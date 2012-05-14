@@ -96,6 +96,9 @@
 
 
     function showSectorDonorWidgetReport(url) {
+    		if ($("#selectedCurrency").val() != null) {
+    			url += "&selectedCurrency=" + $("#selectedCurrency").val();
+    		}
         var popup = window.open(url, "SectorDonorWidgetReport", "height=500,width=750,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
         popup.focus();
     }

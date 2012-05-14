@@ -934,7 +934,7 @@
 			$("input[name='selectedTertiarySectors']").removeAttr("checked");
     }
     
-    
+    $("#selectedPieChartCurrency").html($("#selectedCurrency").val());
 	
 		hideFilter();
 	}

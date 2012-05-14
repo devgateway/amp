@@ -57,7 +57,8 @@ public class ShowSectorDonorWidgetReport extends Action {
             }
 
         }
-         String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+        String baseCurr = request.getParameter("selectedCurrency") != null ? request.getParameter("selectedCurrency") : FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+
         if (baseCurr == null) {
             baseCurr = "USD";
         }

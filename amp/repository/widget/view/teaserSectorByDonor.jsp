@@ -51,10 +51,10 @@
     <tr>
         <td colspan="3" align="left">  
             	<c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==true}">
-            		<digi:trn key="widget:piechart:allAmountsin000USD">All amounts in 000s of</digi:trn> ${gisSectorByDonorTeaserForm.selectedCurrency}
+            		<digi:trn key="widget:piechart:allAmountsin000USD">All amounts in 000s of</digi:trn>&nbsp;<span id="selectedPieChartCurrency">${gisSectorByDonorTeaserForm.selectedCurrency}</span>
             	</c:if>
                 <c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==false}">
-               		<digi:trn>All amounts in</digi:trn> ${gisSectorByDonorTeaserForm.selectedCurrency}
+               		<digi:trn>All amounts in</digi:trn>&nbsp;<span id="selectedPieChartCurrency">${gisSectorByDonorTeaserForm.selectedCurrency}</span>
                </c:if>
             <digi:img  src="module/widget/images/help1.gif" styleId="myContextEl" />
         </td>

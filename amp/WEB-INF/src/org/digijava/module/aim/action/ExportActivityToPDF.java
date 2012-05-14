@@ -140,8 +140,8 @@ public class ExportActivityToPDF extends Action {
 			actId=new Long(request.getParameter("activityid"));
 		}
 		
-        response.setContentType("application/download; charset=UTF-8");
-        response.setHeader("content-disposition", "attachment;filename=activity.pdf");
+        response.setContentType("application/pdf; charset=UTF-8");
+        //response.setHeader("content-disposition", "attachment;filename=activity.pdf");
 		Document document = new Document(PageSize.A4.rotate());
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		PdfWriter.getInstance(document, baos);

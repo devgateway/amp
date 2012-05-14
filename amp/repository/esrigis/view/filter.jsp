@@ -18,7 +18,7 @@
 					<tr>
 						<td width=40% height=25 align="center"
 							background="/TEMPLATE/ampTemplate/img_2/ins_header.gif"
-							class="inside"><b class="ins_header"><digi:trn>Grouping Selector test</digi:trn></b>
+							class="inside"><b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b>
 						</td>
 						<td width=60%
 							background="/TEMPLATE/ampTemplate/img_2/ins_header.gif"

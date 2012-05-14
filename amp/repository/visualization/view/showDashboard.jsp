@@ -683,7 +683,7 @@ function initializeGlobalVariables(){
 				<div class="selector_type"><b><digi:trn>Summary</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.summaryOpt" styleId="export_summary_0" value="0"><digi:trn>Exclude Summary</digi:trn></html:radio><br />
-		            <html:radio property="exportData.summaryOpt" styleId="export_summary_1" value="1"><digi:trn>Inculde Summary</digi:trn></html:radio><br />
+		            <html:radio property="exportData.summaryOpt" styleId="export_summary_1" value="1"><digi:trn>Include Summary</digi:trn></html:radio><br />
 		        </div>
 		        </td>
 		    </tr>

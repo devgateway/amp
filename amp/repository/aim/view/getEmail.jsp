@@ -7,6 +7,31 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="globalsettings" %>
 
+<script type="text/javascript">
+<!--
+function checkEmptyEmail(){
+	var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+	var address = document.aimUserEmailForm.email.value;
+	if (address==null || address==''){
+		<c:set var="translation">
+		<digi:trn>Email can not be empty.</digi:trn>
+		</c:set>
+		alert("${translation}");
+    	return false;
+	}
+	if(reg.test(address) == false) {
+		<c:set var="translation">
+		<digi:trn key="error.registration.noemail">you must enter Valid email please check in</digi:trn>
+		</c:set>
+		alert("${translation}");
+    	return false;
+	}
+	document.aimUserEmailForm.submit();
+}
+
+//-->
+</script>
+
 <digi:form name="aimUserEmailForm" type="org.digijava.module.um.form.UserEmailForm" action="/resetUserPassword.do" >
 <div class="reg_form_container">
 <div class="home_sec_title"><digi:trn key="aim:changePassword">
@@ -45,7 +70,7 @@
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td colspan="2" align="center">
-						<html:submit property="submit" styleClass="buttonx" ><digi:trn key="btn:submit">Submit</digi:trn> </html:submit>
+						<html:button onclick="checkEmptyEmail();" property="btnSubmit" styleClass="buttonx" ><digi:trn key="btn:submit">Submit</digi:trn> </html:button>
 					</td>
 				</tr>
 			</table>

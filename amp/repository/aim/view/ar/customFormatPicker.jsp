@@ -92,7 +92,7 @@
 		</td>
 		<td height="18" colspan="2" nowrap="nowrap">
 		 	<html:checkbox property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />
-	    </td>
+		</td>
 	  </tr>
 	<tr>
 		<td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">

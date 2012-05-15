@@ -120,9 +120,9 @@ public class ReportsFilterPicker extends MultiAction {
 		if (ampReportId!=null) {
 			if (filterForm.getAmpReportId()==null || !ampReportId.equals(String.valueOf(filterForm.getAmpReportId()))) {
 				if (Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-					filterForm.setAmountinthousands(1);
+					filterForm.setAmountinthousands(true);
 				else 
-					filterForm.setAmountinthousands(0);
+					filterForm.setAmountinthousands(false);
 			}
 		}
 		
@@ -1469,7 +1469,7 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
 		custom.setDecimalFormatSymbols(ds);
-		arf.setAmountinthousand(filterForm.getAmountinthousands());
+		arf.setAmountinthousand(filterForm.getAmountinthousandsint());
 		arf.setAmountinmillion(filterForm.getAmountinmillions());
 		
 		arf.setCurrentFormat(custom);
@@ -1526,7 +1526,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedSecondarySectors(null);
         filterForm.setSelectedTertiarySectors(null);
         filterForm.setSelectedArchivedStatus(new Object[]{"1"});
-		filterForm.setAmountinthousands(0);
+		filterForm.setAmountinthousands(false);
 		filterForm.setAmountinmillions(false);
 		filterForm.setSelectedMultiDonor(null);
 		HttpSession httpSession = request.getSession();
@@ -1577,7 +1577,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCustomUseGrouping(null);
 		filterForm.setCustomGroupSize(null);
 		filterForm.setResetFormat(null);
-		filterForm.setAmountinthousands(0);
+		filterForm.setAmountinthousands(false);
 		filterForm.setAmountinmillions(null);
 	}
 

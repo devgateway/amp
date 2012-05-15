@@ -257,7 +257,11 @@ public class FilterUtil {
 		form.setSelectedDonnorAgency( FilterUtil.getObjectsIds(filter.getDonnorgAgency()) );
 		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
-		form.setAmountinthousands(filter.getAmountinthousand());
+		if (filter.getAmountinthousand() ==1){
+			form.setAmountinthousands(true);
+		}else{
+			form.setAmountinthousands(false);
+		}
 		form.setAmountinmillions(filter.getAmountinmillion());
 	}
 	

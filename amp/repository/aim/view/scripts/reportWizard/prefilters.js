@@ -214,6 +214,7 @@ function ResetCustom(maxFractionDigits) {
 	aimReportsFilterPickerForm3.customGroupSize.value = 3;
 	//alert(aimReportsFilterPickerForm3.amountinthousands.checked);
 	aimReportsFilterPickerForm3.customAmountinThousands.checked = false;
+	aimReportsFilterPickerForm3.calendar.value =aimReportsFilterPickerForm3.initialCal.value;
 	initFormatPopup();
 	document.aimReportsFilterPickerForm3.renderStartYear.value=-1;
 	document.aimReportsFilterPickerForm3.renderEndYear.value=-1;

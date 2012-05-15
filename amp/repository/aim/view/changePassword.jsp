@@ -7,10 +7,51 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:instance property="aimChangePasswordForm" />
+<script language="JavaScript">
+function isVoid(name){
+	if ( name == null ||name.length==0){
+    	return true;
+    }		
+	if (!isNaN(name)){
+    	return 2;
+    }		
+	return false;		
+}
 
-<html:javascript formName="aimChangePasswordForm"/>
+function validate(){
+        var email = document.aimChangePasswordForm.userId.value;
+        var oldpassword = document.aimChangePasswordForm.oldPassword.value;
+        var password = document.aimChangePasswordForm.newPassword.value;
+        var passwordConfirmation = document.aimChangePasswordForm.confirmNewPassword.value;
+        var errors=new Array();
+        if(isVoid(email)){
+        	errors.push('<digi:trn jsFriendly="true">Email is required</digi:trn>');
+        }
+        else{
+        	 var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+     		 if(!reg.test(email)){
+     			errors.push('<digi:trn jsFriendly="true">you must enter Valid email please check in</digi:trn>');
+     		 }
+        }
+        if(isVoid(oldpassword)){
+        	errors.push('<digi:trn jsFriendly="true">Old password is required</digi:trn>');
+        }
+        if(isVoid(password)){
+        	errors.push('<digi:trn jsFriendly="true">New password is required</digi:trn>');
+        }  
+        if(password != passwordConfirmation){
+        	errors.push('<digi:trn jsFriendly="true">Passwords in both fields must be the same</digi:trn>');
+        }
+        if(errors.length>0){
+        	 alert(errors.join('\n'));
+        	 return false;
+        }
+        return true;
+	}
 
-<digi:form action="/changePassword.do" method="post" onsubmit="return validateAimChangePasswordForm(this);">
+	</script>
+
+<digi:form action="/changePassword.do" method="post" onsubmit="return validate();">
 <div class="reg_form_container">
 <div class="home_sec_title"><digi:trn key="aim:changePassword">
 						Change Password

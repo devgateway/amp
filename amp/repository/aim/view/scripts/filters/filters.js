@@ -191,8 +191,7 @@ DivManager.prototype.onSelect           = function () {
 		 		break;
 		 	}
 	 	}
-	 	if (found)
+	 	if (found){
 	 		getSearchManagerInstanceById( parentDiv.id+"_search" ).setDiv(this.divEl);
-	 	else
-	 		alert("Not found");
+	 	}
 	 };

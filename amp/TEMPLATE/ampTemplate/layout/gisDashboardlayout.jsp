@@ -17,6 +17,15 @@
 		rechart();
 	}
 	function yearChanged(){
+		var selectedFromYearNumber = parseInt($("select[name='selectedFromYear']").val());
+		var selectedToYearNumber = parseInt($("select[name='selectedToYear']").val());
+
+		if (selectedFromYearNumber > selectedToYearNumber) {
+			alert ("<digi:trn>Start year can not be greater then End year</digi:trn>");
+			$("select[name='selectedFromYear']").val(selectedToYearNumber);
+		}
+
+		
 		rechart();
 		 if(donorWidget){
              getTopTenDonorTable();

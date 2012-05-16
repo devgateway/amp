@@ -15,7 +15,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
 <!--
-	var reallyDeleteColumn = 'Do you relally want to remove column? this will remove data in this column.';
+	var reallyDeleteColumn = '<digi:trn jsFriendly="true">Do you really want to remove the column? this will remove data in this column.</digi:trn>';
 
 	function addColumn(id){
 		var myForm = document.getElementById('tableId').form;

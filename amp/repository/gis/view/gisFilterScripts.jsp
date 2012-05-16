@@ -125,26 +125,22 @@
 	
 	
 	function resetPIFilters() {
-		 $("input[name='selectedDonors']:checked").attr('checked', false);
+		 $("input[name='selectedDonnorAgency']:checked").attr('checked', false);
 		 $("input[name='selectedDonorGroups']:checked").attr('checked', false);
 		 $("input[name='selectedStatuses']:checked").attr('checked', false);
 		 $("input[name='selectedFinancingIstruments']:checked").attr('checked', false);
 		 $("input[name='selectedSectors']:checked").attr('checked', false);
-		  var filterForm = document.getElementsByName("parisIndicatorForm")[0]; 
-		  var selectedArray = new Array();
- 			filterForm.selectedDonors.value= selectedArray;
- 			filterForm.selectedDonorGroups.value= selectedArray;
- 			filterForm.selectedStatuses.value= selectedArray;
- 			filterForm.selectedSectors.value= selectedArray;
- 			filterForm.selectedFinancingIstruments.value= selectedArray;
- 			filterForm.selectedStartYear.value = filterForm.defaultStartYear.value ;
- 	        filterForm.selectedEndYear.value = filterForm.defaultEndYear.value;
- 	        filterForm.selectedCalendar.value = filterForm.defaultCalendar.value;
- 	        filterForm.selectedCurrency.value = filterForm.defaultCurrency.value;
-			$('#selectedStartYear option[value='+filterForm.defaultStartYear.value+']').attr('selected', 'selected');
- 			$('#selectedEndYear option[value='+filterForm.defaultEndYear.value+']').attr('selected', 'selected');
- 			$('#selectedCalendar option[value='+filterForm.selectedCalendar.value+']').attr('selected', 'selected');
- 			$('#selectedCurrency option[value='+filterForm.selectedCurrency.value+']').attr('selected', 'selected');
+		 $("input[name='selectedSecondarySectors']:checked").attr('checked', false);
+		 $("input[name='selectedTertiarySectors']:checked").attr('checked', false);
+		 $("input[name='selectedNatPlanObj']:checked").attr('checked', false);
+		 $("input[name='selectedPrimaryPrograms']:checked").attr('checked', false);
+		 $("input[name='selectedSecondaryPrograms']:checked").attr('checked', false);
+		 $("input[name='selectedDonorTypes']:checked").attr('checked', false);
+		 $(".root_checkbox").attr('checked', false);
+		 $("select[name='selectedTypeOfAssistance']").val("-1");
+		 $("select[name='mapModeFin']").val("fundingData");
+		 $("select[name='fundingType']").val("commitment");
+		 $("select[name='mapLevel']").val(-1);		
 	}
 	function showFilterDiv(divId,searchId){
 		var divEl=document.getElementById(divId);

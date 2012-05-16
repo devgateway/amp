@@ -334,7 +334,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		} else if (request.getParameter("mapMode").equalsIgnoreCase("FinInfo")) {
 
             GisFilterForm filterForm = GisUtil.parseFilterRequest (request);
-            Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm);
+
+            String isRegSetStr = FeaturesUtil.getGlobalSettingValue("GIS Funding Type");
+            boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("Donor Fundings"))?false:true;
+            Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional);
 
             if (filterForm.isFilterAllSectors()) {
                 sectorName = "All";

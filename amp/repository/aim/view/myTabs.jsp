@@ -249,14 +249,17 @@ var myTabsObject;
 function toggleSettings(){
 	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
 	var displaySettingsButton = document.getElementById('displaySettingsButton');
+	var framediv  = document.getElementById('ajaxcontentarea');
 	if(currentDisplaySettings.style.display == "block"){
 		currentDisplaySettings.style.display = "none";
 		displaySettingsButton.innerHTML = "${showCurrSettings}";
+		framediv.style.height=637;
 	}
 	else
 	{
 		currentDisplaySettings.style.display = "block";
 		displaySettingsButton.innerHTML = "${hideCurrSettings}";
+		framediv.style.height=700;
 	}
 }
 
@@ -318,7 +321,7 @@ function toggleSettings(){
 <div class="yui-content" style="display:none">
 </div>
 </div>
-<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; min-height:637px;font-size:12px;">
+<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; height:637px;font-size:12px;">
 	<digi:trn key="aim:addATab">
 		 Click on one of the tabs to display activities. You can add more tabs by using the Tab Manager.
 	</digi:trn>

@@ -1157,7 +1157,7 @@ public class GetFoundingDetails extends Action {
                 } else if (action.equalsIgnoreCase("filter")) {
 
                     String isRegSetStr = FeaturesUtil.getGlobalSettingValue("GIS Funding Type");
-                    boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("Donor Fundings"))?false:true;
+                    boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("Donor Fundings"))?GisUtil.GIS_DONOR_FUNDINGS:GisUtil.GIS_REGIONAL_FUNDINGS;
 
                     GisFilterForm filterForm = GisUtil.parseFilterRequest (request);
                     Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional);

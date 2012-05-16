@@ -73,7 +73,7 @@ public class RMMapCalculationUtil {
 
         Object[] activityFundings = null;
 
-        if (!isRegional) {
+        if (isRegional == GisUtil.GIS_DONOR_FUNDINGS) {
         activityFundings = DbUtil.getActivityFundings(sectorCollector,
                                                                programsIds,
                                                                donnorAgencyIds,
@@ -84,7 +84,7 @@ public class RMMapCalculationUtil {
                                                                workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime());
         }
         Object[] activityRegionalFundings = null;
-        if (isRegional) {
+        if (isRegional == GisUtil.GIS_REGIONAL_FUNDINGS) {
         activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
                                                                                donnorAgencyIds,

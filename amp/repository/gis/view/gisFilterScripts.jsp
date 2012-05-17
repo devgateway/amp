@@ -125,6 +125,7 @@
 	
 	
 	function resetPIFilters() {
+		/*
 		 $("input[name='selectedDonnorAgency']:checked").attr('checked', false);
 		 $("input[name='selectedDonorGroups']:checked").attr('checked', false);
 		 $("input[name='selectedStatuses']:checked").attr('checked', false);
@@ -137,6 +138,8 @@
 		 $("input[name='selectedSecondaryPrograms']:checked").attr('checked', false);
 		 $("input[name='selectedDonorTypes']:checked").attr('checked', false);
 		 $(".root_checkbox").attr('checked', false);
+		 */
+		 $("#gisFilterForm").find("input[type='checkbox']").attr('checked', false);
 		 $("select[name='selectedTypeOfAssistance']").val("-1");
 		 $("select[name='mapModeFin']").val("fundingData");
 		 $("select[name='fundingType']").val("commitment");

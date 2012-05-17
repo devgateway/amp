@@ -111,11 +111,18 @@ function checkall() {
 }
 
 function deleteRates() {
-	document.aimCurrencyRateForm.doAction.value = "delete";
-	<digi:context name="showCurrRates" property="context/module/moduleinstance/showCurrencyRates.do" />
-	document.aimCurrencyRateForm.action = "<%=showCurrRates %>";
-	document.aimCurrencyRateForm.target = "_self";
-	document.aimCurrencyRateForm.submit();
+	var flag = validate();
+	if(flag){
+		document.aimCurrencyRateForm.doAction.value = "delete";
+		<digi:context name="showCurrRates" property="context/module/moduleinstance/showCurrencyRates.do" />
+		document.aimCurrencyRateForm.action = "<%=showCurrRates %>";
+		document.aimCurrencyRateForm.target = "_self";
+		document.aimCurrencyRateForm.submit();
+	}
+}
+
+function validate(){
+	return(confirm('<digi:trn>Do you want to delete this Currency rate?</digi:trn>'));
 }
 
 function selectFile() {

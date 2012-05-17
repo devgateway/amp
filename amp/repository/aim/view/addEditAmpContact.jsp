@@ -209,6 +209,8 @@
 		//check emails. At least one email should exist
 		var emails=$("input[id^='email_']");
     	if(emails!=null){
+    		// took regex from wicket validator, since we want them to be the same
+    		var regex='^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)';
         	for(var i=0;i < emails.length; i++){
                 if(emails[i].value==null || emails[i].value==''){
                 	msg='<digi:trn>Please Enter email</digi:trn>';
@@ -216,7 +218,7 @@
                     return false;
                 }
                 else{
-                    if(emails[i].value.indexOf('@')==-1){
+                    if(!emails[i].value.match(regex)){
                         alert('<digi:trn jsFriendly="true">Please enter valid email</digi:trn>');
                         return false;
                     }

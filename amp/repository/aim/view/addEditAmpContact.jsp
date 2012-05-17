@@ -478,15 +478,15 @@
             var myArray=null;
             var msg='';
             if(dataName=='email' && $("input[id^='email_']").length >= 3){
-                msg='<digi:trn>Max Allowed Number Of Emails is 3 </digi:trn>'
+                msg='<digi:trn jsFriendly="true">Max Allowed Number Of Emails is 3 </digi:trn>'
             	alert(msg);
                 return false;
             }else if(dataName=='phone'  && $("input[id^='phoneNum_']").length >= 3){
-            	msg='<digi:trn>Max Allowed Number Of Phones is 3 </digi:trn>'
+            	msg='<digi:trn jsFriendly="true">Max Allowed Number Of Phones is 3 </digi:trn>'
                 alert(msg);
             	return false;
             }else if(dataName=='fax' && $("input[id^='fax_']").length >= 3){
-            	msg='<digi:trn>Max Allowed Number Of Faxes is 3 </digi:trn>'
+            	msg='<digi:trn jsFriendly="true">Max Allowed Number Of Faxes is 3 </digi:trn>'
                 alert(msg);
             	return false;
             }

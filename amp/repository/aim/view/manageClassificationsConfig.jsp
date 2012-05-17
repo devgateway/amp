@@ -14,11 +14,17 @@
     <digi:trn>Delete this Classification?</digi:trn>
     </c:set>
     function onDelete(url) {
-        var flag = confirm("${translation}");
+        var flag = validate();
             if (flag)
             	window.location = url; 
         }
-        </script>
+    
+    function validate(){
+    	return(confirm('${translation}'));
+    }
+
+    
+</script>
 <digi:instance property="aimSectorClassConfigForm" />
 <digi:context name="digiContext" property="context" />
 <!--  AMP Admin Logo -->
@@ -69,7 +75,7 @@
                                                 	<tr>
                                                 		<td colspan="3" bgColor=#c7d4db class=box-title height="25" align="center" >
                                                             <!-- Table title -->
-                                                    		<b style="font-size:12px;"><digi:trn key="aim:ManageClassificationsConfigurations">Manage Classifications Configurations</digi:trn></b>
+                                                    		<b style="font-size:12px;"><digi:trn key="aim:ManageClassificationsConfigurations">	</digi:trn></b>
                                                             <!-- end table title -->
                                                     	</td>
                                                 	</tr>

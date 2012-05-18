@@ -1131,7 +1131,7 @@
                             <c:set var="translation">
                                 <digi:trn>Show</digi:trn>
                             </c:set>
-                            <input type="button" value="${translation}"  class="buttonx" style="font-family:verdana;font-size:11px;" onclick="return resetPage()"/>
+                            <input type="button" value="${translation}"  class="buttonx" style="font-family:verdana;font-size:11px; margin-top:15px;" onclick="return resetPage()"/>
                             </td>
                             </tr>
                     </table>
@@ -1199,7 +1199,7 @@
                         <option value="0"><digi:trn>Members</digi:trn></option> 
                         <option value="1"><digi:trn>Activities</digi:trn></option> 
                     </select> &nbsp;&nbsp;&nbsp;
-											            <input type="button" id="ws_go" class="buttonx" value='<digi:trn>Show</digi:trn>' onclick="showDetails()">
+					<input type="button" id="ws_go" class="buttonx" value='<digi:trn>Show</digi:trn>' onclick="showDetails()">
                     </td>
                     </tr>
                 </table>

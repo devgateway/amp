@@ -218,7 +218,7 @@
 						
 						<logic:iterate name="gisRegReportForm" property="activityLocationFundingList" id="activityLocationFunding">
 							<tr>
-								<td width="30%" valign="top" style="overflow-x:hidden;" height="20">
+								<td width="30%" valign="top" style="overflow-x:hidden; overflow-y:hidden;" height="20">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
 											<c:choose>

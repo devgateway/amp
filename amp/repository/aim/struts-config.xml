@@ -1820,6 +1820,7 @@
     </action>      
     <action name="BudgetManagerForm" scope="session" path="/aim/BudgetManager" type="org.digijava.module.budget.action.BudgetManager" validate="false">
        <forward name="forward" path="/showLayout.do?layout=BudgetManager" />
+       <forward name="finalized" path="/aim/BudgetManager.do" redirect="true" />
        <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="RetriveOptionsForm" scope="session" path="/aim/RetrieveOptionsAction" type="org.digijava.module.budget.action.RetrieveOptionsAction" validate="false"/>

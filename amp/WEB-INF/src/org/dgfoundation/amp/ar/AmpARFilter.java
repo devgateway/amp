@@ -560,7 +560,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		
 		indexedParams=new ArrayList<FilterParam>();
 		
-		String BUDGET_FILTER = "SELECT amp_activity_id FROM v_activity_budget WHERE budget_id IN ("
+		String BUDGET_FILTER = "SELECT amp_activity_id FROM v_on_off_budget WHERE budget_id IN ("
 			+ Util.toCSString(budget) + ")";
 		String TEAM_FILTER = "";
 

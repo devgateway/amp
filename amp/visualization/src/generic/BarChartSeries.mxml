@@ -194,7 +194,7 @@
 				formatter.thousandsSeparatorFrom=groupSeparator;
 				formatter.thousandsSeparatorTo=groupSeparator;
 				formatter.precision = decimalsToShow;
-				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				var delayer:Delay = new Delay(captureSnapshot,4000,1); //capture snapshot
 
 				//Set the title and the rest of the parameters for legend
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
@@ -488,7 +488,6 @@
 				var params:Object = {};
 				params["format"] = "xml";
 				params["divide"] = divide;
-				params["action"] = dataAction;
 				if(idContainer == "AidType"){
 					params["typeofaid"] = "true";
 				}
@@ -498,7 +497,7 @@
 				messageLoadingPanel.visible = true;
 				sizeLoadingPanel(300, 200);
 				dc.visible = false;
-				//var delayer:Delay = new Delay(captureSnapshot,2000,1);
+				var delayer:Delay = new Delay(captureSnapshot,4000,1);
 			}
 
 		]]>

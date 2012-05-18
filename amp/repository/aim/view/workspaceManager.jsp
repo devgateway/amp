@@ -1108,13 +1108,13 @@
                                     <table width="100%" class="filter" style="font-size:12px;">
                                         <tr>
 
-                                            <td>
-                                        <digi:trn>keyword</digi:trn>:&nbsp;
+                                            <td style="text-align:left;">
+                                        <digi:trn>keyword</digi:trn><br/>	
                                         <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
                                 </td>
 
-                                <td align="center">
-                            <digi:trn>Type</digi:trn>:&nbsp;
+                                <td  style="text-align:left;">
+                            <digi:trn>Type</digi:trn><br/>	
                             <html:select property="workspaceType" styleClass="inp-text">
                                 <html:option value="all"><digi:trn>All</digi:trn></html:option>
                                 <html:option value="team"><digi:trn>Team</digi:trn></html:option>
@@ -1122,8 +1122,8 @@
                                 <html:option value="computed"><digi:trn>Computed</digi:trn></html:option>
                             </html:select>
                             </td>
-													<td align="center">
-														<digi:trn>Workspace Group</digi:trn>:&nbsp;		
+													<td  style="text-align:left;">
+														<digi:trn>Workspace Group</digi:trn><br/>	
 														<c:set var="translationAll"><digi:trn>All</digi:trn></c:set>												
 														<category:showoptions firstLine="${translationAll}" name="aimWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
 													</td>
@@ -1157,7 +1157,7 @@
             </logic:empty>
             <logic:notEmpty name="aimWorkspaceForm" property="workspaces">
                 <tr>
-                    <td width="70%" style="padding-top:15px;" align=center>
+                    <td width="70%" style="padding-top:15px;"align="center" >
                         <div class='yui-skin-sam'>
                             <div id="dynamicdata" class="report"></div>
                             <div id="dt-pag-nav" style="text-align: left"></div>

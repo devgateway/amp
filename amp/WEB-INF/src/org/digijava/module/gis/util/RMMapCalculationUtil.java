@@ -536,9 +536,9 @@ public class RMMapCalculationUtil {
         float coeffBlue = 0f;
 
         if (scheme.getType().equalsIgnoreCase(MapColorScheme.COLOR_SCHEME_GRADIENT)) {
-            deltaRed = Math.abs(scheme.getGradientMaxColor().getRed() - scheme.getGradientMinColor().getRed());
-            deltaGreen = Math.abs(scheme.getGradientMaxColor().getGreen() - scheme.getGradientMinColor().getGreen());
-            deltaBlue = Math.abs(scheme.getGradientMaxColor().getBlue() - scheme.getGradientMinColor().getBlue());
+            deltaRed = scheme.getGradientMaxColor().getRed() - scheme.getGradientMinColor().getRed();
+            deltaGreen = scheme.getGradientMaxColor().getGreen() - scheme.getGradientMinColor().getGreen();
+            deltaBlue = scheme.getGradientMaxColor().getBlue() - scheme.getGradientMinColor().getBlue();
 
 
             if (deltaVal > 0) {

@@ -20,7 +20,8 @@ span.docTitle619{border:1px solid red;text-align:left;}
 
 .se` {color:#FF6000; font-size:12px;}
 .sel_sm {color:#FF6000; font-size:11px;}
-.buttonx, .dr-menu {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
+.buttonx, .dr-menu {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding:5px 3px;}
+html.i3.buttonx{background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; line-height:22px;height:22px;}
 .buttonx_dis {background-color:#979797; border-top: 1px solid #C5C5C5; border-left:1px solid #C5C5C5; border-right:1px solid #5D5D5D; border-bottom:1px solid #5D5D5D; font-size:11px; color:#D9D9D9; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
 .buttonx_sm {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px;}
 .tabSubmit .buttonx_sm {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px;margin:10px 0px 0px 0px;}
@@ -40,6 +41,7 @@ table tr td.f-names{font-weight:bold;}
 fieldset {background-color:#FFFFFF; border-top:1px solid #DADAD6; border-left:1px solid #DADAD6; border-right:2px solid #C2C1BA; border-bottom:2px solid #C2C1BA; padding:10px; margin-top:15px;}
 fieldset table {font-size:12px;}
 legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bold; padding-left:5px; padding-right:5px;}
+html.chrome #moreSettingsLegend{float:left;margin:-20px 0px 0px 10px;}
 .legend_label {line-height:22px;}
 .mand {color:#FF0000;}
 table.inside, td.inside,td.report_inside {border:1px solid #b8b7b7;  font-size:11px;}
@@ -156,7 +158,7 @@ html.ie #usr_menu_logged {width:250px;float:right;text-align:right;}
 .right_menu_cont {padding:10px; font-size:11px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
-#quickfloat .tri { border-top: 1px solid white; border-bottom: 1px solid white; padding-left: 12px; background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px;}
+#quickfloat .tri { border-top: 1px solid white; border-bottom: 1px solid white; padding-left: 12px; background-repeat: no-repeat; list-style:none; display:block; font-size:11px; padding-bottom:1px;}
 html.ie #quickfloat ul{margin:0px 0px 0px -5px;}
 html.ie #quickfloat .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri_1.gif); background-position: 5px -5px; background-repeat: no-repeat;  list-style:none; width:148px; font-size:12px; padding-left: 12px; padding-bottom:5px; }
 .tri_adv {background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:5px; padding-left:7px; margin-top:7px;}
@@ -702,6 +704,7 @@ html.ie div.filtered {width:950px;text-align:right;}
 td.orgtype select{width:135px;font-size:11px;}
 html.ie .yui-ac-content {z-index:9999;}
 div.grayBorder {margin: 10px; padding: 8px;height: 98%; border:1px solid #CCCCCC}
+html.ie div.grayBorder {margin: 10px; padding: 8px;height: 90%; border:1px solid #CCCCCC}
 /* ACTIVITY WIDGET PREVIEW CLASSES */
 .activity_preview_name {font-size:18px; font-weight:bold; color:#FFFFFF; background-color:#4A687A; margin-left:10px; padding:5px; width:690px; overflow:hidden; height:auto; margin-right:10px;}
 .activity_preview_header {background-color:#F0F0F0;  border-top:5px solid #4A687A; width:1000px; margin-left:auto; margin-right:auto;padding:0px 0px 15px 0px;}
@@ -753,8 +756,13 @@ html.ie div.filterContainerTabs div.innerTab{ padding:10px; overflow:auto;height
 html.ie div.filterContainerTabs div.innerTab li{list-style:none;}
 html.ie div.filterContainerTabs div#gisfilters div.groupingSelector ul, html.ie div.filterContainerTabs div#gisfilters div.membersSelector ul{width:90%;margin:0 auto;}
 html.ie div.filterContainerTabs div#gisfilters div.groupingSelector{border-right:1px solid #ccc;}
-html.ie div.innertabheader{border-bottom: 1px solid #CCC; background: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); height: 31px;}
-html.ie div.innertabheader h3 {height: 31px; line-height: 31px; text-indent: 11px; float: left; font-size: 11px; color: #767676; margin: 0; padding: 0;}
+
+
+
+
+div.innertabheader{border-bottom: 1px solid #CCC; background: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif) repeat-x top; height: 31px;position:relative;}
+html.ie div.innertabheader{border-bottom: 1px solid #CCC; background: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);height:25px; }
+html.ie div.innertabheader h3 {height: 25px; line-height: 25px; text-indent: 11px; float: left; font-size: 11px; color: #767676; margin: 0; padding: 0;}
 html.ie  div.filterContainerTabs .otherCriteriaFoofet{border-top:1px solid #ccc;padding:10px;}
 html.ie .groupingselector ul li a { padding: 5px; font-size: 12px; display: block; background: white; color: black; text-decoration: none;}
 html.ie .groupingselector ul li a:hover{background:#bfd2df}
@@ -780,3 +788,28 @@ border-top: 1px;
 border-left: 1px;
 border-bottom: 1px;}
 legend.admtoolsttl{position:absolute;top:-10px;left:10px;}
+.grouping_selector_wrapper{float:left; padding: 0px; height: 230px;background: white; width:35%;  border:1px solid #ccc;padding:0px 0px 5px 0px;}
+.member_selector_wrapper{float:right; padding: 0px; height: 230px;background: white;width:64%; border:1px solid #ccc;padding:0px 0px 5px 0px;}
+html.ie .grouping_selector_wrapper{float:left; padding: 0px; height: 230px;background: white; width:35%;  border:1px solid #ccc;}
+html.ie .member_selector_wrapper{float:right; padding: 0px; height: 230px;background: white;width:64%; border:1px solid #ccc;}
+.grouping_selector_wrapper h3, .member_selector_wrapper  h3{width:40%;margin:0px;padding:8px;}
+.grouping_selector_wrapper h3{width:100%;}
+.grouping_selector_wrapper ul{margin:0px; padding:0px;width:95%;margin:0 auto;overflow:auto;}
+html.ie .grouping_selector_wrapper ul{margin:0px; padding:0px;width:90%;overflow:auto;}
+.grouping_selector_wrapper ul li{list-style:none;text-aligb:left;color:#000;border-bottom:1px solid #ccc;}
+html.ie .grouping_selector_wrapper tr, html.ie .grouping_selector_wrapper tr td{padding:0px;}
+html.ie .grouping_selector_wrapper tr {height:20px;}
+.grouping_selector_wrapper ul li a{color:#000;font-weight:bold;display:block;padding:7px;}
+.grouping_selector_wrapper ul li a:hover{text-decoration:underline;}
+.member_selector_wrapper .memberSelectorInputWrapper{width:50%;position:absolute;top:1px;right:5px;text-align:right;}
+div.filtercontainer{overflow:auto;width:95px;}
+.member_selector_wrapper #membercontainer ul{margin:0px;padding:0px;white-space:normal;}
+.member_selector_wrapper #membercontainer ul li{list-style:none;padding:5px 0px 0px 5px;font-size:11px;white-space:normal;}
+.member_selector_wrapper #membercontainer ul li li{padding-left:35px;}
+.kSearchBox{width:450px; font-size: 12px;margin:0 auto;text-align:center;padding:20px;}
+html.ie .kSearchBox{width:100%; font-size: 12px;text-align:center;margin:0 auto;height:100px;clear:both;}
+li.tri{list-style:none;padding:0px 0px 5px 0px;}
+#tabview_container{height:90%;}
+#otherCriteriaBigTable{height:550px;}
+.membercontainer{height:200px;overflow:auto;}
+.selector_type_cont{padding:2px;margin:0px;}

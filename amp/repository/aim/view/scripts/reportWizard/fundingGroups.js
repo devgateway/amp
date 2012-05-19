@@ -58,7 +58,6 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Responsible Organization'
 				,'Activity Created By'
 				,'Project Category'
-				,'Project Title'
 				,'Funding Status'
 				,'Mode of Payment'
 				,'Budget Department'

@@ -810,7 +810,8 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 					continue;
 				}
 				if ( proprietyValue.getCategoryKey().equals(categoryKey) 
-						&& proprietyValue.getValueKey().equals(valueKey) ) {
+						&& proprietyValue.getValueKey().equals(valueKey) 
+						&& proprietyValue.isProtectOnDelete()) {
 					return true;
 				}
 			}

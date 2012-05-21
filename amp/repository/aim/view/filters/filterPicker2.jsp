@@ -45,8 +45,8 @@ StopWatch.next("Filters", true);
 		<li><a href="#financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a></li>
 		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
 	</ul>
-	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;background: white;" >
-		<div id="donorsTab" style="height: 91%;">
+	<div class="yui-content" style="background-color: #f6faff;margin-top: 10px;background: white;" >
+		<div id="donorsTab" style="height:80%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="donorsPropertyObj" />
@@ -54,7 +54,7 @@ StopWatch.next("Filters", true);
 				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
-		<div id="relAgenciesTab" class="yui-hidden" style="height: 91%;">
+		<div id="relAgenciesTab" class="yui-hidden" style="height: 80%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
@@ -62,7 +62,7 @@ StopWatch.next("Filters", true);
 				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
-		<div id="sectorsTab" class="yui-hidden"  style="height: 91%;">
+		<div id="sectorsTab" class="yui-hidden"  style="height: 80%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="sectorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="sectorsPropertyObj" />
@@ -71,7 +71,7 @@ StopWatch.next("Filters", true);
 			</div>
 		</div>
 		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
-			<div id="programsTab" class="yui-hidden"  style="height: 91%;" >
+			<div id="programsTab" class="yui-hidden"  style="height: 80%;" >
 				<div class="grayBorder">
 					<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
 					<bean:define id="reqPropertyObj" toScope="request" value="programsPropertyObj" />
@@ -80,7 +80,7 @@ StopWatch.next("Filters", true);
 				</div>
 			</div>
 		</module:display>
-		<div id="financingLocTab" class="yui-hidden"  style="height: 91%;" >
+		<div id="financingLocTab" class="yui-hidden"  style="height: 80%;" >
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="financingLocPropertyObj" />
@@ -173,13 +173,13 @@ StopWatch.next("Filters", true);
 				<option value="1"><digi:trn>All keywords</digi:trn></option>
 			</html:select>
 			
-</div>
+
 <div style="display: block; overflow:hidden;width:50%; float:left; font-size: 12px">
 	<html:checkbox property="justSearch" value="true" />&nbsp;
 	<digi:trn>Use filter as advanced search</digi:trn>
 </div>
 
-<div style="clear:both;text-align:center;padding:2px 0px 0px 0px;margin-top: 20px;height: 15%;">
+
 				<html:hidden property="ampReportId" />
 
 				<html:hidden property="defaultCurrency" />

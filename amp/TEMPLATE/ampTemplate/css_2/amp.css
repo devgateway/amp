@@ -734,4 +734,31 @@ h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 
 
 #filter_donor_types_div {width:486px !important;}
 .reg_butt input {width:85px !important;}
-
+td.wrklist div.workspacelist{background: url(../images/arrow-014E86.gif) no-repeat center left #F2F2F2;
+padding: 3px 10px 3px 3px;
+margin-bottom: 1px;
+font-size: 12px;
+text-decoration: none;
+height: 20px;
+line-height: 20px;
+background-position: 5px 7px;
+text-indent: 20px;
+width:45%;
+}
+td.wrklist div.workspacelist a{text-decoration:none; color:#737373;}
+td.wrklist div.workspacelist a:hover{text-decoration:underline;color:#376091;}
+.subtitle-blue {
+BORDER-RIGHT: 1px;
+BORDER-TOP: 1px;
+FONT-WEIGHT: bold;
+FONT-SIZE: 11pt;
+PADDING-BOTTOM: 10px;
+BORDER-LEFT: 1px;
+COLOR: #014e86;
+PADDING-TOP: 16px;
+BORDER-BOTTOM: 1px;
+LETTER-SPACING: 1px;
+border-right: 1px;
+border-top: 1px;
+border-left: 1px;
+border-bottom: 1px;}

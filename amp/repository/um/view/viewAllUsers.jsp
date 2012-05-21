@@ -484,7 +484,7 @@ function banUser(txt) {
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title><digi:trn
 																	key="aim:otherLinks">
-																	<b style="font-weight: bold; font-size: 12px;">Other
+																	<b style="font-weight: bold; font-size: 12px; padding-left:5px; color:#000000;">Other
 																		links</b>
 																</digi:trn></td>
 															<td background="module/aim/images/corner-r.gif"
@@ -494,33 +494,28 @@ function banUser(txt) {
 											</tr>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
-													<table cellPadding=0 cellspacing="0" width="100%" class="">
+													<table cellPadding=0 cellspacing="0" width="100%" class="inside">
 														<tr>
-															<td><digi:img
+															<td class="inside"><digi:img
 																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /></td>
-															<td><digi:link module="aim" href="/../um/addUser.do">
+																	height="10" /> <digi:link module="aim" href="/../um/addUser.do">
 																	<digi:trn key="aim:addNewUser">
 																Add new user																</digi:trn>
 																</digi:link></td>
 														</tr>
 														<tr>
-															<td><digi:img
+															<td class="inside"><digi:img
 																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" />
-															</td>
-															<td><digi:link module="aim" href="/admin.do">
+																	height="10" /> <digi:link module="aim" href="/admin.do">
 																	<digi:trn key="aim:AmpAdminHome">
 																Admin Home
 																</digi:trn>
 																</digi:link></td>
 														</tr>
 														<tr>
-															<td><digi:img
+															<td class="inside"><digi:img
 																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" />
-															</td>
-															<td><digi:link module="aim"
+																	height="10" /> <digi:link module="aim"
 																	href="/workspaceManager.do~page=1">
 																	<digi:trn key="aim:WorkspaceManager">
 																Workspace Manager
@@ -530,11 +525,9 @@ function banUser(txt) {
 														<c:choose>
 															<c:when test="${umViewAllUsersForm.showBanned}">
 																<tr>
-																	<td><digi:img
+																	<td class="inside"><digi:img
 																			src="module/aim/images/arrow-014E86.gif" width="15"
-																			height="10" />
-																	</td>
-																	<td><digi:link module="aim"
+																			height="10" /> <digi:link module="aim"
 																			href="/../um/viewAllUsers.do~showBanned=false">
 																			<digi:trn key="aim:ViewActiveUsers">
 																	View Active Users
@@ -544,11 +537,9 @@ function banUser(txt) {
 															</c:when>
 															<c:otherwise>
 																<tr>
-																	<td><digi:img
+																	<td class="inside"><digi:img
 																			src="module/aim/images/arrow-014E86.gif" width="15"
-																			height="10" />
-																	</td>
-																	<td><digi:link module="aim"
+																			height="10" /> <digi:link module="aim"
 																			href="/../um/viewAllUsers.do~showBanned=true">
 																			<digi:trn key="aim:ViewBannedUsers">
 																	View Banned Users

@@ -493,7 +493,7 @@ function banUser(txt) {
 													</table></td>
 											</tr>
 											<tr>
-												<td bgColor=#ffffff class=box-border>
+												<td bgColor=#ffffff>
 													<table cellPadding=0 cellspacing="0" width="100%" class="inside">
 														<tr>
 															<td class="inside"><digi:img

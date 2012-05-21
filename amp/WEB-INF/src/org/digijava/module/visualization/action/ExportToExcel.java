@@ -77,10 +77,10 @@ public class ExportToExcel extends Action {
 			String filtersLocationsTrn = TranslatorWorker.translateText("Locations", langCode, siteId);
 			String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
 			String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
-	        String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
-	        String topSectorTrn = TranslatorWorker.translateText("Top 5 Sectors", langCode, siteId);
-	        String topDonorTrn = TranslatorWorker.translateText("Top 5 Donors", langCode, siteId);
-	        String topRegionTrn = TranslatorWorker.translateText("Top 5 Regions", langCode, siteId);
+	        String topPrjTrn = TranslatorWorker.translateText("Top Projects", langCode, siteId);
+	        String topSectorTrn = TranslatorWorker.translateText("Top Sectors", langCode, siteId);
+	        String topDonorTrn = TranslatorWorker.translateText("Top Donors", langCode, siteId);
+	        String topRegionTrn = TranslatorWorker.translateText("Top Regions", langCode, siteId);
 	        String projectTrn = TranslatorWorker.translateText("Project", langCode, siteId);
 	        String sectorTrn = TranslatorWorker.translateText("Sector", langCode, siteId);
 	        String donorTrn = TranslatorWorker.translateText("Donor", langCode, siteId);

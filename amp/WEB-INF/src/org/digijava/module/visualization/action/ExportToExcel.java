@@ -67,7 +67,11 @@ public class ExportToExcel extends Action {
 			String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
 			String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
 			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
-			String filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions", langCode, siteId);
+			String filtersAmountsInTrn = ""; 
+			if(vForm.getFilter().getShowAmountsInThousands() != null && vForm.getFilter().getShowAmountsInThousands())
+				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in thousands", langCode, siteId);
+			else
+				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions", langCode, siteId);
 			String filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type", langCode, siteId);
 			String filtersStartYearTrn = TranslatorWorker.translateText("Start Year", langCode, siteId);
 			String filtersEndYearTrn = TranslatorWorker.translateText("End Year", langCode, siteId);

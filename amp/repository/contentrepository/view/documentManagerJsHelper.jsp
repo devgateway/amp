@@ -1200,7 +1200,7 @@ function validateAddDocument() {
 	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
 	//var urlFormat = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&./:]+");
 
-	var urlFormat = new RegExp("^((https?|ftp|):\/\/|www\.)[^\s]+");
+	var urlFormat = new RegExp("^((https?|ftp|file|)://)?[a-zA-Z0-9\\-\\./=?]+$");
 	
 	//alert( document.forms['crDocumentManagerForm'].docTitle.value );
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );

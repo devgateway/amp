@@ -24,7 +24,10 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.MaskConverter;
 import org.apache.wicket.util.convert.converters.DoubleConverter;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
@@ -115,7 +118,11 @@ public class AmpFundingAmountComponent<T> extends Panel {
 			@Override
 			protected void onUpdate(final AjaxRequestTarget target) {
 				
-				AmpFundingItemFeaturePanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
+				AmpComponentPanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
+				if(parentPanel ==null)
+					parentPanel = findParent(AmpComponentField.class);				
+				if(parentPanel ==null)
+					parentPanel = findParent(AmpRegionalFundingItemFeaturePanel.class);
 				 parentPanel.visitChildren(AmpCollectionValidatorField.class, new Component.IVisitor<AmpCollectionValidatorField>()
 				{
 

@@ -11,11 +11,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.validators.AmpCollectionsSumComparatorValidator;
 import org.dgfoundation.amp.onepager.validators.AmpPercentageCollectionValidator;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 
-public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionValidatorField<AmpFundingDetail,Double> {
+public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionValidatorField<T,Double> {
 
-	AbstractReadOnlyModel<List<AmpFundingDetail>> secondAmountListModel;
+	AbstractReadOnlyModel<List<T>> secondAmountListModel;
 
 	private boolean currentModelAmountSumBig;
 	
@@ -30,7 +32,7 @@ public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionV
 	 * @param fmName
 	 */
 	public AmpCollectionsSumComparatorValidatorField(String id,
-			IModel<? extends Collection<AmpFundingDetail>> setModel,  String fmName, String messageKey) {
+			IModel<? extends Collection<T>> setModel,  String fmName, String messageKey) {
 		super(id, setModel, fmName, new AmpCollectionsSumComparatorValidator(messageKey));
 		hiddenContainer.setType(Double.class);
 	
@@ -39,7 +41,7 @@ public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionV
 	
 	
 	@Override
-	public IModel getHiddenContainerModel(final IModel<? extends Collection<AmpFundingDetail>> setModel) {
+	public IModel getHiddenContainerModel(final IModel<? extends Collection<T>> setModel) {
 		Model<Double> model=new Model<Double>() {
 			@Override
 			public void setObject(Double object) {
@@ -61,12 +63,27 @@ public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionV
 
 
 
-	protected double calculateSum(Collection<AmpFundingDetail> collection) {
+	protected double calculateSum(Collection<T> collection) {
 		double total =0;
-		for( AmpFundingDetail item : collection) 
+		
+		for( T item : collection) 
 		{
-			if(item.getTransactionAmount() != null)
-			   total+=item.getTransactionAmount().doubleValue();
+			if(item instanceof AmpFundingDetail)
+			{
+			if(((AmpFundingDetail)item).getTransactionAmount() != null)
+			   total+=((AmpFundingDetail)item).getTransactionAmount().doubleValue();
+			}
+			else if(item instanceof AmpComponentFunding)
+			{
+			if(((AmpComponentFunding)item).getTransactionAmount() != null)
+			   total+=((AmpComponentFunding)item).getTransactionAmount().doubleValue();
+			}else if(item instanceof AmpRegionalFunding)
+			{
+			if(((AmpRegionalFunding)item).getTransactionAmount() != null)
+			   total+=((AmpRegionalFunding)item).getTransactionAmount().doubleValue();
+			}
+			
+				
 				
 		}
 		return total;
@@ -75,7 +92,7 @@ public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionV
 
 
 	public void setSecondCollectionModel(
-			AbstractReadOnlyModel<List<AmpFundingDetail>> secondAmountListModel) {
+			AbstractReadOnlyModel<List<T>> secondAmountListModel) {
 		this.secondAmountListModel=secondAmountListModel;
 		
 	}

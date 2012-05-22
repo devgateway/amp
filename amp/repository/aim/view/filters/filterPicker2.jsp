@@ -45,8 +45,8 @@ StopWatch.next("Filters", true);
 		<li><a href="#financingLocTab"><div><digi:trn>Financing & Location</digi:trn></div></a></li>
 		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
 	</ul>
-	<div class="yui-content" style="background-color: #f6faff;margin-top: 10px;background: white;" >
-		<div id="donorsTab" style="height:80%;">
+	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;background: white;" >
+		<div id="donorsTab" style="height: 91%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="donorsPropertyObj" />
@@ -54,7 +54,7 @@ StopWatch.next("Filters", true);
 				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
-		<div id="relAgenciesTab" class="yui-hidden" style="height: 80%;">
+		<div id="relAgenciesTab" class="yui-hidden" style="height: 91%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
@@ -62,7 +62,7 @@ StopWatch.next("Filters", true);
 				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
-		<div id="sectorsTab" class="yui-hidden"  style="height: 80%;">
+		<div id="sectorsTab" class="yui-hidden"  style="height: 91%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="sectorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="sectorsPropertyObj" />
@@ -71,7 +71,7 @@ StopWatch.next("Filters", true);
 			</div>
 		</div>
 		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
-			<div id="programsTab" class="yui-hidden"  style="height: 80%;" >
+			<div id="programsTab" class="yui-hidden"  style="height: 91%;" >
 				<div class="grayBorder">
 					<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
 					<bean:define id="reqPropertyObj" toScope="request" value="programsPropertyObj" />
@@ -80,7 +80,7 @@ StopWatch.next("Filters", true);
 				</div>
 			</div>
 		</module:display>
-		<div id="financingLocTab" class="yui-hidden"  style="height: 80%;" >
+		<div id="financingLocTab" class="yui-hidden"  style="height: 91%;" >
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="financingLocPropertyObj" />
@@ -93,7 +93,7 @@ StopWatch.next("Filters", true);
 				
 			</div>
 		</div>
-		<div id="otherCriteriaTab" class="yui-hidden"  class="kSearchBox">
+		<div id="otherCriteriaTab" class="yui-hidden"  style="height: 91%;">
 			<div class="grayBorder">
 				<c:set var="reqSelectorHeaderSize" scope="request" value="13" />
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="otherCriteriaElements" />
@@ -103,24 +103,32 @@ StopWatch.next("Filters", true);
 					<%@include file="bigFilterTable.jsp" %>
 				</div>
 				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
-				<div style="width: 20%;  padding: 10px; float: left; ">
+				<div style="width: 20%; height: 30%; padding: 10px; float: left; ">
 					<c:set var="tooltip_translation">
 						<digi:trn>Specify keywords to look for in the project data.</digi:trn>
 					</c:set>
 					<b><digi:trn>Keyword Search</digi:trn> </b>
 					<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
 						src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
-						
+						<br />
+						<br />
 						<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
 				</div>
-				<div style="width: 33%; padding: 10px; float: left;">
+				<div style="width: 33%; height:30%; padding: 10px; float: left;">
 					<b><digi:trn>Date Filter</digi:trn> </b>
-					
+					<br />
 					<table style="font-family: Arial; font-size: 1em;">
-					
+						<tr>
+							<td align="left" colspan="2">
+								<digi:trn key="rep:filer:From"> From </digi:trn>
+							</td>
+							<td align="left" colspan="2">
+								<digi:trn key="rep:filer:To"> To </digi:trn>
+							</td>
+						</tr>
 						<tr bgcolor="#F6FAFF">
 							<td colspan="2" align="left">
-							<html:text  property="fromDate" size="10" styleId="fromDate" styleClass="inp-text" readonly="true" value="from" />
+							<html:text  property="fromDate" size="10" styleId="fromDate" styleClass="inp-text" readonly="true" />
 							<a id="date1" style="background-color: #F6FAFF;" href='javascript:pickDateById("date1","fromDate")'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
@@ -128,7 +136,7 @@ StopWatch.next("Filters", true);
 							
 							
 							<td colspan="2" align="left">
-							<html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" value="to" />
+							<html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" />
 							<a id="date2" style="background-color: #F6FAFF;" href='javascript:pickDateById("date2","toDate")'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
@@ -136,19 +144,20 @@ StopWatch.next("Filters", true);
 						</tr>
 					</table>
 				</div>
-				<div style="width: 17%; padding: 10px; float: left;">
+				<div style="width: 17%; height: 30%; padding: 10px; float: left;">
 					<span style="white-space: nowrap"><b><digi:trn>Actual Approval Year</digi:trn> </b></span>
-					
+						<br />
+						<br />
 						<html:select property="actualAppYear"  style="width: 100px" styleClass="inp-text">
 							<option value="-1"><digi:trn key="aim:filters:actualAppYear">Year</digi:trn></option>
                          	<html:optionsCollection property="actualAppYearsRange" label="wrappedInstance" value="wrappedInstance" />
 						</html:select>
 				</div>
 				<feature:display name="Computed Columns Filters" module="Filter Section">
-					<div style="margin-left: 80%;width: 20%; padding: 10px; ">
+					<div style="margin-left: 80%;width: 20%; height: 30%; padding: 10px; ">
 						<span style="white-space: nowrap"><b><digi:trn>Computed Columns</digi:trn> </b></span>
-							
-							
+							<br />
+							<br />
 							<html:select property="computedYear"  style="width: 100px" styleClass="inp-text">
 								<option value="-1"><digi:trn key="aim:filters:currentYear">Current Year</digi:trn></option>
 	                         	<html:optionsCollection property="computedYearsRange" label="wrappedInstance" value="wrappedInstance" />
@@ -159,7 +168,7 @@ StopWatch.next("Filters", true);
 		</div>
 	</div>
 </div>
-<div class="kSearchBox">
+<div style="width:50%; float:left; font-size: 12px;text-align: center;">
 		<c:set var="tooltip_translation">
 			<digi:trn>Specify keywords to look for in the project data.</digi:trn>
 		</c:set>
@@ -173,13 +182,13 @@ StopWatch.next("Filters", true);
 				<option value="1"><digi:trn>All keywords</digi:trn></option>
 			</html:select>
 			
-
+</div>
 <div style="display: block; overflow:hidden;width:50%; float:left; font-size: 12px">
 	<html:checkbox property="justSearch" value="true" />&nbsp;
 	<digi:trn>Use filter as advanced search</digi:trn>
 </div>
 
-
+<div style="clear:both;text-align:center;padding:2px 0px 0px 0px;margin-top: 20px;height: 15%;">
 				<html:hidden property="ampReportId" />
 
 				<html:hidden property="defaultCurrency" />

@@ -278,6 +278,25 @@ public class AmpARFilter extends PropertyListable {
 	private DecimalFormat currentFormat = null;
 	private Integer amountinthousand;
 	private Boolean amountinmillion;
+	private String decimalseparator;
+	private String groupingseparator;
+	
+	public String getDecimalseparator() {
+		return decimalseparator;
+	}
+
+	public void setDecimalseparator(String decimalseparator) {
+		this.decimalseparator = decimalseparator;
+	}
+
+	public String getGroupingseparator() {
+		return groupingseparator;
+	}
+
+	public void setGroupingseparator(String groupingseparator) {
+		this.groupingseparator = groupingseparator;
+	}
+	
 	public final Boolean getAmountinmillion() {
 		return amountinmillion;
 	}

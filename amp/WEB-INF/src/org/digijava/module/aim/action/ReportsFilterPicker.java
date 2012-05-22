@@ -80,6 +80,8 @@ import org.hibernate.LazyInitializationException;
 import org.hibernate.Session;
 import org.springframework.beans.BeanWrapperImpl;
 
+import com.sun.media.jai.util.RWLock;
+
 /**
  * @author mihai
  * 
@@ -1471,7 +1473,8 @@ public class ReportsFilterPicker extends MultiAction {
 		custom.setDecimalFormatSymbols(ds);
 		arf.setAmountinthousand(filterForm.getAmountinthousandsint());
 		arf.setAmountinmillion(filterForm.getAmountinmillions());
-		
+		arf.setDecimalseparator(filterForm.getCustomDecimalSymbolTxt());
+		arf.setGroupingseparator(filterForm.getCustomGroupCharacterTxt());
 		arf.setCurrentFormat(custom);
 
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency(), AmpOrganisation.class));

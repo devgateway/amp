@@ -1916,241 +1916,145 @@ border-right: 1px solid rgb(208, 208, 208);
                	</field:display> 
                		
               <!-- End Departments -->
-                <tr>
-                    <td  class="tdBoldClass">
-                        <digi:trn>
-                            Pledges
-                        </digi:trn>
-                    </td>
-                    <td>
-                        <%
-       String tempIndexStr = "";
-                        %> <%
-                                                                                                                                               int tempIndex = 0;
-                        %> <!-- ############################## -->
-                        <table width="100%" border="0" bgcolor="#f4f4f2"
-                               cellspacing="1" cellpadding="0"
-                               class=box-border-nopadding>
-                            <c:if test="${ aimAddOrgForm.fundingDetails != null}">
-                                <c:set var="index" value="-1" />
-                                <tr>
-                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn>Program</digi:trn></td>
-                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn>Planned</digi:trn></td>
-                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn>Amount</digi:trn></td>
-                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn>Currency</digi:trn></td>
-                                    <td align="center" valign="bottom" class="tdBoldClass"><digi:trn>Date</digi:trn></td>
-                                </tr>
-                                <c:forEach var="fundingDetail"
-                                           items="${aimAddOrgForm.fundingDetails}">
-                                    <tr>
-                                        <td valign="bottom" class="tdClass"><html:text
-                                                name="fundingDetail" indexed="true"
-                                                property="program" styleClass="inp-text" size="10" />
-                                        </td>
-                                        <td valign="bottom" class="tdClass"><c:set var="index"
-                                               value="${index+1}" /> <html:select
-                                               name="fundingDetail" indexed="true"
-                                               property="adjustmentTypeName.index" styleClass="inp-text">
-                                                <html:option value="0">
-                                                    <digi:trn>Planned</digi:trn>
-                                                </html:option>
-                                            </html:select></td>
-                                        <td valign="bottom" class="tdClass"><html:text
-                                                name="fundingDetail" indexed="true"
-                                                property="amount" size="17" styleClass="amt" /></td>
-                                        <td valign="bottom" class="tdClass"><html:select
-                                                name="fundingDetail" indexed="true"
-                                                property="currencyCode" styleClass="inp-text">
-                                                <html:optionsCollection name="aimAddOrgForm"
-                                                                        property="currencies" value="currencyCode"
-                                                                        label="currencyName" />
-                                            </html:select></td>
-                                        <td vAlign="bottom" class="tdClass">
-                                            <table cellpadding="0" cellspacing="0">
-                                                <tr>
-                                                    <td valign="bottom">
-                                                        <%
-                                                                tempIndexStr = "" + tempIndex;
-                                                                                        tempIndex++;
-                                                        %> <html:text name="fundingDetail" indexed="true"
-                                                                      property="date" styleId="<%=tempIndexStr%>"
-                                                                      styleClass="inp-text" readonly="true" size="10" />
-                                                    </td>
-                                                    <td align="left" vAlign="center">&nbsp; <a
-                                                            id="transDate<%=tempIndexStr%>"
-                                                            href='javascript:pickDateById("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-                                                            <img
-                                                                src="/TEMPLATE/ampTemplate/images/show-calendar.gif"
-                                                                alt="Click to View Calendar" border="0"> </a></td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                        <td valign="bottom"><a
-                                                href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>)">
-                                                <digi:img src="/TEMPLATE/ampTemplate/images/trash_16.gif"
-                                                          border="0" alt="Delete this transaction" /> </a></td>
-                                    </tr>
-                                </c:forEach>
-                            </c:if>
-                            <tr>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr valign="baseline">
-                                <td colspan="1" width="10px"><input
-                                        type="button" class="buttonx_sm" onclick="addPledge();"
-                                        value='<digi:trn>Add Pledge</digi:trn>' />
-                                </td>
-                                <td colspan="5" align="right">
-                            <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-                                <FONT color=blue>*
-                                    <digi:trn>
-																							All the amounts are in thousands (000)
-                                </digi:trn> </FONT>
-                            </gs:test>
-                    </td>
-                </tr>
-            </table>
-
-        </td>
-    </tr>
+               
 </c:otherwise>
 </c:choose>
 
 
  <!-- Contact -->
-								<tr>
-								    <td colspan="2">
-								        
-								        <fieldset style="margin-left:10px; margin-right:10px; margin-bottom:15px;">
-								            <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
-											<div style="float:right">
-                                            <a href="javascript:exportInfo('exportContactInfo')" >
-                                                <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
-                                            </a>
-								        </div>
-								                <img id="img_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('contact')"/>
-								                <img id="imgh_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('contact')"/>
-								                <div id="div_container_contact">
-								                <table cellpadding="2" cellspacing="0" border="0" width="100%">
-								                <c:if test="${not empty aimAddOrgForm.orgContacts}">
-								                    <tr>
-								                        <td colspan="2">
-								                            <c:if test="${fn:length(aimAddOrgForm.orgContacts)>1}">
-								                                <div style="overflow-y: scroll; overflow-x: hidden;width: 95%; height: 100px;">
-								                                </c:if>
-								                                    <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="table_contact_content" style="margin-top:20px;">
-								                                    <tr>
-								                                        <td>&nbsp;
-								                                            
-								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
-								                                            <digi:trn>LAST NAME</digi:trn>
-								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
-								                                            <digi:trn>FIRST NAME</digi:trn>
-								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
-								                                            <digi:trn>EMAIL </digi:trn>
-								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
-								                                            <digi:trn> TELEPHONE </digi:trn>
-								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
-								                                            <digi:trn> FAX </digi:trn>
-								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
-								                                            <digi:trn>TITLE </digi:trn>
-								                                        </td>
-								                                        <td class="tdBoldClass" style="color:#000000">
-								                                        	<digi:trn>PRIMARY </digi:trn>
-								                                        </td>
-								                                        <td colspan="2">&nbsp;
-								                                            
-								                                        </td>
-								                                    </tr>
-								                                    <c:forEach var="orgCont" items="${aimAddOrgForm.orgContacts}" varStatus="stat">
-								                                        <c:set var="ampContactId">
-								                                            <c:choose>
-								                                                <c:when test="${empty orgCont.contact.id||orgCont.contact.id==0}">
-								                                                    ${orgCont.contact.temporaryId}
-								                                                </c:when>
-								                                                <c:otherwise>
-								                                                    ${orgCont.contact.id}
-								                                                </c:otherwise>
-								                                            </c:choose>
-								                                        </c:set>
-								                                        <tr>
-								                                            <td style="width:40px">
-								                                                <html:multibox property="selectedContactInfoIds" styleClass="selectedContactInfoIds">
-								                                                    ${ampContactId}
-								                                                </html:multibox>
-								                                            </td>
-								                                            <td class="tdClass" nowrap>
-								                                                <c:out value="${orgCont.contact.lastname}"/>
-								                                            </td>
-								                                            <td class="tdClass" nowrap>
-								                                                <c:out value="${orgCont.contact.name}"/>
-								                                            </td>
-								                                            <td class="tdClass" nowrap>
-								                                            	<c:forEach var="email" items="${orgCont.contact.properties}">
-																					<c:if test="${email.name=='contact email'}">
-																						<div> <c:out value="${email.value}"/></div>
-																					</c:if>
-																				</c:forEach>
-								                                            </td>
-								                                            <td class="tdClass">
-								                                            	<c:forEach var="phone" items="${orgCont.contact.properties}">
-																					<c:if test="${phone.name=='contact phone'}">                                                                                     
-                                                                                        <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if> <c:out value="${phone.actualPhoneNumber}"></c:out></div>
-																					</c:if>
-																				</c:forEach>
-								                                            </td>
-								                                            <td class="tdClass">
-								                                                <c:forEach var="phone" items="${orgCont.contact.properties}">
-																					<c:if test="${phone.name=='contact fax'}">
-																						<div> <c:out value="${phone.value}"/></div>
-																					</c:if>
-																				</c:forEach>
-								                                            </td>
-								                                            <td class="tdClass">
-								                                                <c:if test="${not empty orgCont.contact.title}">
-								                                                   <digi:trn><c:out value="${orgCont.contact.title.value}"/></digi:trn>
-								                                                </c:if>
-								                                            </td>
-								                                            <td>
-									                                        	<html:multibox name="aimAddOrgForm" property="primaryOrgContIds" styleId="primary_${stat.index}" value="${ampContactId}" onchange="changePrimaryState()"/>
-									                                        </td>
-								                                            <td>
-										                                        <aim:editContactLink collection="orgContacts" form="${aimAddOrgForm}" contactId="${ampContactId}" addOrgBtn="hidden">
-										                                            <img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
-										                                        </aim:editContactLink>
-										                                        </td>
-										                                        <td>
-									                                            <a href="javascript:removeContact('${ampContactId}')">
-									                                                <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
-									                                            </a>
-									                                        </td>
-								                                        </tr>
-								                                    </c:forEach>
-								                                </table>
-								                                <c:if test="${fn:length(aimAddOrgForm.orgContacts)>1}">
-								                                	</div>
-								                            	</c:if>
-								                        </td>
-								                    </tr>
-								                      <tr>
-								                        <td colspan="2" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedContactInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="removeSelectedContacts()" value="<digi:trn>Delete</digi:trn>"></td>
-								                    </tr>
-								                </c:if>
-								                <tr>
-								                    <td colspan="2"><aim:addContactButton styleClass="buttonx_sm" collection="orgContacts" form="${aimAddOrgForm}" addOrgBtn="hidden"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
-								                </tr>
-								
-								            </table>
-								                </div>
-								        </fieldset>
-								    </td>
-								</tr>
+	<tr>
+	    <td colspan="2">
+	        
+	        <fieldset style="margin-left:10px; margin-right:10px; margin-bottom:15px;">
+	            <legend align="left" class="legendClass"><digi:trn>Contact Information</digi:trn></legend>
+				<div style="float:right">
+                                     <a href="javascript:exportInfo('exportContactInfo')" >
+                                         <digi:img src="/TEMPLATE/ampTemplate/imagesSource/common/xls_icon.jpg" border="0"/>
+                                     </a>
+	        </div>
+	                <img id="img_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('contact')"/>
+	                <img id="imgh_contact" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('contact')"/>
+	                <div id="div_container_contact">
+	                <table cellpadding="2" cellspacing="0" border="0" width="100%">
+	                <c:if test="${not empty aimAddOrgForm.orgContacts}">
+	                    <tr>
+	                        <td colspan="2">
+	                            <c:if test="${fn:length(aimAddOrgForm.orgContacts)>1}">
+	                                <div style="overflow-y: scroll; overflow-x: hidden;width: 95%; height: 100px;">
+	                                </c:if>
+	                                    <table width="100%" cellSpacing="1" cellPadding="1" align="left" id="table_contact_content" style="margin-top:20px;">
+	                                    <tr>
+	                                        <td>&nbsp;
+	                                            
+	                                        </td>
+	                                        <td class="tdBoldClass" style="color:#000000">
+	                                            <digi:trn>LAST NAME</digi:trn>
+	                                        </td>
+	                                        <td class="tdBoldClass" style="color:#000000">
+	                                            <digi:trn>FIRST NAME</digi:trn>
+	                                        </td>
+	                                        <td class="tdBoldClass" style="color:#000000">
+	                                            <digi:trn>EMAIL </digi:trn>
+	                                        </td>
+	                                        <td class="tdBoldClass" style="color:#000000">
+	                                            <digi:trn> TELEPHONE </digi:trn>
+	                                        </td>
+	                                        <td class="tdBoldClass" style="color:#000000">
+	                                            <digi:trn> FAX </digi:trn>
+	                                        </td>
+	                                        <td class="tdBoldClass" style="color:#000000">
+	                                            <digi:trn>TITLE </digi:trn>
+	                                        </td>
+	                                        <td class="tdBoldClass" style="color:#000000">
+	                                        	<digi:trn>PRIMARY </digi:trn>
+	                                        </td>
+	                                        <td colspan="2">&nbsp;
+	                                            
+	                                        </td>
+	                                    </tr>
+	                                    <c:forEach var="orgCont" items="${aimAddOrgForm.orgContacts}" varStatus="stat">
+	                                        <c:set var="ampContactId">
+	                                            <c:choose>
+	                                                <c:when test="${empty orgCont.contact.id||orgCont.contact.id==0}">
+	                                                    ${orgCont.contact.temporaryId}
+	                                                </c:when>
+	                                                <c:otherwise>
+	                                                    ${orgCont.contact.id}
+	                                                </c:otherwise>
+	                                            </c:choose>
+	                                        </c:set>
+	                                        <tr>
+	                                            <td style="width:40px">
+	                                                <html:multibox property="selectedContactInfoIds" styleClass="selectedContactInfoIds">
+	                                                    ${ampContactId}
+	                                                </html:multibox>
+	                                            </td>
+	                                            <td class="tdClass" nowrap>
+	                                                <c:out value="${orgCont.contact.lastname}"/>
+	                                            </td>
+	                                            <td class="tdClass" nowrap>
+	                                                <c:out value="${orgCont.contact.name}"/>
+	                                            </td>
+	                                            <td class="tdClass" nowrap>
+	                                            	<c:forEach var="email" items="${orgCont.contact.properties}">
+														<c:if test="${email.name=='contact email'}">
+															<div> <c:out value="${email.value}"/></div>
+														</c:if>
+													</c:forEach>
+	                                            </td>
+	                                            <td class="tdClass">
+	                                            	<c:forEach var="phone" items="${orgCont.contact.properties}">
+														<c:if test="${phone.name=='contact phone'}">                                                                                     
+                                                                                 <div><c:if test="${not empty phone.phoneCategory}"><digi:trn> <c:out value="${phone.phoneCategory}"/></digi:trn></c:if> <c:out value="${phone.actualPhoneNumber}"></c:out></div>
+														</c:if>
+													</c:forEach>
+	                                            </td>
+	                                            <td class="tdClass">
+	                                                <c:forEach var="phone" items="${orgCont.contact.properties}">
+														<c:if test="${phone.name=='contact fax'}">
+															<div> <c:out value="${phone.value}"/></div>
+														</c:if>
+													</c:forEach>
+	                                            </td>
+	                                            <td class="tdClass">
+	                                                <c:if test="${not empty orgCont.contact.title}">
+	                                                   <digi:trn><c:out value="${orgCont.contact.title.value}"/></digi:trn>
+	                                                </c:if>
+	                                            </td>
+	                                            <td>
+		                                        	<html:multibox name="aimAddOrgForm" property="primaryOrgContIds" styleId="primary_${stat.index}" value="${ampContactId}" onchange="changePrimaryState()"/>
+		                                        </td>
+	                                            <td>
+			                                        <aim:editContactLink collection="orgContacts" form="${aimAddOrgForm}" contactId="${ampContactId}" addOrgBtn="hidden">
+			                                            <img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/>
+			                                        </aim:editContactLink>
+			                                        </td>
+			                                        <td>
+		                                            <a href="javascript:removeContact('${ampContactId}')">
+		                                                <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"/>
+		                                            </a>
+		                                        </td>
+	                                        </tr>
+	                                    </c:forEach>
+	                                </table>
+	                                <c:if test="${fn:length(aimAddOrgForm.orgContacts)>1}">
+	                                	</div>
+	                            	</c:if>
+	                        </td>
+	                    </tr>
+	                      <tr>
+	                        <td colspan="2" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedContactInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="removeSelectedContacts()" value="<digi:trn>Delete</digi:trn>"></td>
+	                    </tr>
+	                </c:if>
+	                <tr>
+	                    <td colspan="2"><aim:addContactButton styleClass="buttonx_sm" collection="orgContacts" form="${aimAddOrgForm}" addOrgBtn="hidden"><digi:trn>Add contact</digi:trn></aim:addContactButton></td>
+	                </tr>
+	
+	            </table>
+	                </div>
+	        </fieldset>
+	    </td>
+	</tr>
 
 
 <c:if test="${aimAddOrgForm.type=='NGO'}">

@@ -261,13 +261,13 @@
 						
 						
 						
-						<table width="100%" cellspacing="0" cellpadding="0" class="inside">
+						<table width="150" cellspacing="0" cellpadding="0" class="inside">
 														<tbody><tr>
 															<td class="inside"><img width="15" height="10" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif"> <digi:link module="aim"  href="/admin.do" > <digi:trn key="aim:AmpAdminHome"> Admin Home </digi:trn></digi:link></td>
 														</tr>
 														<tr>
 														<td class="inside">
-														
+														<img width="15" height="10" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif">
 														<c:set var="trn"><digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn></c:set>
             <digi:link module="aim" href="/quartzJobClassManager.do" title="${trn}"><digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn></digi:link>
 														

@@ -200,8 +200,9 @@ saveReportEngine	= null;
 		}
 		
 		YAHOO.amptab.handleClose = function() {
-			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('myFilter');
+			filter.innerHTML 	= '';
+			var wrapper			= document.getElementById('myFilterWrapper');
 			if (filter.parent != null)
 					filter.parent.removeChild(filter);
 			wrapper.appendChild(filter);
@@ -269,7 +270,7 @@ saveReportEngine	= null;
 			    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 			    draggable:true} );
 	
-	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
+	myPanel1.hideEvent.subscribe(YAHOO.amptab.handleClose);
 	myPanel5.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseAbout);
 	myPanel4.beforeHideEvent.subscribe(YAHOO.amptab.handleCloseShowFormat);
 		    
@@ -319,9 +320,22 @@ saveReportEngine	= null;
 	}
 	
 	function showFilter() {
-		$("#myFilter").empty().html('<div align="center" style="font-size: 11px;margin-top:190px;"><img src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/></div>');
-		//$("#myFilter").load("/aim/reportsFilterPicker.do");
-		YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do", {
+		document.getElementById("myFilter").innerHTML = '<div align="center" style="font-size: 11px;margin-top:190px;"><img src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/></div>';
+		
+		var element = document.getElementById("myFilter");
+		element.style.display   = "block";
+ 	 	element.style.height    = "500px";
+
+ 	 	myPanel1.setBody(element);
+		
+ 	 	myPanel1.cfg.setProperty("height", "520px" );
+ 	 	myPanel1.cfg.setProperty("width", "870px" );
+		myPanel1.center();
+		myPanel1.show();
+		
+		var timestamp = new Date().getTime();
+		
+		YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?timestamp="+timestamp, {
 			success: function(o) {
 				document.getElementById("myFilter").innerHTML	= o.responseText;
 				YAHOO.amptab.afterFiltersLoad();
@@ -331,15 +345,6 @@ saveReportEngine	= null;
 			}
 		});
 		YAHOO.amptab.init();
-		var element = document.getElementById("myFilter");
-		element.style.display   = "block";
- 	 	element.style.height    = "500px";
-
- 	 	myPanel1.setBody(element);
- 	 	myPanel1.cfg.setProperty("height", "520px" );
- 	 	myPanel1.cfg.setProperty("width", "870px" );
-		myPanel1.center();
-		myPanel1.show();
 
 		initCalendar();
 

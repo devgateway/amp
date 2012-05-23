@@ -38,7 +38,18 @@
 function 
 SwitchLanguageMenu(value) {
         if(typeof quitRnot1 != 'function'||quitRnot1('${msg}')!=false){
-                document.location.href = value + document.location.href;
+                if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
+            		var referLink = document.createElement('a');
+            		referLink.href = value + document.location.href;
+            		referLink.target = "_self";
+            		document.body.appendChild(referLink);
+            		referLink.click();
+            		
+            	}
+            	else{
+            		 document.location.href = value + document.location.href;
+            	}
+            	
             }
     }
 </script>

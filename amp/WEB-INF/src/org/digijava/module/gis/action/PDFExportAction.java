@@ -392,7 +392,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		}
 
 		imagesTable.addCell(getImageChart(imgChart, selectedDonorName,
-				selectedFromYear, selectedTotYear, publicMode));
+				selectedFromYear, selectedTotYear, request.getParameter("selectedCurrency"), publicMode));
 		// imagesTable.addCell(" ");
 
 		// First batch of widgets
@@ -831,7 +831,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 	}
 
 	private PdfPTable getImageChart(Image imgChart, String selectedDonorName,
-			Integer selectedStartYear, Integer selectedEndYear, boolean isPublic)
+			Integer selectedStartYear, Integer selectedEndYear, String selectedCurency, boolean isPublic)
 			throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
@@ -906,8 +906,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			if (selectedEndYearTranslation == null
 					|| selectedEndYearTranslation.equals(""))
 				selectedEndYearTranslation = "End year";
-			String baseCurr = FeaturesUtil
+
+            /*
+            String baseCurr = FeaturesUtil
 					.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+					*/
+            String baseCurr = selectedCurency != null ? selectedCurency : FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+
 			if (baseCurr == null) {
 				baseCurr = "USD";
 			}

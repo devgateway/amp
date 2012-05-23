@@ -20,9 +20,12 @@ import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
+import org.dgfoundation.amp.ar.cell.ComputedMeasureCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
+import org.dgfoundation.amp.exprlogic.Values;
 import org.digijava.module.aim.helper.KeyValue;
 
 /**
@@ -106,6 +109,8 @@ public class GroupReportData extends ReportData {
 	}
 	
 	protected Integer sourceColsCount;
+
+	private BigDecimal totalac;
 
 	public MetaInfo getThisLevelSorter() {
 		int myDepth=getLevelDepth()-1;
@@ -251,6 +256,25 @@ public class GroupReportData extends ReportData {
 					if (totalExpression!=null){
 						c0.getValues().prepareCountValues();
 						c0.setComputedVaule(MathExpressionRepository.get(totalExpression).result(c0.getValues()));
+					}
+				}
+				if (cell instanceof ComputedMeasureCell) {
+//					String totalExpression=.getColumn().getWorker().getRelatedColumn().getTotalExpression();
+					MathExpression math = null;
+					if (((ComputedMeasureCell) cell).getColumn().getExpression() != null) {
+						math = MathExpressionRepository.get(((ComputedMeasureCell) cell).getColumn().getExpression());
+					} else {
+						math = MathExpressionRepository.get(((ComputedMeasureCell) cell).getColumn().getWorker().getRelatedColumn().getTokenExpression());
+					}
+					ComputedMeasureCell c0=(ComputedMeasureCell) cell ;
+					Values values = c0.getValues();
+					if(this.getTotalActualCommitments() != null)
+						values.put(ArConstants.GRAND_TOTAL_ACTUAL_COMMITMENTS, this.getTotalActualCommitments());
+					else if (this.getParent().getTotalActualCommitments() != null)
+						values.put(ArConstants.GRAND_TOTAL_ACTUAL_COMMITMENTS, this.getParent().getTotalActualCommitments());
+					
+					if (math!=null){
+						values.put("COMPUTED_VALUE", math.result(values));
 					}
 				}
 				
@@ -449,5 +473,13 @@ public class GroupReportData extends ReportData {
 		}
 		this.setRowSpan(rowspan +1);
 	}
+
+	public void setTotalActualCommitments(BigDecimal total) {
+		this.totalac = total;
+	}
+	public BigDecimal getTotalActualCommitments() {
+		return this.totalac;
+	}
+
 	
 }

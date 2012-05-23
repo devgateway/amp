@@ -194,7 +194,9 @@ public final class ArConstants {
 	public final static String COLUMN_ANY_SECONDARYPROG	= "Secondary Program";
 	
 	//additional measures
+	public static final String GRAND_TOTAL_ACTUAL_COMMITMENTS = "GRAND_TOTAL_ACTUAL_COMMITMENTS";
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
+	public final static String ACTUAL_COMMITMENTS="Actual Commitments";
 	public final static String UNCOMMITTED_BALANCE="Uncommitted Balance";
 	public final static String TOTAL_COMMITMENTS="Total Commitments";
 	public final static String TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS="Percentage Of Total Disbursements";
@@ -269,6 +271,8 @@ public final class ArConstants {
 	public final static String TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR= "TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR";
 	
 	public final static String EXCHANGE_RATES_CACHE="EXCHANGE_RATES_CACHE";
+
+
 	
 		
 }

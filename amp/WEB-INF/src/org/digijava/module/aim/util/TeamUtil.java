@@ -1516,12 +1516,12 @@ public class TeamUtil {
             if(!includedraft){
             	queryString.append("  and   (g.ampActivityLastVersion.draft is null or g.ampActivityLastVersion.draft=false)) ");
             }
-            if(keyword!=null){
+            if(keyword!=null && keyword.length()>0){
             	queryString.append(" and lower(g.ampActivityLastVersion.name) like lower(:name)") ;
             }
             
             qry = session.createQuery(queryString.toString());
-          	if(keyword!=null){
+          	if(keyword!=null && keyword.length()>0){
               	qry.setString("name", "%" + keyword + "%");
             }
           	if(teamId!=null){

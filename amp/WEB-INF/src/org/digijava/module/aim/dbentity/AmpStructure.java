@@ -166,7 +166,7 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpStructure aux = (AmpStructure) clone();
 		aux.activities = new HashSet();
-		aux.activities.add(newActivity);
+		//aux.activities.add(newActivity);
 		aux.ampStructureId = null;
 		return aux;
 	}

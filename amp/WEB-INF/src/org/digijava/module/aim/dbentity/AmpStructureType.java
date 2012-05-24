@@ -41,22 +41,6 @@ public class AmpStructureType implements ARDimensionable, Serializable{
 		this.name = name;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		AmpStructureType target= (AmpStructureType) obj;
-		
-		if (target!=null && this.typeId!=null){
-			if (target.getTypeId().doubleValue()==this.getTypeId().doubleValue()){
-				return true;
-			}
-		}
-		return false;
-	}
-	@Override
-	public int hashCode() {
-		return this.getTypeId().hashCode();
-	}
-	
 	public int compareTo(AmpStructureType o) {
 		try {
 			if (this.name.compareToIgnoreCase(o.getName()) > 0) {

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-13287</jira>
+	<keyword>XML Patches</keyword>
+	<author>Alexandru Artimon</author>
+	<description>Update patches references to the new folder names</description>
+	<apply>
+		<script>
+			<lang type="hql">
+				UPDATE AmpXmlPatch SET location=replace(location, '/2', '/2.0.') where location like '%xmlpatches/20%'
+			</lang>
+		</script>
+		<script>
+			<lang type="hql">
+				UPDATE AmpXmlPatch SET location=replace(location, '/2', '/2.0.') where location like '%xmlpatches/210/'
+			</lang>
+		</script>
+		<script>
+			<lang type="hql">
+				UPDATE AmpXmlPatch SET location=replace(location, '/21', '/2.1.') where location like '%xmlpatches/210%'
+			</lang>
+		</script>
+		<script>
+			<lang type="hql">
+				UPDATE AmpXmlPatch SET location=replace(location, '/2', '/2.0.') where location like '%xmlpatches/21%'
+			</lang>
+		</script>
+		<script>
+			<lang type="hql">
+				UPDATE AmpXmlPatch SET state=0 where state=4 and location like 'xmlpatches/2.%'
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -93,8 +93,7 @@ public final class XmlPatcherUtil {
 					else{
 						logger.info("pacth is null ");
 					}
-				
-					throw new DgException("Patch duplication detected! The name "+f.getName()+" is used by two or more patches." +
+					logger.error("Patch duplication detected! The name "+f.getName()+" is used by two or more patches." +
 							" Remove duplicates and restart the server.\n You are not allowed to use one patch name twice even if the older patch has been deleted.");
 				}
 			}

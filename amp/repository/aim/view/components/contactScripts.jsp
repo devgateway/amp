@@ -241,7 +241,7 @@ YAHOO.namespace("YAHOO.amp");
     	if(phoneNumbers!=null){ //if number is not null, then type also will not be null
     		for(var i=0;i < phoneNumbers.length; i++){
     			if(phoneNumbers[i].value==''){
-            		alert('<digi:trn>Please Enter phone</digi:trn>');
+            		alert('<digi:trn jsFriendly="true">Please Enter phone</digi:trn>');
             		return false;
     			}  
     		}
@@ -317,15 +317,15 @@ YAHOO.namespace("YAHOO.amp");
         var myArray=null;
         var msg='';
         if(dataName=='email' && $("input[id^='email_']").length>=allow){
-            msg='<digi:trn>Max Allowed Number Of Emails is 3 </digi:trn>';
+            msg='<digi:trn jsFriendly="true">Max Allowed Number Of Emails is 3 </digi:trn>';
         	alert(msg);
             return false;
         }else if(dataName=='phone'  && $("input[id^='phoneNum_']").length>=allow){
-        	msg='<digi:trn>Max Allowed Number Of Phones is 3 </digi:trn>';
+        	msg='<digi:trn jsFriendly="true">Max Allowed Number Of Phones is 3 </digi:trn>';
             alert(msg);
         	return false;
         }else if(dataName=='fax' && $("input[id^='fax_']").length>=allow){
-        	msg='<digi:trn>Max Allowed Number Of Faxes is 3 </digi:trn>';
+        	msg='<digi:trn jsFriendly="true">Max Allowed Number Of Faxes is 3 </digi:trn>';
             alert(msg);
         	return false;
         }

@@ -62,10 +62,18 @@ function updateChild(action) {
 
 function validateMandatoryFields (){
 	var workspaceName = document.getElementById("teamName").value;
+	var grpIndex=document.aimUpdateWorkspaceForm.workspaceGroup.selectedIndex;
+	var grpValue	= document.aimUpdateWorkspaceForm.workspaceGroup.options[grpIndex].value;
 	if(trim(workspaceName) == ''){
-		var msg = '<digi:trn>Please enter workspace name</digi:trn>';
+		var msg = '<digi:trn jsFriendly="true">Please enter workspace name</digi:trn>';
 		alert(msg);
 		return false;
+	}
+	if(grpValue=='0'){
+		var msg = '<digi:trn jsFriendly="true">Please select workspace group</digi:trn>';
+		alert(msg);
+		return false;
+		
 	}
 	return true;
 }

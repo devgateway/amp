@@ -151,6 +151,9 @@
             </field> -->
             <field property="workspaceType" depends="validOption"> 
             	<arg key="display.aim.workspaceType"/>
+           </field>
+           <field property="workspaceGroup" depends="validOption"> 
+            	<arg key="display.aim.workspaceGroup"/>
            </field>           
 	</form>
 

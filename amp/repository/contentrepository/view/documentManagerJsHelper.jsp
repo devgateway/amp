@@ -1222,9 +1222,7 @@ function validateAddDocument() {
 	}
 	if(webUrlVisible.style.display!='none' && document.forms['crDocumentManagerForm'].webLink.value == ''){ //adding url
 		msg = msg + "${translation_validation_url}"+'<br>' ;
-	}
-	
-	if(webUrlVisible.style.display!='none'){
+	}else if(webUrlVisible.style.display!='none'){
 		var enteredWebLink = document.forms['crDocumentManagerForm'].webLink.value;
 		var found	= urlFormat.test(enteredWebLink); //urlFormat.exec(enteredWebLink);		
 		if ( found != true ) {

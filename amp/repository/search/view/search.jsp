@@ -83,12 +83,12 @@
 			<div class="${keywordClasses}" style="padding-right: 150px">
 			
 			
-			<table border="0" cellpadding="3" cellspacing="3">
+			<table border="0" cellpadding="1" cellspacing="1">
   <tr>
-    <td><digi:trn>Keyword</digi:trn>: </td>
+    <td><digi:trn><b>Keyword</b></digi:trn>: </td>
     <td><html:text title="${searchTooltip}" 
 				property="keyword" styleClass="inputx insidex" size="25" /></td>
-    <td><digi:trn>Type</digi:trn>:</td>
+    <td><digi:trn><b>Type</b></digi:trn>:</td>
     <td><html:select property="queryType" styleClass="inputx insidex">
 				<html:option value="-1">
 					<digi:trn>ALL</digi:trn>
@@ -106,7 +106,7 @@
 					<digi:trn>Resources</digi:trn>
 				</html:option>
 			</html:select> </td>
-    <td><digi:trn>Search Mode</digi:trn>:</td>
+    <td><digi:trn><b>Search Mode</b></digi:trn>:</td>
     <td><html:select property="searchMode" styleClass="inputx insidex">
 				<html:option value="0">
 					<digi:trn>Any keyword</digi:trn>

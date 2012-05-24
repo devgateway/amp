@@ -76,8 +76,8 @@ public class ShowRegionReport extends Action {
             gisRegReportForm.setEndYear(filterForm.getFilterEndYear());
 
             Long regLocId = Long.parseLong(request.getParameter("regLocId"));
-
-            Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(filterForm, regLocId);
+            boolean isPublic = request.getParameter("isPublic") == null?false:true;
+            Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(filterForm, regLocId, isPublic);
 
             FundingData fndDat = null;
             if (filterResults[0] != null && ((Map)filterResults[0]).size() > 0) {
@@ -143,8 +143,8 @@ public class ShowRegionReport extends Action {
             gisFilterForm.setSelectedCurrency(baseCurr);
 
             Long regLocId = Long.parseLong(request.getParameter("regLocId"));
-
-            Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(gisFilterForm, regLocId);
+            boolean isPublic = request.getParameter("isPublic") == null?false:true;
+            Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(gisFilterForm, regLocId, isPublic);
 
             FundingData fndDat = null;
             if (filterResults[0] != null && ((Map)filterResults[0]).size() > 0) {

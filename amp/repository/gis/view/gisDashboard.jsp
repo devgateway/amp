@@ -222,7 +222,13 @@
 				<img style="position:relative; top:-100px;" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=500&height=500">
 			</c:if>
 			<c:if test="${isDevInfoMode == false}">
-				<img style="position:relative; top:-100px;" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&width=500&height=500">
+				<logic:present parameter="public">
+					<img style="position:relative; top:-100px;" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?isPublic=true&action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&width=500&height=500">
+				</logic:present>
+				<logic:notPresent parameter="public">
+					<img style="position:relative; top:-100px;" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&width=500&height=500">
+				</logic:notPresent>
+				
 			</c:if>
 			</div>
 		  

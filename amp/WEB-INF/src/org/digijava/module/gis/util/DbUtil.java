@@ -1927,7 +1927,8 @@ public class DbUtil {
                                                 List <AmpTeam> workspaces,
                                                 Collection <Long> typeOfAssistanceIds,
                                                 java.util.Date startDate,
-                                                java.util.Date endDate) {
+                                                java.util.Date endDate,
+                                                boolean isPublic) {
         List queryResults = null;
         Object[] retVal = null;
 
@@ -2028,6 +2029,11 @@ public class DbUtil {
                     queryStr.append(typeOfAssistanceWhereclause);
                 }
 
+                if (isPublic) {
+                    queryStr.append(" and (fd.ampFundingId.ampActivityId.approvalStatus ='approved' or fd.ampFundingId.ampActivityId.approvalStatus ='startedapproved')");
+                    queryStr.append(" and fd.ampFundingId.ampActivityId.team.parentTeamId is not null");
+                }
+
                 Query q = sess.createQuery(queryStr.toString());
                 q.setDate("START_DATE", startDate);
                 q.setDate("END_DATE", endDate);
@@ -2078,7 +2084,8 @@ public class DbUtil {
                                                         Collection<AmpCategoryValueLocations> locations,
                                                         List <AmpTeam> workspaces,
                                                         java.util.Date startDate,
-                                                        java.util.Date endDate) {
+                                                        java.util.Date endDate,
+                                                        boolean isPublic) {
         List queryResults = null;
         Object[] retVal = null;
 
@@ -2140,6 +2147,11 @@ public class DbUtil {
                 if (workspaceIdsWhereclause != null) {
                     queryStr.append(" and rf.activity.team.ampTeamId in ");
                     queryStr.append(workspaceIdsWhereclause);
+                }
+
+                if (isPublic) {
+                    queryStr.append(" and (rf.activity.approvalStatus ='approved' or rf.activity.approvalStatus ='startedapproved')");
+                    queryStr.append(" and rf.activity.team.parentTeamId is not null");
                 }
 
 

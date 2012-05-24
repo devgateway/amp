@@ -337,7 +337,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
             String isRegSetStr = FeaturesUtil.getGlobalSettingValue("GIS Funding Type");
             boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("donor"))?GisUtil.GIS_DONOR_FUNDINGS:GisUtil.GIS_REGIONAL_FUNDINGS;
-            Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional);
+            boolean isPublic = request.getParameter("publicMode") == null?false:true;
+            Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional, isPublic);
 
             if (filterForm.isFilterAllSectors()) {
                 sectorName = "All";

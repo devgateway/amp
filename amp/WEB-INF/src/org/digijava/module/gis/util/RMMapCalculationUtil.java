@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class RMMapCalculationUtil {
 
-    public static Object[] getAllFundingsFiltered (GisFilterForm filter, boolean isRegional) {
+    public static Object[] getAllFundingsFiltered (GisFilterForm filter, boolean isRegional, boolean isPublic) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
         Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
@@ -75,24 +75,31 @@ public class RMMapCalculationUtil {
 
         if (isRegional == GisUtil.GIS_DONOR_FUNDINGS) {
         activityFundings = DbUtil.getActivityFundings(sectorCollector,
-                                                               programsIds,
-                                                               donnorAgencyIds,
-                                                               donorGroupIds,
-                                                               donorTypeIds,
-                                                               includeCildLocations,
-                                                               locations,
-                                                               workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime());
+                                                       programsIds,
+                                                       donnorAgencyIds,
+                                                       donorGroupIds,
+                                                       donorTypeIds,
+                                                       includeCildLocations,
+                                                       locations,
+                                                       workspaces,
+                                                       typeOfAssistanceIds,
+                                                       fStartDate.getTime(),
+                                                       fEndDate.getTime(),
+                                                       isPublic);
         }
         Object[] activityRegionalFundings = null;
         if (isRegional == GisUtil.GIS_REGIONAL_FUNDINGS) {
         activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
-                                                                               programsIds,
-                                                                               donnorAgencyIds,
-                                                                               donorGroupIds,
-                                                                               donorTypeIds,
-                                                                               includeCildLocations,
-                                                                               locations,
-                                                                               workspaces, fStartDate.getTime(), fEndDate.getTime());
+                                                                       programsIds,
+                                                                       donnorAgencyIds,
+                                                                       donorGroupIds,
+                                                                       donorTypeIds,
+                                                                       includeCildLocations,
+                                                                       locations,
+                                                                       workspaces,
+                                                                       fStartDate.getTime(),
+                                                                       fEndDate.getTime(),
+                                                                       isPublic);
         }
         Object[] fundingList = getAllFundingsByLocations(activityFundings,
                                                          activityRegionalFundings,
@@ -105,7 +112,7 @@ public class RMMapCalculationUtil {
         return fundingList;
     }
 
-    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId) {
+    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isPublic) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
         Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
@@ -164,7 +171,7 @@ public class RMMapCalculationUtil {
                                                                donorTypeIds,
                                                                includeCildLocations,
                                                                locations,
-                                                               null, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime());
+                                                               null, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), isPublic);
         Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
                                                                                donnorAgencyIds,
@@ -172,7 +179,7 @@ public class RMMapCalculationUtil {
                                                                                donorTypeIds,
                                                                                includeCildLocations,
                                                                                locations,
-                                                                               null, fStartDate.getTime(), fEndDate.getTime());
+                                                                               null, fStartDate.getTime(), fEndDate.getTime(), isPublic);
         Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, includeCildLocations, locations, currencyCode, true);
 
 

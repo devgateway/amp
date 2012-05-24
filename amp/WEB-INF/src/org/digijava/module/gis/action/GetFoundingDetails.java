@@ -1158,9 +1158,10 @@ public class GetFoundingDetails extends Action {
 
                     String isRegSetStr = FeaturesUtil.getGlobalSettingValue("GIS Funding Type");
                     boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("donor"))?GisUtil.GIS_DONOR_FUNDINGS:GisUtil.GIS_REGIONAL_FUNDINGS;
+                    boolean isPublic = request.getParameter("isPublic") == null?false:true;
 
                     GisFilterForm filterForm = GisUtil.parseFilterRequest (request);
-                    Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional);
+                    Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional, isPublic);
                     request.getSession().setAttribute("GIS_FILTER_RESULTS", new Object[] {filterForm, filterResults});
 
                 }

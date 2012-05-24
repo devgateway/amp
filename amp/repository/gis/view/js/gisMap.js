@@ -899,7 +899,11 @@
 		
 		jQuery.fn.dataForSectorFin();
 		
-		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getSelectedFilterMap&mapCode=TZA&mapLevel=" + mapLevelInt + "&width=" + canvasWidth + "&height=" + canvasHeight + "&uniqueStr=" + (new Date()).getTime();
+		if (!isPublic) {
+			document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getSelectedFilterMap&mapCode=TZA&mapLevel=" + mapLevelInt + "&width=" + canvasWidth + "&height=" + canvasHeight + "&uniqueStr=" + (new Date()).getTime();
+		} else {
+			document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?isPublic=true&action=getSelectedFilterMap&mapCode=TZA&mapLevel=" + mapLevelInt + "&width=" + canvasWidth + "&height=" + canvasHeight + "&uniqueStr=" + (new Date()).getTime();
+		}
 	}
 
 	
@@ -925,6 +929,10 @@
 		
 		
 		var requestURL = "../../gis/getFoundingDetails.do?mapCode=TZA&action=filter";
+		
+		if (isPublic) {
+			requestURL += "&isPublic=true";
+		}
 		
     $.post(requestURL, $("#gisFilterForm").serialize(), filterSet);
     
@@ -1419,7 +1427,11 @@
 			var popup = window.open("about:blank", "regReportWnd", "height=500,width=850,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
 			var filterForm = $("#gisFilterForm");
 			filterForm.attr("method", "post");
-			filterForm.attr("action", "/gis/ShowRegionReport.do?regLocId=" + regLocId);
+			if (isPublic) {
+				filterForm.attr("action", "/gis/ShowRegionReport.do?isPublic=true&regLocId=" + regLocId);
+			} else {
+				filterForm.attr("action", "/gis/ShowRegionReport.do?regLocId=" + regLocId);
+			}
 			filterForm.attr("target", "regReportWnd");
 			
 			var allSectors = false;

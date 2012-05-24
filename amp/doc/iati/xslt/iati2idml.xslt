@@ -1,32 +1,5 @@
 <?xml version="1.0"?>
-<!-- 
-   TODO
-
-   - support reporting-org
-   - support iati-identifier
--->
-<!--
-  IATI-to-IDML conversion script for UN-OCHA to Haiti AMP reporting.
-
-  David Megginson, 2010-04-27
-
-  This script will convert an XML document in IATI's draft format to
-  version 2.0 of the International Development Markup Language (IDML)
-  as currently used by Haiti's AMP (from the Development Gateway).
-  Note that the output has *not* been tested, and may contain
-  incorrect assumptions about how the AMP uses IDML.
-  
-  Please feel free to modify this script as required.  If you run into
-  strange bugs after making modifications, try removing the
-  xml:space="preserve" attribute from the root element: it results
-  in nicely-formatted output for humans to read, but makes the
-  XSLT very sensitive to whitespace changes.
-
-  This script is meant only as a stopgap, until the Development
-  Gateway AMP can import IATI data directly.
--->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-
   <!-- iterate through the IATI projects, ignoring anything else -->
   <xsl:template match="/iati-activities">
     <activities>
@@ -44,11 +17,11 @@
   <xsl:template match="iati-activity" mode="internal">
     <activity>
       <xsl:attribute name="dbKey">
-        <xsl:value-of select="other-identifier"/>
+        <xsl:value-of select="iati-identifier"/>
       </xsl:attribute>
       <id>
         <xsl:attribute name="uniqID">
-          <xsl:value-of select="other-identifier"/>
+          <xsl:value-of select="iati-identifier"/>
         </xsl:attribute>
         <assigningOrg>
         <!--owner-ref is used for the organization code-->
@@ -65,7 +38,7 @@
         <xsl:value-of select="description[@type='objectives']"/>
       </objective>
       <description>
-        <xsl:value-of select="description[@type='summary']"/>
+        <xsl:value-of select="description"/>
       </description>
       
       <location locationType="Country">
@@ -107,36 +80,64 @@
       </location>
       -->
       <!--I had to add a check here because the importer give and error-->
-      <xsl:if test="activity-date[@type='start']!=''">
+      <xsl:if test="activity-date[@type='start-planned']!=''">
         <proposedStartDate>
           <xsl:attribute name="date">
-            <xsl:value-of select="activity-date[@type='start']/@iso-date"/>
+            <xsl:value-of select="activity-date[@type='start-planned']"/>
           </xsl:attribute>
         </proposedStartDate>
       </xsl:if>
-      <xsl:if test="activity-date[@type='completion']!=''">
+      <xsl:if test="activity-date[@type='start-actual']!=''">
+        <actualStartDate>
+          <xsl:attribute name="date">
+            <xsl:value-of select="activity-date[@type='start-actual']"/>
+          </xsl:attribute>
+        </actualStartDate>
+      </xsl:if>
+      <xsl:if test="activity-date[@type='end-actual']!=''">
         <closingDate>
           <xsl:attribute name="date">
-            <xsl:value-of select="activity-date[@type='completion']/@iso-date"/>
+            <xsl:value-of select="activity-date[@type='end-actual']"/>
           </xsl:attribute>
         </closingDate>
       </xsl:if>
       <!--Modified-->
       <status>
-        <xsl:value-of select="activity-status/@ref"/>
+	      <xsl:if test="count(activity-status/@code)!=0">     
+		<xsl:value-of select="activity-status" />
+	      </xsl:if>
+	      <xsl:if test="count(activity-status/@code)=0">   
+		<xsl:text>à spécifier</xsl:text>
+	      </xsl:if>
       </status>
-      <!--Modified, no itereation before only one sector was taken-->
+      <!--Modified, no iteration before only one sector was taken-->
       <xsl:for-each select="sector">
         <sectors>
           <xsl:attribute name="percentage">
-           <xsl:value-of select="@percentage"/>
+	   <xsl:if test="count(@percentage)=0">
+	           <xsl:text>100</xsl:text>
+	   </xsl:if>
+	   <xsl:if test="count(@percentage)!=0">
+		<xsl:value-of select="@percentage"/>
+	   </xsl:if>
           </xsl:attribute>
           <xsl:attribute name="code">
-            <xsl:value-of select="@ref"/>
+            <xsl:value-of select="@code"/>
           </xsl:attribute>
           <xsl:value-of select="."/>
         </sectors>
       </xsl:for-each>
+      <xsl:if test="count(sector)=0">   
+	  <sectors>
+	  <xsl:attribute name="percentage">
+	   <xsl:text>100</xsl:text>
+	  </xsl:attribute>
+	  <xsl:attribute name="code">
+	   <xsl:text>998</xsl:text>
+	  </xsl:attribute>
+	   <xsl:text>UNALLOCATED/ UNSPECIFIED</xsl:text>
+        </sectors>
+      </xsl:if>
   
   <!--Funding Section, everything was changed here-->    
   
@@ -164,10 +165,20 @@
       <xsl:value-of select="../participating-org[@role='donor']"/>
     </fundingOrg>
     <assistanceType>
-      <xsl:value-of select="../aid-type"/>
+      <xsl:if test="count(aid-type)!=0">     
+        <xsl:value-of select="aid-type" />
+      </xsl:if>
+      <xsl:if test="count(aid-type)=0">   
+	      <xsl:if test="count(../aid-type)!=0">     
+		<xsl:value-of select="../aid-type" />
+	      </xsl:if>
+	      <xsl:if test="count(../aid-type)=0">   
+		<xsl:text>Grant</xsl:text>
+	      </xsl:if>
+      </xsl:if>
     </assistanceType>
      <!--IATI schema Does Not Have This Field-->
-    <financingInstrument>Direct Project Support</financingInstrument>
+    <financingInstrument>Appui projet/programme</financingInstrument>
     <xsl:choose>
       <xsl:when test="@type='Planned Disbursement'">
         <disbursements>
@@ -177,11 +188,21 @@
             </xsl:attribute>
             <!--Transaction amount-->
             <xsl:attribute name="amount">
-              <xsl:value-of select="value"/>
+		      <xsl:if test="count(value)!=0">     
+			<xsl:value-of select="value" />
+		      </xsl:if>
+		      <xsl:if test="count(value)=0">   
+			<xsl:text>0</xsl:text>
+		      </xsl:if>
             </xsl:attribute>
             <!--Date to use in the rate calculations-->
             <xsl:attribute name="date">
-              <xsl:value-of select="value/@value-date"/>
+	    	      <xsl:if test="count(value/@value-date)!=0">     
+			<xsl:value-of select="value/@value-date" />
+		      </xsl:if>
+		      <xsl:if test="count(value/@value-date)=0">   
+			<xsl:value-of select="period-start" />
+		      </xsl:if>
             </xsl:attribute>
             <!--Allways Planed Here -->
             <xsl:attribute name="type">
@@ -197,11 +218,21 @@
             </xsl:attribute>
             <!--Transaction amount-->
             <xsl:attribute name="amount">
-              <xsl:value-of select="value"/>
+		      <xsl:if test="count(value)!=0">     
+			<xsl:value-of select="value" />
+		      </xsl:if>
+		      <xsl:if test="count(value)=0">   
+			<xsl:text>0</xsl:text>
+		      </xsl:if>
             </xsl:attribute>
             <!--Date to use in the rate calculations-->
             <xsl:attribute name="date">
-              <xsl:value-of select="value/@value-date"/>
+	    	      <xsl:if test="count(value/@value-date)!=0">     
+			<xsl:value-of select="value/@value-date" />
+		      </xsl:if>
+		      <xsl:if test="count(value/@value-date)=0">   
+			<xsl:value-of select="period-start" />
+		      </xsl:if>
             </xsl:attribute>
             <!--Allways Planed Here -->
             <xsl:attribute name="type">
@@ -216,29 +247,52 @@
   
   <!--Actual Commitment and  Disbursement-->
   <xsl:for-each select="transaction">
-  <funding>
-    <!--There is not code for funding in the IATI schema-->
-    <xsl:attribute name="code">
-      <xsl:value-of select="@ref"/>
-    </xsl:attribute>
+  <funding code="">
     <fundingOrg>
-      <xsl:attribute name="code">
-        <xsl:value-of select="provider-org/@ref"/>
-      </xsl:attribute>
-      <xsl:value-of select="provider-org"/>
+      <xsl:if test="count(provider-org)!=0">     
+	      <xsl:attribute name="code">
+		<xsl:value-of select="provider-org/@ref"/>
+	      </xsl:attribute>
+	      <xsl:value-of select="provider-org"/>
+      </xsl:if>
+      <xsl:if test="count(provider-org)=0">   
+	      <xsl:attribute name="code">
+		<xsl:value-of select="../participating-org[@role='Funding']/@ref"/>
+	      </xsl:attribute>
+	      <xsl:value-of select="../participating-org[@role='Funding']"/>
+      </xsl:if>
+
     </fundingOrg>
     <assistanceType>
+      <xsl:if test="count(finance-type)!=0">     
+        <xsl:value-of select="finance-type" />
+      </xsl:if>
+      <xsl:if test="count(aid-type)=0">   
+	      <xsl:if test="count(../default-finance-type)!=0">     
+		<xsl:value-of select="../default-finance-type" />
+	      </xsl:if>
+	      <xsl:if test="count(../default-finance-type)=0">   
+		<xsl:text>Grant</xsl:text>
+	      </xsl:if>
+      </xsl:if>
+    </assistanceType>
+
+    <financingInstrument>
       <xsl:if test="count(aid-type)!=0">     
         <xsl:value-of select="aid-type" />
       </xsl:if>
       <xsl:if test="count(aid-type)=0">   
-        <xsl:value-of select="../aid-type"/>
+	      <xsl:if test="count(../default-aid-type)!=0">     
+		<xsl:value-of select="../default-aid-type" />
+	      </xsl:if>
+	      <xsl:if test="count(../default-aid-type)=0">   
+		<xsl:text>Grant</xsl:text>
+	      </xsl:if>
       </xsl:if>
-    </assistanceType>
-    <!--IATI schema Does Not Have This Field-->
-    <financingInstrument>Direct Project Support</financingInstrument>
+   </financingInstrument>
+
     <xsl:choose>
-      <xsl:when test="@type='disbursment'">
+      <xsl:when test="transaction-type/@code='D'">
          <disbursements>
             <!--If currency code is empty then take the default currency-->
             <!--I am not sure if a transacation element could contain more than 1 value element-->
@@ -258,13 +312,61 @@
             </xsl:attribute>
             <!--Date to use in the rate calculations-->
             <xsl:attribute name="date">
-              <xsl:value-of select="value/@value-date"/>
+	    	      <xsl:if test="count(value/@value-date)!=0">     
+			<xsl:value-of select="value/@value-date" />
+		      </xsl:if>
+		      <xsl:if test="count(value/@value-date)=0">   
+		    	      <xsl:if test="count(../activity-date[@type='start']/@iso-date)!=0">     
+				<xsl:value-of select="../activity-date[@type='start']/@iso-date" />
+			      </xsl:if>
+			      <xsl:if test="count(../activity-date[@type='start']/@iso-date)=0">   
+				<xsl:value-of select="../budget-planned[@type='annual']/period-start" />
+			      </xsl:if>
+		      </xsl:if>
             </xsl:attribute>
             <!--Allways Actual Here -->
             <xsl:attribute name="type">
               <xsl:text>Actual</xsl:text>   
             </xsl:attribute>
          </disbursements>
+      </xsl:when>
+      <xsl:when test="transaction-type/@code='E'">
+         <expenditures>
+            <!--If currency code is empty then take the default currency-->
+            <!--I am not sure if a transacation element could contain more than 1 value element-->
+            <xsl:attribute name="currency">
+              <xsl:choose>
+                <xsl:when test="value/@currency!=''">
+                  <xsl:value-of select="value/@currency"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="../@default-currency"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+            <!--Transaction amount-->
+            <xsl:attribute name="amount">
+              <xsl:value-of select="value"/>
+            </xsl:attribute>
+            <!--Date to use in the rate calculations-->
+            <xsl:attribute name="date">
+	    	      <xsl:if test="count(value/@value-date)!=0">     
+			<xsl:value-of select="value/@value-date" />
+		      </xsl:if>
+		      <xsl:if test="count(value/@value-date)=0">   
+		    	      <xsl:if test="count(../activity-date[@type='start']/@iso-date)!=0">     
+				<xsl:value-of select="../activity-date[@type='start']/@iso-date" />
+			      </xsl:if>
+			      <xsl:if test="count(../activity-date[@type='start']/@iso-date)=0">   
+				<xsl:value-of select="../budget-planned[@type='annual']/period-start" />
+			      </xsl:if>
+		      </xsl:if>
+            </xsl:attribute>
+            <!--Allways Actual Here -->
+            <xsl:attribute name="type">
+              <xsl:text>Actual</xsl:text>   
+            </xsl:attribute>
+         </expenditures>
       </xsl:when>
       <xsl:otherwise>
         <commitments>
@@ -285,7 +387,17 @@
             </xsl:attribute>
             <!--Date to use in the rate calculations-->
             <xsl:attribute name="date">
-              <xsl:value-of select="value/@value-date"/>
+	    	      <xsl:if test="count(value/@value-date)!=0">     
+			<xsl:value-of select="value/@value-date" />
+		      </xsl:if>
+		      <xsl:if test="count(value/@value-date)=0">   
+		    	      <xsl:if test="count(../activity-date[@type='start']/@iso-date)!=0">     
+				<xsl:value-of select="../activity-date[@type='start']/@iso-date" />
+			      </xsl:if>
+			      <xsl:if test="count(../activity-date[@type='start']/@iso-date)=0">   
+				<xsl:value-of select="../budget-planned[@type='annual']/period-start" />
+			      </xsl:if>
+		      </xsl:if>
             </xsl:attribute>
             <!--Allways Actual Here -->
             <xsl:attribute name="type">
@@ -303,19 +415,29 @@
   <xsl:for-each select="participating-org"> 
     <relatedOrgs>
     <xsl:choose>
-      <xsl:when test="@role='donor'">
+      <xsl:when test="@role='Extending'">
         <xsl:attribute name="type">
-          <xsl:text>Responsible Organization</xsl:text>
+          <xsl:text>Executing Agency</xsl:text>
         </xsl:attribute> 
       </xsl:when>
-      <xsl:when test="@role='beneficiary'">
+      <xsl:when test="@role='Beneficiary'">
         <xsl:attribute name="type">
           <xsl:text>Beneficiary Agency</xsl:text>
         </xsl:attribute> 
       </xsl:when>
-      <xsl:when test="@role='implementing'">
+      <xsl:when test="@role='Implementing'">
         <xsl:attribute name="type">
           <xsl:text>Implementing Agency</xsl:text>
+        </xsl:attribute> 
+      </xsl:when>
+      <xsl:when test="@role='Accountable'">
+        <xsl:attribute name="type">
+          <xsl:text>Responsible Organization</xsl:text>
+        </xsl:attribute> 
+      </xsl:when>
+      <xsl:when test="@role='Funding'">
+        <xsl:attribute name="type">
+          <xsl:text>Funding Agency</xsl:text>
         </xsl:attribute> 
       </xsl:when>
     </xsl:choose>
@@ -326,39 +448,15 @@
     <xsl:value-of select="."/>
   </relatedOrgs>
   </xsl:for-each>    
-      
-  <!--No chahnges here-->
-    <xsl:apply-templates select="incoming-contribution[status='Commitment' or status='Paid contribution']"/>
-      <additional field="ocha-activities" type="String">
-        <xsl:value-of select="description[@type='activities']"/>
-      </additional>
-      <additional field="ocha-outputs" type="String">
-        <xsl:value-of select="description[@type='outputs']"/>
-      </additional>
-      <additional field="ocha-appeal-id" type="String">
-        <xsl:value-of select="related-initiative[@type='un-ocha-appeal']/@ref"/>
-      </additional>
-      <additional field="ocha-appeal-name" type="String">
-        <xsl:value-of select="related-initiative[@type='un-ocha-appeal']"/>
-      </additional>
-      <additional field="ocha-cluster-code" type="String">
-        <xsl:value-of select="sector[@type='cluster']/@ref"/>
-      </additional>
-      <additional field="ocha-cluster-name" type="String">
-        <xsl:value-of select="sector[@type='cluster']"/>
-      </additional>
-      <additional field="ocha-total-cost" type="Number">
-        <xsl:value-of select="total-cost"/>
-      </additional>
-      <xsl:if test="aid-type">
-        <additional field="ocha-aid-type" type="String">
-          <xsl:value-of select="aid-type"/>
-        </additional>
-      </xsl:if>
-      <additional field="ocha-total-cost-currency" type="String">
-        <xsl:value-of select="total-cost/@currency"/>
-      </additional>
-  
+
+   <!--Contact inforamtion-->
+  	<xsl:for-each select="contact-info">
+	<donorContacts>
+	 	<firstName><xsl:value-of select="person-name" /></firstName>
+		<lastName/>
+		<email><xsl:value-of select="email" /></email>
+	</donorContacts>
+	</xsl:for-each>    
   </activity>
   </xsl:template>
 </xsl:stylesheet>

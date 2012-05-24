@@ -236,12 +236,12 @@ public class ConfigLoaderListener
 		if(metaData.getDatabaseMajorVersion()!=dbMajorVersion || 
 				metaData.getDatabaseMinorVersion()!=dbMinorVersion || 
 				dbBugfixingVersion>parseBugFixingVersion(metaData.getDatabaseProductVersion(), metaData.getDatabaseMajorVersion()+"."+metaData.getDatabaseMinorVersion())) 
-			throw new IncompatibleEnvironmentException("Database version is incompatible. Database version needs to be "+dbMajorVersion+"."+dbMinorVersion+" and bugfixing version at least "+dbBugfixingVersion);
+			throw new IncompatibleEnvironmentException("Database version ("+metaData.getDatabaseProductVersion()+") is incompatible. Database version needs to be "+dbMajorVersion+"."+dbMinorVersion+" and bugfixing version at least "+dbBugfixingVersion);
 	
 		if(metaData.getDriverMajorVersion()!=jdbcMajorVersion || 
 				metaData.getDriverMinorVersion()!=jdbcMinorVersion || 
 				jdbcBugfixingVersion>parseBugFixingVersion(metaData.getDriverVersion(), metaData.getDriverMajorVersion()+"."+metaData.getDriverMinorVersion())) 
-			throw new IncompatibleEnvironmentException("JDBC driver version is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);
+			throw new IncompatibleEnvironmentException("JDBC driver version ("+metaData.getDriverVersion()+") is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);
 	
 		
 		logger.info("Database compatibility OK.");

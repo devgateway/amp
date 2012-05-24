@@ -173,9 +173,9 @@
 															<digi:trn>Keyword</digi:trn>&nbsp;
 															<html:text property="keyword" styleClass="inp-text" />
 														</td>
-														<td width="120">
+														<td nowrap="nowrap">
 															<digi:trn>Results</digi:trn>&nbsp;
-															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamActivitiesForm.teamId }')">
+															<html:select property="tempNumResults" style="width:100px" styleClass="inp-text" onchange="return searchActivity('${aimTeamActivitiesForm.teamId }')">
 																<html:option value="${aimTeamActivitiesForm.tempNumResults}">${aimTeamActivitiesForm.tempNumResults}</html:option>
 																<html:option value="10">10</html:option>
 																<html:option value="20">20</html:option>

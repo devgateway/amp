@@ -80,9 +80,9 @@
 															<digi:trn>Keyword</digi:trn>&nbsp;
 															<html:text property="keyword" styleClass="inp-text" />
 														</td>
-														<td width="120">
+														<td nowrap="nowrap" >
 															<digi:trn>Results</digi:trn>&nbsp;
-															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamReportsForm.teamId }')">
+															<html:select property="tempNumResults" style="width:100px" styleClass="inp-text" onchange="return searchActivity('${aimTeamReportsForm.teamId }')">
 																<c:if test="${aimTeamReportsForm.tempNumResults!=-1}">
 																	<html:option value="${aimTeamReportsForm.tempNumResults}">${aimTeamReportsForm.tempNumResults}</html:option>
 																</c:if>

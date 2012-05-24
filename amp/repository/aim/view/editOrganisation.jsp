@@ -205,7 +205,18 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             var amount=document.aimAddOrgForm.orgInfoAmount;
             var currId=document.aimAddOrgForm.orgInfoCurrId;
             var errorMsg;
-			
+          
+
+            if(year.value=='-1'){
+                errorMsg='<digi:trn jsFriendly="true">Please select year!</digi:trn>';
+                alert(errorMsg);
+                return false;
+            }
+            if(currId.value=='-1'){
+                errorMsg='<digi:trn jsFriendly="true">Please select currency!</digi:trn>';
+                alert(errorMsg);
+                return false;
+            }
             if(type.value=='0'){
                 errorMsg='<digi:trn jsFriendly="true">Please select type!</digi:trn>';
                 alert(errorMsg);
@@ -213,13 +224,19 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             }
 
                     
-		<digi:context name="addOrgInfo" property="context/module/moduleinstance/editOrganisation.do" />
+            if (!(/^\d+\.?\d*$/.test(amount.value))) {
+                errorMsg='<digi:trn jsFriendly="true">Please enter correct amount value!</digi:trn>';
+                alert(errorMsg);
+                amount.value = "";
+                return false;
+            }
+
+    <digi:context name="addOrgInfo" property="context/module/moduleinstance/editOrganisation.do" />
             document.aimAddOrgForm.actionFlag.value="addOrgInfo";
             document.aimAddOrgForm.action = "${addOrgInfo}";
             document.aimAddOrgForm.target = "_self";
             document.aimAddOrgForm.submit();
         }
-        
         function deleteOrgInfo(orginfoId){
             if(orginfoId!=null&&orginfoId!=""&&typeof(orginfoId)!='undefined'){
                 document.aimAddOrgForm.selectedOrgInfoId.value=orginfoId;
@@ -400,7 +417,26 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             return true;
         }
         
-		function msg() {
+
+        function addPledge() {
+    		<digi:context name="addPledge" property="context/module/moduleinstance/editOrganisation.do" />	
+            document.aimAddOrgForm.action = "${addPledge}"
+            document.aimAddOrgForm.actionFlag.value="addPledge";
+            document.aimAddOrgForm.target = "_self";
+            document.aimAddOrgForm.submit();
+        }
+        function removeFundingDetail(index) {
+            var flag = confirm('<digi:trn  jsFriendly="true">Are you sure you want to remove the selected transaction ?</digi:trn>');
+            if(flag != false) {
+    <digi:context name="deletePledge" property="context/module/moduleinstance/editOrganisation.do" />
+                document.aimAddOrgForm.action = "${deletePledge}";
+                document.aimAddOrgForm.actionFlag.value="deletePledge";
+                document.aimAddOrgForm.target = "_self";
+                document.aimAddOrgForm.transIndexId.value=index;
+                document.aimAddOrgForm.submit();
+            }
+        }
+        function msg() {
             if (confirm('<digi:trn  jsFriendly="true">Are you sure about deleting this organization?</digi:trn>')) {
     <digi:context name="delete" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${delete}";
@@ -916,6 +952,7 @@ border-right: 1px solid rgb(208, 208, 208);
     <html:hidden name="aimAddOrgForm" styleId="parentLocId" property="parentLocId" />
     <html:hidden name="aimAddOrgForm"  property="type" />
     <html:hidden name="aimAddOrgForm"  property="ampOrgId" />
+    <html:hidden name="aimAddOrgForm"  property="transIndexId" />
     <html:hidden name="aimAddOrgForm" property="selectedOrgInfoId"/> 
 	<html:hidden name="aimAddOrgForm"  property="selContactId" />
 	<html:hidden styleId="primaryOrgCont" value="${aimAddOrgForm.resetPrimaryOrgContIds}" name="aimAddOrgForm" property="resetPrimaryOrgContIds"/>

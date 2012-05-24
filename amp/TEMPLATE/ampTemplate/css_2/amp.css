@@ -15,7 +15,8 @@ h1 {text-transform:uppercase;}
 .t_mid {font-size:12px;}
 .t_sm_1 {font-size:9px; line-height:14px;}
 .l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;text-align:left;}
-html.ie .l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;text-align:left;}
+html.ie .l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;text-align:left;float:left;padding:0px 15px 0px px;}
+html.ie #form72d input.inputx{float:left;}
 span.docTitle619{border:1px solid red;text-align:left;}
 
 .se {color:#FF6000; font-size:12px;}

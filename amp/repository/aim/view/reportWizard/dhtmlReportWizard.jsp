@@ -306,25 +306,25 @@ body {
 						<div class="tab selected" id="rtab">
 							<div class="tab_cont">
 								<span class="step_num">1</span>
-								<a href="#type_step_div" class="l_big_b"><c:out value="${detailsStepName}"/></a>
+								<a href="#type_step_div" ><c:out value="${detailsStepName}"/></a>
 							</div>
 						</div>
 						<div class="tab" id="rtab">
 							<div class="tab_cont">
 								<span class="step_num">2</span>
-								<a href="#columns_step_div" class="l_big_b"><digi:trn>Columns</digi:trn></a>
+								<a href="#columns_step_div" ><digi:trn>Columns</digi:trn></a>
 							</div>
 						</div>
 						<div class="tab" id="rtab">
 							<div class="tab_cont">
 								<span class="step_num">3</span>
-								<a href="#hierarchies_step_div" class="l_big_b"><digi:trn>Hierarchies</digi:trn></a>
+								<a href="#hierarchies_step_div" ><digi:trn>Hierarchies</digi:trn></a>
 							</div>
 						</div>
 						<div class="tab" id="rtab">
 							<div class="tab_cont">
 								<span class="step_num">4</span>
-								<a href="#measures_step_div" class="l_big_b"><digi:trn>Measures</digi:trn></a>
+								<a href="#measures_step_div" ><digi:trn>Measures</digi:trn></a>
 							</div>
 						</div>
 					</ul>

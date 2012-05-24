@@ -1465,13 +1465,12 @@ public class ExportActivityToPDF extends Action {
 		if(result!=null){
 			String formatterPrefix = "<![endif]-->";  //some records contain wordpress tags in comments,which need to be filtered
 			if(result.indexOf(formatterPrefix) != -1){
-				result = result.substring(result.lastIndexOf(formatterPrefix)+formatterPrefix.length()); 
-				if(result.startsWith("<span")){
-					result = result.substring(result.indexOf(">")+1);
-					result = result.substring(0,result.indexOf("</span>"));
-				}
+				result = result.substring(result.lastIndexOf(formatterPrefix)+formatterPrefix.length());				
 			}
-			
+			if(result.startsWith("<span")){
+				result = result.substring(result.indexOf(">")+1);
+				result = result.substring(0,result.indexOf("</span>"));
+			}
 			
 			result=result.replaceAll("\\<.*?>","");
             result=result.replaceAll("&lt;", "<");

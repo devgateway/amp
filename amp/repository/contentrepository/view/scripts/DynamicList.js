@@ -174,7 +174,7 @@ AbstractDynamicList.prototype.createReqString	= function () {
 }
 
 AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId,hide) {
-	debugger;
+	
 	if ( this.fPanel == null && hide == false) {
 		var divEl		= document.getElementById(divId);
 		

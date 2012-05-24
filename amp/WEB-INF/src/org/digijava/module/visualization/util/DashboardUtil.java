@@ -493,7 +493,6 @@ public class DashboardUtil {
         qr += " and act.draft=false and act.approvalStatus ='approved' ";
         qr += " and act.team is not null and act.team in (select at.ampTeamId from " 
 		+ AmpTeam.class.getName() + " at where parentTeamId is not null)";
-        
         return qr;
     }
     public static String getTeamQuery(TeamMember teamMember) {
@@ -527,7 +526,7 @@ public class DashboardUtil {
             qr += ")";
 
         } else {
-            qr += "  and act.team is not null ";
+            qr += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
         }
         return qr;
     }

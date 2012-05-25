@@ -230,10 +230,16 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 		sectorContainer.add(sectorList);
 		
 		
-		final AmpMinSizeCollectionValidationField<AmpSector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpSector>(
-				"minSizeSectorsValidator", sectorListModel, "minSizeSectorsValidator");
+		final AmpUniqueCollectionValidatorField<AmpSector> uniqueSectorsValidator = new AmpUniqueCollectionValidatorField<AmpSector>(
+				"uniqueSectorsValidator", sectorListModel, "uniqueSectorsValidator")
+				{
+				public Object getIdentifier(AmpSector sector){
+					return sector.getName();
+				}
+				}
+				;
 
-		//add(minSizeCollectionValidationField);
+		add(uniqueSectorsValidator);
 
 
 		final AmpAutocompleteFieldPanel<AmpSector> searchSectors=new AmpAutocompleteFieldPanel<AmpSector>("searchSectors", "Search Sectors For " + fmName,AmpSectorSearchModel.class) {			
@@ -277,6 +283,11 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				AmpIndicator indicator =newInd.getObject(); 
+				
+				uniqueSectorsValidator.reloadValidationField(target);
+				if(uniqueSectorsValidator.getHiddenContainer().getModelObject().length() >0 )
+					return;
+				
 				if(indicator.getName()!=null && indicator.getName().trim().length()>0 &&
 						indicator.getCode()!=null && indicator.getCode().length()>0&&indicator.getSectors()!=null&&indicator.getSectors().size()>0){
 					try {

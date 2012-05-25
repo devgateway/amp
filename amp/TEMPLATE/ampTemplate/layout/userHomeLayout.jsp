@@ -152,6 +152,7 @@
 							<img src="img_2/close_panel_notxt.gif" width="9" height="96" border="0" id="closepanel" style="padding: 6px">
 						</digi:secure>
 					</a>
+					<img src="img_2/t.gif" width="20" height="1"> 
 				</td>
 				<td valign="top" width="1px">
 					<digi:secure authenticated="true">

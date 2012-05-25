@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -1564,5 +1565,22 @@ public class DbUtil {
 		return (Long[]) tempLocationsIds.toArray(new Long[0]);
 	}
 
-
+	public static List<AmpTeam> getAllChildComputedWorkspaces() {
+        Session session = null;
+        List<AmpTeam> teams = null;
+        
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select team from "
+                + AmpTeam.class.getName() + " team "
+                + "where (team.parentTeamId is not null and team.computation=true)";
+            Query qry = session.createQuery(queryString);
+            teams = qry.list();
+            
+        } catch (Exception ex) {
+            logger.error("Unable to get computed-child workspaces from database", ex);
+        }
+        logger.debug("Getting computed-child workspaces successfully ");
+        return teams;
+    }
 }

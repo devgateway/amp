@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -30,6 +32,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -93,6 +96,25 @@ public class AmpContractOrganizationsSubsectionFeature extends
 		list.setReuseItems(true);
 		add(list);
 
+		
+		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
+		add(wmc);
+		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
+		wmc.add(iValidator);
+		
+		final AmpUniqueCollectionValidatorField<AmpOrganisation> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpOrganisation>(
+				"uniqueOrgsValidator", listModel, "Unique Orgs Validator") {
+			@Override
+			public Object getIdentifier(AmpOrganisation t) {
+				return t.getAcronymAndName();
+			}
+		};
+		uniqueCollectionValidationField.setIndicatorAppender(iValidator);
+		add(uniqueCollectionValidationField);
+		
+		
+		
+		
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Funding Organizations",true,AmpOrganisationSearchModel.class) {			
 			private static final long serialVersionUID = 1227775244079125152L;
 
@@ -119,6 +141,7 @@ public class AmpContractOrganizationsSubsectionFeature extends
 				target.addComponent(AmpContractOrganizationsSubsectionFeature.this);
 				target.appendJavascript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
 				target.appendJavascript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+				uniqueCollectionValidationField.reloadValidationField(target);
 			}
 
 			@Override

@@ -496,8 +496,8 @@ function PreviewCell(rpSettings, cellName) {
 
 PreviewCell.prototype.renderCell	= function( ) {
 	this.cellEl		= document.createElement("TD");
-	this.cellEl.setAttribute("rowspan", 1);
-	this.cellEl.setAttribute("colspan", 1);
+	//this.cellEl.setAttribute("rowspan", 1);
+	//this.cellEl.setAttribute("colspan", 1);
 	
 	this.cellEl.innerHTML	= this.cellName;
 };
@@ -519,7 +519,7 @@ ColTitleCell.prototype.renderCell	= function( ) {
 	if ( this.rpSettings.months || this.rpSettings.quarters ) {
 		rowsp += 1;
 	}
-	this.cellEl.setAttribute("rowspan",rowsp);
+	this.cellEl.setAttribute("rowSpan",rowsp);
 };
 
 FundingNameCell.prototype				= new PreviewCell();
@@ -539,7 +539,7 @@ FundingNameCell.prototype.renderCell	= function( ) {
 		if (this.rpSettings.quarters)
 			subYearLength	= this.rpSettings.quartersLength;
 		var colspan	= this.rpSettings.yearsLength * this.rpSettings.measures.length * subYearLength;
-		this.cellEl.setAttribute("colspan", colspan);
+		this.cellEl.setAttribute("colSpan", colspan);
 	}
 	
 };
@@ -555,7 +555,7 @@ function TotalCostNameCell( rpSettings, cellName ) {
 TotalCostNameCell.prototype.renderCell	= function(  ) {
 	this.parent.prototype.renderCell.call(this);
 	this.cellEl.className	= this.rpSettings.cellHeaderClass;
-	this.cellEl.setAttribute("colspan", this.rpSettings.measures.length);
+	this.cellEl.setAttribute("colSpan", this.rpSettings.measures.length);
 };
 
 YearsNameCell.prototype				= new PreviewCell();
@@ -576,7 +576,7 @@ YearsNameCell.prototype.renderCell	= function () {
 		if (this.rpSettings.quarters)
 			subYearLength	= this.rpSettings.quartersLength;
 		var colspan	= this.rpSettings.measures.length * subYearLength;
-		this.cellEl.setAttribute("colspan", colspan);
+		this.cellEl.setAttribute("colSpan", colspan);
 	}
 };
 
@@ -597,7 +597,7 @@ TotalMeasureNameCell.prototype.renderCell	= function() {
 	if ( this.rpSettings.months || this.rpSettings.quarters )
 		rowspan ++;
 	
-	this.cellEl.setAttribute("rowspan", rowspan);
+	this.cellEl.setAttribute("rowSpan", rowspan);
 };
 
 /* 3rd Header Row */
@@ -613,7 +613,7 @@ SubYearNameCell.prototype.renderCell	= function() {
 		this.parent.prototype.renderCell.call(this);
 		this.cellEl.className	= this.rpSettings.cellHeaderClass;
 		var colspan	= this.rpSettings.measures.length;
-		this.cellEl.setAttribute("colspan", colspan);
+		this.cellEl.setAttribute("colSpan", colspan);
 	}
 		
 };
@@ -698,7 +698,7 @@ HierarchyCell.prototype.renderCell	= function() {
 		groupRows		+= Math.pow(this.rpSettings.rowsPerHierarchy, i);
 	}
 	var rowspan		= this.rpSettings.summary? groupRows : groupRows + activityLines ;
-	this.cellEl.setAttribute("rowspan", rowspan );
+	this.cellEl.setAttribute("rowSpan", rowspan );
 };
 
 

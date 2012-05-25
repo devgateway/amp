@@ -83,8 +83,25 @@
 			document.aimTeamActivitiesForm.submit();
 	}
 	function submitArchiveCmd(archive) {
-		document.aimTeamActivitiesForm.removeActivity.value = archive;
-		document.aimTeamActivitiesForm.submit();
+		var checkCheckBoxes=$("input[name='selActivities']:checked").length;
+		if(checkCheckBoxes<1){
+			alert('<digi:trn jsFriendly="true">Please choose the activities</digi:trn>');
+			return false;
+		}
+		else{
+			var msg;
+			if(archive='archive'){
+				msg='<digi:trn jsFriendly="true">Are you sure you want to archive the selected activities?</digi:trn>';
+			}
+			else{
+				msg='<digi:trn jsFriendly="true">Are you sure you want to unarchive the selected activities?</digi:trn>';
+			}
+			if(confirm(msg)){
+				document.aimTeamActivitiesForm.removeActivity.value = archive;
+				document.aimTeamActivitiesForm.submit();
+			}
+		}
+		
 	}
 
 	function page(val) {
@@ -308,17 +325,17 @@
 										<c:choose>
 											<c:when test="${selectedSubTab==unarchivedTab}">
 												<c:set var="archiveActs"><%=GetTeamActivities.ARCHIVE_COMMAND %></c:set>
-												<html:submit onclick="submitArchiveCmd('${archiveActs}')"
+												<html:button onclick="submitArchiveCmd('${archiveActs}')"
 													styleClass="buttonx_sm btn" property="submitButton">
 													<digi:trn>Archive Activities</digi:trn>
-												</html:submit>
+												</html:button>
 											</c:when>
 											<c:when test="${selectedSubTab==archivedTab}">
 												<c:set var="unArchiveActs"><%=GetTeamActivities.UNARCHIVE_COMMAND %></c:set>
-												<html:submit onclick="submitArchiveCmd('${unArchiveActs}')"
+												<html:button onclick="submitArchiveCmd('${unArchiveActs}')"
 													styleClass="buttonx_sm btn" property="submitButton">
 													<digi:trn>Unarchive Activities</digi:trn>
-												</html:submit>
+												</html:button>
 											</c:when>
 											<c:otherwise>
 												<html:submit styleClass="buttonx_sm btn"

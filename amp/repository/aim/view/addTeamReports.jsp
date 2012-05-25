@@ -158,13 +158,13 @@
 															<c:set var="trnResetBtn">
 																<digi:trn>Reset</digi:trn>
 															</c:set>
-															<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
+															<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()" />
 														</td>
 														<td>					
 															<c:set var="trnGoBtn">
 																<digi:trn> GO </digi:trn>
 															</c:set>
-															<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamReportsForm.teamId }')">
+															<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamReportsForm.teamId }')"/>
 														</td>
 													</tr>
 												</table>
@@ -427,9 +427,9 @@
 				                                                                                                     	<c:set var="translation">
 																															<digi:trn>Click here to goto Next Page</digi:trn>
 																														</c:set>																														
-																														<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-																														<c:set target="${urlParams}" property="addReport" value="List of Unassigned Reports"/>
-																														<digi:link href="/updateTeamReports.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" name="urlParams">
+																														<jsp:useBean id="urlParams_2" type="java.util.Map" class="java.util.HashMap"/>
+																														<c:set target="${urlParams_2}" property="addReport" value="List of Unassigned Reports"/>
+																														<digi:link href="/updateTeamReports.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" name="urlParams_2">
 					                                                                                                    	<c:out value="${page}"/>
 					                                                                                                    </digi:link>
 				                                                                                                     </c:if>																												  	
@@ -463,6 +463,7 @@
 												<digi:trn key="btn:addTabsToTheWorkspace">Add Tabs to the Workspace</digi:trn> 
 											</html:submit>
 										</c:if>
+										</td></tr></table>
 									</div>										
 										
 										

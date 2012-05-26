@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -60,6 +61,11 @@ public class AmpEUAmountsComponent<T> extends AmpComponentPanel {
 		super(id, model, fmName);
 		final AmpTextFieldPanel<Double> totalAmount = new AmpTextFieldPanel<Double>("totalAmount", new PropertyModel<Double>(model, "totalAmount"), "Contract Total Amount");
 		totalAmount.getTextContainer().setEnabled(false);
+		totalAmount.getTextContainer().add(new AttributeAppender("readonly", Model.of("readonly"), " "));
+		totalAmount.getTextContainer().add(new AttributeAppender("style", Model.of("filter:alpha(opacity=50);opacity: .5;-moz-opacity:.5;"), " "));
+		
+		
+
 		add(totalAmount);
 		
 		AmpTextFieldPanel<Double> ibAmount = new AmpTextFieldPanel<Double>("ibAmount", new PropertyModel<Double>(model, "totalECContribIBAmount"), "IB Amount");

@@ -240,7 +240,7 @@ public class ReportsFilterPicker extends MultiAction {
 		 
 		 decimalseparators.add(".");
 		 decimalseparators.add(",");
-		 decimalseparators.add(TranslatorWorker.translateText("CUSTOM",request));
+		 //decimalseparators.add(TranslatorWorker.translateText("CUSTOM",request));
 		 filterForm.setAlldecimalSymbols(decimalseparators);
 		 
 		 ArrayList<String> groupseparators = new ArrayList<String>();
@@ -252,7 +252,7 @@ public class ReportsFilterPicker extends MultiAction {
 		 
 		 groupseparators.add(".");
 		 groupseparators.add(",");
-		 groupseparators.add(TranslatorWorker.translateText("CUSTOM",request));
+		 //groupseparators.add(TranslatorWorker.translateText("CUSTOM",request));
 		 filterForm.setAllgroupingseparators(groupseparators);
 		 
 		 if (filterForm.getCustomDecimalSymbol() == null) {

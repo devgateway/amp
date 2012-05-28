@@ -115,11 +115,18 @@ SaveFilters.prototype.saveFilters	= function (e, obj) {
 	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + avoidIECacheParam + additionalParams, obj);
 	
 	if ( this.showSettings ) {
-		var element = document.getElementById("customFormat");
-		element.parentNode.removeChild(element);
 		
-		document.body.appendChild(element);
-	}
+        var element = document.getElementById("customFormat");
+        element.parentNode.removeChild(element);
+        
+        var hiddenDiv=document.getElementById("myHiddenDiv"); //document.createElement('DIV');
+        //hiddenDiv.setAttribute('style','display:none;');
+        //hiddenDiv.setAttribute('id','hiddenDiv');
+        hiddenDiv.appendChild(element);        
+        //document.body.appendChild(hiddenDiv);
+        
+        //document.body.appendChild(element);
+    }
 	this.panel.setBody( "<div style='text-align: center'>" + obj.filterObj.savingDataMessage + 
 		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
 	

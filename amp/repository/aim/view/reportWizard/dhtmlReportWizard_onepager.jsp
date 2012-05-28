@@ -329,6 +329,7 @@ body {
 			</tr>
 		</table>
 	</div>
+	<div id="myHiddenDiv" style="display: none;"></div>
 	<c:if test="${!myForm.desktopTab}">
 		<jsp:include page="previewPanel.jsp" />
 	</c:if>

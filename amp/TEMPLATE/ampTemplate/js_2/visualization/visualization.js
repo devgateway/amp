@@ -1720,11 +1720,21 @@ function updateChartSettings(container, chartType){
 	var divide = document.getElementById(container + "Divide") == undefined ? "" : document.getElementById(container + "Divide");
 
 	switch(chartType){
+	
 	case "bar":
 		title.disabled = false;
 		fontSize.disabled = false;
 		boldTitle.disabled = false;
 		showLegend.disabled = false;
+		showDataLabel.disabled = false;
+		rotateDataLabel.disabled = false;
+		divide.disabled = false;
+		break;
+	case "bar_profile":
+		title.disabled = false;
+		fontSize.disabled = false;
+		boldTitle.disabled = false;
+		showLegend.disabled = true;
 		showDataLabel.disabled = false;
 		rotateDataLabel.disabled = false;
 		divide.disabled = false;

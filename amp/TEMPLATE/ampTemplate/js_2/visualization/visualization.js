@@ -1033,12 +1033,13 @@ function refreshBoxes(o){
 			case "SelOrgGroupsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr />";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
-						inner2 = inner2 + child.list[i].name + " - "
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 					}
+					inner = inner + " <hr />";
 					var div = document.getElementById("org_group_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterOrgGroups").innerHTML = inner2;
@@ -1053,12 +1054,13 @@ function refreshBoxes(o){
 			case "SelOrgsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr /> ";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
-						inner2 = inner2 + child.list[i].name + " - "
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 					}
+					inner = inner + " <hr />";
 					var div = document.getElementById("org_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterOrganizations").innerHTML = inner2;
@@ -1073,12 +1075,13 @@ function refreshBoxes(o){
 			case "SelRegionsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr /> ";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
-						inner2 = inner2 + child.list[i].name + " - "
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 					}
+					inner = inner + " <hr />";
 					var div = document.getElementById("region_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterRegions").innerHTML = inner2;
@@ -1093,10 +1096,11 @@ function refreshBoxes(o){
 			case "SelZonesList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr /> ";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
+						inner = inner + "<li>" + child.list[i].name + "</li>";
 					}
+					inner = inner + "<hr />";
 					var div = document.getElementById("zone_list_id");
 					div.innerHTML = inner;
 					div.style.display = "";
@@ -1123,12 +1127,13 @@ function refreshBoxes(o){
 			case "SelSectorsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr /> ";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
-						inner2 = inner2 + child.list[i].name + " - "
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 					}
+					inner = inner + " <hr />";
 					var div = document.getElementById("sector_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterSectors").innerHTML = inner2;
@@ -1143,10 +1148,11 @@ function refreshBoxes(o){
 			case "SelSubSectorsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr /> ";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
+						inner = inner + "<li>" + child.list[i].name + "</li>";
 					}
+					inner = inner + " <hr />";
 					var div = document.getElementById("sub_sector_list_id");
 					div.innerHTML = inner;
 					div.style.display = "";

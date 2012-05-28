@@ -66,7 +66,9 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 						"actualApprovalDate"), proposedApprovalDate,
 				"Actual Approval Date");
 		add(dateOfSignedAgreement);
-
+		
+		proposedApprovalDate.setDuplicateFieldOnChange(dateOfSignedAgreement);
+		
 		AmpDatePickerFieldPanel proposedStartDate = new AmpDatePickerFieldPanel(
 				"proposedStartDate", new PropertyModel<Date>(actModel,
 						"proposedStartDate"), null, "Proposed Start Date");
@@ -78,7 +80,8 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 						"actualStartDate"), proposedStartDate,
 				"Actual Start Date");
 		add(dateOfEffectiveAgreement);
-
+		proposedStartDate.setDuplicateFieldOnChange(dateOfEffectiveAgreement);
+		
 		AmpDatePickerFieldPanel finalDateForContracting = new AmpDatePickerFieldPanel(
 				"finalDateForContracting", new PropertyModel<Date>(actModel,
 						"contractingDate"), null, "Final Date for Contracting");

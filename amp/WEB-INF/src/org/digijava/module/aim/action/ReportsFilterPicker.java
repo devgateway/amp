@@ -1475,6 +1475,8 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setAmountinmillion(filterForm.getAmountinmillions());
 		arf.setDecimalseparator(filterForm.getCustomDecimalSymbolTxt());
 		arf.setGroupingseparator(filterForm.getCustomGroupCharacterTxt());
+		if (filterForm.getCustomDecimalPlaces() > -1)
+			arf.setMaximumFractionDigits(filterForm.getCustomDecimalPlaces() );
 		arf.setCurrentFormat(custom);
 
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency(), AmpOrganisation.class));

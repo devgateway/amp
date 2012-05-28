@@ -280,7 +280,23 @@ public class AmpARFilter extends PropertyListable {
 	private Boolean amountinmillion;
 	private String decimalseparator;
 	private String groupingseparator;
+	private Integer maximumFractionDigits;
 	
+	
+	/**
+	 * @return the maximumFractionDigits
+	 */
+	public Integer getMaximumFractionDigits() {
+		return maximumFractionDigits;
+	}
+
+	/**
+	 * @param maximumFractionDigits the maximumFractionDigits to set
+	 */
+	public void setMaximumFractionDigits(Integer maximumFractionDigits) {
+		this.maximumFractionDigits = maximumFractionDigits;
+	}
+
 	public String getDecimalseparator() {
 		return decimalseparator;
 	}
@@ -1669,6 +1685,9 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 
 	public void setCurrentFormat(DecimalFormat currentFormat) {
 		this.currentFormat = currentFormat;
+		if ( this.currentFormat != null ) {
+			FormatHelper.tlocal.set(currentFormat);
+		}
 	}
 
 	public String getFromDate() {

@@ -1,0 +1,2 @@
+update amp_measures set measureName='Last Closed Month Actual Disbursement', description='Actual Disbursement of last closed month' where measureName='Previous Month Disbursements';
+update amp_measures set description='Prior Actual Disbursements + Last Closed Month Actual Disbursement' where measureName='Cumulated Disbursements';

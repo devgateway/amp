@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-12111</jira>
+  <keyword>percetanges</keyword>
+  <keyword>capital expenditure</keyword>
+  <author>Alex</author>  
+  
+  <trigger type="all">
+      <condition  type="entryInTableMissing" tablename="amp_columns" columnname="extractorview" columnvalue="v_capital_and_exp" />
+  </trigger>
+   
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres"> 
+
+create or replace view v_capital_and_exp as 
+	select amp_activity_id, 'Capital' from amp_activity UNION select amp_activity_id, 'Expenditure' from amp_activity order by amp_activity_id;
+	
+insert into amp_columns(columnid, columnName, aliasName, cellType, extractorView) 
+ values(nextval('amp_columns_seq'),'Capital - Expenditure', 'capital_expenditure', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_capital_and_exp');
+ 
+
+   </lang>
+      
+     </script>
+  </apply>
+
+</tns:patch>

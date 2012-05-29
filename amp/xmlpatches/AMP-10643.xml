@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-10643</jira>
+  <keyword>Fill amp_activity_version with group id's for each activity</keyword>
+  <author>Diego Dimunzio</author>  
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+      	UPDATE amp_activity_version
+		SET amp_activity_group_id =amp_activity_group.amp_activity_group_id 
+		FROM amp_activity_group 
+		WHERE amp_activity_group.amp_activity_last_version_id = amp_activity_version.amp_activity_id;	
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

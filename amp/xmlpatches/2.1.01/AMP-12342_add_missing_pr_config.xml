@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-12342</jira>
+	<keyword>primary configuration</keyword>
+	<author>Medea</author>
+	<description>Add primary configuration of program</description>
+	<trigger type="all">
+		<condition type="entryInTableMissing" tablename="amp_program_settings"
+			columnname="name" columnvalue="Primary Program" />
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				INSERT INTO amp_program_settings (amp_program_settings_id,allow_multiple, name)  values (nextval('amp_program_settings_seq'),false,'Primary Program');
+			</lang>
+		</script>
+	</apply>
+
+</tns:patch>

@@ -199,7 +199,11 @@ public class GetTeamActivities
                 int totActivities = taForm.getAllActivities().size();
                 if(numRecords== -1 ){
                 	numRecords = totActivities;
+                }else if(totActivities / numRecords >50)
+                {
+                	numRecords = totActivities / 50;
                 }
+                	
                 int numPages = totActivities / numRecords;
                 numPages += (totActivities % numRecords != 0) ? 1 : 0;
                 if(numPages<page){

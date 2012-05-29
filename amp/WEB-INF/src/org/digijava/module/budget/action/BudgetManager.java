@@ -91,7 +91,7 @@ public class BudgetManager extends MultiAction{
 		bfrom.setBudgetsectorcode(null);
 		bfrom.setBudgetsectorname(null);
 		bfrom.setBudgetsectors(BudgetDbUtil.getBudgetSectors());
-		return mapping.findForward("forward");
+		return mapping.findForward("finalized");
 	}
 	
 	public ActionForward modeDelete(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {

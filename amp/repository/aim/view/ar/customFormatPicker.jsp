@@ -18,6 +18,7 @@
 <digi:instance property="aimReportsFilterPickerForm" />
 
 <digi:form action="/reportsFilterPicker.do" name="aimReportsFilterPickerForm3" type="aimReportsFilterPickerForm"  onsubmit="return validateFormat()">
+<input type="hidden" name="initialCal" id="initialCal" value="${aimReportsFilterPickerForm.calendar}"/>
 <center>
 	<b style="font-size: 11px;">
 		<digi:trn>Number Format</digi:trn>
@@ -91,7 +92,7 @@
 		</td>
 		<td height="18" colspan="2" nowrap="nowrap">
 		 	<html:checkbox property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />
-	    </td>
+		</td>
 	  </tr>
 	<tr>
 		<td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">

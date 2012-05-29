@@ -44,8 +44,9 @@ FilterWrapper.prototype.labelsToHTML	= function(text) {
 	if ( this.filterLabels.length > 0) {
 		for (var i=0; i<this.filterLabels.length; i++) {
 			var l	= this.filterLabels[i];
+			var name=l.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 			ret += "<span style='color:" + l.color + "; background-color:" + l.backgroundColor + "; padding: 1px;'>";
-			ret += l.name + "</span> <b>+</b> &nbsp;|&nbsp;";
+			ret += name + "</span> <b>+</b> &nbsp;|&nbsp;";
 		}
 	}
 	else

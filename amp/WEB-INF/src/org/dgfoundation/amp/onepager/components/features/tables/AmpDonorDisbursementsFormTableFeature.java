@@ -62,7 +62,6 @@ public class AmpDonorDisbursementsFormTableFeature extends
 	public AmpDonorDisbursementsFormTableFeature(String id,
 			final IModel<AmpFunding> model, String fmName) throws Exception {
 		super(id, model, fmName, Constants.DISBURSEMENT, 8);
-		
 	
 		final AbstractReadOnlyModel<List<String>> disbOrderIdModel = new AbstractReadOnlyModel<List<String>>() {
 			@Override
@@ -90,19 +89,20 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		
 		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
 		add(wmc);
+		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
+		wmc.add(iValidator);
+		
 		final AmpCollectionsSumComparatorValidatorField amountSumComparator=
 				new AmpCollectionsSumComparatorValidatorField("amountSumComparator",setAmountListModel,"checkCommitmentSum", "AmpCommitmentsCollectionsSumComparatorValidator"); 
-		wmc.add(amountSumComparator.getIndicatorAppender());
+		amountSumComparator.setIndicatorAppender(iValidator);
 		amountSumComparator.setSecondCollectionModel(commitmentModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(true);
 		add(amountSumComparator);
 		
 		
-		WebMarkupContainer wmc1 = new WebMarkupContainer("ajaxIndicator1");
-		add(wmc1);
 		final AmpCollectionsSumComparatorValidatorField amountSumComparator1=
 				new AmpCollectionsSumComparatorValidatorField("amountSumComparator1",setAmountListModel,"checkExpenditureSum", "AmpExpemdituresCollectionsSumComparatorValidator"); 
-		wmc.add(amountSumComparator1.getIndicatorAppender());
+		amountSumComparator1.setIndicatorAppender(iValidator);
 		amountSumComparator1.setSecondCollectionModel(expenditureModel);
 		amountSumComparator1.setAlertIfCurrentModelAmountSumBig(false);
 		add(amountSumComparator1);

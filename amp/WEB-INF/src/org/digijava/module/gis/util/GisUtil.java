@@ -51,6 +51,8 @@ public class GisUtil {
     public static String GIS_MODE_DEVINFO = "devinfo";
     public static String GIS_MODE_FUNDINGS = "fundings";
 
+    public static boolean GIS_DONOR_FUNDINGS = false;
+    public static boolean GIS_REGIONAL_FUNDINGS = true;
 
     private static Map loadedMaps = null;
     private static Map <String, MapColorScheme> colorSchemePresets = null;

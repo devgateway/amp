@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class RMMapCalculationUtil {
 
-    public static Object[] getAllFundingsFiltered (GisFilterForm filter) {
+    public static Object[] getAllFundingsFiltered (GisFilterForm filter, boolean isRegional) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
         Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
@@ -71,7 +71,10 @@ public class RMMapCalculationUtil {
 
         boolean includeCildLocations = filter.getMapLevel() == 3;
 
-        Object[] activityFundings = DbUtil.getActivityFundings(sectorCollector,
+        Object[] activityFundings = null;
+
+        if (isRegional == GisUtil.GIS_DONOR_FUNDINGS) {
+        activityFundings = DbUtil.getActivityFundings(sectorCollector,
                                                                programsIds,
                                                                donnorAgencyIds,
                                                                donorGroupIds,
@@ -79,7 +82,10 @@ public class RMMapCalculationUtil {
                                                                includeCildLocations,
                                                                locations,
                                                                workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime());
-        Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
+        }
+        Object[] activityRegionalFundings = null;
+        if (isRegional == GisUtil.GIS_REGIONAL_FUNDINGS) {
+        activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
                                                                                donnorAgencyIds,
                                                                                donorGroupIds,
@@ -87,6 +93,7 @@ public class RMMapCalculationUtil {
                                                                                includeCildLocations,
                                                                                locations,
                                                                                workspaces, fStartDate.getTime(), fEndDate.getTime());
+        }
         Object[] fundingList = getAllFundingsByLocations(activityFundings,
                                                          activityRegionalFundings,
                                                          includeCildLocations,
@@ -529,9 +536,9 @@ public class RMMapCalculationUtil {
         float coeffBlue = 0f;
 
         if (scheme.getType().equalsIgnoreCase(MapColorScheme.COLOR_SCHEME_GRADIENT)) {
-            deltaRed = Math.abs(scheme.getGradientMaxColor().getRed() - scheme.getGradientMinColor().getRed());
-            deltaGreen = Math.abs(scheme.getGradientMaxColor().getGreen() - scheme.getGradientMinColor().getGreen());
-            deltaBlue = Math.abs(scheme.getGradientMaxColor().getBlue() - scheme.getGradientMinColor().getBlue());
+            deltaRed = scheme.getGradientMaxColor().getRed() - scheme.getGradientMinColor().getRed();
+            deltaGreen = scheme.getGradientMaxColor().getGreen() - scheme.getGradientMinColor().getGreen();
+            deltaBlue = scheme.getGradientMaxColor().getBlue() - scheme.getGradientMinColor().getBlue();
 
 
             if (deltaVal > 0) {

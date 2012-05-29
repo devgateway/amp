@@ -75,7 +75,7 @@ public class ShowDashboard extends Action {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		//If there's a filter but it's not of the right type, reset it.
-		if (filter != null && (filter.getDashboardType() != Constants.DashboardType.REGION || filter.getFromPublicView() != fromPublicView)) {
+		if (filter != null && (filter.getDashboardType() != Constants.DashboardType.REGION || (filter.getFromPublicView() != null && filter.getFromPublicView() != fromPublicView))) {
 			filter = new DashboardFilter();
 			visualizationForm.setFilter(filter);
 			initializeFilter(filter, request);
@@ -98,7 +98,7 @@ public class ShowDashboard extends Action {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		//If there's a filter but it's not of the right type, reset it.
-		if (filter != null && (filter.getDashboardType() != Constants.DashboardType.DONOR || filter.getFromPublicView() != fromPublicView)) {
+		if (filter != null && (filter.getDashboardType() != Constants.DashboardType.DONOR || (filter.getFromPublicView() != null && filter.getFromPublicView() != fromPublicView))) {
 			filter = new DashboardFilter();
 			visualizationForm.setFilter(filter);
 			initializeFilter(filter, request);
@@ -317,7 +317,7 @@ public class ShowDashboard extends Action {
 		DashboardFilter filter = visualizationForm.getFilter();
 		
 		//If there's a filter but it's not of the right type, reset it.
-		if (filter != null && (filter.getDashboardType() != Constants.DashboardType.SECTOR || filter.getFromPublicView() != fromPublicView)) {
+		if (filter != null && (filter.getDashboardType() != Constants.DashboardType.SECTOR || (filter.getFromPublicView() != null && filter.getFromPublicView() != fromPublicView))) {
 			filter = new DashboardFilter();
 			visualizationForm.setFilter(filter);
 			initializeFilter(filter, request);

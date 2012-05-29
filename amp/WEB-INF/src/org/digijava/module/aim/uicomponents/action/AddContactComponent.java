@@ -262,14 +262,14 @@ public class AddContactComponent extends DispatchAction{
 			contactProperties.addAll(AmpContactsWorker.buildAmpContactProperties(createForm.getPhones()));
 		} 
          
-//		if (contact.getProperties() != null) {
-//             contact.getProperties().clear();
-//             contact.getProperties().addAll(contactProperties);
-//         } else {
-//             contact.setProperties(contactProperties);
-//         }
+		if (contact.getProperties() != null) {
+             contact.getProperties().clear();
+         } else {
+             contact.setProperties(new TreeSet<AmpContactProperty>());
+         }
+		 contact.getProperties().addAll(contactProperties);
 		
-		contact.setProperties(contactProperties);
+		//contact.setProperties(contactProperties);
 		
 
 

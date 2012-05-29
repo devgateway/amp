@@ -57,11 +57,11 @@ public class AmpCategoryGroupFieldPanel extends
 		super(id, categoryKey,fmName,ordered,isMultiselect);
 		if (selectedMultiselect)
 			choiceContainer = new CheckBoxMultipleChoice<AmpCategoryValue>(
-					"choice", model, choices);
+					"choice", model, choices,new TranslatedChoiceRenderer<AmpCategoryValue>());
 		else
 			choiceContainer = new RadioChoice<AmpCategoryValue>(
 					"choice",
-					new AmpMultiValueDropDownChoiceModel(model), choices)
+					new AmpMultiValueDropDownChoiceModel(model), choices,new TranslatedChoiceRenderer<AmpCategoryValue>())
 					.setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);
 		addFormComponent(choiceContainer);

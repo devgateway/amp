@@ -179,8 +179,8 @@ public class AmpFilterData implements Serializable {
 				
 				else 
 					if ( primitiveTypesList.contains(fieldObj.getClass().getName()) ) {
-						AmpFilterData fd		= new AmpFilterData ( report, fields[i].getName(), fieldObj.getClass().getName(), 
-															null, objectValue(fieldObj) ) ;
+						AmpFilterData fd = new AmpFilterData ( report, fields[i].getName(), fieldObj.getClass().getName(), 
+						null, objectValue(fieldObj) ) ;
 						fdSet.add( fd );
 					}
 				

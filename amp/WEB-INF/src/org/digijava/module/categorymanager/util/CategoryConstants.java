@@ -162,7 +162,7 @@ public class CategoryConstants {
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_PLANNED = 
 		 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Planned", true);
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_PIPELINE = 
-			 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Pipeline", true);
+			 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Pipeline", false);
 	 
 	 
 	//Org. Manager : Staff Information type

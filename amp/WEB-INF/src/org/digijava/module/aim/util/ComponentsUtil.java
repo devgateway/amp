@@ -76,14 +76,17 @@ public class ComponentsUtil {
 
   
     @SuppressWarnings("unchecked")
-	public static Collection<AmpComponentType> getAmpComponentTypes() {
+	public static Collection<AmpComponentType> getAmpComponentTypes(Boolean... onlyEnabled) {
         Collection<AmpComponentType> col = null;
         String queryString = null;
         Session session = null;
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select co from " + AmpComponentType.class.getName() + " co ";
+            if(onlyEnabled.length >= 1 && onlyEnabled[0] == true)
+               	queryString = "select co from " + AmpComponentType.class.getName() + " co where enable = true ";
+            else
+            	queryString = "select co from " + AmpComponentType.class.getName() + " co ";
             qry = session.createQuery(queryString);
             col = qry.list();
         } catch (Exception ex) {

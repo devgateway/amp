@@ -278,6 +278,25 @@ public class AmpARFilter extends PropertyListable {
 	private DecimalFormat currentFormat = null;
 	private Integer amountinthousand;
 	private Boolean amountinmillion;
+	private String decimalseparator;
+	private String groupingseparator;
+	
+	public String getDecimalseparator() {
+		return decimalseparator;
+	}
+
+	public void setDecimalseparator(String decimalseparator) {
+		this.decimalseparator = decimalseparator;
+	}
+
+	public String getGroupingseparator() {
+		return groupingseparator;
+	}
+
+	public void setGroupingseparator(String groupingseparator) {
+		this.groupingseparator = groupingseparator;
+	}
+	
 	public final Boolean getAmountinmillion() {
 		return amountinmillion;
 	}
@@ -560,7 +579,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		
 		indexedParams=new ArrayList<FilterParam>();
 		
-		String BUDGET_FILTER = "SELECT amp_activity_id FROM v_activity_budget WHERE budget_id IN ("
+		String BUDGET_FILTER = "SELECT amp_activity_id FROM v_on_off_budget WHERE budget_id IN ("
 			+ Util.toCSString(budget) + ")";
 		String TEAM_FILTER = "";
 

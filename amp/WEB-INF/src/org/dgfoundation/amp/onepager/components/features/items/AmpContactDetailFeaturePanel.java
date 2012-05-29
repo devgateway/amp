@@ -61,9 +61,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 //	private WebMarkupContainer faxesFeedbackContainer;
 //	private Label faxesFeedbackLabel;
 	
-	static final private String emailsAmountReachedLimitMsg = "*" + TranslatorUtil.getTranslatedText("Max limit for emails is 3");
-	static final private String phonesAmountReachedLimitMsg = "*" + TranslatorUtil.getTranslatedText("Max limit for phones is 3");
-	static final private String faxesAmountReachedLimitMsg = "*" + TranslatorUtil.getTranslatedText("Max limit for faxes is 3");
+
 	
 	public AmpContactDetailFeaturePanel(String id, String fmName)
 			throws Exception {
@@ -230,11 +228,11 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 			protected void onClick(AjaxRequestTarget target) {
 				if(detailsList.getModelObject().size() >= 3) {
 					if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
-						detailFeedbackLabel.setDefaultModelObject(emailsAmountReachedLimitMsg);						
+						detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for emails is 3"));						
 					}else if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-						detailFeedbackLabel.setDefaultModelObject(phonesAmountReachedLimitMsg);
+						detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for phones is 3"));
 					}else if(contactProperty.equals(Constants.CONTACT_PROPERTY_NAME_FAX)){
-						detailFeedbackLabel.setDefaultModelObject(faxesAmountReachedLimitMsg);
+						detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for faxes is 3"));
 					}
 					detailFeedbackContainer.setVisible(true);
 					target.addComponent(detailFeedbackContainer);

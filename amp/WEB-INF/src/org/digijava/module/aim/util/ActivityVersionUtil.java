@@ -112,7 +112,7 @@ public class ActivityVersionUtil {
 								formatter.setMaximumFractionDigits(0);
 								ret += formatter.format(auxOutput2.getValue()[i]);
 							} else {
-								ret = ret + auxOutput2.getValue()[i];
+								ret = ret + DbUtil.filter(auxOutput2.getValue()[i].toString());
 							}
 						}
 					}

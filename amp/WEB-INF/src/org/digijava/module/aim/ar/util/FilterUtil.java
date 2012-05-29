@@ -140,15 +140,22 @@ public class FilterUtil {
 
 		DecimalFormat custom = new DecimalFormat();
 		DecimalFormatSymbols ds = new DecimalFormatSymbols();
-		ds.setDecimalSeparator((!"CUSTOM".equalsIgnoreCase(customDecimalSymbol) ? customDecimalSymbol.charAt(0) : customDecimalSymbolTxt.charAt(0)));
+		if (arf.getDecimalseparator()!=null){
+			ds.setDecimalSeparator(arf.getDecimalseparator().charAt(0));
+		}else{
+			ds.setDecimalSeparator((!"CUSTOM".equalsIgnoreCase(customDecimalSymbol) ? customDecimalSymbol.charAt(0) : customDecimalSymbolTxt.charAt(0)));
+		}
+		if (arf.getGroupingseparator()!=null){
+			ds.setGroupingSeparator(arf.getGroupingseparator().charAt(0));
+		}else{
 		ds.setGroupingSeparator((!"CUSTOM".equalsIgnoreCase(customGroupCharacter) ? customGroupCharacter.charAt(0) : customGroupCharacterTxt
 						.charAt(0)));
+		}
 		custom.setMaximumFractionDigits((customDecimalPlaces != -1) ?customDecimalPlaces : 99);
 		custom.setGroupingUsed(customUseGrouping);
 		custom.setGroupingSize(customGroupSize);
 		custom.setDecimalFormatSymbols(ds);
 		arf.setCurrentFormat(custom);
-			
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
 	}
 	
@@ -174,7 +181,7 @@ public class FilterUtil {
 	}
 	
 	public static void populateForm ( ReportsFilterPickerForm form, AmpARFilter filter ) {
-
+		
 		// for each sector we have also to add the subsectors
 		form.setSelectedSectors( FilterUtil.getObjectsIds(filter.getSelectedSectors()) );
 		form.setSelectedSecondarySectors( FilterUtil.getObjectsIds(filter.getSelectedSecondarySectors()) );
@@ -257,8 +264,13 @@ public class FilterUtil {
 		form.setSelectedDonnorAgency( FilterUtil.getObjectsIds(filter.getDonnorgAgency()) );
 		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
-		form.setAmountinthousands(filter.getAmountinthousand());
+		if (filter.getAmountinthousand() ==1){
+			form.setAmountinthousands(true);
+		}else{
+			form.setAmountinthousands(false);
+		}
 		form.setAmountinmillions(filter.getAmountinmillion());
+		
 	}
 	
 }

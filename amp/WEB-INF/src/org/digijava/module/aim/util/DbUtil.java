@@ -892,6 +892,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             organization = (AmpOrganisation) session.load(AmpOrganisation.class, id);
+            Hibernate.initialize(organization.getRecipients());
         	Hibernate.initialize(organization.getOrganizationBudgetInfos());
         	if(organization.getOrganizationBudgetInfos()!=null){
 				for(AmpOrganizationBudgetInformation budgetInfo:organization.getOrganizationBudgetInfos()){
@@ -3090,6 +3091,7 @@ public class DbUtil {
                 Set<AmpOrgStaffInformation> staffs=org.getStaffInfos();
                 Set<AmpOrganizationBudgetInformation> budgetInfos=org.getOrganizationBudgetInfos();
                 Set<AmpOrgRecipient> recipients=org.getRecipients();
+                
                
            
                 org = (AmpOrganisation) sess.get(AmpOrganisation.class, org.getAmpOrgId());

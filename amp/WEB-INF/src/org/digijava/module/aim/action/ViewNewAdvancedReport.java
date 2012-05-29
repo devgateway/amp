@@ -428,7 +428,7 @@ public class ViewNewAdvancedReport extends Action {
 			for ( AmpColumns tempCol: availableCols ) {
 				if ( ArConstants.COLUMN_PROJECT_TITLE.equals(tempCol.getColumnName()) ) {
 					if (!AdvancedReportUtil.isColumnAdded(ampReport.getColumns(), ArConstants.COLUMN_PROJECT_TITLE)) {
-						AmpReportColumn titleCol			= new AmpReportColumn();
+						AmpReportColumn titleCol= new AmpReportColumn();
 						titleCol.setLevel(level1);
 						titleCol.setOrderId( new Long((ampReport.getColumns().size()+1)));
 						titleCol.setColumn(tempCol); 
@@ -437,7 +437,7 @@ public class ViewNewAdvancedReport extends Action {
 					}else{
 						/*if Project Title column is already added then remove it from hierarchies list*/
 						if(!FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECT_TITLE_HIRARCHY).equalsIgnoreCase("true"))
-						AdvancedReportUtil.removeColumnFromHierarchies(ampReport.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
+							AdvancedReportUtil.removeColumnFromHierarchies(ampReport.getHierarchies(), ArConstants.COLUMN_PROJECT_TITLE);
 						break;
 					}
 				}

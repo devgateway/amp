@@ -289,9 +289,9 @@ public class CategoryManager extends Action {
 		Session dbSession			= null;
 		Transaction transaction		= null;
 		try{
-			dbSession		= PersistenceManager.getSession();
+			dbSession		= PersistenceManager.openNewSession();
 //beginTransaction();
-			
+			transaction = dbSession.beginTransaction();
 			dbSession.createQuery("delete from " + AmpLinkedCategoriesState.class.getName() +" s where s.mainCategory.id=:categoryId")
 			.setLong("categoryId", categoryId).executeUpdate();
 			//transaction.commit();
@@ -299,7 +299,8 @@ public class CategoryManager extends Action {
 			String queryString 	= "select c from "	+ AmpCategoryClass.class.getName()+ " c where c.id=:id";
 			Query qry			= dbSession.createQuery(queryString);
 			qry.setParameter("id", categoryId, Hibernate.LONG);
-			dbSession.delete( qry.uniqueResult() );			
+			dbSession.delete( qry.uniqueResult() );	
+			transaction.commit();
 			
 		} 
 		catch (Exception ex) {
@@ -315,14 +316,15 @@ public class CategoryManager extends Action {
 			}
 		} 
 		finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-				
-			} 
-			catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
+            if (dbSession != null) {
+                try {
+                    //PersistenceManager.releaseSession(session);
+                	dbSession.close();
+                } catch (Exception ex1) {
+                    logger.warn("releaseSession() failed", ex1);
+                }
+            }
+        }
 	}
 	/**
 	 * 

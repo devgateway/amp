@@ -55,7 +55,7 @@
 	<digi:secure authenticated="true">
 		<jsp:include page="headerTop_2.jsp"/>
 	</digi:secure>
-	
+<center>	
 	<div class="main_menu">
 	  	<table cellpadding="0"cellspacing="0" width="1000">
         	<tr>
@@ -79,6 +79,7 @@
 			</div>
 		</div>
 	</div>
+	</center>
 	<!-- BREADCRUMP END -->
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tbody>

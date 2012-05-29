@@ -105,12 +105,12 @@ loadedobjects+=file+" " //Remember this object as being already added to page
 
 //added by SRK@DGF
 function changeTabUrl(tabcontentid,tabid,url) {
-var thetab=document.getElementById(tabid)
-thetab.href=url
-if (thetab.getAttribute("rel")){
-ajaxpage(thetab.getAttribute("href"), thetab.getAttribute("rel"), thetab)
-loadobjs(thetab.getAttribute("rev"))
-}
+	var thetab=document.getElementById(tabid)
+	thetab.href=url
+	if (thetab.getAttribute("rel")){
+		ajaxpage(thetab.getAttribute("href"), thetab.getAttribute("rel"), thetab)
+		loadobjs(thetab.getAttribute("rev"))
+	}
 }
 
 function reloadTab(tabcontentid,tabid) {

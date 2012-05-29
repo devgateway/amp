@@ -65,7 +65,11 @@ public class AmpComponentsFormSectionFeature extends
 									it.remove();
 							}
 						}
+						target.addComponent(this.findParent(AmpComponentsFormSectionFeature.class));
+						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(this.findParent(AmpComponentsFormSectionFeature.class)));
 						super.onClick(target);
+						
+						
 					}
 				};
 				comp.add(delButton);

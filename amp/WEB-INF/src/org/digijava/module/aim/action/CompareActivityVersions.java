@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +52,13 @@ public class CompareActivityVersions extends DispatchAction {
 	private ServletContext ampContext = null;
 
 	private static Logger logger = Logger.getLogger(EditActivity.class);
-
+	
+	public ActionForward unspecified(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+		return compare(mapping, form, request, response);
+	}
+	
 	public ActionForward compare(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -59,7 +66,7 @@ public class CompareActivityVersions extends DispatchAction {
 		Session session = PersistenceManager.getRequestDBSession();
 		
 		setAdvancemode(vForm, request);
-
+		
 		if (request.getParameter("action") != null && request.getParameter("action").equals("setVersion")
 				&& request.getParameter("activityCurrentVersion") != null) {
 
@@ -390,7 +397,7 @@ public class CompareActivityVersions extends DispatchAction {
 				}
 			}
 		}
-
+	
 		return mapping.findForward("forward");
 	}
 
@@ -642,4 +649,6 @@ public class CompareActivityVersions extends DispatchAction {
 		//If the current user is part of the management workspace or is not the workspace manager of a workspace that's not management then hide.
 		vForm.setAdvancemode(!ispartofamanagetmentworkspace & iscurrentworkspacemanager);
 	}
+	
+	
 }

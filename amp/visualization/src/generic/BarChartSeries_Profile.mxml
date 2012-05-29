@@ -396,7 +396,7 @@
 				params["action"] = dataAction;
 
 				service.send(params);
-				var delayer:Delay = new Delay(captureSnapshot,2000,1); //capture snapshot
+				var delayer:Delay = new Delay(captureSnapshot,4000,1); //capture snapshot
 			}
 			
 			private function sizePanel(w:uint, h:uint):void {

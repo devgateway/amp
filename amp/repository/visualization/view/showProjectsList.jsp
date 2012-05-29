@@ -42,7 +42,7 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 		    <td class="inside" align=center colspan="3"><font color=#C7D4DB><b>${item.key}</b></font></td>
 		  </tr>
 		  <tr bgcolor=#C7D4DB>
-		    <td class="inside" align=center><b>N</b></td>
+		    <td class="inside" align=center><b>No</b></td>
 		    <td class="inside"><b><digi:trn>Title</digi:trn></b></td>
 		    <td class="inside" align=center><b><digi:trn>Amount</digi:trn></b></td>
 		  </tr>

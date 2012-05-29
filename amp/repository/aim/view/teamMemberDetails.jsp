@@ -129,7 +129,7 @@
 														<td class="inside" style="border:0px;">
 															<digi:trn>Name</digi:trn>
 														</td>
-														<td class="inside" style="border:0px;" align="right">
+														<td class="inside" style="border:0px;padding:0px 0px 0px 5px;text-indent:5px;" align="left">
 															<bean:write name="aimTeamMemberForm" property="name" />
 														</td>
 													</tr>
@@ -137,7 +137,7 @@
 														<td class="inside" style="border:0px;">
 															<digi:trn>Role</digi:trn>
 														</td>
-														<td class="inside" style="border:0px;" align="right">
+														<td class="inside" style="border:0px;" align="left">
 															<html:select property="role" styleId="selRole" styleClass="inputx insidex">
 																<%@include file="teamMemberRolesDropDown.jsp" %>
 															</html:select>

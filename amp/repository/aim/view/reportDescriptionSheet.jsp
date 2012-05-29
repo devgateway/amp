@@ -173,8 +173,11 @@
 		document.getElementById('reportDrilldown').innerHTML	= returnYesNo(YAHOO.reportsheet.jsReports[selectedReport].drilldown);
 		document.getElementById('reportPublic').innerHTML		= returnYesNo(YAHOO.reportsheet.jsReports[selectedReport].publicReport);
 		document.getElementById('reportDescription').innerHTML	= YAHOO.reportsheet.jsReports[selectedReport].description;
-		
-		YAHOO.reportsheet.myPanel.setHeader(YAHOO.reportsheet.jsReports[selectedReport].name);
+		var title=YAHOO.reportsheet.jsReports[selectedReport].name;
+		if(title.length>25){
+			title=title.substring(0,24)+"...";
+		}
+		YAHOO.reportsheet.myPanel.setHeader(title);
 	}
 	function showMyPanel () {
 		//initReportSheet();

@@ -858,7 +858,7 @@ span.extContactDropdownEmail {
 				
 				<input type="text" id="contactInput" class="inputx" style="width:470px; Font-size: 10pt; height:22px;">
 				<div id="extContactAutocom"></div>
-				<input type="button" value="<digi:trn>Add</digi:trn>" class="buttonx_sm" onClick="addContact(document.getElementById('contactInput'))">
+				<input type="button" value="<digi:trn>Add</digi:trn>" class="buttonx_sm" style="height:22px;vertical-align: middle;" onClick="addContact(document.getElementById('contactInput'))">
 				<br>
 				<div id="contactsContainer" style="width:470px;"></div>
 				<div id="guest_user_container">

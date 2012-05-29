@@ -1779,11 +1779,13 @@ function reloadGraphs(){
 }
 
 function itemClick(id, type, startYear, endYear){
-	  openNewWindow(600, 400);
-	  var urlItemClick= urlShowList + "&id=" + id + "&type=" + type + "&startYear=" + startYear + "&endYear=" + endYear;
-	  document.visualizationform.action = urlItemClick;
-	  document.visualizationform.target = popupPointer.name;
-	  document.visualizationform.submit();
+	  if(id) {
+		  openNewWindow(600, 400);
+		  var urlItemClick= urlShowList + "&id=" + id + "&type=" + type + "&startYear=" + startYear + "&endYear=" + endYear;
+		  document.visualizationform.action = urlItemClick;
+		  document.visualizationform.target = popupPointer.name;
+		  document.visualizationform.submit();
+	  }
 
 		//var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getActivitiesList&id=" + id + "&type=" + type + "&year=" + year, showListPopinCall, null);
 }

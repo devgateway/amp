@@ -24,6 +24,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
@@ -74,7 +75,11 @@ public class ExportToPDF extends Action {
         	String pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
         	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
 			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
-			String filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions", langCode, siteId);
+			String filtersAmountsInTrn = "";
+			if(vForm.getFilter().getShowAmountsInThousands() != null && vForm.getFilter().getShowAmountsInThousands())
+				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in thousands", langCode, siteId);
+			else
+				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions", langCode, siteId);
 			String filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type", langCode, siteId);
 			String filtersStartYearTrn = TranslatorWorker.translateText("Start Year", langCode, siteId);
 			String filtersEndYearTrn = TranslatorWorker.translateText("End Year", langCode, siteId);
@@ -84,9 +89,9 @@ public class ExportToPDF extends Action {
 			String filtersLocationsTrn = TranslatorWorker.translateText("Locations", langCode, siteId);
         	String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
             String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
-            String topPrjTrn = TranslatorWorker.translateText("Top 5 Projects", langCode, siteId);
-            String topDonorTrn = TranslatorWorker.translateText("Top 5 Donors", langCode, siteId);
-            String topRegionTrn = TranslatorWorker.translateText("Top 5 Regions", langCode, siteId);
+            String topPrjTrn = TranslatorWorker.translateText("Top Projects", langCode, siteId);
+            String topDonorTrn = TranslatorWorker.translateText("Top Donors", langCode, siteId);
+            String topRegionTrn = TranslatorWorker.translateText("Top Regions", langCode, siteId);
             String projectTrn = TranslatorWorker.translateText("Project", langCode, siteId);
             String sectorTrn = TranslatorWorker.translateText("Sector", langCode, siteId);
             String donorTrn = TranslatorWorker.translateText("Donor", langCode, siteId);
@@ -165,6 +170,7 @@ public class ExportToPDF extends Action {
             PdfPCell filterTitleCell = new PdfPCell(new Paragraph(filtersTrn, HEADERFONT));
             filterTitleCell.setColspan(1);
             filtersTbl.addCell(filterTitleCell);
+            
             
             cell = new PdfPCell(new Paragraph(filtersAmountsInTrn));
             filtersTbl.addCell(cell);
@@ -257,10 +263,10 @@ public class ExportToPDF extends Action {
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
 	            
-	            cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getTotalCommitments().toString(), HEADERFONT));
+	            cell = new PdfPCell(new Paragraph(getFormattedNumber(vForm.getSummaryInformation().getTotalCommitments()), HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            summaryTbl.addCell(cell);
-	            cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getTotalDisbursements().toString()));
+	            cell = new PdfPCell(new Paragraph(getFormattedNumber(vForm.getSummaryInformation().getTotalDisbursements())));
 	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            summaryTbl.addCell(cell);
 	            cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getNumberOfProjects().toString()));
@@ -281,7 +287,7 @@ public class ExportToPDF extends Action {
 	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
 	            }
-	            cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getAverageProjectSize().toString()));
+	            cell = new PdfPCell(new Paragraph(getFormattedNumber(vForm.getSummaryInformation().getAverageProjectSize())));
 	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 summaryTbl.addCell(cell);
                 doc.add(summaryTbl);
@@ -313,7 +319,7 @@ public class ExportToPDF extends Action {
 			        Map.Entry entry = (Map.Entry)it.next();
 			        cell = new PdfPCell(new Paragraph(entry.getKey().toString()));
 			        topPrjTbl.addCell(cell);
-	            	cell = new PdfPCell(new Paragraph(entry.getValue().toString()));
+	            	cell = new PdfPCell(new Paragraph(getFormattedNumber((BigDecimal)entry.getValue())));
 	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            	topPrjTbl.addCell(cell);
 			    }
@@ -350,7 +356,13 @@ public class ExportToPDF extends Action {
 	            for (int i = 1; i < fundingRows.length; i++) {
 	            	singleRow = fundingRows[i].split(">");
 	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                	if(j > 0) {
+		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+	                	}
+	                	else
+	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                	
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	fundingTbl.addCell(cell);
 	    			}
@@ -396,7 +408,13 @@ public class ExportToPDF extends Action {
     	            for (int i = 2; i < ODAGrowthRows.length; i++) {
     	            	singleRow = ODAGrowthRows[i].split(">");
     	            	for (int j = 0; j < singleRow.length; j++) {
-    	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+    	                	if(j > 0) { //Skip first and last column
+    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+    	                	}
+    	                	else
+    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+//    	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
     	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
     	                	ODAGrowthTbl.addCell(cell);
     	    			}
@@ -448,7 +466,12 @@ public class ExportToPDF extends Action {
 	            for (int i = 1; i < aidPredRows.length; i++) {
 	            	singleRow = aidPredRows[i].split(">");
 	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                	if(j > 0) { //Skip first and last column
+		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+	                	}
+	                	else
+	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	aidPredTbl.addCell(cell);
 	    			}
@@ -499,7 +522,12 @@ public class ExportToPDF extends Action {
 	            for (int i = 1; i < aidTypeRows.length; i++) {
 	            	singleRow = aidTypeRows[i].split(">");
 	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                	if(j > 0) { //Skip first and last column
+		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+	                	}
+	                	else
+	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	aidTypeTbl.addCell(cell);
 	    			}
@@ -551,7 +579,12 @@ public class ExportToPDF extends Action {
 	            for (int i = 1; i < finInstRows.length; i++) {
 	            	singleRow = finInstRows[i].split(">");
 	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+	                	if(j > 0) { //Skip first and last column
+		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+	                	}
+	                	else
+	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
 	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                	finInstTbl.addCell(cell);
 	    			}
@@ -604,7 +637,12 @@ public class ExportToPDF extends Action {
 		            for (int i = 2; i < sectorProfRows.length; i++) {
 		            	singleRow = sectorProfRows[i].split(">");
 		            	for (int j = 0; j < singleRow.length; j++) {
-		                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+    	                	if(j > 0) { //Skip first and last column
+    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+    	                	}
+    	                	else
+    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
 		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		                	sectorProfTbl.addCell(cell);
 		    			}
@@ -654,10 +692,16 @@ public class ExportToPDF extends Action {
 		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            	regionProfTbl.addCell(cell);
 					}
+		            
 		            for (int i = 2; i < regionProfRows.length; i++) {
 		            	singleRow = regionProfRows[i].split(">");
 		            	for (int j = 0; j < singleRow.length; j++) {
-		                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+    	                	if(j > 0) { //Skip first and last column
+    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+    	                	}
+    	                	else
+    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
 		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		                	regionProfTbl.addCell(cell);
 		    			}
@@ -710,7 +754,12 @@ public class ExportToPDF extends Action {
 		            for (int i = 2; i < donorProfRows.length; i++) {
 		            	singleRow = donorProfRows[i].split(">");
 		            	for (int j = 0; j < singleRow.length; j++) {
-		                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+    	                	if(j > 0) { //Skip first and last column
+    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+    	                	}
+    	                	else
+    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
 		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		                	donorProfTbl.addCell(cell);
 		    			}
@@ -743,5 +792,9 @@ public class ExportToPDF extends Action {
         }
 
         return null;
+    }
+    
+    public String getFormattedNumber(BigDecimal number){
+    	 return FormatHelper.formatNumberNotRounded(number.doubleValue());
     }
 }

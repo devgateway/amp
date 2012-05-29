@@ -104,7 +104,7 @@ function exportXSL(){
 
 
 
-<h1 class="admintitle"><digi:trn>Currencey manager</digi:trn></h1>
+<h1 class="admintitle"><digi:trn>Currency manager</digi:trn></h1>
 <digi:instance property="aimCurrencyForm" />
 <digi:form action="/currencyManager.do">
 

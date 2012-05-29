@@ -168,7 +168,7 @@ StopWatch.next("Filters", true);
 		</div>
 	</div>
 </div>
-<div  class="kSearchBox">
+<div style="width:50%; float:left; font-size: 12px;text-align: center;">
 		<c:set var="tooltip_translation">
 			<digi:trn>Specify keywords to look for in the project data.</digi:trn>
 		</c:set>
@@ -183,12 +183,12 @@ StopWatch.next("Filters", true);
 			</html:select>
 			
 </div>
-<div  class="kSearchBox">
+<div style="display: block; overflow:hidden;width:50%; float:left; font-size: 12px">
 	<html:checkbox property="justSearch" value="true" />&nbsp;
 	<digi:trn>Use filter as advanced search</digi:trn>
 </div>
 
-<div  class="kSearchBox">
+<div style="clear:both;text-align:center;padding:2px 0px 0px 0px;margin-top: 20px;height: 15%;">
 				<html:hidden property="ampReportId" />
 
 				<html:hidden property="defaultCurrency" />

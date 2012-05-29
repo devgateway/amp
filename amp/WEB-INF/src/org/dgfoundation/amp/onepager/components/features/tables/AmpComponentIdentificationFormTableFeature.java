@@ -59,7 +59,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
 					new LoadableDetachableModel<List<AmpComponentType>>() {
 						@Override
 						protected List<AmpComponentType> load() {
-							return new ArrayList(ComponentsUtil.getAmpComponentTypes());
+							return new ArrayList(ComponentsUtil.getAmpComponentTypes(true));
 						}
 					}, "Component Type", false, false, new ChoiceRenderer<AmpComponentType>("name")){
 			/**

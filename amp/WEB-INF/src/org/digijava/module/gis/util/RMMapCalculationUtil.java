@@ -23,8 +23,8 @@ public class RMMapCalculationUtil {
     public static Object[] getAllFundingsFiltered (GisFilterForm filter, boolean isRegional, boolean isPublic) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
-        Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
-        Collection<Long> tertiarySectors = longArrayToColl(filter.getSelectedTertiarySectors());
+        Collection<Long> secondarySectors = null;//longArrayToColl(filter.getSelectedSecondarySectors());
+        Collection<Long> tertiarySectors = null;//longArrayToColl(filter.getSelectedTertiarySectors());
         Collection<Long> typeOfAssistanceIds = longArrayToColl(filter.getSelectedTypeOfAssistance());
 
         Set sectorCollector = new HashSet();
@@ -115,8 +115,10 @@ public class RMMapCalculationUtil {
     public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isRegional, boolean isPublic) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
-        Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
-        Collection<Long> tertiarySectors = longArrayToColl(filter.getSelectedTertiarySectors());
+        //Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
+        Collection<Long> secondarySectors = null;
+        //Collection<Long> tertiarySectors = longArrayToColl(filter.getSelectedTertiarySectors());
+        Collection<Long> tertiarySectors = null;
 
         Set sectorCollector = new HashSet();
 

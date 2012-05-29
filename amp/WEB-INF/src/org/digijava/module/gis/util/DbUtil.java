@@ -2744,13 +2744,32 @@ public class DbUtil {
     public static Map <Long, Set> getActivityLocationNames (Set<Long> actIds) {
         Map <Long, Set> retVal = new HashMap <Long, Set> ();
         try {
+
+
             String actIdWhereclause = generateWhereclause(actIds, new GenericIdGetter());
             Session sess = PersistenceManager.getRequestDBSession();
+
+            /*
+            StringBuilder lastVersionsQry = new StringBuilder("select actGroup.ampActivityLastVersion.ampActivityId from ");
+            lastVersionsQry.append(AmpActivityGroup.class.getName());
+            lastVersionsQry.append(" as actGroup");
+            Query actGrpupQuery = sess.createQuery(lastVersionsQry.toString());
+            List lastVersions = actGrpupQuery.list();
+            String lasVersionsWhereclause = generateWhereclause(lastVersions, new GenericIdGetter());
+            */
+
+
             StringBuilder queryStr = new StringBuilder("select loc.activity.ampActivityId, loc.location.location.name from ");
             queryStr.append(AmpActivityLocation.class.getName());
             queryStr.append(" as loc where loc.activity.ampActivityId in ");
             queryStr.append(actIdWhereclause);
+            /*
+            queryStr.append(" and loc.activity.ampActivityId in ");
+            queryStr.append(lasVersionsWhereclause);
+            */
             Query q = sess.createQuery(queryStr.toString());
+
+
             List <Object[]> qRes = q.list();
 
             if (qRes != null) {

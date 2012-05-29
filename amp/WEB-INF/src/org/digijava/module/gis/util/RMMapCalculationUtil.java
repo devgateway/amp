@@ -112,7 +112,7 @@ public class RMMapCalculationUtil {
         return fundingList;
     }
 
-    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isPublic) {
+    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isRegional, boolean isPublic) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
         Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
@@ -164,7 +164,10 @@ public class RMMapCalculationUtil {
 
         boolean includeCildLocations = filter.getMapLevel() == 3;
 
-        Object[] activityFundings = DbUtil.getActivityFundings(sectorCollector,
+        Object[] activityFundings = null;
+        Object[] activityRegionalFundings = null;
+        if (!isRegional) {
+            activityFundings = DbUtil.getActivityFundings(sectorCollector,
                                                                programsIds,
                                                                donnorAgencyIds,
                                                                donorGroupIds,
@@ -172,7 +175,8 @@ public class RMMapCalculationUtil {
                                                                includeCildLocations,
                                                                locations,
                                                                null, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), isPublic);
-        Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
+        } else {
+            activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
                                                                                donnorAgencyIds,
                                                                                donorGroupIds,
@@ -180,6 +184,7 @@ public class RMMapCalculationUtil {
                                                                                includeCildLocations,
                                                                                locations,
                                                                                null, fStartDate.getTime(), fEndDate.getTime(), isPublic);
+        }
         Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, includeCildLocations, locations, currencyCode, true);
 
 

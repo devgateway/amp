@@ -1,2 +1,0 @@
-insert into amp_columns(columnName, cellType, extractorview) values("Funding start date", "org.dgfoundation.amp.ar.cell.DateCell","v_funding_start_date");
-insert into amp_columns(columnName, cellType, extractorview) values("Funding end date", "org.dgfoundation.amp.ar.cell.DateCell","v_funding_end_date");

@@ -1,1 +1,0 @@
-CREATE  or replace VIEW `v_funding_end_date` AS select `f`.`amp_activity_id` AS `amp_activity_id`, `f`.`actual_completion_date` AS `actual_completion_date` from (`amp_funding` `f` join `amp_activity` `a`) where (`f`.`amp_activity_id` = `a`.`amp_activity_id` and `f`.`actual_completion_date` is not NULL) order by `f`.`amp_activity_id` ;

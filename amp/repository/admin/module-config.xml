@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<module-config>
-	<name>admin</name>
-	<security login-required="true" default="ADMIN" />
-</module-config>

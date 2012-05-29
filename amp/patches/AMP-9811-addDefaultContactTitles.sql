@@ -1,4 +1,0 @@
-insert into amp_category_value (amp_category_class_id, category_value, index_column) values ((select id from amp_category_class where keyName='contact_title'), 'Mr', 0);
-insert into amp_category_value (amp_category_class_id, category_value, index_column) values ((select id from amp_category_class where keyName='contact_title'), 'Ms', 1);
-insert into amp_category_value (amp_category_class_id, category_value, index_column) values ((select id from amp_category_class where keyName='contact_title'), 'Mrs', 2);
-insert into amp_category_value (amp_category_class_id, category_value, index_column) values ((select id from amp_category_class where keyName='contact_title'), 'Dr', 3);

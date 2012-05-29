@@ -91,7 +91,7 @@
 												<legend><span class="legend_label"><digi:trn>Totals Grouping</digi:trn></span></legend>
 												<div id="totalsGroupingDiv" class="inputx">
 													
-													<nested:checkbox property="hideActivities" value="true" onchange="createPreview();">
+													<nested:checkbox property="hideActivities" value="true" onchange="repManager.checkSteps();createPreview();">
 														${summary}
 													</nested:checkbox>
 													<br />

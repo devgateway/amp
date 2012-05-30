@@ -123,6 +123,7 @@ public class DashboardFilter {
     	newFilter.setFromPublicView(this.getFromPublicView());
     	newFilter.setSelSectorConfigId(this.getSelSectorConfigId());
     	newFilter.setAllSectorList(this.getAllSectorList());
+    	newFilter.setTransactionType(this.getTransactionType());
     	return newFilter;
     }
 	

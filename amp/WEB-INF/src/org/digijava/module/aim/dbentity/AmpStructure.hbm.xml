@@ -10,7 +10,7 @@
 				<param name="sequence">AMP_STRUCTURE_seq</param>
 			</generator>
 		</id>
-		<property column="title" name="title" type="java.lang.String" />
+		<property column="title" name="title" type="java.lang.String" not-null="true" />
 		<property column="description" name="description" type="text" />
 		<property column="latitude" name="latitude" type="text" />
 		<property column="longitude" name="longitude" type="text" />
@@ -23,7 +23,7 @@
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivityVersion"
 				column="amp_activity_id" />
 		</set>
-		<many-to-one name="type" column="type"
+		<many-to-one name="type" column="type" not-null="true"
 			class="org.digijava.module.aim.dbentity.AmpStructureType" cascade="none" />
 
 

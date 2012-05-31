@@ -179,9 +179,10 @@
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&subAction=search&viewAll=viewAll"/>
 			    document.aimSelectOrganizationForm.action = "<%= searchOrg %>";
 		      var aux= document.aimSelectOrganizationForm.tempNumResults.value;
-		      document.aimSelectOrganizationForm.tempNumResults.value=1000000;
+		      //Moved to backend
+		      //document.aimSelectOrganizationForm.tempNumResults.value=1000000;
 		     document.aimSelectOrganizationForm.submit();
-		      document.aimSelectOrganizationForm.tempNumResults.value=aux;
+		      //document.aimSelectOrganizationForm.tempNumResults.value=aux;
 			  return true;
 		}
 	}

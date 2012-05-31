@@ -202,12 +202,20 @@ function StandardSearchManager( inputEl ) {
 	
 };
 
-StandardSearchManager.prototype.getMainElements	= function( ) {
+StandardSearchManager.prototype.getMainElements	= function( ) {	
 	return this.divEl.getElementsByTagName("span");
 };
 
 StandardSearchManager.prototype.getAdditionalElements	= function() {
-	return this.divEl.getElementsByTagName("div");
+	var myDivs = this.divEl.getElementsByTagName("div");
+	var retVal= new Array();
+	for (var i=0;i<myDivs.length;i++){
+		if(myDivs[i].className!='hiddenNameDiv'){
+			retVal.push(myDivs[i]);
+		}
+	}
+	
+	return retVal;
 };
 
 var messagesSearchManagerCreator = function (inputEl) {

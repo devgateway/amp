@@ -436,18 +436,18 @@ function collapseAll() {
 			<c:out value="${aimEditActivityForm.identification.actAthLastName}"/> 
 		</b>
 		<hr/>
-	<digi:trn>Workspace of creator</digi:trn>: <br />
+	<digi:trn>Created in workspace</digi:trn>: <br />
 	<b>
-		<c:out value="${aimEditActivityForm.identification.createdBy.ampTeam.name}"/> - 
-		<c:out value="${aimEditActivityForm.identification.createdBy.ampTeam.accessType}"/>
+		<c:out value="${aimEditActivityForm.identification.team.name}"/> - 
+		<c:out value="${aimEditActivityForm.identification.team.accessType}"/>
 	</b>
 	<hr />
  	<digi:trn>Computation</digi:trn>: <br/>
 	<b>
-		<c:if test="${aimEditActivityForm.identification.createdBy.ampTeam.computation == 'true'}">
+		<c:if test="${aimEditActivityForm.identification.team.computation == 'true'}">
 			<digi:trn key="aim:yes">Yes</digi:trn>
 		</c:if> 
-		<c:if test="${aimEditActivityForm.identification.createdBy.ampTeam.computation == 'false'}">
+		<c:if test="${aimEditActivityForm.identification.team.computation == 'false'}">
 			<digi:trn key="aim:no">No</digi:trn>
 		</c:if>
 	</b>

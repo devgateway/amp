@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -18,6 +19,7 @@ import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionsSumComparatorValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpTransactionTypeDonorFundingDetailModel;
@@ -85,13 +87,24 @@ public class AmpDonorExpendituresFormTableFeature extends
 				classification.setTextContainerDefaultMaxSize();
 				item.add(classification);
 				item.add(new ListEditorRemoveButton("delExp", "Delete Expenditure"){
-					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
+					protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
 						super.onClick(target);
 						amountSumComparator.reloadValidationField(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
-						
 						target.addComponent(parent.getFundingInfo());
+						
+						parent.visitChildren(AmpCollectionValidatorField.class, new Component.IVisitor<AmpCollectionValidatorField>()
+								{
+
+									@Override
+									public Object component(AmpCollectionValidatorField component) {
+										component.reloadValidationField(target);
+										target.addComponent(component.getParent());
+										return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+									}
+								});
+				
 					};
 				});
 			}

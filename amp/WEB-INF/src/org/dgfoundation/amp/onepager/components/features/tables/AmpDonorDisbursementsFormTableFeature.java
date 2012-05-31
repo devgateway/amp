@@ -170,6 +170,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 										@Override
 										public Object component(AmpCollectionValidatorField component) {
 											component.reloadValidationField(target);
+											target.addComponent(component.getParent());
 											return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
 										}
 									});

@@ -49,6 +49,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
 	
 	private AmpDonorFundingInfoSubsectionFeature fundingInfo;
+	private AmpDonorDisbursementsSubsectionFeature disbursements;
 
 	/**
 	 * @param id
@@ -182,7 +183,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		add(commitments);
 		
 		
-		AmpDonorDisbursementsSubsectionFeature disbursements = new AmpDonorDisbursementsSubsectionFeature(
+		 disbursements = new AmpDonorDisbursementsSubsectionFeature(
 				"disbursements", fundingModel,"Disbursements",Constants.DISBURSEMENT);
 		add(disbursements);
 		
@@ -200,4 +201,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		return fundingInfo;
 	}
 
+	public AmpDonorDisbursementsSubsectionFeature getDisbursements() {
+		return disbursements;
+	}
+	
 }

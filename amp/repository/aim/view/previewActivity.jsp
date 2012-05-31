@@ -409,16 +409,19 @@ function collapseAll() {
 			<hr/>
 			</module:display>
 			<field:display name="Duration of Project" feature="Planning">
+				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Completion Date - Actual Start Date</digi:trn>" width="10" height=10 border="0">
 				<digi:trn>Duration of project</digi:trn>: <br/>
 				<b>${aimEditActivityForm.planning.projectPeriod }</b>
 				<hr/>
 			</field:display>
 			<field:display name="Delivery rate" feature="Funding Information">
+				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Disbursements / Actual Commitments * 100</digi:trn>" width="10" height=10 border="0">
 				<digi:trn>Delivery rate</digi:trn>:<br/>
 				<b> ${aimEditActivityForm.funding.deliveryRate}</b>
 				<hr/>
 			</field:display> 
 			<field:display name="Consumption rate" feature="Funding Information">
+				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Expenditures / Actual Disbursements * 100</digi:trn>" width="10" height=10 border="0">
 				<digi:trn>Consumption rate</digi:trn>:<br/>
 				<b>${aimEditActivityForm.funding.consumptionRate}</b>		</div>
 			</field:display>

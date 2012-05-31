@@ -644,7 +644,7 @@
         if(pageSize!=''){
             var validChars='^[0-9]*$';
             if(!pageSize.match(validChars)){
-                errmsg+='\n<digi:trn>Please enter correct number of pages</digi:trn>';
+                errmsg+='\n<digi:trn jsFriendly="true">Please enter correct number of pages</digi:trn>';
             }
         }
 		 
@@ -730,7 +730,7 @@
 
     function validateAction(){
         if(document.getElementsByName('action')[0].value==='edit' && document.getElementsByName('role')[0].selectedIndex==0){
-            alert("<digi:trn>Please select the role</digi:trn>");
+            alert("<digi:trn jsFriendly='true'>Please select the role</digi:trn>");
             return false;
         }
         return true;			
@@ -779,14 +779,14 @@
                     updateTableActivities(activities);
                 }
                 catch(e) {
-                    alert("<digi:trn>Error getting activity data</digi:trn>");
+                    alert("<digi:trn jsFriendly='true'>Error getting activity data</digi:trn>");
                 }
                 finally {
                     document.getElementById('ws_go').disabled=false;
                 }
             },
             failure : function () {
-                alert("<digi:trn>Error getting activity data</digi:trn>");
+                alert("<digi:trn jsFriendly='true'>Error getting activity data</digi:trn>");
             }
         
         });
@@ -811,7 +811,7 @@
                     document.getElementById('addNew').innerHTML='<a title="Click here to Add Workspace Member" style="font-size:12px; padding-left:5px;" href="JavaScript:assignNewMember()"><digi:trn jsFriendly="true">Add Workspace Member</digi:trn></a>'
                 }
                 catch(e) {
-                    alert("<digi:trn>Error getting members data</digi:trn>");
+                    alert("<digi:trn jsFriendly='true'>Error getting members data</digi:trn>");
                 }
                 finally {
                    document.getElementById('ws_go').disabled=false;
@@ -821,7 +821,7 @@
                 }
             },
             failure : function () {
-                alert("<digi:trn>Error getting members data</digi:trn>");
+                alert("<digi:trn jsFriendly='true'>Error getting members data</digi:trn>");
             }
         
         });
@@ -923,7 +923,7 @@
         id = document.getElementsByName('teamId')[0].value;
         desc = document.getElementsByName('teamName')[0].value;
         if(id===""||desc===""){
-            alert("<digi:trn>Select a Team First</digi:trn>");
+            alert("<digi:trn jsFriendly='true'>Select a Team First</digi:trn>");
             return;
         }
 	
@@ -970,7 +970,7 @@
 	
     }
     function confirmDelete() {
-        var flag = confirm("<digi:trn>Are you sure you want to remove the selected activity</digi:trn>");
+        var flag = confirm("<digi:trn jsFriendly='true'>Are you sure you want to remove the selected activity</digi:trn>");
         if(flag == false)
             return false;
         else 
@@ -990,7 +990,7 @@
             }
         } 
         if(!result){
-            alert('<digi:trn>Please, Select an Activity First</digi:trn>')
+            alert('<digi:trn jsFriendly="true">Please, Select an Activity First</digi:trn>');
         }
         return result;
     }
@@ -1029,7 +1029,7 @@
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
         }
         else{
-            alert('<digi:trn>Validation Error</digi:trn>')
+            alert('<digi:trn jsFriendly="true">Validation Error</digi:trn>')
         }
 	
     }

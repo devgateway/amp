@@ -427,7 +427,7 @@ public class DocumentManagerUtil {
 			return null;
 		try {
 			DocumentManager dm				= new DocumentManager();
-			Collection<DocumentData> ret	= dm.getDocuments(UUIDs, request,null,false,true);
+			Collection<DocumentData> ret	= dm.getDocuments(UUIDs, request,null,false,true,null);
 			ret.addAll(
 					TemporaryDocumentData.retrieveTemporaryDocDataList(request)
 				);

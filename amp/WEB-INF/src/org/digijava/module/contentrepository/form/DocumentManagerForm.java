@@ -66,6 +66,8 @@ public class DocumentManagerForm extends ActionForm {
 	private Boolean privateDocsExist;
 	private Boolean teamDocsExist;
 	
+	private String keyword;
+	
 	public Boolean getPageCloseFlag() {
 		return pageCloseFlag;
 	}
@@ -398,5 +400,14 @@ public class DocumentManagerForm extends ActionForm {
 
 	public void setTeamDocsExist(Boolean teamDocsExist) {
 		this.teamDocsExist = teamDocsExist;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}	
+	
 }

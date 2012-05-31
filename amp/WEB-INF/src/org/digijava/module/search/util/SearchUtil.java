@@ -55,6 +55,8 @@ public class SearchUtil {
 	public static Collection<LoggerIdentifiable> getReports(TeamMember tm,
 			String string) {
 		// TODO: Unify this with getTabs()
+		string	= string.replace("*", "");	
+		
 		ArrayList<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
 		List<AmpReports> col = new ArrayList<AmpReports>();
 
@@ -113,6 +115,8 @@ public class SearchUtil {
 
 	public static Collection<LoggerIdentifiable> getTabs(TeamMember tm,
 			String string) {
+		
+		string	= string.replace("*", "");	
 		ArrayList<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
 
 		List<AmpReports> col = new ArrayList<AmpReports>();
@@ -227,6 +231,8 @@ public class SearchUtil {
 	public static Collection<LoggerIdentifiable> getResources(String keyword,
 			HttpServletRequest request, TeamMember tm) {
 
+		keyword	= keyword.replace("*", "");	
+		
 		javax.jcr.Session jcrWriteSession = DocumentManagerUtil
 				.getWriteSession(request);
 

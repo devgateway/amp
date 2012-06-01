@@ -185,8 +185,9 @@
      <action name="pledgeForm" path="/aim/removePledge" scope="session" type="org.digijava.module.fundingpledges.action.RemovePledge">
       <forward name="forward" path="/aim/viewPledgesList.do" redirect="true"/>
     </action>
-    <action name="pledgeForm" path="/aim/addPledge" scope="session" type="org.digijava.module.fundingpledges.action.AddPledge" validate="false">
+    <action name="pledgeForm" path="/aim/addPledge" scope="session" type="org.digijava.module.fundingpledges.action.AddPledge">
       <forward name="forward" path="/showLayout.do?layout=addPledge" />
+      <forward name="added" path="/aim/addPledge.do" redirect="true" />
     </action>
     <action name="pledgeForm" path="/aim/addFundingPledgeDetail" scope="session" type="org.digijava.module.fundingpledges.action.AddFundingPledgeDetail">
       <forward name="forward" path="/aim/addPledge.do" redirect="true"/>

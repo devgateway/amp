@@ -47,6 +47,7 @@ public class AddPledge extends Action {
     		
     		// Add sectors
     		if (request.getParameter("addSector") != null) {
+    			request.getSession().getServletContext().removeAttribute("addSector");
     			return addSector(mapping, session, plForm);
     		}else if (request.getParameter("remSectors") != null) {
     			//return removeSector(mapping, request, session, plForm);
@@ -322,7 +323,7 @@ public class AddPledge extends Action {
     		session.removeAttribute("sectorSelected");
     		session.removeAttribute("add");
     		session.removeAttribute("addSector");
-    	    return mapping.findForward("forward");
+    	    return mapping.findForward("added");
 
     	} else {
     		ActivitySector selectedSector = (ActivitySector) session
@@ -406,7 +407,7 @@ public class AddPledge extends Action {
     		plForm.setPledgeSectors(prevSelSectors);
     		session.removeAttribute("sectorSelected");
     		session.removeAttribute("addSector");
-    	    return mapping.findForward("forward");
+    	    return mapping.findForward("added");
     	}
     }
    

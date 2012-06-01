@@ -30,6 +30,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.HierarchyListableUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.filters.GroupingElement;
@@ -128,7 +129,6 @@ public class ShowGisDashboard extends Action {
  	 	List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
         List<AmpSector> tertiaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME);
  	 	
- 	 	
         gisForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
         gisForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
  	 	
@@ -139,6 +139,7 @@ public class ShowGisDashboard extends Action {
 	 	 	rootAmpSectors.setChildren(ampSectors);
 	 	 	GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>("Primary Sectors", "filter_sectors_div", rootAmpSectors, "selectedSectors");
 	 	 	gisForm.getSectorElements().add(sectorsElement);
+	 	 	HierarchyListableUtil.changeTranslateable(sectorsElement.getRootHierarchyListable(), false);
  	 	}
  	 	
  	 	if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)){
@@ -148,6 +149,7 @@ public class ShowGisDashboard extends Action {
  	 		rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
  	 		GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div", rootSecondaryAmpSectors, "selectedSecondarySectors");
  	 		gisForm.getSectorElements().add(secondarySectorsElement);
+ 	 		HierarchyListableUtil.changeTranslateable(secondarySectorsElement.getRootHierarchyListable(), false);
  	 	}
 
         if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext)){
@@ -157,6 +159,7 @@ public class ShowGisDashboard extends Action {
  	 		rootTertiaryAmpSectors.setChildren(tertiaryAmpSectors);
  	 		GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div", rootTertiaryAmpSectors, "selectedTertiarySectors");
  	 		gisForm.getSectorElements().add(tertiarySectorsElement);
+ 	 		HierarchyListableUtil.changeTranslateable(tertiarySectorsElement.getRootHierarchyListable(), false);
  	 	}
  	 		
  	 	
@@ -198,6 +201,7 @@ public class ShowGisDashboard extends Action {
  	 	rootOrgType.setChildren( donorTypes );
  	 	GroupingElement<HierarchyListableImplementation> donorTypeElement = new GroupingElement<HierarchyListableImplementation>("Donor Types", "filter_donor_types_div", rootOrgType, "selectedDonorTypes");
  	 	gisForm.getDonorElements().add(donorTypeElement);
+ 	 	HierarchyListableUtil.changeTranslateable(donorTypeElement.getRootHierarchyListable(), false);
  	 	
  	 	HierarchyListableImplementation rootOrgGroup = new HierarchyListableImplementation();
  	 	rootOrgGroup.setLabel("All Donor Groups");
@@ -205,6 +209,7 @@ public class ShowGisDashboard extends Action {
  	 	rootOrgGroup.setChildren( donorGroups );
  	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
  	 	gisForm.getDonorElements().add(donorGroupElement);
+ 	 	HierarchyListableUtil.changeTranslateable(donorGroupElement.getRootHierarchyListable(), false);
  	 	
  	 	Collection<AmpOrganisation> donors = ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_DONOR);
  	 	HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
@@ -213,15 +218,8 @@ public class ShowGisDashboard extends Action {
  	 	rootDonors.setChildren( donors );
  	 	GroupingElement<HierarchyListableImplementation> donorsElement  = new GroupingElement<HierarchyListableImplementation>("Donor Agencies", "filter_donor_agencies_div", rootDonors, "selectedDonnorAgency");
  	 	gisForm.getDonorElements().add(donorsElement);
+ 	 	HierarchyListableUtil.changeTranslateable(donorsElement.getRootHierarchyListable(), false);
 	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-       
         gisForm.setAvailYears(DbUtil.getAvailIndicatorYears());
         //dropdown(on toolbar) things
 		Calendar cal=Calendar.getInstance();

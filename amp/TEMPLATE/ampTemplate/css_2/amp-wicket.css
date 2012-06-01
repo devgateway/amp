@@ -375,7 +375,7 @@ div.tabpanel div.tab-row a:hover {
 .paris_question {background-color:#FFFFFF; border:1px solid #CCCCCC; font-weight:bold; padding-left:7px; margin-top:10px; margin-bottom:2px;}
 .paris_answer {background-color:#FFFFFF; border:1px solid #E0E5EB; padding:3px; margin-bottom:5px; line-height:18px;}
 
-.sideMenuButtons {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;}
+.sideMenuButtons {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:10px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; width:155px; overflow:hidden;}
 
 .quickListHighlight {background-color: #F2F2F2; border-bottom: 1px solid lightgray !important; border-right: 1px solid lightgray !important; color: white;}
 .padding-two-pixels{padding: 2px;}

@@ -215,11 +215,11 @@
 								<tr>
 									<td>
 										<!-- Other Links -->
-										<table cellpadding="0" cellspacing="0" width="10"0>
+										<table cellpadding="0" cellspacing="0" width="100">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title>
 													<digi:trn key="aim:otherLinks">
-													Other links
+													<b style="font-size:12px; color:#000000; padding-left:5px;">Other links</b>
 													</digi:trn>
 												</td>
 												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;
@@ -231,7 +231,7 @@
 								</tr>
 								<tr>
 									<td bgColor=#ffffff class=box-border>
-										<table cellPadding=5 cellspacing="1" width="100%">
+										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>

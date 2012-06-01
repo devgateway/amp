@@ -82,10 +82,16 @@
 			<c:set var="searchTooltip">
 				<digi:trn>You can use the * wildcard for matching any character</digi:trn>
 			</c:set>
-			<div class="${keywordClasses}" style="padding-right: 135px"><digi:trn>Keyword</digi:trn>: 
-				<html:text title="${searchTooltip}" 
-				property="keyword" styleClass="inputx insidex" size="25" /><digi:trn>Type</digi:trn>:
-			<html:select property="queryType" styleClass="inputx insidex">
+			<div class="${keywordClasses}" style="padding-right: 150px">
+			
+			
+			<table border="0" cellpadding="1" cellspacing="1">
+  <tr>
+    <td><digi:trn><b>Keyword</b></digi:trn>: </td>
+    <td><html:text title="${searchTooltip}" 
+				property="keyword" styleClass="inputx insidex" size="25" /></td>
+    <td><digi:trn><b>Type</b></digi:trn>:</td>
+    <td><html:select property="queryType" styleClass="inputx insidex">
 				<html:option value="-1">
 					<digi:trn>ALL</digi:trn>
 				</html:option>
@@ -116,21 +122,34 @@
                                                         	<html:option value="6"><digi:trn>Implementing Agency</digi:trn></html:option>
                                                         </field:display>
                                                     </feature:display>
-			</html:select> 
-			<digi:trn>Search Mode</digi:trn>:
-			<html:select property="searchMode" styleClass="inputx insidex">
+			</html:select> </td>
+    <td><digi:trn><b>Search Mode</b></digi:trn>:</td>
+    <td><html:select property="searchMode" styleClass="inputx insidex">
 				<html:option value="0">
 					<digi:trn>Any keyword</digi:trn>
 				</html:option>
 				<html:option value="1">
 					<digi:trn>All keywords</digi:trn>
 				</html:option>
-			</html:select>
-			
-			<html:submit styleClass="buttonx_sm">
+			</html:select></td>
+    <td><html:submit styleClass="buttonx_sm">
 				<digi:trn>Search</digi:trn>
-			</html:submit>
-                         <a style="font-size: 11px;" href="/aim/queryEngine.do"><digi:trn>Advanced Search</digi:trn></a>
+			</html:submit></td>
+    <td> <a style="font-size: 11px;" href="/aim/queryEngine.do"><digi:trn>Advanced Search</digi:trn></a></td>
+  </tr>
+</table>
+
+			
+			
+			
+			
+				
+			
+			
+			
+			
+			
+			
                         </div>
 		</digi:form>
 		<table width="100%">

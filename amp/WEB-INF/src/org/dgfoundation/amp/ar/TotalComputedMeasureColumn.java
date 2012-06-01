@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,12 +12,15 @@ import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedMeasureCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.dgfoundation.amp.exprlogic.Values;
 
 /**
  * 
  * @author Sebastian Dimunzio Apr 15, 2009
  */
 public class TotalComputedMeasureColumn extends TotalAmountColumn {
+
+//	private BigDecimal totalVariable;
 
 	/**
 	 * @param worker
@@ -82,16 +86,31 @@ public class TotalComputedMeasureColumn extends TotalAmountColumn {
 
 	public List getTrailCells() {
 		ArrayList ar = new ArrayList();
-		Cell ac = new ComputedMeasureCell();
+		ComputedMeasureCell ac = new ComputedMeasureCell();
 		Iterator i = items.iterator();
+		Values groupValues=new Values();
+
 		while (i.hasNext()) {
 			Object el = i.next();
 			ComputedMeasureCell element = (ComputedMeasureCell) el;
 			ac.merge(element, ac);
+			groupValues.collectTrailVariables(element.getValues());
 		}
 		ac.setColumn(this);
+		ReportData root = getRootReportData(this.getNearestReportData());
+		if(root instanceof GroupReportData && ((GroupReportData)root).getTotalActualCommitments() != null)
+			groupValues.put(ArConstants.GRAND_TOTAL_ACTUAL_COMMITMENTS, ((GroupReportData)root).getTotalActualCommitments());
+		
+		ac.setValues(groupValues);
+		
 		ar.add(ac);
 		return ar;
+	}
+	
+	private ReportData getRootReportData(ReportData rp) {
+		if (rp.parent != null)
+			rp = getRootReportData(rp.parent);
+		return rp;
 	}
 
 }

@@ -104,6 +104,11 @@ table tr td {font-size:11px;}
  <logic:notEmpty name="currentMember" scope="session">
  	<bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
  </logic:notEmpty>
+ <logic:empty name="currentMember" scope="session">
+	<logic:notEmpty name="currentUser" scope="session">
+ 		<bean:define id="userLogged" name="currentUser" scope="session" type="org.digijava.kernel.user.User" />
+	 </logic:notEmpty>
+ </logic:empty>
 <div style="text-align:center">
 <!-- HEADER START -->
 <div class="header">
@@ -127,6 +132,7 @@ table tr td {font-size:11px;}
 		
 		<div id="usr_menu_logged">
 			<a href="javascript:showUserProfile(${teamMember.memberId})">${teamMember.memberName}</a>			
+			<a>${userLogged.name}</a>			
 			<img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">		
 			
 			<c:set var="translation">

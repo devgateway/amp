@@ -8,6 +8,7 @@ package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -61,6 +62,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	private boolean pledgereport=false;
 	
 	private HttpServletRequest request	= null;
+	private BigDecimal totalac;
 
 
 	/**
@@ -482,14 +484,35 @@ public class AmpReportGenerator extends ReportGenerator {
 				mtefCols.add( (TotalComputedAmountColumn) tempCol );
 			}
 		}
-
+		boolean totalActualCommitmentsLoaded = false;
+		boolean totalActualCommitmentsAdded = false;
 		GroupColumn newcol = new GroupColumn();
 		if (categorizeByFundingType) {
 			Set<AmpReportMeasures> measures = reportMetadata.getMeasures();
 			List<AmpReportMeasures> measuresList = new ArrayList<AmpReportMeasures>(
 					measures);
 			Collections.sort(measuresList);
+			//First pass to determine if Actual Commitments needs to be added
 			Iterator<AmpReportMeasures> ii = measuresList.iterator();
+			while (ii.hasNext()) {
+				AmpReportMeasures ampReportMeasurement = ii.next();
+				AmpMeasures element = ampReportMeasurement.getMeasure();
+				if(element.getMeasureName().equals(ArConstants.ACTUAL_COMMITMENTS))
+				{
+					totalActualCommitmentsLoaded = true;
+					break;
+				}
+			}
+			if(!totalActualCommitmentsLoaded) {
+				AmpReportMeasures ampReportMeasurement = new AmpReportMeasures();
+				AmpMeasures element = new AmpMeasures();
+				element.setMeasureName(ArConstants.ACTUAL_COMMITMENTS);
+				ampReportMeasurement.setMeasure(element);
+				measuresList.add(ampReportMeasurement);
+				totalActualCommitmentsAdded = true;
+			}
+			
+			ii = measuresList.iterator();
 			while (ii.hasNext()) {
 				AmpReportMeasures ampReportMeasurement = ii.next();
 				AmpMeasures element = ampReportMeasurement.getMeasure();
@@ -519,6 +542,37 @@ public class AmpReportGenerator extends ReportGenerator {
 			}
 		}
 		
+		//Calculate global totals for Computed MEasures that require it
+		TotalAmountColumn removeableColumn = null;
+		BigDecimal total = new BigDecimal(0);
+		Iterator it = newcol.getItems().iterator();
+		while (it.hasNext())
+		{
+			Object el = it.next();
+			if (el instanceof TotalAmountColumn){
+				TotalAmountColumn column = (TotalAmountColumn) el;
+				if(ArConstants.ACTUAL_COMMITMENTS.equalsIgnoreCase(column.getName())) {
+					Iterator iit = ((TotalAmountColumn) el).iterator();
+					while(iit.hasNext())
+					{
+						Object el2 = iit.next();
+						if (el2 instanceof CategAmountCell) {
+							CategAmountCell cac = (CategAmountCell) el2;
+							double dbl = cac.getAmount();
+							total = total.add(new BigDecimal(dbl));
+						}
+					}
+					if(!totalActualCommitmentsLoaded && totalActualCommitmentsAdded){ //If it was added for calculation purposes, remove it
+						removeableColumn = column;
+					}
+					break;
+				}
+			}
+		}
+		if(removeableColumn != null){
+			newcol.getItems().remove(removeableColumn);
+		}
+		this.setTotalActualCommitments(total);
 		/**
 		 * Iterare all measure and add a column for each computed measure
 		 */
@@ -549,6 +603,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 
 				newcol.getItems().add(cTac);
+//				cTac.setTotalVariables(total);
 			}
 		}
 		
@@ -657,6 +712,12 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		
 	}
+	public void setTotalActualCommitments(BigDecimal total) {
+		this.totalac = total;
+	}
+	public BigDecimal getTotalActualCommitments() {
+		return this.totalac;
+	}
 
 	protected void applyExchangeRate() {
 
@@ -747,6 +808,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (reportMetadata.getHierarchies().size() != 0)
 			createHierarchies();
 
+		report.setTotalActualCommitments(this.getTotalActualCommitments());
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
 

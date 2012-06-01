@@ -202,7 +202,7 @@
 					<td noWrap width="100%" vAlign="top" >
 					<table width="100%" cellspacing="1" border="0" class="r-dotted-lg">
 					<tr><td noWrap width=600 vAlign="top" >
-							<table cellpadding="1" cellspacing="1" width="100%">
+							<table cellpadding="1" cellspacing="1" width="1000">
 								<tr bgColor=#ffffff>
 									<td vAlign="top" width="100%" style="border-top:1px solid #ccc;">
 										<table align=left cellpadding="1" cellspacing="1" width="100%" class="inside" >

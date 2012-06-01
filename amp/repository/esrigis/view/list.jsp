@@ -131,9 +131,12 @@ $(document).ready(function(){
                       <tr bgColor=#f4f4f2>
                         <td align="center" class="inside"><digi:trn>No structure types found</digi:trn>
                         </td>
+						<td class="inside">&nbsp;</td>
+						
                       </tr>
                       <tr>
                         <td class="inside">&nbsp;</td>
+						<td class="inside">&nbsp;</td>
                       </tr>
                     </c:if>
                     <c:if test="${fn:length(requestScope.structureTypesList) gt 0}">

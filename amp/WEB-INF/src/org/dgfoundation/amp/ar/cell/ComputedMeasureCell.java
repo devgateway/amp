@@ -12,6 +12,13 @@ public class ComputedMeasureCell extends AmountCell {
 
 	Values values = null;
 
+	private static String COMPUTED_VALUE = "COMPUTED_VALUE";
+
+	// if is a trail cell the value will be set by the Column
+	public void setComputedVaule(BigDecimal value) {
+		getValues().put(COMPUTED_VALUE, value);
+	}
+
 	public ComputedMeasureCell() {
 		super();
 	}
@@ -41,16 +48,26 @@ public class ComputedMeasureCell extends AmountCell {
 			return (convert() * (getPercentage() / 100));
 
 		MathExpression math = null;
-		if (this.getColumn().getExpression() != null) {
-			math = MathExpressionRepository.get(this.getColumn().getExpression());
+		if (getValues().containsKey(COMPUTED_VALUE)) {
+			BigDecimal val = getValues().get(COMPUTED_VALUE);
+			if (val != null) {
+				return val.doubleValue() * (getPercentage() / 100);
+			} else {
+				return 0d;
+			}
+
 		} else {
-			math = MathExpressionRepository.get(this.getColumn().getWorker().getRelatedColumn().getTokenExpression());
-		}
-		BigDecimal val=math.result(getValues());
-		if (val!=null){
-			return val.doubleValue();
-		}else{
-			return 0d;
+			if (this.getColumn().getExpression() != null) {
+				math = MathExpressionRepository.get(this.getColumn().getExpression());
+			} else {
+				math = MathExpressionRepository.get(this.getColumn().getWorker().getRelatedColumn().getTokenExpression());
+			}
+			BigDecimal val=math.result(getValues());
+			if (val!=null){
+				return val.doubleValue();
+			}else{
+				return 0d;
+			}
 		}
 	}
 
@@ -78,4 +95,8 @@ public class ComputedMeasureCell extends AmountCell {
 		}
 		return values;
 	}
+	public void setValues(Values values) {
+		this.values = values;
+	}	
+	
 }

@@ -1,0 +1,62 @@
+.shadetabs{
+padding: 3px 0;
+margin-left: 1px;
+margin-top: 1px;
+margin-bottom: 0;
+font: bold 12px Verdana;
+list-style-type: none;
+text-align: left; /*set to left, center, or right to align the menu as desired*/
+
+line-height: 25px;
+
+
+}
+
+.shadetabs li{
+display: inline;
+margin: 0;
+padding-bottom: 3px;
+
+height: 5px;
+white-space: nowrap;
+}
+
+.shadetabs li a{
+text-decoration: none;
+padding: 3px 7px;
+margin-right: 3px;
+margin-left: auto;
+border: 1px solid #778;
+color: #2d2b2b;
+background: white url(/repository/aim/view/scripts/ajaxtabs/shade.gif) top left repeat-x;
+}
+
+.shadetabs li a:visited{
+color: #2d2b2b;
+}
+
+.shadetabs li a:hover{
+text-decoration: underline;
+color: #2d2b2b;
+}
+
+.shadetabs li.selected{
+position: relative;
+top: 1px;
+}
+
+.shadetabs li.selected a{ /*selected main tab style */
+background-image: url(/repository/aim/view/scripts/ajaxtabs/shadeactive.gif);
+border-bottom-color: white;
+}
+
+.shadetabs li.selected a:hover{ /*selected main tab style */
+text-decoration: none;
+}
+
+.contentstyle{
+padding: 1px;
+margin-top:0px;
+margin-left:0px;
+border:1;
+}

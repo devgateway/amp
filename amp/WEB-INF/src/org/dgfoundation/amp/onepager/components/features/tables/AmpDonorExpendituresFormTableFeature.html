@@ -1,0 +1,30 @@
+<wicket:extend>
+	<tr wicket:id="tableHeading">
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="right"><b class="ins_title">
+			<wicket:trn key="trn:adjType">Adjustment Type</wicket:trn></b></td>
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:amount">Amount</wicket:trn></b></td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:currency">Currency</wicket:trn></b></td>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:transactionDate">Transaction Date</wicket:trn></b></td>	
+		<wicket:fm fmNames="Expenditure Classification">
+			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:expClassification">Expenditure Classification</wicket:trn></b></td>
+		</wicket:fm>	
+		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+	</tr>
+	<tr wicket:id="listExp">
+		<td  class="inside"><span wicket:id="adjustmentType"/></td>
+		<span class="invisible-item" wicket:id="fundingAmount"/>	
+		<wicket:fm fmNames="Expenditure Classification">
+			<td  class="inside"><span wicket:id="classification"/></td>
+		</wicket:fm>
+		<td  class="inside">
+			<span wicket:id="delExp"/>
+		</td>
+	</tr>
+		<tr>
+		<td  align="center" colspan="8" style="border-right: 1px solid #B8B7B7; background-color: #FFFFFF;">
+			    <span wicket:id="ajaxIndicator"/>
+				<span wicket:id="amountSumComparator"/>
+				
+		</td>
+	</tr>
+</wicket:extend>

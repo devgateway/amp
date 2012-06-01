@@ -38,6 +38,7 @@ public class DocumentManagerForm extends ActionForm {
 	private String[] filterOwners			= null;
 	private Long[] filterTeamIds			= null;
 	private String[] filterLabelsUUID		= null;
+	private String [] filterKeywords 		= null;
 	
 	private String docListInSession			= null;
 	private String showSharedDocs			=null;
@@ -66,7 +67,7 @@ public class DocumentManagerForm extends ActionForm {
 	private Boolean privateDocsExist;
 	private Boolean teamDocsExist;
 	
-	private String keyword;
+	
 	
 	public Boolean getPageCloseFlag() {
 		return pageCloseFlag;
@@ -402,12 +403,13 @@ public class DocumentManagerForm extends ActionForm {
 		this.teamDocsExist = teamDocsExist;
 	}
 
-	public String getKeyword() {
-		return keyword;
+	public String[] getFilterKeywords() {
+		return filterKeywords;
 	}
 
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}	
+	public void setFilterKeywords(String[] filterKeywords) {
+		this.filterKeywords = filterKeywords;
+	}
+
 	
 }

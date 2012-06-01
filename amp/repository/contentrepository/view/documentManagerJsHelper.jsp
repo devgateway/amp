@@ -141,6 +141,9 @@ font-weight : bold;
 <c:set var="filterstrn">
 	<digi:trn>Filters</digi:trn>
 </c:set>
+<c:set var="keywordstrn">
+	<digi:trn>Keywords</digi:trn>
+</c:set>
 
 
 <script type="text/javascript">
@@ -204,6 +207,10 @@ font-weight : bold;
 	}
 	
 	function getlabelsext(){
+		return '${labelstrn}';
+	}
+	
+	function getkeywordsext(){
 		return '${labelstrn}';
 	}
 </script>
@@ -1541,6 +1548,7 @@ function getTemplateLabelsCb(formName, infoDivId) {
 	filterWrapperTrnObj		= {
 			labels: "<digi:trn>Labels</digi:trn>",
 			filters: "<digi:trn>Filters</digi:trn>",
+			keywords: "<digi:trn>Keywords</digi:trn>",
 			apply: "<digi:trn>Apply</digi:trn>",
 			close: "<digi:trn>Close</digi:trn>"
 	};

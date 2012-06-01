@@ -42,6 +42,8 @@ public class DocumentFilter {
 	
 	private Long publicViewPosition;
 	
+	private List<String> filterKeywords;
+	
 	public DocumentFilter( ) {
 		
 	}
@@ -49,7 +51,7 @@ public class DocumentFilter {
 	
 	public DocumentFilter(String source, List<String> filterLabelsUUID, List<Long> filterDocTypeIds,
 			List<String> filterFileType, List<Long> filterTeamIds,
-			List<String> filterOwners, String baseUsername, Long baseTeamId) {
+			List<String> filterOwners,List<String> filterKeywords, String baseUsername, Long baseTeamId) {
 		
 		this.source = source;
 		
@@ -70,6 +72,10 @@ public class DocumentFilter {
 		
 		if ( filterOwners != null && filterOwners.size() > 0 )
 			this.filterOwners = filterOwners;
+		
+		if(filterKeywords !=null && filterKeywords.size() > 0){
+			this.filterKeywords = filterKeywords;
+		}
 		
 	}
 	
@@ -102,6 +108,17 @@ public class DocumentFilter {
 					else 
 						pass	= false;
 						
+				}else if (this.filterKeywords !=null && this.filterKeywords.size() >0){
+					int iterationNo = 0;
+					for (String keyword : this.filterKeywords) {
+						if(dd.getTitle().indexOf(keyword) != -1){
+							pass = true;
+							break;
+						}else if (iterationNo == (this.filterKeywords.size()-1)){
+							pass = false;
+						}
+					}
+					
 				}
 				
 				if (pass)
@@ -211,6 +228,16 @@ public class DocumentFilter {
 
 	public void setPublicViewPosition(Long publicViewPosition) {
 		this.publicViewPosition = publicViewPosition;
+	}
+
+
+	public List<String> getFilterKeywords() {
+		return filterKeywords;
+	}
+
+
+	public void setFilterKeywords(List<String> filterKeywords) {
+		this.filterKeywords = filterKeywords;
 	}
 	
 	

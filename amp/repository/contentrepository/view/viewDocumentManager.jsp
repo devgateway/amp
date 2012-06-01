@@ -183,6 +183,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	var teamListObj	= null;
 	var breadcrumbName='Resources';
 	var breadCrumbObj = null;
+	var privateSeachObj = null;
 		
 	function loadTab() {
 		var visibleTabs =0;
@@ -222,6 +223,7 @@ border-right: 1px solid rgb(208, 208, 208);
 		trnObj		= {
 				labels: "<digi:trn>Labels</digi:trn>",
 				filters: "<digi:trn>Filters</digi:trn>",
+				keywords: "<digi:trn>keywords</digi:trn>",
 				apply: "<digi:trn>Apply</digi:trn>",
 				close: "<digi:trn>Close</digi:trn>",
 				none: "<digi:trn>none</digi:trn>"
@@ -229,21 +231,29 @@ border-right: 1px solid rgb(208, 208, 208);
 		//set breadcrumb text
 		var breadCrumbObj=$('div.breadcrump_cont').text(breadcrumbName);
 		
+		//search
+		
+		
 		privateListObj			= new DynamicList(document.getElementById("my_markup"), "privateListObj","privateFilterDivId",
 				${meTeamMember.teamId}, '${meTeamMember.email}', trnObj);
 		privateListObj.filterInfoDivId	= "privateFilterInfo";
+		privateListObj.setKeywordTextboxInformation("privateSearchStr","privateSearchButtonId");
 		//privateListObj.sendRequest();
 		teamListObj				= new DynamicList(document.getElementById("team_markup"), "teamListObj","teamFilterDivId", 
 				${meTeamMember.teamId}, null, trnObj);
 		teamListObj.filterInfoDivId	= "teamFilterInfo";
+		teamListObj.setKeywordTextboxInformation("teamSearchStr","teamSearchButtonId");
+		
 		//teamListObj.sendRequest();
 		sharedListObj				= new SharedDynamicList(document.getElementById("shared_markup"), "sharedListObj","sharedFilterDivId", trnObj);
 		sharedListObj.filterInfoDivId	= "sharedFilterInfo";
+		sharedListObj.setKeywordTextboxInformation("sharedSearchStr","sharedSearchButtonId");
 		//sharedListObj.sendRequest();
 
 		
 		
 		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj",null, trnObj);
+		publicListObj.setKeywordTextboxInformation("publicSearchStr","publicSearchButtonId");
 		//publicListObj.sendRequest();
 		repositoryTabView				= new YAHOO.widget.TabView("demo");
 		repositoryTabView.addListener("activeTabChange", loadTab);
@@ -576,6 +586,10 @@ border-right: 1px solid rgb(208, 208, 208);
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
+						        		<input type="text" id="privateSearchStr">
+						        		<button id="privateSearchButtonId" type="button" class="buttonx">
+							        		<digi:trn>Search</digi:trn>
+							        	</button>
 							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();fPanel.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);" class="buttonx"><digi:trn>Add Resource</digi:trn>
 							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 							        	</button>
@@ -631,6 +645,11 @@ border-right: 1px solid rgb(208, 208, 208);
 										 -->
 										
 									<%}%>
+									
+									    <input type="text" id="teamSearchStr">
+						        		<button id="teamSearchButtonId" type="button" class="buttonx">
+							        		<digi:trn>Search</digi:trn>
+							        	</button>
 										<button id="teamFilterButtonId" class="buttonx" type="button" onclick="teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId', false);teamFPanel.hide();menuPanelForTeam.hide();">
 								    		<digi:trn>Filters</digi:trn>
 								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
@@ -672,7 +691,11 @@ border-right: 1px solid rgb(208, 208, 208);
 							<div id="shared_res"  class="resource_popin" style="border: none;">				        	       
 								<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 									<tr>
-										<td>										
+										<td>	
+											<input type="text" id="sharedSearchStr">
+							        		<button id="sharedSearchButtonId" type="button" class="buttonx">
+								        		<digi:trn>Search</digi:trn>
+								        	</button>									
 											<button id="sharedFilterButtonId" class="buttonx" type="button" onclick="sharedListObj.getFilterPanel('sharedFilterButtonId','sharedFilterDivId', false);sharedFPanel.hide();">
 									    		<digi:trn>Filters</digi:trn>
 									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
@@ -708,6 +731,14 @@ border-right: 1px solid rgb(208, 208, 208);
 						<c:if test="${not empty myForm.publicDocsTabVisible && myForm.publicDocsTabVisible}">
 							<div id="public_res"  class="resource_popin" style="border: none;">				        	       
 								<table border="0" cellpadding="1" cellspacing="0" width="100%" style="position: relative; left: 0px" >
+									<tr>
+										<td>	
+											<input type="text" id="publicSearchStr">
+							        		<button id="publicSearchButtonId" type="button" class="buttonx">
+								        		<digi:trn>Search</digi:trn>
+								        	</button>
+										</td>
+									</tr>
 									<tr>
 										<td>										
 											<div id="public_markup" align="left" class="all_markup">

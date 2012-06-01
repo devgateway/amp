@@ -1460,7 +1460,7 @@ public class DataDispatcher extends DispatchAction {
 
 		csvString.append("\"" + text + "\"");
 		csvString.append(",");
-		csvString.append("\"" +plannedTitle);
+		csvString.append("\"" + plannedTitle);
 		csvString.append("#");
         csvString.append(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey() + "\"");
         csvString.append(",");
@@ -1477,11 +1477,11 @@ public class DataDispatcher extends DispatchAction {
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			csvString.append(yearName);
 			csvString.append(",");
-            DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-			csvString.append(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-			csvString.append(",");
             DecimalWraper fundingPlanned = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
 			csvString.append(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append(",");
+            DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			csvString.append(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
             if (fundingPlanned.doubleValue() != 0 || fundingActual.doubleValue() != 0) {
 				nodata = false;
 			}

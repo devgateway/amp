@@ -18,9 +18,8 @@
 
 	<td
 		style="font-size:10pt; padding-left:15px;padding-bottom: 4px;color: #C00000"
-		colspan="3"><digi:trn key="rep:popu:${columnReport.columnIdTrn}">${columnReport.columnId}</digi:trn>
-	<% if (!("".equals(columnReport.getRepName()))){ %> : <digi:trn
-		key="rep:pop:${columnReport.repNameTrn}">${columnReport.repName}</digi:trn>
+		colspan="3">${columnReport.columnId}
+	<% if (!("".equals(columnReport.getRepName()))){ %> : <c:out value="${columnReport.repName}"/>
 	<% } %>
 	</td>
 </tr>

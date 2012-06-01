@@ -14,9 +14,9 @@
 		<td style="text-align: left;text-transform: uppercase;font-size: 8pt;" colspan="2">
 			<b>
 			<digi:trn key="rep:popup:totalsFor">TOTALS FOR</digi:trn> 
-			<digi:trn key="rep:popu:${reportData.columnIdTrn}">${reportData.columnId}</digi:trn>
+			${reportData.columnId}
 			<% if (!("".equals(reportData.getRepName()))){ %>
-				: <digi:trn key="rep:pop:${reportData.repNameTrn}">${reportData.repName}</digi:trn>
+				: ${reportData.repName}
 			<% } %>
 			</b>
 		</td>

@@ -2241,7 +2241,7 @@ public class DbUtil {
                     Object[] resArray = (Object[]) resultObj;
                     Long actId = (Long)resArray[0];
                     Long prgId = (Long)resArray[1];
-                    Float prgPercentage = new Float(((Long)resArray[2]).floatValue());
+                    Float prgPercentage = new Float((Float) resArray[2]);
 
                     if (retVal.containsKey(actId)) {
                         ((Map<Long, Float>) retVal.get(actId)).put(prgId, prgPercentage);

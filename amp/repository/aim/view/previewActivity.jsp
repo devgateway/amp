@@ -1908,8 +1908,7 @@ function collapseAll() {
 			<digi:trn key="aim:responsibleorganisation">Responsible Organization</digi:trn>
 			<br/>
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations" >
-				<div id="responsible_organisation_dots">...</div>
-				<div id="act_responsible_organisation" style="display: none;">
+				<div id="act_responsible_organisation" style="display: block;">
 				<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding" >
 					<tr>
 						<td>
@@ -1941,8 +1940,7 @@ function collapseAll() {
 		<digi:trn key="aim:executingAgency">Executing Agency</digi:trn>
 		<br/>
 		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
-			<div id="executing_agency_dots">...</div>
-			<div id="act_executing_agency" style="display: none;">
+			<div id="act_executing_agency" style="display: block;">
 			<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 				<tr>
 					<td>
@@ -1975,8 +1973,7 @@ function collapseAll() {
 			<digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn>
 			<br/>
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies" >
-			<div id="implementing_agency_dots">...</div>
-			<div id="act_implementing_agency" style="display: none;">
+			<div id="act_implementing_agency" style="display: block;">
 				<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 					<tr>
 						<td>
@@ -2009,8 +2006,7 @@ function collapseAll() {
 			<digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn>
 			<br />
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.benAgencies">
-				<div id="benAgencies_dots">...</div>
-				<div id="act_benAgencies_agency" style="display: none;">
+				<div id="act_benAgencies_agency" style="display: block;">
 				<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 					<tr>
 						<td>
@@ -2043,8 +2039,7 @@ function collapseAll() {
 			<digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn>
 			<br/>
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.conAgencies">
-				<div id="contracting_agency_dots">...</div>
-				<div id="act_contracting_agency" style="display: none;">
+				<div id="act_contracting_agency" style="display: block;">
 				<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 					<tr>
 						<td>
@@ -2078,8 +2073,7 @@ function collapseAll() {
 			<digi:trn key="aim:sectorGroup">Sector Group</digi:trn>
 			<br/>
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
-			<div id="sectGroups_dots">...</div>
-			<div id="act_sectGroups_agency" style="display: none;">
+			<div id="act_sectGroups_agency" style="display: block;">
 				<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 					<tr>
 						<td>
@@ -2111,8 +2105,7 @@ function collapseAll() {
 			<digi:trn key="aim:regionalGroup">Regional Group</digi:trn>
 			<br/>
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">
-					<div id="regGroups_dots">...</div>
-					<div id="act_regGroups_agency" style="display: none;">
+					<div id="act_regGroups_agency" style="display: block;">
 						<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 							<tr>
 								<td>
@@ -2985,7 +2978,7 @@ function collapseAll() {
 	
 	
 	//Init indicator popin
-	var msg='\n<digi:trn>Indicator values</digi:trn>';
+	var msg="\n<digi:trn>Indicator values</digi:trn>";
 	myPanel.setHeader(msg);
 	myPanel.setBody("");
 	myPanel.render(document.body);	

@@ -1229,7 +1229,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                                     	</field:display>
                                                                     </td>
                                                                     <td>
-                                                                        <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selectedSectors">
+                                                                        <table cellSpacing="1" cellPadding="5" id="selectedSectors">
                                                                             <c:if test="${aimAddOrgForm.sectors != null}">
                                                                                 <c:forEach var="sector" items="${aimAddOrgForm.sectors}">
                                                                                     <tr>

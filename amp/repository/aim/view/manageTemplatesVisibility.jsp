@@ -235,7 +235,7 @@ div.fakefile2 input{
 
 <script type="text/javascript">
 	initFileUploads();
-	if ( document.crDocumentManagerForm.pageCloseFlag.value == "true" ) {
+	if (crDocumentManagerForm in document && document.crDocumentManagerForm.pageCloseFlag.value == "true" ) {
 			window.opener.location.replace(window.opener.location.href); 
 			window.close();
 		}

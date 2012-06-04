@@ -10,9 +10,14 @@
 
     
     <script type="text/javascript">
-      dojo.require("esri.map");
-      dojo.require("dijit.Dialog");
-      dojo.require("dijit.TooltipDialog");
+    if( typeof dojo != 'undefined' )
+    	{
+    	  dojo.require("esri.map");
+          dojo.require("dijit.Dialog");
+          dojo.require("dijit.TooltipDialog");
+    	
+    	}
+    
       
       var dialogBox, tooltipDialog;
       var map;

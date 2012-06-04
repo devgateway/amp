@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
@@ -135,15 +136,16 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 			@Override
 			protected void onBeforeRender() {
 				super.onBeforeRender();
-				if (((formComponent!=null && formComponent.isRequired())||showReqStarForNotReqComp) && titleLabel.isVisible()){
+				if (((formComponent!=null && formComponent.isRequired())||showReqStarForNotReqComp)){
 					this.setDefaultModelObject("<font color=\"red\">*</font>");
-					this.add(new AttributeAppender("style", new Model("margin-left: -5px"), ";"));
+					this.add(new AttributeModifier("style", new Model("margin-left: -5px;")));
 					this.setEscapeModelStrings(false);
 				} 
 				else
-					this.add(new AttributeAppender("style", new Model("display: none"), ";"));
+					this.add(new AttributeModifier("style", new Model("display: none;")));
 			}
 		};
+		requiredStar.setVisible(!hideNewLine);
 		add(requiredStar);
 		titleLabel = new TrnLabel("fieldLabel", fmName);
 		if (((AmpAuthWebSession)getSession()).isFmMode()){

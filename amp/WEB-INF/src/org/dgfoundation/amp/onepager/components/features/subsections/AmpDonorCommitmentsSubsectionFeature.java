@@ -63,6 +63,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 				parent.getFundingInfo().checkChoicesRequired(commitsTableFeature.getEditorList().getCount());
 				target.addComponent(parent.getFundingInfo());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+				target.appendJavascript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 			}
 		};
 		add(addCommit);

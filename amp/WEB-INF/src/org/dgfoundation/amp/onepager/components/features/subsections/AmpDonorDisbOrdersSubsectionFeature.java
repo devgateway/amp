@@ -125,6 +125,7 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 				parent.getFundingInfo().checkChoicesRequired(disbOrdersTableFeature.getEditorList().getCount());
 				target.addComponent(parent.getFundingInfo());
 				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+				target.appendJavascript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 			}
 		};
 		add(addCommit);

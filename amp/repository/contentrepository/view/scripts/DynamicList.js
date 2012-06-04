@@ -182,6 +182,9 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 		for (var i =0;i< typedText.length ; i++) {
 			this.filterWrapper["filterKeywords"].push( new KeyValue(typedText[i], 'keyword'+i) );
 		}
+	}else{
+		this.filterWrapper["filterKeywords"] = new Array();
+		this.filterWrapper["filterKeywords"].push( new KeyValue('', 'keyword'+i) );
 	}
 }
 

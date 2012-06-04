@@ -111,12 +111,13 @@ public class DocumentFilter {
 				}else if (this.filterKeywords !=null && this.filterKeywords.size() >0){
 					int iterationNo = 0;
 					for (String keyword : this.filterKeywords) {
-						if(dd.getTitle().indexOf(keyword) != -1){
+						if(dd.getTitle().toLowerCase().indexOf(keyword.toLowerCase()) != -1){
 							pass = true;
 							break;
 						}else if (iterationNo == (this.filterKeywords.size()-1)){
 							pass = false;
 						}
+						iterationNo++;
 					}
 					
 				}

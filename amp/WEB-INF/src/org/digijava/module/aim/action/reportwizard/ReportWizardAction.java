@@ -60,6 +60,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -362,6 +363,19 @@ public class ReportWizardAction extends MultiAction {
 		ampReport.setName( myForm.getReportTitle().trim() );
 		ampReport.setDrilldownTab( myForm.getDesktopTab() );
 		ampReport.setPublicReport(myForm.getPublicReport());
+		
+		if(myForm.getPublicReport()!=null&&myForm.getPublicReport()){
+			if(myForm.getReportId()==null){
+				ampReport.setPublishedDate(new Date(System.currentTimeMillis()));
+			}
+			else{
+				boolean wasPublic = DbUtil.isPublicReport(myForm.getReportId());
+				if(!wasPublic||(myForm.getOriginalTitle()!=null && !myForm.getOriginalTitle().equals(myForm.getReportTitle()))){
+					ampReport.setPublishedDate(new Date(System.currentTimeMillis()));
+				}
+			}
+			
+		}
 		ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns() );
 		
 		if ( myForm.getBudgetExporter() != null && myForm.getBudgetExporter() )

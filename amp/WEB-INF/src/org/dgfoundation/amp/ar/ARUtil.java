@@ -89,9 +89,10 @@ public final class ARUtil {
 	 * @param getTabs if null gets both reports and tabs, on true only tabs, on false only reports
 	 * @return list of public reports
 	 */
-	public static ArrayList getAllPublicReports(Boolean getTabs,String name) {
+	@SuppressWarnings("unchecked")
+	public static List<AmpReports> getAllPublicReports(Boolean getTabs,String name) {
 		Session session = null;
-		ArrayList col = new ArrayList();
+		List<AmpReports> col = null;
 		String tabFilter	= "";
 
 		if ( getTabs!=null ) {
@@ -105,6 +106,7 @@ public final class ARUtil {
             if (name != null) {
                 queryString += " and lower(r.name) like lower(:name) ";
             }
+            queryString +=" order by r.publishedDate desc ";
 			Query qry = session.createQuery(queryString);
 			if ( getTabs!=null )
 				qry.setBoolean("getTabs", getTabs);
@@ -112,12 +114,8 @@ public final class ARUtil {
                qry.setString("name", '%' + name+ '%');
             }
 
-			Iterator itrTemp = qry.list().iterator();
-			AmpReports ar = null;
-			while (itrTemp.hasNext()) {
-				ar = (AmpReports) itrTemp.next();
-				col.add(ar);
-			}
+			col= qry.list();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e);

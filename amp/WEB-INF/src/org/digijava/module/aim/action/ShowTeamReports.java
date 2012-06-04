@@ -170,20 +170,19 @@ public class ShowTeamReports extends Action {
         
 
 		if (tm == null) {
-		List reports = ARUtil.getAllPublicReports(false, rf.getKeyword());
+		List<AmpReports> reports = ARUtil.getAllPublicReports(false, rf.getKeyword());
             if (reports != null) {
                 switch (col) {
                     case NAME_ASC:
                         sort = new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.ASC, collator);
+                        Collections.sort(reports, sort);
                         break;
                     case NAME_DESC:
                         sort = new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.DESC, collator);
-                        break;
-                    default:
-                        sort = new AdvancedReportUtil.AmpReportIdComparator();
+                        Collections.sort(reports, sort);
                         break;
                 }
-                Collections.sort(reports, sort);
+               
             }
 			rf.setReports(reports);
 			rf.setTotalPages(FIRST_PAGE);

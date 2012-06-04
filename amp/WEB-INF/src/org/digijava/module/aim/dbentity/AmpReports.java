@@ -92,6 +92,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 	private Boolean allowEmptyFundingColumns;
 	
 	private Boolean budgetExporter = false;
+	private Date publishedDate;
 
 	// public static final String NOTE="NOTE: All shown funding items are in USD
 	// currency. All calendaristic date cells are shown using DD/MM/YYYY format.
@@ -99,8 +100,18 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 	// private static SimpleDateFormat dateFormat = new
 	// SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 
+	
+
 	public Set getLogs() {
 		return logs;
+	}
+
+	public Date getPublishedDate() {
+		return publishedDate;
+	}
+
+	public void setPublishedDate(Date publishedDate) {
+		this.publishedDate = publishedDate;
 	}
 
 	public void setLogs(Set logs) {

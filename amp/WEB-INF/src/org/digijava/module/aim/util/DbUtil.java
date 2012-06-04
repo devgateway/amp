@@ -397,6 +397,28 @@ public class DbUtil {
 		}
 		return report;
 	}
+    
+	public static boolean isPublicReport(Long id) {
+		Session session = null;
+		boolean isPublic = false;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			StringBuilder query = new StringBuilder();
+			query.append("select r.publicReport from ");
+			query.append(AmpReports.class.getName());
+			query.append(" r where r.ampReportId=:id");
+			Query qry = session.createQuery(query.toString());
+			qry.setLong("id", id);
+			Boolean result=(Boolean)qry.uniqueResult();
+			if(result!=null){
+				isPublic=result;
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get AmpReports by Id :" + ex);
+		}
+		return isPublic;
+	}
 
     public static Collection getFundingDetails(Long fundId) {
         Session session = null;

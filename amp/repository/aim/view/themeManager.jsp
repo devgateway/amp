@@ -204,12 +204,9 @@
 					<tr><td noWrap width=600 vAlign="top" >
 							<table cellpadding="1" cellspacing="1" width="1000">
 								<tr bgColor=#ffffff>
-									<td vAlign="top" width="100%" style="border-top:1px solid #ccc;">
-										<table align=left cellpadding="1" cellspacing="1" width="100%" class="inside" >
-												<tr><td>
-													<digi:errors/>
-												</td></tr>
-										
+									<td vAlign="top" width="100%">
+									<digi:errors/>
+										<table align=left cellpadding="1" cellspacing="1" width="100%" class="inside" >							
 												<c:if test="${aimThemeForm.flag == 'activityReferences'}">
 																	<tr>
 																		<td colspan="2" align="center">

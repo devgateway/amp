@@ -224,7 +224,8 @@ function putLoading(){
 								</span>
 							</c:if>
 									
-	            <c:if test="${aimTeamActivitiesForm.donorFlag == false}">
+	            	<c:if test="${aimTeamActivitiesForm.donorFlag == false}">
+	            	<field:display name="Unassigned Activities" feature="Workspace Info">
 	            	<c:if test="${selectedSubTab  == '2'}">
 	            		<span class="bread_sel">
 										<digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn>
@@ -235,19 +236,24 @@ function putLoading(){
 										<digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn>
 									</digi:link>							
 								</c:if>	
-							<span class="breadcrump_sep">|</span>					
-	          	</c:if>	
-	          	<c:if test="${selectedSubTab  == '3'}">
+							<span class="breadcrump_sep">|</span>
+					</field:display>					
+	          			</c:if>	
+	          			
+	          			<field:display name="Non-archived Activities" feature="Workspace Info">
+	          			<c:if test="${selectedSubTab  == '3'}">
                              	<span class="bread_sel">
                                          <digi:trn>Non-Archived Activities</digi:trn>
                                 </span>
-                         </c:if>
+                        </c:if>
                          <c:if test="${selectedSubTab != '3'}">
                                      <digi:link href="/teamActivityList.do~showArchivedActivities=false" name="urlParams" styleClass="l_sm">
                                          <digi:trn>Non-Archived Activities</digi:trn>
                                      </digi:link>							
                          </c:if>
-                         <span class="breadcrump_sep">|</span>	
+                         <span class="breadcrump_sep">|</span>
+                         </field:display>
+                         <field:display name="Archived Activities" feature="Workspace Info">
                           <c:if test="${selectedSubTab  == '4'}">
                              <span class="bread_sel">
                                          <digi:trn>Archived Activities</digi:trn>
@@ -258,7 +264,7 @@ function putLoading(){
                                          <digi:trn>Archived Activities</digi:trn>
                                      </digi:link>							
                          </c:if>	
-	          					
+	          			</field:display>			
 						</c:if>
 							
 						

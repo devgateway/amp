@@ -126,6 +126,10 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	}
 	
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, final boolean showReqStarForNotReqComp){
+		this(id, model, fmName, hideLabel, hideNewLine, showReqStarForNotReqComp, false);
+	}
+	
+	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, final boolean showReqStarForNotReqComp, boolean enableReqStar){
 		super(id, model,fmName, AmpFMTypes.MODULE);
 		this.fmType = AmpFMTypes.MODULE;
 		
@@ -138,14 +142,14 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 				super.onBeforeRender();
 				if (((formComponent!=null && formComponent.isRequired())||showReqStarForNotReqComp)){
 					this.setDefaultModelObject("<font color=\"red\">*</font>");
-					this.add(new AttributeModifier("style", new Model("margin-left: -5px;")));
+					this.add(new AttributeModifier("style", new Model("padding-left: -5px;")));
 					this.setEscapeModelStrings(false);
 				} 
 				else
 					this.add(new AttributeModifier("style", new Model("display: none;")));
 			}
 		};
-		requiredStar.setVisible(!hideNewLine);
+		requiredStar.setVisible(!hideNewLine||enableReqStar);
 		add(requiredStar);
 		titleLabel = new TrnLabel("fieldLabel", fmName);
 		if (((AmpAuthWebSession)getSession()).isFmMode()){

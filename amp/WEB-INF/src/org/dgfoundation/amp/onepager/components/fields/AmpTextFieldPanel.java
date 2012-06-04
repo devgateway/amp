@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -48,35 +49,24 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 	}
 	
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,AmpFMTypes fmType, boolean showRedStarForNotReqComp) {
-		super(id, model, fmName, false, false,showRedStarForNotReqComp);
-		this.fmType = fmType;
-		textContainer = new TextField<T>("textContainer",model) {
-			@Override
-			public IConverter getConverter(Class<?> type) {
-				if(getInternalConverter(type)!=null) return getInternalConverter(type);
-				return super.getConverter(type);
-			}
-		};
-		textContainer.setOutputMarkupId(true);
-		addFormComponent(textContainer);
+		this(id, model, fmName, false, false,showRedStarForNotReqComp);
 	}
 
 	
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel) {
-		super(id, fmName, hideLabel);
-		textContainer = new TextField<T>("textContainer",model) {
-			@Override
-			public IConverter getConverter(Class<?> type) {
-				if(getInternalConverter(type)!=null) return getInternalConverter(type);
-				return super.getConverter(type);
-			}
-		};
-		textContainer.setOutputMarkupId(true);
-		addFormComponent(textContainer);
+		this(id, model, fmName, hideLabel, false, false);
 	}
-	
+
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine) {
-		super(id, fmName, hideLabel, hideNewLine);
+		this(id, model, fmName, hideLabel, hideNewLine, false);
+	}
+	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, boolean showRedStarForNotReqComp) {
+		this(id, model, fmName, hideLabel, hideNewLine, showRedStarForNotReqComp, false);
+	}
+
+	
+	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, boolean showRedStarForNotReqComp, boolean enableReqStar) {
+		super(id, model,  fmName, hideLabel, hideNewLine, showRedStarForNotReqComp, enableReqStar);
 		textContainer = new TextField<T>("textContainer",model) {
 			@Override
 			public IConverter getConverter(Class<?> type) {
@@ -107,5 +97,4 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 		textContainer.setOutputMarkupId(true);
 		addFormComponent(textContainer);
 	}
-	
 }

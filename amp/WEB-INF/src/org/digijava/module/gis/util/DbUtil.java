@@ -2642,9 +2642,12 @@ public class DbUtil {
             StringBuilder queryStr = new StringBuilder("from ");
             queryStr.append(AmpCategoryValueLocations.class.getName());
             if (mapLevel == GisMap.MAP_LEVEL_REGION) {
-                queryStr.append(" as loc where loc.parentCategoryValue.value='Region' and  loc.parentLocation.iso = :COUNTRY_ISO");
+                queryStr.append(" as loc where (loc.parentCategoryValue.value='Region' and  loc.parentLocation.iso = :COUNTRY_ISO)");
+                //queryStr.append(" or (loc.parentCategoryValue.value='Zone' and  parentLocation.parentLocation.iso = :COUNTRY_ISO)");
+                //queryStr.append(" or (loc.parentCategoryValue.value='District' and  parentLocation.parentLocation.parentLocation.iso = :COUNTRY_ISO)");
             } else if (mapLevel == GisMap.MAP_LEVEL_DISTRICT) {
                 queryStr.append(" as loc where loc.parentCategoryValue.value='Zone' and parentLocation.parentLocation.iso = :COUNTRY_ISO");
+                //queryStr.append(" or (loc.parentCategoryValue.value='District' and  parentLocation.parentLocation.parentLocation.iso = :COUNTRY_ISO)");
             }
 
             Query q = sess.createQuery(queryStr.toString());

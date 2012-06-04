@@ -69,7 +69,8 @@ public class RMMapCalculationUtil {
            workspaces.add(filter.getCurWorkspace());
         }
 
-        boolean includeCildLocations = filter.getMapLevel() == 3;
+        //boolean includeCildLocations = filter.getMapLevel() == 3;
+        boolean includeCildLocations = true;
 
         Object[] activityFundings = null;
 
@@ -164,7 +165,8 @@ public class RMMapCalculationUtil {
 
         String currencyCode = filter.getSelectedCurrency();
 
-        boolean includeCildLocations = filter.getMapLevel() == 3;
+        //boolean includeCildLocations = filter.getMapLevel() == 3;
+        boolean includeCildLocations = true;
 
         Object[] activityFundings = null;
         Object[] activityRegionalFundings = null;
@@ -233,6 +235,33 @@ public class RMMapCalculationUtil {
 
     }
 
+    private static Map<Long, Long> getLocParentMap (Collection<AmpCategoryValueLocations> locations, boolean goLowerLevels) {
+        Map<Long, Long> retVal = new HashMap <Long, Long>();
+
+        for (AmpCategoryValueLocations loc: locations) {
+            retVal.put(loc.getId(), loc.getId());
+            List<AmpCategoryValueLocations> children = getChildLocations(loc);
+            for (AmpCategoryValueLocations childLoc : children) {
+                retVal.put(childLoc.getId(), loc.getId());
+            }
+        }
+        return retVal;
+    }
+    
+    private static List<AmpCategoryValueLocations> getChildLocations (AmpCategoryValueLocations parentLoc) {
+        List<AmpCategoryValueLocations> retVal = new ArrayList<AmpCategoryValueLocations>();
+        if (parentLoc.getChildLocations() != null && !parentLoc.getChildLocations().isEmpty()) {
+            for (AmpCategoryValueLocations childLoc: parentLoc.getChildLocations()) {
+                retVal.add(childLoc);
+                if (childLoc.getChildLocations() != null && !childLoc.getChildLocations().isEmpty()) {
+                    retVal.addAll(getChildLocations(childLoc));
+                }
+            }
+        }
+
+        return retVal;
+    }
+
     private static Object[] getFundingsByLocations (Object[] data, Collection<AmpCategoryValueLocations> locations, String currencyCode, boolean detailedActData, boolean inculedChildLocations){
         Object[] retVal = null;
 
@@ -253,7 +282,9 @@ public class RMMapCalculationUtil {
 
             Map<Long, String> locationIdNameMap = getLocationIdNameMap (locations);
 
-            Map<String, Set> locationGroupedFnds = groupFundingsByLocationAndApplyPercentages (fundings, locationPercentageMap, locationIdNameMap, getLocParentMapforLevelThree(locations, inculedChildLocations));
+            //Map<String, Set> locationGroupedFnds = groupFundingsByLocationAndApplyPercentages (fundings, locationPercentageMap, locationIdNameMap, getLocParentMapforLevelThree(locations, inculedChildLocations));
+            Map<String, Set> locationGroupedFnds = groupFundingsByLocationAndApplyPercentages (fundings, locationPercentageMap, locationIdNameMap, getLocParentMap(locations, inculedChildLocations));
+
 
             retVal = calculateTotalsAndApplyExchangeRates (locationGroupedFnds, currencyCode, detailedActData);
         } else {

@@ -62,8 +62,8 @@
 
 	var enterBinder	= new EnterHitBinder('saveOrgGrpBtn');
 </script>
-<div class="addOrgBox">
-	<div class="addOrgBoxInner">
+<div class="addOrgBox" style="background-color:#F8F8F8;">
+	<div class="">
 <digi:instance property="aimAddOrgGroupForm" />
 <digi:context name="digiContext" property="context"/>
 
@@ -117,24 +117,20 @@
 																	<b><digi:trn key="aim:editOrgGroup">Edit Organization Group</digi:trn></b>
 																</logic:equal>
 													
-																		<ul><li><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	
-																	
-																	          <html:text property="orgGrpName" size="35" /></li>
-																
-																		
-																	        <li><digi:trn key="aim:orgGroupCode">Group
-                                                                            Code</digi:trn>
-																		
-																		
-																           <html:text property="orgGrpCode" size="15" /></li>
-																		
-																	
-																	
-																		
-																	      <li>  <digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font>
-																		
-																		
-																	          <html:select property="orgTypeId">
+													
+													
+													<table width="650" border="0" cellspacing="3" cellpadding="3" align="center">
+  <tr>
+    <td><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	</td>
+    <td><html:text property="orgGrpName" size="35" /></td>
+  </tr>
+    <tr>
+    <td><digi:trn key="aim:orgGroupCode">Group Code</digi:trn></td>
+    <td><html:text property="orgGrpCode" size="15" /></td>
+  </tr>
+    <tr>
+    <td><digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font></td>
+    <td><html:select property="orgTypeId">
 																	            <c:set var="translation">
 																					<digi:trn key="aim:btnSelectType">Select Type</digi:trn>
 																				</c:set>
@@ -143,7 +139,21 @@
 																					<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl"
 																		   									value="ampOrgTypeId" label="orgType" />
 																		   		</logic:notEmpty>
-																			</html:select></li>
+																			</html:select></td>
+  </tr>
+</table>
+
+													
+																														
+																	          
+																
+																		
+																	  
+																		
+																	
+																	
+																		
+																	 
 																		
 																	
 																	<%--
@@ -198,7 +208,7 @@
 													
 												
 											
-</ul>
+
 
 </digi:form>
 </div></div>

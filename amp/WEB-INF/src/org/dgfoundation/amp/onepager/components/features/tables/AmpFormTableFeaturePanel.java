@@ -31,7 +31,8 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 	protected WebMarkupContainer titleHeader;
 	protected WebMarkupContainer tableHeading;
 	protected TransparentWebMarkupContainer tableId;
-	
+    protected WebMarkupContainer reqStar;
+    
 	protected ListView<L> list;
 
 	public ListView<L> getList() {
@@ -111,7 +112,7 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 		titleHeader = new WebMarkupContainer("titleHeader");
 		remove(labelContainer);
 		titleHeader.add(labelContainer);
-		WebMarkupContainer reqStar = new WebMarkupContainer("requiredStar");
+		reqStar = new WebMarkupContainer("requiredStar");
 		reqStar.setVisible(showRequiredStar);
 		titleHeader.add(reqStar);
 		add(titleHeader);

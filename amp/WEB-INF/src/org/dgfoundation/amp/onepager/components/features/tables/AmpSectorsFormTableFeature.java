@@ -91,7 +91,13 @@ public class AmpSectorsFormTableFeature extends
 		add(percentageValidationField);
 
 		final AmpMinSizeCollectionValidationField<AmpActivitySector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivitySector>(
-				"minSizeSectorsValidator", listModel, "minSizeSectorsValidator");
+				"minSizeSectorsValidator", listModel, "minSizeSectorsValidator"){
+	           @Override
+	           protected void onBeforeRender() {
+                   super.onBeforeRender();
+                   reqStar.setVisible(isVisible());
+	           }
+		};
 		minSizeCollectionValidationField.setIndicatorAppender(iValidator);
 		add(minSizeCollectionValidationField);
 		

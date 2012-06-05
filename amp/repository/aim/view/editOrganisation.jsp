@@ -1131,10 +1131,10 @@ border-right: 1px solid rgb(208, 208, 208);
                                 <c:choose>
                                     <c:when test="${aimAddOrgForm.type=='NGO'}">
                                         <tr>
-                                            <td class="tdBoldClass" style="font-size:11px; padding-left:105px;" nowrap colspan="2">
-											<table border="0" cellspacing="0" cellpadding="0">
+                                            <td class="tdBoldClass" style="font-size:11px; padding-left:100px;" nowrap colspan="2" valign="top">
+											<table border="0" cellspacing="3" cellpadding="3">
   <tr>
-    <td><digi:trn>Organization Primary Purpose</digi:trn> <field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form">
+    <td><digi:trn><b>Organization Primary Purpose</b></digi:trn> <field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form">
                                                      <span id="mandatoryPrimPurp"><font size="2" color="#FF0000">*</font></span>
                                                 </field:display></td>
     <td><html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="100" rows="4" styleId="orgPrimaryPurpose"/>  </td>

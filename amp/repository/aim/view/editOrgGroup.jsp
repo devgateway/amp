@@ -119,17 +119,17 @@
 													
 													
 													
-													<table width="650" border="0" cellspacing="3" cellpadding="3" align="center">
+													<table border="0" cellspacing="3" cellpadding="3" align="center">
   <tr>
-    <td><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	</td>
+    <td align="right"><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	</td>
     <td><html:text property="orgGrpName" size="35" /></td>
   </tr>
     <tr>
-    <td><digi:trn key="aim:orgGroupCode">Group Code</digi:trn></td>
+    <td align="right"><digi:trn key="aim:orgGroupCode">Group Code</digi:trn></td>
     <td><html:text property="orgGrpCode" size="15" /></td>
   </tr>
     <tr>
-    <td><digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font></td>
+    <td align="right"><digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font></td>
     <td><html:select property="orgTypeId">
 																	            <c:set var="translation">
 																					<digi:trn key="aim:btnSelectType">Select Type</digi:trn>

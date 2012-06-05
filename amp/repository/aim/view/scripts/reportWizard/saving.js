@@ -27,6 +27,11 @@ function getReportTitle() {
 	return getReportTitleEl().value;
 }
 
+function getReportCategory() {
+	var category = document.getElementById("repCat").value;
+	return category;
+}
+
 function getReportDescription() {
 	return aimReportWizardForm.reportDescriptionClone.value;
 }
@@ -156,7 +161,7 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 	getReportTitleEl().focus();
 }
 
-SaveReportEngine.prototype.saveReport	= function () {
+SaveReportEngine.prototype.saveReport	= function () {	
 	var title = getReportTitle();
 	if (title.indexOf('<')!=-1 && title.indexOf('>')!=-1 && title.indexOf('<')<title.indexOf('>')){
         alert("Tags are not allowed on name.");
@@ -167,9 +172,10 @@ SaveReportEngine.prototype.saveReport	= function () {
 	this.divEl.style.visibility		= "";
 	this.divEl.innerHTML			= this.savingMessage + 
 			"... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
-
+	
 	var postString		= "reportTitle="+encodeURIComponent(title)+ "&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() + 
 						"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
+						"&reportCategory="+ getReportCategory()+
 						"&desktopTab="+getDesktopTab() +
 						"&publicReport="+getPublicReport() +
 						"&hideActivities="+getHideActivities() +

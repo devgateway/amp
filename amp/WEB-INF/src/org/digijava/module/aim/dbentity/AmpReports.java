@@ -93,6 +93,8 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 	
 	private Boolean budgetExporter = false;
 	private Date publishedDate;
+	
+	private AmpCategoryValue reportCategory;
 
 	// public static final String NOTE="NOTE: All shown funding items are in USD
 	// currency. All calendaristic date cells are shown using DD/MM/YYYY format.
@@ -546,6 +548,14 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
         public String getObjectFilteredName() {
 		return DbUtil.filter(getObjectName());
 	}
+
+		public AmpCategoryValue getReportCategory() {
+			return reportCategory;
+		}
+
+		public void setReportCategory(AmpCategoryValue reportCategory) {
+			this.reportCategory = reportCategory;
+		}
 
 	
 }

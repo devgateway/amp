@@ -466,6 +466,14 @@ $(document).ready(function() {
 					                            								<b><digi:trn key="aim:reportType">Type</digi:trn></b>
 					                            							</td>
 					                            		</c:if>
+					                            							
+					                            							<c:if test="${!aimTeamReportsForm.showTabs}">
+					                            								<td align="center" class="inside_header">
+						                              								<b><digi:trn>Category</digi:trn></b>
+						                            							</td>
+					                            							</c:if>
+					                            						
+					                            							
 					                            							<td align="center" class="inside_header">
 					                              								<b><digi:trn key="aim:hierarchies">Hierarchies</digi:trn></b>
 					                            							</td>
@@ -634,6 +642,11 @@ $(document).ready(function() {
 					                                								</p>
 					                              								</td>
 					                              								
+					                              							</c:if>
+					                              							<c:if test="${!aimTeamReportsForm.showTabs}">
+					                              								<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; " bgcolor="<%=color%>">
+					                              									${report.reportCategory.value }
+					                              								</td>
 					                              							</c:if>
 					                              								
 					                              								<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;" bgcolor="<%=color%>">

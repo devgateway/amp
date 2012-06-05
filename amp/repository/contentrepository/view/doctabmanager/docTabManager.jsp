@@ -57,6 +57,7 @@ border-right: 1px solid rgb(208, 208, 208);
 var trnObj		= {
 		labels: "<digi:trn>Labels</digi:trn>",
 		filters: "<digi:trn>Filters</digi:trn>",
+		keywords: "<digi:trn>Keywords</digi:trn>",
 		apply: "<digi:trn>Apply</digi:trn>",
 		close: "<digi:trn>Close</digi:trn>",
 		none : "<digi:trn>none</digi:trn>"

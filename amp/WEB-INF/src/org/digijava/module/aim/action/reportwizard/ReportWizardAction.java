@@ -173,6 +173,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setAllowEmptyFundingColumns(false);
 		myForm.setUseFilters(false);
 		myForm.setBudgetExporter(false);
+		myForm.setReportCategory(new Long(0));
 		
 		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
 		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
@@ -270,6 +271,9 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setPublicReport( ampReport.getPublicReport() );
 		myForm.setHideActivities( ampReport.getHideActivities() );
 		myForm.setAllowEmptyFundingColumns( ampReport.getAllowEmptyFundingColumns() );
+		if(ampReport.getReportCategory() !=null){
+			myForm.setReportCategory(ampReport.getReportCategory().getId());
+		}
 		
 		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
@@ -363,6 +367,11 @@ public class ReportWizardAction extends MultiAction {
 		ampReport.setName( myForm.getReportTitle().trim() );
 		ampReport.setDrilldownTab( myForm.getDesktopTab() );
 		ampReport.setPublicReport(myForm.getPublicReport());
+		if(myForm.getReportCategory()!=null && myForm.getReportCategory()!=0){
+			ampReport.setReportCategory(CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getReportCategory()));
+		}else{
+			ampReport.setReportCategory(null);
+		}
 		
 		if(myForm.getPublicReport()!=null&&myForm.getPublicReport()){
 			if(myForm.getReportId()==null){

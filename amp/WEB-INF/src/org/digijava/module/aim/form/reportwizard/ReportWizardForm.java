@@ -45,6 +45,8 @@ public class ReportWizardForm extends ActionForm {
 	
 	private Boolean budgetExporter = false;
 	
+	private Long reportCategory			= new Long(0);
+	
 	public String getProjecttitle() {
 		return projecttitle;
 	}
@@ -219,6 +221,14 @@ public class ReportWizardForm extends ActionForm {
 	 */
 	public void setBudgetExporter(Boolean budgetExporter) {
 		this.budgetExporter = budgetExporter;
+	}
+
+	public Long getReportCategory() {
+		return reportCategory;
+	}
+
+	public void setReportCategory(Long reportCategory) {
+		this.reportCategory = reportCategory;
 	}
 	
 }

@@ -2,8 +2,10 @@ package org.digijava.module.translation.action;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
@@ -20,6 +23,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -65,7 +69,8 @@ public class ImportExportTranslations extends Action {
 		ImportExportForm ioForm = (ImportExportForm)form;
 		List<String> languagesInDb = TranslatorWorker.getAllUsedLanguages();
 		ioForm.setLanguages(languagesInDb);
-
+		HttpSession session = request.getSession();
+		Site site=RequestUtils.getSite(request);
 		//these IF's are copied from old TranslationManager.java to not change JSP file.
 		//except for Export step, code inside IF's are new - not copied from old file.
 		//There are 3 steps for import and 1 for export.
@@ -74,15 +79,17 @@ public class ImportExportTranslations extends Action {
 			//we need to read all languages in this file and display to user
 			//to let him/her choose which languages should be imported.
 			//uploaded file should be stored in session.
+			session.removeAttribute(SESSION_FILE);
+			session.removeAttribute(SESSION_ROOT);
 			FormFile uploadedFile = ioForm.getFileUploaded();
 			byte[] fileData = uploadedFile.getFileData();
 			InputStream inputStream = new ByteArrayInputStream(fileData);
 			if(!uploadedFile.getContentType().equals("text/xml")){
-				Site site = RequestUtils.getSite(request);
 				try {
-					String targetLanguage = ImportExportUtil.importExcelFile(
-							inputStream, site.getId().toString());
-					if (targetLanguage == null) {
+					List<String> importedLanguages=new ArrayList<String>();
+					importedLanguages.add("en");
+					POIFSFileSystem file=ImportExportUtil.getExcelFile(inputStream, importedLanguages);
+					if (importedLanguages.size() != 2) {
 						ActionMessages errors = new ActionMessages();
 						errors.add(
 								ActionMessages.GLOBAL_MESSAGE,
@@ -90,8 +97,8 @@ public class ImportExportTranslations extends Action {
 										"error.aim.importErrorFileContentLanguageTranslation"));
 						saveErrors(request, errors);
 					} else {
-						String[] selectedLanguages = { "en", targetLanguage };
-						recreateLucIndex(selectedLanguages);
+						session.setAttribute(SESSION_FILE, file);
+						ioForm.setImportedLanguages(importedLanguages);
 					}
 				} catch (Exception ex) {
 					ActionMessages errors = new ActionMessages();
@@ -125,15 +132,6 @@ public class ImportExportTranslations extends Action {
 		if (request.getParameter("importLang") != null) {
 			
 			long startTime = System.currentTimeMillis();
-			Translations translations = (Translations)request.getSession().getAttribute(SESSION_ROOT);
-			
-			if (translations == null) {
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTranslation"));
-				saveErrors(request, errors);
-				return mapping.findForward("forward");
-			}
-			
 			String[] selectedLanguages = ioForm.getSelectedImportedLanguages();
 			Set<String> languagesToImport = new HashSet<String>(Arrays.asList(selectedLanguages));
 			
@@ -145,14 +143,32 @@ public class ImportExportTranslations extends Action {
 			option.setLocalesToSave(languagesToImport);
 			option.setSearcher(ImportExportUtil.getCacheSearcher());
 			option.setTypeByLanguage(optionsByLang);
-			
-			//Do work - import translation
-			ImportExportUtil.importTranslations(translations, option);
+			Translations translations = (Translations) session
+					.getAttribute(SESSION_ROOT);
+
+			if (translations == null) {
+				ImportExportUtil.importExcelFile((POIFSFileSystem)session.getAttribute(SESSION_FILE),option,site.getId().toString());
+
+			} else {
+				/*if (translations == null) {
+					ActionErrors errors = new ActionErrors();
+					errors.add(
+							ActionMessages.GLOBAL_MESSAGE,
+							new ActionMessage(
+									"error.aim.importErrorFileContentTranslation"));
+					saveErrors(request, errors);
+					return mapping.findForward("forward");
+				}*/
+
+				// Do work - import translation
+				ImportExportUtil.importTranslations(translations, option);
+			}
 			
 			recreateLucIndex(selectedLanguages);
 			
-			request.getSession().removeAttribute(SESSION_FILE);
-			request.getSession().removeAttribute(SESSION_ROOT);
+			
+			session.removeAttribute(SESSION_FILE);
+			session.removeAttribute(SESSION_ROOT);
 			long endTime = System.currentTimeMillis();
 			System.out.println("Export finished in "+((endTime-startTime))+" milliseconds");
 		}
@@ -195,6 +211,8 @@ public class ImportExportTranslations extends Action {
 					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Key", request));
 					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue("en");
 					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(targetLang);
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Date of creation (en) ", request));
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Date of creation ("+targetLang+") ", request));
 					if( messageGroups!=null){
 						for(MessageGroup messageGrp:  messageGroups){
 							column=0;
@@ -211,22 +229,35 @@ public class ImportExportTranslations extends Action {
 							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(messageGrp.getKey());
 							String englishText=null;
 							String targetText=null;
+							Date englishCreationDate=null;
+							Date targetCreationDate=null;
 							for(Message message :messageGrp.getAllMessages()){
 								if(message.getLocale().equals("en")){
 									englishText=message.getMessage();
+									englishCreationDate=message.getCreated();
 								}
 								else{
 									targetText=message.getMessage();
+									targetCreationDate=message.getCreated();
 								}
 							}
 							englishText=(englishText==null)?"":englishText;
 							targetText=(targetText==null)?"":targetText;
+							
 			
 							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(englishText);
 							row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(targetText);
+							HSSFCell englishDateCell=row.createCell(column++,HSSFCell.CELL_TYPE_BLANK);
+							if(englishCreationDate!=null){
+								englishDateCell.setCellValue(englishCreationDate);
+							}
+							HSSFCell targetDateCell=row.createCell(column++,HSSFCell.CELL_TYPE_BLANK);
+							if(targetCreationDate!=null){
+								targetDateCell.setCellValue(targetCreationDate);
+							}
 						}
 					}
-					for (int i = 0; i < 3; i++) {
+					for (int i = 0; i < 5; i++) {
 						sheet.autoSizeColumn(i); // adjust width of the first
 													// column
 					}

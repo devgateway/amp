@@ -5,11 +5,16 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -18,11 +23,9 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -65,6 +68,7 @@ import org.hibernate.Transaction;
 public class ImportExportUtil {
 
 	private static Logger logger = Logger.getLogger(ImportExportUtil.class);
+	private static final Message  POISON_MSG=new Message();
 
 	/**
 	 * Imports data from JAXB translations instance to database.
@@ -93,12 +97,7 @@ public class ImportExportUtil {
 				//tx.commit();
 				
 				//update translation cache after commit is success.
-				List<Message> messages = option.getAffectedMessages();
-				TranslatorWorker worker = TranslatorWorker.getInstance("");
-				for (Message message : messages) {
-					worker.refresh(message);
-				}
-				logger.info("number of affected messages (update or insert) = "+ messages.size());
+				refreshWorker(option);
 			} catch (HibernateException e) {
 				logger.error(e);
 				if (tx!=null){
@@ -205,7 +204,9 @@ public class ImportExportUtil {
 	private static void updateByTimestamp(Message message, Message existingMessage, Session session, List<Message> affected) throws Exception{
 		if (existingMessage==null){
 			session.save(message);
-			affected.add(message);
+			if (affected != null) {
+				affected.add(message);
+			}
 		} else {
 			Timestamp timeOfExisting = existingMessage.getCreated();
 			Timestamp timeOfNew = message.getCreated();
@@ -215,7 +216,9 @@ public class ImportExportUtil {
                         existingMessage.setLastAccessed(message.getLastAccessed());
                         existingMessage.setMessage(message.getMessage());
                         session.update(existingMessage);
-                        affected.add(existingMessage);
+                        if (affected != null) {
+            				affected.add(message);
+            			}
                     }
 		}
 	}
@@ -239,7 +242,9 @@ public class ImportExportUtil {
 		}else{
 			session.save(message);
 		}
-		affected.add(message);
+		if (affected != null) {
+			affected.add(message);
+		}
 	}
 	
 	/**
@@ -254,7 +259,9 @@ public class ImportExportUtil {
 	private static boolean saveIfNew(Message message, Message existingMessage, Session session, List<Message> affected) throws Exception{
 		if (existingMessage == null){
 			session.save(message);
-			affected.add(message);
+			if (affected != null) {
+				affected.add(message);
+			}
 			return true;
 		}
 		return false;
@@ -474,41 +481,93 @@ public class ImportExportUtil {
 	 * @return list target language 
 	 * @throws AimException
 	 */
-	public static String importExcelFile(InputStream inputStreame, String msgSiteId)  throws AimException{
+	public static void importExcelFile(POIFSFileSystem fsFileSystem,ImportExportOption option, String siteId)  throws AimException{
 		String targetLanguage=null;
+		Session session = null;
 		try {
-			Session session = PersistenceManager.getRequestDBSession();
-			POIFSFileSystem fsFileSystem = new POIFSFileSystem(inputStreame);
-			TranslatorWorker worker = TranslatorWorker.getInstance("");
 			HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
 			HSSFSheet hssfSheet = workBook.getSheetAt(0);
-			Iterator<Row> rowIterator = hssfSheet.rowIterator();
-			targetLanguage=null;
-			while (rowIterator.hasNext()) {
-				Row hssfRow = rowIterator.next();
-				if(hssfRow.getRowNum()==0){
-					targetLanguage=hssfRow.getCell(2).getStringCellValue();
-					if(!DbUtil.isAvailableLanguage(targetLanguage)){
-						return null;
-					}
-					continue;
+			session = PersistenceManager.getRequestDBSession();
+			//set session in parameter
+			option.setDbSession(session);
+			//set list of affected messages 
+			//option.setAffectedMessages(new ArrayList<Message>());
+			//TranslatorWorker worker = TranslatorWorker.getInstance("");
+			BlockingQueue<Message> queue=new LinkedBlockingQueue<Message>();
+			targetLanguage=hssfSheet.getRow(0).getCell(2).getStringCellValue();;
+		
+			
+			ExecutorService executorPool=Executors.newFixedThreadPool(1);
+			Future<?> consumerStatus=executorPool.submit(new ImportRowConsumerThread(option,queue));
+			int physicalNumberOfRows=hssfSheet.getPhysicalNumberOfRows();
+			
+			for (int i = 1; i < physicalNumberOfRows; i++) {
+				Row hssfRow = hssfSheet.getRow(i);
+				String key = (hssfRow.getCell(0).getCellType() == HSSFCell.CELL_TYPE_NUMERIC) ? hssfRow
+						.getCell(0).getNumericCellValue() + ""
+						: hssfRow.getCell(0).getStringCellValue();
+				String englishText = (hssfRow.getCell(1) == null) ? ""
+						: hssfRow.getCell(1).getStringCellValue();
+				String targetText = (hssfRow.getCell(2) == null) ? ""
+						: hssfRow.getCell(2).getStringCellValue();
+				Date englishDate=(hssfRow.getCell(3) == null) ? null: hssfRow.getCell(3).getDateCellValue();
+				Date targetDate=(hssfRow.getCell(4) == null) ? null: hssfRow.getCell(4).getDateCellValue();
+				if(englishDate!=null){
+					Message message = new Message();
+					message.setKey(key);
+					message.setMessage(englishText);
+					message.setLocale("en");
+					message.setSiteId(siteId);
+					message.setCreated(new Timestamp(englishDate.getTime()));
+					queue.put(message);
 				}
 				
-				String key=(hssfRow.getCell(0).getCellType()==HSSFCell.CELL_TYPE_NUMERIC)?hssfRow.getCell(0).getNumericCellValue()+"":hssfRow.getCell(0).getStringCellValue();
-				Message existingMessageInTargetLang =ImportExportUtil.getCacheSearcher().get(key,targetLanguage,msgSiteId);
-				Message existingMessageInEnglish =ImportExportUtil.getCacheSearcher().get(key,"en",msgSiteId);
-				String englishText=(hssfRow.getCell(1)==null)?"":hssfRow.getCell(1).getStringCellValue();
-				String targetText=(hssfRow.getCell(2)==null)?"":hssfRow.getCell(2).getStringCellValue();
-				//save only new trns
-				if (existingMessageInTargetLang == null) {
-					saveMsg(msgSiteId, session, worker, targetLanguage,
-							targetText, key);
-				}
-				if(existingMessageInEnglish==null){
-					saveMsg(msgSiteId, session, worker, "en",
-							englishText, key);
+				if(targetDate!=null){
+					Message targetMessage = new Message();
+					targetMessage.setKey(key);
+					targetMessage.setMessage(targetText);
+					targetMessage.setLocale(targetLanguage);
+					targetMessage.setSiteId(siteId);
+					targetMessage.setCreated(new Timestamp(targetDate.getTime()));
+					queue.put(targetMessage);	
 				}
 				
+				
+			}
+			queue.put(POISON_MSG);
+			consumerStatus.get();
+			executorPool.shutdown();
+			//refreshWorker(option);
+		}
+		catch(NullPointerException e){
+			logger.error("file is not ok");
+			throw new AimException("Cannot import messages",e);
+		}
+		catch (Exception e) {
+			logger.error(e);
+			throw new AimException("Cannot import messages",e);
+		}
+
+	}
+
+	public static void refreshWorker(ImportExportOption option)
+			throws WorkerException {
+		List<Message> messages = option.getAffectedMessages();
+		TranslatorWorker worker = TranslatorWorker.getInstance("");
+		for (Message message : messages) {
+			worker.refresh(message);
+		}
+		logger.info("number of affected messages (update or insert) = "+ messages.size());
+	}
+	public static POIFSFileSystem getExcelFile(InputStream inputStreame, List<String>importedLanguages)  throws AimException{
+		POIFSFileSystem fsFileSystem=null;
+		try {
+			fsFileSystem = new POIFSFileSystem(inputStreame);
+			HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
+			HSSFSheet hssfSheet = workBook.getSheetAt(0);
+			String targetLanguage=hssfSheet.getRow(0).getCell(2).getStringCellValue();
+			if(DbUtil.isAvailableLanguage(targetLanguage)){
+				importedLanguages.add(targetLanguage);
 			}
 		}
 		catch(NullPointerException e){
@@ -519,21 +578,42 @@ public class ImportExportUtil {
 			logger.error(e);
 			throw new AimException("Cannot import messages",e);
 		}
-		return targetLanguage;
+		return fsFileSystem;
 
 	}
 
-	private static void saveMsg(String msgSiteId, Session session,
-			TranslatorWorker worker, String targetLanguage, String msgBodyText,
-			String key) throws WorkerException {
-		Message message = new Message();
-		message.setKey(key);
-		message.setLocale(targetLanguage);
-		message.setSiteId(msgSiteId);
-		message.setMessage(msgBodyText);
-		message.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
-		message.setLastAccessed(message.getCreated());
-		session.save(message);
-		worker.refresh(message);
+	
+	private static class ImportRowConsumerThread implements Runnable {
+		ImportExportOption option;
+		BlockingQueue<Message> queue;
+
+		ImportRowConsumerThread(ImportExportOption option, BlockingQueue<Message> queue) {
+			this.queue=queue;
+			this.option = option;
+
+		}
+
+		@Override
+		public void run() {
+			TranslatorWorker worker = TranslatorWorker.getInstance("");
+			try {
+				while (true) {
+					Message message = queue.take();
+					if(message.equals(POISON_MSG)) {
+						break;
+					}
+					saveMessage(message, option);
+					worker.refresh(message);
+				}
+			} catch (WorkerException e) {
+				logger.error("error", e);
+			} catch (Exception e) {
+				logger.error("error", e);
+			}
+
+		}
+
 	}
+
+	
 }

@@ -355,8 +355,7 @@ function checkSelectedLanguages(){
 							<tr>
 								<td colspan="2">
 									<digi:trn key="aim:translationManagerLangFoundImportMsg">
-									The following languages where found in the file you imported.<br />
-									<digi:trn>Please select the languages you want to export</digi:trn>
+									The following languages where found in the file you imported
 									</digi:trn>
 									<br/>
 								</td>
@@ -412,6 +411,16 @@ function checkSelectedLanguages(){
 									<digi:trn key="aim:translationManagerLangSelectImportMsg">
 									Please select the languages you want to update or to insert
 									</digi:trn>
+								</td>
+								</tr>
+								<tr>
+								<td colspan="2">
+								<table>
+								<tr><th><digi:trn>Import Options</digi:trn></th></tr>
+								<tr><td><digi:trn>Update local translations: updates translations in database if their creation date(not update) is older than one in file</digi:trn></td></tr>
+								<tr><td><digi:trn>Overwrite local translations: Overwrites translations in database using values from file</digi:trn></td></tr>
+								<tr><td><digi:trn>Insert the non existing translations: Inserts translations which doesn't exist in database</digi:trn></td></tr>
+								</table>
 								</td>
 							</tr>
 						 </digi:form>

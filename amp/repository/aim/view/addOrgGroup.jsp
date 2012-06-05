@@ -77,7 +77,7 @@
     <td><html:text property="orgGrpName" size="45" /></td>
   </tr>
    <tr>
-    <td align=right><label><digi:trn key="aim:orgGroupCode">Group  Code</digi:trn></label></td>
+    <td align=right><label><digi:trn key="aim:orgGroupCode">Group  Code</digi:trn></label></td>   
     <td><html:text property="orgGrpCode" size="15" /></td>
   </tr>
    <tr>

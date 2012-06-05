@@ -1399,9 +1399,10 @@ border-right: 1px solid rgb(208, 208, 208);
                                                                             </tr>
                                                                         </c:forEach>
                                                                         <tr>
-                                                                            <td colspan="2">
+                                                                            <td colspan="3">
+																			<input type="button" style="margin-right:10px;" class="buttonx_sm" onclick="javascript:removeOrgs();" value="<digi:trn>Remove Organization(s)</digi:trn>" />
                                                                          <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="buttonx_sm" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                                                        <input type="button" class="buttonx_sm" onclick="javascript:removeOrgs();" value="<digi:trn>Remove Organization(s)</digi:trn>" />
+                                                                        
                                                                         </td>
                                                                         </tr>
 

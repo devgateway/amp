@@ -65,18 +65,26 @@
 </script>
 </c:if>
 <div class="addOrgBox">
-	<div class="addOrgBoxInner">
+	<div>
 <html:hidden property="action" />
 <html:hidden property="ampOrgGrpId" />
 <html:hidden property="ampOrgId" />
 <h1><digi:trn key="aim:addOrgGroup">Add  Organization Group</digi:trn></h1>
- <ul><li>
-	 <label><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font></label> 
-     <html:text property="orgGrpName" size="45" /></li>
-	 <li> <label><digi:trn key="aim:orgGroupCode">Group  Code</digi:trn></label>
-	 <html:text property="orgGrpCode" size="15" /></li>
-	 <li> <label><digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font></label>
-     <html:select property="orgTypeId"> <html:option value="-1">-- Select Type --</html:option></label>
+
+<table width="650" border="0" cellspacing="3" cellpadding="3" align="center">
+  <tr>
+    <td align=right><label><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font></label> </td>
+    <td><html:text property="orgGrpName" size="45" /></td>
+  </tr>
+   <tr>
+    <td align=right><label><digi:trn key="aim:orgGroupCode">Group  Code</digi:trn></label></td>
+    <td><html:text property="orgGrpCode" size="15" /></td>
+  </tr>
+   <tr>
+    <td align=right><label><digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font></label></td>
+    <td><html:select property="orgTypeId"> <html:option value="-1">-- Select Type --</html:option></td>
+  </tr>
+</table>
      <logic:notEmpty name="aimAddOrgGroupForm" property="orgTypeColl"> <html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl" value="ampOrgTypeId" label="orgType" /> </logic:notEmpty> </html:select> </li></ul>
 																	<%--
 																	

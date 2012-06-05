@@ -1242,7 +1242,7 @@ public class DataDispatcher extends DispatchAction {
 		                }
 						BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
 		                if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<aidtype name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + value.getValue() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<aidtype name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
 				} else {
@@ -1274,11 +1274,11 @@ public class DataDispatcher extends DispatchAction {
 			                }
 			                hasValues = true;
 							xmlString.append("<aidtype category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
-							aidTypeData += ">" + value.getValue() + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+							aidTypeData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 						}
 						else
 						{
-							aidTypeData += ">" + value.getValue() + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+							aidTypeData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 						}
 					}
 					if (!hasValues){

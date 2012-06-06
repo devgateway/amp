@@ -110,13 +110,12 @@ StopWatch.next("Filters", true);
 					<b><digi:trn>Keyword Search</digi:trn> </b>
 					<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
 						src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
-						<br />
-						<br />
-						<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
+					<div style="margin-top:10px;"><html:text property="indexString" style="width: 150px"	styleClass="inp-text"  /></div>
 				</div>
 				<div style="width: 33%; height:30%; padding: 10px; float: left;">
 					<b><digi:trn>Date Filter</digi:trn> </b>
-					<br />
+					
+					<div style="margin-top:10px;">
 					<table style="font-family: Arial; font-size: 1em;">
 						<tr>
 							<td align="left" colspan="2">
@@ -133,8 +132,6 @@ StopWatch.next("Filters", true);
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
 							</td>
-							
-							
 							<td colspan="2" align="left">
 							<html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" />
 							<a id="date2" style="background-color: #F6FAFF;" href='javascript:pickDateById("date2","toDate")'>
@@ -142,26 +139,26 @@ StopWatch.next("Filters", true);
 							</a>
 							</td>
 						</tr>
-					</table>
+					</table></div>
 				</div>
 				<div style="width: 17%; height: 30%; padding: 10px; float: left;">
 					<span style="white-space: nowrap"><b><digi:trn>Actual Approval Year</digi:trn> </b></span>
-						<br />
-						<br />
+						<div style="margin-top:10px;">
 						<html:select property="actualAppYear"  style="width: 100px" styleClass="inp-text">
 							<option value="-1"><digi:trn key="aim:filters:actualAppYear">Year</digi:trn></option>
                          	<html:optionsCollection property="actualAppYearsRange" label="wrappedInstance" value="wrappedInstance" />
 						</html:select>
+						</div>
 				</div>
 				<feature:display name="Computed Columns Filters" module="Filter Section">
 					<div style="margin-left: 80%;width: 20%; height: 30%; padding: 10px; ">
 						<span style="white-space: nowrap"><b><digi:trn>Computed Columns</digi:trn> </b></span>
-							<br />
-							<br />
+							<div style="margin-top:10px;">
 							<html:select property="computedYear"  style="width: 100px" styleClass="inp-text">
 								<option value="-1"><digi:trn key="aim:filters:currentYear">Current Year</digi:trn></option>
 	                         	<html:optionsCollection property="computedYearsRange" label="wrappedInstance" value="wrappedInstance" />
 							</html:select>
+							</div>
 					</div>
 				</feature:display>
 			</div>

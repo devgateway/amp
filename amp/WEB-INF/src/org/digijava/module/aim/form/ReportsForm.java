@@ -1,10 +1,8 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 
 public class ReportsForm extends ActionForm {
 
@@ -42,6 +40,7 @@ public class ReportsForm extends ActionForm {
     private boolean reset;
     
     private Long selectedReportCategory= new Long(0);
+    private Boolean onlyFavourites;
 
     public boolean isReset() {
         return reset;
@@ -310,6 +309,14 @@ public class ReportsForm extends ActionForm {
 
 	public void setSelectedReportCategory(Long selectedReportCategory) {
 		this.selectedReportCategory = selectedReportCategory;
+	}
+
+	public Boolean getOnlyFavourites() {
+		return onlyFavourites;
+	}
+
+	public void setOnlyFavourites(Boolean onlyFavourites) {
+		this.onlyFavourites = onlyFavourites;
 	}
 
 	public enum ReportSortBy{

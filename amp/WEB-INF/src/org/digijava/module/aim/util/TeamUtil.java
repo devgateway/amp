@@ -1858,123 +1858,152 @@ public class TeamUtil {
      */
 
     public synchronized static List getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name,Long reportCategoryId) {
+	    return getAllTeamReports(teamId, getTabs, currentPage, reportPerPage, inlcludeMemberReport, memberId, name, reportCategoryId, null);
+    	
+    }    
     
-    	   Session session 	= null;
-           List col 		= new ArrayList();
-           String tabFilter	= "";
-           try {
-        	   
-        	   if ( getTabs!=null ) {
-        			   tabFilter	= "r.drilldownTab=:getTabs AND";
-        	   }
-        	   
-               session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-               AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
-               
-               
-               /*AMP-2685 Team leader should not see all reports*/
-               AmpTeamMember ampteammember = TeamMemberUtil.getAmpTeamMember(memberId);
-               String queryString = null;
-               Query qry = null;
+    public synchronized static List getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name,Long reportCategoryId,Boolean onlyCategorized) {
+ 	   Session session 	= null;
+        List col 		= new ArrayList();
+        String tabFilter	= "";
+        try {
+     	   if ( getTabs!=null ) {
+     			   tabFilter	= "r.drilldownTab=:getTabs AND";
+     	   }
+     	   
+            session = PersistenceManager.getRequestDBSession();
+            AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
+            
+            /*AMP-2685 Team leader should not see all reports*/
+            AmpTeamMember ampteammember = TeamMemberUtil.getAmpTeamMember(memberId);
+            String queryString = null;
+            Query qry = null;
 
-               if(team.getAccessType().equalsIgnoreCase(
-                   Constants.ACCESS_TYPE_MNGMT)) {
-                   queryString = "select DISTINCT r from " + AmpReports.class.getName()
-                       + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
-                       + AmpTeamReports.class.getName() 
-                       + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
-                      if (name != null) {
-                       queryString += " and lower(r.name) like lower(:name) ";
-                      }
-                      if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
-                     	 queryString += " and r.reportCategory=:repCat ";
-                     }
-
-                   queryString +=  " order by r.name";
-                   qry = session.createQuery(queryString);
-                   qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
-                   qry.setParameter("teamid", teamId);
-                   if ( getTabs!=null )
-                	   qry.setBoolean("getTabs", getTabs);
+            if(team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+                queryString = "select DISTINCT r from " + AmpReports.class.getName()
+                    + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
+                    + AmpTeamReports.class.getName() 
+                    + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
                    if (name != null) {
-                       qry.setString("name", '%' + name + '%');
+                    queryString += " and lower(r.name) like lower(:name) ";
+                   }
+                   if(onlyCategorized!=null && onlyCategorized){
+                	   queryString += " and r.reportCategory is not null ";
                    }
                    if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
-                  	 qry.setLong("repCat", reportCategoryId);
-                   }
-                   if (currentPage !=null){
-                	   qry.setFirstResult(currentPage);
-                   }
-                   if(reportPerPage!=null && reportPerPage.intValue()>0){
-                	   qry.setMaxResults(reportPerPage);
-                   }
-                   col = qry.list();
-               } else if (!inlcludeMemberReport){
-                   queryString = "select r from "
-                       + AmpTeamReports.class.getName()+" tr inner join  tr.report r "
-                       + "  where " + tabFilter + " (tr.team=:teamId)";
-                      if (name != null) {
-                       queryString += " and lower(r.name) like lower(:name) ";
-                   }
+                  	 queryString += " and r.reportCategory=:repCat ";
+                  }
 
-                   queryString +=  " order by r.name";
-                   qry = session.createQuery(queryString);
-                   qry.setLong("teamId", teamId);
-                   if ( getTabs!=null )
-                	   qry.setBoolean("getTabs", getTabs);
-                    if (name != null) {
-                       qry.setString("name", '%' + name + '%');
+                queryString +=  " order by r.name";
+                qry = session.createQuery(queryString);
+                qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
+                qry.setParameter("teamid", teamId);
+                if ( getTabs!=null )
+             	   qry.setBoolean("getTabs", getTabs);
+                if (name != null) {
+                    qry.setString("name", '%' + name + '%');
+                }
+                if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+               	 qry.setLong("repCat", reportCategoryId);
+                }
+                if (currentPage !=null){
+             	   qry.setFirstResult(currentPage);
+                }
+                if(reportPerPage!=null && reportPerPage.intValue()>0){
+             	   qry.setMaxResults(reportPerPage);
+                }
+                col = qry.list();
+            } else if (!inlcludeMemberReport){
+                queryString = "select r from "+ AmpTeamReports.class.getName()+" tr inner join  tr.report r " + "  where " + tabFilter + " (tr.team=:teamId)";
+                   if (name != null) {
+                    queryString += " and lower(r.name) like lower(:name) ";
                    }
-                   
-                   if (currentPage !=null){
-                	   qry.setFirstResult(currentPage);
+                   if(onlyCategorized!=null && onlyCategorized){
+                	   queryString += " and r.reportCategory is not null ";
                    }
-                   if(reportPerPage!=null && reportPerPage.intValue()>0){
-                	   qry.setMaxResults(reportPerPage);
-                   }
-                   col = qry.list();
-               }else if(inlcludeMemberReport){
-            	   queryString="select distinct r from " + AmpReports.class.getName()+
-   				"  r left join r.members m where " + tabFilter + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
+                   if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+                  	 queryString += " and r.reportCategory=:repCat ";
+                  }
+
+                queryString +=  " order by r.name";
+                qry = session.createQuery(queryString);
+                qry.setLong("teamId", teamId);
+                if ( getTabs!=null )
+             	   qry.setBoolean("getTabs", getTabs);
+                 if (name != null) {
+                    qry.setString("name", '%' + name + '%');
+                }
+                if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+                   	 qry.setLong("repCat", reportCategoryId);
+                }
+                
+                if (currentPage !=null){
+             	   qry.setFirstResult(currentPage);
+                }
+                if(reportPerPage!=null && reportPerPage.intValue()>0){
+             	   qry.setMaxResults(reportPerPage);
+                }
+                col = qry.list();
+            }else if(inlcludeMemberReport){
+         	   queryString="select distinct r from " + AmpReports.class.getName()+
+				"  r left join r.members m where " + tabFilter + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
 				" tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
-                  if(name!=null){
-                           queryString += " and lower(r.name) like lower(:name)";
-                  }
-            	  qry = session.createQuery(queryString); 
-            	  qry.setLong("ampTeamMemId", memberId);
-             	  qry.setLong("teamId", teamId);
-             	  if ( getTabs!=null )
-             		  qry.setBoolean("getTabs", getTabs);
-                   if (name != null) {
-                       qry.setString("name", '%' + name + '%');
-                   }
-            	  if (currentPage !=null){
-               	   qry.setFirstResult(currentPage);
-                  }
-                  if(reportPerPage!=null && reportPerPage.intValue()>0){
-               	   qry.setMaxResults(reportPerPage);
-                  }
-                  col = qry.list();
-
+               if(name!=null){
+                        queryString += " and lower(r.name) like lower(:name)";
                }
-               //transaction.commit();
-           } catch(Exception e) {
-               logger.error("Exception from getAllTeamReports()", e);
-               throw new RuntimeException(e);
-           }
-           return col;	
-    	
-    }
-    public static List getLastShownReports(Long teamId, Long memberId, Boolean getTabs) {
+               if(onlyCategorized!=null && onlyCategorized){
+            	   queryString += " and r.reportCategory is not null ";
+               }
+               if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+              	 queryString += " and r.reportCategory=:repCat ";
+              }
+         	  qry = session.createQuery(queryString); 
+         	  qry.setLong("ampTeamMemId", memberId);
+          	  qry.setLong("teamId", teamId);
+          	  if ( getTabs!=null )
+          		  qry.setBoolean("getTabs", getTabs);
+                if (name != null) {
+                    qry.setString("name", '%' + name + '%');
+                }
+                if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+                  	 qry.setLong("repCat", reportCategoryId);
+                }
+         	  if (currentPage !=null){
+            	   qry.setFirstResult(currentPage);
+               }
+               if(reportPerPage!=null && reportPerPage.intValue()>0){
+            	   qry.setMaxResults(reportPerPage);
+               }
+               col = qry.list();
+
+            }
+            //transaction.commit();
+        } catch(Exception e) {
+            logger.error("Exception from getAllTeamReports()", e);
+            throw new RuntimeException(e);
+        }
+        return col;	
+ 	
+ }
+    
+    
+    
+    
+    
+    
+    public static List getLastShownReports(Long teamId, Long memberId, Boolean getTabs,Boolean onlyCategorized) {
         
  	   Session session 	= null;
        List col 		= new ArrayList();
        String tabFilter	= "";
 	   if ( getTabs!=null ) {
-		   tabFilter	= "r.drilldownTab=:getTabs AND";
+		   tabFilter	= "r.drilldownTab=:getTabs AND ";
        }
+	   String favourites ="";
+	   if(onlyCategorized!=null && onlyCategorized){
+		   favourites = " r.reportCategory is not null AND ";
+	   }
 
        try {
             session = PersistenceManager.getRequestDBSession();
@@ -1984,7 +2013,7 @@ public class TeamUtil {
             //oracle doesn't support order by from a column that is not part of the distinct Statement  so we have to include the  m.lastView  in the select part 
 
          	queryString="select distinct r,m.lastView from " + AmpReports.class.getName()+
-			"  r inner join r.logs m where "+tabFilter+" (m.member is not null and m.member.ampTeamMemId=:ampTeamMemId) order by m.lastView desc";
+			"  r inner join r.logs m where "+tabFilter+favourites+" (m.member is not null and m.member.ampTeamMemId=:ampTeamMemId) order by m.lastView desc";
          	qry = session.createQuery(queryString); 
          	qry.setLong("ampTeamMemId", memberId);
        	    if ( getTabs!=null )
@@ -1999,7 +2028,7 @@ public class TeamUtil {
        	  //end fix for oracle
 	       	
 	       	if (col.isEmpty()){
-            	queryString="select distinct r from " + AmpReports.class.getName()+ " r where r.drilldownTab=false AND r.ownerId is not null and r.ownerId=:ampTeamMemId";
+            	queryString="select distinct r from " + AmpReports.class.getName()+ " r where r.drilldownTab=false AND "+favourites+"  r.ownerId is not null and r.ownerId=:ampTeamMemId";
             	qry = session.createQuery(queryString); 
              	qry.setLong("ampTeamMemId", memberId);
              	col = qry.list();

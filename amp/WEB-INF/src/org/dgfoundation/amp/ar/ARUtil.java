@@ -91,6 +91,10 @@ public final class ARUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<AmpReports> getAllPublicReports(Boolean getTabs,String name,Long reportCategoryId) {
+		return getAllPublicReports(getTabs, name, reportCategoryId, null);
+	}
+	
+	public static List<AmpReports> getAllPublicReports(Boolean getTabs,String name,Long reportCategoryId,Boolean onlyCategorizied) {
 		Session session = null;
 		List<AmpReports> col = null;
 		String tabFilter	= "";
@@ -99,12 +103,13 @@ public final class ARUtil {
 			tabFilter	= "r.drilldownTab=:getTabs AND";
 		}
 		try {
-
 			session = PersistenceManager.getSession();
-			String queryString = "select r from " + AmpReports.class.getName()
-					+ " r " + "where ( " + tabFilter + " r.publicReport=true)";
+			String queryString = "select r from " + AmpReports.class.getName()+ " r " + "where ( " + tabFilter + " r.publicReport=true)";
             if (name != null) {
                 queryString += " and lower(r.name) like lower(:name) ";
+            }
+            if(onlyCategorizied!=null && onlyCategorizied){
+            	queryString += " and r.reportCategory is not null ";
             }
             if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
             	 queryString += " and r.reportCategory=:repCat ";

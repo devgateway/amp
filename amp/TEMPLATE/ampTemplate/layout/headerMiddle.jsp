@@ -511,12 +511,28 @@ function adminHelp(){
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd bd_drop">                    
-                                      <ul class="first-of-type">  
-                                      	<li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
-                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false&reset=true"  onclick="return canExit()">
-                                                <b><digi:trn>Report List</digi:trn></b>
-                                            </a>
-                                    	</li>
+                                      <ul class="first-of-type">
+                                      		<li class="yuiampmenuitem_drop">
+	                                        	<a class="yuiampmenuitemlabel" href="#">
+	                                            	<digi:trn>Reports</digi:trn>
+	                                            </a>
+	                                            <div id="reportsSubMenu" class="yuiampmenu">
+	                                          		<div class="bd">      
+	                                          			<ul>	                                          		
+															<li class="yuiampmenuitem_drop" title='<digi:trn>Create Report</digi:trn>'>
+					                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false&reset=true&onlyFavourites=false"  onclick="return canExit()">
+					                                                <b><digi:trn>All Reports</digi:trn></b>
+					                                            </a>
+					                                    	</li>
+					                                    	<li class="yuiampmenuitem_drop" title='<digi:trn>Create Report</digi:trn>'>
+					                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false&reset=true&onlyFavourites=true"  onclick="return canExit()">
+					                                                <b><digi:trn>Favourite Reports</digi:trn></b>
+					                                            </a>
+					                                    	</li>
+														  </ul>
+	                                                  </div>
+	                                              </div>
+	                                        </li>
                                         <module:display  name="Report Generator" parentModule="REPORTING">
 	                                        <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true"  onclick="return canExit()">

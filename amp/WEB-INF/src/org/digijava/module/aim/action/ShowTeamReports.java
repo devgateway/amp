@@ -8,7 +8,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -83,7 +82,8 @@ public class ShowTeamReports extends Action {
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if ( tm != null )
 			rf.setCurrentMemberId(tm.getMemberId());
-		                                        	
+		
+				                                        	
 		getAllReports(appSettingSet, rf, tm, request);
 		rf.setCurrentPage(rf.getPage());
 		rf.setPagesToShow(10);
@@ -169,9 +169,18 @@ public class ShowTeamReports extends Action {
             }
         }
         
-
+        
+		Boolean favourites = rf.getOnlyFavourites();
+        
 		if (tm == null) {
-		List<AmpReports> reports = ARUtil.getAllPublicReports(false, rf.getKeyword(),rf.getSelectedReportCategory());
+			List<AmpReports> reports = null;
+			if(favourites !=null && favourites){
+				reports = ARUtil.getAllPublicReports(false, rf.getKeyword(),rf.getSelectedReportCategory(),favourites);
+			}else{
+				reports = ARUtil.getAllPublicReports(false, rf.getKeyword(),rf.getSelectedReportCategory());
+			}
+			
+			
             if (reports != null) {
                 switch (col) {
                     case NAME_ASC:
@@ -213,13 +222,23 @@ public class ShowTeamReports extends Action {
 			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 			AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 			if (appSettingSet) {
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword(),rf.getSelectedReportCategory());
+				if(favourites !=null && favourites){
+					teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword(),rf.getSelectedReportCategory(),favourites);
+				}else{
+					teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword(),rf.getSelectedReportCategory());
+				}
+				
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(), rf.getShowTabs(), true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 				rf.setTempNumResults(appSettings.getDefReportsPerPage());
 				//rf.setTempNumResults(100);
 			}else{
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword(),rf.getSelectedReportCategory());
+				if(favourites !=null && favourites){
+					teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword(),rf.getSelectedReportCategory(),favourites);
+				}else{
+					teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword(),rf.getSelectedReportCategory());
+				}
+				
 				}
 			boolean found = false;
 			if (defaultTeamReport != null){

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.gis.dbentity.GisSettings" table="DG_GIS_SETTINGS"> <cache usage="read-write" />
+
+        <composite-id>
+            <key-property name="siteId" column="SITE_ID" type="java.lang.String"/>
+            <key-property name="instanceId" column="INSTANCE_ID" type="java.lang.String" />
+        </composite-id>
+
+		<property name="sectorSchemeFilterMode" column="SEC_SCHEME_FILTER_MODE" type="int" />
+
+        <property name="selectedPreset" column="SELECTED_PRESET" type="java.lang.String" />
+
+
+	</class>
+</hibernate-mapping>

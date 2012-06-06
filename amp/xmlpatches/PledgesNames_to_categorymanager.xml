@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-9866</jira>
+  <keyword>Pledge Names</keyword>
+  <author>Mauricio</author>
+  <description>This patch add a new category for Pledges Names</description>
+  <trigger type="all">
+      <condition type="custom">
+          <script returnVar="y">
+              <lang type="sql">SELECT count(*) from amp_category_class WHERE category_name='Pledges Names'</lang>
+          </script>
+          <test>y.intValue()==0</test>
+      </condition>
+  </trigger> 
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+     	INSERT INTO amp_category_class(id, category_name,is_multiselect,is_ordered, keyName)
+		VALUES(nextval('amp_category_class_seq'),'Pledges Names', false, true, 'pledges_names');
+		
+		INSERT INTO amp_category_value (id, category_value, amp_category_class_id, index_column) 
+		SELECT nextval('amp_category_value_seq'), title, id, ord 
+		FROM 
+			(SELECT DISTINCT row_number() OVER (ORDER BY fp.title) AS ord, fp.title as title, acc.id as id FROM amp_funding_pledges fp, amp_category_class acc WHERE acc.category_name ='Pledges Names') AS tmp;
+		
+		UPDATE amp_funding_pledges afp
+		    SET title = acv.id 
+		    FROM amp_category_value acv 
+		    WHERE afp.title = acv.category_value;
+		
+		ALTER TABLE amp_funding_pledges DROP COLUMN title CASCADE;
+		ALTER TABLE amp_funding_pledges ADD COLUMN title bigint;
+		
+		DROP VIEW IF EXISTS "public"."v_pledges_funding";
+		CREATE OR REPLACE VIEW "public"."v_pledges_funding" (
+		    pledgeid,
+		    title,
+		    contact_name,
+		    contact_email,
+		    amount,
+		    amp_fund_detail_id,
+		    transaction_date,
+		    currency_code,
+		    org_name,
+		    aid_modality_name,
+		    type_of_assistance_name,
+		    pledge_type,
+		    p_sectorname,
+		    spercenatage,
+		    region)
+		AS
+		SELECT ap.id AS pledgeid,
+		       ap.title,
+		       COALESCE(ap.contactname, '' ::character varying) AS contact_name,
+		       COALESCE(ap.contactemail, '' ::character varying) AS contact_email,
+		       ((((apd.amount * COALESCE(fps.sector_percentage, (100) ::double precision
+		       )) /(100) ::double precision) * COALESCE(fpl.location_percentage, (100)
+		        ::double precision)) /(100) ::double precision) AS amount,
+		       apd.id AS amp_fund_detail_id,
+			   to_date('02 Jan '||apd.year::text,'DD Mon YYYY') AS transaction_date,
+		       ac.currency_code,
+		       aorg.name AS org_name,
+		       catv.category_value AS aid_modality_name,
+		       catv1.category_value AS type_of_assistance_name,
+		       catv2.category_value AS pledge_type,
+		       s.name AS p_sectorname,
+		       fps.sector_percentage AS spercenatage,
+		       l.location_name AS region
+		FROM ((((((((((amp_funding_pledges ap
+		     JOIN amp_funding_pledges_details apd ON ((ap.id = apd.pledge_id)))
+		     JOIN amp_category_value catv ON ((apd.aid_modality = catv.id)))
+		     JOIN amp_category_value catv1 ON ((apd.type_of_assistance = catv1.id)))
+		     JOIN amp_category_value catv2 ON ((apd.pledge_type = catv2.id)))
+		     JOIN amp_currency ac ON ((apd.currency = ac.amp_currency_id)))
+		     JOIN amp_organisation aorg ON ((ap.amp_org_id = aorg.amp_org_id)))
+		     JOIN amp_funding_pledges_sector fps ON ((ap.id = fps.pledge_id)))
+		     JOIN amp_sector s ON ((fps.amp_sector_id = s.amp_sector_id)))
+		     JOIN amp_funding_pledges_location fpl ON ((ap.id = fpl.pledge_id)))
+		     LEFT JOIN amp_category_value_location l ON ((fpl.location_id = l.id)))
+		GROUP BY ap.id,
+		         apd.id,
+		         aorg.amp_org_id,
+		         s.amp_sector_id,
+		         l.id,
+		         ap.title,
+		         COALESCE(ap.contactname, '' ::character varying),
+		         ap.contactemail,
+		         apd.amount,
+		         fps.sector_percentage,
+		         fpl.location_percentage,
+		         apd.year,
+		         ac.currency_code,
+		         aorg.name,
+		         catv.category_value,
+		         catv1.category_value,
+		         catv2.category_value,
+		         s.name,
+		         l.location_name;
+		         
+		CREATE OR REPLACE VIEW v_pledges_titles AS 
+		SELECT 
+		    p.id AS pledge_id,
+		    val.category_value AS title,
+		    val.id AS title_id 
+		FROM 
+		  	(amp_funding_pledges p join amp_category_value val on (p.title = val.id))
+		ORDER BY 
+		    p.id;
+		    
+    	</lang>
+    </script>
+  </apply>
+
+</tns:patch>

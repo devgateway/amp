@@ -1,0 +1,1 @@
+update amp_funding set capital_spend_percent=0 where capital_spend_percent is null

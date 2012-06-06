@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-10423</jira>
+  <keyword>remove redundant resource data</keyword>
+  <author>Dare</author>  
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+      	delete from amp_features_templates where feature in 
+(
+select id from  amp_features_visibility where parent in 
+(select id from amp_modules_visibility where name like 'Document Management' or name like 'DOCUMENTS MANAGEMENT')
+);
+
+delete from  amp_features_visibility where parent in 
+(select id from amp_modules_visibility where name like 'Document Management' or name like 'DOCUMENTS MANAGEMENT');
+
+delete from amp_modules_templates where 
+module in (select id from amp_modules_visibility where name like 'DOCUMENTS MANAGEMENT' or name like 'Document Management'); 
+
+delete from  amp_modules_visibility where name like 'DOCUMENTS MANAGEMENT' or name like 'Document Management'; 
+
+
+ 
+      </lang>
+    </script>
+  </apply>
+
+</tns:patch>

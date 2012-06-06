@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+- Acegi managed beans.
+-->
+<beans>
+  <bean id="digiUserDetailsService" class="org.digijava.kernel.security.auth.DigiUserDetailsService">
+    <property name="populateGroupAuthorities">
+	<value>false</value>
+    </property>
+  </bean>
+
+  <bean id="casAuthenticationProvider" class="org.springframework.security.providers.cas.CasAuthenticationProvider">
+    <property name="ticketValidator">
+      <ref bean="casTicketValidator" />
+    </property>
+    <property name="casAuthoritiesPopulator">
+      <ref bean="casAuthoritiesPopulator" />
+    </property>
+    <property name="casProxyDecider">
+      <ref bean="casProxyDecider"/>
+    </property>
+    <property name="statelessTicketCache">
+      <ref bean="statelessTicketCache"/>
+    </property>
+    <property name="key">
+      <value>amp_cas_password</value>
+    </property> 
+  </bean>
+  
+  <bean id="serviceProperties" class="org.springframework.security.ui.cas.ServiceProperties">
+    <property name="service">
+      <value>http://amp.mofed.gov:8080/j_acegi_cas_security_check</value>
+    </property>
+  </bean>
+
+  <bean id="casProxyDecider" class="org.springframework.security.providers.cas.proxy.AcceptAnyCasProxy"/> 
+
+   <bean id="statelessTicketCache" class="org.springframework.security.providers.cas.cache.EhCacheBasedTicketCache"> 
+     <property name="cache"><ref local="ticketCacheBackend"/></property> 
+   </bean> 
+
+   <bean id="ticketCacheBackend" class="org.springframework.cache.ehcache.EhCacheFactoryBean"> 
+<!--
+     <property name="cacheManager"> 
+       <ref local="cacheManager"/> 
+     </property> 
+-->
+     <property name="cacheName"> 
+       <value>CASTicketCache</value> 
+     </property> 
+   </bean> 
+
+   <bean id="casAuthoritiesPopulator" class="org.springframework.security.providers.cas.populator.DaoCasAuthoritiesPopulator"> 
+     <property name="userDetailsService"><ref bean="digiUserDetailsService"/></property> 
+   </bean> 
+
+  <bean id="casAuthenticationManager" class="org.springframework.security.providers.ProviderManager">
+    <property name="providers">
+      <list>
+        <ref bean="casAuthenticationProvider" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="roleVoter" class="org.springframework.security.vote.RoleVoter" />
+
+  <bean id="accessDecisionManager" class="org.springframework.security.vote.UnanimousBased">
+    <property name="decisionVoters">
+      <list>
+        <ref bean="roleVoter" />
+      </list>
+    </property>
+  </bean>
+
+<!--
+  <bean id="securityInterceptor" class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+    <property name="authenticationManager">
+      <ref bean="authenticationManager" />
+    </property>
+    <property name="accessDecisionManager">
+      <ref bean="accessDecisionManager" />
+    </property>
+    <property name="objectDefinitionSource">
+      <value>
+      CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISION
+      PATTERN_TYPE_APACHE_ANT
+      /faces/**=ROLE_EXPERT
+      </value>
+    </property>
+  </bean>
+-->
+  <!--
+  <bean id="rememberMeServices" class="org.springframework.security.ui.rememberme.NullRememberMeServices" />
+  -->
+
+   <bean id="authenticationProcessingFilter" class="org.springframework.security.ui.cas.CasProcessingFilter"> 
+     <property name="authenticationManager"><ref bean="casAuthenticationManager"/></property> 
+     <property name="authenticationFailureUrl"><value>/404.jsp</value></property> 
+     <property name="defaultTargetUrl"><value>/shevediiit.jsp</value></property> 
+     <property name="filterProcessesUrl"><value>/j_acegi_cas_security_check</value></property> 
+   </bean> 
+
+  <bean id="logoutFilter" class="org.digijava.kernel.security.auth.CasLogoutFilter">
+    <constructor-arg>
+      <value>https://amp.cas.powerdot.net:9392/cas-amp/logout</value>
+    </constructor-arg>
+    <constructor-arg>
+      <value>http://amp.mofed.gov:8080</value>
+    </constructor-arg>
+    <constructor-arg>
+      <list>
+        <bean class="org.springframework.security.ui.logout.SecurityContextLogoutHandler"/>
+        <bean class="org.digijava.module.aim.auth.AmpLogoutHandler" />
+      </list>
+    </constructor-arg>
+    <property name="filterProcessesUrl">
+      <value>/j_spring_logout</value>
+    </property>
+  </bean>
+
+
+<bean id="filterChainProxy" class="org.springframework.security.util.FilterChainProxy">
+  <property name="filterInvocationDefinitionSource">
+    <value>
+    CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+    PATTERN_TYPE_APACHE_ANT
+    /**=httpSessionContextIntegrationFilter, logoutFilter, authenticationProcessingFilter, exceptionTranslationFilter
+    </value>
+  </property>
+</bean>
+
+<bean id="httpSessionContextIntegrationFilter" class="org.springframework.security.context.HttpSessionContextIntegrationFilter">
+  <property name="allowSessionCreation"><value>true</value></property>
+</bean>
+
+<bean id="exceptionTranslationFilter" class="org.springframework.security.ui.ExceptionTranslationFilter">
+  <property name="authenticationEntryPoint">
+    <ref local="digiAuthenticationProcessingFilterEntryPoint"/>
+   </property>
+   <property name="accessDeniedHandler">
+      <bean class="org.springframework.security.ui.AccessDeniedHandlerImpl">
+        <property name="errorPage" value="/403.jsp"/>
+      </bean>
+   </property>
+</bean>
+
+  <!-- 
+     This name is MANDATORY for authentication entry point, because it is 
+     hard-coded in some non-spring managed code. For example - RequestProcessor
+  -->
+   <bean id="digiAuthenticationProcessingFilterEntryPoint" class="org.springframework.security.ui.cas.CasProcessingFilterEntryPoint"> 
+     <property name="loginUrl">
+       <value>https://amp.cas.powerdot.net:9392/cas-amp/login</value>
+     </property> 
+     <property name="serviceProperties">
+       <ref bean="serviceProperties"/>
+     </property> 
+   </bean> 
+
+  <bean id="digiSecurityEnforcementFilter" class="org.digijava.kernel.security.auth.SSOAuthenticationFilter">
+    <property name="digiStyleLogin">
+      <value>true</value>
+    </property>
+    <property name="excludedUrlPatters">
+      <list>
+        <value>/servlet/.*</value>
+        <value>/services/.*</value>
+        <value>.*.rss.*</value>
+        <value>.*logonAction.do.*</value>
+        <value>.*login.do.*</value>
+        <value>/j_acegi_cas_security_check</value>
+      </list>
+    </property>
+  </bean>
+</beans>

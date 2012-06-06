@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-11314</jira>
+  <keyword>Add the cross cutting issues steps in the report generator</keyword>
+  <author>Diego</author> 
+
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+		CREATE OR REPLACE VIEW v_environment AS 
+ 		SELECT amp_activity.amp_activity_id, btrim(dg_editor.body) AS ebody
+   		FROM amp_activity_version amp_activity, dg_editor
+  		WHERE amp_activity.environment::text = dg_editor.editor_key::text
+  		ORDER BY amp_activity.amp_activity_id;
+		ALTER TABLE v_objectives OWNER TO amp;
+		
+		CREATE OR REPLACE VIEW v_equalopportunity  AS 
+ 		SELECT amp_activity.amp_activity_id, btrim(dg_editor.body) AS ebody
+   		FROM amp_activity_version amp_activity, dg_editor
+  		WHERE amp_activity.equalopportunity::text = dg_editor.editor_key::text
+  		ORDER BY amp_activity.amp_activity_id;
+		ALTER TABLE v_objectives OWNER TO amp;
+		
+		CREATE OR REPLACE VIEW v_minorities AS 
+ 		SELECT amp_activity.amp_activity_id, btrim(dg_editor.body) AS ebody
+   		FROM amp_activity_version amp_activity, dg_editor
+  		WHERE amp_activity.minorities ::text = dg_editor.editor_key::text
+  		ORDER BY amp_activity.amp_activity_id;
+		ALTER TABLE v_objectives OWNER TO amp;
+		
+		INSERT INTO amp_columns (columnId,columnName,aliasName,cellType,extractorView) VALUES 
+ 		((Select (max(columnId) + 1) from amp_columns),'Environment','environment','org.dgfoundation.amp.ar.cell.TextCell','v_environment'),
+ 		((Select (max(columnId) + 2) from amp_columns),'Equal Opportunity','equalopportunity','org.dgfoundation.amp.ar.cell.TextCell','v_equalopportunity'),
+ 		((Select (max(columnId) + 3) from amp_columns),'Minorities','minorities','org.dgfoundation.amp.ar.cell.TextCell','v_minorities');
+		INSERT INTO amp_columns_order(id,columnName, indexOrder)Values ((Select max(id) + 1 from amp_columns_order),'Cross Cutting Issues', (Select max(indexOrder) + 1 from amp_columns_order));
+		
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

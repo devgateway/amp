@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpPhysicalPerformance"
+		table="AMP_PHYSICAL_PERFORMANCE">
+		<cache usage="read-write" />
+
+		<id name="ampPpId" column="amp_pp_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_PHYSICAL_PERFORMANCE_seq</param>
+			</generator>
+		</id>
+
+		<property column="type" name="type" type="java.lang.String" />
+		<property column="title" name="title" type="java.lang.String" />
+		<property column="description" name="description" type="text" />
+		<property column="reporting_date" name="reportingDate" type="java.util.Date" />
+		<property column="language" name="Language" type="java.lang.String" />
+		<property column="comments" name="comments" type="text" />
+
+		<many-to-one   name="ampActivityId" column="amp_activity_id"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+		<many-to-one name="reportingOrgId" column="reporting_org_id"
+			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+		<many-to-one name="component" column="amp_component_id"
+			class="org.digijava.module.aim.dbentity.AmpComponent" cascade="none" />
+	</class>
+</hibernate-mapping>

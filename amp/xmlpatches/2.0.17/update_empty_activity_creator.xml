@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-12625</jira>
+	<keyword>Activity Form</keyword>
+	<author>Dare</author>
+	<description>Activity Creator is null for some activities. Need to have some value</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="sql">
+				update amp_activity_version a set activity_creator = updated_by where a.activity_creator is null;
+				update amp_activity_version a set activity_creator = modified_by where a.activity_creator is null;
+				update amp_activity_version a set activity_creator = approvedBy where a.activity_creator is null;
+				update amp_activity_version a set activity_creator = (select amp_team_mem_id from amp_team_member where amp_team_id=a.amp_team_id 
+					and amp_member_role_id=(select amp_team_mem_role_id from amp_team_member_roles where role like 'Workspace Manager')) where a.activity_creator is null;	
+			</lang>
+		</script>
+	</apply>
+
+</tns:patch>

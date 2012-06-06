@@ -57,7 +57,8 @@ public class RMMapCalculationUtil {
         Calendar fStartDate = Calendar.getInstance();
                 fStartDate.set(Integer.parseInt(filter.getFilterStartYear()), 0, 1, 0, 0, 0);
         Calendar fEndDate = Calendar.getInstance();
-                fEndDate.set(Integer.parseInt(filter.getFilterEndYear()), 0, 1, 0, 0, 0);
+                fEndDate.set(Integer.parseInt(filter.getFilterEndYear()) + 1, 0, 1, 0, 0, 0);
+                fEndDate.add(Calendar.SECOND,-1);
 
         String currencyCode = filter.getSelectedCurrency();
 

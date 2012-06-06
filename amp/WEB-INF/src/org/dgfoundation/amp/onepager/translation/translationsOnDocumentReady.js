@@ -36,7 +36,8 @@ $(document).ready(function(){
 				  e.returnValue = ' ';
 			  }
 		  }
-	}
+	};
+
 	
 	//Listener to remove the leave page confirmation on errors
 	oldAjaxRequestCallback = Wicket.Ajax.Request.prototype.stateChangeCallback;
@@ -45,7 +46,7 @@ $(document).ready(function(){
 	    try{
 	    	if (t != null && t.readyState != 1) {
 	       		var tmp = t.getResponseHeader("Ajax-Location"); 
-	       		if (typeof(tmp) != "undefined" && tmp != null){
+	       		if (typeof(tmp) != "undefined" && tmp != null && tmp != "" ){
 	          		window.onbeforeunload=null;
 	       		}
 	    	}
@@ -55,6 +56,9 @@ $(document).ready(function(){
 	};
 
 });
+
+
+
 
 //////////////////////////////////////////////////////////////
 //

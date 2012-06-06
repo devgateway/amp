@@ -115,25 +115,17 @@ StopWatch.next("Filters", true);
 				<div style="width: 33%; height:30%; padding: 10px; float: left;">
 					<b><digi:trn>Date Filter</digi:trn> </b>
 					
-					<div style="margin-top:10px;">
+					<div style="margin-top:9px;">
 					<table style="font-family: Arial; font-size: 1em;">
 						<tr>
-							<td align="left" colspan="2">
-								<digi:trn key="rep:filer:From"> From </digi:trn>
-							</td>
-							<td align="left" colspan="2">
-								<digi:trn key="rep:filer:To"> To </digi:trn>
-							</td>
-						</tr>
-						<tr bgcolor="#F6FAFF">
-							<td colspan="2" align="left">
-							<html:text  property="fromDate" size="10" styleId="fromDate" styleClass="inp-text" readonly="true" />
+							<td align="left">
+							<digi:trn key="rep:filer:From"> From </digi:trn> <html:text  property="fromDate" size="10" styleId="fromDate" styleClass="inp-text" readonly="true" />
 							<a id="date1" style="background-color: #F6FAFF;" href='javascript:pickDateById("date1","fromDate")'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
 							</td>
-							<td colspan="2" align="left">
-							<html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" />
+							<td align="left">
+							<digi:trn key="rep:filer:To"> To </digi:trn> <html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" />
 							<a id="date2" style="background-color: #F6FAFF;" href='javascript:pickDateById("date2","toDate")'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>

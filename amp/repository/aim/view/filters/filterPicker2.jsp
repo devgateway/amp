@@ -112,10 +112,10 @@ StopWatch.next("Filters", true);
 						src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
 					<div style="margin-top:10px;"><html:text property="indexString" style="width: 150px"	styleClass="inp-text"  /></div>
 				</div>
-				<div style="width: 33%; height:30%; padding: 10px; float: left;">
+				<div style="width: 38%; height:30%; padding: 10px; float: left;">
 					<b><digi:trn>Date Filter</digi:trn> </b>
 					
-					<div style="margin-top:9px;">
+					<div style="margin-top:7px;">
 					<table style="font-family: Arial; font-size: 1em;">
 						<tr>
 							<td align="left">

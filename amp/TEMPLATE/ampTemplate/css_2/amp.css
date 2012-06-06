@@ -858,9 +858,6 @@ div.innerTab {
 	display: inline-block;
 }
 
-p {
-	padding: 0px 0px 10px 0px;
-}
 
 .otherCriteriaFoofet select {
 	background-color: #FFFFFF;
@@ -885,12 +882,4 @@ p {
 .groupingSelector,  .groupingSelectors{
 	margin: 0;
 	padding: 0;
-}
-
-
-label {
-	text-indent: 10px;
-}
-li table{
-	visibility:visible; 
 }

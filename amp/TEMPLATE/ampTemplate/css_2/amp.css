@@ -728,3 +728,169 @@ h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 
 
 #filter_donor_types_div {width:486px !important;}
 .reg_butt input {width:85px !important;}
+
+
+
+
+.clear,.innerTab {
+	clear: both;
+}
+
+div#filterContainer {
+	width: 740px;
+	min-height: 350px;
+	margin: 0 auto;
+	background: #fff;
+}
+
+div.filterContainerHeader {
+	background: #e9e9fb;
+	border-bottom: 1px solid #bfd4e0;
+	height: 26px;
+}
+
+div.filterContainerHeader h2 {
+	line-height: 26px;
+	font-size: 12px;
+	font-weight: bold;
+	text-indent: 11px;
+	width: 90%;
+	float: left;
+}
+
+
+
+div.filterContainerTabs {
+	width: 740px;
+	margin: 0 auto;
+	margin-top: 11px;
+}
+
+div.groupingSelector {
+	width: 311px;
+	float: left;
+	border-bottom: 1px solid #cccccc;
+	border-right: none;
+	height: 155px;
+}
+
+
+
+div.membersSelector {
+	width: 425px;
+	float: right;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+	height: 155px;
+}
+
+div.innerTabHeader {
+	border-bottom: 1px solid #cccccc;
+	background: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);
+	height: 31px;
+}
+
+div.innerTabHeader h3 {
+	height: 31px;
+	line-height: 31px;
+	text-indent: 11px;
+	float: left;
+	font-size: 11px;
+	color: #767676;
+	margin: 0;
+	padding: 0;
+}
+
+div.membersSelector div.memsearch {
+	padding: 1px 0px 0px 0px;
+	width: 230px;
+	float: right;
+	text-align: right;
+}
+
+
+
+.innerTabHeader input.buttonx {
+	font-size: 11px;
+}
+
+.groupingSelector ul {
+	margin: 0 auto;
+	margin-bottom: 15px;
+	width: 250px;
+}
+
+.groupingSelector ul li {
+	list-style: none;
+}
+
+.groupingSelector ul li a {
+	padding: 5px;
+	font-size: 12px;
+	display: block;
+	background: #fff;
+	color: #000;
+	text-decoration: none;
+}
+
+.groupingSelector ul li a:hover {
+	background: #bfd2df;
+}
+
+
+div.innerTab {
+	height: 115px;
+	overflow: auto;
+	margin: 2px;
+	width: 99%;
+}
+
+
+.otherCriteriaFoofet {
+	padding: 15px 0px 0px 0px;
+	clear: both;
+}
+
+.otherCriteriaFoofet #calendarForm label {
+	width: 100px;
+	font-size: 11px;
+	display: inline-block;
+}
+
+p {
+	padding: 0px 0px 10px 0px;
+}
+
+.otherCriteriaFoofet select {
+	background-color: #FFFFFF;
+	border: 1px solid #D0D0D0;
+	color: #000;
+	font-size: 11px;
+	padding: 0px;
+	width: 150px;
+}
+
+
+.tabSubmit {
+	text-align: center;
+	padding: 0px 0px 5px 0px;
+}
+
+.groupingSelectors li a span {
+	display: inline-block;
+	float: right;
+	font-size: 11px;
+}
+.groupingSelector,  .groupingSelectors{
+	margin: 0;
+	padding: 0;
+}
+
+
+label {
+	text-indent: 10px;
+}
+li table{
+	visibility:visible; 
+}

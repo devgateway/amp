@@ -40,6 +40,8 @@ public class ReportsForm extends ActionForm {
     private boolean tabs;
     private int sortBy;
     private boolean reset;
+    
+    private Long selectedReportCategory= new Long(0);
 
     public boolean isReset() {
         return reset;
@@ -301,7 +303,16 @@ public class ReportsForm extends ActionForm {
 	public boolean isShowReportList() {
 		return showReportList;
 	}
-    public enum ReportSortBy{
+	
+    public Long getSelectedReportCategory() {
+		return selectedReportCategory;
+	}
+
+	public void setSelectedReportCategory(Long selectedReportCategory) {
+		this.selectedReportCategory = selectedReportCategory;
+	}
+
+	public enum ReportSortBy{
      NAME_ASC(1),
      NAME_DESC(2),
      OWNER_ASC(3),

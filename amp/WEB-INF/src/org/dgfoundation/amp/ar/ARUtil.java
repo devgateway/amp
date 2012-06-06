@@ -90,7 +90,7 @@ public final class ARUtil {
 	 * @return list of public reports
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<AmpReports> getAllPublicReports(Boolean getTabs,String name) {
+	public static List<AmpReports> getAllPublicReports(Boolean getTabs,String name,Long reportCategoryId) {
 		Session session = null;
 		List<AmpReports> col = null;
 		String tabFilter	= "";
@@ -106,6 +106,9 @@ public final class ARUtil {
             if (name != null) {
                 queryString += " and lower(r.name) like lower(:name) ";
             }
+            if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+            	 queryString += " and r.reportCategory=:repCat ";
+            }
             queryString +=" order by r.publishedDate desc ";
 			Query qry = session.createQuery(queryString);
 			if ( getTabs!=null )
@@ -113,6 +116,9 @@ public final class ARUtil {
              if (name != null) {
                qry.setString("name", '%' + name+ '%');
             }
+             if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+            	 qry.setLong("repCat", reportCategoryId);
+             }
 
 			col= qry.list();
 			

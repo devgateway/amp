@@ -47,7 +47,7 @@ public class GetDesktopReports extends TilesAction {
 				// It has nothing to do with the tabs
 				ArrayList userReports = (ArrayList) TeamUtil.getLastShownReports(tm.getTeamId(),tm.getMemberId(), false);
 				
-				ArrayList userActiveTabs = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(), true, null, null,true,tm.getMemberId(),null);
+				ArrayList userActiveTabs = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(), true, null, null,true,tm.getMemberId(),null,null);
 				if (defaultTeamReport != null){
 					Iterator iter = userActiveTabs.iterator();
 					boolean found = false;
@@ -145,7 +145,7 @@ public class GetDesktopReports extends TilesAction {
 				if(tm.getTeamHead()) session.setAttribute(Constants.TEAM_Head,"yes");
 					else session.setAttribute(Constants.TEAM_Head,"no");
 		} else {
-			Collection reports=ARUtil.getAllPublicReports(null,null);
+			Collection reports=ARUtil.getAllPublicReports(null,null,null);
 			session.setAttribute(Constants.MY_REPORTS,reports);
 		}
 		return null;

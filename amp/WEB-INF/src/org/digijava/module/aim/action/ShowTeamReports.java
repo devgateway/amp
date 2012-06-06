@@ -65,6 +65,7 @@ public class ShowTeamReports extends Action {
             rf.setCurrentPage(0);
             rf.setReset(false);
             rf.setPage(0);
+            rf.setSelectedReportCategory(new Long(0));
         }
 
 		rf.setShowTabs(null);
@@ -170,7 +171,7 @@ public class ShowTeamReports extends Action {
         
 
 		if (tm == null) {
-		List<AmpReports> reports = ARUtil.getAllPublicReports(false, rf.getKeyword());
+		List<AmpReports> reports = ARUtil.getAllPublicReports(false, rf.getKeyword(),rf.getSelectedReportCategory());
             if (reports != null) {
                 switch (col) {
                     case NAME_ASC:
@@ -212,13 +213,13 @@ public class ShowTeamReports extends Action {
 			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 			AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 			if (appSettingSet) {
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword());
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword(),rf.getSelectedReportCategory());
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(), rf.getShowTabs(), true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 				rf.setTempNumResults(appSettings.getDefReportsPerPage());
 				//rf.setTempNumResults(100);
 			}else{
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword());
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword(),rf.getSelectedReportCategory());
 				}
 			boolean found = false;
 			if (defaultTeamReport != null){

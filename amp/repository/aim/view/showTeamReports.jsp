@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
 
@@ -255,7 +257,25 @@ $(document).ready(function() {
          	<td>
           	<table cellpadding="6" cellspacing="6">
                <tr>
-                   <td id="reportsearchform"><c:choose><c:when test="${aimTeamReportsForm.showTabs}"><digi:trn>Tab Title</digi:trn></c:when><c:otherwise><digi:trn>Report Title</digi:trn></c:otherwise></c:choose>: <html:text property="keyword"/> </td> <td id="reportsearchform1"> <input type="button"  value="<digi:trn>Search</digi:trn>" onclick="submitForm('search')"/></td> <td id="reportsearchform2"><input type="button"  value="<digi:trn>clear</digi:trn>" onclick="submitForm('clear')"/></td>
+                   <td id="reportsearchform">
+                   		<c:choose>
+                   			<c:when test="${aimTeamReportsForm.showTabs}"><digi:trn>Tab Title</digi:trn></c:when>
+                   			<c:otherwise><digi:trn>Report Title</digi:trn></c:otherwise>
+                   		</c:choose>: <html:text property="keyword"/>
+                   		
+                   		<c:if test="${!aimTeamReportsForm.showTabs}">
+	                   		<c:set var="translation">
+									<digi:trn>Please select a category from below</digi:trn>
+							</c:set>
+							<category:showoptions firstLine="${translation}" name="aimTeamReportsForm" property="selectedReportCategory"  keyName="<%= CategoryConstants.REPORT_CATEGORY_KEY %>" styleClass="dropdwn_sm" styleId="repCat" />
+	                   	</c:if> 
+                   	</td>
+                   	<td id="reportsearchform1">
+                   		<input type="button"  value="<digi:trn>Search</digi:trn>" onclick="submitForm('search')"/>
+                   	</td>                   	
+                   	<td id="reportsearchform2">
+                   		<input type="button"  value="<digi:trn>clear</digi:trn>" onclick="submitForm('clear')"/>
+                   	</td>
                </tr>
               </table>
              </td>

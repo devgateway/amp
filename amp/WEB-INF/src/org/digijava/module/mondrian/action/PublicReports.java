@@ -18,7 +18,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 
 			HttpSession session = request.getSession();
 			
-			session.setAttribute("publicReports",ARUtil.getAllPublicReports(null,null));
+			session.setAttribute("publicReports",ARUtil.getAllPublicReports(null,null,null));
 			AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 			if(arf==null) arf=new AmpARFilter();		
 			arf.setPublicView(true);

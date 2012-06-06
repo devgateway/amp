@@ -83,7 +83,7 @@ public class TabManagerAction extends Action {
 		TeamMember teamMember					=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
 		
 		TabManagerForm myForm					= (TabManagerForm) form;
-		List<AmpReports> reports				= TeamUtil.getAllTeamReports( teamMember.getTeamId(), true, null, null, true, teamMember.getMemberId(),null );
+		List<AmpReports> reports				= TeamUtil.getAllTeamReports( teamMember.getTeamId(), true, null, null, true, teamMember.getMemberId(),null,null );
 		if ( reports == null ) 
 			throw new Exception("Tabs could not be loaded from database");
 		myForm.setTabs( reports );
@@ -144,7 +144,7 @@ public class TabManagerAction extends Action {
 				throw new Exception( "TeamMember not found in session" );
 		
 		AmpTeamMember ampTeamMember				= TeamUtil.getAmpTeamMember(teamMember.getMemberId());
-		Collection<AmpReports> myReports		= TeamUtil.getAllTeamReports( teamMember.getTeamId(), true, null, null, true, teamMember.getMemberId(),null );;
+		Collection<AmpReports> myReports		= TeamUtil.getAllTeamReports( teamMember.getTeamId(), true, null, null, true, teamMember.getMemberId(),null,null );;
 		
 		if ( myReports == null)
 			throw new Exception("Tabs could not be loaded from database");

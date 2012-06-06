@@ -1857,7 +1857,7 @@ public class TeamUtil {
      * @author Dare
      */
 
-    public synchronized static List getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name) {
+    public synchronized static List getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name,Long reportCategoryId) {
     
     	   Session session 	= null;
            List col 		= new ArrayList();
@@ -1886,7 +1886,10 @@ public class TeamUtil {
                        + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) ";
                       if (name != null) {
                        queryString += " and lower(r.name) like lower(:name) ";
-                   }
+                      }
+                      if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+                     	 queryString += " and r.reportCategory=:repCat ";
+                     }
 
                    queryString +=  " order by r.name";
                    qry = session.createQuery(queryString);
@@ -1896,6 +1899,9 @@ public class TeamUtil {
                 	   qry.setBoolean("getTabs", getTabs);
                    if (name != null) {
                        qry.setString("name", '%' + name + '%');
+                   }
+                   if(reportCategoryId !=null && !reportCategoryId.equals(new Long(0))){
+                  	 qry.setLong("repCat", reportCategoryId);
                    }
                    if (currentPage !=null){
                 	   qry.setFirstResult(currentPage);
@@ -2007,7 +2013,7 @@ public class TeamUtil {
  }
 
     public static List getAllTeamReports(Long teamId, Integer currentPage, Integer reportPerPage) {
-    	return getAllTeamReports( teamId, null,  currentPage,  reportPerPage, false,null,null);
+    	return getAllTeamReports( teamId, null,  currentPage,  reportPerPage, false,null,null,null);
     }
  
     /**

@@ -131,7 +131,12 @@ public class RegisterUser extends Action {
                                 String id=ShaCrypt.crypt(user.getEmail().trim()+user.getId()).trim();
                                 String description = "Welcome to AMP!"+ '\n'+'\n'+"We must first verify your email address before you become a full registered member (with login privileges)." +'\n'+ "In order to verify your email and complete the registration process, please click on the link below. " +
                                       '\n'+link+ "confirmRegisteration.do?id="+id;
-                               DgEmailManager.sendMail(user.getEmail(), "Confirm your registration", description);
+                                try{
+                                	DgEmailManager.sendMail(user.getEmail(), "Confirm your registration", description);
+                                }catch (Exception e) {
+                                	logger.error("Exception from RegisterUser :" + e);
+								}
+                               
                 }
                   
 				UserRegistrationTrigger urt=new UserRegistrationTrigger(user);

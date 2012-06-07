@@ -20,6 +20,7 @@ import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
+import org.digijava.module.message.triggers.UserRegistrationTrigger;
 /**
  * Constants for AmpMessage class and it's subclasses
  * @author Dare Roinishvili
@@ -50,7 +51,8 @@ public class MessageConstants {
                                                                 AwaitingApprovalCalendarTrigger.class,
                                                                 PendingResourceShareTrigger.class,
                                                                 ApprovedResourceShareTrigger.class,
-                                                                RejectResourceSharetrigger.class};
+                                                                RejectResourceSharetrigger.class,
+                                                                UserRegistrationTrigger.class};
 
     public static final  String[] triggerName=new String[] {"Save Actvity",
                                                             "Activity Disbursement Date",
@@ -71,7 +73,8 @@ public class MessageConstants {
                                                             "Calendar Event Awaiting Approval",
                                                             "Resource Share is Pending Approval",
                                                             "Resource Share is Approved",
-                                                            "Reject Resource Share"};
+                                                            "Reject Resource Share",
+                                                            "New User Registration"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";

@@ -20,9 +20,9 @@ public class UserRegistrationTrigger extends Trigger {
 		forwardEvent();
 	}
 
-	 static{
-	    	TriggerRegistry.getInstance().register(ActivitySaveTrigger.class,"New User Registration");
-	    }
+//	 static{
+//	    	TriggerRegistry.getInstance().register(ActivitySaveTrigger.class,"New User Registration");
+//	    }
 
 	protected Event generateEvent() {
 		Event e=new Event(UserRegistrationTrigger.class);

@@ -206,6 +206,8 @@
     var viewTeamDetails='';
     var myPaginator;
     var added='${param.added}';
+    var activityCurrentPage=1;
+    var actRecordNumbers=0;
 
 
     
@@ -692,10 +694,10 @@
             document.getElementById('footerMessage').innerHTML='';
         }
         html[j] = "</tbody></table>";
-
+        document.getElementById('paginatorPlace').innerHTML='';
         tmp.innerHTML = html.join('');
 
-        tbl.replaceChild(tmp.getElementsByTagName('tbody')[0], tbody);
+        demo.replaceChild(tmp.getElementsByTagName('table')[0], tbl);
     
        
     }
@@ -736,39 +738,97 @@
         return true;			
     }
     function updateTableActivities(members){
-
         var demo       = YAHOO.util.Dom.get('demo'),
         tbl        = demo.getElementsByTagName('table')[0],
         tbody      = tbl.getElementsByTagName('tbody')[0],
         tmp        = document.createElement('div'),
-        html       = ["<table id=\"dataTable\" class=\"inside\"><tbody>"],i,j = 1,l,item;
+        html       = ["<table id=\"dataTable\" class=\"inside\" style=\"width:100%\">"],i,j = 1,l,item,k=0;
 
         if (members && members.length>0) {
-            for (i = 0, l = members.length; i < l; ++i) {
+        	var pages=0;
+            for (i = 0, l = members.length; i <l; ++i) {
+            	if(i%10==0){
+            		pages++;
+            		if(activityCurrentPage!=pages){
+            			html[j++]='<tbody class="act_pages_'+pages+'" style="display:none">';
+            		}
+            		else{
+            			html[j++]='<tbody class="act_pages_'+pages+'">';
+            		}
+            		
+            	}
                 item = members[i];
                 html[j++] = '<tr><td width="300" class="inside">';
                 html[j++] = item.name;
                 html[j++] = '</td ><td align=\'center\' width="100" class="inside">';
                 html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn jsFriendly="true">Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\' />' + '</a>';
                 html[j++] = '</td></tr>';
+                if(i%10==9||i==l-1){
+            		html[j++]='</tbody>';
+            	}
             }
         
         } else {
             html[j++] = '<tr><td colspan="2"><em><digi:trn jsFriendly="true">No Activities</digi:trn></em></td></tr>';
         }
         document.getElementById('footerMessage').innerHTML='';
-        html[j] = "</tbody></table>";
-
+        var paginator =['<table><tbody style="border:none"><tr><td colspan="2"><span id="yui-pg0-0-pages" class="yui-pg-pages">'];
+        paginator[j++]='<span id="act_page_link_first" style="display:none"><a href="#"  class="yui-pg-page" onclick="return showPageContent(1)"><digi:trn>First Page</digi:trn></a> |</span>';
+        for(k=1;k<=pages;k++){
+        	if(k!=activityCurrentPage){
+        		paginator[j++]='<span id="act_page_link_navi_'+k+'"><a href="#"  class="yui-pg-page" onclick="return showPageContent('+k+')">'+k+'</a> |</span>';
+        		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page" style="display:none"><span class="current-page">&nbsp;&nbsp;'+k+'&nbsp;&nbsp;</span>|</span>';
+        	}
+        	else{
+        		paginator[j++]='<span id="act_page_link_navi_'+k+'" style="display:none" ><a href="#" class="yui-pg-page" onclick="return showPageContent('+k+')" >'+k+'</a> |</span>';
+        		paginator[j++]='<span id="act_page_link_curr_'+k+'" class="yui-pg-current-page yui-pg-page"><span class="current-page">&nbsp;&nbsp;'+k+'&nbsp;&nbsp;</span>|</span>';
+        	}
+        	
+        }
+        actRecordNumbers=pages;
+        if(pages>1){
+        	paginator[j++]='<span id="act_page_link_last"><a href="#"  class="yui-pg-page" onclick="return showPageContent('+pages+')"><digi:trn>Last Page</digi:trn></a></span>';	
+        }
+        
+        paginator[j++] ="</span></td></tr></tbody></table>";
+        document.getElementById('paginatorPlace').innerHTML=paginator.join('');
+        html[j] = "</table>";
         tmp.innerHTML = html.join('');
-
-        tbl.replaceChild(tmp.getElementsByTagName('tbody')[0], tbody);
+        demo.replaceChild(tmp.getElementsByTagName('table')[0], tbl);
+      
     
         
+    }
+    function showPageContent(k){
+    	if(k!=activityCurrentPage){
+    		$("tbody[class='act_pages_"+activityCurrentPage+"']").hide('fast');
+        	$("tbody[class='act_pages_"+k+"']").show('fast');
+        	$("#act_page_link_navi_"+activityCurrentPage).toggle();
+        	$("#act_page_link_curr_"+activityCurrentPage).toggle();
+        	$("#act_page_link_navi_"+k).toggle();
+        	$("#act_page_link_curr_"+k).toggle();
+        	activityCurrentPage=k;
+    	}
+    	if(activityCurrentPage>1){
+    		$("#act_page_link_first").show();
+    	}
+    	else{
+    		$("#act_page_link_first").hide();
+    	}
+    	if(k< actRecordNumbers){
+    		$("#act_page_link_last").show();
+    	}
+    	else{
+    		$("#act_page_link_last").hide();
+    	}
+    	return false;
     }
     function removeActivity(id){
             <digi:context name="commentUrl" property="context/module/moduleinstance/removeTeamActivityJSON.do"/>  
             var url = "<%=commentUrl %>";
         url += "?selActivities="+id+"&teamId="+ document.getElementsByName('teamId')[0].value;
+        YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
+        YAHOO.util.Dom.replaceClass('loadingDetailsIcon', 'invisibleTable','visibleTable');
         YAHOO.util.Connect.asyncRequest('GET',url,{
 
             success : function (res) {
@@ -776,13 +836,17 @@
                 var activities;
                 try {
                     activities = YAHOO.lang.JSON.parse(res.responseText);
+                    activityCurrentPage=1;
                     updateTableActivities(activities);
+                    showPageContent(1);
                 }
                 catch(e) {
                     alert("<digi:trn>Error getting activity data</digi:trn>");
                 }
                 finally {
                     document.getElementById('ws_go').disabled=false;
+                    YAHOO.util.Dom.replaceClass('loadingDetailsIcon','visibleTable', 'invisibleTable');
+                    YAHOO.util.Dom.replaceClass('loadedDetails','invisibleTable', 'visibleTable');
                 }
             },
             failure : function () {
@@ -817,7 +881,7 @@
                    document.getElementById('ws_go').disabled=false;
                    YAHOO.util.Dom.replaceClass('loadingDetailsIcon','visibleTable', 'invisibleTable');
                    YAHOO.util.Dom.replaceClass('loadedDetails', 'invisibleTable','visibleTable');
-                   YAHOO.util.Dom.replaceClass('addNew','invisibleTable', 'visibleTable');
+                   YAHOO.util.Dom.replaceClass('addNew','invisibleTable', 'visibleTable'); 
                 }
             },
             failure : function () {
@@ -838,6 +902,7 @@
                 var members;
                 try {
                     members = YAHOO.lang.JSON.parse(res.responseText);
+                    activityCurrentPage=1;
                     updateTableActivities(members);
                     document.getElementById('teamTitle').innerHTML=document.getElementsByName('teamName')[0].value;
                     document.getElementById('addNew').innerHTML='<a title="Click here to Assign Activity" style="font-size:12px; padding-left:5px;" href=\'JavaScript:addActivities('+id+')\'><digi:trn jsFriendly="true">Assign an activity</digi:trn></a>';
@@ -1239,6 +1304,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <div id="paginatorPlace"></div>
                                             <table cellspacing="1" cellpadding="2" align="left" width="100%">
                                                 <tbody>
                                                     <tr><td colspan="2" id="footerMessage">&nbsp;

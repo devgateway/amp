@@ -66,12 +66,12 @@
 						range for the funding information on the map</digi:trn>
 						<br/><br/>
 		<digi:trn>From Date:</digi:trn> 
-		<html:select styleClass="dropdwn_sm" style="width:145px;" name="gisDashboardForm" property="selectedFromYear" onchange="yearChanged(); mapYearChanged()">
+		<html:select styleClass="dropdwn_sm" style="width:100px;" name="gisDashboardForm" property="selectedFromYear" onchange="yearChanged(); mapYearChanged()">
 			<html:optionsCollection name="gisDashboardForm" property="yearsFrom" label="label" value="value"/>
 		</html:select>
 		&nbsp;&nbsp;
 		<digi:trn>To Date:</digi:trn> 
-		<html:select styleClass="dropdwn_sm" style="width:145px;" name="gisDashboardForm" property="selectedToYear" onchange="yearChanged(); mapYearChanged()">
+		<html:select styleClass="dropdwn_sm" style="width:100px;" name="gisDashboardForm" property="selectedToYear" onchange="yearChanged(); mapYearChanged()">
 			<html:optionsCollection name="gisDashboardForm" property="yearsTo" label="label" value="value"/>
 		</html:select>
 	</div>

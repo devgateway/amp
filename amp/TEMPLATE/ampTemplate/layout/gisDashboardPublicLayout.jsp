@@ -98,14 +98,14 @@ else {
 			</TR>
 			<TR>
     	<TD align="center">
-				<TABLE width="100" cellPadding="5" cellSpacing="0" border="0">
+				<TABLE width="500" cellPadding="5" cellSpacing="0" border="0">
 					<TR>
 						<TD style="width: 600;max-width: 600;">
 							<jsp:include page="/TEMPLATE/ampTemplate/layout/gisReportToolbarPublic.jsp" />
 						</TD>
 					</TR>
 					<TR>
-						<TD vAlign="top" align="center" height="100%" rowspan="3" style="width: 100%;max-width: 600;">
+						<TD vAlign="top" align="center" height="100%" rowspan="3">
 							<digi:insert attribute="body" />
 						</TD>
 					</TR>

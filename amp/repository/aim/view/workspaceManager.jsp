@@ -759,7 +759,7 @@
             	}
                 item = members[i];
                 html[j++] = '<tr><td width="300" class="inside">';
-                html[j++] = item.name;
+                html[j++] = item.name.replace("<", "&lt;").replace(">", "&gt;");
                 html[j++] = '</td ><td align=\'center\' width="100" class="inside">';
                 html[j++] = '<a href=\'JavaScript:removeActivity('+item.ID+')\' onClick=\'return confirmDelete()\' title=\'<digi:trn jsFriendly="true">Click here to Delete Activity</digi:trn>\'>' + '<img vspace=\'2\' border=\'0\' src=\'/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\' />' + '</a>';
                 html[j++] = '</td></tr>';

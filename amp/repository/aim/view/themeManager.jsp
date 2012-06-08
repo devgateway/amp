@@ -13,6 +13,8 @@
 
 <script language="JavaScript">
 	<!--
+	    var fire=false;
+	
 		function validate()
 		{
 			if (trim(document.aimThemeForm.programName.value).length == 0)
@@ -50,33 +52,45 @@
 
 		function addProgram()
 		{
+			if(fire)
+				return false;
+			fire = true;
 			openNewWindow(600,500);
 			<digi:context name="addNewTh" property="context/module/moduleinstance/addTheme.do?event=add"/>
 			document.aimThemeForm.action = "<%=addNewTh%>";
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
+			fire=false;
 			return true;
 		}
 
 
 		function addSubProgram(rutId,id,level,name)
 		{
+			if(fire)
+				return false;
+			fire = true;
 			openNewWindow(600,500);
 			<digi:context name="subProgram" property="context/module/moduleinstance/addTheme.do?event=addSubProgram"/>
 			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
+			fire=false;
 		}
 
 
 		
 		function editProgram(id)
 		{
+			if(fire)
+				return false;
+			fire = true;
 			openNewWindow(600,500);
 			<digi:context name="editTh" property="context/module/moduleinstance/addTheme.do?event=edit"/>
 			document.aimThemeForm.action = "<%= editTh %>&themeId=" + id;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
+			fire=false;
 
 		}
 		function assignIndicators(id)

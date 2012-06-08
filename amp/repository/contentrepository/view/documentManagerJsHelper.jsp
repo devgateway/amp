@@ -449,11 +449,15 @@ myTable.enhanceMarkup = function(markupName) {
 	dataTable.subscribe("paginateEvent",hideCategories);
 	dataTable.subscribe("rowMouseoverEvent", dataTable.onEventHighlightRow); 
 	dataTable.subscribe("rowMouseoutEvent", dataTable.onEventUnhighlightRow);
-
+	dataTable.subscribe('initEvent', sortColumn);
 	
 	 
 	return dataTable;
 };
+
+function sortColumn() {
+	this.sortColumn(this.getColumn('date'),YAHOO.widget.DataTable.CLASS_DESC);
+}
 
 function hideCategories(){
 var categories	= YAHOO.amp.actionPanels;

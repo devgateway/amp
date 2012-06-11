@@ -231,7 +231,7 @@ function exportXSL(){
 														align="left" width="100%" class="inside">
 														<thead>
 															<tr bgcolor="eeeeee">
-																<td width="5%"></td>
+																<td width="5%" class="inside"></td>
 																<td align="left" class="inside" width="20%"
 																	style="cursor: pointer;" onclick="sortSubmit(1)"
 																	onMouseOver="this.className='colHeaderOver'"

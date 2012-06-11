@@ -292,10 +292,10 @@ function checkSelectedLanguages(){
 						<c:forEach items="${importExportForm.languages}" var="lang">
 							<tr>
 								<td align="center">
-								<table border="0" cellspacing="2" cellpadding="2">
+								<table border="0" cellspacing="2" cellpadding="2" width=100>
   <tr>
-    <td align=right><html:checkbox property="selectedLanguages" value="${lang}"/></td>
-    <td> <digi:trn key="aim:TranslationManagerLangiage${lang}">
+    <td align=right width=50><html:checkbox property="selectedLanguages" value="${lang}"/></td>
+    <td width=50><digi:trn key="aim:TranslationManagerLangiage${lang}">
                                     ${lang}
                                     </digi:trn></td>
   </tr>

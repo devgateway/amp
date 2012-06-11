@@ -361,6 +361,7 @@
 														</c:set>																														
 														<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 														<c:set target="${urlParams}" property="addReport" value="List of Unassigned Reports"/>
+														<c:set target="${urlParams}" property="keyword" value="${aimTeamReportsForm.keyword}"/>
 														<digi:link href="/updateTeamReports.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" name="urlParams">
 					                                    	<c:out value="${page}"/>
 					                                    </digi:link>

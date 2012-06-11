@@ -375,12 +375,12 @@
 				                                    </c:if>
 				                                    <c:if test="${aimTeamReportsForm.currentPage!=page}">				                                    
 				                                    	<c:if test="${aimTeamReportsForm.showReportList == true}">
-															<digi:link href="/teamReportList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" >
+															<digi:link href="/teamReportList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}&keyword=${aimTeamReportsForm.keyword}" >
 							                                   	<c:out value="${page}"/>
 							                                </digi:link>
 														</c:if>
 														<c:if test="${aimTeamReportsForm.showReportList == false}">
-															<digi:link href="/teamDesktopTabList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" >
+															<digi:link href="/teamDesktopTabList.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}&keyword=${aimTeamReportsForm.keyword}" >
 							                                   	<c:out value="${page}"/>
 							                                </digi:link>
 														</c:if>

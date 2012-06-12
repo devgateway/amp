@@ -116,7 +116,7 @@
             <td>&nbsp;
                 
             </td>
-            <td>
+            <td align=center>
                 <table>
                     <tr>
                         <!-- Start Navigation -->
@@ -292,9 +292,9 @@
                          </tr>
                      </table>
                  </c:if>
-                <table style="text-align:right;width:100%;">
+                <table style="width:75%;" align=center>
                     <tr>
-                        <td style="height:70px;">
+                        <td style="height:70px;" align=center>
                             <a href="javaScript:addJob();"><digi:trn key="aim:job:lnkAddNewJob">Add new job</digi:trn></a>
                             &nbsp;
                             <a href="javaScript:pauseAllJobs();"><digi:trn key="aim:job:lnkPauseAllJobs">Pause all jobs</digi:trn></a>
@@ -303,7 +303,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="">
+                        <td style="" align=center>
                             <digi:trn key="aim:job:serverTime">Server date and time:</digi:trn>
                             <span id="divServerTime"></span>
                         </td>

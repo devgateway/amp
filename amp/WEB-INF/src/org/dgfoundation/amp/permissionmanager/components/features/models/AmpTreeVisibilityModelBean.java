@@ -31,6 +31,8 @@ public class AmpTreeVisibilityModelBean implements Serializable
 	}
 
 	public String getName() {
+		if(name.contains("/"))
+			return name.substring(name.lastIndexOf("/")+1, name.length());
 		return name;
 	}
 

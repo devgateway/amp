@@ -332,20 +332,28 @@ public final class PMUtil {
 	}
 	
 	public static AmpTreeVisibilityModelBean generateAmpTreeFMPermissions(AmpTemplatesVisibility currentTemplate) {
-		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentTemplate.getName(), new ArrayList<Object>(), currentTemplate);
-		if (currentTemplate.getAllItems() != null && currentTemplate.getAllItems().iterator() != null)
-				for (Iterator it = currentTemplate.getSortedAlphaAllItems().iterator(); it.hasNext();) {
-					AmpModulesVisibility module = (AmpModulesVisibility) it.next();
-					if(module.getParent()==null) 
-						{
-							tree.getItems().add(new AmpTreeVisibilityModelBean(module.getName(),buildAmpSubTreeFMPermission(module), module));
-						}
+		AmpObjectVisibility ampObjRoot = currentTemplate;
+		for (Iterator it = currentTemplate.getAllItems().iterator(); it.hasNext();) {
+			AmpObjectVisibility o = (AmpObjectVisibility) it.next();
+			if("/Activity Form".compareTo(o.getName()) ==0 )
+				{
+					ampObjRoot = o; break;
 				}
+		} 
+		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(ampObjRoot.getName(), buildAmpSubTreeFMPermission(ampObjRoot), ampObjRoot);
+//		if (ampObjRoot.getAllItems() != null && ampObjRoot.getAllItems().iterator() != null)
+//				for (Iterator it = ampObjRoot.getSortedAlphaAllItems().iterator(); it.hasNext();) {
+//					AmpModulesVisibility module = (AmpModulesVisibility) it.next();
+//					if(module.getParent()==null) 
+//						{
+//							tree.getItems().add(new AmpTreeVisibilityModelBean(module.getName(),buildAmpSubTreeFMPermission(module), module));
+//						}
+//				}
+		//tree.getItems().add(new AmpTreeVisibilityModelBean(ampObjRoot.getName(),buildAmpSubTreeFMPermission(ampObjRoot), ampObjRoot));
 		return tree;
 	}
 	
 	public static AmpTemplatesVisibility getDefaultAmpTemplateVisibility() {
-		AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
 		// get the default amp template
 		Session session = null;
 		try {

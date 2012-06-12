@@ -2123,6 +2123,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		BigDecimal commitment = null;
 		BigDecimal disbursement = null;
 		BigDecimal expenditure = null;
+        BigDecimal plannedDisbursement = null;
 
 		FundingCalculationsHelper fch = new FundingCalculationsHelper();
 		// fch.doCalculations();
@@ -2153,13 +2154,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			commitment = fch.getTotActualComm().getValue();
 			disbursement = fch.getTotActualDisb().getValue();
 			expenditure = fch.getTotActualExp().getValue();
+            plannedDisbursement = fch.getTotPlanDisb().getValue();
 
 		} catch (Exception ex1) {
 			ex1.printStackTrace();
 			// Add exception reporting
 		}
 
-		retVal = new FundingData(commitment, disbursement, expenditure);
+		retVal = new FundingData(commitment, disbursement, expenditure, plannedDisbursement);
 
 		return retVal;
 	}

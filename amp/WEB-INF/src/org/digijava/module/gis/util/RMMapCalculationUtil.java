@@ -430,7 +430,7 @@ public class RMMapCalculationUtil {
 
     private static Object[] calculateTotalsAndApplyExchangeRates (Map <String, Set> fundings, String currencyCode, boolean detailedActData) {
         Map locationFundingMap = new HashMap();
-        FundingData totalFunding = new FundingData(new BigDecimal(0), new BigDecimal(0), new BigDecimal(0));
+        FundingData totalFunding = new FundingData(new BigDecimal(0), new BigDecimal(0), new BigDecimal(0), new BigDecimal(0));
 
         if (currencyCode == null) {
             String baseCurr	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
@@ -473,7 +473,8 @@ public class RMMapCalculationUtil {
                     ActivityLocationFunding actData = new ActivityLocationFunding(
                             fch.getTotActualComm().getValue(),
                             fch.getTotActualDisb().getValue(),
-                            fch.getTotActualExp().getValue());
+                            fch.getTotActualExp().getValue(),
+                            fch.getTotPlanDisb().getValue());
                     actData.setActivityId(actId);
                     actData.setActivityName(allActIdNames.get(actId));
                     actData.setTopSectors(allActIdSectorNames.get(actId));
@@ -494,12 +495,14 @@ public class RMMapCalculationUtil {
             BigDecimal commitment = fch.getTotActualComm().getValue();
             BigDecimal disbursement = fch.getTotActualDisb().getValue();
             BigDecimal expenditure = fch.getTotActualExp().getValue();
+            BigDecimal plannedDisbursement = fch.getTotPlanDisb().getValue();
 
-            FundingData forCurLocation = new FundingData(commitment, disbursement, expenditure);
+            FundingData forCurLocation = new FundingData(commitment, disbursement, expenditure, plannedDisbursement);
 
             totalFunding.setCommitment(totalFunding.getCommitment().add(commitment));
             totalFunding.setDisbursement(totalFunding.getDisbursement().add(disbursement));
             totalFunding.setExpenditure(totalFunding.getExpenditure().add(expenditure));
+            totalFunding.setPlannedDisbursement(totalFunding.getPlannedDisbursement().add(plannedDisbursement));
 
             forCurLocation.setActivityLocationFundingList(detailedActDataList);
 

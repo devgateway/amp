@@ -15,11 +15,13 @@ public class ActivityLocationFunding {
 
     public ActivityLocationFunding(BigDecimal commitment,
                                    BigDecimal disbursement,
-                                   BigDecimal expenditure)
+                                   BigDecimal expenditure,
+                                   BigDecimal plannedDisbursement)
     {
         this.commitment = commitment;
         this.disbursement = disbursement;
         this.expenditure = expenditure;
+        this.plannedDisbursement = plannedDisbursement;
 
     }
 
@@ -30,6 +32,7 @@ public class ActivityLocationFunding {
     private BigDecimal commitment;
     private BigDecimal disbursement;
     private BigDecimal expenditure;
+    private BigDecimal plannedDisbursement;
 
 
     private Set donorOrgs;
@@ -109,5 +112,13 @@ public class ActivityLocationFunding {
 
     public void setTopSectors(Set topSectors) {
         this.topSectors = topSectors;
+    }
+
+    public BigDecimal getPlannedDisbursement() {
+        return plannedDisbursement;
+    }
+
+    public void setPlannedDisbursement(BigDecimal plannedDisbursement) {
+        this.plannedDisbursement = plannedDisbursement;
     }
 }

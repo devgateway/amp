@@ -584,15 +584,15 @@ public class GetFoundingDetails extends Action {
                         XMLDocument segmendDataInfo = new XMLDocument();
                         segmendDataInfo.setCodeset("UTF-8");
 
-                        String numberFormat = FeaturesUtil.getGlobalSettingValue(
-                                "Default Number Format");
-                        //NumberFormat formatter = new DecimalFormat(numberFormat);
+//                        String numberFormat = FeaturesUtil.getGlobalSettingValue("Default Number Format");
+
 
                         XML root = new XML("funding");
 
                         root.addAttribute("totalCommitment",FormatHelper.formatNumber(totalFunding.getCommitment().doubleValue()));
                         root.addAttribute("totalDisbursement",FormatHelper.formatNumber(totalFunding.getDisbursement().doubleValue()));
                         root.addAttribute("totalExpenditure",FormatHelper.formatNumber(totalFunding.getExpenditure().doubleValue()));
+                        root.addAttribute("totalPlannedDisbursement",FormatHelper.formatNumber(totalFunding.getPlannedDisbursement().doubleValue()));
 
                         segmendDataInfo.addElement(root);
                         Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
@@ -605,6 +605,7 @@ public class GetFoundingDetails extends Action {
                             regionData.addAttribute("fundingCommitment",FormatHelper.formatNumber(ammount.getCommitment().doubleValue()));
                             regionData.addAttribute("fundingDisbursement",FormatHelper.formatNumber(ammount.getDisbursement().doubleValue()));
                             regionData.addAttribute("fundingExpenditure",FormatHelper.formatNumber(ammount.getExpenditure().doubleValue()));
+                            regionData.addAttribute("fundingPlannedDisbursement",FormatHelper.formatNumber(ammount.getPlannedDisbursement().doubleValue()));
                             root.addElement(regionData);
                         }
                         segmendDataInfo.output(sos);
@@ -1476,6 +1477,7 @@ public class GetFoundingDetails extends Action {
         BigDecimal commitment = null;
         BigDecimal disbursement = null;
         BigDecimal expenditure = null;
+        BigDecimal planedDisbursement = null;
 
         Timestamp startTs = new Timestamp(start.getTime());
         startTs.setNanos(0);
@@ -1516,13 +1518,14 @@ public class GetFoundingDetails extends Action {
             commitment = fch.getTotActualComm().getValue();
             disbursement = fch.getTotActualDisb().getValue();
             expenditure = fch.getTotActualExp().getValue();
+            planedDisbursement = fch.getTotPlanDisb().getValue();
 
         } catch (Exception ex1) {
             ex1.printStackTrace();
             //Add exception reporting
         }
 
-        retVal = new FundingData(commitment, disbursement, expenditure);
+        retVal = new FundingData(commitment, disbursement, expenditure, planedDisbursement);
 
         return retVal;
     }
@@ -1537,6 +1540,7 @@ public class GetFoundingDetails extends Action {
         BigDecimal commitment = null;
         BigDecimal disbursement = null;
         BigDecimal expenditure = null;
+        BigDecimal plannedDisbursement = null;
 
         Timestamp startTs = new Timestamp(start.getTime());
         startTs.setNanos(0);
@@ -1579,13 +1583,13 @@ public class GetFoundingDetails extends Action {
             commitment = fch.getTotActualComm().getValue();
             disbursement = fch.getTotActualDisb().getValue();
             expenditure = fch.getTotActualExp().getValue();
-
+            plannedDisbursement = fch.getTotPlanDisb().getValue();
         } catch (Exception ex1) {
             ex1.printStackTrace();
             //Add exception reporting
         }
 
-        retVal = new FundingData(commitment, disbursement, expenditure);
+        retVal = new FundingData(commitment, disbursement, expenditure, plannedDisbursement);
 
         return retVal;
     }

@@ -551,6 +551,12 @@
 			    <td width="50%" id="tooltipTotalExpenditureContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    </field:display>
+		    <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
+		    <tr>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Planned Disbursement</digi:trn></td>
+			    <td width="50%" id="tooltipTotalPlannedDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
+		    </tr>
+		    </field:display>
 		    <tr>
 			    <td nowrap bgcolor="#c3b6a5" colspan="2" id="reg_district_caption_for" style="font-size: 12px; color:#373735;"><digi:trn>For this region</digi:trn></td>
 		    </tr>
@@ -570,6 +576,12 @@
 		    <tr>
 			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Expenditure</digi:trn></td>
 			    <td width="50%" id="tooltipCurrentExpenditureContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
+		    </tr>
+		    </field:display>
+		    <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
+		    <tr>
+			    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Planned Disbursement</digi:trn></td>
+			    <td width="50%" id="tooltipCurrentPlannedDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
 		    </tr>
 		    </field:display>
 		    <tr>
@@ -630,6 +642,12 @@
                 <td color="white" width="50%" id="tooltipTotalExpenditureContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             </field:display>
+            <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
+				    <tr>
+					    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Planned Disbursement</digi:trn></td>
+					    <td width="50%" id="tooltipTotalPlannedDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
+				    </tr>
+				    </field:display>
             <tr>
                 <td color="white" nowrap bgcolor="#c3b6a5" colspan="2" id="reg_district_caption_for" style="font-size: 12px; color:#373735;"><digi:trn>For this region</digi:trn></td>
             </tr>
@@ -651,6 +669,12 @@
                 <td color="white" width="50%" id="tooltipCurrentExpenditureContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             </field:display>
+            <field:display name="Measure Planned Disbursement" feature="GIS DASHBOARD">
+				    <tr>
+					    <td nowrap width="50%" style="font-size: 12px; color:#373735;"><digi:trn>Planned Disbursement</digi:trn></td>
+					    <td width="50%" id="tooltipCurrentPlannedDisbursementContainer" style="font-size: 12px; color:#373735;">&nbsp;</td>
+				    </tr>
+				    </field:display>
         </table>
         </div> 
     </div>

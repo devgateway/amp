@@ -31,6 +31,7 @@
 	var totalCommitmentFund = "0";
 	var totalDisbursementFund = "0";
 	var totalExpenditureFund = "0";
+	var totalPlannedDisbFund = "0";
 
 	var selSector = 0;
 	
@@ -352,6 +353,9 @@
                 if (data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure")){
                 	totalExpenditureFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure").value;
                 }
+                if (data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalPlannedDisbursement")){
+                	totalPlannedDisbFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalPlannedDisbursement").value;
+                }
                 
                 
                 var regionDataList = data.getElementsByTagName('region');
@@ -364,6 +368,7 @@
                     regionDataMap[1] = regData.attributes.getNamedItem("fundingCommitment").value;
                     regionDataMap[2] = regData.attributes.getNamedItem("fundingDisbursement").value;
                     regionDataMap[3] = regData.attributes.getNamedItem("fundingExpenditure").value;
+                    regionDataMap[4] = regData.attributes.getNamedItem("fundingPlannedDisbursement").value;
 
                     fundingDataByRegion[fundingDataByRegion.length] = regionDataMap;
                 }
@@ -438,6 +443,10 @@
 					totalExpenditureFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure").value;
 				}
 				
+				if(data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalPlannedDisbursement").value){
+					totalPlannedDisbFund = data.getElementsByTagName('funding')[0].attributes.getNamedItem("totalPlannedDisbursement").value;
+				}
+				
 				
 				var regionDataList = data.getElementsByTagName('region');
 				fundingDataByRegion = new Array();
@@ -449,6 +458,7 @@
 					regionDataMap[1] = regData.attributes.getNamedItem("fundingCommitment").value;
 					regionDataMap[2] = regData.attributes.getNamedItem("fundingDisbursement").value;
 					regionDataMap[3] = regData.attributes.getNamedItem("fundingExpenditure").value;
+					regionDataMap[4] = regData.attributes.getNamedItem("fundingPlannedDisbursement").value;
 
 					fundingDataByRegion[fundingDataByRegion.length] = regionDataMap;
 				}
@@ -1025,6 +1035,9 @@
 			if (document.getElementById("tooltipTotalExpenditureContainer")){
 				document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund;
 			}
+			if (document.getElementById("tooltipTotalPlannedDisbursementContainer")){
+				document.getElementById("tooltipTotalPlannedDisbursementContainer").innerHTML = totalPlannedDisbFund;
+			}
 		
 			var regData = getRegFounding(regCode);
 		
@@ -1041,6 +1054,9 @@
 			}
 			if(document.getElementById("tooltipCurrentExpenditureContainer")){
 				document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2] + note;
+			}
+			if(document.getElementById("tooltipCurrentPlannedDisbursementContainer")){
+				document.getElementById("tooltipCurrentPlannedDisbursementContainer").innerHTML = regData[3] + note;
 			}
 			
 			
@@ -1096,7 +1112,7 @@
 		for (dataIndex = 0; dataIndex < fundingDataByRegion.length; dataIndex ++) {
 			var dataItem = fundingDataByRegion[dataIndex];
 			if (dataItem[0] == regCode) {
-				retVal = new Array (dataItem[1], dataItem[2], dataItem[3]);
+				retVal = new Array (dataItem[1], dataItem[2], dataItem[3], dataItem[4]);
 				break;
 			}
 		}

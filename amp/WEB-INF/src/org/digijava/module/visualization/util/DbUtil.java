@@ -392,7 +392,7 @@ public class DbUtil {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
 	            }
 	
-	            oql += "  and (parcv.value = 'Region') ";
+	            oql += "  and (parcv.value = 'Region' OR parcv.value = 'Zone' OR parcv.value = 'District') ";// get not only regions, but any subregions that might have data
 
 	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
 	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
@@ -413,7 +413,7 @@ public class DbUtil {
 	            logger.error(e);
 	            throw new DgException("Cannot load regions from db", e);
 	        }
-	        return locations;
+	        return DashboardUtil.getTopLevelLocationList(locations);
 		}
      }
     
@@ -489,8 +489,6 @@ public class DbUtil {
 	            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
 	            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.id =:configId) "; 
 	            
-	            oql += "  and sec.parentSectorId is null "; 
-	            
 	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
 	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
 	    		}
@@ -512,7 +510,7 @@ public class DbUtil {
 	            logger.error(e);
 	            throw new DgException("Cannot load sectors from db", e);
 	        }
-	        return sectors;
+	        return DashboardUtil.getTopLevelParentList(sectors);
     	}
      }
     

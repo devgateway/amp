@@ -558,11 +558,23 @@ public class DashboardUtil {
     }
     
     // This recursive method helps the generateLevelHierarchy method.
-	public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
+    public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
 		if (topLevelSector.getParentSectorId() != null) {
 			topLevelSector = getTopLevelParent(topLevelSector.getParentSectorId());
 		}
 		return topLevelSector;
+	}
+
+    public static List<AmpSector> getTopLevelParentList(List<AmpSector> list) {
+    	List<AmpSector> sectors = new ArrayList<AmpSector>();
+    	for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			AmpSector ampSector = (AmpSector) iterator.next();
+			AmpSector ampSectorTopLevel = getTopLevelParent(ampSector);
+			if (!sectors.contains(ampSectorTopLevel)) {
+				sectors.add(ampSectorTopLevel);
+			}
+		}
+		return sectors;
 	}
 
 	public static String getYearName(String headingFY, Long fiscalCalendarId, Date startDate, Date endDate) {
@@ -595,6 +607,19 @@ public class DashboardUtil {
 		return location;
 	}
 
+	 public static List<AmpCategoryValueLocations> getTopLevelLocationList(List<AmpCategoryValueLocations> list) {
+	    	List<AmpCategoryValueLocations> locs = new ArrayList<AmpCategoryValueLocations>();
+	    	for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+	    		AmpCategoryValueLocations ampLoc = (AmpCategoryValueLocations) iterator.next();
+	    		AmpCategoryValueLocations ampLocTopLevel = getTopLevelLocation(ampLoc);
+				if (!locs.contains(ampLocTopLevel)) {
+					locs.add(ampLocTopLevel);
+				}
+			}
+			return locs;
+		}
+
+		
 	public static BigDecimal getDividingDenominator(Boolean divideThousands, Boolean isProfile) {
 		BigDecimal divideByDenominator;
 		if(isProfile){ //The profile already divide in the preload of data in method getSummaryAndRankInformation(VisualizationForm, HttpServletRequest)

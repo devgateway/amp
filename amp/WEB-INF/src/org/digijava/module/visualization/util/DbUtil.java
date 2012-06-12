@@ -392,7 +392,7 @@ public class DbUtil {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
 	            }
 	
-	            oql += "  and (parcv.value = 'Region' OR parcv.value = 'Zone' OR parcv.value = 'District') ";// get not only regions, but any subregions that might have data
+	            oql += "  and (parcv.value = 'Region') ";
 
 	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
 	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
@@ -488,6 +488,8 @@ public class DbUtil {
 	
 	            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
 	            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.id =:configId) "; 
+	            
+	            oql += "  and sec.parentSectorId is null "; 
 	            
 	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
 	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");

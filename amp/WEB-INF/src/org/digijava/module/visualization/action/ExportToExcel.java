@@ -487,6 +487,149 @@ public class ExportToExcel extends Action {
 			    }
 	        }	
 	      
+	      //Sector Profile Table.
+	        HSSFSheet sheet6 = null;
+		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+		    	sheet6 = wb.createSheet(sectorProfTrn);
+		    	rowNum=1;
+		    	//rowNum = rowNum + 2;
+		        cellNum = 0;
+		        
+		        headerText = null;
+	        	row = sheet6.createRow(rowNum++);
+	        	cell = row.createCell(cellNum++);
+	        	String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
+	            
+	        	headerText = new HSSFRichTextString(sectorProfTrn + " (" + currName + ")");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            cellNum = 0;
+	            row = sheet6.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(sectorTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            singleRow = sectorProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	cell = row.createCell(cellNum++);
+	 	            headerText = new HSSFRichTextString(singleRow[i]);
+	 	            cell.setCellValue(headerText);
+	 	            cell.setCellStyle(subHeaderCS);
+				}
+	            for (int i = 2; i < sectorProfRows.length; i++) {
+		        	cellNum = 0;
+			        row = sheet6.createRow(rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == sectorProfRows.length-1)
+			    		st = lastCellStyle;
+		            else
+		            	st = cellStyle;
+	            	singleRow = sectorProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		cell = row.createCell(cellNum++);
+	 		            headerText = new HSSFRichTextString(singleRow[j]);
+	 		            cell.setCellValue(headerText);
+	 		            cell.setCellStyle(st);
+	    			}
+				}
+		    	rowNum++;
+		    	rowNum++;
+		        cellNum = 0;
+		        row = sheet6.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(sectorProfTrn + " Chart");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(headerCS);
+	            
+		        ByteArrayOutputStream ba4 = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getSectorGraph(), "png", ba4);
+	            int pictureIndex4 = wb.addPicture(ba4.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+	            HSSFPatriarch patriarch4 = sheet6.createDrawingPatriarch();
+	            HSSFPicture pic4 =  patriarch4.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex4);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic4.getAnchor();
+	            anchor.setCol2((short)5);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic4.resize();
+		    }
+		      
+		  //Region Profile Table.
+		    HSSFSheet sheet7 = null;
+		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+		    	sheet7 = wb.createSheet(regionProfTrn);
+		    	rowNum=1;
+		    	//rowNum = rowNum + 2;
+		        cellNum = 0;
+		        
+		        headerText = null;
+	        	row = sheet7.createRow(rowNum++);
+	        	cell = row.createCell(cellNum++);
+	        	String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
+	            
+	        	headerText = new HSSFRichTextString(regionProfTrn + " (" + currName + ")");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            cellNum = 0;
+	            row = sheet7.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(regionTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            singleRow = regionProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	cell = row.createCell(cellNum++);
+	 	            headerText = new HSSFRichTextString(singleRow[i]);
+	 	            cell.setCellValue(headerText);
+	 	            cell.setCellStyle(subHeaderCS);
+				}
+	            for (int i = 2; i < regionProfRows.length; i++) {
+		        	cellNum = 0;
+			        row = sheet7.createRow(rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == regionProfRows.length-1)
+			    		st = lastCellStyle;
+		            else
+		            	st = cellStyle;
+	            	singleRow = regionProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		cell = row.createCell(cellNum++);
+	 		            headerText = new HSSFRichTextString(singleRow[j]);
+	 		            cell.setCellValue(headerText);
+	 		            cell.setCellStyle(st);
+	    			}
+				}
+		    	rowNum++;
+		    	rowNum++;
+		        cellNum = 0;
+		        row = sheet7.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(regionProfTrn + " Chart");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(headerCS);
+	            
+		        ByteArrayOutputStream ba5 = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getRegionGraph(), "png", ba5);
+	            int pictureIndex5 = wb.addPicture(ba5.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+	            HSSFPatriarch patriarch5 = sheet7.createDrawingPatriarch();
+				HSSFPicture pic5 =  patriarch5.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex5);
+				HSSFClientAnchor anchor = (HSSFClientAnchor) pic5.getAnchor();
+	            anchor.setCol2((short)5);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic5.resize();
+		    }
 		  //Funding Table.
 		    HSSFSheet sheet2 = null;
 		    if (!fundingOpt.equals("0")){
@@ -868,159 +1011,161 @@ public class ExportToExcel extends Action {
 		    }
             
 		  //Sector Profile Table.
-		    HSSFSheet sheet6 = null;
-		    if (!sectorOpt.equals("0")){
-		    	sheet6 = wb.createSheet(sectorProfTrn);
-		    	rowNum=1;
-		    }
-		    if (sectorOpt.equals("1") || sectorOpt.equals("3")){
-		    	//rowNum = rowNum + 2;
-		        cellNum = 0;
-		        
-		        headerText = null;
-	        	row = sheet6.createRow(rowNum++);
-	        	cell = row.createCell(cellNum++);
-	        	String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
-	            
-	        	headerText = new HSSFRichTextString(sectorProfTrn + " (" + currName + ")");
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(subHeaderCS);
-	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
-	            
-	            cellNum = 0;
-	            row = sheet6.createRow(rowNum++);
-	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(sectorTrn);
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(subHeaderCS);
-	            singleRow = sectorProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = row.createCell(cellNum++);
-	 	            headerText = new HSSFRichTextString(singleRow[i]);
-	 	            cell.setCellValue(headerText);
-	 	            cell.setCellStyle(subHeaderCS);
-				}
-	            for (int i = 2; i < sectorProfRows.length; i++) {
-		        	cellNum = 0;
+		    if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+			    if (!sectorOpt.equals("0")){
+			    	sheet6 = wb.createSheet(sectorProfTrn);
+			    	rowNum=1;
+			    }
+			    if (sectorOpt.equals("1") || sectorOpt.equals("3")){
+			    	//rowNum = rowNum + 2;
+			        cellNum = 0;
+			        
+			        headerText = null;
+		        	row = sheet6.createRow(rowNum++);
+		        	cell = row.createCell(cellNum++);
+		        	String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
+		            
+		        	headerText = new HSSFRichTextString(sectorProfTrn + " (" + currName + ")");
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(subHeaderCS);
+		            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+		            
+		            cellNum = 0;
+		            row = sheet6.createRow(rowNum++);
+		            cell = row.createCell(cellNum++);
+		            headerText = new HSSFRichTextString(sectorTrn);
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(subHeaderCS);
+		            singleRow = sectorProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = row.createCell(cellNum++);
+		 	            headerText = new HSSFRichTextString(singleRow[i]);
+		 	            cell.setCellValue(headerText);
+		 	            cell.setCellStyle(subHeaderCS);
+					}
+		            for (int i = 2; i < sectorProfRows.length; i++) {
+			        	cellNum = 0;
+				        row = sheet6.createRow(rowNum++);
+				        HSSFCellStyle st = null;
+				    	if (i == sectorProfRows.length-1)
+				    		st = lastCellStyle;
+			            else
+			            	st = cellStyle;
+		            	singleRow = sectorProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		            		cell = row.createCell(cellNum++);
+		 		            headerText = new HSSFRichTextString(singleRow[j]);
+		 		            cell.setCellValue(headerText);
+		 		            cell.setCellStyle(st);
+		    			}
+					}
+			    }
+			    
+			    if (sectorOpt.equals("2") || sectorOpt.equals("3")){
+			    	rowNum++;
+			    	rowNum++;
+			        cellNum = 0;
 			        row = sheet6.createRow(rowNum++);
-			        HSSFCellStyle st = null;
-			    	if (i == sectorProfRows.length-1)
-			    		st = lastCellStyle;
-		            else
-		            	st = cellStyle;
-	            	singleRow = sectorProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	            		cell = row.createCell(cellNum++);
-	 		            headerText = new HSSFRichTextString(singleRow[j]);
-	 		            cell.setCellValue(headerText);
-	 		            cell.setCellStyle(st);
-	    			}
-				}
-		    }
-		    
-		    if (sectorOpt.equals("2") || sectorOpt.equals("3")){
-		    	rowNum++;
-		    	rowNum++;
-		        cellNum = 0;
-		        row = sheet6.createRow(rowNum++);
-	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(sectorProfTrn + " Chart");
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(headerCS);
-	            
-		        ByteArrayOutputStream ba4 = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getSectorGraph(), "png", ba4);
-	            int pictureIndex4 = wb.addPicture(ba4.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
-	            HSSFPatriarch patriarch4 = sheet6.createDrawingPatriarch();
-	            HSSFPicture pic4 =  patriarch4.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex4);
-	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic4.getAnchor();
-	            anchor.setCol2((short)5);
-	            anchor.setDx1(0);
-	            anchor.setDx2(0);
-	            anchor.setRow2(rowNum+25);
-	            anchor.setDy1(0);
-	            anchor.setDy2(0);
-	            //rowNum = rowNum+27;
-	            //pic4.resize();
+		            cell = row.createCell(cellNum++);
+		            headerText = new HSSFRichTextString(sectorProfTrn + " Chart");
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(headerCS);
+		            
+			        ByteArrayOutputStream ba4 = new ByteArrayOutputStream();
+		            ImageIO.write(vForm.getExportData().getSectorGraph(), "png", ba4);
+		            int pictureIndex4 = wb.addPicture(ba4.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+		            HSSFPatriarch patriarch4 = sheet6.createDrawingPatriarch();
+		            HSSFPicture pic4 =  patriarch4.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex4);
+		            HSSFClientAnchor anchor = (HSSFClientAnchor) pic4.getAnchor();
+		            anchor.setCol2((short)5);
+		            anchor.setDx1(0);
+		            anchor.setDx2(0);
+		            anchor.setRow2(rowNum+25);
+		            anchor.setDy1(0);
+		            anchor.setDy2(0);
+		            //rowNum = rowNum+27;
+		            //pic4.resize();
+			    }
 		    }
 		    
 		  //Region Profile Table.
-		    HSSFSheet sheet7 = null;
-		    if (!regionOpt.equals("0")){
-		    	sheet7 = wb.createSheet(regionProfTrn);
-		    	rowNum=1;
-		    }
-		    if (regionOpt.equals("1") || regionOpt.equals("3")){
-		    	//rowNum = rowNum + 2;
-		        cellNum = 0;
-		        
-		        headerText = null;
-	        	row = sheet7.createRow(rowNum++);
-	        	cell = row.createCell(cellNum++);
-	        	String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
-	            
-	        	headerText = new HSSFRichTextString(regionProfTrn + " (" + currName + ")");
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(subHeaderCS);
-	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
-	            
-	            cellNum = 0;
-	            row = sheet7.createRow(rowNum++);
-	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(regionTrn);
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(subHeaderCS);
-	            singleRow = regionProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = row.createCell(cellNum++);
-	 	            headerText = new HSSFRichTextString(singleRow[i]);
-	 	            cell.setCellValue(headerText);
-	 	            cell.setCellStyle(subHeaderCS);
-				}
-	            for (int i = 2; i < regionProfRows.length; i++) {
-		        	cellNum = 0;
+		    if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+			    if (!regionOpt.equals("0")){
+			    	sheet7 = wb.createSheet(regionProfTrn);
+			    	rowNum=1;
+			    }
+			    if (regionOpt.equals("1") || regionOpt.equals("3")){
+			    	//rowNum = rowNum + 2;
+			        cellNum = 0;
+			        
+			        headerText = null;
+		        	row = sheet7.createRow(rowNum++);
+		        	cell = row.createCell(cellNum++);
+		        	String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
+		            
+		        	headerText = new HSSFRichTextString(regionProfTrn + " (" + currName + ")");
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(subHeaderCS);
+		            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+		            
+		            cellNum = 0;
+		            row = sheet7.createRow(rowNum++);
+		            cell = row.createCell(cellNum++);
+		            headerText = new HSSFRichTextString(regionTrn);
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(subHeaderCS);
+		            singleRow = regionProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	cell = row.createCell(cellNum++);
+		 	            headerText = new HSSFRichTextString(singleRow[i]);
+		 	            cell.setCellValue(headerText);
+		 	            cell.setCellStyle(subHeaderCS);
+					}
+		            for (int i = 2; i < regionProfRows.length; i++) {
+			        	cellNum = 0;
+				        row = sheet7.createRow(rowNum++);
+				        HSSFCellStyle st = null;
+				    	if (i == regionProfRows.length-1)
+				    		st = lastCellStyle;
+			            else
+			            	st = cellStyle;
+		            	singleRow = regionProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		            		cell = row.createCell(cellNum++);
+		 		            headerText = new HSSFRichTextString(singleRow[j]);
+		 		            cell.setCellValue(headerText);
+		 		            cell.setCellStyle(st);
+		    			}
+					}
+			    }
+			    
+			    if (regionOpt.equals("2") || regionOpt.equals("3")){
+			    	rowNum++;
+			    	rowNum++;
+			        cellNum = 0;
 			        row = sheet7.createRow(rowNum++);
-			        HSSFCellStyle st = null;
-			    	if (i == regionProfRows.length-1)
-			    		st = lastCellStyle;
-		            else
-		            	st = cellStyle;
-	            	singleRow = regionProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	            		cell = row.createCell(cellNum++);
-	 		            headerText = new HSSFRichTextString(singleRow[j]);
-	 		            cell.setCellValue(headerText);
-	 		            cell.setCellStyle(st);
-	    			}
-				}
+		            cell = row.createCell(cellNum++);
+		            headerText = new HSSFRichTextString(regionProfTrn + " Chart");
+		            cell.setCellValue(headerText);
+		            cell.setCellStyle(headerCS);
+		            
+			        ByteArrayOutputStream ba5 = new ByteArrayOutputStream();
+		            ImageIO.write(vForm.getExportData().getRegionGraph(), "png", ba5);
+		            int pictureIndex5 = wb.addPicture(ba5.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+		            HSSFPatriarch patriarch5 = sheet7.createDrawingPatriarch();
+					HSSFPicture pic5 =  patriarch5.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex5);
+					HSSFClientAnchor anchor = (HSSFClientAnchor) pic5.getAnchor();
+		            anchor.setCol2((short)5);
+		            anchor.setDx1(0);
+		            anchor.setDx2(0);
+		            anchor.setRow2(rowNum+25);
+		            anchor.setDy1(0);
+		            anchor.setDy2(0);
+		            //rowNum = rowNum+27;
+		            //pic5.resize();
+			    }
 		    }
 		    
-		    if (regionOpt.equals("2") || regionOpt.equals("3")){
-		    	rowNum++;
-		    	rowNum++;
-		        cellNum = 0;
-		        row = sheet7.createRow(rowNum++);
-	            cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(regionProfTrn + " Chart");
-	            cell.setCellValue(headerText);
-	            cell.setCellStyle(headerCS);
-	            
-		        ByteArrayOutputStream ba5 = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getRegionGraph(), "png", ba5);
-	            int pictureIndex5 = wb.addPicture(ba5.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
-	            HSSFPatriarch patriarch5 = sheet7.createDrawingPatriarch();
-				HSSFPicture pic5 =  patriarch5.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex5);
-				HSSFClientAnchor anchor = (HSSFClientAnchor) pic5.getAnchor();
-	            anchor.setCol2((short)5);
-	            anchor.setDx1(0);
-	            anchor.setDx2(0);
-	            anchor.setRow2(rowNum+25);
-	            anchor.setDy1(0);
-	            anchor.setDy2(0);
-	            //rowNum = rowNum+27;
-	            //pic5.resize();
-		    }
-            
 		  //Donor Profile Table.
 		    HSSFSheet sheet8 = null;
 		    if (!donorOpt.equals("0")){

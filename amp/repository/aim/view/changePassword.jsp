@@ -79,7 +79,7 @@ function validate(){
 					<td align=right class=f-names noWrap width="40%" valign=top>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:email">
-							UserId:
+							UserId: <span style="color:#FF0000;">*</span>
 						</digi:trn>
 					</td>
 					</td>
@@ -97,7 +97,7 @@ function validate(){
 					<td align=right class=f-names noWrap>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:oldPassword">
-						Old Password:
+						Old Password: <span style="color:#FF0000;">*</span>
 						</digi:trn>
 					</td>
 					<td align="left">
@@ -109,7 +109,7 @@ function validate(){
 					<td align=right class=f-names noWrap>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:newPassword">
-						New Password:
+						New Password: <span style="color:#FF0000;">*</span>
 						</digi:trn>
 					</td>
 					<td align="left">
@@ -121,7 +121,7 @@ function validate(){
 					<td align=right class=f-names noWrap>
 <!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:confirmNewPassword">
-						Confirm new Password:
+						Confirm new Password: <span style="color:#FF0000;">*</span>
 						</digi:trn>
 					</td>
 					<td align="left">

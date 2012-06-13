@@ -130,6 +130,12 @@
 				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualExpendituresStr"/></td>
 			</tr>
 			<tr>
+				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader">
+					<digi:trn>Plannet Disbursements</digi:trn>
+				</td>
+				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualDisbursementsStr"/></td>
+			</tr>
+			<tr>
 				<td nowrap colspan="2" align="center">
 					<font color="red">
 						<digi:trn>Note: all numbers are in</digi:trn> ${gisRegReportForm.selectedCurrency}
@@ -162,7 +168,7 @@
 										</div>
 									</div>
 								</td>
-								<td colspan="3" style="overflow-x:hidden; background-color: #C7D4DB; color:#000000;">
+								<td colspan="4" style="overflow-x:hidden; background-color: #C7D4DB; color:#000000;">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell">
 											<digi:trn><b>For selected sector/region</b></digi:trn>
@@ -188,24 +194,29 @@
 											<digi:trn>Sector</digi:trn>(s)
 										</div>
 								</td>
-								<td width="10%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
+								<td width="8%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Donor</digi:trn>(s)
 										</div>
 								</td>
-								<td width="10%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
+								<td width="8%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Commitments</digi:trn>
 										</div>
 								</td>
-								<td width="10%" style="overflow-x:hidden;background-color: #CDCDCD; color:#000000;">
+								<td width="8%" style="overflow-x:hidden;background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Disbursements</digi:trn>
 										</div>
 								</td>
-								<td width="10%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
+								<td width="8%" style="overflow-x:hidden; background-color: #CDCDCD; color:#000000;">
 										<div class="gisReportTableBevelCell">
 											<digi:trn>Expenditures</digi:trn>
+										</div>
+								</td>
+								<td width="8%" style="overflow-x:hidden;background-color: #CDCDCD; color:#000000;">
+										<div class="gisReportTableBevelCell">
+											<digi:trn>Planned Disb.</digi:trn>
 										</div>
 								</td>
 						</tr>
@@ -218,7 +229,7 @@
 						
 						<logic:iterate name="gisRegReportForm" property="activityLocationFundingList" id="activityLocationFunding">
 							<tr>
-								<td width="30%" valign="top" style="overflow-x:hidden; overflow-y:hidden;" height="20">
+								<td valign="top" style="overflow-x:hidden; overflow-y:hidden;" height="20">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
 											<c:choose>
@@ -238,7 +249,7 @@
 										</div>
 									</div>
 								</td>
-								<td width="20%" align="left" style="overflow-x:hidden;">
+								<td align="left" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
 											<logic:present name="activityLocationFunding" property="locations">
@@ -255,7 +266,7 @@
 										</div>
 									</div>
 								</td>
-								<td width="20%" align="left" style="overflow-x:hidden;">
+								<td align="left" style="overflow-x:hidden;">
 								<%--
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
@@ -292,7 +303,7 @@
 										</div>
 									</div>
 								</td>
-								<td width="20%" align="left" style="overflow-x:hidden;">
+								<td align="left" style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
 										<div class="gisReportTableBevelCell gisReportTableBevelCellBgNormal">
 											<logic:present name="activityLocationFunding" property="donorOrgs">
@@ -309,7 +320,7 @@
 										</div>
 									</div>
 								</td>
-								<td width="10%" style="overflow-x:hidden;">
+								<td style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell 
 									<logic:present name="activityLocationFunding" property="fmtCommitment">
@@ -322,7 +333,7 @@
 										<bean:write name="activityLocationFunding" property="fmtCommitment"/>
 									</div></div>
 								</td>
-								<td width="10%" style="overflow-x:hidden;">
+								<td style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell 
 									<logic:present  name="activityLocationFunding" property="fmtDisbursement">
@@ -336,7 +347,7 @@
 									</div>
 									</div>
 								</td>
-								<td width="10%" style="overflow-x:hidden;">
+								<td style="overflow-x:hidden;">
 									<div class="gisReportTableBevelCellContainer">
 									<div class="gisReportTableBevelCell 
 									<logic:present name="activityLocationFunding" property="fmtExpenditure">
@@ -350,11 +361,27 @@
 									</div>
 									</div>
 								</td>
+								
+								<td style="overflow-x:hidden;">
+									<div class="gisReportTableBevelCellContainer">
+									<div class="gisReportTableBevelCell 
+									<logic:present  name="activityLocationFunding" property="fmtPlannedDisbursement">
+									gisReportTableBevelCellBgNormal
+									</logic:present>
+									<logic:notPresent  name="activityLocationFunding" property="fmtPlannedDisbursement">
+									gisReportTableBevelCellBgDash
+									</logic:notPresent>
+									">
+										<bean:write name="activityLocationFunding" property="fmtPlannedDisbursement"/>
+									</div>
+									</div>
+								</td>
+								
 								<td style="border-left:1px solid black;">&nbsp;</td>
 							</tr>
 						</logic:iterate>
 						<tr>
-							<td colspan="7" height="100%" style="border-top:1px solid #CCCCCC;">&nbsp;
+							<td colspan="8" height="100%" style="border-top:1px solid #CCCCCC;">&nbsp;
 									
 							</td>
 							<!--

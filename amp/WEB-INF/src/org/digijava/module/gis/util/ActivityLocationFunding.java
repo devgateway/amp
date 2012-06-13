@@ -74,6 +74,10 @@ public class ActivityLocationFunding {
         return expenditure != null ? FormatHelper.formatNumber(expenditure.doubleValue()):null;
     }
 
+    public String getFmtPlannedDisbursement() {
+        return plannedDisbursement != null ? FormatHelper.formatNumber(plannedDisbursement.doubleValue()):null;
+    }
+
     public BigDecimal getCommitment() {
         return commitment;
     }

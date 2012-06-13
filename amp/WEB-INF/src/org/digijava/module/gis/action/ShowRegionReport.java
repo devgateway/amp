@@ -169,6 +169,10 @@ public class ShowRegionReport extends Action {
                 gisRegReportForm.setActualDisbursementsStr(FormatHelper.formatNumber(fndDat.getDisbursement().doubleValue()));
             }
 
+            if (fndDat.getPlannedDisbursement() != null) {
+                gisRegReportForm.setPlannedDisbursementsStr(FormatHelper.formatNumber(fndDat.getPlannedDisbursement().doubleValue()));
+            }
+
 
             Long teamId = null;
             boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");

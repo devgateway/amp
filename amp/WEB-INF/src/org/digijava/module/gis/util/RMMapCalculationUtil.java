@@ -5,6 +5,8 @@ import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.*;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapSegment;
 
@@ -57,8 +59,8 @@ public class RMMapCalculationUtil {
         Calendar fStartDate = Calendar.getInstance();
                 fStartDate.set(Integer.parseInt(filter.getFilterStartYear()), 0, 1, 0, 0, 0);
         Calendar fEndDate = Calendar.getInstance();
-                fEndDate.set(Integer.parseInt(filter.getFilterEndYear()), 0, 1, 0, 0, 0);
-
+                fEndDate.set(Integer.parseInt(filter.getFilterEndYear() + 1), 0, 1, 0, 0, 0);
+        fEndDate.add(Calendar.SECOND, -1);
         String currencyCode = filter.getSelectedCurrency();
 
 
@@ -158,7 +160,8 @@ public class RMMapCalculationUtil {
         Calendar fStartDate = Calendar.getInstance();
                 fStartDate.set(Integer.parseInt(filter.getFilterStartYear()), 0, 1, 0, 0, 0);
         Calendar fEndDate = Calendar.getInstance();
-                fEndDate.set(Integer.parseInt(filter.getFilterEndYear()), 0, 1, 0, 0, 0);
+                fEndDate.set(Integer.parseInt(filter.getFilterEndYear() + 1), 0, 1, 0, 0, 0);
+        fEndDate.add(Calendar.SECOND, -1);
 
         String currencyCode = filter.getSelectedCurrency();
 
@@ -337,7 +340,7 @@ public class RMMapCalculationUtil {
         for (Object fundingInfoObj: fundings) {
             Object[] fundingInfo = (Object[]) fundingInfoObj;
             BigDecimal ammount = new BigDecimal((Double)fundingInfo[0]);
-            Long activityId = (Long)fundingInfo[4];
+            Long activityId = (Long)fundingInfo[5];
 
             Map sectorOrProgramPercentageMapItem = sectorOrProgramPercentageMap.get(activityId);
 
@@ -367,13 +370,17 @@ public class RMMapCalculationUtil {
             Object[] fundingInfo = (Object[]) fundingInfoObj;
             Double ammount = (Double)fundingInfo[0];
             Integer type = (Integer)fundingInfo[1];
-            Date date = (Date)fundingInfo[2];
-            String currencyCode = (String)fundingInfo[3];
-            Long activityId = (Long)fundingInfo[4];
+            Long adjustementTypeId = (Long)fundingInfo[2];
+            Date date = (Date)fundingInfo[3];
+            String currencyCode = (String)fundingInfo[4];
+            Long activityId = (Long)fundingInfo[5];
 
             Map locationPercentageMapItem = locationPercentageMap.get(activityId);
             if (locationPercentageMapItem != null) {
             Set <Long> locKeySet = locationPercentageMapItem.keySet();
+                
+                Map <Long, AmpCategoryValue> adjustementIdTypeMap = new HashMap <Long, AmpCategoryValue> ();
+                
                 for (Long locKey : locKeySet) {
                     //For L2+L3 location summing
                     Long parentKey = locationParentMap.get(locKey);
@@ -381,9 +388,18 @@ public class RMMapCalculationUtil {
                         retVal.put(locationIdNameMap.get(parentKey), new HashSet());
                     }
 
+                    AmpCategoryValue adjTypeCatVal = null;
+
+                    if (!adjustementIdTypeMap.containsKey(adjustementTypeId)) {
+                        adjustementIdTypeMap.put(adjustementTypeId, CategoryManagerUtil.getAmpCategoryValueFromDb(adjustementTypeId));
+                    }
+
+                    adjTypeCatVal = adjustementIdTypeMap.get(adjustementTypeId);
+
                     AmpFundingDetail forCalculations = new AmpFundingDetail();
                     forCalculations.setAmpCurrencyId(currencyCodeObjectMap.get(currencyCode));
-                    forCalculations.setTransactionAmount(new BigDecimal(ammount).multiply(new BigDecimal((Float)locationPercentageMapItem.get(locKey))).divide(new BigDecimal(100)).doubleValue());
+                    forCalculations.setTransactionAmount(new BigDecimal(ammount).multiply(new BigDecimal((Float) locationPercentageMapItem.get(locKey))).divide(new BigDecimal(100)).doubleValue());
+                    forCalculations.setAdjustmentType(adjTypeCatVal);
                     forCalculations.setTransactionDate(date);
                     forCalculations.setTransactionType(type);
 

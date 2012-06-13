@@ -515,7 +515,7 @@
 
 
 <c:if test="${isDevInfoMode == true}">
-    <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #dcd8c1; color:white; border: 1px solid silver;z-index: 2; width:200px;">
+    <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #dcd8c1; color:white; border: 1px solid silver;z-index: 2; width:300px;">
  	    <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
 	    
 	    <table class="tableElement" border="1" color="white" bgcolor="#dcd8c1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse; style="font-size: 12px;"">
@@ -602,7 +602,7 @@
 
 
 <c:if test="${isDevInfoMode == false}">
-    <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #dcd8c1; color:white; border: 1px solid silver;z-index: 2; width:200px;">
+    <div id="tooltipContainer"  style="display:none; position: absolute; left:50px; top: 50px; background-color: #dcd8c1; color:white; border: 1px solid silver;z-index: 2; width:300px;">
          <div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black; style="font-size: 12px;"">
         
         <table class="tableElement" bgcolor="#dcd8c1" color="white" border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">

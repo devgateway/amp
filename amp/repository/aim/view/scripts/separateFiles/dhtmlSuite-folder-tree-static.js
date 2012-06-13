@@ -128,7 +128,9 @@ Owner of DHTMLgoodies.com
 			var img = document.createElement('IMG');
 			img.src = imageFolder + plusImage;
 			img.onclick = showHideNode;
-			if(subItems.length==0)img.style.visibility='hidden';else{
+			if(subItems[0].all.length==0)
+				img.style.visibility='hidden';
+			else{
 				subItems[0].id = 'tree_ul_' + treeUlCounter;
 				treeUlCounter++;
 			}
@@ -297,7 +299,18 @@ Owner of DHTMLgoodies.com
 				var img = document.createElement('IMG');
 				img.src = imageFolder + plusImage;
 				img.onclick = showHideNode;
-				if(subItems.length==0)img.style.visibility='hidden';else{
+				if(subItems.length==0 )
+					img.style.visibility='hidden';
+				else if( subItems[0].children.length==0)
+					{
+					
+					img.style.display='none';
+					
+					subItems[0].id = 'tree_ul_' + treeUlCounter;
+					treeUlCounter++;
+					}
+					
+				else{
 					subItems[0].id = 'tree_ul_' + treeUlCounter;
 					treeUlCounter++;
 				}

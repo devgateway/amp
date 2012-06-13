@@ -29,6 +29,11 @@ public class AmpPMAddPermFormTableFeaturePanel extends AmpFormTableFeaturePanel 
 		AbstractReadOnlyModel<List<AmpPMReadEditWrapper>> gatesListReadOnlyModel = OnePagerUtil.getReadOnlyListModelFromSetModel(gatesSetModel);
 		
 		list = new ListView<AmpPMReadEditWrapper>("permGatesList", gatesListReadOnlyModel) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 761176352811271991L;
+
 			@Override
 			protected void populateItem(final ListItem<AmpPMReadEditWrapper> item) {
 				item.add(new Label("gateName", TranslatorUtil.getTranslation(item.getModelObject().getName())   ));

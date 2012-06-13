@@ -319,12 +319,19 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable{
 	public void setYearsList(TreeSet<String> yearsList) {
 		this.yearsList = yearsList;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(!(o instanceof FundingPledges))
+			return false;
+		FundingPledges p = (FundingPledges) o; 
+		if (p == null)
+			return false;
+		return this.getId().equals(p.getId());
+	}
+	
 	@Override
 	public int compareTo(FundingPledges o) {
-		if (this.getId()>o.getId()) {
-			return 1;
-		} else {
-			return 0;
-		}
+		return (int) (this.getId() - o.getId());
 	}
 }

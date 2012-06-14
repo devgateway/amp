@@ -8,6 +8,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -41,6 +42,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	protected AjaxCheckBox cascadeFmToChildren;
 	
 	protected boolean ignoreFmVisibility = false;
+	protected boolean ignorePermissions = false; 
 	protected boolean ignoreFmButtonsVisibility = false;
 	
 	public IModel<T> getModel() {
@@ -102,9 +104,9 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	 */
 	public void switchFmVisible(AjaxRequestTarget target) {
 		FMUtil.switchFmVisible(AmpComponentPanel.this);
-		visibleFmButton.add(new AttributeModifier("value", new Model((FMUtil.isFmVisible(AmpComponentPanel.this)?"Hide":"Show")+ " "+getShorterFmName())));
+		visibleFmButton.add(new AttributeModifier("value", new Model<String>((FMUtil.isFmVisible(AmpComponentPanel.this)?"Hide":"Show")+ " "+getShorterFmName())));
 		target.addComponent(this);
-		target.appendJavascript(OnePagerUtil.getToggleChildrenJS(this));
+		target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this));
 	}
 
 	/**
@@ -113,9 +115,9 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	 */
 	public void switchFmEnabled(AjaxRequestTarget target) {
 		FMUtil.switchFmEnabled(AmpComponentPanel.this);
-		enabledFmButton.add(new AttributeModifier("value", new Model((FMUtil.isFmEnabled(AmpComponentPanel.this)?"Disable":"Enable") + " "+getShorterFmName())));
+		enabledFmButton.add(new AttributeModifier("value", new Model<String>((FMUtil.isFmEnabled(AmpComponentPanel.this)?"Disable":"Enable") + " "+getShorterFmName())));
 		target.addComponent(this);
-		target.appendJavascript(OnePagerUtil.getToggleChildrenJS(this));
+		target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this));
 	}
 	
 	/**
@@ -179,7 +181,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 					return;
 				tmpOs.setPosition(tmpOs.getPosition() + 1);
 				os.setPosition(os.getPosition() - 1);
-				target.appendJavascript("window.location.reload()");
+				target.appendJavaScript("window.location.reload()");
 			}
 		};
 		add(upButton);
@@ -193,7 +195,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 					return;
 				tmpOs.setPosition(tmpOs.getPosition() - 1);
 				os.setPosition(os.getPosition() + 1);
-				target.appendJavascript("window.location.reload()");
+				target.appendJavaScript("window.location.reload()");
 			}
 		};
 		add(downButton);
@@ -205,17 +207,17 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 				if (os == null)
 					return;
 				os.setFolded(!os.isFolded());
-				target.appendJavascript("window.location.reload()"); 
+				target.appendJavaScript("window.location.reload()"); 
 			}
 		};
 		add(foldButton);
 
 		boolean fmMode = ((AmpAuthWebSession)getSession()).isFmMode();
 		if (this instanceof AmpFormSectionFeaturePanel && fmMode){
-			upButton.add(new AttributeModifier("title", new Model("Up")));
-			upButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/onepager/up.png")));		
-			downButton.add(new AttributeModifier("title", new Model("Down")));
-			downButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/onepager/down.png")));		
+			upButton.add(new AttributeModifier("title", new Model<String>("Up")));
+			upButton.add(new AttributeModifier("src", new Model<String>("/TEMPLATE/ampTemplate/img_2/onepager/up.png")));		
+			downButton.add(new AttributeModifier("title", new Model<String>("Down")));
+			downButton.add(new AttributeModifier("src", new Model<String>("/TEMPLATE/ampTemplate/img_2/onepager/down.png")));		
 		}
 		else{
 			upButton.setVisible(false);	
@@ -249,6 +251,14 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		return fmName;
 	}
 	
+	public boolean isIgnoreFmButtonsVisibility() {
+		return ignoreFmButtonsVisibility;
+	}
+
+	public void setIgnoreFmButtonsVisibility(boolean ignoreFmButtonsVisibility) {
+		this.ignoreFmButtonsVisibility = ignoreFmButtonsVisibility;
+	}
+
 	@Override
 	protected void onBeforeRender() {
 		boolean fmMode = ((AmpAuthWebSession)getSession()).isFmMode();
@@ -258,21 +268,22 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		boolean fmEnabled = FMUtil.isFmEnabled(this);
 		boolean fmVisible = FMUtil.isFmVisible(this);
 		
-		setEnabled(fmMode?true:fmEnabled);
+		if (ignorePermissions)
+			setEnabled(fmMode?true:fmEnabled);
 		if (!ignoreFmVisibility)
 			setVisible(fmMode?true:fmVisible);
 		
-		enabledFmButton.add(new AttributeModifier("title", new Model((fmEnabled?"Disable":"Enable")+ " "+getFMName())));
-		enabledFmButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/onepager/" + (fmEnabled?"enable.png":"disable.png"))));
-		visibleFmButton.add(new AttributeModifier("title", new Model((fmVisible?"Hide":"Show")+ " "+getFMName())));
-		visibleFmButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/onepager/" + (fmVisible?"alt_enable.png":"alt_disable.png"))));
+		enabledFmButton.add(new AttributeModifier("title", new Model<String>((fmEnabled?"Disable":"Enable")+ " "+getFMName())));
+		enabledFmButton.add(new AttributeModifier("src", new Model<String>("/TEMPLATE/ampTemplate/img_2/onepager/" + (fmEnabled?"enable.png":"disable.png"))));
+		visibleFmButton.add(new AttributeModifier("title", new Model<String>((fmVisible?"Hide":"Show")+ " "+getFMName())));
+		visibleFmButton.add(new AttributeModifier("src", new Model<String>("/TEMPLATE/ampTemplate/img_2/onepager/" + (fmVisible?"alt_enable.png":"alt_disable.png"))));
 
 		
 		if (this instanceof AmpFormSectionFeaturePanel && fmMode){
 			OnepagerSection tmpos = OnePager.findByName(this.getClass().getName());
 			if (tmpos != null){
-				foldButton.add(new AttributeModifier("title", new Model((tmpos.isFolded()?"Unfold":"Fold"))));
-				foldButton.add(new AttributeModifier("src", new Model("/TEMPLATE/ampTemplate/img_2/onepager/"+(tmpos.isFolded()?"fold.png":"unfold.png"))));		
+				foldButton.add(new AttributeModifier("title", new Model<String>((tmpos.isFolded()?"Unfold":"Fold"))));
+				foldButton.add(new AttributeModifier("src", new Model<String>("/TEMPLATE/ampTemplate/img_2/onepager/"+(tmpos.isFolded()?"fold.png":"unfold.png"))));		
 			}
 		}
 		
@@ -281,7 +292,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			//enabledFmButton.setVisible(true);
 			cascadeFmToChildren.setVisible(true);
 			String style="border: 1px dashed #9E334D; padding: 4px;";
-			fmBorder.add(new AttributeModifier("style", true, new Model(style)));
+			fmBorder.add(new AttributeModifier("style", true, new Model<String>(style)));
 		}
 		super.onBeforeRender();
 	}

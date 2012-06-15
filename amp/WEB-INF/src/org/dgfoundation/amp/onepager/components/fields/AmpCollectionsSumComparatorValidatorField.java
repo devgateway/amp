@@ -9,11 +9,14 @@ import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.onepager.validators.AmpCollectionsSumComparatorValidator;
 import org.dgfoundation.amp.onepager.validators.AmpPercentageCollectionValidator;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionValidatorField<T,Double> {
 
@@ -68,23 +71,73 @@ public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionV
 		
 		for( T item : collection) 
 		{
+			AmpCurrency currency = null;
+			java.sql.Date currencyDate = null;
+			double exchangeRate = 1;
+			double amount = 0;
+			boolean fixedRate = false;
 			if(item instanceof AmpFundingDetail)
 			{
-			if(((AmpFundingDetail)item).getTransactionAmount() != null)
-			   total+=((AmpFundingDetail)item).getTransactionAmount().doubleValue();
+				AmpFundingDetail fundItem =(AmpFundingDetail)item;
+			    if(fundItem.getTransactionAmount() != null)
+			    	amount=fundItem.getTransactionAmount();
+			    else
+			    	continue;
+			    
+			    if(fundItem.getFixedExchangeRate()!=null)
+			    {
+			    	fixedRate=true;
+			    	exchangeRate=fundItem.getFixedExchangeRate();
+			    }
+			    else
+			    {
+			    	currency = 	fundItem.getAmpCurrencyId();
+			    	if(fundItem.getTransactionDate()!=null)
+			    	currencyDate = new java.sql.Date(fundItem.getTransactionDate().getTime());
+			    }
 			}
 			else if(item instanceof AmpComponentFunding)
 			{
-			if(((AmpComponentFunding)item).getTransactionAmount() != null)
-			   total+=((AmpComponentFunding)item).getTransactionAmount().doubleValue();
-			}else if(item instanceof AmpRegionalFunding)
+				AmpComponentFunding compFundItem =(AmpComponentFunding)item;
+			   if(compFundItem.getTransactionAmount() != null)
+				   amount=compFundItem.getTransactionAmount();
+			    else
+			    	continue;
+			   
+			   if(compFundItem.getExchangeRate()!=null)
+			    {
+			    	fixedRate=true;
+			    	exchangeRate=compFundItem.getExchangeRate();
+			    }
+			    else
+			    {
+			    	currency = 	compFundItem.getCurrency();
+			    	if(compFundItem.getTransactionDate()!=null)
+			    	  currencyDate = new java.sql.Date(compFundItem.getTransactionDate().getTime());
+			    }
+			   
+			   
+			}
+			else if(item instanceof AmpRegionalFunding)
 			{
-			if(((AmpRegionalFunding)item).getTransactionAmount() != null)
-			   total+=((AmpRegionalFunding)item).getTransactionAmount().doubleValue();
+				AmpRegionalFunding regFundItem =(AmpRegionalFunding)item;
+				   if(regFundItem.getTransactionAmount() != null)
+					   amount=regFundItem.getTransactionAmount();
+				    else
+				    	continue;
+				   
+
+				  currency = 	regFundItem.getCurrency();
+				  if(regFundItem.getTransactionDate()!=null)
+				  currencyDate = new java.sql.Date(regFundItem.getTransactionDate().getTime());
+
 			}
 			
-				
-				
+		 	
+		 if(!fixedRate )	
+		    exchangeRate =	Util.getExchange(currency.getCurrencyCode(), currencyDate);	
+		  
+		  total += amount/exchangeRate;
 		}
 		return total;
 	}

@@ -8,7 +8,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
-import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -106,7 +105,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		FMUtil.switchFmVisible(AmpComponentPanel.this);
 		visibleFmButton.add(new AttributeModifier("value", new Model<String>((FMUtil.isFmVisible(AmpComponentPanel.this)?"Hide":"Show")+ " "+getShorterFmName())));
 		target.addComponent(this);
-		target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this));
+		target.appendJavascript(OnePagerUtil.getToggleChildrenJS(this));
 	}
 
 	/**
@@ -117,7 +116,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		FMUtil.switchFmEnabled(AmpComponentPanel.this);
 		enabledFmButton.add(new AttributeModifier("value", new Model<String>((FMUtil.isFmEnabled(AmpComponentPanel.this)?"Disable":"Enable") + " "+getShorterFmName())));
 		target.addComponent(this);
-		target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this));
+		target.appendJavascript(OnePagerUtil.getToggleChildrenJS(this));
 	}
 	
 	/**
@@ -181,7 +180,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 					return;
 				tmpOs.setPosition(tmpOs.getPosition() + 1);
 				os.setPosition(os.getPosition() - 1);
-				target.appendJavaScript("window.location.reload()");
+				target.appendJavascript("window.location.reload()");
 			}
 		};
 		add(upButton);
@@ -195,7 +194,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 					return;
 				tmpOs.setPosition(tmpOs.getPosition() - 1);
 				os.setPosition(os.getPosition() + 1);
-				target.appendJavaScript("window.location.reload()");
+				target.appendJavascript("window.location.reload()");
 			}
 		};
 		add(downButton);
@@ -207,7 +206,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 				if (os == null)
 					return;
 				os.setFolded(!os.isFolded());
-				target.appendJavaScript("window.location.reload()"); 
+				target.appendJavascript("window.location.reload()"); 
 			}
 		};
 		add(foldButton);

@@ -984,6 +984,7 @@ public class GetFoundingDetails extends Action {
                     root.addAttribute("totalCommitment",FormatHelper.formatNumber(totalFunding.getCommitment().doubleValue()));
                     root.addAttribute("totalDisbursement",FormatHelper.formatNumber(totalFunding.getDisbursement().doubleValue()));
                     root.addAttribute("totalExpenditure",FormatHelper.formatNumber(totalFunding.getExpenditure().doubleValue()));
+                    root.addAttribute("totalPlannedDisbursement",FormatHelper.formatNumber(totalFunding.getPlannedDisbursement().doubleValue()));
 
                     segmendDataInfo.addElement(root);
                     Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
@@ -995,6 +996,7 @@ public class GetFoundingDetails extends Action {
                         regionData.addAttribute("fundingCommitment",FormatHelper.formatNumber(ammount.getCommitment().doubleValue()));
                         regionData.addAttribute("fundingDisbursement", FormatHelper.formatNumber(ammount.getDisbursement().doubleValue()));
                         regionData.addAttribute("fundingExpenditure",FormatHelper.formatNumber(ammount.getExpenditure().doubleValue()));
+                        regionData.addAttribute("fundingPlannedDisbursement",FormatHelper.formatNumber(ammount.getPlannedDisbursement().doubleValue()));
                         root.addElement(regionData);
                     }
                     segmendDataInfo.output(sos);

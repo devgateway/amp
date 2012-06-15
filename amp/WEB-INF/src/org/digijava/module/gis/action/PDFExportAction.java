@@ -11,7 +11,9 @@ import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.lowagie.text.pdf.PdfTable;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -152,6 +155,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		Boolean showLegends = true;
 		String selectedDonorName = "";
 		boolean publicMode = false;
+
+        Object[] filterResults = null;
 
 		if (request.getParameter("publicMode") != null
 				&& request.getParameter("publicMode").equals("true")) {
@@ -338,7 +343,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
             String isRegSetStr = FeaturesUtil.getGlobalSettingValue("GIS Funding Type");
             boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("donor"))?GisUtil.GIS_DONOR_FUNDINGS:GisUtil.GIS_REGIONAL_FUNDINGS;
             boolean isPublic = request.getParameter("publicMode") == null?false:true;
-            Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional, isPublic);
+            filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional, isPublic);
 
             if (filterForm.isFilterAllSectors()) {
                 sectorName = "All";
@@ -356,7 +361,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
             }
 
-            outMapByteArray = getMapImageFinancial (filterResults, filterForm.getFundingType(), (mapCode != null && mapCode.trim().length() > 0) ? mapCode : "TZA", mapLevel, colorScheme);
+            outMapByteArray = getMapImageFinancial (filterResults, filterForm.getFundingType(), (mapCode != null && mapCode.trim().length() > 0) ? mapCode : "TZA", filterForm.getMapLevel(), colorScheme);
 
         }
 		// Get the Map Image
@@ -408,6 +413,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			ServletContext ampContext = getServlet().getServletContext();
 			AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext
 					.getAttribute("ampTreeVisibility");
+
+            /*
+            PdfPTable regionalFundingTable = getRegionalFundingTable(filterResults);
+            layoutTable1.addCell(regionalFundingTable);
+            */
+
 
 			if (FeaturesUtil.getFieldVisibility("Millennium Development Goals")
 					.isFieldActive(ampTreeVisibility)) {
@@ -510,6 +521,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		document.add(title);
 		document.add(updateDate);
 		document.add(imagesTable);
+        document.add(getRegionalFundingTable(filterResults));
+
 		document.add(layoutTable1);
 
 		document.close();
@@ -1078,6 +1091,164 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		return generalBox;
 	}
+
+    private PdfPTable getRegionalFundingTable (Object[] filterResults) throws WorkerException {
+        PdfPTable retVal = new PdfPTable(1);
+        retVal.setWidthPercentage(100f);
+        // Work the header
+        PdfPCell headerCell = new PdfPCell();
+        headerCell.setPadding(0);
+        headerCell.setBorder(Rectangle.NO_BORDER);
+
+        float[] widths = { 1f, 2f };
+        PdfPTable headerTable = new PdfPTable(widths);
+        headerTable.setWidthPercentage(100f);
+        // Get the first cell, with the rounded edges and the text
+        RoundRectangle border = new RoundRectangle();
+        PdfPCell firstCell = new PdfPCell();
+        firstCell.setPadding(0);
+        firstCell.setBorder(Rectangle.NO_BORDER);
+        // gis:millenniumdevelopmentgoals
+
+        Paragraph paragraph = new Paragraph(
+                TranslatorWorker.translateText("Funding by Locations",
+                        locale, siteId) + "\n",
+                new Font(Font.HELVETICA, 7, Font.BOLD, new Color(255, 255, 255)));
+        paragraph.setAlignment(Element.ALIGN_CENTER);
+        firstCell.setCellEvent(border);
+        firstCell.addElement(paragraph);
+        firstCell.setColspan(8);
+
+        PdfPCell secondCell = new PdfPCell();
+        secondCell.setPadding(0);
+        secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
+
+        // Add rounded tab
+        headerTable.addCell(firstCell);
+        // Add empty space
+        headerTable.addCell(secondCell);
+
+        // add the table with the rounded tab and the empty space to the cell
+        headerCell.addElement(headerTable);
+        // add the full header cell to the general layout of the box
+        retVal.addCell(headerCell);
+        		PdfPCell lineCell = new PdfPCell();
+        		lineCell.setBorder(Rectangle.NO_BORDER);
+        		lineCell.setBackgroundColor(new Color(34, 46, 93));
+        		lineCell.setPadding(0);
+        		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+        retVal.addCell(lineCell);
+        		// Work the layout
+        		PdfPCell layoutCell = new PdfPCell();
+        		layoutCell.setPadding(2);
+        		layoutCell.setBackgroundColor(new Color(206, 226, 251));
+
+        
+        Map <String, FundingData> regFnd = (Map <String, FundingData>) filterResults[0];
+        Set <String> regNames = (Set <String>) regFnd.keySet();
+
+        PdfPTable regFndTable = new PdfPTable(5);
+                retVal.setWidthPercentage(100f);
+
+
+        //Table header
+        PdfPCell regCellHeader = new PdfPCell();
+        regCellHeader.setPadding(0);
+        regCellHeader.setBorder(Rectangle.NO_BORDER);
+
+        regCellHeader.setBackgroundColor(new Color(34, 46, 93));
+        regCellHeader.addElement(new Phrase(TranslatorWorker.translateText("Location", locale, siteId), new Font(Font.HELVETICA, 6f, Font.BOLD, new Color(255, 255, 255))));
+
+        PdfPCell regActComHeader = new PdfPCell();
+        regActComHeader.setPadding(0);
+        regActComHeader.setBorder(Rectangle.NO_BORDER);
+        regActComHeader.setBackgroundColor(new Color(34, 46, 93));
+        regActComHeader.addElement(new Phrase(TranslatorWorker.translateText("Actual Commitment",locale, siteId), new Font(Font.HELVETICA, 6f, Font.BOLD, new Color(255, 255, 255))));
+
+        PdfPCell regActDisbHeader = new PdfPCell();
+        regActDisbHeader.setPadding(0);
+        regActDisbHeader.setBorder(Rectangle.NO_BORDER);
+        regActDisbHeader.setBackgroundColor(new Color(34, 46, 93));
+        regActDisbHeader.addElement(new Phrase(TranslatorWorker.translateText("Actual Disbursement",locale, siteId), new Font(Font.HELVETICA, 6f, Font.BOLD, new Color(255, 255, 255))));
+
+        PdfPCell regActExpHeader = new PdfPCell();
+        regActExpHeader.setPadding(0);
+        regActExpHeader.setBorder(Rectangle.NO_BORDER);
+        regActExpHeader.setBackgroundColor(new Color(34, 46, 93));
+        regActExpHeader.addElement(new Phrase(TranslatorWorker.translateText("Actual Expenditure",locale, siteId), new Font(Font.HELVETICA, 6f, Font.BOLD, new Color(255, 255, 255))));
+
+        PdfPCell regPlanDisbHeader = new PdfPCell();
+        regPlanDisbHeader.setPadding(0);
+        regPlanDisbHeader.setBorder(Rectangle.NO_BORDER);
+        regPlanDisbHeader.setBackgroundColor(new Color(34, 46, 93));
+        regPlanDisbHeader.addElement(new Phrase(TranslatorWorker.translateText("Planned Disbursement",locale, siteId), new Font(Font.HELVETICA, 6f, Font.BOLD, new Color(255, 255, 255))));
+
+        regFndTable.addCell(regCellHeader);
+        regFndTable.addCell(regActComHeader);
+        regFndTable.addCell(regActDisbHeader);
+        regFndTable.addCell(regActExpHeader);
+        regFndTable.addCell(regPlanDisbHeader);
+
+        List <String>regNamesSorted = new ArrayList<String>();
+        regNamesSorted.addAll(regNames);
+
+        
+        Collections.sort(regNamesSorted);
+
+        int counter = 0;
+        Color odd = new Color(206, 226, 251);
+        Color even = Color.white;
+        for (String regName : regNamesSorted) {
+
+            counter ++;
+
+            Color rowColor = counter%2==0 ? odd : even;
+            
+            FundingData curRegFnd = regFnd.get(regName);
+
+            PdfPCell regCell = new PdfPCell();
+            regCell.setBackgroundColor(rowColor);
+            regCell.setPadding(0);
+            regCell.setBorder(Rectangle.NO_BORDER);
+            regCell.addElement(new Phrase(regName, new Font(Font.HELVETICA, 6f)));
+
+            PdfPCell regActCom = new PdfPCell();
+            regActCom.setBackgroundColor(rowColor);
+            regActCom.setPadding(0);
+            regActCom.setBorder(Rectangle.NO_BORDER);
+            regActCom.addElement(new Phrase(FormatHelper.formatNumber(curRegFnd.getCommitment().doubleValue()), new Font(Font.HELVETICA, 6f)));
+
+            PdfPCell regActDisb = new PdfPCell();
+            regActDisb.setBackgroundColor(rowColor);
+            regActDisb.setPadding(0);
+            regActDisb.setBorder(Rectangle.NO_BORDER);
+            regActDisb.addElement(new Phrase(FormatHelper.formatNumber(curRegFnd.getDisbursement().doubleValue()), new Font(Font.HELVETICA, 6f)));
+
+            PdfPCell regActExp = new PdfPCell();
+            regActExp.setBackgroundColor(rowColor);
+            regActExp.setPadding(0);
+            regActExp.setBorder(Rectangle.NO_BORDER);
+            regActExp.addElement(new Phrase(FormatHelper.formatNumber(curRegFnd.getExpenditure().doubleValue()), new Font(Font.HELVETICA, 6f)));
+
+            PdfPCell regPlanDisb = new PdfPCell();
+            regPlanDisb.setBackgroundColor(rowColor);
+            regPlanDisb.setPadding(0);
+            regPlanDisb.setBorder(Rectangle.NO_BORDER);
+            regPlanDisb.addElement(new Phrase(FormatHelper.formatNumber(curRegFnd.getPlannedDisbursement().doubleValue()), new Font(Font.HELVETICA, 6f)));
+
+
+            regFndTable.addCell(regCell);
+            regFndTable.addCell(regActCom);
+            regFndTable.addCell(regActDisb);
+            regFndTable.addCell(regActExp);
+            regFndTable.addCell(regPlanDisb);
+        }
+
+
+        retVal.addCell(regFndTable);
+        
+        return retVal;
+    }
 
 	private PdfPTable getMDGSBox() throws WorkerException {
 
@@ -1648,13 +1819,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return outByteStream;
 	}
 
-   private ByteArrayOutputStream getMapImageFinancial(Object[] fundingList, String fundingType, String mapCode, String mapLevel, MapColorScheme colorScheme) throws Exception {
+   private ByteArrayOutputStream getMapImageFinancial(Object[] fundingList, String fundingType, String mapCode, int mapLevel, MapColorScheme colorScheme) throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
 		GisMap map = null;
 
 		if (mapCode != null && mapCode.trim().length() > 0) {
-			map = GisUtil.getMap(mapCode);
+			map = GisUtil.getMap(mapCode, mapLevel);
 		}
 
 		Map fundingLocationMap = (Map) fundingList[0];

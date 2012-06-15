@@ -1864,6 +1864,7 @@
    <action name="exportTableForm" path="/aim/exportAdminTable"  scope="request" type="org.digijava.module.aim.action.ExportAdminTable"/>
    <action name="aimWorkspaceForm" path="/aim/exportWorkspaceManager2XSL" scope="session" type="org.digijava.module.aim.action.ExportWorkspaceManager2XSL"  validate="false"/>
    <action name="aimEditActivityForm" path="/aim/exportActToPDF" type="org.digijava.module.aim.action.ExportActivityToPDF"/>
+   <action name="aimEditActivityForm" path="/aim/exportActToWord" type="org.digijava.module.aim.action.ExportActivityToWord"/>
    <action name="saveFmDescriptionForm" path="/aim/saveFMDescription"  scope="request" type="org.digijava.module.aim.action.SaveFmDescription"/>
 
 	<action path="/aim/getLastVersions" name="lastVersionsForm" scope="session" type="org.digijava.module.versioning.action.ViewLastVersions" />

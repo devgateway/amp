@@ -77,6 +77,24 @@ function exportToPdf (actId) {
 	
 }
 
+function exportToWord (actId) {
+	var href="/aim/exportActToWord.do?activityid="+actId;
+	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
+		var popupName = "popup"+new Date().getTime();	
+		var popupWindow =  window.open("", popupName, "height=500,width=780,menubar=no,scrollbars=yes,resizable");
+		var referLink = document.createElement('a');
+		referLink.href = href;
+		referLink.target = popupName;
+		document.body.appendChild(referLink);
+		referLink.click();
+		
+	}
+	else{
+		openURLinResizableWindow(href, 780, 500);
+	}
+	
+}
+
 function gotoStep(value) {
 	document.aimEditActivityForm.step.value = value;
 	<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
@@ -281,19 +299,26 @@ function collapseAll() {
             <div style="clear:both;"></div>
 	    </td>
 		<logic:present name="currentMember" scope="session">
-	    <td align=right><img src="img_2/ico_pdf.gif" /> </td>
-	    <td align=right>
+	    
+	    <td align=right nowrap="nowrap">
 	    	<c:set var="trn">
 				<digi:trn>Export To PDF</digi:trn>
 			</c:set> 
-			<a onclick="javascript:exportToPdf(${actId})" class="l_sm" style="cursor: pointer; color:#376091;"><digi:trn>${trn}</digi:trn></a>
+			<a onclick="javascript:exportToPdf(${actId})" class="l_sm" style="cursor: pointer; color:#376091;" title="${trn}">
+				<img src="img_2/ico_pdf.gif" />${trn}
+			</a>
 	    </td>
-		<td width=10>&nbsp;</td>
-	    <td align=right>
-	    	<img src="img_2/ico_print.gif" width="15" height="18" />
+	    <td width="10">&nbsp;</td>	    
+	    <td align=right nowrap="nowrap">	    	
+			<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
+				<img src="img_2/ico_word.gif" />
+				<digi:trn>Export to Word</digi:trn>
+			</a>
 	    </td>
-	    <td align=right>
-	    	<a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="cursor: pointer; color:#376091;">
+	    <td width="10">&nbsp;</td>
+	    <td align=right nowrap="nowrap">
+	    	<a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="cursor: pointer; color:#376091;" title="<digi:trn key="aim:print">Print</digi:trn>">
+	    		<img src="img_2/ico_print.gif" width="15" height="18" />
 	    		<digi:trn key="aim:print">Print</digi:trn>
 	    	</a>
 	    </td>

@@ -153,14 +153,17 @@
 							for(j = 0; j < service.lastResult.year[i][dataField].length; j++){
 								totalAmount = totalAmount + Number(service.lastResult.year[i][dataField][j].amount);
 							}
+						} else {
+							totalAmount = totalAmount + Number(service.lastResult.year[i][dataField].amount);
 						}
 					}
-				}
-				else if ("name" in service.lastResult.year && service.lastResult.year["name"] != "") {
-					for(j = 0; j < service.lastResult.year[dataField].length; j++){
-						totalAmount = totalAmount + Number(service.lastResult.year[dataField][j].amount);
+				} else {
+					if ("name" in service.lastResult.year && service.lastResult.year["name"] != "") {
+						for(j = 0; j < service.lastResult.year[dataField].length; j++){
+							totalAmount = totalAmount + Number(service.lastResult.year[dataField][j].amount);
+						}
 					}
-				}
+				} 
 				if(totalAmount > 0) //If there's something to show
 				{
 					dc.visible = true;
@@ -489,6 +492,7 @@
 				var params:Object = {};
 				params["format"] = "xml";
 				params["divide"] = divide;
+				params["action"] = dataAction;
 				if(idContainer == "AidType"){
 					params["typeofaid"] = "true";
 				}

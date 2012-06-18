@@ -2,6 +2,7 @@ package org.digijava.module.visualization.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,8 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -31,20 +30,21 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.visualization.dbentity.AmpDashboard;
+import org.digijava.module.visualization.dbentity.AmpDashboardGraph;
+import org.digijava.module.visualization.dbentity.AmpGraph;
+import org.digijava.module.visualization.form.DashboardForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -1583,4 +1583,219 @@ public class DbUtil {
         logger.debug("Getting computed-child workspaces successfully ");
         return teams;
     }
+
+	public static List<AmpDashboard> getAllDashboards() {
+        Session session = null;
+        List<AmpDashboard> dsb = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select d from "
+                + AmpDashboard.class.getName() + " d ";
+            Query qry = session.createQuery(queryString);
+            dsb = qry.list();
+
+        } catch (Exception ex) {
+            logger.error("Unable to get dashboards from database", ex);
+        }
+        logger.debug("Getting dashboards successfully ");
+        return dsb;
+    }
+	
+	public static AmpDashboard getDashboardById(Long id) {
+        Session session = null;
+        AmpDashboard dash = null;
+        Iterator itr = null;
+		
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select d from "
+                + AmpDashboard.class.getName() + " d where (d.id=:id)";
+            Query qry = session.createQuery(queryString);
+            qry = session.createQuery(queryString);
+			qry.setParameter("id", id, Hibernate.LONG);
+			itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				dash = (AmpDashboard) itr.next();
+			}
+        } catch (Exception ex) {
+            logger.error("Unable to get dashboard from database", ex);
+        }
+        logger.debug("Getting dashboard successfully ");
+        return dash;
+    }
+
+    
+	public static List<AmpGraph> getAllGraphs() {
+        Session session = null;
+        List<AmpGraph> graphs = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select g from "
+                + AmpGraph.class.getName() + " g ";
+            Query qry = session.createQuery(queryString);
+            graphs = qry.list();
+
+        } catch (Exception ex) {
+            logger.error("Unable to get graphs from database", ex);
+        }
+        logger.debug("Getting graphs successfully ");
+        return graphs;
+    }
+	
+	public static AmpGraph getGraphById(Long id) {
+        Session session = null;
+        AmpGraph graph = null;
+        Iterator itr = null;
+		
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select g from "
+                + AmpGraph.class.getName() + " g where (g.id=:id)";
+            Query qry = session.createQuery(queryString);
+            qry = session.createQuery(queryString);
+			qry.setParameter("id", id, Hibernate.LONG);
+			itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				graph = (AmpGraph) itr.next();
+			}
+        } catch (Exception ex) {
+            logger.error("Unable to get graphs from database", ex);
+        }
+        logger.debug("Getting graphs successfully ");
+        return graph;
+    }
+
+	public static List<AmpDashboardGraph> getDashboardGraphByDashboard(Long id) {
+        Session session = null;
+        List<AmpDashboardGraph> dashGraphs = null;
+        Iterator itr = null;
+		
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select dg from "
+                + AmpDashboardGraph.class.getName() + " dg where (dg.dashboard=:id)";
+            Query qry = session.createQuery(queryString);
+            qry = session.createQuery(queryString);
+			qry.setParameter("id", id, Hibernate.LONG);
+			dashGraphs = qry.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get dashboardGraphs from database", ex);
+        }
+        logger.debug("Getting dashboardGraphs successfully ");
+        return dashGraphs;
+    }
+
+	public static void saveDashboard(AmpDashboard dashboard, DashboardForm form) throws DgException {
+		
+		Transaction tx=null;
+		try {
+			Session session = PersistenceManager.getSession();
+			session.save(dashboard);
+			
+			if(form.getDashGraphList()!=null && form.getDashGraphList().size()>0){
+				for (Iterator iterator = form.getDashGraphList().iterator(); iterator.hasNext();) {
+					AmpDashboardGraph dashboardGraph = (AmpDashboardGraph) iterator.next();
+					dashboardGraph.setDashboard(dashboard);
+					session.save(dashboardGraph);
+				}
+			}
+		} catch (HibernateException e) {
+			logger.error("Error saving dashboard",e);
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					throw new DgException("Cannot rallback save dashboard action",ex);
+				}
+				throw new DgException("Cannot save dashboard!",e);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void updateDashboard(AmpDashboard dashboard, DashboardForm form) throws DgException {
+		
+		Transaction tx=null;
+		try {
+			Session session = PersistenceManager.getSession();
+			session.update(dashboard);
+			Collection<AmpDashboardGraph> dashGraphs = getDashboardGraphByDashboard(dashboard.getId());
+
+			if(form.getDashGraphList()!=null && form.getDashGraphList().size()>0){
+				for (Iterator iterator = form.getDashGraphList().iterator(); iterator.hasNext();) {
+					AmpDashboardGraph ampDashboardGraph = (AmpDashboardGraph) iterator.next();
+					if (dashGraphs.contains(ampDashboardGraph)) {
+						ampDashboardGraph.setDashboard(dashboard);
+						session.update(ampDashboardGraph);
+					} else {
+						ampDashboardGraph.setDashboard(dashboard);
+						session.save(ampDashboardGraph);
+						dashGraphs.add(ampDashboardGraph);
+					}
+				}
+			} else {
+				for (Iterator iterator = dashGraphs.iterator(); iterator.hasNext();) {
+					AmpDashboardGraph ampDashboardGraph = (AmpDashboardGraph) iterator.next();
+					session.delete(ampDashboardGraph);
+				}
+				dashGraphs = null;
+			}
+			
+			if(dashGraphs!=null && dashGraphs.size()>0){
+				for (Iterator iterator = dashGraphs.iterator(); iterator.hasNext();) {
+					AmpDashboardGraph ampDashboardGraph = (AmpDashboardGraph) iterator.next();
+					if (!form.getDashGraphList().contains(ampDashboardGraph)) {
+						session.delete(ampDashboardGraph);
+					}
+				}
+			}
+		} catch (HibernateException e) {
+			logger.error("Error saving dashboard",e);
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					throw new DgException("Cannot rallback save dashboard action",ex);
+				}
+				throw new DgException("Cannot save dashboard!",e);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void removeDashboard(AmpDashboard dashboard) throws DgException {
+		Transaction tx=null;
+		try {
+			Session session = PersistenceManager.getSession();
+
+			Collection<AmpDashboardGraph> dashGraphs = getDashboardGraphByDashboard(dashboard.getId());
+			
+			for (Iterator iterator = dashGraphs.iterator(); iterator.hasNext();) {
+				AmpDashboardGraph ampDashboardGraph = (AmpDashboardGraph) iterator.next();
+				session.delete(ampDashboardGraph);
+			}
+			session.delete(dashboard);
+		} catch (HibernateException e) {
+			logger.error("Error deleting dashboard",e);
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					throw new DgException("Cannot rallback remove dashboard action",ex);
+				}
+				throw new DgException("Cannot delete dashboard!",e);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 }

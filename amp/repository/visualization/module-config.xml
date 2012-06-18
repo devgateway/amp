@@ -9,4 +9,13 @@
 		<action login-required="false" pattern="/excelExport" />
 		<action login-required="false" pattern="/showProjectsList" />
 	</security>
+	
+	<!-- dashboard classes Begin -->
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.visualization.dbentity.AmpDashboardGraph</hibernate-class>
+		<hibernate-class>org.digijava.module.visualization.dbentity.AmpDashboard</hibernate-class>
+		<hibernate-class>org.digijava.module.visualization.dbentity.AmpGraph</hibernate-class>
+	</hibernate-classes>
+	<!-- dashboard classes End -->
+	
 </module-config>

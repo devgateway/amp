@@ -6,6 +6,9 @@
 			type="org.digijava.module.visualization.form.VisualizationForm" />
 			<form-bean name="visualizationSaveOrgInfoForm"
 			type="org.digijava.module.visualization.form.SaveOrgInfoForm" />
+			<form-bean name="dashboardform"
+			type="org.digijava.module.visualization.form.DashboardForm" />
+			
 	</form-beans>
 
 	<action-mappings>
@@ -29,13 +32,26 @@
 			<forward name="region" path="/showLayout.do?layout=sectorDashboard" />
 		</action>
 	    <action name="visualizationform" path="/visualization/showProjectsList" scope="session" type="org.digijava.module.visualization.action.ShowProjectsList">
-	      <forward name="forward" path="/showLayout.do?layout=showProjectsList" />
+	      	<forward name="forward" path="/showLayout.do?layout=showProjectsList" />
 	    </action>
     
     	<action name="visualizationform" path="/visualization/pdfExport" type="org.digijava.module.visualization.action.ExportToPDF"/>
     	<action name="visualizationform" path="/visualization/wordExport" type="org.digijava.module.visualization.action.ExportToWord"/>
     	<action name="visualizationform" path="/visualization/excelExport" type="org.digijava.module.visualization.action.ExportToExcel"/>
     	<action name="visualizationSaveOrgInfoForm" path="/visualization/saveOrgInfo" type="org.digijava.module.visualization.action.SaveAdditionalInformation" scope="request"/>
+    
+	    <action name="dashboardform" path="/visualization/viewDashboardsList" scope="session" type="org.digijava.module.visualization.action.ShowDashboardsList">
+	      	<forward name="forward" path="/showLayout.do?layout=viewDashboardsList"/>
+	    </action>
+	    <action name="dashboardform" path="/visualization/addDashboard" scope="session" type="org.digijava.module.visualization.action.AddDashboard">
+	     	<forward name="forward" path="/showLayout.do?layout=addDashboard" />
+	    </action>
+    	<action name="dashboardform" path="/visualization/saveDashboard" scope="session" type="org.digijava.module.visualization.action.SaveDashboard">
+	      	<forward name="forward" path="/visualization/viewDashboardsList.do" redirect="true"/>
+	    </action>
+    		<action name="dashboardform" path="/visualization/removeDashboard" scope="session" type="org.digijava.module.visualization.action.RemoveDashboard">
+      	<forward name="forward" path="/visualization/viewDashboardsList.do" redirect="true"/>
+    </action>
     
 	</action-mappings>
 </struts-config>

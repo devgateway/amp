@@ -91,21 +91,47 @@ public class ExportRegionManager2XSL extends Action {
 		int countryLayerIndex	= countryLayer.getIndex();
 		int size = values.size();
 		HSSFRow titleRow = sheet.createRow(rowIndex++);
+		HSSFCell cell = titleRow.createCell(cellIndex++);
+		HSSFRichTextString nameTitle = new HSSFRichTextString(
+				TranslatorWorker.translateText("Database ID", locale,
+						siteId));
+		cell.setCellValue(nameTitle);
+		cell.setCellStyle(titleCS);
 		for (AmpCategoryValue value : values) {
-			HSSFCell cell = titleRow.createCell(cellIndex++);
-			HSSFRichTextString nameTitle = new HSSFRichTextString(
+			cell = titleRow.createCell(cellIndex++);
+			nameTitle = new HSSFRichTextString(
 					TranslatorWorker.translateText(value.getValue(), locale,
 							siteId));
 			cell.setCellValue(nameTitle);
 			cell.setCellStyle(titleCS);
 
 		}
+		int lastImpLevelIndex=cellIndex;
+		cell = titleRow.createCell(cellIndex++);
+		nameTitle = new HSSFRichTextString(
+				TranslatorWorker.translateText("Latitude", locale,
+						siteId));
+		cell.setCellValue(nameTitle);
+		cell.setCellStyle(titleCS);
+		cell = titleRow.createCell(cellIndex++);
+		nameTitle = new HSSFRichTextString(
+				TranslatorWorker.translateText("Longitude", locale,
+						siteId));
+		cell.setCellValue(nameTitle);
+		cell.setCellStyle(titleCS);
+		
+		cell = titleRow.createCell(cellIndex++);
+		nameTitle = new HSSFRichTextString(
+				TranslatorWorker.translateText("GeoID", locale,
+						siteId));
+		cell.setCellValue(nameTitle);
+		cell.setCellStyle(titleCS);
+		
 		ActionMessages errors = new ActionMessages();
 		Collection<AmpCategoryValueLocations> rootLocations = DynLocationManagerUtil
 				.getHighestLayerLocations(implLocClass, myForm, errors);
 		Integer[] rowIndexArr={rowIndex};
-		cellIndex=-1;
-		generateLocationHierarchy(rootLocations, rowIndexArr,sheet,++cellIndex,myForm.getHideEmptyCountries(), countryLayerIndex);
+		generateLocationHierarchy(rootLocations, rowIndexArr,sheet,myForm.getHideEmptyCountries(), countryLayerIndex,lastImpLevelIndex);
 		for (int i = 0; i < size; i++) {
 			sheet.autoSizeColumn(i);
 		}
@@ -115,9 +141,10 @@ public class ExportRegionManager2XSL extends Action {
 	}
 
 	private void generateLocationHierarchy(
-			Collection<AmpCategoryValueLocations> locations, Integer[] rowIndex, HSSFSheet sheet,int cellIndex,boolean hideEmptyCountries,int countryLayerIndex ) {
+			Collection<AmpCategoryValueLocations> locations, Integer[] rowIndex, HSSFSheet sheet,boolean hideEmptyCountries,int countryLayerIndex,int lastImpLevelIndex ) {
 		if (locations != null&&locations.size()>0) {
 			for (AmpCategoryValueLocations location : locations) {
+				int cellIndex=0;
 				Set<AmpCategoryValueLocations> childrenLocs = location
 				.getChildLocations();
 				int currentLayer				= location.getParentCategoryValue().getIndex();
@@ -125,10 +152,23 @@ public class ExportRegionManager2XSL extends Action {
 					continue;
 				}
 				HSSFRow row = sheet.createRow(rowIndex[0]++);
-				HSSFCell cell = row.createCell(cellIndex);
-				cell.setCellValue(location.getName());
-				int newVal=cellIndex+1;
-				generateLocationHierarchy(childrenLocs, rowIndex,sheet,newVal,hideEmptyCountries,countryLayerIndex);
+				HSSFCell cell = row.createCell(cellIndex++);
+				cell.setCellValue(location.getId());
+				List<String> parents=DynLocationManagerUtil.getParents(location);
+				if(parents!=null){
+					for(String parent:parents){
+						cell = row.createCell(cellIndex++);
+						cell.setCellValue(parent);
+					}
+				}
+				cellIndex=lastImpLevelIndex;
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(location.getGsLat());
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(location.getGsLong());
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(location.getGeoCode());
+				generateLocationHierarchy(childrenLocs, rowIndex,sheet,hideEmptyCountries,countryLayerIndex,lastImpLevelIndex);
 			}
 		}
 		else{

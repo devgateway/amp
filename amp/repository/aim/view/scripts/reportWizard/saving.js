@@ -28,8 +28,12 @@ function getReportTitle() {
 }
 
 function getReportCategory() {
-	var category = document.getElementById("repCat").value;
-	return category;
+	var categoryEl 	= document.getElementById("repCat");
+	if (categoryEl != null ) {
+		var category	= categoryEl.value; 
+		return category;
+	}
+	return 0;
 }
 
 function getReportDescription() {

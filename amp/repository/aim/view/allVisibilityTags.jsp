@@ -340,7 +340,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Activity Updated By" feature="Identification"></field:display> 
 <field:display name="Activity Updated On" feature="Identification"></field:display> 
 <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display> 
-<field:display name="Actors" feature="Issues"></field:display> 
+<field:display name="Actors" feature="Issues"></field:display>
 <field:display name="Actual Approval Date" feature="Planning" ></field:display>
 <field:display name="Actual Completion Date" feature="Planning"></field:display> 
 <field:display name="Final Date for Disbursements Comments" feature="Planning"></field:display>
@@ -672,6 +672,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Internal Financing" feature="Admin NPD"></field:display> 
 <field:display name="Issue Date" feature="Issues"></field:display> 
 <field:display name="Issues" feature="Issues"></field:display> 
+<field:display name="Issues / Measures / Actors" feature="Issues"></field:display> 
 <field:display name="Joint Criteria" feature="Budget"></field:display> 
 <field:display name="Lessons Learned" feature="Identification"></field:display> 
 <field:display name="Level 1 Sectors List" feature="Sectors"></field:display> 

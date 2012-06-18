@@ -81,7 +81,7 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 	 * @return the ColumnWorker class
 	 * @see ColumnWorker
 	 */
-	public abstract Class getWorker();
+	public abstract Class<? extends ColumnWorker> getWorker();
 	
 
 	public int compareTo(C o) {
@@ -229,6 +229,9 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 	 */
 	public abstract Cell newInstance();
 	
+	public String getWrapDirective() {
+		 return "nowrap=\"nowrap\"";
+	}
 	
 
 

@@ -7,7 +7,7 @@
 <bean:define id="cellColumn" name="viewable" type="org.dgfoundation.amp.ar.CellColumn" scope="request" toScope="page"/>
 <bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="request" toScope="page"/>
 <% Cell c=cellColumn.getByOwner(ownerId);%>
-<td  nowrap="nowrap" class="clsTableCellDataHtml">
+<td  <%= (c!=null)?c.getWrapDirective():"nowrap='nowrap'" %> class="clsTableCellDataHtml">
 	<% if(c!=null) {
 		request.setAttribute("cell",c);
 	%> 

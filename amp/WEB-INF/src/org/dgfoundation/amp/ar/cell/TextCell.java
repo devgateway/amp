@@ -30,7 +30,7 @@ public class TextCell extends Cell {
 		value="";		
 	}
 	
-	public Class getWorker() {
+	public Class<TextColWorker> getWorker() {
 		return TextColWorker.class;
 	}
 	

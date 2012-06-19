@@ -1552,6 +1552,13 @@ public class DbUtil {
 	private static Long[] getAllDescendantsLocation(Long[] locationIds,
 			ArrayList<AmpCategoryValueLocations> allLocationsList) {
     	List<Long> tempLocationsIds = new ArrayList<Long>();
+    	if (locationIds.length == 1){
+    		AmpCategoryValueLocations loc = getLocationById(locationIds[0]);
+    		if (loc.getParentLocation()==null) {
+    			Long[] ids = {loc.getId()};
+				return ids;
+			}
+    	}
 		for(AmpCategoryValueLocations as : allLocationsList){
 			for(Long i : locationIds){
 		    	if(!tempLocationsIds.contains(i)) tempLocationsIds.add(i);
@@ -1583,4 +1590,22 @@ public class DbUtil {
         logger.debug("Getting computed-child workspaces successfully ");
         return teams;
     }
+	
+	public static AmpCategoryValueLocations getLocationById(Long id) {
+		Session session = null;
+ 	 	try {
+ 	 		session = PersistenceManager.getSession();
+ 	 		String queryString = "select loc from "
+ 	 		+ AmpCategoryValueLocations.class.getName()
+ 	 		+ " loc where (loc.id=:id)" ;                   
+ 	 		Query qry = session.createQuery(queryString);
+ 	 		qry.setLong("id", id);
+ 	 		AmpCategoryValueLocations returnLoc = (AmpCategoryValueLocations)qry.uniqueResult();
+ 	 		return returnLoc;
+ 	 	} catch (Exception e) {
+ 	 		e.printStackTrace();
+ 	 	}
+ 	 	return null;
+ 	}
+	
 }

@@ -1958,7 +1958,7 @@ public class DataDispatcher extends DispatchAction {
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
 	            if(regionId != null && !regionId.equals("-1")){
 	            	Long id = Long.parseLong(regionId);
-	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue());
+	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue(),request);
 	            }
 	            else
 	        		map = visualizationForm.getRanksInformation().getFullRegions();
@@ -1968,10 +1968,10 @@ public class DataDispatcher extends DispatchAction {
         	{
 	            if(regionId != null && !regionId.equals("-1")){
 	            	Long id = Long.parseLong(regionId);
-	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue());
+	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue(),request);
 	            }
 	            else
-	            	map = DashboardUtil.getRankRegions(DbUtil.getRegions(filter), filter, startYear.intValue(), endYear.intValue());
+	            	map = DashboardUtil.getRankRegions(DbUtil.getRegions(filter), filter, startYear.intValue(), endYear.intValue(),request);
         	}
         	
 	        if (map==null) {
@@ -2107,7 +2107,11 @@ public class DataDispatcher extends DispatchAction {
 	            regionData += "<" + loc.getName() + ">";
                 for (Long i = startYear; i <= endYear; i++) {
 	    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-	    			Long[] ids = {loc.getId()};
+	    			Long[] ids = new Long[1];
+	    			if (loc.getId()!=null)
+	    				ids[0] = loc.getId();
+	    			else
+	    				ids[0] = 0l;
 	    			newFilter.setSelLocationIds(ids);
 	    			newFilter.setAllLocationsList(filter.getAllLocationsList());
 	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());

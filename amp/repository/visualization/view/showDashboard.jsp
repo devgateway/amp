@@ -615,15 +615,15 @@ function initializeGlobalVariables(){
 														<html:option value="4">4</html:option>
 														<html:option value="5">5</html:option>
 													</html:select></td>
-												<!--<td><b><digi:trn>Year To Compare Growth</digi:trn>:</b>
-												</td>
-												<td><html:select property="filter.yearToCompare"
-														styleId="yearToCompare_dropdown" styleClass="dropdwn_sm"
-														style="width:70px;">
-														<html:optionsCollection property="filter.years"
-															label="wrappedInstance" value="wrappedInstance" />
-													</html:select></td>
-											--></tr>
+													<td></td>
+													<td></td>
+													<td><b><digi:trn>Show national located values</digi:trn>:</b>
+													</td>
+													<td>
+														<html:checkbox property="filter.showNationalValues" styleId="show_national_values"/>
+													</td>
+												
+												</tr>
 										</table>
 									</div>
 								</div>
@@ -799,6 +799,7 @@ function initializeGlobalVariables(){
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
 <html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
 <html:hidden property="filter.showAmountsInThousands" styleId="showAmountsInThousands"/>
+<html:hidden property="filter.showNationalValues" styleId="showNationalValues"/>
 <html:hidden property="filter.showMonochrome" styleId="showMonochrome"/>
 <html:hidden property="filter.commitmentsVisible" styleId="commitmentsVisible"/>
 <html:hidden property="filter.disbursementsVisible" styleId="disbursementsVisible" />

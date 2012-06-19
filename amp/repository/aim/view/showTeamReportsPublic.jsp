@@ -115,7 +115,7 @@ function submitForm(action){
 												style="width: 970px; border-left: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; border-right: 2px solid #CCCCCC;">
 												<tr>
 													<td>
-													<div style="float:right; margin-right:15px; margin-top:20px;">
+													<div style="float:right; margin-right:15px; margin-top:8px;">
 													
 														<div class="t_sm">
             <b><digi:trn>Icons Reference</digi:trn></b>

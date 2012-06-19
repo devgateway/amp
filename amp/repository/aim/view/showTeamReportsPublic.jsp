@@ -115,6 +115,17 @@ function submitForm(action){
 												style="width: 970px; border-left: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; border-right: 2px solid #CCCCCC;">
 												<tr>
 													<td>
+													<div style="float:right; margin-right:15px; margin-top:20px;">
+													
+														<div class="t_sm">
+            <b><digi:trn>Icons Reference</digi:trn></b>
+		<br/>
+		<img src="img_2/ico_exc.gif">&nbsp;&nbsp;<digi:trn>Click on this icon to get report in Excel format</digi:trn> &nbsp;&nbsp;|&nbsp;&nbsp;
+		<img src="img_2/ico_pdf.gif">&nbsp;&nbsp;<digi:trn>Click on this icon to get report in PDF format</digi:trn>
+	</div>
+													
+													
+													</div>
 														<table cellpadding="6" cellspacing="6">
 															<tr>
 																<td id="reportsearchform"><digi:trn>Report Title</digi:trn>:
@@ -591,12 +602,7 @@ function submitForm(action){
 												</tr>
 												<tr>
 													<td>
-	<div class="t_sm">
-            <b><digi:trn>Icons Reference</digi:trn></b>
-		<br/>
-		<img src="img_2/ico_exc.gif">&nbsp;&nbsp;<digi:trn>Click on this icon to get report in Excel format</digi:trn> &nbsp;&nbsp;|&nbsp;&nbsp;
-		<img src="img_2/ico_pdf.gif">&nbsp;&nbsp;<digi:trn>Click on this icon to get report in PDF format</digi:trn>
-	</div>
+
 													</td>
 												</tr>
 											</table>

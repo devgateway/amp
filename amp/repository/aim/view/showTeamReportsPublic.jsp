@@ -78,6 +78,9 @@ function submitForm(action){
 	font-family: Arial;
 	font-size:10px;
 }
+
+
+
 </style>
 <digi:instance property="aimTeamReportsForm" />
 <digi:form action="/viewTeamReports.do" method="post">
@@ -102,14 +105,12 @@ function submitForm(action){
 									<div id="demo" class="yui-navset" style="width: 1000px;">
 										<ul class="yui-nav" id="MyTabs">
 											<li class="selected"><a rel="Tab_Name" href="#"
-												id="Tab-tab tertiary" onclick="return false;"
-												style="background-color: #f2f2f2; background-repeat: no-repeat; background-image: none;">
+												id="Tab-tab tertiary" onclick="return false;">
 													<div>${pageTitle}</div> </a>
 											</li>
 										</ul>
 										<div id="Tab_Name"
-											class="ui-tabs-panel ui-widget-content ui-corner-bottom"
-											style="background-color: #F2F2F2; padding: 5px; border: 1px solid rgb(208, 208, 208);">
+											class="ui-tabs-panel ui-widget-content ui-corner-bottom" style="margin-top:-1px;padding: 5px; border: 1px solid rgb(208, 208, 208);">
 
 											<table bgcolor="#FFFFFF"
 												style="width: 970px; border-left: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; border-right: 2px solid #CCCCCC;">

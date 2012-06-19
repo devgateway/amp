@@ -74,9 +74,40 @@ public class RMMapCalculationUtil {
         boolean includeCildLocations = true;
 
         Object[] activityFundings = null;
+        Object[] activityRegionalFundings = null;
 
-        if (isRegional == GisUtil.GIS_DONOR_FUNDINGS) {
-        activityFundings = DbUtil.getActivityFundings(sectorCollector,
+
+        if (!filter.getMapModeFin().equalsIgnoreCase("pledgesData")) {
+            if (isRegional == GisUtil.GIS_DONOR_FUNDINGS) {
+            activityFundings = DbUtil.getActivityFundings(sectorCollector,
+                                                           programsIds,
+                                                           donnorAgencyIds,
+                                                           donorGroupIds,
+                                                           donorTypeIds,
+                                                           includeCildLocations,
+                                                           locations,
+                                                           workspaces,
+                                                           typeOfAssistanceIds,
+                                                           fStartDate.getTime(),
+                                                           fEndDate.getTime(),
+                                                           isPublic);
+            }
+
+            if (isRegional == GisUtil.GIS_REGIONAL_FUNDINGS) {
+            activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
+                                                                           programsIds,
+                                                                           donnorAgencyIds,
+                                                                           donorGroupIds,
+                                                                           donorTypeIds,
+                                                                           includeCildLocations,
+                                                                           locations,
+                                                                           workspaces,
+                                                                           fStartDate.getTime(),
+                                                                           fEndDate.getTime(),
+                                                                           isPublic);
+            }
+        } else {
+            activityFundings = DbUtil.getPledgeFundings(sectorCollector,
                                                        programsIds,
                                                        donnorAgencyIds,
                                                        donorGroupIds,
@@ -89,20 +120,8 @@ public class RMMapCalculationUtil {
                                                        fEndDate.getTime(),
                                                        isPublic);
         }
-        Object[] activityRegionalFundings = null;
-        if (isRegional == GisUtil.GIS_REGIONAL_FUNDINGS) {
-        activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
-                                                                       programsIds,
-                                                                       donnorAgencyIds,
-                                                                       donorGroupIds,
-                                                                       donorTypeIds,
-                                                                       includeCildLocations,
-                                                                       locations,
-                                                                       workspaces,
-                                                                       fStartDate.getTime(),
-                                                                       fEndDate.getTime(),
-                                                                       isPublic);
-        }
+
+
         Object[] fundingList = getAllFundingsByLocations(activityFundings,
                                                          activityRegionalFundings,
                                                          includeCildLocations,

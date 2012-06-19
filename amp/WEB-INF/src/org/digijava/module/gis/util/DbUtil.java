@@ -44,11 +44,16 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesProgram;
@@ -1992,7 +1997,25 @@ public class DbUtil {
 
         //If any activity in selected filter
         if (!allActivityIdsSet.isEmpty()) {
+
+            AmpCategoryClass catClass = null;
+            Long actualCommitmentCatValId = null;
+            try {
+                catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
+                for (AmpCategoryValue val : catClass.getPossibleValues()) {
+                    if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                        actualCommitmentCatValId = val.getId();
+                        break;
+                    }
+                }
+            } catch (NoCategoryClassException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+
             String activityWhereclause = generateWhereclause(allActivityIdsSet, new GenericIdGetter());
+
+
 
             Session sess = null;
             try {
@@ -2004,6 +2027,11 @@ public class DbUtil {
                 queryStr.append(" and fd.ampFundingId.ampActivityId.ampActivityId in ");
                 queryStr.append(activityWhereclause);
 
+                queryStr.append(" and fd.adjustmentType.id=");
+                queryStr.append(actualCommitmentCatValId);
+
+
+                
                 if (donorIdsWhereclause != null) {
                     queryStr.append(" and fd.ampFundingId.ampDonorOrgId.ampOrgId in ");
                     queryStr.append(donorIdsWhereclause);
@@ -2033,6 +2061,8 @@ public class DbUtil {
                     queryStr.append(" and (fd.ampFundingId.ampActivityId.approvalStatus ='approved' or fd.ampFundingId.ampActivityId.approvalStatus ='startedapproved')");
                     queryStr.append(" and fd.ampFundingId.ampActivityId.team.parentTeamId is not null");
                 }
+                
+                
 
                 Query q = sess.createQuery(queryStr.toString());
                 q.setDate("START_DATE", startDate);
@@ -2266,6 +2296,9 @@ public class DbUtil {
             if (loc.getChildLocations() != null && !loc.getChildLocations().isEmpty()) {
                 for (AmpCategoryValueLocations childLoc: loc.getChildLocations()) {
                     retVal.add(childLoc);
+                    if (childLoc.getChildLocations() != null && !childLoc.getChildLocations().isEmpty()) {
+                        retVal.addAll(childLoc.getChildLocations());
+                    }
                 }
             }
         }
@@ -2338,12 +2371,17 @@ public class DbUtil {
 
     //For pledges
     public static Object[] getPledgeFundings (Collection<Long> sectorIds,
-                                              Collection<Long> programIds,
-                                              Collection<Long> donorIds,
-                                              Collection<AmpCategoryValueLocations> locations,
-                                              List <AmpTeam> workspaces,
-                                              java.util.Date startDate,
-                                              java.util.Date endDate) {
+                                                    Collection<Long> programIds,
+                                                    Collection<Long> donorIds,
+                                                    Collection<Long> donorGroupIds,
+                                                    Collection<Long> donorTypeIds,
+                                                    boolean includeCildLocations,
+                                                    Collection<AmpCategoryValueLocations> locations,
+                                                    List <AmpTeam> workspaces,
+                                                    Collection <Long> typeOfAssistanceIds,
+                                                    java.util.Date startDate,
+                                                    java.util.Date endDate,
+                                                    boolean isPublic) {
         List queryResults = null;
         Object[] retVal = null;
 

@@ -660,7 +660,7 @@ function initializeGlobalVariables(){
 	<div id="exportDiv" class="yui-navset">
 		<table width="100%" height=400 cellpadding="0" cellspacing="0">
 			<tr>
-				<td class="inside" width="30%" >
+				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Export Type</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.typeOpt" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>  </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"><br />
@@ -669,7 +669,7 @@ function initializeGlobalVariables(){
 		        </div>
 		        </td>
 				<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-			        <td class="inside" width="30%" >
+			        <td class="inside" width="30%" valign="top">
 					<div class="selector_type"><b><digi:trn>ODA Growth</digi:trn></b></div>
 					<div>
 			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -679,7 +679,7 @@ function initializeGlobalVariables(){
 			        </div>
 			        </td>
 		    	</c:if>
-				<td class="inside" width="30%" >
+				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Summary</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.summaryOpt" styleId="export_summary_0" value="0"><digi:trn>Exclude Summary</digi:trn></html:radio><br />
@@ -688,7 +688,7 @@ function initializeGlobalVariables(){
 		        </td>
 		    </tr>
 		    <tr>
-				<td class="inside" width="30%" >
+				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Funding</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.fundingOpt" styleId="export_funding_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -697,7 +697,7 @@ function initializeGlobalVariables(){
 		            <html:radio property="exportData.fundingOpt" styleId="export_funding_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
-		        <td class="inside" width="30%" >
+		        <td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Aid Predictability</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -706,7 +706,7 @@ function initializeGlobalVariables(){
 		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
-		    	<td class="inside" width="30%" >
+		    	<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Aid Type</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -717,7 +717,7 @@ function initializeGlobalVariables(){
 		        </td>
 		    </tr>
 		    <tr>
-				<td class="inside" width="30%" >
+				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Financing Instrument</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -727,7 +727,7 @@ function initializeGlobalVariables(){
 		        </div>
 		        </td>
 		    	<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-    			<td class="inside" width="30%" >
+    			<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Donor Profile</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.donorOpt" styleId="export_donor_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -738,7 +738,7 @@ function initializeGlobalVariables(){
 		        </td>
 		        </c:if>
 		        <c:if test="${visualizationform.filter.dashboardType ne '3' }">
-    			<td class="inside" width="30%" >
+    			<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Sector</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.sectorOpt" styleId="export_sector_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -749,7 +749,7 @@ function initializeGlobalVariables(){
 		        </td>
 		        </c:if>
 		        <c:if test="${visualizationform.filter.dashboardType ne '2' }">
-    			<td class="inside" width="30%" >
+    			<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Region</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.regionOpt" styleId="export_region_0" value="0"><digi:trn>None</digi:trn></html:radio><br />

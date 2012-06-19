@@ -46,7 +46,8 @@
     }
     .chartFieldset {
 	    background-color: #F4F4F4;
-    }	
+    }
+	
 </style>
 <!-- Visualization's Scripts-->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
@@ -259,21 +260,21 @@ function initializeGlobalVariables(){
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_1" >
+														<td class="side_opt_sel" id="general_selector_1" bgcolor="#FFFFFF">
 															<div class="selector_type_cont" onclick="changeTab(1)">
 																<digi:trn>Organization Groups With Organizations</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_2">
+														<td class="side_opt_sel" id="general_selector_2" bgcolor="#FFFFFF">
 															<div class="selector_type_cont" onclick="changeTab(2)">
 																<digi:trn>Regions With Zones</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_3">
+														<td class="side_opt_sel" id="general_selector_3" bgcolor="#FFFFFF">
 															<div class="selector_type_cont" onclick="changeTab(3)">
 																<digi:trn>Sectors and Sub Sectors</digi:trn>
 															</div></td>

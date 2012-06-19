@@ -866,11 +866,26 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         }
 
         function removeSelectedContacts(){
-        	<digi:context name="remConts" property="context/module/moduleinstance/editOrganisation.do" />
-            document.aimAddOrgForm.action = "${remConts}";
-            document.aimAddOrgForm.target = "_self"
-            document.aimAddOrgForm.actionFlag.value="deleteContact";
-            document.aimAddOrgForm.submit();
+        	var atLeastOneIsChecked = false;
+        	for (var i = 0; ((i < document.aimAddOrgForm.selectedContactInfoIds.length) && (atLeastOneIsChecked == false)) ; i++){
+        		if (document.aimAddOrgForm.selectedContactInfoIds[i].checked) { 
+                	atLeastOneIsChecked = true;
+                } else { 
+                	atLeastOneIsChecked = false;
+                	
+                }
+            }
+        	if (atLeastOneIsChecked) {
+            	<digi:context name="remConts" property="context/module/moduleinstance/editOrganisation.do" />
+                document.aimAddOrgForm.action = "${remConts}";
+                document.aimAddOrgForm.target = "_self"
+                document.aimAddOrgForm.actionFlag.value="deleteContact";
+                document.aimAddOrgForm.submit();
+        	} else {
+    			var errorMesage='<digi:trn jsFriendly="true">Please select at least one contact to delete</digi:trn>';
+            	alert(errorMesage);
+        		return false;
+        	}
         }
 
         function changePrimaryState(){

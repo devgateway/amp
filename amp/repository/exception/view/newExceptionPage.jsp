@@ -146,15 +146,15 @@
         			</td>
         		</tr>
         		<tr>
-        			<td width="120px">
-        				&nbsp;
+        			<td width="120px">&nbsp;
+        				
         			</td>
         			<td style="background-color: #F0F0F0">
        					<div id="devInfo" style="display: none;"  >
        						<div style="display: none;">
 							<fieldset>
 					          <legend>
-					       		<a href="javascript:toggleLayer('docDiv');">
+					       		<a href="javascript:toggleLayer('docDiv');" style="color:#FFFFFF;">
 				            		<digi:trn key="exception:suggestedDocumentation">Suggested Documentation</digi:trn>
 						        </a>
 					          </legend>
@@ -168,7 +168,7 @@
 							
 							<fieldset>
 					          <legend>
-					          	<a href="javascript:toggleLayer('errMsg');">
+					          	<a href="javascript:toggleLayer('errMsg');" style="color:#FFFFFF;">
 				            		<digi:trn key="exception:exceptionDetails">Exception details</digi:trn>
 					            </a>
 					          </legend>
@@ -226,7 +226,7 @@
 							<logic:notEmpty name="exceptionReportForm" property="exceptionInfo.stackTrace">
 								<fieldset>
 						          <legend>
-						          	<a href="javascript:toggleLayer('stackDiv');">
+						          	<a href="javascript:toggleLayer('stackDiv');" style="color:#FFFFFF;">
 							            <digi:trn key="exception:stackTrace">Stack trace</digi:trn>
 						            </a>
 						          </legend>

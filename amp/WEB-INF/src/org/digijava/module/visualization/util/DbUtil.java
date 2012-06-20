@@ -588,6 +588,7 @@ public class DbUtil {
                 oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
             }
             if (sectorCondition) {
+            	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
                 oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
             }
 
@@ -711,9 +712,11 @@ public class DbUtil {
 	                oql += DashboardUtil.getTeamQuery(teamMember);
 	            }
 	            if (locationCondition) {
+	            	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
 	                oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
 	            }
 	            if (sectorCondition) {
+	            	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
 	            }
 	           

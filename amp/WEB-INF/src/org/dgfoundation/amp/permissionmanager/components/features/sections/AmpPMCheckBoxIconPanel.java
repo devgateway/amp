@@ -6,11 +6,14 @@ package org.dgfoundation.amp.permissionmanager.components.features.sections;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LabelIconPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMCheckBoxTree;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
@@ -64,6 +67,11 @@ public class AmpPMCheckBoxIconPanel extends LabelIconPanel {
 		IModel dataModel = new PropertyModel(ampTree,"checked"); 
 		add(cb = cbTree.newCheckBox("checkbox", dataModel, callback)); 
 		add(newContentComponent("content", tree, model));
+		String extPath = "/TEMPLATE/ampTemplate/images/info.gif";
+		WebMarkupContainer downloadLinkImg = new WebMarkupContainer("infoTip");
+		downloadLinkImg.add(new AttributeModifier("src", true, new Model(extPath)));
+		downloadLinkImg.add(new AttributeModifier("title", true, new Model(ampTree.getAmpObjectVisibility().getId().toString())));
+		add(downloadLinkImg);
 	}
 
 	/**

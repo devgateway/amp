@@ -1439,7 +1439,6 @@ function refreshBoxes(o){
 		div = document.getElementById("FundingChartTitleLegend");
 		input = document.getElementById("FundingChartTitle");
 		value = trnODAHistoricalTrend + " - " + fundType;
-		alert (value);
 		if (div != null)
 			div.innerHTML = value;
 		if (input != null)

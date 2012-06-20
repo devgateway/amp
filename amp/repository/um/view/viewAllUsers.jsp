@@ -48,8 +48,12 @@ function banUser(txt) {
       document.umViewAllUsersForm.target="_self";
       document.umViewAllUsersForm.submit();
 }
-	
 
+ function resetUsers() {
+     document.umViewAllUsersForm.action="/um/viewAllUsers.do?currentAlpha=viewAll&reset=true";
+     document.umViewAllUsersForm.target="_self";
+     document.umViewAllUsersForm.submit();
+}
 </script>
 
 
@@ -170,7 +174,16 @@ function banUser(txt) {
 							<c:set var="translation">
 								<digi:trn key="um:viewAllUsers:showButton">Show</digi:trn>
 							</c:set> <input type="button" value="${translation}" class="dr-menu"
-							style="font-family: verdana; font-size: 11px;" onclick="showUsers()" /></td>
+							style="font-family: verdana; font-size: 11px;" onclick="showUsers()" />
+							
+							<c:set var="translation">
+								<digi:trn key="um:viewAllUsers:resetButton">Reset</digi:trn>
+							</c:set> <input type="button" value="${translation}" class="dr-menu"
+							style="font-family: verdana; font-size: 11px;"  onclick="resetUsers()"  />
+							
+							</td>
+							
+							
 					</tr>
 					<tr>
 						<td noWrap width=967 vAlign="top" colspan="7"

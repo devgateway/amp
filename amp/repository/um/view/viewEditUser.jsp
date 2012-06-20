@@ -133,7 +133,8 @@ function isInvalid(field){
 <div class="ampFormContainer">
 <digi:form action="/viewEditUser.do" method="post">
   <html:hidden name="umViewEditUserForm" property="event" styleId="event"/>
-
+  <html:hidden name="umViewEditUserForm" property="id" styleId="id"/>
+  
   <table bgColor="#ffffff" cellPadding="5" cellSpacing="1" width="705" >
 	<tr>
 		<td class="r-dotted-lg" width="14">&nbsp;</td>

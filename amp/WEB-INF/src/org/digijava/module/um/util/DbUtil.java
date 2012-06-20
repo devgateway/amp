@@ -452,8 +452,6 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-
-//beginTransaction();
             ArrayList removeArray = new ArrayList();
 
             if(user.getInterests() != null) {
@@ -489,11 +487,7 @@ public class DbUtil {
                 user.getInterests().removeAll(removeArray);
 
             session.update(user);
-
-//session.flush();
             
-            //tx.commit();
-
             if(user.getUserPreference()!=null){
                 UserUtils.saveUserPreferences(user.getUserPreference());
             }

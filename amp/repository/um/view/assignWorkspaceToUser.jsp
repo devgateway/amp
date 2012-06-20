@@ -24,7 +24,7 @@
 		document.umViewEditUserForm.submit();
 	}
 	function cancel() {
-		document.umViewEditUserForm.action = "/um/viewEditUser.do";
+		document.umViewEditUserForm.action = "/um/viewEditUser.do?addWorkspace=false";
 		document.umViewEditUserForm.target = "_self";
 		document.umViewEditUserForm.submit();
 		return false;

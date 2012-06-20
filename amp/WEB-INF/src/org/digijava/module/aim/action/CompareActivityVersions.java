@@ -568,6 +568,7 @@ public class CompareActivityVersions extends DispatchAction {
 			// Code related to versioning.
 			AmpActivityGroup auxActivityGroup = (AmpActivityGroup) session.load(AmpActivityGroup.class, vForm
 					.getOldActivity().getAmpActivityGroup().getAmpActivityGroupId());
+			AmpActivityVersion prevVersion		= auxActivityGroup.getAmpActivityLastVersion();
 			auxActivityGroup.setAmpActivityLastVersion(auxActivity);
 			session.save(auxActivityGroup);
 			auxActivity.setAmpActivityGroup(auxActivityGroup);
@@ -585,6 +586,13 @@ public class CompareActivityVersions extends DispatchAction {
 			
 					
 			logger.warn("Activity Saved.");
+			
+			Site site = RequestUtils.getSite(request);
+			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+			java.util.Locale locale = new java.util.Locale(navigationLanguage.getCode());
+			LuceneUtil.addUpdateActivity(request.getSession().getServletContext(), true, site, locale, auxActivity, prevVersion);
+			
+			
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();

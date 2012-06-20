@@ -92,38 +92,38 @@ public class ExportRegionManager2XSL extends Action {
 		int size = values.size();
 		HSSFRow titleRow = sheet.createRow(rowIndex++);
 		HSSFCell cell = titleRow.createCell(cellIndex++);
-		HSSFRichTextString nameTitle = new HSSFRichTextString(
-				TranslatorWorker.translateText("Database ID", locale,
-						siteId));
+		HSSFRichTextString nameTitle = new HSSFRichTextString("Database ID");
 		cell.setCellValue(nameTitle);
 		cell.setCellStyle(titleCS);
 		for (AmpCategoryValue value : values) {
 			cell = titleRow.createCell(cellIndex++);
-			nameTitle = new HSSFRichTextString(
-					TranslatorWorker.translateText(value.getValue(), locale,
-							siteId));
+			nameTitle = new HSSFRichTextString(value.getValue());
 			cell.setCellValue(nameTitle);
 			cell.setCellStyle(titleCS);
 
 		}
 		int lastImpLevelIndex=cellIndex;
 		cell = titleRow.createCell(cellIndex++);
-		nameTitle = new HSSFRichTextString(
-				TranslatorWorker.translateText("Latitude", locale,
-						siteId));
+		nameTitle = new HSSFRichTextString("Latitude");
 		cell.setCellValue(nameTitle);
 		cell.setCellStyle(titleCS);
 		cell = titleRow.createCell(cellIndex++);
-		nameTitle = new HSSFRichTextString(
-				TranslatorWorker.translateText("Longitude", locale,
-						siteId));
+		nameTitle = new HSSFRichTextString("Longitude");
 		cell.setCellValue(nameTitle);
 		cell.setCellStyle(titleCS);
 		
 		cell = titleRow.createCell(cellIndex++);
-		nameTitle = new HSSFRichTextString(
-				TranslatorWorker.translateText("GeoID", locale,
-						siteId));
+		nameTitle = new HSSFRichTextString("GeoID");
+		cell.setCellValue(nameTitle);
+		cell.setCellStyle(titleCS);
+		
+		cell = titleRow.createCell(cellIndex++);
+		nameTitle = new HSSFRichTextString("ISO");
+		cell.setCellValue(nameTitle);
+		cell.setCellStyle(titleCS);
+		
+		cell = titleRow.createCell(cellIndex++);
+		nameTitle = new HSSFRichTextString("ISO3");
 		cell.setCellValue(nameTitle);
 		cell.setCellStyle(titleCS);
 		
@@ -168,6 +168,10 @@ public class ExportRegionManager2XSL extends Action {
 				cell.setCellValue(location.getGsLong());
 				cell = row.createCell(cellIndex++);
 				cell.setCellValue(location.getGeoCode());
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(location.getIso());
+				cell = row.createCell(cellIndex++);
+				cell.setCellValue(location.getIso3());
 				generateLocationHierarchy(childrenLocs, rowIndex,sheet,hideEmptyCountries,countryLayerIndex,lastImpLevelIndex);
 			}
 		}

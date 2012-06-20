@@ -250,6 +250,7 @@
 						<p>
 							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.expandAll();"><digi:trn>Expand</digi:trn></a>]
 							&nbsp;&nbsp;[<a class="functional" onclick="treeObj.collapseAll();treeObj.showHideNode(false, 'DHTMLSuite_treeNode1');"><digi:trn>Collapse</digi:trn></a>]
+							&nbsp;&nbsp;[<a class="functional"  href="/aim/importIntoDynLocationManagerXSL.do"><digi:trn>Import Regions</digi:trn></a>]
 						</p>
 						<p>
 							<digi:trn>Hide empty countries</digi:trn> <html:checkbox property="hideEmptyCountries" onchange="simpleSubmit();" onclick="simpleSubmit();" styleId="hide_empty_countries"/>

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,15 +15,22 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.exception.DynLocationStructuralException;
 import org.digijava.module.aim.exception.DynLocationStructureStringException;
 import org.digijava.module.aim.form.DynLocationManagerForm;
+import org.digijava.module.aim.form.DynLocationManagerForm.Option;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -984,6 +992,125 @@ public class DynLocationManagerUtil {
 			return o1.getName().compareTo(o2.getName());
 		}
 	};
+
+	public static ErrorCode importExcelFile(InputStream inputStream,
+			Option option) throws AimException {
+		POIFSFileSystem fsFileSystem = null;
+		try {
+			fsFileSystem = new POIFSFileSystem(inputStream);
+			HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
+			HSSFSheet hssfSheet = workBook.getSheetAt(0);
+			Row hssfRow = hssfSheet.getRow(0);
+			int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
+			List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
+					CategoryManagerUtil
+							.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
+			int i = 1;
+			int hierarchyNumberOfCells=implLocs.size();
+			// last five cells are not hierarchy cells and first cell is db id
+			if (hierarchyNumberOfCells+6 != physicalNumberOfCells) {
+				return ErrorCode.NUMBER_NOT_MATCH;
+			}
+			for (AmpCategoryValue location : implLocs) {
+				if (!hssfRow.getCell(i).getStringCellValue()
+						.equals(location.getValue())) {
+					return ErrorCode.NAME_NOT_MATCH;
+				}
+				i++;
+			}
+			i--;
+			
+			for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows(); j++) {
+				AmpCategoryValueLocations parentLoc=null;
+				hssfRow = hssfSheet.getRow(j);
+				Cell cell =hssfRow.getCell(0);
+				Long databaseId =(cell==null)? null: (long)cell 
+						.getNumericCellValue();
+				List<String> locationNames = new ArrayList<String>();
+				int k = 1;
+				
+				for (; k <=hierarchyNumberOfCells; k++) {
+					cell = hssfRow.getCell(k);
+					if (cell == null) {
+						k=hierarchyNumberOfCells+1;
+						break;
+					}
+					String location = cell.getStringCellValue();
+					if(location==null||location.trim().length()==0){
+						k=hierarchyNumberOfCells+1;
+						break;
+					}
+					locationNames.add(location);
+				}
+				cell=hssfRow.getCell(k++);
+				String lalitude=(cell==null)?null:cell.getStringCellValue();
+				cell=hssfRow.getCell(k++);
+				String longitude=(cell==null)?null:cell.getStringCellValue();
+				cell=hssfRow.getCell(k++);
+				String geoID=(cell==null)?null:cell.getStringCellValue();
+				cell=hssfRow.getCell(k++);
+				String iso=(cell==null)?null:cell.getStringCellValue();
+				cell=hssfRow.getCell(k++);
+				String iso3=(cell==null)?null:cell.getStringCellValue();
+					for (k = 0; k < locationNames.size(); k++) {
+						String name = locationNames.get(k);
+						AmpCategoryValue implLoc = implLocs.get(k);
+						if (k == locationNames.size() - 1) {
+							AmpCategoryValueLocations location=new AmpCategoryValueLocations(); ;
+							AmpCategoryValueLocations currentLoc = getLocationByName(
+									name, implLoc, parentLoc);
+							if (currentLoc != null) {
+								if (option.equals(Option.NEW)) {
+									break;
+								}
+								else{
+									location=currentLoc;
+								}
+							}
+							else{
+								if (option.equals(Option.OVERWRITE)) {
+									if(databaseId!=null&&databaseId!=0){
+										location=getLocationByIdRequestSession(databaseId);
+									}
+									else{
+										break;
+									}
+								}
+							}
+							location.setName(name);
+							location.setGsLat(lalitude);
+							location.setGsLong(longitude);
+							location.setGeoCode(geoID);
+							location.setIso(iso);
+							location.setIso3(iso3);
+							location.setParentCategoryValue(implLoc);
+							location.setParentLocation(parentLoc);
+							boolean edit=(location.getId()==null)?false:true;
+							LocationUtil.saveLocation(location, edit);
+						} else {
+							parentLoc=getLocationByName(name, implLoc,
+									parentLoc);
+							if(parentLoc==null){
+								return ErrorCode.INCORRECT_CONTENT;
+							}	
+						}
+					}
+			}
+
+		} catch (NullPointerException e) {
+			logger.error("file is not ok");
+			throw new AimException("Cannot import regions", e);
+		} catch (Exception e) {
+			logger.error(e);
+			throw new AimException("Cannot import regions", e);
+		}
+		return ErrorCode.CORRECT_CONTENT;
+
+	}
+	
+	public enum ErrorCode{
+		NUMBER_NOT_MATCH,NAME_NOT_MATCH,INCORRECT_CONTENT,CORRECT_CONTENT
+	}
 
 	public static class NodeInfo {
 		private int i = 0;

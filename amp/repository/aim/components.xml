@@ -448,6 +448,7 @@
 	
 	<page name="wicketHeader" page="wicketHeader"></page>
 	<page name="wicketFooter" page="wicketFooter"></page>
+	<page page="importRegions" name="importRegionLayout" title="Import Regions" />
 </secondary-pages>
 <module>
 

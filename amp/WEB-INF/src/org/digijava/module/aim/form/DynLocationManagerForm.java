@@ -3,10 +3,14 @@ package org.digijava.module.aim.form;
 import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 
 public class DynLocationManagerForm extends ActionForm {
+	public enum Option{
+		OVERWRITE,NEW
+	}
 	private Collection<AmpCategoryValueLocations> firstLevelLocations;
 	private Collection<AmpCategoryValueLocations> unorganizedLocations;
 	private AmpCategoryClass implementationLocation;
@@ -17,6 +21,26 @@ public class DynLocationManagerForm extends ActionForm {
 	private Long deleteLocationId;
 	private boolean hideEmptyCountries	= true;
 	private boolean importantErrorAppeared = false;
+	private FormFile fileUploaded;
+	private int option;
+
+	public int getOption() {
+		return option;
+	}
+
+	public void setOption(int option) {
+		this.option = option;
+	}
+
+	public FormFile getFileUploaded() {
+		return fileUploaded;
+	}
+
+	public void setFileUploaded(FormFile fileUploaded) {
+		this.fileUploaded = fileUploaded;
+	}
+
+	
 
 	public Collection<AmpCategoryValueLocations> getFirstLevelLocations() {
 		return firstLevelLocations;

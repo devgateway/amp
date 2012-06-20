@@ -113,7 +113,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
 						super.onClick(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
-						target.addComponent(parent.getFundingInfo());
+						target.add(parent.getFundingInfo());
 					};
 				});
 			}

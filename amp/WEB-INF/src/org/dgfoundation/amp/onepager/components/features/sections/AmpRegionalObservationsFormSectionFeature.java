@@ -82,7 +82,7 @@ public class AmpRegionalObservationsFormSectionFeature extends
 				issues.setRegionalObservationMeasures(new HashSet());
 				issues.setActivity(am.getObject());
 				list.addItem(issues);
-				target.addComponent(this.getParent());
+				target.add(this.getParent());
 			}
 		};
 		add(addbutton);

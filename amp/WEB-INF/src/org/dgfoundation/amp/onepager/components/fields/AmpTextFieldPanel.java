@@ -51,11 +51,13 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 		super(id, model, fmName, false, false,showRedStarForNotReqComp);
 		this.fmType = fmType;
 		textContainer = new TextField<T>("textContainer",model) {
+			@SuppressWarnings("unchecked")
 			@Override
-			public IConverter getConverter(Class<?> type) {
+			public final <T> IConverter<T> getConverter(Class<T> type){
 				if(getInternalConverter(type)!=null) return getInternalConverter(type);
 				return super.getConverter(type);
 			}
+
 		};
 		textContainer.setOutputMarkupId(true);
 		addFormComponent(textContainer);
@@ -65,11 +67,13 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel) {
 		super(id, fmName, hideLabel);
 		textContainer = new TextField<T>("textContainer",model) {
+			@SuppressWarnings("unchecked")
 			@Override
-			public IConverter getConverter(Class<?> type) {
+			public final <T> IConverter<T> getConverter(Class<T> type){
 				if(getInternalConverter(type)!=null) return getInternalConverter(type);
 				return super.getConverter(type);
 			}
+
 		};
 		textContainer.setOutputMarkupId(true);
 		addFormComponent(textContainer);
@@ -78,8 +82,9 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine) {
 		super(id, fmName, hideLabel, hideNewLine);
 		textContainer = new TextField<T>("textContainer",model) {
+			@SuppressWarnings("unchecked")
 			@Override
-			public IConverter getConverter(Class<?> type) {
+			public final <T> IConverter<T> getConverter(Class<T> type){
 				if(getInternalConverter(type)!=null) return getInternalConverter(type);
 				return super.getConverter(type);
 			}

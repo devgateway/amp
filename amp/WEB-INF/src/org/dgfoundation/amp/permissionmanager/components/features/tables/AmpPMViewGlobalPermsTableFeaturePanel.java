@@ -77,7 +77,7 @@ public class AmpPMViewGlobalPermsTableFeaturePanel extends AmpFormTableFeaturePa
 					@Override
 					protected void onClick(AjaxRequestTarget target) {
 						editPermTable.setVisible(!editPermTable.isVisible());
-						target.addComponent(listParent);
+						target.add(listParent);
 					}
 				};
 				item.add(editLink);
@@ -107,7 +107,7 @@ public class AmpPMViewGlobalPermsTableFeaturePanel extends AmpFormTableFeaturePa
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						target.addComponent(AmpPMViewGlobalPermsTableFeaturePanel.this.getParent());
+						target.add(AmpPMViewGlobalPermsTableFeaturePanel.this.getParent());
 						list.removeAll();
 					}
 				};

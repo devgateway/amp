@@ -93,8 +93,8 @@ public class AmpSectorsFormTableFeature extends
 		final AmpMinSizeCollectionValidationField<AmpActivitySector> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivitySector>(
 				"minSizeSectorsValidator", listModel, "minSizeSectorsValidator"){
 			@Override
-			protected void onBeforeRender() {
-				super.onBeforeRender();
+			protected void onConfigure() {
+				super.onConfigure();
 				reqStar.setVisible(isVisible());
 			}
 		};
@@ -143,7 +143,7 @@ public class AmpSectorsFormTableFeature extends
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
-						target.addComponent(listParent);
+						target.add(listParent);
 						list.removeAll();
 						percentageValidationField.reloadValidationField(target);
 						uniqueCollectionValidationField.reloadValidationField(target);
@@ -201,7 +201,7 @@ public class AmpSectorsFormTableFeature extends
 				activitySector.setClassificationConfig(sectorClassification);
 				setModel.getObject().add(activitySector);
 				list.removeAll();
-				target.addComponent(list.getParent());
+				target.add(list.getParent());
 				percentageValidationField.reloadValidationField(target);
 				uniqueCollectionValidationField.reloadValidationField(target);
 				minSizeCollectionValidationField.reloadValidationField(target);

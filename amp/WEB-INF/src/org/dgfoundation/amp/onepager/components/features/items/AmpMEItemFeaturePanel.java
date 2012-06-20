@@ -206,12 +206,12 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 					target.setEnabled(false);
 					revised.setVisible(true);
 					valuesSet.setObject(true);
-					art.addComponent(target);
+					art.add(target);
 				}
 
-				art.addComponent(base.getParent());
-				art.appendJavascript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
-				art.appendJavascript(OnePagerUtil.getClickToggle2JS(this.getParent()));
+				art.add(base.getParent());
+				art.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
+				art.appendJavaScript(OnePagerUtil.getClickToggle2JS(this.getParent()));
 			}
 		};
 		add(setValue);

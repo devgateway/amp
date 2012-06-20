@@ -9,6 +9,7 @@ import javax.jcr.RepositoryException;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.time.Time;
@@ -28,7 +29,7 @@ public class DownloadResourceStream implements IResourceStream {
 	private IModel<AmpActivityDocument> doc;
 	private String fileName;
 	private transient InputStream fileData;
-	private long fileSize;
+	private Bytes fileSize;
 	
 	public DownloadResourceStream(FileUpload f) {
 		this.file = f;
@@ -45,7 +46,7 @@ public class DownloadResourceStream implements IResourceStream {
 		if (true || contentType == null){
 			if (newResource){
 				contentType = file.getContentType();
-				fileSize = file.getSize();
+				fileSize = Bytes.bytes(file.getSize());
 				fileName = file.getClientFileName();
 				try {
 					fileData = file.getInputStream();
@@ -65,7 +66,7 @@ public class DownloadResourceStream implements IResourceStream {
 					fileData = data.getStream();
 					
 					Property size = nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE);
-					fileSize = size.getLong();
+					fileSize = Bytes.bytes(size.getLong());
 					DocumentManagerUtil.logoutJcrSessions( s.getHttpSession());
 				} catch (RepositoryException e) {
 					logger.error("Error while getting data stream from JCR:", e);
@@ -101,7 +102,7 @@ public class DownloadResourceStream implements IResourceStream {
 	}
 
 	@Override
-	public long length() {
+	public Bytes length() {
 		initHelperFields();
 		return fileSize;
 	}
@@ -117,6 +118,30 @@ public class DownloadResourceStream implements IResourceStream {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	@Override
+	public String getStyle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setStyle(String style) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getVariation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setVariation(String variation) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

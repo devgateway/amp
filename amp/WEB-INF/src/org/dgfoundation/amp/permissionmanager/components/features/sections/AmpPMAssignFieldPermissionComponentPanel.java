@@ -13,16 +13,14 @@ import javax.swing.tree.TreeModel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
-import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
@@ -101,7 +99,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 				workspaces.setVisible(getShowWorkspaces());
 				permPriorityLabel.setVisible(getShowWorkspaces());
 				permissionPriorityChoices.setVisible(getShowWorkspaces());
-				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
+				target.add(AmpPMAssignFieldPermissionComponentPanel.this);
 			}
 			
 		};
@@ -126,7 +124,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 				ampTreeVisibilityBeanModel.setObject(PMUtil.buildTreeObjectFMPermissions(choice));
 				iTreeModel.setObject(PMUtil.createTreeModel(ampTreeVisibilityBeanModel));
 				tree.refreshTree(iTreeModel);
-				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
+				target.add(AmpPMAssignFieldPermissionComponentPanel.this);
 			}
 			@Override
 			public Integer getChoiceLevel(AmpObjectVisibility choice) {
@@ -169,7 +167,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 	        @Override
 	        protected void onUpdate(AjaxRequestTarget target) {
 	          PMUtil.setPermissionPriorityVisibility(permissionChoiceModel, permGatesFieldsFormTable, permWorkspacesFieldsFormTable);
-	          target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
+	          target.add(AmpPMAssignFieldPermissionComponentPanel.this);
 	        }
 
 	      }); 
@@ -177,7 +175,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 			//@Override
 			public void onClick(AjaxRequestTarget target) {
 				form.clearInput();
-				target.addComponent(AmpPMAssignFieldPermissionComponentPanel.this);
+				target.add(AmpPMAssignFieldPermissionComponentPanel.this);
 			}
 		};
 		resetFieldPermBtn.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));

@@ -64,8 +64,8 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 				set.add(choice);
 				idsList.removeAll();
 				usersTable.getSliders().clear();
-				target.addComponent(AmpPMManageUsersSectionFeature.this);
-				target.appendJavascript(OnePagerUtil.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
+				target.add(AmpPMManageUsersSectionFeature.this);
+				target.appendJavaScript(OnePagerUtil.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
 			}
 			
 			@Override
@@ -91,8 +91,8 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 				paginator.setVisible(visible);
 				searchUsers.setVisible(visible);
 				usersOrgs.setVisible(!visible);
-				target.addComponent(AmpPMManageUsersSectionFeature.this);
-				target.appendJavascript(OnePagerUtil.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
+				target.add(AmpPMManageUsersSectionFeature.this);
+				target.appendJavaScript(OnePagerUtil.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
 			}
 			
 		};

@@ -26,7 +26,7 @@ public class AmpPMTreeField extends Panel {
 	 * @param model
 	 * @param fmName
 	 */
-	public AmpPMTreeField(String id, IModel<Object> model, String fmName) {
+	public AmpPMTreeField(String id, IModel<?> model, String fmName) {
 		super(id);
 		// TODO Auto-generated constructor stub
 		

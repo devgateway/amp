@@ -95,7 +95,7 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
-						target.addComponent(listParent);
+						target.add(listParent);
 						idsList.removeAll();
 					}
 				};
@@ -140,11 +140,7 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 					set.add(ampOrgCont);
 				}
 				
-				/*
-				idsList.removeAll();
-				target.addComponent(idsList.getParent());
-				*/
-				target.addComponent(idsList.getParent());
+				target.add(idsList.getParent());
 			}
 
 			@Override

@@ -47,7 +47,7 @@ public class AmpComboboxFieldPanel<T> extends AmpFieldPanel<T> {
 				//simulate onKeyDown event, this will trigger ajax-autocomplete.js to show all options
 				String js=String.format("e=jQuery.Event('keydown'); e.which=40; $('#%s').trigger(e);",autoComplete.getMarkupId());
 				target.focusComponent(autoComplete);
-				target.appendJavascript(js);
+				target.appendJavaScript(js);
 			}
 		};
 		//link.add(new Image("dropdown",new DropDownImageResourceRef()));

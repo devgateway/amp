@@ -74,8 +74,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				super.onClick(target);
-				target.addComponent(parent);
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent));
+				target.add(parent);
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
 			}
 		});
 		
@@ -92,8 +92,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				
 				parent.getList().addItem(funding);
 				parent.getList().updateModel();
-				target.addComponent(parent);
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent));
+				target.add(parent);
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
 			}
 		};
 		add(addNewFunding);
@@ -122,8 +122,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				pm.setObject(choice);
 				this.getParent().setVisible(false);
 				
-				target.addComponent(parent);
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent));
+				target.add(parent);
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
 			}
 			@Override
 			public Integer getChoiceLevel(AmpOrganisation choice) {
@@ -149,8 +149,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			protected void onClick(AjaxRequestTarget target) {
 				searchOrganization.setVisible(true);
 				MarkupContainer tmpParent = searchOrganization.getParent();
-				target.addComponent(tmpParent);
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(tmpParent));
+				target.add(tmpParent);
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(tmpParent));
 			}
 		};
 		add(changeFundingOrg);

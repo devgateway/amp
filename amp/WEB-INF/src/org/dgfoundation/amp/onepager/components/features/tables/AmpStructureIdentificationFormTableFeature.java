@@ -156,7 +156,7 @@ public class AmpStructureIdentificationFormTableFeature extends AmpFormTableFeat
 				try{
 				AmpStructure stru = structureModel.getObject();
 				setModel.getObject().remove(stru);
-				target.addComponent(this.findParent(AmpStructuresFormSectionFeature.class));
+				target.add(this.findParent(AmpStructuresFormSectionFeature.class));
 				//list.removeAll();
 				}
 				catch(Exception e){
@@ -179,7 +179,7 @@ public class AmpStructureIdentificationFormTableFeature extends AmpFormTableFeat
 	protected void handleChanges(AjaxRequestTarget target, IModel<AmpStructure> structureModel) {
 		boolean update = updateVisibility(structureModel);
 		if (update){
-			target.addComponent(this);
+			target.add(this);
 		}
 	}
 	

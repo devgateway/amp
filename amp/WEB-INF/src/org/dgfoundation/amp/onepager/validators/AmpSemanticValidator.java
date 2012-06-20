@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.onepager.validators;
 
+import org.apache.log4j.Logger;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
@@ -15,6 +16,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorFie
  *  @see AmpCollectionValidatorField
  */
 public abstract class AmpSemanticValidator<T> implements IValidator<T> {
+	private static final Logger logger = Logger.getLogger(AmpSemanticValidator.class);
 	
 	protected boolean enabled=true;
 	

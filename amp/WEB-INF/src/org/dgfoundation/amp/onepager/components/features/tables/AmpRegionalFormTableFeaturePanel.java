@@ -85,7 +85,7 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				model.getObject().remove(item.getModelObject());
-				target.addComponent(AmpRegionalFormTableFeaturePanel.this);
+				target.add(AmpRegionalFormTableFeaturePanel.this);
 				list.removeAll();
 			}
 		};

@@ -78,7 +78,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 				Set<AmpPMReadEditWrapper> gatesSetAux = new TreeSet<AmpPMReadEditWrapper>();
 				populateGatesSet(gatesSetAux, globalPermissibleClassModel, infoGlobalPermModel);
 				gatesSetModel.setObject(gatesSetAux);
-				target.addComponent(AmpPMAssignGlobalPermissionComponentPanel.this);
+				target.add(AmpPMAssignGlobalPermissionComponentPanel.this);
 			}
 		});
 		form.add(dropDownPermCategories);
@@ -87,7 +87,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 			//@Override
 			public void onClick(AjaxRequestTarget target) {
 				form.clearInput();
-				target.addComponent(AmpPMAssignGlobalPermissionComponentPanel.this);
+				target.add(AmpPMAssignGlobalPermissionComponentPanel.this);
 			}
 		};
 		resetGlobalPerm.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));

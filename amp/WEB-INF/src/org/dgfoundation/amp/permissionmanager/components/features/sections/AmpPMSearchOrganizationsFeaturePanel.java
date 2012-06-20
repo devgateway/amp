@@ -98,8 +98,8 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 				if(!choiceNotExist) 
 					return;
 				idsList.removeAll();
-				target.addComponent(idsList.getParent());
-				target.addComponent(AmpPMSearchOrganizationsFeaturePanel.this);
+				target.add(idsList.getParent());
+				target.add(AmpPMSearchOrganizationsFeaturePanel.this);
 				try {
 					DbUtil.updateUser(userModel.getObject());
 				} catch (AdminException e) {

@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.translation;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.markup.ComponentTag;
@@ -38,7 +39,7 @@ public class TranslationComponentResolver implements IComponentResolver {
 	 * Method will attach to the markup a TrnLabel component.
 	 */
 	@Override
-	public boolean resolve(MarkupContainer container,
+	public Component resolve(MarkupContainer container,
 			MarkupStream markupStream, ComponentTag tag) {
 
 		if (tag.getName().compareTo("trn") == 0) {
@@ -60,13 +61,13 @@ public class TranslationComponentResolver implements IComponentResolver {
 				label.setRenderBodyOnly(true);
 			}
 
-			container.autoAdd(label, markupStream);
+			//container.autoAdd(label, markupStream);
 			
 			// Yes, we handled the tag
-			return true;
+			return label;
 		}
 		
 		// We were not able to handle the tag
-		return false;
+		return null;
 	}
 }

@@ -8,11 +8,11 @@ import java.util.Map;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.list.Loop;
+import org.apache.wicket.markup.html.list.LoopItem;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.model.Model;
@@ -44,19 +44,18 @@ public class AmpPMPagingNavigation extends AjaxPagingNavigation {
 	}
 	
 	@Override
-	protected void populateItem(final Loop.LoopItem loopItem)
-	{
+	protected void populateItem(LoopItem loopItem) {
 		// Get the index of page this link shall point to
-		final int pageIndex = getStartIndex() + loopItem.getIteration();
-
+		final int pageIndex = loopItem.getIndex();
+		
 		// Add a page link pointing to the page
 		final AbstractLink link = super.newPagingNavigationLink("pageLink", pageable, pageIndex);
 		link.add(new TitleAppender(pageIndex));
 		int currentPage = pageable.getCurrentPage();
 		if(currentPage == pageIndex)
-				link.add(new AttributeModifier("class",new Model("paging_sel")));
+			link.add(new AttributeModifier("class",new Model("paging_sel")));
 		loopItem.add(link);
-
+		
 		// Add a page number label to the list which is enclosed by the link
 		String label = "";
 		if (labelProvider != null)
@@ -69,9 +68,8 @@ public class AmpPMPagingNavigation extends AjaxPagingNavigation {
 		}
 		link.add(new Label("pageNumber", label));
 	}
-
 	
-	private final class TitleAppender extends AbstractBehavior
+	private final class TitleAppender extends Behavior
 	{
 		private static final long serialVersionUID = 1L;
 		/** resource key for the message */

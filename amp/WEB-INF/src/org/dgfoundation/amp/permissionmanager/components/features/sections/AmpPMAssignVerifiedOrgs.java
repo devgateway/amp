@@ -97,9 +97,9 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 				Set<AmpOrganisation> set = orgsModel.getObject();
 				set.add(choice);
 				idOrgsList.removeAll();
-				target.addComponent(idOrgsList.getParent());
-				target.addComponent(AmpPMAssignVerifiedOrgs.this);
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
+				target.add(idOrgsList.getParent());
+				target.add(AmpPMAssignVerifiedOrgs.this);
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
 			}
 
 			@Override
@@ -134,9 +134,9 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 				Set<User> set = usersModel.getObject();
 				set.add(choice);
 				idUsersList.removeAll();
-				target.addComponent(idUsersList.getParent());
-				target.addComponent(AmpPMAssignVerifiedOrgs.this);
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
+				target.add(idUsersList.getParent());
+				target.add(AmpPMAssignVerifiedOrgs.this);
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpPMAssignVerifiedOrgs.this));
 			}
 
 			@Override

@@ -9,9 +9,8 @@ import java.util.StringTokenizer;
 import javax.servlet.ServletContext;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -27,24 +26,16 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
  */
 public class TransparentFMWebMarkupContainer extends TransparentWebMarkupContainer {
 
-	/**
-	 * @param id
-	 */
-	public TransparentFMWebMarkupContainer(String id) {
+	private Model<String> model;
+
+	public TransparentFMWebMarkupContainer(String id, Model<String> model) {
 		super(id);
+		this.model = model;
 	}
 
-	/**
-	 * @param id
-	 * @param model
-	 */
-	public TransparentFMWebMarkupContainer(String id, IModel<?> model) {
-		super(id, model);
-	}
-	
 	@Override
-	protected void onBeforeRender() {
-		super.onBeforeRender();
+	protected void onConfigure() {
+		super.onConfigure();
 		LinkedList<FMInfo> fmList;
 		try {
 			fmList = FMUtil.getFmPath(this);
@@ -52,7 +43,7 @@ public class TransparentFMWebMarkupContainer extends TransparentWebMarkupContain
 			return;
 		}
 		String fmPath = FMUtil.getFmPathString(fmList);
-		String names = (String) this.getDefaultModelObject();
+		String names = (String) model.getObject();
 		boolean allInvisible = true;
 		if (names != null){
 			ServletContext context   = ((WebApplication)Application.get()).getServletContext();

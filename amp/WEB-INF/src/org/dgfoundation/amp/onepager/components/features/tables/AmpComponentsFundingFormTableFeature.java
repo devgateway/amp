@@ -196,7 +196,7 @@ public class AmpComponentsFundingFormTableFeature extends
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						compFundsModel.getObject().remove(item.getModelObject());
-						target.addComponent(AmpComponentsFundingFormTableFeature.this);
+						target.add(AmpComponentsFundingFormTableFeature.this);
 						list.removeAll();
 					}
 					});

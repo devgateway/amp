@@ -3,32 +3,21 @@
  */
 package org.dgfoundation.amp.onepager;
 
-import java.util.LinkedList;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.Response;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
-import org.apache.wicket.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
-import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.WebPage;
-import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpSubsectionFeaturePanel;
-import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
 import org.dgfoundation.amp.onepager.util.FMComponentResolver;
 import org.dgfoundation.amp.onepager.util.JspResolver;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.springframework.security.AuthenticationManager;
-import org.wicketstuff.jquery.JQueryBehavior;
-import org.wicketstuff.mergedresources.ResourceMount;
-import org.wicketstuff.mergedresources.ResourceSpec;
 
 /**
  * @author mihai
@@ -57,8 +46,13 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 	 public void init() {
 		 super.init();
 		 
-		 getResourceSettings().setStripJavascriptCommentsAndWhitespace(true);
+		 //getResourceSettings().setStripJavaScriptCommentsAndWhitespace(true);
 		 //getResourceSettings().setAddLastModifiedTimeToResourceReferenceUrl(true);
+		 //TODO:
+		 //TODO:1.5
+		 //TODO:
+		 /*
+		  * 
 		 if (true) {		
 			 ResourceMount.mountWicketResources("script", this);
 
@@ -72,8 +66,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 			 
 			 
 			 LinkedList<ResourceSpec> jslist = new LinkedList<ResourceSpec>();
-			 jslist.add(new ResourceSpec(JQueryBehavior.class, "jquery.js"));
-			 jslist.add(new ResourceSpec(JQueryBehavior.class, "jquery.debug.js"));
+			 jslist.add(new ResourceSpec(JQueryBehavior.class, JQueryBehavior.JQUERY_FILE_NAME));
 			 //jslist.add(new ResourceSpec(AutoCompleteBehavior.class, "wicket-autocomplete.js"));
 			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax.js"));
 			 jslist.add(new ResourceSpec(IHeaderContributor.class, "wicket-event.js"));
@@ -99,6 +92,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 			 .addResourceSpecs(jslist)
 			 .mount(this);
 		 }
+		  */
  		 
 		 /**
 		  * 
@@ -124,8 +118,8 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 getPageSettings().addComponentResolver(new TranslationComponentResolver());
 		 getPageSettings().addComponentResolver(new FMComponentResolver());
 		 getPageSettings().addComponentResolver(new JspResolver());
-		 mountBookmarkablePage(OnePagerConst.ONEPAGER_URL_PREFIX, OnePager.class);
-		 mountBookmarkablePage("permmanager", PermissionManager.class);
+		 mountPage(OnePagerConst.ONEPAGER_URL_PREFIX, OnePager.class);
+		 mountPage("permmanager", PermissionManager.class);
 		 
 //		 ServletContext servletContext = getServletContext();
 //		 Resource resource = new FileSystemResource(servletContext.getRealPath("spring-config.xml"));

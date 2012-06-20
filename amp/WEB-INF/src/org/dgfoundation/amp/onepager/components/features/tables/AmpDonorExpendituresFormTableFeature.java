@@ -91,7 +91,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 						amountSumComparator.reloadValidationField(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						
-						target.addComponent(parent.getFundingInfo());
+						target.add(parent.getFundingInfo());
 					};
 				});
 			}

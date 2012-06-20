@@ -71,7 +71,7 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
-						target.addComponent(listParent);
+						target.add(listParent);
 						idsList.removeAll();
 					}
 				};
@@ -91,7 +91,7 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 				Set<AmpActivityInternalId> set = setModel.getObject();
 				set.add(activityInternalId);
 				idsList.removeAll();
-				target.addComponent(idsList.getParent());
+				target.add(idsList.getParent());
 			}
 			
 			@Override

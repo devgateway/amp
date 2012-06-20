@@ -52,11 +52,11 @@ public class AmpMTEFProjectionSubsectionFeature extends
 				projection.setReportingDate(new Date(System.currentTimeMillis()));
 				projection.setAmpCurrency(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				mtefTableFeature.getEditorList().addItem(projection);
-				target.addComponent(mtefTableFeature);
+				target.add(mtefTableFeature);
 				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
 				parent.getFundingInfo().checkChoicesRequired(mtefTableFeature.getEditorList().getCount());
-				target.addComponent(parent.getFundingInfo());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+				target.add(parent.getFundingInfo());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 			}
 		};
 		add(addMTEF);

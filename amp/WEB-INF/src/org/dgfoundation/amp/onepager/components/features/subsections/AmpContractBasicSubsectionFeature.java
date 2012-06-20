@@ -41,7 +41,7 @@ public class AmpContractBasicSubsectionFeature extends
 		name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onblur"){
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				target.addComponent(contractNameLabel);
+				target.add(contractNameLabel);
 			}
 		});
 		name.setTextContainerDefaultMaxSize();

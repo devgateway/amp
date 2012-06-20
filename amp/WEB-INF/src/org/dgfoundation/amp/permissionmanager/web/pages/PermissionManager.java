@@ -61,48 +61,4 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		add(new PermissionManagerFormFeature("permission", teamsModel, "Permission Manager"));
 	}
 
-
-
-	/**
-	 * @param model
-	 */
-	public PermissionManager(IModel<?> model) {
-		super(model);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param pageMap
-	 */
-	public PermissionManager(IPageMap pageMap) {
-		super(pageMap);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param parameters
-	 */
-	public PermissionManager(PageParameters parameters) {
-		super(parameters);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param pageMap
-	 * @param model
-	 */
-	public PermissionManager(IPageMap pageMap, IModel<?> model) {
-		super(pageMap, model);
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param pageMap
-	 * @param parameters
-	 */
-	public PermissionManager(IPageMap pageMap, PageParameters parameters) {
-		super(pageMap, parameters);
-		// TODO Auto-generated constructor stub
-	}
-
 }

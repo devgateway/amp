@@ -55,20 +55,19 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 		};
 		IModel<List<? extends AmpOrgGroup>> orgGroupsModel = Model.ofList((List<AmpOrgGroup>) DbUtil.getAllOrgGroups());
 		orgGroupPanel = new AmpSelectFieldPanel<AmpOrgGroup>("selectOrgType", new Model<AmpOrgGroup>(),  orgGroupsModel, "Select Organization Type", true, true, cr);
-
 		orgGroupPanel.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
-				@Override
-				protected  void onUpdate(AjaxRequestTarget target)
-				{
-					
-					AmpOrgGroup org_group = (AmpOrgGroup) orgGroupPanel.getChoiceContainer().getModelObject();
-					if(org_group != null)						
-					   autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER, org_group);
-					else
-						autocompletePanel.getModelParams().remove(AmpOrganisationSearchModel.PARAM.GROUP_FILTER);
-					target.addComponent(autocompletePanel);
-				}
-				
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				AmpOrgGroup org_group = (AmpOrgGroup) orgGroupPanel.getChoiceContainer().getModelObject();
+				if(org_group != null)						
+					autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER, org_group);
+				else
+					autocompletePanel.getModelParams().remove(AmpOrganisationSearchModel.PARAM.GROUP_FILTER);
+				target.add(autocompletePanel);
+			}
+
 		});
 		orgGroupPanel.getChoiceContainer().add(new AttributeAppender("style", true, new Model("width: 100px; height: 22px; margin-top: 1px;"), ";"));
 		add(orgGroupPanel);
@@ -79,15 +78,10 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 		add(autocompletePanel);
 	}
 	
-	
-	
 	@Override
 	public void onSelectionChanged() {
 		Long id =  ((AmpOrgGroup)orgGroupPanel.getChoiceContainer().getModelObject()).getAmpOrgGrpId();
 		autocompletePanel.getModelParams().put(AmpOrganisationSearchModel.PARAM.GROUP_FILTER,id);
 	}
-
-	
-	
 
 }

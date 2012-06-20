@@ -79,8 +79,8 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 				set.add(choice);
 				idsList.removeAll();
 				workspacesTable.getSliders().clear();
-				target.addComponent(AmpPMManageWorkspacesSectionFeature.this);
-				target.appendJavascript(OnePagerUtil.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
+				target.add(AmpPMManageWorkspacesSectionFeature.this);
+				target.appendJavaScript(OnePagerUtil.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
 			}
 
 			@Override

@@ -8,12 +8,13 @@ import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * @author mpostelnicu@dgateway.org
  * @since Jun 2, 2011
  */
-public abstract class IndicatingAjaxCheckBox extends AjaxCheckBox implements
+public abstract class IndicatingAjaxCheckBox<T> extends AjaxCheckBox implements
 		IAjaxIndicatorAware {
 	
 	private static final long serialVersionUID = 1L;
@@ -23,8 +24,7 @@ public abstract class IndicatingAjaxCheckBox extends AjaxCheckBox implements
 	 * @param id
 	 */
 	public IndicatingAjaxCheckBox(String id) {
-		super(id);
-		add(indicatorAppender);
+		this(id, new Model<Boolean>());
 	}
 
 	/**

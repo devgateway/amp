@@ -197,14 +197,14 @@ public class AmpLocationFormTableFeature extends
 									iterator.remove();
 							}
 							regionalFundingFeature.getList().removeAll();
-							target.addComponent(regionalFundingFeature);
-							target.appendJavascript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+							target.add(regionalFundingFeature);
+							target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
 							
 							percentageValidationField.reloadValidationField(target);							
 							uniqueCollectionValidationField.reloadValidationField(target);
 						}
 						setModel.getObject().remove(item.getModelObject());
-						target.addComponent(listParent);
+						target.add(listParent);
 						list.removeAll();
 					}
 
@@ -218,8 +218,8 @@ public class AmpLocationFormTableFeature extends
 
 		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
 			@Override
-			protected void onBeforeRender() {
-				super.onBeforeRender();
+			protected void onConfigure() {
+				super.onConfigure();
 				if (this.isEnabled()){
 					this.setEnabled(!disablePercentagesForInternational.getObject());
 				}
@@ -288,12 +288,13 @@ public class AmpLocationFormTableFeature extends
 				Set<AmpActivityLocation> set = setModel.getObject();
 				set.add(activityLocation);
 				// toggleHeading(target, setModel.getObject());
-				target.addComponent(list.getParent());
+				target.add(list.getParent());
 				regionalFundingFeature.getList().removeAll();
-				target.addComponent(regionalFundingFeature);
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+				target.add(regionalFundingFeature);
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
 				percentageValidationField.reloadValidationField(target);		
 				uniqueCollectionValidationField.reloadValidationField(target);
+				minSizeCollectionValidationField.reloadValidationField(target);
 				list.removeAll();
 			}
 

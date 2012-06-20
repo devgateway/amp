@@ -89,7 +89,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
 		name.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onblur"){
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				target.addComponent(componentNameLabel);
+				target.add(componentNameLabel);
 			}
 		});
 		name.getTextContainer().add(new AmpUniqueComponentTitleValidator(new PropertyModel<Long>(componentModel, "ampComponentId")));

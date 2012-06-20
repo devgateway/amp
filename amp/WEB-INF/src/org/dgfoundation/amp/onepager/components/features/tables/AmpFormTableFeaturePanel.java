@@ -8,11 +8,11 @@ import java.util.Collection;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
@@ -49,7 +49,7 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 		boolean prevVisible=tableHeading.isVisible();
 		boolean currVisible=(source.size()!=0);
 		tableHeading.setVisible(currVisible);
-		if(prevVisible!=currVisible) target.addComponent(tableHeading);
+		if(prevVisible!=currVisible) target.add(tableHeading);
 	}
 
 	public WebMarkupContainer getTitleHeader() {

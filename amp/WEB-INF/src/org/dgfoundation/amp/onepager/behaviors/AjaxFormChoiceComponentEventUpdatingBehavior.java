@@ -62,9 +62,9 @@ public abstract class AjaxFormChoiceComponentEventUpdatingBehavior extends AjaxE
 	 * @see org.apache.wicket.ajax.AbstractDefaultAjaxBehavior#renderHead(org.apache.wicket.markup.html.IHeaderResponse)
 	 */
 	@Override
-	public void renderHead(IHeaderResponse response)
+	public void renderHead(Component component, IHeaderResponse response)
 	{
-		super.renderHead(response);
+		super.renderHead(component, response);
 
 		AppendingStringBuffer asb = new AppendingStringBuffer();
 		asb.append("function attachChoiceHandlers(markupId, callbackScript) {\n");
@@ -80,9 +80,9 @@ public abstract class AjaxFormChoiceComponentEventUpdatingBehavior extends AjaxE
 		asb.append(" }\n");
 		asb.append("}\n");
 
-		response.renderJavascript(asb, "attachChoice");
+		response.renderJavaScript(asb, "attachChoice");
 
-		response.renderOnLoadJavascript("attachChoiceHandlers('" + getComponent().getMarkupId() +
+		response.renderOnLoadJavaScript("attachChoiceHandlers('" + getComponent().getMarkupId() +
 			"', function() {" + getEventHandler() + "});");
 
 	}

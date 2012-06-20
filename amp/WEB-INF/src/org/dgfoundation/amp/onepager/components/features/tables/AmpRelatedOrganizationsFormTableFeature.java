@@ -146,7 +146,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 						setModel.getObject().remove(item.getModelObject());
 						uniqueCollectionValidationField.reloadValidationField(target);
 						list.removeAll();
-						target.addComponent(listParent);
+						target.add(listParent);
 					}
 				};
 				item.add(delRelOrg);
@@ -205,7 +205,7 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 				setModel.getObject().add(ampOrgRole);
 				uniqueCollectionValidationField.reloadValidationField(target);
 				list.removeAll();
-				target.addComponent(list.getParent());
+				target.add(list.getParent());
 			}
 
 			@Override

@@ -83,7 +83,7 @@ public class AmpComponentsFundingSubsectionFeature extends
 				compFundsModel.getObject().add(cf);
 				
 				tableFeature.getList().removeAll();
-				target.addComponent(tableFeature);
+				target.add(tableFeature);
 			}
 		};
 		add(addButton);

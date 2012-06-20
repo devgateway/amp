@@ -4,38 +4,21 @@
  */
 package org.dgfoundation.amp.onepager.components;
 
-import java.text.NumberFormat;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.MaskConverter;
-import org.apache.wicket.util.convert.converters.DoubleConverter;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.IPAContract;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author aartimon@dginternational.org
  * @since Oct 8, 2011
  */
 public class AmpEUAmountsComponent<T> extends AmpComponentPanel {
+	private static final long serialVersionUID = 1L;
 
-	
 	private void calculateTotalAmount(IModel<IPAContract> model){
 		IPAContract c = model.getObject();
 		Double total = (double) 0;
@@ -67,7 +50,7 @@ public class AmpEUAmountsComponent<T> extends AmpComponentPanel {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				calculateTotalAmount(model);
-				target.addComponent(totalAmount);
+				target.add(totalAmount);
 			}
 		});
 		add(ibAmount);
@@ -79,7 +62,7 @@ public class AmpEUAmountsComponent<T> extends AmpComponentPanel {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				calculateTotalAmount(model);
-				target.addComponent(totalAmount);
+				target.add(totalAmount);
 			}
 		});
 		add(invAmount);
@@ -91,7 +74,7 @@ public class AmpEUAmountsComponent<T> extends AmpComponentPanel {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				calculateTotalAmount(model);
-				target.addComponent(totalAmount);
+				target.add(totalAmount);
 			}
 		});
 		add(centralAmount);
@@ -103,7 +86,7 @@ public class AmpEUAmountsComponent<T> extends AmpComponentPanel {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				calculateTotalAmount(model);
-				target.addComponent(totalAmount);
+				target.add(totalAmount);
 			}
 		});
 		add(ifiAmount);
@@ -115,7 +98,7 @@ public class AmpEUAmountsComponent<T> extends AmpComponentPanel {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				calculateTotalAmount(model);
-				target.addComponent(totalAmount);
+				target.add(totalAmount);
 			}
 		});
 		add(regionalAmount);
@@ -127,7 +110,7 @@ public class AmpEUAmountsComponent<T> extends AmpComponentPanel {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				calculateTotalAmount(model);
-				target.addComponent(totalAmount);
+				target.add(totalAmount);
 			}
 		});
 		add(privIbAmount);

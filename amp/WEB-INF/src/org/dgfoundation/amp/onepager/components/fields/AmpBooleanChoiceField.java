@@ -76,11 +76,4 @@ public class AmpBooleanChoiceField extends AmpFieldPanel<Boolean>{
 		choiceContainer.setSuffix(" ");
 		addFormComponent(choiceContainer);
 	}
-	
-	@Override
-	protected AjaxEventBehavior visualErrorBehavior() {
-		return new ChoiceComponentVisualErrorBehavior("onchange", feedbackContainer);
-	}
-
-
 }

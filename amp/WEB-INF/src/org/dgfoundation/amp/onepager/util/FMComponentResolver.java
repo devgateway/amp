@@ -5,15 +5,16 @@
 package org.dgfoundation.amp.onepager.util;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.parser.filter.WicketTagIdentifier;
 import org.apache.wicket.markup.resolver.IComponentResolver;
-import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.TransparentFMWebMarkupContainer;
-import org.dgfoundation.amp.onepager.components.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.model.Model;
 
 /**
  * @author aartimon@dginternational.org
@@ -41,7 +42,7 @@ public class FMComponentResolver implements IComponentResolver {
 	 * Method will attach to the markup a TrnLabel component.
 	 */
 	@Override
-	public boolean resolve(MarkupContainer container,
+	public Component resolve(MarkupContainer container,
 			MarkupStream markupStream, ComponentTag tag) {
 
 		if (tag.getName().compareTo("fm") == 0) {
@@ -60,13 +61,15 @@ public class FMComponentResolver implements IComponentResolver {
 			if (fmNames != null){
 				twmc = new TransparentFMWebMarkupContainer(id, new Model<String>(fmNames));
 			}
-			container.autoAdd(twmc, markupStream);
+			
+			//commented due to new resolve api
+			//container.autoAdd(twmc, markupStream);
 			
 			// Yes, we handled the tag
-			return true;
+			return twmc;
 		}
 		
 		// We were not able to handle the tag
-		return false;
+		return null;
 	}
 }

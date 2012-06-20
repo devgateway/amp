@@ -4,26 +4,35 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractChoice;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.RadioChoice;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.behaviors.ChoiceComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior;
+import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior2;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
-import org.dgfoundation.amp.onepager.components.FeedbackLabel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
-import org.digijava.kernel.translator.util.TrnUtil;
 
 /**
  * Component to be extended directly by AMP Field Types. An AMP field contains a
@@ -40,9 +49,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	protected Label titleLabel;
 	protected WebMarkupContainer newLine;
 	protected FormComponent<?> formComponent;
-	protected FeedbackLabel feedbackLabel;
 	protected String fmName;
-	protected WebMarkupContainer feedbackContainer;
 	//protected BeautyTipBehavior tooltipContainer;
 
 	/**
@@ -51,10 +58,70 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 */
 	protected void initFormComponent(FormComponent<?> fc) {
 		formComponent = fc;
-		feedbackLabel.setComponent(fc);
 		fc.setLabel(new Model<String>(TranslatorUtil.getTranslatedText(fmName)));		
 		fc.add(visualErrorBehavior());
+		
+		if (!ajaxFormChoiceComponentUpdatingBehaviorAppliesTo(fc)){
+			fc.add(new AjaxFormComponentUpdatingBehavior(getActionMonitored(fc)){
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					target.add(formComponent);
+					onAjaxOnUpdate(target);
+				}
+				@Override
+				protected void onError(AjaxRequestTarget target, RuntimeException e) {
+					target.add(formComponent);
+					onAjaxOnError(target);
+				}
+			});
+		}
+		else{
+			fc.add(new AjaxFormChoiceComponentUpdatingBehavior(){
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					target.add(formComponent);
+					onAjaxOnUpdate(target);
+				}
+				@Override
+				protected void onError(AjaxRequestTarget target, RuntimeException e) {
+					target.add(formComponent);
+					onAjaxOnError(target);
+				}
+			});			
+		}
 	}
+	
+	
+	public static boolean ajaxFormChoiceComponentUpdatingBehaviorAppliesTo(Component component){
+		return (component instanceof RadioChoice) ||
+			(component instanceof CheckBoxMultipleChoice) || (component instanceof RadioGroup) ||
+			(component instanceof CheckGroup);
+	}
+	
+	public static String getActionMonitored(Component component){
+		 if (component instanceof DateTextField)
+			 return "onchange";
+		 return "onblur";
+	}
+	
+	/**
+	 * Override this to add functionality to the onUpdate method
+	 * when the "onblur" event is generated on the form component
+	 * @param target
+	 */
+	protected void onAjaxOnUpdate(AjaxRequestTarget target){
+	}
+	
+	/**
+	 * Override this to add functionality to the onUpdate method
+	 * when the "onblur" event is generated on the form component
+	 * @param target
+	 */
+	protected void onAjaxOnError(AjaxRequestTarget target){
+	}
+	
 	
 	/**
 	 * This is a special {@link AjaxEventBehavior} crafted for visual ajax error feedback.
@@ -62,8 +129,11 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	 * By default we use {@link ComponentVisualErrorBehavior}
 	 * @return the event behavior to be added to the form component, triggering ajax validation
 	 */
-	protected AjaxEventBehavior visualErrorBehavior() {
-		return new ComponentVisualErrorBehavior("onchange", feedbackContainer);
+	protected Behavior visualErrorBehavior() {
+		
+		return new ComponentVisualErrorBehavior2();
+		
+		//return new ComponentVisualErrorBehavior("onchange", feedbackContainer);
 	}
 
 	/**
@@ -162,14 +232,6 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 //			add(tooltipContainer);
 //		}
 
-		feedbackLabel = new FeedbackLabel("feedback");
-		feedbackLabel.setOutputMarkupId(true);
-		feedbackContainer = new WebMarkupContainer("feedbackContainer");
-		feedbackContainer.setVisible(false);
-		feedbackContainer.setOutputMarkupId(true);
-		feedbackContainer.add(feedbackLabel);
-		add(feedbackContainer);
-		
 	}
 
 	

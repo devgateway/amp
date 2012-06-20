@@ -85,9 +85,9 @@ public class AmpContractOrganizationsSubsectionFeature extends
 						@Override
 						public void onClick(AjaxRequestTarget target) {
 							orgs.getObject().remove(item.getModelObject());
-							target.addComponent(AmpContractOrganizationsSubsectionFeature.this);
-							target.appendJavascript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
-							target.appendJavascript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+							target.add(AmpContractOrganizationsSubsectionFeature.this);
+							target.appendJavaScript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+							target.appendJavaScript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
 						}
 					};
 					item.add(delete);
@@ -138,9 +138,9 @@ public class AmpContractOrganizationsSubsectionFeature extends
 					AmpOrganisation choice) {
 				orgs.getObject().add(choice);
 				list.removeAll();
-				target.addComponent(AmpContractOrganizationsSubsectionFeature.this);
-				target.appendJavascript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
-				target.appendJavascript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+				target.add(AmpContractOrganizationsSubsectionFeature.this);
+				target.appendJavaScript(OnePagerUtil.getToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
+				target.appendJavaScript(OnePagerUtil.getClickToggleJS(AmpContractOrganizationsSubsectionFeature.this.getSlider()));
 				uniqueCollectionValidationField.reloadValidationField(target);
 			}
 

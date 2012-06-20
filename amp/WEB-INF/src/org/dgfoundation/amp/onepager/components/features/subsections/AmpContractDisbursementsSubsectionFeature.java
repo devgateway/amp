@@ -72,9 +72,9 @@ public class AmpContractDisbursementsSubsectionFeature extends
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						disbModel.getObject().remove(item.getModelObject());
-						target.addComponent(AmpContractDisbursementsSubsectionFeature.this);
-						target.appendJavascript(OnePagerUtil.getToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
-						target.appendJavascript(OnePagerUtil.getClickToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
+						target.add(AmpContractDisbursementsSubsectionFeature.this);
+						target.appendJavaScript(OnePagerUtil.getToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
+						target.appendJavaScript(OnePagerUtil.getClickToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
 					}
 				};
 				item.add(delete);
@@ -90,9 +90,9 @@ public class AmpContractDisbursementsSubsectionFeature extends
 				//comp.setContract(model.getObject());
 				comp.setCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
 				disbModel.getObject().add(comp);
-				target.addComponent(this.getParent());
-				target.appendJavascript(OnePagerUtil.getToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
-				target.appendJavascript(OnePagerUtil.getClickToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
+				target.add(this.getParent());
+				target.appendJavaScript(OnePagerUtil.getToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
+				target.appendJavaScript(OnePagerUtil.getClickToggleJS(AmpContractDisbursementsSubsectionFeature.this.getSlider()));
 			}
 		};
 		add(addbutton);

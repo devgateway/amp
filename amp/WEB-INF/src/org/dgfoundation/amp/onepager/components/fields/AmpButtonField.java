@@ -4,14 +4,10 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import javax.servlet.ServletContext;
-
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.CheckGroup;
@@ -21,7 +17,8 @@ import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.LabelTranslatorBehaviour;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -88,25 +85,24 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
-				super.onError(target, form);
 				AmpButtonField.this.onError(target, form);
 
 				// visit form children and add to the ajax request the invalid
 				// ones
 				form.visitChildren(FormComponent.class,
-						new Component.IVisitor<FormComponent>() {
-
+						new IVisitor<FormComponent, Void>() {
 							@Override
-							public Object component(FormComponent component) {
+							public void component(FormComponent component,
+									IVisit<Void> visit) {
 								if (!component.isValid()) {
 									
 									//some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields
 									//like for example a list of sectors with percentages
 									//when these AmpCollectionValidatorFieldS are detected, their validation is revisited
 									if (component instanceof HiddenField) {									
-										 target.appendJavascript("$('#"+ component.getMarkupId() +"').parents().show();");
-										 target.appendJavascript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
-										 target.addComponent(component);
+										 target.appendJavaScript("$('#"+ component.getMarkupId() +"').parents().show();");
+										 target.appendJavaScript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
+										 target.add(component);
 										 if(component.getParent() instanceof AmpCollectionValidatorField<?, ?>) 
 											 ((AmpCollectionValidatorField)component.getParent()).reloadValidationField(target);									
 
@@ -122,11 +118,10 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 										else 											
 											js=String.format("$('#%s').change();",component.getMarkupId());
 										
-										target.appendJavascript(js);
-										target.addComponent(component);
+										target.appendJavaScript(js);
+										target.add(component);
 									}
 								}
-								return Component.IVisitor.CONTINUE_TRAVERSAL;
 							}
 						});
 
@@ -152,7 +147,7 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 			button.setOutputMarkupId(true);
 			button.add(new LabelTranslatorBehaviour());
 			button.add(new AttributeAppender("style", new Model("text-decoration: underline; color: #0CAD0C;"), ""));
-			button.add(new SimpleAttributeModifier("key", genKey));
+			button.add(new AttributeModifier("key", genKey));
 		}
 		
 		

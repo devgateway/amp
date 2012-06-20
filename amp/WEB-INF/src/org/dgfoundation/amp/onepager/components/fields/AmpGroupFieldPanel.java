@@ -51,12 +51,6 @@ public class AmpGroupFieldPanel<T> extends AmpFieldPanel<T> {
 		addFormComponent(choiceContainer);
 	}
 	
-
-	@Override
-	protected AjaxEventBehavior visualErrorBehavior() {
-		return new ChoiceComponentVisualErrorBehavior("onclick",feedbackContainer);
-	}
-
 	/**
 	 * Construct a group field panel for a {@link RadioChoice} or for a {@link CheckBoxMultipleChoice}
 	 * depending if @param isMultiSelect is true or not

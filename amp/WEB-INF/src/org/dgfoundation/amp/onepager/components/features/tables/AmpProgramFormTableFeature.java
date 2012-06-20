@@ -128,7 +128,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
-						target.addComponent(listParent);
+						target.add(listParent);
 						list.removeAll();
 						percentageValidationField.reloadValidationField(target);
 						uniqueCollectionValidationField.reloadValidationField(target);
@@ -200,7 +200,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				setModel.getObject().add(aap);
 
 				list.removeAll();
-				target.addComponent(list.getParent());
+				target.add(list.getParent());
 				percentageValidationField.reloadValidationField(target);
 				uniqueCollectionValidationField.reloadValidationField(target);
 			}

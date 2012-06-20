@@ -161,9 +161,9 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 							}
                             if(succesfuldelete){
                             	detailFeedbackContainer.setVisible(false);
-        						target.addComponent(detailFeedbackContainer);
+        						target.add(detailFeedbackContainer);
                             }                            
-                            target.addComponent(resultcontainer);
+                            target.add(resultcontainer);
                         }
                     };
                     
@@ -235,7 +235,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 						detailFeedbackLabel.setDefaultModelObject("*" + TranslatorUtil.getTranslatedText("Max limit for faxes is 3"));
 					}
 					detailFeedbackContainer.setVisible(true);
-					target.addComponent(detailFeedbackContainer);
+					target.add(detailFeedbackContainer);
 					return;
 				}
 					
@@ -246,13 +246,13 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 //				contactProperties.clear();
 //				contactProperties.addAll(detailsList.getModelObject());
 				Set<AmpContactProperty> contactProperties=setModel.getObject();
-                                if(contactProperties==null){
-                                    contactProperties=new TreeSet<AmpContactProperty>();
-                                    setModel.setObject(contactProperties);
-                                }
+                if(contactProperties==null){
+                    contactProperties=new TreeSet<AmpContactProperty>();
+                    setModel.setObject(contactProperties);
+                }
 				contactProperties.add(fakeContact1);
 				//detailsList.removeAll();
-                                target.addComponent(resultcontainer);
+                target.add(resultcontainer);
 				
 
 			}

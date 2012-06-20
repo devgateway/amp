@@ -81,7 +81,7 @@ public class AmpLineMinistryObservationsFormSectionFeature extends
 				issues.setLineMinistryObservationMeasures(new HashSet());
 				issues.setActivity(am.getObject());
 				list.addItem(issues);
-				target.addComponent(this.getParent());
+				target.add(this.getParent());
 			}
 		};
 		add(addbutton);

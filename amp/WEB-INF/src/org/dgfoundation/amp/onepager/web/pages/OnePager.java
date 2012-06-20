@@ -16,14 +16,15 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.target.basic.RedirectRequestTarget;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -102,13 +103,13 @@ public class OnePager extends AmpHeaderFooter {
 		}
 		return null;
 	}
-
-	public OnePager(PageParameters parameters) {
+	
+	public OnePager() {
 		super();
+		PageParameters parameters = decodePageParameters(getRequest());
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		session.reset();
-		
-		String activityId = (String) parameters.get(OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY);
+		String activityId = parameters.get(OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY).toString();
 		boolean newActivity = false;
 		if ((activityId == null) || (activityId.compareTo("new") == 0)){
 			am = new AmpActivityModel();
@@ -118,10 +119,10 @@ public class OnePager extends AmpHeaderFooter {
 			am.getObject().setTeam(session.getAmpCurrentMember().getAmpTeam());
 			
 			if(parameters.get("lat") != null && parameters.get("lat") != null && parameters.get("geoId") != null && parameters.get("name") != null){
-				String activityName = (String)parameters.get("name");
-				String latitude = (String)parameters.get("lat");
-				String longitude = (String)parameters.get("lon");
-				String geoId = (String)parameters.get("geoId");
+				String activityName = (String)parameters.get("name").toString();
+				String latitude = (String)parameters.get("lat").toString();
+				String longitude = (String)parameters.get("lon").toString();
+				String geoId = (String)parameters.get("geoId").toString();
 				
 				initializeActivity(am.getObject(), activityName, latitude, longitude, geoId);
 			}
@@ -131,7 +132,7 @@ public class OnePager extends AmpHeaderFooter {
 			String key = ActivityGatekeeper.lockActivity(activityId, ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
 			if (key == null){ //lock not aquired
 				//redirect page
-				getRequestCycle().setRequestTarget(new RedirectRequestTarget(ActivityGatekeeper.buildRedirectLink(activityId)));
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(ActivityGatekeeper.buildRedirectLink(activityId)));
 				return;
 			}
 			
@@ -161,14 +162,14 @@ public class OnePager extends AmpHeaderFooter {
 				protected void onTimer(AjaxRequestTarget target) {
 					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
 					if (editLockRefresher.isEnabled() && refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED) 
-						getRequestCycle().setRequestTarget(new RedirectRequestTarget(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()))));
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()))));
 					
 					if (DEBUG_ACTIVITY_LOCK){
 						if (refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED)
 							editLockRefresher.setDefaultModelObject("FAILED to refresh lock!");
 						else
 							editLockRefresher.setDefaultModelObject("Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
-						target.addComponent(editLockRefresher);
+						target.add(editLockRefresher);
 					}
 				}
 			});
@@ -178,6 +179,33 @@ public class OnePager extends AmpHeaderFooter {
 				editLockRefresher.setDefaultModelObject("");
 		add(editLockRefresher);
 	}
+	
+	/**
+     * Decodes a URL in the form:
+     * 
+     * /mountpoint/paramName1/paramValue1/paramName2/paramValue2 
+     * 
+     * (i.e. a URL using the pre wicket 1.5 Hybrid URL strategy)
+     */
+    public PageParameters decodePageParameters(Request request)
+    {
+        PageParameters parameters = new PageParameters();
+
+        Iterator<String> segment = request.getUrl().getSegments().iterator();
+        if (segment.hasNext())
+        	segment.next();
+        
+        while (segment.hasNext()){
+        	String key = segment.next();
+        	String value = null;
+        	if (segment.hasNext())
+        		value = segment.next();
+        	parameters.add(key, value);
+        }
+        
+        return parameters.isEmpty() ? null : parameters;
+    }
+
 
 	/**
 	 * Method used to initialize an Activity/ActivityVersion with

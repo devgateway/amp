@@ -65,7 +65,7 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 			dif = dif - delta;
 		}
 		list.removeAll();
-		target.addComponent(list.getParent());
+		target.add(list.getParent());
 	}
 	
 	public abstract void setPercentage(T item, int val);

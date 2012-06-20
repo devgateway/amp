@@ -98,7 +98,7 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 			@Override
 			public void onSelect(AjaxRequestTarget target, AmpOrganisation choice) {
 				survey.getObject().setPointOfDeliveryDonor(choice);
-				target.addComponent(pod);
+				target.add(pod);
 			}
 
 			@Override

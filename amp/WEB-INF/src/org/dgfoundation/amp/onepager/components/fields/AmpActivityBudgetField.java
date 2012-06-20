@@ -31,7 +31,7 @@ public class AmpActivityBudgetField extends AmpFieldPanel {
 	}
 	
 	private void updateExtraFields(AjaxRequestTarget target){
-		target.addComponent(budgetExtras.getParent());
+		target.add(budgetExtras.getParent());
 		budgetClassification.addToTargetActivityBudget(target);
 	}
 	

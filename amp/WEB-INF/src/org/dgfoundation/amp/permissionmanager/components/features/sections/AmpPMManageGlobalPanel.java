@@ -38,8 +38,8 @@ public class AmpPMManageGlobalPanel extends AmpComponentPanel {
 		AjaxPagingNavigator pager = new AjaxPagingNavigator("globalPermsNavigator", (PageableListView)globalPermsTable.getList()) {
 			@Override
 			protected void onAjaxEvent(AjaxRequestTarget target) {
-				target.addComponent(AmpPMManageGlobalPanel.this);
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpPMManageGlobalPanel.this));
+				target.add(AmpPMManageGlobalPanel.this);
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpPMManageGlobalPanel.this));
 			}
 		};
 		add(pager);

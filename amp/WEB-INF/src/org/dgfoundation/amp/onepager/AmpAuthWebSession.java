@@ -8,13 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.wicket.Request;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Session;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authorization.strategies.role.Roles;
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authorization.strategies.role.Roles;
+import org.apache.wicket.request.Request;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.util.SiteCache;
@@ -34,8 +31,8 @@ import org.springframework.security.providers.UsernamePasswordAuthenticationToke
  * @since Jan 3, 2011
  */
 public class AmpAuthWebSession extends AuthenticatedWebSession {
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AmpAuthWebSession.class);
-	private static Request request;
 
 	private boolean translatorMode;
 	private boolean fmMode;
@@ -61,9 +58,8 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 		super(request);
 		fmMode = false;
 		translatorMode = false;
-		
-		ServletWebRequest wRequest = (ServletWebRequest) request;
-		httpSession = wRequest.getHttpServletRequest().getSession();
+		HttpServletRequest wRequest = (HttpServletRequest) request.getContainerRequest();
+		httpSession = wRequest.getSession();
 		currentMember = (TeamMember)httpSession.getAttribute("currentMember");
 		isAdmin = (String)httpSession.getAttribute("ampAdmin");
 		if (currentMember != null)
@@ -71,9 +67,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 		else
 			ampCurrentMember = null;
 		
-		WebRequestCycle cycle    = (WebRequestCycle)RequestCycle.get();
-	    HttpServletRequest hsRequest   = cycle.getWebRequest().getHttpServletRequest();
-		SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(hsRequest.getServerName(), null);
+		SiteDomain siteDomain = SiteCache.getInstance().getSiteDomain(wRequest.getServerName(), null);
 		site = siteDomain.getSite();
 	}
 

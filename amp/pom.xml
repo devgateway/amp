@@ -7,8 +7,6 @@
 	<packaging>war</packaging>
 	<name>Aid Management Platform</name>
 
-
-
 	<repositories>
 		<repository>
 			<id>AMP Local</id>
@@ -397,11 +395,6 @@
 			<version>1.0.13</version>
 		</dependency>
 		<dependency>
-			<groupId>org.wicketstuff</groupId>
-			<artifactId>jquery</artifactId>
-			<version>1.4.12.1</version>
-		</dependency>
-		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
 			<version>2.3</version>
@@ -658,45 +651,48 @@
 			<artifactId>wcf</artifactId>
 			<version>1.8.0-070305</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>tinymce</artifactId>
-			<version>1.4.19</version>
+			<version>1.5.7</version>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner</artifactId>
 			<version>0.4.1</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket</artifactId>
-			<version>1.4.19</version>
+			<artifactId>wicket-core</artifactId>
+			<version>1.5.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-auth-roles</artifactId>
-			<version>1.4.19</version>
+			<version>1.5.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-datetime</artifactId>
-			<version>1.4.19</version>
+			<version>1.5.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-extensions</artifactId>
-			<version>1.4.19</version>
+			<version>1.5.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-ioc</artifactId>
-			<version>1.4.19</version>
+			<version>1.5.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-spring</artifactId>
-			<version>1.4.19</version>
+			<version>1.5.7</version>
 		</dependency>
 		<dependency>
 			<groupId>at.molindo</groupId>
@@ -760,11 +756,13 @@
 			<version>6.0.35</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>net.fckeditor</groupId>
 			<artifactId>java-core</artifactId>
 			<version>2.4.2</version>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>ant</groupId>
 			<artifactId>ant-jakarta-oro</artifactId>

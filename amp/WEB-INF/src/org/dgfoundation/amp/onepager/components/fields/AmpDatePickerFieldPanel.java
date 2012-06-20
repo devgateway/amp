@@ -13,6 +13,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 5, 2010
@@ -51,7 +53,9 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 
 		//datepicker MMM bug in Wicket 1.4.x: https://issues.apache.org/jira/browse/WICKET-3598
 		//DO NOT use DatePicker pattern constructors in Wicket 1.4! this problem has Fix Version Wicket 1.5-RC4!!
-		date = new DateTextField("date", model);
+		String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		pattern = pattern.replace('m', 'M');
+		date = new DateTextField("date", model, pattern);
 		
 		date.setOutputMarkupId(true);
 		DatePicker dp = new DatePicker() {
@@ -81,12 +85,12 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 					//date.setEnabled(true);
 					dateWrapper.setEnabled(true);
 					String js=String.format("$('#%s').val($('#%s').val());",date.getMarkupId(),otherPicker.getDate().getMarkupId());
-					target.appendJavascript(js);
-					target.addComponent(dateWrapper);
+					target.appendJavaScript(js);
+					target.add(dateWrapper);
 				} else {
 					date.setEnabled(true);
 					dateWrapper.setEnabled(true);
-					target.addComponent(dateWrapper);
+					target.add(dateWrapper);
 				}
 			}
 		};

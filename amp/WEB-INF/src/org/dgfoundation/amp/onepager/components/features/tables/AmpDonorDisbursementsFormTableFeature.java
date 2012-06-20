@@ -5,23 +5,16 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
@@ -29,17 +22,12 @@ import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionsSumComparatorValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpTransactionTypeDonorFundingDetailModel;
-import org.dgfoundation.amp.onepager.validators.AmpCollectionsSumComparatorValidator;
-import org.dgfoundation.amp.onepager.validators.AmpPercentageCollectionValidator;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -50,7 +38,7 @@ import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
  */
 public class AmpDonorDisbursementsFormTableFeature extends
 		AmpDonorFormTableFeaturePanel {
-
+	private static final long serialVersionUID = 1L;
 	private boolean alertIfExpenditureBiggerDisbursment = false;  
 	private boolean alertIfDisbursmentBiggerCommitments = false;
 	/**
@@ -161,20 +149,18 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
 						super.onClick(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
-						target.addComponent(parent.getFundingInfo());
+						target.add(parent.getFundingInfo());
 						updateModel();
 						
-						parent.visitChildren(AmpCollectionValidatorField.class, new Component.IVisitor<AmpCollectionValidatorField>()
-									{
-
-										@Override
-										public Object component(AmpCollectionValidatorField component) {
-											component.reloadValidationField(target);
-											return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
-										}
-									});
-					
-						
+						parent.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>(){
+							@Override
+							public void component(
+									AmpCollectionValidatorField component,
+									IVisit<Void> visit) {
+								component.reloadValidationField(target);
+								visit.dontGoDeeper();
+							}
+						});
 					};
 				});
 			}

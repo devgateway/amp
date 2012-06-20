@@ -105,7 +105,7 @@ public class AmpBudgetClassificationField extends AmpFieldPanel {
 			protected void onUpdate(AjaxRequestTarget target) {
 				Long orgId = budgetOrganizationModel.getObject();
 				if (orgId != null){
-					target.addComponent(budgetDepartment);
+					target.add(budgetDepartment);
 				}
 			}
 		});
@@ -120,7 +120,7 @@ public class AmpBudgetClassificationField extends AmpFieldPanel {
 			protected void onUpdate(AjaxRequestTarget target) {
 				Long sectorId = budgetSectorModel.getObject();
 				if (sectorId != null){
-					target.addComponent(budgetOrganization);
+					target.add(budgetOrganization);
 				}
 			}
 		});
@@ -135,9 +135,9 @@ public class AmpBudgetClassificationField extends AmpFieldPanel {
 	
 	public void addToTargetActivityBudget(AjaxRequestTarget target){
 		if (budgetDepartment.getParent().getParent().isVisible()){
-			target.addComponent(budgetDepartment.getParent());
+			target.add(budgetDepartment.getParent());
 			//same parent, but just in case someone will change the code and split the components
-			target.addComponent(budgetProgram.getParent());
+			target.add(budgetProgram.getParent());
 		}
 	}
 }

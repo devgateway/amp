@@ -118,8 +118,8 @@ public class AmpDonorFundingFormSectionFeature extends
 				funding.setGroupVersionedFunding(System.currentTimeMillis());
 
 				list.addItem(funding);
-				target.addComponent(list.getParent());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
+				target.add(list.getParent());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
 				list.updateModel();
 			}
 

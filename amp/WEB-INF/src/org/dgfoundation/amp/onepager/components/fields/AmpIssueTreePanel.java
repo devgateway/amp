@@ -136,7 +136,7 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 						a.setName(new String(""));
 						list.addItem(a);
 					}
-					target.addComponent(this.getParent());
+					target.add(this.getParent());
 				}
 			};
 			

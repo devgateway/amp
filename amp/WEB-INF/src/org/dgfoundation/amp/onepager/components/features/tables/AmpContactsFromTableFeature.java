@@ -111,7 +111,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 								if (primaryContact != null) {
 									primaryContact.clearInput();
 									primaryContact.setModelObject(Boolean.FALSE);
-									target.addComponent(primaryContact);
+									target.add(primaryContact);
 								}
 								primaryContact = this;
 							} else {
@@ -133,7 +133,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 											@Override
                                             public void onClick(AjaxRequestTarget target) {
                                                     setModel.getObject().remove(item.getModelObject());
-                                                    target.addComponent(listParent);
+                                                    target.add(listParent);
                                                     if( primaryContact!=null&& primaryContact.equals(primary)){
                                                     	primaryContact=null;
                                                     }
@@ -227,7 +227,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 				}
 				
 				idsList.removeAll();
-				target.addComponent(idsList.getParent());
+				target.add(idsList.getParent());
             }
 
         };

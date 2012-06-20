@@ -57,12 +57,12 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 				//model.getObject().getFundingDetails().add(fd);
 				//commitsTableFeature.getList().removeAll();
 				commitsTableFeature.getEditorList().addItem(fd);
-				target.addComponent(commitsTableFeature);
+				target.add(commitsTableFeature);
 				
 				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
 				parent.getFundingInfo().checkChoicesRequired(commitsTableFeature.getEditorList().getCount());
-				target.addComponent(parent.getFundingInfo());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+				target.add(parent.getFundingInfo());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 			}
 		};
 		add(addCommit);

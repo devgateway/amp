@@ -4,6 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
@@ -66,10 +67,11 @@ public abstract class AmpLinkField extends AmpFieldPanel<Void> {
 		    protected IAjaxCallDecorator getAjaxCallDecorator() {
 				if(qModel==null) return super.getAjaxCallDecorator(); else
 		        return new AjaxCallDecorator() {
-		            @Override
-		            public CharSequence decorateScript(CharSequence script) {
+					@Override
+					public CharSequence decorateScript(Component c,
+							CharSequence script) {
 		                return "if(!confirm('"+qModel.getObject()+"')) return false;" + script;
-		            }
+					}
 		        };
 
 		    }

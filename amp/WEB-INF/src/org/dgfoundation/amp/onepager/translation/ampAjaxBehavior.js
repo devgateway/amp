@@ -11,8 +11,6 @@ function getAmpAjaxCallBackUrl(){
 	return "${callBackUrl}";
 }
 
-onepagerMode = ${onepagerMode};
-
 //////////////////////////////////////////////////////////////
 //
 // functions for trn label
@@ -119,45 +117,4 @@ function wicketSwitchFMMode(){
 	var params = '&method=switchfmmode&activity=' + actId;
 	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
 }
-
-function highlightQItem(currentItem){
-	$('#qListItems').find('li').removeClass('quickListHighlight');
-	$(currentItem).parent().parent().addClass('quickListHighlight');
-}
-
-function showSection(itemId){
-	if (onepagerMode){
-		$('#' + itemId).parent().parent().siblings('div:first').show();
-		$('html, body').animate({scrollTop: $('#' + itemId).offset().top}, 1200);
-	}
-	else{
-		$('span[name=section]').hide();
-		$('#'+itemId).parents('span[name=section]').show();
-	}
-	highlightQItem($("#qItem"+itemId));
-}
-
-function switchOnepagerMode(){
-	if (onepagerMode){
-		onepagerMode = false;
-		$('span[name=section]').hide();
-		$('span[name=section]').eq(0).show();
-		$('#imgGroupMode').hide();
-		$('#imgOnepagerMode').show();
-	}
-	else{
-		onepagerMode = true;
-		$('span[name=section]').show();
-		$('#imgOnepagerMode').hide();
-		$('#imgGroupMode').show();
-	}
-	highlightQItem($("#qListItems").find('a:first'));
-}
-
-//////////////////////////////////////////////////////////////
-//
-// functions for button label
-//
-//////////////////////////////////////////////////////////////
-
 

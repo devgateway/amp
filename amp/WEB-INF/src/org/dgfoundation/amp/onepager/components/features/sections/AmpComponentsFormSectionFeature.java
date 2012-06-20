@@ -65,8 +65,8 @@ public class AmpComponentsFormSectionFeature extends
 									it.remove();
 							}
 						}
-						target.addComponent(this.findParent(AmpComponentsFormSectionFeature.class));
-						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(this.findParent(AmpComponentsFormSectionFeature.class)));
+						target.add(this.findParent(AmpComponentsFormSectionFeature.class));
+						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.findParent(AmpComponentsFormSectionFeature.class)));
 						super.onClick(target);
 						
 						
@@ -84,8 +84,8 @@ public class AmpComponentsFormSectionFeature extends
 			public void onClick(AjaxRequestTarget target) {
 				AmpComponent comp = new AmpComponent();
 				list.addItem(comp);
-				target.addComponent(this.getParent());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
+				target.add(this.getParent());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
 			}
 		};
 		add(addbutton);

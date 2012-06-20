@@ -57,7 +57,7 @@ public class AmpPMOrganizationsUsersTableFeaturePanel extends AmpFormTableFeatur
 							e.printStackTrace();
 						}
                         list.removeAll();
-                        target.addComponent(AmpPMOrganizationsUsersTableFeaturePanel.this.getParent());
+                        target.add(AmpPMOrganizationsUsersTableFeaturePanel.this.getParent());
                     }
                 };
                 item.add(propertyDeleteLink);

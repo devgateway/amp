@@ -13,16 +13,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.wicket.Response;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.behavior.IBehavior;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AbstractAutoCompleteRenderer;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteSettings;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.Response;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpAutoCompleteModelParam;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -38,7 +39,7 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
  * @see AmpAutocompleteFieldPanel
  */
 public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
-		AbstractAutoCompleteTextField<CHOICE> implements IAjaxIndicatorAware {
+AbstractAutoCompleteTextField<CHOICE> implements IAjaxIndicatorAware {
 	private static final long serialVersionUID = -4601873923915411280L;
 	protected Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass;
 	protected Map<AmpAutoCompleteModelParam, Object> modelParams;
@@ -95,7 +96,7 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 		setType((Class<?>) null);
 		this.objectListModelClass = objectListModelClass;
 		this.setOutputMarkupId(true);
-		add(new SimpleAttributeModifier("autocomplete", "off"));
+		add(new AttributeModifier("autocomplete", "off"));
 		this.modelParams = new HashMap<AmpAutoCompleteModelParam, Object>();
 
 		// generate the renderer using the abstract method of the wrapper to
@@ -114,10 +115,10 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 					if (level != null && level == 1)
 						response.write("<i>");
 					if(input.length()<2) response.write(getChoiceValue(object));else
-					response.write(Pattern
-							.compile(input, Pattern.CASE_INSENSITIVE)
-							.matcher(getChoiceValue(object))
-							.replaceAll("<b>$0</b>"));
+						response.write(Pattern
+								.compile(input, Pattern.CASE_INSENSITIVE)
+								.matcher(getChoiceValue(object))
+								.replaceAll("<b>$0</b>"));
 					if (level != null && level == 1)
 						response.write("</i>");
 				} catch (Throwable e) {
@@ -136,16 +137,16 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 		};
 
 		// create behavior for this renderer
-		
+
 		AutoCompleteSettings settings = new AutoCompleteSettings();
 		settings.setShowListOnEmptyInput(true);
 		settings.setUseSmartPositioning(true);
 		settings.setAdjustInputWidth(false);
-		
+
 		settings.setThrottleDelay(1000);
-//		settings.setShowCompleteListOnFocusGain(true);
-//		settings.setShowListOnFocusGain(true);
-		
+		//		settings.setShowCompleteListOnFocusGain(true);
+		//		settings.setShowListOnFocusGain(true);
+
 		autoCompleteBehavior = createAutoCompleteBehavior(renderer,
 				settings);
 		if (autoCompleteBehavior == null) {
@@ -155,10 +156,10 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 
 		// remove any previously added default behaviors - that may include
 		// StringAutoCompleteRenderer
-		 List<IBehavior> behaviors = getBehaviors();
-			for (IBehavior element : behaviors) {
-				if (element instanceof AbstractAutoCompleteTextField.AutoCompleteChoiceBehavior) remove(element);
-			}
+		List<? extends Behavior> behaviors = getBehaviors();
+		for (Behavior element: behaviors) {
+			if (element instanceof AbstractAutoCompleteTextField.AutoCompleteChoiceBehavior) remove(element);
+		}
 
 		add(autoCompleteBehavior);
 
@@ -170,7 +171,7 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-			//target.addComponent(AbstractAmpAutoCompleteTextField.this);
+				//target.add(AbstractAmpAutoCompleteTextField.this);
 				CHOICE choice = findChoice();
 				if (choice != null)
 					onSelect(target, choice);
@@ -186,7 +187,7 @@ public abstract class AbstractAmpAutoCompleteTextField<CHOICE> extends
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				target.addComponent(AbstractAmpAutoCompleteTextField.this);
+				target.add(AbstractAmpAutoCompleteTextField.this);
 				if (getModelObject() != null)
 					setModelObject("");
 			}

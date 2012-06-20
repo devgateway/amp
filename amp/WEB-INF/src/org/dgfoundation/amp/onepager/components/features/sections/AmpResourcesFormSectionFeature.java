@@ -88,8 +88,8 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 					am.getObject().getActivityDocuments().add(ad);
 				}
 				
-				target.addComponent(resourcesList.getParent());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpResourcesFormSectionFeature.this));
+				target.add(resourcesList.getParent());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpResourcesFormSectionFeature.this));
 				
 			}
 

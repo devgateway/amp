@@ -64,8 +64,8 @@ public class AmpStructuresFormSectionFeature extends
 			public void onClick(AjaxRequestTarget target) {
 				AmpStructure stru = new AmpStructure();
 				setModel.getObject().add(stru);
-				target.addComponent(this.getParent());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
+				target.add(this.getParent());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
 				list.removeAll();
 			}
 		};

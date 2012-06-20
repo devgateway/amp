@@ -24,6 +24,7 @@ public abstract class AmpSemanticValidatorField <H> extends AmpHiddenFieldPanel 
 
 	public AmpSemanticValidatorField(String id, String fmName, AmpSemanticValidator<H> semanticValidator) {
 		super(id, fmName);
+		this.setOutputMarkupId(true);
 		this.semanticValidator=semanticValidator;
 		hiddenContainer.add(semanticValidator);
 		add(indicatorAppender);

@@ -55,11 +55,11 @@ public class AmpDonorExpendituresSubsectionFeature extends
 				fd.setTransactionType(Constants.EXPENDITURE);
 				fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
 				expTableFeature.getEditorList().addItem(fd);
-				target.addComponent(expTableFeature);
+				target.add(expTableFeature);
 				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
 				parent.getFundingInfo().checkChoicesRequired(expTableFeature.getEditorList().getCount());
-				target.addComponent(parent.getFundingInfo());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+				target.add(parent.getFundingInfo());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 			}
 		};
 		add(addCommit);

@@ -4,7 +4,7 @@
 */
 package org.dgfoundation.amp.onepager;
 
-import org.apache.wicket.Request;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.protocol.http.WebSession;
 
 /**

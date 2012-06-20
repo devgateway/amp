@@ -71,8 +71,8 @@ public class AmpContractingFormSectionFeature extends AmpFormSectionFeaturePanel
 				//setModel.getObject().add(comp);
 				comp.setTotalAmountCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
 				list.addItem(comp);
-				target.addComponent(this.getParent());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpContractingFormSectionFeature.this));
+				target.add(this.getParent());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpContractingFormSectionFeature.this));
 			}
 		};
 		add(addbutton);

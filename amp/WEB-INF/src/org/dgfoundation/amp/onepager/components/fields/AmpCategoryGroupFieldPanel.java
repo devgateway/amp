@@ -101,11 +101,4 @@ public class AmpCategoryGroupFieldPanel extends
 		this(id,categoryKey,model,fmName,ordered,nullValid,false);
 	}
 
-	
-	@Override
-	protected AjaxEventBehavior visualErrorBehavior() {
-		return new ChoiceComponentVisualErrorBehavior("onclick",feedbackContainer);
-	}
-
-	
 }

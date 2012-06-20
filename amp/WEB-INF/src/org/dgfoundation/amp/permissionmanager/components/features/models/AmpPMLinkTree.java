@@ -61,19 +61,19 @@ public class AmpPMLinkTree extends LinkTree {
 			{
 				//super.onNodeLinkClicked(node, tree, target);
 				//AmpPMLinkTree.this.onNodeLinkClicked(node, tree, target);
-				//target.addComponent(AmpPMLinkTree.this);
+				//target.add(AmpPMLinkTree.this);
 				System.out.println("aaa");
 			}
 
 			@Override
-			protected Component newContentComponent(String componentId, BaseTree tree, IModel<Object> model)
-			{
+			protected Component newContentComponent(String componentId,
+					BaseTree tree, IModel<?> model) {
 				DefaultMutableTreeNode o = (DefaultMutableTreeNode)model.getObject();
 				//return new Label(componentId, getNodeTextModel(model));
-				IModel<Object> nodeTextModel = getNodeTextModel(model);
+				IModel<?> nodeTextModel = getNodeTextModel(model);
 				return new AmpPMTreeField(componentId, nodeTextModel,componentId);
 			}
-			
+						
 			@Override
 			protected void addComponents(final IModel<Object> model, final BaseTree tree)
 			{

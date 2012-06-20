@@ -123,7 +123,6 @@ public class FeedbackLabel extends Label implements IFeedback {
         }
     }
     
- 
     public final boolean isValid() {
         return component.isValid();
     }

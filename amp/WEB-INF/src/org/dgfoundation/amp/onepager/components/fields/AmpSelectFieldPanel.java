@@ -33,6 +33,19 @@ public class AmpSelectFieldPanel<T> extends AmpFieldPanel<T> {
 	public boolean dropDownChoiceIsDisabled(T object, int index, String selected){
 		return false;
 	}
+	
+	/**
+	 * Override this when onchange needs to be used
+	 * also set wantOnSelectionChangedNotifications
+	 * to return true
+	 * @param newSelection
+	 */
+	protected void onSelectionChanged(T newSelection){
+	}
+	
+	protected boolean wantOnSelectionChangedNotifications(){
+		return false;
+	}
 
 	public AmpSelectFieldPanel(String id, IModel<T> model,
 			IModel<? extends List<? extends T>> choicesList, String fmName,
@@ -43,6 +56,16 @@ public class AmpSelectFieldPanel<T> extends AmpFieldPanel<T> {
 				renderer){
 			protected boolean isDisabled(T object, int index, String selected) {
 				return dropDownChoiceIsDisabled(object, index, selected);
+			};
+			
+			@Override
+			protected boolean wantOnSelectionChangedNotifications() {
+				return AmpSelectFieldPanel.this.wantOnSelectionChangedNotifications();
+			};
+			
+			@Override
+			protected void onSelectionChanged(T newSelection) {
+				AmpSelectFieldPanel.this.onSelectionChanged(newSelection);
 			};
 		}.setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);

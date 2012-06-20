@@ -86,7 +86,7 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 			public void onClick(AjaxRequestTarget target) {
 				cpModel.setObject(null);
 				addPermForm.clearInput();
-				target.addComponent(AmpPMAddPermissionFormFeaturePanel.this);
+				target.add(AmpPMAddPermissionFormFeaturePanel.this);
 			}
 		};
 		addPermForm.add(resetPermBtn);

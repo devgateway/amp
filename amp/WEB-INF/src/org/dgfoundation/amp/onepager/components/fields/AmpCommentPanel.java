@@ -174,7 +174,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 						org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS).add(currentItem.getObject());
 
 						listView.removeAll();
-						target.addComponent(listView.getParent());
+						target.add(listView.getParent());
 					}
 				};
 				item.add(delOrgId);
@@ -188,7 +188,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 							private static final long serialVersionUID = 1L;
 							
 							@Override
-							protected void onComponentTagBody(
+							public void onComponentTagBody(
 									MarkupStream markupStream,
 									ComponentTag openTag) {
 								Object modelObject = getDefaultModelObject();
@@ -268,9 +268,13 @@ public class AmpCommentPanel extends AmpFieldPanel {
 					org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS).add(c);
 					
 					addComment.setModelObject(msg);
-					target.addComponent(addComment);
-					target.addComponent(listView.getParent());
+					target.add(addComment);
+					target.add(listView.getParent());
 				}
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
 			}
 		};
 		form.add(asl);

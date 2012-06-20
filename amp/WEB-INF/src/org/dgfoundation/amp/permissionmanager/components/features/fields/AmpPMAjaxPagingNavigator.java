@@ -41,7 +41,7 @@ public class AmpPMAjaxPagingNavigator extends AjaxPagingNavigator {
 		{
 			// Get the navigation bar and add it to the hierarchy
 			PagingNavigation pagingNavigation = super.getPagingNavigation();
-			pagingNavigation = newNavigation(super.getPageable(), null);
+			pagingNavigation = newNavigation(getId(), super.getPageable(), null);
 			add(pagingNavigation);
 
 			// Add additional page links
@@ -58,10 +58,9 @@ public class AmpPMAjaxPagingNavigator extends AjaxPagingNavigator {
 	}
 
 	@Override
-	protected PagingNavigation newNavigation(final IPageable pageable,
-		final IPagingLabelProvider labelProvider)
-	{
-		return new AmpPMPagingNavigation(NAVIGATION_ID, pageable, labelProvider);
+	protected PagingNavigation newNavigation(String id, IPageable pageable,
+			IPagingLabelProvider labelProvider) {
+		return new AmpPMPagingNavigation(id, pageable, labelProvider);
 	}
 	
 	private final class TitleAppender extends AbstractBehavior

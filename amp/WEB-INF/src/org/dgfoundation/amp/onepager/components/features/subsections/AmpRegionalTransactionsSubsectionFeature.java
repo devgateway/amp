@@ -58,7 +58,7 @@ public class AmpRegionalTransactionsSubsectionFeature extends
 				fd.setActivity(am.getObject());
 				fd.setCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
 				transactionsTableFeature.getListEditor().addItem(fd);
-				target.addComponent(transactionsTableFeature);
+				target.add(transactionsTableFeature);
 			}
 		};
 		add(addCommit);

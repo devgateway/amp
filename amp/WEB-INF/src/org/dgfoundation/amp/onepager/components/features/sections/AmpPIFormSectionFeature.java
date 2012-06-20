@@ -61,8 +61,8 @@ public class AmpPIFormSectionFeature extends AmpFormSectionFeaturePanel {
 				updateSurveySet(am);
 				list.removeAll();
 
-				target.addComponent(list.getParent());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpPIFormSectionFeature.this));
+				target.add(list.getParent());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpPIFormSectionFeature.this));
 			}
 		};
 		add(addbutton);

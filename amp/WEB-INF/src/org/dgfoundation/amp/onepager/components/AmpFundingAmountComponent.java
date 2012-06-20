@@ -11,9 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -21,24 +19,19 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.MaskConverter;
 import org.apache.wicket.util.convert.converters.DoubleConverter;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.validators.AmpCollectionsSumComparatorValidator;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.help.action.GetHelpBodyHtml;
 
 /**
  * Reusable component capturing an amount item in AMP (the tuple amount /
@@ -62,6 +55,24 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		super(id, model);
 		amount = new AmpTextFieldPanel<Double>("amount",
 				new PropertyModel<Double>(model, propertyAmount), fmAmount,true) {
+			
+			@Override
+			protected void onAjaxOnUpdate(final AjaxRequestTarget target) {
+				AmpComponentPanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
+				if(parentPanel ==null)
+					parentPanel = findParent(AmpComponentField.class);				
+				if(parentPanel ==null)
+					parentPanel = findParent(AmpRegionalFundingItemFeaturePanel.class);
+				parentPanel.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>() {
+					@Override
+					public void component(AmpCollectionValidatorField component,
+							IVisit<Void> visit) {
+						component.reloadValidationField(target);
+						visit.dontGoDeeper();
+					}
+				});
+			}
+			
 			public IConverter getInternalConverter(java.lang.Class<?> type) {
 				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
 				NumberFormat formatter = FormatHelper.getDecimalFormat(true);
@@ -114,30 +125,25 @@ public class AmpFundingAmountComponent<T> extends Panel {
 	
 	public void setAmountValidator(final AmpCollectionValidatorField validationHiddenField){
 		validationFields.add(validationHiddenField);
+		/*
 		amount.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onblur") {
 			@Override
 			protected void onUpdate(final AjaxRequestTarget target) {
-				
 				AmpComponentPanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
 				if(parentPanel ==null)
 					parentPanel = findParent(AmpComponentField.class);				
 				if(parentPanel ==null)
 					parentPanel = findParent(AmpRegionalFundingItemFeaturePanel.class);
-				 parentPanel.visitChildren(AmpCollectionValidatorField.class, new Component.IVisitor<AmpCollectionValidatorField>()
-				{
-
+				parentPanel.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>() {
 					@Override
-					public Object component(AmpCollectionValidatorField component) {
+					public void component(AmpCollectionValidatorField component,
+							IVisit<Void> visit) {
 						component.reloadValidationField(target);
-						return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+						visit.dontGoDeeper();
 					}
-				}
-				 
-				
-			);			
-				
-				
+				});
 			}
 		});
+		 */
 	}
 }

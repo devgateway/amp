@@ -2,11 +2,11 @@ package org.dgfoundation.amp.onepager.util;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.RequestCycle;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.protocol.http.WebRequest;
 
-public class CKEditorBehavior extends AbstractBehavior{
+public class CKEditorBehavior extends Behavior{
 	
 	/**
 	 * 
@@ -15,35 +15,35 @@ public class CKEditorBehavior extends AbstractBehavior{
 	private Component component;
 
 	@Override
-	public void renderHead(IHeaderResponse response) {
+	public void renderHead(Component component, IHeaderResponse response) {
 
-		String renderOnDomReady = getRenderOnDomReadyJavascript(response);
+		String renderOnDomReady = getRenderOnDomReadyJavaScript(response);
         if (renderOnDomReady != null)
-            response.renderOnDomReadyJavascript(renderOnDomReady);
+            response.renderOnDomReadyJavaScript(renderOnDomReady);
         /*
          * 
-        String renderJavaScript = getRenderJavascript(response);
+        String renderJavaScript = getRenderJavaScript(response);
         if (renderJavaScript != null)
-            response.renderJavascript(renderJavaScript, null);
+            response.renderJavaScript(renderJavaScript, null);
          */
 	}
 	
-	protected String getRenderOnDomReadyJavascript(IHeaderResponse response) {
+	protected String getRenderOnDomReadyJavaScript(IHeaderResponse response) {
         if (component == null)
             throw new IllegalStateException("CKEditorBehavior is not bound to a component");
-        //if (! mayRenderJavascriptDirect())
+        //if (! mayRenderJavaScriptDirect())
             return getAddCKEditorScript(component);
         //return null;
     }
 
-    private boolean mayRenderJavascriptDirect() {
+    private boolean mayRenderJavaScriptDirect() {
     	return RequestCycle.get().getRequest() instanceof WebRequest && !((WebRequest)RequestCycle.get().getRequest()).isAjax();
 	}
 
-	protected String getRenderJavascript(IHeaderResponse response) {
+	protected String getRenderJavaScript(IHeaderResponse response) {
         if (component == null)
             throw new IllegalStateException("CKEditorBehavior is not bound to a component");
-        if (mayRenderJavascriptDirect())
+        if (mayRenderJavaScriptDirect())
             return getAddCKEditorScript(component);
         return null;
     }

@@ -65,7 +65,7 @@ public class AmpPMVerifiedUsersTableFeaturePanel extends AmpFormTableFeaturePane
                     public void onClick(AjaxRequestTarget target) {
                     	usersSetModel.getObject().remove(item.getModelObject());
                         list.removeAll();
-                        target.addComponent(AmpPMVerifiedUsersTableFeaturePanel.this.getParent());
+                        target.add(AmpPMVerifiedUsersTableFeaturePanel.this.getParent());
                     }
                 };
                 item.add(propertyDeleteLink);

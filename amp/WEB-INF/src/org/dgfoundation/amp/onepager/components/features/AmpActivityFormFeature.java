@@ -11,17 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractChoice;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -30,14 +32,16 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.request.target.basic.RedirectRequestTarget;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
@@ -72,7 +76,7 @@ import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
  */
 public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> {
 	
-
+	private static final long serialVersionUID = 1L;
 	protected Form<AmpActivityVersion> activityForm;
 	private static final Integer GO_TO_DESKTOP=1;
 	private static final Integer STAY_ON_PAGE=2;
@@ -103,34 +107,34 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 		// visit all the semantic validator fields and enable/disable them
 		form.visitChildren(AmpSemanticValidatorField.class,
-				new Component.IVisitor<AmpSemanticValidatorField<?>>() {
+				new IVisitor<AmpSemanticValidatorField<?>, Void>() {
+
 					@Override
-					public Object component(AmpSemanticValidatorField<?> ifs) {
+					public void component(AmpSemanticValidatorField<?> ifs,
+							IVisit<Void> visit) {
 						ifs.getSemanticValidator().setEnabled(enabled);
 						if (ifs.isVisibleInHierarchy())
-							target.addComponent(ifs);
-						return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+							target.add(ifs);
+						visit.dontGoDeeper();
 					}
-
 				});
 
 		// put status to not required
 		form.visitChildren(AmpIdentificationFormSectionFeature.class,
-				new Component.IVisitor<AmpIdentificationFormSectionFeature>() {
-
+				new IVisitor<AmpIdentificationFormSectionFeature, Void>() {
 					@Override
-					public Object component(
-							AmpIdentificationFormSectionFeature ifs) {
+					public void component(
+							AmpIdentificationFormSectionFeature ifs,
+							IVisit<Void> visit) {
 						AbstractChoice<?, AmpCategoryValue> statusField = ifs
 								.getStatus().getChoiceContainer();
-						String js = String.format("$('#%s').change();",
+						String js = String.format("$('#%s').blur();",
 								statusField.getMarkupId());
 						statusField.setRequired(enabled);
-						target.appendJavascript(js);
-						target.addComponent(ifs.getStatus());
-						return Component.IVisitor.STOP_TRAVERSAL;
+						target.appendJavaScript(js);
+						target.add(ifs.getStatus());
+						visit.stop();
 					}
-
 				});
 	}
 
@@ -186,26 +190,65 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		//add ajax submit button
 		AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.MODULE, true) {
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+			protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
 				am.setObject(am.getObject());
 				toggleSemanticValidation(true, form,target);
-				
 				// process the form for this request
 				form.process(this.getButton());
 				
-				if(!form.hasError()) saveMethod(target, am, feedbackPanel, false);
+				if(!form.hasError()) 
+					saveMethod(target, am, feedbackPanel, false);
+				else
+					onError(target, form);
 			}
 			
 			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
-				target.addComponent(feedbackPanel);
+				
+				// visit form children and add to the ajax request the invalid ones
+				form.visitChildren(FormComponent.class,
+						new IVisitor<FormComponent, Void>() {
+							@Override
+							public void component(FormComponent component,
+									IVisit<Void> visit) {
+								if (!component.isValid()) {
+									target.appendJavaScript("$('#"+ component.getMarkupId() +"').parents().show();");
+									target.appendJavaScript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
+									target.add(component);
+									
+									//some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields
+									//like for example a list of sectors with percentages
+									//when these AmpCollectionValidatorFieldS are detected, their validation is revisited
+									if (component instanceof HiddenField) {									
+										if(component.getParent() instanceof AmpCollectionValidatorField<?, ?>) 
+											((AmpCollectionValidatorField)component.getParent()).reloadValidationField(target);									
+									} else {
+										target.focusComponent(component);
+										String js = null;
+										
+										//we simulate onClick over AmpGroupFieldS because radiochoices are treated differently they can't receive onChange.
+										//For the rest of the components we use onChange
+										if(component instanceof RadioChoice<?> || component instanceof CheckBoxMultipleChoice
+												|| component  instanceof RadioGroup<?> || component instanceof CheckGroup) 
+											js=String.format("$('#%s').click();",component.getMarkupId());										
+										else 											
+											js=String.format("$('#%s').change();",component.getMarkupId());
+										
+										target.appendJavaScript(js);
+										target.add(component);
+									}
+								}
+							}
+						});
+				
+				target.add(feedbackPanel);
 			}
 			
 		};
-		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model("window.onbeforeunload = null; for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), "");
+		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model<String>("window.onbeforeunload = null; for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), "");
 		
-		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model<String>("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);
 		saveAndSubmit.getButton().setDefaultFormProcessing(false);
 		activityForm.add(saveAndSubmit);
@@ -215,7 +258,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 			}
 		};
-		saveAsDraft.getButton().add(new SimpleAttributeModifier("onclick", "showDraftPanel();"));
+		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();"));
 		saveAsDraft.setVisible(true);
 		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
 		activityForm.add(saveAsDraft);
@@ -228,7 +271,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 			protected void onEvent(final AjaxRequestTarget target) {
 				myDraftOpts.setModelObject(GO_TO_DESKTOP);
-				target.addComponent(myDraftOpts);
+				target.add(myDraftOpts);
 			}
 		});
 		myDraftOpts.add(radioDesktop);
@@ -238,7 +281,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			
 			protected void onEvent(final AjaxRequestTarget target) {
 				myDraftOpts.setModelObject(STAY_ON_PAGE);
-				target.addComponent(myDraftOpts);
+				target.add(myDraftOpts);
 			}
 		});
 		myDraftOpts.add(radioStay);
@@ -249,7 +292,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			TextField<String> titleField=null;
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				target.appendJavascript("hideDraftPanel();");
+				target.appendJavaScript("hideDraftPanel();");
 				am.setObject(am.getObject());
 				
 				redirected=myDraftOpts.getModelObject();
@@ -266,7 +309,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
-				target.addComponent(feedbackPanel);
+				target.add(feedbackPanel);
 			}
 		};
 		saveAsDraftAction.getButton().setDefaultFormProcessing(false); //disable global validation of the form
@@ -279,7 +322,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 			}
 		};
-		cancelSaveAsDraft.getButton().add(new SimpleAttributeModifier("onclick", "hideDraftPanel();"));
+		cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();"));
 		cancelSaveAsDraft.setVisible(true);
 		cancelSaveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
 		activityForm.add(cancelSaveAsDraft);
@@ -292,7 +335,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		if (am.getObject().getAmpActivityId() == null)
 			logframe.setVisible(false);
 		else{
-			logframe.add(new SimpleAttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");"));
+			logframe.add(new AttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");"));
 			logframe.setVisible(true);
 		}
 		logframe.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
@@ -301,13 +344,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				target.appendJavascript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
+				target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
 			}
 			
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
-				target.addComponent(feedbackPanel);
+				target.add(feedbackPanel);
 			}
 		};
 		preview.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
@@ -324,7 +367,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					item.add(item.getModelObject());
 				else{
 					Label tmp = new Label("featureItem", "ERROR: Section failed to load!");
-					tmp.add(new SimpleAttributeModifier("style", "font-size: medium; font-style: bold; color: red; margin: 15px;"));
+					tmp.add(new AttributeModifier("style", "font-size: medium; font-style: bold; color: red; margin: 15px;"));
 					item.add(tmp);
 				}
 				
@@ -332,7 +375,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						GlobalSettingsConstants.ACTIVITY_FORM_ONE_PAGER);
 				if ("false".equals(activityFormOnePager)){
 					if (item.getIndex() > 0){
-						item.add(new SimpleAttributeModifier("style", "display: none;"));
+						item.add(new AttributeModifier("style", "display: none;"));
 					}
 				}
 					
@@ -364,7 +407,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		//Before starting to save check lock
 		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())){
 			//Someone else has grabbed the lock ... maybe connection slow and lock refresh timed out
-			getRequestCycle().setRequestTarget(new RedirectRequestTarget(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()))));
+			getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()))));
 			return;
 		}
 		
@@ -384,7 +427,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     	String additionalDetails="approved";
 		//if validation is off in team setup no messages should be generated
 		String validation = DbUtil.getValidationFromTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
-			if (activity.getDraft() != null&& !activity.getDraft()&&!("validationOff".equals(validation))) {
+		
+		if (activity.getDraft() != null&& !activity.getDraft()&&!("validationOff".equals(validation))) {
         	String approvalStatus = newActivity.getApprovalStatus();
 			if(approvalStatus != null && (approvalStatus.equals(Constants.APPROVED_STATUS)||approvalStatus.equals(Constants.STARTED_APPROVED_STATUS))){
         		if(modifiedBy!=null){
@@ -412,20 +456,20 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				additionalDetails="draft";
 			}
 		}
-			WebRequestCycle cycle    = (WebRequestCycle)RequestCycle.get();
-		    HttpServletRequest hsRequest   = cycle.getWebRequest().getHttpServletRequest();
+		
+		HttpServletRequest hsRequest = (HttpServletRequest) getRequest().getContainerRequest();
 
-			if (oldId != null) {
-				List<String> details=new ArrayList<String>();
-				details.add(additionalDetails);
-				AuditLoggerUtil.logActivityUpdate(hsRequest, newActivity,details);
-			} else {
-				try {
-					AuditLoggerUtil.logObject(hsRequest, newActivity, "add",additionalDetails);
-				} catch (DgException e) {
-					e.printStackTrace();
-				}
+		if (oldId != null) {
+			List<String> details=new ArrayList<String>();
+			details.add(additionalDetails);
+			AuditLoggerUtil.logActivityUpdate(hsRequest, newActivity,details);
+		} else {
+			try {
+				AuditLoggerUtil.logObject(hsRequest, newActivity, "add",additionalDetails);
+			} catch (DgException e) {
+				e.printStackTrace();
 			}
+		}
 
 		//if (newActivity){
 			Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
@@ -435,13 +479,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			else
 				replaceStr = String.valueOf(oldId);
 			if(redirected.equals(STAY_ON_PAGE)){
-				target.appendJavascript("window.location.replace(window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\"));");
+				target.appendJavaScript("window.location.replace(window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\"));");
 			}
 			else{
-				target.appendJavascript("window.location.replace('/');");
+				target.appendJavaScript("window.location.replace('/');");
 			}
 		//}
-		target.addComponent(feedbackPanel);
+		target.add(feedbackPanel);
 	}
 
 	private void quickMenu(IModel<AmpActivityVersion> am, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) {
@@ -452,8 +496,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				if (item.getModelObject() != null){
 					Label label = new TrnLabel("quickName", item.getModelObject().getFMName());
 					String itemId = Hex.encodeHexString(item.getModelObject().getFMName().getBytes());
-					label.add(new SimpleAttributeModifier("id", "qItem"+itemId));
-					label.add(new SimpleAttributeModifier("onclick", "showSection('"+itemId +"'); return false;"));
+					label.add(new AttributeModifier("id", "qItem"+itemId));
+					label.add(new AttributeModifier("onclick", "showSection('"+itemId +"'); return false;"));
 					if (!item.getModelObject().isVisible())
 						item.setVisible(false);
 					item.add(label);

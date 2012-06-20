@@ -184,12 +184,12 @@ public final class OnePagerUtil {
 					}
 				});
 	      	
-	            ajaxRequestTarget.addComponent(formComponent);
-	            ajaxRequestTarget.appendJavascript("$('#"+ formComponent.getMarkupId() +"').parents().show();");
+	            ajaxRequestTarget.add(formComponent);
+	            ajaxRequestTarget.appendJavaScript("$('#"+ formComponent.getMarkupId() +"').parents().show();");
 	        }
 
 	        if(component.getUpdateComponent()!=null){
-	            ajaxRequestTarget.addComponent(component.getUpdateComponent().getParent());
+	            ajaxRequestTarget.add(component.getUpdateComponent().getParent());
 	        }
 	    }
 

@@ -126,7 +126,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 					
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
-						target.addComponent(implementationLocation);
+						target.add(implementationLocation);
 						String mixedImplementationLocation = FeaturesUtil.getGlobalSettingValue(
 								GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
 						if ("false".equals(mixedImplementationLocation)){
@@ -134,8 +134,8 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 							if(set.size()>0) {
 								locationsTable.getSetModel().getObject().clear();
 								locationsTable.getList().removeAll();
-								target.appendJavascript(OnePagerUtil.getToggleChildrenJS(locationsTable));
-								target.addComponent(locationsTable);
+								target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
+								target.add(locationsTable);
 							}
 						}
 						checkDisablePercentages(implementationLevel, implementationLocation, disablePercentagesForInternational);

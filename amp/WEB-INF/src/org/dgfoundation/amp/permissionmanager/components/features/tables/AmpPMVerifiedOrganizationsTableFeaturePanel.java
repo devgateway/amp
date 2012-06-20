@@ -48,7 +48,7 @@ public class AmpPMVerifiedOrganizationsTableFeaturePanel extends AmpFormTableFea
                     public void onClick(AjaxRequestTarget target) {
                     	orgsSetmodel.getObject().remove(item.getModelObject());
                         list.removeAll();
-                        target.addComponent(AmpPMVerifiedOrganizationsTableFeaturePanel.this.getParent());
+                        target.add(AmpPMVerifiedOrganizationsTableFeaturePanel.this.getParent());
                     }
                 };
                 item.add(propertyDeleteLink);

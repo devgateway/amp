@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.wicket.RequestCycle;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
@@ -22,12 +22,14 @@ import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.resources.JavascriptResourceReference;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.http.WebRequestCycle;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
+import org.apache.wicket.util.string.StringValue;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
@@ -127,15 +129,15 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		final CharSequence url = onSelectBehavior.getCallbackUrl();
 		textField.add(new AbstractBehavior() {
 			private static final long serialVersionUID = 1L;
-
+			
 			@Override
-			public void renderHead(IHeaderResponse response) {
+			public void renderHead(Component component, IHeaderResponse response) {
 				String js = "function callWicket"
 						+ textField.getMarkupId()
 						+ "(selectedString) { var wcall = wicketAjaxGet ('"
 						+ url
 						+ "&selectedString='+selectedString, function() { }, function() { } ) }";
-				response.renderJavascript(js,
+				response.renderJavaScript(js,
 						"callWicket-" + textField.getMarkupId());
 			}
 		});
@@ -221,9 +223,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		add(container);    
 		add(new YuiAutoCompleteBehavior(){
 			@Override
-			public void renderHead(IHeaderResponse response) {
-				super.renderHead(response);
-				response.renderJavascriptReference(new JavascriptResourceReference(
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.renderJavaScriptReference(new PackageResourceReference(
 						AmpAutocompleteFieldPanel.class,
 						"AmpAutocompleteCommonScripts.js"));
 				
@@ -235,16 +237,16 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 						return variables;
 					}
 				};
-				response.renderJavascriptReference(new TextTemplateResourceReference(clazz, jsName, variablesModel));
+				response.renderJavaScriptReference(new TextTemplateResourceReference(clazz, jsName, variablesModel));
 				/*
-				 * currently renderOnDomReadyJavascript doesn't work as expected in IE8
+				 * currently renderOnDomReadyJavaScript doesn't work as expected in IE8
 				 * that is why jquery's $(document).ready has been added here
 				 */
 				
 				String disableControl = "true";
 				if (textField.getParent().isEnabled())
 					disableControl = "false";
-				response.renderOnDomReadyJavascript("$(document).ready(function() {"+getJsVarName()
+				response.renderOnDomReadyJavaScript("$(document).ready(function() {"+getJsVarName()
 						+ " = new YAHOO.widget."+ autoCompeleteVar+"('"
 						+ textField.getMarkupId() + "', '" + getCallbackUrl()
 						+ "', '" + container.getMarkupId() + "', '"
@@ -263,9 +265,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 
 			@Override
 			protected void respond(final AjaxRequestTarget target) {
-				String selectedString = RequestCycle.get().getRequest().getParameter("selectedString");
+				String selectedString = getRequestCycle().getRequest().getRequestParameters().getParameterValue("selectedString").toString();
 				// hide loading icon:
-				target.appendJavascript("YAHOO.util.Dom.get('"
+				target.appendJavaScript("YAHOO.util.Dom.get('"
 						+ indicator.getMarkupId() + "').style.display = 'none';");
 				CHOICE choice = getSelectedChoice(DbUtil.deFilter(selectedString, false));
 				onSelect(target, choice);
@@ -455,7 +457,6 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	
 
 	/**
-	 * Behavior that shows the YUI autocomplete picklist. Invokes
 	 * YAHOO.widget.WicketAutoComplete using {@link YuiAutoComplete#textField
 	 * #getMarkupId()} and {@link YuiAutoComplete#container#getMarkupId()}. The
 	 * select all button uses {@link YuiAutoComplete#toggleButton#getMarkupId()}
@@ -468,20 +469,17 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	 */
 	private class YuiAutoCompleteBehavior extends AbstractDefaultAjaxBehavior {
 
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
-			RequestCycle requestCycle = RequestCycle.get();
-			Map<String, String[]> paramMap = ((WebRequestCycle) requestCycle)
-					.getRequest().getParameterMap();
-			String[] paramValues = paramMap.get("q");
-			if (paramValues == null) {
-				return;
-			}
-			String query = paramValues[0];
+			Request request = getRequestCycle().getRequest(); 
+			IRequestParameters paramMap = request.getRequestParameters();
+			StringValue queryS = paramMap.getParameterValue("q");
+			String query = queryS.toString();
 			String[][] result = getChoiceValues(query);
 			String jsonResult = OnePagerUtil.jsonMarshal(result);
-			target.appendJavascript(getJsVarName()
+			target.appendJavaScript(getJsVarName()
 					+ ".dataSource.responseArray = " + jsonResult + ";");
 		}
 

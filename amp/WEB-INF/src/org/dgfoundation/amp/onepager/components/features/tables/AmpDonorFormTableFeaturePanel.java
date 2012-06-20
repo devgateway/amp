@@ -91,10 +91,10 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				parentModel.getObject().remove(item.getModelObject());
-				target.addComponent(AmpDonorFormTableFeaturePanel.this);
+				target.add(AmpDonorFormTableFeaturePanel.this);
 				list.removeAll();
-				target.addComponent(getParentFundingItem().getFundingInfo());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(getParentFundingItem().getFundingInfo()));
+				target.add(getParentFundingItem().getFundingInfo());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(getParentFundingItem().getFundingInfo()));
 			}
 		};
 	}

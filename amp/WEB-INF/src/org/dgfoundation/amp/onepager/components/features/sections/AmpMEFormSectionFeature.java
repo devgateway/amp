@@ -108,8 +108,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 						uniqueCollectionValidationField.reloadValidationField(target);
 						//setModel.getObject().remove(item.getModelObject());
 						list.removeAll();
-						target.addComponent(AmpMEFormSectionFeature.this);
-						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
+						target.add(AmpMEFormSectionFeature.this);
+						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
 					}
 				};
 				item.add(deleteLinkField);
@@ -140,8 +140,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 				
 					//setModel.getObject().add(ia);
 				list.removeAll();
-				target.addComponent(list.getParent());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
+				target.add(list.getParent());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
 			}
 
 			@Override
@@ -216,7 +216,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						sectorSetModel.getObject().remove(item.getModelObject());
-						target.addComponent(listParent);
+						target.add(listParent);
 						list.removeAll();
 					}
 				};
@@ -250,8 +250,8 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 				sectorSetModel.getObject().add(choice);
 				list.removeAll();
                                 indicatorFeedbackContainer.setVisible(false);
-				target.addComponent(sectorContainer);
-                                target.addComponent(indicatorFeedbackContainer);
+				target.add(sectorContainer);
+                                target.add(indicatorFeedbackContainer);
 			}
 
 			@Override
@@ -286,7 +286,7 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 						//tr.commit();
 						
 						updateVisibility(newInd);
-						target.addComponent(indicatorFeedbackContainer);
+						target.add(indicatorFeedbackContainer);
 						
 						IndicatorActivity ia = new IndicatorActivity();
 						ia.setActivity(am.getObject());
@@ -296,14 +296,14 @@ public class AmpMEFormSectionFeature extends AmpFormSectionFeaturePanel {
 						
 						newInd.setObject(getNewIndicator());
 						
-						target.addComponent(list.getParent());
-						target.appendJavascript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
+						target.add(list.getParent());
+						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpMEFormSectionFeature.this));
 					} catch (Exception e) {
 						logger.error(e);
 					}
 				}else{
 					updateVisibility(newInd);
-					target.addComponent(indicatorFeedbackContainer);
+					target.add(indicatorFeedbackContainer);
 				}
 				
 			}

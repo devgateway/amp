@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.WicketRuntimeException;
@@ -45,7 +46,7 @@ public class JspResolver implements IComponentResolver {
 		WicketTagIdentifier.registerWellKnownTagName("jsp");
 	}
 
-	public boolean resolve(final MarkupContainer container, final MarkupStream markupStream, final ComponentTag tag) {
+	public Component resolve(final MarkupContainer container, final MarkupStream markupStream, final ComponentTag tag) {
 		if (tag instanceof WicketTag) {
 			
 			WicketTag wtag = (WicketTag)tag;
@@ -61,16 +62,17 @@ public class JspResolver implements IComponentResolver {
 					layout = null;
 				}
 				
+				JspFileContainer jfc = new JspFileContainer(file, layout);
 				// Add the jsp component to the component hierarchy
-				container.autoAdd(new JspFileContainer(file, layout), markupStream);
+				//container.autoAdd(jfc, markupStream);
 				
 				// We did process the tag
-				return true;
+				return jfc;
 			}
 		}
 
 		// We did not process the tag
-		return false;
+		return null;
 	}
 
 	private static class JspFileContainer extends MarkupContainer {

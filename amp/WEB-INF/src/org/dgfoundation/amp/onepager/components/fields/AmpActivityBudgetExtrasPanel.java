@@ -47,7 +47,7 @@ public class AmpActivityBudgetExtrasPanel extends AmpFieldPanel {
 		fy.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange"){
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				target.addComponent(fy);		
+				target.add(fy);		
 			}		
 	      });
 		// add(new AmpTextFieldPanel<String>("fy", new PropertyModel(model,
@@ -63,8 +63,8 @@ public class AmpActivityBudgetExtrasPanel extends AmpFieldPanel {
 	
 		add(new AmpComponentPanel("requiredField", "Validator Required Fields") {
 			@Override
-			protected void onBeforeRender() {
-				super.onBeforeRender();
+			protected void onConfigure() {
+				super.onConfigure();
 				if (this.isVisible()){
 					vote.getTextContainer().setRequired(true);
 					subVote.getTextContainer().setRequired(true);

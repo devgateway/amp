@@ -57,13 +57,13 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 	 * @param target
 	 */
 	public void updateDisbOrderPickers(AjaxRequestTarget target) {
-		Iterator<? extends ListItem<AmpFundingDetail>> iterator = (Iterator<? extends ListItem<AmpFundingDetail>>) disbursements
-				.getDisbursementsTableFeature().getEditorList().iterator();
+		Iterator<Component> iterator = disbursements.getDisbursementsTableFeature()
+				.getEditorList().iterator();
 		while (iterator.hasNext()) {
 			ListItem<AmpFundingDetail> listItem = (ListItem<AmpFundingDetail>) iterator
 					.next();
 			Component component = listItem.get("disbOrderId");
-			target.addComponent(component);
+			target.add(component);
 		}
 	}
 
@@ -119,12 +119,12 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 				Set fundingDetails = model.getObject().getFundingDetails();
 				fd.setDisbOrderId(generateNewDisbOrderId(fundingDetails));
 				disbOrdersTableFeature.getEditorList().addItem(fd);
-				target.addComponent(disbOrdersTableFeature);
+				target.add(disbOrdersTableFeature);
 				updateDisbOrderPickers(target);
 				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
 				parent.getFundingInfo().checkChoicesRequired(disbOrdersTableFeature.getEditorList().getCount());
-				target.addComponent(parent.getFundingInfo());
-				target.appendJavascript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+				target.add(parent.getFundingInfo());
+				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 			}
 		};
 		add(addCommit);

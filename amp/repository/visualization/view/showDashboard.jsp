@@ -84,6 +84,7 @@ var trnDisbursements = "";
 var trnExpenditures = "";
 var trnPledges = "";
 var trnAidPredictability = "";
+var trnODAHistoricalTrend="";
 var trnAidType = "";
 var trnFinancingInstrument = "";
 var trnDonorProfile = "";
@@ -161,6 +162,7 @@ function initializeTranslations(){
 	trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";
 	trnPledges="<digi:trn jsFriendly='true'>Pledges</digi:trn>";
 	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
+	trnODAHistoricalTrend="<digi:trn jsFriendly='true'>ODA Historical Trend</digi:trn>";
 	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
 	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
 	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
@@ -1383,11 +1385,11 @@ function initializeGlobalVariables(){
 		</c:if>
 		<c:if test="${showFundingChart eq 1 }">
 		<fieldset class="chartFieldset">
-			<legend><span id="FundingChartTitleLegend" class=legend_label><digi:trn jsFriendly='true'>ODA historical trend</digi:trn></span></legend>
+			<legend><span id="FundingChartTitleLegend" class=legend_label></span></legend>
 			<div style="float:left;">
 				<a onclick="toggleHeader(this, 'FundingChartHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
 				<div id="FundingChartHeader" class="chart_header" style="display:none;">
-				<digi:trn>Title</digi:trn> <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">
+				<digi:trn>Title</digi:trn> <input type="text" id="FundingChartTitle" value="" size="50">
 				<input type="hidden" id="FundingChartShowFontFamily" value="Verdana"/>
 				&nbsp;<digi:trn>Size</digi:trn>
 				<select id="FundingChartFontSize">
@@ -1887,6 +1889,7 @@ function initializeTranslations(){
 	trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";
 	trnPledges="<digi:trn jsFriendly='true'>Pledges</digi:trn>";
 	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
+	trnODAHistoricalTrend="<digi:trn jsFriendly='true'>ODA Historical Trend</digi:trn>";
 	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
 	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
 	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";

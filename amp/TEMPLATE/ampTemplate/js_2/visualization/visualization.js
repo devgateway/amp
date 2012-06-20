@@ -1436,6 +1436,15 @@ function refreshBoxes(o){
 			if (input != null)
 				input.value = value;
 		}
+		div = document.getElementById("FundingChartTitleLegend");
+		input = document.getElementById("FundingChartTitle");
+		value = trnODAHistoricalTrend + " - " + fundType;
+		alert (value);
+		if (div != null)
+			div.innerHTML = value;
+		if (input != null)
+			input.value = value;
+		
 		div = document.getElementById("AidPredictabilityTitleLegend");
 		input = document.getElementById("AidPredictabilityTitle");
 		value = trnAidPredictability + " - " + fundType;

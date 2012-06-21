@@ -11,10 +11,13 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
 
 <!-- expenditures -->
 <digi:instance property="aimEditActivityForm" />
 
+<c:if test="${aimEditActivityForm.funding.showPlanned}">
 <tr bgcolor="#FFFFCC">
 	<td colspan="4" style="text-transform: uppercase"><a
 		title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
@@ -64,7 +67,7 @@
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
-
+</c:if>
 
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
@@ -77,9 +80,11 @@
            </td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+	</c:if>
 	<tr>
 		<td colspan="4" height="7px"></td>
 	</tr>
+	<c:if test="${aimEditActivityForm.funding.showActual}">
 	<tr bgcolor="#FFFFCC">
 		<td colspan="4" style="text-transform: uppercase">
 			<a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
@@ -87,6 +92,7 @@
 			</a>
 		</td>
 	</tr>
+	<c:if test="${!empty funding.fundingDetails}">
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 	<!--Actual-->
 		<logic:equal name="fundingDetail" property="transactionType" value="2">
@@ -131,6 +137,7 @@
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
+	</c:if>
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
 			<digi:trn key="aim:subtotalplannedExpenditures">SUBTOTAL ACTUAL EXPENDITURES</digi:trn>
@@ -142,9 +149,11 @@
            </td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+	</c:if>
 	<tr>
 		<td colspan="4" height="7px"></td>
 	</tr>
-</c:if>
+
+</module:display>
 <!-- expenditures -->
 

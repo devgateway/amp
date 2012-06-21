@@ -341,6 +341,7 @@ function collapseAll() {
 		<div class="field_text_big">
 			<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments" 
 														parentModule="/Activity Form/Donor Funding/Funding Item">
+			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Actual Commitment</digi:trn>:<br/> 
 				<c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
 					<b>
@@ -355,6 +356,8 @@ function collapseAll() {
 			         </b>
 		         </c:if>
 			<hr/>
+			</c:if>
+			<c:if test="${aimEditActivityForm.funding.showPlanned}">
 			<digi:trn>Total Planned Commitment</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
 					<b>
@@ -369,10 +372,12 @@ function collapseAll() {
 			         </b>
 		         </c:if>
 		         <hr/>
+		         </c:if>
 		       </module:display>
 			
 			<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements" 
 														parentModule="/Activity Form/Donor Funding/Funding Item">
+			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Actual Distributements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
 	                <b>
@@ -387,6 +392,8 @@ function collapseAll() {
 			         </b>
 		         </c:if>
 			<hr/>
+			</c:if>
+			<c:if test="${aimEditActivityForm.funding.showPlanned}">
 			<digi:trn>Total Planned Distributements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
 	                <b>
@@ -401,9 +408,11 @@ function collapseAll() {
 			         </b>
 		         </c:if>
 			<hr/>
+			</c:if>
 			</module:display>
 			<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures" 
 														parentModule="/Activity Form/Donor Funding/Funding Item">
+			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Expenditures</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
 	                <b>
@@ -418,6 +427,8 @@ function collapseAll() {
 			         </b>
 		         </c:if>
 			<hr/>
+			</c:if>
+			<c:if test="${aimEditActivityForm.funding.showPlanned}">
 			<digi:trn>Total Planned Expenditures</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
 	                <b>
@@ -432,6 +443,7 @@ function collapseAll() {
 			         </b>
 		         </c:if>
 			<hr/>
+			</c:if>
 			</module:display>
 			<field:display name="Duration of Project" feature="Planning">
 				<digi:trn>Duration of project</digi:trn>: <br/>

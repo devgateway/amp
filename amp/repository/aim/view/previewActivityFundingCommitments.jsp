@@ -15,7 +15,11 @@
 <digi:instance property="aimEditActivityForm" />
 
 <!--start commitments-->
-<feature:display name="Planned Commitments" module="Measures">
+
+
+<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
+	<c:if test="${aimEditActivityForm.funding.showPlanned}">
 	<tr bgcolor="#ffffff">
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
 			style="text-transform: uppercase;"><a
@@ -28,10 +32,7 @@
 			</c:if>
 		</td>
 	</tr>
-</feature:display>
-<c:if test="${!empty funding.fundingDetails}">
-<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Add Commitment" 
-	parentModule="/Activity Form/Donor Funding/Funding Item/Commitments">
+	<c:if test="${!empty funding.fundingDetails}">
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
@@ -63,9 +64,11 @@
 								</field:display>
 							</td>
 						</tr>
+			
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
+	</c:if>
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
 			<digi:trn key='aim:subtotalplannedcommittment'> SUBTOTAL PLANNED COMMITMENTS:</digi:trn>
@@ -79,9 +82,11 @@
       		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
-	</module:display>
+	</c:if>
+
 
 	<tr><td colspan="4" height="7px"></td></tr>
+	<c:if test="${aimEditActivityForm.funding.showActual}">
 	<tr>
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase">
 			<a title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
@@ -93,6 +98,7 @@
 			</c:if>
 		</td>
 	</tr>
+	<c:if test="${!empty funding.fundingDetails}">
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Actual">
@@ -128,11 +134,12 @@
 									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 							</module:display>
 							</td>
-							</c:if>
+						</c:if>
 						</tr>
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
+	</c:if>
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
@@ -145,6 +152,8 @@
         </td>    
 		<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+	</c:if>
+	<c:if test="${aimEditActivityForm.funding.showPipeline}">
 	<tr>
 		<td colspan="4" height="7px"></td></tr>
 		<!-- PIPELINE COMMITMENTS -->
@@ -161,6 +170,7 @@
                 	</c:if>
                 </td>
         </tr>
+        <c:if test="${!empty funding.fundingDetails}">
         <logic:iterate name="funding" property="fundingDetails"
                 id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
                 <logic:equal name="fundingDetail" property="transactionType" value="0">
@@ -202,6 +212,7 @@
                         </logic:equal>
                 </logic:equal>
         </logic:iterate>
+        </c:if>
         <tr>
                 <td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
                         <digi:trn> SUBTOTAL PIPELINE COMMITMENTS: </digi:trn>
@@ -213,6 +224,7 @@
         		</td>    
                 <td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
         </tr>
+        </c:if>
         <tr><td colspan="4" height="7px"></td></tr>
-</c:if>
+     </module:display>
 <!-- End commitments-->

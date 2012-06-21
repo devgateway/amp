@@ -12,9 +12,9 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <digi:instance property="aimEditActivityForm" />
-
-
-<field:display name="Planned Disbursement Preview" feature="Disbursement">
+<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
+<c:if test="${aimEditActivityForm.funding.showPlanned}">
 	<tr bgcolor="#ffffff">
 		<td height="20" colspan="4" bgcolor="#FFFFCC"
 			style="text-transform: uppercase"><a
@@ -23,17 +23,14 @@
 		<digi:trn key="aim:planneddisbursements">PLANNED DISBURSEMENT</digi:trn>
 		</a></td>
 	</tr>
-</field:display>
-
-<c:if test="${!empty funding.fundingDetails}">
-
-	<field:display name="Planned Disbursement Preview" feature="Disbursement">
 	
 	<!-- Start Planned Disbursements -->
+	<c:if test="${!empty funding.fundingDetails}">	
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">
+			
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF">
 								<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Adjustment Type"
@@ -71,8 +68,8 @@
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
+	</c:if>
 	<!-- End Planned Disbursements -->
-	
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase">
@@ -86,8 +83,10 @@
 			</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+	</c:if>
 	
-	</field:display>
+	<c:if test="${aimEditActivityForm.funding.showActual}">
+
 	
 <tr><td colspan="4" height="7px"></td></tr>
 	<tr bgcolor="#ffffff">
@@ -97,6 +96,7 @@
 	</tr>
 
 	<!-- Start Actual Disbursements -->
+	<c:if test="${!empty funding.fundingDetails}">	
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Actual">
@@ -138,6 +138,7 @@
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
+	</c:if>
 	<!-- End Actual Disbursements -->
 
 	<tr>
@@ -154,6 +155,11 @@
                    
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+	</c:if>
+	</module:display>
+
+
+
 	<tr><td colspan="4" height="7px"></td></tr>
-</c:if>
+
 

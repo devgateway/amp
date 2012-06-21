@@ -164,18 +164,20 @@
 														parentModule="/Activity Form/Donor Funding/Funding Item">
 														<jsp:include page="previewActivityFundingCommitments.jsp" />
 													</module:display>
-													<feature:display module="Funding"
-														name="Disbursement">
+													<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
 														<jsp:include page="previewActivityFundingDisbursement.jsp" />
-													</feature:display>
+													</module:display>
 
-													<feature:display module="Funding" name="Expenditures">
+													<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
 														<jsp:include page="previewActivityFundingExpenditures.jsp" />
-													</feature:display>
+													</module:display>
 
-                                                    <feature:display module="Funding" name="Disbursement Orders">
+                                                   <module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
                                                         <jsp:include page="previewActivityFundingExpenditures.jsp" />
-                                                    </feature:display>
+                                                  </module:display>
 
 													<feature:display module="Funding" name="Undisbursed Balance">
 													<jsp:include page="previewActivityFundingUndisbursedBalance.jsp" />
@@ -211,7 +213,9 @@
                     <tr>
                         <td>
                         <table cellspacing="1" cellpadding="0" border="0" style="font-size:11px;" width="100%">
-                        <feature:display name="Planned Commitments" module="Measures">
+                        	<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
+							<c:if test="${aimEditActivityForm.funding.showPlanned}">
 	                        <tr>
 	                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase;">
 	                            	<digi:trn key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS: </digi:trn>
@@ -226,7 +230,8 @@
 		                             &nbsp;
                         		</td>
 	                        </tr>
-	                 	</feature:display>
+	                        </c:if>
+	                    <c:if test="${aimEditActivityForm.funding.showActual}">
                         <tr>
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB; text-transform: uppercase"><digi:trn
@@ -242,6 +247,8 @@
 	                        	</c:if>&nbsp;        
 	                        </td>
                         </tr>
+                        </c:if>
+                        <c:if test="${aimEditActivityForm.funding.showPipeline}">
 						<tr>
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase"><digi:trn
                                 key='aim:totalactualcommittment'> TOTAL PIPELINE COMMITMENTS: </digi:trn>
@@ -255,8 +262,11 @@
                                 </c:if>&nbsp;        
                             </td>
                         </tr>
-                        <feature:display module="Funding"
-                            name="Disbursement">
+                        </c:if>
+                        </module:display>
+                        <module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
+						<c:if test="${aimEditActivityForm.funding.showPlanned}">
                         <tr>
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
                             	<digi:trn key='aim:totalplanneddisbursement'>
@@ -273,6 +283,8 @@
                                 </c:if> &nbsp;
                              </td>
                         </tr>
+                        </c:if>
+                        <c:if test="${aimEditActivityForm.funding.showActual}">
                         <tr>
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB"><digi:trn
@@ -289,8 +301,11 @@
                                 </c:if>&nbsp;
                              </td>
                         </tr>
-                        </feature:display>
-                        <feature:display module="Funding" name="Expenditures">
+                        </c:if>
+                        </module:display>
+                         <module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
+						<c:if test="${aimEditActivityForm.funding.showPlanned}">
                         <tr>
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB; text-transform: uppercase"><digi:trn
@@ -306,6 +321,8 @@
                                 </c:if>&nbsp;
                              </td>
                         </tr>
+                        </c:if>
+                        <c:if test="${aimEditActivityForm.funding.showActual}">
                         <tr>
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB; text-transform: uppercase"><digi:trn
@@ -322,8 +339,11 @@
                                 </c:if>&nbsp;
                            </td>
                         </tr>
-                        </feature:display>
-                        <feature:display module="Funding" name="Disbursement Orders">
+                        </c:if>
+                        </module:display>
+                          <module:display name="/Activity Form/Donor Funding/Funding Item/Disbursement Orders" 
+														parentModule="/Activity Form/Donor Funding/Funding Item">
+   
                         <tr>
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase;">
                         <digi:trn
@@ -346,7 +366,7 @@
                                 </c:if> &nbsp;
                            </td>
                       	</tr>
-                        </feature:display>
+                        </module:display>
                         <feature:display module="Funding" name="Undisbursed Balance">
                       	<tr>
                             <td bgcolor="#eeeeee"

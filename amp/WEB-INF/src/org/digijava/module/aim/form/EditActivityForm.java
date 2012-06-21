@@ -2557,8 +2557,35 @@ public class EditActivityForm extends ActionForm implements Serializable {
         private int selectedMTEFProjectionYear;
         
         private float capitalSpendingPercentage;
+        private boolean showActual;
+        private boolean showPlanned;
+        private boolean showPipeline;
 
-        public float getCapitalSpendingPercentage() {
+        public boolean isShowPipeline() {
+			return showPipeline;
+		}
+
+		public void setShowPipeline(boolean showPipeline) {
+			this.showPipeline = showPipeline;
+		}
+
+		public boolean isShowActual() {
+			return showActual;
+		}
+
+		public void setShowActual(boolean showActual) {
+			this.showActual = showActual;
+		}
+
+		public boolean isShowPlanned() {
+			return showPlanned;
+		}
+
+		public void setShowPlanned(boolean showPlanned) {
+			this.showPlanned = showPlanned;
+		}
+
+		public float getCapitalSpendingPercentage() {
             return capitalSpendingPercentage;
         }
 

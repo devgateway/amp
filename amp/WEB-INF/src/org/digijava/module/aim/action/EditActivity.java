@@ -1155,7 +1155,29 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
           
           
-          FundingCalculationsHelper calculations=new FundingCalculationsHelper();    
+          FundingCalculationsHelper calculations=new FundingCalculationsHelper();   
+          try{
+        	  eaForm.getFunding().setShowActual(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL)==null?false:true);
+        	  eaForm.getFunding().setShowActual(true);
+          }
+          catch(Exception ex){
+        	  eaForm.getFunding().setShowActual(false);
+          }
+          try{
+        	  eaForm.getFunding().setShowPlanned(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PLANNED)==null?false:true);
+        	  eaForm.getFunding().setShowPlanned(true);
+          }
+          catch(Exception ex){
+        	  eaForm.getFunding().setShowPlanned(false);
+          }
+          try{
+        	  eaForm.getFunding().setShowPipeline(CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE)==null?false:true);
+        	  eaForm.getFunding().setShowPipeline(true);
+          }
+          catch(Exception ex){
+        	  eaForm.getFunding().setShowPipeline(false);
+          }
+         
           String toCurrCode=null;
           if (tm != null)
               toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();

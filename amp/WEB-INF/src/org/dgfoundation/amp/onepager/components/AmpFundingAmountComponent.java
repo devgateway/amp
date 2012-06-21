@@ -61,7 +61,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 			String fmDate, String propertyDate) {
 		super(id, model);
 		amount = new AmpTextFieldPanel<Double>("amount",
-				new PropertyModel<Double>(model, propertyAmount), fmAmount,true) {
+				new PropertyModel<Double>(model, propertyAmount), fmAmount,true,true) {
 			public IConverter getInternalConverter(java.lang.Class<?> type) {
 				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
 				NumberFormat formatter = FormatHelper.getDecimalFormat(true);

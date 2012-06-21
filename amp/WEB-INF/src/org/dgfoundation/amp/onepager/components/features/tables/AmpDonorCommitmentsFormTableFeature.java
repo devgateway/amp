@@ -93,7 +93,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 				};
 				
 				AmpTextFieldPanel<Double> exchangeRate = new AmpTextFieldPanel<Double>("exchangeRate",
-						new PropertyModel<Double>(item.getModel(), "fixedExchangeRate"), "Exchange Rate",true);
+						new PropertyModel<Double>(item.getModel(), "fixedExchangeRate"), "Exchange Rate",true,true);
 	
 				exchangeRate.getTextContainer().add(new MinimumValidator<Double>(0.001d));
 				exchangeRate.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("6")));

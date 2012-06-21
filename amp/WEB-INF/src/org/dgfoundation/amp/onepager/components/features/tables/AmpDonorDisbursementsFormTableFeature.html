@@ -13,7 +13,10 @@
 		</wicket:fm>	
 		<wicket:fm fmNames="Pledges">
 			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:pledge">Pledge</wicket:trn></b></td>
-		</wicket:fm>	
+		</wicket:fm>
+        <wicket:fm fmNames="Funding Status;Mode of Payment;Capital Spending Percentage">
+            <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:capSpendPercentage">Cap.Spend. %</wicket:trn></b></td>
+        </wicket:fm>
 		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
 	</tr>
 	<tr wicket:id=listDisbursements>
@@ -28,6 +31,9 @@
 		<wicket:fm fmNames="Pledges">
 			<td class="inside"><span wicket:id="pledge"/></td>
 		</wicket:fm>
+        <wicket:fm fmNames="Capital Spending Percentage">
+            <td class="inside" ><span wicket:id="capitalSpendingPercentage"/></td>
+        </wicket:fm>
 		<td  class="inside">
 			<span wicket:id="delDisbursement"/>
 		</td>

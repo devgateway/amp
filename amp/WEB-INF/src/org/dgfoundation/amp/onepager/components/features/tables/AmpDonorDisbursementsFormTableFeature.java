@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -22,6 +23,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.MaximumValidator;
+import org.apache.wicket.validation.validator.MinimumValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
@@ -31,6 +34,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorFie
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionsSumComparatorValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpTransactionTypeDonorFundingDetailModel;
 import org.dgfoundation.amp.onepager.validators.AmpCollectionsSumComparatorValidator;
 import org.dgfoundation.amp.onepager.validators.AmpPercentageCollectionValidator;
@@ -120,6 +124,14 @@ public class AmpDonorDisbursementsFormTableFeature extends
 				 if(alertIfDisbursmentBiggerCommitments);
 					 	amountComponent.setAmountValidator(amountSumComparator); 	
 				item.add(amountComponent);
+
+                AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
+                                        "capitalSpendingPercentage",
+                                        new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage",true);
+                capitalSpendingPercentage.getTextContainer().add(new MinimumValidator<Float>(0f));
+                capitalSpendingPercentage.getTextContainer().add(new MaximumValidator<Float>(100f));
+                capitalSpendingPercentage.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("5")));
+                item.add(capitalSpendingPercentage);
 
 				item.add(new AmpSelectFieldPanel<String>("disbOrderId",
 						new PropertyModel<String>(item.getModel(),

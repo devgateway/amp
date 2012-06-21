@@ -83,6 +83,7 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 //		financingId.getNewLine().setVisible(false);
 		add(financingId);
 
+        /*
         AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
 				"capitalSpendingPercentage",
 				new PropertyModel<Float>(model, "capitalSpendingPercentage"),
@@ -90,7 +91,7 @@ public class AmpDonorFundingInfoSubsectionFeature extends
         capitalSpendingPercentage.getTextContainer().add(new MinimumValidator<Float>(0f));
         capitalSpendingPercentage.getTextContainer().add(new MaximumValidator<Float>(100f));
         add(capitalSpendingPercentage);
-
+          */
 		if (model != null && model.getObject() != null && 
 			model.getObject().getFundingDetails() != null &&
 			model.getObject().getFundingDetails().size() > 0)

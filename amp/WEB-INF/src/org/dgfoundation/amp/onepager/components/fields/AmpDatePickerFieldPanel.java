@@ -68,6 +68,7 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 			}
 		};
 		dp.setShowOnFieldClick(true);
+		dp.setAutoHide(true);
 		date.add(dp);
 		dateWrapper.add(date);
 		initFormComponent(date);

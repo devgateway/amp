@@ -15,6 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpFormTableFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 
@@ -37,6 +38,7 @@ public class AmpPMAddPermFormTableFeaturePanel extends AmpFormTableFeaturePanel 
 			@Override
 			protected void populateItem(final ListItem<AmpPMReadEditWrapper> item) {
 				item.add(new Label("gateName", TranslatorUtil.getTranslation(item.getModelObject().getName())   ));
+				
 				CheckBox read =	new CheckBox("gateReadFlag", new PropertyModel(item.getModelObject(), "readFlag"));
 				read.setOutputMarkupId(true);
 				item.add(read);

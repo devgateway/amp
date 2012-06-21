@@ -46,8 +46,7 @@ public class AmpCheckBoxFieldPanel extends AmpFieldPanel<Boolean> {
 	 * @param fmName
 	 * @param hideLabel
 	 */
-	public AmpCheckBoxFieldPanel(String id, IModel<Boolean> model,
-			String fmName, boolean hideLabel) {
+	public AmpCheckBoxFieldPanel(String id, IModel<Boolean> model, String fmName, boolean hideLabel) {
 		super(id, model, fmName, hideLabel);
 		newLine.setVisible(false);
 		checkBox = new AjaxCheckBox("checkbox", model){

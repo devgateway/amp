@@ -43,6 +43,15 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	
 	protected boolean ignoreFmVisibility = false;
 	protected boolean ignorePermissions = false; 
+	
+	public boolean isIgnorePermissions() {
+		return ignorePermissions;
+	}
+
+	public void setIgnorePermissions(boolean ignorePermissions) {
+		this.ignorePermissions = ignorePermissions;
+	}
+
 	protected boolean ignoreFmButtonsVisibility = false;
 	
 	public IModel<T> getModel() {

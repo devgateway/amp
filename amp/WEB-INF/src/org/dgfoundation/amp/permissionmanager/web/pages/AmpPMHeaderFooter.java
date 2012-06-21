@@ -66,8 +66,7 @@ public class AmpPMHeaderFooter extends WebPage {
 				return variables;
 			}
 		};
-		add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,
-				"translations.js", variablesModel));
+		//add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,"translations.js", variablesModel));
 		
 		
 		   add(new IndicatingAjaxLink("fmmode", new Model("FM Mode")) {

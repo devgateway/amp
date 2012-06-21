@@ -145,7 +145,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		final IModel<Set<AmpPMReadEditWrapper>> gatesSetModel = new Model((Serializable) gatesSet);
 		final AmpPMAddPermFormTableFeaturePanel permGatesFieldsFormTable = new AmpPMAddPermFormTableFeaturePanel("permGatesFieldsForm", gatesSetModel, "Gate Form Table", true);
 		permGatesFieldsFormTable.setTableWidth(470);
-		permGatesFieldsFormTable.setIgnoreFmVisibility(true);
+		permGatesFieldsFormTable.setIgnorePermissions(true);
 		//permGatesFieldsFormTable.setEnabled(true);
 		permGatesFieldsFormTable.setOutputMarkupId(true);
 		form.add(permGatesFieldsFormTable);
@@ -156,7 +156,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		final AmpPMAddPermFormTableFeaturePanel permWorkspacesFieldsFormTable = new AmpPMAddPermFormTableFeaturePanel("permWorkspacesFieldsForm", workspacesSetModel, "Workspaces Form Table", true);
 		permWorkspacesFieldsFormTable.setTableWidth(470);
 		permWorkspacesFieldsFormTable.setOutputMarkupId(true);
-		permWorkspacesFieldsFormTable.setIgnoreFmVisibility(true);
+		permGatesFieldsFormTable.setIgnorePermissions(true);
 		//permWorkspacesFieldsFormTable.setEnabled(false);
 		form.add(permWorkspacesFieldsFormTable);
 		

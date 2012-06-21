@@ -48,6 +48,7 @@ table.inside, td.inside_zebra {}
 td.tdInsideHeader{background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x;padding:3px;text-align:center;}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
 td.inside {margin: 0; padding: 4px; border-bottom:1px solid #b8b7b7;}
+td.inside a img {border:0;}
 td.report_inside { border-width: 1px 1px 0 0;padding-top:5px;}
 td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #cccccc; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;padding:3px;}
 td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border-style: solid; font-size:11px;}

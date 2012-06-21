@@ -1030,10 +1030,11 @@ function collapseAll() {
 			<digi:trn>Proposed Completion Date</digi:trn>:&nbsp;
 			<b>${aimEditActivityForm.planning.proposedCompDate}</b>		</field:display>
 		
-		<module:display name="/Activity Form/Planning/current completion date" parentModule="/Activity Form/Planning">
+		<module:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
-			<digi:trn>Current Completion Date</digi:trn>:&nbsp;
-			<b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b>		</module:display>
+			<digi:trn>Actual Completion Date</digi:trn>:&nbsp;
+			<b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b>		
+		</module:display>
 		<hr>
 		<field:display name="Duration of Project" feature="Planning"> 
 			<digi:trn>Duration of project</digi:trn>:&nbsp;

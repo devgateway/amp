@@ -630,15 +630,15 @@ body {background:none;}
 												</tr>
 												</c:if>
 												</field:display>
-												<field:display name="Current Completion Date" feature="Planning">
+												<module:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
 												<tr>
-													<td width="32%"><digi:trn key="aim:currentCompletionDate">
-													Current Completion Date</digi:trn></td>
+													<td width="32%">
+													<digi:trn>Actual Completion Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
 														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>													</td>
 												</tr>
-												</field:display>
+												</module:display>
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.planning.activityCloseDates}">
 												<tr>

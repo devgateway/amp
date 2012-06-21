@@ -783,3 +783,4 @@ border-left: 1px;
 border-bottom: 1px;}
 legend.admtoolsttl{position:absolute;top:-10px;left:10px;}
 #customDecimalSymbol{margin:0px 2px 0px 2px;width:64px;}
+span.geostyle{background:#f1f1f1;padding:3px;border:1px solid #e0e0e0;color:#5d5d5b;font-size:11px;font-weight:normal;}

@@ -4,10 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -52,7 +50,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		super(id, model, fmName, Constants.COMMITMENT, 7);
 
 		
-		 if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS).equalsIgnoreCase("TRUE"));
+		 if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS).equalsIgnoreCase("TRUE"))
 		    alertIfDisbursmentBiggerCommitments = true;
 
 		AbstractReadOnlyModel<List<AmpFundingDetail>> setAmountListModel = OnePagerUtil
@@ -77,37 +75,37 @@ public class AmpDonorCommitmentsFormTableFeature extends
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
 				item.add(getAdjustmentTypeComponent(item.getModel()));
-				
+
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 
-				 if(alertIfDisbursmentBiggerCommitments);
-					 	amountComponent.setAmountValidator(amountSumComparator); 	
+				if(alertIfDisbursmentBiggerCommitments)
+					amountComponent.setAmountValidator(amountSumComparator); 	
 				item.add(amountComponent);
 
 				IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
 					protected java.util.List<FundingPledges> load() {
 						return PledgesEntityHelper
 								.getPledgesByDonor(model.getObject()
-								.getAmpDonorOrgId().getAmpOrgId()); 
+										.getAmpDonorOrgId().getAmpOrgId()); 
 					};
 				};
-				
+
 				AmpTextFieldPanel<Double> exchangeRate = new AmpTextFieldPanel<Double>("exchangeRate",
 						new PropertyModel<Double>(item.getModel(), "fixedExchangeRate"), "Exchange Rate",true,true);
-	
+
 				exchangeRate.getTextContainer().add(new MinimumValidator<Double>(0.001d));
 				exchangeRate.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("6")));
 				item.add(exchangeRate);
-				
+
 				item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",
 						new PropertyModel<FundingPledges>(item.getModel(),
 								"pledgeid"), pledgesModel,
-						"Pledges", true, true, new ChoiceRenderer<FundingPledges>() {
-							@Override
-							public Object getDisplayValue(FundingPledges arg0) {
-								return arg0.getTitle();
-							}
-						}));
+								"Pledges", true, true, new ChoiceRenderer<FundingPledges>() {
+					@Override
+					public Object getDisplayValue(FundingPledges arg0) {
+						return arg0.getTitle();
+					}
+				}));
 				item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);

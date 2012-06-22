@@ -674,8 +674,11 @@ body {background:none;}
                                                   	</b>                      	      
                                                   	</td>
 													<td bgcolor="#FFFFFF">
-												   		<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/><br><br>
-                                                        <c:out value="${aimEditActivityForm.identification.statusReason}"/>
+												   	  <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/><br><br>
+                                                      <c:if test="${not empty aimEditActivityForm.identification.statusReason}">
+				  											<b> <c:set var="statusReasonKey" value="${aimEditActivityForm.identification.statusReason}"/>
+															<digi:edit key="${statusReasonKey}"></digi:edit></b>
+													  </c:if>                                                       
                                                    </td>									
                                          	 </tr>
 										</field:display>									

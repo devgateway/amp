@@ -68,6 +68,10 @@ public class RMMapCalculationUtil {
         if (filter.isCurWorkspaceOnly() && filter.getCurWorkspace() != null) {
            workspaces = new ArrayList();
            workspaces.add(filter.getCurWorkspace());
+           Collection childWorkspaces = TeamUtil.getAllChildrenWorkspaces(filter.getCurWorkspace().getAmpTeamId());
+            if (childWorkspaces != null && !childWorkspaces.isEmpty()) {
+                workspaces.addAll(childWorkspaces);
+            }
         }
 
         //boolean includeCildLocations = filter.getMapLevel() == 3;

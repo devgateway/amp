@@ -694,13 +694,6 @@
 			<artifactId>wicket-spring</artifactId>
 			<version>1.5.7</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>at.molindo</groupId>
-			<artifactId>wicketstuff-merged-resources</artifactId>
-			<version>3.1-alpha-1</version>
-		</dependency>
-		 -->
 		<dependency>
 			<groupId>axis</groupId>
 			<artifactId>axis-wsdl4j</artifactId>

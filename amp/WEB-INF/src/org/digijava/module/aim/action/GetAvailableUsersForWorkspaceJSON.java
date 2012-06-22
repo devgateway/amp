@@ -102,7 +102,7 @@ public class GetAvailableUsersForWorkspaceJSON extends Action {
 				orgs+="</ul>";
 			}
 			juser.put("organizations", orgs);
-			String roles="<select name=\"userIdsWithRoles\" class=\"inp-text\" id=\"role_"+user.getId()+"\" >";
+			String roles="<select class=\"inp-text\" id=\"role_"+user.getId()+"\" onclick=\"updateUserRole(this)\" >";
 			roles+="<option value=\"-1\" >-----" +TranslatorWorker.translateText("Select Role", locale, siteId)+"-----</option>";
 			Collection<AmpTeamMemberRoles> allRoles= TeamMemberUtil.getAllTeamMemberRoles();
 			if(allRoles!=null && allRoles.size()>0){
@@ -115,7 +115,7 @@ public class GetAvailableUsersForWorkspaceJSON extends Action {
 			roles+="</select>";
 			juser.put("role", roles);
 			//checkbox
-			String chkBox="<input type=\"checkbox\" value=\""+user.getId()+"\" id=\"chk_"+user.getId()+"\" class=\"selectedUsers\">";
+			String chkBox="<input type=\"checkbox\" value=\""+user.getId()+"\" id=\"chk_"+user.getId()+"\" class=\"selectedUsers\" onclick=\"pickUsersForTeam(this)\">";
 			//String chkBox="<input type=\"checkbox\" name=\"userIdsWithRoles\" value=\""+user.getId()+"\" id=\"chk_"+user.getId()+"\" class=\"selectedUsers\">";
 			juser.put("chkBox", chkBox);
 			jsonArray.add(juser);

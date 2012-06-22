@@ -240,6 +240,37 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 	        this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
 	        // Programmatically bring focus to the instance so arrow selection works immediately 
 	        this.myDataTable.focus(); 
+	        
+	        this.myDataTable.subscribe('postRenderEvent',function(oArgs){
+	        	var children=document.getElementById("selectedUsersListDiv").childNodes;
+	        	if(children!=null){
+	        		for(var i=0;i<children.length;i++){
+	        			var child=children[i];
+	        			if(child.tagName.toLowerCase()=='input'){
+	        				$('#chk_'+child.value).attr('checked','checked');
+	        			}
+	        		}
+	        	}
+	        	children=document.getElementById("selectedUsersRoleListDiv").childNodes;
+	        	if(children!=null){
+	        		for(var i=0;i<children.length;i++){
+	        			var child=children[i];
+	        			if(child.tagName.toLowerCase()=='input'){
+	        				var currUserId=child.value.split("_")[0];
+	    					$('#role_'+currUserId).val(child.value);
+	        			}
+	        		}
+	        	}
+	        	
+				/*$('.selectedUsersList').each(function(index) {
+					$('#chk_'+$(this).val()).attr('checked','checked');
+				});
+				$('.selectedUsersRoleList').each(function(index) {
+					var currUserId=$(this).val().split("_")[0];
+					$('#role_'+currUserId).val($(this).val());
+				});*/
+				
+	        });
 	
 	        // Update totalRecords on the fly with value from server
 	        this.myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
@@ -257,9 +288,42 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 		aimTeamMemberForm.target = "_self";
 		aimTeamMemberForm.submit();
 	}
-        
-        // don't remove or change this line!!!
-	document.getElementsByTagName('body')[0].className='yui-skin-sam';
+        function pickUsersForTeam(checkbox){
+        	var div=document.getElementById("selectedUsersListDiv");
+        	if(checkbox.checked){
+        		var selectedUser=document.createElement("input");
+        		selectedUser.setAttribute("type","hidden");
+        		selectedUser.setAttribute("value",checkbox.value);
+        		selectedUser.setAttribute("class", 'selectedUsersList');
+        		selectedUser.setAttribute("id", 'userId_'+checkbox.value);
+        		div.appendChild(selectedUser);
+        	}
+        	else{
+        		var selectedUser=document.getElementById('userId_'+checkbox.value);
+        		div.removeChild(selectedUser);
+        	}
+        }
+       
+	function updateUserRole(select) {
+		var div = document.getElementById("selectedUsersRoleListDiv");
+		var selectedUser = document.getElementById('hidden_' + select.id);
+		var currentValue = select.value;
+		if(selectedUser!=null){
+			div.removeChild(selectedUser);
+		}
+		if( currentValue!=-1){
+			var selectedUser = document.createElement("input");
+			selectedUser.setAttribute("type", "hidden");
+			selectedUser.setAttribute("value", currentValue);
+			selectedUser.setAttribute("class", 'selectedUsersRoleList');
+			selectedUser.setAttribute("name", 'userIdsWithRoles');
+			selectedUser.setAttribute("id", 'hidden_' + select.id);
+			div.appendChild(selectedUser);
+		}
+	}
+
+	// don't remove or change this line!!!
+	document.getElementsByTagName('body')[0].className = 'yui-skin-sam';
 </script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
@@ -275,52 +339,59 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 		}
 	}
 
-	function validate(){
+	
+	function validate() {
 		//if none of the users are checked, we should show an alert
-		var checkedUsers = $('input.selectedUsers:checked');
-		if(checkedUsers==null || checkedUsers.length==0){
+		var checkedUsers = document.getElementById("selectedUsersListDiv").childNodes;
+		var checkedRoles = document.getElementById("selectedUsersRoleListDiv").childNodes;
+		if (checkedUsers == null || checkedUsers.length == 0) {
 			alert('Please select at least one user to add');
 			return false;
 		}
-		
 		//if more then one user is selected to be TL,or team already has a manager, we should show alert
-		var selectedRoles=[];
-		checkedUsers.each(function(index){ //get all checkboxes,which are checked			
-			selectedRoles[selectedRoles.length]=$(this).parents('tr').find('select').val();
-		});
-		
-		var teamHeadRole=document.getElementById('wrkspcManRoleId').value;
-		var teamHeadCount=0; //this field is used to count how many users were indicated as TL.if it's greater then 1,then we should show error
-		var workspaceManExist=document.getElementById('wrkspcManager').value;
-		if(workspaceManExist=='exists'){
+		var teamHeadRole = document.getElementById('wrkspcManRoleId').value;
+		var teamHeadCount = 0; //this field is used to count how many users were indicated as TL.if it's greater then 1,then we should show error
+		var workspaceManExist = document.getElementById('wrkspcManager').value;
+		if (workspaceManExist == 'exists') {
 			teamHeadCount++;
-		}		
-		if(selectedRoles!=null && selectedRoles.length>0){
-			for(var i=0;i<selectedRoles.length;i++){
-				if(selectedRoles[i].indexOf('_')!= -1){
-					selectedRoles[i]=selectedRoles[i].substring(selectedRoles[i].indexOf('_')+1);
-				}
-				if(selectedRoles[i]== -1){ //check whether all checked users have roles
-					alert('Please select role');
-					return false;
-				}
-				if(teamHeadRole==selectedRoles[i]){
-					teamHeadCount++;					
-				}
-			}			
 		}
-		if(teamHeadCount>1){
-			alert('Workspace can not have more than one Manager');
+
+		for ( var i = 0; i < checkedUsers.length; i++) {
+			var child = checkedUsers[i];
+			if (child.tagName.toLowerCase() == 'input') {
+				var role = document.getElementById("hidden_role_" + child.value);
+				if (role == null) {
+					alert('<digi:trn jsFriendly="true">Please select role</digi:trn>');
+					return false;
+					
+				}
+				var roleId = role.value.split("_")[1];
+				if (roleId == teamHeadRole) {
+					teamHeadCount++;
+					if (teamHeadCount > 1) {
+						alert('<digi:trn jsFriendly="true">Workspace can not have more than one Manager</digi:trn>');
+						return false;
+					}
+
+				}
+			}
+		}
+
+		if (checkedUsers.length != checkedRoles.length) {
+			alert('<digi:trn jsFriendly="true">Role is set, but corresponding user is not selected.Please check</digi:trn>');
 			return false;
 		}
-		
+
 		return true;
 	}
 </script>
 
 <digi:instance property="aimTeamMemberForm" />
 
+
 <digi:form action="/addTeamMember.do" method="post">
+<div style="dispalay:none" id="selectedUsersListDiv"></div>
+<div style="dispalay:none" id="selectedUsersRoleListDiv"></div>
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <html:hidden name="aimTeamMemberForm" property="teamLeaderExists" styleId="wrkspcManager"/>
@@ -384,6 +455,9 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
         var userAutoComp = new YAHOO.widget.AutoComplete("userInput","userAutoComp", userDataSource);
         userAutoComp.queryDelay = 0.5;
         $("#userInput").css("position", "static");
+    	$('.selectedUsers').change(function() {
+  		  alert('Handler for .change() called.');
+  		});
     </script>
 </body>
 

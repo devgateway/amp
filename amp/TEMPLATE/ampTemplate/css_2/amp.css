@@ -152,7 +152,7 @@ html.ie #usr_menu_logged {width:250px;float:right;text-align:right;}
 .right_menu_header {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header.gif);width:162px; height:27px;}
 .right_menu_header_big {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header_big.gif);width:220px; height:27px;}
 .right_menu_header_cont {padding-left:10px; padding-top:6px; color:#FFFFFF; font-size:11px; font-weight:bold; }
-.right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:160px; }
+.right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:160px !important; }
 .right_menu_box_big {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:218px; }
 /*--rafy--*/
 .right_menu_cont {padding:10px; font-size:11px;}

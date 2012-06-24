@@ -5,6 +5,8 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,6 +74,19 @@ public class AmpSectorsFormTableFeature extends
 							.equals(sectorClassification.getId()))
 						ret.add(ampActivitySector);
 				}
+				
+			    Comparator<AmpActivitySector> comparator = new Comparator<AmpActivitySector>(){
+
+				@Override
+				public int compare(AmpActivitySector o1, AmpActivitySector o2) {
+					return o1.getSectorId().getSectorPathString().compareTo(o2.getSectorId().getSectorPathString());
+				}
+				
+				
+			};
+			
+			   Collections.sort(ret, comparator);
+			     
 				return ret;
 			}
 		};
@@ -123,6 +138,9 @@ public class AmpSectorsFormTableFeature extends
 		 
 
 		list = new ListView<AmpActivitySector>("listSectors", listModel) {
+			
+			
+			
 
 			@Override
 			protected void populateItem(final ListItem<AmpActivitySector> item) {

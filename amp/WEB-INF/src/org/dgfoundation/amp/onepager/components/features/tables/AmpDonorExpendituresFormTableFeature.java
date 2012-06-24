@@ -48,8 +48,8 @@ public class AmpDonorExpendituresFormTableFeature extends
 		super(id, model, fmName, Constants.EXPENDITURE, 6);
 
 		
-		 if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT).equalsIgnoreCase("TRUE"));
-		 	alertIfExpenditureBiggerDisbursment = true;
+		if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT).equalsIgnoreCase("TRUE"))
+			alertIfExpenditureBiggerDisbursment = true;
 
 		AbstractReadOnlyModel<List<AmpFundingDetail>> setAmountListModel = OnePagerUtil
 				.getReadOnlyListModelFromSetModel(setModel);
@@ -75,8 +75,8 @@ public class AmpDonorExpendituresFormTableFeature extends
 				item.add(getAdjustmentTypeComponent(item.getModel()));
 				final AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 
-				 if(alertIfExpenditureBiggerDisbursment);
-					 	amountComponent.setAmountValidator(amountSumComparator); 	
+				if(alertIfExpenditureBiggerDisbursment)
+					amountComponent.setAmountValidator(amountSumComparator); 	
 				item.add(amountComponent);
 				
 				AmpTextFieldPanel<String> classification = new AmpTextFieldPanel<String>(

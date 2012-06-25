@@ -2,15 +2,10 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.Response;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.validators.AmpCollectionsSumComparatorValidator;
-import org.dgfoundation.amp.onepager.validators.AmpPercentageCollectionValidator;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;

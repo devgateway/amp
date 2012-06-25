@@ -4,19 +4,15 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Map;
 import java.util.StringTokenizer;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupException;
@@ -25,7 +21,8 @@ import org.apache.wicket.markup.WicketTag;
 import org.apache.wicket.markup.parser.filter.WicketTagIdentifier;
 import org.apache.wicket.markup.resolver.IComponentResolver;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebRequestCycle;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
@@ -91,9 +88,9 @@ public class JspResolver implements IComponentResolver {
 		protected void onRender(MarkupStream markupStream) {
 		    markupStream.next();
 			
-		    WebRequestCycle cycle    = (WebRequestCycle)RequestCycle.get();
-		    HttpServletRequest request   = cycle.getWebRequest().getHttpServletRequest();
-		    ServletResponse response = cycle.getWebResponse().getHttpServletResponse();
+		    ServletWebRequest swr = (ServletWebRequest) RequestCycle.get().getRequest();
+		    HttpServletRequest request   = swr.getContainerRequest();
+		    ServletResponse response = (ServletResponse) RequestCycle.get().getResponse();
 		    ServletContext context   = ((WebApplication)Application.get()).getServletContext();
 		    
 		    /*

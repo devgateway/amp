@@ -34,9 +34,11 @@ public abstract class AmpCollectionValidatorField<T,H> extends
 	 * @param target
 	 */
 	public void reloadValidationField(AjaxRequestTarget target) {
-		target.add(this);
-		this.getHiddenContainer().clearInput();
-		target.appendJavaScript(String.format("$('#%s').blur();", this.getHiddenContainer().getMarkupId()));
+		if (this.isVisible()){
+			target.add(this);
+			this.getHiddenContainer().clearInput();
+			target.appendJavaScript(String.format("$('#%s').blur();", this.getHiddenContainer().getMarkupId()));
+		}
 	}
 	
 	/**

@@ -8,11 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.servlet.http.Cookie;
-
-import org.apache.wicket.IPageMap;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -21,7 +17,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.WebRequest;
-import org.apache.wicket.util.template.TextTemplateHeaderContributor;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.behaviors.JQueryBehavior;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
@@ -66,8 +61,6 @@ public class AmpPMHeaderFooter extends WebPage {
 				return variables;
 			}
 		};
-		//add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,"translations.js", variablesModel));
-		
 		
 		   add(new IndicatingAjaxLink("fmmode", new Model("FM Mode")) {
 			    @Override

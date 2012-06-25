@@ -7,8 +7,6 @@ package org.dgfoundation.amp.onepager.models;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.wicket.request.target.component.listener.BehaviorRequestTarget;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;

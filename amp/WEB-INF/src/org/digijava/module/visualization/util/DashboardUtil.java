@@ -164,7 +164,7 @@ public class DashboardUtil {
     	        map.put(location, total);
             }
 		}
-		if (filter.getShowNationalValues()) {
+		//National values
 			AmpCategoryValueLocations tempLoc = new AmpCategoryValueLocations();
 			if (request!=null) {
 				String locale = RequestUtils.getNavigationLanguage(request).getCode();
@@ -185,7 +185,28 @@ public class DashboardUtil {
 			filter.setSelLocationIds(tempLocationsIds);
             BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             map.put(tempLoc, total);
-		}
+            
+         //Unallocated values   
+            AmpCategoryValueLocations tempLoc2 = new AmpCategoryValueLocations();
+			if (request!=null) {
+				String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		        try {
+					tempLoc2.setName(TranslatorWorker.translateText("Unallocated", locale, siteId));
+				} catch (WorkerException e) {
+					tempLoc2.setName("Unallocated");
+				}
+			} else {
+				tempLoc2.setName("Unallocated");
+			}
+			tempLoc2.setId(0l);
+            Long[] ids2 = {0l};
+			tempLocationsIds = filter.getSelLocationIds();
+			filter.setSelLocationIds(ids2);
+			fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			filter.setSelLocationIds(tempLocationsIds);
+            total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            map.put(tempLoc2, total);
 		return sortByValue (map);
 	}
 	
@@ -360,7 +381,7 @@ public class DashboardUtil {
 		        form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
 		        form.getRanksInformation().setTopSectors(getTop(form.getRanksInformation().getFullSectors(),form.getFilter().getTopLists()));
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep5);
-				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null, null));
+				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null, request));
 				form.getRanksInformation().setTopRegions(getTop(form.getRanksInformation().getFullRegions(),form.getFilter().getTopLists()));
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep6);
 				form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));

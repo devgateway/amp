@@ -824,8 +824,12 @@ public class DbUtil {
             oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
         }
         if (locationCondition) {
-        	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+        	if (locationIds[0].equals(0l)) {
+        		oql += " and actloc is NULL "; //Unallocated condition
+			} else {
+				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+			}
         }
 
         if (sectorCondition) {

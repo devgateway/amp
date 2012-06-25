@@ -502,7 +502,6 @@ function resetToDefaults(){
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
 	document.getElementById("show_amounts_in_thousands").checked = false;
-	document.getElementById("show_national_values").checked = false;
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
@@ -760,7 +759,6 @@ function callbackApplyFilter(e){
 	document.getElementById("endYear_dropdown").value = document.getElementById("endYearQuickFilter_dropdown").value;
 	document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
 	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
-	document.getElementById("showNationalValues").value = document.getElementById("show_national_values").checked;
 	
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
@@ -862,7 +860,6 @@ function applyFilterPopin(e){
 		document.getElementById("workspaceOnlyQuickFilter").checked = document.getElementById("workspace_only").checked;
 	}
 	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
-	document.getElementById("showNationalValues").value = document.getElementById("show_national_values").checked;
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	
 	if (document.getElementById("transaction_type_0").checked == true) {

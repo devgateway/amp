@@ -99,7 +99,6 @@ public class DashboardFilter {
     private ArrayList<AmpSector> allSectorList;
     private ArrayList<AmpCategoryValueLocations> allLocationsList;
     private int topLists = 5;
-    private Boolean showNationalValues;
 
 	public int getTopLists() {
 		return topLists;
@@ -734,71 +733,41 @@ public class DashboardFilter {
 		return allSectorList;
 	}
 
-
-
-
 	public void setStartYearQuickFilter(Long startYearQuickFilter) {
 		this.startYearQuickFilter = startYearQuickFilter;
 	}
-
-
-
 
 	public Long getStartYearQuickFilter() {
 		return startYearQuickFilter;
 	}
 
-
-
-
 	public void setEndYearQuickFilter(Long endYearQuickFilter) {
 		this.endYearQuickFilter = endYearQuickFilter;
 	}
-
-
-
 
 	public Long getEndYearQuickFilter() {
 		return endYearQuickFilter;
 	}
 
-
-
-
 	public void setStartYearFilter(Long startYearFilter) {
 		this.startYearFilter = startYearFilter;
 	}
-
-
-
 
 	public Long getStartYearFilter() {
 		return startYearFilter;
 	}
 
-
-
-
 	public void setEndYearFilter(Long endYearFilter) {
 		this.endYearFilter = endYearFilter;
 	}
-
-
-
 
 	public Long getEndYearFilter() {
 		return endYearFilter;
 	}
 
-
-
-
 	public void setAllLocationsList(ArrayList<AmpCategoryValueLocations> allLocationsList) {
 		this.allLocationsList = allLocationsList;
 	}
-
-
-
 
 	public ArrayList<AmpCategoryValueLocations> getAllLocationsList() {
 		return allLocationsList;
@@ -819,14 +788,5 @@ public class DashboardFilter {
 	public void setShowAmountsInThousands(Boolean showAmountsInThousands) {
 		this.showAmountsInThousands = showAmountsInThousands;
 	}
-
-	public Boolean getShowNationalValues() {
-		return showNationalValues;
-	}
-
-	public void setShowNationalValues(Boolean showNationalValues) {
-		this.showNationalValues = showNationalValues;
-	}
-
 	
 }

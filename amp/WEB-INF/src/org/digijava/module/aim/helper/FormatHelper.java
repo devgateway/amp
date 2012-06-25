@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
-import org.apache.wicket.util.convert.converters.AbstractNumberConverter;
+import org.apache.wicket.util.convert.converter.AbstractNumberConverter;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**

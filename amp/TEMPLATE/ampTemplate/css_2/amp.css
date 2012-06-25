@@ -790,3 +790,5 @@ legend.admtoolsttl{position:absolute;top:-10px;left:10px;}
 .related_org_buttn .button_green_btm {margin-bottom:0 !important;}
 
 #type_step_div .buttonx {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding:3px !important;}
+
+.permission_cont #wicket-autocomplete {width:auto !important;}

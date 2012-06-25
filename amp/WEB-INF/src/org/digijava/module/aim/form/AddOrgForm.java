@@ -67,10 +67,8 @@ public class AddOrgForm extends ActionForm {
 	private Collection sectors;
 	private Long selSectors[];
 	
-	//Pledges
-	private ArrayList fundingDetails;
+
 	private Collection currencies = null;
-	private long transIndexId;
 	
 	
 	private String orgPrimaryPurpose;
@@ -184,19 +182,6 @@ public class AddOrgForm extends ActionForm {
 		this.selecteddepartments = selecteddepartments;
 	}    
 	
-	public Pledge getFundingDetail(int index) {
-		int currentSize = fundingDetails.size();
-		if (index >= currentSize) {
-			for (int i = 0; i <= index - currentSize; i++) {
-				fundingDetails.add(new Pledge());
-			}
-		}
-		return (Pledge)fundingDetails.get(index);
-	}
-	
-	public void setFundingDetail(int index, Object test){
-		////System.out.println("NU merge!");
-	}
 	
 	public Collection getCurrencies() {
 		return currencies;
@@ -258,7 +243,6 @@ public class AddOrgForm extends ActionForm {
 		  saveFlag = "no";
 		  mode=null;
 		  sectors = null;
-		  fundingDetails = null;
 		  if ("resetMode".equals(request.getParameter("mode"))){
 			  request.removeAttribute("mode");
 		  }
@@ -535,25 +519,6 @@ public class AddOrgForm extends ActionForm {
 		this.selSectors = selSectors;
 	}
 
-
-	public ArrayList getFundingDetails() {
-		return fundingDetails;
-	}
-
-
-	public void setFundingDetails(ArrayList fundingDetails) {
-		this.fundingDetails = fundingDetails;
-	}
-
-
-	public long getTransIndexId() {
-		return transIndexId;
-	}
-
-
-	public void setTransIndexId(long transIndexId) {
-		this.transIndexId = transIndexId;
-	}
 	public String getBudgetOrgCode() {
 		return budgetOrgCode;
 	}

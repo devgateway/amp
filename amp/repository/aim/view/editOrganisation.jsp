@@ -418,24 +418,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         }
         
 
-        function addPledge() {
-    		<digi:context name="addPledge" property="context/module/moduleinstance/editOrganisation.do" />	
-            document.aimAddOrgForm.action = "${addPledge}"
-            document.aimAddOrgForm.actionFlag.value="addPledge";
-            document.aimAddOrgForm.target = "_self";
-            document.aimAddOrgForm.submit();
-        }
-        function removeFundingDetail(index) {
-            var flag = confirm('<digi:trn  jsFriendly="true">Are you sure you want to remove the selected transaction ?</digi:trn>');
-            if(flag != false) {
-    <digi:context name="deletePledge" property="context/module/moduleinstance/editOrganisation.do" />
-                document.aimAddOrgForm.action = "${deletePledge}";
-                document.aimAddOrgForm.actionFlag.value="deletePledge";
-                document.aimAddOrgForm.target = "_self";
-                document.aimAddOrgForm.transIndexId.value=index;
-                document.aimAddOrgForm.submit();
-            }
-        }
+    
         function msg() {
             if (confirm('<digi:trn  jsFriendly="true">Are you sure about deleting this organization?</digi:trn>')) {
     <digi:context name="delete" property="context/module/moduleinstance/editOrganisation.do" />
@@ -952,7 +935,6 @@ border-right: 1px solid rgb(208, 208, 208);
     <html:hidden name="aimAddOrgForm" styleId="parentLocId" property="parentLocId" />
     <html:hidden name="aimAddOrgForm"  property="type" />
     <html:hidden name="aimAddOrgForm"  property="ampOrgId" />
-    <html:hidden name="aimAddOrgForm"  property="transIndexId" />
     <html:hidden name="aimAddOrgForm" property="selectedOrgInfoId"/> 
 	<html:hidden name="aimAddOrgForm"  property="selContactId" />
 	<html:hidden styleId="primaryOrgCont" value="${aimAddOrgForm.resetPrimaryOrgContIds}" name="aimAddOrgForm" property="resetPrimaryOrgContIds"/>

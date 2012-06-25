@@ -205,30 +205,7 @@ public class EditOrganisation extends DispatchAction {
               editForm.setBudgetOrgCode(organization.getBudgetOrgCode());
               editForm.setDescription(organization.getDescription());
 
-              // Pledges
-              Collection<AmpPledge> funding = organization.getFundingDetails();
-              ArrayList<Pledge> fundingDet = new ArrayList<Pledge>();
-              Iterator<AmpPledge> it = funding.iterator();
-              while (it.hasNext()) {
-                  AmpPledge e = it.next();
-                  Pledge fund = new Pledge();
-                  fund.setAdjustmentType(e.getAdjustmentType());
-                  fund.setAmount(String.valueOf(e.getAmount()));
-                  fund.setCurrencyCode(e.getCurrency().getCurrencyCode());
-                  fund.setProgram(e.getProgram());
-                  // AMP-2828 by mouhamad
-                  String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
-                  dateFormat = dateFormat.replace("m", "M");
-
-                  SimpleDateFormat dz = new SimpleDateFormat(dateFormat);
-                  String date = "";
-                  if (e.getDate() != null) {
-                      date = dz.format(e.getDate());
-                  }
-                  fund.setDate(date);
-                  fundingDet.add(fund);
-              }
-              editForm.setFundingDetails(fundingDet);
+            
 
 
           }
@@ -463,44 +440,7 @@ public class EditOrganisation extends DispatchAction {
   }
   
   
-  public ActionForward addPledge(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-      if (sessionChk(request)) {
-          return mapping.findForward("index");
-      }
-      AddOrgForm editForm = (AddOrgForm) form;
-      Pledge det = new Pledge();
-      det.setIndexId(System.currentTimeMillis());
-      if (editForm.getFundingDetails() != null) {
-          ArrayList<Pledge> list = (ArrayList<Pledge>) editForm.getFundingDetails();
-          list.add(det);
-          editForm.setFundingDetails(list);
-      } else {
-          ArrayList<Pledge> newList = new ArrayList<Pledge>();
-          newList.add(det);
-          editForm.setFundingDetails(newList);
-      }
 
-      return mapping.findForward("forward");
-  }
-
-  public ActionForward deletePledge(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-      if (sessionChk(request)) {
-          return mapping.findForward("index");
-      }
-      AddOrgForm editForm = (AddOrgForm) form;
-      long index = editForm.getTransIndexId();
-      ArrayList<Pledge> list = (ArrayList<Pledge>) editForm.getFundingDetails();
-      Iterator<Pledge> i = list.iterator();
-      while (i.hasNext()) {
-          Pledge e = i.next();
-          if (e.getIndexId() == index) {
-              i.remove();
-              break;
-          }
-      }
-
-      return mapping.findForward("forward");
-  }
 
   public ActionForward addStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
       if (sessionChk(request)) {
@@ -829,7 +769,6 @@ public class EditOrganisation extends DispatchAction {
           editForm.setDacOrgCode(null);
           editForm.setOrgIsoCode(null);
           editForm.setBudgetOrgCode(null);
-          editForm.setFundingDetails(null);
           editForm.setOrgCode(null);
           editForm.setDescription(null);
 
@@ -1207,37 +1146,6 @@ public class EditOrganisation extends DispatchAction {
           organization.getLocations().addAll(locations);
 
 
-      // pledges
-      Set<AmpPledge> ampPledges = new HashSet<AmpPledge>();
-      if (editForm.getFundingDetails() != null) {
-          Iterator<Pledge> itr = editForm.getFundingDetails().iterator();
-          try {
-              while (itr.hasNext()) {
-                  Pledge el = itr.next();
-                  AmpPledge pledge = new AmpPledge();
-                  pledge.setAdjustmentType(el.getAdjustmentType());
-                  pledge.setAmount(FormatHelper.parseDouble(el.getAmount()));
-                  AmpCurrency c = CurrencyUtil.getCurrencyByCode(el.getCurrencyCode());
-                  pledge.setCurrency(c);
-                  if (el.getProgram() == null || el.getProgram().equals("")) {
-                      throw new Exception();
-                  }
-                  pledge.setProgram(el.getProgram());
-                  String date = el.getDate();
-                  ////System.out.println(d.toString());
-                  pledge.setDate(FormatHelper.parseDate2(date));
-
-                  ampPledges.add(pledge);
-              }
-
-          } catch (Exception ex) {
-              errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.saveOrgPledgeError"));
-              saveErrors(request, errors);
-              return mapping.findForward("forward");
-
-          }
-
-      }
       
       //Budget sectors
       Set<AmpBudgetSector> budgetsectors = new HashSet<AmpBudgetSector>();
@@ -1285,9 +1193,7 @@ public class EditOrganisation extends DispatchAction {
       } else {
           organization.getFundingDetails().clear();
       }
-      if (editForm.getFundingDetails() != null) {
-          organization.getFundingDetails().addAll(ampPledges);
-      }  
+      
       	/**
          * contacts
          */
@@ -1386,7 +1292,6 @@ public class EditOrganisation extends DispatchAction {
           form.setDescription(null);
           form.setFiscalCalId(null);
           form.setFlag(null);
-          form.setFundingDetails(null);
           form.setLevel(null);
           form.setLevelFlag(null);
           form.setMode(null);

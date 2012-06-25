@@ -416,15 +416,10 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 							<td>
 								<div>
 									<div style="float: left">
-									<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn>change the field's value to blank and click to find button if you want to view all available users</digi:trn>"/>
 										<html:text property="fullname" styleId="userInput"
 											styleClass="inputx"
 											style="width:320px; Font-size: 10pt; height:22px;" />
 										<div id="userAutoComp"></div>
-									</div>
-									<div style="float: left">
-										<input type="button" value="<digi:trn>find</digi:trn>"
-											class="buttonx_sm" onClick="searchUsers()" />
 									</div>
 								</div></td>
 						</tr>
@@ -455,7 +450,13 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
         var userAutoComp = new YAHOO.widget.AutoComplete("userInput","userAutoComp", userDataSource);
         userAutoComp.queryDelay = 0.5;
         $("#userInput").css("position", "static");
-    </script>
+       
+		var myHandler = function(sType, aArgs) {
+					
+						searchUsers();
+					};
+		userAutoComp.itemSelectEvent.subscribe(myHandler);
+		</script>
 </body>
 
 

@@ -109,7 +109,6 @@ public class PIUseCase {
 					new GroupingElement<HierarchyListableImplementation>("Financing Instrument", "filter_financing_instr_div", 
 							rootFinancingInstrument, "selectedFinancingIstruments");
 			form.getFinancingInstrumentsElements().add(finInstrElement);
-			HierarchyListableUtil.changeTranslateable(finInstrElement.getRootHierarchyListable(), false);
 		}
 		if(form.getDonorElements()==null||form.getDonorElements().isEmpty()){
 			Collection<AmpOrgGroup> donorGroups = DbUtil.getAllOrgGroups();

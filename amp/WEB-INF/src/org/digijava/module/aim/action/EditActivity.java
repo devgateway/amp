@@ -985,7 +985,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
               getDisbursmentsDate()));
           eaForm.getPlanning().setProposedCompDate(DateConversion
                                      .ConvertDateToString(activity.
-              getOriginalCompDate()));
+              getProposedCompletionDate()));
 
           eaForm.getPlanning().setCurrentCompDate(DateConversion
                                     .ConvertDateToString(activity

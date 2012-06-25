@@ -16,6 +16,8 @@
     <tr>
       <td valign="top" rowspan="2"><digi:edit key="${param.htmlblock_2}" displayText="Edit HTML"></digi:edit>
       </td>
+      <td valign="top" rowspan="2"><digi:edit key="${param.htmlblock_1}" displayText="Edit HTML"></digi:edit>
+      </td>
     </tr>
   </table>
 </div>

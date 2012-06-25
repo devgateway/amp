@@ -9,7 +9,7 @@
 		<td background="images/ins_bg.gif" class="inside" align="left"><b class="ins_title">&nbsp;</b></td>	
 	</tr>
 	<tr>
-		<td class="inside" align="right"><select wicket:id="structureTypes" /></td>
+		<td class="inside" align="right"><span wicket:id="structureTypes" /></td>
 		<td class="inside"><span  wicket:id="name" /></td>
 		<td class="inside"><span wicket:id="description" /></td>
 		<td class="inside"><span wicket:id="latitude" /></td>
@@ -17,10 +17,6 @@
 		<td class="inside"><input type="button" onClick="callGisPopup(this)" size="3" value="Map"><span style="display:none" wicket:id="shape" /></td>
 		<td class="inside" align="left"><span wicket:id="deleteStructure"/></td>
 	</tr>
-	<tr wicket:id="feedbackContainer">
-		<td class="inside" align="left" colspan="7">
-			<span wicket:id="feedbackLabel" class="feedbacklabel.error"></span>
-		</td>
-	</tr>
+
 </wicket:extend>				
 				 

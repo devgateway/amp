@@ -1242,7 +1242,7 @@ public class DataDispatcher extends DispatchAction {
 		                }
 						BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
 		                if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<aidtype name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + value.getValue() + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<aidtype name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
 				} else {
@@ -1274,11 +1274,11 @@ public class DataDispatcher extends DispatchAction {
 			                }
 			                hasValues = true;
 							xmlString.append("<aidtype category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
-							aidTypeData += ">" + value.getValue() + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+							aidTypeData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 						}
 						else
 						{
-							aidTypeData += ">" + value.getValue() + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+							aidTypeData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 						}
 					}
 					if (!hasValues){
@@ -1327,6 +1327,7 @@ public class DataDispatcher extends DispatchAction {
 			else
 				csvString.append("\n");
 		}
+		BigDecimal total = new BigDecimal(0);
         for (Long i = startYear; i <= endYear; i++) {
             startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
@@ -1344,13 +1345,17 @@ public class DataDispatcher extends DispatchAction {
                     funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
                 }
         		csvString.append(funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+        		total = total.add(funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
     			if(it.hasNext()) 
     				csvString.append(",");
     			else
     				csvString.append("\n");
     		}
         }
-		
+        if(total.intValue()==0){
+        	csvString = new StringBuffer();
+        	csvString.append("Year");
+        }
 		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.setHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", 0);
@@ -1460,7 +1465,7 @@ public class DataDispatcher extends DispatchAction {
 
 		csvString.append("\"" + text + "\"");
 		csvString.append(",");
-		csvString.append("\"" +plannedTitle);
+		csvString.append("\"" + plannedTitle);
 		csvString.append("#");
         csvString.append(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey() + "\"");
         csvString.append(",");
@@ -1468,7 +1473,8 @@ public class DataDispatcher extends DispatchAction {
 		csvString.append("#");
         csvString.append(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey() + "\"");
         csvString.append("\n");
-
+        BigDecimal total = new BigDecimal(0);
+        
         for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
             // apply calendar filter
             Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
@@ -1477,12 +1483,14 @@ public class DataDispatcher extends DispatchAction {
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			csvString.append(yearName);
 			csvString.append(",");
-            DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-			csvString.append(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-			csvString.append(",");
             DecimalWraper fundingPlanned = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
 			csvString.append(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-            if (fundingPlanned.doubleValue() != 0 || fundingActual.doubleValue() != 0) {
+			total = total.add(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append(",");
+            DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			csvString.append(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			total = total.add(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			if (fundingPlanned.doubleValue() != 0 || fundingActual.doubleValue() != 0) {
 				nodata = false;
 			}
 			csvString.append("\n");
@@ -1490,6 +1498,10 @@ public class DataDispatcher extends DispatchAction {
 		if (nodata) {
 //			result = new DefaultCategoryDataset();
 		}
+		if(total.intValue()==0){
+        	csvString = new StringBuffer();
+        	csvString.append("Year");
+        }
 		if(divide){
 			filter.setDivideThousands(false);
 		}
@@ -1669,7 +1681,7 @@ public class DataDispatcher extends DispatchAction {
 		if(divide){
 			filter.setDivideThousands(false);
 		}
-
+		BigDecimal total = new BigDecimal(0);
         for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
 			// apply calendar filter
 			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
@@ -1684,18 +1696,21 @@ public class DataDispatcher extends DispatchAction {
 				fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),filter.getSelOrgGroupIds(), startDate, endDate,currCode);
 				csvString.append(",");
 				csvString.append(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+				total = total.add(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
 			
 			if (filter.isCommitmentsVisible()) {
 				DecimalWraper fundingComm = DbUtil.getFunding(filter, startDate, endDate, null, null,Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				csvString.append(",");
 				csvString.append(fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+				total = total.add(fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
 			
 			if (filter.isDisbursementsVisible()) {
 	    		DecimalWraper fundingDisb = DbUtil.getFunding(filter, startDate,endDate, null, null, Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	    		csvString.append(",");
 	    		csvString.append(fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+	    		total = total.add(fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
 			
 			DecimalWraper fundingExp = new DecimalWraper();
@@ -1703,10 +1718,16 @@ public class DataDispatcher extends DispatchAction {
 				fundingExp = DbUtil.getFunding(filter, startDate, endDate,null, null, Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				csvString.append(",");
 				csvString.append(fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+				total = total.add(fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
 
 			csvString.append("\n");
 		}
+        if(total.intValue()==0){
+        	csvString = new StringBuffer();
+        	csvString.append("Year");
+        }
+		
 		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		response.setHeader("Pragma", "no-cache");
 		response.setDateHeader("Expires", 0);
@@ -1937,7 +1958,7 @@ public class DataDispatcher extends DispatchAction {
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
 	            if(regionId != null && !regionId.equals("-1")){
 	            	Long id = Long.parseLong(regionId);
-	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue());
+	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue(),request);
 	            }
 	            else
 	        		map = visualizationForm.getRanksInformation().getFullRegions();
@@ -1947,10 +1968,10 @@ public class DataDispatcher extends DispatchAction {
         	{
 	            if(regionId != null && !regionId.equals("-1")){
 	            	Long id = Long.parseLong(regionId);
-	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue());
+	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue(),request);
 	            }
 	            else
-	            	map = DashboardUtil.getRankRegions(DbUtil.getRegions(filter), filter, startYear.intValue(), endYear.intValue());
+	            	map = DashboardUtil.getRankRegions(DbUtil.getRegions(filter), filter, startYear.intValue(), endYear.intValue(),request);
         	}
         	
 	        if (map==null) {
@@ -2086,7 +2107,11 @@ public class DataDispatcher extends DispatchAction {
 	            regionData += "<" + loc.getName() + ">";
                 for (Long i = startYear; i <= endYear; i++) {
 	    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-	    			Long[] ids = {loc.getId()};
+	    			Long[] ids = new Long[1];
+	    			if (loc.getId()!=null)
+	    				ids[0] = loc.getId();
+	    			else
+	    				ids[0] = 0l;
 	    			newFilter.setSelLocationIds(ids);
 	    			newFilter.setAllLocationsList(filter.getAllLocationsList());
 	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());

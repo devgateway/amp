@@ -630,15 +630,15 @@ body {background:none;}
 												</tr>
 												</c:if>
 												</field:display>
-												<field:display name="Current Completion Date" feature="Planning">
+												<module:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
 												<tr>
-													<td width="32%"><digi:trn key="aim:currentCompletionDate">
-													Current Completion Date</digi:trn></td>
+													<td width="32%">
+													<digi:trn>Actual Completion Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
 														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>													</td>
 												</tr>
-												</field:display>
+												</module:display>
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.planning.activityCloseDates}">
 												<tr>
@@ -674,8 +674,11 @@ body {background:none;}
                                                   	</b>                      	      
                                                   	</td>
 													<td bgcolor="#FFFFFF">
-												   		<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/><br><br>
-                                                        <c:out value="${aimEditActivityForm.identification.statusReason}"/>
+												   	  <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/><br><br>
+                                                      <c:if test="${not empty aimEditActivityForm.identification.statusReason}">
+				  											<b> <c:set var="statusReasonKey" value="${aimEditActivityForm.identification.statusReason}"/>
+															<digi:edit key="${statusReasonKey}"></digi:edit></b>
+													  </c:if>                                                       
                                                    </td>									
                                          	 </tr>
 										</field:display>									

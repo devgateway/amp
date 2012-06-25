@@ -16,7 +16,7 @@ public class MathExpression {
 	 * @author Sebastian Dimunzio Apr 27, 2009
 	 */
 	public enum Operation {
-		ADD, SUBTRACT, DIVIDE, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP, DATE_MONTH_DIFF, SUM;
+		ADD, SUBTRACT, DIVIDE, DIVIDE_ROUND_TWO_DECIMALS, MULTIPLY, DIVIDE_ROUND_DOWN, DIVIDE_ROUND_UP, DATE_MONTH_DIFF, SUM;
 	}
 
 	private Operation operation = null;
@@ -141,6 +141,11 @@ public class MathExpression {
 					return new BigDecimal(0);
 				}
 				return oper1.divide(oper2, RoundingMode.UP);
+			case DIVIDE_ROUND_TWO_DECIMALS:
+				if (oper2.doubleValue() == 0d) {
+					return new BigDecimal(0);
+				}
+				return oper1.divide(oper2, 2, RoundingMode.HALF_UP);
 
 			case MULTIPLY:
 				return oper1.multiply(oper2);

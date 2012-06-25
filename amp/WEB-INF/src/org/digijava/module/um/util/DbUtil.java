@@ -452,8 +452,6 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-
-//beginTransaction();
             ArrayList removeArray = new ArrayList();
 
             if(user.getInterests() != null) {
@@ -489,11 +487,7 @@ public class DbUtil {
                 user.getInterests().removeAll(removeArray);
 
             session.update(user);
-
-//session.flush();
             
-            //tx.commit();
-
             if(user.getUserPreference()!=null){
                 UserUtils.saveUserPreferences(user.getUserPreference());
             }
@@ -662,7 +656,48 @@ public class DbUtil {
 
         return iscorrect;
     }
+    public static boolean EmailExist(String email, Long id) throws
+    UMException {
+    Session sess = null;
+    boolean iscorrect = false;
+    try {
+        sess = PersistenceManager.getSession();
 
+        String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
+        Query query = sess.createQuery(queryString);
+        query.setString("email", email.toLowerCase().trim());
+        
+        Iterator iter = query.list().iterator();
+        if(!iter.hasNext()) {
+            iscorrect = true;
+        }
+        for (Iterator iterator = query.list().iterator(); iterator.hasNext();) {
+			User user = (User) iterator.next();
+			if (user.getId().compareTo(id)==0){
+				iscorrect = true;
+			}else{
+				iscorrect =false;
+				break;
+			}
+		}
+        
+    } catch(Exception ex0) {
+        logger.debug("isRegisteredEmail() failed", ex0);
+        throw new UMException(ex0.getMessage(), ex0);
+    } finally {
+        if(sess != null) {
+            try {
+                PersistenceManager.releaseSession(sess);
+            } catch(Exception ex1) {
+                logger.warn("releaseSession() failed ", ex1);
+            }
+        }
+
+    }
+
+    return iscorrect;
+}
+    
     public static void saveResetPassword(long userId, String code) throws
         UMException {
         Transaction tx = null;

@@ -236,8 +236,10 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 					var target = YAHOO.util.Event.getTarget(ev);
 					var record = this.getRecord(target);
 				});
-	        
-	        this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
+	 		
+	 		if(this.myDataTable.getRecordSet().getLength() > 0) { 
+	            this.myDataTable.selectRow(this.myDataTable.getTrEl(0)); 
+	 		}
 	        // Programmatically bring focus to the instance so arrow selection works immediately 
 	        this.myDataTable.focus(); 
 	        

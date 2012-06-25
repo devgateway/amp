@@ -59,6 +59,11 @@
 										</c:choose>
 									</font>
 									</span>
+									<span id="hierarchiesSummaryMust" style="visibility: hidden;">
+									<font color="red">*
+											<digi:trn>Only in summary reports can all columns be hierarchies</digi:trn>
+									</font>
+									</span>
 									<br>
 									<span id="incompatiblehierarchies" style="visibility: hidden;">
 									<font color="red">* 

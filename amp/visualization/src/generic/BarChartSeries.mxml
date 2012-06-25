@@ -153,14 +153,17 @@
 							for(j = 0; j < service.lastResult.year[i][dataField].length; j++){
 								totalAmount = totalAmount + Number(service.lastResult.year[i][dataField][j].amount);
 							}
+						} else {
+							totalAmount = totalAmount + Number(service.lastResult.year[i][dataField].amount);
 						}
 					}
-				}
-				else if ("name" in service.lastResult.year && service.lastResult.year["name"] != "") {
-					for(j = 0; j < service.lastResult.year[dataField].length; j++){
-						totalAmount = totalAmount + Number(service.lastResult.year[dataField][j].amount);
+				} else {
+					if ("name" in service.lastResult.year && service.lastResult.year["name"] != "") {
+						for(j = 0; j < service.lastResult.year[dataField].length; j++){
+							totalAmount = totalAmount + Number(service.lastResult.year[dataField][j].amount);
+						}
 					}
-				}
+				} 
 				if(totalAmount > 0) //If there's something to show
 				{
 					dc.visible = true;
@@ -781,7 +784,7 @@
 			</axiis:HBoxLayout> 
 		</axiis:layouts>
 	</axiis:DataCanvas>
-	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="410" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
+	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="420" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
 	
 	</mx:Canvas>

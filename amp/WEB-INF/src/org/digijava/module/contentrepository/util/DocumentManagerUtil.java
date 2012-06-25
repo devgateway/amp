@@ -37,12 +37,14 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.action.DocumentManager;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
@@ -420,6 +422,73 @@ public class DocumentManagerUtil {
 		
 		return teamInfo;
 	}
+	
+	public static Collection<DocumentData> createDocumentDataCollectionForActivityPreview(HttpServletRequest request) {
+		Collection<String> UUIDs = SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
+		ArrayList<DocumentData> ret = new ArrayList<DocumentData>();
+		if ( UUIDs == null )
+			return null;
+		try {
+			ArrayList<Node> documents = new ArrayList<Node>();
+			Iterator<String> iter = UUIDs.iterator();
+			while (iter.hasNext()) {
+				String uuid = iter.next();
+				Node documentNode = DocumentManagerUtil.getReadNode(uuid, request);
+				if (documentNode == null) {
+					try {
+					  throw new Exception("Document with uuid '" + uuid + "' not found !");
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+						RepairDbUtil.repairDocumentNoLongerInContentRepository(uuid, CrDocumentNodeAttributes.class.getName() );
+						RepairDbUtil.repairDocumentNoLongerInContentRepository(uuid, AmpActivityDocument.class.getName() );
+					}
+				}
+				else
+					documents.add(documentNode);
+			}
+			Iterator iterator			= documents.iterator();
+			while ( iterator.hasNext() ) {
+				Node documentNode	= (Node)iterator.next();
+				//Node baseNode=documentNode; 
+				String documentNodeBaseVersionUUID=documentNode.getUUID();
+				//NodeLastApprovedVersion nlpv	= DocumentManagerUtil.getlastApprovedVersionOfTeamNode(documentNodeBaseVersionUUID);
+				NodeWrapper nodeWrapper	= new NodeWrapper(documentNode);
+				String fileName	=  nodeWrapper.getName();
+				if ( fileName == null && nodeWrapper.getWebLink() == null ){
+					continue;
+				}
+				DocumentData documentData		= new DocumentData();
+				documentData.setName( fileName );
+				documentData.setUuid( documentNodeBaseVersionUUID );
+				documentData.setNodeVersionUUID(nodeWrapper.getUuid()); //if it's original,node then this value is equal to documentNodeBaseVersionUUID, otherwise it's node's visible version uuid
+				documentData.setTitle( nodeWrapper.getTitle() );
+				documentData.setDescription( nodeWrapper.getDescription() );
+				documentData.setNotes( nodeWrapper.getNotes() );
+				documentData.setFileSize( nodeWrapper.getFileSizeInMegabytes() );
+				documentData.setCalendar( nodeWrapper.getDate() );
+				documentData.setVersionNumber( nodeWrapper.getVersionNumber() );
+				documentData.setContentType( nodeWrapper.getContentType() );
+				documentData.setWebLink( nodeWrapper.getWebLink() );
+				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
+				documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
+				documentData.setLabels( nodeWrapper.getLabels() );
+				documentData.setCreatorTeamId( nodeWrapper.getCreatorTeam() );
+				documentData.setCreatorEmail( nodeWrapper.getCreator() );
+								
+				documentData.process(request);
+				documentData.computeIconPath(true);
+				ret.add(documentData);
+			}	
+			return ret;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
 	
 	public static Collection<DocumentData> createDocumentDataCollectionFromSession(HttpServletRequest request) {
 		Collection<String> UUIDs		= SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);

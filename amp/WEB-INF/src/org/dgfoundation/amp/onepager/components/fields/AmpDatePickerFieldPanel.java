@@ -6,7 +6,9 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Date;
 
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -39,7 +41,7 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 	 * @param hideLabel
 	 */
 	public AmpDatePickerFieldPanel(String id, 
-			IModel<Date> model, String fmName,AmpDatePickerFieldPanel otherDatePicker,
+			IModel<Date> model, String fmName,final AmpDatePickerFieldPanel otherDatePicker,
 			boolean hideLabel) {
 		super(id, fmName, hideLabel);
 		this.fmType = AmpFMTypes.MODULE;
@@ -70,6 +72,10 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 		dp.setShowOnFieldClick(true);
 		dp.setAutoHide(true);
 		date.add(dp);
+		
+		
+	
+		
 		dateWrapper.add(date);
 		initFormComponent(date);
 		sameAsOtherDatePicker = new AmpAjaxCheckBoxFieldPanel(
@@ -96,9 +102,12 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 			}
 		};
 
+	    
+		
 		if (otherDatePicker == null){
 			sameAsOtherDatePicker.setVisible(false);
 		}
+		
 		add(sameAsOtherDatePicker);
 
 	}
@@ -130,4 +139,28 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 		this(id,  model, fmName,null, hideLabel);
 	}
 	
+	
+	
+	public void setDuplicateFieldOnChange(final AmpDatePickerFieldPanel peerPickerField)
+	{
+	
+	AjaxEventBehavior onChange =new AjaxEventBehavior("onchange") {
+		private static final long serialVersionUID = 1L;
+
+	    protected void onEvent(final AjaxRequestTarget target) {
+			Boolean check = (Boolean)peerPickerField.getCheckBox().getModelObject();
+			if(check != null && check){
+				String js=String.format("$('#%s').val($('#%s').val());",peerPickerField.date.getMarkupId(),date.getMarkupId());
+				target.appendJavaScript(js);
+			    target.add(peerPickerField.date.getParent());
+			}
+		 }			
+	    };
+	    date.add(onChange);	
+	}
+	
+	public AjaxCheckBox getCheckBox()
+	{
+		return sameAsOtherDatePicker.checkbox;
+	}
 }

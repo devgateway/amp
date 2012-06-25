@@ -181,7 +181,7 @@ public class ViewEditUser extends Action {
             uForm.setNewPassword(null);
             uForm.setDisplaySuccessMessage(null);
             uForm.setAddWorkspace(false);
-
+            uForm.setEmailerror(false);
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
                 AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
@@ -281,6 +281,13 @@ public class ViewEditUser extends Action {
         } else {        	
             if (uForm.getEvent().equalsIgnoreCase("save")) {
                 if (user != null) {
+                	uForm.setEmailerror(false);
+                	  if (!DbUtil.EmailExist(uForm.getEmail(), user.getId())){
+                			uForm.setEmailerror(true);
+                			uForm.setEvent(null);
+                			return mapping.findForward("forward");
+                      }
+                	
                 	// TODO ideally, user, userLangPreferences, and userExtension should be saved in one transaction.
                 	AmpUserExtension userExt=AmpUserUtil.getAmpUserExtension(user);
                 	if (userExt==null){
@@ -323,13 +330,13 @@ public class ViewEditUser extends Action {
                     user.setUserLangPreferences(userLangPreferences);
                     user.setPledger(uForm.getPledger());
                     DbUtil.updateUser(user);
-
                     //assign workspace place
                     if(uForm.isAddWorkspace()){
-                		uForm.setAssignedWorkspaces(TeamMemberUtil.getAllAmpTeamMembersByUser(user));
-            			return mapping.findForward("assignWorkspace");
-            		}
+                    	uForm.setAssignedWorkspaces(TeamMemberUtil.getAllAmpTeamMembersByUser(user));
+                    	return mapping.findForward("assignWorkspace");
+                    }
                     
+                    uForm.setEvent(null);
                     resetViewEditUserForm(uForm);
                     return mapping.findForward("saved");
                 }
@@ -446,6 +453,7 @@ public class ViewEditUser extends Action {
             uForm.setEvent(null);
             uForm.setNewPassword(null);
             uForm.setConfirmNewPassword(null);
+            uForm.setEmailerror(false);
         }
     }
     

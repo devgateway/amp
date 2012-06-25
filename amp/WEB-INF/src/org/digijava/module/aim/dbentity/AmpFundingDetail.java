@@ -72,8 +72,17 @@ public class AmpFundingDetail implements Serializable, Cloneable {
 	private AmpCurrency fixedRateBaseCurrency;
 	private Boolean disbursementOrderRejected;
 	private FundingPledges pledgeid;
-	
-	public FundingPledges getPledgeid() {
+    private Float capitalSpendingPercentage;
+
+    public Float getCapitalSpendingPercentage() {
+        return capitalSpendingPercentage;
+    }
+
+    public void setCapitalSpendingPercentage(Float capitalSpendingPercentage) {
+        this.capitalSpendingPercentage = capitalSpendingPercentage;
+    }
+
+    public FundingPledges getPledgeid() {
 		return pledgeid;
 	}
 

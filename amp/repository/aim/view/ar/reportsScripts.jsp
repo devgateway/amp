@@ -448,6 +448,19 @@ saveReportEngine	= null;
 	function hideSorter() {
 		myPanel2.hide();
 	}
+	function resetSorter(button) {
+		debugger;
+		var form1		= button.form;
+		for (var i=0; i<form1.elements.length; i++) {
+				var selEl	= form1.elements[i];
+				if ( selEl.nodeName.toLowerCase() == "select" ) {
+					selEl.selectedIndex	= 0;
+					selEl.options[0].selected = true;
+				}
+		}
+		return false;
+	}
+	
 	function showRange(){
 		YAHOO.amptab.init();
 		var element = document.getElementById("myRange");

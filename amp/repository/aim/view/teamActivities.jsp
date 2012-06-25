@@ -90,7 +90,7 @@
 		}
 		else{
 			var msg;
-			if(archive='archive'){
+			if(archive=='archive'){
 				msg='<digi:trn jsFriendly="true">Are you sure you want to archive the selected activities?</digi:trn>';
 			}
 			else{

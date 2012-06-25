@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -195,6 +196,10 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	}
 	
 	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, final boolean showReqStarForNotReqComp){
+		this(id, model, fmName, hideLabel, hideNewLine, showReqStarForNotReqComp, false);
+	}
+	
+	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, final boolean showReqStarForNotReqComp, boolean enableReqStar){
 		super(id, model,fmName, AmpFMTypes.MODULE);
 		this.fmType = AmpFMTypes.MODULE;
 		
@@ -205,15 +210,16 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 			@Override
 			protected void onBeforeRender() {
 				super.onBeforeRender();
-				if (((formComponent!=null && formComponent.isRequired())||showReqStarForNotReqComp) && titleLabel.isVisible()){
+				if (((formComponent!=null && formComponent.isRequired())||showReqStarForNotReqComp)){
 					this.setDefaultModelObject("<font color=\"red\">*</font>");
-					this.add(new AttributeAppender("style", new Model("margin-left: -5px"), ";"));
+					this.add(new AttributeModifier("style", new Model("padding-left: -5px;")));
 					this.setEscapeModelStrings(false);
 				} 
 				else
-					this.add(new AttributeAppender("style", new Model("display: none"), ";"));
+					this.add(new AttributeModifier("style", new Model("display: none;")));
 			}
 		};
+		requiredStar.setVisible(!hideNewLine||enableReqStar);
 		add(requiredStar);
 		titleLabel = new TrnLabel("fieldLabel", fmName);
 		if (((AmpAuthWebSession)getSession()).isFmMode()){

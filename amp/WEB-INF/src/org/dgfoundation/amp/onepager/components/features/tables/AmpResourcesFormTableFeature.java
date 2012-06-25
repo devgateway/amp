@@ -132,8 +132,13 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 				
 				//item.add(new AmpLabelFieldPanel<String>("title", new PropertyModel<String>(item.getModel(), "title"), "Document Title", true));
 				//item.add(new AmpLabelFieldPanel<String>("resourceName", new PropertyModel<String>(item.getModel(), "fileName"), "Resource Name", true));
+				
 				item.add(new Label("title", item.getModel().getObject().getTitle()));
-				item.add(new Label("resourceName",item.getModel().getObject().getWebLink()));
+				if (item.getModel().getObject().getFileName()==null){
+					item.add(new Label("resourceName",item.getModel().getObject().getWebLink()));
+				}else{
+					item.add(new Label("resourceName",item.getModel().getObject().getFileName()));
+				}
 				
 				PropertyModel<Date> dateModel = new PropertyModel<Date>(item.getModel(), "date.time");
 				String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);

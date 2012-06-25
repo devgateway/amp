@@ -554,7 +554,7 @@ $(document).ready(function() {
 																									<c:if test="${fn:length(report.name) > 25}" >
 																										<c:out value="${fn:substring(report.name, 0, 25)}" />...
 																									</c:if>
-																									<c:if test="${fn:length(report.name) < 25}" >
+																									<c:if test="${fn:length(report.name) <= 25}" >
 																										<c:out value="${report.name}" /> 
 																									</c:if>
 							                     	         									</p>  

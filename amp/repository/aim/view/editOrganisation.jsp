@@ -849,11 +849,26 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
         }
 
         function removeSelectedContacts(){
-        	<digi:context name="remConts" property="context/module/moduleinstance/editOrganisation.do" />
-            document.aimAddOrgForm.action = "${remConts}";
-            document.aimAddOrgForm.target = "_self"
-            document.aimAddOrgForm.actionFlag.value="deleteContact";
-            document.aimAddOrgForm.submit();
+        	var atLeastOneIsChecked = false;
+        	for (var i = 0; ((i < document.aimAddOrgForm.selectedContactInfoIds.length) && (atLeastOneIsChecked == false)) ; i++){
+        		if (document.aimAddOrgForm.selectedContactInfoIds[i].checked) { 
+                	atLeastOneIsChecked = true;
+                } else { 
+                	atLeastOneIsChecked = false;
+                	
+                }
+            }
+        	if (atLeastOneIsChecked) {
+            	<digi:context name="remConts" property="context/module/moduleinstance/editOrganisation.do" />
+                document.aimAddOrgForm.action = "${remConts}";
+                document.aimAddOrgForm.target = "_self"
+                document.aimAddOrgForm.actionFlag.value="deleteContact";
+                document.aimAddOrgForm.submit();
+        	} else {
+    			var errorMesage='<digi:trn jsFriendly="true">Please select at least one contact to delete</digi:trn>';
+            	alert(errorMesage);
+        		return false;
+        	}
         }
 
         function changePrimaryState(){
@@ -1113,14 +1128,15 @@ border-right: 1px solid rgb(208, 208, 208);
                                 <c:choose>
                                     <c:when test="${aimAddOrgForm.type=='NGO'}">
                                         <tr>
-                                            <td  class="tdBoldClass" style="font-size:11px;" nowrap width=50% align=right>
-                                                <digi:trn>Organization Primary Purpose</digi:trn>
-                                                <field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form">
+                                            <td class="tdBoldClass" style="font-size:11px; padding-left:100px;" nowrap colspan="2" valign="top">
+											<table border="0" cellspacing="3" cellpadding="3">
+  <tr>
+    <td><digi:trn><b>Organization Primary Purpose</b></digi:trn> <field:display name="Mandatory Indicator For Organization Primary Purpose" feature="NGO Form">
                                                      <span id="mandatoryPrimPurp"><font size="2" color="#FF0000">*</font></span>
-                                                </field:display>                                                
-                                            </td>
-                                            <td width=50% style="padding-right:15px;">
-                                                <html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="100" rows="4" styleId="orgPrimaryPurpose"/>
+                                                </field:display></td>
+    <td><html:textarea name="aimAddOrgForm" property="orgPrimaryPurpose" cols="100" rows="4" styleId="orgPrimaryPurpose"/>  </td>
+  </tr>
+</table>
                                             </td>
                                         </tr>
                                         <tr>
@@ -1211,7 +1227,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                                     	</field:display>
                                                                     </td>
                                                                     <td>
-                                                                        <table cellSpacing="1" cellPadding="5" class="box-border-nopadding" id="selectedSectors">
+                                                                        <table cellSpacing="1" cellPadding="5" id="selectedSectors">
                                                                             <c:if test="${aimAddOrgForm.sectors != null}">
                                                                                 <c:forEach var="sector" items="${aimAddOrgForm.sectors}">
                                                                                     <tr>
@@ -1381,9 +1397,10 @@ border-right: 1px solid rgb(208, 208, 208);
                                                                             </tr>
                                                                         </c:forEach>
                                                                         <tr>
-                                                                            <td colspan="2">
+                                                                            <td colspan="3">
+																			<input type="button" style="margin-right:10px;" class="buttonx_sm" onclick="javascript:removeOrgs();" value="<digi:trn>Remove Organization(s)</digi:trn>" />
                                                                          <aim:addOrganizationButton refreshParentDocument="true" collection="recipients" delegateClass="org.digijava.module.aim.helper.RecipientPostProcessDelegate"  form="${aimAddOrgForm}" styleClass="buttonx_sm" showAs="popin"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
-                                                                        <input type="button" class="buttonx_sm" onclick="javascript:removeOrgs();" value="<digi:trn>Remove Organization(s)</digi:trn>" />
+                                                                        
                                                                         </td>
                                                                         </tr>
 

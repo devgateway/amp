@@ -5153,7 +5153,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select c from " + AmpOrgGroup.class.getName()
-                + " c order by org_grp_name asc";
+                + " c order by lower(org_grp_name) asc";
             Query qry = session.createQuery(queryString);
             col = qry.list();
         } catch (Exception e) {

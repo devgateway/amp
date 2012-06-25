@@ -8,7 +8,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 
 
 
@@ -27,7 +27,7 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 	}
 
 	@Override
-	protected void onClick(AjaxRequestTarget target) {
+	protected void onClick(final AjaxRequestTarget target) {
 		Set<T> set = setModel.getObject();
 		if (set.size() == 0)
 			return;
@@ -65,6 +65,13 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 			dif = dif - delta;
 		}
 		list.removeAll();
+		list.getParent().visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField>() {
+			@Override
+			public Object component(AmpCollectionValidatorField component) {
+				component.reloadValidationField(target);
+				return CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+			}
+		});
 		target.add(list.getParent());
 	}
 	

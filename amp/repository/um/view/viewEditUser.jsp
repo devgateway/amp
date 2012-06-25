@@ -17,6 +17,14 @@
 <!-- End of Logo -->
 <script language="javascript" type="text/javascript">
 
+function cancel()
+{
+	document.umViewEditUserForm.action = "/um/viewAllUsers.do~reset=true";
+	document.umViewEditUserForm.target = "_self";
+	document.umViewEditUserForm.submit();
+	return false;
+}
+
 function goAction(value){
 	var submitForm=true;	
 	
@@ -133,7 +141,8 @@ function isInvalid(field){
 <div class="ampFormContainer">
 <digi:form action="/viewEditUser.do" method="post">
   <html:hidden name="umViewEditUserForm" property="event" styleId="event"/>
-
+  <html:hidden name="umViewEditUserForm" property="id" styleId="id"/>
+  
   <table bgColor="#ffffff" cellPadding="5" cellSpacing="1" width="705" >
 	<tr>
 		<td class="r-dotted-lg" width="14">&nbsp;</td>
@@ -195,7 +204,14 @@ function isInvalid(field){
 					            The password has been changed successfully
 					            </digi:trn>
 					          </b>
-					        </logic:equal></span>
+					        </logic:equal>
+					        <logic:equal name="umViewEditUserForm" property="emailerror" value="true" >
+					          <b style="color: red;">
+					            <digi:trn>
+					            	The	email already exist in the database.
+					            </digi:trn>
+					          </b>
+					        </logic:equal>
 			      </td>
 			    </tr><tr >
 															<td bgColor="#dddddb" height="25" align="center" colspan="5" style="font-size:12px; font-weight:normal;">
@@ -455,7 +471,7 @@ function isInvalid(field){
 																                Cancel
 																                </digi:trn>
 																              </c:set>
-																              <input type="button" value="${translation}" onclick="history.back();" style="font-family:verdana; font-size:11px; min-width:60px; "/>
+																              <input type="button" value="${translation}" onclick="cancel();" style="font-family:verdana; font-size:11px; min-width:60px; "/>
 																		</td>
 																	</tr>																	
 																	<tr>

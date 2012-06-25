@@ -48,39 +48,24 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 	}
 	
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,AmpFMTypes fmType, boolean showRedStarForNotReqComp) {
-		super(id, model, fmName, false, false,showRedStarForNotReqComp);
-		this.fmType = fmType;
-		textContainer = new TextField<T>("textContainer",model) {
-			@SuppressWarnings("unchecked")
-			@Override
-			public final <T> IConverter<T> getConverter(Class<T> type){
-				if(getInternalConverter(type)!=null) return getInternalConverter(type);
-				return super.getConverter(type);
-			}
-
-		};
-		textContainer.setOutputMarkupId(true);
-		addFormComponent(textContainer);
+		this(id, model, fmName, false, false,showRedStarForNotReqComp);
 	}
 
 	
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel) {
-		super(id, fmName, hideLabel);
-		textContainer = new TextField<T>("textContainer",model) {
-			@SuppressWarnings("unchecked")
-			@Override
-			public final <T> IConverter<T> getConverter(Class<T> type){
-				if(getInternalConverter(type)!=null) return getInternalConverter(type);
-				return super.getConverter(type);
-			}
-
-		};
-		textContainer.setOutputMarkupId(true);
-		addFormComponent(textContainer);
+		this(id, model, fmName, hideLabel, false, false);
 	}
-	
+
 	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine) {
-		super(id, fmName, hideLabel, hideNewLine);
+		this(id, model, fmName, hideLabel, hideNewLine, false);
+	}
+	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, boolean showRedStarForNotReqComp) {
+		this(id, model, fmName, hideLabel, hideNewLine, showRedStarForNotReqComp, false);
+	}
+
+	
+	public AmpTextFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, boolean showRedStarForNotReqComp, boolean enableReqStar) {
+		super(id, model, fmName, hideLabel, hideNewLine, showRedStarForNotReqComp, enableReqStar);
 		textContainer = new TextField<T>("textContainer",model) {
 			@SuppressWarnings("unchecked")
 			@Override

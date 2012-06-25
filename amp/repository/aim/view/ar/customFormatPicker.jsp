@@ -31,10 +31,20 @@
 				<digi:trn key="aim:formatPicket:decimalSymbol">Decimal Separator</digi:trn>&nbsp;
 			</td>
         	<td width="20%" height="18" nowrap="nowrap">
-        		<html:select styleClass="dropdwn_sm" onchange="initFormatPopup();" property="customDecimalSymbol" styleId="customDecimalSymbol">
-	             	<html:options property="alldecimalSymbols"/>
-	            </html:select>
-           		<html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customDecimalSymbolTxt" onchange="initFormatPopup()"/>
+        		<html:select styleClass="dropdwn_sm"
+					onchange="initFormatPopup();" property="customDecimalSymbol"
+					styleId="customDecimalSymbol">
+					<c:forEach var="customDecSym"
+						items="${aimReportsFilterPickerForm.alldecimalSymbols}">
+						<html:option value="${customDecSym}">
+							<c:out value="${customDecSym}" />
+						</html:option>
+					</c:forEach>
+					<html:option value="CUSTOM">
+						<digi:trn>Custom</digi:trn>
+					</html:option>
+				</html:select> 
+				<html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customDecimalSymbolTxt" onchange="initFormatPopup()"/>
            </td>
       	</tr>
 		<tr>
@@ -74,7 +84,10 @@
 			</td>
 	    	<td width="20%" height="18" nowrap="nowrap" style="font-size: 11px">
 	    		<html:select styleClass="dropdwn_sm" property="customGroupCharacter" styleId="customGroupCharacter" onchange="initFormatPopup();">
-            		<html:options property="allgroupingseparators"/>
+	    		<c:forEach var="customGroupChar" items="${aimReportsFilterPickerForm.allgroupingseparators}">
+	    		<html:option value="${customGroupChar}"><c:out value="${customGroupChar}"/></html:option>
+	    		</c:forEach>
+	    		<html:option value="CUSTOM"><digi:trn>Custom</digi:trn></html:option>
             	</html:select>
             <html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customGroupCharacterTxt" onchange="initFormatPopup()"/>
             </td>

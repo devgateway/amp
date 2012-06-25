@@ -34,7 +34,7 @@ public class AmpPercentageTextField extends AmpTextFieldPanel<Double> {
 	public AmpPercentageTextField(String id, IModel<Double> model,
 			String fmName,
 			AmpPercentageCollectionValidatorField<?> validationHiddenField) {
-		super(id, model, fmName, true);
+		super(id, model, fmName, true, true, false, true);
 		this.validationHiddenField = validationHiddenField;
 		
 		textContainer.setType(Double.class);

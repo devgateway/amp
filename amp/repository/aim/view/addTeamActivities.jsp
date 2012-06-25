@@ -151,17 +151,17 @@ function checkSelActivities() {
 										
 										
 										
-									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">
+									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0" style="border:none;">
 										<!-- filter start -->
 										<tr>
-											<td>
+											<td >
 												<table>
 										<tr>
 														<td nowrap="nowrap">
 															<digi:trn>Keyword</digi:trn>&nbsp;
 															<html:text property="keyword" styleClass="inp-text" />
 														</td>
-														<td width="120">
+														<td  nowrap="nowrap">
 															<digi:trn>Results</digi:trn>&nbsp;
 															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamActivitiesForm.teamId }')">
 																<c:if test="${aimTeamActivitiesForm.tempNumResults!=-1}">
@@ -191,21 +191,24 @@ function checkSelActivities() {
 										</tr>
 										<!-- filter end -->	
 										<tr>
+                                        <td style="background:#ccc;">
+                                        	<table cellpadding="1" cellspacing="1" border="0" width="100%"style="background:none;border:none;">
+										<tr>
 											
-									  	<td width="5" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									  	<td width="5px" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="border:none;width:25px;border-left:none;">
 									  		<input type="checkbox" id="checkAll">
 									  	</td>
-									    <td width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="border:none;">
 									    	<b class="ins_title"><digi:trn key="aim:ampId">AMP ID</digi:trn></b>
 									    </td>
-									    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="border:none;">
 									    	<b class="ins_title">
 									    		<a  style="color:black" href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
 														<b><digi:trn key="aim:unassignedActivityList">List of unassigned activities</digi:trn></b>
 													</a>
 									    	</b>
 									    </td>
-									    <td width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
+									    <td width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside  style="border:none;">
 									    	<b class="ins_title">
 									    		<a  style="color:black" href="javascript:sortMe('donor')" title="Click here to sort by Donors">
 														<b><digi:trn key="aim:donors">Donors</digi:trn></b>
@@ -215,7 +218,7 @@ function checkSelActivities() {
 										</tr>
 										<logic:empty name="aimTeamActivitiesForm" property="activities">
 											<tr>
-												<td class="inside" align="center" colspan="4">
+												<td class="inside1" align="center" colspan="4">
 													<digi:trn key="aim:noActivitiesPresent">
 														No activities present
 													</digi:trn>
@@ -225,15 +228,15 @@ function checkSelActivities() {
 										<logic:notEmpty name="aimTeamActivitiesForm" property="activities">
 											<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities">
 												<tr>
-													<td class="inside">
+													<td class="inside1">
 														<html:multibox property="selActivities">
 															<bean:write name="activities" property="ampActivityId" />
 														</html:multibox>
 													</td>
-													<td class="inside">
+													<td class="inside1">
 														<bean:write name="activities" property="ampId"/>
 													</td>
-													<td class="inside">
+													<td class="inside1">
 														<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams}" property="ampActivityId">
 																<bean:write name="activities" property="ampActivityId" />
@@ -248,12 +251,15 @@ function checkSelActivities() {
 																<bean:write name="activities" property="name" />
 															</digi:link>
 													</td>
-													<td class="inside">
+													<td class="inside1">
 														<bean:write name="activities" property="donors" />
 													</td>
 												</tr>
 											</logic:iterate>	
 										</logic:notEmpty>
+									</table>
+									</td>
+									</tr>
 									</table>
 									
 									

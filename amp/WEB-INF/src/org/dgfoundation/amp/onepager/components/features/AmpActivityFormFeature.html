@@ -62,7 +62,9 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 										<div class="hd" style="text-align: left">
 											<wicket:trn>Save as Draft</wicket:trn>
 										</div>
-									    <div class="bd" style="text-align: center">
+									    
+										
+										<div class="bd" style="text-align: center">
 									        <p>
 									        	<wicket:trn>Where would you like to navigate after save action?</wicket:trn>
 									        </p>
@@ -73,11 +75,14 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 												<input type="radio" wicket:id="draftStayOnPage">
 													<wicket:trn>Stay on the activity page</wicket:trn>
 												</input>
-											</span>
+											</span></div>
 									      	<br />
-									     	<span name="saveAsDraftPanelButton" class="padding-two-pixels" wicket:id="saveAsDraftAction" />
-									     	<span class="padding-two-pixels" wicket:id="saveAsDraftCanceld" />
-									    </div>
+									     	<div style="width:155px; margin-left:auto; margin-right:auto; margin-bottom:10px;"><span name="saveAsDraftPanelButton"  wicket:id="saveAsDraftAction" /></div>
+									     	<div style="width:155px; margin-left:auto; margin-right:auto;"><span wicket:id="saveAsDraftCanceld" /></div>
+									    
+										
+										
+										
 									    <div class="ft"></div>
 									</div>
 									<div class="padding-two-pixels" wicket:id="logframe" />

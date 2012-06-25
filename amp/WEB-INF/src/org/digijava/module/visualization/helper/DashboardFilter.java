@@ -99,7 +99,8 @@ public class DashboardFilter {
     private ArrayList<AmpSector> allSectorList;
     private ArrayList<AmpCategoryValueLocations> allLocationsList;
     private int topLists = 5;
-    
+    private Boolean showNationalValues;
+
 	public int getTopLists() {
 		return topLists;
 	}
@@ -123,6 +124,7 @@ public class DashboardFilter {
     	newFilter.setFromPublicView(this.getFromPublicView());
     	newFilter.setSelSectorConfigId(this.getSelSectorConfigId());
     	newFilter.setAllSectorList(this.getAllSectorList());
+    	newFilter.setTransactionType(this.getTransactionType());
     	return newFilter;
     }
 	
@@ -816,6 +818,14 @@ public class DashboardFilter {
 
 	public void setShowAmountsInThousands(Boolean showAmountsInThousands) {
 		this.showAmountsInThousands = showAmountsInThousands;
+	}
+
+	public Boolean getShowNationalValues() {
+		return showNationalValues;
+	}
+
+	public void setShowNationalValues(Boolean showNationalValues) {
+		this.showNationalValues = showNationalValues;
 	}
 
 	

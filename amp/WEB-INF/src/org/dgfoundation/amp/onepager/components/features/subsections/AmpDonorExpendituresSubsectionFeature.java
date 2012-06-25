@@ -60,6 +60,7 @@ public class AmpDonorExpendituresSubsectionFeature extends
 				parent.getFundingInfo().checkChoicesRequired(expTableFeature.getEditorList().getCount());
 				target.add(parent.getFundingInfo());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+				target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 			}
 		};
 		add(addCommit);

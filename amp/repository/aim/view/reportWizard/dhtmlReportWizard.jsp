@@ -338,7 +338,7 @@ body {
 						${plsEnterTitle}
 					</div>
 					<div class="bd" id="titlePanelBody">
-						<html:text onkeyup="repManager.checkSteps()" onkeypress="return saveReportEngine.checkEnter(event);" property="reportTitle" styleClass="inp-text" 
+						<html:text onkeyup="repManager.checkSteps();" onkeypress="return saveReportEngine.checkEnter(event);" property="reportTitle" styleClass="inp-text" 
 							style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
 						<c:if test="${aimReportWizardForm.desktopTab ==false }">
 							<br><br>
@@ -358,6 +358,7 @@ body {
 			</tr>
 		</table>
 	</div>
+	<div id="myHiddenDiv" style="display: none;"></div>
 	<c:if test="${!myForm.desktopTab}">
 		<jsp:include page="previewPanel.jsp" />
 	</c:if>

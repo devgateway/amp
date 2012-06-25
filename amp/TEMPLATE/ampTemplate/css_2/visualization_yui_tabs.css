@@ -24,7 +24,7 @@
     color: #376091;
     margin: 0pt 0px 0pt 0pt;
     /* background:#3754A1 url(tableftcornerunsel.gif) no-repeat scroll left top;*/
-    background-color: #FFFFFF;
+    background-color: #f7f7f7;
     border-top: 1px solid #D0D0D0;
     border-left: 1px solid #D0D0D0;
     border-right: 1px solid #D0D0D0;
@@ -39,7 +39,7 @@
     font-weight: bold;
     /* background:#222E5D url(tableftcorner.gif) no-repeat scroll left top; */
     color: #FF6000;
-    background-color: #F7F7F7;
+    background-color: #FFFFFF;
 }
 
 #demo .longTab {

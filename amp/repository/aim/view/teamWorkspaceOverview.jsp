@@ -186,7 +186,7 @@ function trim(stringToTrim) {
 														<c:set var="translation">
 															<digi:trn>Please select from below</digi:trn>
 														</c:set>															
-														<tr>
+														<tr style="background:#f4f4f2;" colspan="3">
 															<td width="150" align="right" bgcolor="#f4f4f2">
 																<font color="red"><b>*</b></font>
 																<digi:trn key="aim:workspaceGroup">Workspace Group</digi:trn>
@@ -233,7 +233,7 @@ function trim(stringToTrim) {
 								<c:if test="${subtabId == 2 }">
 									<html:hidden name="aimUpdateWorkspaceForm" property="workspaceType"/>
 									<html:hidden name="aimUpdateWorkspaceForm" property="category"/>
-									<table class="inside" width="100%" cellpadding="0" cellspacing="0">
+									<table  width="100%" cellpadding="0" cellspacing="0">
 										<tr>
 											<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 												<b class="ins_title">

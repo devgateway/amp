@@ -502,6 +502,7 @@ function resetToDefaults(){
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
 	document.getElementById("show_amounts_in_thousands").checked = false;
+	document.getElementById("show_national_values").checked = false;
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
@@ -759,6 +760,7 @@ function callbackApplyFilter(e){
 	document.getElementById("endYear_dropdown").value = document.getElementById("endYearQuickFilter_dropdown").value;
 	document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
 	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
+	document.getElementById("showNationalValues").value = document.getElementById("show_national_values").checked;
 	
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
@@ -860,6 +862,7 @@ function applyFilterPopin(e){
 		document.getElementById("workspaceOnlyQuickFilter").checked = document.getElementById("workspace_only").checked;
 	}
 	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
+	document.getElementById("showNationalValues").value = document.getElementById("show_national_values").checked;
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	
 	if (document.getElementById("transaction_type_0").checked == true) {
@@ -1033,12 +1036,13 @@ function refreshBoxes(o){
 			case "SelOrgGroupsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr />";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
-						inner2 = inner2 + child.list[i].name + " - "
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 					}
+					inner = inner + " <hr />";
 					var div = document.getElementById("org_group_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterOrgGroups").innerHTML = inner2;
@@ -1053,12 +1057,13 @@ function refreshBoxes(o){
 			case "SelOrgsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr /> ";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
-						inner2 = inner2 + child.list[i].name + " - "
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 					}
+					inner = inner + " <hr />";
 					var div = document.getElementById("org_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterOrganizations").innerHTML = inner2;
@@ -1073,12 +1078,13 @@ function refreshBoxes(o){
 			case "SelRegionsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr /> ";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
-						inner2 = inner2 + child.list[i].name + " - "
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 					}
+					inner = inner + " <hr />";
 					var div = document.getElementById("region_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterRegions").innerHTML = inner2;
@@ -1093,10 +1099,11 @@ function refreshBoxes(o){
 			case "SelZonesList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr /> ";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
+						inner = inner + "<li>" + child.list[i].name + "</li>";
 					}
+					inner = inner + "<hr />";
 					var div = document.getElementById("zone_list_id");
 					div.innerHTML = inner;
 					div.style.display = "";
@@ -1123,12 +1130,13 @@ function refreshBoxes(o){
 			case "SelSectorsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr /> ";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
-						inner2 = inner2 + child.list[i].name + " - "
+						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 					}
+					inner = inner + " <hr />";
 					var div = document.getElementById("sector_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterSectors").innerHTML = inner2;
@@ -1143,10 +1151,11 @@ function refreshBoxes(o){
 			case "SelSubSectorsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "";
+					inner = "<hr /> ";
 					for(var i = 0; i < child.list.length; i++){
-						inner = inner + "<li>" + child.list[i].name + "</li>"
+						inner = inner + "<li>" + child.list[i].name + "</li>";
 					}
+					inner = inner + " <hr />";
 					var div = document.getElementById("sub_sector_list_id");
 					div.innerHTML = inner;
 					div.style.display = "";
@@ -1427,6 +1436,14 @@ function refreshBoxes(o){
 			if (input != null)
 				input.value = value;
 		}
+		div = document.getElementById("FundingChartTitleLegend");
+		input = document.getElementById("FundingChartTitle");
+		value = trnODAHistoricalTrend + " - " + fundType;
+		if (div != null)
+			div.innerHTML = value;
+		if (input != null)
+			input.value = value;
+		
 		div = document.getElementById("AidPredictabilityTitleLegend");
 		input = document.getElementById("AidPredictabilityTitle");
 		value = trnAidPredictability + " - " + fundType;
@@ -1720,11 +1737,21 @@ function updateChartSettings(container, chartType){
 	var divide = document.getElementById(container + "Divide") == undefined ? "" : document.getElementById(container + "Divide");
 
 	switch(chartType){
+	
 	case "bar":
 		title.disabled = false;
 		fontSize.disabled = false;
 		boldTitle.disabled = false;
 		showLegend.disabled = false;
+		showDataLabel.disabled = false;
+		rotateDataLabel.disabled = false;
+		divide.disabled = false;
+		break;
+	case "bar_profile":
+		title.disabled = false;
+		fontSize.disabled = false;
+		boldTitle.disabled = false;
+		showLegend.disabled = true;
 		showDataLabel.disabled = false;
 		rotateDataLabel.disabled = false;
 		divide.disabled = false;

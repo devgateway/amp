@@ -200,6 +200,7 @@ public class selectOrganizationComponent extends Action {
 				eaForm.setSelOrganisations(null);
 				eaForm.setAllSelectedOrgsIds(null);
 			}else if(request.getParameter("viewAll")!=null && request.getParameter("viewAll").equalsIgnoreCase("viewAll")){
+                eaForm.setNumResults(100000);
 				fillAllSelectedOgs(eaForm);
 				if(eaForm.getAllSelectedOrgsIds()!=null && eaForm.getAllSelectedOrgsIds().size()>0){
 					eaForm.setSelOrganisations(eaForm.getAllSelectedOrgsIds().toArray(new Long[eaForm.getAllSelectedOrgsIds().size()]));

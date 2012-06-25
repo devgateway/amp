@@ -65,6 +65,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
 				parent.getFundingInfo().checkChoicesRequired(disbursementsTableFeature.getEditorList().getCount());
 				target.add(parent.getFundingInfo());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+				target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 			}
 		};
 		add(addCommit);

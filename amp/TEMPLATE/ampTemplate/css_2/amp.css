@@ -16,7 +16,6 @@ h1 {text-transform:uppercase;}
 .t_sm_1 {font-size:9px; line-height:14px;}
 .l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;text-align:left;}
 html.ie .l_big_b {font-size:12px; font-weight:bold;padding:0px 0px 5px 0px;text-align:left;float:left;padding:0px 15px 0px px;}
-html.ie #form72d input.inputx{float:left;}
 span.docTitle619{border:1px solid red;text-align:left;}
 
 .se {color:#FF6000; font-size:12px;}
@@ -49,6 +48,7 @@ table.inside, td.inside_zebra {}
 td.tdInsideHeader{background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x;padding:3px;text-align:center;}
 table.inside {border-width: 0 0 1px 1px; border-spacing: 0; border-collapse: collapse;}
 td.inside {margin: 0; padding: 4px; border-bottom:1px solid #b8b7b7;}
+td.inside a img {border:0;}
 td.report_inside { border-width: 1px 1px 0 0;padding-top:5px;}
 td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-color: #cccccc; border-style: solid; font-size:12px; border-width: 1px 1px 1px 1px; border-spacing: 0; border-collapse: collapse; text-align:center;padding:3px;}
 td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border-style: solid; font-size:11px;}
@@ -83,6 +83,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .welcome_note {font-size:11px; font-weight:bold; color:#666666;}
 .login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_bg.png); width:90px; height:26px; text-align:center;float:left;margin-left:70px;}
 .login_here_cont { font-size:12px;}
+.login_here_cont a {font-size:11px;}
 .login_here a {color:#000000;}
 .wlc_aid_map {background-color:#F4F4F4; border:1px solid #CCCCCC; padding:10px; font-size:12px; width:650px; margin-left:auto; margin-right:auto;}
 .wlc_aid_map_dates {font-size:11px; margin-top:10px;}
@@ -90,7 +91,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 
 /* HEADER */
 .header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
-.logo {color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:5px 0px 0px 0px;}
+.logo {color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:8px 0px 0px 0px;}
 .logo a {color:#FFFFFF; font-size:18px; font-weight:bold;}
 .amp_label {padding-top:10px;font-size:14px;}
 .top_nav {position:absolute; right:30px; top:30px;}
@@ -99,7 +100,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .login_nav a {color:#FFFFFF;}
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
 top_nav a {color:#FFFFFF;}
-.top_sep {margin-left:10px; margin-right:10px;}
+.top_sep {margin-left:10px; margin-right:10px; height:30px;}
 .workspace_info {width:100px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;text-align:right;float:right;margin:-0px 0px 0px 50px;z-index:9990;}
 html.ie .workspace_info {width:100px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;text-align:right;margin:-0px 0px 0px 50px;z-index:9990;position:absolute; top:5px;right:10px;}
 .loginWidget{color: #376091; text-align: left; white-space: nowrap;font-family:  Arial, sans-serif;font-size: 11px;font-weight: bold;text-transform:uppercase;}
@@ -151,13 +152,13 @@ html.ie #usr_menu_logged {width:250px;float:right;text-align:right;}
 .right_menu_header {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header.gif);width:162px; height:27px;}
 .right_menu_header_big {background-image:url(/TEMPLATE/ampTemplate/img_2/blue_header_big.gif);width:220px; height:27px;}
 .right_menu_header_cont {padding-left:10px; padding-top:6px; color:#FFFFFF; font-size:11px; font-weight:bold; }
-.right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:160px; }
+.right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:160px !important; }
 .right_menu_box_big {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:218px; }
-
+/*--rafy--*/
 .right_menu_cont {padding:10px; font-size:11px;}
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}
-.tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px; padding-left:7px;}
+.tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri.gif); background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px; padding-left:7px; background-position: 4px -1px;}
 #quickfloat .tri { border-top: 1px solid white; border-bottom: 1px solid white; padding-left: 12px; background-repeat: no-repeat; list-style-position:inside; list-style:none; display:block; font-size:11px; padding-bottom:1px;}
 html.ie #quickfloat ul{margin:0px 0px 0px -5px;}
 html.ie #quickfloat .tri {background-image:url(/TEMPLATE/ampTemplate/img_2/ico_tri_1.gif); background-position: 5px -5px; background-repeat: no-repeat;  list-style:none; width:148px; font-size:12px; padding-left: 12px; padding-bottom:5px; }

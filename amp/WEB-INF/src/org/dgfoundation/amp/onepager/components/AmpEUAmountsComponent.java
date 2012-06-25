@@ -6,7 +6,9 @@ package org.dgfoundation.amp.onepager.components;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -43,6 +45,8 @@ public class AmpEUAmountsComponent<T> extends AmpComponentPanel {
 		super(id, model, fmName);
 		final AmpTextFieldPanel<Double> totalAmount = new AmpTextFieldPanel<Double>("totalAmount", new PropertyModel<Double>(model, "totalAmount"), "Contract Total Amount");
 		totalAmount.getTextContainer().setEnabled(false);
+		totalAmount.getTextContainer().add(new AttributeAppender("readonly", Model.of("readonly"), " "));
+		totalAmount.getTextContainer().add(new AttributeAppender("style", Model.of("filter:alpha(opacity=50);opacity: .5;-moz-opacity:.5;"), " "));
 		add(totalAmount);
 		
 		AmpTextFieldPanel<Double> ibAmount = new AmpTextFieldPanel<Double>("ibAmount", new PropertyModel<Double>(model, "totalECContribIBAmount"), "IB Amount");

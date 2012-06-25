@@ -83,6 +83,8 @@ SearchManager.prototype.findNext	= function() {
 			return;
 		var spans				= this.getMainElements();//this.divEl.getElementsByTagName("span");
 		var additionalSrchDivs	= this.getAdditionalElements();//this.divEl.getElementsByTagName("DIV");
+		//console.log(spans.length);
+		//console.log(additionalSrchDivs.length);
 		var numFound	= 0;
 		
 		var searchStr = this.inputEl.value.toLowerCase();
@@ -94,7 +96,9 @@ SearchManager.prototype.findNext	= function() {
 				var spanString	= spans[i].innerHTML.toLowerCase();
 				var additionalSrchDivString	= '';
 				if(additionalSrchDivs.length > 0){
-					additionalSrchDivString = additionalSrchDivs[i].innerHTML.toLowerCase();
+					if (i>0) {
+						additionalSrchDivString = additionalSrchDivs[i-1].innerHTML.toLowerCase();
+					}
 				}				 
 				
 				if ( spanString.indexOf(searchStr) >= 0 || additionalSrchDivString.indexOf(searchStr) >= 0) {
@@ -143,7 +147,9 @@ SearchManager.prototype.findPrev	= function() {
 			var spanString	= spans[i].innerHTML.toLowerCase();
 			var additionalSrchDivString	= '';
 			if(additionalSrchDivs.length > 0){
-				additionalSrchDivString = additionalSrchDivs[i].innerHTML.toLowerCase();
+				if (i>0) {
+					additionalSrchDivString = additionalSrchDivs[i - 1].innerHTML.toLowerCase();
+				}
 			}
 			
 			if (spanString.indexOf(searchStr) >= 0 || additionalSrchDivString.indexOf(searchStr) >= 0) {
@@ -202,12 +208,20 @@ function StandardSearchManager( inputEl ) {
 	
 };
 
-StandardSearchManager.prototype.getMainElements	= function( ) {
+StandardSearchManager.prototype.getMainElements	= function( ) {	
 	return this.divEl.getElementsByTagName("span");
 };
 
 StandardSearchManager.prototype.getAdditionalElements	= function() {
-	return this.divEl.getElementsByTagName("div");
+	var myDivs = this.divEl.getElementsByTagName("div");
+	var retVal= new Array();
+	for (var i=0;i<myDivs.length;i++){
+		if(myDivs[i].className!='hiddenNameDiv'){
+			retVal.push(myDivs[i]);
+		}
+	}
+	
+	return retVal;
 };
 
 var messagesSearchManagerCreator = function (inputEl) {

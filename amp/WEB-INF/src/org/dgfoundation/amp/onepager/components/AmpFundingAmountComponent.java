@@ -54,7 +54,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 			String fmDate, String propertyDate) {
 		super(id, model);
 		amount = new AmpTextFieldPanel<Double>("amount",
-				new PropertyModel<Double>(model, propertyAmount), fmAmount,true) {
+				new PropertyModel<Double>(model, propertyAmount), fmAmount,true,true) {
 			
 			@Override
 			protected void onAjaxOnUpdate(final AjaxRequestTarget target) {

@@ -13,7 +13,6 @@ import org.digijava.module.aim.helper.CountryBean;
 
 public class ViewEditUserForm extends ActionForm {
 
-	
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 	    this.pledger=false;
 	    }
@@ -63,7 +62,16 @@ public class ViewEditUserForm extends ActionForm {
 	private Collection assignedWorkspaces;
 	private Long teamId;
 	private Long role;
+	private boolean emailerror;
+	
+	public boolean isEmailerror() {
+		return emailerror;
+	}
 
+	public void setEmailerror(boolean emailerror) {
+		this.emailerror = emailerror;
+	}
+	
 	public Collection<AmpOrganisation> getAssignedOrgs() {
 		return assignedOrgs;
 	}

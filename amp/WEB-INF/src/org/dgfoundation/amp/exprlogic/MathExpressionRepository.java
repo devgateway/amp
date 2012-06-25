@@ -85,6 +85,8 @@ public class MathExpressionRepository {
 	 */
 	public static final String PERCENTAGE_OF_DISBURSEMENT= "percentageOfDisbursement";
 	public static final String COMMITMENT_GAP= "commitmentGap";
+
+	public static final String PERCENTAGE_OF_TOTAL_COMMITMENTS = "percentageOfTotalCommitments";
 	
 	//@Deprecated
 	//public static final String MTEF_COLUMN	= "mtefColumn";
@@ -140,6 +142,7 @@ public class MathExpressionRepository {
 		
 		buildPercentageOfDisbursement();
 		buildCommitmentGap();
+		buildPercentageOfTotalCommitments();
 //		buildPledgesGap();
 //		buildTotalPledged();
 	}
@@ -156,6 +159,20 @@ public class MathExpressionRepository {
 			logger.error(e);
 		}
 	}
+
+	/**
+	 * buildPercentageOfTotalCommitments (Total disbursed by year/quarter/month)/(TOTAL_ACTUAL_DISBURSEMENT)*100 
+	 */
+	private static void buildPercentageOfTotalCommitments() {
+		try {
+			MathExpression m1 = new MathExpression(MathExpression.Operation.MULTIPLY, ArConstants.ACTUAL_COMMITMENT, new BigDecimal(100));
+			MathExpression m2 = new MathExpression(MathExpression.Operation.DIVIDE_ROUND_TWO_DECIMALS, m1, ArConstants.GRAND_TOTAL_ACTUAL_COMMITMENTS);
+			expresions.put(PERCENTAGE_OF_TOTAL_COMMITMENTS, m2);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+	
 	
 	private static void buildCommitmentGap() {
 		try {

@@ -6,6 +6,9 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -15,6 +18,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.apache.wicket.validation.validator.MaximumValidator;
+import org.apache.wicket.validation.validator.MinimumValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
@@ -23,6 +28,7 @@ import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFea
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionsSumComparatorValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpTransactionTypeDonorFundingDetailModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -109,6 +115,14 @@ public class AmpDonorDisbursementsFormTableFeature extends
 					 	amountComponent.setAmountValidator(amountSumComparator); 	
 				item.add(amountComponent);
 
+                AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
+                                        "capitalSpendingPercentage",
+                                        new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage",true);
+                capitalSpendingPercentage.getTextContainer().add(new MinimumValidator<Float>(0f));
+                capitalSpendingPercentage.getTextContainer().add(new MaximumValidator<Float>(100f));
+                capitalSpendingPercentage.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("5")));
+                item.add(capitalSpendingPercentage);
+
 				item.add(new AmpSelectFieldPanel<String>("disbOrderId",
 						new PropertyModel<String>(item.getModel(),
 								"disbOrderId")
@@ -158,6 +172,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 									AmpCollectionValidatorField component,
 									IVisit<Void> visit) {
 								component.reloadValidationField(target);
+								target.add(component.getParent());
 								visit.dontGoDeeper();
 							}
 						});

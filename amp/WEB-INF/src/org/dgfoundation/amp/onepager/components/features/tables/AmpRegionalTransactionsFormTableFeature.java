@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -19,6 +20,9 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionsSumComparatorValidatorField;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -136,7 +140,26 @@ public class AmpRegionalTransactionsFormTableFeature extends
 					 	amountComponent.setAmountValidator(amountSumComparator); 	
 					 	
 				item.add(amountComponent);
-				item.add(new ListEditorRemoveButton("delTransaction", "Delete Item"));
+
+				item.add(new ListEditorRemoveButton("delTransaction", "Delete Item"){
+					protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {
+						AmpRegionalFundingItemFeaturePanel parent = this.findParent(AmpRegionalFundingItemFeaturePanel.class);
+						super.onClick(target);
+						amountSumComparator.reloadValidationField(target);
+						
+						parent.visitChildren(AmpCollectionValidatorField.class, new Component.IVisitor<AmpCollectionValidatorField>()
+								{
+
+									@Override
+									public Object component(AmpCollectionValidatorField component) {
+										component.reloadValidationField(target);
+										target.addComponent(component.getParent());
+										return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+									}
+								});
+				
+					};
+				});
 			}
 		};
 		add(list);

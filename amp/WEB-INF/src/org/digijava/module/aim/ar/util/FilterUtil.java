@@ -151,7 +151,11 @@ public class FilterUtil {
 		ds.setGroupingSeparator((!"CUSTOM".equalsIgnoreCase(customGroupCharacter) ? customGroupCharacter.charAt(0) : customGroupCharacterTxt
 						.charAt(0)));
 		}
-		custom.setMaximumFractionDigits((customDecimalPlaces != -1) ?customDecimalPlaces : 99);
+		
+		if (arf.getMaximumFractionDigits() != null && arf.getMaximumFractionDigits() > -1)
+			custom.setMaximumFractionDigits(arf.getMaximumFractionDigits());
+		else
+			custom.setMaximumFractionDigits((customDecimalPlaces != -1) ?customDecimalPlaces : 99);
 		custom.setGroupingUsed(customUseGrouping);
 		custom.setGroupingSize(customGroupSize);
 		custom.setDecimalFormatSymbols(ds);
@@ -270,6 +274,18 @@ public class FilterUtil {
 			form.setAmountinthousands(false);
 		}
 		form.setAmountinmillions(filter.getAmountinmillion());
+		
+		if ( filter.getGroupingseparator() != null ) {
+			form.setCustomGroupCharacter("CUSTOM");
+			form.setCustomGroupCharacterTxt(filter.getGroupingseparator() );
+		}
+		if ( filter.getDecimalseparator() != null ) {
+			form.setCustomDecimalSymbol("CUSTOM");
+			form.setCustomDecimalSymbolTxt(filter.getDecimalseparator() );
+		}
+		if (filter.getMaximumFractionDigits() != null && filter.getMaximumFractionDigits() > -1) {
+			form.setCustomDecimalPlaces(filter.getMaximumFractionDigits() );
+		}
 		
 	}
 	

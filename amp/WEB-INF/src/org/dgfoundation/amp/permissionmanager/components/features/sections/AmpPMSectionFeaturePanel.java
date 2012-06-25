@@ -3,9 +3,12 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
@@ -24,12 +27,8 @@ public class AmpPMSectionFeaturePanel extends AmpFeaturePanel implements IHeader
 	 * @param fmName
 	 * @throws Exception
 	 */
-	public AmpPMSectionFeaturePanel(String id, String fmName) throws Exception {
-		super(id, fmName);
-		// TODO Auto-generated constructor stub
-		sliderPM = new TransparentWebMarkupContainer("sliderPM");
-		sliderPM.setOutputMarkupId(true);
-		add(sliderPM);
+	public AmpPMSectionFeaturePanel(String id, String fmName) throws Exception {		
+		this(id,null, fmName);	
 	}
 
 	/**
@@ -40,11 +39,7 @@ public class AmpPMSectionFeaturePanel extends AmpFeaturePanel implements IHeader
 	 */
 	public AmpPMSectionFeaturePanel(String id, IModel model, String fmName)
 			throws Exception {
-		super(id, model, fmName);
-		// TODO Auto-generated constructor stub
-		sliderPM = new TransparentWebMarkupContainer("sliderPM");
-		sliderPM.setOutputMarkupId(true);
-		add(sliderPM);
+		this(id, model, fmName, false);
 
 	}
 
@@ -61,6 +56,10 @@ public class AmpPMSectionFeaturePanel extends AmpFeaturePanel implements IHeader
 		sliderPM = new TransparentWebMarkupContainer("sliderPM");
 		sliderPM.setOutputMarkupId(true);
 		add(sliderPM);
+		Image img = new Image("perm_open",  new Model<String>(""));
+		img.add(new SimpleAttributeModifier("src", "/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif"));
+		
+		add(img);
 
 	}
 

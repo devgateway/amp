@@ -86,7 +86,7 @@ import org.digijava.module.um.util.AmpUserUtil;
 	            }
 	        }
 	
-	        if(vwForm.getKeyword() != null && ubCol != null) {
+	        if(vwForm.getKeyword() != null && vwForm.getKeyword().length() >0 && ubCol != null) {
 	            for(Iterator ubIter = ubCol.iterator(); ubIter.hasNext(); ) {
 	                UserBean ub = (UserBean) ubIter.next();
 	

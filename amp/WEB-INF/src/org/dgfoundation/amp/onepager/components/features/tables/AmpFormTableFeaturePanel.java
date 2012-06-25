@@ -32,7 +32,7 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 	protected WebMarkupContainer tableHeading;
 	protected TransparentWebMarkupContainer tableId;
 	protected WebMarkupContainer reqStar;
-	
+    
 	protected ListView<L> list;
 
 	public ListView<L> getList() {

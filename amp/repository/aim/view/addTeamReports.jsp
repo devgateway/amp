@@ -135,42 +135,6 @@
 
                                 	<div class="contentbox_border" style="border-top:0px;padding: 10px 0px 10px 0px;">
 									<div align="center">
-													<div>
-														<table>
-													<tr>
-														<td nowrap="nowrap">
-															<digi:trn>Keyword</digi:trn>&nbsp;
-															<html:text property="keyword" styleClass="inp-text" />
-														</td>
-														<td width="120">
-															<digi:trn>Results</digi:trn>&nbsp;
-															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamReportsForm.teamId }')">
-																<c:if test="${aimTeamReportsForm.tempNumResults!=-1}">
-																	<html:option value="${aimTeamReportsForm.tempNumResults}">${aimTeamReportsForm.tempNumResults}</html:option>
-																</c:if>
-																<html:option value="10">10</html:option>
-																<html:option value="20">20</html:option>
-																<html:option value="50">50</html:option>
-																<html:option value="-1"><digi:trn>All</digi:trn></html:option>
-															</html:select>
-														</td>
-														<td>
-															<c:set var="trnResetBtn">
-																<digi:trn>Reset</digi:trn>
-															</c:set>
-															<input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()" />
-														</td>
-														<td>					
-															<c:set var="trnGoBtn">
-																<digi:trn> GO </digi:trn>
-															</c:set>
-															<input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchActivity('${aimTeamReportsForm.teamId }')"/>
-														</td>
-													</tr>
-												</table>
-													</div>
-										
-							
 									<table class="normal" width="100%" cellpadding="0" cellspacing="0" style="background:#fff;">
 										<tr>
 											<td >
@@ -180,7 +144,7 @@
 															<digi:trn>Keyword</digi:trn>&nbsp;
 															<html:text property="keyword" styleClass="inp-text" />
 														</td>
-														<td width="120">
+														<td nowrap="nowrap">
 															<digi:trn>Results</digi:trn>&nbsp;
 															<html:select property="tempNumResults" styleClass="inp-text" onchange="return searchActivity('${aimTeamReportsForm.teamId }')">
 																<c:if test="${aimTeamReportsForm.tempNumResults!=-1}">
@@ -397,6 +361,7 @@
 														</c:set>																														
 														<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 														<c:set target="${urlParams}" property="addReport" value="List of Unassigned Reports"/>
+														<c:set target="${urlParams}" property="keyword" value="${aimTeamReportsForm.keyword}"/>
 														<digi:link href="/updateTeamReports.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" name="urlParams">
 					                                    	<c:out value="${page}"/>
 					                                    </digi:link>
@@ -411,38 +376,7 @@
 									<div class="buttons" align="center">
 														</td>
 													</tr>
-													<tr>
-                                                                                                        <td>
-                                                                                                <!-- Revisit teamUtil.java, see AMP-5420 -->
-                                                                                                <logic:notEmpty name="aimTeamReportsForm" property="totalPages">
-                                                                                                	<table>
-																										<tr>
-																											<td>
-																												<digi:trn>Pages :</digi:trn>
-																												<c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
-																												  	<c:if test="${aimTeamReportsForm.currentPage==page}">
-				                                                                                                         <c:out value="${page}"/>
-				                                                                                                    </c:if>
-				                                                                                                     <c:if test="${aimTeamReportsForm.currentPage!=page}">
-				                                                                                                     	<c:set var="translation">
-																															<digi:trn>Click here to goto Next Page</digi:trn>
-																														</c:set>																														
-																														<jsp:useBean id="urlParams_2" type="java.util.Map" class="java.util.HashMap"/>
-																														<c:set target="${urlParams_2}" property="addReport" value="List of Unassigned Reports"/>
-																														<digi:link href="/updateTeamReports.do?currentPage=${page}&tempNumResults=${aimTeamReportsForm.tempNumResults}" name="urlParams_2">
-					                                                                                                    	<c:out value="${page}"/>
-					                                                                                                    </digi:link>
-				                                                                                                     </c:if>																												  	
-																													|&nbsp;
-																												</c:forEach>
-																											</td>
-																										</tr>
-																									</table>
-																								</logic:notEmpty>
-                                                                                                
-                                                                                                
-                                                                                            </td>
-                                                                                            </tr>
+													
 													<tr>
 														<td align="center" bgcolor=#ffffff>
                                                           <a style="cursor:pointer;" onclick="window.scrollTo(0,0); return false"><digi:trn key="aim:backtotop">Back to Top</digi:trn> <span style="font-size: 10pt; font-family: Tahoma;">&uarr;</span></a>

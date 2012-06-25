@@ -116,7 +116,7 @@
             <td>&nbsp;
                 
             </td>
-            <td>
+            <td align=center>
                 <table>
                     <tr>
                         <!-- Start Navigation -->
@@ -250,28 +250,34 @@
                             
                         </td>
                         <td valign="top">
-                        <div class="right_menu">
-						<div class="right_menu_header">
-						<div class="right_menu_header_cont">
-						<digi:trn>Other links</digi:trn>
-						</div>
+						
+						
+						<table width="100" cellspacing="0" cellpadding="0">
+														<tbody><tr>
+															<td bgcolor="#c9c9c7" class="box-title"><digi:trn><b style="font-size:12px; color:#000000; padding-left:5px;">Other links</b></digi:trn></td>
+															<td width="17" height="17" background="module/aim/images/corner-r.gif">&nbsp;</td>
+														</tr>
+													</tbody></table>
+						
+						
+						
+						<table width="150" cellspacing="0" cellpadding="0" class="inside">
+														<tbody><tr>
+															<td class="inside"><img width="15" height="10" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif"> <digi:link module="aim"  href="/admin.do" > <digi:trn key="aim:AmpAdminHome"> Admin Home </digi:trn></digi:link></td>
+														</tr>
+														<tr>
+														<td class="inside">
+														<img width="15" height="10" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-014E86.gif">
+														<c:set var="trn"><digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn></c:set>
+            <digi:link module="aim" href="/quartzJobClassManager.do" title="${trn}"><digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn></digi:link>
+														
+														</td>
+														</tr>								
+														<!-- end of other links -->
+													</tbody></table>
+						
+						
 
-						</div>
-						<div class="right_menu_box">
-						<div class="right_menu_cont">
-                        <ul id="jobquicklinks">
-			<li class="tri"><digi:link module="aim"  href="/admin.do" > <digi:trn key="aim:AmpAdminHome"> Admin Home </digi:trn></digi:link></li>
-           <c:set var="trn"><digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn></c:set>
-            <li class="tri"><digi:link module="aim" href="/quartzJobClassManager.do" title="${trn}"><digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn></digi:link></li>
-				 
-					</ul>
-			        
-			        
-			 
-	          
-	             		
-		</div>
-	</div>
                             <!-- Other Links -->
                            
                  </td>
@@ -286,9 +292,9 @@
                          </tr>
                      </table>
                  </c:if>
-                <table style="text-align:right;width:100%;">
+                <table style="width:75%;" align=center>
                     <tr>
-                        <td style="height:70px;">
+                        <td style="height:70px;" align=center>
                             <a href="javaScript:addJob();"><digi:trn key="aim:job:lnkAddNewJob">Add new job</digi:trn></a>
                             &nbsp;
                             <a href="javaScript:pauseAllJobs();"><digi:trn key="aim:job:lnkPauseAllJobs">Pause all jobs</digi:trn></a>
@@ -297,7 +303,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="">
+                        <td style="" align=center>
                             <digi:trn key="aim:job:serverTime">Server date and time:</digi:trn>
                             <span id="divServerTime"></span>
                         </td>

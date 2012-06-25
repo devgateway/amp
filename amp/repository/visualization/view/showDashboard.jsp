@@ -46,7 +46,8 @@
     }
     .chartFieldset {
 	    background-color: #F4F4F4;
-    }	
+    }
+	
 </style>
 <!-- Visualization's Scripts-->
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
@@ -83,6 +84,7 @@ var trnDisbursements = "";
 var trnExpenditures = "";
 var trnPledges = "";
 var trnAidPredictability = "";
+var trnODAHistoricalTrend="";
 var trnAidType = "";
 var trnFinancingInstrument = "";
 var trnDonorProfile = "";
@@ -160,6 +162,7 @@ function initializeTranslations(){
 	trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";
 	trnPledges="<digi:trn jsFriendly='true'>Pledges</digi:trn>";
 	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
+	trnODAHistoricalTrend="<digi:trn jsFriendly='true'>ODA Historical Trend</digi:trn>";
 	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
 	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
 	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
@@ -259,21 +262,21 @@ function initializeGlobalVariables(){
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_1" >
+														<td class="side_opt_sel" id="general_selector_1" bgcolor="#FFFFFF">
 															<div class="selector_type_cont" onclick="changeTab(1)">
 																<digi:trn>Organization Groups With Organizations</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_2">
+														<td class="side_opt_sel" id="general_selector_2" bgcolor="#FFFFFF">
 															<div class="selector_type_cont" onclick="changeTab(2)">
 																<digi:trn>Regions With Zones</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_3">
+														<td class="side_opt_sel" id="general_selector_3" bgcolor="#FFFFFF">
 															<div class="selector_type_cont" onclick="changeTab(3)">
 																<digi:trn>Sectors and Sub Sectors</digi:trn>
 															</div></td>
@@ -614,15 +617,15 @@ function initializeGlobalVariables(){
 														<html:option value="4">4</html:option>
 														<html:option value="5">5</html:option>
 													</html:select></td>
-												<!--<td><b><digi:trn>Year To Compare Growth</digi:trn>:</b>
-												</td>
-												<td><html:select property="filter.yearToCompare"
-														styleId="yearToCompare_dropdown" styleClass="dropdwn_sm"
-														style="width:70px;">
-														<html:optionsCollection property="filter.years"
-															label="wrappedInstance" value="wrappedInstance" />
-													</html:select></td>
-											--></tr>
+													<td></td>
+													<td></td>
+													<td><b><digi:trn>Show national located values</digi:trn>:</b>
+													</td>
+													<td>
+														<html:checkbox property="filter.showNationalValues" styleId="show_national_values"/>
+													</td>
+												
+												</tr>
 										</table>
 									</div>
 								</div>
@@ -660,7 +663,7 @@ function initializeGlobalVariables(){
 	<div id="exportDiv" class="yui-navset">
 		<table width="100%" height=400 cellpadding="0" cellspacing="0">
 			<tr>
-				<td class="inside" width="30%" >
+				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Export Type</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.typeOpt" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>  </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"><br />
@@ -669,7 +672,7 @@ function initializeGlobalVariables(){
 		        </div>
 		        </td>
 				<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-			        <td class="inside" width="30%" >
+			        <td class="inside" width="30%" valign="top">
 					<div class="selector_type"><b><digi:trn>ODA Growth</digi:trn></b></div>
 					<div>
 			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -679,7 +682,7 @@ function initializeGlobalVariables(){
 			        </div>
 			        </td>
 		    	</c:if>
-				<td class="inside" width="30%" >
+				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Summary</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.summaryOpt" styleId="export_summary_0" value="0"><digi:trn>Exclude Summary</digi:trn></html:radio><br />
@@ -688,7 +691,7 @@ function initializeGlobalVariables(){
 		        </td>
 		    </tr>
 		    <tr>
-				<td class="inside" width="30%" >
+				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Funding</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.fundingOpt" styleId="export_funding_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -697,7 +700,7 @@ function initializeGlobalVariables(){
 		            <html:radio property="exportData.fundingOpt" styleId="export_funding_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
-		        <td class="inside" width="30%" >
+		        <td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Aid Predictability</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -706,7 +709,7 @@ function initializeGlobalVariables(){
 		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
-		    	<td class="inside" width="30%" >
+		    	<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Aid Type</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -717,7 +720,7 @@ function initializeGlobalVariables(){
 		        </td>
 		    </tr>
 		    <tr>
-				<td class="inside" width="30%" >
+				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Financing Instrument</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -727,7 +730,7 @@ function initializeGlobalVariables(){
 		        </div>
 		        </td>
 		    	<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-    			<td class="inside" width="30%" >
+    			<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Donor Profile</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.donorOpt" styleId="export_donor_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -738,7 +741,7 @@ function initializeGlobalVariables(){
 		        </td>
 		        </c:if>
 		        <c:if test="${visualizationform.filter.dashboardType ne '3' }">
-    			<td class="inside" width="30%" >
+    			<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Sector</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.sectorOpt" styleId="export_sector_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -749,7 +752,7 @@ function initializeGlobalVariables(){
 		        </td>
 		        </c:if>
 		        <c:if test="${visualizationform.filter.dashboardType ne '2' }">
-    			<td class="inside" width="30%" >
+    			<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Region</digi:trn></b></div>
 				<div>
 		            <html:radio property="exportData.regionOpt" styleId="export_region_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
@@ -798,6 +801,7 @@ function initializeGlobalVariables(){
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
 <html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
 <html:hidden property="filter.showAmountsInThousands" styleId="showAmountsInThousands"/>
+<html:hidden property="filter.showNationalValues" styleId="showNationalValues"/>
 <html:hidden property="filter.showMonochrome" styleId="showMonochrome"/>
 <html:hidden property="filter.commitmentsVisible" styleId="commitmentsVisible"/>
 <html:hidden property="filter.disbursementsVisible" styleId="disbursementsVisible" />
@@ -829,7 +833,7 @@ function initializeGlobalVariables(){
   </tr>
 </table>
 <div class="dashboard_stat" id="divSummaryInfo" ></div>
-<div class="dashboard_stat" align="right" ><a onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
+<div class="dashboard_stat" align="right" ><a href="javascript:" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
 <div class="dashboard_stat" style="display:none; padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
 	<table cellpadding="0" cellspacing="0" border="0" width="100%">
 	<tr style="background-color:white;" >
@@ -1381,11 +1385,11 @@ function initializeGlobalVariables(){
 		</c:if>
 		<c:if test="${showFundingChart eq 1 }">
 		<fieldset class="chartFieldset">
-			<legend><span id="FundingChartTitleLegend" class=legend_label><digi:trn jsFriendly='true'>ODA historical trend</digi:trn></span></legend>
+			<legend><span id="FundingChartTitleLegend" class=legend_label></span></legend>
 			<div style="float:left;">
 				<a onclick="toggleHeader(this, 'FundingChartHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
 				<div id="FundingChartHeader" class="chart_header" style="display:none;">
-				<digi:trn>Title</digi:trn> <input type="text" id="FundingChartTitle" value="<digi:trn jsFriendly='true'>ODA historical trend</digi:trn>" size="50">
+				<digi:trn>Title</digi:trn> <input type="text" id="FundingChartTitle" value="" size="50">
 				<input type="hidden" id="FundingChartShowFontFamily" value="Verdana"/>
 				&nbsp;<digi:trn>Size</digi:trn>
 				<select id="FundingChartFontSize">
@@ -1885,6 +1889,7 @@ function initializeTranslations(){
 	trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";
 	trnPledges="<digi:trn jsFriendly='true'>Pledges</digi:trn>";
 	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
+	trnODAHistoricalTrend="<digi:trn jsFriendly='true'>ODA Historical Trend</digi:trn>";
 	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
 	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
 	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";

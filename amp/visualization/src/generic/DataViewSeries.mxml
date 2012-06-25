@@ -14,7 +14,7 @@
 		.centerBold {
 			fontWeight: bold;
 		}
-	</mx:Style>	<mx:HTTPService id="service" result="service_resultHandler(event)" >
+	</mx:Style>	<mx:HTTPService id="service" result="service_resultHandler(event)"  method="POST">
 		
 	</mx:HTTPService>
 	
@@ -91,24 +91,16 @@
 					strProtocol = curUrl.split('/')[0];
 					strDomain = curUrl.split('/')[2];
 				}
-				var params:Object;
+				var params:Object = {};
+				params["action"] = dataAction;
+				params["formatNumber"] = "true";
 				if(idContainer == "AidType"){
-					params = {
-						"typeofaid" : "true",
-						"formatNumber" : "true"
-					};
-				}
-				else
-				{
-					params = {
-						"formatNumber" : "true"
-					};
+					params["typeofaid"] = "true";
 				}
 
 				service.url = strProtocol + "//" + strDomain + strUrl;
 				if(start)
 					service.send(params);
-				
 				try {
 					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
 				}

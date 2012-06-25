@@ -22,7 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -114,7 +116,7 @@ public class DashboardUtil {
 		return sortByValue (map);
 	}
 	
-	public static Map<AmpCategoryValueLocations, BigDecimal> getRankRegions (Collection<AmpCategoryValueLocations> regionsList, DashboardFilter filter, Integer startYear, Integer endYear) throws DgException{
+	public static Map<AmpCategoryValueLocations, BigDecimal> getRankRegions (Collection<AmpCategoryValueLocations> regionsList, DashboardFilter filter, Integer startYear, Integer endYear, HttpServletRequest request) throws DgException{
 		Map<AmpCategoryValueLocations, BigDecimal> map = new HashMap<AmpCategoryValueLocations, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
@@ -134,6 +136,7 @@ public class DashboardUtil {
 				aggregateTopLevel = false;
 			}
 		}
+        AmpCategoryValueLocations nationalLoc = null;
 		for (Iterator<AmpCategoryValueLocations> iterator = regionsList.iterator(); iterator.hasNext();) {
 			AmpCategoryValueLocations location = (AmpCategoryValueLocations) iterator.next();
 			Long[] ids = {location.getId()};
@@ -151,13 +154,37 @@ public class DashboardUtil {
                 }
                 else
                 {
+                	nationalLoc = topLevelLocation.getParentLocation();
         	        map.put(topLevelLocation, total);
                 }
             }
             else
             {
+            	nationalLoc = topLevelLocation.getParentLocation();
     	        map.put(location, total);
             }
+		}
+		if (filter.getShowNationalValues()) {
+			AmpCategoryValueLocations tempLoc = new AmpCategoryValueLocations();
+			if (request!=null) {
+				String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		        try {
+					tempLoc.setName(TranslatorWorker.translateText("National", locale, siteId));
+				} catch (WorkerException e) {
+					tempLoc.setName("National");
+				}
+			} else {
+				tempLoc.setName("National");
+			}
+			tempLoc.setId(nationalLoc.getId());
+            Long[] ids = {nationalLoc.getId()};
+			Long[] tempLocationsIds = filter.getSelLocationIds();
+			filter.setSelLocationIds(ids);
+			DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			filter.setSelLocationIds(tempLocationsIds);
+            BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+            map.put(tempLoc, total);
 		}
 		return sortByValue (map);
 	}
@@ -333,7 +360,7 @@ public class DashboardUtil {
 		        form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
 		        form.getRanksInformation().setTopSectors(getTop(form.getRanksInformation().getFullSectors(),form.getFilter().getTopLists()));
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep5);
-				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null));
+				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null, null));
 				form.getRanksInformation().setTopRegions(getTop(form.getRanksInformation().getFullRegions(),form.getFilter().getTopLists()));
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep6);
 				form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));

@@ -25,8 +25,8 @@ public class RMMapCalculationUtil {
     public static Object[] getAllFundingsFiltered (GisFilterForm filter, boolean isRegional, boolean isPublic) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
-        Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
-        Collection<Long> tertiarySectors = longArrayToColl(filter.getSelectedTertiarySectors());
+        Collection<Long> secondarySectors = null;//longArrayToColl(filter.getSelectedSecondarySectors());
+        Collection<Long> tertiarySectors = null;//longArrayToColl(filter.getSelectedTertiarySectors());
         Collection<Long> typeOfAssistanceIds = longArrayToColl(filter.getSelectedTypeOfAssistance());
 
         Set sectorCollector = new HashSet();
@@ -60,7 +60,7 @@ public class RMMapCalculationUtil {
                 fStartDate.set(Integer.parseInt(filter.getFilterStartYear()), 0, 1, 0, 0, 0);
         Calendar fEndDate = Calendar.getInstance();
                 fEndDate.set(Integer.parseInt(filter.getFilterEndYear() + 1), 0, 1, 0, 0, 0);
-        fEndDate.add(Calendar.SECOND, -1);
+		        fEndDate.add(Calendar.SECOND, -1);
         String currencyCode = filter.getSelectedCurrency();
 
 
@@ -69,14 +69,50 @@ public class RMMapCalculationUtil {
         if (filter.isCurWorkspaceOnly() && filter.getCurWorkspace() != null) {
            workspaces = new ArrayList();
            workspaces.add(filter.getCurWorkspace());
+           Collection childWorkspaces = TeamUtil.getAllChildrenWorkspaces(filter.getCurWorkspace().getAmpTeamId());
+            if (childWorkspaces != null && !childWorkspaces.isEmpty()) {
+                workspaces.addAll(childWorkspaces);
+            }
         }
 
-        boolean includeCildLocations = filter.getMapLevel() == 3;
+        //boolean includeCildLocations = filter.getMapLevel() == 3;
+        boolean includeCildLocations = true;
 
         Object[] activityFundings = null;
+        Object[] activityRegionalFundings = null;
 
-        if (isRegional == GisUtil.GIS_DONOR_FUNDINGS) {
-        activityFundings = DbUtil.getActivityFundings(sectorCollector,
+
+        if (!filter.getMapModeFin().equalsIgnoreCase("pledgesData")) {
+            if (isRegional == GisUtil.GIS_DONOR_FUNDINGS) {
+            activityFundings = DbUtil.getActivityFundings(sectorCollector,
+                                                           programsIds,
+                                                           donnorAgencyIds,
+                                                           donorGroupIds,
+                                                           donorTypeIds,
+                                                           includeCildLocations,
+                                                           locations,
+                                                           workspaces,
+                                                           typeOfAssistanceIds,
+                                                           fStartDate.getTime(),
+                                                           fEndDate.getTime(),
+                                                           isPublic);
+            }
+
+            if (isRegional == GisUtil.GIS_REGIONAL_FUNDINGS) {
+            activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
+                                                                           programsIds,
+                                                                           donnorAgencyIds,
+                                                                           donorGroupIds,
+                                                                           donorTypeIds,
+                                                                           includeCildLocations,
+                                                                           locations,
+                                                                           workspaces,
+                                                                           fStartDate.getTime(),
+                                                                           fEndDate.getTime(),
+                                                                           isPublic);
+            }
+        } else {
+            activityFundings = DbUtil.getPledgeFundings(sectorCollector,
                                                        programsIds,
                                                        donnorAgencyIds,
                                                        donorGroupIds,
@@ -89,20 +125,8 @@ public class RMMapCalculationUtil {
                                                        fEndDate.getTime(),
                                                        isPublic);
         }
-        Object[] activityRegionalFundings = null;
-        if (isRegional == GisUtil.GIS_REGIONAL_FUNDINGS) {
-        activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
-                                                                       programsIds,
-                                                                       donnorAgencyIds,
-                                                                       donorGroupIds,
-                                                                       donorTypeIds,
-                                                                       includeCildLocations,
-                                                                       locations,
-                                                                       workspaces,
-                                                                       fStartDate.getTime(),
-                                                                       fEndDate.getTime(),
-                                                                       isPublic);
-        }
+
+
         Object[] fundingList = getAllFundingsByLocations(activityFundings,
                                                          activityRegionalFundings,
                                                          includeCildLocations,
@@ -114,11 +138,13 @@ public class RMMapCalculationUtil {
         return fundingList;
     }
 
-    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isPublic) {
+    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isRegional, boolean isPublic) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
-        Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
-        Collection<Long> tertiarySectors = longArrayToColl(filter.getSelectedTertiarySectors());
+        //Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
+        Collection<Long> secondarySectors = null;
+        //Collection<Long> tertiarySectors = longArrayToColl(filter.getSelectedTertiarySectors());
+        Collection<Long> tertiarySectors = null;
 
         Set sectorCollector = new HashSet();
 
@@ -161,13 +187,17 @@ public class RMMapCalculationUtil {
                 fStartDate.set(Integer.parseInt(filter.getFilterStartYear()), 0, 1, 0, 0, 0);
         Calendar fEndDate = Calendar.getInstance();
                 fEndDate.set(Integer.parseInt(filter.getFilterEndYear() + 1), 0, 1, 0, 0, 0);
-        fEndDate.add(Calendar.SECOND, -1);
+		        fEndDate.add(Calendar.SECOND, -1);
 
         String currencyCode = filter.getSelectedCurrency();
 
-        boolean includeCildLocations = filter.getMapLevel() == 3;
+        //boolean includeCildLocations = filter.getMapLevel() == 3;
+        boolean includeCildLocations = true;
 
-        Object[] activityFundings = DbUtil.getActivityFundings(sectorCollector,
+        Object[] activityFundings = null;
+        Object[] activityRegionalFundings = null;
+        if (!isRegional) {
+            activityFundings = DbUtil.getActivityFundings(sectorCollector,
                                                                programsIds,
                                                                donnorAgencyIds,
                                                                donorGroupIds,
@@ -175,7 +205,8 @@ public class RMMapCalculationUtil {
                                                                includeCildLocations,
                                                                locations,
                                                                null, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), isPublic);
-        Object[] activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
+        } else {
+            activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
                                                                                donnorAgencyIds,
                                                                                donorGroupIds,
@@ -183,6 +214,7 @@ public class RMMapCalculationUtil {
                                                                                includeCildLocations,
                                                                                locations,
                                                                                null, fStartDate.getTime(), fEndDate.getTime(), isPublic);
+        }
         Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, includeCildLocations, locations, currencyCode, true);
 
 
@@ -229,6 +261,33 @@ public class RMMapCalculationUtil {
 
     }
 
+    private static Map<Long, Long> getLocParentMap (Collection<AmpCategoryValueLocations> locations, boolean goLowerLevels) {
+        Map<Long, Long> retVal = new HashMap <Long, Long>();
+
+        for (AmpCategoryValueLocations loc: locations) {
+            retVal.put(loc.getId(), loc.getId());
+            List<AmpCategoryValueLocations> children = getChildLocations(loc);
+            for (AmpCategoryValueLocations childLoc : children) {
+                retVal.put(childLoc.getId(), loc.getId());
+            }
+        }
+        return retVal;
+    }
+    
+    private static List<AmpCategoryValueLocations> getChildLocations (AmpCategoryValueLocations parentLoc) {
+        List<AmpCategoryValueLocations> retVal = new ArrayList<AmpCategoryValueLocations>();
+        if (parentLoc.getChildLocations() != null && !parentLoc.getChildLocations().isEmpty()) {
+            for (AmpCategoryValueLocations childLoc: parentLoc.getChildLocations()) {
+                retVal.add(childLoc);
+                if (childLoc.getChildLocations() != null && !childLoc.getChildLocations().isEmpty()) {
+                    retVal.addAll(getChildLocations(childLoc));
+                }
+            }
+        }
+
+        return retVal;
+    }
+
     private static Object[] getFundingsByLocations (Object[] data, Collection<AmpCategoryValueLocations> locations, String currencyCode, boolean detailedActData, boolean inculedChildLocations){
         Object[] retVal = null;
 
@@ -249,7 +308,9 @@ public class RMMapCalculationUtil {
 
             Map<Long, String> locationIdNameMap = getLocationIdNameMap (locations);
 
-            Map<String, Set> locationGroupedFnds = groupFundingsByLocationAndApplyPercentages (fundings, locationPercentageMap, locationIdNameMap, getLocParentMapforLevelThree(locations, inculedChildLocations));
+            //Map<String, Set> locationGroupedFnds = groupFundingsByLocationAndApplyPercentages (fundings, locationPercentageMap, locationIdNameMap, getLocParentMapforLevelThree(locations, inculedChildLocations));
+            Map<String, Set> locationGroupedFnds = groupFundingsByLocationAndApplyPercentages (fundings, locationPercentageMap, locationIdNameMap, getLocParentMap(locations, inculedChildLocations));
+
 
             retVal = calculateTotalsAndApplyExchangeRates (locationGroupedFnds, currencyCode, detailedActData);
         } else {

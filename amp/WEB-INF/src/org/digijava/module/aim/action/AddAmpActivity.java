@@ -1331,7 +1331,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	        		  }
 	        	  }
 	          }
-	          eaForm.getDocuments().setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) );
+	          eaForm.getDocuments().setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionForActivityPreview(request) );
 	
 	          /* END - Setting documents for preview */
 	          request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);

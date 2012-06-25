@@ -603,7 +603,7 @@ border-right: 1px solid rgb(208, 208, 208);
 								    	</button>
 								    </td>
 								</tr>
-								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;height:2px;"/></td></tr>
+								<tr><td><hr style="width: 100%;margin-left: 0px; height:2px;"/></td></tr>
 								<tr>
 									<td>
 											<div style="width: 80%; float: left" class="t_sm" id="privateFilterInfo"></div>
@@ -660,7 +660,7 @@ border-right: 1px solid rgb(208, 208, 208);
 								    	</button>
 									</td>
 								</tr>						
-								<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;height:2px;"/></td></tr>	
+								<tr><td><hr style="width: 100%;margin-left: 0px; height:2px;"/></td></tr>	
 								<tr>
 									<td>									
 											<div style="width: 80%; float: left" id="teamFilterInfo" class="t_sm"></div>
@@ -706,7 +706,7 @@ border-right: 1px solid rgb(208, 208, 208);
 									    	</button>
 										</td>
 									</tr>						
-									<tr><td><hr style="width: 97%;margin-left: 0px; margin-right: 15px;height:2px;"/></td></tr>	
+									<tr><td><hr style="width: 100%;margin-left: 0px; height:2px;"/></td></tr>	
 									<tr>
 										<td>										
 											<div style="width: 80%; float: left" id="sharedFilterInfo" class="t_sm"></div>

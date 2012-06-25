@@ -330,7 +330,7 @@ public class HelpUtil {
 			throw new AimException("Can't update help topic", e);
 		}
 	}
-	
+
 	public static void deleteHelpTopic(HelpTopic topic, HttpServletRequest request) throws AimException{
 		Session session = null;
 		Transaction tx = null;
@@ -365,7 +365,15 @@ public class HelpUtil {
 					}
 				}
 			}
-			session.delete(topic);			
+//			session.delete(topic);
+            StringBuilder qstr = new StringBuilder("delete from ");
+            qstr.append(HelpTopic.class.getName());
+            qstr.append(" ht where ht.helpTopicId=:HT_ID");
+            Query q = session.createQuery(qstr.toString());
+            q.setLong("HT_ID", topic.getHelpTopicId());
+            q.executeUpdate();
+
+
 			tx.commit();
 			session.flush();
 			if (topic.getTopicType()!=GlossaryUtil.TYPE_GLOSSARY){

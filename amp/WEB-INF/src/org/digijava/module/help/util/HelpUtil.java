@@ -1119,12 +1119,13 @@ System.out.println("lang:"+lang);
 	private static void insertHelp(Object o)
 		{
 			Session session = null;
+            Transaction tx = null;
 			HelpTopic help =(HelpTopic)o;
 			try{
-					session	= PersistenceManager.getSession();
-//beginTransaction();
+					session	= PersistenceManager.openNewSession();
+                    tx = session.beginTransaction();
 					session.save(help);
-					//tx.commit();
+					tx.commit();
 
             }
 			catch (Exception ex) {
@@ -1232,7 +1233,7 @@ System.out.println("lang:"+lang);
 								editor.setBody(editorBody);
 							}
 							
-							org.digijava.module.editor.util.DbUtil.saveEditor(editor);
+							org.digijava.module.editor.util.DbUtil.saveEditor(editor, true);
 						}
 							
 					}

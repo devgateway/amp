@@ -438,21 +438,32 @@ public class DbUtil {
         }
     }
 
+    public static void saveEditor(Editor editor) throws EditorException {
+        saveEditor(editor, false);
+    }
+
     /**
      * Save editor
      *
      * @param editor
      * @throws EditorException
      */
-    public static void saveEditor(Editor editor) throws EditorException {
+    public static void saveEditor(Editor editor, boolean newSess) throws EditorException {
 
         Session session = null;
         Transaction tx = null;
         try {
-            session = PersistenceManager.getRequestDBSession();
+            if (!newSess) {
+                session = PersistenceManager.getRequestDBSession();
+            } else {
+                session = PersistenceManager.openNewSession();
+                tx = session.beginTransaction();
+            }
 //beginTransaction();
             session.save(editor);
-            //tx.commit();
+            if (newSess) {
+                tx.commit();
+            }
         }
         catch (Exception ex) {
             logger.debug("Unable to save editor information into database",
@@ -468,6 +479,14 @@ public class DbUtil {
             }
             throw new EditorException(
                 "Unable to save editor information into database", ex);
+        } finally {
+        				if (newSess && session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch (Exception rsf) {
+                    logger.error("Release session failed :" + rsf.getMessage());
+                }
+            }
         }
     }
 

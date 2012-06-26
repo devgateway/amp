@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/aim"prefix="aim"%>
 
 
 <html:javascript formName="aimUpdateWorkspaceForm"/>
@@ -13,6 +14,130 @@
 
 <digi:instance property="aimUpdateWorkspaceForm" />
 <digi:context name="digiContext" property="context" />
+<div id="popin" class="invisible-item">
+    <div id="popinContent" class="content">
+    </div>
+</div>
+
+<style type="text/css">
+   #popin .content {
+        overflow:auto;
+        height:500px;
+        background-color:#ffffff;
+        padding:10px;
+    }
+ </style>
+
+
+
+<script type="text/javascript">
+    <!--
+
+    YAHOO.namespace("YAHOO.amp");
+
+    var myPanel = new YAHOO.widget.Panel("newpopins", {
+        width:"600px",
+        fixedcenter: true,
+        constraintoviewport: false,
+        underlay:"none",
+        close:true,
+        visible:false,
+        modal:true,
+        draggable:true,
+        context: ["showbtn", "tl", "bl"],
+        effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5}
+    });
+    var panelStart=0;
+    var checkAndClose=false;
+    function initOrganizationScript() {
+        var msg='\n<digi:trn>Add Organizations</digi:trn>';
+        myPanel.setHeader(msg);
+        myPanel.setBody("");
+        myPanel.beforeHideEvent.subscribe(function() {
+            panelStart=1;
+        });
+
+        myPanel.render(document.body);
+    }
+    function showPanelLoading(msg){
+        myPanel.setHeader(msg);
+        var content = document.getElementById("popinContent");
+        content.innerHTML = '<div style="text-align: center">' +
+            '<img src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-darkblue.gif" border="0" height="17px"/>&nbsp;&nbsp;' +
+            '<digi:trn>Loading, please wait ...</digi:trn><br/><br/></div>';
+            showContent();
+    }
+    function mapCallBack(status, statusText, responseText, responseXML){
+        window.location.reload();
+    }
+
+
+    var responseSuccess = function(o){
+        /* Please see the Success Case section for more
+         * details on the response object's properties.
+         * o.tId
+         * o.status
+         * o.statusText
+         * o.getResponseHeader[ ]
+         * o.getAllResponseHeaders
+         * o.responseText
+         * o.responseXML
+         * o.argument
+         */
+        var response = o.responseText;
+        var content = document.getElementById("popinContent");
+        //response = response.split("<!")[0];
+        content.innerHTML = response;
+        //content.style.visibility = "visible";
+
+        showContent();
+    }
+
+    var responseFailure = function(o){
+        // Access the response object's properties in the
+        // same manner as listed in responseSuccess( ).
+        // Please see the Failure Case section and
+        // Communication Error sub-section for more details on the
+        // response object's properties.
+        //alert("Connection Failure!");
+    }
+    var callback =
+        {
+        success:responseSuccess,
+        failure:responseFailure
+    };
+
+    function showContent(){
+        var element = document.getElementById("popin");
+        element.style.display = "inline";
+        if (panelStart < 1){
+            myPanel.setBody(element);
+        }
+       // alert(element)
+        if (panelStart < 2){
+            //document.getElementById("popin").scrollTop=0;
+            myPanel.show();
+            panelStart = 2;
+        }
+        checkErrorAndClose();
+    }
+
+     function checkErrorAndClose(){
+     	if(checkAndClose==true){
+        	if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false"){
+            	myPanel.hide();
+                panelStart=1;
+            }
+            checkAndClose=false;
+            <digi:context name="addOrgs" property="context/childWorkspacesAdded.do?childorgs=true&dest=admin"/>
+		    document.aimUpdateWorkspaceForm.action = "${addOrgs}";
+            document.aimUpdateWorkspaceForm.submit();
+            
+        }            
+     }
+    -->
+</script>
+<jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
 
 <digi:form action="/updateWorkspace.do" method="post" name="aimUpdateWorkspaceForm"
 type="org.digijava.module.aim.form.UpdateWorkspaceForm"
@@ -665,12 +790,9 @@ function cancel()
 																				<digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn>
 																			</td>
 																			<td align="left" bgcolor="#FFFFFF">
-																				<c:set var="translation">
-																					<digi:trn key="btn:createWorkspaceAdd">
-																						Add
-																					</digi:trn>
-																				</c:set>
-																				<input type="button" value="${translation}" class="dr-menu" onclick="addChildOrgs()">
+																					<aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${aimUpdateWorkspaceForm}" styleClass="buttonx_sm btn_save">
+																						<digi:trn>Add</digi:trn>
+																				</aim:addOrganizationButton>
 																			</td>
 																		</tr>
 																		</table>
@@ -815,3 +937,6 @@ function cancel()
 </td></tr>
 </table>
 </digi:form>
+<script language="JavaScript" type="text/javascript">
+    addLoadEvent(initOrganizationScript);
+  </script>

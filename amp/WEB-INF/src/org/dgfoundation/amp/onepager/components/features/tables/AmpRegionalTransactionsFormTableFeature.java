@@ -16,6 +16,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
@@ -147,17 +149,17 @@ public class AmpRegionalTransactionsFormTableFeature extends
 						super.onClick(target);
 						amountSumComparator.reloadValidationField(target);
 						
-						parent.visitChildren(AmpCollectionValidatorField.class, new Component.IVisitor<AmpCollectionValidatorField>()
-								{
-
+						
+						parent.visitChildren(AmpCollectionValidatorField.class,
+								new IVisitor<AmpCollectionValidatorField, Void>() {
 									@Override
-									public Object component(AmpCollectionValidatorField component) {
+									public void component(AmpCollectionValidatorField component,
+											IVisit<Void> visit) {
 										component.reloadValidationField(target);
-										target.addComponent(component.getParent());
-										return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+										target.add(component.getParent());
+										visit.dontGoDeeper();
 									}
 								});
-				
 					};
 				});
 			}

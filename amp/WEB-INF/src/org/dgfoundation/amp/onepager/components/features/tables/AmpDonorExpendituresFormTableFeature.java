@@ -10,10 +10,13 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
@@ -94,17 +97,17 @@ public class AmpDonorExpendituresFormTableFeature extends
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.add(parent.getFundingInfo());
 						
-						parent.visitChildren(AmpCollectionValidatorField.class, new Component.IVisitor<AmpCollectionValidatorField>()
-								{
-
+						
+						parent.visitChildren(AmpCollectionValidatorField.class,
+								new IVisitor<AmpCollectionValidatorField, Void>() {
 									@Override
-									public Object component(AmpCollectionValidatorField component) {
+									public void component(AmpCollectionValidatorField component,
+											IVisit<Void> visit) {
 										component.reloadValidationField(target);
 										target.addComponent(component.getParent());
-										return Component.IVisitor.CONTINUE_TRAVERSAL_BUT_DONT_GO_DEEPER;
+										visit.dontGoDeeper();
 									}
 								});
-				
 					};
 				});
 			}

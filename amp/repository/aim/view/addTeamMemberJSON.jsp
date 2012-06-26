@@ -386,6 +386,10 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 
 		return true;
 	}
+	function clearSearchResults(){
+		 document.getElementById("userInput").value="";
+		 searchUsers();
+	}
 </script>
 
 <digi:instance property="aimTeamMemberForm" />
@@ -418,10 +422,15 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 							<td>
 								<div>
 									<div style="float: left">
+									<digi:trn>Search User</digi:trn>:
 										<html:text property="fullname" styleId="userInput"
 											styleClass="inputx"
 											style="width:320px; Font-size: 10pt; height:22px;" />
 										<div id="userAutoComp"></div>
+									</div>
+									<div style="float: left">
+										<input type="button" value="<digi:trn>Clear</digi:trn>"
+											class="buttonx_sm" onClick="clearSearchResults()"/>
 									</div>
 								</div></td>
 						</tr>

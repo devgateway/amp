@@ -56,7 +56,7 @@ public class CellColumnXLS extends XLSExporter {
 		 c.invokeExporter(this);
 		 else {
 			 HSSFCell cell=this.getRegularCell();
-			 cell.setCellValue(" ");
+			 cell.setCellValue(0);
 			 colId.inc();
 		 }
 	}

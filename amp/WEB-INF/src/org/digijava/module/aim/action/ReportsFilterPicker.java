@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -581,7 +583,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpTeam> creatorsList	= TeamUtil.getAllRelatedTeams();
-			Collection<HierarchyListableImplementation> children	= 
+			List<HierarchyListableImplementation> children	=
 				new ArrayList<HierarchyListableImplementation>();
 
 			HierarchyListableImplementation rootCreators = new HierarchyListableImplementation();
@@ -596,6 +598,15 @@ public class ReportsFilterPicker extends MultiAction {
 				creatorsDO.setUniqueId( ampTeam.getAmpTeamId() + "");
 				children.add(creatorsDO);
 			}
+
+            //sort workspace list
+            Collections.sort(children, new Comparator() {
+                @Override
+                public int compare(Object o1, Object o2) {
+                    return ((HierarchyListableImplementation) o1).getLabel().compareTo(((HierarchyListableImplementation) o2).getLabel());
+                }
+            });
+            
 			GroupingElement<HierarchyListableImplementation> activityStatusElement	=
 					new GroupingElement<HierarchyListableImplementation>("Workspace", "filter_workspace_div", 
 							rootCreators, "selectedWorkspaces");

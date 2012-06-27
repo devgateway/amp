@@ -69,7 +69,6 @@ function banUser(txt) {
 <table width="1000" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width=680>
-	<td width=20>&nbsp;</td>
 	<table cellPadding=5 cellspacing="0" width="700">
 					<!--       <tr>
             <td height=33 colspan=8>
@@ -187,7 +186,7 @@ function banUser(txt) {
 							
 					</tr>
 					<tr>
-						<td noWrap width=967 vAlign="top" colspan="7"
+						<td width=700 vAlign="top" colspan="7"
 							style="border-left: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0; border-bottom: 1px solid #D0D0D0;">
 							<table width="100%" cellspacing="1" cellspacing="1">
 								<tr>
@@ -523,6 +522,7 @@ function banUser(txt) {
 									<td noWrap width="100%" vAlign="top">&nbsp;								  </td>
 								</tr>
 							</table></td>
+				<td width=20>&nbsp;</td>
     <td width=300 valign=top>
 										<table align="center" cellpadding="0" cellspacing="0"
 											width="300" border="0">

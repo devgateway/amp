@@ -65,11 +65,12 @@ function banUser(txt) {
 <digi:context name="digiContext" property="context" />
 <digi:form action="/viewAllUsers.do" method="post" >
 <h1 class="admintitle"><digi:trn>User manager</digi:trn></h1>
-	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000"
-		align=center>
-		<tr>
-			<td align=left valign="top">
-				<table cellPadding=5 cellspacing="0" width="100%">
+
+<table width="1000" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width=680>
+	<td width=20>&nbsp;</td>
+	<table cellPadding=5 cellspacing="0" width="700">
 					<!--       <tr>
             <td height=33 colspan=8>
               <span class=crumb>
@@ -519,9 +520,12 @@ function banUser(txt) {
 													</table></td>
 											</tr>
 										</table></td>
-									<td noWrap width="100%" vAlign="top">
+									<td noWrap width="100%" vAlign="top">&nbsp;								  </td>
+								</tr>
+							</table></td>
+    <td width=300 valign=top>
 										<table align="center" cellpadding="0" cellspacing="0"
-											width="90%" border="0">
+											width="300" border="0">
 											<tr>
 												<td>
 													<!-- Other Links -->
@@ -596,8 +600,14 @@ function banUser(txt) {
 													</table></td>
 											</tr>
 										</table></td>
-								</tr>
-							</table></td>
+  </tr>
+</table>
+
+
+	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000"	align=center>
+		<tr>
+			<td align=left valign="top">
+				</td>
 					</tr>
 				</table></td>
 		</tr>

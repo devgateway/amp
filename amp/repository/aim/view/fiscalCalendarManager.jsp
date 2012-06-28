@@ -29,7 +29,12 @@
 
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
   <tr>
-    <td width=750 valign=top><table cellPadding=5 cellspacing="0" width="100%">
+    <td width=750 valign=top>
+	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+	<tr>
+		<td align=left class=r-dotted-lg valign="top" width=750>
+
+			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -227,9 +232,13 @@
 					
                     </tr>
                     
-		  </table></td>
+		  </table>
+                </div>
+	  </td>
+  </tr>
+</table></td>
 	<td width=20>&nbsp;</td>
-    <td width=230 valign="top"><table cellpadding="0" cellspacing="0" width="100">
+    <td width=250 valign=top><table cellpadding="0" cellspacing="0" width="100">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title>
 													<digi:trn key="aim:otherLinks">
@@ -268,7 +277,9 @@
 												</td>
 											</tr>
 											<!-- end of other links -->
-	</table></td>
+										</table>
+										
+										</td>
   </tr>
 </table>
 
@@ -276,16 +287,4 @@
 
 
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
-	<tr>
-		<td align=left class=r-dotted-lg valign="top" width=750>
-
-			
-                </div>
-	  </td>
-  </tr>
-</table>
-	</td>
-	</tr>
-</table>
 </digi:form>

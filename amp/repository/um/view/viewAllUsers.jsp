@@ -69,7 +69,7 @@ function banUser(txt) {
 <table width="1000" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width=680>
-	<table cellPadding=5 cellspacing="0" width="700">
+	<table cellPadding=5 cellspacing="0" width="100%">
 					<!--       <tr>
             <td height=33 colspan=8>
               <span class=crumb>
@@ -105,8 +105,7 @@ function banUser(txt) {
 					<tr style="background-color: #F2F2F2; padding: 5px;">
 						<c:choose>
 							<c:when test="${umViewAllUsersForm.showBanned}">
-								<td width="160" colspan="2"
-									style="border-left: 1px solid #D0D0D0; border-top: 1px solid #D0D0D0; border-bottom: 1px solid #D0D0D0;">
+								<td width="160" style="border-left: 1px solid #D0D0D0; border-top: 1px solid #D0D0D0; border-bottom: 1px solid #D0D0D0;">
 									<digi:trn key="um:viewAllUsers:filter">
 		              Filter by:
 		              </digi:trn> <html:select property="type"
@@ -185,6 +184,8 @@ function banUser(txt) {
 							
 							
 					</tr>
+					</table>
+					<table>
 					<tr>
 						<td width=700 vAlign="top" colspan="7"
 							style="border-left: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0; border-bottom: 1px solid #D0D0D0;">
@@ -604,14 +605,6 @@ function banUser(txt) {
 </table>
 
 
-	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000"	align=center>
-		<tr>
-			<td align=left valign="top">
-				</td>
-					</tr>
-				</table></td>
-		</tr>
-	</table>
 </digi:form>
 
 

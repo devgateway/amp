@@ -76,7 +76,7 @@ function banUser(txt) {
 							<table width="100%" cellspacing="1" cellspacing="1">
 								<tr>
 									<td noWrap width=700 vAlign="top">
-									<table cellPadding=5 cellspacing="0" width="100%">
+									<table cellPadding=5 cellspacing="0" width="100%" style="margin-bottom:15px;">
 					<!--       <tr>
             <td height=33 colspan=8>
               <span class=crumb>

@@ -138,10 +138,69 @@ function exportXSL(){
 								</tr>
 								
 								<tr>
-									<td align="left" colspan=5>
+									<td align="left">
 										<jsp:include
 									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
 									</td>
+									<td rowspan="4" valign=top>
+										<table align="center" cellpadding="0" cellspacing="0"
+											width="90%" border="0">
+											<tr>
+												<td style="border-bottom:1px solid #ccc;">
+													<!-- Other Links -->
+													<table cellpadding="0" cellspacing="0" width="100">
+														<tr>
+															<td bgColor=#c9c9c7 class=box-title>
+																	<b style="font-size: 12px; padding-left: 5px;"><digi:trn
+																	key="aim:otherLinks">Other
+																		links</digi:trn></b>
+															</td>
+															<td background="module/aim/images/corner-r.gif"
+																height="17" width=17></td>
+														</tr>
+													</table></td>
+											</tr>
+											<tr>
+												<td bgColor="#ffffff" class="box-border">
+													<table cellPadding=5 cellspacing="1" width="100%"
+														class="inside">
+														<tr>
+															<td class="inside"><digi:img
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <c:set var="translation">
+																	<digi:trn>Click here to go back to admin home page</digi:trn>
+																</c:set> <digi:link href="/admin.do" title="${translation}">
+																	<digi:trn>Admin Home</digi:trn>
+																</digi:link>
+															</td>
+														</tr>
+														<tr>
+															<td class="inside"><digi:img
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <c:set var="translation">
+																	<digi:trn>Click here to go to the Currency Rate Manager</digi:trn>
+																</c:set> <digi:link
+																	href="/showCurrencyRates.do~clean=true~timePeriod=1"
+																	title="${translation}">
+																	<digi:trn>Currency Rate Manager</digi:trn>
+																</digi:link>
+															</td>
+														</tr>
+														<tr>
+															<td class="inside"><digi:img
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <c:set var="translation">
+																	<digi:trn>Click here to go to Select Filteres Currency Rates</digi:trn>
+																</c:set> <digi:link href="/selectFilteredRates.do"
+																	title="${translation}">
+																	<digi:trn>Select Filtered Rates</digi:trn>
+																</digi:link>
+															</td>
+														</tr>
+														<!-- end of other links -->
+													</table></td>
+											</tr>
+									</table></td>
 								</tr>
 
 								<html:hidden property="page" />
@@ -482,65 +541,6 @@ function exportXSL(){
 															</a>
 															</td>
 														</tr>
-													</table></td>
-											</tr>
-										</table></td>
-									<td valign="top">
-										<table align="center" cellpadding="0" cellspacing="0"
-											width="90%" border="0">
-											<tr>
-												<td style="border-bottom:1px solid #ccc;">
-													<!-- Other Links -->
-													<table cellpadding="0" cellspacing="0" width="100">
-														<tr>
-															<td bgColor=#c9c9c7 class=box-title>
-																	<b style="font-size: 12px; padding-left: 5px;"><digi:trn
-																	key="aim:otherLinks">Other
-																		links</digi:trn></b>
-															</td>
-															<td background="module/aim/images/corner-r.gif"
-																height="17" width=17></td>
-														</tr>
-													</table></td>
-											</tr>
-											<tr>
-												<td bgColor="#ffffff" class="box-border">
-													<table cellPadding=5 cellspacing="1" width="100%"
-														class="inside">
-														<tr>
-															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <c:set var="translation">
-																	<digi:trn>Click here to go back to admin home page</digi:trn>
-																</c:set> <digi:link href="/admin.do" title="${translation}">
-																	<digi:trn>Admin Home</digi:trn>
-																</digi:link>
-															</td>
-														</tr>
-														<tr>
-															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <c:set var="translation">
-																	<digi:trn>Click here to go to the Currency Rate Manager</digi:trn>
-																</c:set> <digi:link
-																	href="/showCurrencyRates.do~clean=true~timePeriod=1"
-																	title="${translation}">
-																	<digi:trn>Currency Rate Manager</digi:trn>
-																</digi:link>
-															</td>
-														</tr>
-														<tr>
-															<td class="inside"><digi:img
-																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <c:set var="translation">
-																	<digi:trn>Click here to go to Select Filteres Currency Rates</digi:trn>
-																</c:set> <digi:link href="/selectFilteredRates.do"
-																	title="${translation}">
-																	<digi:trn>Select Filtered Rates</digi:trn>
-																</digi:link>
-															</td>
-														</tr>
-														<!-- end of other links -->
 													</table></td>
 											</tr>
 										</table></td>

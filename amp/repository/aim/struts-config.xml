@@ -285,7 +285,7 @@
       <forward name="reportWizard" path="/showLayout.do?layout=aim_showSelectedFilters" />
     </action>
     
-
+ 	<action name="aimReportsFilterPickerForm" path="/aim/validateReportsFilterPicker" scope="session" type="org.digijava.module.aim.action.ReportFilterPickerValidator" validate="false"/>
 	<action name="aimReportsFilterPickerForm" path="/aim/queryEngine" scope="session" type="org.digijava.module.aim.action.query.QueryEngine" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=aim_queryEngine" />	
 	</action>

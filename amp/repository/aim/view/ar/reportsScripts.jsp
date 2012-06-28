@@ -281,24 +281,24 @@ saveReportEngine	= null;
 		myPanel1.setBody("");
 		myPanel1.render(document.body);
 		
-		var msgP2='\n<digi:trn key="rep:filter:selectsorter">Please select hierarchy sorter criteria</digi:trn>';
+		var msgP2='\n<digi:trn key="rep:filter:selectsorter" jsFriendly="true">Please select hierarchy sorter criteria</digi:trn>';
 
 		myPanel2.setHeader(msgP2);
 		myPanel2.setBody("");
 		myPanel2.render(document.body);
 		myPanel2EmptyBody	= true;
 		
-		var msgP3='\n<digi:trn key="rep:filter:selectRange">Please select range</digi:trn>';
+		var msgP3='\n<digi:trn key="rep:filter:selectRange" jsFriendly="true">Please select range</digi:trn>';
 		myPanel3.setHeader(msgP3);
 		myPanel3.setBody("");
 		myPanel3.render(document.body);
 		
-		var msgP4='\n<digi:trn>Please select report settings</digi:trn>';
+		var msgP4='\n<digi:trn jsFriendly="true">Please select report settings</digi:trn>';
 		myPanel4.setHeader(msgP4);
 		myPanel4.setBody("");
 		myPanel4.render(document.body);
 
-		var msgP5='\n<digi:trn key="aim:aboutamp">About AMP</digi:trn>';
+		var msgP5='\n<digi:trn key="aim:aboutamp" jsFriendly="true">About AMP</digi:trn>';
 		myPanel5.setHeader(msgP5);
 		myPanel5.setBody("");
 		myPanel5.render(document.body);				
@@ -383,7 +383,7 @@ saveReportEngine	= null;
 	function checkRangeValues(){
 	    var actualFrom = document.aimReportsFilterPickerForm2.renderStartYear.value;
         var actualTo = document.aimReportsFilterPickerForm2.renderEndYear.value;
-        var msg='\n<digi:trn key="rep:filter:wrongSelecteRange">Default Start Year must be lesser than Default End Year</digi:trn>';
+        var msg='\n<digi:trn key="rep:filter:wrongSelecteRange" jsFriendly="true">Default Start Year must be lesser than Default End Year</digi:trn>';
 		if(actualFrom>actualTo){
 		    alert(msg);
 			return false;

@@ -38,7 +38,7 @@
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 		<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-modalMessage.js"/>"></script>
 		
-		<script type="text/javascript" src="<digi:file src='module/aim/scripts/query/QueryManager.js'/>" ></script>		
+		<script type="text/javascript" src="<digi:file src='module/aim/scripts/query/QueryManager.js'/>" ></script>	
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
@@ -52,19 +52,37 @@
 
 <script type="text/javascript">
 
-	queryCbObj		= {
+queryValidCbObj	= {
 		success: function (o) {
-			var divObj		= document.getElementById("results");
-			divObj.innerHTML	= o.responseText;
-			animToResult();
+			var valid=o.responseXML.
+		       getElementsByTagName("result")[0].getAttribute("valid");
+			if(valid=='true'){
+				submitQuery ();
+			}
+			else{
+				alert('<digi:trn jsFriendly="true">From date should be greater than to Date</digi:trn>');
+			}
+			 
 		},
 		failure: function (o) {
-			var divObj		= document.getElementById("results");
-			divObj.innerHTML	= "There was a problem with getting the results. Please try again";
+			alert('<digi:trn jsFriendly="true">Error!</digi:trn>');
 			
 		}
 	
 	};
+			queryCbObj		= {
+			success: function (o) {
+				var divObj		= document.getElementById("results");
+				divObj.innerHTML	= o.responseText;
+				animToResult();
+			},
+			failure: function (o) {
+				var divObj		= document.getElementById("results");
+				divObj.innerHTML	= "There was a problem with getting the results. Please try again";
+				
+			}
+		
+		};
 	
 	function animToResult () {
 		var attributes = { 
@@ -92,15 +110,28 @@
 			displaySettingsButton.innerHTML = "${hideCurrSettings}";
 		}
 	}
+function validateSubmitQuery () {
+		var formName	= "aimReportsFilterPickerForm";
+		var filterForm		= document.getElementsByName(formName)[0];
+		var fromDate=filterForm.fromDate.value;
+		var toDate=filterForm.toDate.value;
+		if(fromDate!=null&&fromDate!=''&&toDate!=null&&toDate!=''){
+			var additionalParams	= "fromDate="+fromDate+"&toDate="+toDate;
+			YAHOO.util.Connect.asyncRequest("POST", "/aim/validateReportsFilterPicker.do" , queryValidCbObj, additionalParams);
+		}
+		else{
+			submitQuery ();
+		}
+	}
 	
 	function submitQuery () {
+		var formName	= "aimReportsFilterPickerForm";
+		var filterForm		= document.getElementsByName(formName)[0];
 		var divObj		= document.getElementById("results");
 		divObj.innerHTML	= 
 		"<div style='text-align: center'>" + "Please wait..." + 
 		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
-		
-		var formName	= "aimReportsFilterPickerForm";
-		YAHOO.util.Connect.setForm( document.getElementsByName(formName)[0] );
+		YAHOO.util.Connect.setForm(filterForm);
 		var additionalParams	= "&doreset=true&queryEngine=true";
 		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + additionalParams, queryCbObj);
 		animToResult();
@@ -123,7 +154,7 @@
 		
 		document.getElementById("filterPickerSubmitButton").onclick	= function() { return false;};
 		YAHOO.util.Event.removeListener("filterPickerSubmitButton", "click");
-		YAHOO.util.Event.addListener("filterPickerSubmitButton", "click", submitQuery);		
+		YAHOO.util.Event.addListener("filterPickerSubmitButton", "click",  validateSubmitQuery);		
 		
 		YAHOO.util.Event.addListener("filterPickerResetButton", "click", buildLabels);		
 		

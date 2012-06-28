@@ -69,7 +69,14 @@ function banUser(txt) {
 <table width="1000" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width=680>
-	<table cellPadding=5 cellspacing="0" width="100%">
+					<table>
+					<tr>
+						<td width=700 vAlign="top" colspan="7"
+							style="border-left: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0; border-bottom: 1px solid #D0D0D0;">
+							<table width="100%" cellspacing="1" cellspacing="1">
+								<tr>
+									<td noWrap width=700 vAlign="top">
+									<table cellPadding=5 cellspacing="0" width="100%">
 					<!--       <tr>
             <td height=33 colspan=8>
               <span class=crumb>
@@ -185,13 +192,6 @@ function banUser(txt) {
 							
 					</tr>
 					</table>
-					<table>
-					<tr>
-						<td width=700 vAlign="top" colspan="7"
-							style="border-left: 1px solid #D0D0D0; border-right: 1px solid #D0D0D0; border-bottom: 1px solid #D0D0D0;">
-							<table width="100%" cellspacing="1" cellspacing="1">
-								<tr>
-									<td noWrap width=700 vAlign="top">
 										<table bgColor=#ffffff cellpadding="0" cellspacing="0"
 											width="100%">
 											<tr bgColor=#f4f4f2>

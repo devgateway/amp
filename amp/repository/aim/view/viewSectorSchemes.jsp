@@ -35,7 +35,7 @@
 <html:hidden property="event" value="view"/>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000"  align=center>
 	<tr>
-		<td align=left class=r-dotted-lg valign="top" width=750>
+		<td align=left class=r-dotted-lg valign="top" width=700>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<!-- <tr> -->
 					<!-- Start Navigation -->
@@ -166,8 +166,13 @@
 						</table>
 					</td>
 					
-					<td noWrap  vAlign="top" style="width:250px;">
-						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
+</tr>
+					</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	    <td align=left class=r-dotted-lg valign="top" width=300><table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
 							<tr>
 								<td style="border-bottom:1px solid #ccc;">
 									<!-- Other Links -->
@@ -234,13 +239,7 @@
 									</table>
 								</td>
 							</tr>
-						</table>
-					</td></tr>
-					</table>
-					</td>
-				</tr>
-			</table>
-		</td>
+						</table></td>
 	</tr>
 </table>
 </digi:form>

@@ -108,7 +108,7 @@
 														<logic:notEmpty name="aimFiscalCalendarForm" 	property="fiscalCal">
 														<tr>
 															<td width="100%" class="report">
-																<table width="533" border="0" cellspacing="4"	 bgColor=#f4f4f2>
+																<table width="100%" border="0" cellspacing="4"	 bgColor=#f4f4f2>
 																<thead>
 																	<tr>
 																	  <td width="144"><b>

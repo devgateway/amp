@@ -159,13 +159,19 @@ public class ReportHeadingsXLS extends XLSExporter {
 							cell.setCellValue(cellValue + "III");
 						else 
 							cell.setCellValue(translatedCellValue);
-
-						if(rowsp>1) makeRowSpan(rowsp-1,true);
 						
-						if (element2.getWidth() > 1)
+					   /*This is a quick fix related to AMP-13537 there should be a better way to fix the problem
+						* We have to review this afterwards.
+						*/
+						if (!this.getMetadata().getHideActivities()){
+							if(rowsp>1) makeRowSpan(rowsp-1,true);
+						}
+						
+						if (element2.getWidth() > 1){
 							makeColSpan(element2.getWidth(),true);
-						else
+						}else{
 							colId.inc();
+						}
 						
 					}
 					}		

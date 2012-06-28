@@ -26,11 +26,10 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
-	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg valign="top" width=750>
-			<table cellPadding=5 cellspacing="0" width="100%">
+
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+  <tr>
+    <td width=750 valign=top><table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -62,7 +61,7 @@
 						<td align="left">
 						<c:set var="translationxls">
 							<digi:trn>Export to Excel</digi:trn>
-							</c:set> <c:set var="translationPrinter">
+						  </c:set> <c:set var="translationPrinter">
 								<digi:trn>Printer Friendly</digi:trn>
 							</c:set>
 							<div class="toolbar" align="center" style="background: #f2f2f2;">
@@ -126,7 +125,7 @@
 																			<b><digi:trn key="aim:offsetFromCurrentYear">Offset (From current year)</digi:trn></b>
 																		</td>
 																	</tr>
-																	</thead>
+																  </thead>
 																		<!--  to export table we are adding class "yui-dt-data" to its tbody-->
 															<tbody class="yui-dt-data">
                                                                 <c:set value="0" var="monthIndex"/>
@@ -170,7 +169,7 @@
                                                                  			<bean:write name="fiscalCal" property="yearOffset"/>
 																		</td>
 																	</tr>
-																  </logic:iterate>
+															  </logic:iterate>
 																  </tbody>
 															  </table>
 															</td>
@@ -215,7 +214,22 @@
 								<tr>
 									<td>
 										<!-- Other Links -->
-										<table cellpadding="0" cellspacing="0" width="100">
+										
+									</td>
+								</tr>
+								<tr>
+									<td bgColor=#ffffff class=box-border>
+										
+									</td>
+								</tr>
+							</table>
+						</td>
+					
+                    </tr>
+                    
+		  </table></td>
+	<td width=20>&nbsp;</td>
+    <td width=230 valign="top"><table cellpadding="0" cellspacing="0" width="100">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title>
 													<digi:trn key="aim:otherLinks">
@@ -227,10 +241,6 @@
 												</td>
 											</tr>
 										</table>
-									</td>
-								</tr>
-								<tr>
-									<td bgColor=#ffffff class=box-border>
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td class="inside">
@@ -258,19 +268,23 @@
 												</td>
 											</tr>
 											<!-- end of other links -->
-										</table>
-									</td>
-								</tr>
-							</table>
-						</td>
-					
-                    </tr>
-                    
-				</table>
+	</table></td>
+  </tr>
+</table>
+
+
+
+
+
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+	<tr>
+		<td align=left class=r-dotted-lg valign="top" width=750>
+
+			
                 </div>
-			</td>
-		</tr>
-	</table>
+	  </td>
+  </tr>
+</table>
 	</td>
 	</tr>
 </table>

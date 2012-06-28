@@ -30,14 +30,14 @@
 <table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
   <tr>
     <td width=750 valign=top>
-	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 
 			<table cellPadding=5 cellspacing="0" width="100%">
-				<tr>
-					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+				<!--<tr>
+					 Start Navigation -->
+					<!--<td height=33><span class=crumb>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -50,18 +50,18 @@
 						</digi:trn>
                       </span>
                       
-					</td>
-					<!-- End navigation -->
-				</tr>
+					</td>-->
+					<!-- End navigation 
+				</tr>-->
               
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<digi:trn key="aim:fiscalCalendarManager"></span><span class=crumb>Fiscal
                       Calendar Manager
 						</digi:trn>
 						</span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 						<td align="left">
 						<c:set var="translationxls">
@@ -76,7 +76,7 @@
 			</tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top" align="center">
-                      <div style="margin:0 auto;width:1000px;">
+                      <div>
 					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr>
 						<td noWrap width=600 vAlign="top">

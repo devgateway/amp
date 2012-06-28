@@ -207,36 +207,8 @@
 										</table>
 									</td>
 								</tr>
-								<tr>
-									<td bgColor=#f4f4f2>&nbsp;
-										
-									</td>
-								</tr>
 							</table>
 						</td>
-						<td noWrap width="100%" vAlign="top">
-							<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
-								<tr>
-									<td>
-										<!-- Other Links -->
-										
-									</td>
-								</tr>
-								<tr>
-									<td bgColor=#ffffff class=box-border>
-										
-									</td>
-								</tr>
-							</table>
-						</td>
-					
-                    </tr>
-                    
-		  </table>
-                </div>
-	  </td>
-  </tr>
-</table></td>
 	<td width=20>&nbsp;</td>
     <td width=250 valign=top><table cellpadding="0" cellspacing="0" width="100">
 											<tr>

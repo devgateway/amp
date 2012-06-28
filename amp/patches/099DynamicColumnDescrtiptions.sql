@@ -1,0 +1,10 @@
+update amp_columns set description='Cumulative Commitment - Cumulative Disbursement (independent of filters)' where columnName='Undisbursed Balance';
+update amp_columns set description='Sum of all ACTUAL COMMITMENTS independent of filters'  where columnName='Cumulative Commitment';
+update amp_columns set description='Sum of all ACTUAL DISBURSEMENTS independent of filters' where columnName= 'Cumulative Disbursement';
+update amp_columns set description='Cumulative Commitment - Cumulative Disbursement (independent of filters)' where columnName='Undisbursed Cumulative Balance';
+update amp_columns set description='Max Disbursements- Min Disbursements' where columnName='Variance Of Disbursements';
+update amp_columns set description='Max Commitments - Min Commitments' where columnName='Variance Of Commitments';
+update amp_columns set description='Total Commitments / Count Of Activities' where columnName='Average Size of Projects';
+update amp_columns set description='((Actual Disbursements - Planned Disbursements) / Planned Disbursements) X 100' where columnName='Predictability of Funding';
+update amp_columns set description='Current Date - Actual Start Date' where columnName='Age of Project';
+update amp_columns set description='Current Date - Proposed Completion' where columnName='Overage Project';

@@ -1,0 +1,70 @@
+<wicket:extend>
+		<tr wicket:id="tableHeading">
+			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="right">
+				<b class="ins_title"><wicket:trn key="aim:location">Location</wicket:trn></b>
+			</td>
+			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">
+				<wicket:trn key="aim:percentage">Percentage</wicket:trn></b>
+			</td>
+			<wicket:fm fmNames="Latitude;Longitude">
+				<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">
+					<wicket:trn key="aim:percentage">Coordinates</wicket:trn></b>
+				</td>
+			</wicket:fm>
+			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+		</tr>
+		<tr wicket:id="listLocations">
+			<td class="inside" align="right">
+				<span wicket:id="locationLabel" />
+			</td>
+			<td class="inside">
+				<span wicket:id="percentage"/>
+			</td>
+			<wicket:fm fmNames="Latitude;Longitude">
+				<td class="inside">
+					<table>
+						<tr>
+							<td>
+								Latitude
+							</td>
+							<td>
+								<span wicket:id="latitudeid"/>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Longitude
+							</td>
+							<td>
+								<span wicket:id="longitudeid"/>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</wicket:fm>
+			<td class="inside" align="left">
+				<span wicket:id="delLocation"/>
+			</td>
+		</tr>
+		<tr>
+			<td class="inside" align="center" colspan="4">
+			    <span wicket:id="ajaxIndicator"/>
+				<span wicket:id="locationPercentageTotal"/>
+				<span wicket:id="uniqueLocationsValidator"/>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" class="inside" align="center">
+				<table>
+					<tr>
+						<td>
+							<span wicket:id="searchLocations"/>	
+						</td>
+						<td>
+							<span wicket:id="dividePercentage"/>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+</wicket:extend>		

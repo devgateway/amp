@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-12719</jira>
+	<keyword>Reports</keyword>
+	<keyword>Computed column</keyword>
+	<author>FFerreyra</author>
+	<description>Create a new computed column for Nepal, called Percentage of Total Commitments</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="sql">
+		INSERT INTO amp_measures(measureid,measurename,aliasname,type,expression,description) VALUES 
+		((Select (max(measureid) + 1) from amp_measures),'Percentage of Total Commitments','Percentage of Total Commitments','A','percentageOfTotalCommitments', 'Actual commitments for the project / Total actual commitments * 100');
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

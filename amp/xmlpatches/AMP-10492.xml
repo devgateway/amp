@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-10492</jira>
+  <keyword>report wizard</keyword>
+  <author>Alex</author>
+  <description>This makes a global setting for selecting onepager/wizard</description>
+  <trigger type="all">
+      <condition  type="entryInTableMissing" tablename="amp_global_settings" columnname="settingsname" columnvalue="Report Generator - One Pager" />
+  </trigger>  
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+INSERT INTO amp_global_settings(id, settingsname, settingsvalue, possiblevalues, description, section) 
+	values (nextval('amp_global_settings_seq'), 'Report Generator - One Pager','false','t_Boolean','Whether to use one-pager or wizard for generating reports','general');		
+      </lang>
+    </script>
+  </apply>
+
+</tns:patch>

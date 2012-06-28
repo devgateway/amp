@@ -1,0 +1,4 @@
+create temporary table sector_cleanup as select distinct (s1.amp_activity_sector_id) from amp_activity_sector s1, amp_activity_sector s2 where s1.amp_sector_id=s2.amp_sector_id and s1.amp_activity_id=s2.amp_activity_id and s1.amp_activity_sector_id<s2.amp_activity_sector_id;
+delete from amp_activity_sector where amp_activity_sector_id in (select * from sector_cleanup);
+create temporary table org_role_cleanup as select distinct (o1.amp_org_role_id) from amp_org_role o1, amp_org_role o2 where o1.activity=o2.activity and o1.organisation=o2.organisation and o1.role=o2.role and o1.amp_org_role_id<o2.amp_org_role_id;
+delete from amp_org_role where amp_org_role_id in (select * from org_role_cleanup);

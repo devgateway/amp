@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-12019</jira>
+  <keyword>SHA1</keyword>
+  <author>Diego</author>
+  <description>Add SHA-1 function which is used for user registration</description>
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+      	CREATE FUNCTION digest(bytea, text) RETURNS bytea AS '$libdir/pgcrypto','pg_digest' LANGUAGE 'C';
+		CREATE OR REPLACE FUNCTION sha1(bytea) returns text AS $$ SELECT encode(digest($1, 'sha1'), 'hex') $$ LANGUAGE SQL STRICT IMMUTABLE;
+  		</lang>
+    </script>
+  </apply>
+
+</tns:patch>

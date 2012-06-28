@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMPOPS-114</jira>
+  <keyword>cleaup digi dg_site</keyword>
+  <author>mihai</author> 
+  <apply>
+    <script>
+      <lang delimiter=";" type="sql">
+delete from dg_module_instance where site_id=(select id from dg_site where name='Demo Site');
+delete from dg_group where site_id=(select id from dg_site where name='Demo Site');
+delete from dg_site_domain where site_id=(select id from dg_site where name='Demo Site');
+delete from dg_site where name='Demo Site';
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

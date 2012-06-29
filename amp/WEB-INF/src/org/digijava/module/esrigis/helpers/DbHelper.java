@@ -30,6 +30,8 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
 import org.digijava.module.visualization.util.DashboardUtil; //TODO: Check this functions and use a common
 import org.digijava.module.visualization.util.DbUtil;
@@ -94,7 +96,7 @@ public class DbHelper {
 		    if (filter.getProjectStatusId()!=null){
 		    	oql+=" join  act.categories as categories ";
 		    }
-			oql += "  where fd.adjustmentType = 1";
+			oql += "  where fd.adjustmentType = "+CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId();
 			if (filter.getTransactionType() < 2) {
 				oql += " and fd.transactionType =:transactionType  ";
 			} else {

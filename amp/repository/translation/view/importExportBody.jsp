@@ -282,6 +282,8 @@ function checkSelectedLanguages(){
 					<logic:empty name="importExportForm" property="importedLanguages">
 					<logic:notEmpty name="importExportForm" property="languages">
 					<digi:form action="/importexport.do" method="post" >
+					</td>
+					</tr>
 							<tr>
 								<td align="center">
 									<digi:trn key="aim:translationManagerLangFoundMsg">
@@ -465,9 +467,9 @@ function checkSelectedLanguages(){
 										</table>
 									</td>
 								</tr>
-							</table>
-						</td>
-					</tr>
+					  </table>
+	  </td>
+  </tr>
 				</table>
 					</td>
 				</tr>

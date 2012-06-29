@@ -124,8 +124,26 @@ public class AddOrgForm extends ActionForm {
     private Boolean resetBudgetSectors;
     private int orgInfoIndex;
     private int staffInfoIndex;
+    private String orgTypeName;
+    private String orgGroupName;
 
-    public int getOrgInfoIndex() {
+    public String getOrgTypeName() {
+		return orgTypeName;
+	}
+
+	public void setOrgTypeName(String orgTypeName) {
+		this.orgTypeName = orgTypeName;
+	}
+
+	public String getOrgGroupName() {
+		return orgGroupName;
+	}
+
+	public void setOrgGroupName(String orgGroupName) {
+		this.orgGroupName = orgGroupName;
+	}
+
+	public int getOrgInfoIndex() {
         return orgInfoIndex;
     }
 

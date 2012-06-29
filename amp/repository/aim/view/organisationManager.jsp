@@ -66,11 +66,14 @@
 	-->
 
 </script>
+<digi:secure actions="ADMIN">
 <h1 class="admintitle"><digi:trn>Organization manager</digi:trn></h1>
+</digi:secure>
 <digi:instance property="aimOrgManagerForm" />
 
 <digi:context name="digiContext" property="context" />
 <digi:form action="/organisationManager.do" method="post">
+<c:set var="selectedTab" value="9" scope="request"/>
 	<digi:errors />
 
 	<!--  AMP Admin Logo -->
@@ -104,14 +107,23 @@
                       </span>
 					</td>
 				</tr>-->
+				<digi:secure actions="ADMIN">
 					<tr>
 						<td align="left" colspan=7>
 							<div class="toolbar" align="center" style="background: #f2f2f2;">
 									<jsp:include
 									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
 							</div></td>
-
 					</tr>
+					</digi:secure>
+					<c:if test="${!aimOrgManagerForm.adminSide}">
+					<tr>
+					<td valign="top">
+						<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+							<jsp:include page="teamSetupMenu.jsp" flush="true"/>
+					
+					<table>
+					</c:if>
 					<tr>
 						<td width="250"><digi:trn key="aim:orgManagerType">Type</digi:trn>&nbsp;
 							<html:select property="ampOrgTypeId" styleClass="inp-text-orgType">
@@ -303,6 +315,11 @@
 																									<img src="/repository/aim/images/down.gif" />
 																								</c:if>
 																							</td>
+																							<c:if test="${!aimOrgManagerForm.adminSide}">
+																							<td class="inside" bgcolor=#F2F2F2>
+																									<digi:trn>Edit</digi:trn>
+																							</td>
+																							</c:if>
 																						</tr>
 																					</thead>
 																					<!--  to export table we are adding class "yui-dt-data" to its tbody-->
@@ -311,7 +328,8 @@
 																							property="pagedCol" id="organisation"
 																							indexId="index">
 																							<tr>
-																								<td class="inside"><jsp:useBean
+																								<td class="inside">
+																								<jsp:useBean
 																										id="urlParams" type="java.util.Map"
 																										class="java.util.HashMap" /> <c:set
 																										target="${urlParams}" property="mode"
@@ -321,11 +339,18 @@
 																										property="ampOrgId">
 																										<bean:write name="organisation"
 																											property="ampOrgId" />
-																									</c:set> <digi:link href="/editOrganisation.do"
+																											</c:set>
+																								<c:choose>
+																								<c:when test="${aimOrgManagerForm.adminSide}">
+																									 <digi:link href="/editOrganisation.do"
 																										name="urlParams">
 																										<bean:write name="organisation"
 																											property="name" />
 																									</digi:link>
+																								</c:when>
+																								<c:otherwise><c:out value="${organisation.name}"/></c:otherwise>
+																								</c:choose>
+																								
 																								</td>
 																								<td class="inside"><bean:write
 																										name="organisation" property="acronym" />
@@ -349,6 +374,14 @@
 																											value="${organisation.orgGrpId.orgGrpName}" />
 																									</logic:notEmpty>
 																								</td>
+																								<c:if test="${!aimOrgManagerForm.adminSide}">
+																							<td class="inside">
+																							 <digi:link href="/editOrganisation.do"
+																										name="urlParams">
+																										<digi:trn>Edit</digi:trn>
+																									</digi:link>
+																							</td>
+																							</c:if>
 																							</tr>
 																						</logic:iterate>
 																					</tbody>
@@ -523,9 +556,13 @@
 												</tr>
 											</logic:notEmpty>
 										</table></td>
+											<digi:secure actions="ADMIN">
 									<td noWrap width="100%" vAlign="top" style="padding-top: 10px;"><jsp:include
 											page="orgManagerOtherLinks.jsp" /></td>
+										</digi:secure>
 								</tr>
 							</table></td>
 					</tr>
-				</table></td></tr></table> </digi:form>
+				<c:if test="${!aimOrgManagerForm.adminSide}"></table></div></td></tr></c:if></table>
+					</td>
+					</tr></table> </digi:form>

@@ -1,6 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,25 +16,22 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -51,14 +47,13 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
-import org.digijava.module.aim.helper.Pledge;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ParisUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -88,6 +83,20 @@ public class EditOrganisation extends DispatchAction {
       }
       return false;
   }
+  private boolean sessionChkForWInfo(HttpServletRequest request) {
+      HttpSession session = request.getSession();
+   	  TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	    boolean plainTeamMember = tm==null||!tm.getTeamHead();
+      if (session.getAttribute("ampAdmin") == null&&plainTeamMember) {
+          return true;
+      } else {
+          String str = (String) session.getAttribute("ampAdmin");
+          if ("no".equals(str)&&plainTeamMember) {
+              return true;
+          }
+      }
+      return false;
+  }
   
   @Override
   protected ActionForward unspecified(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
@@ -110,7 +119,7 @@ public class EditOrganisation extends DispatchAction {
   }
   
   public ActionForward edit(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-      if (sessionChk(request)) {
+      if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
       AddOrgForm editForm = (AddOrgForm) form;
@@ -125,6 +134,8 @@ public class EditOrganisation extends DispatchAction {
       AmpOrgType orgType = null;
       if (organization.getOrgGrpId() != null) {
           orgType = organization.getOrgGrpId().getOrgType();
+          editForm.setOrgGroupName(organization.getOrgGrpId().getOrgGrpName());
+          editForm.setOrgTypeName(orgType.getOrgType());
           Long orgTypeId = orgType.getAmpOrgTypeId();
           orgGroups = DbUtil.searchForOrganisationGroupByType(orgTypeId);
           editForm.setAmpOrgTypeId(orgType.getAmpOrgTypeId());
@@ -322,8 +333,14 @@ public class EditOrganisation extends DispatchAction {
     	  Long[] defaultvalue = {0L}; 
     	  editForm.setSelecteddepartments(defaultvalue);
       }
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (tm!=null&&tm.getTeamHead()) {
+			return mapping.findForward("forwardWI");
+		} else {
+			return mapping.findForward("forward");
+		}
       
-      return mapping.findForward("forward");
   }
   
   
@@ -443,7 +460,7 @@ public class EditOrganisation extends DispatchAction {
 
 
   public ActionForward addStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-      if (sessionChk(request)) {
+      if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
       AddOrgForm editForm = (AddOrgForm) form;
@@ -470,11 +487,17 @@ public class EditOrganisation extends DispatchAction {
       editForm.setNumberOfStaff(null);
       editForm.setTypeOfStaff(null);
       editForm.setStaffInfoIndex(-1);
-      return mapping.findForward("forward");
+      HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (tm!=null&&tm.getTeamHead()) {
+			return mapping.findForward("forwardWI");
+		} else {
+			return mapping.findForward("forward");
+		}
   }
 
   public ActionForward deleteStaffInfo(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)throws Exception {
-      if (sessionChk(request)) {
+      if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
       AddOrgForm editForm = (AddOrgForm) form;
@@ -501,10 +524,17 @@ public class EditOrganisation extends DispatchAction {
       editForm.setSelectedStaff(null);
       editForm.setStaff(staff);
       editForm.setSelectedStaffId(null);
-      return mapping.findForward("forward");
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (tm!=null&&tm.getTeamHead()) {
+			return mapping.findForward("forwardWI");
+		} else {
+			return mapping.findForward("forward");
+		}
+  
   }
   public ActionForward editStaffInfo(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-      if (sessionChk(request)) {
+      if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
       AddOrgForm editForm = (AddOrgForm) form;
@@ -512,7 +542,14 @@ public class EditOrganisation extends DispatchAction {
       editForm.setSelectedYear(staff.getYear().toString());
       editForm.setTypeOfStaff(staff.getType().getId());
       editForm.setNumberOfStaff(staff.getStaffNumber().toString());
-      return mapping.findForward("forward");
+  	HttpSession session = request.getSession();
+	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	if (tm!=null&&tm.getTeamHead()) {
+		return mapping.findForward("forwardWI");
+	} else {
+		return mapping.findForward("forward");
+	}
+  
   }
 
   
@@ -607,7 +644,7 @@ public class EditOrganisation extends DispatchAction {
   }
 
   public ActionForward addSector(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-      if (sessionChk(request)) {
+      if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
       HttpSession session = request.getSession();
@@ -630,11 +667,17 @@ public class EditOrganisation extends DispatchAction {
       editForm.setSectors(prevSelSectors);
       session.removeAttribute("add");
       session.removeAttribute("sectorSelected");
-      return mapping.findForward("forward");
+	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	if (tm!=null&&tm.getTeamHead()) {
+		return mapping.findForward("forwardWI");
+	} else {
+		return mapping.findForward("forward");
+	}
+  
   }
 
   public ActionForward removeSector(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-      if (sessionChk(request)) {
+      if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
       AddOrgForm editForm = (AddOrgForm) form;
@@ -666,7 +709,14 @@ public class EditOrganisation extends DispatchAction {
       }
 
       editForm.setSectors(newSectors);
-      return mapping.findForward("forward");
+  	HttpSession session = request.getSession();
+	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	if (tm!=null&&tm.getTeamHead()) {
+		return mapping.findForward("forwardWI");
+	} else {
+		return mapping.findForward("forward");
+	}
+  
   }
   
   public ActionForward removeRecipient(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
@@ -804,7 +854,9 @@ public class EditOrganisation extends DispatchAction {
 
   public ActionForward reload(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
 	  AddOrgForm editForm = (AddOrgForm) form;
-	  String forwardWhere="forward";
+	  HttpSession session = request.getSession();
+	  TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	  String forwardWhere=(tm!=null&&tm.getTeamHead())?"forwardWI":"forward";
   	  String asynchCall=request.getParameter("asynchCall");
   	  if(asynchCall!=null && asynchCall.equals("true")){
   		  forwardWhere = null;
@@ -834,8 +886,14 @@ public class EditOrganisation extends DispatchAction {
   }
 
   public ActionForward save(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws Exception {
-      if (sessionChk(request)) {
-          return mapping.findForward("index");
+	  boolean isAdmin=!sessionChk(request);
+	  HttpSession session = request.getSession();
+	  TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	  boolean isTeamHead=tm!=null&&tm.getTeamHead();
+      if (!isAdmin) {
+    	  if(!isTeamHead){
+    		  return mapping.findForward("index");
+    	  }
       }
       AddOrgForm editForm = (AddOrgForm) form;
       AmpOrganisation organization = null;
@@ -860,6 +918,7 @@ public class EditOrganisation extends DispatchAction {
       if (exist) {
           errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationManager.saveOrgNameError"));
       }
+      if(isAdmin){
 		if (editForm.getOrgCode() != null
 				&& editForm.getOrgCode().trim().length() > 0) {
 			Collection orgsCol = DbUtil.getOrgByCode(action,
@@ -869,6 +928,7 @@ public class EditOrganisation extends DispatchAction {
 						"error.aim.organizationManager.saveOrgCodeError"));
 			}
 		}
+      }
             
        String[] orgContsIds=editForm.getPrimaryOrgContIds();
 
@@ -881,125 +941,257 @@ public class EditOrganisation extends DispatchAction {
       
       if(!errors.isEmpty()){
       	saveErrors(request, errors);
-          return mapping.findForward("forward");
+    	if (isTeamHead) {
+    		return mapping.findForward("forwardWI");
+    	} else {
+    		return mapping.findForward("forward");
+    	}
+      
       }
       
       if(editForm.getResetPrimaryOrgContIds()!=null && editForm.getResetPrimaryOrgContIds()){
       	editForm.setPrimaryOrgContIds(null);
       }
-      
-      organization.setName(editForm.getName());
-      organization.setAcronym(editForm.getAcronym());
-      organization.setFundingorgid(editForm.getFundingorgid());
+      if(isAdmin){
+    	  organization.setName(editForm.getName());
+          organization.setAcronym(editForm.getAcronym());
+          organization.setFundingorgid(editForm.getFundingorgid());
+
+          if (editForm.getFiscalCalId() != null && !editForm.getFiscalCalId().equals(-1l)) {
+              organization.setAmpFiscalCalId(DbUtil.getAmpFiscalCalendar(editForm.getFiscalCalId()));
+          } else {
+              organization.setAmpFiscalCalId(null);
+          }
+          organization.setBudgetOrgCode(editForm.getBudgetOrgCode());
+          if (editForm.getCountryId() != null && !editForm.getCountryId().equals(-1l)) {
+              organization.setCountry(DynLocationManagerUtil.getLocation(editForm.getCountryId(), false));
+          } else {
+              organization.setCountry(null);
+          }
+          organization.setDacOrgCode(editForm.getDacOrgCode());
+
+          if (editForm.getLegalPersonNum() != null && !editForm.getLegalPersonNum().equals("")) {
+              organization.setLegalPersonNum(editForm.getLegalPersonNum());
+
+          } else {
+              organization.setLegalPersonNum(null);
+          }
+          if (editForm.getRegionId() != null && !editForm.getRegionId().equals(-1l)) {
+              organization.setRegion(DynLocationManagerUtil.getLocation(editForm.getRegionId(), false));
+
+          } else {
+              organization.setRegion(null);
+          }
+          if (editForm.getLegalPersonRegDate() != null && !editForm.getLegalPersonRegDate().equals("")) {
+              organization.setLegalPersonRegDate(FormatHelper.parseDate2(editForm.getLegalPersonRegDate()));
+          } else {
+              organization.setLegalPersonRegDate(null);
+          }
+          if (editForm.getMinPlanRegDate() != null && !editForm.getMinPlanRegDate().equals("")) {
+              organization.setMinPlanRegDate(FormatHelper.parseDate2(editForm.getMinPlanRegDate()));
+          } else {
+              organization.setMinPlanRegDate(null);
+          }
+          if (editForm.getRegNumbMinPlan() != null && !editForm.getRegNumbMinPlan().equals("")) {
+              organization.setMinPlanRegNumb(editForm.getRegNumbMinPlan());
+          } else {
+              organization.setMinPlanRegNumb(null);
+          }
+       
+          if (editForm.getOperFuncApprDate() != null&& !editForm.getOperFuncApprDate().equals("")) {
+              organization.setOperFuncApprDate(FormatHelper.parseDate2(editForm.getOperFuncApprDate()));
+          }
+          else{
+              organization.setOperFuncApprDate(null);
+          }
+          if (editForm.getLineMinRegDate() != null&& !editForm.getLineMinRegDate().equals("")) {
+              organization.setLineMinRegDate(FormatHelper.parseDate2(editForm.getLineMinRegDate()));
+          }
+          else{
+              organization.setLineMinRegDate(null);
+          }
+          if (editForm.getLineMinRegNumber() != null && !editForm.getLineMinRegNumber().equals("")) {
+              organization.setLineMinRegNumber(editForm.getLineMinRegNumber());
+
+          } else {
+              organization.setLineMinRegNumber(null);
+          }
+          organization.setReceiptLegPersonalityAct(editForm.getReceiptLegPersonalityAct());
+          organization.setOtherInformation(editForm.getOtherInformation());
+          organization.setOrgGrpId(DbUtil.getAmpOrgGroup(editForm.getAmpOrgGrpId()));
+          organization.setOrgIsoCode(editForm.getOrgIsoCode());
+          organization.setOrgCode(editForm.getOrgCode());
+          if (editForm.getImplemLocationLevel() != null && editForm.getImplemLocationLevel() != 0) {
+              organization.setImplemLocationLevel(CategoryManagerUtil.getAmpCategoryValueFromDb(editForm.getImplemLocationLevel()));
+          } else {
+              organization.setImplemLocationLevel(null);
+          }
+
+          if (editForm.getTaxNumber() != null && !editForm.getTaxNumber().equals("")) {
+              organization.setTaxNumber(editForm.getTaxNumber());
+          }
+       
+
+          // recipients
+          if (organization.getRecipients() == null) {
+              organization.setRecipients(new HashSet<AmpOrgRecipient>());
+          } 
+          if (editForm.getRecipients() != null) {
+              Iterator<AmpOrgRecipient> recipientIter = editForm.getRecipients().iterator();
+              Set<AmpOrgRecipient> recipients = new HashSet<AmpOrgRecipient>();
+              Set<AmpOrgRecipient> recipientsToRetain = new HashSet<AmpOrgRecipient>();
+              while (recipientIter.hasNext()) {
+                  AmpOrgRecipient recipient = recipientIter.next();
+                  /*if (recipient.getAmpOrgRecipientId()!=null&&recipient.getAmpOrgRecipientId()!=0) {
+                      AmpOrgRecipient newRecipient = (AmpOrgRecipient) DbUtil.getObject(AmpOrgRecipient.class, recipient.getAmpOrgRecipientId());
+                      newRecipient.setDescription(recipient.getDescription());
+                      recipientsToRetain.add(newRecipient);
+                      continue;
+                  }*/
+                  AmpOrgRecipient newRecipient = new AmpOrgRecipient();
+                  newRecipient.setParentOrganization(organization);
+                  newRecipient.setOrganization(recipient.getOrganization());
+                  newRecipient.setDescription(recipient.getDescription());
+                  recipients.add(newRecipient);
+              }
+              //organization.getRecipients().retainAll(recipientsToRetain);
+              organization.getRecipients().clear();
+              organization.getRecipients().addAll(recipients);
+          }
+          // organization information
+          if (organization.getOrganizationBudgetInfos() == null) {
+              organization.setOrganizationBudgetInfos(new HashSet<AmpOrganizationBudgetInformation>());
+          }
+
+          if (editForm.getOrgInfos() != null) {
+              Iterator<AmpOrganizationBudgetInformation> infoIter = editForm.getOrgInfos().iterator();
+              Set<AmpOrganizationBudgetInformation> infosOrg = new HashSet<AmpOrganizationBudgetInformation>();
+              Set<AmpOrganizationBudgetInformation> infosOrgToRetain = new HashSet<AmpOrganizationBudgetInformation>();
+              AmpOrganizationBudgetInformation newInfo = null;
+              while (infoIter.hasNext()) {
+                  AmpOrganizationBudgetInformation info = infoIter.next();
+                 /* if (!info.isNewlyCreated()) {
+                      newInfo = (AmpOrganizationBudgetInformation) DbUtil.getObject(AmpOrganizationBudgetInformation.class, info.getId());
+                      newInfo.setYear(info.getYear());
+                      newInfo.setType(info.getType());
+                      newInfo.setCurrency(info.getCurrency());
+                      newInfo.setAmount(info.getAmount());
+                      if (newInfo.getOrganizations() != null) {
+                          newInfo.getOrganizations().clear();
+                      } else {
+                          newInfo.setOrganizations(new HashSet<AmpOrganisation>());
+                      }
+                      if (info.getOrganizations() != null) {
+                          newInfo.getOrganizations().addAll(info.getOrganizations());
+                      }
+                      infosOrgToRetain.add(newInfo);
+                      continue;
+                  } else {*/
+                      newInfo = new AmpOrganizationBudgetInformation();
+                      newInfo.setOrganization(organization);
+                      newInfo.setYear(info.getYear());
+                      newInfo.setType(info.getType());
+                      newInfo.setCurrency(info.getCurrency());
+                      newInfo.setAmount(info.getAmount());
+                      newInfo.setOrganizations(info.getOrganizations());
+                      infosOrg.add(newInfo);
+                 // }
+                  
+                
+                 // organization.getOrganizationBudgetInfos().retainAll(infosOrgToRetain);
+                  organization.getOrganizationBudgetInfos().clear();
+                  organization.getOrganizationBudgetInfos().addAll(infosOrg);
+              }
+
+          } else {
+              organization.getOrganizationBudgetInfos().clear();
+          }
+          // locations
+          if (organization.getLocations() == null) {
+              organization.setLocations(new HashSet<AmpOrgLocation>());
+          }
+          Set<AmpOrgLocation> locations = new HashSet<AmpOrgLocation>();
+          if (editForm.getSelectedLocs() != null) {
+              Iterator<Location> locationIter = editForm.getSelectedLocs().iterator();
+              while (locationIter.hasNext()) {
+                  Location location = locationIter.next();
+                  Iterator<AmpOrgLocation> iter = organization.getLocations().iterator();
+                  AmpOrgLocation newLoc = null;
+                  while (iter.hasNext()) {
+                      AmpOrgLocation orgLoc = iter.next();
+                      if (orgLoc.getLocation().getId().equals(location.getAmpCVLocation().getId())) {
+                          orgLoc.setPercent(Double.valueOf(location.getPercent()));
+                          newLoc = orgLoc;
+                          locations.add(newLoc);
+                          break;
+                      }
+                  }
+                  if (newLoc == null) {
+                      newLoc = new AmpOrgLocation();
+                      newLoc.setOrganization(organization);
+                      newLoc.setPercent(Double.valueOf(location.getPercent()));
+                      newLoc.setLocation(location.getAmpCVLocation());
+                      locations.add(newLoc);
+                  }
+                     
+              }
+          }
+                 
+                
+          organization.getLocations().clear();
+          organization.getLocations().addAll(locations);
+
+
+          
+          //Budget sectors
+          Set<AmpBudgetSector> budgetsectors = new HashSet<AmpBudgetSector>();
+          if(editForm.getResetBudgetSectors()!=null && editForm.getResetBudgetSectors()){
+        	  editForm.setSelectedbudgetsectors(null) ;
+          }     
+          
+          if (editForm.getSelectedbudgetsectors() != null) {
+              Iterator<AmpBudgetSector> itr = editForm.getBudgetsectors().iterator();
+              while (itr.hasNext()) {
+            	  AmpBudgetSector bsector = itr.next();
+                  for (int i = 0; i < editForm.getSelectedbudgetsectors().length; i++) {
+                	  if(bsector.getIdsector().equals(editForm.getSelectedbudgetsectors()[i])){
+                		  budgetsectors.add(bsector);
+                	  }
+    			}
+            	  
+              }
+          }
+          organization.setBudgetsectors(budgetsectors);
+          
+          //Departments
+          Set<AmpDepartments> departments = new HashSet<AmpDepartments>();
+          if(editForm.getResetDepartments()!=null && editForm.getResetDepartments()){
+        	  editForm.setSelecteddepartments(null);
+          }
+          
+          if (editForm.getSelecteddepartments() != null) {
+              Iterator<AmpDepartments> itr = editForm.getDepartments().iterator();
+              while (itr.hasNext()) {
+            	  AmpDepartments dep = itr.next();
+                  for (int i = 0; i < editForm.getSelecteddepartments().length; i++) {
+                	  if(dep.getId().equals(editForm.getSelecteddepartments()[i])){
+                		  departments.add(dep);
+                	  }
+    			}
+            	  
+              }
+          }
+          organization.setDepartments(departments);
+
+      }
+     
       organization.setAddress(editForm.getAddress());
       organization.setAddressAbroad(editForm.getAddressAbroad());
-
-      if (editForm.getFiscalCalId() != null && !editForm.getFiscalCalId().equals(-1l)) {
-          organization.setAmpFiscalCalId(DbUtil.getAmpFiscalCalendar(editForm.getFiscalCalId()));
-      } else {
-          organization.setAmpFiscalCalId(null);
-      }
-      organization.setBudgetOrgCode(editForm.getBudgetOrgCode());
-      if (editForm.getCountryId() != null && !editForm.getCountryId().equals(-1l)) {
-          organization.setCountry(DynLocationManagerUtil.getLocation(editForm.getCountryId(), false));
-      } else {
-          organization.setCountry(null);
-      }
-      organization.setDacOrgCode(editForm.getDacOrgCode());
-
-      if (editForm.getLegalPersonNum() != null && !editForm.getLegalPersonNum().equals("")) {
-          organization.setLegalPersonNum(editForm.getLegalPersonNum());
-
-      } else {
-          organization.setLegalPersonNum(null);
-      }
-      if (editForm.getRegionId() != null && !editForm.getRegionId().equals(-1l)) {
-          organization.setRegion(DynLocationManagerUtil.getLocation(editForm.getRegionId(), false));
-
-      } else {
-          organization.setRegion(null);
-      }
-      if (editForm.getLegalPersonRegDate() != null && !editForm.getLegalPersonRegDate().equals("")) {
-          organization.setLegalPersonRegDate(FormatHelper.parseDate2(editForm.getLegalPersonRegDate()));
-      } else {
-          organization.setLegalPersonRegDate(null);
-      }
-      if (editForm.getMinPlanRegDate() != null && !editForm.getMinPlanRegDate().equals("")) {
-          organization.setMinPlanRegDate(FormatHelper.parseDate2(editForm.getMinPlanRegDate()));
-      } else {
-          organization.setMinPlanRegDate(null);
-      }
-      if (editForm.getRegNumbMinPlan() != null && !editForm.getRegNumbMinPlan().equals("")) {
-          organization.setMinPlanRegNumb(editForm.getRegNumbMinPlan());
-      } else {
-          organization.setMinPlanRegNumb(null);
-      }
-   
-      if (editForm.getOperFuncApprDate() != null&& !editForm.getOperFuncApprDate().equals("")) {
-          organization.setOperFuncApprDate(FormatHelper.parseDate2(editForm.getOperFuncApprDate()));
-      }
-      else{
-          organization.setOperFuncApprDate(null);
-      }
-      if (editForm.getLineMinRegDate() != null&& !editForm.getLineMinRegDate().equals("")) {
-          organization.setLineMinRegDate(FormatHelper.parseDate2(editForm.getLineMinRegDate()));
-      }
-      else{
-          organization.setLineMinRegDate(null);
-      }
-      if (editForm.getLineMinRegNumber() != null && !editForm.getLineMinRegNumber().equals("")) {
-          organization.setLineMinRegNumber(editForm.getLineMinRegNumber());
-
-      } else {
-          organization.setLineMinRegNumber(null);
-      }
-      organization.setReceiptLegPersonalityAct(editForm.getReceiptLegPersonalityAct());
-      organization.setOtherInformation(editForm.getOtherInformation());
-
       organization.setDescription(editForm.getDescription());
-      organization.setOrgGrpId(DbUtil.getAmpOrgGroup(editForm.getAmpOrgGrpId()));
-      organization.setOrgIsoCode(editForm.getOrgIsoCode());
-      organization.setOrgCode(editForm.getOrgCode());
       organization.setOrgUrl(editForm.getOrgUrl());
       organization.setPrimaryPurpose(editForm.getOrgPrimaryPurpose());
 
-      if (editForm.getImplemLocationLevel() != null && editForm.getImplemLocationLevel() != 0) {
-          organization.setImplemLocationLevel(CategoryManagerUtil.getAmpCategoryValueFromDb(editForm.getImplemLocationLevel()));
-      } else {
-          organization.setImplemLocationLevel(null);
-      }
-
-      if (editForm.getTaxNumber() != null && !editForm.getTaxNumber().equals("")) {
-          organization.setTaxNumber(editForm.getTaxNumber());
-      }
-   
-
-      // recipients
-      if (organization.getRecipients() == null) {
-          organization.setRecipients(new HashSet<AmpOrgRecipient>());
-      } 
-      if (editForm.getRecipients() != null) {
-          Iterator<AmpOrgRecipient> recipientIter = editForm.getRecipients().iterator();
-          Set<AmpOrgRecipient> recipients = new HashSet<AmpOrgRecipient>();
-          Set<AmpOrgRecipient> recipientsToRetain = new HashSet<AmpOrgRecipient>();
-          while (recipientIter.hasNext()) {
-              AmpOrgRecipient recipient = recipientIter.next();
-              /*if (recipient.getAmpOrgRecipientId()!=null&&recipient.getAmpOrgRecipientId()!=0) {
-                  AmpOrgRecipient newRecipient = (AmpOrgRecipient) DbUtil.getObject(AmpOrgRecipient.class, recipient.getAmpOrgRecipientId());
-                  newRecipient.setDescription(recipient.getDescription());
-                  recipientsToRetain.add(newRecipient);
-                  continue;
-              }*/
-              AmpOrgRecipient newRecipient = new AmpOrgRecipient();
-              newRecipient.setParentOrganization(organization);
-              newRecipient.setOrganization(recipient.getOrganization());
-              newRecipient.setDescription(recipient.getDescription());
-              recipients.add(newRecipient);
-          }
-          //organization.getRecipients().retainAll(recipientsToRetain);
-          organization.getRecipients().clear();
-          organization.getRecipients().addAll(recipients);
-      }
+     
 
       // staff information
       if (organization.getStaffInfos() == null) {
@@ -1009,7 +1201,7 @@ public class EditOrganisation extends DispatchAction {
       if (editForm.getStaff() != null) {
           Iterator<AmpOrgStaffInformation> infoIter = editForm.getStaff().iterator();
           Set<AmpOrgStaffInformation> infos = new HashSet<AmpOrgStaffInformation>();
-          Set<AmpOrgStaffInformation> infosToRetain = new HashSet<AmpOrgStaffInformation>();
+          //Set<AmpOrgStaffInformation> infosToRetain = new HashSet<AmpOrgStaffInformation>();
           while (infoIter.hasNext()) {
               AmpOrgStaffInformation info = infoIter.next();
               /*if (!info.isNewlyCreated()) {
@@ -1033,55 +1225,6 @@ public class EditOrganisation extends DispatchAction {
       }
       else{
           organization.getStaffInfos().clear();
-      }
-
-       // organization information
-      if (organization.getOrganizationBudgetInfos() == null) {
-          organization.setOrganizationBudgetInfos(new HashSet<AmpOrganizationBudgetInformation>());
-      }
-
-      if (editForm.getOrgInfos() != null) {
-          Iterator<AmpOrganizationBudgetInformation> infoIter = editForm.getOrgInfos().iterator();
-          Set<AmpOrganizationBudgetInformation> infosOrg = new HashSet<AmpOrganizationBudgetInformation>();
-          Set<AmpOrganizationBudgetInformation> infosOrgToRetain = new HashSet<AmpOrganizationBudgetInformation>();
-          AmpOrganizationBudgetInformation newInfo = null;
-          while (infoIter.hasNext()) {
-              AmpOrganizationBudgetInformation info = infoIter.next();
-             /* if (!info.isNewlyCreated()) {
-                  newInfo = (AmpOrganizationBudgetInformation) DbUtil.getObject(AmpOrganizationBudgetInformation.class, info.getId());
-                  newInfo.setYear(info.getYear());
-                  newInfo.setType(info.getType());
-                  newInfo.setCurrency(info.getCurrency());
-                  newInfo.setAmount(info.getAmount());
-                  if (newInfo.getOrganizations() != null) {
-                      newInfo.getOrganizations().clear();
-                  } else {
-                      newInfo.setOrganizations(new HashSet<AmpOrganisation>());
-                  }
-                  if (info.getOrganizations() != null) {
-                      newInfo.getOrganizations().addAll(info.getOrganizations());
-                  }
-                  infosOrgToRetain.add(newInfo);
-                  continue;
-              } else {*/
-                  newInfo = new AmpOrganizationBudgetInformation();
-                  newInfo.setOrganization(organization);
-                  newInfo.setYear(info.getYear());
-                  newInfo.setType(info.getType());
-                  newInfo.setCurrency(info.getCurrency());
-                  newInfo.setAmount(info.getAmount());
-                  newInfo.setOrganizations(info.getOrganizations());
-                  infosOrg.add(newInfo);
-             // }
-              
-            
-             // organization.getOrganizationBudgetInfos().retainAll(infosOrgToRetain);
-              organization.getOrganizationBudgetInfos().clear();
-              organization.getOrganizationBudgetInfos().addAll(infosOrg);
-          }
-
-      } else {
-          organization.getOrganizationBudgetInfos().clear();
       }
 
       //Sectors
@@ -1109,90 +1252,6 @@ public class EditOrganisation extends DispatchAction {
           }
       }
       organization.setSectors(sectors);
-    
-      // locations
-      if (organization.getLocations() == null) {
-          organization.setLocations(new HashSet<AmpOrgLocation>());
-      }
-      Set<AmpOrgLocation> locations = new HashSet<AmpOrgLocation>();
-      if (editForm.getSelectedLocs() != null) {
-          Iterator<Location> locationIter = editForm.getSelectedLocs().iterator();
-          while (locationIter.hasNext()) {
-              Location location = locationIter.next();
-              Iterator<AmpOrgLocation> iter = organization.getLocations().iterator();
-              AmpOrgLocation newLoc = null;
-              while (iter.hasNext()) {
-                  AmpOrgLocation orgLoc = iter.next();
-                  if (orgLoc.getLocation().getId().equals(location.getAmpCVLocation().getId())) {
-                      orgLoc.setPercent(Double.valueOf(location.getPercent()));
-                      newLoc = orgLoc;
-                      locations.add(newLoc);
-                      break;
-                  }
-              }
-              if (newLoc == null) {
-                  newLoc = new AmpOrgLocation();
-                  newLoc.setOrganization(organization);
-                  newLoc.setPercent(Double.valueOf(location.getPercent()));
-                  newLoc.setLocation(location.getAmpCVLocation());
-                  locations.add(newLoc);
-              }
-                 
-          }
-      }
-             
-            
-      organization.getLocations().clear();
-          organization.getLocations().addAll(locations);
-
-
-      
-      //Budget sectors
-      Set<AmpBudgetSector> budgetsectors = new HashSet<AmpBudgetSector>();
-      if(editForm.getResetBudgetSectors()!=null && editForm.getResetBudgetSectors()){
-    	  editForm.setSelectedbudgetsectors(null) ;
-      }     
-      
-      if (editForm.getSelectedbudgetsectors() != null) {
-          Iterator<AmpBudgetSector> itr = editForm.getBudgetsectors().iterator();
-          while (itr.hasNext()) {
-        	  AmpBudgetSector bsector = itr.next();
-              for (int i = 0; i < editForm.getSelectedbudgetsectors().length; i++) {
-            	  if(bsector.getIdsector().equals(editForm.getSelectedbudgetsectors()[i])){
-            		  budgetsectors.add(bsector);
-            	  }
-			}
-        	  
-          }
-      }
-      organization.setBudgetsectors(budgetsectors);
-      
-      //Departments
-      Set<AmpDepartments> departments = new HashSet<AmpDepartments>();
-      if(editForm.getResetDepartments()!=null && editForm.getResetDepartments()){
-    	  editForm.setSelecteddepartments(null);
-      }
-      
-      if (editForm.getSelecteddepartments() != null) {
-          Iterator<AmpDepartments> itr = editForm.getDepartments().iterator();
-          while (itr.hasNext()) {
-        	  AmpDepartments dep = itr.next();
-              for (int i = 0; i < editForm.getSelecteddepartments().length; i++) {
-            	  if(dep.getId().equals(editForm.getSelecteddepartments()[i])){
-            		  departments.add(dep);
-            	  }
-			}
-        	  
-          }
-      }
-      organization.setDepartments(departments);
-      
-      
-      if (organization.getFundingDetails() == null) {
-          organization.setFundingDetails(new HashSet<AmpPledge>());
-      } else {
-          organization.getFundingDetails().clear();
-      }
       
       	/**
          * contacts
@@ -1217,10 +1276,13 @@ public class EditOrganisation extends DispatchAction {
       }         
          
       this.saveDocuments(request, organization);
-      DbUtil.saveOrg(organization);        
+      DbUtil.saveOrg(organization,isAdmin);        
       return mapping.findForward("added");
 
   }
+
+
+  
   
   public ActionForward deleteContact(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
       if (sessionChk(request)) {

@@ -91,6 +91,7 @@
 	<page name="addFiscalCalendar" title=" - Fiscal Calendar Manager" />
 	<page name="organisationManager" title=" - Organization Manager" />
 	<page name="editOrganisation" title=" - Organisation Manager" />
+	<page name="editOrganisationFromWorkspace" title=" - Organisation Manager" />
 	<page name="orgTypeManager" title=" - Organisation Type Manager" />
 	<page name="editOrgType" title=" - Organisation Type Manager" />
 	<page name="orgGroupManager" title=" - Organisation Group Manager" />

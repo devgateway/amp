@@ -174,6 +174,22 @@ function putLoading(){
 							</digi:link>
 						</li>
 					</c:if>
+					<field:display name="Enable Organization Edit in Workspace InFo" feature="Organization Form">
+					<c:if test="${selectedTab  == '9'}">
+						<li class="desktop_tab ui-state-default ui-corner-top ui-tabs-selected ui-state-active">
+							<a class="tab_link">
+								<digi:trn>Organizations</digi:trn>
+							</a>
+						</li>
+					</c:if>					
+					<c:if test="${selectedTab  != '9'}">
+						<li class="desktop_tab ui-state-default ui-corner-top">
+							<digi:link href="/organisationManager.do" styleClass="tab_link">
+								<digi:trn>Organizations</digi:trn>
+							</digi:link>
+						</li>
+					</c:if>
+					</field:display>
 				</ul>
 				
 				<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">

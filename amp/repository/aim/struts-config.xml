@@ -602,6 +602,7 @@
     </action>
     <action name="aimOrgManagerForm" path="/aim/organisationManager" scope="session" type="org.digijava.module.aim.action.OrganisationManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=organisationManager" />
+      <forward name="forwardWorkSpaceInfo" path="/showLayout.do?layout=organisationList" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimOrgManagerForm" path="/aim/organisationSearch" scope="session" type="org.digijava.module.aim.action.OrganisationSearch" validate="false">
@@ -611,6 +612,12 @@
     <action name="aimOrgManagerForm" path="/aim/exportOrgManager" scope="session" type="org.digijava.module.aim.action.ExportOrganizationManager2XSL" validate="false" />
     <action name="aimAddOrgForm" path="/aim/editOrganisation" scope="session" type="org.digijava.module.aim.action.EditOrganisation" validate="false" parameter="actionFlag">
       <forward name="forward" path="/showLayout.do?layout=editOrganisation" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+      <forward name="added" path="/aim/organisationManager.do?added=true" redirect="true" />
+    </action>
+    <action name="aimAddOrgForm" path="/aim/editOrganisation" scope="session" type="org.digijava.module.aim.action.EditOrganisation" validate="false" parameter="actionFlag">
+      <forward name="forward" path="/showLayout.do?layout=editOrganisation" />
+      <forward name="forwardWI" path="/showLayout.do?layout=editOrganisationFromWorkspace" />
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="added" path="/aim/organisationManager.do?added=true" redirect="true" />
     </action>

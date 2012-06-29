@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.OrgManagerForm;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 
 public class OrganisationManager
@@ -33,19 +34,30 @@ public class OrganisationManager
       java.lang.Exception {
 
     HttpSession session = request.getSession();
+    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+    boolean isAdmin=false;
+    boolean plainTeamMember = tm==null||!tm.getTeamHead();
     if (session.getAttribute("ampAdmin") == null) {
-      return mapping.findForward("index");
+		if(plainTeamMember){
+    		 return mapping.findForward("index");
+    	}
     }
     else {
       String str = (String) session.getAttribute("ampAdmin");
       if (str.equals("no")) {
-        return mapping.findForward("index");
+    	  if(plainTeamMember){
+    		  return mapping.findForward("index");
+    	  }
+      }
+      else{
+    	  isAdmin=true;
       }
     }
 
     logger.debug("In organisation manager action");
 
     OrgManagerForm eaForm = (OrgManagerForm) form;
+    eaForm.setAdminSide(isAdmin);
     if (request.getParameter("orgSelReset") != null
         && request.getParameter("orgSelReset").equals("false")) {
       eaForm.setOrgSelReset(false);
@@ -235,8 +247,8 @@ public class OrganisationManager
     eaForm.setPagedCol(tempCol);
     eaForm.setPages(pages);
     eaForm.setCurrentPage(new Integer(1));
+	return mapping.findForward("forward");
 
-    return mapping.findForward("forward");
   }
 	
 }

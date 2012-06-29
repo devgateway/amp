@@ -41,8 +41,17 @@ private String keyword;
   private int pagesSize;
   private int offset;
   private String sortBy;
+  private boolean adminSide;
   
-  public String getSortBy() {
+  public boolean isAdminSide() {
+	return adminSide;
+}
+
+public void setAdminSide(boolean adminSide) {
+	this.adminSide = adminSide;
+}
+
+public String getSortBy() {
 	return sortBy;
 }
 

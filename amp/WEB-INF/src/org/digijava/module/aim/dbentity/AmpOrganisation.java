@@ -71,8 +71,6 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	
 	private Set<AmpOrganisationDocument> documents;
 
-	//Pledges
-	private Set fundingDetails;
 	
 	private String otherInformation;
     private Date lineMinRegDate;
@@ -451,14 +449,6 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 
 	public Object getIdentifier() {
 		return this.getAmpOrgId();
-	}
-
-	public Set getFundingDetails() {
-		return fundingDetails;
-	}
-
-	public void setFundingDetails(Set fundingDetails) {
-		this.fundingDetails = fundingDetails;
 	}
 
 	public Class getDimensionClass() {

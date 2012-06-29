@@ -279,14 +279,15 @@ initContactScript();
                     document.aimAddOrgForm.address.focus();
                     return false;
                 }
+                var selSectors= document.getElementsByName("selSectors");
+                var mandatorySectPref = document.getElementById('mandatorySectPref');
+                if (mandatorySectPref!=null && (selSectors == null||selSectors.length == 0 )) {
+                    alert('<digi:trn  jsFriendly="true">Please Select Sectors for this Organization.</digi:trn>');
+                    return false;
+                }
                                     
             }
-            var selSectors= document.getElementsByName("selSectors");
-            var mandatorySectPref = document.getElementById('mandatorySectPref');
-            if (mandatorySectPref!=null && (selSectors == null||selSectors.length == 0 )) {
-                alert('<digi:trn  jsFriendly="true">Please Select Sectors for this Organization.</digi:trn>');
-                return false;
-            }
+           
               
             return true;
 
@@ -641,12 +642,12 @@ initContactScript();
 																	<table cellpadding="5" cellspacing="5">
 																		<tr>
 																			<td style="text-align: right" class="tdBoldClass">
-																				<digi:trn>Sectors Scheme</digi:trn> <field:display
+																				<digi:trn>Sectors Scheme</digi:trn><c:if test="${aimAddOrgForm.type=='NGO'}"> <field:display
 																					name="Mandatory Indicator For Sector Preferences"
 																					feature="NGO Form">
 																					<span id="mandatorySectScheme"><font
 																						color="red">*</font></span>
-																				</field:display>
+																				</field:display></c:if>
 																			</td>
 																			<td><html:select property="ampSecSchemeId"
 																					styleClass="selectStyle" styleId="ampSecSchemeId">
@@ -667,12 +668,12 @@ initContactScript();
 																		</tr>
 																		<tr>
 																			<td style="text-align: right" class="tdBoldClass">
-																				<digi:trn>Sector Preferences</digi:trn> <field:display
+																				<digi:trn>Sector Preferences</digi:trn><c:if test="${aimAddOrgForm.type=='NGO'}"> <field:display
 																					name="Mandatory Indicator For Sector Preferences"
 																					feature="NGO Form">
 																					<span id="mandatorySectPref"><font
 																						color="red">*</font></span>
-																				</field:display>
+																				</field:display></c:if>
 																			</td>
 																			<td>
 																				<table cellSpacing="1" cellPadding="5"

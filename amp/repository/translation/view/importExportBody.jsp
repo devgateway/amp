@@ -253,7 +253,7 @@ function checkSelectedLanguages(){
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
-					<td colspan="2" height=33 bgcolor=#F2F2F2><span class=crumb style="color:#376091;">
+					<td height=33 bgcolor=#F2F2F2><span class=crumb style="color:#376091;">
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -265,19 +265,19 @@ function checkSelectedLanguages(){
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="16" colspan="2" vAlign="middle"  align="center">
+					<td height="16" vAlign="middle"  align="center">
                       <span style="font-size:12px; color:#000000;">
                         <b><digi:trn>Translation Manager</digi:trn></b><hr />
                       </span>
 					</td>
 				</tr>
 				<tr>
-					<td height="16" vAlign="middle" colspan="2">
+					<td height="16" vAlign="middle">
 						<digi:errors />
 					</td>
 				</tr>
 				<tr>
-					<td noWrap   width="95%" vAlign="top">
+					<td noWrap  width="700" vAlign="top">
 					<table cellspacing="1" cellspacing="1" border="0" align="center">
 					<logic:empty name="importExportForm" property="importedLanguages">
 					<logic:notEmpty name="importExportForm" property="languages">
@@ -422,7 +422,7 @@ function checkSelectedLanguages(){
 					</logic:notEmpty>
 					</table>
 					</td>
-					<td style="vertical-align: top;">
+					<td style="vertical-align: top;" width=300 rowspan="3">
 				<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
 								<tr>
 									<td>

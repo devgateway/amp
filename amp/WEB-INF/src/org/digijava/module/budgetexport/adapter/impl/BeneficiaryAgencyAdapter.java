@@ -45,4 +45,11 @@ public class BeneficiaryAgencyAdapter implements MappingEntityAdapter {
     public HierarchyListable getObjectByID(Long id) throws DgException {
         return null;
     }
+
+    @Override
+    public boolean hasAddidionalLabelColumn() {
+        return false;
+    }
+
+
 }

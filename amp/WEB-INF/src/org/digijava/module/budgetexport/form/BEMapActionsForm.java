@@ -34,7 +34,7 @@ public class BEMapActionsForm extends ActionForm {
     private FormFile upload;
     private boolean noReload;
     int delimiter;
-    
+    private boolean additionalLabelCol;
 
     public Long getId() {
         return id;
@@ -130,5 +130,13 @@ public class BEMapActionsForm extends ActionForm {
 
     public void setDelimiter(int delimiter) {
         this.delimiter = delimiter;
+    }
+
+    public boolean isAdditionalLabelCol() {
+        return additionalLabelCol;
+    }
+
+    public void setAdditionalLabelCol(boolean hasAdditionalLabelCol) {
+        this.additionalLabelCol = hasAdditionalLabelCol;
     }
 }

@@ -51,4 +51,9 @@ public class ProjectAdapter implements MappingEntityAdapter {
     public HierarchyListable getObjectByID(Long id) throws DgException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public boolean hasAddidionalLabelColumn() {
+        return true;
+    }
 }

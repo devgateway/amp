@@ -16,4 +16,5 @@ public interface MappingEntityAdapter {
     public List<HierarchyListable> getAllObjects() throws DgException;
     public int getObjectCount() throws DgException;
     public HierarchyListable getObjectByID(Long id) throws DgException;
+    public boolean hasAddidionalLabelColumn();
 }

@@ -20,8 +20,10 @@ public class AmpBudgetExportMapItem {
 
     private String importedLabel;
     private String ampLabel;
-    
-    
+    private String additionalLabel;
+
+    private boolean showAdditionalLabelCol;
+
     public Long getId() {
         return id;
     }
@@ -76,5 +78,21 @@ public class AmpBudgetExportMapItem {
 
     public void setAmpLabel(String ampLabel) {
         this.ampLabel = ampLabel;
+    }
+
+    public String getAdditionalLabel() {
+        return additionalLabel;
+    }
+
+    public void setAdditionalLabel(String additionalLabel) {
+        this.additionalLabel = additionalLabel;
+    }
+
+    public boolean isShowAdditionalLabelCol() {
+        return showAdditionalLabelCol;
+    }
+
+    public void setShowAdditionalLabelCol(boolean showAdditionalLabelCol) {
+        this.showAdditionalLabelCol = showAdditionalLabelCol;
     }
 }

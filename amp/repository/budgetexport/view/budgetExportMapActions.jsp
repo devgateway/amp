@@ -39,7 +39,13 @@
 <td colspan=4 align=center background="images/ins_header.gif" class=inside><b class="ins_header"><digi:trn>Manage Mappings</digi:trn></b></td>
 </tr>
 <tr>
-    <td background="images/ins_bg.gif" class=inside width=50%><b class="ins_header" style="font-size:11px;"><digi:trn>AMP Label</digi:trn></b></td>
+		<logic:equal name="beMapActionsForm" property="additionalLabelCol" value="false">
+    	<td background="images/ins_bg.gif" class=inside width=50%><b class="ins_header" style="font-size:11px;"><digi:trn>AMP Label</digi:trn></b></td>
+    </logic:equal>
+    <logic:equal name="beMapActionsForm" property="additionalLabelCol" value="true">
+    	<td background="images/ins_bg.gif" class=inside width=40%><b class="ins_header" style="font-size:11px;"><digi:trn>AMP Label</digi:trn></b></td>
+    	<td background="images/ins_bg.gif" class=inside width=10%>&nbsp</td>
+    </logic:equal>
     <td background="images/ins_bg.gif" class=inside width=50%><b class="ins_header" style="font-size:11px;"><digi:trn>External Code/Label</digi:trn></b></td>
     <td background="images/ins_bg.gif" class=inside width=150><b class="ins_header" style="font-size:11px;">&nbsp;&nbsp;<digi:trn>Matching</digi:trn>&nbsp;&nbsp;</b></td>
     </tr>
@@ -47,13 +53,20 @@
 <logic:present name="beMapActionsForm" property="ampEntityMappedItems">
 					<logic:iterate name="beMapActionsForm" property="ampEntityMappedItems" id="ampEntityMappedItem">
 						<tr>
-							<td nowrap width="400" style="width:400px;" class="inside">
+							<td nowrap class="inside">
 								<span style="height:12px; width:400px; max-width:400px; overflow-x:hidden; display:block;" title="<bean:write name="ampEntityMappedItem" property="ampEntity.label"/>">
 									<bean:write name="ampEntityMappedItem" property="ampEntity.label"/>
 								</span>
 							</td>
+							<logic:equal name="beMapActionsForm" property="additionalLabelCol" value="true">
+								<td nowrap class="inside">
+									<span style="height:12px; width:100px; max-width:100px; overflow-x:hidden; display:block;" title="<bean:write name="ampEntityMappedItem" property="ampEntity.additionalSearchString"/>">
+										<bean:write name="ampEntityMappedItem" property="ampEntity.additionalSearchString"/>
+									</span>
+								</td>
+							</logic:equal>
 							<td class="be_autocomplete_cell inside">
-								<table width="100%">
+								<table width="100%" style="border-collapse:collapse;border-color:silver;" border="1">
 									<tbody>
 										<tr>
 											<td width="50" class="be_autocomplete_code_cell">
@@ -64,6 +77,9 @@
 													</logic:present>
 												</div>
 											</td>
+											<!--
+											<td width="1">&nbsp;</td>
+											-->
 											<td align="left" class="be_autocomplete_label_cell">
 												<div class="be_autocomplete_static_text">
 													<logic:present name="ampEntityMappedItem" property="mapItem">

@@ -70,6 +70,8 @@ public class MapActions extends DispatchAction {
 
             MappingEntityAdapter adapter = MappingEntityAdapterUtil.getEntityAdapter(rule.getAmpColumn().getExtractorView());
 
+            beMapActionsForm.setAdditionalLabelCol(adapter.hasAddidionalLabelColumn());
+
             List<HierarchyListable> ampEntityList = adapter.getAllObjects();
             request.getSession().setAttribute(AMP_ENTITY_LIST_SESSION_ATTR, ampEntityList);
             beMapActionsForm.setAmpEntities(ampEntityList);
@@ -124,6 +126,7 @@ public class MapActions extends DispatchAction {
                             mapDbItem.setImportedCode(mapItem.getImportedCode());
                             mapDbItem.setImportedLabel(mapItem.getImportedLabel());
                             mapDbItem.setMatchLevel(mapItem.getMatchLevel());
+                            mapDbItem.setAdditionalLabel(mapItem.getAdditionalLabel());
                         }
                     }
                 } else { //Add a new one

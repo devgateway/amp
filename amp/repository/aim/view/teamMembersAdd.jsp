@@ -35,7 +35,6 @@
 
 
 <digi:instance property="aimTeamMemberForm" />
-
 <table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left">
 	<tr>
 		<td>
@@ -51,8 +50,10 @@
 										<table width="100%" cellpadding="0" cellspacing="0">
 											<tr>
 												<td>
-													<div >
-														<jsp:include page="addTeamMember.jsp" flush="true"/>									
+													<div>
+													<digi:link href="/teamMemberList.do" styleClass="l_sm">&lt;&lt;<digi:trn>Back to Members List</digi:trn></digi:link><br><br>
+													<input type="hidden" value="showAddFromTeam" id="addFromWhere"/>
+														<jsp:include page="addTeamMemberJSON.jsp" flush="true"/>								
 								                     </div>
 												</td>
 											</tr>

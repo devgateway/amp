@@ -78,6 +78,7 @@
 										</tr>										
 										<tr>
 											<td valign="top" colspan="2">
+												<input type="hidden" value="showAddFromAdmin" id="addFromWhere"/>
 												<jsp:include page="addTeamMemberJSON.jsp" flush="true"/>
 											</td>
 										</tr>

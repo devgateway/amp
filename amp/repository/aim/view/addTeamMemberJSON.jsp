@@ -334,8 +334,9 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 	function addUsersToWorkspace(){
 		if(validate()==true){
 			//submit form
+			var addFromWhere=document.getElementById("addFromWhere").value;
 			<digi:context name="commentUrl" property="context/module/moduleinstance/assignUsersToWorkspace.do"/>;
-			document.aimTeamMemberForm.action="${commentUrl}?added=true&addedFrom=showAddFromAdmin";
+			document.aimTeamMemberForm.action="${commentUrl}?added=true&addedFrom="+addFromWhere;
 		    document.aimTeamMemberForm.target="_self";
 		    document.aimTeamMemberForm.submit();
 		}

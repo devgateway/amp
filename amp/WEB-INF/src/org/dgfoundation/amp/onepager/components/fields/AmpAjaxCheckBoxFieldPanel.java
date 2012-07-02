@@ -8,6 +8,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.translation.TrnLabel;
 
 /**
  * @author mpostelnicu@dgateway.org
@@ -35,6 +36,7 @@ public abstract class AmpAjaxCheckBoxFieldPanel extends AmpFieldPanel<Boolean> {
 			
 		};
 		addFormComponent(checkbox);
+		add(new TrnLabel("label", fmName));
 	}
 
 	/**
@@ -42,7 +44,7 @@ public abstract class AmpAjaxCheckBoxFieldPanel extends AmpFieldPanel<Boolean> {
 	 * @param fmName
 	 */
 	public AmpAjaxCheckBoxFieldPanel(String id, String fmName,IModel<Boolean> model) {
-		this(id,fmName,model, false);
+		this(id,fmName,model, true);
 	}
 	
 

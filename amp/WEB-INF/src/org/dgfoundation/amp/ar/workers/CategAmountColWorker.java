@@ -454,7 +454,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		if(filter.getCurrency()!=null ) {
 			/* If source and destination currency are the same we need to set exactly the same exchange rate for 'toExchangeRate' and 'fromExchangeRate.
 			 * That way, AmountCell.convert won't do any computation' */
-			if ( currencyCode.equals(filter.getCurrency().getCurrencyCode())   ) 
+			if (currencyCode !=null && currencyCode.equals(filter.getCurrency().getCurrencyCode())   ) 
 				acc.setToExchangeRate( acc.getFromExchangeRate() );
 			else if ( !baseCurrCode.equals(filter.getCurrency().getCurrencyCode()))  
 				acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));

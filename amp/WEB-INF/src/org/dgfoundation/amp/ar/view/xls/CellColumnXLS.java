@@ -56,7 +56,11 @@ public class CellColumnXLS extends XLSExporter {
 		 c.invokeExporter(this);
 		 else {
 			 HSSFCell cell=this.getRegularCell();
-			 cell.setCellValue(0);
+			 if (col.getClass().toString().equalsIgnoreCase("class org.dgfoundation.amp.ar.TotalAmountColumn")){
+				 cell.setCellValue(0);
+			 }else{
+				 cell.setCellValue(" ");
+			 }
 			 colId.inc();
 		 }
 	}

@@ -73,9 +73,6 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 		dp.setAutoHide(true);
 		date.add(dp);
 		
-		
-	
-		
 		dateWrapper.add(date);
 		initFormComponent(date);
 		sameAsOtherDatePicker = new AmpAjaxCheckBoxFieldPanel(
@@ -101,8 +98,7 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 				}
 			}
 		};
-
-	    
+		sameAsOtherDatePicker.setIgnoreFmVisibility(true);
 		
 		if (otherDatePicker == null){
 			sameAsOtherDatePicker.setVisible(false);

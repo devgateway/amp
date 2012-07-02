@@ -122,7 +122,7 @@
 						<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 							<jsp:include page="teamSetupMenu.jsp" flush="true"/>
 					
-					<table>
+					<table style="width:100%;">
 					</c:if>
 					<tr>
 						<td width="250"><digi:trn key="aim:orgManagerType">Type</digi:trn>&nbsp;

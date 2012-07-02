@@ -568,7 +568,7 @@ initContactScript();
 
 			<table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width=1000
 				align=center>
-				<tr><td align="left"><digi:link href="/organisationManager.do" styleClass="sec_name">&lt;&lt;<digi:trn>Back to Organization List</digi:trn></digi:link></td></tr>
+				<tr><td align="left" style="padding-left:5px; font-weight:bold;"><digi:link href="/organisationManager.do" styleClass="l_sm">&lt;&lt;<digi:trn>Back to Organization List</digi:trn></digi:link></td></tr>
 				<tr>
 					<td align=left valign="top" width="100%">
 						<table bgcolor="#ffffff" cellPadding=5 cellspacing="0"

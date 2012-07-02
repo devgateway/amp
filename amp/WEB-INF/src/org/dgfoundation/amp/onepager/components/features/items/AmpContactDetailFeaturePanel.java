@@ -170,7 +170,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                     if (!item.getModelObject().getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
                         IModel<String> value = new PropertyModel<String>(item.getModel(), "value");
                         Fragment frg1 = new Fragment("detailPanel", "frag1",this);
-                        AmpTextFieldPanel<String> detailField=new AmpTextFieldPanel<String>("detail", value, fmName, true);
+                        AmpTextFieldPanel<String> detailField=new AmpTextFieldPanel<String>("detail", value, fmName, true,true);
                         if(item.getModelObject().getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
                         	TextField<String> detailTextField=detailField.getTextContainer();
                         	detailTextField.add(new SimpleAttributeModifier("size", "50"));
@@ -192,7 +192,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                             IModel<String> valueModel = new PropertyModel<String>(item.getModel(), "actualValue");
                             IModel<AmpCategoryValue> catValueModel = new PropertyModel<AmpCategoryValue>(item.getModel(), "categoryValue");
                             Fragment frg2 = new Fragment("detailPanel", "frag2",this);
-                            AmpTextFieldPanel<String> phn = new AmpTextFieldPanel<String>("phone", valueModel, fmName, true);
+                            AmpTextFieldPanel<String> phn = new AmpTextFieldPanel<String>("phone", valueModel, fmName, true,true);
                             TextField<String> detailTextField=phn.getTextContainer();
                         	detailTextField.setRequired(true);
                         	detailTextField.add(new PatternValidator(EXPRESSION));

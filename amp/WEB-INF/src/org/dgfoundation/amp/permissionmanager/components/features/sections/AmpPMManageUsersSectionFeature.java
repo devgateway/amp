@@ -29,7 +29,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 
 	protected ListView<User> idsList;
-	protected boolean visible = true ;
+	//protected boolean visible = true ;
 	
 	/**
 	 * @param id
@@ -47,12 +47,20 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 
 		final AmpPMAssignVerifiedOrgs usersOrgs = new AmpPMAssignVerifiedOrgs("assignMultiUsersMultiOrgs",allOrgsModel, allUsersModel, "Assign Verified Organizations to Users", false);
 		usersOrgs.getLabelContainer().add(new AttributeModifier("class",new Model("perm_h3")));
+		usersOrgs.setIgnorePermissions(true);
+		usersOrgs.setVisibilityAllowed(true);
+		usersOrgs.setOutputMarkupId(true);
+		usersOrgs.setVisible(false);
 		add(usersOrgs);
-		usersOrgs.setVisible(!visible);
 		
 		final AmpPMManageUsersTableFeaturePanel usersTable = new AmpPMManageUsersTableFeaturePanel("users", usersModel, "Users");
+		usersTable.setVisibilityAllowed(true);
+		usersTable.setIgnorePermissions(true);
+		usersTable.setOutputMarkupId(true);
+		usersTable.setVisible(true);
 		add(usersTable);
-		final AmpPMAjaxPagingNavigator paginator = new AmpPMAjaxPagingNavigator("navigator", (PageableListView)usersTable.getList()); 
+		final AmpPMAjaxPagingNavigator paginator = new AmpPMAjaxPagingNavigator("navigator", (PageableListView)usersTable.getList());
+		paginator.setVisibilityAllowed(true);
 		add(paginator);
 		idsList = usersTable.getList();
 		
@@ -80,23 +88,26 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		};
 		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(100));
 		searchUsers.getTextField().add(sizeModifier);
+		searchUsers.setVisibilityAllowed(true);
+		searchUsers.setIgnorePermissions(true);
 		add(searchUsers);
 		
 		AmpAjaxLinkField addVerifiedOrgsBtn = new AmpAjaxLinkField("addOrgsToUsers","Add Verified Organizations Button","Add Verified Organizations"){
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				visible = !visible;
-				usersTable.setVisible(visible);
-				paginator.setVisible(visible);
-				searchUsers.setVisible(visible);
-				usersOrgs.setVisible(!visible);
+				//visible = !visible;
+				usersTable.setVisible(!usersTable.isVisible());
+				paginator.setVisible(!paginator.isVisible());
+				searchUsers.setVisible(!searchUsers.isVisible());
+				usersOrgs.setVisible(!usersOrgs.isVisible());
 				target.add(AmpPMManageUsersSectionFeature.this);
 				target.appendJavaScript(OnePagerUtil.getToggleJS(AmpPMManageUsersSectionFeature.this.getSliderPM()));
 			}
 			
 		};
 		addVerifiedOrgsBtn.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		addVerifiedOrgsBtn.setVisibilityAllowed(true);
 		add(addVerifiedOrgsBtn);
 		
 	}

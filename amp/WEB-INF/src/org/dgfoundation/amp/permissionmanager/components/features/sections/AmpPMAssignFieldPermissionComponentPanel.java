@@ -157,7 +157,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 		permWorkspacesFieldsFormTable.setTableWidth(470);
 		permWorkspacesFieldsFormTable.setIgnorePermissions(true);
 		permWorkspacesFieldsFormTable.setOutputMarkupId(true);
-		permWorkspacesFieldsFormTable.setEnabled(false);
+		permWorkspacesFieldsFormTable.setEnabled(false); 
 		form.add(permWorkspacesFieldsFormTable);
 		
 		PMUtil.setPermissionPriorityVisibility(permissionChoiceModel, permGatesFieldsFormTable, permWorkspacesFieldsFormTable);

@@ -1,5 +1,8 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,7 +11,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.form.TeamActivitiesForm;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class RemoveTeamActivity extends Action {
@@ -23,6 +29,14 @@ public class RemoveTeamActivity extends Action {
         
         if (taForm.getSelActivities() != null) {
             TeamUtil.removeActivitiesFromTeam(taForm.getSelActivities(),taForm.getTeamId());
+            Long selActivities[] = taForm.getSelActivities();
+			for(Long selActivityId:selActivities){
+				AmpActivityVersion activity=ActivityUtil.getAmpActivityVersion(selActivityId);
+				String detail="unassigned from team";
+				List<String> details=new ArrayList<String>();
+				details.add(detail);
+				AuditLoggerUtil.logActivityUpdate(request, activity, details);
+			}
         }
         
         return mapping.findForward("forward");

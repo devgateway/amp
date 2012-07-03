@@ -1578,20 +1578,19 @@ public class TeamUtil {
     public static Collection<AmpActivityVersion> getManagementTeamActivities(Long teamId, String keyword) {
         Session session = null;
         Collection<AmpActivityVersion> activities=null;
-        String queryString = "";
         Query qry = null;
 
         try {
-            session = PersistenceManager.getSession();
+            
             Collection childIds = DesktopUtil.getAllChildrenIds(teamId);
             childIds.add(teamId);
             if(childIds != null && childIds.size() > 0) { 
-               
-                queryString = "select new AmpActivityVersion(a.ampActivityId,a.name, a.ampId) from " + AmpActivity.class.getName()+"  a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false) and ( a.deleted is null or a.deleted=false )";
-                if(keyword!=null){
-                	queryString += " and lower(a.name) like lower(:name)" ;
+            	session = PersistenceManager.getRequestDBSession();
+            	StringBuilder queryString = new StringBuilder("select new AmpActivityVersion(a.ampActivityId,a.name, a.ampId) from "+ AmpActivityGroup.class.getName()+" g inner join g.ampActivityLastVersion a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false) and ( a.deleted is null or a.deleted=false )");     
+                if(keyword!=null && keyword.length()>0){
+                 	queryString.append(" and lower(a.name) like lower(:name)") ;
                 }
-                qry = session.createQuery(queryString);
+                qry = session.createQuery(queryString.toString());
                 if(keyword!=null){
                 	qry.setString("name", "%" + keyword + "%");
                 } 

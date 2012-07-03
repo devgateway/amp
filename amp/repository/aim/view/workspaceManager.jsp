@@ -766,6 +766,9 @@
         
     }
     function removeActivity(id){
+    	YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
+        YAHOO.util.Dom.replaceClass('loadingDetailsIcon', 'invisibleTable','visibleTable');
+        YAHOO.util.Dom.replaceClass('addNew','visibleTable','invisibleTable');
             <digi:context name="commentUrl" property="context/module/moduleinstance/removeTeamActivityJSON.do"/>  
             var url = "<%=commentUrl %>";
         url += "?selActivities="+id+"&teamId="+ document.getElementsByName('teamId')[0].value;
@@ -783,6 +786,9 @@
                 }
                 finally {
                     document.getElementById('ws_go').disabled=false;
+                    YAHOO.util.Dom.replaceClass('loadingDetailsIcon','visibleTable', 'invisibleTable');
+                    YAHOO.util.Dom.replaceClass('loadedDetails', 'invisibleTable','visibleTable');
+                    YAHOO.util.Dom.replaceClass('addNew','invisibleTable', 'visibleTable');
                 }
             },
             failure : function () {

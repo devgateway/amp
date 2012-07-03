@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ecs.xml.XML;
+import org.apache.ecs.xml.XMLDocument;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -35,6 +37,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -55,6 +58,7 @@ public class CSVExportAction
       Exception {
 
     HttpSession session = request.getSession();
+    boolean asXml = request.getParameter("asXml") != null && request.getParameter("asXml").equalsIgnoreCase("true");
     AmpARFilter arf= (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
     TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 	if(tm == null){
@@ -75,9 +79,15 @@ public class CSVExportAction
 	if (session.getAttribute("currentMember")!=null || rd.getReportMetadata().getPublicReport()){
 	    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
 	
-	    response.setContentType("application/vnd.ms-excel");
-	    response.setHeader("Content-Disposition",
-	                       "inline; filename=data.csv ");
+        if (!asXml) {
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition",
+                           "inline; filename=data.csv ");
+        } else {
+            response.setContentType("text/xml");
+            response.setHeader("Content-Disposition",
+                                       "inline; filename=data.xml ");
+        }
 	
 	    HSSFWorkbook wb = new HSSFWorkbook();
 	
@@ -159,21 +169,51 @@ public class CSVExportAction
 	    
 	    grdx.setAutoSize(false);
 	    grdx.generate();
-	    
+
+
+        XMLDocument reportXML = null;
+        XML root = null;
+
+        if (asXml) {
+            reportXML = new XMLDocument();
+            reportXML.setCodeset("UTF-8");
+            root = new XML("report");
+            reportXML.addElement(root);
+        }
+
 	    // we now iterate the rows and create the csv
 	
 	    StringBuffer sb = new StringBuffer();
 	    Iterator i = sheet.rowIterator();
 	    while (i.hasNext()) {
 	      HSSFRow crow = (HSSFRow) i.next();
+          XML rowTag = null;
+            if (asXml) {
+                rowTag = new XML("row");
+              root.addElement(rowTag);
+            }
 	      for (short ii = crow.getFirstCellNum(); ii <= crow.getLastCellNum(); ii++) {
 	        HSSFCell ccell = crow.getCell(ii);
 	        String s = "";
+
+              XML columnTag = null;
+              if (asXml) {
+                  columnTag = new XML("column");
+                  rowTag.addElement(columnTag);
+              }
+
 	        if (ccell != null) {
-	          if (ccell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
+	          if (ccell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC) {
 	            s = Double.toString(ccell.getNumericCellValue());
-	          else
+                if (asXml) {
+                    columnTag.addElement(FormatHelper.formatNumber(ccell.getNumericCellValue()));
+                }
+              } else {
 	            s = ccell.getStringCellValue();
+                if (asXml) {
+                    columnTag.addElement(ccell.getStringCellValue());
+                }
+              }
 	          sb.append("\"").append(s).append("\"");
 	
 	          if (ii < crow.getLastCellNum())
@@ -183,12 +223,18 @@ public class CSVExportAction
 	      sb.append("\n");
 	
 	    }
-	    PrintWriter out = new PrintWriter(new OutputStreamWriter(response.
-	        getOutputStream(), "UnicodeLittle"), true);
-	
-	    out.println(sb.toString());
-	
-	    out.close();
+
+        if (!asXml) {
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(response.
+                                    getOutputStream(), "UnicodeLittle"), true);
+            out.println(sb.toString());
+            out.close();
+        } else {
+            reportXML.setCodeset("UTF-8");
+            reportXML.output(response.getOutputStream());
+            response.getOutputStream().close();
+        }
+
 	}else{
 		
 		Site site = RequestUtils.getSite(request);

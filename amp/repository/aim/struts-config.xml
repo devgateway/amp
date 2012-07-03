@@ -1918,6 +1918,8 @@
      <action name="aimTeamActivitiesForm" path="/aim/removeTeamActivityJSON" scope="request" type="org.digijava.module.aim.action.RemoveTeamActivity" validate="false">
 	  <forward name="forward" path="/aim/teamActivitiesJSON.do" />
     </action>
+
+    <action name="exportTableForm" path="/aim/reportTableProxy" scope="request" type="org.digijava.module.aim.action.publicview.ReportTableProxy"/>
 	    
   </action-mappings>
 </struts-config>

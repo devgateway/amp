@@ -48,7 +48,15 @@ public class ViewUserProfile
         if (request.getParameter("email") != null && request.getParameter("email") != "") {
             email = request.getParameter("email");
             user= DbUtil.getUser(email);
-            userid = user.getId();
+            if(user==null){
+            	 errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserIdLogs"));
+                 saveErrors(request, errors);
+                 return mapping.findForward("forward");
+            }
+            else{
+            	userid = user.getId();
+            }
+            
         }
         
         if (httpSession.getAttribute("ampAdmin") == null || httpSession.getAttribute("ampAdmin").equals("no")) {
@@ -63,7 +71,7 @@ public class ViewUserProfile
                 } else {
                     errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.invalidUserId"));
                     saveErrors(request, errors);
-                    return mapping.getInputForward();
+                    mapping.findForward("forward");
                 }
             } else if (member != null) {
 //            	user = DbUtil.getUser(member.getUser().getId()); 

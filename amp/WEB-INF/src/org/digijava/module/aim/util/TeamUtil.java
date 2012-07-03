@@ -1508,6 +1508,7 @@ public class TeamUtil {
             session = PersistenceManager.getRequestDBSession();
             StringBuilder queryString = new StringBuilder("select g.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" g where");
             Query qry = null;
+            queryString.append(" (g.ampActivityLastVersion.deleted is null or g.ampActivityLastVersion.deleted=false) and ") ;
             if(teamId == null) {
             	queryString.append(" g.ampActivityLastVersion.team is null") ;
             }else{
@@ -1586,7 +1587,7 @@ public class TeamUtil {
             childIds.add(teamId);
             if(childIds != null && childIds.size() > 0) { 
                
-                queryString = "select new AmpActivityVersion(a.ampActivityId,a.name, a.ampId) from " + AmpActivity.class.getName()+"  a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false)";
+                queryString = "select new AmpActivityVersion(a.ampActivityId,a.name, a.ampId) from " + AmpActivity.class.getName()+"  a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false) and ( a.deleted is null or a.deleted=false )";
                 if(keyword!=null){
                 	queryString += " and lower(a.name) like lower(:name)" ;
                 }
@@ -1622,7 +1623,7 @@ public class TeamUtil {
 			}else{
 				queryString+="where act.team is null";
 			}
-            queryString+=" and   (act.draft is null or act.draft=false) ";
+            queryString+=" and   (act.draft is null or act.draft=false) and ( act.deleted is null or act.deleted=false )";
             if(keyword!=null){
             	queryString += " and lower(act.name) like lower(:name)" ;
             }

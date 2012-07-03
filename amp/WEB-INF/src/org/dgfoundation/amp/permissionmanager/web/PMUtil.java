@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +25,6 @@ import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMRe
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
-import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
@@ -62,6 +62,7 @@ public final class PMUtil {
 	public static final String WORKSPACE_MEMBER_IMG_SRC = "/TEMPLATE/ampTemplate/img_2/ico_user.gif";
 	public static final String WORKSPACE_MANAGER_IMG_SRC = "/TEMPLATE/ampTemplate/img_2/ico_user_admin.gif";
 	
+	public static final HashMap<String,String> permissionRoles = createPermissionRoles();
 	
 	
 	public static void setGlobalPermission(Class globalPermissionMapForPermissibleClass, Permission permission,String simpleName) {
@@ -235,7 +236,7 @@ public final class PMUtil {
 
 	    CompositePermission cp=new CompositePermission(true);
 		cp.setDescription("This permission was created using the PM UI by admin user");
-		cp.setName(globalPermissibleClass.getSimpleName() + " - Composite Permission");
+		cp.setName(getFieldSimpleName(globalPermissibleClass.getSimpleName()) + " - Composite Permission");
 		
 		for (AmpPMReadEditWrapper ampPMGateWrapper : gatesSet) {
 			initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
@@ -315,7 +316,7 @@ public final class PMUtil {
 		}
 		CompositePermission cp = new CompositePermission(true);
 		cp.setDescription("This permission was created using the PM UI by admin user");
-		cp.setName(name);
+		cp.setName(getFieldSimpleName(name));
 		if(gatesSet!=null && gatesSet.size()>0)
 			for (AmpPMReadEditWrapper ampPMGateWrapper : gatesSet)
 				initializeAndSaveGatePermission(session,cp,ampPMGateWrapper);
@@ -495,6 +496,23 @@ public final class PMUtil {
 		gatesSet.add(new AmpPMGateReadEditWrapper(new Long(11),"Sector Group", "SG", OrgRoleGate.class, Boolean.FALSE,Boolean.FALSE));
 	}
 	
+	public static HashMap<String, String> createPermissionRoles(){
+		HashMap<String,String> result = new HashMap<String,String>();
+		result.put(UserLevelGate.PARAM_EVERYONE, "Everyone");
+		result.put(UserLevelGate.PARAM_GUEST, "Guest");
+		result.put(UserLevelGate.PARAM_OWNER, "Owner");
+		result.put("BA","Beneficiary Agency");
+		result.put("CA","Contracting Agency");
+		result.put("EA","Executing Agency");
+		result.put("FA","Funding Agency");
+		result.put("IA","Implementing Agency");
+		result.put("RA","Responsible Agency");
+		result.put("RG","Regional Group");
+		result.put("SG","Sector Group");
+		
+		return result;
+	}
+	
 	public static PermissionMap createPermissionMap(Class globalPermissionMapForPermissibleClass, boolean newCompPerm) {
 		PermissionMap pmAux;
 		pmAux = new PermissionMap();
@@ -506,10 +524,17 @@ public final class PMUtil {
 		return pmAux;
 	}
 	
+	public static String getFieldSimpleName(String name) {
+		if(name.contains("/"))
+			return name.substring(name.lastIndexOf("/")+1, name.length());
+		return name;
+	}
+	
+	
 	public static CompositePermission createCompositePermission(String name, String description, boolean dedicated){
 		CompositePermission cp=new CompositePermission(dedicated);
 		cp.setDescription(description);
-		cp.setName(name);
+		cp.setName(getFieldSimpleName(name));
 		return cp;
 	}
 
@@ -738,10 +763,10 @@ public final class PMUtil {
 		for (PermissionMap permissionMap : pmList) {
 			if(permissionMap!=null) {
 			    Permission p=permissionMap.getPermission();
-			    //result+="p: "+p.getName();
+			    result+="Permission Name: "+p.getName()+"; ";
 			    if (p!=null && p.isDedicated()) {
 					CompositePermission cp = (CompositePermission)p;
-					result+=" - cp:"+cp.getName();
+					//result+=" - cp:"+cp.getName();
 					String userInfo		 = "";
 					String workspaceInfo = "";
 					String orgRoleInfo	 = "";
@@ -757,7 +782,7 @@ public final class PMUtil {
 							workspaceInfo	+=	buildInfoGate(pGate,3);
 
 					}
-					result=userInfo +orgRoleInfo+ workspaceInfo;
+					result +=userInfo +orgRoleInfo+ workspaceInfo;
 			    }
 			}
 		}
@@ -779,6 +804,8 @@ public final class PMUtil {
 					AmpTeam team = TeamUtil.getAmpTeam(Long.parseLong(s));
 					s = team.getName();
 				}
+			else if (type == 2)
+					s = permissionRoles.get(s);
 			info+=s+": "+listToString(pGate.getActions(),",")+"; ";
 		}
 		return info; 

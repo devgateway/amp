@@ -753,40 +753,51 @@ public final class PMUtil {
 	}
 
 
-
-
 	public static String generatePermInfo(AmpObjectVisibility ampObjectVisibility) {
 		// TODO Auto-generated method stub
 		String  result	= "";
 		List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampObjectVisibility);
 		if(pmList!=null)
-		for (PermissionMap permissionMap : pmList) {
-			if(permissionMap!=null) {
-			    Permission p=permissionMap.getPermission();
-			    result+="Permission Name: "+p.getName()+"; ";
-			    if (p!=null && p.isDedicated()) {
-					CompositePermission cp = (CompositePermission)p;
-					//result+=" - cp:"+cp.getName();
-					String userInfo		 = "";
-					String workspaceInfo = "";
-					String orgRoleInfo	 = "";
-					for (Iterator<Permission> it = cp.getPermissions().iterator(); it.hasNext();) {
-						GatePermission pGate = (GatePermission) it.next();
-						//pGate.getGateSimpleName()
-						//UserLevelGate.class.getName()
-						if(UserLevelGate.class.getName().compareTo(pGate.getGateTypeName()) == 0)
-							userInfo		+=	buildInfoGate(pGate,1);
-						if(OrgRoleGate.class.getName().compareTo(pGate.getGateTypeName()) == 0)
-							orgRoleInfo		+=	buildInfoGate(pGate,2);
-						if(WorkspaceGate.class.getName().compareTo(pGate.getGateTypeName()) == 0)
-							workspaceInfo	+=	buildInfoGate(pGate,3);
-
-					}
-					result +=userInfo +orgRoleInfo+ workspaceInfo;
-			    }
+		{
+			for (PermissionMap permissionMap : pmList) {
+				if(permissionMap!=null) {
+				    Permission p=permissionMap.getPermission();
+				    result+="Assigned Field Permission : "+p.getName()+"; ";
+				    result = getContentInfoPermission(result, p);
+				}
 			}
 		}
+		else {
+			Permission p = PermissionUtil.getGlobalPermissionForPermissibleClass(AmpModulesVisibility.class);
+		    result+="GLOBAL Permission : "+p.getName()+"; ";
+		    result = getContentInfoPermission(result, p);
+		}
 		return result; 
+	}
+
+
+
+
+	private static String getContentInfoPermission(String result, Permission p) {
+		if (p!=null && p.isDedicated()) {
+			CompositePermission cp = (CompositePermission)p;
+			//result+=" - cp:"+cp.getName();
+			String userInfo		 = "";
+			String workspaceInfo = "";
+			String orgRoleInfo	 = "";
+			for (Iterator<Permission> it = cp.getPermissions().iterator(); it.hasNext();) {
+				GatePermission pGate = (GatePermission) it.next();
+				if(UserLevelGate.class.getName().compareTo(pGate.getGateTypeName()) == 0)
+					userInfo		+=	buildInfoGate(pGate,1);
+				if(OrgRoleGate.class.getName().compareTo(pGate.getGateTypeName()) == 0)
+					orgRoleInfo		+=	buildInfoGate(pGate,2);
+				if(WorkspaceGate.class.getName().compareTo(pGate.getGateTypeName()) == 0)
+					workspaceInfo	+=	buildInfoGate(pGate,3);
+
+			}
+			result +=userInfo +orgRoleInfo+ workspaceInfo;
+		}
+		return result;
 	}
 
 

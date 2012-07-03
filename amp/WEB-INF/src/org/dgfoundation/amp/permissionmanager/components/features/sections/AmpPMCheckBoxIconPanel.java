@@ -17,6 +17,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMCheckBoxTree;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
+import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 
 /**
  * @author dan
@@ -69,8 +70,11 @@ public class AmpPMCheckBoxIconPanel extends LabelIconPanel {
 		add(newContentComponent("content", tree, model));
 		String extPath = "/TEMPLATE/ampTemplate/images/info.gif";
 		WebMarkupContainer downloadLinkImg = new WebMarkupContainer("infoTip");
+		String info = "";
+		info = PMUtil.generatePermInfo(ampTree.getAmpObjectVisibility());
 		downloadLinkImg.add(new AttributeModifier("src", true, new Model(extPath)));
-		downloadLinkImg.add(new AttributeModifier("title", true, new Model(ampTree.getAmpObjectVisibility().getId().toString())));
+		//ampTree.getAmpObjectVisibility().getId().toString()
+		downloadLinkImg.add(new AttributeModifier("title", true, new Model(info)));
 		add(downloadLinkImg);
 	}
 

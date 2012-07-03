@@ -33,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.GatePermission;
@@ -598,7 +599,7 @@ public final class PMUtil {
 //			List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampTreeRootObject.getAmpObjectVisibility());
 			
 			Calendar cal = Calendar.getInstance();
-			CompositePermission cp = PMUtil.createCompositePermissionForFM(ampTreeRootObject.getAmpObjectVisibility().getName()+" Composite Permission Multiple Assigned " + cal.getTimeInMillis(), gatesSetModel!=null?gatesSetModel.getObject():null, workspacesSetModel!=null?workspacesSetModel.getObject():null);
+			CompositePermission cp = PMUtil.createCompositePermissionForFM(ampTreeRootObject.getAmpObjectVisibility().getName()+" Composite Permission " + cal.getTimeInMillis(), gatesSetModel!=null?gatesSetModel.getObject():null, workspacesSetModel!=null?workspacesSetModel.getObject():null);
 			session.save(cp);
 			PMUtil.saveFieldsPermission(session, root, cp);
 			
@@ -729,6 +730,70 @@ public final class PMUtil {
 
 
 
+	public static String generatePermInfo(AmpObjectVisibility ampObjectVisibility) {
+		// TODO Auto-generated method stub
+		String  result	= "";
+		List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampObjectVisibility);
+		if(pmList!=null)
+		for (PermissionMap permissionMap : pmList) {
+			if(permissionMap!=null) {
+			    Permission p=permissionMap.getPermission();
+			    //result+="p: "+p.getName();
+			    if (p!=null && p.isDedicated()) {
+					CompositePermission cp = (CompositePermission)p;
+					result+=" - cp:"+cp.getName();
+					String userInfo		 = "";
+					String workspaceInfo = "";
+					String orgRoleInfo	 = "";
+					for (Iterator<Permission> it = cp.getPermissions().iterator(); it.hasNext();) {
+						GatePermission pGate = (GatePermission) it.next();
+						//pGate.getGateSimpleName()
+						//UserLevelGate.class.getName()
+						if(UserLevelGate.class.getName().compareTo(pGate.getGateTypeName()) == 0)
+							userInfo		+=	buildInfoGate(pGate,1);
+						if(OrgRoleGate.class.getName().compareTo(pGate.getGateTypeName()) == 0)
+							orgRoleInfo		+=	buildInfoGate(pGate,2);
+						if(WorkspaceGate.class.getName().compareTo(pGate.getGateTypeName()) == 0)
+							workspaceInfo	+=	buildInfoGate(pGate,3);
 
+					}
+					result=userInfo +orgRoleInfo+ workspaceInfo;
+			    }
+			}
+		}
+		return result; 
+	}
+
+
+
+
+	private static String buildInfoGate(GatePermission pGate, int type) {
+		String info	= "";
+		//type = 1 - UserLevelGate
+		//type = 2 - OrgRoleGate
+		//type = 3 - WorkspaceGate
+		for (Iterator<String> iterator = pGate.getGateParameters().iterator(); iterator.hasNext();) {
+			String s = (String) iterator.next();
+			if(type == 3)
+				{
+					AmpTeam team = TeamUtil.getAmpTeam(Long.parseLong(s));
+					s = team.getName();
+				}
+			info+=s+": "+listToString(pGate.getActions(),",")+"; ";
+		}
+		return info; 
+	}
+	
+	private static String listToString(Set<String> s, String sep){
+		String result = "";
+		for (Iterator iterator = s.iterator(); iterator.hasNext();) {
+			String action = (String) iterator.next();
+			if(!iterator.hasNext())
+				result+=action;
+			else
+				result+=action+sep;
+		}
+		return result;
+	}
 	
 }

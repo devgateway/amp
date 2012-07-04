@@ -107,8 +107,7 @@ public class AmpStructureIdentificationFormTableFeature extends AmpFormTableFeat
 
 		final AmpTextFieldPanel<String> shape = new AmpTextFieldPanel<String>("shape", new PropertyModel<String>(structureModel, "shape"),"Structure Shape", true, true);
 		shape.setOutputMarkupId(true);
-		shape.setTextContainerDefaultMaxSize();
-
+		
 		shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
 		add(shape);
 

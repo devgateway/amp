@@ -6,9 +6,11 @@ public class AmpGraph implements Serializable {
 	
 	private Long id;
 	private String name;
+	private String containerId;
 	private String extractMethod;
 	private boolean barGraphEnabled;
 	private boolean barProfileGraphEnabled;
+	private boolean barGrowthGraphEnabled;
 	private boolean lineGraphEnabled;
 	private boolean pieGraphEnabled;
 	private boolean dataListEnabled;
@@ -24,6 +26,12 @@ public class AmpGraph implements Serializable {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getContainerId() {
+		return containerId;
+	}
+	public void setContainerId(String containerId) {
+		this.containerId = containerId;
 	}
 	public String getExtractMethod() {
 		return extractMethod;
@@ -42,6 +50,12 @@ public class AmpGraph implements Serializable {
 	}
 	public void setBarProfileGraphEnabled(boolean barProfileGraphEnabled) {
 		this.barProfileGraphEnabled = barProfileGraphEnabled;
+	}
+	public boolean isBarGrowthGraphEnabled() {
+		return barGrowthGraphEnabled;
+	}
+	public void setBarGrowthGraphEnabled(boolean barGrowthGraphEnabled) {
+		this.barGrowthGraphEnabled = barGrowthGraphEnabled;
 	}
 	public boolean isLineGraphEnabled() {
 		return lineGraphEnabled;

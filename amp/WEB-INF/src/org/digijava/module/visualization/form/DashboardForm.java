@@ -6,6 +6,7 @@ import org.apache.struts.action.ActionForm;
 import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.dbentity.AmpDashboardGraph;
 import org.digijava.module.visualization.dbentity.AmpGraph;
+import org.digijava.module.visualization.helper.DashboardFilter;
 
 public class DashboardForm extends ActionForm {
 
@@ -21,6 +22,7 @@ public class DashboardForm extends ActionForm {
 	private List<AmpDashboard> dashboardList;
 	private AmpDashboard dashboard;
 	private Long dashboardId;
+	private DashboardFilter filter; 
 	
 	public String getDashboardName() {
 		return dashboardName;
@@ -57,6 +59,12 @@ public class DashboardForm extends ActionForm {
 	}
 	public void setDashboardId(Long dashboardId) {
 		this.dashboardId = dashboardId;
+	}
+	public DashboardFilter getFilter() {
+		return filter;
+	}
+	public void setFilter(DashboardFilter filter) {
+		this.filter = filter;
 	}
 	
 }

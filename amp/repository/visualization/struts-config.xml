@@ -49,9 +49,15 @@
     	<action name="dashboardform" path="/visualization/saveDashboard" scope="session" type="org.digijava.module.visualization.action.SaveDashboard">
 	      	<forward name="forward" path="/visualization/viewDashboardsList.do" redirect="true"/>
 	    </action>
-    		<action name="dashboardform" path="/visualization/removeDashboard" scope="session" type="org.digijava.module.visualization.action.RemoveDashboard">
-      	<forward name="forward" path="/visualization/viewDashboardsList.do" redirect="true"/>
-    </action>
+    	<action name="dashboardform" path="/visualization/removeDashboard" scope="session" type="org.digijava.module.visualization.action.RemoveDashboard">
+      		<forward name="forward" path="/visualization/viewDashboardsList.do" redirect="true"/>
+    	</action>
+    	<action name="visualizationform" path="/visualization/dashboardLauncher" scope="session" type="org.digijava.module.visualization.action.DashboardLauncher">
+      		<forward name="forward" path="/showLayout.do?layout=dashboardLauncher"/>
+    	</action>
+    	<action name="visualizationform" path="/visualization/launchDashboard" scope="session" type="org.digijava.module.visualization.action.LaunchDashboard">
+      		<forward name="forward" path="/showLayout.do?layout=launchDashboard"/>
+    	</action>
     
 	</action-mappings>
 </struts-config>

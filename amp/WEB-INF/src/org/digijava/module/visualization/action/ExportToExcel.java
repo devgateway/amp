@@ -249,7 +249,7 @@ public class ExportToExcel extends Action {
 	        rowNum++;
             HSSFCell cell = row.createCell(cellNum);
             //sheet.addMergedRegion(new CellRangeAddress(1,1,0,5));
-	        HSSFRichTextString header = new HSSFRichTextString(name);
+	        HSSFRichTextString header = new HSSFRichTextString(vForm.getDashboard().getName());
 	        cell.setCellValue(header);
 	        cell.setCellStyle(titleCS);
 	        
@@ -376,24 +376,24 @@ public class ExportToExcel extends Action {
 	            headerText = new HSSFRichTextString(numberPrjTrn);
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(subHeaderCS);
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = row.createCell(cellNum++);
 	            	headerText = new HSSFRichTextString(numberDonTrn);
 	                cell.setCellValue(headerText);
 	                cell.setCellStyle(subHeaderCS);
-	            }
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+	            //}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
 	            	cell = row.createCell(cellNum++);
 	            	headerText = new HSSFRichTextString(numberRegTrn);
 	                cell.setCellValue(headerText);
 	                cell.setCellStyle(subHeaderCS);
-	            }
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+	            //}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
 	            	cell = row.createCell(cellNum++);
 	            	headerText = new HSSFRichTextString(numberSecTrn);
 	                cell.setCellValue(headerText);
 	                cell.setCellStyle(subHeaderCS);
-	            }
+	            //}
 	            cell = row.createCell(cellNum++);
 	            headerText = new HSSFRichTextString(numberPrjTrn);
 	            cell.setCellValue(headerText);
@@ -414,24 +414,24 @@ public class ExportToExcel extends Action {
 	            headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfProjects().toString());
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(lastCellStyle);
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = row.createCell(cellNum++);
 	                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfDonors().toString());
 	                cell.setCellValue(headerText);
 	                cell.setCellStyle(lastCellStyle);
-	            }
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+	            //}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
 	            	cell = row.createCell(cellNum++);
 	                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfRegions().toString());
 	                cell.setCellValue(headerText);
 	                cell.setCellStyle(lastCellStyle);
-	            }
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+	            //}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
 	            	cell = row.createCell(cellNum++);
 	                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfSectors().toString());
 	                cell.setCellValue(headerText);
 	                cell.setCellStyle(lastCellStyle);
-	            }
+	            //}
 	            cell = row.createCell(cellNum++);
 	            headerText = new HSSFRichTextString(vForm.getSummaryInformation().getAverageProjectSize().toString());
 	            cell.setCellValue(headerText);
@@ -442,55 +442,57 @@ public class ExportToExcel extends Action {
 	        rowNum = rowNum + 2;
 	        cellNum = 0;
 	        
-	        headerText = null;
-        	row = sheet.createRow(rowNum++);
-        	cell = row.createCell(cellNum++);
-            headerText = new HSSFRichTextString(topPrjTrn + " (" + currName + ")");
-            cell.setCellValue(headerText);
-            cell.setCellStyle(subHeaderCS);
-            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
-            
-            cellNum = 0;
-            row = sheet.createRow(rowNum++);
-            cell = row.createCell(cellNum++);
-            headerText = new HSSFRichTextString(projectTrn);
-            cell.setCellValue(headerText);
-            cell.setCellStyle(subHeaderCS);
-
-            cell = row.createCell(cellNum++);
-            headerText = new HSSFRichTextString(fundTypeTrn);
-            cell.setCellValue(headerText);
-            cell.setCellStyle(subHeaderCS);
-
-            //row = sheet.createRow(rowNum++);
-	        //cellNum = 0;
-	        Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
-	        if(topProjects!=null){
-	            List list = new LinkedList(topProjects.entrySet());
-			    for (Iterator it = list.iterator(); it.hasNext();) {
-			    	row = sheet.createRow(rowNum++);
-			        cellNum = 0;
-			        Map.Entry entry = (Map.Entry)it.next();
-			        HSSFCellStyle st = null;
-			        HSSFCellStyle stLf = null;
-			    	if (it.hasNext()){
-			    		st = cellStyle;
-			    		stLf = cellStyleLeft;
-			    	} else {
-		            	st = lastCellStyle;
-		            	stLf = lastCellStyleLeft;
-			    	}
-			        cell = row.createCell(cellNum++);
-		            headerText = new HSSFRichTextString(entry.getKey().toString());
-		            cell.setCellValue(headerText);
-		            cell.setCellStyle(stLf);
-		            cell = row.createCell(cellNum++);
-		            headerText = new HSSFRichTextString(entry.getValue().toString());
-		            cell.setCellValue(headerText);
-		            cell.setCellStyle(st);
-			    }
-	        }	
-	      
+	        if (vForm.getFilter().getShowProjectsRanking()){
+		        headerText = null;
+	        	row = sheet.createRow(rowNum++);
+	        	cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(topPrjTrn + " (" + currName + ")");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            cellNum = 0;
+	            row = sheet.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(projectTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(fundTypeTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	
+	            //row = sheet.createRow(rowNum++);
+		        //cellNum = 0;
+		        Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
+		        if(topProjects!=null){
+		            List list = new LinkedList(topProjects.entrySet());
+				    for (Iterator it = list.iterator(); it.hasNext();) {
+				    	row = sheet.createRow(rowNum++);
+				        cellNum = 0;
+				        Map.Entry entry = (Map.Entry)it.next();
+				        HSSFCellStyle st = null;
+				        HSSFCellStyle stLf = null;
+				    	if (it.hasNext()){
+				    		st = cellStyle;
+				    		stLf = cellStyleLeft;
+				    	} else {
+			            	st = lastCellStyle;
+			            	stLf = lastCellStyleLeft;
+				    	}
+				        cell = row.createCell(cellNum++);
+			            headerText = new HSSFRichTextString(entry.getKey().toString());
+			            cell.setCellValue(headerText);
+			            cell.setCellStyle(stLf);
+			            cell = row.createCell(cellNum++);
+			            headerText = new HSSFRichTextString(entry.getValue().toString());
+			            cell.setCellValue(headerText);
+			            cell.setCellStyle(st);
+				    }
+		        }	
+	        }
+	        
 		  //Funding Table.
 		    HSSFSheet sheet2 = null;
 		    if (!fundingOpt.equals("0")){

@@ -9,9 +9,11 @@
 		</id>
 	
 		<property name="name" column="name" type="java.lang.String" />
+		<property name="containerId" column="container_id" type="java.lang.String" />
 		<property name="extractMethod" column="extract_method" type="java.lang.String" />
 		<property name="barGraphEnabled" column="bar_graph_enabled" type="java.lang.Boolean" />
 		<property name="barProfileGraphEnabled" column="bar_profile_graph_enabled" type="java.lang.Boolean" />
+		<property name="barGrowthGraphEnabled" column="bar_growth_graph_enabled" type="java.lang.Boolean" />
 		<property name="lineGraphEnabled" column="line_graph_enabled" type="java.lang.Boolean" />
 		<property name="pieGraphEnabled" column="pie_graph_enabled" type="java.lang.Boolean" />
 		<property name="dataListEnabled" column="data_list_enabled" type="java.lang.Boolean" />

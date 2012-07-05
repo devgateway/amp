@@ -165,7 +165,8 @@ public class ExportToWord extends Action {
             doc.setFooter(footer);
             doc.setMargins(20, 20, 40, 40);
             doc.open();
-            Paragraph pageTitle = new Paragraph(dashboardTypeTrn.toUpperCase() + " " + dashboardTrn.toUpperCase(), TITLEFONT);
+            //Paragraph pageTitle = new Paragraph(dashboardTypeTrn.toUpperCase() + " " + dashboardTrn.toUpperCase(), TITLEFONT);
+            Paragraph pageTitle = new Paragraph(vForm.getDashboard().getName().toUpperCase(), TITLEFONT);
             pageTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(pageTitle);
             doc.add(new Paragraph(" "));
@@ -248,13 +249,13 @@ public class ExportToWord extends Action {
             
           //Summary table.
             if (summaryOpt.equals("1")) {
-				Table summaryTbl = new Table(6);
+				Table summaryTbl = new Table(7);
 				summaryTbl.setBorder(1);
 				summaryTbl.setBorderWidth(5);
 				summaryTbl.setBorderColor(Color.RED);
 	            summaryTbl.setWidth(100);
 	            RtfCell sumamaryTitleCell = new RtfCell(new Paragraph(summaryTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            sumamaryTitleCell.setColspan(6);
+	            sumamaryTitleCell.setColspan(7);
 	            summaryTbl.addCell(sumamaryTitleCell);
 	            cell = new RtfCell(new Paragraph(totalCommsTrn, HEADERFONTWHITE));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -268,24 +269,24 @@ public class ExportToWord extends Action {
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            cell.setBackgroundColor(TITLECOLOR);
 	            summaryTbl.addCell(cell);
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = new RtfCell(new Paragraph(numberDonTrn, HEADERFONTWHITE));
 	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            	cell.setBackgroundColor(TITLECOLOR);
 		            summaryTbl.addCell(cell);
-				}
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+				//}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
 		            cell = new RtfCell(new Paragraph(numberRegTrn, HEADERFONTWHITE));
 		            cell.setBackgroundColor(TITLECOLOR);
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
-	            }
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+	            //}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
 		            cell = new RtfCell(new Paragraph(numberSecTrn, HEADERFONTWHITE));
 		            cell.setBackgroundColor(TITLECOLOR);
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
-	            }
+	            //}
 	            cell = new RtfCell(new Paragraph(avgPrjZSizeTrn, HEADERFONTWHITE));
 	            cell.setBackgroundColor(TITLECOLOR);
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -300,68 +301,69 @@ public class ExportToWord extends Action {
 	            cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getNumberOfProjects().toString()));
 	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            summaryTbl.addCell(cell);
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getNumberOfDonors().toString()));
 	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
-				}
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+				//}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
 	            	cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getNumberOfRegions().toString()));
 	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
-	            }
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+	            //}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
 	            	cell = new RtfCell(new Paragraph(vForm.getSummaryInformation().getNumberOfSectors().toString()));
 	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
-	            }
+	            //}
 	            cell = new RtfCell(new Paragraph(getFormattedNumber(vForm.getSummaryInformation().getAverageProjectSize())));
 	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 summaryTbl.addCell(cell);
                 doc.add(summaryTbl);
 	            doc.add(new Paragraph(" "));
             }
-	            
-            Paragraph subTitle = new Paragraph(topPrjTrn + " (" + currName + ")", SUBTITLEFONT);
-            subTitle.setAlignment(Element.ALIGN_LEFT);
-            doc.add(subTitle);
-            
+	        
+            Paragraph subTitle = null;
           //Top projects table.
-            Table topPrjTbl = null;
-            topPrjTbl = new Table(2);
-            topPrjTbl.setWidth(100);
-            //RtfCell topPrjTitleCell = new RtfCell(new Paragraph(topPrjTrn + " (" + currName + ")", HEADERFONTWHITE));
-            //topPrjTitleCell.setColspan(2);
-            //topPrjTitleCell.setBackgroundColor(TITLECOLOR);
-            //topPrjTbl.addCell(topPrjTitleCell);
-            cell = new RtfCell(new Paragraph(projectTrn, HEADERFONTWHITE));
-            cell.setBackgroundColor(TITLECOLOR);
-            topPrjTbl.addCell(cell);
-            cell = new RtfCell(new Paragraph(fundTypeTrn, HEADERFONTWHITE));
-            cell.setBackgroundColor(TITLECOLOR);
-            topPrjTbl.addCell(cell);
-            Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
-            if (topProjects != null){
-	            list = new LinkedList(topProjects.entrySet());
-	            count = 0;
-			    for (Iterator it = list.iterator(); it.hasNext();) {
-			        Map.Entry entry = (Map.Entry)it.next();
-			        cell = new RtfCell(new Paragraph(entry.getKey().toString()));
-			        if (count % 2 == 0)
-			        	cell.setBackgroundColor(CELLCOLOR);
-			        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				    topPrjTbl.addCell(cell);
-				    cell = new RtfCell(new Paragraph(getFormattedNumber((BigDecimal)entry.getValue())));
-				    if (count % 2 == 0)
-			        	cell.setBackgroundColor(CELLCOLOR);
-				    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-				    topPrjTbl.addCell(cell);
-				    count++;
-			    }
-			    doc.add(topPrjTbl);
-	            doc.add(new Paragraph(" "));
+            if (vForm.getFilter().getShowProjectsRanking()){
+            	subTitle = new Paragraph(topPrjTrn + " (" + currName + ")", SUBTITLEFONT);
+                subTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(subTitle);
+                Table topPrjTbl = null;
+	            topPrjTbl = new Table(2);
+	            topPrjTbl.setWidth(100);
+	            //RtfCell topPrjTitleCell = new RtfCell(new Paragraph(topPrjTrn + " (" + currName + ")", HEADERFONTWHITE));
+	            //topPrjTitleCell.setColspan(2);
+	            //topPrjTitleCell.setBackgroundColor(TITLECOLOR);
+	            //topPrjTbl.addCell(topPrjTitleCell);
+	            cell = new RtfCell(new Paragraph(projectTrn, HEADERFONTWHITE));
+	            cell.setBackgroundColor(TITLECOLOR);
+	            topPrjTbl.addCell(cell);
+	            cell = new RtfCell(new Paragraph(fundTypeTrn, HEADERFONTWHITE));
+	            cell.setBackgroundColor(TITLECOLOR);
+	            topPrjTbl.addCell(cell);
+	            Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
+	            if (topProjects != null){
+		            list = new LinkedList(topProjects.entrySet());
+		            count = 0;
+				    for (Iterator it = list.iterator(); it.hasNext();) {
+				        Map.Entry entry = (Map.Entry)it.next();
+				        cell = new RtfCell(new Paragraph(entry.getKey().toString()));
+				        if (count % 2 == 0)
+				        	cell.setBackgroundColor(CELLCOLOR);
+				        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					    topPrjTbl.addCell(cell);
+					    cell = new RtfCell(new Paragraph(getFormattedNumber((BigDecimal)entry.getValue())));
+					    if (count % 2 == 0)
+				        	cell.setBackgroundColor(CELLCOLOR);
+					    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					    topPrjTbl.addCell(cell);
+					    count++;
+				    }
+				    doc.add(topPrjTbl);
+		            doc.add(new Paragraph(" "));
+	            }
             }
-            
             //Funding Table.
             if (!fundingOpt.equals("0")){
             	doc.newPage();

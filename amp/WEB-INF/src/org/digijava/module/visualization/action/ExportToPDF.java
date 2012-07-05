@@ -152,7 +152,8 @@ public class ExportToPDF extends Action {
             footer.setBorder(0);
             doc.setFooter(footer);
             doc.open();
-            Paragraph pageTitle = new Paragraph(dashboardTypeTrn.toUpperCase() + " " + dashboardTrn.toUpperCase(), TITLEFONT);
+            //Paragraph pageTitle = new Paragraph(dashboardTypeTrn.toUpperCase() + " " + dashboardTrn.toUpperCase(), TITLEFONT);
+            Paragraph pageTitle = new Paragraph(vForm.getDashboard().getName().toUpperCase(), TITLEFONT);
             pageTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(pageTitle);
             doc.add(new Paragraph(" "));
@@ -231,10 +232,10 @@ public class ExportToPDF extends Action {
           //Summary table.
             if (summaryOpt.equals("1")) {
 				PdfPTable summaryTbl = null;
-	            summaryTbl = new PdfPTable(6);
+	            summaryTbl = new PdfPTable(7);
 	            summaryTbl.setWidthPercentage(100);
 	            PdfPCell sumamaryTitleCell = new PdfPCell(new Paragraph(summaryTrn + " (" + currName + ")", HEADERFONT));
-	            sumamaryTitleCell.setColspan(6);
+	            sumamaryTitleCell.setColspan(7);
 	            summaryTbl.addCell(sumamaryTitleCell);
 	            cell = new PdfPCell(new Paragraph(totalCommsTrn, HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -245,20 +246,21 @@ public class ExportToPDF extends Action {
 	            cell = new PdfPCell(new Paragraph(numberPrjTrn, HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = new PdfPCell(new Paragraph(numberDonTrn, HEADERFONT));
-	                summaryTbl.addCell(cell);
-				}
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            summaryTbl.addCell(cell);
+				//}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
 		            cell = new PdfPCell(new Paragraph(numberRegTrn, HEADERFONT));
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
-	            }
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+	            //}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
 		            cell = new PdfPCell(new Paragraph(numberSecTrn, HEADERFONT));
 		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		            summaryTbl.addCell(cell);
-	            }
+	            //}
 	            cell = new PdfPCell(new Paragraph(avgPrjZSizeTrn, HEADERFONT));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	            summaryTbl.addCell(cell);
@@ -272,61 +274,62 @@ public class ExportToPDF extends Action {
 	            cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getNumberOfProjects().toString()));
 	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	            summaryTbl.addCell(cell);
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getNumberOfDonors().toString()));
 	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
-				}
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+				//}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
 	            	cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getNumberOfRegions().toString()));
 	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
-	            }
-	            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+	            //}
+	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
 	            	cell = new PdfPCell(new Paragraph(vForm.getSummaryInformation().getNumberOfSectors().toString()));
 	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	                summaryTbl.addCell(cell);
-	            }
+	            //}
 	            cell = new PdfPCell(new Paragraph(getFormattedNumber(vForm.getSummaryInformation().getAverageProjectSize())));
 	            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 summaryTbl.addCell(cell);
                 doc.add(summaryTbl);
 	            doc.add(new Paragraph(" "));
             }
-	        
-            Paragraph subTitle = new Paragraph(topPrjTrn + " (" + currName + ")", SUBTITLEFONT);
-            subTitle.setAlignment(Element.ALIGN_LEFT);
-            doc.add(subTitle);
-            doc.add(new Paragraph(" "));
-            
+           
+            Paragraph subTitle = null;
           //Top projects table.
-            PdfPTable topPrjTbl = null;
-            topPrjTbl = new PdfPTable(2);
-            topPrjTbl.setWidthPercentage(100);
-            //PdfPCell topPrjTitleCell = new PdfPCell(new Paragraph(topPrjTrn + " (" + currName + ")", HEADERFONT));
-            //topPrjTitleCell.setColspan(2);
-            //topPrjTbl.addCell(topPrjTitleCell);
-            cell = new PdfPCell(new Paragraph(projectTrn, HEADERFONT));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            topPrjTbl.addCell(cell);
-            cell = new PdfPCell(new Paragraph(fundTypeTrn, HEADERFONT));
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            topPrjTbl.addCell(cell);
-            Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
-            if (topProjects!=null){
-	            list = new LinkedList(topProjects.entrySet());
-			    for (Iterator it = list.iterator(); it.hasNext();) {
-			        Map.Entry entry = (Map.Entry)it.next();
-			        cell = new PdfPCell(new Paragraph(entry.getKey().toString()));
-			        topPrjTbl.addCell(cell);
-	            	cell = new PdfPCell(new Paragraph(getFormattedNumber((BigDecimal)entry.getValue())));
-	            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	            	topPrjTbl.addCell(cell);
-			    }
-			    doc.add(topPrjTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            
+            if (vForm.getFilter().getShowProjectsRanking()){
+            	 subTitle = new Paragraph(topPrjTrn + " (" + currName + ")", SUBTITLEFONT);
+                 subTitle.setAlignment(Element.ALIGN_LEFT);
+                 doc.add(subTitle);
+                 doc.add(new Paragraph(" "));
+                 PdfPTable topPrjTbl = null;
+	            topPrjTbl = new PdfPTable(2);
+	            topPrjTbl.setWidthPercentage(100);
+	            //PdfPCell topPrjTitleCell = new PdfPCell(new Paragraph(topPrjTrn + " (" + currName + ")", HEADERFONT));
+	            //topPrjTitleCell.setColspan(2);
+	            //topPrjTbl.addCell(topPrjTitleCell);
+	            cell = new PdfPCell(new Paragraph(projectTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            topPrjTbl.addCell(cell);
+	            cell = new PdfPCell(new Paragraph(fundTypeTrn, HEADERFONT));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            topPrjTbl.addCell(cell);
+	            Map<AmpActivityVersion, BigDecimal> topProjects = vForm.getRanksInformation().getTopProjects();
+	            if (topProjects!=null){
+		            list = new LinkedList(topProjects.entrySet());
+				    for (Iterator it = list.iterator(); it.hasNext();) {
+				        Map.Entry entry = (Map.Entry)it.next();
+				        cell = new PdfPCell(new Paragraph(entry.getKey().toString()));
+				        topPrjTbl.addCell(cell);
+		            	cell = new PdfPCell(new Paragraph(getFormattedNumber((BigDecimal)entry.getValue())));
+		            	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		            	topPrjTbl.addCell(cell);
+				    }
+				    doc.add(topPrjTbl);
+		            doc.add(new Paragraph(" "));
+	            }
+        	}
           //Funding Table.
             if (!fundingOpt.equals("0")){
             	doc.newPage();

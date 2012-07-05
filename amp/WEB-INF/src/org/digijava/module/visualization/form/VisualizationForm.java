@@ -16,6 +16,8 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
+import org.digijava.module.visualization.dbentity.AmpDashboard;
+import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.util.Constants;
 
@@ -32,6 +34,29 @@ public class VisualizationForm extends ActionForm {
 	private RanksInformation ranksInformation;
 	private ExportData exportData;
 	private Map<String, Map<AmpActivityVersion, BigDecimal>> itemProjectsList;
+	private List<AmpGraph> graphList;
+	private List<AmpDashboard> dashboardList;
+	private AmpDashboard dashboard;
+	
+	
+	public List<AmpGraph> getGraphList() {
+		return graphList;
+	}
+	public void setGraphList(List<AmpGraph> graphList) {
+		this.graphList = graphList;
+	}
+	public List<AmpDashboard> getDashboardList() {
+		return dashboardList;
+	}
+	public void setDashboardList(List<AmpDashboard> dashboardList) {
+		this.dashboardList = dashboardList;
+	}
+	public AmpDashboard getDashboard() {
+		return dashboard;
+	}
+	public void setDashboard(AmpDashboard dashboard) {
+		this.dashboard = dashboard;
+	}
 	
 	public Map<String, Map<AmpActivityVersion, BigDecimal>> getItemProjectsList() {
 		return itemProjectsList;
@@ -216,16 +241,16 @@ public class VisualizationForm extends ActionForm {
 		private String sectorTableData;
 		private String regionTableData;
 		private String ODAGrowthTableData;
-		private int fundingOpt = 3;
-		private int aidPredicOpt = 3;
-		private int aidTypeOpt = 3;
-		private int financingInstOpt = 3;
-		private int donorOpt = 3;
-		private int sectorOpt = 3;
-		private int regionOpt = 3;
-		private int summaryOpt = 1;	
-		private int typeOpt = 0;
-		private int ODAGrowthOpt = 3;
+		private int exportFundingsOption = 3;
+		private int exportAidPredictabilityOption = 3;
+		private int exportAidTypeOption = 3;
+		private int exportAidModalityOption = 3;
+		private int exportDonorProfileOption = 3;
+		private int exportSectorProfileOption = 3;
+		private int exportRegionProfileOption = 3;
+		private int exportSummaryOption = 1;	
+		private int exportTypeOption = 0;
+		private int exportODAGrowthOption = 3;
 		
 		public BufferedImage getAidPredictabilityGraph() {
 			return aidPredictabilityGraph;
@@ -355,86 +380,85 @@ public class VisualizationForm extends ActionForm {
 			this.ODAGrowthTableData = ODAGrowthTableData;
 		}
 
-		public int getFundingOpt() {
-			return fundingOpt;
+		public int getExportFundingsOption() {
+			return exportFundingsOption;
 		}
 
-		public void setFundingOpt(int fundingOpt) {
-			this.fundingOpt = fundingOpt;
+		public void setExportFundingsOption(int exportFundingsOption) {
+			this.exportFundingsOption = exportFundingsOption;
 		}
 
-		public int getAidPredicOpt() {
-			return aidPredicOpt;
+		public int getExportAidPredictabilityOption() {
+			return exportAidPredictabilityOption;
 		}
 
-		public void setAidPredicOpt(int aidPredicOpt) {
-			this.aidPredicOpt = aidPredicOpt;
+		public void setExportAidPredictabilityOption(int exportAidPredictabilityOption) {
+			this.exportAidPredictabilityOption = exportAidPredictabilityOption;
 		}
 
-		public int getAidTypeOpt() {
-			return aidTypeOpt;
+		public int getExportAidTypeOption() {
+			return exportAidTypeOption;
 		}
 
-		public void setAidTypeOpt(int aidTypeOpt) {
-			this.aidTypeOpt = aidTypeOpt;
+		public void setExportAidTypeOption(int exportAidTypeOption) {
+			this.exportAidTypeOption = exportAidTypeOption;
 		}
 
-		public int getFinancingInstOpt() {
-			return financingInstOpt;
+		public int getExportAidModalityOption() {
+			return exportAidModalityOption;
 		}
 
-		public void setFinancingInstOpt(int financingInstOpt) {
-			this.financingInstOpt = financingInstOpt;
+		public void setExportAidModalityOption(int exportAidModalityOption) {
+			this.exportAidModalityOption = exportAidModalityOption;
 		}
 
-		public int getDonorOpt() {
-			return donorOpt;
+		public int getExportDonorProfileOption() {
+			return exportDonorProfileOption;
 		}
 
-		public void setDonorOpt(int donorOpt) {
-			this.donorOpt = donorOpt;
+		public void setExportDonorProfileOption(int exportDonorProfileOption) {
+			this.exportDonorProfileOption = exportDonorProfileOption;
 		}
 
-		public int getSectorOpt() {
-			return sectorOpt;
+		public int getExportSectorProfileOption() {
+			return exportSectorProfileOption;
 		}
 
-		public void setSectorOpt(int sectorOpt) {
-			this.sectorOpt = sectorOpt;
+		public void setExportSectorProfileOption(int exportSectorProfileOption) {
+			this.exportSectorProfileOption = exportSectorProfileOption;
 		}
 
-		public int getRegionOpt() {
-			return regionOpt;
+		public int getExportRegionProfileOption() {
+			return exportRegionProfileOption;
 		}
 
-		public void setRegionOpt(int regionOpt) {
-			this.regionOpt = regionOpt;
+		public void setExportRegionProfileOption(int exportRegionProfileOption) {
+			this.exportRegionProfileOption = exportRegionProfileOption;
 		}
 
-		public int getSummaryOpt() {
-			return summaryOpt;
+		public int getExportSummaryOption() {
+			return exportSummaryOption;
 		}
 
-		public void setSummaryOpt(int summaryOpt) {
-			this.summaryOpt = summaryOpt;
+		public void setExportSummaryOption(int exportSummaryOption) {
+			this.exportSummaryOption = exportSummaryOption;
 		}
 
-		public int getTypeOpt() {
-			return typeOpt;
+		public int getExportTypeOption() {
+			return exportTypeOption;
 		}
 
-		public void setTypeOpt(int typeOpt) {
-			this.typeOpt = typeOpt;
+		public void setExportTypeOption(int exportTypeOption) {
+			this.exportTypeOption = exportTypeOption;
 		}
 
-		public int getODAGrowthOpt() {
-			return ODAGrowthOpt;
+		public int getExportODAGrowthOption() {
+			return exportODAGrowthOption;
 		}
 
-		public void setODAGrowthOpt(int oDAGrowthOpt) {
-			ODAGrowthOpt = oDAGrowthOpt;
-		} 
-	
-		
+		public void setExportODAGrowthOption(int exportODAGrowthOption) {
+			this.exportODAGrowthOption = exportODAGrowthOption;
+		}
+
 	}
 }

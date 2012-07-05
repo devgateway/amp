@@ -8,6 +8,8 @@
 		<page name="showProjectsList" title="Visualization Dashboard" />
 		<page name="viewDashboardsList" page="viewDashboardsList" title ="Dashboards List" />
 		<page name="addDashboard" page="addDashboard" title ="Add Dashboard" />
+		<page name="dashboardLauncher" page="dashboardLauncher" title ="Dashboard Launcher" />
+		<page name="launchDashboard" page="launchDashboard" title ="Launch Dashboard" />
 	</secondary-pages>
 	
 </config>

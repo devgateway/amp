@@ -1714,6 +1714,29 @@ public class DbUtil {
         return dashGraphs;
     }
 
+	public static AmpDashboardGraph getDashboardGraphById(Long id) {
+        Session session = null;
+        AmpDashboardGraph dashGraph = null;
+        Iterator itr = null;
+		
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select d from "
+                + AmpDashboardGraph.class.getName() + " d where (d.id=:id)";
+            Query qry = session.createQuery(queryString);
+            qry = session.createQuery(queryString);
+			qry.setParameter("id", id, Hibernate.LONG);
+			itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				dashGraph = (AmpDashboardGraph) itr.next();
+			}
+        } catch (Exception ex) {
+            logger.error("Unable to get dashboard graph from database", ex);
+        }
+        logger.debug("Getting dashboard graph successfully ");
+        return dashGraph;
+    }
+
 	public static void saveDashboard(AmpDashboard dashboard, DashboardForm form) throws DgException {
 		
 		Transaction tx=null;

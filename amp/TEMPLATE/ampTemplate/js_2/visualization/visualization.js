@@ -111,41 +111,45 @@ var updateFullList = {
 						}
 						inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a>";
 						var div = document.getElementById("divFullProjects");
-						div.innerHTML = inner;
+						if (div!=null)
+							div.innerHTML = inner;
 						break;
 					case "DonorsList":
-						if (dashboardType!=1) {
+						//if (dashboardType!=1) {
 							inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a> <br />";
 							for(var i = 0; i < child.list.length; i++){
 								inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
 							}
 							inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a>";
 							var div = document.getElementById("divFullDonors");
-							div.innerHTML = inner;
-						}
+							if (div!=null)
+								div.innerHTML = inner;
+						//}
 						break;
 					case "SectorsList":
-						if (dashboardType!=3) {
+						//if (dashboardType!=3) {
 							inner = "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a> <br />";
 							for(var i = 0; i < child.list.length; i++){
 								inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
 							}
 							inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a>";
 							var div = document.getElementById("divFullSectors");
-							div.innerHTML = inner;
-						}
+							if (div!=null)
+								div.innerHTML = inner;
+						//}
 						break;
 					case "RegionsList":
-						if (dashboardType!=2) {
+						//if (dashboardType!=2) {
 							inner = "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a> <br />";
 							for(var i = 0; i < child.list.length; i++){
 								inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
 							}
 							inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a>";
 							var div = document.getElementById("divFullRegions");
-							div.innerHTML = inner;
+							if (div!=null)
+								div.innerHTML = inner;
 							inner = "";
-						}
+						//}
 						break;
 					default:
 						break;
@@ -418,13 +422,14 @@ function doExport(){
 	options += "typeOpt=" + getOptionChecked("export_type_");
 	options += "&summaryOpt=" + getOptionChecked("export_summary_");
 	options += "&ODAGrowthOpt=" + getOptionChecked("export_ODAGrowth_");
-	options += "&fundingOpt=" + getOptionChecked("export_funding_");
-	options += "&aidPredicOpt=" + getOptionChecked("export_aid_pred_");
-	options += "&aidTypeOpt=" + getOptionChecked("export_aid_type_");
-	options += "&financingInstOpt=" + getOptionChecked("export_fin_inst_");
-	options += "&donorOpt=" + getOptionChecked("export_donor_");
-	options += "&sectorOpt=" + getOptionChecked("export_sector_");
-	options += "&regionOpt=" + getOptionChecked("export_region_");
+	options += "&fundingOpt=" + getOptionChecked("export_Fundings_");
+	options += "&aidPredicOpt=" + getOptionChecked("export_AidPredictability_");
+	options += "&aidTypeOpt=" + getOptionChecked("export_AidType_");
+	options += "&financingInstOpt=" + getOptionChecked("export_AidModality_");
+	options += "&donorOpt=" + getOptionChecked("export_DonorProfile_");
+	options += "&sectorOpt=" + getOptionChecked("export_SectorProfile_");
+	options += "&regionOpt=" + getOptionChecked("export_RegionProfile_");
+	
 	var type = "" + getOptionChecked("export_type_");
 	if (type=="0") {
 		document.visualizationform.action= urlPdfExport + options ;
@@ -502,7 +507,6 @@ function resetToDefaults(){
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
 	document.getElementById("show_amounts_in_thousands").checked = false;
-	document.getElementById("show_national_values").checked = false;
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
@@ -760,18 +764,26 @@ function callbackApplyFilter(e){
 	document.getElementById("endYear_dropdown").value = document.getElementById("endYearQuickFilter_dropdown").value;
 	document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
 	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
-	document.getElementById("showNationalValues").value = document.getElementById("show_national_values").checked;
 	
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
 		return;
 	}
 	
+	var params = "";
+	params = params + "&orgGroupIds=" + getQueryParameter("orgGroupIds");
+	params = params + "&orgIds=" + getQueryParameter("orgIds");
+	params = params + "&regionIds=" + getQueryParameter("regionIds");
+	params = params + "&zoneIds=" + getQueryParameter("zoneIds");
+	params = params + "&selSectorConfigId=" + getQueryParameter("selSectorConfigId");
+	params = params + "&sectorIds=" + getQueryParameter("sectorIds");
+	params = params + "&subSectorIds=" + getQueryParameter("subSectorIds");
+
 	loadingPanel.show();
 
 	YAHOO.util.Connect.setForm('visualizationform');
 
-	var sUrl="/visualization/dataDispatcher.do?action=applyFilter";
+	var sUrl="/visualization/dataDispatcher.do?action=applyFilter" + params;
 
 	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
 
@@ -835,7 +847,6 @@ var callbackUpdateLoadingPanel = {
 		};
 
 function applyFilterPopin(e){
-	
 //var allGraphs = document.getElementsByName("flashContent");
 	document.getElementById("topLists").value = document.getElementById("topLists_dropdown").options[document.getElementById("topLists_dropdown").selectedIndex].value;
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
@@ -862,7 +873,6 @@ function applyFilterPopin(e){
 		document.getElementById("workspaceOnlyQuickFilter").checked = document.getElementById("workspace_only").checked;
 	}
 	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
-	document.getElementById("showNationalValues").value = document.getElementById("show_national_values").checked;
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	
 	if (document.getElementById("transaction_type_0").checked == true) {
@@ -998,51 +1008,55 @@ function refreshBoxes(o){
 				}
 				inner = inner + "<a href='javascript:showFullList(\"projects\")' style='float:right;'>"+trnShowFullList+"</a>";
 				var div = document.getElementById("divTopProjects");
-				div.innerHTML = inner;
+				if (div!=null)
+					div.innerHTML = inner;
 				break;
 			case "DonorsList":
-				if (dashboardType!=1) {
+				//if (dashboardType!=1) {
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
 						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:showFullList(\"donors\")' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopDonors");
-					div.innerHTML = inner;
-				}
+					if (div!=null)
+						div.innerHTML = inner;
+				//}
 				break;
 			case "SectorsList":
-				if (dashboardType!=3) {
+				//if (dashboardType!=3) {
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
 						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:showFullList(\"sectors\")' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopSectors");
-					div.innerHTML = inner;
-				}
+					if (div!=null)
+						div.innerHTML = inner;
+				//}
 				break;
 			case "RegionsList":
-				if (dashboardType!=2) {
+				//if (dashboardType!=2) {
 					inner = "";
 					for(var i = 0; i < child.top.length; i++){
 						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
 					}
 					inner = inner + "<a href='javascript:showFullList(\"regions\")' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopRegions");
-					div.innerHTML = inner;
-				}
+					if (div!=null)
+						div.innerHTML = inner;
+				//}
 				break;
 			case "SelOrgGroupsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "<hr />";
+					inner = "<hr/>";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
 						inner2 = inner2 + child.list[i].name + " - ";
 					}
-					inner = inner + " <hr />";
+					inner = inner + "<hr/>";
 					var div = document.getElementById("org_group_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterOrgGroups").innerHTML = inner2;
@@ -1057,13 +1071,13 @@ function refreshBoxes(o){
 			case "SelOrgsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "<hr /> ";
+					inner = "<hr/>";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
 						inner2 = inner2 + child.list[i].name + " - ";
 					}
-					inner = inner + " <hr />";
+					inner = inner + "<hr/>";
 					var div = document.getElementById("org_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterOrganizations").innerHTML = inner2;
@@ -1078,13 +1092,13 @@ function refreshBoxes(o){
 			case "SelRegionsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "<hr /> ";
+					inner = "<hr/>";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
 						inner2 = inner2 + child.list[i].name + " - ";
 					}
-					inner = inner + " <hr />";
+					inner = inner + "<hr/>";
 					var div = document.getElementById("region_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterRegions").innerHTML = inner2;
@@ -1099,11 +1113,11 @@ function refreshBoxes(o){
 			case "SelZonesList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "<hr /> ";
+					inner = "<hr/>";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
 					}
-					inner = inner + "<hr />";
+					inner = inner + "<hr/>";
 					var div = document.getElementById("zone_list_id");
 					div.innerHTML = inner;
 					div.style.display = "";
@@ -1116,8 +1130,9 @@ function refreshBoxes(o){
 				break;
 			case "SelSectorConfig":
 					if (child.list.length > 0) {
-					inner =child.list[0].name;
+					inner ="<hr/>"+child.list[0].name;
 					var div = document.getElementById("sector_config_list_id");
+					inner = inner + "<hr/>";
 					div.innerHTML = inner;
 					document.getElementById("filterSectorConfiguration").innerHTML = inner;
 					div.style.display = "";
@@ -1130,13 +1145,13 @@ function refreshBoxes(o){
 			case "SelSectorsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "<hr /> ";
+					inner = "<hr/>";
 					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
 						inner2 = inner2 + child.list[i].name + " - ";
 					}
-					inner = inner + " <hr />";
+					inner = inner + "<hr/>";
 					var div = document.getElementById("sector_list_id");
 					div.innerHTML = inner;
 					document.getElementById("filterSectors").innerHTML = inner2;
@@ -1151,11 +1166,11 @@ function refreshBoxes(o){
 			case "SelSubSectorsList":
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
-					inner = "<hr /> ";
+					inner = "<hr/>";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
 					}
-					inner = inner + " <hr />";
+					inner = inner + "<hr/>";
 					var div = document.getElementById("sub_sector_list_id");
 					div.innerHTML = inner;
 					div.style.display = "";
@@ -1302,19 +1317,20 @@ function refreshBoxes(o){
 	}
 	inner = "<a title='" + trnTotalDisbsDescription + "' style='color: black;'>" + trnTotalDisbs + "</a> <b>" + valTotalDisbs + "</b><span class='breadcrump_sep'>|</span>";
 	inner = inner + "<a title='" + trnNumOfProjsDescription + "' style='color: black;'>" + trnNumOfProjs + "</a> <b>" + valNumOfProjs + "</b><span class='breadcrump_sep'>|</span>";
-	if (dashboardType!=1) {
+	//if (dashboardType!=1) {
 		inner = inner + "<a title='" + trnNumOfDonsDescription + "' style='color: black;'>" + trnNumOfDons + "</a> <b>" + valNumOfDons + "</b><span class='breadcrump_sep'>|</span>";
-	}
-	if (dashboardType!=3) {
+	//}
+	//if (dashboardType!=3) {
 		inner = inner + "<a title='" + trnNumOfSecsDescription + "' style='color: black;'>" + trnNumOfSecs + "</a> <b>" + valNumOfSecs + "</b><span class='breadcrump_sep'>|</span>";
-	}
-	if (dashboardType!=2) {
+	//}
+	//if (dashboardType!=2) {
 		inner = inner + "<a title='" + trnNumOfRegsDescription + "' style='color: black;'>" + trnNumOfRegs + "</a> <b>" + valNumOfRegs + "</b><span class='breadcrump_sep'>|</span>";
-	}
+	//}
 	inner = inner + "<a title='" + trnAvgProjSizeDescription + "' style='color: black;'>" + trnAvgProjSize + "</a> <b>" + valAvgProjSize;
 	var div = document.getElementById("divSummaryInfo");
 	div.innerHTML = inner;
 
+	/*
 	var namePlaceholder = document.getElementById("dashboard_name");
 	if (dashboardType==1) {
 		var name1 = "";
@@ -1400,7 +1416,7 @@ function refreshBoxes(o){
 		name1 = name1.replace(/</g, "< ");
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
-	
+	*/
 	var type = document.getElementById("transactionType").value;
 	var fundType = "";
 	if (type==0) {
@@ -1412,6 +1428,19 @@ function refreshBoxes(o){
 	if (type==2) {
 		fundType = trnExpenditures;
 	}
+	
+	var titlesObj = getTitlesObjects();
+	for ( var i = 0; i < titlesObj.length; i++) {
+		var id = titlesObj[i].getAttribute("id");
+		if(id!=null && id.indexOf("Legend")!=-1){
+			var input = document.getElementById(id.substr(0,id.indexOf("Legend")));
+			var trnTitle = document.getElementById(id+"Trn").value + " - " + fundType;
+			titlesObj[i].innerHTML = trnTitle;
+			if (input != null)
+				input.value = trnTitle;
+		}
+	}
+	/*
 	try
 	{
 		if (dashboardType==1) {
@@ -1513,7 +1542,7 @@ function refreshBoxes(o){
 	catch(e){
 		
 	}
-
+	*/
 	var startYear = document.getElementById("startYear").value;
 	var endYear = document.getElementById("endYear").value;
 
@@ -1523,34 +1552,49 @@ function refreshBoxes(o){
 	} else {
 		inner = trnTopProjects + " (" + startYear + "-" + endYear + ")";
 	}
-	div.innerHTML = inner;
-	if (dashboardType!=3) {
+	if (div!=null)
+		div.innerHTML = inner;
+	//if (dashboardType!=3) {
 		div = document.getElementById("topSectorsTitle");
 		if (startYear == endYear) {
 			inner = trnTopSectors + " (" + startYear + ")";
 		} else {
 			inner = trnTopSectors + " (" + startYear + "-" + endYear + ")";
 		}
-		div.innerHTML = inner;
-	}
-	if (dashboardType!=1) {
+		if (div!=null)
+			div.innerHTML = inner;
+	//}
+	//if (dashboardType!=1) {
 		div = document.getElementById("topDonorsTitle");
 		if (startYear == endYear) {
 			inner = trnTopDonors + " (" + startYear + ")";
 		} else {
 			inner = trnTopDonors + " (" + startYear + "-" + endYear + ")";
 		}
-		div.innerHTML = inner;
-	}
-	if (dashboardType!=2) {
+		if (div!=null)
+			div.innerHTML = inner;
+	//}
+	//if (dashboardType!=2) {
 		div = document.getElementById("topRegionsTitle");
 		if (startYear == endYear) {
 			inner = trnTopRegions + " (" + startYear + ")";
 		} else {
 			inner = trnTopRegions + " (" + startYear + "-" + endYear + ")";
 		}
-		div.innerHTML = inner;
+		if (div!=null)
+			div.innerHTML = inner;
+	//}
+}
+
+function getTitlesObjects(){
+	var objs = document.getElementsByTagName("span");
+	var arrReturnElements = new Array();
+	for ( var i = 0; i < objs.length; i++) {
+		if (objs[i].getAttribute("class")=="legend_label"){
+			arrReturnElements.push(objs[i]);
+		}
 	}
+	return (arrReturnElements);
 }
 
 YAHOO.util.Event.onDOMReady(initializeTranslations);
@@ -1569,16 +1613,16 @@ YAHOO.util.Event.addListener("visualizationDiv", "click", refreshGraphs);
 var initialized = false;
 function initDashboard(){
 	var dashboardType = document.getElementById("dashboardType").value;
-	changeChart(null, 'bar', 'FundingChart', true);
-	changeChart(null, 'bar', 'ODAGrowth');
-	changeChart(null, 'bar', 'AidPredictability', true);
-	changeChart(null, 'bar', 'AidType', true);
-	changeChart(null, 'bar', 'FinancingInstrument', true);
-	if (dashboardType!=1) {
-		changeChart(null, 'bar_profile', 'DonorProfile', true);
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		var id = allGraphs[idx].children[0].getAttribute("id");
+		if (id.indexOf("Profile")!=-1)
+			changeChart(null, 'bar_profile', id, true);
+		else if (id.indexOf("Growth")!=-1)
+			changeChart(null, 'bar_growth', id, true);
+		else
+			changeChart(null, 'bar', id, true);
 	}
-	changeChart(null, 'bar_profile', 'SectorProfile', true);
-	changeChart(null, 'bar_profile', 'RegionProfile', true);
 	callbackApplyFilter();
 }
 
@@ -1690,13 +1734,13 @@ function changeChart(e, chartType, container, useGeneric){
 			if(useGeneric)
 				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries.swf" + cache, container, "634", "460", "10.0.0", false, flashvars, params, attributes);
 			else
-			{
-				if(container == "ODAGrowth"){
-					swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf" + cache, container, "634", "460", "10.0.0", false, flashvars, params, attributes);
-				}
-				else
-					swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf" + cache, container, "634", "460", "10.0.0", false, flashvars, params, attributes);
-			}
+				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf" + cache, container, "634", "460", "10.0.0", false, flashvars, params, attributes);
+			break;
+		case "bar_growth":
+			if(useGeneric)
+				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_Growth.swf" + cache, container, "634", "460", "10.0.0", false, flashvars, params, attributes);
+			else
+				swfobject.embedSWF("/repository/visualization/view/charts/BarChartSeries_" + container + ".swf" + cache, container, "634", "460", "10.0.0", false, flashvars, params, attributes);
 			break;
 		case "bar_profile":
 			if(useGeneric)
@@ -1732,12 +1776,30 @@ function updateChartSettings(container, chartType){
 	var fontSize = document.getElementById(container + "FontSize") == undefined ? "" : document.getElementById(container + "FontSize");
 	var boldTitle = document.getElementById(container + "Bold") == undefined ? "" : document.getElementById(container + "Bold");
 	var showLegend = document.getElementById(container + "ShowLegend") == undefined ? "" : document.getElementById(container + "ShowLegend");
+	var showLegendLabel = document.getElementById(container + "ShowLegendLabel") == undefined ? "" : document.getElementById(container + "ShowLegendLabel");
 	var showDataLabel = document.getElementById(container + "ShowDataLabel") == undefined ? "" : document.getElementById(container + "ShowDataLabel");
 	var rotateDataLabel = document.getElementById(container + "RotateDataLabel") == undefined ? "" : document.getElementById(container + "RotateDataLabel");
+	var rotateDataLabelLabel = document.getElementById(container + "RotateDataLabelLabel") == undefined ? "" : document.getElementById(container + "RotateDataLabelLabel");
 	var divide = document.getElementById(container + "Divide") == undefined ? "" : document.getElementById(container + "Divide");
+	var divideLabel = document.getElementById(container + "DivideLabel") == undefined ? "" : document.getElementById(container + "DivideLabel");
+	var ignore = document.getElementById(container + "Ignore") == undefined ? "" : document.getElementById(container + "Ignore");
+	var ignoreLabel = document.getElementById(container + "IgnoreLabel") == undefined ? "" : document.getElementById(container + "IgnoreLabel");
 
 	switch(chartType){
-	
+	case "bar_growth":
+		title.disabled = false;
+		fontSize.disabled = false;
+		boldTitle.disabled = false;
+		showLegend.style.display = "none";
+		showLegendLabel.style.display = "none";
+		showDataLabel.disabled = false;
+		rotateDataLabel.style.display = "none";
+		rotateDataLabelLabel.style.display = "none";
+		divide.style.display = "none";
+		divideLabel.style.display = "none";
+		ignore.style.display = "";
+		ignoreLabel.style.display = "";
+		break;
 	case "bar":
 		title.disabled = false;
 		fontSize.disabled = false;
@@ -1793,16 +1855,16 @@ function updateChartSettings(container, chartType){
 
 function reloadGraphs(){
 	var dashboardType = document.getElementById("dashboardType").value;
-	changeChart('start', 'bar', 'ODAGrowth');
-	changeChart('start', 'bar', 'FundingChart', true);
-	changeChart('start', 'bar', 'AidPredictability', true);
-	changeChart('start', 'bar', 'AidType', true);
-	changeChart('start', 'bar', 'FinancingInstrument', true);
-	if (dashboardType!=1) {
-		changeChart('start', 'bar_profile', 'DonorProfile', true);
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		var id = allGraphs[idx].children[0].getAttribute("id");
+		if (id.indexOf("Profile")!=-1)
+			changeChart('start', 'bar_profile', id, true);
+		else if (id.indexOf("Growth")!=-1)
+			changeChart('start', 'bar_growth', id, true);
+		else
+			changeChart('start', 'bar', id, true);
 	}
-	changeChart('start', 'bar_profile', 'SectorProfile', true);
-	changeChart('start', 'bar_profile', 'RegionProfile', true);
 }
 
 function itemClick(id, type, startYear, endYear){
@@ -1816,3 +1878,124 @@ function itemClick(id, type, startYear, endYear){
 
 		//var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getActivitiesList&id=" + id + "&type=" + type + "&year=" + year, showListPopinCall, null);
 }
+
+function callbackGetGraphs(id) {
+	var elems = document.getElementsByName("dsbd");
+	for ( var i = 0; i < elems.length; i++) {
+		var id2 = elems[i].getAttribute("id");
+		if (id2==id) {
+			$("#"+id2).addClass("side_opt_sel");	
+		} else {
+			$("#"+id2).removeClass("side_opt_sel");	
+		}
+		
+	}
+	if (id != null){
+		var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getGraphsFromDashboard&id=" + id, callbackGetGraphsCall, null);
+	}
+}
+
+
+var callbackGetGraphsCall = {
+	  success: function(o) {
+		  try {
+			    var results = YAHOO.lang.JSON.parse(o.responseText);
+	       		var graphList = document.getElementById("graphList");
+	    		var inner = "";
+	    		for(var i = 0; i < results.children.length; i++){
+	    			inner = inner+"<li><input type='checkbox' value='"+results.children[i].ID+"' name='graphChech'><label>"+results.children[i].name+"</label></li>";
+	    		}
+	    		graphList.innerHTML = inner;
+			}
+			catch (e) {
+			    alert("Invalid respose.");
+			}
+	  },
+	  failure: function(o) {//Fail silently
+		  }
+	};
+
+
+function launchDashboard(){
+	var graphList = document.getElementsByName("graphChech");
+	var graphs = "";
+	if(graphList.length==0){
+		alert(selectOneGraph);
+		return;
+	}
+	for(var i = 0; i < graphList.length; i++){
+		if (graphList[i].checked==true)
+			graphs = graphs + graphList[i].value + ",";
+	}
+	
+	document.getElementById("topLists").value = document.getElementById("topLists_dropdown").options[document.getElementById("topLists_dropdown").selectedIndex].value;
+	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
+	document.getElementById("startYear").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
+	document.getElementById("endYear").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;
+	
+	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
+	document.getElementById("fiscalCalendarId").value = document.getElementById("fiscalCalendar_dropdown_Id").options[document.getElementById("fiscalCalendar_dropdown_Id").selectedIndex].value;
+	document.getElementById("commitmentsVisible").value = document.getElementById("commitments_visible").checked;
+	document.getElementById("disbursementsVisible").value = document.getElementById("disbursements_visible").checked;
+	if (document.getElementById("expenditures_visible")!=null){
+		document.getElementById("expendituresVisible").value = document.getElementById("expenditures_visible").checked;
+	}
+	if (document.getElementById("pledge_visible")!=null){
+		document.getElementById("pledgeVisible").value = document.getElementById("pledge_visible").checked;
+	}
+	if (document.getElementById("workspace_only")!=null){
+		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
+	}
+	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
+	
+	if (document.getElementById("transaction_type_0").checked == true) {
+		document.getElementById("transactionType").value = document.getElementById("transaction_type_0").value;
+	}
+	if (document.getElementById("transaction_type_1").checked == true) {
+		document.getElementById("transactionType").value = document.getElementById("transaction_type_1").value;
+	}
+	if (document.getElementById("transaction_type_2")!=null){
+		if (document.getElementById("transaction_type_2").checked == true) {
+			document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
+		}
+	}
+	document.getElementById("showProjectsRanking").value = document.getElementById("show_projects_ranking").checked;
+	document.getElementById("showDonorsRanking").value = document.getElementById("show_donors_ranking").checked;
+	document.getElementById("showSectorsRanking").value = document.getElementById("show_sectors_ranking").checked;
+	document.getElementById("showRegionsRanking").value = document.getElementById("show_regions_ranking").checked;
+	
+	var params = "";
+	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
+	params = params + "&orgIds=" + getSelectionsFromElement("organization_check",false);
+	params = params + "&regionIds=" + getSelectionsFromElement("region_check",false);
+	params = params + "&zoneIds=" + getSelectionsFromElement("zone_check",false);
+	params = params + "&selSectorConfigId=" + getSelectionsFromElement("sector_config_check",false);
+	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
+	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);
+
+	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
+		alert(alertBadDate);	
+		return;
+	}
+	var launchDashboardURL= urlLaunchDashboard + "&graphs=" + graphs + params;
+	  document.visualizationform.action = launchDashboardURL;
+	  document.visualizationform.target = "_blank";
+	  document.visualizationform.submit();
+}
+
+function getQueryParameter ( parameterName ) {
+	  var queryString = window.top.location.search.substring(1);
+	  var parameterName = parameterName + "=";
+	  if ( queryString.length > 0 ) {
+	    begin = queryString.indexOf ( parameterName );
+	    if ( begin != -1 ) {
+	      begin += parameterName.length;
+	      end = queryString.indexOf ( "&" , begin );
+	        if ( end == -1 ) {
+	        end = queryString.length
+	      }
+	      return unescape ( queryString.substring ( begin, end ) );
+	    }
+	  }
+	  return "null";
+	}

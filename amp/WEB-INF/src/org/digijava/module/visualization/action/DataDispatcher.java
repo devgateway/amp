@@ -54,6 +54,8 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.visualization.dbentity.AmpDashboardGraph;
+import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.util.DashboardUtil;
@@ -522,7 +524,7 @@ public class DataDispatcher extends DispatchAction {
         	Map map = null;
         	//If the startYear/endYear selected is the same as in the general filter, use the stored rank
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
-        		if(sectorId != null && !sectorId.equals("-1")){ //If there's a selected sector, get subsectors
+        		if(sectorId != null && !sectorId.equals("") && !sectorId.equals("-1")){ //If there's a selected sector, get subsectors
                 	Long id = Long.parseLong(sectorId);
                 	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), filter, null, null);
                 }
@@ -576,12 +578,12 @@ public class DataDispatcher extends DispatchAction {
 	 	                
 	 	                if (donut){
     	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-    	                		xmlString.append("<sector name=\"" + sec.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + sec.getAmpSectorId() + "\"  yearLabels=\"" + yearLabels + "\"/>\n");
+    	                		xmlString.append("<dataField name=\"" + sec.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + sec.getAmpSectorId() + "\"  yearLabels=\"" + yearLabels + "\"/>\n");
     	                		index++;
     	                	}
     	                } else {
     	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-    	                		xmlString.append("<sector name=\"" + sec.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + sec.getAmpSectorId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
+    	                		xmlString.append("<dataField name=\"" + sec.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + sec.getAmpSectorId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
     	                		index++;
 	     	                }
     	                }
@@ -598,11 +600,11 @@ public class DataDispatcher extends DispatchAction {
 	 	            BigDecimal percentage = getPercentage(othersValue, sectorTotal);
 	 	            if (donut){
 	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-	              		xmlString.append("<sector name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
+	              		xmlString.append("<dataField name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                	}
 	                } else {
 	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-	                		xmlString.append("<sector name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
+	                		xmlString.append("<dataField name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                		index++;
     	                }
 	                }
@@ -610,8 +612,8 @@ public class DataDispatcher extends DispatchAction {
 	 				//	xmlString.append("<sector name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + getPercentage(othersValue, sectorTotal) + "\"/>\n");
 	 	            //}
 				} else {
-	            	xmlString.append("<sector name=\"\">\n");
-					xmlString.append("</sector>\n");
+	            	xmlString.append("<dataField name=\"\">\n");
+					xmlString.append("</dataField>\n");
 				}
 			} else {
 	        	csvString = new StringBuffer();
@@ -920,12 +922,12 @@ public class DataDispatcher extends DispatchAction {
      	               //if(percentage.compareTo(new BigDecimal(0.01)) == 1) //if this is more than 0.01
      	                if (donut){
      	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-     	                		xmlString.append("<donor name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
+     	                		xmlString.append("<dataField name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
      	                		index++;
      	                	}
      	                } else {
      	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-     	                		xmlString.append("<donor name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
+     	                		xmlString.append("<dataField name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
      	                		index++;
  	     	                }
      	                }
@@ -942,11 +944,11 @@ public class DataDispatcher extends DispatchAction {
      	           	BigDecimal percentage = getPercentage(othersValue, donorTotal);
 	 	            if (donut){
 	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<donor name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
+	                		xmlString.append("<dataField name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                	}
 	                } else {
 	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-	                		xmlString.append("<donor name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
+	                		xmlString.append("<dataField name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                		index++;
 	                	}
 	                }
@@ -957,8 +959,8 @@ public class DataDispatcher extends DispatchAction {
     			}
     			else
     			{
-                	xmlString.append("<donor name=\"\">\n");
-    				xmlString.append("</donor>\n");
+                	xmlString.append("<dataField name=\"\">\n");
+    				xmlString.append("</dataField>\n");
     			}
     		}
             else
@@ -1145,9 +1147,10 @@ public class DataDispatcher extends DispatchAction {
         }
 	}	
 	
-	public ActionForward getAidTypeGraphData(ActionMapping mapping,
+	public ActionForward getAidModalityGraphData(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
+		
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
                 String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
@@ -1242,12 +1245,12 @@ public class DataDispatcher extends DispatchAction {
 		                }
 						BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
 		                if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<aidtype name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
 				} else {
-					xmlString.append("<aidtype name=\"\">\n");
-					xmlString.append("</aidtype>\n");
+					xmlString.append("<dataField name=\"\">\n");
+					xmlString.append("</dataField>\n");
 				}
 			}
 			else
@@ -1273,7 +1276,7 @@ public class DataDispatcher extends DispatchAction {
 			                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 			                }
 			                hasValues = true;
-							xmlString.append("<aidtype category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+							xmlString.append("<dataField category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
 							aidTypeData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 						}
 						else
@@ -1282,7 +1285,7 @@ public class DataDispatcher extends DispatchAction {
 						}
 					}
 					if (!hasValues){
-						xmlString.append("<aidtype category=\"Category\" id=\"0\" amount=\"0.00\" year=\"" + yearName + "\"/>\n");
+						xmlString.append("<dataField category=\"Category\" id=\"0\" amount=\"0.00\" year=\"" + yearName + "\"/>\n");
 					}
 					xmlString.append("</year>\n");
 				}
@@ -1367,7 +1370,17 @@ public class DataDispatcher extends DispatchAction {
     	out.close();
 
     	return null;
-		}
+		
+	}
+	
+	public ActionForward getAidTypeGraphData(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws java.lang.Exception {
+
+		request.setAttribute("typeofaid",true);
+		return getAidModalityGraphData(mapping, form, request, response);
+		
+	}
         
 	
 	public ActionForward getAidPredictabilityGraphData(ActionMapping mapping,
@@ -1435,10 +1448,10 @@ public class DataDispatcher extends DispatchAction {
 				xmlString.append("<year name=\"" + yearName + "\">\n");
 				aidPredData += "<" + yearName;
 	            DecimalWraper fundingPlanned = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
-				xmlString.append("<fundingtype category=\""+plannedTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey() + "\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				xmlString.append("<dataField category=\""+plannedTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey() + "\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
 				aidPredData += ">Planned>" + fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				DecimalWraper fundingActual = DbUtil.getFunding(filter, startDate, endDate,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-				xmlString.append("<fundingtype category=\""+actualTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey() + "\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				xmlString.append("<dataField category=\""+actualTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey() + "\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
 				aidPredData += ">Actual>" + fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				xmlString.append("</year>\n");
 			}
@@ -1627,7 +1640,7 @@ public class DataDispatcher extends DispatchAction {
 							filter.getOrgGroupIds(), startDate, endDate,
 							currCode);
 					xmlString
-					.append("<fundingtype category=\""+TranslatorWorker.translateText("Pledges", locale, siteId)+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
+					.append("<dataField category=\""+TranslatorWorker.translateText("Pledges", locale, siteId)+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + pledgesTranslatedTitle + ">"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isCommitmentsVisible()) {
@@ -1635,7 +1648,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 					xmlString
-					.append("<fundingtype category=\""+ comTranslatedTitle +"\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
+					.append("<dataField category=\""+ comTranslatedTitle +"\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + comTranslatedTitle + ">"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isDisbursementsVisible()) {
@@ -1643,7 +1656,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 					xmlString
-					.append("<fundingtype category=\""+ disbTranslatedTitle +"\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + yearName + "\"/>\n");
+					.append("<dataField category=\""+ disbTranslatedTitle +"\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + disbTranslatedTitle + ">"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isExpendituresVisible() && expendituresVisible) {
@@ -1651,7 +1664,7 @@ public class DataDispatcher extends DispatchAction {
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 					xmlString
-					.append("<fundingtype category=\""+ expTranslatedTitle +"\" id=\"" + Constants.EXPENDITURE + "\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
+					.append("<dataField category=\""+ expTranslatedTitle +"\" id=\"" + Constants.EXPENDITURE + "\" amount=\""+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + expTranslatedTitle + ">"+ fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 
@@ -1852,6 +1865,52 @@ public class DataDispatcher extends DispatchAction {
 		}
 		return null;
 	}
+	
+	public ActionForward getGraphsFromDashboard(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+
+		VisualizationForm visualizationForm = (VisualizationForm)form;
+		
+		String id = request.getParameter("id");
+
+        JSONObject root = new JSONObject();
+	    JSONArray children = new JSONArray();
+
+	    List<AmpDashboardGraph> dashboardGraphs = DbUtil.getDashboardGraphByDashboard(Long.valueOf(id));
+	    visualizationForm.setDashboard(DbUtil.getDashboardById(Long.valueOf(id)));
+	    
+	    try {
+        	JSONObject child = new JSONObject();
+			Iterator<AmpDashboardGraph> it = dashboardGraphs.iterator();
+			while(it.hasNext()){
+				AmpDashboardGraph dashboardGraph = it.next();
+				child.put("ID", dashboardGraph.getId());
+				String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+				String locale = RequestUtils.getNavigationLanguage(request).getCode();
+				String graphName = TranslatorWorker.translateText(dashboardGraph.getGraph().getName(), locale, siteId);
+				child.put("name", graphName);
+				children.add(child);
+			}
+			root.put("children", children);
+        } catch (Exception e) {
+            logger.error("unable to load organizations", e);
+        }
+	    
+		response.setContentType("text/json-comment-filtered");
+		OutputStreamWriter outputStream = null;
+
+		try {
+			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+			outputStream.write(root.toString());
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+		return null;
+	}
+	
 	public ActionForward getProgress(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
@@ -1956,7 +2015,7 @@ public class DataDispatcher extends DispatchAction {
         	Map map = null;
         	//If the startYear/endYear selected is the same as in the general filter, use the stored rank
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
-	            if(regionId != null && !regionId.equals("-1")){
+	            if(regionId != null && !regionId.equals("") && !regionId.equals("-1")){
 	            	Long id = Long.parseLong(regionId);
 	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue(),request);
 	            }
@@ -2009,12 +2068,12 @@ public class DataDispatcher extends DispatchAction {
 	 	                BigDecimal value = (BigDecimal)entry.getValue();
 	 	                if (donut){
     	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + loc.getId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
+    	                		xmlString.append("<dataField name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + loc.getId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
     	                		index++;
     	                	}
     	                } else {
     	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-    	                		xmlString.append("<region name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + loc.getId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
+    	                		xmlString.append("<dataField name=\"" + entry.getKey() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + loc.getId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
     	                		index++;
 	     	                }
     	                }
@@ -2031,11 +2090,11 @@ public class DataDispatcher extends DispatchAction {
 	 	            BigDecimal percentage = getPercentage(othersValue, regionTotal);
 	 	            if (donut){
 	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<region name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
+	                		xmlString.append("<dataField name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                	}
 	                } else {
 	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-	                		xmlString.append("<region name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
+	                		xmlString.append("<dataField name=\"" + othersTitle + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ othersValue.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + idsArrayStr + "\"/>\n");
 	                		index++;
 	                	}
 	                }
@@ -2043,8 +2102,8 @@ public class DataDispatcher extends DispatchAction {
 	 				//	xmlString.append("<region name=\"" + othersTitle + "\" value=\""+ othersValue.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + othersTitle + "\" percentage=\"" + getPercentage(othersValue, regionTotal) + "\"/>\n");
 	 	            //}
 				} else {
-	            	xmlString.append("<region name=\"\">\n");
-					xmlString.append("</region>\n");
+	            	xmlString.append("<dataField name=\"\">\n");
+					xmlString.append("</dataField>\n");
 				}
 			} else {
 	        	csvString = new StringBuffer();
@@ -2354,12 +2413,12 @@ public class DataDispatcher extends DispatchAction {
 					value = new BigDecimal(-105);
 					valueStr = valueStr + " <<<";
 				}
-				xmlString.append("<organization name=\"" + yearInterval + "\" value=\""+ value + "\" valueStr=\""+ valueStr + "\" label=\"" + yearInterval + "\" />\n");
+				xmlString.append("<dataField name=\"" + yearInterval + "\" value=\""+ value + "\" valueStr=\""+ valueStr + "\" label=\"" + yearInterval + "\" />\n");
 			}
 	        
 			if (xmlString.length()==0) {
-				xmlString.append("<organization name=\"\">\n");
-				xmlString.append("</organization>\n");
+				xmlString.append("<dataField name=\"\">\n");
+				xmlString.append("</dataField>\n");
 			}
 			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 			response.setHeader("Pragma", "no-cache");
@@ -2452,12 +2511,12 @@ public class DataDispatcher extends DispatchAction {
 					value = new BigDecimal(-105);
 					valueStr = valueStr + " <<<";
 				}
-				xmlString.append("<organization name=\"" + org.getAcronym() + "\" value=\""+ value + "\" valueStr=\""+ valueStr + "\" label=\"" + org.getName() + "\" />\n");
+				xmlString.append("<dataField name=\"" + org.getAcronym() + "\" value=\""+ value + "\" valueStr=\""+ valueStr + "\" label=\"" + org.getName() + "\" />\n");
 			}
 	        
 			if (xmlString.length()==0) {
-				xmlString.append("<organization name=\"\">\n");
-				xmlString.append("</organization>\n");
+				xmlString.append("<dataField name=\"\">\n");
+				xmlString.append("</dataField>\n");
 			}
 			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 			response.setHeader("Pragma", "no-cache");
@@ -2521,7 +2580,7 @@ public class DataDispatcher extends DispatchAction {
 	                byte[] imagen=decoder.decodeBuffer(new String(bytes));
 	                InputStream in = new ByteArrayInputStream(imagen);
 	                BufferedImage image =  ImageIO.read(in);
-	                if (graph.equals("FundingChart")) {
+	                if (graph.equals("Fundings")) {
 						vForm.getExportData().setFundingGraph(image);
 						logger.info("Creating image from Funding graph");
 	                }
@@ -2533,7 +2592,7 @@ public class DataDispatcher extends DispatchAction {
 						vForm.getExportData().setAidTypeGraph(image);
 						logger.info("Creating image from Aid Type graph");
 	                }
-	                if (graph.equals("FinancingInstrument")) {
+	                if (graph.equals("AidModality")) {
 						vForm.getExportData().setFinancingInstGraph(image);
 						logger.info("Creating image from Financing Instrument graph");
 	                }

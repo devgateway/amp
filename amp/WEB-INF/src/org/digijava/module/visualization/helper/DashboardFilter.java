@@ -44,7 +44,7 @@ public class DashboardFilter {
     private List<AmpCategoryValueLocations> regions;
     private List<AmpCategoryValueLocations> zones;
     private List<AmpClassificationConfiguration> sectorConfigs;
-
+    
     private Long[] orgGroupIds;
     private Long orgGroupId;
     private Long[] orgIds;
@@ -87,7 +87,11 @@ public class DashboardFilter {
     private Boolean showOnlyApprovedActivities;
     private Boolean showOnlyNonDraftActivities;
     private Boolean showAmountsInThousands;
-
+    private Boolean showProjectsRanking;
+    private Boolean showDonorsRanking;
+    private Boolean showSectorsRanking;
+    private Boolean showRegionsRanking;
+    
     private Long activityId;
     private int decimalsToShow;
     private String groupSeparator = FormatHelper.getGroupSymbol();
@@ -311,6 +315,7 @@ public class DashboardFilter {
 
     public void setTransactionType(int transactionType) {
         this.transactionType = transactionType;
+        this.transactionTypeQuickFilter = transactionType;
     }
     
     public void setTransactionTypeFilter(int transactionTypeFilter) {
@@ -826,6 +831,38 @@ public class DashboardFilter {
 
 	public void setShowNationalValues(Boolean showNationalValues) {
 		this.showNationalValues = showNationalValues;
+	}
+
+	public Boolean getShowProjectsRanking() {
+		return showProjectsRanking;
+	}
+
+	public void setShowProjectsRanking(Boolean showProjectsRanking) {
+		this.showProjectsRanking = showProjectsRanking;
+	}
+
+	public Boolean getShowDonorsRanking() {
+		return showDonorsRanking;
+	}
+
+	public void setShowDonorsRanking(Boolean showDonorsRanking) {
+		this.showDonorsRanking = showDonorsRanking;
+	}
+
+	public Boolean getShowSectorsRanking() {
+		return showSectorsRanking;
+	}
+
+	public void setShowSectorsRanking(Boolean showSectorsRanking) {
+		this.showSectorsRanking = showSectorsRanking;
+	}
+
+	public Boolean getShowRegionsRanking() {
+		return showRegionsRanking;
+	}
+
+	public void setShowRegionsRanking(Boolean showRegionsRanking) {
+		this.showRegionsRanking = showRegionsRanking;
 	}
 
 	

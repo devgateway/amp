@@ -40,6 +40,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 
@@ -353,25 +354,34 @@ public class DashboardUtil {
 			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			form.getSummaryInformation().setNumberOfProjects(activityList.size());
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());
+			form.getSummaryInformation().setNumberOfRegions(regionList.size());
 			form.getSummaryInformation().setNumberOfDonors(donorList.size());
 			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep4);
-		        form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
-		        form.getRanksInformation().setTopSectors(getTop(form.getRanksInformation().getFullSectors(),form.getFilter().getTopLists()));
+		        if (filter.getShowSectorsRanking() || isInGraphInList(form.getGraphList(),"SectorProfile")) {
+		        	form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
+			        form.getRanksInformation().setTopSectors(getTop(form.getRanksInformation().getFullSectors(),form.getFilter().getTopLists()));
+				} 
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep5);
-				form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null, null));
-				form.getRanksInformation().setTopRegions(getTop(form.getRanksInformation().getFullRegions(),form.getFilter().getTopLists()));
+	        	if (filter.getShowRegionsRanking() || isInGraphInList(form.getGraphList(),"RegionProfile")) {
+		        	form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null, null));
+		        	form.getRanksInformation().setTopRegions(getTop(form.getRanksInformation().getFullRegions(),form.getFilter().getTopLists()));
+		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep6);
-				form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
-				form.getRanksInformation().setTopProjects(getTop(form.getRanksInformation().getFullProjects(),form.getFilter().getTopLists()));
+		        if (filter.getShowProjectsRanking()) {
+		        	form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
+		        	form.getRanksInformation().setTopProjects(getTop(form.getRanksInformation().getFullProjects(),form.getFilter().getTopLists()));
+		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep7);
-				form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null, null));
-				form.getRanksInformation().setTopDonors(getTop(form.getRanksInformation().getFullDonors(),form.getFilter().getTopLists()));
+		        if (filter.getShowDonorsRanking() || isInGraphInList(form.getGraphList(),"DonorProfile")) {
+		        	form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null, null));
+		        	form.getRanksInformation().setTopDonors(getTop(form.getRanksInformation().getFullDonors(),form.getFilter().getTopLists()));
+		        }
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			form.getSummaryInformation().setNumberOfRegions(form.getRanksInformation().getFullRegions().size());
+			
 			
 		} else {
 			form.getSummaryInformation().setTotalCommitments(new BigDecimal(0));
@@ -683,4 +693,13 @@ public class DashboardUtil {
 		return divideByDenominator;
 	}
 
+	public static boolean isInGraphInList(List<AmpGraph> list, String containerId){
+		for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			AmpGraph ampGraph = (AmpGraph) iterator.next();
+			if (ampGraph.getContainerId().equals(containerId)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

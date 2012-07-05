@@ -1,4 +1,4 @@
-package org.digijava.module.aim.action.publicview;
+package org.digijava.module.aim.action;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.struts.action.Action;

@@ -1646,7 +1646,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                 <img id="img_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('budget')"/>
                                 <img id="imgh_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"  onclick="collapse('budget')"/>
                                 <div id="div_container_budget">
-                                <table cellpadding="2" cellspacing="0" border="0">   
+                                <table cellpadding="2" cellspacing="0" border="0" width=100%>   
                                      <tr>
                                     <td style="width:40px;text-align:center; "  class="tdBoldClass">&nbsp;
                                         

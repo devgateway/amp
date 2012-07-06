@@ -1540,46 +1540,7 @@ border-right: 1px solid rgb(208, 208, 208);
                             <img id="imgh_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('staff')"/>
                             <div id="div_container_staff">
                             <table cellpadding="2" cellspacing="0" border="0" width=100% style="margin-top:25px;">
-                                <c:if test="${not empty aimAddOrgForm.staff}">
-                                    <tr>
-                                        <td colspan="5">
-                                            <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
-                                                <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px;">
-                                                </c:if>
-                                                <table cellspacing="0" cellpadding="0" id="staffTable">
-												<tr class="tableOdd tableHeader" style="color:#000000; font-weight:bold; font-size:11px; text-align:center;">
-												<td>&nbsp;</td>
-												<td><b>Year</b></td>
-												<td><b>Type of staff</b></td>
-												<td><b>Number of stuff</b></td>
-												<td>&nbsp;</td>
-												<td>&nbsp;</td>
-												</tr>
-                                                    <c:forEach var="info" items="${aimAddOrgForm.staff}"   varStatus="staffInfoIndex">
-                                                        <tr class="tableEven ">
-                                                            <td  style="width:40px;text-align:left;">
-                                                                <html:multibox property="selectedStaff" styleClass="staffInfo">
-                                                                    ${info.id}
-                                                                </html:multibox>
-                                                            </td>
-                                                            <td class="tdClass" style="width:125px;text-align:center;">${info.year}</td>
-                                                            <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${info.type.value}</digi:trn></td>
-                                                            <td class="tdClass" style="width:200px;text-align:center;">${info.staffNumber}</td>
-                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:editStaffInfo('${staffInfoIndex.index}')"><img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/></a></td>
-                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                </table>
-                                                <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
-                                                </div>
-                                            </c:if>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5" style="text-align:left;" class="tdBoldClass"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
-                                    </tr>
-                                    </c:if>
-                                     <tr>
+                                      <tr>
                                     <td style="width:40px;text-align:center;font-weight:bold">&nbsp;
                                         
                                     </td>
@@ -1627,6 +1588,45 @@ border-right: 1px solid rgb(208, 208, 208);
                                 </c:set>
                                 <td style="text-align:center"><input type="button" class="buttonx_sm" style="width:80px" onclick="addStaff()" value="${staffButtonTxt}" /></td>
                                 </tr>
+                               <c:if test="${not empty aimAddOrgForm.staff}">
+                                    <tr>
+                                        <td colspan="5">
+                                            <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
+                                                <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px;">
+                                                </c:if>
+                                                <table cellspacing="0" cellpadding="0" id="staffTable">
+												<tr class="tableOdd tableHeader" style="background-color:#C7D4DB; color:#000000; font-weight:bold; font-size:11px; text-align:center;" width=100%>
+												<td>&nbsp;</td>
+												<td><b>Year</b></td>
+												<td><b>Type of staff</b></td>
+												<td><b>Number of stuff</b></td>
+												<td>&nbsp;</td>
+												<td>&nbsp;</td>
+												</tr>
+                                                    <c:forEach var="info" items="${aimAddOrgForm.staff}"   varStatus="staffInfoIndex">
+                                                        <tr class="tableEven ">
+                                                            <td  style="width:40px;text-align:left;">
+                                                                <html:multibox property="selectedStaff" styleClass="staffInfo">
+                                                                    ${info.id}
+                                                                </html:multibox>
+                                                            </td>
+                                                            <td class="tdClass" style="width:125px;text-align:center;">${info.year}</td>
+                                                            <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${info.type.value}</digi:trn></td>
+                                                            <td class="tdClass" style="width:200px;text-align:center;">${info.staffNumber}</td>
+                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:editStaffInfo('${staffInfoIndex.index}')"><img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/></a></td>
+                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </table>
+                                                <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
+                                                </div>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" style="text-align:left;" class="tdBoldClass"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
+                                    </tr>
+                                    </c:if>
                             </table>
                             </div>
                         </fieldset>

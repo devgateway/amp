@@ -24,9 +24,9 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
     <title>
     </title>
-    <link rel="stylesheet" type="text/css" href="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/2.2/js/dojo/dijit/themes/soria/soria.css">
-    <link rel="stylesheet" type="text/css" href="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/2.2/js/dojo/dojox/grid/resources/Grid.css"> 
-    <link rel="stylesheet" type="text/css" href="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/2.2/js/dojo/dojox/grid/resources/SoriaGrid.css"> 
+    <link rel="stylesheet" type="text/css" href="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/3.0/js/dojo/dijit/themes/soria/soria.css">
+    <link rel="stylesheet" type="text/css" href="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/3.0/js/dojo/dojox/grid/resources/Grid.css"> 
+    <link rel="stylesheet" type="text/css" href="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/3.0/js/dojo/dojox/grid/resources/SoriaGrid.css"> 
     <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp.css" type="text/css" rel="stylesheet" />
    	<digi:ref href="/TEMPLATE/ampTemplate/css_2/mapstyles.css" type="text/css" rel="stylesheet" />
    	
@@ -37,10 +37,10 @@
       };
     </script>
     <!-- Map Scripts -->
-    <script type="text/javascript" src="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/?v=2.2"></script>
+    <script type="text/javascript" src="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/?v=3.0"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/DecimalFormat.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-min.js"/>"></script>
+   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-debug.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
@@ -52,7 +52,7 @@
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/menu/assets/skins/sam/menu.css"> 
    	
    	 <style type="text/css">
-      @import "<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/2.2/js/dojo/dijit/themes/claro/claro.css";
+      @import "<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/3.0/js/dojo/dijit/themes/claro/claro.css";
       .zoominIcon { background:url(/TEMPLATE/ampTemplate/img_2/gis/nav_zoomin.png) no-repeat right; width:16px; height:16px;}
       .zoomoutIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_zoomout.png); width:16px; height:16px; }
       .zoomfullextIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_fullextent.png); width:16px; height:16px; }
@@ -275,8 +275,8 @@
     <div id="mainWindow" dojotype="dijit.layout.BorderContainer" design="headline" gutters="false" style="width:100%; height:100%;">
   		<div id="map" dojotype="dijit.layout.ContentPane" class="roundedCorners" region="center">
        </div>
-        <div id="basemapGallery"></div>
-       	<div id="basemapGalleryesri"></div>
+        <div id="basemapGallery" region="center"></div>
+       	<div id="basemapGalleryesri" region="center"></div>
        <div class="headerBackground"> </div>
        <div class="header"style="float:left;">
 	 		<div style="margin-left:-85px;padding:8px 0px 0px 0px;">
@@ -345,7 +345,7 @@
  			<jsp:include page="filter.jsp" flush="true"></jsp:include>
  		</div>
  		<div class='legendHeader' id="fakecolor">Donor Legend<br/><hr/></div>
- 		<div id="pointsLegend" class="legendContent" style="rigth:10px;"></div>
+ 		<div id="pointsLegend" class="legendContent" style="rigth:10px;top:421px;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
         <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
        
@@ -450,7 +450,7 @@
         	</table>
         </div>
         </feature:display>	
-        <div id="navToolbar" dojoType="dijit.Toolbar" style="position:absolute; right:180px; top:20px; z-Index:999;display: none;margin-top: 40px;">
+        <div id="navToolbar" dojoType="dijit.Toolbar" region="center" style="position:absolute; right:180px; top:20px; z-Index:999;display: none;margin-top: 40px;">
         <div class="toolscontainer" style="margin:5px 0px 0px 0px;">
         	<div class="gisBoxHeader">
 			  	<h3>Tools panel</h3><a href="#"></a>
@@ -462,7 +462,7 @@
 		    <div class="mapButton" dojoType="dijit.form.Button" id="zoomnext" iconClass="zoomnextIcon" onClick="navToolbar.zoomToNextExtent();"><digi:trn>Next Extent</digi:trn></div>
 		    <div class="mapButton" dojoType="dijit.form.Button" id="pan" iconClass="panIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.PAN);"><digi:trn>Pan</digi:trn></div>
 		    <div class="mapButton" dojoType="dijit.form.Button" id="deactivate" iconClass="deactivateIcon" onClick="navToolbar.deactivate()"><digi:trn>Deactivate</digi:trn></div>
- 		</div></div>
+		</div></div>
     </div>  
 	<div class="tooltip" style="position: absolute; display: block;z-index:100;" id="tooltipHolder"></div>
 

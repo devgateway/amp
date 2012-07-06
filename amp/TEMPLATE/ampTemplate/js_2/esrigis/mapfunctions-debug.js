@@ -40,7 +40,7 @@ var foundstr = new Array();
 var searchpoint;
 var rangegraphicLayer;
 /*-----------------Indicators Layers------------*/
-
+var rooturl;
 var basemapUrl;
 var countrymapurl;
 var COUNTY;
@@ -70,10 +70,13 @@ function init() {
 					DISTRICT = map.districtfield;
 					GEO_ID = map.geoidfield;
 					COUNT = map.countfield;
+					break;
 				case 4:
 					geometryServiceurl = map.mapurl;
-				case 6:
-					basemapsarray.push(map.mapurl);
+					break;
+				case 8:
+					rooturl = map.mapurl;
+					break;
 				default:
 					break;
 				}
@@ -165,12 +168,13 @@ function createMapAddLayers(myService1, myService2) {
 	
 	map = new esri.Map("map", {lods : customLods,extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
 	dojo.connect(map, 'onLoad', function(map) {
-		dojo.connect(dijit.byId('map'), 'resize', resizeMap);
+		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+		//dojo.connect(dijit.byId('map'), 'resize', resizeMap);
 		dojo.byId('map_zoom_slider').style.top = '95px';
 		getActivities(false);
 		getStructures(false);
 	});
-
+	
 	// add the legend
 	dojo.connect(map, 'onLayersAddResult', function(results) {
 		var layerInfo = dojo.map(results, function(layer, index) {
@@ -231,20 +235,6 @@ function toggleindicatormap(id) {
 function extentHistoryChangeHandler() {
 	dijit.byId("zoomprev").disabled = navToolbar.isFirstExtent();
 	dijit.byId("zoomnext").disabled = navToolbar.isLastExtent();
-}
-
-/**
- * resize the map when the browser resizes - view the 'Resizing and
- * repositioning the map' section in the following help topic for more details
- * http://help.esri.com/EN/webapi/javascript/arcgis/help/jshelp_start.htm#jshelp/inside_faq.htm
- */
-function resizeMap() {
-	var resizeTimer;
-	clearTimeout(resizeTimer);
-	resizeTimer = setTimeout(function() {
-		map.resize();
-		map.reposition();
-	}, 500);
 }
 
 /**

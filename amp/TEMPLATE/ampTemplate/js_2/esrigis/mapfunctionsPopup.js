@@ -8,31 +8,23 @@ dojo.require("dojo.data.ItemFileReadStore");
 dojo.require("esri.toolbars.navigation");
 dojo.require("dijit.form.Button");
 dojo.require("dijit.Toolbar");
-dojo.require("esri.tasks.find");
-dojo.require("esri.tasks.geometry");
-dojo.require("esri.dijit.BasemapGallery");
 dojo.require("esri.arcgis.utils");
-
 dojo.require("esri.toolbars.draw");
 dojo.require("esri.toolbars.edit");
 dojo.require("dijit.Menu");
+dojo.require("dijit.layout.BorderContainer");
+dojo.require("esri.dijit.BasemapGallery");
 
-var map, navToolbar,geometryService,findTask,findParams, tb;
-var totallocations = 0;
-var features = new Array();
-var timer_on = 0;
-var activitiesarray = new Array();
+var map, navToolbar, tb;
 var loading;
-var cL;
-var basemapGallery;
-
+var basemapurl;
+var mapurl;
+var locatorurl;
+var rooturl;
 function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
 	loading.hidden = true;
-	
-	var basemapUrl;
-	var mapurl;
 	
 	var xhrArgs = {
 			url : "/esrigis/datadispatcher.do?getconfig=true",
@@ -42,10 +34,17 @@ function init() {
 				   dojo.forEach(jsonData,function(map) {
 			        	switch (map.maptype) {
 						case 1:
-							basemapUrl = map.mapurl;
+							basemapurl = map.mapurl;
 							break;
 						case 2:
 							mapurl = map.mapurl;
+							break;
+						case 7:
+							locatorurl = map.mapurl;
+							break;
+						case 8:
+							rooturl = map.mapurl;
+							break;
 						default:
 							break;
 						}
@@ -59,34 +58,41 @@ function init() {
 		var deferred = dojo.xhrGet(xhrArgs);
 	
 	
-	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {opacity : 0.90}); // Levels at which this layer will be visible);
-	liberiamap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90});
-
+	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapurl, {opacity : 0.90}); // Levels at which this layer will be visible);
+	var mainmap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90});
+	if (!locatorurl){
+		$("#address").attr("disabled","disabled");
+		$("#localebtn").attr("disabled","disabled");
+		$("#localebtn").css('backgroundColor','gray');
+	}else{
+		locator = new esri.tasks.Locator(locatorurl);
+		dojo.connect(locator, "onAddressToLocationsComplete", showResults);
+	}
 	
 	var layerLoadCount = 0;
 	if (basemap.loaded) {
 		layerLoadCount += 1;
 		if (layerLoadCount === 2) {
-			createMapAddLayers(basemap, liberiamap);
+			createMapAddLayers(basemap, mainmap);
 		}
 	} else {
 		dojo.connect(basemap, "onLoad", function(service) {
 			layerLoadCount += 1;
 			if (layerLoadCount === 2) {
-				createMapAddLayers(basemap, liberiamap);
+				createMapAddLayers(basemap, mainmap);
 			}
 		});
 	}
-	if (liberiamap.loaded) {
+	if (mainmap.loaded) {
 		layerLoadCount += 1;
 		if (layerLoadCount === 2) {
-			createMapAddLayers(basemap, liberiamap);
+			createMapAddLayers(basemap, mainmap);
 		}
 	} else {
-		dojo.connect(liberiamap, "onLoad", function(service) {
+		dojo.connect(mainmap, "onLoad", function(service) {
 			layerLoadCount += 1;
 			if (layerLoadCount === 2) {
-				createMapAddLayers(basemap, liberiamap);
+				createMapAddLayers(basemap, mainmap);
 			}
 		});
 	}
@@ -94,11 +100,27 @@ function init() {
 
 }
 
+
+
 // Create a map, set the extent, and add the services to the map.
 function createMapAddLayers(myService1, myService2) {
+	customLods = [
+		   {"level" : 0,"resolution" : 19567.87924099992,"scale" : 7.3957190948944E7}, 
+		   {"level" : 1,"resolution" : 4891.96981024998,"scale" : 18489297.737236}, 
+		   {"level" : 2,"resolution" : 2445.98490512499,"scale" : 9244648.868618}, 
+		   {"level" : 3,"resolution" : 1222.99245256249,"scale" : 4622324.434309}, 
+		   {"level" : 4,"resolution" : 611.49622628138,"scale" : 2311162.217155}, 
+		   {"level" : 5,"resolution" : 305.748113140558,"scale" : 1155581.108577}, 
+		   {"level" : 6,"resolution" : 152.874056570411,"scale" : 577790.554289}, 
+		   {"level" : 7,"resolution" : 76.4370282850732,"scale" : 288895.277144}, 
+		   {"level" : 8,"resolution" : 38.2185141425366,"scale" : 144447.638572}, 
+		   {"level" : 9,"resolution" : 19.1092570712683,"scale" : 72223.819286}, 
+		   {"level" : 10,"resolution" : 9.55462853563415,"scale" : 36111.909643}, 
+		   {"level" : 11,"resolution" : 4.77731426794937,"scale" : 18055.954822} ];
+	
 	// create map
 	// convert the extent to Web Mercator
-	map = new esri.Map("map", {
+	map = new esri.Map("map", {lods : customLods,
 		extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)
 	});
 
@@ -119,20 +141,16 @@ function createMapAddLayers(myService1, myService2) {
 	map.addLayer(myService2);
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
+	createBasemapGalleryEsri('basemapGalleryesripopup');
 }
 
 
 function showLoading() {
     esri.show(loading);
-    map.disableMapNavigation();
-    map.hideZoomSlider();
   }
 
-  function hideLoading(error) {
+  function hideLoading() {
     esri.hide(loading);
-    map.enableMapNavigation();
-    map.showZoomSlider();
-  
   }
 
 function showCoordinates(evt) {
@@ -417,3 +435,45 @@ function selectLocationCallerShape(selectedGraphic){
 	window.close();
 }
 
+function locate() {
+	showLoading();
+    map.graphics.clear();
+    var address = {"PlaceName":dojo.byId("address").value};
+    locator.outSpatialReference= map.spatialReference;
+    var options = {
+      address:address,
+      outFields:["Name"]
+    }
+    locator.addressToLocations(options);
+  }
+
+   
+   function showResults(candidates) {
+    var candidate;
+    //var symbol = new esri.symbol.SimpleMarkerSymbol();
+    var callerButton = window.opener.callerGisObject;
+    var typeSelect = callerButton.parentNode.parentNode.getElementsByTagName("SELECT")[0];
+	var typeText = typeSelect.options[typeSelect.selectedIndex].text; 
+	var typeValue = typeSelect.options[typeSelect.selectedIndex].value;
+    var symbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 32, 37);
+    var infoTemplate = new esri.InfoTemplate("Location", "Location: ${address}<br />Score: ${score}");
+
+    
+    //symbol.setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_DIAMOND);
+    //symbol.setColor(new dojo.Color([255,0,0,0.75]));
+
+    var points =  new esri.geometry.Multipoint(map.spatialReference);
+
+    for (var i=0, il=candidates.length; i<il; i++) {
+      candidate = candidates[i];
+      if (candidate.score > 90) {
+        var attributes = { address: candidate.address, score:candidate.score, locatorName:candidate.attributes.Loc_name };
+        var graphic = new esri.Graphic(candidate.location, symbol, attributes, infoTemplate);
+        map.graphics.add(graphic);
+        map.graphics.add(new esri.Graphic(candidate.location, new esri.symbol.TextSymbol(attributes.address).setOffset(0, 8)));
+        points.addPoint(candidate.location);
+      }
+    }
+    map.setExtent(points.getExtent().expand(3));
+    hideLoading();
+  }

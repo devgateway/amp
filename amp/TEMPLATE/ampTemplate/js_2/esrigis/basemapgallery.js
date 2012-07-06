@@ -2,23 +2,23 @@ function createBasemapGallery() {
 	// manually create basemaps to add to basemap gallery
 	var basemaps = [];
 	var worldphysicallayer = new esri.dijit.BasemapLayer(
-			{url : "http://4.79.228.117:8399/arcgis/rest/services/World_Physical_Map/MapServer"});
+			{url : rooturl +"World_Physical_Map/MapServer"});
 	
 	var WorldTopolayer = new esri.dijit.BasemapLayer(
-			{url : "http://4.79.228.117:8399/arcgis/rest/services/World_Topo_Map/MapServer"});
+			{url : rooturl +"World_Topo_Map/MapServer"});
 	
 	var WorldImagery = new esri.dijit.BasemapLayer(
-			{url : "http://syberia.devgateway.org:8399/arcgis/rest/services/World_Imagery/MapServer"});
+			{url : rooturl +"World_Imagery/MapServer"});
 	
 	var WorldTerrain = new esri.dijit.BasemapLayer(
-			{url : "http://syberia.devgateway.org:8399/arcgis/rest/services/World_Terrain_Base/MapServer"});
+			{url : rooturl +"World_Terrain_Base/MapServer"});
 	
 	var WorldShaded = new esri.dijit.BasemapLayer(
-			{url : "http://4.79.228.117:8399/arcgis/rest/services/World_Shaded_Relief/MapServer"});
+			{url : rooturl +"World_Shaded_Relief/MapServer"});
 	
 	
 	var WorldStreet = new esri.dijit.BasemapLayer(
-			{url : "http://4.79.228.117:8399/arcgis/rest/services/World_Street_Map/MapServer"});
+			{url : rooturl +"World_Street_Map/MapServer"});
 	
 	
 	var worldphysicalmap = new esri.dijit.Basemap({

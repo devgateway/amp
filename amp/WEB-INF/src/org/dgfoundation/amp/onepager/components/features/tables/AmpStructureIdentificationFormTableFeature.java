@@ -70,7 +70,7 @@ public class AmpStructureIdentificationFormTableFeature extends AmpFormTableFeat
 			protected List<AmpStructureType> load() {
 				return new ArrayList<AmpStructureType>(StructuresUtil.getAmpStructureTypes());
 			}		
-		}, "Structure Type",true, false,  new ChoiceRenderer<AmpStructureType>("name")) ;
+		}, "Structure Type",true, false,  new ChoiceRenderer<AmpStructureType>("name","typeId")) ;
 		
 
 		structureTypes.getChoiceContainer().setRequired(true);

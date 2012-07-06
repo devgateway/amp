@@ -1539,7 +1539,7 @@ border-right: 1px solid rgb(208, 208, 208);
                             <img id="img_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
                             <img id="imgh_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('staff')"/>
                             <div id="div_container_staff">
-                            <table cellpadding="2" cellspacing="0" border="0">
+                            <table cellpadding="2" cellspacing="0" border="0" width=100% style="margin-top:25px;">
                                 <c:if test="${not empty aimAddOrgForm.staff}">
                                     <tr>
                                         <td colspan="5">
@@ -1547,8 +1547,16 @@ border-right: 1px solid rgb(208, 208, 208);
                                                 <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px;">
                                                 </c:if>
                                                 <table cellspacing="0" cellpadding="0" id="staffTable">
+												<tr class="tableOdd tableHeader" style="color:#000000; font-weight:bold; font-size:11px; text-align:center;">
+												<td>&nbsp;</td>
+												<td><b>Year</b></td>
+												<td><b>Type of staff</b></td>
+												<td><b>Number of stuff</b></td>
+												<td>&nbsp;</td>
+												<td>&nbsp;</td>
+												</tr>
                                                     <c:forEach var="info" items="${aimAddOrgForm.staff}"   varStatus="staffInfoIndex">
-                                                        <tr>
+                                                        <tr class="tableEven ">
                                                             <td  style="width:40px;text-align:left;">
                                                                 <html:multibox property="selectedStaff" styleClass="staffInfo">
                                                                     ${info.id}

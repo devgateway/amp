@@ -1594,7 +1594,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                             <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
                                                 <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px;">
                                                 </c:if>
-                                                <table cellspacing="0" cellpadding="0" id="staffTable">
+                                                <table cellspacing="0" cellpadding="0" id="staffTable" width=100%>
 												<tr class="tableOdd tableHeader" style="background-color:#C7D4DB; color:#000000; font-weight:bold; font-size:11px; text-align:center;" width=100%>
 												<td>&nbsp;</td>
 												<td><b>Year</b></td>

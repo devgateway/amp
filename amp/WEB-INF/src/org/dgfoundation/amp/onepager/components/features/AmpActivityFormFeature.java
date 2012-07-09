@@ -292,7 +292,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		if (am.getObject().getAmpActivityId() == null)
 			logframe.setVisible(false);
 		else{
-			logframe.add(new SimpleAttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");"));
+			logframe.getButton().add(new SimpleAttributeModifier("onclick", "previewLogframe(" + am.getObject().getAmpActivityId() + ");"));
 			logframe.setVisible(true);
 		}
 		logframe.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));

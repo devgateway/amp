@@ -77,9 +77,14 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
 			}
 		};
 		
+		PropertyModel<String> currencyModel = new PropertyModel<String>(am, "currencyCode");
+		
+		if (currencyModel.getObject() == null){
+			currencyModel.setObject(CurrencyUtil.getWicketWorkspaceCurrency().getCurrencyCode());
+		}
+		
 		AmpSelectFieldPanel<String> currency = new AmpSelectFieldPanel<String>("proposedCurrency",
-				new PropertyModel<String>(am, "currencyCode"),
-				currencyList,
+				currencyModel, currencyList,
 				"Currency", false, false);
 		add(currency);
 		AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", new PropertyModel<Date>(

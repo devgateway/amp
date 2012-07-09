@@ -6,10 +6,13 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.jcr.Node;
 import org.apache.wicket.AttributeModifier;
@@ -19,7 +22,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListItemModel;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.AbstractPropertyModel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -31,6 +36,8 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.helper.DownloadResourceStream;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
@@ -59,56 +66,93 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 		super(id, am, fmName);
 		super.setTitleHeaderColSpan(10);
 
+
+        
 		final IModel<Set<AmpActivityDocument>> setModel=new PropertyModel<Set<AmpActivityDocument>>(am,"activityDocuments");
+
 		if (am.getObject().getActivityDocuments() == null)
 			am.getObject().setActivityDocuments(new HashSet<AmpActivityDocument>());
 		
 		IModel<List<TemporaryDocument>> listModel = new AbstractReadOnlyModel<List<TemporaryDocument>>() {
 
+            private Map <String,String> docNames = new HashMap <String,String>();
+            List<TemporaryDocument> existingTmpDocs = getExistingObject();
+
+            private List<TemporaryDocument> getExistingObject() {
+                AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+                Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
+                List<TemporaryDocument> ret = new ArrayList<TemporaryDocument>();
+                HashSet <TemporaryDocument> existingDocTitles = new HashSet<TemporaryDocument>();
+
+                while (it.hasNext()) {
+                    AmpActivityDocument d = (AmpActivityDocument) it
+                            .next();
+                    Node node = DocumentManagerUtil.getWriteNode(d.getUuid(), session.getHttpSession());
+                    NodeWrapper nw = new NodeWrapper(node);
+
+
+
+                    if (node == null || nw == null)
+                        continue;
+
+                    /**
+                     * Code to add TempDoc to list
+                     */
+                    TemporaryDocument td = new TemporaryDocument();
+                    td.setExisting(true);
+                    td.setExistingDocument(d);
+                    td.setDate(nw.getCalendarDate());
+                    td.setDescription(nw.getDescription());
+                    td.setNote(nw.getNotes());
+                    td.setTitle(nw.getTitle());
+                    td.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(nw.getCmDocTypeId()));
+                    td.setWebLink(nw.getWebLink());
+                    td.setYear(nw.getYearOfPublication());
+
+                    td.setFileSize(nw.getFileSizeInMegabytes());
+                    td.setFileName(nw.getName());
+                    td.setLabels(nw.getLabels());
+                    td.setContentType(nw.getContentType());
+
+                    /*
+                    TemporaryDocument titleHolder = new TemporaryDocument();
+                    titleHolder.setTitle(td.getTitle());
+                    titleHolder.setExistingDocument(d);
+                    existingDocTitles.add(titleHolder);
+                    */
+                    existingDocTitles.add(td);
+
+
+                    ret.add(td);
+                }
+                getSession().setMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES, existingDocTitles);
+                return ret;
+            }
+
 			@Override
 			public List<TemporaryDocument> getObject() {
 				HashSet<TemporaryDocument> newItems = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
 				HashSet<AmpActivityDocument> delItems = getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
-				ArrayList<TemporaryDocument> ret = new ArrayList<TemporaryDocument>();
-				
-				AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+                List<TemporaryDocument> ret = new ArrayList<TemporaryDocument>();
+                ret.addAll(existingTmpDocs);
+
 				Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
+
 				while (it.hasNext()) {
 					AmpActivityDocument d = (AmpActivityDocument) it
 							.next();
 					//check if marked for delete
-					if (delItems.contains(d))
-						continue;
-					
-					Node node = DocumentManagerUtil.getWriteNode(d.getUuid(), session.getHttpSession());
-					NodeWrapper nw = new NodeWrapper(node);
-					
-					if (node == null || nw == null)
-						continue;
-					
-					/**
-					 * Code to add TempDoc to list
-					 */
-					TemporaryDocument td = new TemporaryDocument();
-					td.setExisting(true);
-					td.setExistingDocument(d);
-					td.setDate(nw.getCalendarDate());
-					td.setDescription(nw.getDescription());
-					td.setNote(nw.getNotes());
-					td.setTitle(nw.getTitle());
-					td.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(nw.getCmDocTypeId()));
-					td.setWebLink(nw.getWebLink());
-					td.setYear(nw.getYearOfPublication());
-					
-					td.setFileSize(nw.getFileSizeInMegabytes());
-					td.setFileName(nw.getName());
-					td.setLabels(nw.getLabels());
-					td.setContentType(nw.getContentType());
-
-					ret.add(td);
+					if (delItems.contains(d)) {
+                        for (TemporaryDocument td : existingTmpDocs) {
+                            if (td.getExistingDocument().equals(d)) {
+                                existingTmpDocs.remove(td);
+                                break;
+                            }
+                        }
+                    }
 				}
 				ret.addAll(newItems);
-				
+
 				return ret;
 			}
 		};
@@ -130,10 +174,15 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 					return;
 				}
 				
-				//item.add(new AmpLabelFieldPanel<String>("title", new PropertyModel<String>(item.getModel(), "title"), "Document Title", true));
+//				item.add(new AmpLabelFieldPanel<String>("title", new PropertyModel<String>(item.getModel(), "title"), "Document Title", true));
 				//item.add(new AmpLabelFieldPanel<String>("resourceName", new PropertyModel<String>(item.getModel(), "fileName"), "Resource Name", true));
 				
-				item.add(new Label("title", item.getModel().getObject().getTitle()));
+//				item.add(new Label("title", item.getModel().getObject().getTitle()));
+                AmpTextFieldPanel titleField = new AmpTextFieldPanel("title", new PropertyModel<String>(item.getModel(), "title"), "Title", true);
+                item.add(titleField);
+
+
+
 				if (item.getModel().getObject().getFileName()==null){
 					item.add(new Label("resourceName",item.getModel().getObject().getWebLink()));
 				}else{

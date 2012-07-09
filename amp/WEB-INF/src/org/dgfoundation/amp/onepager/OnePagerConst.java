@@ -35,6 +35,7 @@ public final class OnePagerConst {
 	
 	public static final MetaDataKey<HashSet<TemporaryDocument>> RESOURCES_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryDocument>>(){};
 	public static final MetaDataKey<HashSet<AmpActivityDocument>> RESOURCES_DELETED_ITEMS = new MetaDataKey<HashSet<AmpActivityDocument>>(){};
+    public static final MetaDataKey<HashSet<TemporaryDocument>> RESOURCES_EXISTING_ITEM_TITLES = new MetaDataKey<HashSet<TemporaryDocument>>(){};
 
 	public static final MetaDataKey<HashMap<String, String>> EDITOR_ITEMS = new MetaDataKey<HashMap<String, String>>(){};
 

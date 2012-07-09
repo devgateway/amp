@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
@@ -50,8 +53,10 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
@@ -452,7 +457,32 @@ public class ActivityUtil {
 
 		HashSet<TemporaryDocument> newResources = s.getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
 		HashSet<AmpActivityDocument> deletedResources = s.getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
-		
+        HashSet<TemporaryDocument> existingTitles = s.getMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES);
+
+        /*
+         * update titles
+         */
+        if (existingTitles != null && !existingTitles.isEmpty()) {
+            for (TemporaryDocument d : existingTitles) {
+                Node node = DocumentManagerUtil.getWriteNode(d.getExistingDocument().getUuid(), s.getHttpSession());
+                if (node != null) {
+                    NodeWrapper nw = new NodeWrapper(node);
+                    if (!nw.getTitle().equals(d.getTitle())) {
+                        if (d.getWebLink() != null && d.getWebLink().trim().length() > 0 &&
+                                (d.getFileName() == null || d.getFileName().trim().length()==0)) {
+                            d.setFileName(d.getWebLink());
+                        }
+
+                        if (!deletedResources.contains(d.getExistingDocument())) {
+                            newResources.add(d);
+                            deletedResources.add(d.getExistingDocument());
+                        }
+                    }
+                }
+            }
+        }
+
+
 		/*
 		 * remove old resources
 		 */

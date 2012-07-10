@@ -225,6 +225,14 @@ function checkRelatedEntities(option,name,id){
 function uncheckAllOption(name){
 	$("#"+name+"_all").removeAttr('checked');
 }
+function checkParentOption(name, id){
+	var options = document.getElementsByName(name);
+	for ( var i = 0; i < options.length; i++) {
+		if (options[i].value == id){
+			options[i].checked = true;
+		}
+	}
+}
 function manageSectorEntities(option,configId,sectorId){
 	$("li[id^='config_']").each(function() {
 		if(this.id!='config_'+configId){
@@ -1330,24 +1338,19 @@ function refreshBoxes(o){
 	var div = document.getElementById("divSummaryInfo");
 	div.innerHTML = inner;
 
-	/*
 	var namePlaceholder = document.getElementById("dashboard_name");
 	if (dashboardType==1) {
 		var name1 = "";
 		var name2 = "";
 		if (getSelectionsFromElement("org_grp_check",true)==""){
-			if (document.getElementById("org_group_dropdown_id").selectedIndex == 0) {
-				name1 = trnAllOrgGroups;
-			} else {
-				name1 = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+			if (document.getElementById("org_group_dropdown_id").selectedIndex != 0) {
+			name1 = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
 			}
 		} else {
 			name1 = getSelectionsFromElement("org_grp_check",true);
 		}
 		if (getSelectionsFromElement("organization_check",true)==""){
-			if (document.getElementById("org_dropdown_id").selectedIndex == 0) {
-				//Do nothing
-			} else {
+			if (document.getElementById("org_dropdown_id").selectedIndex != 0) {
 				name2 = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
 			}
 		} else {
@@ -1357,25 +1360,23 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("organization_check",true);
 			}
 		}
-		name1 = name1.replace(/</g, "< ");
-		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
+		if (name1 != "") {
+			name1 = name1.replace(/</g, "< ");
+			namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
+		}
 	}
 	if (dashboardType==3) {
 		var name1 = "";
 		var name2 = "";
 		if (getSelectionsFromElement("sector_check",true)==""){
-			if (document.getElementById("sector_dropdown_id").selectedIndex == 0) {
-				name1 = trnAllSectors;
-			} else {
+			if (document.getElementById("sector_dropdown_id").selectedIndex != 0) {
 				name1 = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
 			}
 		} else {
 			name1 = getSelectionsFromElement("sector_check",true);
 		}
 		if (getSelectionsFromElement("sub_sector_check",true)==""){
-			if (document.getElementById("sub_sector_dropdown_id").selectedIndex == 0) {
-				name2 = trnAllSubSector;
-			} else {
+			if (document.getElementById("sub_sector_dropdown_id").selectedIndex != 0) {
 				name2 = document.getElementById("sub_sector_dropdown_id").options[document.getElementById("sub_sector_dropdown_id").selectedIndex].text;
 			}
 		} else {
@@ -1385,25 +1386,23 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("sub_sector_check",true);
 			}
 		}
-		name1 = name1.replace(/</g, "< ");
-		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
+		if (name1 != "") {
+			name1 = name1.replace(/</g, "< ");
+			namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
+		}
 	}
 	if (dashboardType==2) {
 		var name1 = "";
 		var name2 = "";
 		if (getSelectionsFromElement("region_check",true)==""){
-			if (document.getElementById("region_dropdown_id").selectedIndex == 0) {
-				name1 = trnAllRegions;
-			} else {
+			if (document.getElementById("region_dropdown_id").selectedIndex != 0) {
 				name1 = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
 			}
 		} else {
 			name1 = getSelectionsFromElement("region_check",true);
 		}
 		if (getSelectionsFromElement("zone_check",true)==""){
-			if (document.getElementById("zone_dropdown_id").selectedIndex == 0) {
-				name2 = trnAllZones;
-			} else {
+			if (document.getElementById("zone_dropdown_id").selectedIndex != 0) {
 				name2 = document.getElementById("zone_dropdown_id").options[document.getElementById("zone_dropdown_id").selectedIndex].text;
 			}
 		} else {
@@ -1413,10 +1412,12 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("zone_check",true);
 			}
 		}
-		name1 = name1.replace(/</g, "< ");
-		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
+		if (name1 != "") {
+			name1 = name1.replace(/</g, "< ");
+			namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
+		}
 	}
-	*/
+	
 	var type = document.getElementById("transactionType").value;
 	var fundType = "";
 	if (type==0) {
@@ -1879,7 +1880,7 @@ function itemClick(id, type, startYear, endYear){
 		//var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getActivitiesList&id=" + id + "&type=" + type + "&year=" + year, showListPopinCall, null);
 }
 
-function callbackGetGraphs(id) {
+function callbackGetGraphs(id,baseType) {
 	var elems = document.getElementsByName("dsbd");
 	for ( var i = 0; i < elems.length; i++) {
 		var id2 = elems[i].getAttribute("id");
@@ -1888,7 +1889,64 @@ function callbackGetGraphs(id) {
 		} else {
 			$("#"+id2).removeClass("side_opt_sel");	
 		}
-		
+	}
+	switch(baseType){
+	case 0:
+		var elems = document.getElementsByName("org_grp_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="checkbox";
+		}
+		var elems = document.getElementsByName("region_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="checkbox";
+		}
+		var elems = document.getElementsByName("sector_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="checkbox";
+		}
+		break;
+	case 1:
+		var elems = document.getElementsByName("org_grp_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="radio";
+		}
+		var elems = document.getElementsByName("region_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="checkbox";
+		}
+		var elems = document.getElementsByName("sector_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="checkbox";
+		}
+		break;
+	case 2:
+		var elems = document.getElementsByName("org_grp_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="checkbox";
+		}
+		var elems = document.getElementsByName("region_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="radio";
+		}
+		var elems = document.getElementsByName("sector_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="checkbox";
+		}
+		break;
+	case 3:
+		var elems = document.getElementsByName("org_grp_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="checkbox";
+		}
+		var elems = document.getElementsByName("region_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="checkbox";
+		}
+		var elems = document.getElementsByName("sector_check");
+		for ( var i = 0; i < elems.length; i++) {
+			elems[i].type="radio";
+		}
+		break;
 	}
 	if (id != null){
 		var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getGraphsFromDashboard&id=" + id, callbackGetGraphsCall, null);
@@ -1903,7 +1961,7 @@ var callbackGetGraphsCall = {
 	       		var graphList = document.getElementById("graphList");
 	    		var inner = "";
 	    		for(var i = 0; i < results.children.length; i++){
-	    			inner = inner+"<li><input type='checkbox' value='"+results.children[i].ID+"' name='graphChech'><label>"+results.children[i].name+"</label></li>";
+	    			inner = inner+"<li><input type='checkbox' checked='checked' value='"+results.children[i].ID+"' name='graphChech'><label>"+results.children[i].name+"</label></li>";
 	    		}
 	    		graphList.innerHTML = inner;
 			}
@@ -1919,13 +1977,13 @@ var callbackGetGraphsCall = {
 function launchDashboard(){
 	var graphList = document.getElementsByName("graphChech");
 	var graphs = "";
-	if(graphList.length==0){
-		alert(selectOneGraph);
-		return;
-	}
 	for(var i = 0; i < graphList.length; i++){
 		if (graphList[i].checked==true)
 			graphs = graphs + graphList[i].value + ",";
+	}
+	if(graphs.length==0){
+		alert(selectOneGraph);
+		return;
 	}
 	
 	document.getElementById("topLists").value = document.getElementById("topLists_dropdown").options[document.getElementById("topLists_dropdown").selectedIndex].value;

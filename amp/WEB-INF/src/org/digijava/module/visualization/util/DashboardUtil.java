@@ -165,7 +165,7 @@ public class DashboardUtil {
     	        map.put(location, total);
             }
 		}
-		if (filter.getShowNationalValues()) {
+		//if (filter.getShowNationalValues()) {
 			AmpCategoryValueLocations tempLoc = new AmpCategoryValueLocations();
 			if (request!=null) {
 				String locale = RequestUtils.getNavigationLanguage(request).getCode();
@@ -186,7 +186,7 @@ public class DashboardUtil {
 			filter.setSelLocationIds(tempLocationsIds);
             BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             map.put(tempLoc, total);
-		}
+		//}
 		return sortByValue (map);
 	}
 	

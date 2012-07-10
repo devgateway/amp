@@ -9,6 +9,7 @@
 		</id>
 	
 		<property name="name" column="name" type="java.lang.String" />
+		<property name="baseType" column="base_type" type="java.lang.Integer" />
 		
  	 </class>
 </hibernate-mapping>

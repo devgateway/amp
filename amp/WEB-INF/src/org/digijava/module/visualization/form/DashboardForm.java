@@ -23,6 +23,7 @@ public class DashboardForm extends ActionForm {
 	private AmpDashboard dashboard;
 	private Long dashboardId;
 	private DashboardFilter filter; 
+	private int baseType;
 	
 	public String getDashboardName() {
 		return dashboardName;
@@ -65,6 +66,12 @@ public class DashboardForm extends ActionForm {
 	}
 	public void setFilter(DashboardFilter filter) {
 		this.filter = filter;
+	}
+	public int getBaseType() {
+		return baseType;
+	}
+	public void setBaseType(int baseType) {
+		this.baseType = baseType;
 	}
 	
 }

@@ -32,7 +32,7 @@
 							class="sub_sector_check_${sectorHelper.mainEntity.ampSectorId}"
 							name="sub_sector_check" title="${subSector.name}"
 							value="${subSector.ampSectorId}"
-							onclick="manageSectorEntities(this,${item.mainEntity.id});" /><span><c:out
+							onclick="manageSectorEntities(this,${item.mainEntity.id});checkParentOption('sector_check',${sectorHelper.mainEntity.ampSectorId})" /><span><c:out
 									value="${subSector.name}" />
 						</span></li>
 					</c:forEach>

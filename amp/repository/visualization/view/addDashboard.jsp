@@ -128,6 +128,16 @@ function validateData(){
 		return false;
 	}
 
+	<c:set var="selectBase">
+	  <digi:trn>
+	  	Please, select a based type.
+	  </digi:trn>
+	</c:set>
+	if (document.getElementById("baseType_dropdown").value == -1){
+		alert ("${selectBase}")
+		return false;
+	}
+
 	<c:set var="addGraph">
 	  <digi:trn>
 	  	Please, add at least one graph.
@@ -168,11 +178,21 @@ function validateData(){
 	
 	<tr>
 		<td align=left valign="top" class=r-dotted-lg>
-			<table width="100%" cellSpacing="0" cellPadding="0" vAlign="top" align="left">
+			<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 				<tr>
 					<td width="50%" align="left" valign="middle">
 						<digi:trn><b>Dashboard Name</b></digi:trn>
 					<html:text property="dashboardName" size="40" styleClass="inp-text"/></td>
+				</tr>
+				<tr>
+					<td><digi:trn><b>Select a base type</b></digi:trn>
+						<html:select property="baseType" styleId="baseType_dropdown" styleClass="inp-text" style="width:250px;">
+						<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
+						<html:option value="0"><digi:trn>None</digi:trn></html:option>
+						<html:option value="1"><digi:trn>Donor based</digi:trn></html:option>
+						<html:option value="2"><digi:trn>Region based</digi:trn></html:option>
+						<html:option value="3"><digi:trn>Sector based</digi:trn></html:option>
+					</html:select></td>
 				</tr>
 				<tr>
 					<td>

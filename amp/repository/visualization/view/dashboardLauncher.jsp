@@ -298,7 +298,7 @@ function initializeGlobalVariables(){
                 	<ul>
 						<c:forEach var="dashboard" items="${visualizationform.dashboardList}">
 							<li>
-								<a class="side_opt_sel" name="dsbd" id="${dashboard.id}" href="JavaScript:callbackGetGraphs(${dashboard.id});">
+								<a class="side_opt_sel" name="dsbd" id="${dashboard.id}" href="JavaScript:callbackGetGraphs(${dashboard.id},${dashboard.baseType});">
 								<c:out value="${dashboard.name}"/>
 								</a>
 							</li>
@@ -490,7 +490,7 @@ function initializeGlobalVariables(){
 															</c:if> <c:if
 																test="${visualizationform.filter.dashboardType ne '1' }">
 																<input type="checkbox" name="org_grp_check"
-																	title="${orgGrpe}"
+																	title="${orgGrp}"
 																	value="${item.mainEntity.ampOrgGrpId}"
 																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
 															</c:if> <span><c:out value="${orgGrp}"/>
@@ -502,7 +502,7 @@ function initializeGlobalVariables(){
 																		class="organization_check_${item.mainEntity.ampOrgGrpId}"
 																		name="organization_check" title="<c:out value='${organization.name}'/>"
 																		value="${organization.ampOrgId}"
-																		onclick="uncheckAllOption('org_grp_check');" /> <span><c:out value="${organization.name}"/></span>
+																		onclick="uncheckAllOption('org_grp_check');checkParentOption('org_grp_check',${item.mainEntity.ampOrgGrpId})" /> <span><c:out value="${organization.name}"/></span>
 																	</li>
 																</c:forEach>
 															</ul></li>
@@ -558,7 +558,7 @@ function initializeGlobalVariables(){
 																		class="zone_check_${item.mainEntity.id}"
 																		name="zone_check" title="${zone.name}"
 																		value="${zone.id}"
-																		onclick="uncheckAllOption('region_check');" /><span><c:out value="${zone.name}"/></span>
+																		onclick="uncheckAllOption('region_check');checkParentOption('region_check',${item.mainEntity.id})" /><span><c:out value="${zone.name}"/></span>
 																	</li>
 																</c:forEach>
 															</ul></li>

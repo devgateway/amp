@@ -37,7 +37,8 @@ public class VisualizationForm extends ActionForm {
 	private List<AmpGraph> graphList;
 	private List<AmpDashboard> dashboardList;
 	private AmpDashboard dashboard;
-	
+	private String dashboardTitle;
+	private String dashboardSubTitle;
 	
 	public List<AmpGraph> getGraphList() {
 		return graphList;
@@ -460,5 +461,18 @@ public class VisualizationForm extends ActionForm {
 			this.exportODAGrowthOption = exportODAGrowthOption;
 		}
 
+	}
+
+	public String getDashboardTitle() {
+		return dashboardTitle;
+	}
+	public void setDashboardTitle(String dashboardTitle) {
+		this.dashboardTitle = dashboardTitle;
+	}
+	public String getDashboardSubTitle() {
+		return dashboardSubTitle;
+	}
+	public void setDashboardSubTitle(String dashboardSubTitle) {
+		this.dashboardSubTitle = dashboardSubTitle;
 	}
 }

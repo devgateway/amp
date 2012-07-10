@@ -422,7 +422,7 @@ function initializeGlobalVariables(){
 																		class="organization_check_${item.mainEntity.ampOrgGrpId}"
 																		name="organization_check" title="<c:out value='${organization.name}'/>"
 																		value="${organization.ampOrgId}"
-																		onclick="uncheckAllOption('org_grp_check');" /> <span><c:out value="${organization.name}"/></span>
+																		onclick="uncheckAllOption('org_grp_check');checkParentOption('org_grp_check',${item.mainEntity.ampOrgGrpId})" /> <span><c:out value="${organization.name}"/></span>
 																	</li>
 																</c:forEach>
 															</ul></li>
@@ -488,7 +488,7 @@ function initializeGlobalVariables(){
 																		class="zone_check_${item.mainEntity.id}"
 																		name="zone_check" title="${zone.name}"
 																		value="${zone.id}"
-																		onclick="uncheckAllOption('region_check');" /><span><c:out value="${zone.name}"/></span>
+																		onclick="uncheckAllOption('region_check');checkParentOption('region_check',${item.mainEntity.id})" /><span><c:out value="${zone.name}"/></span>
 																	</li>
 																</c:forEach>
 															</ul></li>
@@ -754,7 +754,9 @@ function initializeGlobalVariables(){
 <div class="dashboard_header">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
 <div class="dashboard_total" id="divTotalComms"></div>
-<div class="dashboard_name" id="dashboard_name">${visualizationform.dashboard.name}</div>
+<div class="dashboard_name" id="dashboard_name">
+<span style="font-size:18px">${visualizationform.dashboardTitle}</span><br/><span style="font-size:13px">${visualizationform.dashboardSubTitle}</span>
+</div>
  <table border="0" cellspacing="0" cellpadding="0">
   <tr>  
     <td>
@@ -1230,6 +1232,7 @@ function initializeGlobalVariables(){
 				&nbsp;<input type="checkbox" id="${graph.containerId}Ignore" style="display: none;" checked="checked"><label id="${graph.containerId}IgnoreLabel" style="display: none;" for="${graph.containerId}Ignore"><digi:trn>Ignore big values</digi:trn></label></br>
 				<input type="hidden" id="${graph.containerId}DataAction" value="get${graph.containerId}GraphData" />
 				<input type="hidden" id="${graph.containerId}DataField" value="dataField" />
+				<input type="hidden" id="${graph.containerId}ItemId"/>
 				<input type="hidden" id="${graph.containerId}TitleLegendTrn" value="<digi:trn>${graph.name}</digi:trn>" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, '${graph.containerId}')">
 				</div>

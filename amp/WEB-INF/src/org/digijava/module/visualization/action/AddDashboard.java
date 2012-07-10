@@ -29,6 +29,7 @@ public class AddDashboard extends Action {
 			dForm.setDashboardId(dashboard.getId());
 			dForm.setDashboardName(dashboard.getName());
 			dForm.setDashGraphList(DbUtil.getDashboardGraphByDashboard(dashboard.getId()));
+			dForm.setBaseType(dashboard.getBaseType());
 		}
 		dForm.setGraphList(DbUtil.getAllGraphs());
 		return mapping.findForward("forward");
@@ -41,5 +42,6 @@ public class AddDashboard extends Action {
 		dForm.setDashboardName(null);
 		dForm.setDashGraphList(null);
 		dForm.setGraphList(null);
+		dForm.setBaseType(0);
 	}
 }

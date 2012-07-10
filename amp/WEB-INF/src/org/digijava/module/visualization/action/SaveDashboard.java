@@ -33,6 +33,7 @@ public class SaveDashboard extends Action {
 		
 		dashboard.setId(dForm.getDashboardId());
 		dashboard.setName(dForm.getDashboardName());
+		dashboard.setBaseType(dForm.getBaseType());
 		String graphs = request.getParameter("graphs");
 		String grs[] = graphs.split("_");
 		dForm.setDashGraphList(new ArrayList<AmpDashboardGraph>());

@@ -3,9 +3,12 @@
  */
 package org.dgfoundation.amp.onepager.util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,6 +27,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.util.lang.Bytes;
+import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
@@ -474,6 +479,117 @@ public class ActivityUtil {
                         }
 
                         if (!deletedResources.contains(d.getExistingDocument())) {
+                            String contentType = nw.getContentType();
+                            String fileName = nw.getName();
+                            Bytes fileSize = null;
+                            InputStream fileData = null;
+                            try {
+                                Property data = nw.getNode().getProperty(CrConstants.PROPERTY_DATA);
+                                fileData = data.getStream();
+                                
+                                Property size = nw.getNode().getProperty(CrConstants.PROPERTY_FILE_SIZE);
+                                fileSize = Bytes.bytes(size.getLong());
+                                DocumentManagerUtil.logoutJcrSessions( s.getHttpSession());
+                            } catch (RepositoryException e) {
+                                logger.error("Error while getting data stream from JCR:", e);
+                            }
+
+
+                            class FileItemEx implements FileItem{
+                                private String contentType;
+                                private String fileName;
+                                private Bytes fileSize;
+                                private InputStream fileData;
+
+
+                                public FileItemEx(String fileNameIn, String contentTypeIn, InputStream fileDataIn, Bytes fileSizeIn) {
+                                    fileName = fileNameIn;
+                                    contentType = contentTypeIn;
+                                    fileData = fileDataIn;
+                                    fileSize = fileSizeIn;
+
+                                }
+
+
+
+                                @Override
+                                public InputStream getInputStream() throws IOException {
+                                    return fileData;  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public String getContentType() {
+                                    return contentType;  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public String getName() {
+                                    return fileName;  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public boolean isInMemory() {
+                                    return false;  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public long getSize() {
+                                    return fileSize.bytes();  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public byte[] get() {
+                                    return new byte[0];  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public String getString(String s) throws UnsupportedEncodingException {
+                                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public String getString() {
+                                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public void write(File file) {
+                                    //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public void delete() {
+                                    //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public String getFieldName() {
+                                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public void setFieldName(String s) {
+                                    //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public boolean isFormField() {
+                                    return false;  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public void setFormField(boolean b) {
+                                    //To change body of implemented methods use File | Settings | File Templates.
+                                }
+
+                                @Override
+                                public OutputStream getOutputStream() throws IOException {
+                                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                                }
+                            }
+
+                            FileUpload file = new FileUpload(new FileItemEx(fileName, contentType, fileData, fileSize));
+                            d.setFile(file);
                             newResources.add(d);
                             deletedResources.add(d.getExistingDocument());
                         }
@@ -765,5 +881,7 @@ public class ActivityUtil {
 	      }
 	
 	}
+
+
 
 }

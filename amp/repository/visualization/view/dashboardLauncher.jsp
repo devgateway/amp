@@ -240,17 +240,17 @@ function initializeGlobalVariables(){
 	<style>
     	*{margin:0px;padding:0px;}
 
-		#stepscontainer{width:960px;margin:0 auto;padding:20px;border:1px solid #d0d0d0;background:#fff;font-family:arial;font-size:12px;}
+		#stepscontainer{width:960px;margin:0 auto;padding:20px;background:#fff;font-family:arial;font-size:12px;}
 
-		#stepscontainer h2{text-align:center;text-transform:uppercase;color:#a2a5a7;font-size:18px;font-weight:normal;margin:0px 0px 20px 0px;}
+		#stepscontainer h2{text-align:center;text-transform:uppercase;font-size:18px;font-weight:normal;margin:0px 0px 0px 0px; background-color: #4A687A; color:#FFFFFF; padding:10px;}
 
-		.stepsbox{border:1px solid #d0d0d0;padding:10px;margin:0px 0px 20px 0px;}
+		.stepsbox{border:1px solid #d0d0d0;padding:10px;margin:0px 0px 20px 0px; background-color: #FBFBFB;}
 
 		.leftbox{float:left;width:465px;border:1px solid #fff;}
 
 		.rightbox{ float:right;width:465px;border:1px solid #fff;}
 
-		.boxes{background:url(/TEMPLATE/ampTemplate/img_2/split.gif) repeat-y center;border:1px solid #d0d0d0;position:relative;}
+		.boxes{background:url(/TEMPLATE/ampTemplate/img_2/split.gif) repeat-y center;border:1px solid #d0d0d0;position:relative; background-color:#FFFFFF;}
 
 		.stepsbox h3{background:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif) repeat-x;height:40px;margin:0px;padding:10px 10px 0px 10px;color:#a2a5a7;line-height:10px;}
 
@@ -686,7 +686,7 @@ function initializeGlobalVariables(){
 					        </div>	
 					        
 					</div>
-					<input type="button" value="<digi:trn>Launch Dashboard</digi:trn>" onclick="launchDashboard()" class="buttonx" style="margin-right:10px; margin-top:10px;">
+					<center><input type="button" value="<digi:trn>Launch Dashboard</digi:trn>" onclick="launchDashboard()" class="buttonx" style="margin-right:10px; margin-top:10px;"></center>
 									
             </div>
 

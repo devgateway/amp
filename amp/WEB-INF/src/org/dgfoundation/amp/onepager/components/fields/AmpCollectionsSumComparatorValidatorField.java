@@ -3,20 +3,17 @@ package org.dgfoundation.amp.onepager.components.fields;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.Response;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.onepager.validators.AmpCollectionsSumComparatorValidator;
-import org.dgfoundation.amp.onepager.validators.AmpPercentageCollectionValidator;
+
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.aim.util.CurrencyUtil;
+
 
 public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionValidatorField<T,Double> {
 
@@ -38,14 +35,15 @@ public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionV
 			IModel<? extends Collection<T>> setModel,  String fmName, String messageKey) {
 		super(id, setModel, fmName, new AmpCollectionsSumComparatorValidator(messageKey));
 		hiddenContainer.setType(Double.class);
-	
 	}
 
 	
-	
 	@Override
-	public IModel getHiddenContainerModel(final IModel<? extends Collection<T>> setModel) {
+	public IModel<Double> getHiddenContainerModel(final IModel<? extends Collection<T>> setModel) {
 		Model<Double> model=new Model<Double>() {
+
+			private static final long serialVersionUID = 3202118320593721972L;
+
 			@Override
 			public void setObject(Double object) {
 			}

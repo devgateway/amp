@@ -205,7 +205,7 @@
 					
 
 						<c:if test="${param['loginError'] != null}">
-						<div style="padding:5px 5px 5px 5px;text-align:left;font-weight:bold;">
+						<div style="padding:1px 5px 5px 5px;text-align:left;font-weight:bold;">
 							<c:if test="${param['loginError'] == 'invalidLogin'}">
 								<c:set var="errorDisplayed">true</c:set>
 								<bean:message key="error.aim.invalidLogin" />

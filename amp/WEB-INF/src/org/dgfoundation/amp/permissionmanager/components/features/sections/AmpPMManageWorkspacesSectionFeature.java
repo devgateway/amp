@@ -59,13 +59,20 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 		super(id, workspacesModel, fmName, hideLabel);
 		
 		final AmpPMManageWorkspacesTableFeaturePanel workspacesTable = new AmpPMManageWorkspacesTableFeaturePanel("workspaces", workspacesModel, "Workspaces", false);
-		
 		add(workspacesTable);
-		AmpPMAjaxPagingNavigator pager = new AmpPMAjaxPagingNavigator("workspacesNavigator", (PageableListView)workspacesTable.getList());
-		add(pager);
-		idsList = workspacesTable.getList();
 		
+		PageableListView<AmpTeam> pageList= (PageableListView)workspacesTable.getList();
+		pageList.setItemsPerPage(10);
+		AmpPMAjaxPagingNavigator pager = new AmpPMAjaxPagingNavigator("workspacesNavigator", pageList);
+		add(pager);
+		
+		idsList = workspacesTable.getList();
 		final AmpAutocompleteFieldPanel<AmpTeam> autoComplete = new AmpAutocompleteFieldPanel<AmpTeam>("searchWorkspaces", "Search Workspaces",AmpPMWorkspaceSearchModel.class) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -4113089893479844312L;
 
 			@Override
 			protected String getChoiceValue(AmpTeam choice){
@@ -78,7 +85,7 @@ public class AmpPMManageWorkspacesSectionFeature extends AmpPMSectionFeaturePane
 				set.clear();
 				set.add(choice);
 				idsList.removeAll();
-				workspacesTable.getSliders().clear();
+				//workspacesTable.getSliders().clear();
 				target.add(AmpPMManageWorkspacesSectionFeature.this);
 				target.appendJavaScript(OnePagerUtil.getToggleJS(AmpPMManageWorkspacesSectionFeature.this.getSliderPM()));
 			}

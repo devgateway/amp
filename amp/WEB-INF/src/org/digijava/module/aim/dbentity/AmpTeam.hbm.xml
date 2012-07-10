@@ -49,6 +49,6 @@
 			property-ref="team" cascade="delete" />
 
 		<many-to-one name="workspaceGroup" column="group_categoryvalue_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
-
+		<property name="permissionStrategy" column="permission_strategy" type="java.lang.String" />
 	</class>
 </hibernate-mapping>

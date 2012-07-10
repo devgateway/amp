@@ -5,6 +5,7 @@ package org.dgfoundation.amp.permissionmanager.web;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -47,6 +48,7 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * @author dan
@@ -61,6 +63,13 @@ public final class PMUtil {
 	public static final String ROLE_PERMISSION = "Role based permission";
 	public static final String WORKSPACE_MEMBER_IMG_SRC = "/TEMPLATE/ampTemplate/img_2/ico_user.gif";
 	public static final String WORKSPACE_MANAGER_IMG_SRC = "/TEMPLATE/ampTemplate/img_2/ico_user_admin.gif";
+	
+	public static final String PERM_ROLE = "Role Based Permission";
+	public static final String PERM_WORKSPACE = "Workspace Based Permission";
+	public static final String PERM_NO_ACCESS = "No Access";
+	public static final String PERM_FULL_ACCESS = "Full Access";
+	public static final String PERM_ROLE_WORKSPACE = "Role and Workspace Based Permission";
+	public static final List<String> PERM_STRATEGIES = Arrays.asList(PERM_NO_ACCESS, PERM_ROLE, PERM_WORKSPACE, PERM_ROLE_WORKSPACE,PERM_FULL_ACCESS);
 	
 	public static final HashMap<String,String> permissionRoles = createPermissionRoles();
 	
@@ -832,6 +841,26 @@ public final class PMUtil {
 				result+=action+sep;
 		}
 		return result;
+	}
+
+
+
+
+	public static void updateAmpObj(Object object) {
+        logger.debug("In add " + object.getClass().getName());
+        Session session = null;
+        Transaction tx = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+//beginTransaction();
+            session.saveOrUpdate(object);
+            ////tx.commit();
+        } catch (Exception e) {
+            logger.error("Unable to update");
+            e.printStackTrace(System.out);
+        }
+        return ;
+		
 	}
 	
 }

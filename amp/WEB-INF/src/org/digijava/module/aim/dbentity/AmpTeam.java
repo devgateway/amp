@@ -48,6 +48,15 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	
 	private AmpCategoryValue workspaceGroup;
 	
+	private String permissionStrategy;
+
+	public String getPermissionStrategy() {
+		return permissionStrategy;
+	}
+
+	public void setPermissionStrategy(String permissionStrategy) {
+		this.permissionStrategy = permissionStrategy;
+	}
 
 	public NpdSettings getNpdSettings() {
 		return npdSettings;

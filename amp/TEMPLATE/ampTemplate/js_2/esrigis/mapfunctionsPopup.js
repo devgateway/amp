@@ -322,13 +322,18 @@ function selectCurrentLocation(){
 	//Hack to get the Ids for the fields lan/lon
 	var callerButton = window.opener.callerGisObject;
 	var pgraphic;
-	
+	var sms;
 	var shapeValue = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[4].value;
 	var typeSelect = callerButton.parentNode.parentNode.getElementsByTagName("SELECT")[0];
 	var typeText = typeSelect.options[typeSelect.selectedIndex].text; 
 	var typeValue = typeSelect.options[typeSelect.selectedIndex].value; 
-	var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 32, 37);
-
+	if (typeValue){
+		sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 32, 37);
+	}else{
+		sms = new esri.symbol.SimpleMarkerSymbol();
+		sms.setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE);
+		sms.setColor(new dojo.Color([255,0,0,0.75]));
+	}
 	if(shapeValue == ""){
 		//This takes an identifier for the element shape (the sibling of the Map button) and replaces shape with latitude and longitude or any other attribute we need
 		var latitude = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1].value;
@@ -447,7 +452,7 @@ function locate() {
     locator.addressToLocations(options);
   }
 
-   
+  var symbol;
    function showResults(candidates) {
     var candidate;
     //var symbol = new esri.symbol.SimpleMarkerSymbol();
@@ -455,12 +460,17 @@ function locate() {
     var typeSelect = callerButton.parentNode.parentNode.getElementsByTagName("SELECT")[0];
 	var typeText = typeSelect.options[typeSelect.selectedIndex].text; 
 	var typeValue = typeSelect.options[typeSelect.selectedIndex].value;
-    var symbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 32, 37);
+    
+	
+	if (typeValue!=""){
+		symbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 32, 37);
+	}else{
+		symbol = new esri.symbol.SimpleMarkerSymbol();
+		symbol.setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE);
+		symbol.setColor(new dojo.Color([255,0,0,0.75]));
+	}
     var infoTemplate = new esri.InfoTemplate("Location", "Location: ${address}<br />Score: ${score}");
 
-    
-    //symbol.setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_DIAMOND);
-    //symbol.setColor(new dojo.Color([255,0,0,0.75]));
 
     var points =  new esri.geometry.Multipoint(map.spatialReference);
 

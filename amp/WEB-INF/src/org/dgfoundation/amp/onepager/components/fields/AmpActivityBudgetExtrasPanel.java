@@ -41,7 +41,7 @@ public class AmpActivityBudgetExtrasPanel extends AmpFieldPanel {
 		}
 		
 		List<String> selectedYears=new ArrayList<String>();
-		final AmpSelectFieldPanel fy = new AmpSelectFieldPanel("fy", new ActivityFYModel(new PropertyModel<List<String>>(model, "FY")), years, "FY", false, true, false);
+		final AmpSelectFieldPanel fy = new AmpSelectFieldPanel("fy", new ActivityFYModel(new PropertyModel<String>(model, "FY")), years, "FY", false, true, false);
 		fy.getChoiceContainer().setOutputMarkupId(true);
 		fy.setOutputMarkupId(true);
 		fy.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange"){

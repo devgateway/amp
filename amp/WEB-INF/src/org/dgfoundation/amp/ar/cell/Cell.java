@@ -44,8 +44,8 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 		public final int compare (Cell o1, Cell o2) {
 			if (o1 == null || o2 == null)
 				return 0;
-	        logger.debug("3 cell o1 instance : "+o1.getValue());
-	        logger.debug("4 cell o2 instance : "+o2.getValue());            
+	        //logger.debug("3 cell o1 instance : "+o1.getValue());
+	        //logger.debug("4 cell o2 instance : "+o2.getValue());            
 			return o1.comparableToken().compareTo(o2.comparableToken());
 		}
 	}

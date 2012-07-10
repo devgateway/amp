@@ -91,7 +91,6 @@ public class ActivityUtil {
 		boolean newActivity = false;
 		try {
 			saveFundingOrganizationRole(a);
-			session.clear();
             AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 		
 			if (a.getAmpActivityId() == null){
@@ -113,7 +112,7 @@ public class ActivityUtil {
 					AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 					
 					a = ActivityVersionUtil.cloneActivity(a, wicketSession.getAmpCurrentMember());
-					
+					session.clear();
 					if (tmpGroup == null){
 						//we need to create a group for this activity
 						tmpGroup = new AmpActivityGroup();

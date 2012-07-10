@@ -1,27 +1,23 @@
 package org.dgfoundation.amp.onepager.models;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
-public class ActivityFYModel extends Model {
-
-	private IModel sourceModel;
-	private List<String> ddvalues;
-	ArrayList<String> fyYears=new ArrayList<String>();
+public class ActivityFYModel implements IModel<List<String>> {
+	private static final long serialVersionUID = 1L;
+	private IModel<String> sourceModel;
+	private List<String> fyYears=new ArrayList<String>();
 	
-	public ActivityFYModel(IModel sourceModel) {
+	public ActivityFYModel(IModel<String> sourceModel) {
 		this.sourceModel = sourceModel;
 	}
 	
 	@Override
-	public void setObject(Serializable object) {
+	public void setObject(List<String> object) {
 		if (object == null){
-			sourceModel.setObject(new ArrayList<String>());
+			sourceModel.setObject(new String());
 		}
 		else{
 			List<String> selected=(List<String>)object;
@@ -30,7 +26,9 @@ public class ActivityFYModel extends Model {
 				years.append(year);
 				years.append(",");
 			}
-			years.deleteCharAt(years.length()-1);
+			int idx = years.length()-1;
+			if (idx > 0)
+				years.deleteCharAt(idx);
 			String fy=years.toString();
 			sourceModel.setObject(fy);
 		}
@@ -38,7 +36,7 @@ public class ActivityFYModel extends Model {
 	}
 	
 	@Override
-	public Serializable getObject() {
+	public List<String> getObject() {
 		String fy = (String) sourceModel.getObject();
 		fyYears.clear();
 		if(fy!=null&&fy.length()>0){
@@ -48,6 +46,10 @@ public class ActivityFYModel extends Model {
 		return fyYears;
 	}
 
+	@Override
+	public void detach() {
+		sourceModel.detach();
+	}
 }
 
 

@@ -12,7 +12,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 
 public abstract class ListEditor<T> extends RepeatingView implements IFormModelUpdateListener{
-	public transient List<T> items;
+	private static final long serialVersionUID = 1L;
+	public transient List<T> items = new ArrayList<T>();
 	IModel<Set<T>> model;
 	private transient Comparator<T> comparator;
 
@@ -36,6 +37,10 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 	}
 	
 	public void addItem(T value){
+		origAddItem(value);
+	}
+	
+	public final void origAddItem(T value){
 		items.add(value);
 		ListItem<T> item = new ListItem<T>(newChildId(), 
 				items.size() - 1);

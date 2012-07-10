@@ -359,8 +359,8 @@ public class AmountCell extends Cell {
 		Column sourceCol = source.getColumn();
 		
 		initializePercentageMaps();
-		logger.debug("percent "+percentage +" apply to "+this+" (hash"+this.getHashCode()+") with source "+sourceCol.getName());
-		logger.debug("...column already has "+columnPercent+" for "+columnCellValue);
+		//logger.debug("percent "+percentage +" apply to "+this+" (hash"+this.getHashCode()+") with source "+sourceCol.getName());
+		//logger.debug("...column already has "+columnPercent+" for "+columnCellValue);
 		// never apply same percentage of same value again
 		if (columnPercent.containsKey(sourceCol.getName()) && columnCellValue.get(sourceCol.getName()).equals(source.getValue())) return;
 

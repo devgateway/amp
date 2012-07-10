@@ -521,6 +521,11 @@ function adminHelp(){
 	                                            </a>
 	                                        </li>
 	                                    </module:display>
+	                                        <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
+	                                            <a class="yuiampmenuitemlabel" href="/organizationReportWizard.do"  onclick="return canExit()">
+	                                                <b><digi:trn>Donor Report Generator</digi:trn></b>
+	                                            </a>
+	                                        </li>
 	                                    <module:display name="Multi-dimensional Reports" parentModule="REPORTING">
                                         <li class="yuiampmenuitem_drop">
                                             <a class="yuiampmenuitemlabel" href="/mondrian/mainreports.do" onclick="return canExit()">

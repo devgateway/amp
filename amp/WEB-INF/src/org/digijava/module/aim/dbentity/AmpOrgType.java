@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorTypeDimension;
+import org.digijava.module.aim.helper.donorReport.OrganizationReportColumn;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 

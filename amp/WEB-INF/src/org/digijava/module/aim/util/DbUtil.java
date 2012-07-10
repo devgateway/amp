@@ -2687,6 +2687,57 @@ public class DbUtil {
         }
         return organizations;
     }
+
+	public static List<AmpOrganisation> getAmpOrganisations(Long orgId,
+			Long groupId, Long typeId) {
+		Session session = null;
+		Query q = null;
+		List<AmpOrganisation> organizations = null;
+		StringBuilder queryString = new StringBuilder();
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString.append(" select org from ");
+			queryString.append(AmpOrganisation.class.getName());
+			queryString.append(" org inner join org.orgGrpId grp ");
+			queryString.append("  inner join grp.orgType type ");
+			
+			boolean orgCond = orgId != null && orgId != -1;
+			boolean groupCond = groupId != null && groupId != -1;
+			boolean typeCond = typeId != null && typeId != -1;
+			
+			if (orgCond || groupCond || typeCond) {
+				queryString.append(" where 1=1 ");
+			}
+			if (groupCond) {
+				queryString.append(" and grp.ampOrgGrpId=:groupId ");
+			}
+			if (typeCond) {
+				queryString.append(" and type.ampOrgTypeId=:typeId ");
+			}
+			if (orgCond) {
+				queryString.append(" and org.ampOrgId=:orgId ");
+			}
+			queryString.append("  order by org.name ");
+			q = session.createQuery(queryString.toString());
+			if (orgCond) {
+				q.setLong("orgId", orgId);
+			}
+			if (groupCond) {
+				q.setLong("groupId", groupId);
+			}
+			if (typeCond) {
+				q.setLong("typeId", typeId);
+			}
+
+			organizations = q.list();
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Amp organisation names  from database "
+					+ ex.getMessage());
+		}
+		return organizations;
+	}
    
     public static List<AmpOrganisation> getBilMulOrganisations() {
         Session session = null;

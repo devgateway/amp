@@ -1,8 +1,15 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AmpOrganisationContact implements Serializable {
+import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
+import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
+
+import com.rc.retroweaver.runtime.Arrays;
+
+public class AmpOrganisationContact implements Serializable,OrgProfileValue {
 	
 	private Long id;
 	private AmpContact contact;
@@ -42,6 +49,22 @@ public class AmpOrganisationContact implements Serializable {
 	}
 	public void setPrimaryContact(Boolean primaryContact) {
 		this.primaryContact = primaryContact;
+	}
+	@Override
+	public List<ValueTranslatabePair> getValuesForOrgReport(){
+    	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
+    	AmpContact contact=getContact();
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{contact.getName()}),false));
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{contact.getLastname()}),false));
+    	List<String> emails=contact.getEmails();
+    	values.add(new ValueTranslatabePair(emails,false));
+    	return values;
+    }
+
+	@Override
+	public String[] getSubHeaders() {
+		String[] subHeaders={"First Name","Last Name","E-mail"};
+		return subHeaders;
 	}
 	
 }

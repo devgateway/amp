@@ -1,22 +1,28 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.LocationsDimension;
+import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
+import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
+import com.rc.retroweaver.runtime.Arrays;
 
 /**
  * 
  * @author medea
  */
 public class AmpCategoryValueLocations implements Identifiable,
-		HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable {
+		HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable,OrgProfileValue {
 
 	private Long id;
 	private String name;
@@ -232,4 +238,17 @@ public class AmpCategoryValueLocations implements Identifiable,
     public String getAdditionalSearchString() {
         return this.code;
     }
+    @Override
+    public List<ValueTranslatabePair> getValuesForOrgReport(){
+    	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
+    	ValueTranslatabePair value=new ValueTranslatabePair(Arrays.asList(new String[]{getName()}),false);
+    	values.add(value);
+    	return values;
+    }
+
+	@Override
+	public String[] getSubHeaders() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

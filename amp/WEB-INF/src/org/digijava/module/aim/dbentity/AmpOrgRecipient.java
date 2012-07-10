@@ -1,9 +1,16 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
+import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
+
+import com.rc.retroweaver.runtime.Arrays;
 
 
-public class AmpOrgRecipient implements Serializable {
+public class AmpOrgRecipient implements Serializable,OrgProfileValue {
     private static final long serialVersionUID = 1L;
     private Long ampOrgRecipientId;
     private AmpOrganisation organization;
@@ -42,6 +49,18 @@ public class AmpOrgRecipient implements Serializable {
     public void setParentOrganization(AmpOrganisation parentOrganization) {
         this.parentOrganization = parentOrganization;
     }
+    @Override
+    public List<ValueTranslatabePair> getValuesForOrgReport(){
+    	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getOrganization().getName()}),false));
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{(getDescription()==null)?"":getDescription()}),false));
+    	return values;
+    }
 
+	@Override
+	public String[] getSubHeaders() {
+		String[] subHeaders = { "Name", "Description" };
+		return subHeaders;
+	}
 
 }

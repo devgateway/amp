@@ -3,11 +3,18 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+
+import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
+import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
+import com.rc.retroweaver.runtime.Arrays;
 
-public class AmpOrganizationBudgetInformation implements Serializable{
+
+public class AmpOrganizationBudgetInformation implements Serializable,OrgProfileValue{
     private Long id;
     private AmpCategoryValue type;
     private Long year;
@@ -81,6 +88,28 @@ public class AmpOrganizationBudgetInformation implements Serializable{
     public void setYear(Long year) {
         this.year = year;
     }
+    @Override
+    public List<ValueTranslatabePair> getValuesForOrgReport(){
+    	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getYear().toString()}),false));
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getType().getValue()}),true));
+    	Set<AmpOrganisation> orgs=getOrganizations();
+    	List<String> orgNames=new ArrayList<String>();
+    	if(orgs!=null&&!orgs.isEmpty()){
+    		for(AmpOrganisation org:orgs){
+    			orgNames.add(org.getName());
+    		}
+    	}
+    	values.add(new ValueTranslatabePair(orgNames,false));
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getAmount().toString()}),false));
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getCurrency().getCurrencyCode()}),false));
+    	return values;
+    }
 
+	@Override
+	public String[] getSubHeaders() {
+		String[] subHeaders={"Year","Type","Organization(s)","Amount","Currency"};
+		return subHeaders;
+	}
  
 }

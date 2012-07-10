@@ -9,6 +9,8 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.helper.donorReport.OrganizationReportColumn;
+import org.digijava.module.aim.helper.donorReport.PropertyType;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
@@ -96,7 +98,8 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
     private String  lineMinRegNumber;
     
     private boolean translateable	= true;
-
+    
+    @OrganizationReportColumn(columnName="Line Ministry Registration Number",propertyType=PropertyType.NGO)
 	public String getLineMinRegNumber() {
         return lineMinRegNumber;
     }
@@ -156,7 +159,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 
 	
 	
-	//
+	@OrganizationReportColumn(columnName="Sector Preferences", propertyType=PropertyType.BOTH)
 	public Set getSectors() {
 		return sectors;
 	}
@@ -183,6 +186,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	/**
 	 * @return
 	 */
+	@OrganizationReportColumn(columnName="DAC Code")
 	public String getDacOrgCode() {
 		return dacOrgCode;
 	}
@@ -190,6 +194,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	/**
 	 * @return
 	 */
+	@OrganizationReportColumn(columnName="Description")
 	public String getDescription() {
 		return description;
 	}
@@ -197,10 +202,11 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	/**
 	 * @return
 	 */
+	@OrganizationReportColumn(columnName="Organization Name", propertyType=PropertyType.BOTH)
 	public String getName() {
 		return name;
 	}
-
+	@OrganizationReportColumn(columnName="Organization Acronym",propertyType=PropertyType.BOTH)
 	public String getAcronym() {
 		return acronym;
 	}
@@ -208,6 +214,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	/**
 	 * @return
 	 */
+	@OrganizationReportColumn(columnName="Organization Code")
 	public String getOrgCode() {
 		return orgCode;
 	}
@@ -215,6 +222,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	/**
 	 * @return
 	 */
+	@OrganizationReportColumn(columnName="ISO Code")
 	public String getOrgIsoCode() {
 		return orgIsoCode;
 	}
@@ -238,6 +246,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	/**
 	 * @param string
 	 */
+
 	public void setDacOrgCode(String string) {
 		dacOrgCode = string;
 	}
@@ -280,7 +289,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setOrgType(String string) {
 		orgType = string;
 	}
-
+	@OrganizationReportColumn(columnName="Fiscal Calendar",propertyType=PropertyType.BOTH)
 	public AmpFiscalCalendar getAmpFiscalCalId() {
 		return ampFiscalCalId;
 	}
@@ -361,6 +370,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	/**
 	 * @return Returns the address.
 	 */
+	@OrganizationReportColumn(columnName="Address",propertyType=PropertyType.BOTH)
 	public String getAddress() {
 		return address;
 	}
@@ -399,6 +409,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	/**
 	 * @return Returns the orgGrpId.
 	 */
+	@OrganizationReportColumn(columnName="Organization Group", propertyType=PropertyType.BOTH)
 	public AmpOrgGroup getOrgGrpId() {
 		return orgGrpId;
 	}
@@ -411,6 +422,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	/**
 	 * @return Returns the orgUrl.
 	 */
+	@OrganizationReportColumn(columnName="Organization website", propertyType=PropertyType.BOTH)
 	public String getOrgUrl() {
 		return orgUrl;
 	}
@@ -488,7 +500,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
     public void setAcronymAndName(String acronymAndName) {
 	this.acronymAndName = acronymAndName;
     }
-
+    @OrganizationReportColumn(columnName="Budget Organization Code")
 	public String getBudgetOrgCode() {
 		return budgetOrgCode;
 	}
@@ -512,7 +524,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setImplemLocationLevel(AmpCategoryValue implemLocationLevel) {
 		this.implemLocationLevel = implemLocationLevel;
 	}
-
+	@OrganizationReportColumn(columnName="Organization Intervention Location",propertyType=PropertyType.NGO,returnedClass="org.digijava.module.aim.dbentity.AmpOrgLocation")
 	public Set<AmpOrgLocation> getLocations() {
 		return locations;
 	}
@@ -520,7 +532,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setLocations(Set<AmpOrgLocation> locations) {
 		this.locations = locations;
 	}
-
+	@OrganizationReportColumn(columnName="Staff Information",propertyType=PropertyType.NGO,returnedClass="org.digijava.module.aim.dbentity.AmpOrgStaffInformation")
 	public Set<AmpOrgStaffInformation> getStaffInfos() {
 		return staffInfos;
 	}
@@ -528,7 +540,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setStaffInfos(Set<AmpOrgStaffInformation> staffInfos) {
 		this.staffInfos = staffInfos;
 	}
-
+	@OrganizationReportColumn(columnName="Country Of Origin",propertyType=PropertyType.NGO)
 	public AmpCategoryValueLocations getCountry() {
 		return country;
 	}
@@ -536,7 +548,8 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setCountry(AmpCategoryValueLocations country) {
 		this.country = country;
 	}
-
+	
+	@OrganizationReportColumn(columnName="Recipients",propertyType=PropertyType.NGO,returnedClass="org.digijava.module.aim.dbentity.AmpOrgRecipient")
 	public Set<AmpOrgRecipient> getRecipients() {
 		return recipients;
 	}
@@ -544,7 +557,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setRecipients(Set<AmpOrgRecipient> recipients) {
 		this.recipients = recipients;
 	}
-
+	@OrganizationReportColumn(columnName="Organization Address Abroad(Internation NGO)",propertyType=PropertyType.NGO)
 	public String getAddressAbroad() {
 		return addressAbroad;
 	}
@@ -552,7 +565,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setAddressAbroad(String addressAbroad) {
 		this.addressAbroad = addressAbroad;
 	}
-
+	@OrganizationReportColumn(columnName="Tax Number",propertyType=PropertyType.NGO)
 	public String getTaxNumber() {
 		return taxNumber;
 	}
@@ -560,7 +573,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setTaxNumber(String taxNumber) {
 		this.taxNumber = taxNumber;
 	}
-
+	@OrganizationReportColumn(columnName="Organization Primary Purpose",propertyType=PropertyType.NGO)
 	public String getPrimaryPurpose() {
 		return primaryPurpose;
 	}
@@ -568,7 +581,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setPrimaryPurpose(String primaryPurpose) {
 		this.primaryPurpose = primaryPurpose;
 	}
-
+	@OrganizationReportColumn(columnName="Registration Number in MinPlan",propertyType=PropertyType.NGO)
 	public String getMinPlanRegNumb() {
 		return minPlanRegNumb;
 	}
@@ -576,7 +589,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setMinPlanRegNumb(String minPlanRegNumb) {
 		this.minPlanRegNumb = minPlanRegNumb;
 	}
-
+	@OrganizationReportColumn(columnName="Legal Personality Number",propertyType=PropertyType.NGO)
 	public String getLegalPersonNum() {
 		return legalPersonNum;
 	}
@@ -584,7 +597,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setLegalPersonNum(String legalPersonNum) {
 		this.legalPersonNum = legalPersonNum;
 	}
-
+	@OrganizationReportColumn(columnName="Legal personality registration date in the country of origin",propertyType=PropertyType.NGO)
 	public Date getLegalPersonRegDate() {
 		return legalPersonRegDate;
 	}
@@ -592,7 +605,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setLegalPersonRegDate(Date legalPersonRegDate) {
 		this.legalPersonRegDate = legalPersonRegDate;
 	}
-
+	@OrganizationReportColumn(columnName="Registration Date in MinPlan",propertyType=PropertyType.NGO)
 	public Date getMinPlanRegDate() {
 		return minPlanRegDate;
 	}
@@ -600,7 +613,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setMinPlanRegDate(Date minPlanRegDate) {
 		this.minPlanRegDate = minPlanRegDate;
 	}
-
+	@OrganizationReportColumn(columnName="Budget Information",propertyType=PropertyType.NGO,returnedClass="org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation")
 	public Set<AmpOrganizationBudgetInformation> getOrganizationBudgetInfos() {
 		return organizationBudgetInfos;
 	}
@@ -617,7 +630,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setOtherInformation(String otherInformation) {
 		this.otherInformation = otherInformation;
 	}
-
+	@OrganizationReportColumn(columnName="Registration date of Line Ministry",propertyType=PropertyType.NGO)
 	public Date getLineMinRegDate() {
 		return lineMinRegDate;
 	}
@@ -625,7 +638,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setLineMinRegDate(Date lineMinRegDate) {
 		this.lineMinRegDate = lineMinRegDate;
 	}
-
+	@OrganizationReportColumn(columnName="Operation approval date in the country of origin",propertyType=PropertyType.NGO)
 	public Date getOperFuncApprDate() {
 		return operFuncApprDate;
 	}
@@ -633,7 +646,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setOperFuncApprDate(Date operFuncApprDate) {
 		this.operFuncApprDate = operFuncApprDate;
 	}
-
+	@OrganizationReportColumn(columnName="Receipt of legal personality act in DRC",propertyType=PropertyType.NGO)
 	public String getReceiptLegPersonalityAct() {
 		return receiptLegPersonalityAct;
 	}
@@ -645,11 +658,11 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setOrganizationContacts(Set<AmpOrganisationContact> organizationContacts) {
 		this.organizationContacts = organizationContacts;
 	}
-
+	@OrganizationReportColumn(columnName="Contact Information",propertyType=PropertyType.NGO,returnedClass="org.digijava.module.aim.dbentity.AmpOrganisationContact")
 	public Set<AmpOrganisationContact> getOrganizationContacts() {
 		return organizationContacts;
 	}
-	
+	@OrganizationReportColumn(columnName="Funding Org Id",propertyType=PropertyType.BOTH)
 	public String getFundingorgid() {
 		return fundingorgid;
 	}
@@ -692,6 +705,10 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 
     public String getAdditionalSearchString() {
         return this.acronym;
+    }
+    @OrganizationReportColumn(columnName="Organization Type",propertyType=PropertyType.BOTH)
+    public String getOrgTypeName() {
+        return this.orgGrpId.getOrgType().getOrgType();
     }
 	
 	

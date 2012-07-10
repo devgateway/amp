@@ -37,7 +37,10 @@
 				var realObj	= this.getEl();
 				var dragObj	= this.getDragEl();
 				MyDragAndDropObject.prototype.endAnimation(realObj, dragObj);
-				repManager.checkSteps();
+				if (typeof repManager != 'undefined') {
+					repManager.checkSteps();
+				}
+				
 			}
 			MyDragAndDropObject.prototype.onDrag		= function(e) {
 				//alert('onDrag');

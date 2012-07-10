@@ -1,7 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
+import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianFiscalBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
@@ -9,7 +13,9 @@ import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.NepaliBasedWorker;
 import org.digijava.module.aim.util.Identifiable;
 
-public class AmpFiscalCalendar implements Serializable, Identifiable {
+import com.rc.retroweaver.runtime.Arrays;
+
+public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileValue {
 	private Long ampFiscalCalId;
 	private Integer startMonthNum;
 	private Integer yearOffset;
@@ -132,6 +138,19 @@ public class AmpFiscalCalendar implements Serializable, Identifiable {
 
 	public void setIsFiscal(Boolean isFiscal) {
 		this.isFiscal = isFiscal;
+	}
+	@Override
+	public List<ValueTranslatabePair> getValuesForOrgReport(){
+    	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
+    	ValueTranslatabePair value=new ValueTranslatabePair(Arrays.asList(new String[]{getName()}),false);
+    	values.add(value);
+    	return values;
+    }
+
+	@Override
+	public String[] getSubHeaders() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

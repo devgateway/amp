@@ -3,10 +3,17 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
+import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
+import com.rc.retroweaver.runtime.Arrays;
 
-public class AmpOrgStaffInformation implements Serializable{
+
+public class AmpOrgStaffInformation implements Serializable,OrgProfileValue{
     private static final long serialVersionUID = 1L;
     private Long id;
     private Long year;
@@ -63,4 +70,18 @@ public class AmpOrgStaffInformation implements Serializable{
     public void setYear(Long year) {
         this.year = year;
     }
+    @Override
+    public List<ValueTranslatabePair> getValuesForOrgReport(){
+    	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getYear().toString()}),false));
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getType().getValue()}),true));
+    	values.add(new ValueTranslatabePair(Arrays.asList(new String[]{getStaffNumber().toString()}),false));
+    	return values;
+    }
+
+	@Override
+	public String[] getSubHeaders() {
+		String[] subHeaders={"Year","Type of staff","Number of Staff"};
+		return subHeaders;
+	}
 }

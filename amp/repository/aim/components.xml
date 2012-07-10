@@ -450,6 +450,8 @@
 	<page name="wicketHeader" page="wicketHeader"></page>
 	<page name="wicketFooter" page="wicketFooter"></page>
 	<page page="importRegions" name="importRegionLayout" title="Import Regions" />
+	<page page="orgProfileReportGenerator" name="aim_orgProfileReportGenerator" title="Donor Report Generator" />
+	<page page="orgProfileReport" name="aim_orgProfileReport" title="Donor Report Generator" />
 </secondary-pages>
 <module>
 

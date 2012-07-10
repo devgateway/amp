@@ -1,21 +1,26 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.SectorDimension;
+import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
+import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.HierarchyListable;
-import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
+
+import com.rc.retroweaver.runtime.Arrays;
 
 import edu.emory.mathcs.backport.java.util.TreeSet;
 
 public class AmpSector implements Serializable, Comparable, Identifiable,
 		ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
-		Cloneable {
+		Cloneable, OrgProfileValue {
 	private Long ampSectorId;
 	private AmpSector parentSectorId;
 	private String sectorCode;
@@ -326,4 +331,15 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
     public String getAdditionalSearchString() {
         return this.sectorCode;
     }
+    @Override
+    public List<ValueTranslatabePair> getValuesForOrgReport(){
+    	List<ValueTranslatabePair> values=new ArrayList<ValueTranslatabePair>();
+    	ValueTranslatabePair value=new ValueTranslatabePair(Arrays.asList(new String[]{getSectorPathString()}),false);
+    	values.add(value);
+    	return values;
+    }
+    @Override
+	public String[] getSubHeaders() {
+		return null;
+	}
 }

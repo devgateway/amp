@@ -1,0 +1,21 @@
+#header {
+	font-family: arial;
+	font-size: 14pt;
+	font-style: normal;
+	width:100%;
+	height:50px;
+	background-image:url(images/top_bg.gif);
+	color:white;
+}
+#filter {
+	border-top:1px white solid;	
+	border-bottom:1px white solid;	
+	
+/*	background-image:url(images/top_bg.gif);
+	color:white;*/
+}
+
+body {
+	margin:0;	
+	font-family: arial;
+}

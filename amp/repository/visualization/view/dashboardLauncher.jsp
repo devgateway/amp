@@ -686,7 +686,7 @@ function initializeGlobalVariables(){
 					        </div>	
 					        
 					</div>
-					<center><input type="button" value="<digi:trn>Launch Dashboard</digi:trn>" onclick="launchDashboard()" class="buttonx" style="margin-right:10px; margin-top:10px;"></center>
+					<center><input type="button" value="<digi:trn>Generate Dashboard</digi:trn>" onclick="launchDashboard()" class="buttonx" style="margin-right:10px; margin-top:10px;"></center>
 									
             </div>
 

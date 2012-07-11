@@ -154,15 +154,13 @@ ${fn:replace(message,quote,escapedQuote)}
 	                              		</feature:display>
 									</module:display>
 										
-<!--										<module:display name="Org. Dashboard" parentModule="Visualization Dashboards">-->
-<!--	                                        <feature:display name="Show Org. Dashboard in public View" module="Org. Dashboard">-->
+										<module:display name="Dashboard Generator in public view" parentModule="Visualization Dashboards">
 	                                        <li class="yuiampmenuitem_drop">
 				                              	<a class="yuiampmenuitemlabel" href="/visualization/dashboardLauncher.do"  onclick="return canExit()">
-				                                	<digi:trn>Dashboard Launcher</digi:trn>
+				                                	<digi:trn>Dashboard Generator</digi:trn>
 				                                </a> 
 			                                </li>
-<!--			                                </feature:display>-->
-<!--		                                </module:display>-->
+		                                </module:display>
 		                                
 								</ul>
 						</div>
@@ -697,15 +695,13 @@ function adminHelp(){
 			                            </li> 
                                         </module:display>                                        
 										
-<!--										<module:display name="Org. Dashboard" parentModule="Visualization Dashboards">-->
-<!--	                                        <feature:display name="Show Org. Dashboard in public View" module="Org. Dashboard">-->
+										<module:display name="Dashboard Generator" parentModule="Visualization Dashboards">
 	                                        <li class="yuiampmenuitem_drop">
 				                              	<a class="yuiampmenuitemlabel" href="/visualization/dashboardLauncher.do"  onclick="return canExit()">
-				                                	<digi:trn>Dashboard Launcher</digi:trn>
+				                                	<digi:trn>Dashboard Generator</digi:trn>
 				                                </a> 
 			                                </li>
-<!--			                                </feature:display>-->
-<!--		                                </module:display>-->
+		                                </module:display>
 		                                
                                       </ul>
                                   </div>

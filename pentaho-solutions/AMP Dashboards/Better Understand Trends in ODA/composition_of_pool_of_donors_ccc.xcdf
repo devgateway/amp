@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdf>
+  <title>Composition of Pool of Donors CCC</title>
+  <author>Fernando Ferreyra</author>
+  <description>This contains a description of the dashboards</description>
+  <icon></icon>
+  <template>composition_of_pool_of_donors_ccc.html</template>
+  <style>amp</style>
+  <messages>messages</messages>
+</cdf>

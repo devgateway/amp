@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdf>
+  <title>Budget By Year</title>
+  <author>Fernando Ferreyra</author>
+  <description>This contains a description of the dashboards</description>
+  <icon></icon>
+  <template>budget_by_year.html</template>
+  <style>amp</style>
+</cdf>

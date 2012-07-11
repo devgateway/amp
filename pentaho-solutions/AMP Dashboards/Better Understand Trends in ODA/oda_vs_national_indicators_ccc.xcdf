@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdf>
+  <title>ODA Local vs National Indicators CCC</title>
+  <author>Fernando Ferreyra</author>
+  <description>This contains a description of the dashboards</description>
+  <icon></icon>
+  <template>oda_vs_national_indicators_ccc.html</template>
+  <style>amp</style>
+</cdf>

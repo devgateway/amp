@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdf>
+  <title>Share of ODA by Donor Organization CCC</title>
+  <author>Fernando Ferreyra</author>
+  <description>This contains a description of the dashboards</description>
+  <icon></icon>
+  <template>share_of_oda_by_donor_organization_ccc.html</template>
+  <style>amp</style>
+</cdf>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="first_chart_mdx" type="mondrian.jndi">
+         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
+         <Jndi>AMPMalawiStaging</Jndi>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx"
+               id="first_chart_mdx"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="Direct Project Support" name="aidType" type="String"/>
+      </Parameters>
+      <Query>With
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Financing Instrument],[*BASE_MEMBERS_Donor Dates])'
+Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Dates].CurrentMember.OrderKey,BASC)'
+Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Financing Instrument].CurrentMember.OrderKey,BASC)'
+Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[2003],[Donor Dates].[2004],[Donor Dates].[2005],[Donor Dates].[2006],[Donor Dates].[2007],[Donor Dates].[2008],[Donor Dates].[2009],[Donor Dates].[2010],[Donor Dates].[2011]}'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[*FORMATTED_MEASURE_0]}'
+Set [*BASE_MEMBERS_Financing Instrument] as '[Financing Instrument].[Financing Instrument].Members'
+Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Dates].currentMember)})'
+Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Financing Instrument].currentMember)})'
+Member [Measures].[*FORMATTED_MEASURE_0] as '[Measures].[Actual Commitments]', FORMAT_STRING = '$#,##0.00', SOLVE_ORDER=400
+Select
+CrossJoin([*SORTED_COL_AXIS],[*BASE_MEMBERS_Measures]) on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]</Query>
+   </DataAccess>
+</CDADescriptor>

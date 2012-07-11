@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Query name="E2F97EA8-0646-5297-807A-6060940C8E97" type="MDX" connection="AMPSenegal" cube="[Donor Funding]" catalog="AMPMalawi" schema="AMPMalawi">
+  <MDX>With
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Primary Sector],[*BASE_MEMBERS_Donor Group])'
+Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Group].CurrentMember.OrderKey,BASC)'
+Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Primary Sector].CurrentMember.OrderKey,BASC,Ancestor([Primary Sector].CurrentMember,[Primary Sector].[Primary Sector Scheme]).OrderKey,BASC)'
+Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[*SUMMARY_MEASURE_0]}'
+Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Group].currentMember)})'
+Set [*BASE_MEMBERS_Donor Group] as '[Donor Group].[DonorGroup].Members'
+Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Primary Sector].currentMember)})'
+Set [*BASE_MEMBERS_Primary Sector] as '[Primary Sector].[Primary Sector].Members'
+Member [Measures].[*SUMMARY_MEASURE_0] as '[Measures].[Actual Disbursements]/([Measures].[Actual Disbursements],[Primary Sector].[*TOTAL_MEMBER_SEL~AGG])', FORMAT_STRING = Case When [Measures].CurrentMember = 1 Then '|#%' When [Measures].CurrentMember &gt;= 0.2 Then '|#.##%|style=green' When [Measures].CurrentMember &gt;= 0.15 Then '|#.##%|style=yellow' When [Measures].CurrentMember &gt; 0 Then '|0.##%|style=red' End, SOLVE_ORDER=100
+Member [Primary Sector].[*TOTAL_MEMBER_SEL~AGG] as 'Aggregate({[Primary Sector].[All Primary Sectors]})', SOLVE_ORDER=-101
+Select
+Union(CrossJoin({[Primary Sector].[*TOTAL_MEMBER_SEL~AGG]},[*BASE_MEMBERS_Measures]),CrossJoin([*SORTED_COL_AXIS],[*BASE_MEMBERS_Measures])) on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]</MDX>
+</Query>
+

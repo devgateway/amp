@@ -1,0 +1,96 @@
+
+
+
+<!-- The dashboard layout -->
+<div id="dashboard" style="width:100%;">
+    <div id="first_section" style="float:left;margin:10px 10x 10px 10px;">
+      <div id="firstChartTypeSelect_object">
+        <span class="#format" id="firstChartTypeSelector">
+            <input type="radio" id="first_bar" name="first_chart_type"  CHECKED value="bar"/><label for="first_bar">CDF.i18n("msg_bar1")</label>
+            <input type="radio" id="first_line" name="first_chart_type" value="line"/><label for="first_line">CDF.i18n("msg_line1")</label>
+            <input type="radio" id="first_data" name="first_chart_type" value="data"/><label for="first_data">CDF.i18n("msg_data1")</label>
+        </span>
+      </div>
+      <div id="first_chart_line" style="margin:0px auto;"></div>
+      <div id="first_chart_bar" style="margin:0px auto;"></div>
+      <div id="first_chart_data"></div>
+    </div>
+</div>
+
+
+<script language="javascript" type="text/javascript">
+var first_line_chart = jQuery.extend(true, {}, seminal_chart);
+first_line_chart.type = "cccLineChart";
+first_line_chart.htmlObject = "first_chart_line";
+first_line_chart.chartDefinition.dataAccessId = "ampmalawigni";
+first_line_chart.chartDefinition.crosstabMode = false;
+first_line_chart.chartDefinition.valueFormat = function f(value){return (Math.round(value*100)/100) + "%";};
+first_line_chart.chartDefinition.path = "/AMP Dashboards/Better Understand Trends in ODA/oda_vs_national_indicators_ccc.cda";
+first_line_chart.chartDefinition.title = function() {return Dashboards.i18nSupport.prop("msg_oda_vs_gni");};
+
+var first_bar_chart = jQuery.extend(true, {}, seminal_chart);
+first_bar_chart.type = "cccBarChart";
+first_bar_chart.htmlObject = "first_chart_bar";
+first_bar_chart.chartDefinition.dataAccessId = "ampmalawigni";
+first_bar_chart.chartDefinition.crosstabMode = false;
+first_bar_chart.chartDefinition.seriesInRows = true;
+first_bar_chart.chartDefinition.valueFormat = function f(value){return (Math.round(value*100)/100) + "%";};
+first_bar_chart.chartDefinition.path = "/AMP Dashboards/Better Understand Trends in ODA/oda_vs_national_indicators_ccc.cda";
+first_bar_chart.chartDefinition.title = function() {return Dashboards.i18nSupport.prop("msg_oda_vs_gni");};
+
+var first_data_table = jQuery.extend(true, {}, seminal_data_table);
+first_data_table.chartDefinition.dataAccessId = "ampmalawigni";
+first_data_table.chartDefinition.path = "/AMP Dashboards/Better Understand Trends in ODA/oda_vs_national_indicators_ccc.cda";
+first_data_table.htmlObject = "first_chart_data";
+first_data_table.name = "first_data_table";
+first_data_table.chartDefinition.colTypes = "";//['string','numeric','numeric','numeric','numeric'];
+first_data_table.chartDefinition.colFormats = "";//[null,'%.2f','%.2f','%.2f','%.2f'];
+
+    // These are the components to be loaded into the dashboard withing the [] separated by ,
+    var components = [first_line_chart,first_bar_chart,first_data_table];
+    // The initial dashboard load function definition
+    function load(){
+      Dashboards.init(components);
+    }
+
+    // The initial dashboard load function execution
+    load();
+
+</script>
+
+<script language="javascript">
+    var cType = "bar";
+		$("#firstChartTypeSelector").buttonset();
+    $("#first_chart_line").hide();
+    $("#first_chart_data").hide();
+		$("#firstChartTypeSelector").click(function (){
+        var oldCType = cType;
+        cType = $("#firstChartTypeSelector :radio:checked").val();
+        $("#first_chart_" + oldCType).fadeOut('fast', function(){$("#first_chart_" + cType).fadeIn();});
+			});
+
+  var resizeLayout = function() {
+		$("#dashboard").height($(window).height()-30);
+		$("#dashboard").width($(document.body).width()-5);
+		$("#first_section").height($("#dashboard").height());
+		$("#first_section").width($("#dashboard").width());
+    $("#first_chart_line").width($("#first_section").width()-20);
+    $("#first_chart_bar").width($("#first_section").width()-20);
+    $("#first_chart_data").width($("#first_section").width()-20);
+		first_line_chart.chartDefinition.width = $("#first_section").width()-20;
+		first_bar_chart.chartDefinition.width = $("#first_section").width()-20;
+		first_data_table.chartDefinition.width = $("#first_section").width()-20;
+	  	if (initialized)
+			Dashboards.resetAll();
+	}
+	var initialized = false;
+	
+	$(window).resize(resizeLayout);
+	$(window).ready(function() {resizeLayout();initialized = true;});
+
+</script>
+	<style>
+    .ui-button-text { font-size:8pt;}
+    .ui-state-active { font-weight:bold;}
+    </style>
+

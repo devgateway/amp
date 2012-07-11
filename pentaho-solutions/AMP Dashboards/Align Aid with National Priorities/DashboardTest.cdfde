@@ -1,0 +1,967 @@
+{
+ "layout": {
+  "title": "Two Columns Template",
+  "rows": [
+   {
+    "id": "e12f9bf3-27f1-beb1-0a68-a5b0facd091b",
+    "type": "LayoutRow",
+    "typeDesc": "Row",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Header"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": ""
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": ""
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": ""
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": ""
+     }
+    ]
+   },
+   {
+    "id": "5dc54aa4-6a22-269a-d641-ac5fd3a61298",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "e12f9bf3-27f1-beb1-0a68-a5b0facd091b",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": ""
+     },
+     {
+      "name": "columnSpan",
+      "type": "Integer",
+      "value": "24"
+     },
+     {
+      "name": "columnPrepend",
+      "type": "Integer",
+      "value": ""
+     },
+     {
+      "name": "columnAppend",
+      "type": "Integer",
+      "value": ""
+     },
+     {
+      "name": "columnPrependTop",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnAppendBottom",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBigBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": "#a1d200"
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": "cdfdd-round"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "60"
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": "center"
+     }
+    ]
+   },
+   {
+    "id": "53e4ccdd-bd66-1ee1-8b5a-5a8771703095",
+    "type": "LayoutHtml",
+    "typeDesc": "Html",
+    "parent": "5dc54aa4-6a22-269a-d641-ac5fd3a61298",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "title"
+     },
+     {
+      "name": "html",
+      "type": "Html",
+      "value": "<h2 style=\"color:#606060;\">Dashboard generated with CDF Dashboard Editor</h2>"
+     },
+     {
+      "name": "color",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "fontSize",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "cda9bf5f-0f51-13db-68ac-616cef3e73be",
+    "type": "LayoutRow",
+    "typeDesc": "Row",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Spacer"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "5"
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": ""
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": ""
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": ""
+     }
+    ]
+   },
+   {
+    "id": "9b5e4665-60dd-d123-d49a-7cb9072a0540",
+    "type": "LayoutRow",
+    "typeDesc": "Row",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Body"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": ""
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": ""
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": ""
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": ""
+     }
+    ]
+   },
+   {
+    "id": "a75b059a-0f5b-deda-6d3f-aeba72af2fe5",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "9b5e4665-60dd-d123-d49a-7cb9072a0540",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Panel_1"
+     },
+     {
+      "name": "columnSpan",
+      "type": "Integer",
+      "value": "10"
+     },
+     {
+      "name": "columnPrepend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnAppend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnPrependTop",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnAppendBottom",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBigBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": "#e0e0e0"
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": "cdfdd-round"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "400"
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": ""
+     }
+    ]
+   },
+   {
+    "id": "33c5530d-4064-ad09-75d3-eb9be0cba2fc",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "9b5e4665-60dd-d123-d49a-7cb9072a0540",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Panel_2"
+     },
+     {
+      "name": "columnSpan",
+      "type": "Integer",
+      "value": "10"
+     },
+     {
+      "name": "columnPrepend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnAppend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnPrependTop",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnAppendBottom",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBigBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": "#e0e0e0"
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": "cdfdd-round"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "400"
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": ""
+     }
+    ]
+   },
+   {
+    "id": "6e933249-6d80-9b57-95f9-8a47a24ae398",
+    "type": "LayoutRow",
+    "typeDesc": "Row",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Small_Space"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "5"
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": ""
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": ""
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": ""
+     }
+    ]
+   },
+   {
+    "id": "64b07960-f21e-b93e-4911-8c2c025d0d3b",
+    "type": "LayoutRow",
+    "typeDesc": "Row",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Footer"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "50"
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": "#e0e0e0"
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": "cdfdd-round"
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": "right"
+     }
+    ]
+   },
+   {
+    "id": "e03427a4-44c1-d56c-e8e5-ec4b6b48a612",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "64b07960-f21e-b93e-4911-8c2c025d0d3b",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Footer_Text"
+     },
+     {
+      "name": "columnSpan",
+      "type": "Integer",
+      "value": "20"
+     },
+     {
+      "name": "columnPrepend",
+      "type": "Integer",
+      "value": ""
+     },
+     {
+      "name": "columnAppend",
+      "type": "Integer",
+      "value": ""
+     },
+     {
+      "name": "columnPrependTop",
+      "type": "Boolean",
+      "value": "false"
+     },
+     {
+      "name": "columnAppendBottom",
+      "type": "Boolean",
+      "value": "false"
+     },
+     {
+      "name": "columnBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBigBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": ""
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": ""
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "40"
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": "right"
+     }
+    ]
+   },
+   {
+    "id": "b45069a3-a949-0502-b04e-c736d142c232",
+    "type": "LayoutHtml",
+    "typeDesc": "Html",
+    "parent": "e03427a4-44c1-d56c-e8e5-ec4b6b48a612",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Text"
+     },
+     {
+      "name": "html",
+      "type": "Html",
+      "value": "<h4 style=\"color:#606060;\" >Dashboard CDF Dashboard Editor</h4>"
+     },
+     {
+      "name": "color",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "fontSize",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "e5c22f13-2f56-9638-5a05-b675a84fc695",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "64b07960-f21e-b93e-4911-8c2c025d0d3b",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Footer_Image"
+     },
+     {
+      "name": "columnSpan",
+      "type": "Integer",
+      "value": "4"
+     },
+     {
+      "name": "columnPrepend",
+      "type": "Integer",
+      "value": ""
+     },
+     {
+      "name": "columnAppend",
+      "type": "Integer",
+      "value": "0"
+     },
+     {
+      "name": "columnPrependTop",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnAppendBottom",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBigBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": ""
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": ""
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": ""
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": "left"
+     }
+    ]
+   },
+   {
+    "id": "68d6b48f-a44c-99af-7261-38b98e99259e",
+    "type": "LayoutHtml",
+    "typeDesc": "Html",
+    "parent": "e5c22f13-2f56-9638-5a05-b675a84fc695",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Image"
+     },
+     {
+      "name": "html",
+      "type": "Html",
+      "value": "<a style=\"position:relative;top:12;\" border=\"0\" title=\"WebDetails\" href=\"http://www.webdetails.pt\">\n<img src=\"/pentaho/content/pentaho-cdf-dd/getResource?resource=/images/webdetails.png\"/>\n</a>"
+     },
+     {
+      "name": "color",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "fontSize",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   }
+  ]
+ },
+ "components": {
+  "rows": [
+   {
+    "id": "OTHERCOMPONENTS",
+    "name": "Others",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "Others",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "7d5cb60d-7ed7-2705-1037-0a988f8e749c",
+    "type": "ComponentsTable",
+    "typeDesc": "table Component",
+    "parent": "OTHERCOMPONENTS",
+    "properties": [
+     {
+      "name": "name",
+      "value": "first_table",
+      "type": "Id"
+     },
+     {
+      "name": "htmlObject",
+      "value": "Panel_1",
+      "type": "HtmlObject"
+     },
+     {
+      "name": "listeners",
+      "value": "[]",
+      "type": "Listeners"
+     },
+     {
+      "name": "xActionArrayParameter",
+      "value": "[]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "dataSource",
+      "type": "Datasource",
+      "value": "olapQuery"
+     },
+     {
+      "name": "cccClickAction",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "colHeaders",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colTypes",
+      "value": "[]",
+      "type": "colTypesCustom"
+     },
+     {
+      "name": "colFormats",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colWidths",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colSortable",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "colSearchable",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "paginate",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "paginateServerside",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "paginationType",
+      "value": "two_button",
+      "type": "PaginationType"
+     },
+     {
+      "name": "filter",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "info",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "sort",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "sortBy",
+      "value": "[]",
+      "type": "SortByArray"
+     },
+     {
+      "name": "displayLength",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "lengthChange",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "tableStyle",
+      "value": "themeroller",
+      "type": "TableStyle"
+     },
+     {
+      "name": "drawCallback",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "sDom",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "oLanguage",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "executeAtStart",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "preChange",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postChange",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "preExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "tooltip",
+      "value": "",
+      "type": "Html"
+     },
+     {
+      "name": "extraOptions",
+      "value": "[]",
+      "type": "OptionArray"
+     },
+     {
+      "name": "expandParameters",
+      "value": "[]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "expandOnClick",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "expandContainerObject",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   }
+  ]
+ },
+ "datasources": {
+  "rows": [
+   {
+    "id": "MDX",
+    "name": "MDX Queries",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "MDX Queries",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "ff41bdcf-a55a-ca74-6d09-f074484c92e9",
+    "type": "Componentsmdx_mondrianJndi",
+    "typeDesc": "mdx over mondrianJndi",
+    "meta": "CDA",
+    "meta_conntype": "mondrian.jndi",
+    "meta_datype": "mdx",
+    "parent": "MDX",
+    "properties": [
+     {
+      "name": "name",
+      "value": "olapQuery",
+      "type": "Id"
+     },
+     {
+      "name": "catalog",
+      "value": "AMP Dashboards/AmpMalawiStaging.xml",
+      "type": "MondrianCatalog"
+     },
+     {
+      "name": "jndi",
+      "value": "AMPMalawiStaging",
+      "type": "Jndi"
+     },
+     {
+      "name": "access",
+      "value": "public",
+      "type": "Access"
+     },
+     {
+      "name": "parameters",
+      "value": "[]",
+      "type": "CdaParameters"
+     },
+     {
+      "name": "output",
+      "value": "[]",
+      "type": "IndexArray"
+     },
+     {
+      "name": "outputMode",
+      "value": "include",
+      "type": "OutputMode"
+     },
+     {
+      "name": "cdacolumns",
+      "value": "[]",
+      "type": "CdaColumnsArray"
+     },
+     {
+      "name": "cdacalculatedcolumns",
+      "value": "[]",
+      "type": "CdaCalculatedColumnsArray"
+     },
+     {
+      "name": "query",
+      "value": "With\nSet [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Primary Sector],[*BASE_MEMBERS_Donor Group])'\nSet [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Group].CurrentMember.OrderKey,BASC)'\nSet [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Primary Sector].CurrentMember.OrderKey,BASC,Ancestor([Primary Sector].CurrentMember,[Primary Sector].[Primary Sector Scheme]).OrderKey,BASC)'\nSet [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'\nSet [*BASE_MEMBERS_Measures] as '{[Measures].[*SUMMARY_MEASURE_0]}'\nSet [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Group].currentMember)})'\nSet [*BASE_MEMBERS_Donor Group] as '[Donor Group].[DonorGroup].Members'\nSet [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Primary Sector].currentMember)})'\nSet [*BASE_MEMBERS_Primary Sector] as '[Primary Sector].[Primary Sector].Members'\nMember [Measures].[*SUMMARY_MEASURE_0] as '[Measures].[Actual Disbursements]/([Measures].[Actual Disbursements],[Primary Sector].[*TOTAL_MEMBER_SEL~AGG])', FORMAT_STRING = Case When [Measures].CurrentMember = 1 Then '|#%' When [Measures].CurrentMember >= 0.2 Then '|#.##%|style=green' When [Measures].CurrentMember >= 0.15 Then '|#.##%|style=yellow' When [Measures].CurrentMember > 0 Then '|0.##%|style=red' End, SOLVE_ORDER=100\nMember [Primary Sector].[*TOTAL_MEMBER_SEL~AGG] as 'Aggregate({[Primary Sector].[All Primary Sectors]})', SOLVE_ORDER=-101\nSelect\nUnion(CrossJoin({[Primary Sector].[*TOTAL_MEMBER_SEL~AGG]},[*BASE_MEMBERS_Measures]),CrossJoin([*SORTED_COL_AXIS],[*BASE_MEMBERS_Measures])) on columns,\nNon Empty [*SORTED_ROW_AXIS] on rows\nFrom [Donor Funding]",
+      "type": "SqlQuery"
+     },
+     {
+      "name": "cache",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cacheDuration",
+      "value": 3600,
+      "type": "Integer"
+     },
+     {
+      "name": "bandedMode",
+      "value": "compact",
+      "type": "BandedMode"
+     }
+    ]
+   }
+  ]
+ },
+ "filename": "/AMP Dashboards/Align Aid with National Priorities/DashboardTest.cdfde"
+}

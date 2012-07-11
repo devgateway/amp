@@ -1,0 +1,530 @@
+{
+ "layout": {
+  "title": "Two Columns Template",
+  "rows": [
+   {
+    "id": "9b5e4665-60dd-d123-d49a-7cb9072a0540",
+    "type": "LayoutRow",
+    "typeDesc": "Row",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Body"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": ""
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": ""
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": ""
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": ""
+     }
+    ]
+   },
+   {
+    "id": "a75b059a-0f5b-deda-6d3f-aeba72af2fe5",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "9b5e4665-60dd-d123-d49a-7cb9072a0540",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Panel_1"
+     },
+     {
+      "name": "columnSpan",
+      "type": "Integer",
+      "value": "10"
+     },
+     {
+      "name": "columnPrepend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnAppend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnPrependTop",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnAppendBottom",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBigBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": "#e0e0e0"
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": "cdfdd-round"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "800"
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": "center"
+     }
+    ]
+   },
+   {
+    "id": "33c5530d-4064-ad09-75d3-eb9be0cba2fc",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "9b5e4665-60dd-d123-d49a-7cb9072a0540",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Panel_2"
+     },
+     {
+      "name": "columnSpan",
+      "type": "Integer",
+      "value": "10"
+     },
+     {
+      "name": "columnPrepend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnAppend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnPrependTop",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnAppendBottom",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBigBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": "#e0e0e0"
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": "cdfdd-round"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "800"
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": "center"
+     }
+    ]
+   }
+  ]
+ },
+ "components": {
+  "rows": [
+   {
+    "id": "GENERIC",
+    "name": "Generic",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "Generic",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "9e0f477f-eea2-a623-c5b4-2e5a430debed",
+    "type": "ComponentsParameter",
+    "typeDesc": "Parameter",
+    "parent": "GENERIC",
+    "properties": [
+     {
+      "name": "name",
+      "value": "currency",
+      "type": "Id"
+     },
+     {
+      "name": "propertyValue",
+      "value": "USD",
+      "type": "String"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
+     }
+    ]
+   },
+   {
+    "id": "CHARTS",
+    "name": "Charts",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "Charts",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "19756e49-b4b7-763a-8f55-0ec2ce2feb4d",
+    "type": "ComponentsTimePlot",
+    "typeDesc": "TimePlot Component",
+    "parent": "CHARTS",
+    "properties": [
+     {
+      "name": "name",
+      "value": "nuevo",
+      "type": "Id"
+     },
+     {
+      "name": "title",
+      "value": "nuevo",
+      "type": "String"
+     },
+     {
+      "name": "chartType",
+      "value": "BarChart",
+      "type": "ChartType"
+     },
+     {
+      "name": "htmlObject",
+      "value": "Panel_1",
+      "type": "HtmlObject"
+     },
+     {
+      "name": "listeners",
+      "value": "[]",
+      "type": "Listeners"
+     },
+     {
+      "name": "cdaParams",
+      "value": "[]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "dataSource",
+      "type": "Datasource",
+      "value": "first_chart_mdx"
+     },
+     {
+      "name": "width",
+      "value": "500",
+      "type": "Integer"
+     },
+     {
+      "name": "height",
+      "value": "500",
+      "type": "Integer"
+     },
+     {
+      "name": "dots",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "fill",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "columns",
+      "value": " [\"Total Sales\"]",
+      "type": "String"
+     },
+     {
+      "name": "hideZeroToolTipValues",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "showValues",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "executeAtStart",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "preChange",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postChange",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "preExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "tooltip",
+      "value": "",
+      "type": "Html"
+     }
+    ]
+   }
+  ]
+ },
+ "datasources": {
+  "rows": [
+   {
+    "id": "MDX",
+    "name": "MDX Queries",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "MDX Queries",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "a478cccc-c19c-3990-aafe-13c556dc3ef2",
+    "type": "Componentsmdx_mondrianJndi",
+    "typeDesc": "mdx over mondrianJndi",
+    "meta": "CDA",
+    "meta_conntype": "mondrian.jndi",
+    "meta_datype": "mdx",
+    "parent": "MDX",
+    "properties": [
+     {
+      "name": "name",
+      "value": "first_chart_mdx",
+      "type": "Id"
+     },
+     {
+      "name": "catalog",
+      "value": "AMP Dashboards/AmpMalawiStaging.xml",
+      "type": "MondrianCatalog"
+     },
+     {
+      "name": "jndi",
+      "value": "AMPMalawiStaging",
+      "type": "Jndi"
+     },
+     {
+      "name": "access",
+      "value": "public",
+      "type": "Access"
+     },
+     {
+      "name": "parameters",
+      "value": "[[\"currency\",\"USD\",\"String\",\"\"]]",
+      "type": "CdaParameters"
+     },
+     {
+      "name": "output",
+      "value": "[]",
+      "type": "IndexArray"
+     },
+     {
+      "name": "outputMode",
+      "value": "include",
+      "type": "OutputMode"
+     },
+     {
+      "name": "cdacolumns",
+      "value": "[]",
+      "type": "CdaColumnsArray"
+     },
+     {
+      "name": "cdacalculatedcolumns",
+      "value": "[]",
+      "type": "CdaCalculatedColumnsArray"
+     },
+     {
+      "name": "query",
+      "value": "SELECT\nNON EMPTY {Hierarchize({[Measures].[Actual Commitments]})} ON ROWS,\nNON EMPTY {Hierarchize({[Donor Dates].[Date].Members})} ON COLUMNS\nFROM [Donor Funding]",
+      "type": "SqlQuery"
+     },
+     {
+      "name": "cache",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cacheDuration",
+      "value": 3600,
+      "type": "Integer"
+     },
+     {
+      "name": "bandedMode",
+      "value": "compact",
+      "type": "BandedMode"
+     }
+    ]
+   },
+   {
+    "id": "520d0ec1-3aaf-333d-2768-15d16d7385e0",
+    "type": "Componentsmdx_mondrianJndi",
+    "typeDesc": "mdx over mondrianJndi",
+    "meta": "CDA",
+    "meta_conntype": "mondrian.jndi",
+    "meta_datype": "mdx",
+    "parent": "MDX",
+    "properties": [
+     {
+      "name": "name",
+      "value": "second_chart_mdx",
+      "type": "Id"
+     },
+     {
+      "name": "catalog",
+      "value": "AMP Dashboards/AmpMalawiStaging.xml",
+      "type": "MondrianCatalog"
+     },
+     {
+      "name": "jndi",
+      "value": "AMPMalawiStaging",
+      "type": "Jndi"
+     },
+     {
+      "name": "access",
+      "value": "public",
+      "type": "Access"
+     },
+     {
+      "name": "parameters",
+      "value": "[]",
+      "type": "CdaParameters"
+     },
+     {
+      "name": "output",
+      "value": "[]",
+      "type": "IndexArray"
+     },
+     {
+      "name": "outputMode",
+      "value": "include",
+      "type": "OutputMode"
+     },
+     {
+      "name": "cdacolumns",
+      "value": "[]",
+      "type": "CdaColumnsArray"
+     },
+     {
+      "name": "cdacalculatedcolumns",
+      "value": "[]",
+      "type": "CdaCalculatedColumnsArray"
+     },
+     {
+      "name": "query",
+      "value": "With\nSet [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Donor Types],[*BASE_MEMBERS_Donor Dates])'\nSet [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Types].CurrentMember.OrderKey,BASC)'\nSet [*BASE_MEMBERS_Donor Types] as '[Donor Types].[DonorType].Members'\nSet [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[2008]}'\nSet [*BASE_MEMBERS_Measures] as '{[Measures].[Actual Commitments],[Measures].[Actual Disbursements],[Measures].[Actual Expenditures]}'\nSet [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Types].currentMember)})'\nSet [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'\nSet [*CJ_COL_AXIS] as '[*NATIVE_CJ_SET]'\nMember [Donor Dates].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-400\nSelect\n[*BASE_MEMBERS_Measures] on columns,\nNon Empty [*SORTED_ROW_AXIS] on rows\nFrom [Donor Funding]\nWhere ([Donor Dates].[*SLICER_MEMBER])",
+      "type": "SqlQuery"
+     },
+     {
+      "name": "cache",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cacheDuration",
+      "value": 3600,
+      "type": "Integer"
+     },
+     {
+      "name": "bandedMode",
+      "value": "compact",
+      "type": "BandedMode"
+     }
+    ]
+   }
+  ]
+ },
+ "filename": "/AMP Dashboards/Better Understand Trends in ODA/Composition of Pool of Donors.cdfde"
+}

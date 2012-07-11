@@ -1,0 +1,338 @@
+<Schema name="AMPMalawi">
+  <Dimension visible="true" highCardinality="false" name="Activity">
+    <Hierarchy visible="true" hasAll="true" allMemberName="All Activities" allMemberCaption="#All_Activities#" primaryKey="amp_activity_id" caption="#Activity#">
+      <Table name="cached_amp_activity">
+      </Table>
+      <Level name="Activity Title" visible="false" table="cached_amp_activity" column="name" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="AMP ID" visible="true" table="cached_amp_activity" column="amp_id" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="TimeDimension" visible="true" highCardinality="false" name="Donor Dates">
+    <Hierarchy visible="true" hasAll="true" allMemberName="All Periods" allMemberCaption="#All_Donor_Dates#" primaryKey="amp_fund_detail_id" caption="#Donor_Dates#">
+      <Table name="cached_v_donor_date_hierarchy">
+      </Table>
+      <Level name="Year" visible="true" column="year" type="Numeric" uniqueMembers="false" levelType="TimeYears" hideMemberIf="Never">
+      </Level>
+      <Level name="Quarter" visible="true" column="quarter" nameColumn="quarter_name" ordinalColumn="quarter" type="Numeric" uniqueMembers="false" levelType="TimeQuarters" hideMemberIf="Never">
+      </Level>
+      <Level name="Month" visible="true" column="month" nameColumn="month_name" ordinalColumn="month" type="Numeric" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="Never">
+<!--        <NameExpression>
+          <SQL dialect="mysql">
+            <![CDATA[case WHEN cached_v_donor_date_hierarchy.month_name= 'january' THEN '#january#'
+						WHEN month_name='february' THEN '#february#'
+						WHEN month_name='march' THEN '#march#'
+						WHEN month_name='april' THEN '#april#'
+						WHEN month_name='may' THEN '#may#'
+						WHEN month_name='june' THEN '#june#'
+						WHEN month_name='july' THEN '#july#'
+						WHEN month_name='august' THEN '#august#'
+						WHEN month_name='september' THEN '#september#'
+						WHEN month_name='october' THEN '#october#'
+						WHEN month_name='november' THEN '#november#'
+						WHEN month_name='december' THEN '#december#'
+						END]]>
+          </SQL>
+        </NameExpression>-->
+      </Level>
+			<Level name="Date" visible="true"  column="full_date" type="Numeric" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never"/>
+    </Hierarchy>
+  </Dimension>
+  <Dimension visible="true" highCardinality="false" name="Status">
+    <Hierarchy visible="true" hasAll="true" allMemberName="All Status" allMemberCaption="#All_Status#" primaryKey="amp_activity_id" caption="#Status#">
+      <Table name="cached_v_status">
+      </Table>
+      <Level name="name" visible="true" table="cached_v_status" column="name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension visible="true" highCardinality="false" name="Budget">
+    <Hierarchy visible="true" hasAll="true" allMemberName="All Budgets" allMemberCaption="#All_Budgets#" primaryKey="amp_activity_id" caption="#Budget#">
+      <Table name="cached_v_budget">
+      </Table>
+      <Level name="name" visible="true" table="cached_v_budget" column="name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="Donor Funding" visible="true" cache="true" enabled="true">
+    <Table name="cached_v_donor_funding">
+    </Table>
+    <Dimension visible="true" highCardinality="false" name="Donor">
+      <Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Donor#" allLevelName="All Donor" caption="#Donor#">
+        <Level name="DonorName" visible="true" column="donor_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(donor_name,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension visible="true" highCardinality="false" name="Donor Group">
+      <Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Donor_Group#" allLevelName="#All Donor Group" caption="#Donor_Group#">
+        <Level name="DonorGroup" visible="true" column="org_grp_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(org_grp_name,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension visible="true" highCardinality="false" name="Donor Types">
+      <Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Donors_types#" allLevelName="All Donors types" caption="#Donors_types#">
+        <Level name="DonorType" visible="true" column="donor_type_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(donor_type_name,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension visible="true" highCardinality="false" name="Financing Instrument">
+      <Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Financing_Instrument#" allLevelName="All" caption="#Financing_Instrument#">
+        <Level name="Financing Instrument" visible="true" column="financing_instrument_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(financing_instrument_name,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension visible="true" highCardinality="false" name="Terms of Assistance" caption="#Terms_of_Assistance#">
+      <Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Terms_of_Assistance#" allLevelName="All Terms of Assistance#" caption="#Terms_of_Assistance#">
+        <Level name="Terms of Assistance" visible="true" column="terms_assist_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(terms_assist_name,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension visible="true" foreignKey="amp_activity_id" highCardinality="false" name="Primary Sector">
+      <Hierarchy visible="true" hasAll="true" allMemberName="All Primary Sectors" allMemberCaption="#All_Primary_Sectors#" primaryKey="amp_activity_id" caption="#Primary_Sector#">
+        <Level name="Primary Sector Scheme" visible="true" column="sec_scheme_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Primary Sector" visible="true" column="p_sectorname" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(p_sectorname,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension visible="true" highCardinality="false" name="Regions">
+      <Hierarchy visible="true" hasAll="true" allMemberName="All Regions" allMemberCaption="#All_Regions#" primaryKey="amp_activity_id" caption="#Regions#">
+        <Level name="Region" visible="true" column="region" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(region,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension visible="true" highCardinality="false" name="Primary Program">
+      <Hierarchy visible="true" hasAll="true" allMemberName="All Programs" allMemberCaption="#All_Programs#" primaryKey="amp_activity_id" caption="#Primary_Program#">
+        <Level name="Primary Program" visible="true" column="primary_program_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(primary_program_name,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension visible="true" highCardinality="false" name="Secondary Program">
+      <Hierarchy visible="true" hasAll="true" allMemberName="All Programs" allMemberCaption="#All_Programs#" primaryKey="amp_activity_id" caption="#Secondary_Program#">
+        <Level name="Secondary Program" visible="true" column="secondary_program_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(secondary_program_name,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension visible="true" highCardinality="false" name="National Program">
+      <Hierarchy visible="true" hasAll="true" allMemberName="All Programs" allMemberCaption="#All_Programs#" primaryKey="amp_activity_id" caption="#National_Program#">
+        <Level name="National Program" visible="true" column="national_program_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(national_program_name,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension visible="true" highCardinality="false" name="Sub-Sector">
+      <Hierarchy visible="true" hasAll="true" allMemberName="All Sub-Sectors" allMemberCaption="#All Sub-Sectors#" primaryKey="amp_activity_id" caption="#Sub-Sectors#">
+        <Level name="sub-sector" visible="true" column="p_sub_sector_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="mysql">
+              <![CDATA[IFNULL(p_sub_sector_name,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <DimensionUsage source="Activity" name="Activity" visible="true" foreignKey="amp_activity_id" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Donor Dates" name="Donor Dates" visible="true" foreignKey="amp_fund_detail_id" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Status" name="Status" visible="true" foreignKey="amp_activity_id" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Budget" name="Budget" visible="true" foreignKey="amp_activity_id" highCardinality="false">
+    </DimensionUsage>
+    <Measure name="Actual Commitments" aggregator="sum" caption="#Actual_Commitments#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=0
+					and cached_v_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('USD',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Actual Disbursements" aggregator="sum" caption="#Actual_Disbursements#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=1
+					and cached_v_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('USD',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Actual Expenditures" aggregator="sum" caption="#Actual_Expenditures#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=2
+					and cached_v_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('USD',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Actual Commitments USD" aggregator="sum" caption="#Actual_Commitments_USD#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=0
+					and cached_v_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('USD',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Actual Disbursements USD" aggregator="sum" caption="#Actual_Disbursements_USD#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=1
+					and cached_v_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('USD',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Actual Expenditures USD" aggregator="sum" caption="#Actual_Expenditures_USD#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=2
+					and cached_v_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('USD',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Actual Commitments EUR" aggregator="sum" caption="#Actual_Commitments_EUR#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=0
+					and cached_v_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('EUR',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Actual Disbursements EUR" aggregator="sum" caption="#Actual_Disbursements_EUR#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=1
+					and cached_v_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('EUR',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Actual Expenditures EUR" aggregator="sum" caption="#Actual_Expenditures_EUR#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=2
+					and cached_v_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('EUR',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Activity Count" column="amp_activity_id" aggregator="distinct-count" caption="#Activity_Count#">
+    </Measure>
+    <Measure name="Actual Expenditures" aggregator="sum" caption="#Actual_Expenditures#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=2
+					and cached_v_donor_funding.adjustment_type=1 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('USD',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Planned Commitments" aggregator="sum" caption="#Planned_Commitments#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=0
+					and cached_v_donor_funding.adjustment_type=0 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('USD',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Planned Disbursements" aggregator="sum" caption="#Planned_Disbursements#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=1
+					and cached_v_donor_funding.adjustment_type=0 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('USD',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+    <Measure name="Planned Expenditures" aggregator="sum" caption="#Planned_Expenditures#">
+      <MeasureExpression>
+        <SQL dialect="mysql">
+          <![CDATA[case when cached_v_donor_funding.transaction_type=2
+					and cached_v_donor_funding.adjustment_type=0 then
+					(1/getExchangeWithFixed(cached_v_donor_funding.currency_code,cached_v_donor_funding.transaction_date,cached_v_donor_funding.fixed_exchange_rate))* cached_v_donor_funding.transaction_amount * 
+					getExchange('USD',cached_v_donor_funding.transaction_date)
+					else 0 end]]>
+        </SQL>
+      </MeasureExpression>
+    </Measure>
+  </Cube>
+</Schema>

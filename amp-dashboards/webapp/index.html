@@ -1,0 +1,405 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="ampdashboards.css" rel="stylesheet" type="text/css">
+<link type="text/css" href="js/jquery-ui-1.8.20/css/smoothness/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-ui-1.8.20/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.20/js/jquery-ui-1.8.20.custom.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.20/js/jquery.myplugin.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.20/js/jquery.i18n.properties-1.0.9.js"></script>
+
+<title>AMP Dashboard Test</title>
+<style>
+    .ui-button-text { font-size:8pt;}
+    .ui-state-active { font-weight:bold;}
+</style>
+</head>
+
+<body>
+
+<div id="dialog-modal" style="display:none;font-size:8pt;">
+    <p id="msg_processing">Processing your request.</p>
+    <img src="images/ajax-loader.gif" />
+</div>
+<div id="mainContainer">
+    <div id="header">
+        <img src="images/logo-development-gateway.png" align="absmiddle" /> <span id="msg_title">Aid Management Platform Dashboards</span>
+	</div>
+    <div id="selection" style="font-size:8pt;margin:10px;">
+        <h3><div style="padding:0px;float:right;margin:0px" id="header_buttons"><button id="reset" style="font-size:10pt;font-weight:bold;"><span id="msg_reset">Reset</span></button></div><a href="#">Better Understand Trends in ODA</a></h3>
+       	
+    </div>
+    <div id="accordion" style="font-size:8pt;margin:10px;">
+    </div>
+    	<div id="options" style="margin:10px;">
+            <span class="#format" id="type_of_funding">
+                <input type="radio" id="ac" name="tof" CHECKED value="Actual Commitments"/><label for="ac"><span id="msg_actual_commitments">Actual Commitments</span></label>
+                <input type="radio" id="ad"  name="tof" value="Actual Disbursements"/><label for="ad"><span id="msg_actual_disbursements">Actual Disbursements</span></label>
+            </span>
+            <span class="#format" id="currency">
+                <input type="radio" id="usd"  name="cur" value="USD" CHECKED /><label for="usd">USD</label>
+                <input type="radio" id="eur"  name="cur" value="EUR" /><label for="eur">EUR</label>
+            </span>
+        </div>
+        <div id="actions" style="margin:10px;">
+        	<button id="run"><span style="font-size:10pt;font-weight:bold;" id="msg_get_dashboard">Get Dashboard</span></button>
+        </div>
+</div>
+<iframe src="testiframe.html" id="iframeDashboards" frameborder="0">
+</iframe>
+<script language="javascript">
+	var initPanel = function() {
+		$("#header").slideDown();
+		$("#selection").slideUp();
+		$("#selection").accordion({
+			autoHeight: false,
+			navigation: true,
+			collapsible: true,
+      event: false
+		});
+		$("#accordion").slideDown();
+		$("#options").slideDown();
+
+		$("#type_of_funding").buttonset();
+		$("#currency" ).buttonset();
+		$("#run").button();
+		$("#run").click(function (){
+				processDashboard();
+			});
+		$("#reset").button();
+		$("#reset").click(function (){
+/*        var currentGroup = dashboards.children[currentlySelectedDashboard.idParent];
+        var currentDashboard = currentGroup.children[currentlySelectedDashboard.idChild];
+        if (currentDashboard.currency_selectable || currentDashboard.type_of_funding_selectable) {
+          $("#options").appendTo("#mainContainer");
+          $("#options").promise().done(function(){
+            $("#options").css("margin","10px 10px");
+            $("#options").css("float","none");
+            $("#options").fadeIn();
+          });
+        }
+*/
+        $("#header").slideDown();
+        $("#selection").slideUp();
+        $("#accordion").slideDown();
+        $("#options").slideDown();
+        $("#run").slideDown();
+        $("#accordion").promise().done(function() {
+          $("#options").promise().done(function() {
+            $("#selection").promise().done(function() {
+              $("#header").promise().done(function() {
+                $("#iframeDashboards").attr("src", "testiframe.html")
+                resizeIframe();
+                resizeAccordion();
+              });
+            });
+          });
+        });
+			});
+		$("#iframeDashboards").load(function(){
+				resizeIframe();
+				closeDialog();
+			});
+		
+	}
+
+	var processDashboard = function() {
+			$("#accordion").slideUp();
+			$("#options").slideUp();
+			var currentGroup = dashboards.children[currentlySelectedDashboard.idParent];
+			var currentDashboard = currentGroup.children[currentlySelectedDashboard.idChild];
+/*			if (currentDashboard.currency_selectable || currentDashboard.type_of_funding_selectable) {
+        $("#options").appendTo("#header_buttons");
+        $("#options").promise().done(function(){
+          $("#options").css("margin","0px 0px");
+          $("#options").css("float","right");
+          $("#options").fadeIn();
+        });
+        $("#reset").css("float","right");
+			}*/ 
+
+			$("#selection").slideDown();
+      $("#header").slideUp();
+        $("#run").slideUp();
+			$("#selection h3 > a").text(getTranslated(currentGroup.name) + " > " +getTranslated(currentDashboard.name));
+      
+      
+			
+			var currency = $('input:radio[name=cur]:checked').val();
+			var type_of_funding = $('input:radio[name=tof]:checked').val();
+      var currencyUrl = "";
+			if (currentDashboard.currency_selectable) {
+				currencyUrl = "&currency=" + currency;
+			}
+      var typeOfFundingUrl = "";
+			if (currentDashboard.type_of_funding_selectable) {
+				typeOfFundingUrl = "&type_of_funding=" + type_of_funding;
+			}
+			var fileName = currentDashboard.action_name + ".xcdf";
+			
+			var url = "/pentaho/content/pentaho-cdf/RenderXCDF?solution=" + dashboards.solution + "&path=" + currentGroup.path + 
+				"&action=" + fileName + "" + "&userid=" + dashboards.userid + "&password=" + dashboards.password + "" + currencyUrl + "" + typeOfFundingUrl;
+      $("#accordion").promise().done(function() {
+        $("#options").promise().done(function() {
+          $("#selection").promise().done(function() {
+            $("#header").promise().done(function() {
+              $( "#iframeDashboards").attr("src", url);
+            });
+          });
+        });
+      });
+			resizeAccordion();
+			showDialog();
+	}
+
+	var showDialog = function() {
+		$( "#dialog-modal" ).dialog({
+			height: 150,
+			width: 150,
+			modal: true
+		});
+		$(".ui-dialog-titlebar").hide()
+	}
+
+	var closeDialog = function() {
+		$( "#dialog-modal" ).dialog("close");
+	}
+
+	var resizeIframe = function() {
+		$("#iframeDashboards", parent.document.body).height($(window).height() - $("#mainContainer").height()-30);
+		$("#iframeDashboards", parent.document.body).width($(document.body).width()-5);
+	}
+	
+	var resizeAccordion = function() {
+		$("#accordion", parent.document.body).width($(document.body).width()-20);
+		$("#selection", parent.document.body).width($(document.body).width()-20);
+	}
+	
+</script>
+
+
+<script language="javascript">
+
+//Dashboard Data
+	var dashboardGroups = [];	
+	
+	var dashboardGroup = {
+		name: "Better Understand Trends in ODA",
+		path: "%2FBetter+Understand+Trends+in+ODA",
+		idGroup: "better_understand_trends",
+    idString: "msg_better_understand_trends_in_oda",
+		children: [
+			{
+				"name":"Composition of Pool of Donors",
+        "idString": "",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=composition_of_pool_of_donors_ccc.xcdf&template=mantle",
+				"action_name": "composition_of_pool_of_donors_ccc",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			},
+			{
+				"name":"ODA Global vs Local Trends",
+        "idString": "msg_better_understand_trends_in_oda",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=oda_vs_national_indicators_ccc.xcdf&template=mantle",
+				"action_name": "oda_global_vs_local_trends_ccc",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			},
+			{
+				"name":"ODA vs GNI",
+        "idString": "msg_better_understand_trends_in_oda",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=oda_global_vs_local_trends_ccc.xcdf&template=mantle",
+				"action_name": "oda_vs_national_indicators_ccc",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			},
+			{
+				"name":"Share of ODA by Donor Group",
+        "idString": "msg_better_understand_trends_in_oda",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=share_of_oda_by_donor_group_ccc.xcdf&template=mantle",
+				"action_name": "share_of_oda_by_donor_group_ccc",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			},
+			{
+				"name":"Share of ODA by Donor Organization",
+        "idString": "msg_better_understand_trends_in_oda",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=share_of_oda_by_donor_organization_ccc.xcdf&template=mantle",
+				"action_name": "share_of_oda_by_donor_organization_ccc",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			},
+			{
+				"name":"Share of ODA by Sector",
+        "idString": "msg_better_understand_trends_in_oda",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=share_of_oda_by_sector_ccc.xcdf&template=mantle",
+				"action_name": "share_of_oda_by_sector_ccc",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Align aid with National Priorities",
+		path: "%2FAlign+Aid+with+National+Priorities",
+		idGroup: "align_aid",
+    idString: "msg_better_understand_trends_in_oda",
+		children: [
+			{
+				"name":"Aid by Type and Budget",
+        "idString": "msg_better_understand_trends_in_oda",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FAlign+Aid+with+National+Priorities&action=Dashboard_CCC.xcdf&template=mantle",
+				"action_name": "Dashboard_CCC",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Reduce Fragmentation",
+		path: "%2FReduce+Fragmentation",
+		idGroup: "reduce_frag",
+    idString: "msg_better_understand_trends_in_oda",
+		children: [
+			{
+				"name":"Fragmentation by Donor",
+        "idString": "msg_better_understand_trends_in_oda",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FReduce+Fragmentation&action=fragmentation_by_donor_ccc.xcdf&template=mantle",
+				"action_name": "fragmentation_by_donor_ccc",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			},
+			{
+				"name":"Fragmentation by Sector",
+        "idString": "msg_better_understand_trends_in_oda",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FReduce+Fragmentation&action=fragmentation_by_sector_ccc.xcdf&template=mantle",
+				"action_name": "fragmentation_by_sector_ccc",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Reduce Off Budget Aid",
+		path: "%2FReduce+Off-Budget+Aid",
+		idGroup: "reduce_off",
+    idString: "msg_better_understand_trends_in_oda",
+		children: [
+			{
+				"name":"On/Off Budget by Donor Group",
+        "idString": "msg_better_understand_trends_in_oda",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FReduce+Off-Budget+Aid=budget_by_donor.xcdf&template=mantle",
+				"action_name": "budget_by_donor",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			},
+			{
+				"name":"On/Off Budget by Year",
+        "idString": "msg_better_understand_trends_in_oda",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FReduce+Off-Budget+Aid=budget_by_year.xcdf&template=mantle",
+				"action_name": "budget_by_year",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+/*	dashboardGroup = {
+		name: "Donor Performance and Division of Labor",
+		path: "%2FDonor+Performance+and+Division+of+Labor",
+		idGroup: "donor_perf",
+		children: [
+			{
+				"name":"Type I",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FReduce+Off-Budget+Aid&action_name=Dashboard+by+donor+group.xdash",
+				"action_name": "Dashboard+by+Donor",
+				"type_of_funding_selectable": true,
+				"currency_selectable": false
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);*/
+	
+	var dashboards = { 
+		children: dashboardGroups, 
+		userid: "joe", 
+		password: "password",
+		solution: "AMP+Dashboards",
+		path: "/pentaho/content/dashboards"
+	};
+	var currentlySelectedDashboard = {};
+	var initData = function() {
+		$(dashboards.children).each(function(indexParent) {
+			var idGroup = this.idGroup;
+			$("#accordion").append("<h3><a href=\"#\"><span id='" + calculateTranslatedStringId(this.name) + "'>" + this.name + "</span></a></h3>");
+			$("#accordion").append("<div><div id=\"" + idGroup + "_btn\" style=\"float:left;\"></div></div>");
+			$(this.children).each(function(index) {
+                	$("#" + idGroup + "_btn").append("<input type=\"radio\" id=\"" + idGroup + "_" + index + "\" name=\"" + idGroup + "_ck\"/><label for=\"" + idGroup + "_" + index + "\"><span id='" + calculateTranslatedStringId(this.name) + "'>" + this.name + "</span></label>");
+					$("#" + idGroup + "_" + index).click(function() {
+							currentlySelectedDashboard = { 
+									idParent: indexParent,
+									idChild: index
+							};
+							var currentDashboard = dashboards.children[currentlySelectedDashboard.idParent].children[currentlySelectedDashboard.idChild]
+							if(currentDashboard.type_of_funding_selectable) 
+								$("#type_of_funding").slideDown();
+							else
+								$("#type_of_funding").slideUp();
+
+							if(currentDashboard.currency_selectable) 
+								$("#currency").slideDown();
+							else
+								$("#currency").slideUp();
+							
+						});
+			});
+			$("#" + idGroup + "_btn").buttonset();
+		});
+		
+		$("#accordion").accordion({
+			autoHeight: false,
+			navigation: true,
+			collapsible: true
+		});
+		
+	};
+
+
+	$(window).resize(resizeIframe);
+	$(window).resize(resizeAccordion);
+	
+	$(window).ready(resizeIframe);
+	$(window).ready(resizeAccordion);
+	$(window).ready(initPanel);
+	$(window).ready(initData);
+  
+$(window).load(function() {
+    processTranslations();
+});	
+// This will initialize the plugin 
+// and show two dialog boxes: one with the text "Olá World"
+// and other with the text "Good morning John!" 
+//        jQuery.i18n.prop('msg_hello');
+
+jQuery.i18n.properties({
+    name:'Messages', 
+    mode:'both'
+});
+
+var processTranslations = function() {
+  $("[id^='msg']").each(function(idx, object){
+    try {$(object).html(eval(object.id));} catch(e){console.log(object.id )}
+  });
+}
+var getTranslated = function(name) {
+  return eval(calculateTranslatedStringId(name));
+}
+var calculateTranslatedStringId = function(name) { return ("msg_" + (name.toLowerCase()).replace(/ /g,"_")).replace(/\//,"_")};
+
+</script>
+</body>
+</html>

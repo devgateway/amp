@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="ampdashboards.css" rel="stylesheet" type="text/css">
+<link type="text/css" href="js/jquery-ui-1.8.20/css/smoothness/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-ui-1.8.20/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.20/js/jquery-ui-1.8.20.custom.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.20/js/jquery.myplugin.js"></script>
+
+<title>AMP Dashboard Test</title>
+
+	<style>
+    .ui-button-text { font-size:8pt;}
+    .ui-state-active { font-weight:bold;}
+    </style>
+    
+</head>
+
+<body>
+<div id="dialog-modal" style="display:none;font-size:8pt;">
+    <p>Processing your request.</p>
+    <img src="images/ajax-loader.gif" />
+</div>
+<div id="mainContainer">
+    <div id="header">
+        <img src="images/logo-development-gateway.png" align="absmiddle" /> Aid Management Platform Dashboards
+	</div>
+    <div id="selection" style="font-size:8pt;margin:10px;">
+        <h3><a href="#">Better Understand Trends in ODA</a></h3>
+        <div>
+        Explanation and settings
+        </div>
+    </div>
+    <div id="accordion" style="font-size:8pt;margin:10px;">
+        <h3><a href="#">Better Understand Trends in ODA</a></h3>
+        <div>
+            <div id="better_understand_trends_btn" style="float:left;">
+                <input type="radio" id="better_understand_trends_1" name="better_understand_trends_ck"/><label for="better_understand_trends_1">Composition of the pool of donors</label>
+                <input type="radio" id="better_understand_trends_2"  name="better_understand_trends_ck"/><label for="better_understand_trends_2">ODA Global vs Local Trends</label>
+                <input type="radio" id="better_understand_trends_3"  name="better_understand_trends_ck"/><label for="better_understand_trends_3">ODA vs GNI</label>
+                <input type="radio" id="better_understand_trends_4"  name="better_understand_trends_ck"/><label for="better_understand_trends_4">Share of ODA by Donor Group</label>
+                <input type="radio" id="better_understand_trends_5"  name="better_understand_trends_ck"/><label for="better_understand_trends_5">Share of ODA by Donor Organization</label>
+                <input type="radio" id="better_understand_trends_6"  name="better_understand_trends_ck"/><label for="better_understand_trends_6">Share of ODA by Sector</label>
+            </div>
+        </div>
+        <h3><a href="#">Align aid with national priorities</a></h3>
+        <div>
+            <div id="align_aid_btn" style="float:left;">
+                   <input type="radio" id="align_aid_1" name="align_aid_ck"/><label for="align_aid_1">Aid by Type and Budget</label>
+            </div>
+         </div>
+        <h3><a href="#">Reduce Fragmentation</a></h3>
+        <div>
+        <div id="reduce_frag_btn" style="float:left;">
+                <input type="radio" id="reduce_frag_1" name="reduce_frag_ck"/><label for="reduce_frag_1">Fragmentation by Donor</label>
+                <input type="radio" id="reduce_frag_2" name="reduce_frag_ck"/><label for="reduce_frag_2">Fragmentation by Sector</label>
+        </div>
+        </div>
+        <h3><a href="#">Reduce Off Budget Aid</a></h3>
+        <div>
+        <div id="reduce_off_btn" style="float:left;">
+                <input type="radio" id="reduce_off_1" name="reduce_off_ck"/><label for="reduce_off_1">On/Off Budget by Donor Group</label>
+                <input type="radio" id="reduce_off_2" name="reduce_off_ck"/><label for="reduce_off_2">On/Off Budget by Year</label>
+        </div>
+        </div>
+        <h3><a href="#">Donor Performance and Division of Labor</a></h3>
+        <div>
+        <div id="donor_perf_btn" style="float:left;">
+                <input type="radio" id="donor_perf_1" name="donor_perf_ck"/><label for="donor_perf_1">Item 1</label>
+                <input type="radio" id="donor_perf_2" name="donor_perf_ck"/><label for="donor_perf_2">Item 2</label>
+        </div>
+        </div>
+    </div>
+    	<div id="options" style="margin:10px;">
+            <span class="#format" id="type_of_funding">
+                <input type="radio" id="ac" name="tof" CHECKED/><label for="ac">Actual Commitments</label>
+                <input type="radio" id="ad"  name="tof"/><label for="ad">Actual Disbursements</label>
+            </span>
+            <span class="#format" id="currency">
+                <input type="radio" id="usd"  name="cur" CHECKED/><label for="usd">USD</label>
+                <input type="radio" id="eur"  name="cur"/><label for="eur">EUR</label>
+            </span>
+        </div>
+    	<div id="actions" style="margin:10px;">
+        	<button id="run"><span style="font-size:10pt;font-weight:bold;">Get Dashboard</span></button>
+        	<button id="reset"><span style="font-size:10pt;font-weight:bold;">Reset Dashboard</span></button>
+        </div>
+</div>
+<iframe src="testiframe.html" id="iframeDashboards" frameborder="0">
+</iframe>
+<script language="javascript">
+	var initPanel = function() {
+		$("#selection").slideUp();
+		$("#selection").accordion({
+			autoHeight: false,
+			navigation: true,
+			collapsible: true,
+		});
+		$("#accordion").accordion({
+			autoHeight: false,
+			navigation: true,
+			collapsible: true
+		});
+		$("#accordion").slideDown();
+		$("#options").slideDown();
+
+		$("#type_of_funding").buttonset();
+		$("#currency" ).buttonset();
+		$("#better_understand_trends_btn").buttonset();
+		$("#align_aid_btn").buttonset();
+		$("#reduce_frag_btn").buttonset();
+		$("#reduce_off_btn").buttonset();
+		$("#donor_perf_btn").buttonset();
+		$("#run").button();
+		$("#run").click(function (){
+				processDashboard();
+			});
+		$("#reset").button();
+		$("#reset").click(function (){
+				$( "#iframeDashboards").attr("src", "")
+				initPanel();
+				resizeIframe();
+				resizeAccordion();
+			});
+		$("#iframeDashboards").load(function(){
+				resizeIframe();
+				closeDialog();
+			});
+		
+	}
+
+	var processDashboard = function() {
+			$( "#accordion" ).slideUp();
+			$( "#options" ).slideUp();
+			$( "#selection" ).slideDown();
+			$( "#iframeDashboards").attr("src", "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action_name=Composition+of+the+pool+of+donors.xdash&userid=joe&password=password")
+			resizeAccordion();
+			showDialog();
+	}
+
+	var showDialog = function() {
+		$( "#dialog-modal" ).dialog({
+			height: 150,
+			width: 150,
+			modal: true
+		});
+		$(".ui-dialog-titlebar").hide()
+	}
+
+	var closeDialog = function() {
+		$( "#dialog-modal" ).dialog("close");
+	}
+
+	var resizeIframe = function() {
+		console.log( $("#mainContainer").height());
+		$("#iframeDashboards", parent.document.body).height($(window).height() - $("#mainContainer").height()-30);
+		$("#iframeDashboards", parent.document.body).width($(document.body).width()-5);
+	}
+	
+	var resizeAccordion = function() {
+		$("#accordion", parent.document.body).width($(document.body).width()-20);
+		$("#selection", parent.document.body).width($(document.body).width()-20);
+	}
+	
+	$(window).resize(resizeIframe);
+	$(window).resize(resizeAccordion);
+	
+	$(window).ready(resizeIframe);
+	$(window).ready(resizeAccordion);
+	$(window).ready(initPanel);
+	$(window).ready(initData);
+	
+</script>
+
+
+<script language="javascript">
+
+//Dashboard Data
+	var dashboardGroups = [];	
+	
+	var dashboardGroup = {
+		name: "Better Understand Trends in ODA",
+		path: "%2FBetter+Understand+Trends+in+ODA",
+		children: [
+			{
+				"name":"Composition of Pool of Donors",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action_name=Composition+of+the+pool+of+donors.xdash",
+				"action_name": "Composition+of+the+pool+of+donors",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			},
+			{
+				"name":"ODA Global vs Local Trends",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action_name=ODA+Global+vs+Local+Trends.xdash",
+				"action_name": "ODA+Global+vs+Local+Trends",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			},
+			{
+				"name":"ODA vs GNI",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action_name=ODA+vs+GNI.xdash",
+				"action_name": "ODA+vs+GNI",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			},
+			{
+				"name":"Share of ODA by Donor Group",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action_name=Share+of+ODA+by+Donor+Group.xdash",
+				"action_name": "Share+of+ODA+by+Donor+Group",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			},
+			{
+				"name":"Share of ODA by Donor Organization",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action_name=Share+of+ODA+by+Donor+Organization.xdash",
+				"action_name": "Share+of+ODA+by+Donor+Organization",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			},
+			{
+				"name":"Share of ODA by Sector",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action_name=Share+of+ODA+by+Sector.xdash",
+				"action_name": "Share+of+ODA+by+Sector",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Align aid with National Priorities",
+		path: "%2FAlign+Aid+with+National+Priorities",
+		children: [
+			{
+				"name":"Aid by Type and Budget",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FAlign+Aid+with+National+Priorities&action_name=Dashboard.xdash",
+				"action_name": "Dashboard",
+				"type_of_funding_selectable": true,
+				"currency_selectable": true
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Reduce Fragmentation",
+		path: "%2FReduce+Fragmentation",
+		children: [
+			{
+				"name":"Fragmentation by Donor",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FReduce+Fragmentation&action_name=Dashboard+by+Donor.xdash",
+				"action_name": "Dashboard+by+Donor",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			},
+			{
+				"name":"Fragmentation by Sector",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FReduce+Fragmentation&action_name=Dashboard+by+Sector.xdash",
+				"action_name": "Dashboard+by+Sector",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Reduce Off Budget Aid",
+		path: "%2FReduce+Off-Budget+Aid",
+		children: [
+			{
+				"name":"On/Off Budget by Donor Group",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FReduce+Off-Budget+Aid&action_name=Dashboard+by+donor+group.xdash",
+				"action_name": "Dashboard+by+Donor",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			},
+			{
+				"name":"On/Off Budget by Year",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FReduce+Off-Budget+Aid&action_name=Dashboard+by+year.xdash",
+				"action_name": "Dashboard+by+Sector",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Donor Performance and Division of Labor",
+		path: "%2FDonor+Performance+and+Division+of+Labor",
+		children: [
+			{
+				"name":"Type I",
+				"url": "/pentaho/content/dashboards?solution=AMP+Dashboards&path=%2FReduce+Off-Budget+Aid&action_name=Dashboard+by+donor+group.xdash",
+				"action_name": "Dashboard+by+Donor",
+				"type_of_funding_selectable": false,
+				"currency_selectable": false
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	
+	var dashboards = { 
+		children: dashboardGroups, 
+		userid: "joe", 
+		password: "password",
+		solution: "AMP+Dashboards",
+		path: "/pentaho/content/dashboards"
+	};
+	
+
+	var initData = function() {
+		
+	};
+</script>
+</body>
+</html>

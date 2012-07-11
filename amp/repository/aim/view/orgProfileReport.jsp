@@ -120,7 +120,7 @@ function exportToExcel() {
 										border="0" id="img_col_${record.orgId}"
 										onclick="expandCollapse(${record.orgId});return false;">
 									</span>
-								<div style="clear:both;">&nbsp;</div>	
+								<div style="clear:both; height:1px;">&nbsp;</div>	
 								<div id="org_${record.orgId}" style="display:none;">
 								<center>
 									<c:forEach var="helper" items="${record.helpers}">

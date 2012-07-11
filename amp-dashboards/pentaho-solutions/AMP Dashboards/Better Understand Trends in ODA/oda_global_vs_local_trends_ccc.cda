@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="ampmalawicsv" type="sql.jdbc">
+         <Driver>com.mysql.jdbc.Driver</Driver>
+         <Pass></Pass>
+         <Url>jdbc:mysql://localhost:3307/hibernate</Url>
+         <User>root</User>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="ampmalawicsv"
+               id="ampmalawicsv"
+               type="sql">
+      <Columns/>
+      <Parameters/>
+      <Query>select `Year`,`Country`,`Total Percentage` from ampmalawicsv</Query>
+   </DataAccess>
+</CDADescriptor>

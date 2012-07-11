@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="first_chart_mdx" type="mondrian.jndi">
+         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
+         <Jndi>AMPMalawiStaging</Jndi>
+      </Connection>
+      <Connection id="second_chart_mdx" type="mondrian.jndi">
+         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
+         <Jndi>AMPMalawiStaging</Jndi>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx"
+               id="first_chart_mdx"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="USD" name="currency" type="String"/>
+      </Parameters>
+      <Query>SELECT
+NON EMPTY {Hierarchize({[Measures].[Actual Commitments]})} ON ROWS,
+NON EMPTY {Hierarchize({[Donor Dates].[Date].Members})} ON COLUMNS
+FROM [Donor Funding]</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="second_chart_mdx"
+               id="second_chart_mdx"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters/>
+      <Query>With
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Donor Types],[*BASE_MEMBERS_Donor Dates])'
+Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Types].CurrentMember.OrderKey,BASC)'
+Set [*BASE_MEMBERS_Donor Types] as '[Donor Types].[DonorType].Members'
+Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[2008]}'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[Actual Commitments],[Measures].[Actual Disbursements],[Measures].[Actual Expenditures]}'
+Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Types].currentMember)})'
+Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
+Set [*CJ_COL_AXIS] as '[*NATIVE_CJ_SET]'
+Member [Donor Dates].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-400
+Select
+[*BASE_MEMBERS_Measures] on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]
+Where ([Donor Dates].[*SLICER_MEMBER])</Query>
+   </DataAccess>
+</CDADescriptor>

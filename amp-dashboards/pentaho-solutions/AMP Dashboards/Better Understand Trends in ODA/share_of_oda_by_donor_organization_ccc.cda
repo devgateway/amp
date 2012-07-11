@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="first_chart_mdx" type="mondrian.jndi">
+         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
+         <Jndi>AMPMalawiStaging</Jndi>
+      </Connection>
+      <Connection id="first_chart_mdx_params" type="mondrian.jndi">
+         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
+         <Jndi>AMPMalawiStaging</Jndi>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx"
+               id="first_chart_mdx"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
+         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
+         <Parameter default="USD" name="currency" type="String"/>
+         <Parameter default="2000" name="startYear" type="String"/>
+         <Parameter default="2009" name="endYear" type="String"/>
+      </Parameters>
+      <Query>
+With
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Donor],[*BASE_MEMBERS_Donor Dates])'
+Set [*SORTED_ROW_AXIS] as 'Order(TopCount(Order([*CJ_ROW_AXIS],[Measures].[${type_of_funding_translation} %],BDESC),25),[Measures].[${type_of_funding_translation} %],BASC)'
+Set [*NATIVE_MEMBERS_Donor] as 'Generate([*NATIVE_CJ_SET], {[Donor].CurrentMember})'
+Set [*BASE_MEMBERS_Donor] as 'Filter([Donor].[DonorName].Members,[Donor].CurrentMember.Caption Not Matches ("(?i).*x_.*"))'
+Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[${type_of_funding_translation} %]}'
+Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor].currentMember)})'
+Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
+Set [*CJ_COL_AXIS] as '[*NATIVE_CJ_SET]'
+Member [Measures].[${type_of_funding_translation} %] as '[Measures].[${type_of_funding} ${currency}]/([Measures].[${type_of_funding} ${currency}],[Donor].[*TOTAL_MEMBER_SEL~AGG])*100',  SOLVE_ORDER=100
+Member [Donor].[*TOTAL_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Donor])', SOLVE_ORDER=-100
+Member [Donor Dates].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-400
+Select
+[*BASE_MEMBERS_Measures] on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]
+Where ([Donor Dates].[*SLICER_MEMBER])
+    </Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx_params"
+               id="first_chart_mdx_params"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
+         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
+         <Parameter default="USD" name="currency" type="String"/>
+         <Parameter default="[Regions].Members" name="regionParameter" type="String"/>
+         <Parameter default="[Primary Sector].Members" name="sectorParameter" type="String"/>
+         <Parameter default="[National Program].Members" name="programParameter" type="String"/>
+         <Parameter default="2000" name="startYear" type="String"/>
+         <Parameter default="2009" name="endYear" type="String"/>
+      </Parameters>
+      <Query>
+With
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Donor],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_National Program],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Dates],[*BASE_MEMBERS_Primary Sector]))))'
+Set [*SORTED_ROW_AXIS] as 'Order(TopCount(Order([*CJ_ROW_AXIS],[Measures].[${type_of_funding_translation} %],BDESC),25),[Measures].[${type_of_funding_translation} %],BASC)'
+Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[${type_of_funding_translation} %]}'
+Set [*BASE_MEMBERS_National Program] as '{${programParameter}}'
+Set [*CJ_COL_AXIS] as '[*NATIVE_CJ_SET]'
+Set [*NATIVE_MEMBERS_Donor] as 'Generate([*NATIVE_CJ_SET], {[Donor].CurrentMember})'
+Set [*NATIVE_MEMBERS_National Program] as 'Generate([*NATIVE_CJ_SET], {[National Program].CurrentMember})'
+Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
+Set [*NATIVE_MEMBERS_Regions] as 'Generate([*NATIVE_CJ_SET], {[Regions].CurrentMember})'
+Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
+Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor].currentMember)})'
+Set [*BASE_MEMBERS_Donor] as 'Filter([Donor].[DonorName].Members,[Donor].CurrentMember.Caption Not Matches ("(?i).*x_.*"))'
+Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
+Set [*BASE_MEMBERS_Primary Sector] as '{${sectorParameter}}'
+Member [National Program].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_National Program])', SOLVE_ORDER=-400
+Member [Regions].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Regions])', SOLVE_ORDER=-400
+Member [Measures].[${type_of_funding_translation} %] as '[Measures].[${type_of_funding} ${currency}]/([Measures].[${type_of_funding} ${currency}],[Donor].[*TOTAL_MEMBER_SEL~AGG])*100', SOLVE_ORDER=100
+Member [Primary Sector].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Primary Sector])', SOLVE_ORDER=-400
+Member [Donor Dates].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-400
+Member [Donor].[*TOTAL_MEMBER_SEL~AGG] as 'Aggregate({[Donor].[All Donors]})', SOLVE_ORDER=-100
+Select
+[*BASE_MEMBERS_Measures] on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]
+Where ([Regions].[*SLICER_MEMBER], [National Program].[*SLICER_MEMBER], [Donor Dates].[*SLICER_MEMBER], [Primary Sector].[*SLICER_MEMBER])
+    </Query>
+   </DataAccess>
+
+</CDADescriptor>

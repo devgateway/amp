@@ -1,0 +1,695 @@
+{
+ "layout": {
+  "title": "Two Columns Template",
+  "rows": [
+   {
+    "id": "9b5e4665-60dd-d123-d49a-7cb9072a0540",
+    "type": "LayoutRow",
+    "typeDesc": "Row",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Body"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": ""
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": ""
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": ""
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": ""
+     }
+    ]
+   },
+   {
+    "id": "a75b059a-0f5b-deda-6d3f-aeba72af2fe5",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "9b5e4665-60dd-d123-d49a-7cb9072a0540",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Panel_1"
+     },
+     {
+      "name": "columnSpan",
+      "type": "Integer",
+      "value": "15"
+     },
+     {
+      "name": "columnPrepend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnAppend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnPrependTop",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnAppendBottom",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBigBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": "#e0e0e0"
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": "cdfdd-round"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "800"
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": "center"
+     }
+    ]
+   },
+   {
+    "id": "33c5530d-4064-ad09-75d3-eb9be0cba2fc",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "9b5e4665-60dd-d123-d49a-7cb9072a0540",
+    "properties": [
+     {
+      "name": "name",
+      "type": "Id",
+      "value": "Panel_2"
+     },
+     {
+      "name": "columnSpan",
+      "type": "Integer",
+      "value": "5"
+     },
+     {
+      "name": "columnPrepend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnAppend",
+      "type": "Integer",
+      "value": "1"
+     },
+     {
+      "name": "columnPrependTop",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnAppendBottom",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "columnBigBorder",
+      "type": "Boolean",
+      "value": false
+     },
+     {
+      "name": "backgroundColor",
+      "type": "Color",
+      "value": "#e0e0e0"
+     },
+     {
+      "name": "roundCorners",
+      "type": "RoundCorners",
+      "value": "cdfdd-round"
+     },
+     {
+      "name": "height",
+      "type": "Integer",
+      "value": "800"
+     },
+     {
+      "name": "cssClass",
+      "type": "String",
+      "value": ""
+     },
+     {
+      "name": "textAlign",
+      "type": "TextAlign",
+      "value": "center"
+     }
+    ]
+   }
+  ]
+ },
+ "components": {
+  "rows": [
+   {
+    "id": "GENERIC",
+    "name": "Generic",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "Generic",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "9e0f477f-eea2-a623-c5b4-2e5a430debed",
+    "type": "ComponentsParameter",
+    "typeDesc": "Parameter",
+    "parent": "GENERIC",
+    "properties": [
+     {
+      "name": "name",
+      "value": "currency",
+      "type": "Id"
+     },
+     {
+      "name": "propertyValue",
+      "value": "USD",
+      "type": "String"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
+     }
+    ]
+   },
+   {
+    "id": "CHARTS",
+    "name": "Charts",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "Charts",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "5be2623e-9d09-c67d-5929-9950aa2d11b9",
+    "type": "ComponentscccBarChart",
+    "typeDesc": "CCC Bar Chart",
+    "meta_cdwSupport": "true",
+    "parent": "CHARTS",
+    "properties": [
+     {
+      "name": "name",
+      "value": "first_chart",
+      "type": "Id"
+     },
+     {
+      "name": "width",
+      "value": "900",
+      "type": "Integer"
+     },
+     {
+      "name": "height",
+      "value": "400",
+      "type": "Integer"
+     },
+     {
+      "name": "dataSource",
+      "type": "Datasource",
+      "value": "first_chart_mdx"
+     },
+     {
+      "name": "cccCrosstabMode",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccSeriesInRows",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccRenderCallback",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "cccAnimate",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccClickable",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccClickAction",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "cccSelectable",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccSelectionChangedAction",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "cccTimeSeries",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccTimeSeriesFormat",
+      "value": "%Y-%m-%d",
+      "type": "String"
+     },
+     {
+      "name": "cccStacked",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccMaxBarSize",
+      "value": 100,
+      "type": "Integer"
+     },
+     {
+      "name": "cccPanelSizeRatio",
+      "value": 0.8,
+      "type": "Float"
+     },
+     {
+      "name": "cccBarSizeRatio",
+      "value": 0.9,
+      "type": "Float"
+     },
+     {
+      "name": "cccOrientation",
+      "value": "horizontal",
+      "type": "MenuMode"
+     },
+     {
+      "name": "cccColors",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "cccShowValues",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccValueFormat",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "cccTooltipFormat",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "cccValuesAnchor",
+      "value": "right",
+      "type": "AnchorCenter"
+     },
+     {
+      "name": "title",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "cccTitlePosition",
+      "value": "top",
+      "type": "Anchor"
+     },
+     {
+      "name": "cccTitleSize",
+      "value": 25,
+      "type": "Integer"
+     },
+     {
+      "name": "cccShowLegend",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccLegendPosition",
+      "value": "bottom",
+      "type": "Anchor"
+     },
+     {
+      "name": "cccLegendSize",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "cccLegendAlign",
+      "value": "center",
+      "type": "SquareAlign"
+     },
+     {
+      "name": "cccShowXScale",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccXAxisPosition",
+      "value": "bottom",
+      "type": "TopBottom"
+     },
+     {
+      "name": "cccXAxisSize",
+      "value": 30,
+      "type": "Integer"
+     },
+     {
+      "name": "cccShowYScale",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccYAxisPosition",
+      "value": "left",
+      "type": "LeftRight"
+     },
+     {
+      "name": "cccYAxisSize",
+      "value": 50,
+      "type": "Integer"
+     },
+     {
+      "name": "cccXAxisFullGrid",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccYAxisFullGrid",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccXAxisEndLine",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccYAxisEndLine",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccXAxisDomainRoundMode",
+      "value": "none",
+      "type": "cccXAxisDomainRoundModeCustom"
+     },
+     {
+      "name": "cccYAxisDomainRoundMode",
+      "value": "none",
+      "type": "cccYAxisDomainRoundModeCustom"
+     },
+     {
+      "name": "cccBarLineDomainRoundMode",
+      "value": "none",
+      "type": "cccBarLineDomainRoundModeCustom"
+     },
+     {
+      "name": "cccXAxisDesiredTickCount",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "cccYAxisDesiredTickCount",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "cccBarLineDesiredTickCount",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "cccXAxisMinorTicks",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccYAxisMinorTicks",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccBarLineMinorTicks",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccAxisOffset",
+      "value": "0",
+      "type": "Float"
+     },
+     {
+      "name": "cccOriginIsZero",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccOrthoFixedMax",
+      "value": "",
+      "type": "Float"
+     },
+     {
+      "name": "cccBarLine",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccBarLineIndependentScale",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccBarLineIdx",
+      "value": "[]",
+      "type": "Array"
+     },
+     {
+      "name": "cccBarLineOriginIsZero",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cccBarLineTickColor",
+      "value": "blue",
+      "type": "String"
+     },
+     {
+      "name": "cccExtensionPoints",
+      "value": "[]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "xActionArrayParameter",
+      "value": "[[\"aidType\",\"Direct Project Support\"]]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "executeAtStart",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "postFetch",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "preChange",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postChange",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "htmlObject",
+      "value": "Panel_1",
+      "type": "HtmlObject"
+     },
+     {
+      "name": "preExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "tooltip",
+      "value": "",
+      "type": "Html"
+     },
+     {
+      "name": "listeners",
+      "value": "[]",
+      "type": "Listeners"
+     }
+    ]
+   }
+  ]
+ },
+ "datasources": {
+  "rows": [
+   {
+    "id": "MDX",
+    "name": "MDX Queries",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "MDX Queries",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "6b80a16a-d0b3-6ab2-047b-01787e92b5cb",
+    "type": "Componentsmdx_mondrianJndi",
+    "typeDesc": "mdx over mondrianJndi",
+    "meta": "CDA",
+    "meta_conntype": "mondrian.jndi",
+    "meta_datype": "mdx",
+    "parent": "MDX",
+    "properties": [
+     {
+      "name": "name",
+      "value": "first_chart_mdx",
+      "type": "Id"
+     },
+     {
+      "name": "catalog",
+      "value": "AMP Dashboards/AmpMalawiStaging.xml",
+      "type": "MondrianCatalog"
+     },
+     {
+      "name": "jndi",
+      "value": "AMPMalawiStaging",
+      "type": "Jndi"
+     },
+     {
+      "name": "access",
+      "value": "public",
+      "type": "Access"
+     },
+     {
+      "name": "parameters",
+      "value": "[[\"aidType\",\"Direct Project Support\",\"String\",\"\"]]",
+      "type": "CdaParameters"
+     },
+     {
+      "name": "output",
+      "value": "[]",
+      "type": "IndexArray"
+     },
+     {
+      "name": "outputMode",
+      "value": "include",
+      "type": "OutputMode"
+     },
+     {
+      "name": "cdacolumns",
+      "value": "[]",
+      "type": "CdaColumnsArray"
+     },
+     {
+      "name": "cdacalculatedcolumns",
+      "value": "[]",
+      "type": "CdaCalculatedColumnsArray"
+     },
+     {
+      "name": "query",
+      "value": "With\nSet [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Financing Instrument],[*BASE_MEMBERS_Donor Dates])'\nSet [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Dates].CurrentMember.OrderKey,BASC)'\nSet [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Financing Instrument].CurrentMember.OrderKey,BASC)'\nSet [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[2003],[Donor Dates].[2004],[Donor Dates].[2005],[Donor Dates].[2006],[Donor Dates].[2007],[Donor Dates].[2008],[Donor Dates].[2009],[Donor Dates].[2010],[Donor Dates].[2011]}'\nSet [*BASE_MEMBERS_Measures] as '{[Measures].[*FORMATTED_MEASURE_0]}'\nSet [*BASE_MEMBERS_Financing Instrument] as '[Financing Instrument].[Financing Instrument].Members'\nSet [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Dates].currentMember)})'\nSet [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Financing Instrument].currentMember)})'\nMember [Measures].[*FORMATTED_MEASURE_0] as '[Measures].[Actual Commitments]', FORMAT_STRING = '$#,##0.00', SOLVE_ORDER=400\nSelect\nCrossJoin([*SORTED_COL_AXIS],[*BASE_MEMBERS_Measures]) on columns,\nNon Empty [*SORTED_ROW_AXIS] on rows\nFrom [Donor Funding]",
+      "type": "SqlQuery"
+     },
+     {
+      "name": "cache",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "cacheDuration",
+      "value": 3600,
+      "type": "Integer"
+     },
+     {
+      "name": "bandedMode",
+      "value": "compact",
+      "type": "BandedMode"
+     }
+    ]
+   }
+  ]
+ },
+ "filename": "/AMP Dashboards/Align Aid with National Priorities/Dashboard.cdfde"
+}

@@ -3,8 +3,9 @@ body{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;f
 div#ampcontainer{width:1000px;margin:0 auto;}
 #content{z-index:1000;}
 div#ampcontainer{width:1000px;margin:0 auto;}
-#content{z-index:1;b}
+#content{z-index:1;}
 a {color:#376091;}
+table {font-size:11px !important;}
 hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
 .hr_3 {border: 0; color: #D0D0D0; background-color: #D0D0D0; height: 1px; width: 100%; text-align: left;}
 .hr_2 {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 2px; width: 100%; text-align: left;}

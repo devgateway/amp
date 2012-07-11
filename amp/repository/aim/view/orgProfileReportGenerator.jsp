@@ -63,7 +63,7 @@
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td width="1000">
-					<div class="step_head">
+					<div class="step_head_lng">
 						<div id="rgTitle" class="step_head_cont">
 							<digi:trn>Report Generator</digi:trn>
 						</div>
@@ -120,7 +120,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td colspan="3" style="text-align: center;">
+									<td colspan="3" style="text-align: center; padding-top:15px;">
 										<button type="button" name="" class="buttonx"
 											onclick="makeReport()" value="makeReport">
 											<digi:trn>Make Report</digi:trn>

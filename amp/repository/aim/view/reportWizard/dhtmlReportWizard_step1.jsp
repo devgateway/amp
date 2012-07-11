@@ -80,7 +80,7 @@
 										<fieldset class="main_side_cont">
 											<nested:hidden property="reportDescription" />
 											<legend><span class="legend_label">${descriptionName}</span></legend>
-											<textarea name="reportDescriptionClone"  rows="5" class="inputx" style="width:340px; height:90px;"></textarea>
+											<textarea name="reportDescriptionClone"  rows="5" class="inputx" style="width:423px; height:67px;"></textarea>
 										</fieldset>
 									</td>
 								</tr>

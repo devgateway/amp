@@ -108,6 +108,7 @@ function exportToExcel() {
 					<c:forEach var="record" items="${aimOrgProfileReport.records}">
 						<div class="gis_wht" style="min-height:30px;">
 							<div class="gis_cont">
+									
 									<a href=#
 										onclick="expandCollapse(${record.orgId});return false;" style="display:block; float:left;"><b>${record.organizationName}</b></a><span
 										style="margin-top: 3px; margin-right: 3px; float: right;">
@@ -119,6 +120,7 @@ function exportToExcel() {
 										border="0" id="img_col_${record.orgId}"
 										onclick="expandCollapse(${record.orgId});return false;">
 									</span>
+								<div style="clear:both;">&nbsp;</div>	
 								<div id="org_${record.orgId}" style="display:none;">
 								<center>
 									<c:forEach var="helper" items="${record.helpers}">

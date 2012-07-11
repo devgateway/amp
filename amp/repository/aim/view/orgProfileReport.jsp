@@ -111,7 +111,7 @@ function exportToExcel() {
 									
 									<a href=#
 										onclick="expandCollapse(${record.orgId});return false;" style="display:block; float:left;"><b>${record.organizationName}</b></a><span
-										style="margin-top: 3px; margin-right: 3px; float: right;">
+										style="margin-top: 3px; margin-right: 3px; float: right; cursor:pointer;">
 										<img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif"
 										border="0" id="img_exp_${record.orgId}"
 										onclick="expandCollapse(${record.orgId});return false;"><img
@@ -120,7 +120,7 @@ function exportToExcel() {
 										border="0" id="img_col_${record.orgId}"
 										onclick="expandCollapse(${record.orgId});return false;">
 									</span>
-								<div style="clear:both; height:1px;">&nbsp;</div>	
+								<div style="clear:both; height:1px; line-height:1px;">&nbsp;</div>	
 								<div id="org_${record.orgId}" style="display:none;">
 								<center>
 									<c:forEach var="helper" items="${record.helpers}">

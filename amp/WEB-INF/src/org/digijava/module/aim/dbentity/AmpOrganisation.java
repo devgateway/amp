@@ -524,7 +524,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setImplemLocationLevel(AmpCategoryValue implemLocationLevel) {
 		this.implemLocationLevel = implemLocationLevel;
 	}
-	@OrganizationReportColumn(columnName="Organization Intervention Location",propertyType=PropertyType.NGO,returnedClass="org.digijava.module.aim.dbentity.AmpOrgLocation")
+	@OrganizationReportColumn(columnName="Organization Intervention Location",propertyType=PropertyType.NGO,returnedClass=AmpOrgLocation.class)
 	public Set<AmpOrgLocation> getLocations() {
 		return locations;
 	}
@@ -532,7 +532,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setLocations(Set<AmpOrgLocation> locations) {
 		this.locations = locations;
 	}
-	@OrganizationReportColumn(columnName="Staff Information",propertyType=PropertyType.NGO,returnedClass="org.digijava.module.aim.dbentity.AmpOrgStaffInformation")
+	@OrganizationReportColumn(columnName="Staff Information",propertyType=PropertyType.NGO,returnedClass=AmpOrgStaffInformation.class)
 	public Set<AmpOrgStaffInformation> getStaffInfos() {
 		return staffInfos;
 	}
@@ -549,7 +549,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 		this.country = country;
 	}
 	
-	@OrganizationReportColumn(columnName="Recipients",propertyType=PropertyType.NGO,returnedClass="org.digijava.module.aim.dbentity.AmpOrgRecipient")
+	@OrganizationReportColumn(columnName="Recipients",propertyType=PropertyType.NGO,returnedClass=AmpOrgRecipient.class)
 	public Set<AmpOrgRecipient> getRecipients() {
 		return recipients;
 	}
@@ -613,7 +613,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setMinPlanRegDate(Date minPlanRegDate) {
 		this.minPlanRegDate = minPlanRegDate;
 	}
-	@OrganizationReportColumn(columnName="Budget Information",propertyType=PropertyType.NGO,returnedClass="org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation")
+	@OrganizationReportColumn(columnName="Budget Information",propertyType=PropertyType.NGO,returnedClass=AmpOrganizationBudgetInformation.class)
 	public Set<AmpOrganizationBudgetInformation> getOrganizationBudgetInfos() {
 		return organizationBudgetInfos;
 	}
@@ -658,7 +658,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setOrganizationContacts(Set<AmpOrganisationContact> organizationContacts) {
 		this.organizationContacts = organizationContacts;
 	}
-	@OrganizationReportColumn(columnName="Contact Information",propertyType=PropertyType.NGO,returnedClass="org.digijava.module.aim.dbentity.AmpOrganisationContact")
+	@OrganizationReportColumn(columnName="Contact Information",propertyType=PropertyType.NGO,returnedClass=AmpOrganisationContact.class)
 	public Set<AmpOrganisationContact> getOrganizationContacts() {
 		return organizationContacts;
 	}

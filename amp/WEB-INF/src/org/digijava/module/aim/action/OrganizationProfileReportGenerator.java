@@ -93,11 +93,10 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 						.getAnnotation(OrganizationReportColumn.class);
 				if (annotation != null) {
 					PropertyType type = annotation.propertyType();
-					String clazzName = annotation.returnedClass();
+					Class<?> clazz = annotation.returnedClass();
 					String[] subHeaders = null;
-					if (!clazzName.equals("")) {
-						OrgProfileValue orgProfileValue = (OrgProfileValue) Class
-								.forName(clazzName).newInstance();
+					if (!clazz.equals(Object.class)) {
+						OrgProfileValue orgProfileValue = (OrgProfileValue) clazz.newInstance();
 						subHeaders = orgProfileValue.getSubHeaders();
 					}
 					DonorReportHelper helper = new DonorReportHelper(method,

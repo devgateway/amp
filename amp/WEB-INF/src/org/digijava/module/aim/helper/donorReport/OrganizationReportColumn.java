@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 public @interface OrganizationReportColumn {
 	public String columnName();
 	public PropertyType propertyType() default PropertyType.PLAIN;
-	public String returnedClass() default "";
+	public Class<?> returnedClass() default Object.class;
 }
 

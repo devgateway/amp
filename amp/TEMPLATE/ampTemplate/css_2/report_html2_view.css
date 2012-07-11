@@ -106,3 +106,5 @@ a.nohoverlink{
 a.nohoverlink:hover{
 	background-color:transparent;
 }
+
+.clsTableCellDataHtml div {padding-left:5px !important;}

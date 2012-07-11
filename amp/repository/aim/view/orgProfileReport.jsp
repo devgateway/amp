@@ -106,10 +106,10 @@ function exportToExcel() {
 						<h1><digi:trn>Donor Profile Report</digi:trn></h1>
 					</center>
 					<c:forEach var="record" items="${aimOrgProfileReport.records}">
-						<div class="gis_wht">
+						<div class="gis_wht" style="height:25px;">
 							<div class="gis_cont">
 									<a href=#
-										onclick="expandCollapse(${record.orgId});return false;" style="display: in"><b>${record.organizationName}</b></a><span
+										onclick="expandCollapse(${record.orgId});return false;" style="display:block; float:left;"><b>${record.organizationName}</b></a><span
 										style="margin-top: 3px; margin-right: 3px; float: right;">
 										<img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif"
 										border="0" id="img_exp_${record.orgId}"

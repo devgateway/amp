@@ -39,12 +39,12 @@ function exportToExcel() {
 <digi:context name="digiContext" property="context" />
 <digi:form action="/organizationReportWizard.do" method="post">
 <html:hidden property="action" value="makeReport"/>
-	<table width="1000" border="0" cellspacing="0" cellpadding="0"
+	<table width="1000px" border="0" cellspacing="0" cellpadding="0"
 		align=center>
 
 		<tr>
 
-			<td width=1000><div class="step_head_lng">
+			<td width="1000px"><div class="step_head_lng">
 
 					<div class="step_head_cont">
 						<digi:trn>Donor Profile Report</digi:trn>
@@ -61,13 +61,13 @@ function exportToExcel() {
 
 				<div class="main_side_cont">
 
-					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<table width="98%" border="0" cellspacing="0" cellpadding="0">
 
 						<tr>
 
 							<td><a href="/aim/organizationReportWizard.do" class="l_sm"><b>« <dig:trn>Back to report generator</dig:trn></b></a></td>
 
-							<td align=right><b><digi:trn>Organization</digi:trn></b> <html:select
+							<td align="right"><b><digi:trn>Organization</digi:trn></b> <html:select
 									property="selectedOrgId" styleClass="dropdwn_sm" style="width:100px">
 									<html:option value="-1">
 										<digi:trn key="aim:all">All</digi:trn>
@@ -88,24 +88,18 @@ function exportToExcel() {
 									</html:option>
 									<html:optionsCollection name="aimOrgProfileReport"
 										property="orgTypes" value="ampOrgTypeId" label="orgType" />
-								</html:select> <input type="submit" value="<digi:trn>Filter</digi:trn>" class="buttonx" />
-								<table border="0" cellspacing="0" cellpadding="0" align=right>
-
+								</html:select> <input type="submit" value="<digi:trn>Filter</digi:trn>" class="buttonx" /><table  border="0" cellspacing="0" cellpadding="0"  style="display: inline;">
 									<tr>
-
 										<td><span
 											style="font-size: 16px; font-weight: normal; display: block; margin-left: 10px; margin-right: 10px; color: #C6C6C6;">|</span></td>
-
 										<td><digi:img hspace="2" vspace="2"	src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif"	border="0" alt="Export to Excel" /> </td>
 
-										<td><a href=# onclick="exportToExcel();return false;">Export to Excel</a></td>
+										<td><a href=# onclick="exportToExcel();return false;"><digi:trn>Export to Excel</digi:trn></a></td>
 
 									</tr>
 
 								</table></td>
-
 						</tr>
-
 					</table>
 
 					<center>
@@ -114,11 +108,18 @@ function exportToExcel() {
 					<c:forEach var="record" items="${aimOrgProfileReport.records}">
 						<div class="gis_wht">
 							<div class="gis_cont">
-								<b style="font-size: 12px;"><a href=# onclick="expandCollapse(${record.orgId});return false;">${record.organizationName}</a></b><span style="float: right; margin-top: 3px; margin-right: 3px;"><img
-									src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" border="0" id="img_exp_${record.orgId}" onclick="expandCollapse(${record.orgId});return false;"><img
-									style="display:none"
-									src="/TEMPLATE/ampTemplate/img_2/ico_perm_close.gif" border="0" id="img_col_${record.orgId}" onclick="expandCollapse(${record.orgId});return false;"></span>
-								<div id="org_${record.orgId}" style="display:none">
+									<a href=#
+										onclick="expandCollapse(${record.orgId});return false;" style="display: in"><b>${record.organizationName}</b></a><span
+										style="margin-top: 3px; margin-right: 3px; float: right;">
+										<img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif"
+										border="0" id="img_exp_${record.orgId}"
+										onclick="expandCollapse(${record.orgId});return false;"><img
+										style="display: none"
+										src="/TEMPLATE/ampTemplate/img_2/ico_perm_close.gif"
+										border="0" id="img_col_${record.orgId}"
+										onclick="expandCollapse(${record.orgId});return false;">
+									</span>
+								<div id="org_${record.orgId}" style="display:none;">
 								<center>
 									<c:forEach var="helper" items="${record.helpers}">
 										<c:if

@@ -20,13 +20,19 @@
 	src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
 <link rel="stylesheet" type="text/css"
 	href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
+	<digi:instance property="aimOrgProfileReport" />
 <script type="text/javascript">
 	function initializeDragAndDrop() {
+		selectedCols= new Array();
 		new YAHOO.util.DDTarget('source_col_ul');
 		new YAHOO.util.DDTarget('dest_col_ul');
 		columnDragAndDropObject = new MyDragAndDropObject('source_col_ul',
 				'dest_col_ul');
 		columnDragAndDropObject.createDragAndDropItems();
+		<c:forEach items="${aimOrgProfileReport.selectedColumns}" var="dbId">
+		selectedCols.push('${dbId}');
+		</c:forEach>
+		MyDragAndDropObject.selectObjsByDbId ("source_col_ul", "dest_col_ul", selectedCols);
 
 	}
 	YAHOO.util.Event.addListener(window, "load", initializeDragAndDrop);
@@ -38,18 +44,16 @@
 		}
 		//alert(selectedColumns);
 
-
-		var params='';
+		var params = '';
 		var i = 0;
-		for (; i < selectedColumns.length-1; i++) {
-			params +=   selectedColumns[i].value+"&selectedColumns=";
+		for (; i < selectedColumns.length - 1; i++) {
+			params += selectedColumns[i].value + "&selectedColumns=";
 		}
-		params+=selectedColumns[i].value;
+		params += selectedColumns[i].value;
 		document.aimOrgProfileReport.selectedColumnsList.value = params;
 		document.aimOrgProfileReport.submit();
 	}
 </script>
-<digi:instance property="aimOrgProfileReport" />
 <digi:context name="digiContext" property="context" />
 <digi:form action="/organizationReportWizard.do" method="post">
 <input type="hidden" name="selectedColumnsList" id="selectedColumnsList" value=""/>
@@ -111,7 +115,6 @@
 											</legend>
 											<ul id="dest_col_ul" class="draglist"
 												style="line-height: 20px;">
-
 											</ul>
 										</fieldset>
 									</td>

@@ -81,6 +81,9 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 			throws java.lang.Exception {
 		OrgProfileReportForm orgProfileForm = (OrgProfileReportForm) form;
 		orgProfileForm.setColumns(COLUMNS);
+		if(request.getParameter("reset")!=null){
+			orgProfileForm.setSelectedColumns(null);
+		}
 		HashMap<String, DonorReportHelper> map = null;
 		try {
 			map = new HashMap<String, DonorReportHelper>();
@@ -256,6 +259,7 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 		OrgProfileReportForm orgProfileForm = (OrgProfileReportForm) form;
 		String[] selectedColumns = orgProfileForm.getSelectedColumnsList()
 				.split("&selectedColumns=");
+		orgProfileForm.setSelectedColumns(selectedColumns);
 		HashMap<String, DonorReportHelper> map = orgProfileForm.getMap();
 		String siteId = RequestUtils.getSiteDomain(request).getSite().getId()
 				.toString();

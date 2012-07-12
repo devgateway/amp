@@ -121,7 +121,7 @@ table tr td {font-size:11px;}
 		            <img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br/>
 		            </a>
 				</td>
-				<td style="padding-left:10px;">
+				<td>
             		<a href="/" style="text-decoration: none">
             		<div class="amp_label" style="padding-top:0px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
             		</a>

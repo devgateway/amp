@@ -1,4 +1,5 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 <script type="text/javascript">
 function search() {
@@ -12,26 +13,36 @@ function search() {
 	return true;
 }
 </script>
+
+<c:set var="suffix">
+	<c:if test="${sessionScope.mode}">
+_big
+</c:if>
+</c:set>
+
+
+
 <div class="right_menu">
-	<div class="right_menu_header">
+
+	<div class="right_menu_header${suffix}">
 		<div class="right_menu_header_cont"><digi:trn>Search</digi:trn></div>
 		</div>
-			<div class="right_menu_box">
+			<div class="right_menu_box${suffix}">
 				<div class="right_menu_cont">
 				 	<table width="85%" border="0" cellspacing="1px" cellpadding="0">
 						<tr>
 								<td class="tbl_spacing" align="left">
 									<div class="search_label"><digi:trn>Keyword</digi:trn>:</div>
 								</td>
-								<td align=right class="tbl_spacing">
+								<td align="left" class="tbl_spacing">
 									<input name="" type="text" class="inputx" style="width:90px;" id="keyword">
 								</td>
 						</tr>
 						<tr>
-								<td>
+								<td class="tbl_spacing">
 									<div class="search_label"><digi:trn>Type</digi:trn>:</div>
 								</td>
-								<td align="left">
+								<td align="left" class="tbl_spacing">
 									<select class="dropdwn_sm" style="width: 90px;" id="querytype" >
 									<option value="-1"><digi:trn>ALL</digi:trn></option>
 									<option value="0"><digi:trn>Activities</digi:trn></option>

@@ -165,19 +165,19 @@ background-color: yellow;css
 
 <script type="text/javascript">
 SaveReportEngine.connectionErrorMessage = 
-	"<digi:trn key='aim:reportwizard:connectionProblems'>Apparently there are some connection problems. Please try again in a few moments.</digi:trn>";
+	"<digi:trn key='aim:reportwizard:connectionProblems' jsFriendly='true'>Apparently there are some connection problems. Please try again in a few moments.</digi:trn>";
 SaveReportEngine.savingMessage =
-	"<digi:trn key='aim:reportwizard:savingData'>Saving data. Please wait.</digi:trn>";
+	"<digi:trn key='aim:reportwizard:savingData' jsFriendly='true'>Saving data. Please wait.</digi:trn>";
 SaveReportEngine.doneCopyMessage =
-	"<digi:trn key='aim:reports:doneCopy'>A copy was saved containing the currently selected filters. </digi:trn>";
+	"<digi:trn key='aim:reports:doneCopy' jsFriendly='true'>A copy was saved containing the currently selected filters. </digi:trn>";
 SaveReportEngine.checkReportsMessage =
-	"<digi:trn key='aim:reports:checkReports'>Check Reports in the main menu. </digi:trn>";
+	"<digi:trn key='aim:reports:checkReports' jsFriendly='true'>Check Reports in the main menu. </digi:trn>";
 SaveReportEngine.checkTabsMessage =
-	"<digi:trn key='aim:reports:checkTabs'>Check the Tab Manager in the main menu. </digi:trn>";
+	"<digi:trn key='aim:reports:checkTabs' jsFriendly='true'>Check the Tab Manager in the main menu. </digi:trn>";
 SaveReportEngine.tabSavedMessage =
-	"<digi:trn key='aim:reports:tabSaved'>Tab and filters have been saved. </digi:trn>";
+	"<digi:trn key='aim:reports:tabSaved' jsFriendly='true'>Tab and filters have been saved. </digi:trn>";
 SaveReportEngine.reportSavedMessage =
-	"<digi:trn key='aim:reports:reportSaved'>Report and filters have been saved.</digi:trn>";
+	"<digi:trn key='aim:reports:reportSaved' jsFriendly='true'>Report and filters have been saved.</digi:trn>";
 saveReportEngine	= null;	
 </script>
 
@@ -341,7 +341,7 @@ saveReportEngine	= null;
 				YAHOO.amptab.afterFiltersLoad();
 			},
 			failure:function (o) {
-				document.getElementById("myFilter").innerHTML	= "<digi:trn>There was a problem loading the filters</digi:trn>";
+				document.getElementById("myFilter").innerHTML	= "<digi:trn jsFriendly='true'>There was a problem loading the filters</digi:trn>";
 			}
 		});
 		YAHOO.amptab.init();
@@ -639,15 +639,15 @@ function validateFormat(){
 	window.onload=initScripts;
 
 
-	var msg0="<digi:trn key="rep:pop:pleasewait..."> Please wait...</digi:trn>";
+	var msg0="<digi:trn key="rep:pop:pleasewait..." jsFriendly='true'> Please wait...</digi:trn>";
 	
-	var msg1="<digi:trn key="rep:pop:freezeReportHeading">Freeze Report Heading</digi:trn>";
+	var msg1="<digi:trn key="rep:pop:freezeReportHeading" jsFriendly='true'>Freeze Report Heading</digi:trn>";
 	
-	var msg2="<digi:trn key="rep:pop:unFreezeReportHeading">Unfreeze Report Heading</digi:trn>";
+	var msg2="<digi:trn key="rep:pop:unFreezeReportHeading" jsFriendly='true'>Unfreeze Report Heading</digi:trn>";
 	
-	var msg3="<digi:trn key="rep:pop:freezingReportHeading"> Freezing Report Heading </digi:trn>";
+	var msg3="<digi:trn key="rep:pop:freezingReportHeading" jsFriendly='true'> Freezing Report Heading </digi:trn>";
 	
-	var msg4="<digi:trn key="rep:pop:freezingReportHeading"> Unfreezing Report Heading </digi:trn>";
+	var msg4="<digi:trn key="rep:pop:freezingReportHeading" jsFriendly='true'> Unfreezing Report Heading </digi:trn>";
 
 
 

@@ -27,6 +27,7 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFun
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpMTEFProjectionSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -64,7 +65,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			fundingModel.getObject().setFundingDetails(new TreeSet());
 		
 		
-		final Label orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding" /*"ampDonorOrgId"*/));
+		final Label orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
 		orgLabel.setOutputMarkupId(true);
 		add(orgLabel);
 		
@@ -90,6 +91,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		};
 		add(addNewFunding);
 		
+		AmpTextAreaFieldPanel<String> donorObjective = new AmpTextAreaFieldPanel<String>("donorObjective", new PropertyModel<String>(fundingModel,"donorObjective"), "Donor Objective", false);
+		add(donorObjective);
 		
 		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true, AmpOrganisationSearchModel.class) {			
 			@Override

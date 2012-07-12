@@ -91,13 +91,6 @@ public class AmpDonorFundingFormSectionFeature extends
 		AmpProposedProjectCost propProjectCost = new AmpProposedProjectCost("propProjCost", "Proposed Project Cost", am);
 		add(propProjectCost);
 
-		/*
-		setModel = new PropertyModel<Set<AmpFunding>>(
-				am, "funding");
-		if (setModel.getObject() == null)
-			setModel.setObject(new LinkedHashSet<AmpFunding>());
-		 */
-		
 		fundingModel = new PropertyModel<Set<AmpFunding>>(am, "funding");
 		if (fundingModel.getObject() == null)
 			fundingModel.setObject(new LinkedHashSet<AmpFunding>());
@@ -136,27 +129,6 @@ public class AmpDonorFundingFormSectionFeature extends
 				
 			}
 		};
-		
-		/*
-		list = new ListEditor<AmpFunding>("listFunding", setModel) {
-			@Override
-			protected void onPopulateItem(
-					org.dgfoundation.amp.onepager.components.ListItem<AmpFunding> item) {
-				AmpFundingItemFeaturePanel fundingItemFeature;
-				try {
-					fundingItemFeature = new AmpFundingItemFeaturePanel(
-							"fundingItem", "Funding Item",
-							item.getModel(),am,AmpDonorFundingFormSectionFeature.this);
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-				item.add(fundingItemFeature);
-
-				
-
-			}
-		};
-		*/
 		add(list);
 
 		

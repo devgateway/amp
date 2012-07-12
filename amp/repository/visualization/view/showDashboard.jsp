@@ -833,11 +833,11 @@ function initializeGlobalVariables(){
   </tr>
 </table>
 <div class="dashboard_stat" id="divSummaryInfo" ></div>
-<div class="dashboard_stat" align="right" ><a href="javascript:" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
-<div class="dashboard_stat" style="display:none; padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+<div class="dashboard_stat"><a href="javascript:" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
+<div class="dashboard_stat" style="display:none;" id="currentDisplaySettings" >
 	<table cellpadding="0" cellspacing="0" border="0" width="100%">
 	<tr style="background-color:white;" >
-	<td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+	<td style="font-size:11px;font-family:Arial,Helvetica,sans-serif; padding-top:5px; padding-bottom:5px; padding-left:5px;" valign="top">
 	<strong>
 	<digi:trn>Selected Filters</digi:trn>:</strong>
 	   <i><digi:trn>Currency type</digi:trn>: </i><label id="filterCurrency"></label> |

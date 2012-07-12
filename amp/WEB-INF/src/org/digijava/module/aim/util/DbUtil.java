@@ -3048,199 +3048,7 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getRequestDBSession();
 //beginTransaction();
-            sess.clear();
-            Set<AmpOrganisationContact> organisationContacts=org.getOrganizationContacts(); //form org contacts
-            if (org.getAmpOrgId() != null) {
-                String name = org.getName();
-                String dacOrgCode = org.getDacOrgCode();
-                String orgIsoCode = org.getOrgIsoCode();
-                String description = org.getDescription();
-                String orgCode = org.getOrgCode();
-                AmpFiscalCalendar ampFiscalCalId = org.getAmpFiscalCalId();
-                String budgetOrgCode = org.getBudgetOrgCode();
-                String acronymAndName = org.getAcronymAndName();
-                AmpOrgGroup orgGrpId = org.getOrgGrpId();
-                String address = org.getAddress();
-                String orgUrl = org.getOrgUrl();
-                String acronym = org.getAcronym();
-                String fundingorgid = org.getFundingorgid();
-                AmpLevel levelId = org.getLevelId();
-                AmpCategoryValueLocations region = org.getRegion();
-                AmpCategoryValue implemLocationLevel = org.getImplemLocationLevel();
-                Set<AmpOrgLocation> locations = org.getLocations();
-                AmpCategoryValueLocations country = org.getCountry();
-                String addressAbroad = org.getAddressAbroad();
-                String taxNumber = org.getTaxNumber();
-                String primaryPurpose = org.getPrimaryPurpose();
-                String minPlanRegNumb = org.getMinPlanRegNumb();
-                String lineMinRegNumber = org.getLineMinRegNumber();
-                String legalPersonNum = org.getLegalPersonNum();
-                Date legalPersonRegDate = org.getLegalPersonRegDate();
-                Date minPlanRegDate = org.getMinPlanRegDate();
-                String segmentCode = org.getSegmentCode();
-                Set sectors = org.getSectors();
-                Set<AmpOrganisationDocument> documents = org.getDocuments();
-                Set fundingDetails = org.getFundingDetails();
-                String otherInformation = org.getOtherInformation();
-                Date lineMinRegDate = org.getLineMinRegDate();
-                Date operFuncApprDate = org.getOperFuncApprDate();
-                String receiptLegPersonalityAct = org.getReceiptLegPersonalityAct();
-                Set<AmpDepartments> departments =org.getDepartments();
-                Set<AmpBudgetSector> budgetsectors = org.getBudgetsectors();
-
-                Set<AmpOrgStaffInformation> staffs=org.getStaffInfos();
-                Set<AmpOrganizationBudgetInformation> budgetInfos=org.getOrganizationBudgetInfos();
-                Set<AmpOrgRecipient> recipients=org.getRecipients();
-                
-               
-           
-                org = (AmpOrganisation) sess.get(AmpOrganisation.class, org.getAmpOrgId());
-                org.setName(name);
-                org.setDacOrgCode(dacOrgCode);
-                org.setOrgIsoCode(orgIsoCode);
-                org.setDescription(description);
-                org.setOrgCode(orgCode);
-                org.setAmpFiscalCalId(ampFiscalCalId);
-                org.setBudgetOrgCode(budgetOrgCode);
-                org.setAcronymAndName(acronymAndName);
-                org.setAcronym(acronym);
-                org.setFundingorgid(fundingorgid);
-                org.setAddress(address);
-                org.setOrgUrl(orgUrl);
-                org.setOrgGrpId(orgGrpId);
-                org.setLevelId(levelId);
-                org.setRegion(region);
-                org.setCountry(country);
-                org.setSegmentCode(segmentCode);
-                org.setImplemLocationLevel(implemLocationLevel);
-                org.setAddressAbroad(addressAbroad);
-                org.setTaxNumber(taxNumber);
-                org.setPrimaryPurpose(primaryPurpose);
-                org.setMinPlanRegNumb(minPlanRegNumb);
-                org.setLegalPersonNum(legalPersonNum);
-                org.setLegalPersonRegDate(legalPersonRegDate);
-                org.setMinPlanRegDate(minPlanRegDate);
-                org.setOperFuncApprDate(operFuncApprDate);
-                org.setLineMinRegDate(lineMinRegDate);
-                org.setReceiptLegPersonalityAct(receiptLegPersonalityAct);
-                org.setOtherInformation(otherInformation);
-                org.setLineMinRegNumber(lineMinRegNumber); 
-  
-
-                if(org.getLocations()==null){
-                    org.setLocations(new HashSet<AmpOrgLocation>());
-                }
-                org.getLocations().clear();
-                if(locations!=null){
-                    Iterator<AmpOrgLocation> locationIter=locations.iterator();
-                    while(locationIter.hasNext()){
-                        AmpOrgLocation location=locationIter.next();
-                        if(location.getAmpOrgLocId()!=null){
-                           AmpOrgLocation oldLocation=(AmpOrgLocation)sess.get(AmpOrgLocation.class, location.getAmpOrgLocId());
-                           oldLocation.setPercent(location.getPercent());
-                           org.getLocations().add(oldLocation);
-                        }
-                        else{
-                             org.getLocations().add(location);
-                        }
-
-                    }
-                }
-               
-                if(org.getSectors()==null){
-                    org.setSectors(new HashSet());
-                }
-                org.getSectors().clear();
-                if(sectors!=null){
-                    org.getSectors().addAll(sectors);
-                }
-                if(org.getFundingDetails()==null){
-                    org.setFundingDetails(new HashSet());
-                }
-                org.getFundingDetails().clear();
-                if(fundingDetails!=null){
-                    org.getFundingDetails().addAll(fundingDetails);
-                }
-                
-                if(org.getDocuments()==null){
-                    org.setDocuments(new HashSet<AmpOrganisationDocument>());
-                }
-                org.getDocuments().clear();
-                if(documents!=null){
-                    org.getDocuments().addAll(documents);
-                }
-                
-                
-                if(org.getDepartments()==null){
-                    org.setDepartments(new HashSet());
-                }
-                org.getDepartments().clear();                
-                if(departments!=null){
-                	org.getDepartments().addAll(departments);
-                }
-                
-                if(org.getStaffInfos()==null){
-                	org.setStaffInfos(new HashSet<AmpOrgStaffInformation>());
-                }
-                org.getStaffInfos().clear();
-				if (staffs != null&&staffs.size()>0) {
-					for(AmpOrgStaffInformation staff:staffs){
-						staff.setOrganization(org);
-					}
-					org.getStaffInfos().addAll(staffs);
-				}
-				
-                 
-                if (org.getOrganizationBudgetInfos() == null) {
-                    org.setOrganizationBudgetInfos(new HashSet<AmpOrganizationBudgetInformation>());
-                }
-                
-                org.getOrganizationBudgetInfos().clear();
-                if (budgetInfos != null&&budgetInfos.size()>0) {
-					for (AmpOrganizationBudgetInformation info : budgetInfos) {
-						info.setOrganization(org);
-					}
-					org.getOrganizationBudgetInfos().addAll(budgetInfos);
-				}
-				
-                            
-                
-                if (org.getRecipients() == null) {
-                    org.setRecipients(new HashSet<AmpOrgRecipient>());
-                } 
-                org.getRecipients().clear();
-				if (recipients != null && recipients.size() > 0) {
-					for (AmpOrgRecipient info : recipients) {
-						info.setParentOrganization(org);
-					}
-					org.getRecipients().addAll(recipients);
-				}
-                	
-				
-				
-                
-                
-                if(org.getBudgetsectors()==null){
-                	org.setBudgetsectors(new HashSet<AmpBudgetSector>());
-                }
-                
-                org.getBudgetsectors().clear();
-                if(budgetsectors!=null){
-                	org.getBudgetsectors().addAll(budgetsectors);
-                }
-
-                if (org.getOrganizationContacts() != null) {
-                    for (AmpOrganisationContact ampOrganisationContact : org.getOrganizationContacts()) {
-                        AmpContact contact = ampOrganisationContact.getContact();
-                        contact.getOrganizationContacts().remove(ampOrganisationContact);
-                        sess.delete(ampOrganisationContact);
-                    }
-                    org.getOrganizationContacts().clear();
-
-                }
-            }
-           
-        
+            Set<AmpOrganisationContact> organisationContacts=org.getOrganizationContacts(); //form org contacts   
            /**
             * contact information
            */            
@@ -3282,10 +3090,13 @@ public class DbUtil {
  							AmpContact cont=ampOrganisationContact.getContact();
  							AmpOrganisationContact contToBeRemoved=(AmpOrganisationContact)sess.get(AmpOrganisationContact.class, ampOrganisationContact.getId()) ;
  							if(contToBeRemoved!=null){
- 								sess.delete(contToBeRemoved);
- 	 							cont.getOrganizationContacts().remove(contToBeRemoved);
- 	 							
- 	 							org.getOrganizationContacts().remove(contToBeRemoved);
+ 								if(contToBeRemoved!=null){
+ 	 								AmpContact ampContact=contToBeRemoved.getContact();
+ 	 								sess.delete(contToBeRemoved);
+ 	 								ampContact.getOrganizationContacts().remove(contToBeRemoved);
+ 	 	 							sess.update(ampContact);
+ 	 	 							org.getOrganizationContacts().remove(contToBeRemoved);
+ 	 							}
  							}
  							 							
  						}

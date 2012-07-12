@@ -3114,7 +3114,7 @@ public class DbUtil {
     }
     
     
-    public static void saveOrg(AmpOrganisation org, boolean admin) throws DgException {
+    public static void saveOrg(AmpOrganisation org) throws DgException {
         Session sess = null;
         Transaction tx = null;
 

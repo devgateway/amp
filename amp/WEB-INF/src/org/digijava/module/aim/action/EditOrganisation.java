@@ -1276,7 +1276,7 @@ public class EditOrganisation extends DispatchAction {
       }         
          
       this.saveDocuments(request, organization);
-      DbUtil.saveOrg(organization,isAdmin);        
+      DbUtil.saveOrg(organization);        
       return mapping.findForward("added");
 
   }

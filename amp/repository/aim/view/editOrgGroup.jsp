@@ -130,17 +130,19 @@
   </tr>
     <tr>
     <td align="right"><digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font></td>
-    <td><html:select property="orgTypeId">
-																	            <c:set var="translation">
-																					<digi:trn key="aim:btnSelectType">Select Type</digi:trn>
-																				</c:set>
-																	    		<html:option value="-1">-- ${translation} --</html:option>
-																	    		<logic:notEmpty name="aimAddOrgGroupForm" property="orgTypeColl">
-																					<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl"
-																		   									value="ampOrgTypeId" label="orgType" />
-																		   		</logic:notEmpty>
-																			</html:select></td>
-  </tr>
+    <td>
+    	<html:select property="orgTypeId">
+	        <c:set var="translation">
+				<digi:trn key="aim:btnSelectType">Select Type</digi:trn>
+			</c:set>
+    		<html:option value="-1">-- ${translation} --</html:option>
+    		<logic:notEmpty name="aimAddOrgGroupForm" property="orgTypeColl">
+				<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl"
+	   									value="ampOrgTypeId" label="orgType" />
+	   		</logic:notEmpty>
+		</html:select>
+	</td>
+</tr>
 </table>
 
 													

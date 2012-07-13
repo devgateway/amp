@@ -685,7 +685,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             openNewWindow(600, 230);
     <digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
             var id = document.aimAddOrgForm.ampOrgId.value;
-            url = "<%= selectLoc %>?action=createGroup";
+            url = "<%= selectLoc %>?action=create";
             document.aimAddOrgForm.action = url;
             document.aimAddOrgForm.target = popupPointer.name;
             document.aimAddOrgForm.submit();

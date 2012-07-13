@@ -79,7 +79,7 @@ public class AmpThemeSearchModel extends AbstractAmpAutoCompleteModel<AmpTheme> 
 					ArrayList<AmpTheme> sameProgramThemes = new ArrayList<AmpTheme>();
 					for(AmpTheme theme : themes){
 						AmpTheme parentTheme = theme.getRootTheme();
-						if(parentTheme.getAmpThemeId().equals(def.getAmpThemeId())){
+						if(def!=null && parentTheme!=null && parentTheme.getAmpThemeId().equals(def.getAmpThemeId())){
 							sameProgramThemes.add(theme);
 						}
 					}

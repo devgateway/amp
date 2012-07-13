@@ -574,6 +574,38 @@ public class DbUtil {
 
         return body;
     }
+    /**
+     * Retrieves editor body text.
+     * @param siteId
+     * @param editorKey
+     * @param language
+     * @return
+     * @throws EditorException
+     */
+    public static String getEditorBodyEmptyInclude(String siteId, String editorKey, String language) throws EditorException {
+
+        Session session = null;
+        String body = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = session.createQuery(
+                "select e.body from " + Editor.class.getName() + " e " +
+                " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and e.language=:language");
+          //  q.setCacheable(true);
+            q.setString("siteId", siteId);
+            q.setString("editorKey", editorKey);
+            q.setString("language", language);
+            body=(String)q.uniqueResult();
+        }
+        catch (Exception ex) {
+            logger.debug("Unable to get editor from database", ex);
+            throw new EditorException("Unable to get editor from database", ex);
+        }
+
+        return body;
+    }
+    
 
     /**
      * Returns editor body text but strips out all HTML tags.

@@ -31,8 +31,8 @@ var activitieson;
 var structureson;
 var maxExtent;
 var basemap;
-var structureGraphicLayer;
 var highlightson;
+var structureGraphicLayer;
 /*---- Search  ----*/
 var searchactive = new Boolean();
 var searchdistance;

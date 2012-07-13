@@ -16,6 +16,7 @@
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Activity Export Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Applied Patches" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Activity Partial Import Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>

@@ -377,6 +377,19 @@
        </td>
    </tr>
  </module:display>
+ <module:display name="Structures Importer" parentModule="ADMINISTRATIVE SECTION">
+  	<tr>
+		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    	<td class="admin_box_label">
+        	<c:set var="trnDataExchangeExportTitle">
+				<digi:trn invisibleLinks="true">Click here to view Structures Importer</digi:trn>
+			</c:set>
+			<digi:link module="esrigis"  href="/StructuresImporter.do" >
+				<digi:trn>Structures Importer</digi:trn>
+			</digi:link>
+       </td>
+   </tr>
+ </module:display> 
   
   
 

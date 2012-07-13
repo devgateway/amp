@@ -8,19 +8,23 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -631,7 +635,43 @@ public class DbHelper {
         }
         return sts;
 	}
-
+	
+	public static AmpStructureType getStructureTypesByName(String name) {
+        Session session = null;
+        Query q = null;
+        AmpStructureType stt = null;
+        StringBuilder queryString = new StringBuilder("select st from " + AmpStructureType.class.getName() + " st ");
+        queryString.append("where st.name=:name");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            q.setString("name", name);
+            stt = (AmpStructureType) q.list().get(0);
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp Structure Type from database ", ex);
+        }
+        return stt;
+	}
+	
+	public static Set<AmpActivity> getActivityByAmpId(String id) {
+        Session session = null;
+        Query q = null;
+        Set<AmpActivity> activities = null;
+        StringBuilder queryString = new StringBuilder("select a from " + AmpActivity.class.getName() + " a ");
+        queryString.append("where a.ampId=:id");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+            q.setString("id", id);
+            activities = new HashSet<AmpActivity>(q.list());
+            
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp Structure Type from database ", ex);
+        }
+        return activities;
+	}
+	
+	
 	public static List<AmpMapConfig> getMaps() {
 		Session session = null;
         Query q = null;
@@ -684,29 +724,31 @@ public class DbHelper {
 		} 
 		
 	}
-
-	public static void saveStructureType(AmpStructureType structureType) {
+	
+	public static void saveStructure(AmpStructure structure) {
 		Session session = null;
-		Transaction tx = null;
-
 		try {
 			session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-//			if (structureType.getContentThumbnails() != null) {
-//				Iterator itr = contentItem.getContentThumbnails().iterator();
-//				while (itr.hasNext()) {
-//					org.digijava.module.content.dbentity.AmpContentItemThumbnail thumb = (org.digijava.module.content.dbentity.AmpContentItemThumbnail) itr
-//							.next();
-//					thumb.setContentItem(contentItem);
-//				}
-//			}
-			session.save(structureType);
-			//tx.commit();
+			session.save(structure);
+
 		} catch (Exception e) {
 			logger.error("Unable to save structure type", e);
 		}
 		
 	}
+	
+	public static void saveStructureType(AmpStructureType structureType) {
+		Session session = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			session.save(structureType);
+
+		} catch (Exception e) {
+			logger.error("Unable to save structure type", e);
+		}
+		
+	}
+	
     private static Long[] getAllDescendants(Long[] sectorIds,
 			ArrayList<AmpSector> allSectorList) {
     	//Go through the list to determine the children

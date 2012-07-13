@@ -6,5 +6,6 @@
 		<page name="esriproxy" title="AMP GIS"/>
 		<page name="list" page="list" title="Admin Structure Types" />
 		<page name="edit" page="edit" title="Admin Structure Types" />
+		<page name="importstructures" title="Admin Structure Importer"/>
 	</secondary-pages>
 </config>

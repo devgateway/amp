@@ -88,14 +88,14 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
 .logo {color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:5px 0px 0px 0px;}
 .logo a {color:#FFFFFF; font-size:18px; font-weight:bold;}
-.amp_label {padding-top:10px;font-size:14px;}
+.amp_label {padding-top:7px;font-size:14px;}
 .top_nav {position:absolute; right:30px; top:30px;}
 .top_nav a {color:#FFFFFF;}
 .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;margin:0px 20px 0px 0px;}
 .login_nav a {color:#FFFFFF;}
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
 top_nav a {color:#FFFFFF;}
-.top_sep {margin-left:10px; margin-right:10px;}
+.top_sep {margin-left:10px; margin-right:10px; height:32px;}
 .workspace_info {width:100px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;text-align:right;float:right;margin:-0px 0px 0px 50px;z-index:9990;}
 .loginWidget{color: #376091; text-align: left; white-space: nowrap;font-family:  Arial, sans-serif;font-size: 11px;font-weight: bold;text-transform:uppercase;}
 .workspace_info select{width:150px;font-size:10px;}

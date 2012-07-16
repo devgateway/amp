@@ -205,13 +205,13 @@
 			alert(msg);
 			return false;
 		}
-		if (notAchievedMaxAllowed('email')) {
+		if (!notAchievedMaxAllowed('email',4)) {
 			return false;
 		}
-		if (notAchievedMaxAllowed('phone')) {
+		if (!notAchievedMaxAllowed('phone',4)) {
 			return false;
 		}
-		if (notAchievedMaxAllowed('fax')) {
+		if (!notAchievedMaxAllowed('fax',4)) {
 			return false;
 		}
 		//check emails. At least one email should exist
@@ -467,7 +467,7 @@
         }
 
         function addNewData(dataName){
-            if(notAchievedMaxAllowed(dataName)){
+            if(notAchievedMaxAllowed(dataName,3)){
             	<digi:context name="addCont" property="context/addressBook.do?actionType=addNewData"/>
             	var url = "<%=addCont%>";
             	YAHOO.util.Connect.asyncRequest('POST',url, addNewDataCallback, "data="+dataName);
@@ -480,19 +480,19 @@
         	YAHOO.util.Connect.asyncRequest('POST',url, removeNewDataCallback, "dataName="+propertyType+"&index="+index);
         }
 
-        function notAchievedMaxAllowed(dataName){
+        function notAchievedMaxAllowed(dataName,allow){
             var myArray=null;
             var msg='';
-            if(dataName=='email' && $("input[id^='email_']").length >= 3){
-                msg='<digi:trn>Max Allowed Number Of Emails is 3 </digi:trn>'
+            if(dataName=='email' && $("input[id^='email_']").length>=allow){
+                msg='<digi:trn jsFriendly="true">Max Allowed Number Of Emails is 3 </digi:trn>';
             	alert(msg);
                 return false;
-            }else if(dataName=='phone'  && $("input[id^='phoneNum_']").length >= 3){
-            	msg='<digi:trn>Max Allowed Number Of Phones is 3 </digi:trn>'
+            }else if(dataName=='phone'  && $("input[id^='phoneNum_']").length>=allow){
+            	msg='<digi:trn jsFriendly="true">Max Allowed Number Of Phones is 3 </digi:trn>';
                 alert(msg);
             	return false;
-            }else if(dataName=='fax' && $("input[id^='fax_']").length >= 3){
-            	msg='<digi:trn>Max Allowed Number Of Faxes is 3 </digi:trn>'
+            }else if(dataName=='fax' && $("input[id^='fax_']").length>=allow){
+            	msg='<digi:trn jsFriendly="true">Max Allowed Number Of Faxes is 3 </digi:trn>';
                 alert(msg);
             	return false;
             }

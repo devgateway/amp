@@ -147,12 +147,12 @@
 																	</tr>
 																	<tr>
                                                                         <td colspan="2" align="center">
-                                                                            <fieldset style="border:1px solid #CCCCCC; background-color:#FFFFFF; text-align: left;">
+                                                                            <fieldset style="padding-left:200px; border:1px solid #CCCCCC; background-color:#FFFFFF; text-align: left;">
                                                                             <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="FUND"><digi:trn>FUND</digi:trn></html:radio><br>
-                                                                            <input type="button" onclick="resetRadioButtons()" value="<digi:trn>Deselect</digi:trn>" class="buttonx"/>
+                                                                            <input style="margin-top:10px;" type="button" onclick="resetRadioButtons()" value="<digi:trn>Deselect</digi:trn>" class="buttonx"/>
                                                                             </fieldset>                                                                        </td>
 																	</tr>
 																																		

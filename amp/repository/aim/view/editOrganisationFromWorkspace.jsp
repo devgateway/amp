@@ -449,14 +449,14 @@ initContactScript();
 
         function removeSelectedContacts(){
         	var atLeastOneIsChecked = false;
-        	for (var i = 0; ((i < document.aimAddOrgForm.selectedContactInfoIds.length) && (atLeastOneIsChecked == false)) ; i++){
-        		if (document.aimAddOrgForm.selectedContactInfoIds[i].checked) { 
+        	var selected= $("input[class='selectedContactInfoIds']:checked").length;
+        		if (selected>0) { 
                 	atLeastOneIsChecked = true;
                 } else { 
                 	atLeastOneIsChecked = false;
                 	
                 }
-            }
+            
         	if (atLeastOneIsChecked) {
             	<digi:context name="remConts" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${remConts}";

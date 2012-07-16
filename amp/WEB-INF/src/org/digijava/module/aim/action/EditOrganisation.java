@@ -1285,7 +1285,7 @@ public class EditOrganisation extends DispatchAction {
   
   
   public ActionForward deleteContact(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-      if (sessionChk(request)) {
+	  if (sessionChkForWInfo(request)) {
           return mapping.findForward("index");
       }
       AddOrgForm editForm = (AddOrgForm) form;
@@ -1319,8 +1319,13 @@ public class EditOrganisation extends DispatchAction {
       editForm.setOrgContacts(odlOrgContacts);
       editForm.setSelContactId(null);
       editForm.setSelectedContactInfoIds(null);
-
-      return mapping.findForward("forward");
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (tm != null && tm.getTeamHead()) {
+			return mapping.findForward("forwardWI");
+		} else {
+			return mapping.findForward("forward");
+		}
   }
   
   public static List<LabelValueBean> getYearsBeanList() {

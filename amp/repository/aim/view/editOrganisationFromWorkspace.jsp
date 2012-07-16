@@ -806,7 +806,7 @@ initContactScript();
 														src="/TEMPLATE/ampTemplate/images/arrow_down.gif"
 														onclick="collapse('staff')" />
 													<div id="div_container_staff">
-														<table cellpadding="2" cellspacing="0" border="0">
+														<table cellpadding="2" cellspacing="0" border="0" width=100%>
 															<c:if test="${not empty aimAddOrgForm.staff}">
 																<tr>
 																	<td colspan="5"><c:if

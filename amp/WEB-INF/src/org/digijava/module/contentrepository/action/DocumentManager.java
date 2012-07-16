@@ -2,6 +2,7 @@ package org.digijava.module.contentrepository.action;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -329,12 +330,14 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("version") && myForm.getUuid() != null ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node vNode		= DocumentManagerUtil.getWriteNode(myForm.getUuid(), request);
+
 					/**
 					 * approval is not needed for version,if current member is TL, or he is creator of this node(base node,not version)
 					 * or if tm's are allowed to add versions
 					 */
 					Boolean hasVersioningRightsWithoutApprovalNeeded=DocumentManagerRights.hasVersioningRights(vNode, request);
 					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, vNode , true, errors);
+                    vNode.setProperty(CrConstants.PROPERTY_ADDING_DATE, Calendar.getInstance());
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
 						nodeWrapper.saveNode(jcrWriteSession);
 						if ( nodeWrapper.isTeamDocument() ) {

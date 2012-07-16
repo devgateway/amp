@@ -1522,7 +1522,7 @@ border-right: 1px solid rgb(208, 208, 208);
                             <img id="img_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
                             <img id="imgh_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('staff')"/>
                             <div id="div_container_staff">
-                            <table cellpadding="2" cellspacing="0" border="0">
+                            <table cellpadding="2" cellspacing="0" border="0" width=100%>
                                 <c:if test="${not empty aimAddOrgForm.staff}">
                                     <tr>
                                         <td colspan="5">

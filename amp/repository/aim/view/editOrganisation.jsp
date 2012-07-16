@@ -152,8 +152,9 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             var type=document.aimAddOrgForm.typeOfStaff;
             var number=document.aimAddOrgForm.numberOfStaff;
             var errorMsg= '<digi:trn jsFriendly="true">Please enter numeric value only</digi:trn>';
-            if (isNaN(number.value)||number.value=='') {
-                alert(errorMsg);
+            var reg=/^\d+$/;
+            if(!reg.test(number.value)){
+         	   alert(errorMsg);
                 number.value = "";
                 return false;
             }

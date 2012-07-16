@@ -593,31 +593,9 @@ initContactScript();
 										</tr>
 										<tr>
 											<td colspan="2">
-												<table cellpadding="2" cellspacing="2" border="0"
-													width="80%" align=center
-													style="margin-top: 15px; margin-bottom: 15px;">
-													<tr>
-														<td style="text-align: left;" class="tdBoldClass" nowrap>
-															<digi:trn>Organization Name</digi:trn>
-														</td>
-														<td align="left"><c:out value="${aimAddOrgForm.name}" />
-														</td>
-													</tr>
-													<tr>
-														<td style="text-align: left;" class="tdBoldClass" nowrap>
-															<digi:trn>Organization Type</digi:trn>
-														</td>
-														<td align="left"><c:out
-																value="${aimAddOrgForm.orgTypeName}" /></td>
-													</tr>
-													<tr>
-														<td style="text-align: left;" class="tdBoldClass" nowrap>
-															<digi:trn>Organization Group</digi:trn>
-														</td>
-														<td align="left"><c:out
-																value="${aimAddOrgForm.orgGroupName}" /></td>
-													</tr>
-												</table>
+												<digi:trn>Organization Name</digi:trn> <c:out value="${aimAddOrgForm.name}" /><br>
+															<digi:trn>Organization Type</digi:trn><c:out value="${aimAddOrgForm.orgTypeName}" /><br>
+															<digi:trn>Organization Group</digi:trn><c:out value="${aimAddOrgForm.orgGroupName}" />
 											</td>
 
 										</tr>

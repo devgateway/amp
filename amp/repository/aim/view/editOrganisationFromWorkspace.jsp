@@ -619,9 +619,9 @@ initContactScript();
 														<table width="100%" cellpadding="5" cellspacing="5">
 															<tr>
 																<td valign="top" width="50%">
-																	<table cellpadding="5" cellspacing="5">
+																	<table cellpadding="5" cellspacing="5" width=100%>
 																		<tr>
-																			<td style="text-align: right" class="tdBoldClass">
+																			<td class="tdBoldClass">
 																				<digi:trn>Sectors Scheme</digi:trn><c:if test="${aimAddOrgForm.type=='NGO'}"> <field:display
 																					name="Mandatory Indicator For Sector Preferences"
 																					feature="NGO Form">
@@ -642,12 +642,12 @@ initContactScript();
 																							label="secSchemeName" />
 																					</logic:notEmpty>
 																				</html:select></td>
-																			<td style="text-align: right" class="tdBoldClass"><digi:trn>Organization website</digi:trn></td>
+																			<td class="tdBoldClass"><digi:trn>Organization website</digi:trn></td>
 																			<td><html:text property="orgUrl"
 																					styleId="orgUrl" /></td>
 																		</tr>
 																		<tr>
-																			<td style="text-align: right" class="tdBoldClass">
+																			<td class="tdBoldClass">
 																				<digi:trn>Sector Preferences</digi:trn><c:if test="${aimAddOrgForm.type=='NGO'}"> <field:display
 																					name="Mandatory Indicator For Sector Preferences"
 																					feature="NGO Form">
@@ -751,9 +751,9 @@ initContactScript();
 																				<c:otherwise>
 																				<td><b><digi:trn>Description</digi:trn></b>
 																					</td>
-																					<td><html:textarea
+																					<td colspan=5><html:textarea
 																							property="description" styleId="description"
-																							style="width:400px;	height:100px;margin-bottom:10px;" />
+																							style="width:100%;	height:100px;margin-bottom:10px;" />
 																					</td>
 																				</c:otherwise>
 																			</c:choose>

@@ -714,7 +714,7 @@ initContactScript();
 																			</td>
 																			<c:choose>
 																				<c:when test="${aimAddOrgForm.type=='NGO'}">
-																					<td style="text-align: right" class="tdBoldClass">
+																					<td class="tdBoldClass">
 																						<digi:trn>Organization Headquarters Address</digi:trn>
 																						<field:display
 																							name="Mandatory Indicator For Organization Headquarters Address"
@@ -725,7 +725,7 @@ initContactScript();
 																					</td>
 																				</c:when>
 																				<c:otherwise>
-																					<td class="tdBoldClass"><digi:trn>Address</digi:trn></td>
+																					<td class="tdBoldClass"><digi:trn>Organization Headquarters Address</digi:trn></td>
 																				</c:otherwise>
 																			</c:choose>
 																			<td><html:textarea property="address" cols="40"
@@ -744,7 +744,7 @@ initContactScript();
 																					<td><html:textarea name="aimAddOrgForm"
 																							property="orgPrimaryPurpose" cols="30"
 																							styleId="orgPrimaryPurpose" /></td>
-																					<td style="text-align: right" class="tdBoldClass"><digi:trn>Organization Address Abroad(Internation NGO)</digi:trn></td>
+																					<td class="tdBoldClass"><digi:trn>Organization Address Abroad(Internation NGO)</digi:trn></td>
 																					<td><html:textarea property="addressAbroad"
 																							cols="30" styleId="addressAbroad" /></td>
 																				</c:when>

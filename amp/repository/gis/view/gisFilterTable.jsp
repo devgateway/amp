@@ -23,7 +23,7 @@
 	<c:set var="selectorHeaderSize" scope="page" value="${reqSelectorHeaderSize}" />
 </logic:notEmpty>	
 	<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC;border-bottom: 0px;">
+		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; color: white; padding:2px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC;border-bottom: 0px; overflow-y:scroll;">
 			<div class="inside">
 				<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 			</div>

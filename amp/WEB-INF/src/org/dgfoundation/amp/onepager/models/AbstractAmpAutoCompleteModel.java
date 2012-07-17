@@ -12,12 +12,17 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel.PARAM;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.engine.TypedValue;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 13, 2010
@@ -93,9 +98,43 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 	protected Criterion getTextCriterion(String propertyName, String value) {
 		if (isExactMatch())
 			return Restrictions.eq(propertyName, value);
-		return Restrictions.ilike(propertyName, value, MatchMode.ANYWHERE);
+		return getUnaccentILikeExpression(propertyName, value);
 	}
 
+	
+	protected Criterion getUnaccentILikeExpression(final String propertyName, final String value)
+	{
+		
+		return new Criterion(){
+
+			private static final long serialVersionUID = -8979378752879206485L;
+
+			@Override
+			public String toSqlString(Criteria criteria,
+					CriteriaQuery criteriaQuery) throws HibernateException {
+				Dialect dialect = criteriaQuery.getFactory().getDialect();
+				String[] columns = criteriaQuery.findColumns(propertyName, criteria);
+				if (columns.length!=1) throw new HibernateException("ilike may only be used with single-column properties");
+				if ( dialect instanceof PostgreSQLDialect ) {
+					return "unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";
+				}
+				else {
+					return dialect.getLowercaseFunction() + '(' + columns[0] + ") like ?";
+				}
+
+			}
+
+			@Override
+			public TypedValue[] getTypedValues(Criteria criteria,
+					CriteriaQuery criteriaQuery) throws HibernateException {
+				return new TypedValue[] { criteriaQuery.getTypedValue( criteria, propertyName, MatchMode.ANYWHERE.toMatchString(value).toLowerCase() ) };
+			}
+			
+			
+		};
+		
+	}
+	
 	/**
 	 * This recursive method adds to the sector root tree the given sector. It
 	 * does this only if this sector has no parent (it's a root sector).

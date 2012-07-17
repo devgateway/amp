@@ -157,7 +157,7 @@ StopWatch.next("Filters", true);
 		</div>
 	</div>
 </div>
-<div style="width:50%; float:left; font-size: 12px;text-align: center;">
+<div style="width:60%; float:left; font-size: 12px;text-align: center;">
 		<c:set var="tooltip_translation">
 			<digi:trn>Specify keywords to look for in the project data.</digi:trn>
 		</c:set>
@@ -172,7 +172,7 @@ StopWatch.next("Filters", true);
 			</html:select>
 			
 </div>
-<div style="display: block; overflow:hidden;width:50%; float:left; font-size: 12px">
+<div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
 	<html:checkbox property="justSearch" value="true" />&nbsp;
 	<digi:trn>Use filter as advanced search</digi:trn>
 </div>

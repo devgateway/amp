@@ -23,12 +23,12 @@
 	<c:set var="selectorHeaderSize" scope="page" value="${reqSelectorHeaderSize}" />
 </logic:notEmpty>	
 	<div class="grouping_selector_wrapper" style="float: left; width: 40%; padding: 0px; height: 98%;">
-		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; width: 100%; color: white; padding-top:5px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC;border-bottom: 0px;">
+		<div style="background-image:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif);margin:0px; width: 100%; color: white; padding-top:5px; height: ${selectorHeaderSize}%; border: 1px solid #CCCCCC;border-bottom: 0px; overflow-y:scroll;">
 			<div class="inside">
 				<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 			</div>
 		</div>
-		<div style="border: 1px solid #CCCCCC; height: ${100-selectorHeaderSize}%; width: 100%; background: white;">		
+		<div style="border: 1px solid #CCCCCC; height: ${100-selectorHeaderSize}%; width: 100%; background: white; overflow-y:scroll;">		
 				<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 					<logic:iterate id="element" name="elements" scope="page">
 						<tr style="cursor: pointer;"

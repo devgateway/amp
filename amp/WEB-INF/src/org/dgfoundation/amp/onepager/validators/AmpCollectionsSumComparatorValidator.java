@@ -2,7 +2,7 @@ package org.dgfoundation.amp.onepager.validators;
 
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
-
+import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 /**
  * @author Armen
  *

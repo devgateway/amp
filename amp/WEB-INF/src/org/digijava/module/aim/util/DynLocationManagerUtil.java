@@ -1024,8 +1024,13 @@ public class DynLocationManagerUtil {
 				AmpCategoryValueLocations parentLoc=null;
 				hssfRow = hssfSheet.getRow(j);
 				Cell cell =hssfRow.getCell(0);
-				Long databaseId =(cell==null)? null: (long)cell 
-						.getNumericCellValue();
+				Long databaseId=null;
+				if(cell!=null){
+					switch(cell.getCellType()){
+						case Cell.CELL_TYPE_STRING:databaseId=(cell.getStringCellValue()==null||(cell.getStringCellValue()!=null&&cell.getStringCellValue().trim().equals("")))?null:Long.parseLong(cell.getStringCellValue());break;
+						case Cell.CELL_TYPE_NUMERIC:databaseId=(long) cell.getNumericCellValue();break;
+					}
+				}
 				List<String> locationNames = new ArrayList<String>();
 				int k = 1;
 				
@@ -1035,7 +1040,7 @@ public class DynLocationManagerUtil {
 						k=hierarchyNumberOfCells+1;
 						break;
 					}
-					String location = cell.getStringCellValue();
+					String location = getValue(cell);
 					if(location==null||location.trim().length()==0){
 						k=hierarchyNumberOfCells+1;
 						break;
@@ -1043,15 +1048,15 @@ public class DynLocationManagerUtil {
 					locationNames.add(location);
 				}
 				cell=hssfRow.getCell(k++);
-				String lalitude=(cell==null)?null:cell.getStringCellValue();
+				String lalitude=getValue(cell);
 				cell=hssfRow.getCell(k++);
-				String longitude=(cell==null)?null:cell.getStringCellValue();
+				String longitude=getValue(cell);
 				cell=hssfRow.getCell(k++);
-				String geoID=(cell==null)?null:cell.getStringCellValue();
+				String geoID=getValue(cell);
 				cell=hssfRow.getCell(k++);
-				String iso=(cell==null)?null:cell.getStringCellValue();
+				String iso=getValue(cell);
 				cell=hssfRow.getCell(k++);
-				String iso3=(cell==null)?null:cell.getStringCellValue();
+				String iso3=getValue(cell);
 					for (k = 0; k < locationNames.size(); k++) {
 						String name = locationNames.get(k);
 						AmpCategoryValue implLoc = implLocs.get(k);
@@ -1097,15 +1102,31 @@ public class DynLocationManagerUtil {
 					}
 			}
 
-		} catch (NullPointerException e) {
+		} 
+		catch (NullPointerException e) {
 			logger.error("file is not ok");
 			throw new AimException("Cannot import regions", e);
+		}
+		catch (IllegalStateException e) {
+			logger.error("file is not ok", e);
+			return ErrorCode.INCORRECT_CONTENT;
 		} catch (Exception e) {
 			logger.error(e);
 			throw new AimException("Cannot import regions", e);
 		}
 		return ErrorCode.CORRECT_CONTENT;
 
+	}
+
+	private static String getValue(Cell cell) {
+		String value=null;
+		if(cell!=null){
+			switch(cell.getCellType()){
+				case Cell.CELL_TYPE_STRING:value=(cell.getStringCellValue()!=null&&cell.getStringCellValue().trim().equals(""))?null:cell.getStringCellValue();break;
+				case Cell.CELL_TYPE_NUMERIC: value=""+cell.getNumericCellValue();break;
+			}
+		}
+		return value;
 	}
 	
 	public enum ErrorCode{

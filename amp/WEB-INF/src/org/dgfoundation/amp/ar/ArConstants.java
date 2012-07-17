@@ -279,6 +279,7 @@ public final class ArConstants {
 	public final static String TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR= "TOTAL_PLANNED_DISBURSEMENT_SELECTED_YEAR";
 	
 	public final static String EXCHANGE_RATES_CACHE="EXCHANGE_RATES_CACHE";
+	public static final String VIEW_PUBLIC_PREFIX = "cached_";
 
 
 	

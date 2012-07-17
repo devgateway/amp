@@ -272,7 +272,10 @@ public class DbUtil {
         oql += "   inner join actSec.classificationConfig config ";
 
         oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
-        oql += " inner join act.ampActivityGroup actGroup ";
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " inner join act.ampActivityGroupCached actGroup ";
+        else
+        	oql += " inner join act.ampActivityGroup actGroup ";
         oql += " and fd.transactionType =:transactionType  ";
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)   ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
@@ -373,7 +376,10 @@ public class DbUtil {
 	            oql += "   inner join actSec.classificationConfig config ";
 	            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            oql += " inner join loc.parentCategoryValue parcv ";
-	            oql += " inner join act.ampActivityGroup actGroup ";
+	            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+	            	oql += " inner join act.ampActivityGroupCached actGroup ";
+	            else
+	            	oql += " inner join act.ampActivityGroup actGroup ";
 	            if (sectorCondition) {
 	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 	            }
@@ -468,7 +474,10 @@ public class DbUtil {
 	            oql += " inner join f.ampActivityId act ";
 	            oql += " inner join act.sectors actSec ";
 	            oql += " inner join actSec.sectorId sec ";
-	            oql += " inner join act.ampActivityGroup actGroup ";
+	            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+	            	oql += " inner join act.ampActivityGroupCached actGroup ";
+	            else
+	            	oql += " inner join act.ampActivityGroup actGroup ";
 	            if (locationCondition) {
 	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            }
@@ -558,7 +567,10 @@ public class DbUtil {
             oql += " inner join f.ampActivityId act ";
             oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
             oql += " inner join actsec.classificationConfig config ";
-            oql += " inner join act.ampActivityGroup actGroup ";
+            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+            	oql += " inner join act.ampActivityGroupCached actGroup ";
+            else
+            	oql += " inner join act.ampActivityGroup actGroup ";
             if (locationCondition) {
                 oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
             }
@@ -686,7 +698,10 @@ public class DbUtil {
 	            oql += "   inner join f.ampDonorOrgId donor ";
 	            oql += " inner join act.sectors actsec ";
 	            oql+=" inner join actsec.classificationConfig config ";
-	            oql += " inner join act.ampActivityGroup actGroup ";
+	            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+	            	oql += " inner join act.ampActivityGroupCached actGroup ";
+	            else
+	            	oql += " inner join act.ampActivityGroup actGroup ";
 	            if (locationCondition) {
 	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            }
@@ -798,7 +813,12 @@ public class DbUtil {
         oql += AmpFundingDetail.class.getName()
                 + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
-        oql += " inner join act.ampActivityGroup actGroup ";
+        
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " inner join act.ampActivityGroupCached actGroup ";
+        else
+        	oql += " inner join act.ampActivityGroup actGroup ";
+        	
         if (locationCondition) {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         }
@@ -964,7 +984,10 @@ public class DbUtil {
         oql += AmpFundingDetail.class.getName()
                 + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
-        oql += " inner join act.ampActivityGroup actGroup ";
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " inner join act.ampActivityGroupCached actGroup ";
+        else
+        	oql += " inner join act.ampActivityGroup actGroup ";
         if (locationCondition) {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         }
@@ -1281,7 +1304,10 @@ public class DbUtil {
         oql += AmpFundingDetail.class.getName()
                 + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
-        oql += " inner join act.ampActivityGroup actGroup ";
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " inner join act.ampActivityGroupCached actGroup ";
+        else
+        	oql += " inner join act.ampActivityGroup actGroup ";
         if (locationCondition) {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         }

@@ -214,10 +214,15 @@ public class AmpReportGenerator extends ReportGenerator {
 			while (i.hasNext()) {
 				AmpReportColumn rcol = (AmpReportColumn) i.next();
 				AmpColumns col = rcol.getColumn();
-				logger.info("Extracting column " + col.getColumnName()
-						+ " with view " + col.getExtractorView());
 				String cellTypeName = col.getCellType();
-				String extractorView = col.getExtractorView();
+				String extractorView = "";
+				if (col.getExtractorView()!=null && this.filter.isPublicView()){
+					extractorView = ArConstants.VIEW_PUBLIC_PREFIX+col.getExtractorView();
+				}else{
+					extractorView  = col.getExtractorView();
+				}
+				logger.info("Extracting column " + col.getColumnName()
+						+ " with view " + extractorView);
 				String columnName = col.getColumnName();
 				String relatedContentPersisterClass = col
 						.getRelatedContentPersisterClass();

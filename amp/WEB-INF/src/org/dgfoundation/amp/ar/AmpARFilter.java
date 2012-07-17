@@ -23,6 +23,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +60,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.mondrian.query.MoConstants;
 
 
 /**
@@ -1106,6 +1109,11 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		if ( multiDonor != null ) {
 			queryAppend( MULTI_DONOR );
 		}
+
+		if (this.isPublicView()){
+			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
+		}
+
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		logger.info(this.generatedFilterQuery);
 		
@@ -1908,6 +1916,13 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		this.showArchived = showArchived;
 	}
 
+	public String getOffLineQuery(String query) {
+		String result = query;
+		Pattern p = Pattern.compile(MoConstants.AMP_ACTIVITY_TABLE);
+		Matcher m = p.matcher(result);
+		result = m.replaceAll(MoConstants.CACHED_ACTIVITY_TABLE);
+		return result;
+	}
 
 
 }

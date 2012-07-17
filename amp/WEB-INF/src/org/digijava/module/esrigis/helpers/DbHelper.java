@@ -80,7 +80,10 @@ public class DbHelper {
 			oql += AmpFundingDetail.class.getName()
 					+ " as fd inner join fd.ampFundingId f ";
 			oql += " inner join f.ampActivityId act ";
-			oql += " inner join act.ampActivityGroup actGroup ";
+	        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+	        	oql += " inner join act.ampActivityGroupCached actGroup ";
+	        else
+	        	oql += " inner join act.ampActivityGroup actGroup ";
 			//oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 			if (locationCondition) {
 				oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";

@@ -139,7 +139,7 @@ public class DataDispatcher extends DispatchAction {
 		Long[] subSecsIds = visualizationForm.getFilter().getSubSectorIds();
 		String configIdAsString=request.getParameter("selSectorConfigId");
 		Long configId = null;
-		if(configIdAsString!=null&&!configIdAsString.equals("")){
+		if(configIdAsString!=null&&!configIdAsString.equals("") && !configIdAsString.equals("null")){
 			configId = Long.parseLong(configIdAsString);
 			visualizationForm.getFilter().setSelSectorConfigId(configId);
 		}
@@ -1937,7 +1937,7 @@ public class DataDispatcher extends DispatchAction {
 	}
 	
 	private Long[] getLongArrayFromParameter (String param){
-		if (param!=null && param!="") {
+		if (param!=null && param!="" && !param.equals("null")) {
 			String[] spl = param.split(",");
 			Long[] ret = new Long [spl.length];
 			for (int i = 0; i < spl.length; i++) {

@@ -359,22 +359,22 @@ public class DashboardUtil {
 			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep4);
-		        if (filter.getShowSectorsRanking() || isInGraphInList(form.getGraphList(),"SectorProfile")) {
+		        if (filter.getShowSectorsRanking()==null || filter.getShowSectorsRanking() || isInGraphInList(form.getGraphList(),"SectorProfile")) {
 		        	form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
 			        form.getRanksInformation().setTopSectors(getTop(form.getRanksInformation().getFullSectors(),form.getFilter().getTopLists()));
 				} 
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep5);
-	        	if (filter.getShowRegionsRanking() || isInGraphInList(form.getGraphList(),"RegionProfile")) {
+	        	if (filter.getShowRegionsRanking()==null || filter.getShowRegionsRanking() || isInGraphInList(form.getGraphList(),"RegionProfile")) {
 		        	form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null, null));
 		        	form.getRanksInformation().setTopRegions(getTop(form.getRanksInformation().getFullRegions(),form.getFilter().getTopLists()));
 		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep6);
-		        if (filter.getShowProjectsRanking()) {
+		        if (filter.getShowProjectsRanking()==null || filter.getShowProjectsRanking()) {
 		        	form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
 		        	form.getRanksInformation().setTopProjects(getTop(form.getRanksInformation().getFullProjects(),form.getFilter().getTopLists()));
 		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep7);
-		        if (filter.getShowDonorsRanking() || isInGraphInList(form.getGraphList(),"DonorProfile")) {
+		        if (filter.getShowDonorsRanking()==null || filter.getShowDonorsRanking() || isInGraphInList(form.getGraphList(),"DonorProfile")) {
 		        	form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null, null));
 		        	form.getRanksInformation().setTopDonors(getTop(form.getRanksInformation().getFullDonors(),form.getFilter().getTopLists()));
 		        }

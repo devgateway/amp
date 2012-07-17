@@ -1344,7 +1344,7 @@ function refreshBoxes(o){
 		var name2 = "";
 		if (getSelectionsFromElement("org_grp_check",true)==""){
 			if (document.getElementById("org_group_dropdown_id").selectedIndex != 0) {
-			name1 = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+				name1 = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
 			}
 		} else {
 			name1 = getSelectionsFromElement("org_grp_check",true);
@@ -1360,10 +1360,11 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("organization_check",true);
 			}
 		}
-		if (name1 != "") {
-			name1 = name1.replace(/</g, "< ");
-			namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
+		if (name1 == "") {
+			name1 = trnAllOrgGroups;
 		}
+		name1 = name1.replace(/</g, "< ");
+		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	if (dashboardType==3) {
 		var name1 = "";
@@ -1386,10 +1387,11 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("sub_sector_check",true);
 			}
 		}
-		if (name1 != "") {
-			name1 = name1.replace(/</g, "< ");
-			namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
+		if (name1 == "") {
+			name1 = trnAllSectors;
 		}
+		name1 = name1.replace(/</g, "< ");
+		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	if (dashboardType==2) {
 		var name1 = "";
@@ -1412,10 +1414,11 @@ function refreshBoxes(o){
 				name2 = getSelectionsFromElement("zone_check",true);
 			}
 		}
-		if (name1 != "") {
-			name1 = name1.replace(/</g, "< ");
-			namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
+		if (name1 == "") {
+			name1 = trnAllRegions;
 		}
+		name1 = name1.replace(/</g, "< ");
+		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	
 	var type = document.getElementById("transactionType").value;

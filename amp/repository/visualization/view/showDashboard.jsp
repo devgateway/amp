@@ -666,27 +666,27 @@ function initializeGlobalVariables(){
 				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Export Type</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.typeOpt" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>  </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"><br />
-		            <html:radio property="exportData.typeOpt" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"><br />
-		        	<html:radio property="exportData.typeOpt" styleId="export_type_2" value="2"><digi:trn>Excel</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif"><br />
+		            <html:radio property="exportData.exportTypeOption" styleId="export_type_0" value="0" ><digi:trn>PDF</digi:trn>  </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_pdf.gif"><br />
+		            <html:radio property="exportData.exportTypeOption" styleId="export_type_1" value="1"><digi:trn>Word</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_word.gif"><br />
+		        	<html:radio property="exportData.exportTypeOption" styleId="export_type_2" value="2"><digi:trn>Excel</digi:trn>   </html:radio><img src="/TEMPLATE/ampTemplate/img_2/ico_exc.gif"><br />
 		        </div>
 		        </td>
 				<c:if test="${visualizationform.filter.dashboardType eq '1' }">
 			        <td class="inside" width="30%" valign="top">
 					<div class="selector_type"><b><digi:trn>ODA Growth</digi:trn></b></div>
 					<div>
-			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
-			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
-			             <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
-			            <html:radio property="exportData.ODAGrowthOpt" styleId="export_ODAGrowth_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+			            <html:radio property="exportData.exportODAGrowthOption" styleId="export_ODAGrowth_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+			            <html:radio property="exportData.exportODAGrowthOption" styleId="export_ODAGrowth_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+			             <html:radio property="exportData.exportODAGrowthOption" styleId="export_ODAGrowth_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+			            <html:radio property="exportData.exportODAGrowthOption" styleId="export_ODAGrowth_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 			        </div>
 			        </td>
 		    	</c:if>
 				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Summary</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.summaryOpt" styleId="export_summary_0" value="0"><digi:trn>Exclude Summary</digi:trn></html:radio><br />
-		            <html:radio property="exportData.summaryOpt" styleId="export_summary_1" value="1"><digi:trn>Inculde Summary</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportSummaryOption" styleId="export_summary_0" value="0"><digi:trn>Exclude Summary</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportSummaryOption" styleId="export_summary_1" value="1"><digi:trn>Inculde Summary</digi:trn></html:radio><br />
 		        </div>
 		        </td>
 		    </tr>
@@ -694,28 +694,28 @@ function initializeGlobalVariables(){
 				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Funding</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.fundingOpt" styleId="export_funding_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
-		            <html:radio property="exportData.fundingOpt" styleId="export_funding_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.fundingOpt" styleId="export_funding_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.fundingOpt" styleId="export_funding_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportFundingsOption" styleId="export_Fundings_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportFundingsOption" styleId="export_Fundings_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportFundingsOption" styleId="export_Fundings_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportFundingsOption" styleId="export_Fundings_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
 		        <td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Aid Predictability</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
-		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.aidPredicOpt" styleId="export_aid_pred_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidPredictabilityOption" styleId="export_AidPredictability_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidPredictabilityOption" styleId="export_AidPredictability_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidPredictabilityOption" styleId="export_AidPredictability_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidPredictabilityOption" styleId="export_AidPredictability_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
 		    	<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Aid Type</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
-		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.aidTypeOpt" styleId="export_aid_type_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidTypeOption" styleId="export_AidType_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidTypeOption" styleId="export_AidType_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidTypeOption" styleId="export_AidType_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidTypeOption" styleId="export_AidType_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
 		    </tr>
@@ -723,20 +723,20 @@ function initializeGlobalVariables(){
 				<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Financing Instrument</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
-		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.financingInstOpt" styleId="export_fin_inst_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidModalityOption" styleId="export_AidModality_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidModalityOption" styleId="export_AidModality_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidModalityOption" styleId="export_AidModality_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportAidModalityOption" styleId="export_AidModality_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
 		    	<c:if test="${visualizationform.filter.dashboardType ne '1' }">
     			<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Donor Profile</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.donorOpt" styleId="export_donor_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
-		            <html:radio property="exportData.donorOpt" styleId="export_donor_2" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.donorOpt" styleId="export_donor_1" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.donorOpt" styleId="export_donor_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportDonorProfileOption" styleId="export_DonorProfile_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportDonorProfileOption" styleId="export_DonorProfile_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportDonorProfileOption" styleId="export_DonorProfile_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportDonorProfileOption" styleId="export_DonorProfile_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
 		        </c:if>
@@ -744,10 +744,10 @@ function initializeGlobalVariables(){
     			<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Sector</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.sectorOpt" styleId="export_sector_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
-		            <html:radio property="exportData.sectorOpt" styleId="export_sector_2" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.sectorOpt" styleId="export_sector_1" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.sectorOpt" styleId="export_sector_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportSectorProfileOption" styleId="export_SectorProfile_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportSectorProfileOption" styleId="export_SectorProfile_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportSectorProfileOption" styleId="export_SectorProfile_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportSectorProfileOption" styleId="export_SectorProfile_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
 		        </c:if>
@@ -755,10 +755,10 @@ function initializeGlobalVariables(){
     			<td class="inside" width="30%" valign="top">
 				<div class="selector_type"><b><digi:trn>Region</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.regionOpt" styleId="export_region_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
-		            <html:radio property="exportData.regionOpt" styleId="export_region_2" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.regionOpt" styleId="export_region_1" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.regionOpt" styleId="export_region_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportRegionProfileOption" styleId="export_RegionProfile_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportRegionProfileOption" styleId="export_RegionProfile_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportRegionProfileOption" styleId="export_RegionProfile_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportRegionProfileOption" styleId="export_RegionProfile_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
 		        </c:if>
@@ -1124,7 +1124,7 @@ function initializeGlobalVariables(){
 	<table cellspacing="0" cellpadding="0" width="100%"> 
 		<tr>
 			<td>
-				<a href="javascript:document.getElementById('FundingChartTitleLegend').scrollIntoView(true);"><digi:trn>Funding Chart</digi:trn></a> - 
+				<a href="javascript:document.getElementById('FundingsTitleLegend').scrollIntoView(true);"><digi:trn>Funding Chart</digi:trn></a> - 
 				<a href="javascript:document.getElementById('AidPredictabilityTitleLegend').scrollIntoView(true);"><digi:trn>Aid Predictability Chart</digi:trn></a> - 
 				<a href="javascript:document.getElementById('AidTypeTitleLegend').scrollIntoView(true);"><digi:trn>Aid Type Chart</digi:trn></a> - 
 				<a href="javascript:document.getElementById('FinancingInstrumentTitleLegend').scrollIntoView(true);"><digi:trn>Financing Instrument Chart</digi:trn></a> - 
@@ -1295,13 +1295,15 @@ function initializeGlobalVariables(){
 					<option value="16">16</option>
 				</select>
 				&nbsp;<input type="checkbox" id="RegionProfileBold"><label for="RegionProfileBold"><digi:trn>Bold</digi:trn></label><br/>
-				<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label for="RegionProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
-				&nbsp;<input type="checkbox" id="RegionProfileDivide"><label for="RegionProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
-				&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel"><label for="RegionProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-				&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label for="RegionProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label id="RegionProfileShowLegendLabel"  for="RegionProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="RegionProfileDivide"><label id="RegionProfileDivideLabel" for="RegionProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel"><label id="RegionProfileShowDataLabelLabel" for="RegionProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label id="RegionProfileRotateDataLabelLabel" for="RegionProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				&nbsp;<input type="checkbox" id="RegionProfileIgnore" style="display: none;" checked="checked"><label id="RegionProfileIgnoreLabel" style="display: none;" for="RegionProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 				<input type="hidden" id="RegionProfileDataAction" value="getRegionProfileGraphData" />
-				<input type="hidden" id="RegionProfileDataField" value="region" />
+				<input type="hidden" id="RegionProfileDataField" value="dataField" />
 				<input type="hidden" id="RegionProfileItemId" value="${visualizationform.filter.regionId}" />
+				<input type="hidden" id="RegionProfileTitleLegendTrn" value="<digi:trn>Region Profile</digi:trn>" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'RegionProfile')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'RegionProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'RegionProfile', true)" title="<digi:trn>Donut Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'RegionProfile', true)" title="<digi:trn>Line Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'RegionProfile', true)" title="<digi:trn>Data View</digi:trn>"/></div>
@@ -1336,13 +1338,15 @@ function initializeGlobalVariables(){
 					<option value="16">16</option>
 				</select>
 				&nbsp;<input type="checkbox" id="SectorProfileBold"><label for="SectorProfileBold"><digi:trn>Bold</digi:trn></label><br/>
-				<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label for="SectorProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
-				&nbsp;<input type="checkbox" id="SectorProfileDivide"><label for="SectorProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
-				&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel"><label for="SectorProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-				&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label for="SectorProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label id="SectorProfileShowLegendLabel" for="SectorProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="SectorProfileDivide"><label id="SectorProfileDivideLabel" for="SectorProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel"><label id="SectorProfileShowDataLabelLabel" for="SectorProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label id="SectorProfileRotateDataLabelLabel" for="SectorProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				&nbsp;<input type="checkbox" id="SectorProfileIgnore" style="display: none;" checked="checked"><label id="SectorProfileIgnoreLabel" style="display: none;" for="SectorProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 				<input type="hidden" id="SectorProfileDataAction" value="getSectorProfileGraphData" />
-				<input type="hidden" id="SectorProfileDataField" value="sector" />
+				<input type="hidden" id="SectorProfileDataField" value="dataField" />
 				<input type="hidden" id="SectorProfileItemId" value="${visualizationform.filter.sectorId}" />
+				<input type="hidden" id="SectorProfileTitleLegendTrn" value="<digi:trn>Sector Profile</digi:trn>" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'SectorProfile')">
 				</div>
 				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'SectorProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'SectorProfile', true)" title="<digi:trn>Donut Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'SectorProfile', true)" title="<digi:trn>Line chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'SectorProfile', true)" title="<digi:trn>Data View</digi:trn>"/></div>
@@ -1385,33 +1389,35 @@ function initializeGlobalVariables(){
 		</c:if>
 		<c:if test="${showFundingChart eq 1 }">
 		<fieldset class="chartFieldset">
-			<legend><span id="FundingChartTitleLegend" class=legend_label></span></legend>
+			<legend><span id="FundingsTitleLegend" class=legend_label></span></legend>
 			<div style="float:left;">
-				<a onclick="toggleHeader(this, 'FundingChartHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
-				<div id="FundingChartHeader" class="chart_header" style="display:none;">
-				<digi:trn>Title</digi:trn> <input type="text" id="FundingChartTitle" value="" size="50">
-				<input type="hidden" id="FundingChartShowFontFamily" value="Verdana"/>
+				<a onclick="toggleHeader(this, 'FundingsHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
+				<div id="FundingsHeader" class="chart_header" style="display:none;">
+				<digi:trn>Title</digi:trn> <input type="text" id="FundingsTitle" value="" size="50">
+				<input type="hidden" id="FundingsShowFontFamily" value="Verdana"/>
 				&nbsp;<digi:trn>Size</digi:trn>
-				<select id="FundingChartFontSize">
+				<select id="FundingsFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
 					<option value="14">14</option>
 					<option value="15">15</option>
 					<option value="16">16</option>
 				</select>
-				&nbsp;<input type="checkbox" id="FundingChartBold"><label for="FundingChartBold"><digi:trn>Bold</digi:trn></label><br/>
-				<input type="checkbox" id="FundingChartShowLegend" checked="checked"><label for="FundingChartShowLegend"><digi:trn>Show legend</digi:trn></label>
-				&nbsp;<input type="checkbox" id="FundingChartDivide"><label for="FundingChartDivide"><digi:trn>Divide by thousands</digi:trn></label>
-				&nbsp;<input type="checkbox" id="FundingChartShowDataLabel"><label for="FundingChartShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-				&nbsp;<input type="checkbox" id="FundingChartRotateDataLabel"><label for="FundingChartRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
-				<input type="hidden" id="FundingChartDataAction" value="getFundingsGraphData" />
-				<input type="hidden" id="FundingChartDataField" value="fundingtype" />
-				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'FundingChart')">
+				&nbsp;<input type="checkbox" id="FundingsBold"><label for="FundingsBold"><digi:trn>Bold</digi:trn></label><br/>
+				<input type="checkbox" id="FundingsShowLegend" checked="checked"><label id="FundingsShowLegendLabel" for="FundingsShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="FundingsDivide"><label id="FundingsDivideLabel" for="FundingsDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="FundingsShowDataLabel"><label id="FundingsShowDataLabelLabel" for="FundingsShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="FundingsRotateDataLabel"><label id="FundingsRotateDataLabelLabel" for="FundingsRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				&nbsp;<input type="checkbox" id="FundingsIgnore" style="display: none;" checked="checked"><label id="FundingsIgnoreLabel" style="display: none;" for="FundingsIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
+				<input type="hidden" id="FundingsDataAction" value="getFundingsGraphData" />
+				<input type="hidden" id="FundingsDataField" value="dataField" />
+				<input type="hidden" id="FundingsTitleLegendTrn" value="<digi:trn>ODA historical trend</digi:trn>" />
+				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'Fundings')">
 				</div>
 			</div>
-			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FundingChart', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FundingChart', true)" title="<digi:trn>Line chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FundingChart', true)" title="<digi:trn>Data View</digi:trn>"/></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'Fundings', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'Fundings', true)" title="<digi:trn>Line chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'Fundings', true)" title="<digi:trn>Data View</digi:trn>"/></div>
 			<div class="flashcontent" name="flashContent">
-				<div id="FundingChart">
+				<div id="Fundings">
 					<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
@@ -1441,17 +1447,21 @@ function initializeGlobalVariables(){
 						<option value="16">16</option>
 					</select>
 					&nbsp;<input type="checkbox" id="ODAGrowthBold"><label for="ODAGrowthBold"><digi:trn>Bold</digi:trn></label><br/>
-					&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel" checked="checked"><label for="ODAGrowthShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-					&nbsp;<input type="checkbox" id="ODAGrowthIgnore" checked="checked"><label for="ODAGrowthIgnore"><digi:trn>Ignore big values</digi:trn></label>
-					
-					<br/>
+					<input type="checkbox" id="ODAGrowthShowLegend" checked="checked"><label id="ODAGrowthShowLegendLabel" for="ODAGrowthShowLegend"><digi:trn>Show legend</digi:trn></label>
+					&nbsp;<input type="checkbox" id="ODAGrowthDivide"><label id="ODAGrowthDivideLabel" for="ODAGrowthDivide"><digi:trn>Divide by thousands</digi:trn></label>
+					&nbsp;<input type="checkbox" id="ODAGrowthShowDataLabel"><label id="ODAGrowthShowDataLabelLabel" for="ODAGrowthShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+					&nbsp;<input type="checkbox" id="ODAGrowthRotateDataLabel"><label id="ODAGrowthRotateDataLabelLabel" for="ODAGrowthRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+					&nbsp;<input type="checkbox" id="ODAGrowthIgnore" style="display: none;" checked="checked"><label id="ODAGrowthIgnoreLabel" style="display: none;" for="ODAGrowthIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 					<input type="hidden" id="ODAGrowthDataAction" value="getODAGrowthGraphData" />
+					<input type="hidden" id="ODAGrowthDataField" value="dataField" />
+					<input type="hidden" id="ODAGrowthTitleLegendTrn" value="<digi:trn>ODA Growth</digi:trn>" />
+					<br/>
 					<input type="hidden" id="ODAGrowthDropdownCurrentTitle" value="<digi:trn jsFriendly='true'>Year</digi:trn>">
 					<input type="hidden" id="ODAGrowthDropdownPreviousTitle" value="<digi:trn jsFriendly='true'>Previous Year to Compare</digi:trn>">
 					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'ODAGrowth')">
 					</div>
 				</div>
-				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'ODAGrowth')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'ODAGrowth', true)" title="<digi:trn>Data View</digi:trn>"/></div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_growth', 'ODAGrowth')" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'ODAGrowth', true)" title="<digi:trn>Data View</digi:trn>"/></div>
 				<br />
 				<br />
 				<div class="flashcontent" name="flashContent" style="height:460px;">
@@ -1507,12 +1517,14 @@ function initializeGlobalVariables(){
 					<option value="16">16</option>
 				</select>
 				&nbsp;<input type="checkbox" id="AidPredictabilityBold"><label for="AidPredictabilityBold"><digi:trn>Bold</digi:trn></label><br/>
-				<input type="checkbox" id="AidPredictabilityShowLegend" checked="checked"><label for="AidPredictabilityShowLegend"><digi:trn>Show legend</digi:trn></label>
-				&nbsp;<input type="checkbox" id="AidPredictabilityDivide"><label for="AidPredictabilityDivide"><digi:trn>Divide by thousands</digi:trn></label>
-				&nbsp;<input type="checkbox" id="AidPredictabilityShowDataLabel"><label for="AidPredictabilityShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-				&nbsp;<input type="checkbox" id="AidPredictabilityRotateDataLabel"><label for="AidPredictabilityRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				<input type="checkbox" id="AidPredictabilityShowLegend" checked="checked"><label id="AidPredictabilityShowLegendLabel" for="AidPredictabilityShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="AidPredictabilityDivide"><label id="AidPredictabilityDivideLabel" for="AidPredictabilityDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="AidPredictabilityShowDataLabel"><label id="AidPredictabilityShowDataLabelLabel" for="AidPredictabilityShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="AidPredictabilityRotateDataLabel"><label id="AidPredictabilityRotateDataLabelLabel" for="AidPredictabilityRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				&nbsp;<input type="checkbox" id="AidPredictabilityIgnore" style="display: none;" checked="checked"><label id="AidPredictabilityIgnoreLabel" style="display: none;" for="AidPredictabilityIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 				<input type="hidden" id="AidPredictabilityDataAction" value="getAidPredictabilityGraphData" />
-				<input type="hidden" id="AidPredictabilityDataField" value="fundingtype" />
+				<input type="hidden" id="AidPredictabilityDataField" value="dataField" />
+				<input type="hidden" id="AidPredictabilityTitleLegendTrn" value="<digi:trn>Aid Predictability</digi:trn>" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'AidPredictability')">
 				</div>
 			</div>
@@ -1572,12 +1584,14 @@ function initializeGlobalVariables(){
 					<option value="16">16</option>
 				</select>
 				&nbsp;<input type="checkbox" id="AidTypeBold"><label for="AidTypeBold"><digi:trn>Bold</digi:trn></label><br/>
-				<input type="checkbox" id="AidTypeShowLegend" checked="checked"><label for="AidTypeShowLegend"><digi:trn>Show legend</digi:trn></label>
-				&nbsp;<input type="checkbox" id="AidTypeDivide"><label for="AidTypeDivide"><digi:trn>Divide by thousands</digi:trn></label>
-				&nbsp;<input type="checkbox" id="AidTypeShowDataLabel"><label for="AidTypeShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-				&nbsp;<input type="checkbox" id="AidTypeRotateDataLabel"><label for="AidTypeRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				<input type="checkbox" id="AidTypeShowLegend" checked="checked"><label id="AidTypeShowLegendLabel" for="AidTypeShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="AidTypeDivide"><label id="AidTypeDivideLabel" for="AidTypeDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="AidTypeShowDataLabel"><label id="AidTypeShowDataLabelLabel" for="AidTypeShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="AidTypeRotateDataLabel"><label id="AidTypeRotateDataLabelLabel" for="AidTypeRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				&nbsp;<input type="checkbox" id="AidTypeIgnore" style="display: none;" checked="checked"><label id="AidTypeIgnoreLabel" style="display: none;" for="AidTypeIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 				<input type="hidden" id="AidTypeDataAction" value="getAidTypeGraphData" />
-				<input type="hidden" id="AidTypeDataField" value="aidtype" />
+				<input type="hidden" id="AidTypeDataField" value="dataField" />
+				<input type="hidden" id="AidTypeTitleLegendTrn" value="<digi:trn>Aid Type</digi:trn>" />
 				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'AidType')">
 				</div>
 			</div>
@@ -1621,35 +1635,37 @@ function initializeGlobalVariables(){
 		</c:if>
 		<c:if test="${showFinancingInstrumentChart eq 1 }">
 		<fieldset class="chartFieldset">
-			<legend><span id="FinancingInstrumentTitleLegend" class=legend_label></span></legend>
+			<legend><span id="AidModalityTitleLegend" class=legend_label></span></legend>
 			<div style="float:left;">
-				<a onclick="toggleHeader(this, 'FinancingInstrumentHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
-				<div id="FinancingInstrumentHeader" class="chart_header" style="display:none;">
-				<digi:trn>Title</digi:trn> <input type="text" id="FinancingInstrumentTitle" value="" size="50">
-				<input type="hidden" id="FinancingInstrumentShowFontFamily" value="Verdana"/>
+				<a onclick="toggleHeader(this, 'AidModalityHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
+				<div id="AidModalityHeader" class="chart_header" style="display:none;">
+				<digi:trn>Title</digi:trn> <input type="text" id="AidModalityTitle" value="" size="50">
+				<input type="hidden" id="AidModalityShowFontFamily" value="Verdana"/>
 				&nbsp;<digi:trn>Size</digi:trn>
-				<select id="FinancingInstrumentFontSize">
+				<select id="AidModalityFontSize">
 					<option value="12">12</option>
 					<option value="13">13</option>
 					<option value="14">14</option>
 					<option value="15">15</option>
 					<option value="16">16</option>
 				</select>
-				&nbsp;<input type="checkbox" id="FinancingInstrumentBold"><label for="FinancingInstrumentBold"><digi:trn>Bold</digi:trn></label><br/>
-				<input type="checkbox" id="FinancingInstrumentShowLegend" checked="checked"><label for="FinancingInstrumentShowLegend"><digi:trn>Show legend</digi:trn></label>
-				&nbsp;<input type="checkbox" id="FinancingInstrumentDivide"><label for="FinancingInstrumentDivide"><digi:trn>Divide by thousands</digi:trn></label>
-				&nbsp;<input type="checkbox" id="FinancingInstrumentShowDataLabel"><label for="FinancingInstrumentShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-				&nbsp;<input type="checkbox" id="FinancingInstrumentRotateDataLabel"><label for="FinancingInstrumentRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
-				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'FinancingInstrument')">
-				<input type="hidden" id="FinancingInstrumentDataAction" value="getAidTypeGraphData" />
-				<input type="hidden" id="FinancingInstrumentDataField" value="aidtype" />
+				&nbsp;<input type="checkbox" id="AidModalityBold"><label for="AidModalityBold"><digi:trn>Bold</digi:trn></label><br/>
+				<input type="checkbox" id="AidModalityShowLegend" checked="checked"><label id="AidModalityShowLegendLabel" for="AidModalityShowLegend"><digi:trn>Show legend</digi:trn></label>
+				&nbsp;<input type="checkbox" id="AidModalityDivide"><label id="AidModalityDivideLabel" for="AidModalityDivide"><digi:trn>Divide by thousands</digi:trn></label>
+				&nbsp;<input type="checkbox" id="AidModalityShowDataLabel"><label id="AidModalityShowDataLabelLabel" for="AidModalityShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+				&nbsp;<input type="checkbox" id="AidModalityRotateDataLabel"><label id="AidModalityRotateDataLabelLabel" for="AidModalityRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+				&nbsp;<input type="checkbox" id="AidModalityIgnore" style="display: none;" checked="checked"><label id="AidModalityIgnoreLabel" style="display: none;" for="AidModalityIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
+				<input type="hidden" id="AidModalityTitleLegendTrn" value="<digi:trn>Aid Modality</digi:trn>" />
+				<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'AidModality')">
+				<input type="hidden" id="AidModalityDataAction" value="getAidModalityGraphData" />
+				<input type="hidden" id="AidModalityDataField" value="dataField" />
 				</div>
 			</div>
-			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'FinancingInstrument', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'FinancingInstrument', true)" title="<digi:trn>Donut Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'FinancingInstrument', true)" title="<digi:trn>Line chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'FinancingInstrument', true)" title="<digi:trn>Data View</digi:trn>"/></div>
+			<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar', 'AidModality', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'AidModality', true)" title="<digi:trn>Donut Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'AidModality', true)" title="<digi:trn>Line chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'AidModality', true)" title="<digi:trn>Data View</digi:trn>"/></div>
 			<br />
 			<br />
 			<div class="flashcontent" name="flashContent">
-				<div id="FinancingInstrument">
+				<div id="AidModality">
 					<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 						<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 					</a>
@@ -1694,12 +1710,14 @@ function initializeGlobalVariables(){
 						<option value="16">16</option>
 					</select>
 					&nbsp;<input type="checkbox" id="DonorProfileBold"><label for="DonorProfileBold"><digi:trn>Bold</digi:trn></label><br/>
-					<input type="checkbox" id="DonorProfileShowLegend" checked="checked"><label for="DonorProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
-					&nbsp;<input type="checkbox" id="DonorProfileDivide"><label for="DonorProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
-					&nbsp;<input type="checkbox" id="DonorProfileShowDataLabel"><label for="DonorProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-					&nbsp;<input type="checkbox" id="DonorProfileRotateDataLabel"><label for="DonorProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+					<input type="checkbox" id="DonorProfileShowLegend" checked="checked"><label id="DonorProfileShowLegendLabel" for="DonorProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+					&nbsp;<input type="checkbox" id="DonorProfileDivide"><label id="DonorProfileDivideLabel" for="DonorProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+					&nbsp;<input type="checkbox" id="DonorProfileShowDataLabel"><label id="DonorProfileShowDataLabelLabel" for="DonorProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+					&nbsp;<input type="checkbox" id="DonorProfileRotateDataLabel"><label id="DonorProfileRotateDataLabelLabel" for="DonorProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+					&nbsp;<input type="checkbox" id="DonorProfileIgnore" style="display: none;" checked="checked"><label id="DonorProfileIgnoreLabel" style="display: none;" for="DonorProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 					<input type="hidden" id="DonorProfileDataAction" value="getDonorProfileGraphData" />
-					<input type="hidden" id="DonorProfileDataField" value="donor" />
+					<input type="hidden" id="DonorProfileDataField" value="dataField" />
+					<input type="hidden" id="DonorProfileTitleLegendTrn" value="<digi:trn>Donor Profile</digi:trn>" />
 					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'DonorProfile')">
 					</div>
 				</div>
@@ -1753,13 +1771,15 @@ function initializeGlobalVariables(){
 						<option value="16">16</option>
 					</select>
 					&nbsp;<input type="checkbox" id="SectorProfileBold"><label for="SectorProfileBold"><digi:trn>Bold</digi:trn></label><br/>
-					<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label for="SectorProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
-					&nbsp;<input type="checkbox" id="SectorProfileDivide"><label for="SectorProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
-					&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel"><label for="SectorProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-					&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label for="SectorProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+					<input type="checkbox" id="SectorProfileShowLegend" checked="checked"><label id="SectorProfileShowLegendLabel" for="SectorProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+					&nbsp;<input type="checkbox" id="SectorProfileDivide"><label id="SectorProfileDivideLabel" for="SectorProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+					&nbsp;<input type="checkbox" id="SectorProfileShowDataLabel"><label id="SectorProfileShowDataLabelLabel" for="SectorProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+					&nbsp;<input type="checkbox" id="SectorProfileRotateDataLabel"><label id="SectorProfileRotateDataLabelLabel" for="SectorProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+					&nbsp;<input type="checkbox" id="SectorProfileIgnore" style="display: none;" checked="checked"><label id="SectorProfileIgnoreLabel" style="display: none;" for="SectorProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 					<input type="hidden" id="SectorProfileDataAction" value="getSectorProfileGraphData" />
-					<input type="hidden" id="SectorProfileDataField" value="sector" />
+					<input type="hidden" id="SectorProfileDataField" value="dataField" />
 					<input type="hidden" id="SectorProfileItemId" value="${visualizationform.filter.sectorId}" />
+					<input type="hidden" id="SectorProfileTitleLegendTrn" value="<digi:trn>Sector Profile</digi:trn>" />
 					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'SectorProfile')">
 					</div>
 				</div>
@@ -1813,13 +1833,15 @@ function initializeGlobalVariables(){
 						<option value="16">16</option>
 					</select>
 					&nbsp;<input type="checkbox" id="RegionProfileBold"><label for="RegionProfileBold"><digi:trn>Bold</digi:trn></label><br/>
-					<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label for="RegionProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
-					&nbsp;<input type="checkbox" id="RegionProfileDivide"><label for="RegionProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
-					&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel"><label for="RegionProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-					&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label for="RegionProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+					<input type="checkbox" id="RegionProfileShowLegend" checked="checked"><label id="RegionProfileShowLegendLabel" for="RegionProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+					&nbsp;<input type="checkbox" id="RegionProfileDivide"><label id="RegionProfileDivideLabel" for="RegionProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+					&nbsp;<input type="checkbox" id="RegionProfileShowDataLabel"><label id="RegionProfileShowDataLabelLabel" for="RegionProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+					&nbsp;<input type="checkbox" id="RegionProfileRotateDataLabel"><label id="RegionProfileRotateDataLabelLabel" for="RegionProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+					&nbsp;<input type="checkbox" id="RegionProfileIgnore" style="display: none;" checked="checked"><label id="RegionProfileIgnoreLabel" style="display: none;" for="RegionProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
 					<input type="hidden" id="RegionProfileDataAction" value="getRegionProfileGraphData" />
-					<input type="hidden" id="RegionProfileDataField" value="region" />
+					<input type="hidden" id="RegionProfileDataField" value="dataField" />
 					<input type="hidden" id="RegionProfileItemId" value="${visualizationform.filter.regionId}" />
+					<input type="hidden" id="RegionProfileTitleLegendTrn" value="<digi:trn>Region Profile</digi:trn>" />
 					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'RegionProfile')">
 					</div>
 				</div>

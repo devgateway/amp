@@ -433,6 +433,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 							                              <input name="selectedOrgName" type='text' id="${nameId}" value="${pledgeForm.selectedOrgName}" style="text-align:left; width:400px" onKeyDown="return false" class="inp-text"/>
 							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton></td>
 											</tr>
+											
 											<field:display name="Who Authorized Pledge" feature="Pledge Donor Information">
 												<tr bgcolor="#ffffff">											
 													<td align="left" valign="middle">
@@ -1434,7 +1435,9 @@ function validateData(){
 				alert ("${insertAmount}")
 				return false;
 			}
-			if (isNaN(document.getElementsByName("fund_"+i+"_4")[0].value)){
+			var tmp = replaceAll(document.getElementsByName("fund_"+i+"_4")[0].value, " ", "");
+			alert ("temp: "+tmp);
+			if (isNaN(tmp)){
 				alert ("${insertNumeric}")
 				return false;
 			}
@@ -1489,6 +1492,13 @@ function validateData(){
 	
 	return true;
 }
+
+function replaceAll(str, find, replace){
+	  while (str.toString().indexOf(find) != -1)
+	      str = str.toString().replace(find,replace);
+	  return str;
+	}
+
 
 </script>
 

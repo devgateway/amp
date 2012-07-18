@@ -110,7 +110,7 @@ function exportToExcel() {
 							<div class="gis_cont">
 									
 									<a href=#
-										onclick="expandCollapse(${record.orgId});return false;" style="display:block; float:left;"><b>${record.organizationName}</b></a><span
+										onclick="expandCollapse(${record.orgId});return false;" style="display:block; float:left;"><b><c:out value="${record.organizationName}"/></b></a><span
 										style="margin-top: 3px; margin-right: 3px; float: right; cursor:pointer;">
 										<img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif"
 										border="0" id="img_exp_${record.orgId}"
@@ -128,21 +128,21 @@ function exportToExcel() {
 											test="${helper.allTypeProperty||helper.ngoOnlyProperty==record.ngo}">
 											<c:choose>
 													<c:when test="${empty helper.subHeaders}">
-														<digi:trn>${helper.columnName}</digi:trn>:
+														<digi:trn><c:out value="${helper.columnName}"/></digi:trn>:
 														<c:forEach var="value" items="${helper.values}">
-																<c:forEach var="val" items="${value}"><b>${val}</b><br/></c:forEach>
+																<c:forEach var="val" items="${value}"><b><c:out value="${val}"/></b><br/></c:forEach>
 															</c:forEach>
 													</c:when>
 													<c:otherwise>
 													<hr />
-													<h2>${helper.columnName}</h2>
+													<h2><c:out value="${helper.columnName}"/></h2>
 													<table width="960" cellspacing="0" cellpadding="0"
 														class="inside">
 														<tbody>
 															<tr>
 																<c:forEach var="subHeader" items="${helper.subHeaders}">
 																	<td nowrap="nowrap" background="images/ins_bg.gif"
-																		class="inside" align=center><b class="ins_title">${subHeader}</b></td>
+																		class="inside" align=center><b class="ins_title"><c:out value="${subHeader}"/></b></td>
 																</c:forEach>
 															</tr>
 															<c:set var="elSize">
@@ -153,7 +153,7 @@ function exportToExcel() {
 																<c:if test="${(status.index+1)%elSize==1}">
 																	<tr>
 																</c:if>
-																<td bgcolor="#FFFFFF" class="inside" align=center><c:forEach var="val" items="${value}">${val}<br/></c:forEach></td>
+																<td bgcolor="#FFFFFF" class="inside" align=center><c:forEach var="val" items="${value}"><c:out value="${val}"/><br/></c:forEach></td>
 																<c:if
 																	test="${(status.index+1)%elSize==0}">
 																	</tr>

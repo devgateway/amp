@@ -16,21 +16,9 @@ function expandCollapse(id){
 	$("#img_col_"+id).toggle();
 }
 function exportToExcel() {
-	var href="/aim/organizationReportWizard.do?action=generateExcelFile";
-	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
-		var popupName = "popup"+new Date().getTime();	
-		var popupWindow =  window.open("", popupName, "height=500,width=780,menubar=no,scrollbars=yes,resizable");
-		var referLink = document.createElement('a');
-		referLink.href = href;
-		referLink.target = popupName;
-		document.body.appendChild(referLink);
-		referLink.click();
-		
-	}
-	else{
-		openURLinResizableWindow(href, 780, 500);
-	}
-	
+	document.aimOrgProfileReport.action.value = "generateExcelFile";
+	document.aimOrgProfileReport.submit();
+	document.aimOrgProfileReport.action.value = "makeReport";
 }
 </script>
 

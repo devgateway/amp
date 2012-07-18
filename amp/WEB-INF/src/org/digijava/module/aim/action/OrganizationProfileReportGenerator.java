@@ -127,7 +127,7 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 		Long siteId = site.getId();
 		String locale = navigationLanguage.getCode();
 		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-disposition", "inline; filename=Export.xls");
+		response.setHeader("Content-disposition", "attachment; filename=Export.xls");
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet = wb.createSheet("export");
 		// title cells

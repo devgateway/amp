@@ -18,6 +18,7 @@
 <bean:define toScope="request" id="showVersionsRights" value="false" />
 <bean:define toScope="request" id="deleteRights" value="false" />
 <bean:define toScope="request" id="crRights" value="true" />
+<bean:define toScope="request" id="showLineBreaks" value="true" />
 
 <jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
 </body>

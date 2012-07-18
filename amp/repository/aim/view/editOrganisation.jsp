@@ -2107,6 +2107,7 @@ border-right: 1px solid rgb(208, 208, 208);
 							<bean:define toScope="request" id="deleteRights" value="false" />
 							<bean:define toScope="request" id="crRights" value="true" />
 							<bean:define toScope="request" id="checkBoxToHide" value="false" />
+							<bean:define toScope="request" id="showLineBreaks" value="true" />
 							<jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
 						</td>
 					</tr>

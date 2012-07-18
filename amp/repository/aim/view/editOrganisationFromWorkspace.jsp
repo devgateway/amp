@@ -1051,7 +1051,7 @@ initContactScript();
 														<table width="95%" cellspacing="0" cellpadding="0"
 															border="0">
 															<tr>
-																<td bgcolor=#f4f4f2 align=center><bean:define
+																<td bgcolor=#f4f4f2 align=left><bean:define
 																		toScope="request" id="showRemoveButton" value="true" />
 																	<bean:define toScope="request" id="documentsType"
 																		value="<%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%>" />
@@ -1064,25 +1064,24 @@ initContactScript();
 																		id="deleteRights" value="false" /> <bean:define
 																		toScope="request" id="crRights" value="true" /> <bean:define
 																		toScope="request" id="checkBoxToHide" value="false" />
+																		<bean:define toScope="request"
+																		id="showLineBreaks" value="false" />
 																	<jsp:include
 																		page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp" />
-																</td>
+																		<c:set var="showTheFollowingDocuments" value="PUBLIC" />
+																	<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
+																	<html:button styleClass="buttonx_sm"
+																		property="submitButton"
+																		onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
+																		<digi:trn>Add Documents From Repository</digi:trn>
+																	</html:button></td>
 															</tr>
 														</table>
 													</td>
 													<td></td>
 												</tr>
 											</module:display>
-											<tr>
-												<td colspan="2" align="center"><c:set
-														var="showTheFollowingDocuments" value="PUBLIC" /> <c:set
-														var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
-													<html:button styleClass="buttonx_sm"
-														property="submitButton"
-														onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
-														<digi:trn>Add Documents From Repository</digi:trn>
-													</html:button> <br /> <br /></td>
-											</tr>
+											
 										</c:if>
 
 

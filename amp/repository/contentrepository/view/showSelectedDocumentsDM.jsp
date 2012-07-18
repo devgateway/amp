@@ -46,14 +46,15 @@
 		<field:display name="Remove Documents Button" feature="Related Documents">
 		<logic:notEmpty name="showRemoveButton" >
 			<logic:equal name="showRemoveButton" value="true">
-		&nbsp;&nbsp;&nbsp;&nbsp;
+		<c:if test="${showLineBreaks}">&nbsp;&nbsp;&nbsp;&nbsp;</c:if>
 			<html:button  styleClass="buttonx_sm" property="submitButton" onclick="removeSelectedDocuments(${removeFrom})">
 				<digi:trn key="btn:remove">Remove</digi:trn>
 			</html:button>
 			</logic:equal>
 		</logic:notEmpty>
 		</field:display>
-		<br /> <br />
+		<c:if test="${showLineBreaks}"><br /> <br /></c:if>
+		
 		
 			<script type="text/javascript">
 				var rights			= null;

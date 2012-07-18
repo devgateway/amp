@@ -132,6 +132,7 @@ function exportToExcel() {
 														<c:forEach var="value" items="${helper.values}">
 																<c:forEach var="val" items="${value}"><b><c:out value="${val}"/></b><br/></c:forEach>
 															</c:forEach>
+															<c:if test="${empty helper.values}"><br/></c:if>
 													</c:when>
 													<c:otherwise>
 													<hr />

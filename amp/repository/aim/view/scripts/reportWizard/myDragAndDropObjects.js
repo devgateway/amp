@@ -152,7 +152,9 @@
 					}
 				}
 			}
-			repManager.checkSteps();
+			if (typeof repManager != 'undefined') {
+				repManager.checkSteps();
+			}
 			return false;
 		}
 		
@@ -326,7 +328,9 @@
 					}
 				}
 				generateHierarchies();
-				repManager.checkSteps();
+				if (typeof repManager != 'undefined') {
+					repManager.checkSteps();
+				}
 				return false;
 			}
 			ColumnsDragAndDropObject.selectObjsByDbId	= function (srcId, destId, arrayOfIds) {
@@ -348,7 +352,9 @@
 						}
 					}
 				}
-				repManager.checkSteps();
+				if (typeof repManager != 'undefined') {
+					repManager.checkSteps();
+				}
 				return false;
 			}
 			ColumnsDragAndDropObject.deselectObjs		= function (srcId) {
@@ -362,7 +368,9 @@
 					}
 				}
 				generateHierarchies();
-				repManager.checkSteps();
+				if (typeof repManager != 'undefined') {
+					repManager.checkSteps();
+				}
 				return false;
 			}
 			

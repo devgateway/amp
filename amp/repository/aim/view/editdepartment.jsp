@@ -45,7 +45,7 @@ function closePopup() {
         <table bgcolor=#aaaaaa cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding>
           <tr bgcolor="#aaaaaa">
             <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-              <digi:trn>Deparments Editor</digi:trn>
+              <digi:trn>Departments Editor</digi:trn>
             </td></tr>
             <tr>
               <td vAlign="center" width="100%" align ="center" height="20">

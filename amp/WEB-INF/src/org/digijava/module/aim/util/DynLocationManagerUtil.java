@@ -1076,23 +1076,28 @@ public class DynLocationManagerUtil {
 								if (option.equals(Option.OVERWRITE)) {
 									if(databaseId!=null&&databaseId!=0){
 										location=getLocationByIdRequestSession(databaseId);
-										if(location==null) break;
 									}
 									else{
 										break;
 									}
 								}
 							}
-							location.setName(name);
-							location.setGsLat(lalitude);
-							location.setGsLong(longitude);
-							location.setGeoCode(geoID);
-							location.setIso(iso);
-							location.setIso3(iso3);
-							location.setParentCategoryValue(implLoc);
-							location.setParentLocation(parentLoc);
-							boolean edit=(location.getId()==null)?false:true;
-							LocationUtil.saveLocation(location, edit);
+							if(location!=null){
+								if(location.getParentCategoryValue()!=null&&!location.getParentCategoryValue().equals(implLoc)){
+									break;
+								}
+								location.setName(name);
+								location.setGsLat(lalitude);
+								location.setGsLong(longitude);
+								location.setGeoCode(geoID);
+								location.setIso(iso);
+								location.setIso3(iso3);
+								location.setParentCategoryValue(implLoc);
+								location.setParentLocation(parentLoc);
+								boolean edit=(location.getId()==null)?false:true;
+								LocationUtil.saveLocation(location, edit);
+							}
+							
 						} else {
 							parentLoc=getLocationByName(name, implLoc,
 									parentLoc);

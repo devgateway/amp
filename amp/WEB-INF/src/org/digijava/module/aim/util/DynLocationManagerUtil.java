@@ -1076,6 +1076,7 @@ public class DynLocationManagerUtil {
 								if (option.equals(Option.OVERWRITE)) {
 									if(databaseId!=null&&databaseId!=0){
 										location=getLocationByIdRequestSession(databaseId);
+										if(location==null) break;
 									}
 									else{
 										break;

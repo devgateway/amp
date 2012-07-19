@@ -13,6 +13,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ARUtil;
@@ -162,5 +163,33 @@ public abstract class ARDimension {
 	return true;
     }
 
-    
+    public static boolean areItemsLinked(Long parentId, Long childId, Class dimensionClass) {
+    	ARDimension d=DIMENSIONS.get(dimensionClass);
+    	if(d==null) {
+    	    Constructor dimensionCons = ARUtil.getConstrByParamNo(dimensionClass,0);
+    	    try {
+    		 d = (ARDimension) dimensionCons.newInstance();
+    		DIMENSIONS.put(dimensionClass, d);
+    	    }
+    	    catch (Exception e) {
+    	    	e.printStackTrace();
+			}
+    	}
+    	return d.areItemsLinked(parentId, childId);
+    		
+    }
+    public boolean areItemsLinked(Long parentId, Long childId) {
+    	Set<Entry<Class, HashMap<Long,Long>>> entrySet	=  this.links.entrySet();
+    	if ( entrySet.size() == 1 ) // All the ones with percentages have just one set
+    	{
+    		HashMap<Long, Long> map	= entrySet.iterator().next().getValue();
+    		Long tempId				= childId;
+    		while ( tempId != null) {
+				if ( tempId.equals(parentId) )
+					return true;
+				tempId		= map.get(tempId);
+			}
+    	}
+    	return false;
+    }
 }

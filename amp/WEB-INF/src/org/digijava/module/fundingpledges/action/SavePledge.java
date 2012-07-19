@@ -43,7 +43,7 @@ public class SavePledge extends Action {
     		pledge.setId(plForm.getPledgeId());
     		//pledge.setTitle(plForm.getPledgeTitle());
     		pledge.setTitle(CategoryManagerUtil.getAmpCategoryValueFromDb(plForm.getPledgeTitleId()));
-    		pledge.setOrganization(PledgesEntityHelper.getOrganizationById(Long.parseLong(plForm.getSelectedOrgId())));
+    		pledge.setOrganizationGroup(PledgesEntityHelper.getOrgGroupById(Long.parseLong(plForm.getSelectedOrgGrpId())));
     		pledge.setAdditionalInformation(plForm.getAdditionalInformation());
     		pledge.setWhoAuthorizedPledge(plForm.getWhoAuthorizedPledge());
     		pledge.setFurtherApprovalNedded(plForm.getFurtherApprovalNedded());

@@ -37,6 +37,7 @@
 		<property name="contactAlternativeEmail_1" column="contactAlternativeEmail_1" type="java.lang.String"/>
 		
 		<many-to-one name="organization" column="amp_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" lazy="false"/>
+		<many-to-one name="organizationGroup" column="amp_org_grp_id" class="org.digijava.module.aim.dbentity.AmpOrgGroup" cascade="none" lazy="false"/>
 		<many-to-one name="contactOrganization" column="contactOrganization" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
 		<many-to-one name="contactOrganization_1" column="contactOrganization_1" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
 		 <!-- 

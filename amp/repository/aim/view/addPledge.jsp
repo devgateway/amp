@@ -420,18 +420,14 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 													<FONT color=red><b>*</b></FONT>
 													
 													<b>
-													<digi:trn key="donorCountryInstitution">Donor (Country/Institution)</digi:trn>
+													<digi:trn>Organization Group</digi:trn>
 													</b>																								</td>
 											</tr>
 											<tr>
-											<td><!--														<html:hidden property="selectedOrgId" />-->
-<!--														<html:text property="selectedOrgName" readonly="true"/>-->
-<!--														<aim:addOrganizationButton refreshParentDocument="true"  form="${pledgeForm}" htmlvalueHolder="selectedOrgId" htmlNameHolder="selectedOrgName" useClient="true" styleClass="dr-menu">...</aim:addOrganizationButton>-->
-															<c:set var="valueId"> contrDonorId </c:set>
-							                              <c:set var="nameId"> nameContrDonorId </c:set>
-							                              <input   name='selectedOrgId' type="hidden" id="${valueId}" style="text-align:left" value='${pledgeForm.selectedOrgId}' size="4"/>
-							                              <input name="selectedOrgName" type='text' id="${nameId}" value="${pledgeForm.selectedOrgName}" style="text-align:left; width:400px" onKeyDown="return false" class="inp-text"/>
-							                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" >...</aim:addOrganizationButton></td>
+												<td><html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id">
+													<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
+													<html:optionsCollection property="orgGroups" value="ampOrgGrpId" label="orgGrpName" />
+												</html:select></td>
 											</tr>
 											
 											<field:display name="Who Authorized Pledge" feature="Pledge Donor Information">
@@ -1329,13 +1325,13 @@ function validateData(){
 		alert ("${pleaseInsertTitle}")
 		return false;
 	}
-	<c:set var="pleaseSelectOrg">
-	  <digi:trn key="aim:pleaseSelectOrg">
-	 	 Please, select organisation using organisation selector.
+	<c:set var="pleaseSelectOrgGrp">
+	  <digi:trn>
+	 	 Please, select one organisation group.
 	  </digi:trn>
 	</c:set>
-	if (document.getElementById("contrDonorId")==null || document.getElementById("contrDonorId").value.length==0){
-		alert ("${pleaseSelectOrg}")
+	if (document.getElementById("org_grp_dropdown_id")==null || document.getElementById("org_grp_dropdown_id").value==-1){
+		alert ("${pleaseSelectOrgGrp}")
 		return false;
 	}
 	<c:set var="insertPercentage">

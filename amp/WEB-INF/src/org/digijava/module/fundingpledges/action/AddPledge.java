@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -24,6 +26,7 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -76,6 +79,9 @@ public class AddPledge extends Action {
             	plForm.getYears().add(String.valueOf(i));
             }
     		
+            List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
+            plForm.setOrgGroups(orgGroups);
+            
     		Collection currencies = CurrencyUtil.getActiveAmpCurrencyByName();
     		ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
 	    	plForm.setValidcurrencies(validcurrencies);
@@ -100,8 +106,9 @@ public class AddPledge extends Action {
 				if (fp.getTitle() != null) {
 					plForm.setPledgeTitleId(fp.getTitle().getId());
 				}
+				plForm.setSelectedOrgId(fp.getOrganizationGroup().getAmpOrgGrpId().toString());
 				AmpOrganisation pledgeOrg =	PledgesEntityHelper.getOrganizationById(fp.getOrganization().getAmpOrgId());
-				plForm.setSelectedOrgId(pledgeOrg.getAmpOrgId().toString());
+				plForm.setSelectedOrgGrpId(pledgeOrg.getOrgGrpId().getAmpOrgGrpId().toString());
 	        	plForm.setSelectedOrgName(pledgeOrg.getName());
 	        	plForm.setAdditionalInformation(fp.getAdditionalInformation());
 	        	plForm.setWhoAuthorizedPledge(fp.getWhoAuthorizedPledge());
@@ -201,6 +208,7 @@ public class AddPledge extends Action {
 		plForm.setPledgeTitleId(null);
 		plForm.setFundingPledges(null);
 		plForm.setSelectedOrgId(null);
+		plForm.setSelectedOrgGrpId(null);
     	plForm.setSelectedOrgName(null);
     	plForm.setAdditionalInformation(null);
     	plForm.setWhoAuthorizedPledge(null);

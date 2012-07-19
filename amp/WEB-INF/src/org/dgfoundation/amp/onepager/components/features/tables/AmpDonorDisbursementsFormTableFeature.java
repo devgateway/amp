@@ -154,8 +154,8 @@ public class AmpDonorDisbursementsFormTableFeature extends
 				IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
 					protected java.util.List<FundingPledges> load() {
 						return PledgesEntityHelper
-								.getPledgesByDonor(model.getObject()
-								.getAmpDonorOrgId().getAmpOrgId()); 
+								.getPledgesByDonorGroup(model.getObject()
+								.getAmpDonorOrgId().getOrgGrpId().getAmpOrgGrpId());
 					};
 				};
 				

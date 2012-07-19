@@ -3,6 +3,8 @@ package org.digijava.module.fundingpledges.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -24,6 +26,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable{
 	private String furtherApprovalNedded;
 	
 	private AmpOrganisation organization;
+	private AmpOrgGroup organizationGroup;
 	private Set<FundingPledgesSector> sectorlist;
 	private Set<FundingPledgesLocation> locationlist;
 	private Set<FundingPledgesDetails> fundingPledgesDetails;
@@ -173,6 +176,12 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable{
 	}
 	public void setOrganization(AmpOrganisation organization) {
 		this.organization = organization;
+	}
+	public AmpOrgGroup getOrganizationGroup() {
+		return organizationGroup;
+	}
+	public void setOrganizationGroup(AmpOrgGroup organizationGroup) {
+		this.organizationGroup = organizationGroup;
 	}
 	public Set<FundingPledgesSector> getSectorlist() {
 		return sectorlist;

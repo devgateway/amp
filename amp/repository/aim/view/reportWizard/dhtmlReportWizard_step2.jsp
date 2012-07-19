@@ -13,6 +13,8 @@
    
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/reportWizard/searchColumn.js"/>"></script>
+
 						<div id="columns_step_div" class="main_side_cont yui-hidden" style="${topBottomPadding}">
 							<c:set var="stepNum" value="1"  scope="request" />
 							<c:if test="${!myForm.onePager}">
@@ -20,6 +22,27 @@
 							</c:if>
 							<br />
 							<table align="center" cellpadding="0" cellspacing="0" style="width: 735px;" border=0>
+							
+							<tr>
+									<td width="55%" align="left">
+									<div id="searchBox" style="  font-size:12px;">
+<!-- 										<form name="searchBoxForm" onsubmit="searchFunction();return false;"> -->
+
+<digi:trn key="fm:search:searchTitle"><b>Search</b></digi:trn> 
+<input type="Text" id="searchCriteria"/> 
+<input type="button" class="buttonx" src="#" value="<digi:trn key="fm:search:search">Search</digi:trn>" onclick="searchFunction(); return false;" />
+<input type="button" class="buttonx" onclick="resetSearch()" value="<digi:trn key="fm:search:reset">Reset</digi:trn>" />
+
+<input type="button" id="prevSearchButton" class="buttonx" onclick="prevResult()" value="<<" disabled="true" style="display:none;"/>
+<input type="button" id="nextSearchButton" class="buttonx" onclick="nextResult()" value=">>" disabled="true"  style="display:none;"/>
+<!-- </form> -->
+<span id="spanSearchMessage" style="color:red;font-weight:bold;"></span>
+</div>
+
+									</td>
+							</tr>
+							
+							
 								<tr>
 									<td width="48%" align="center">
 										<fieldset class="main_side_cont">

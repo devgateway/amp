@@ -658,7 +658,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public void setOrganizationContacts(Set<AmpOrganisationContact> organizationContacts) {
 		this.organizationContacts = organizationContacts;
 	}
-	@OrganizationReportColumn(columnName="Contact Information",propertyType=PropertyType.NGO,returnedClass=AmpOrganisationContact.class)
+	@OrganizationReportColumn(columnName="Contact Information",propertyType=PropertyType.BOTH,returnedClass=AmpOrganisationContact.class)
 	public Set<AmpOrganisationContact> getOrganizationContacts() {
 		return organizationContacts;
 	}

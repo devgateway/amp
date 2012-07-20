@@ -583,6 +583,7 @@
 		type="org.digijava.module.aim.action.ImportIntoDynLocationManagerXSL"
 		scope="request" path="/aim/importIntoDynLocationManagerXSL">
 		<forward name="forward" path="/showLayout.do?layout=importRegionLayout" />
+		<forward name="success" path="/aim/dynLocationManager.do"  redirect="true"/>
 	</action>
      <action name="aimNewAddLocationForm" path="/aim/addNewLocation" scope="session" type="org.digijava.module.aim.action.AddNewLocation" validate="false">
       <forward name="addEdit" path="/showLayout.do?layout=addNewLocation" />

@@ -248,28 +248,28 @@ function initializeGlobalVariables(){
 												<table style="width: 95%; margin-top: 15px;" align="center"
 													class="inside">
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_0">
+														<td class="side_opt_sel inside" id="general_selector_0">
 															<div class="selector_type_cont" onclick="changeTab(0)">
 																<digi:trn>General</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_1" >
+														<td class="side_opt_sel inside" id="general_selector_1" >
 															<div class="selector_type_cont" onclick="changeTab(1)">
 																<digi:trn>Organization Groups With Organizations</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_2">
+														<td class="side_opt_sel inside" id="general_selector_2">
 															<div class="selector_type_cont" onclick="changeTab(2)">
 																<digi:trn>Regions With Zones</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_3">
+														<td class="side_opt_sel inside" id="general_selector_3">
 															<div class="selector_type_cont" onclick="changeTab(3)">
 																<digi:trn>Sectors and Sub Sectors</digi:trn>
 															</div></td>

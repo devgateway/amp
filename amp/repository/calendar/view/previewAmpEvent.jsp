@@ -40,12 +40,19 @@ function deleteEvent(){
 
 function openPrinter(){
 	var id = document.getElementById('id').value;
-
-	//<digi:context name="rev" property="/calendar/showCalendarEvent.do~method=print~resetForm=true" />
-		//openURLinWindow("<%=rev%>",1024,768);
-	window.open('/calendar/showCalendarEvent.do~method=print~resetForm=true~calendarId='+id+'','mywindow','toolbar=no,location=no, width=540,height=500, directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
-		
-	}
+	var href="/calendar/showCalendarEvent.do~method=print~resetForm=true~calendarId="+id;
+	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){
+		var popupName = "popup"+new Date().getTime();
+	 	var popupWindow =  window.open(href,popupName,'toolbar=no,location=no, width=540,height=500, directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');    
+	 	var referLink = document.createElement('a');
+	 	referLink.href = href;
+	 	referLink.target = popupName;
+	 	document.body.appendChild(referLink);
+	 	referLink.click();
+	 } else {
+		 window.open(href,'mywindow','toolbar=no,location=no, width=540,height=500, directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+	 }
+}
 
 function getWeekdays(){
    var weekDays = document.getElementById('weekDays').value;

@@ -26,7 +26,7 @@ border: none;
 	<logic:equal name="report" property="publicReport" value="true"> 
 		<logic:equal name="report" property="drilldownTab" value="true">
 			<logic:equal name="firstReportFound" value="false">
-				<bean:define id="firstReportName" name="report" property="name" toScope="Page"/>
+				<bean:define id="firstReportName" name="report" property="id" toScope="Page"/>
 				<bean:define id="firstReportFound" value="true" toScope="page"/>
 			</logic:equal>
 		</logic:equal>
@@ -86,7 +86,7 @@ function toggleSettings(){
 <logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 
 			<logic:equal name="report" property="publicReport" value="true">
 				<logic:equal name="report" property="drilldownTab" value="true">
-					<li><a id='Tab-<bean:write name="report" property="name"/>' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><div><bean:write name="report" property="name"/></div></a></li>
+                        <li><a id='Tab-<bean:write name="report" property="id"/>' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><div><bean:write name="report" property="name"/></div></a></li> 
 				</logic:equal>
 			</logic:equal>
 </logic:iterate>

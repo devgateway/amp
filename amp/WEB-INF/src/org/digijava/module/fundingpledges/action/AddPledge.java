@@ -107,9 +107,6 @@ public class AddPledge extends Action {
 					plForm.setPledgeTitleId(fp.getTitle().getId());
 				}
 				plForm.setSelectedOrgId(fp.getOrganizationGroup().getAmpOrgGrpId().toString());
-				AmpOrganisation pledgeOrg =	PledgesEntityHelper.getOrganizationById(fp.getOrganization().getAmpOrgId());
-				plForm.setSelectedOrgGrpId(pledgeOrg.getOrgGrpId().getAmpOrgGrpId().toString());
-	        	plForm.setSelectedOrgName(pledgeOrg.getName());
 	        	plForm.setAdditionalInformation(fp.getAdditionalInformation());
 	        	plForm.setWhoAuthorizedPledge(fp.getWhoAuthorizedPledge());
 	        	plForm.setFurtherApprovalNedded(fp.getFurtherApprovalNedded());

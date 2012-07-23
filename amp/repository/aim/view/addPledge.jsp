@@ -1432,7 +1432,6 @@ function validateData(){
 				return false;
 			}
 			var tmp = replaceAll(document.getElementsByName("fund_"+i+"_4")[0].value, " ", "");
-			alert ("temp: "+tmp);
 			if (isNaN(tmp)){
 				alert ("${insertNumeric}")
 				return false;

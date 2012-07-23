@@ -1513,6 +1513,7 @@ public class TeamUtil {
             session = PersistenceManager.getRequestDBSession();
             StringBuilder queryString = new StringBuilder("select g.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" g where");
             Query qry = null;
+            queryString.append(" (g.ampActivityLastVersion.deleted is null or g.ampActivityLastVersion.deleted=false) and ") ;
             if(teamId == null) {
             	queryString.append(" g.ampActivityLastVersion.team is null") ;
             }else{
@@ -1582,20 +1583,19 @@ public class TeamUtil {
     public static Collection<AmpActivityVersion> getManagementTeamActivities(Long teamId, String keyword) {
         Session session = null;
         Collection<AmpActivityVersion> activities=null;
-        String queryString = "";
         Query qry = null;
 
         try {
-            session = PersistenceManager.getSession();
+            
             Collection childIds = DesktopUtil.getAllChildrenIds(teamId);
             childIds.add(teamId);
             if(childIds != null && childIds.size() > 0) { 
-               
-                queryString = "select new AmpActivityVersion(a.ampActivityId,a.name, a.ampId) from " + AmpActivity.class.getName()+"  a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false)";
-                if(keyword!=null){
-                	queryString += " and lower(a.name) like lower(:name)" ;
+            	session = PersistenceManager.getRequestDBSession();
+            	StringBuilder queryString = new StringBuilder("select new AmpActivityVersion(a.ampActivityId,a.name, a.ampId) from "+ AmpActivityGroup.class.getName()+" g inner join g.ampActivityLastVersion a inner join a.team tm where tm.ampTeamId in (:params) and (a.draft is null or a.draft=false) and ( a.deleted is null or a.deleted=false )");     
+                if(keyword!=null && keyword.length()>0){
+                 	queryString.append(" and lower(a.name) like lower(:name)") ;
                 }
-                qry = session.createQuery(queryString);
+                qry = session.createQuery(queryString.toString());
                 if(keyword!=null){
                 	qry.setString("name", "%" + keyword + "%");
                 } 
@@ -1627,7 +1627,7 @@ public class TeamUtil {
 			}else{
 				queryString+="where act.team is null";
 			}
-            queryString+=" and   (act.draft is null or act.draft=false) ";
+            queryString+=" and   (act.draft is null or act.draft=false) and ( act.deleted is null or act.deleted=false )";
             if(keyword!=null){
             	queryString += " and lower(act.name) like lower(:name)" ;
             }

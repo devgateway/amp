@@ -669,7 +669,7 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             openNewWindow(600, 230);
     <digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
             var id = document.aimAddOrgForm.ampOrgId.value;
-            url = "<%= selectLoc %>?action=createGroup";
+            url = "<%= selectLoc %>?action=create";
             document.aimAddOrgForm.action = url;
             document.aimAddOrgForm.target = popupPointer.name;
             document.aimAddOrgForm.submit();
@@ -1522,39 +1522,8 @@ border-right: 1px solid rgb(208, 208, 208);
                             <img id="img_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;"  onclick="expand('staff')"/>
                             <img id="imgh_staff" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"   onclick="collapse('staff')"/>
                             <div id="div_container_staff">
-                            <table cellpadding="2" cellspacing="0" border="0" width=100%>
-                                <c:if test="${not empty aimAddOrgForm.staff}">
-                                    <tr>
-                                        <td colspan="5">
-                                            <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
-                                                <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px;">
-                                                </c:if>
-                                                <table cellspacing="0" cellpadding="0" id="staffTable">
-                                                    <c:forEach var="info" items="${aimAddOrgForm.staff}"   varStatus="staffInfoIndex">
-                                                        <tr>
-                                                            <td  style="width:40px;text-align:left;">
-                                                                <html:multibox property="selectedStaff" styleClass="staffInfo">
-                                                                    ${info.id}
-                                                                </html:multibox>
-                                                            </td>
-                                                            <td class="tdClass" style="width:125px;text-align:center;">${info.year}</td>
-                                                            <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${info.type.value}</digi:trn></td>
-                                                            <td class="tdClass" style="width:200px;text-align:center;">${info.staffNumber}</td>
-                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:editStaffInfo('${staffInfoIndex.index}')"><img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/></a></td>
-                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                </table>
-                                                <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
-                                                </div>
-                                            </c:if>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5" style="text-align:left;" class="tdBoldClass"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
-                                    </tr>
-                                    </c:if>
-                                     <tr>
+                            <table cellpadding="2" cellspacing="0" border="0" width=100% style="margin-top:25px;">
+                                      <tr>
                                     <td style="width:40px;text-align:center;font-weight:bold">&nbsp;
                                         
                                     </td>
@@ -1602,6 +1571,45 @@ border-right: 1px solid rgb(208, 208, 208);
                                 </c:set>
                                 <td style="text-align:center"><input type="button" class="buttonx_sm" style="width:80px" onclick="addStaff()" value="${staffButtonTxt}" /></td>
                                 </tr>
+                               <c:if test="${not empty aimAddOrgForm.staff}">
+                                    <tr>
+                                        <td colspan="5">
+                                            <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
+                                                <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px;">
+                                                </c:if>
+                                                <table cellspacing="0" cellpadding="0" id="staffTable" width=100%>
+												<tr class="tableOdd tableHeader" style="background-color:#C7D4DB; color:#000000; font-weight:bold; font-size:11px; text-align:center;" width=100%>
+												<td>&nbsp;</td>
+												<td><b>Year</b></td>
+												<td><b>Type of staff</b></td>
+												<td><b>Number of stuff</b></td>
+												<td>&nbsp;</td>
+												<td>&nbsp;</td>
+												</tr>
+                                                    <c:forEach var="info" items="${aimAddOrgForm.staff}"   varStatus="staffInfoIndex">
+                                                        <tr class="tableEven ">
+                                                            <td  style="width:40px;text-align:left;">
+                                                                <html:multibox property="selectedStaff" styleClass="staffInfo">
+                                                                    ${info.id}
+                                                                </html:multibox>
+                                                            </td>
+                                                            <td class="tdClass" style="width:125px;text-align:center;">${info.year}</td>
+                                                            <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${info.type.value}</digi:trn></td>
+                                                            <td class="tdClass" style="width:200px;text-align:center;">${info.staffNumber}</td>
+                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:editStaffInfo('${staffInfoIndex.index}')"><img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/></a></td>
+                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:deleteStaff('${info.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </table>
+                                                <c:if test="${fn:length(aimAddOrgForm.staff)>1}">
+                                                </div>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" style="text-align:left;" class="tdBoldClass"><input type="checkbox"  onclick="selectAll('staffInfo')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="deleteStaff()" value="<digi:trn>Delete</digi:trn>"></td>
+                                    </tr>
+                                    </c:if>
                             </table>
                             </div>
                         </fieldset>
@@ -1621,47 +1629,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                 <img id="img_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"  style="display : none;" onclick="expand('budget')"/>
                                 <img id="imgh_budget" alt="" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"  onclick="collapse('budget')"/>
                                 <div id="div_container_budget">
-                                <table cellpadding="2" cellspacing="0" border="0">
-                               
-                                <c:if test="${not empty aimAddOrgForm.orgInfos}">
-
-                                    <tr>
-                                        <td colspan="7">
-                                            <c:if test="${fn:length(aimAddOrgForm.orgInfos)>1}">
-                                                <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px; min-height:100px">
-                                                </c:if>
-                                                <table width="100%" cellspacing="0" cellpadding="0" id="orgInfosTable">
-                                                    <c:forEach var="orgInfo" items="${aimAddOrgForm.orgInfos}" varStatus="orgInfoIndex" >
-                                                        <tr>
-                                                            <td  style="width:40px;text-align:left;">
-                                                                <html:multibox property="selectedOrgInfoIds" styleClass="selectedOrgInfoIds">
-                                                                    ${orgInfo.id}
-                                                                </html:multibox>
-                                                            </td>
-                                                            <td class="tdClass" style="width:100px;text-align:center;">${orgInfo.year}</td>
-                                                            <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${orgInfo.type}</digi:trn></td>
-                                                            <td class="tdClass" style="width:150px;text-align:center;"> <ul>
-                                                                    <c:forEach var="budgetOrganization" items="${orgInfo.organizations}">
-                                                                        <li>${budgetOrganization.name}</li>
-                                                                    </c:forEach>
-                                                                </ul>
-                                                            </td>
-                                                            <td class="tdClass" style="width:150px;text-align:center;">${orgInfo.amount}</td>
-                                                            <td class="tdClass" style="width:205px;text-align:center;">${orgInfo.currency.currencyCode}</td>
-                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:editOrgInfo('${orgInfoIndex.index}')"><img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/></a></td>
-                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:deleteOrgInfo('${orgInfo.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                </table>
-                                                <c:if test="${fn:length(aimAddOrgForm.orgInfos)>1}">
-                                                </div>
-                                            </c:if>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedOrgInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="deleteOrgInfo()" value="<digi:trn>Delete</digi:trn>"></td>
-                                    </tr>
-                                </c:if>
+                                <table cellpadding="2" cellspacing="0" border="0" width=100%>   
                                      <tr>
                                     <td style="width:40px;text-align:center; "  class="tdBoldClass">&nbsp;
                                         
@@ -1745,6 +1713,54 @@ border-right: 1px solid rgb(208, 208, 208);
 
                                     <td style="text-align:center"><input type="button" class="buttonx_sm" style="width:80px" onclick="addOrgInfo()" value="${budgetInfoButtonTxt}" /></td>
                                 </tr>
+                                <c:if test="${not empty aimAddOrgForm.orgInfos}">
+                                    <tr>
+                                        <td colspan="7">
+                                            <c:if test="${fn:length(aimAddOrgForm.orgInfos)>1}">
+                                                <div style="overflow-y: scroll; overflow-x: hidden; width: 100%; height: 100px; min-height:100px">
+                                                </c:if>
+                                                <table width="100%" cellspacing="0" cellpadding="0" id="orgInfosTable">
+												<tr style="background-color:#C7D4DB; color:#000000; font-weight:bold; font-size:11px; text-align:center;" class="tableOdd ">
+												<td>&nbsp;</td>
+												<td><b>Year</b></td>
+												<td><b>Type</b></td>
+												<td><b>Organization</b></td>
+												<td><b>Amount</b></td>
+												<td><b>Currency</b></td>
+												<td>&nbsp;</td>
+												<td>&nbsp;</td>
+												</tr>
+                                                    <c:forEach var="orgInfo" items="${aimAddOrgForm.orgInfos}" varStatus="orgInfoIndex" >
+                                                        <tr class="tableEven">
+                                                            <td  style="width:40px;text-align:left;">
+                                                                <html:multibox property="selectedOrgInfoIds" styleClass="selectedOrgInfoIds">
+                                                                    ${orgInfo.id}
+                                                                </html:multibox>
+                                                            </td>
+                                                            <td class="tdClass" style="width:100px;text-align:center;">${orgInfo.year}</td>
+                                                            <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${orgInfo.type}</digi:trn></td>
+                                                            <td class="tdClass" style="width:150px;text-align:center;"> <ul>
+                                                                    <c:forEach var="budgetOrganization" items="${orgInfo.organizations}">
+                                                                        <li>${budgetOrganization.name}</li>
+                                                                    </c:forEach>
+                                                                </ul>
+                                                            </td>
+                                                            <td class="tdClass" style="width:150px;text-align:center;">${orgInfo.amount}</td>
+                                                            <td class="tdClass" style="width:205px;text-align:center;">${orgInfo.currency.currencyCode}</td>
+                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:editOrgInfo('${orgInfoIndex.index}')"><img alt="edit" src= "/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0"/></a></td>
+                                                            <td class="tdClass" style="width:35px;text-align:center;"><a href="javascript:deleteOrgInfo('${orgInfo.id}')"> <img alt="delete" src= "/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0"></a></td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </table>
+                                                <c:if test="${fn:length(aimAddOrgForm.orgInfos)>1}">
+                                                </div>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" class="tdBoldClass" style="text-align:left;"><input type="checkbox"  onclick="selectAll('selectedOrgInfoIds')"><digi:trn>Select All</digi:trn>&nbsp;&nbsp;<input type="button" class="buttonx_sm" onclick="deleteOrgInfo()" value="<digi:trn>Delete</digi:trn>"></td>
+                                    </tr>
+                                </c:if>
                             </table>
                             </div>
                         </fieldset>

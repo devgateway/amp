@@ -438,21 +438,32 @@ public class DbUtil {
         }
     }
 
+    public static void saveEditor(Editor editor) throws EditorException {
+        saveEditor(editor, false);
+    }
+
     /**
      * Save editor
      *
      * @param editor
      * @throws EditorException
      */
-    public static void saveEditor(Editor editor) throws EditorException {
+    public static void saveEditor(Editor editor, boolean newSess) throws EditorException {
 
         Session session = null;
         Transaction tx = null;
         try {
-            session = PersistenceManager.getRequestDBSession();
+            if (!newSess) {
+                session = PersistenceManager.getRequestDBSession();
+            } else {
+                session = PersistenceManager.openNewSession();
+                tx = session.beginTransaction();
+            }
 //beginTransaction();
             session.save(editor);
-            //tx.commit();
+            if (newSess) {
+                tx.commit();
+            }
         }
         catch (Exception ex) {
             logger.debug("Unable to save editor information into database",
@@ -468,6 +479,14 @@ public class DbUtil {
             }
             throw new EditorException(
                 "Unable to save editor information into database", ex);
+        } finally {
+        				if (newSess && session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch (Exception rsf) {
+                    logger.error("Release session failed :" + rsf.getMessage());
+                }
+            }
         }
     }
 
@@ -555,6 +574,38 @@ public class DbUtil {
 
         return body;
     }
+    /**
+     * Retrieves editor body text.
+     * @param siteId
+     * @param editorKey
+     * @param language
+     * @return
+     * @throws EditorException
+     */
+    public static String getEditorBodyEmptyInclude(String siteId, String editorKey, String language) throws EditorException {
+
+        Session session = null;
+        String body = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = session.createQuery(
+                "select e.body from " + Editor.class.getName() + " e " +
+                " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and e.language=:language");
+          //  q.setCacheable(true);
+            q.setString("siteId", siteId);
+            q.setString("editorKey", editorKey);
+            q.setString("language", language);
+            body=(String)q.uniqueResult();
+        }
+        catch (Exception ex) {
+            logger.debug("Unable to get editor from database", ex);
+            throw new EditorException("Unable to get editor from database", ex);
+        }
+
+        return body;
+    }
+    
 
     /**
      * Returns editor body text but strips out all HTML tags.

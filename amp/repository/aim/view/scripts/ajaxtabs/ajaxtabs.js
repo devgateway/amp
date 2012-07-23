@@ -95,8 +95,8 @@ fileref.setAttribute("href", file);
 }
 }
 if (fileref!=""){
-document.getElementsByTagName("head").item(0).appendChild(fileref)
-loadedobjects+=file+" " //Remember this object as being already added to page
+document.getElementsByTagName("head").item(0).appendChild(fileref);
+loadedobjects+=file+" "; //Remember this object as being already added to page
 }
 }
 }
@@ -105,17 +105,20 @@ loadedobjects+=file+" " //Remember this object as being already added to page
 
 //added by SRK@DGF
 function changeTabUrl(tabcontentid,tabid,url) {
-	var thetab=document.getElementById(tabid)
-	thetab.href=url
+	var thetab=document.getElementById(tabid);
+	if(thetab)
+		{
+	thetab.href=url;
 	if (thetab.getAttribute("rel")){
-		ajaxpage(thetab.getAttribute("href"), thetab.getAttribute("rel"), thetab)
-		loadobjs(thetab.getAttribute("rev"))
+		ajaxpage(thetab.getAttribute("href"), thetab.getAttribute("rel"), thetab);
+		loadobjs(thetab.getAttribute("rev"));
+	}
 	}
 }
 
 function reloadTab(tabcontentid,tabid) {
 var thetab=document.getElementById(tabid);
-//if (thetab!=null)
+if (thetab!=null)
 	if (thetab.getAttribute("rel")){
 		ajaxpage(thetab.getAttribute("href"), thetab.getAttribute("rel"), thetab)
 		loadobjs(thetab.getAttribute("rev"))

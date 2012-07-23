@@ -69,10 +69,10 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		};		
 		
 
-		 if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT).equalsIgnoreCase("TRUE"));
-		 	alertIfExpenditureBiggerDisbursment = true;
-		 if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS).equalsIgnoreCase("TRUE"));
-		    alertIfDisbursmentBiggerCommitments = true;
+		if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT).equalsIgnoreCase("TRUE"))
+			alertIfExpenditureBiggerDisbursment = true;
+		if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS).equalsIgnoreCase("TRUE"))
+			alertIfDisbursmentBiggerCommitments = true;
 
 		AbstractReadOnlyModel<List<AmpFundingDetail>> setAmountListModel = OnePagerUtil
 				.getReadOnlyListModelFromSetModel(setModel);
@@ -110,10 +110,10 @@ public class AmpDonorDisbursementsFormTableFeature extends
 				item.add(getAdjustmentTypeComponent(item.getModel()));
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 
-				 if(alertIfExpenditureBiggerDisbursment);
-				 	amountComponent.setAmountValidator(amountSumComparator1);
-				 if(alertIfDisbursmentBiggerCommitments);
-					 	amountComponent.setAmountValidator(amountSumComparator); 	
+				if(alertIfExpenditureBiggerDisbursment)
+					amountComponent.setAmountValidator(amountSumComparator1);
+				if(alertIfDisbursmentBiggerCommitments)
+					amountComponent.setAmountValidator(amountSumComparator); 	
 				item.add(amountComponent);
 
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
@@ -145,8 +145,8 @@ public class AmpDonorDisbursementsFormTableFeature extends
 				IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
 					protected java.util.List<FundingPledges> load() {
 						return PledgesEntityHelper
-								.getPledgesByDonor(model.getObject()
-								.getAmpDonorOrgId().getAmpOrgId()); 
+								.getPledgesByDonorGroup(model.getObject()
+								.getAmpDonorOrgId().getOrgGrpId().getAmpOrgGrpId());
 					};
 				};
 				

@@ -4,6 +4,9 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -80,9 +83,31 @@ public class AmpLocationFormTableFeature extends
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet());
 
-		AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel);
-	
+		AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = new AbstractReadOnlyModel<List<AmpActivityLocation>>() {
+				@Override
+				public List<AmpActivityLocation> getObject() {
+			// remove sectors with other classification
+			ArrayList<AmpActivityLocation> ret = new ArrayList<AmpActivityLocation>();
+
+			if(setModel.getObject()!=null)
+				for (AmpActivityLocation ampActivityLocation : setModel.getObject()) {
+						ret.add(ampActivityLocation);
+				}
+				
+			
+		Comparator<AmpActivityLocation> comparator = new Comparator<AmpActivityLocation>(){
+
+			@Override
+			public int compare(AmpActivityLocation o1, AmpActivityLocation o2) {
+				return o1.getLocation().getLocation().getAutoCompleteLabel().compareTo(o2.getLocation().getLocation().getAutoCompleteLabel());
+			}		
+		};
+		
+		   Collections.sort(ret, comparator);
+		     
+			return ret;
+		}
+	};
 		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
 		add(wmc);
 		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();

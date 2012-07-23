@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -40,6 +41,8 @@ public class PledgeForm extends ActionForm implements Serializable{
 
 	private FundingPledges fundingPledges;
 	private String selectedOrgId;
+	private String selectedOrgGrpId;
+	private Collection<AmpOrgGroup> orgGroups;
 	private String selectedOrgName;
 	private AmpCategoryValue pledgeTitle;
 	private Collection<AmpCurrency> validcurrencies;
@@ -275,6 +278,22 @@ public class PledgeForm extends ActionForm implements Serializable{
 	public void setSelectedOrgId(String selectedOrgId) {
 		this.selectedOrgId = selectedOrgId;
 	}
+	public String getSelectedOrgGrpId() {
+		return selectedOrgGrpId;
+	}
+
+	public void setSelectedOrgGrpId(String selectedOrgGrpId) {
+		this.selectedOrgGrpId = selectedOrgGrpId;
+	}
+
+	public Collection<AmpOrgGroup> getOrgGroups() {
+		return orgGroups;
+	}
+
+	public void setOrgGroups(Collection<AmpOrgGroup> orgGroups) {
+		this.orgGroups = orgGroups;
+	}
+
 	/**
 	 * @return the selectedOrgName
 	 */

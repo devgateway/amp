@@ -1356,8 +1356,16 @@ function createToolTip (id, containerElement) {
 
 
 function downloadFile(uuid) {
+	
 	if (checkDocumentUuid(uuid)) {
-		window.location='/contentrepository/downloadFile.do?uuid='+uuid;
+		if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
+			var referLink = document.createElement('a');
+			referLink.href='/contentrepository/downloadFile.do?uuid='+uuid;
+			document.body.appendChild(referLink);
+			referLink.click();
+		} else {
+			window.location='/contentrepository/downloadFile.do?uuid='+uuid;
+		}
 	}
 }
 

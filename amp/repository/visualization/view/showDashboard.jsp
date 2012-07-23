@@ -619,11 +619,8 @@ function initializeGlobalVariables(){
 													</html:select></td>
 													<td></td>
 													<td></td>
-													<td><b><digi:trn>Show national located values</digi:trn>:</b>
-													</td>
-													<td>
-														<html:checkbox property="filter.showNationalValues" styleId="show_national_values"/>
-													</td>
+													<td></td>
+													<td></td>
 												
 												</tr>
 										</table>
@@ -801,7 +798,6 @@ function initializeGlobalVariables(){
 <html:hidden property="filter.dashboardType" styleId="dashboardType" />
 <html:hidden property="filter.workspaceOnly" styleId="workspaceOnly"/>
 <html:hidden property="filter.showAmountsInThousands" styleId="showAmountsInThousands"/>
-<html:hidden property="filter.showNationalValues" styleId="showNationalValues"/>
 <html:hidden property="filter.showMonochrome" styleId="showMonochrome"/>
 <html:hidden property="filter.commitmentsVisible" styleId="commitmentsVisible"/>
 <html:hidden property="filter.disbursementsVisible" styleId="disbursementsVisible" />

@@ -151,12 +151,12 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     item.add(contactTitle);
                     
                     
-                    AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(contactModel,"name"),"contact first name",true);
+                    AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(contactModel,"name"),"contact first name",true,true);
                     name.getTextContainer().setRequired(true);
                     name.getTextContainer().add(new SimpleAttributeModifier("size", "50"));
                     name.setTextContainerDefaultMaxSize();
                     item.add(name);
-                    AmpTextFieldPanel<String> lastname=new AmpTextFieldPanel<String>("lastname",new PropertyModel<String>(contactModel,"lastname"),"contact lastname",true);
+                    AmpTextFieldPanel<String> lastname=new AmpTextFieldPanel<String>("lastname",new PropertyModel<String>(contactModel,"lastname"),"contact lastname",true,true);
                     lastname.getTextContainer().setRequired(true);
                     lastname.getTextContainer().add(new SimpleAttributeModifier("size", "50"));
                     lastname.setTextContainerDefaultMaxSize();

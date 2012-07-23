@@ -51,7 +51,7 @@ public class GetHelpBodyHtml extends Action {
 			GlossaryUtil.createOrUpdateGlossaryTopic(topic, request);
 		}
 		//get body for help topic
-		String body = DbUtil.getEditorBody(siteId, editorKey, language);
+		String body = DbUtil.getEditorBodyEmptyInclude(siteId, editorKey, language);
 		if (body==null){
 			body="No text. Please edit and enter text.";
 			Editor editor = new Editor();

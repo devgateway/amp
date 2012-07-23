@@ -492,12 +492,15 @@ function collapseAll() {
 	<digi:trn>Activity created on</digi:trn>:<br/>
 	<b><c:out value="${aimEditActivityForm.identification.createdDate}"/></b>
 	<hr />
-	<digi:trn>Data Team Leader</digi:trn>: <br />
-	<b>
-		<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/> 
-		<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>
-		<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
-	</b>	</div>
+	<field:display name="Data Team Leader" feature="Identification">
+		<digi:trn>Data Team Leader</digi:trn>: <br />
+		<b>
+			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.firstNames}"/> 
+			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.lastName}"/>
+			<c:out value="${aimEditActivityForm.identification.team.teamLead.user.email}"/>
+		</b>	
+	</field:display>
+	</div>
 </fieldset>	
 	</div>	</td>
 	<td width=15>&nbsp;</td>

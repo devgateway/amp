@@ -222,7 +222,7 @@ function onDelete() {
 				</tr>
 			</table>
 			</td>
-            <td style="font-size:12px;" noWrap width=250 vAlign="top">
+            <td style="font-size:12px; padding-top:37px;" noWrap width=250 vAlign="top">
 							<table align="center" cellpadding="0" cellspacing="0" width="230"
 								border="0">
 								<tr>

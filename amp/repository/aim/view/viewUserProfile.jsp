@@ -44,7 +44,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 
 <digi:errors/>
 
-
+<c:if test="${not empty aimUserDetailForm.mailingAddress}">
 					<table class="inside" width="100%" cellpadding="0" cellspacing="0" border="0">
 						<tr>
 							<td colspan="2" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
@@ -151,6 +151,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 						</td>
 						</tr>
 						</table>
+						</c:if>
 
 <br>					
 <div class="buttons" align="center">					

@@ -298,6 +298,9 @@
 			   data: ({helpTopicId : glossId}),
 			   cache : false,
 			   success: function(data,msg){
+				   if($.trim(data)==''){
+					   data='<digi:trn jsFriendly="true">No text. Please edit and enter text</digi:trn>.';
+				   }
 					$('div#nodeContentDiv').html(data);
 					$('div#nodeTitle').html(glossName);
 					<digi:secure group="Help Administrators">

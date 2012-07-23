@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.fundingpledges.form.PledgeForm;
@@ -92,6 +93,38 @@ public class PledgesEntityHelper {
 	        	}
 	        }
 	        return AllFunds;
+	}
+	
+	public static ArrayList<FundingPledges> getPledgesByDonorGroup(Long donorGrpId){
+		 Session session = null;
+	        Query q = null;
+	        FundingPledges pledge = new FundingPledges();
+	        ArrayList<FundingPledges> Pledges = new ArrayList<FundingPledges>();
+	        List list = null;
+	        try {
+	            session = PersistenceManager.getSession();
+	            String queryString = new String();
+	            queryString = "select p from " + FundingPledges.class.getName()
+				+ " p where (p.organizationGroup=:id)";
+	            q = session.createQuery(queryString);
+	            q.setParameter("id", donorGrpId,Hibernate.LONG);
+	            Iterator iter = q.list().iterator();
+	            while (iter.hasNext()) {
+	            	pledge = (FundingPledges) iter.next();
+	            	Pledges.add(pledge);
+	            }
+	        } catch (Exception ex) {
+	        	logger.debug("Unable to get Pledges by organization Group from database" + ex.getMessage());
+	        }finally {
+	        	try {
+	        		if (session != null) {
+	        			PersistenceManager.releaseSession(session);
+	        		}
+	        	} catch (Exception ex) {
+	        		logger.error("releaseSession() failed");
+	        	}
+	        }
+	        return Pledges;
 	}
 	
 	public static ArrayList<FundingPledges> getPledgesByDonor(Long donorid){
@@ -588,6 +621,30 @@ public class PledgesEntityHelper {
 			}
 		}
 		return ampOrg;
+	}
+	
+	public static AmpOrgGroup getOrgGroupById(Long id) {
+		Session session = null;
+		AmpOrgGroup ampOrgGrp = null;
+		try {
+			//session = PersistenceManager.getSession();
+			session = PersistenceManager.getSession();
+			ampOrgGrp = (AmpOrgGroup) session.load(AmpOrgGroup.class, id);
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		}
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return ampOrgGrp;
 	}
 	
 	/**

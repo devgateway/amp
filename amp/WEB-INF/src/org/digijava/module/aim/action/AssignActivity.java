@@ -1,7 +1,10 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,6 +17,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.AssignActivityForm;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -58,6 +62,10 @@ public class AssignActivity extends Action {
 					AmpTeam ampTeam = TeamUtil.getAmpTeam(aForm.getTeamId());
 					activity.setTeam(ampTeam);
 					DbUtil.update(activity);
+					String detail="assigned to team";
+					List<String> details=new ArrayList<String>();
+					details.add(detail);
+					AuditLoggerUtil.logActivityUpdate(request, activity, details);
 				//UpdateDB.updateReportCache(actId);
 				}
 			}

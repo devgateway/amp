@@ -26,14 +26,18 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
+  <tr>
+    <td width=750 valign=top>
+	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
+
 			<table cellPadding=5 cellspacing="0" width="100%">
-				<tr>
-					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
+				<!--<tr>
+					 Start Navigation -->
+					<!--<td height=33><span class=crumb>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -46,23 +50,23 @@
 						</digi:trn>
                       </span>
                       
-					</td>
-					<!-- End navigation -->
-				</tr>
+					</td>-->
+					<!-- End navigation 
+				</tr>-->
               
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571><span class=subtitle-blue>
 						<digi:trn key="aim:fiscalCalendarManager"></span><span class=crumb>Fiscal
                       Calendar Manager
 						</digi:trn>
 						</span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 						<td align="left">
 						<c:set var="translationxls">
 							<digi:trn>Export to Excel</digi:trn>
-							</c:set> <c:set var="translationPrinter">
+						  </c:set> <c:set var="translationPrinter">
 								<digi:trn>Printer Friendly</digi:trn>
 							</c:set>
 							<div class="toolbar" align="center" style="background: #f2f2f2;">
@@ -72,7 +76,7 @@
 			</tr>
 				<tr>
 					<td noWrap width="100%" vAlign="top" align="center">
-                      <div style="margin:0 auto;width:1000px;">
+                      <div>
 					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr>
 						<td noWrap width=600 vAlign="top">
@@ -104,7 +108,7 @@
 														<logic:notEmpty name="aimFiscalCalendarForm" 	property="fiscalCal">
 														<tr>
 															<td width="100%" class="report">
-																<table width="533" border="0" cellspacing="4"	 bgColor=#f4f4f2>
+																<table width="100%" border="0" cellspacing="4"	 bgColor=#f4f4f2>
 																<thead>
 																	<tr>
 																	  <td width="144"><b>
@@ -126,7 +130,7 @@
 																			<b><digi:trn key="aim:offsetFromCurrentYear">Offset (From current year)</digi:trn></b>
 																		</td>
 																	</tr>
-																	</thead>
+																  </thead>
 																		<!--  to export table we are adding class "yui-dt-data" to its tbody-->
 															<tbody class="yui-dt-data">
                                                                 <c:set value="0" var="monthIndex"/>
@@ -170,7 +174,7 @@
                                                                  			<bean:write name="fiscalCal" property="yearOffset"/>
 																		</td>
 																	</tr>
-																  </logic:iterate>
+															  </logic:iterate>
 																  </tbody>
 															  </table>
 															</td>
@@ -203,19 +207,10 @@
 										</table>
 									</td>
 								</tr>
-								<tr>
-									<td bgColor=#f4f4f2>&nbsp;
-										
-									</td>
-								</tr>
 							</table>
 						</td>
-						<td noWrap width="100%" vAlign="top">
-							<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
-								<tr>
-									<td>
-										<!-- Other Links -->
-										<table cellpadding="0" cellspacing="0" width="100">
+	<td width=20>&nbsp;</td>
+    <td width=250 valign=top><table cellpadding="0" cellspacing="0" width="100">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title>
 													<digi:trn key="aim:otherLinks">
@@ -227,10 +222,6 @@
 												</td>
 											</tr>
 										</table>
-									</td>
-								</tr>
-								<tr>
-									<td bgColor=#ffffff class=box-border>
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
 												<td class="inside">
@@ -259,19 +250,13 @@
 											</tr>
 											<!-- end of other links -->
 										</table>
-									</td>
-								</tr>
-							</table>
-						</td>
-					
-                    </tr>
-                    
-				</table>
-                </div>
-			</td>
-		</tr>
-	</table>
-	</td>
-	</tr>
+										
+										</td>
+  </tr>
 </table>
+
+
+
+
+
 </digi:form>

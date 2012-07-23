@@ -67,10 +67,10 @@
 </script>
 
 <c:set var="showCurrSettings">
-	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 
+	<digi:trn key="rep:showCurrSettings" jsFriendly="true">Show current settings</digi:trn> 
 </c:set>
 <c:set var="hideCurrSettings">
-	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn> 
+	<digi:trn key="rep:hideCurrSettings" jsFriendly="true">Hide current settings</digi:trn> 
 </c:set>
 
 
@@ -115,8 +115,8 @@ var myTabsObject;
 		myTabsObject = new YAHOOAmp.widget.TabView("demo"); 
 		//Create "More..." tab
 		var objeto = document.createElement("DIV");
-		objeto.innerHTML = "<digi:trn key="aim:moretabs">More Tabs...</digi:trn>";
-		objeto.title = "<digi:trn key="aim:clickforalltabs">Click to see all tabs</digi:trn>";;
+		objeto.innerHTML = "<digi:trn jsFriendly='true'>More Tabs...</digi:trn>";
+		objeto.title = "<digi:trn jsFriendly='true'>Click to see all tabs</digi:trn>";;
 		objeto.onclick = changeTab;
 		objeto.id = "moreTabs";
 
@@ -134,7 +134,7 @@ var myTabsObject;
 					width:"320px", height:"225px", visible:false,
 					effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
 					constraintoviewport:true }  );
-		allTabsPanel.setHeader("<digi:trn>Please select from the list below</digi:trn>");
+		allTabsPanel.setHeader("<digi:trn jsFriendly='true'>Please select from the list below</digi:trn>");
 		allTabsPanel.setBody("");
 		allTabsPanel.render(document.body);
 		var divAllTabs = document.getElementById("allTabs");

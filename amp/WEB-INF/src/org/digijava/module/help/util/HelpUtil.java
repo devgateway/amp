@@ -330,7 +330,7 @@ public class HelpUtil {
 			throw new AimException("Can't update help topic", e);
 		}
 	}
-	
+
 	public static void deleteHelpTopic(HelpTopic topic, HttpServletRequest request) throws AimException{
 		Session session = null;
 		Transaction tx = null;
@@ -365,7 +365,15 @@ public class HelpUtil {
 					}
 				}
 			}
-			session.delete(topic);			
+//			session.delete(topic);
+            StringBuilder qstr = new StringBuilder("delete from ");
+            qstr.append(HelpTopic.class.getName());
+            qstr.append(" ht where ht.helpTopicId=:HT_ID");
+            Query q = session.createQuery(qstr.toString());
+            q.setLong("HT_ID", topic.getHelpTopicId());
+            q.executeUpdate();
+
+
 			tx.commit();
 			session.flush();
 			if (topic.getTopicType()!=GlossaryUtil.TYPE_GLOSSARY){
@@ -1111,12 +1119,13 @@ System.out.println("lang:"+lang);
 	private static void insertHelp(Object o)
 		{
 			Session session = null;
+            Transaction tx = null;
 			HelpTopic help =(HelpTopic)o;
 			try{
-					session	= PersistenceManager.getSession();
-//beginTransaction();
+					session	= PersistenceManager.openNewSession();
+                    tx = session.beginTransaction();
 					session.save(help);
-					//tx.commit();
+					tx.commit();
 
             }
 			catch (Exception ex) {
@@ -1224,7 +1233,7 @@ System.out.println("lang:"+lang);
 								editor.setBody(editorBody);
 							}
 							
-							org.digijava.module.editor.util.DbUtil.saveEditor(editor);
+							org.digijava.module.editor.util.DbUtil.saveEditor(editor, true);
 						}
 							
 					}

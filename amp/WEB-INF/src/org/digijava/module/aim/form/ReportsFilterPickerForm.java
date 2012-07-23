@@ -918,7 +918,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 
 	public Integer getAmountinthousandsint() {
-		if (amountinthousands){
+		if (amountinthousands !=null && amountinthousands){ // AMP-13496
 			return 1;
 		}else{
 			return 0;

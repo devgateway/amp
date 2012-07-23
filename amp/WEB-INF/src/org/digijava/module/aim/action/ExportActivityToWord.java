@@ -2,7 +2,12 @@ package org.digijava.module.aim.action;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
@@ -10,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.lowagie.text.Cell;
+import org.apache.ecs.xml.XML;
+import org.apache.ecs.xml.XMLDocument;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -22,15 +30,25 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpImputation;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.EditActivityForm.Planning;
 import org.digijava.module.aim.form.EditActivityForm.Programs;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.TeamMember;
@@ -55,7 +73,7 @@ import com.lowagie.text.rtf.table.RtfCell;
 
 public class ExportActivityToWord extends Action {
 	
-	private static Logger logger = Logger.getLogger(ExportToPDF.class);
+	private static Logger logger = Logger.getLogger(ExportActivityToWord.class);
 	public static final Color TITLECOLOR = new Color(34, 46, 93);
     public static final Color BORDERCOLOR = new Color(0, 255, 0);
     public static final Color CELLCOLOR = new Color(219, 229, 241);
@@ -363,7 +381,26 @@ public class ExportActivityToWord extends Action {
 	 	           doc.add(sectorsTbl);
 	 	           doc.add(new Paragraph(" "));
 	            }	            
-	           
+
+                for (Table tbl : getDonorFundingTables(request, ampContext, activity)) {
+                    doc.add(tbl);
+                }
+
+                for (Table tbl : getRegioanlFundingTables(request, ampContext, activity)) {
+                    doc.add(tbl);
+                }
+
+                for (Table tbl : getComponentTables(request, ampContext, activity)) {
+                    doc.add(tbl);
+                }
+
+                for (Table tbl : getIssuesTables(request, ampContext, activity)) {
+                    doc.add(tbl);
+                }
+
+
+                
+
 			}
         	
             
@@ -445,6 +482,199 @@ public class ExportActivityToWord extends Action {
 		}
 	}
 
+
+    /*
+     * Related org.s section
+     */
+    /*
+    private List<Table> getRelatedOrgsTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
+        List<Table> retVal = new ArrayList<Table>();
+
+        ExportSectionHelper eshTitle = new ExportSectionHelper("Related Organizations", true).setWidth(100f).setAlign("left");
+
+                retVal.add(createSectionTable(eshTitle, request));
+
+
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations", ampContext)){
+                    if (act.getOrgrole() != null && !act.getOrgrole().isEmpty()) {
+                        Set<AmpOrgRole> orgRoles = act.getOrgrole();
+
+                        ExportSectionHelper eshIssuesTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+                        for (AmpOrgRole orgRile : orgRoles) {
+                            eshIssuesTable.addRowData(new ExportSectionHelperRowData(issue.getName() + "  " + DateConversion.ConvertDateToString(issue.getIssueDate()),false));
+                            if (issue.getMeasures() != null && !issue.getMeasures().isEmpty()) {
+                                for (AmpMeasure measure : (Set<AmpMeasure>) issue.getMeasures()) {
+                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" •" + measure.getName(),false)));
+                                    if(measure.getActors() != null && !measure.getActors().isEmpty()) {
+                                        for (AmpActor actor : (Set<AmpActor>) measure.getActors()) {
+                                            eshIssuesTable.addRowData((new ExportSectionHelperRowData("  •" + actor.getName(),false)));
+                                        }
+                                    }
+                                }
+                            }
+                            retVal.add(createSectionTable(eshIssuesTable, request));
+                        }
+                    }
+                }
+
+        return retVal;
+    } */
+
+    /*
+     * Issue section
+     */
+    private List<Table> getIssuesTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
+        List<Table> retVal = new ArrayList<Table>();
+
+        ExportSectionHelper eshTitle = new ExportSectionHelper("Issues", true).setWidth(100f).setAlign("left");
+
+                retVal.add(createSectionTable(eshTitle, request));
+
+
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section", ampContext)){
+                    if (act.getIssues() != null && !act.getIssues().isEmpty()) {
+                        Set<AmpIssues> issues = act.getIssues();
+
+                        ExportSectionHelper eshIssuesTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+                        for (AmpIssues issue : issues) {
+                            eshIssuesTable.addRowData(new ExportSectionHelperRowData(issue.getName() + "  " + DateConversion.ConvertDateToString(issue.getIssueDate()),false));
+                            if (issue.getMeasures() != null && !issue.getMeasures().isEmpty()) {
+                                for (AmpMeasure measure : (Set<AmpMeasure>) issue.getMeasures()) {
+                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" •" + measure.getName(),false)));
+                                    if(measure.getActors() != null && !measure.getActors().isEmpty()) {
+                                        for (AmpActor actor : (Set<AmpActor>) measure.getActors()) {
+                                            eshIssuesTable.addRowData((new ExportSectionHelperRowData("  •" + actor.getName(),false)));
+                                        }
+                                    }
+                                }
+                            }
+                            retVal.add(createSectionTable(eshIssuesTable, request));
+                        }
+                    }
+                }
+
+        return retVal;
+    }
+
+    /*
+     * Component funding section
+     */
+    private List<Table> getComponentTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
+        List<Table> retVal = new ArrayList<Table>();
+
+        ExportSectionHelper eshTitle = new ExportSectionHelper("Components", true).setWidth(100f).setAlign("left");
+
+                retVal.add(createSectionTable(eshTitle, request));
+
+
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Components", ampContext)){
+                    if (act.getComponentFundings() != null && !act.getComponentFundings().isEmpty()) {
+                        Set<AmpComponentFunding> compFnds = act.getComponentFundings();
+
+                        ExportSectionHelper eshCompFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+                        for (AmpComponentFunding compFnd : compFnds) {
+
+                            eshCompFundingDetails.addRowData((new ExportSectionHelperRowData(compFnd.getComponent().getTitle(), false)).
+                                    addRowData(getTransactionTypeLable(compFnd.getTransactionType()), true).
+                                    addRowData(compFnd.getAdjustmentType().getLabel(), true).
+                                    addRowData(DateConversion.ConvertDateToString(compFnd.getTransactionDate())).
+                                    addRowData(compFnd.getTransactionAmount().toString()).
+                                    addRowData(compFnd.getCurrency().getCurrencyCode()));
+
+
+                            retVal.add(createSectionTable(eshCompFundingDetails, request));
+                        }
+                    }
+                }
+
+        return retVal;
+    }
+
+    /*
+     * Regional funding section
+     */
+    private List<Table> getRegioanlFundingTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
+        List<Table> retVal = new ArrayList<Table>();
+
+        ExportSectionHelper eshTitle = new ExportSectionHelper("Regional Fundings", true).setWidth(100f).setAlign("left");
+
+                retVal.add(createSectionTable(eshTitle, request));
+
+
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding", ampContext)){
+                    if (act.getRegionalFundings() != null && !act.getRegionalFundings().isEmpty()) {
+                        Set<AmpRegionalFunding> regFnds = act.getRegionalFundings();
+
+                        ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+                        for (AmpRegionalFunding regFnd : regFnds) {
+                            eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd.getTransactionType()), true)).
+                                                                            addRowData(regFnd.getRegionLocation().getName()).
+                                                                            addRowData(regFnd.getAdjustmentType().getLabel(), true).
+                                                                            addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate())).
+                                                                            addRowData(regFnd.getTransactionAmount().toString()).
+                                                                            addRowData(regFnd.getCurrency().getCurrencyCode()));
+
+
+                            retVal.add(createSectionTable(eshRegFundingDetails, request));
+                        }
+                    }
+                }
+        
+        return retVal;
+    }
+
+    /*
+     * Donor funding section
+     */
+    private List<Table> getDonorFundingTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
+        List<Table> retVal = new ArrayList<Table>();
+
+        ExportSectionHelper eshTitle = new ExportSectionHelper("Donor Fundings", true).setWidth(100f).setAlign("left");
+
+        retVal.add(createSectionTable(eshTitle, request));
+
+
+        if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding", ampContext)){
+            if (act.getFunding() != null && !act.getFunding().isEmpty()) {
+                for (AmpFunding fnd : (Set<AmpFunding>)act.getFunding()) {
+                    ExportSectionHelper eshDonorInfo = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+
+                    eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Id", true)).addRowData(fnd.getFinancingId()));
+                    eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Name", true)).addRowData(fnd.getAmpDonorOrgId().getName()));
+                    eshDonorInfo.addRowData((new ExportSectionHelperRowData("Type of Assistance", true)).addRowData(fnd.getTypeOfAssistance().getLabel()));
+                    eshDonorInfo.addRowData((new ExportSectionHelperRowData("Financial Instrument", true)).addRowData(fnd.getFinancingInstrument().getLabel()));
+                    eshDonorInfo.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+                    retVal.add(createSectionTable(eshDonorInfo, request));
+
+                    Set <AmpFundingDetail> fndDets = fnd.getFundingDetails();
+
+                    Map<String, Map<String, Set<AmpFundingDetail>>> structuredFundings = getStructuredFundings(fndDets);
+
+                    ExportSectionHelper eshDonorFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+                    for (String transTypeKey : structuredFundings.keySet()) {
+                        Map<String, Set<AmpFundingDetail>> transTypeGroup = structuredFundings.get(transTypeKey);
+                        for (String adjTypeKey : transTypeGroup.keySet()) {
+                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(new StringBuilder(adjTypeKey).
+                                    append(" ").append(transTypeKey).toString(), true));
+                            Set<AmpFundingDetail> structuredFndDets = transTypeGroup.get(adjTypeKey);
+                            for (AmpFundingDetail fndDet : structuredFndDets) {
+                                eshDonorFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), true)).
+                                        addRowData(fndDet.getAdjustmentType().getLabel(), true).
+                                        addRowData(DateConversion.ConvertDateToString(fndDet.getTransactionDate())).
+                                        addRowData(fndDet.getTransactionAmount().toString()).
+                                        addRowData(fndDet.getAmpCurrencyId().getCurrencyCode()));
+                            }
+
+                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+                        }
+                    }
+                    retVal.add(createSectionTable(eshDonorFundingDetails, request));
+                }
+            }
+        }
+        return retVal;
+    }
+    
 	private void generateIdentificationPart(HttpServletRequest request,	ServletContext ampContext, Paragraph p1,Table identificationSubTable1) throws WorkerException, Exception {
 		AmpCategoryValue catVal;
 		String columnName;
@@ -1121,6 +1351,232 @@ public class ExportActivityToWord extends Action {
 		}
 		return result;
 	}
-	
+
+    private class ExportSectionHelper {
+        private String secTitle;
+        private boolean translateTitle;
+        private float width = 100f;
+        private String align = "left";
+        List <ExportSectionHelperRowData> rowData;
+
+        public ExportSectionHelper(String secTitle, boolean translateTitle) {
+            this.secTitle = secTitle;
+            this.translateTitle = translateTitle;
+            rowData = new ArrayList<ExportSectionHelperRowData>();
+        }
+
+        public ExportSectionHelper(String secTitle) {
+            this(secTitle, false);
+        }
+
+        public String getSecTitle() {
+            return secTitle;
+        }
+
+        public boolean isTranslateTitle() {
+            return translateTitle;
+        }
+
+        public List<ExportSectionHelperRowData> getRowData() {
+            return rowData;
+        }
+
+        public void addRowData (ExportSectionHelperRowData data) {
+            this.rowData.add(data);
+        }
+
+        public float getWidth() {
+            return width;
+        }
+
+        public ExportSectionHelper setWidth(float width) {
+            this.width = width;
+            return this;
+        }
+
+        public String getAlign() {
+            return align;
+        }
+
+        public ExportSectionHelper setAlign(String align) {
+            this.align = align;
+            return this;
+        }
+    }
+    
+    private class ExportSectionHelperRowData {
+        private String title;
+        private boolean translateTitle;
+        private List<String> values;
+        private boolean separator;
+        private String moduleVisibilityKey;
+        private String featureVisibilityKey;
+        private Map<String, Boolean> translateValues;
+
+        public ExportSectionHelperRowData (String title, boolean translateTitle, boolean separator) {
+            this.title = title;
+            this.translateTitle = translateTitle;
+            this.separator = separator;
+            values = new ArrayList<String>();
+            translateValues = new HashMap<String, Boolean>();
+        }
+
+        public ExportSectionHelperRowData (String title, boolean translateTitle) {
+            this (title, translateTitle, false);
+        }
+
+        public ExportSectionHelperRowData (String title) {
+            this(title, false);
+        }
+
+        public ExportSectionHelperRowData addRowData(String data, Boolean translate) {
+            values.add(data);
+            translateValues.put(data, translate);
+            return this;
+        }
+
+        public ExportSectionHelperRowData addRowData(String data) {
+            return addRowData(data, false);
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public boolean isTranslateTitle() {
+            return translateTitle;
+        }
+
+        public List<String> getValues() {
+            return values;
+        }
+
+        public boolean isSeparator() {
+            return separator;
+        }
+
+        public ExportSectionHelperRowData setSeparator(boolean separator) {
+            this.separator = separator;
+            return this;
+        }
+
+        public Map<String, Boolean> getTranslateValues() {
+            return translateValues;
+        }
+    }
+
+    private Table createSectionTable(ExportSectionHelper esh, HttpServletRequest request) throws BadElementException, WorkerException {
+        Table retVal = null;
+        int maxCols = 0;
+        for (ExportSectionHelperRowData rd : esh.getRowData()) {
+            if (rd.getValues() != null && rd.getValues().size() > maxCols) {
+                maxCols = rd.getValues().size();
+            }
+        }
+
+        maxCols++; //first col will be the row title by default
+
+        retVal = new Table(maxCols);
+        retVal.setWidth(esh.getWidth());
+        retVal.setAlignment(esh.getAlign());
+
+        if (esh.getSecTitle() != null && esh.getSecTitle().trim().length() > 0) {
+            String secTitle = esh.translateTitle ?
+                                    TranslatorWorker.translateText(esh.getSecTitle(),request) : esh.getSecTitle();
+            RtfCell titleCell = new RtfCell(new Paragraph(secTitle, TITLEFONT));
+            titleCell.setColspan(maxCols);
+            titleCell.setBackgroundColor(CELLCOLORGRAY);
+            retVal.addCell(titleCell);
+        }
+
+
+
+        for (ExportSectionHelperRowData rd : esh.getRowData()) {
+            RtfCell dataTitleCell = null;
+
+            if (!rd.isSeparator()) {
+                
+                String title = (rd.translateTitle && rd.title != null) ?
+                        TranslatorWorker.translateText(rd.title,request) : rd.title;
+
+
+                
+                dataTitleCell = new RtfCell(new Paragraph(title, BOLDFONT));
+                dataTitleCell.setBackgroundColor(CELLCOLORGRAY);
+
+                if ((rd.getValues() == null || rd.getValues().isEmpty()) && maxCols > 1) {
+                    dataTitleCell.setColspan(maxCols);
+                }
+            } else {
+                dataTitleCell = new RtfCell(new Paragraph("_____________________________________________________________________________________"));
+                dataTitleCell.setColspan(maxCols);
+            }
+
+
+            retVal.addCell(dataTitleCell);
+
+            int rowCounter = 1;
+            for(String rowData : rd.getValues()) {
+                String trnVal = (rowData !=null && rd.getTranslateValues().containsKey(rowData)) ?
+                        TranslatorWorker.translateText(rowData,request) : rowData;
+                RtfCell dataValCell = new RtfCell(trnVal != null ? trnVal : "-");
+                if (rd.getValues().size() < (maxCols - 1) && rowCounter == rd.getValues().size()) {
+                    dataValCell.setColspan(maxCols - rowCounter);
+                }
+                retVal.addCell(dataValCell);
+                rowCounter ++;
+            }
+
+
+
+        }
+
+
+        return retVal;
+    }
+    
+    private static String getTransactionTypeLable (int type) {
+        String retVal = null;
+        switch (type) {
+            case Constants.COMMITMENT:
+                retVal = "Commitment";
+                break;
+
+            case Constants.DISBURSEMENT:
+                retVal = "Disbursement";
+                break;
+
+            case Constants.EXPENDITURE:
+                retVal = "Expenditure";
+                break;
+
+            case Constants.DISBURSEMENT_ORDER:
+                retVal = "Disbursement Order";
+                break;
+
+            case Constants.MTEFPROJECTION:
+                retVal = "MTEF Projection";
+                break;
+
+        }
+        return retVal;
+    }
+    
+    private Map<String, Map<String, Set<AmpFundingDetail>>> getStructuredFundings (Set<AmpFundingDetail> fndDets) {
+        Map<String, Map<String, Set<AmpFundingDetail>>> retVal = new HashMap<String, Map<String, Set<AmpFundingDetail>>>();
+        for (AmpFundingDetail fndDet : fndDets) {
+            String transactionType = getTransactionTypeLable(fndDet.getTransactionType());
+            if (!retVal.containsKey(transactionType)) {
+                retVal.put(transactionType, new HashMap<String, Set<AmpFundingDetail>>());
+            }
+
+            if (!retVal.get(transactionType).containsKey(fndDet.getAdjustmentType().getLabel())) {
+                retVal.get(transactionType).put(fndDet.getAdjustmentType().getLabel(), new HashSet<AmpFundingDetail>());
+            }
+            retVal.get(transactionType).get(fndDet.getAdjustmentType().getLabel()).add(fndDet);
+        }
+        return retVal;
+    }
+
 
 }

@@ -190,7 +190,7 @@ public class SearchUtil {
 		}
 		filter.setIndexText(keyword);
 
-		filter.generateFilterQuery(request);
+		filter.generateFilterQuery(request, false);
 
 		String hsqlQuery = filter.getGeneratedFilterQuery().replaceAll(
 				"FROM amp_activity", "FROM " + AmpActivity.class.getName());

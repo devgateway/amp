@@ -941,18 +941,16 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		if (!(reportMetadata.getType()==ArConstants.PLEDGES_TYPE)){
 			request.getSession().removeAttribute(ArConstants.PLEDGES_REPORT);
-			filter.generateFilterQuery(request);
 		}else {
 			pledgereport = true;
 			request.getSession().setAttribute(ArConstants.PLEDGES_REPORT, "true");
-			filter.generateFilterQuery(request);
 		}
 		
+		filter.generateFilterQuery(request, false);
+
 		debugMode=(request.getParameter("debugMode")!=null);
 
-
-
-		logger.info("Master report query:" + filter.getGeneratedFilterQuery());
+		logger.error("Master report query:" + filter.getGeneratedFilterQuery());
 
 		// remove the columns that are also hierarchies
 

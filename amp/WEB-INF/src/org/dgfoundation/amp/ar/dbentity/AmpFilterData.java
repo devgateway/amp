@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
-import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.Identifiable;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -24,8 +23,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class AmpFilterData implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Long id;
-	private AmpReports ampReport;
+	private FilterDataSetInterface filterRelObj;
 	private String propertyName;
 	private String propertyClassName;
 	private String elementClassName;
@@ -44,18 +44,19 @@ public class AmpFilterData implements Serializable {
 	private static final List<String> primitiveTypesList	= Arrays.asList( primitiveTypes );
 	
 	public AmpFilterData () {;}
-	public AmpFilterData (AmpReports ampReport, String propertyName, String propertyClassName, 
+	public AmpFilterData (FilterDataSetInterface filterRelObj, String propertyName, String propertyClassName, 
 							String elementClassName, String value) {
-		this.ampReport			= ampReport;
+		this.filterRelObj			= filterRelObj;
 		this.propertyName		= propertyName;
 		this.propertyClassName	= propertyClassName;
 		this.elementClassName	= elementClassName;
 		this.value				= value;
 		this.id					= null;
 	}
+
 	@Override
 	public String toString() {
-		return "report:" + ampReport.getAmpReportId() + "; propertyName:" + propertyName + "; propertyClassName:" + propertyClassName + 
+		return "report:" + filterRelObj + "; propertyName:" + propertyName + "; propertyClassName:" + propertyClassName + 
 		"; elementClassName:" + elementClassName +	"; value:" + value;
 	}
 	
@@ -121,7 +122,7 @@ public class AmpFilterData implements Serializable {
 	}
 	
 	
-	public static Set<AmpFilterData> createFilterDataSet (AmpReports report, Object srcObj) {
+	public static Set<AmpFilterData> createFilterDataSet (FilterDataSetInterface fds, Object srcObj) {
 		Field[] fields					= srcObj.getClass().getDeclaredFields();
 		HashSet<AmpFilterData> fdSet		= new HashSet<AmpFilterData>();
 		
@@ -162,8 +163,8 @@ public class AmpFilterData implements Serializable {
 								
 							if ( indexOfDollar >= 0 )
 								elClassName		= elClassName.substring(0, indexOfDollar); 
-									
-							AmpFilterData fd	= new AmpFilterData( report, fields[i].getName(), 
+							
+							AmpFilterData fd	= fds.newAmpFilterData( fds, fields[i].getName(), 
 									fieldObj.getClass().getName(), elClassName, 
 									objectValue(element) );
 							fdSet.add( fd );
@@ -172,14 +173,14 @@ public class AmpFilterData implements Serializable {
 				}
 				
 				if ( fieldObj instanceof Identifiable) {
-					AmpFilterData fd = new AmpFilterData ( report, fields[i].getName(), fieldObj.getClass().getName(), 
+					AmpFilterData fd = fds.newAmpFilterData ( fds, fields[i].getName(), fieldObj.getClass().getName(), 
 							null, objectValue(fieldObj) ) ;
 					fdSet.add( fd );
 				}
 				
 				else 
 					if ( primitiveTypesList.contains(fieldObj.getClass().getName()) ) {
-						AmpFilterData fd = new AmpFilterData ( report, fields[i].getName(), fieldObj.getClass().getName(), 
+						AmpFilterData fd = fds.newAmpFilterData ( fds, fields[i].getName(), fieldObj.getClass().getName(), 
 						null, objectValue(fieldObj) ) ;
 						fdSet.add( fd );
 					}
@@ -206,7 +207,7 @@ public class AmpFilterData implements Serializable {
 			tx		= sess.beginTransaction();
 			String qryStr	= "select a from "
 				+ AmpFilterData.class.getName() + " a "
-				+ "where (a.ampReport=:report)";
+				+ "where (a.filterRelObj=:report)";
 			Query query		= sess.createQuery(qryStr);
 			query.setLong("report", ampReportId);
 			List results	= query.list();
@@ -218,9 +219,9 @@ public class AmpFilterData implements Serializable {
 					AmpFilterData afd	= (AmpFilterData)iter.next();
 					if ( !cleared ) {
 						cleared	= true;
-						afd.getAmpReport().getFilterDataSet().clear();
+						afd.getFilterRelObj().getFilterDataSet().clear();
 					} 
-					afd.setAmpReport(null);
+					afd.setFilterRelObj(null);
 					sess.delete(afd);
 				}
 			}
@@ -244,19 +245,17 @@ public class AmpFilterData implements Serializable {
 		
 	} 
 	
-	
-	
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public AmpReports getAmpReport() {
-		return ampReport;
+	public FilterDataSetInterface getFilterRelObj() {
+		return filterRelObj;
 	}
-	public void setAmpReport(AmpReports ampReport) {
-		this.ampReport = ampReport;
+	public void setFilterRelObj(FilterDataSetInterface filterRelObj) {
+		this.filterRelObj = filterRelObj;
 	}
 	public String getPropertyName() {
 		return propertyName;

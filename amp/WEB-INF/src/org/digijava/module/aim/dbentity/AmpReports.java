@@ -12,11 +12,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
 import javax.servlet.http.HttpSession;
-
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
+import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
@@ -25,7 +24,7 @@ import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
-public class AmpReports implements Comparable, LoggerIdentifiable, Serializable {
+public class AmpReports implements Comparable, LoggerIdentifiable, Serializable, FilterDataSetInterface {
 
 	private Long ampReportId;
 
@@ -459,11 +458,18 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 	}
 	
 
+	@Override
+	public AmpFilterData newAmpFilterData(FilterDataSetInterface filterRelObj,
+			String propertyName, String propertyClassName,
+			String elementClassName, String value) {
+		return new AmpFilterData(filterRelObj, propertyName, propertyClassName, elementClassName, value);
+	}
+	@Override
 	public Set<AmpFilterData> getFilterDataSet() {
 		return filterDataSet;
 	}
-
-	public void setFilterDataSet(Set<AmpFilterData> filterDataSet) {
+	@Override
+	public void setFilterDataSet(Set filterDataSet) {
 		this.filterDataSet = filterDataSet;
 	}
 
@@ -556,6 +562,4 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable 
 		public void setReportCategory(AmpCategoryValue reportCategory) {
 			this.reportCategory = reportCategory;
 		}
-
-	
 }

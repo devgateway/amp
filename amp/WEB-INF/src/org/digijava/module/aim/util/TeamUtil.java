@@ -599,6 +599,11 @@ public class TeamUtil {
                 updTeam.setComputation(team.getComputation());
                 updTeam.setHideDraftActivities(team.getHideDraftActivities() );
                 updTeam.setWorkspaceGroup(team.getWorkspaceGroup());
+                if (updTeam.getFilterDataSet() == null)
+                	updTeam.setFilterDataSet(new HashSet());
+                else
+                	updTeam.getFilterDataSet().clear();
+                updTeam.getFilterDataSet().addAll(team.getFilterDataSet());
                 session.saveOrUpdate(updTeam);
 
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "

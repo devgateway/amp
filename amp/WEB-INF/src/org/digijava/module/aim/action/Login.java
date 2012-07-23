@@ -27,6 +27,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.LoginForm;
@@ -295,7 +296,8 @@ public class Login extends Action {
 					if (usr != null) {
 						tm.setEmail(usr.getEmail());
 					}
-
+					AmpTeam.initializeTeamFiltersSession(member, request, session);
+					
 					// Check whether the user is a transalator for the amp site.
 					// if yes, the system has to show the translator toolbar at the bottom of the pages
 					if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {

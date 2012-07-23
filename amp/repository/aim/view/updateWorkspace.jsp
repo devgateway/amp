@@ -28,7 +28,31 @@
     }
  </style>
 
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
 
+<c:set var="filterPanelName">
+	<digi:trn key="rep:filter:filters">Filters</digi:trn>
+</c:set>
+<c:set var="failureMessage">
+	<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>
+</c:set>
+<c:set var="filterProblemsMessage">
+	<digi:trn key="aim:reportwizard:filterProblems">Apparently there are some problems displaying filters pop-up. Please try again.</digi:trn>
+</c:set>
+<c:set var="loadingDataMessage">
+	<digi:trn key="aim:reportwizard:loadingData">Loading data. Please wait.</digi:trn>
+</c:set>
+<c:set var="cannotSaveFiltersMessage">
+	<digi:trn key="aim:reportwizard:cannotSaveFilters">There was a problem saving the filters. Please try again.</digi:trn>
+</c:set>
+<c:set var="settingsPanelName">
+	<digi:trn key="rep:filter:filters">Settings</digi:trn>
+</c:set>
+<c:set var="savingDataMessage">
+	<digi:trn key="aim:reportwizard:savingData">Saving data. Please wait.</digi:trn>
+</c:set>
 
 <script type="text/javascript">
     <!--
@@ -782,42 +806,44 @@ function cancel()
 																	</tr>
 																	
 																</table>
-																<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
-																	<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
-																	<table>
-																		<tr>
-																			<td align="right" width="150" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
-																				<digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn>
-																			</td>
-																			<td align="left" bgcolor="#FFFFFF">
-																					<aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${aimUpdateWorkspaceForm}" styleClass="buttonx_sm btn_save">
-																						<digi:trn>Add</digi:trn>
-																				</aim:addOrganizationButton>
-																			</td>
-																		</tr>
-																		</table>
-																	</c:if>
-																</c:if>
-																<c:if test="${!empty aimUpdateWorkspaceForm.organizations}">
-																
+																<fieldset class="main_side_cont">
+																	<legend><span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
+																	<div id="listFiltersDiv" style="height:85px; overflow-y:auto; overflow-x:hidden; margin-bottom: 5px;" class="inputx">
+																		<jsp:include page="reportWizard/showSelectedFilters.jsp" />				
+																	</div>
+																	<button type="button" value="Filters" class="buttonx_sm btn_save" id="add_filters_button" style="margin-right:2px;" onclick="repFilters.showFilters()"/>
+																		<digi:trn key="btn:repFilters">Filters</digi:trn>
+																	</button>
+																</fieldset>
+																			
+																<fieldset class="main_side_cont">
+																	<legend><span class="legend_label"><digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn></span></legend>
+																	<c:if test="${!empty aimUpdateWorkspaceForm.organizations}">
 																		<table width="98%" cellPadding=2 cellspacing="0" valign="top" align="center"
-																		class="box-border-nopadding">
-																		<c:forEach var="org" items="${aimUpdateWorkspaceForm.organizations}">
-																			<tr>
-																				<td align="left">&nbsp;
-																					<c:out value="${org.name}"/>
-																				</td>
-																				<td align="right" width="10">
-																					<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
-																					<a href="javascript:removeChildOrg(<c:out value="${org.ampOrgId}"/>)">
-																				 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Remove this linked org"/></a>&nbsp;
-																					</c:if>
-																				</td>
-																			</tr>
-																		</c:forEach>
+																			class="box-border-nopadding">
+																			<c:forEach var="org" items="${aimUpdateWorkspaceForm.organizations}">
+																				<tr>
+																					<td align="left">&nbsp;
+																						<c:out value="${org.name}"/>
+																					</td>
+																					<td align="right" width="10">
+																						<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
+																						<a href="javascript:removeChildOrg(<c:out value="${org.ampOrgId}"/>)">
+																					 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Remove this linked org"/></a>&nbsp;
+																						</c:if>
+																					</td>
+																				</tr>
+																			</c:forEach>
 																		</table>
 																	</c:if>
-																
+																	<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
+																		<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
+																			<aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${aimUpdateWorkspaceForm}" styleClass="buttonx_sm btn_save">
+																					<digi:trn>Add</digi:trn>
+																			</aim:addOrganizationButton>
+																		</c:if>
+																	</c:if>
+																</fieldset>																			
 														</td>
 													</tr>
 													
@@ -937,6 +963,14 @@ function cancel()
 </td></tr>
 </table>
 </digi:form>
+
+<script type="text/javascript">
+	repFilters = new Filters("${filterPanelName}", "${failureMessage}", "${filterProblemsMessage}", 
+					 		 "${loadingDataMessage}", "${savingDataMessage}", "${cannotSaveFiltersMessage}", 
+					 		 false, "${settingsPanelName}");
+</script>		
+<%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
+
 <script language="JavaScript" type="text/javascript">
     addLoadEvent(initOrganizationScript);
   </script>

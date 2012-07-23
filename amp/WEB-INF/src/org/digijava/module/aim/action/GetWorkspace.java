@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,14 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
+import org.digijava.kernel.taglib.util.TagUtil;
+import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -62,14 +70,31 @@ public class GetWorkspace extends Action {
 		uwForm.setUpdateFlag(false);
 		//uwForm.setOrganizations(DbUtil.getAll(AmpOrganisation.class));
 		
-	
+		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
+		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
+		request.getSession().setAttribute( ArConstants.REPORTS_FILTER, null );
+
+		/**
+		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard
+		 */
+		ReportsFilterPicker rfp		= new ReportsFilterPicker();
+		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
+		if (rfpForm == null ) {
+			rfpForm		= new ReportsFilterPickerForm();
+			request.setAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS, "true");
+			rfp.modePrepare(mapping, rfpForm, request, response);
+			TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, true);
+		}
+		rfpForm.setIsnewreport(true);
+		rfp.reset(rfpForm, request, mapping);
+		rfpForm.setIsnewreport(false);
 		
-		if(action!=null && "reset".compareTo(action)==0)
-		{
+		if(action!=null && "reset".compareTo(action)==0){
 			uwForm.setReset(true);
             uwForm.reset(mapping, request);
             uwForm.setActionEvent("add");
             uwForm.setAddFlag(true);
+
             return mapping.findForward("showAddWorkspace");
 		}
 		logger.debug("dest = " + dest);
@@ -96,6 +121,21 @@ public class GetWorkspace extends Action {
 			}
 		} catch (NumberFormatException nfe) {
 			// incorrect id.
+		}
+		
+		AmpTeam ampTeam = TeamUtil.getAmpTeam(teamId);
+		if (ampTeam != null){
+			Set<AmpTeamFilterData> fdSet	= ampTeam.getFilterDataSet();
+			if ( fdSet != null && fdSet.size() > 0 ) {
+				AmpARFilter filter		= new AmpARFilter();
+				FilterUtil.populateFilter(ampTeam, filter);
+				FilterUtil.prepare(request, filter);
+				request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER , filter);
+				ReportsFilterPickerForm rfpForm2	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
+				new ReportsFilterPicker().modeRefreshDropdowns(mapping, rfpForm2, request, response, getServlet().getServletContext() );
+				FilterUtil.populateForm(rfpForm2, filter);
+				//myForm.setUseFilters(true);
+			}
 		}
 
 		Workspace workspace = TeamUtil.getWorkspace(teamId);

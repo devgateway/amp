@@ -50,5 +50,12 @@
 
 		<many-to-one name="workspaceGroup" column="group_categoryvalue_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		<property name="permissionStrategy" column="permission_strategy" type="java.lang.String" />
+		
+		<set name="filterDataSet" lazy="false" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="amp_team_id" />
+			<one-to-many class="org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData" />
+		</set>
+		
 	</class>
 </hibernate-mapping>

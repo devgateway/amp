@@ -254,6 +254,7 @@ public final class ArConstants {
 	//reportsFilter
 	
 	public final static String REPORTS_FILTER="ReportsFilter";
+	public final static String TEAM_FILTER="TeamFilter";
 
 	public final static String COMPUTE_ON_YEAR="ComputeOnYear";
 

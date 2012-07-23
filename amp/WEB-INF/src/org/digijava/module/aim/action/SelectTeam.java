@@ -18,6 +18,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.LoginForm;
@@ -152,6 +153,8 @@ public class SelectTeam extends Action {
             tm.setPledger(member.getUser().getPledger());
             tm.setPublishDocuments(member.getPublishDocPermission());
             tm.setApprover(member.getAmpMemberRole().isApprover());
+            AmpTeam.initializeTeamFiltersSession(member, request, session);
+			
             if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
                 tm.setTranslator(true);
             } else {

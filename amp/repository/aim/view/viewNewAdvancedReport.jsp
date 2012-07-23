@@ -285,6 +285,18 @@ session.setAttribute("progressValue", counter);
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 			<strong>
+			<digi:trn key="rep:pop:WorkspaceFilters">Workspace Filters:</digi:trn></strong>
+                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" scope="session">
+                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" toScope="request"/>
+                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
+                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+                    <jsp:include page="${listable.jspFile}" />
+                </logic:present>
+             </td>
+             </tr>
+             <tr>
+             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+			<strong>
 			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
                 <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
                 <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
@@ -369,6 +381,18 @@ session.setAttribute("progressValue", counter);
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 			<strong>
+			<digi:trn key="rep:pop:WorkspaceFilters">Workspace Filters:</digi:trn></strong>
+                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" scope="session">
+                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" toScope="request"/>
+                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
+                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+                    <jsp:include page="${listable.jspFile}" />
+                </logic:present>
+             </td>
+             </tr>
+             <tr>
+             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+			<strong>
 			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
                 <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
                 <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
@@ -445,6 +469,18 @@ session.setAttribute("progressValue", counter);
              &nbsp;<br>
              <div class="tab_opt_box_cont" style="display:none;" id="currentDisplaySettings" >
              <table cellpadding="0" cellspacing="0" border="0" width="80%">
+             <tr>
+             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+			<strong>
+			<digi:trn key="rep:pop:WorkspaceFilters">Workspace Filters:</digi:trn></strong>
+                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" scope="session">
+                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" toScope="request"/>
+                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
+                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+                    <jsp:include page="${listable.jspFile}" />
+                </logic:present>
+             </td>
+             </tr>
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 			<strong>

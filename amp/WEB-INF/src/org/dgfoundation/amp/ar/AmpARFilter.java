@@ -483,9 +483,7 @@ public class AmpARFilter extends PropertyListable {
 
 			}
 			
-			
-			
-if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
+			if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
 				worker = calendarType.getworker();
 				try {
 					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
@@ -495,7 +493,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 					e.printStackTrace();
 				}
 			}
-			}
+		}
 		
 		renderStartYear=(renderStartYear==null)?-1:renderStartYear;
 		
@@ -553,7 +551,7 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		this.generatedFilterQuery = initialFilterQuery;
 	}
 
-	public void generateFilterQuery(HttpServletRequest request) {
+	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter) {
 		if (request.getSession().getAttribute(ArConstants.PLEDGES_REPORT) != null && 
 				request.getSession().getAttribute(ArConstants.PLEDGES_REPORT).toString().equalsIgnoreCase("true")){
 			indexedParams=new ArrayList<FilterParam>();
@@ -656,13 +654,23 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 					+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL )";
 		
 			}
+			
+			if (!workspaceFilter){
+				//Merge Filter with the Workspace Filter
+				AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
+				if (teamFilter != null){
+					TEAM_FILTER += " OR " + teamFilter.getFilterConditionOnly();
+				}
+			}
 		int c;
-		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
+		if (!workspaceFilter){
+			if(draft){
+				c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
+			}
+			else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
+			this.setActivitiesRejectedByFilter(new Long(c));
+			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 		}
-		else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
-		this.setActivitiesRejectedByFilter(new Long(c));
-		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 
 		String STATUS_FILTER = "SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("
 				+ Util.toCSString(statuses) + ")";
@@ -1117,14 +1125,14 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		logger.info(this.generatedFilterQuery);
 		
-		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
+		if (!workspaceFilter){
+			if(draft){
+				c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
+			}
+			else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
+			this.setActivitiesRejectedByFilter(new Long(c));
+			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 		}
-		else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
-		this.setActivitiesRejectedByFilter(new Long(c));
-		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
-		
-		
 	}
 
 	/**
@@ -1915,7 +1923,18 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 	public void setShowArchived(Boolean showArchived) {
 		this.showArchived = showArchived;
 	}
-
+	
+	@PropertyListableIgnore
+	public String getFilterConditionOnly() {
+		String genFilter = this.getGeneratedFilterQuery();
+		int pos = genFilter.indexOf(initialFilterQuery);
+		genFilter = genFilter.substring(pos + initialFilterQuery.length());
+		pos = genFilter.indexOf("AND");
+		genFilter = genFilter.substring(pos + 3);
+		return genFilter;
+	}
+	
+	@PropertyListableIgnore
 	public String getOffLineQuery(String query) {
 		String result = query;
 		Pattern p = Pattern.compile(MoConstants.AMP_ACTIVITY_TABLE);
@@ -1923,6 +1942,4 @@ if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calend
 		result = m.replaceAll(MoConstants.CACHED_ACTIVITY_TABLE);
 		return result;
 	}
-
-
 }

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
-import org.digijava.module.aim.dbentity.AmpReports;
+import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
@@ -25,9 +25,9 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class FilterUtil {
-	public static void populateFilter(AmpReports report, AmpARFilter filter) {
+	public static void populateFilter(FilterDataSetInterface report, AmpARFilter filter) {
 		if ( report.getFilterDataSet()!=null && report.getFilterDataSet().size()>0 ) {
-			Iterator<AmpFilterData> iter	= report.getFilterDataSet().iterator();
+			Iterator<AmpFilterData> iter	= (Iterator<AmpFilterData>) report.getFilterDataSet().iterator();
 			while ( iter.hasNext() ) {
 				try {
 					iter.next().populateField(filter);

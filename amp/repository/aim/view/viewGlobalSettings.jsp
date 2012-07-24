@@ -734,7 +734,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                              <td colspan="2" align="center" valign="bottom" >
 					                              	<html:hidden property="allValues"/>
 					                              	<html:hidden property="indexTab"/>
-					                              	<html:submit property="saveAll" styleId="gsSaveAllBtn">
+					                              	<html:submit property="saveAll" styleClass="buttonx" styleId="gsSaveAllBtn">
 					                                    <digi:trn key="aim:saveAll">
 					                                    	Save All                                    
 					                                    </digi:trn>

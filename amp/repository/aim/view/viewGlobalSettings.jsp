@@ -228,7 +228,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
-
+<h1 style="text-align:left;" class="admintitle">General Settings</h1>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
 		<td align=left valign="top" width=750px>

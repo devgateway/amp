@@ -227,11 +227,11 @@
 				<!-- </tr> -->
 				<tr>
 					<td height="16" vAlign="center" width="571">
-						<span class="subtitle-blue">
+					<h1 class="admintitle" style="text-align:left;">
 							<digi:trn key="aim:regionManager">
 								Region Manager
 							</digi:trn>
-						</span>
+						</h1>
 					</td>
 				</tr>
 					<tr>

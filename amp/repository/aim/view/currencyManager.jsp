@@ -489,7 +489,7 @@ function exportXSL(){
 										<table align="center" cellpadding="0" cellspacing="0"
 											width="90%" border="0">
 											<tr>
-												<td style="border-bottom:1px solid #ccc;">
+												<td>
 													<!-- Other Links -->
 													<table cellpadding="0" cellspacing="0" width="100">
 														<tr>

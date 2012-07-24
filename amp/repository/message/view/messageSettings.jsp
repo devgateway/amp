@@ -183,7 +183,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 									<td  vAlign="top">
 										<table align="center" cellpadding="0" cellspacing="0" width="100%" border="0">
 											<tr>
-												<td style="border-bottom:1px solid #cccccc;">
+												<td>
 													<!-- Other Links -->
 													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px;">
 														<tr>

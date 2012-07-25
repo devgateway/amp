@@ -48,6 +48,7 @@ import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.helpers.ActivityPoint;
@@ -325,15 +326,16 @@ public class DataDispatcher extends MultiAction {
 
 		while (locationsIt.hasNext()) {
 			AmpCategoryValueLocations location = locationsIt.next();
-
 			Long[] ids = { location.getId() };
+			Long[] allids = DbHelper.getAllDescendantsLocation(ids, DbUtil.getAmpLocations());
+
 			MapFilter newFilter = filter.getCopyFilterForFunding();
-			newFilter.setSelLocationIds(ids);
-			BigDecimal amountCommitments = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.COMMITMENT, Constants.ACTUAL).getValue()
+			newFilter.setSelLocationIds(allids);
+			BigDecimal amountCommitments = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.COMMITMENT, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId()).getValue()
 					.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			BigDecimal amountDisbursements = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.DISBURSEMENT, Constants.ACTUAL)
+			BigDecimal amountDisbursements = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.DISBURSEMENT, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId())
 					.getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			BigDecimal amountExpenditures = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.EXPENDITURE, Constants.ACTUAL).getValue()
+			BigDecimal amountExpenditures = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.EXPENDITURE, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId()).getValue()
 					.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 			String keyName = "";
 			String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY

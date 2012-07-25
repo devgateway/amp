@@ -26,7 +26,7 @@ public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.Scop
 	
 	public static final MetaInfo[] PARAM_INFO  = new MetaInfo[] { new MetaInfo("WorkspaceId","the id of the workspace that has access") };
 
-	 private static final String  DESCRIPTION = "gives access if the currenct workspace of the current user has the same id as the given parameter";
+	 private static final String  DESCRIPTION = "gives access if the current workspace of the current user has the same id as the given parameter";
 	/**
 	 * @param scope
 	 * @param parameters

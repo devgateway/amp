@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Queue;
 
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
 
@@ -17,22 +19,22 @@ import org.digijava.module.gateperm.core.GatePermConst;
  * belongs to the workspace with the Id given in the
  * {@link Gate#getParameters()}
  * 
- * @author mpostelnicu@dgateway.org
- * @since Feb 16, 2011
+ * @author dan@developmentgateway.org
+ * @since Jul 24, 2012
  */
-public class WorkspaceGate extends Gate {
+public class StrategyPermSelectGate extends Gate {
 
 	public static final MetaInfo[] SCOPE_KEYS = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER };
 
-	public static final MetaInfo[] PARAM_INFO = new MetaInfo[] { new MetaInfo("WorkspaceId","The ID of the workspace to check the user membership") };
+	public static final MetaInfo[] PARAM_INFO = new MetaInfo[] { new MetaInfo("StrategyWorkspaceType","The type of the strategy that is assigned to each workspace regarding how and what permissions should be applied") };
 
-	private static final String DESCRIPTION = "This gate returns true if the CURRENT_MEMBER belongs to the workspace with the Id given as parameter";
+	private static final String DESCRIPTION = "This gate returns true if the CURRENT_MEMBER belongs to an workspace with the permissionStrategy eq with the value given as parameter";
 
 	/**
 	 * @param scope
 	 * @param parameters
 	 */
-	public WorkspaceGate(Map scope, Queue<String> parameters) {
+	public StrategyPermSelectGate(Map scope, Queue<String> parameters) {
 		super(scope, parameters);
 		// TODO Auto-generated constructor stub
 	}
@@ -40,7 +42,7 @@ public class WorkspaceGate extends Gate {
 	/**
 	 * 
 	 */
-	public WorkspaceGate() {
+	public StrategyPermSelectGate() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -52,9 +54,9 @@ public class WorkspaceGate extends Gate {
 	@Override
 	public boolean logic() throws Exception {
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-		Long workspaceId = Long.parseLong(parameters.poll().trim());
-		
-		if (tm.getTeamId().compareTo(workspaceId) == 0)
+		String permStrategy = parameters.poll().trim();
+		AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
+		if (ampTeam.getPermissionStrategy()!=null && ampTeam.getPermissionStrategy().compareTo(permStrategy) == 0)
 			return true;
 		
 		return false;

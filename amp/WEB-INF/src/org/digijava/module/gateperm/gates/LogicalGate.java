@@ -53,7 +53,7 @@ public class LogicalGate extends Gate {
 	else {
 	    String gateName = gateInfo.substring(0, gateInfo.indexOf('('));
 	    ret.add(gateName);
-	    String parameters = gateInfo.substring(gateInfo.indexOf('('), gateInfo.length() - 1);
+	    String parameters = gateInfo.substring(gateInfo.indexOf('(')+1, gateInfo.length() - 1);
 	    StringTokenizer st = new StringTokenizer(parameters, "~");
 	    while (st.hasMoreTokens()) {
 		String token = st.nextToken();

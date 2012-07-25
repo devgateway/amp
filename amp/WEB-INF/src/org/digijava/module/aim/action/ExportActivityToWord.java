@@ -23,11 +23,13 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
@@ -42,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.EditActivityForm.Planning;
@@ -49,9 +52,11 @@ import org.digijava.module.aim.form.EditActivityForm.Programs;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -166,8 +171,9 @@ public class ExportActivityToWord extends Action {
 	            
 	            generateIdentificationPart(request, ampContext, p1,identificationSubTable1);
 	            identificationTblCell1.add(identificationSubTable1);
-	            identificationTbl.addCell(identificationTblCell1);
+	            //identificationTbl.addCell(identificationTblCell1);
 	            doc.add(identificationTbl);
+                doc.add(identificationSubTable1);
 	            
 	            /**
 	             * Planning step
@@ -188,8 +194,9 @@ public class ExportActivityToWord extends Action {
 	            
 	            processPlanningPart(request, ampContext, planningSubTable1);
 	            planningTblCell1.add(planningSubTable1);
-	            planningTbl.addCell(planningTblCell1);
+	            //planningTbl.addCell(planningTblCell1);
 	            doc.add(planningTbl);
+                doc.add(planningSubTable1);
 	            doc.add(new Paragraph(" "));
 	            
 	            /**
@@ -255,8 +262,9 @@ public class ExportActivityToWord extends Action {
 	            }
 	            
 	            locationTblCell1.add(locationSubTable1);
-            	locationTbl.addCell(locationTblCell1);
+            	//locationTbl.addCell(locationTblCell1);
 	            doc.add(locationTbl);
+                doc.add(locationSubTable1);
 	            doc.add(new Paragraph(" "));
 	            
 	            /**
@@ -398,8 +406,17 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
+                for (Table tbl : getRelatedOrgsTables(request, ampContext, activity)) {
+                    doc.add(tbl);
+                }
 
-                
+                for (Table tbl : getContactInfoTables(request, ampContext, activity)) {
+                    doc.add(tbl);
+                }
+
+                for (Table tbl : getProposedProjectCostTables(request, ampContext, activity)) {
+                    doc.add(tbl);
+                }
 
 			}
         	
@@ -484,9 +501,113 @@ public class ExportActivityToWord extends Action {
 
 
     /*
+     * Proposed Project Cost
+     */
+    private List<Table> getProposedProjectCostTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
+        List<Table> retVal = new ArrayList<Table>();
+
+        ExportSectionHelper eshTitle = new ExportSectionHelper("Proposed Project Cost", true).setWidth(100f).setAlign("left");
+
+        retVal.add(createSectionTable(eshTitle, request));
+
+        Set<AmpFundingDetail> allComponents = new HashSet<AmpFundingDetail>();
+        
+        for (AmpFunding f : (Set<AmpFunding>) act.getFunding()) {
+            if (f.getFundingDetails() != null && !f.getFundingDetails().isEmpty()) {
+                allComponents.addAll(f.getFundingDetails());
+            }
+        }
+        Site site = RequestUtils.getSite(request);
+        Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+        String siteId=site.getSiteId();
+        String locale=navigationLanguage.getCode();
+        String currencyCode = (String) request.getSession().getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
+        if(currencyCode == null) {
+            currencyCode = Constants.DEFAULT_CURRENCY;
+        }
+        
+        String translatedCurrency = TranslatorWorker.translateText(currencyCode,locale,siteId);
+        translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
+
+
+        FundingCalculationsHelper fch = new FundingCalculationsHelper();
+        fch.doCalculations(allComponents, currencyCode);
+
+
+
+
+        ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", true).
+                                                addRowData(FormatHelper.formatNumber(fch.getTotalCommitments().getValue())).
+                                                addRowData(translatedCurrency));
+
+        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Proposed Completion Date ", true).
+                                                        addRowData(DateConversion.ConvertDateToString(act.getProposedCompletionDate())));
+
+
+        retVal.add(createSectionTable(eshProjectCostTable, request));
+        return retVal;
+    }
+
+
+
+    /*
+     * Contact info. section
+     */
+    private List<Table> getContactInfoTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
+        List<Table> retVal = new ArrayList<Table>();
+
+        ExportSectionHelper eshTitle = new ExportSectionHelper("Contact Information", true).setWidth(100f).setAlign("left");
+
+        retVal.add(createSectionTable(eshTitle, request));
+
+
+        if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts", ampContext)){
+            if (act.getActivityContacts() != null && !act.getActivityContacts().isEmpty()) {
+                Set<AmpActivityContact> actContacts = act.getActivityContacts();
+
+
+
+                Map <String, Set<AmpActivityContact>> contactGrouper = new HashMap<String, Set<AmpActivityContact>>();
+                ExportSectionHelper eshContactInfoTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+                for (AmpActivityContact actContact : actContacts) {
+                    if (!contactGrouper.containsKey(actContact.getContactType())) {
+                        contactGrouper.put(actContact.getContactType(), new HashSet<AmpActivityContact>());
+                    }
+                    contactGrouper.get(actContact.getContactType()).add(actContact);
+                }
+
+                for (String contactType : contactGrouper.keySet()) {
+                    Set<AmpActivityContact> groupedContactTypeSet = contactGrouper.get(contactType);
+                    eshContactInfoTable.addRowData(new ExportSectionHelperRowData(getContactTypeLable(contactType), false));
+                    for (AmpActivityContact contact : groupedContactTypeSet) {
+                        String contFunction = contact.getContact().getFunction() != null ?
+                                contact.getContact().getFunction() : "-";
+
+                        eshContactInfoTable.addRowData(new ExportSectionHelperRowData(contact.getContact().getNameAndLastName(), false).
+                                addRowData(contact.getContact().getEmails().iterator().next()).
+                                addRowData(contFunction));
+
+
+
+                    }
+
+                    eshContactInfoTable.addRowData(new ExportSectionHelperRowData(null, false).setSeparator(true));
+                }
+
+                retVal.add(createSectionTable(eshContactInfoTable, request));
+            }
+        }
+
+        return retVal;
+    }
+
+
+
+    /*
      * Related org.s section
      */
-    /*
+
     private List<Table> getRelatedOrgsTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
 
@@ -499,26 +620,41 @@ public class ExportActivityToWord extends Action {
                     if (act.getOrgrole() != null && !act.getOrgrole().isEmpty()) {
                         Set<AmpOrgRole> orgRoles = act.getOrgrole();
 
-                        ExportSectionHelper eshIssuesTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+                        Map <String, Set<AmpOrgRole>> roleGrouper = new HashMap<String, Set<AmpOrgRole>>();
+                        ExportSectionHelper eshRelatedOrgsTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
                         for (AmpOrgRole orgRile : orgRoles) {
-                            eshIssuesTable.addRowData(new ExportSectionHelperRowData(issue.getName() + "  " + DateConversion.ConvertDateToString(issue.getIssueDate()),false));
-                            if (issue.getMeasures() != null && !issue.getMeasures().isEmpty()) {
-                                for (AmpMeasure measure : (Set<AmpMeasure>) issue.getMeasures()) {
-                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" •" + measure.getName(),false)));
-                                    if(measure.getActors() != null && !measure.getActors().isEmpty()) {
-                                        for (AmpActor actor : (Set<AmpActor>) measure.getActors()) {
-                                            eshIssuesTable.addRowData((new ExportSectionHelperRowData("  •" + actor.getName(),false)));
-                                        }
-                                    }
-                                }
+                            if (!roleGrouper.containsKey(orgRile.getRole().getName())) {
+                                roleGrouper.put(orgRile.getRole().getName(), new HashSet<AmpOrgRole>());
                             }
-                            retVal.add(createSectionTable(eshIssuesTable, request));
+
+                            roleGrouper.get(orgRile.getRole().getName()).add(orgRile);
+
+                            //eshIssuesTable.addRowData(new ExportSectionHelperRowData(orgRile.getRole().getName(), false));
+                            //retVal.add(createSectionTable(eshIssuesTable, request));
                         }
+                        
+                        for (String roleName : roleGrouper.keySet()) {
+                            Set<AmpOrgRole> groupedRoleSet = roleGrouper.get(roleName);
+                            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(roleName, true));
+                            for (AmpOrgRole role : groupedRoleSet) {
+                                Double orgPercentage = role.getPercentage() == null ? new Double(0) : role.getPercentage();
+                                eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", false).
+                                        addRowData(role.getOrganisation().getName()).
+                                        addRowData(orgPercentage.toString() + "%"));
+
+
+                                
+                            }
+
+                            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(null, false).setSeparator(true));
+                        }
+
+                        retVal.add(createSectionTable(eshRelatedOrgsTable, request));
                     }
                 }
 
         return retVal;
-    } */
+    }
 
     /*
      * Issue section
@@ -1483,7 +1619,7 @@ public class ExportActivityToWord extends Action {
         if (esh.getSecTitle() != null && esh.getSecTitle().trim().length() > 0) {
             String secTitle = esh.translateTitle ?
                                     TranslatorWorker.translateText(esh.getSecTitle(),request) : esh.getSecTitle();
-            RtfCell titleCell = new RtfCell(new Paragraph(secTitle, TITLEFONT));
+            RtfCell titleCell = new RtfCell(new Paragraph(secTitle, HEADERFONT));
             titleCell.setColspan(maxCols);
             titleCell.setBackgroundColor(CELLCOLORGRAY);
             retVal.addCell(titleCell);
@@ -1519,7 +1655,7 @@ public class ExportActivityToWord extends Action {
             for(String rowData : rd.getValues()) {
                 String trnVal = (rowData !=null && rd.getTranslateValues().containsKey(rowData)) ?
                         TranslatorWorker.translateText(rowData,request) : rowData;
-                RtfCell dataValCell = new RtfCell(trnVal != null ? trnVal : "-");
+                RtfCell dataValCell = new RtfCell(new Paragraph(trnVal != null ? trnVal : "-", PLAINFONT));
                 if (rd.getValues().size() < (maxCols - 1) && rowCounter == rd.getValues().size()) {
                     dataValCell.setColspan(maxCols - rowCounter);
                 }
@@ -1559,6 +1695,23 @@ public class ExportActivityToWord extends Action {
                 break;
 
         }
+        return retVal;
+    }
+
+    private static String getContactTypeLable (String type) {
+        String retVal = null;
+        if (type.equals(Constants.DONOR_CONTACT)) {
+            retVal = "Donor funding contact";
+        } else if (type.equals(Constants.MOFED_CONTACT)) {
+            retVal = "MOFED contact";
+        } else if (type.equals(Constants.SECTOR_MINISTRY_CONTACT)) {
+            retVal = "Project Coordinator Contact";
+        } else if (type.equals(Constants.PROJECT_COORDINATOR_CONTACT)) {
+            retVal = "Sector Ministry Contact";
+        } else if (type.equals(Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT)) {
+            retVal = "Implementing/Executing Agency Contact";
+        }
+
         return retVal;
     }
     

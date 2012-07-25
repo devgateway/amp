@@ -43,7 +43,7 @@ function openPrinter(){
 	var href="/calendar/showCalendarEvent.do~method=print~resetForm=true~calendarId="+id;
 	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){
 		var popupName = "popup"+new Date().getTime();
-	 	var popupWindow =  window.open(href,popupName,'toolbar=no,location=no, width=540,height=500, directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');    
+	 	var popupWindow =  window.open('',popupName,'toolbar=no,location=no, width=540,height=500, directories=no,status=no,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');    
 	 	var referLink = document.createElement('a');
 	 	referLink.href = href;
 	 	referLink.target = popupName;

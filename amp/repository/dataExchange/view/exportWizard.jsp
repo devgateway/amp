@@ -309,9 +309,9 @@
 		<digi:form action="/exportWizard.do?method=export" method="post" styleId="form">
 		<span id="formChild" style="display:none;">&nbsp;</span>
 
-        <span class="subtitle-blue">
+        <h1 class="admintitle" style="text-align:left;">
           &nbsp;<digi:trn>Data Exporter</digi:trn>
-        </span>		
+        </h1>		
 		
 		<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv">
 

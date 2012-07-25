@@ -33,7 +33,7 @@
 		</tr>-->
 		<tr>
 			<td>
-	
+				 <h1 class="admintitle" style="text-align:left;">Result Matrix/GIS Settings</h1>
 				<%--
 				<table>
 					<tr>

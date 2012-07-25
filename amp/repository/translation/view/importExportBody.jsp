@@ -246,14 +246,14 @@ function checkSelectedLanguages(){
 <digi:context name="digiContext" property="context" />
 <!--  AMP Admin Logo -->
 <!-- End of Logo -->
-
+ <h1 class="admintitle" style="text-align:left;">Translation Manager</h1>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align="center">
 	<tr>
 		<td align=left valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33 bgcolor=#F2F2F2><span class=crumb style="color:#376091;">
+					<!--<td height=33 bgcolor=#F2F2F2><span class=crumb style="color:#376091;">
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -261,15 +261,15 @@ function checkSelectedLanguages(){
 						<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:translationManager"><span style="color:#000000">Translation Manager</span></digi:trn>
-					</td>
+					</td>-->
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height="16" vAlign="middle" width="571" align="center">
+					<!--<td height="16" vAlign="middle" width="571" align="center">
                       <span style="font-size:12px; color:#000000;">
                         <digi:trn><b>Translation Manager</b><hr /></digi:trn>
                       </span>
-					</td>
+					</td>-->
 				</tr>
 				<tr>
 					<td height="16" vAlign="middle" width="571">

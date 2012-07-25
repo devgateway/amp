@@ -225,6 +225,7 @@ border-right: 1px solid rgb(208, 208, 208);
 				filters: "<digi:trn>Filters</digi:trn>",
 				keywords: "<digi:trn>keywords</digi:trn>",
 				apply: "<digi:trn>Apply</digi:trn>",
+			//	reset: "<digi:trn>Reset</digi:trn>",
 				close: "<digi:trn>Close</digi:trn>",
 				none: "<digi:trn>none</digi:trn>"
 		};
@@ -237,12 +238,14 @@ border-right: 1px solid rgb(208, 208, 208);
 		privateListObj			= new DynamicList(document.getElementById("my_markup"), "privateListObj","privateFilterDivId",
 				${meTeamMember.teamId}, '${meTeamMember.email}', trnObj);
 		privateListObj.filterInfoDivId	= "privateFilterInfo";
-		privateListObj.setKeywordTextboxInformation("privateSearchStr","privateSearchButtonId");
+		if(privateListObj.setKeywordTextboxInformation)
+		   privateListObj.setKeywordTextboxInformation("privateSearchStr","privateSearchButtonId");
 		//privateListObj.sendRequest();
 		teamListObj				= new DynamicList(document.getElementById("team_markup"), "teamListObj","teamFilterDivId", 
 				${meTeamMember.teamId}, null, trnObj);
 		teamListObj.filterInfoDivId	= "teamFilterInfo";
-		teamListObj.setKeywordTextboxInformation("teamSearchStr","teamSearchButtonId");
+		if(teamListObj.setKeywordTextboxInformation)
+		   teamListObj.setKeywordTextboxInformation("teamSearchStr","teamSearchButtonId");
 		
 		//teamListObj.sendRequest();
 		sharedListObj				= new SharedDynamicList(document.getElementById("shared_markup"), "sharedListObj","sharedFilterDivId", trnObj);

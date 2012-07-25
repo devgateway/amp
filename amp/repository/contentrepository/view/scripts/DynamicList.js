@@ -162,7 +162,45 @@ AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 		divEl.innerHTML = this.filterWrapper.labelsToHTML(getlabelsext()) + "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.fToHTML(getfiltertext())
 		+ "&nbsp;&nbsp;&nbsp;&nbsp;" + this.filterWrapper.kToHTML(getkeywordsext());
 	}
-}
+};
+
+AbstractDynamicList.prototype.sendResetRequest		= function (shouldRetrieveFilters) {
+	this.resetFilterData(shouldRetrieveFilters);
+	this.sendRequest(shouldRetrieveFilters);
+};
+
+AbstractDynamicList.prototype.resetFilterData		= function (shouldRetrieveFilters) {
+	var panel = this.fPanel;
+	
+	var elems = panel.element.getElementsByTagName('select');
+		
+		//panel.getBody().getElementByTagName('select');
+	
+	for(var i=0; i < elems.length; i++)
+		{
+		var optList = elems[i];
+		
+		for(var optInd=0; optInd < optList.length; optInd++)
+		{
+		if(optInd==0)
+			{
+			optList[optInd].setAttribute("selected","true");
+			optList[optInd].selected=true;
+			}
+			
+		else
+			{
+			optList[optInd].removeAttribute("selected");
+			optList[optInd].selected=false;
+			}
+			
+		}
+	    
+		
+		}
+	    
+	
+};
 
 AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 	var divEl	= document.getElementById(divId);
@@ -229,7 +267,8 @@ AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId,hide) {
 		divEl.style.display	= "";
 		var buttonEls	= divEl.getElementsByTagName("button");
 		YAHOO.util.Event.on(buttonEls[0],"click", this.sendRequest, this, true);
-		YAHOO.util.Event.on(buttonEls[1],"click", this.fPanel.hide, this.fPanel, true);
+		YAHOO.util.Event.on(buttonEls[1],"click", this.sendResetRequest, this, true);
+		YAHOO.util.Event.on(buttonEls[2],"click", this.fPanel.hide, this.fPanel, true);
 	} else if (hide == true) {
 //		var isVisible = this.fPanel.get("visible");
 //		alert (isVisible);

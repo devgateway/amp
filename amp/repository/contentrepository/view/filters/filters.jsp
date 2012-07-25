@@ -70,6 +70,10 @@
 					<button class="buttonx" type="button">
 						<digi:trn>Apply</digi:trn>
 					</button>
+					 &nbsp;&nbsp;&nbsp;
+					<button class="buttonx" type="button">
+						<digi:trn>Reset</digi:trn>
+					</button> 
 					&nbsp;&nbsp;&nbsp;
 					<button class="buttonx" type="button">
 						<digi:trn>Close</digi:trn>

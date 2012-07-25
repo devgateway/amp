@@ -101,7 +101,7 @@ public class AmpDonorDisbOrdersSubsectionFeature extends
 			throws Exception {
 		super(id, fmName, model);
 		disbOrdersTableFeature = new AmpDonorDisbOrdersFormTableFeature(
-				"disbOrdersTableFeature", model, "Disbursement Orders Table");
+				"disbOrdersTableFeature", model, "Disbursement Orders Table", transactionType);
 		add(disbOrdersTableFeature);
 
 		AmpAjaxLinkField addCommit = new AmpAjaxLinkField("addDisbOrder",

@@ -678,12 +678,19 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 * @param key The key of the AmpCategoryClass object. (A key can be attributed when creating a new category)
 	 * @return The AmpCategoryClass object with the specified key. If not found returns null.
 	 */
-	public static AmpCategoryClass loadAmpCategoryClassByKey(String key) throws NoCategoryClassException
+	public static AmpCategoryClass loadAmpCategoryClassByKey(String key) throws NoCategoryClassException{
+		return loadAmpCategoryClassByKey(key, true);
+	}
+	
+	public static AmpCategoryClass loadAmpCategoryClassByKey(String key, boolean closeSession) throws NoCategoryClassException
 	{
 		Session dbSession			= null;
 		Collection col=new ArrayList();
 		try {
-			dbSession						= PersistenceManager.openNewSession();
+			if (closeSession)
+				dbSession = PersistenceManager.openNewSession();
+			else
+				dbSession = PersistenceManager.getSession();
 			//AmpCategoryClass dbCategory		= new AmpCategoryClass();
 				String queryString	= "select c from " + AmpCategoryClass.class.getName() + " c where c.keyName=:key";
 				Query query			= dbSession.createQuery(queryString);
@@ -694,10 +701,12 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		} catch (Exception ex) {
 			logger.error("Error retrieving AmpCategoryClass with key '" + key + "': " + ex);
 		} finally {
-			try {
-				dbSession.close();
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
+			if (closeSession){
+				try {
+					dbSession.close();
+				} catch (Exception ex2) {
+					logger.error("releaseSession() failed :" + ex2);
+				}
 			}
 		}
 

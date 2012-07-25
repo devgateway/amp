@@ -46,7 +46,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 	 * @throws Exception
 	 */
 	public AmpDonorCommitmentsFormTableFeature(String id,
-			final IModel<AmpFunding> model, String fmName) throws Exception {
+			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.COMMITMENT, 7);
 
 		
@@ -74,7 +74,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 			@Override
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
-				item.add(getAdjustmentTypeComponent(item.getModel()));
+				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 

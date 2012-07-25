@@ -94,7 +94,31 @@ public class AmpCategoryGroupFieldPanel extends
 		choiceContainer.setOutputMarkupId(true);
 		addFormComponent(choiceContainer);
 	}
-	
+
+	/**
+	 * Create a category select field panel that is dependent on another category
+	 * @param id
+	 * @param categoryKey
+	 * @param model
+	 * @param fmName
+	 * @param ordered
+	 * @param nullValid
+	 * @param hideLabel
+	 * @param dependantModel 
+	 * @throws Exception
+	 */
+	public AmpCategoryGroupFieldPanel(String id, String categoryKey,
+			IModel<AmpCategoryValue> model, String fmName,
+			boolean ordered, Boolean nullValid, boolean hideLabel, 
+			IModel<Set<AmpCategoryValue>> dependantModel) throws Exception {
+		super(id,categoryKey,fmName,ordered,false,dependantModel,hideLabel);
+		choiceContainer = new RadioChoice<AmpCategoryValue>(
+				"choice",model, choices, new TranslatedChoiceRenderer<AmpCategoryValue>())
+				.setNullValid(nullValid);
+		choiceContainer.setOutputMarkupId(true);
+		addFormComponent(choiceContainer);
+	}
+
 	public AmpCategoryGroupFieldPanel(String id, String categoryKey,
 			IModel<AmpCategoryValue> model, String fmName,
 			boolean ordered, Boolean nullValid) throws Exception {

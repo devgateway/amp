@@ -38,7 +38,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 	public AmpDonorCommitmentsSubsectionFeature(String id,
 			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
 		super(id, fmName, model);
-		commitsTableFeature = new AmpDonorCommitmentsFormTableFeature("commitsTableFeature", model, "Commitments Table");
+		commitsTableFeature = new AmpDonorCommitmentsFormTableFeature("commitsTableFeature", model, "Commitments Table", transactionType);
 		add(commitsTableFeature);
 		
 		AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addCommit","Add Commitment","Add Commitment") {

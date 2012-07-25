@@ -80,7 +80,10 @@ public class CategoryConstants {
 	
 	public static final String ADJUSTMENT_TYPE_NAME			= "Adjustment Type";
 	public static final String ADJUSTMENT_TYPE_KEY			= "adjustment_type";
-	
+
+	public static final String TRANSACTION_TYPE_NAME		= "Transaction Type";
+	public static final String TRANSACTION_TYPE_KEY			= "transaction_type";
+
 	public static final String REPORT_CATEGORY_NAME					="Report Category";
 	public static final String REPORT_CATEGORY_KEY					="report_category";
 	

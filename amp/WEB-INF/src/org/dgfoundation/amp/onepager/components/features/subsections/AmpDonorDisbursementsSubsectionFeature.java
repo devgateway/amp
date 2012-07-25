@@ -44,7 +44,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
 	public AmpDonorDisbursementsSubsectionFeature(String id,
 			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
 		super(id, fmName, model);
-		disbursementsTableFeature = new AmpDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Disbursements Table");
+		disbursementsTableFeature = new AmpDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Disbursements Table", transactionType);
 		add(disbursementsTableFeature);
 		
 		AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addDisbursement","Add Disbursement","Add Disbursement") {

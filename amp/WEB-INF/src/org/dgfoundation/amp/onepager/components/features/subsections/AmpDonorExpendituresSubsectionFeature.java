@@ -40,7 +40,7 @@ public class AmpDonorExpendituresSubsectionFeature extends
 	public AmpDonorExpendituresSubsectionFeature(String id,
 			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
 		super(id, fmName, model);
-		expTableFeature = new AmpDonorExpendituresFormTableFeature("expTableFeature", model, "Expenditures Table");
+		expTableFeature = new AmpDonorExpendituresFormTableFeature("expTableFeature", model, "Expenditures Table", transactionType);
 		add(expTableFeature);
 		
 		AmpAjaxLinkField addCommit=new AmpAjaxLinkField("addExp","Add Expenditure","Add Expenditure") {

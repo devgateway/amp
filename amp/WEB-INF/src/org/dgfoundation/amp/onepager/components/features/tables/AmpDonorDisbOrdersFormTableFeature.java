@@ -33,14 +33,14 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 	 * @throws Exception
 	 */
 	public AmpDonorDisbOrdersFormTableFeature(String id,
-			final IModel<AmpFunding> model, String fmName) throws Exception {
+			final IModel<AmpFunding> model, String fmName, final int transactionType) throws Exception {
 		super(id, model, fmName, Constants.DISBURSEMENT_ORDER, 8);
 
 		list = new ListEditor<AmpFundingDetail>("listDisbOrders", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 			@Override
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
-				item.add(getAdjustmentTypeComponent(item.getModel()));
+				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 				item.add(getFundingAmountComponent(item.getModel()));
 
 				AmpTextFieldPanel<String> disbOrderId = new AmpTextFieldPanel<String>(

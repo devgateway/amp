@@ -1940,7 +1940,9 @@ function collapseAll() {
 			</logic:notEmpty>
 		</module:display>
 		<!-- Executing Agency not found in the new activity form-->
-		<hr />			
+		<hr />	
+		
+		<module:display name="/Activity Form/Related Organizations/Executing Agency" parentModule="/Activity Form/Related Organizations">		
 		<digi:trn key="aim:executingAgency">Executing Agency</digi:trn>
 		<br/>
 		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
@@ -1972,7 +1974,7 @@ function collapseAll() {
 			</div>
 		</logic:notEmpty>
 		<hr/>
-					
+		</module:display> 			
 		<module:display name="/Activity Form/Related Organizations/Implementing Agency" parentModule="/Activity Form/Related Organizations">
 			<digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn>
 			<br/>

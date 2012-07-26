@@ -225,7 +225,7 @@
 		                                                <b><digi:trn key="aim:job:stWorking">Working</digi:trn></b>
 		                                            </c:if>
 		                                        </td>
-		                                        <td style="${bgcolor_even_odd};">
+		                                        <td style="${bgcolor_even_odd}; white-space:nowrap;">
 		                                            &nbsp;
 		                                            <c:if test="${job.paused}">
 		                                                [<digi:trn key="aim:job:lnkPause">Pause</digi:trn>]

@@ -188,13 +188,20 @@ function typeChanged(value){
 
   <html:hidden name="quartzJobManagerForm" property="action" styleId="hdnAction" />
   <html:hidden name="quartzJobManagerForm" property="editAction" />
-  <table>
+ <h1 class="admintitle" style="text-align:left;">
+								<c:choose>
+									<c:when test="${quartzJobManagerForm.editAction=='false'}">
+										<digi:trn>Add new job</digi:trn>
+									</c:when>
+									<c:otherwise>
+										<digi:trn>Edit job</digi:trn>
+									</c:otherwise>
+								</c:choose>
+						</h1>
+  <table cellpadding="0" cellspacing="0" width=750 align=center>
     <tr>
-      <td>
-      &nbsp;&nbsp;&nbsp;
-      </td>
-      <td>
-        <table>
+     <td align=center bgcolor=#F2F2F2>
+        <table style="font-size:12px;">
           <tr>
             <!-- Start Navigation -->
             <td>
@@ -220,24 +227,12 @@ function typeChanged(value){
             <!-- End navigation -->
           </tr>
           <tr>
-            <td style="height:53px;"><span class="subtitle-blue">
-								<c:choose>
-									<c:when test="${quartzJobManagerForm.editAction=='false'}">
-										<digi:trn>Add new job</digi:trn>
-									</c:when>
-									<c:otherwise>
-										<digi:trn>Edit job</digi:trn>
-									</c:otherwise>
-								</c:choose>
-						</span></td>
-          </tr> 
-          <tr>
           	<td>
           		<digi:errors/>
           	</td>
           </tr>         
           <tr>
-            <td>
+            <td align=center>
               <table cellpadding="2" style="width:400px;">
                 <tr>
                   <td align="right">
@@ -284,7 +279,7 @@ function typeChanged(value){
             </td>
           </tr>
           <tr>
-            <td colspan="3">
+            <td colspan="3" align=center>
               <table cellpadding="2" cellspacing="1" style="border:dashed 1px;width:400px;">
                 <tr>
                   <td width="96" align="right">
@@ -400,9 +395,9 @@ function typeChanged(value){
             </td>
           </tr>
           <tr>
-            <td colspan="2">
+            <td colspan="2" align=center>
             <span style="color:red;">*</span>
-            <digi:trn>Job Type</digi:trn>
+            <digi:trn><b>Job Type</b></digi:trn>
             <table width="439" cellpadding="2" cellspacing="1" style="border:dashed 1px;width:400px;">
               <tr>
                 <td colspan="2">
@@ -500,7 +495,7 @@ function typeChanged(value){
             </td>
           </tr>
           <tr>
-            <td>
+            <td align=center style="padding:15px;">
               <c:set var="trn">
                 <digi:trn>Save</digi:trn>
               </c:set>

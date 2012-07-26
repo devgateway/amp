@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -508,7 +509,7 @@ public class ExportActivityToWord extends Action {
 
         ExportSectionHelper eshTitle = new ExportSectionHelper("Proposed Project Cost", true).setWidth(100f).setAlign("left");
 
-        retVal.add(createSectionTable(eshTitle, request));
+        retVal.add(createSectionTable(eshTitle, request, ampContext));
 
         Set<AmpFundingDetail> allComponents = new HashSet<AmpFundingDetail>();
         
@@ -537,15 +538,15 @@ public class ExportActivityToWord extends Action {
 
 
         ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", true).
+        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
                                                 addRowData(FormatHelper.formatNumber(fch.getTotalCommitments().getValue())).
                                                 addRowData(translatedCurrency));
 
-        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Proposed Completion Date ", true).
+        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Proposed Completion Date ", null, null,  true).
                                                         addRowData(DateConversion.ConvertDateToString(act.getProposedCompletionDate())));
 
 
-        retVal.add(createSectionTable(eshProjectCostTable, request));
+        retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
         return retVal;
     }
 
@@ -559,7 +560,7 @@ public class ExportActivityToWord extends Action {
 
         ExportSectionHelper eshTitle = new ExportSectionHelper("Contact Information", true).setWidth(100f).setAlign("left");
 
-        retVal.add(createSectionTable(eshTitle, request));
+        retVal.add(createSectionTable(eshTitle, request, ampContext));
 
 
         if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts", ampContext)){
@@ -579,12 +580,12 @@ public class ExportActivityToWord extends Action {
 
                 for (String contactType : contactGrouper.keySet()) {
                     Set<AmpActivityContact> groupedContactTypeSet = contactGrouper.get(contactType);
-                    eshContactInfoTable.addRowData(new ExportSectionHelperRowData(getContactTypeLable(contactType), false));
+                    eshContactInfoTable.addRowData(new ExportSectionHelperRowData(getContactTypeLable(contactType), null, null,  false));
                     for (AmpActivityContact contact : groupedContactTypeSet) {
                         String contFunction = contact.getContact().getFunction() != null ?
                                 contact.getContact().getFunction() : "-";
 
-                        eshContactInfoTable.addRowData(new ExportSectionHelperRowData(contact.getContact().getNameAndLastName(), false).
+                        eshContactInfoTable.addRowData(new ExportSectionHelperRowData(contact.getContact().getNameAndLastName(), null, null,  false).
                                 addRowData(contact.getContact().getEmails().iterator().next()).
                                 addRowData(contFunction));
 
@@ -592,10 +593,10 @@ public class ExportActivityToWord extends Action {
 
                     }
 
-                    eshContactInfoTable.addRowData(new ExportSectionHelperRowData(null, false).setSeparator(true));
+                    eshContactInfoTable.addRowData(new ExportSectionHelperRowData(null, null, null,  false).setSeparator(true));
                 }
 
-                retVal.add(createSectionTable(eshContactInfoTable, request));
+                retVal.add(createSectionTable(eshContactInfoTable, request, ampContext));
             }
         }
 
@@ -613,7 +614,7 @@ public class ExportActivityToWord extends Action {
 
         ExportSectionHelper eshTitle = new ExportSectionHelper("Related Organizations", true).setWidth(100f).setAlign("left");
 
-                retVal.add(createSectionTable(eshTitle, request));
+                retVal.add(createSectionTable(eshTitle, request, ampContext));
 
 
                 if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations", ampContext)){
@@ -635,10 +636,10 @@ public class ExportActivityToWord extends Action {
                         
                         for (String roleName : roleGrouper.keySet()) {
                             Set<AmpOrgRole> groupedRoleSet = roleGrouper.get(roleName);
-                            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(roleName, true));
+                            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(roleName, null, null,  true));
                             for (AmpOrgRole role : groupedRoleSet) {
                                 Double orgPercentage = role.getPercentage() == null ? new Double(0) : role.getPercentage();
-                                eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", false).
+                                eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).
                                         addRowData(role.getOrganisation().getName()).
                                         addRowData(orgPercentage.toString() + "%"));
 
@@ -646,10 +647,10 @@ public class ExportActivityToWord extends Action {
                                 
                             }
 
-                            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(null, false).setSeparator(true));
+                            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(null,null,null, false).setSeparator(true));
                         }
 
-                        retVal.add(createSectionTable(eshRelatedOrgsTable, request));
+                        retVal.add(createSectionTable(eshRelatedOrgsTable, request, ampContext));
                     }
                 }
 
@@ -664,7 +665,7 @@ public class ExportActivityToWord extends Action {
 
         ExportSectionHelper eshTitle = new ExportSectionHelper("Issues", true).setWidth(100f).setAlign("left");
 
-                retVal.add(createSectionTable(eshTitle, request));
+                retVal.add(createSectionTable(eshTitle, request, ampContext));
 
 
                 if(FeaturesUtil.isVisibleModule("/Activity Form/Issues Section", ampContext)){
@@ -673,18 +674,18 @@ public class ExportActivityToWord extends Action {
 
                         ExportSectionHelper eshIssuesTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
                         for (AmpIssues issue : issues) {
-                            eshIssuesTable.addRowData(new ExportSectionHelperRowData(issue.getName() + "  " + DateConversion.ConvertDateToString(issue.getIssueDate()),false));
+                            eshIssuesTable.addRowData(new ExportSectionHelperRowData(issue.getName() + "  " + DateConversion.ConvertDateToString(issue.getIssueDate()), null, null, false));
                             if (issue.getMeasures() != null && !issue.getMeasures().isEmpty()) {
                                 for (AmpMeasure measure : (Set<AmpMeasure>) issue.getMeasures()) {
-                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" •" + measure.getName(),false)));
+                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" •" + measure.getName(), null, null, false)));
                                     if(measure.getActors() != null && !measure.getActors().isEmpty()) {
                                         for (AmpActor actor : (Set<AmpActor>) measure.getActors()) {
-                                            eshIssuesTable.addRowData((new ExportSectionHelperRowData("  •" + actor.getName(),false)));
+                                            eshIssuesTable.addRowData((new ExportSectionHelperRowData("  •" + actor.getName(), null, null, false)));
                                         }
                                     }
                                 }
                             }
-                            retVal.add(createSectionTable(eshIssuesTable, request));
+                            retVal.add(createSectionTable(eshIssuesTable, request, ampContext));
                         }
                     }
                 }
@@ -700,7 +701,7 @@ public class ExportActivityToWord extends Action {
 
         ExportSectionHelper eshTitle = new ExportSectionHelper("Components", true).setWidth(100f).setAlign("left");
 
-                retVal.add(createSectionTable(eshTitle, request));
+                retVal.add(createSectionTable(eshTitle, request, ampContext));
 
 
                 if(FeaturesUtil.isVisibleModule("/Activity Form/Components", ampContext)){
@@ -710,7 +711,7 @@ public class ExportActivityToWord extends Action {
                         ExportSectionHelper eshCompFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
                         for (AmpComponentFunding compFnd : compFnds) {
 
-                            eshCompFundingDetails.addRowData((new ExportSectionHelperRowData(compFnd.getComponent().getTitle(), false)).
+                            eshCompFundingDetails.addRowData((new ExportSectionHelperRowData(compFnd.getComponent().getTitle(), null, null, false)).
                                     addRowData(getTransactionTypeLable(compFnd.getTransactionType()), true).
                                     addRowData(compFnd.getAdjustmentType().getLabel(), true).
                                     addRowData(DateConversion.ConvertDateToString(compFnd.getTransactionDate())).
@@ -718,7 +719,7 @@ public class ExportActivityToWord extends Action {
                                     addRowData(compFnd.getCurrency().getCurrencyCode()));
 
 
-                            retVal.add(createSectionTable(eshCompFundingDetails, request));
+                            retVal.add(createSectionTable(eshCompFundingDetails, request, ampContext));
                         }
                     }
                 }
@@ -734,7 +735,7 @@ public class ExportActivityToWord extends Action {
 
         ExportSectionHelper eshTitle = new ExportSectionHelper("Regional Fundings", true).setWidth(100f).setAlign("left");
 
-                retVal.add(createSectionTable(eshTitle, request));
+                retVal.add(createSectionTable(eshTitle, request, ampContext));
 
 
                 if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding", ampContext)){
@@ -743,7 +744,7 @@ public class ExportActivityToWord extends Action {
 
                         ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
                         for (AmpRegionalFunding regFnd : regFnds) {
-                            eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd.getTransactionType()), true)).
+                            eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd.getTransactionType()), null, null, true)).
                                                                             addRowData(regFnd.getRegionLocation().getName()).
                                                                             addRowData(regFnd.getAdjustmentType().getLabel(), true).
                                                                             addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate())).
@@ -751,7 +752,7 @@ public class ExportActivityToWord extends Action {
                                                                             addRowData(regFnd.getCurrency().getCurrencyCode()));
 
 
-                            retVal.add(createSectionTable(eshRegFundingDetails, request));
+                            retVal.add(createSectionTable(eshRegFundingDetails, request, ampContext));
                         }
                     }
                 }
@@ -767,7 +768,7 @@ public class ExportActivityToWord extends Action {
 
         ExportSectionHelper eshTitle = new ExportSectionHelper("Donor Fundings", true).setWidth(100f).setAlign("left");
 
-        retVal.add(createSectionTable(eshTitle, request));
+        retVal.add(createSectionTable(eshTitle, request, ampContext));
 
 
         if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding", ampContext)){
@@ -775,12 +776,23 @@ public class ExportActivityToWord extends Action {
                 for (AmpFunding fnd : (Set<AmpFunding>)act.getFunding()) {
                     ExportSectionHelper eshDonorInfo = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
 
-                    eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Id", true)).addRowData(fnd.getFinancingId()));
-                    eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Name", true)).addRowData(fnd.getAmpDonorOrgId().getName()));
-                    eshDonorInfo.addRowData((new ExportSectionHelperRowData("Type of Assistance", true)).addRowData(fnd.getTypeOfAssistance().getLabel()));
-                    eshDonorInfo.addRowData((new ExportSectionHelperRowData("Financial Instrument", true)).addRowData(fnd.getFinancingInstrument().getLabel()));
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Funding Organization Id", ampContext)) {
+                        eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Id", null, null, true)).addRowData(fnd.getFinancingId()));
+                    }
+
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Donor Organisation", ampContext)) {
+                        eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Name", null, null, true)).addRowData(fnd.getAmpDonorOrgId().getName()));
+                    }
+
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Type of Assistence", ampContext)) {
+                        eshDonorInfo.addRowData((new ExportSectionHelperRowData("Type of Assistance", null, null, true)).addRowData(fnd.getTypeOfAssistance().getLabel()));
+                    }
+
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Financing Instrument", ampContext)) {
+                        eshDonorInfo.addRowData((new ExportSectionHelperRowData("Financial Instrument", null, null, true)).addRowData(fnd.getFinancingInstrument().getLabel()));
+                    }
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
-                    retVal.add(createSectionTable(eshDonorInfo, request));
+                    retVal.add(createSectionTable(eshDonorInfo, request, ampContext));
 
                     Set <AmpFundingDetail> fndDets = fnd.getFundingDetails();
 
@@ -791,10 +803,10 @@ public class ExportActivityToWord extends Action {
                         Map<String, Set<AmpFundingDetail>> transTypeGroup = structuredFundings.get(transTypeKey);
                         for (String adjTypeKey : transTypeGroup.keySet()) {
                             eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(new StringBuilder(adjTypeKey).
-                                    append(" ").append(transTypeKey).toString(), true));
+                                    append(" ").append(transTypeKey).toString(),null, null, true));
                             Set<AmpFundingDetail> structuredFndDets = transTypeGroup.get(adjTypeKey);
                             for (AmpFundingDetail fndDet : structuredFndDets) {
-                                eshDonorFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), true)).
+                                eshDonorFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true)).
                                         addRowData(fndDet.getAdjustmentType().getLabel(), true).
                                         addRowData(DateConversion.ConvertDateToString(fndDet.getTransactionDate())).
                                         addRowData(fndDet.getTransactionAmount().toString()).
@@ -804,7 +816,7 @@ public class ExportActivityToWord extends Action {
                             eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
                         }
                     }
-                    retVal.add(createSectionTable(eshDonorFundingDetails, request));
+                    retVal.add(createSectionTable(eshDonorFundingDetails, request, ampContext));
                 }
             }
         }
@@ -1543,26 +1555,38 @@ public class ExportActivityToWord extends Action {
     private class ExportSectionHelperRowData {
         private String title;
         private boolean translateTitle;
+        private List <String> fieldOrderedList;
+        private Map<String, String> fldVisibilityKeyMap;
         private List<String> values;
         private boolean separator;
-        private String moduleVisibilityKey;
-        private String featureVisibilityKey;
         private Map<String, Boolean> translateValues;
 
-        public ExportSectionHelperRowData (String title, boolean translateTitle, boolean separator) {
+
+
+
+        public ExportSectionHelperRowData (String title, List<String> fields, List<String> visibilityKeys, boolean translateTitle, boolean separator) {
             this.title = title;
             this.translateTitle = translateTitle;
             this.separator = separator;
             values = new ArrayList<String>();
             translateValues = new HashMap<String, Boolean>();
+            fldVisibilityKeyMap = new HashMap<String, String>();
+            fieldOrderedList = fields;
+            if (fields != null && !fields.isEmpty() && visibilityKeys != null && !visibilityKeys.isEmpty()) {
+                int count = 0;
+                for (String fld : fields) {
+                    fldVisibilityKeyMap.put(fld, visibilityKeys.get(count));
+                    count ++;
+                }
+            }
         }
 
-        public ExportSectionHelperRowData (String title, boolean translateTitle) {
-            this (title, translateTitle, false);
+        public ExportSectionHelperRowData (String title, List<String> fields, List<String> visibilityKeys, boolean translateTitle) {
+            this (title, fields, visibilityKeys, translateTitle, false);
         }
 
         public ExportSectionHelperRowData (String title) {
-            this(title, false);
+            this(title, null, null, false);
         }
 
         public ExportSectionHelperRowData addRowData(String data, Boolean translate) {
@@ -1599,13 +1623,37 @@ public class ExportActivityToWord extends Action {
         public Map<String, Boolean> getTranslateValues() {
             return translateValues;
         }
+
+        public Map<String, String> getFldVisibilityKeyMap() {
+            return fldVisibilityKeyMap;
+        }
+
+        public List<String> getFieldOrderedList() {
+            return fieldOrderedList;
+        }
+
     }
 
-    private Table createSectionTable(ExportSectionHelper esh, HttpServletRequest request) throws BadElementException, WorkerException {
+    private Table createSectionTable(ExportSectionHelper esh, HttpServletRequest request, ServletContext ampContext) throws BadElementException, WorkerException {
         Table retVal = null;
         int maxCols = 0;
         for (ExportSectionHelperRowData rd : esh.getRowData()) {
-            if (rd.getValues() != null && rd.getValues().size() > maxCols) {
+            //Calculate visible row count
+            int visibleRowCount = 0;
+            if (rd.getValues() != null && !rd.getValues().isEmpty()) {
+                if (rd.getFieldOrderedList() != null) {
+                    for (String fldTitle : rd.getFieldOrderedList()) { 
+                        String visKey = rd.getFldVisibilityKeyMap().get(fldTitle);
+                        if(FeaturesUtil.isVisibleField(visKey, ampContext)) {
+                            visibleRowCount ++;
+                        }
+                    }
+                } else {  //If no visibility keys
+                    visibleRowCount = rd.getValues().size();
+                }
+            }
+
+            if (visibleRowCount > maxCols) {
                 maxCols = rd.getValues().size();
             }
         }
@@ -1631,7 +1679,6 @@ public class ExportActivityToWord extends Action {
             RtfCell dataTitleCell = null;
 
             if (!rd.isSeparator()) {
-                
                 String title = (rd.translateTitle && rd.title != null) ?
                         TranslatorWorker.translateText(rd.title,request) : rd.title;
 
@@ -1652,15 +1699,26 @@ public class ExportActivityToWord extends Action {
             retVal.addCell(dataTitleCell);
 
             int rowCounter = 1;
+            int idx = 0;
             for(String rowData : rd.getValues()) {
-                String trnVal = (rowData !=null && rd.getTranslateValues().containsKey(rowData)) ?
-                        TranslatorWorker.translateText(rowData,request) : rowData;
-                RtfCell dataValCell = new RtfCell(new Paragraph(trnVal != null ? trnVal : "-", PLAINFONT));
-                if (rd.getValues().size() < (maxCols - 1) && rowCounter == rd.getValues().size()) {
-                    dataValCell.setColspan(maxCols - rowCounter);
+                String visKey = null;
+                if (rd.getFieldOrderedList() != null) {
+                    String colTitle = rd.getFieldOrderedList().get(idx);
+                    visKey = rd.getFldVisibilityKeyMap().get(colTitle);
                 }
-                retVal.addCell(dataValCell);
-                rowCounter ++;
+
+                idx ++;
+
+                if(visKey == null || (visKey != null && FeaturesUtil.isVisibleField(visKey, ampContext))) {
+                    String trnVal = (rowData !=null && rd.getTranslateValues().containsKey(rowData)) ?
+                            TranslatorWorker.translateText(rowData,request) : rowData;
+                    RtfCell dataValCell = new RtfCell(new Paragraph(trnVal != null ? trnVal : "-", PLAINFONT));
+                    if (rd.getValues().size() < (maxCols - 1) && rowCounter == rd.getValues().size()) {
+                        dataValCell.setColspan(maxCols - rowCounter);
+                    }
+                    retVal.addCell(dataValCell);
+                    rowCounter ++;
+                }
             }
 
 

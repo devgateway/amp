@@ -33,7 +33,33 @@
 
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <!-- HEADER START -->
- 
+ <div class="headerTop">
+	<digi:secure authenticated="false">
+		<logic:notPresent name="currentMember" scope="session">
+			<digi:insert attribute="headerTop" />	
+		</logic:notPresent>
+	</digi:secure>
+	<digi:secure authenticated="true">
+		<jsp:include page="headerTop_2.jsp"/>
+	</digi:secure>
+</div>
+	<center>
+	<div class="main_menu" >
+		  	<table cellpadding="0"cellspacing="0" width="1000">
+        	<tr>
+            	<td style="width:900px;" valign="top"><digi:insert attribute="headerMiddle"/></td>
+                <td><digi:secure authenticated="true">
+         <div class="workspace_info"> <!-- I think this class should be renamed to correspong the logout item -->   						
+   			<digi:link styleClass="loginWidget" href="/j_spring_logout" module="aim">
+				<digi:trn key="aim:logout">LOGOUT</digi:trn>
+			</digi:link>
+		</div>	
+		</digi:secure></td>
+            </tr>
+        </table>
+		
+	</div>
+    </center>
 <wicket:jsp file="/TEMPLATE/ampTemplate/layout/wicketAdminHeaderLayout.jsp" layouts="headerTopLayout;headerMiddleLayout" />
 
 

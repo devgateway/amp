@@ -186,10 +186,10 @@ function filldatasourcetable(){
     	cell = row.insertCell(0);
     	var url = '<a title="'+activitiesarray[int].activityname+'"href="/aim/viewActivityPreview.do~pageId=2~activityId='+activitiesarray[int].id+'~isPreview=1" target="_blank" style="text-decoration:none;">'+trimmedPathname+'...</a>'
     	cell.innerHTML= url;
-    	cell.setAttribute("width","320px");
+    	cell.setAttribute("width","350px");
     	cell0 = row.insertCell(1);
     	cell0.innerHTML= activitiesarray[int].ampactivityid;
-    	cell0.setAttribute("width","220px");
+    	cell0.setAttribute("width","100px");
     	
     	cell1 = row.insertCell(2);
     	cell1.innerHTML= donors;
@@ -203,12 +203,54 @@ function filldatasourcetable(){
     }
 }
 
+function filldatasourcetablenational(){
+	deleteRow("sourcecontent");
+	var table = document.getElementById("sourcecontent");
+	var rowCount = table.rows.length;
+    var cell;
+    var strlength = 45;  // set to the number of characters you want to keep
+    var trimmedPathname;
+    var donors='';
+    
+    for ( var int = 0; int < nationalactivitiesarray.length; int++) {
+    	donors='';
+    	for ( var x = 0; x < nationalactivitiesarray[int].donors.length; x++) {
+			if (donors == ''){
+				donors = nationalactivitiesarray[int].donors[x].donorCode;
+			}else{
+				donors = donors +', '+ nationalactivitiesarray[int].donors[x].donorCode;
+			}
+		}
+        
+    	trimmedPathname = nationalactivitiesarray[int].activityname.substring(0, Math.min(strlength,nationalactivitiesarray[int].activityname.length));
+
+    	row = table.insertRow(rowCount + int);
+    	cell = row.insertCell(0);
+    	var url = '<a title="'+nationalactivitiesarray[int].activityname+'"href="/aim/viewActivityPreview.do~pageId=2~activityId='+nationalactivitiesarray[int].id+'~isPreview=1" target="_blank" style="text-decoration:none;">'+trimmedPathname+'...</a>'
+    	cell.innerHTML= url;
+    	cell.setAttribute("width","350px");
+    	cell0 = row.insertCell(1);
+    	cell0.innerHTML= nationalactivitiesarray[int].ampactivityid;
+    	cell0.setAttribute("width","100px");
+    	
+    	cell1 = row.insertCell(2);
+    	cell1.innerHTML= donors;
+    	cell1.setAttribute("width","120px");
+    	
+    	cell1 = row.insertCell(3);
+    	cell1.innerHTML= nationalactivitiesarray[int].commitments;
+    	
+    	cell3 = row.insertCell(4);
+    	cell3.innerHTML= nationalactivitiesarray[int].disbursements;
+    }
+}
+
 function deleteRow(tableID) {
     try {
     var table = document.getElementById(tableID);
     var rowCount = table.rows.length;
-    if (rowCount >1){
-    	for(var i=1; i<rowCount; i++) {
+    if (rowCount >0){
+    	for(var i=0; i<rowCount; i++) {
     		table.deleteRow(i);
     		rowCount--;
     		i--;

@@ -100,11 +100,115 @@ public class DataDispatcher extends MultiAction {
 		}else if (request.getParameter("getconfig") != null) { 
 			return modeGetConfiguration(mapping, form, request, response);
 		}else if (request.getParameter("getmedia") != null) { 
-				return modeGetMedia(mapping, form, request, response);
-			}
+			return modeGetMedia(mapping, form, request, response);
+		}else if (request.getParameter("shownational") != null) { 
+			return modeShowNational(mapping, form, request, response);
+		}
 		return null;
 	}
 		
+	public ActionForward modeShowNational(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		DataDispatcherForm maphelperform = (DataDispatcherForm) form;
+
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		maphelperform.getFilter().setTeamMember(tm);
+
+		JSONArray jsonArray = new JSONArray();
+		List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
+		list = DbHelper.getActivities(maphelperform.getFilter());
+		Boolean isaggregatable = true;
+		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
+			ActivityPoint ap = new ActivityPoint();
+			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
+			ap.setId(aA.getIdentifier().toString());
+			ap.setAmpactivityid(aA.getAmpId());
+			ap.setActivityname(aA.getName());
+
+			FundingCalculationsHelper calculations = new FundingCalculationsHelper();
+			Iterator fundItr = aA.getFunding().iterator();
+			ap.setDonors(new ArrayList<SimpleDonor>());
+			while (fundItr.hasNext()) {
+				AmpFunding ampFunding = (AmpFunding) fundItr.next();
+				Collection fundDetails = ampFunding.getFundingDetails();
+				calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
+				SimpleDonor donor = new SimpleDonor(); 
+				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
+				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
+				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
+				ap.getDonors().add(donor);
+			}
+			ap.setCommitments(calculations.getTotalCommitments().toString());
+			ap.setDisbursements(calculations.getTotActualDisb().toString());
+			ap.setExpenditures(calculations.getTotPlannedExp().toString());
+			ap.setSectors(SectorsToJson(aA));
+			ap.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
+			ArrayList<SimpleLocation> sla = new ArrayList<SimpleLocation>();
+			for (Iterator iterator2 = aA.getLocations().iterator(); iterator2.hasNext();) {
+				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
+				boolean implocation = alocation.getLocation().getLocation().getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
+				ArrayList<Long> locationIds = new ArrayList<Long>(Arrays.asList(maphelperform.getFilter().getSelLocationIds()));
+				if (maphelperform.getFilter().getZoneIds()!= null && maphelperform.getFilter().getZoneIds().length>0){
+					locationIds.addAll(Arrays.asList(maphelperform.getFilter().getZoneIds()));
+				}
+				boolean isfiltered = locationIds != null && locationIds.size() > 0 && !locationIds.get(0).equals(-1l) ;
+				if (implocation) {
+					isaggregatable = true;
+					SimpleLocation sl = new SimpleLocation();
+					String lat = alocation.getLocation().getLocation().getGsLat();
+					String lon = alocation.getLocation().getLocation().getGsLong();
+					
+					if (alocation.getLatitude() != null && alocation.getLatitude() !=null 
+							&& !"".equalsIgnoreCase(alocation.getLatitude()) && !"".equalsIgnoreCase(alocation.getLongitude())){
+						sl.setExactlocation(true);
+						sl.setExactlocation_lat(alocation.getLatitude());
+						sl.setExactlocation_lon(alocation.getLongitude());
+					}else{
+						sl.setExactlocation(false);
+					}
+					
+					sl.setName(alocation.getLocation().getLocation().getName());
+					sl.setGeoId(alocation.getLocation().getLocation().getGeoCode());
+					sl.setLat(lat);
+					sl.setLon(lon);
+					if ("".equalsIgnoreCase(lat) && "".equalsIgnoreCase(lon)) {
+						sl.setIslocated(false);
+					} else {
+						sl.setIslocated(true);
+					}
+					if (alocation.getLocationPercentage()!=null){
+						sl.setPercentage(alocation.getLocationPercentage().toString());
+						sl.setCommitments(QueryUtil.getPercentage(calculations.getTotalCommitments().getValue(),new BigDecimal(alocation.getLocationPercentage())));
+						sl.setDisbursements(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(alocation.getLocationPercentage())));
+						sl.setExpenditures(QueryUtil.getPercentage(calculations.getTotActualExp().getValue(),new BigDecimal(alocation.getLocationPercentage())));
+					}
+					if (isfiltered){
+						if (locationIds.contains(alocation.getLocation().getLocation().getId())){
+							sla.add(sl);
+						}
+					}else{
+						sla.add(sl);
+					}
+					
+				} else {
+					isaggregatable = false;
+					break;
+				}
+			}
+			if (isaggregatable) {
+				ap.setLocations(sla);
+				jsonArray.add(ap);
+			}
+		}
+
+		PrintWriter pw = response.getWriter();
+		pw.write(jsonArray.toString());
+		pw.flush();
+		pw.close();
+		return null;
+	}
+
 	private ActionForward modeGetMedia(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) {
 	  URL url;

@@ -90,7 +90,15 @@
      		filldatasourcetable();
      	});
 	});
-
+	
+	$(function(){
+  		$('#nationalp').click(function(){
+     		$('#sourcediv').toggle();
+     		filldatasourcetablenational();
+     	});
+	});
+	
+	
 	$(function(){
   		$('#sbyd').click(function(){
   	  		var value = $('#distance').val();
@@ -334,7 +342,10 @@
 						</feature:display>
 						<li id="datasource" style="cursor: pointer;"><digi:trn>Data Source</digi:trn></li>
 						<feature:display name="Media Search" module="Map Module">
-						<li id="mediasearch" style="cursor: pointer;"><digi:trn>Media Search</digi:trn></li>
+							<li id="mediasearch" style="cursor: pointer;"><digi:trn>Media Search</digi:trn></li>
+						</feature:display>
+						<feature:display name="Show National" module="Map Module">
+							<li id="shownational" onclick="getNationalActivities();" style="cursor: pointer;"><digi:trn>Show National</digi:trn></li>
 						</feature:display>
 				     </ul>
 			     </div>
@@ -348,6 +359,11 @@
  		<div id="pointsLegend" class="legendContent" style="rigth:10px;top:421px;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
         <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
+        <div id="NationalDiv" class="legendContent" style="top:310px;left:74%;font-size: 10px;width: 170px;">
+        	<p id="nationalp">
+        		<digi:trn>Click here to see national projects</digi:trn>
+        	</p>
+        </div>
        
         <div class="usaidlogo">
         	<table>
@@ -383,16 +399,16 @@
         	</table>
         </div>
         <!-- Data Source -->
-        <div id="sourcediv" class="legendContent" style="top:55px;left:30px;width: 75%;display:none;height: 400px;"> 
+        <div id="sourcediv" class="legendContent" style="top:55px;left:30px;width: 70%;display:none;height: 400px;"> 
         	<div onclick="$('#sourcediv').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
         	<div class="legendHeader"><digi:trn>Data Source</digi:trn><br/><hr/></div>
         	<table id="sourceheader" width="95%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
         		<tbody>
 					<tr>
-						<td valign="top" style="font-weight: bolder;">
+						<td valign="top" style="font-weight: bolder;width: 350px;">
 							<digi:trn>Activity Name</digi:trn>
 						</td>
-						<td valign="top" style="font-weight: bolder;">
+						<td valign="top" style="font-weight: bolder;width: 100px;">
 							<digi:trn>Activity Id</digi:trn>
 						</td>
 						<td valign="top" style="font-weight: bolder;">

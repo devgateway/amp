@@ -106,6 +106,7 @@
 <feature:display name="Add activity" module="Map Module"></feature:display>
 <feature:display name="Search  Structures" module="Map Module"></feature:display>
 <feature:display name="Structures" module="Map Module"></feature:display>
+<feature:display name="Show National" module="Map Module"></feature:display>
 <feature:display name="Highlight regions" module="Map Module"></feature:display>
 <feature:display name="Highlight Zones" module="Map Module"></feature:display>
 <feature:display name="Media Search" module="Map Module"></feature:display>

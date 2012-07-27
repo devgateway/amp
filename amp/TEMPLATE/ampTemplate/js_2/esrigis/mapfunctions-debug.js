@@ -24,6 +24,7 @@ var features = new Array();
 var structures = new Array();
 var timer_on = 0;
 var activitiesarray = new Array();
+var nationalactivitiesarray = new Array();
 var loading;
 var cL;
 var basemapGallery;
@@ -43,6 +44,7 @@ var rangegraphicLayer;
 var rooturl;
 var basemapUrl;
 var countrymapurl;
+var nationalborderurl;
 var COUNTY;
 var DISTRICT;
 var COUNT;
@@ -77,6 +79,9 @@ function init() {
 				case 8:
 					rooturl = map.mapurl;
 					break;
+				case 9:
+					nationalborderurl= map.mapurl;
+					break;
 				default:
 					break;
 				}
@@ -108,7 +113,9 @@ function init() {
 	 * esri.layers.ArcGISDynamicMapServiceLayer(population,{opacity :
 	 * 0.80,visible:false,id:'census'});
 	 */
-
+	
+	bordermap= new esri.layers.ArcGISDynamicMapServiceLayer(nationalborderurl,{opacity :0.90,visible:false,id:'border'});
+	
 	geometryService = new esri.tasks.GeometryService(geometryServiceurl);
 	esriConfig.defaults.io.proxyUrl = "/esrigis/esriproxy.do";
 
@@ -166,8 +173,8 @@ function createMapAddLayers(myService1, myService2) {
 	       {"level" : 10,"resolution" : 9.55462853563415,"scale" : 36111.909643}, 
 	       {"level" : 11,"resolution" : 4.77731426794937,"scale" : 18055.954822} ];
 	
-	map = new esri.Map("map", {lods : customLods,extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
-	dojo.connect(map, 'onLoad', function(map) {
+		map = new esri.Map("map", {lods : customLods,extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
+		dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
 		//dojo.connect(dijit.byId('map'), 'resize', resizeMap);
 		dojo.byId('map_zoom_slider').style.top = '95px';
@@ -201,6 +208,7 @@ function createMapAddLayers(myService1, myService2) {
 
 	map.addLayer(myService1);
 	map.addLayer(myService2);
+	map.addLayer(bordermap);
 	// map.addLayers([povertyratesmap,populationmap]);
 
 	// dojo.connect(map, "onExtentChange", showExtent);
@@ -229,6 +237,23 @@ function toggleindicatormap(id) {
 		$('#legendDiv').show('slow');
 		functionalayer.hide();
 		indicatoractive = true;
+	}
+}
+
+nationalactive=false;
+function togglenational() {
+	var layer = map.getLayer('border');
+	var functionalayer = map.getLayer('countrymap');
+	if (layer.visible) {
+		layer.hide();
+		$('#NationalDiv').hide('slow');
+		functionalayer.show();
+		nationalactive = false;
+	} else if (!indicatoractive) {
+		layer.show();
+		$('#NationalDiv').show('slow');
+		functionalayer.hide();
+		nationalactive = true;
 	}
 }
 
@@ -503,6 +528,37 @@ function getActivities(clear) {
 	var deferred = dojo.xhrGet(xhrArgs);
 	
 }
+/**
+ * 
+ */
+
+function getNationalActivities() {
+	if(!nationalactive){
+		showLoading();
+		var xhrArgs = {
+			url : "/esrigis/datadispatcher.do?shownational=true",
+			handleAs : "json",
+			load : function(jsonData) {
+				nationalactivitiesarray=[];
+				// For every item we received...
+				dojo.forEach(jsonData, function(activity) {
+					nationalactivitiesarray.push(activity);
+				});
+				togglenational();
+				filldatasourcetablenational();
+				hideLoading();
+			},
+			error : function(error) {
+				console.log(error);
+			}
+		}
+		// Call the asynchronous xhrGet
+		var deferred = dojo.xhrGet(xhrArgs);
+	}else{
+		togglenational();
+	}
+}
+
 
 /**
  * 

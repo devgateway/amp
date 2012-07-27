@@ -148,7 +148,7 @@
 
 			
 
-					<div style='width:100%; height:280px; border: 0px; overflow-y:scroll;'>
+					<div id="listContainerDiv" style='width:100%; height:300px; border: 0px; overflow-y:scroll;'>
 			
 			
 					<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;" border="0">
@@ -394,6 +394,20 @@
 			}
 			
 		}
+		
+		resizeListContainer = function(o) {
+			var wndHeight = $(window).height();
+			if(wndHeight >= 499) {
+				var newHeight = (wndHeight - 200) + "px";
+				$("#listContainerDiv").css("height", newHeight);
+			}
+		}
+		
+		$(document).ready(resizeListContainer);
+		$(window).resize(resizeListContainer);
+		
+		
+		
 		</script>
 
 

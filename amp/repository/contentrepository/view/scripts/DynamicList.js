@@ -120,7 +120,19 @@ AbstractDynamicList.prototype.setKeywordTextboxInformation = function (inputId,b
 	this.searchBtn = document.getElementById(buttonId);
 	this.searchBox	= document.getElementById(inputId);
 	YAHOO.util.Event.on(this.searchBtn,"click", this.sendRequest, this, true);
+	YAHOO.util.Event.on(this.searchBox,"keydown", handleKeyPress, this, true);
+	
+};
+
+
+
+function handleKeyPress(arg) {
+	
+	if(!arg || arg.keyCode != 13)
+		return;
+	this.sendRequest(true);
 }
+
 
 function AbstractDynamicList (containerEl, thisObjName, fDivId, trnObj) {
 	this.containerEl	= containerEl;

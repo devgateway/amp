@@ -208,7 +208,7 @@ function fnSubmit() {
 				<tr>
 					<td noWrap width="750" vAlign="top">
 						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left" style="margin-top:10px;">
-							<tr><td><table width="100%" border="0" align="left" cellpadding="1" cellspacing="1" bgcolor="#F2F2F2">
+							<tr><td><table width="100%" border="0" align="left" cellpadding="1" cellspacing="1" bgcolor="#F2F2F2" style="padding:10px;">
 								<tr><td>
 								<table cellpadding="0" cellSpacing=2 align="left" border="0" style="font-size:12px; margin-bottom:10px;">
 									<tr>

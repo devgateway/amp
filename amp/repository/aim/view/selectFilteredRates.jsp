@@ -45,7 +45,7 @@
 <bean:define id="myForm" name="aimSelectFilteredCurrencyRatesForm" toScope="page" type="org.digijava.module.aim.form.SelectFilteredCurrencyRatesForm" />
 
 <digi:form action="/selectFilteredRates.do">
-
+<h1 class="admintitle">Select Filtered Currency rates</h1>
 <table>
 	<tr>
 		<td>
@@ -56,7 +56,7 @@
 			<table cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
 					<!-- Start Navigation -->
-					<td colspan="3"><span class=crumb>
+					<!--<td colspan="3"><span class=crumb>
 						<digi:link href="/admin.do" styleClass="comment" title="Click here to goto Admin Home">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
@@ -66,7 +66,7 @@
 						Select Filtered Currency rates
 						</digi:trn>
 						</span>
-					</td>
+					</td>-->
 					<!-- End navigation -->
 				</tr>
 				<tr>
@@ -83,7 +83,7 @@
 					<td noWrap width=100% vAlign="top">
 						<table width="100%" cellspacing="2" cellPadding="2" align="left">
 							<tr>
-								<td valign="top" width="500px">
+								<td valign="top" width="100%">
 									<logic:notEmpty name="myForm" property="existingFilteredRates">
 									<table width="100%">
 										<tr>
@@ -129,11 +129,8 @@
 												<input class="buttonx" type="button" onclick="return deleteSelection();" value="${trnBtn}" />
 											</td>
 										</tr>
-									</table>
-									</logic:notEmpty>
-								</td>
-								<td valign="top" width="300px">
-									<table width="100%">
+										<tr>
+										  <td><table width="100%">
 										<tr>
 											<td width="100%">
 												<table cellSpacing="1" cellPadding="4" align="left" width="100%" class="inside">
@@ -173,12 +170,14 @@
 												<input class="buttonx" type="button" onclick="return addFilteredRate();" value="${trnAddBtn}" id="addFilteredRateBtn"/>	
 											</td>
 										</tr>
+									</table></td>
+									  </tr>
 									</table>
-								
-										
-								</td>
+									</logic:notEmpty>
+							  </td>
+
 							</tr>
-						</table>
+					  </table>
 					</td>
 				</tr>
 			</table>
@@ -188,17 +187,30 @@
 </td>
 
 <!-- other links -->
-<td>
+<td valign="top">
 			<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" >
 				<thead>
-												<tr bgcolor="eeeeee">
+												<tr>
 													<td align="left" class="inside" width="100%" colspan="2">
-														<b><digi:trn>
+													
+													<table width="100" cellspacing="0" cellpadding="0">
+														<tbody><tr>
+															<td bgcolor="#c9c9c7" class="box-title"><b style="font-size: 12px; padding-left: 5px;"><b><digi:trn>
 															Other Links
-														</digi:trn></b>
+														</digi:trn></b></b>
+															</td>
+															<td width="17" height="17" background="module/aim/images/corner-r.gif"></td>
+														</tr>
+													</tbody></table>
+													
+													
+													
+													
+													
+														
 													</td>
 												</tr>
-											</thead>
+			  </thead>
 												
 												<tr>
 													<td bgColor="#ffffff" class="box-border">
@@ -237,11 +249,11 @@
 													</table>
 													</td>
 												</tr>
-											</table>
-		</td>
+	  </table>
+	  </td>
 	</tr>
 </table> 
  
- </digi:form>
+</digi:form>
 
 

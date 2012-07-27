@@ -112,7 +112,7 @@
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
-
+<h1 class="admintitle" style="text-align:left;"><digi:trn key="aim:fiscalCalendarManager">Fiscal Calendar Manager</digi:trn></h1>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>
 	<tr>
 		<td align=left valign="top" width=1000>
@@ -143,11 +143,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 valign="center" width=571><span class=subtitle-blue>
-						<digi:trn key="aim:fiscalCalendarManager">
-						Fiscal Calendar Manager
-						</digi:trn>
-						</span>
+					<td height=16 valign="center" width=571>
 						<br>
 						<digi:errors/>
 					</td>

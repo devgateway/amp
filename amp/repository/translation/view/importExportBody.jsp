@@ -277,7 +277,7 @@ function checkSelectedLanguages(){
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width="100%" vAlign="top">
+					<td noWrap width="100%" vAlign="top" bgcolor=#f2f2f2 style="padding:15px;">
 					<table width="50%" cellspacing="1" cellspacing="1" border="0" align="center">
 					<logic:empty name="importExportForm" property="importedLanguages">
 					<logic:notEmpty name="importExportForm" property="languages">
@@ -332,7 +332,7 @@ function checkSelectedLanguages(){
 
 					<digi:form action="/importexport.do" method="post" enctype="multipart/form-data">
 						<tr>
-							<td align="left">
+							<td align="center">
 								<!-- <html:file property="fileUploaded"></html:file> -->
 								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 									<!-- CSS content must be put in a separated file and a class must be generated -->
@@ -341,7 +341,7 @@ function checkSelectedLanguages(){
 							</td>
 						</tr>
 							 <tr>
-							 	<td>
+							 	<td align=center>
                                   <c:set var="translation">
                                     <digi:trn >Import</digi:trn>
                                   </c:set>

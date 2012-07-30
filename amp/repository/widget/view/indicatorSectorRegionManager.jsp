@@ -29,8 +29,8 @@
 <digi:form action="/indSectRegManager.do~actType=viewAll">
 <html:hidden name="gisIndicatorSectorRegionForm" property="selectedPage"/>
 
-
-<table width="60%" border="0" cellpadding="15">
+<digi:errors/>
+<table width="1000" border="0" cellpadding="0">
 	<!--<tr>
 		<td>
 			<span class="crumb">
@@ -44,20 +44,15 @@
 			</span>
 		</td>
 		</tr>-->
-                <tr>
-                    <td>
-                        <digi:errors/>
-                    </td>
-                </tr>
 
 	<tr>
-		<td>
-			<a href="/widget/indSectRegManager.do~actType=create"><digi:trn key="gis:indicatorSectorRegionManager:createNew">Create new Indicator</digi:trn></a>
+		<td style="padding-bottom:20px;">
+			<a href="/widget/indSectRegManager.do~actType=create" style="font-size:12px; font-weight:bold;"><digi:trn key="gis:indicatorSectorRegionManager:createNew">Create new Indicator</digi:trn></a>
 		</td>
 	</tr>
 	
 	<tr>
-		<td width="100%">
+		<td width="100%" bgcolor=#f2f2f2 style="padding-top:10px; padding-bottom:10px;">
 			<table>
 				<tr>
 					<td nowrap="nowrap">
@@ -84,7 +79,7 @@
     </tr>	
 	
 	<tr>
-		<td>
+		<td style="padding-top:15px;">
 			
 			<table border="0" width="100%" align="center" style="font-family:verdana;font-size:11px;">
 				<tr bgColor="#d7eafd">

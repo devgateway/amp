@@ -59,6 +59,7 @@ div.fakefile2 {
 	margin: 0;
 	z-index: 1;
 	line-height: 90%;
+	text-align:left;
 }
 div.fakefile2 input{
 	width: 83px;

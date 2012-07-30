@@ -185,7 +185,7 @@ function page (page, ampSelectedClass){
 								    	</c:if>
 								    	</div>
 								    </td>
-								    <td bgcolor="#FFFFFF" class="inside">
+								    <td bgcolor="#FFFFFF" class="inside ampvalues">
 								  		<html:select  name="mapFieldsForm"  property="allSelectedAmpValues" styleClass="dropdwn_sm" styleId="ampValues[${field.ampField.id}]">
 								  			<html:option value="-1" ><digi:trn>Add new</digi:trn></html:option>
         									<logic:iterate id="cls" name="field" property="sortedLabels" >

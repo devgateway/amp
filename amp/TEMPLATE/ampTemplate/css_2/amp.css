@@ -890,3 +890,5 @@ div.innerTab {
 .pageTitle {margin:20px 0 20px 0 !important; text-align:center; padding:5px; background-color:#C7D4DB;}
 .addTranslations, .delete_trans {background-color:#5E8AD1; border-top: 1px solid #99BAF1; border-left:1px solid #99BAF1; border-right:1px solid #225099; border-bottom:1px solid #225099; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; cursor:pointer}
 .reportsBorderTD {padding:10px;}
+
+.ampvalues select {width:500px;}

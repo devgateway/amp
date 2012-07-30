@@ -191,7 +191,7 @@
 			<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" >
 				<thead>
 												<tr>
-													<td align="left" class="inside" width="100%" colspan="2">
+													<td align="left" width="100%" colspan="2">
 													
 													<table width="100" cellspacing="0" cellpadding="0">
 														<tbody><tr>

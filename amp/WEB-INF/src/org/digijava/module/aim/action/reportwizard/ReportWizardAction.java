@@ -127,7 +127,7 @@ public class ReportWizardAction extends MultiAction {
 		}
 		else { // If there is a report title in the request then it means that the report should be saved
 			try{
-				if ( "true".equalsIgnoreCase( request.getParameter("dynamicSaveReport") ) ) 
+				if ( "true".equalsIgnoreCase( request.getParameter("dynamicSaveReport")) ) 
 					return this.modeDynamicSave(mapping, form, request, response);
 				else
 					return this.modeSave(mapping, form, request, response);
@@ -465,7 +465,7 @@ public class ReportWizardAction extends MultiAction {
 		if ( ampReport == null )
 			throw new Exception ("There was a problem getting access to the old report");
 		
-		if ( ampReportTitle.equals(ampReport.getName()) ) { // we need to override the report
+		if ( ampReportTitle.equals(ampReport.getName()) && reportId!=-7) { // we need to override the report 
 			ampReport.setAmpReportId( reportId );
 			AmpFilterData.deleteOldFilterData( reportId );
 		}

@@ -310,7 +310,7 @@
 				 				
  				<table align="center" cellpadding="0" cellspacing="0" width="100%" class="inside">
 					<tr bgColor=#C0D6E2>
-                		<td bgColor=#C0D6E2 align="center" class="inside_report">
+                		<td bgColor=#C0D6E2 align="center" class="inside_report" style="padding:5px;">
                     		<b>
                         		${titleColumn}
                         	</b>

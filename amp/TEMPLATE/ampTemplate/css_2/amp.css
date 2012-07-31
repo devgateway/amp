@@ -340,7 +340,7 @@ table.report_indicator{margin-bottom:15px}
 .dashboard_bottom{border-top:1px solid #dadada;font-weight:bold;color:#000000;font-size:11px}
 .dashboard_activities{float:left;width:730px;padding:5px;margin-top:10px}
 .dashboard_options{float:left;width:180px; padding:5px;margin-top:10px; background-color:#F2F2F2;}
-.dashboard_filters{float:left;width:745px; border:1px solid #CCCCCC; padding:5px;margin-top:10px; margin-right:10px;}
+.dashboard_filters{float:left;width:745px; min-height:328px;border:1px solid #CCCCCC; padding:5px;margin-top:10px; margin-right:10px;}
 .dashboard_bottom table td{font-weight:normal}
 .normal_options{font-weight:normal;font-size:11px;line-height:2em;}
 .dashboard_bottom .btn_save{margin:10px 5px	;text-align:left}

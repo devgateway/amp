@@ -812,7 +812,7 @@ span.extContactDropdownEmail {
 
 <module:display name="Messages" parentModule="Messaging System"></module:display>
 
-<div class="ins_box_left" style="border: 1px solid silver; background-color:#F5F5F5;">
+<div class="ins_box_left" style="width:100%;border: 1px solid silver; background-color:#F5F5F5;">
 	<digi:errors/>
 	<div class="create_message">
 		<table width="100%" border="0" cellspacing="3" cellpadding="3">
@@ -962,8 +962,8 @@ span.extContactDropdownEmail {
 					</div>
 					
 				</td>
-				<td>
-					&nbsp;
+				<td>&nbsp;
+					
 				</td>
 			</tr>
 		</table></td>

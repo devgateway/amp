@@ -887,7 +887,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 															<c:set var="valueId1"> contact1OrgId </c:set>
 								                              <c:set var="nameId1"> contact1OrgName </c:set>
 								                              <input name="contact1OrgId" type="hidden" id="${valueId1}" style="text-align:left" value='${pledgeForm.contact1OrgId}' size="4"/>
-								                              <input name="contact1OrgName" type="text" id="${nameId1}" value='${pledgeForm.contact1OrgName}' size="33" style="background-color:#CCCCCC; text-align:left" onKeyDown="return false" class="inp-text" onchange="setSameContact()"/>
+								                              <input name="contact1OrgName" type="text" id="${nameId1}" value='${pledgeForm.contact1OrgName}' size="33" style="background-color:#FFFFFF; text-align:left" onKeyDown="return false" class="inp-text" onchange="setSameContact()"/>
 								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId1}" htmlNameHolder="${nameId1}" >...</aim:addOrganizationButton></td>
 											<td><html:text property="contact1Ministry" size="40" styleClass="inp-text" onkeyup="setSameContact()"/></td>
 											</tr>
@@ -1007,7 +1007,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 											<td><c:set var="valueId2"> contact2OrgId </c:set>
 								                              <c:set var="nameId2"> contact2OrgName </c:set>
 								                              <input name="contact2OrgId" type="hidden" id="${valueId2}" style="text-align:left" value='${pledgeForm.contact2OrgId}' size="4"/>
-								                              <input name="contact2OrgName" type='text' id="${nameId2}" value='${pledgeForm.contact2OrgName}' size="33" style="background-color:#CCCCCC;text-align:left" onKeyDown="return false" class="inp-text"/>
+								                              <input name="contact2OrgName" type='text' id="${nameId2}" value='${pledgeForm.contact2OrgName}' size="33" style="background-color:#FFFFFF;text-align:left" onKeyDown="return false" class="inp-text"/>
 								                              <aim:addOrganizationButton useClient="true" useAcronym="true" htmlvalueHolder="${valueId2}" htmlNameHolder="${nameId2}" >...</aim:addOrganizationButton></td>
 											<td><html:text property="contact2Ministry" size="40" styleClass="inp-text"/></td>
 											</tr>

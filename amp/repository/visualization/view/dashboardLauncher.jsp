@@ -613,27 +613,27 @@ function initializeGlobalVariables(){
 									<div >
 									<table border="0" cellspacing="3" cellpadding="3">
  									 <tr>
-  										  <td><b><digi:trn>Start year</digi:trn>:</b></td>
-   										  <td><html:select property="filter.startYearFilter" styleId="startYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+  										  <td class="dashboard_generator_opt"><b><digi:trn>Start year</digi:trn>:</b></td>
+   										  <td class="dashboard_generator_opt"><html:select property="filter.startYearFilter" styleId="startYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
 														<html:optionsCollection property="filter.years"
 															label="wrappedInstance" value="wrappedInstance" />
 													</html:select></td>
 													<td rowspan=2 width=15>&nbsp;</td>
-   										 <td><b><digi:trn>End year</digi:trn>:</b></td>
-  									     <td><html:select property="filter.endYearFilter" styleId="endYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+   										 <td class="dashboard_generator_opt"><b><digi:trn>End year</digi:trn>:</b></td>
+  									     <td class="dashboard_generator_opt"><html:select property="filter.endYearFilter" styleId="endYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
 														<html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
 													</html:select></td>
 													<td rowspan=2 width=15>&nbsp;</td>
-   										 <td><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
-   										 <td><html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:150px;">
+   										 <td class="dashboard_generator_opt"><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
+   										 <td class="dashboard_generator_opt"><html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:150px;">
 														<html:option value="-1">
 														<digi:trn>None</digi:trn>
 														</html:option>
 														<html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
 													</html:select></td>
 													<td rowspan=2 width=15>&nbsp;</td>
-													<td>&nbsp;</td>
-													<td>&nbsp;</td>
+													<td class="dashboard_generator_opt">&nbsp;</td>
+													<td class="dashboard_generator_opt">&nbsp;</td>
  									 </tr>
 									  <tr>
    										<td><b><digi:trn>Currency Type</digi:trn>:</b></td>

@@ -242,7 +242,7 @@ function initializeGlobalVariables(){
 
 		#stepscontainer{width:960px;margin:0 auto;padding:5px;background:#fff;font-family:arial;font-size:12px;}
 
-		#stepscontainer h2{text-align:center;text-transform:uppercase;font-size:13px;font-weight:bold;margin:0px 0px 0px 0px; background-color: #4A687A; color:#FFFFFF; padding:10px;}
+		#stepscontainer h2{text-align:center;text-transform:uppercase;font-size:13px;font-weight:bold;margin:0px 0px 0px 0px; background-color: #4A687A; color:#FFFFFF; padding:5px;}
 
 		.stepsbox{border:1px solid #d0d0d0;padding:10px;margin:0px 0px 20px 0px; background-color: #FBFBFB;}
 
@@ -611,7 +611,58 @@ function initializeGlobalVariables(){
 
 								<br />
 									<div >
-										<table border="0" cellspacing="3" cellpadding="3">
+									<table border="0" cellspacing="3" cellpadding="3">
+ 									 <tr>
+  										  <td><b><digi:trn>Start year</digi:trn>:</b></td>
+   										  <td><html:select property="filter.startYearFilter" styleId="startYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+														<html:optionsCollection property="filter.years"
+															label="wrappedInstance" value="wrappedInstance" />
+													</html:select></td>
+													<td rowspan=2 width=15>&nbsp;</td>
+   										 <td><b><digi:trn>End year</digi:trn>:</b></td>
+  									     <td><html:select property="filter.endYearFilter" styleId="endYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+														<html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+													</html:select></td>
+													<td rowspan=2 width=15>&nbsp;</td>
+   										 <td><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
+   										 <td><html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:150px;">
+														<html:option value="-1">
+														<digi:trn>None</digi:trn>
+														</html:option>
+														<html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
+													</html:select></td>
+													<td rowspan=2 width=15>&nbsp;</td>
+													<td>&nbsp;</td>
+													<td>&nbsp;</td>
+ 									 </tr>
+									  <tr>
+   										<td><b><digi:trn>Currency Type</digi:trn>:</b></td>
+  										    <td><html:select property="filter.currencyId" styleId="currencies_dropdown_ids" styleClass="dropdwn_sm" style="width:150px;">
+														<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
+													</html:select></td>
+    										<td><b><digi:trn>Show in top ranks</digi:trn>:</b></td>
+    									    <td><html:select property="filter.topLists" styleId="topLists_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+														<html:option value="5">5</html:option>
+														<html:option value="10">10</html:option>
+														<html:option value="20">20</html:option>
+														<html:option value="50">50</html:option>
+													</html:select></td>
+													
+   											 <td><b><digi:trn>Decimals to show</digi:trn>:</b></td>
+    										 <td><html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+														<html:option value="0">0</html:option>
+														<html:option value="1">1</html:option>
+														<html:option value="2">2</html:option>
+														<html:option value="3">3</html:option>
+														<html:option value="4">4</html:option>
+														<html:option value="5">5</html:option>
+													</html:select></td>
+													
+ 											 <td><b><digi:trn>Show amounts in thousands</digi:trn>:</b></td>
+ 											 <td><html:checkbox property="filter.showAmountsInThousands" styleId="show_amounts_in_thousands"/></td>
+									  </tr>
+				</table>
+										<!--<table border="0" cellspacing="3" cellpadding="3">
 											<tr>
 												<td><b><digi:trn>Currency Type</digi:trn>:</b>
 												</td>
@@ -665,7 +716,7 @@ function initializeGlobalVariables(){
 												<td>
 														<html:checkbox property="filter.showAmountsInThousands"
 																				styleId="show_amounts_in_thousands"/>
-													</td>
+											  </td>
 											</tr>
 											<tr>
 												<td><b><digi:trn>Decimals to show</digi:trn>:</b>
@@ -680,8 +731,8 @@ function initializeGlobalVariables(){
 														<html:option value="4">4</html:option>
 														<html:option value="5">5</html:option>
 													</html:select></td>
-												</tr>
-										</table>
+										  </tr>
+										</table>-->
 									</div>
 								
 					        </div>	

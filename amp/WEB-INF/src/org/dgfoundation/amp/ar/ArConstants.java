@@ -193,6 +193,17 @@ public final class ArConstants {
 	public final static List<String> LOCATION_COLUMNS	= 
 		Arrays.asList(new String[]{ArConstants.COLUMN_REGION, ArConstants.COLUMN_ZONE, ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_SECTOR_LOCATION} );
 	
+	public final static List<String> PROGRAMS_COLUMNS	= 
+		Arrays.asList(new String[]{"National Planning Objectives Level 1",
+				"National Planning Objectives Level 2",
+				"National Planning Objectives Level 3",
+				"National Planning Objectives Level 4",
+				"National Planning Objectives Level 5",
+				"National Planning Objectives Level 6",
+				"National Planning Objectives Level 7",
+				"National Planning Objectives Level 8"});
+	
+	
 	public final static String COLUMN_SECTOR_GROUP="Sector Group";
 	
 	public final static String COLUMN_ANY_NATPROG					= "National Planning Objectives";

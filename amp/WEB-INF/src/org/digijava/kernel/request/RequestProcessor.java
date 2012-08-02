@@ -244,6 +244,12 @@ public class RequestProcessor
 
     }
 
+    private boolean checkForIdInQuery(String url){
+    	if (url.indexOf('~') > -1 || url.indexOf("id=") > -1 || url.indexOf("Id=") > -1)
+    		return true;
+    	return false;
+    }
+    
     public void process(HttpServletRequest request,
                         HttpServletResponse response) throws IOException,
         ServletException {
@@ -272,17 +278,20 @@ public class RequestProcessor
         		}
         		
         		if (commonREF.compareTo(commonURL) != 0){
-        			request.getSession().invalidate();
-        			response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
+        			commonURL = new String(request.getRequestURL());
+            		if (request.getQueryString() != null)
+            			commonURL += "?" + request.getQueryString();
+            		if (checkForIdInQuery(commonURL)){
+	        			request.getSession().invalidate();
+	        			response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
+            		}
         		}
         	}
         	else{
         		commonURL = new String(request.getRequestURL());
         		if (request.getQueryString() != null)
         			commonURL += "?" + request.getQueryString();
-        		if (commonURL.indexOf('~') > -1 ||
-        				commonURL.indexOf("id=") > -1 ||
-        				commonURL.indexOf("Id=") > -1){
+        		if (checkForIdInQuery(commonURL)){
         			request.getSession().invalidate();
         			response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
         		}

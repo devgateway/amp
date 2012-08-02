@@ -931,11 +931,25 @@ System.out.println("lang:"+lang);
                                   Matcher urlMatcher = urlPattern.matcher(imgTag);
                                   */
              					 //get the image and put it in zip
-             					 String paragraphOrder= imgTag.substring(imgTag.indexOf("activeParagraphOrder=")+21,imgTag.lastIndexOf("&"));
-             					 String docId = imgTag.substring(imgTag.indexOf("documentId=")+11, imgTag.indexOf("\"",imgTag.indexOf("documentId=")+11));
-             					 String imgName = item.getBodyEditKey()+"_langIs_"+lang+"_poIs_"+paragraphOrder;
+                                  String paragraphOrder = null;
+                                  int activeParagraphOrderIdxOf = imgTag.indexOf("activeParagraphOrder=");
+                                  int idxOfAmp = imgTag.indexOf("&");
+                                  if (activeParagraphOrderIdxOf > -1 && idxOfAmp > -1) {
+             					    paragraphOrder = imgTag.substring(activeParagraphOrderIdxOf + 21, idxOfAmp);
+                                  }
+                                  String docId = null;
+                                  int documentIdIdxOf = imgTag.lastIndexOf("documentId=");
+                                  if (documentIdIdxOf > -1) {
+             					    docId = imgTag.substring(documentIdIdxOf + 11, imgTag.indexOf("\"",imgTag.indexOf("documentId=")+11));
+                                  }
 
-                                  if (!imageUniqueChecker.contains(imgName)) {
+                                  String imgName = null;
+
+                                  if (paragraphOrder != null && docId != null) {
+                                    imgName = item.getBodyEditKey()+"_langIs_"+lang+"_poIs_"+paragraphOrder;
+                                  }
+
+                                  if (!imageUniqueChecker.contains(imgName) && paragraphOrder != null && docId != null) {
                                       imageUniqueChecker.add(imgName);
 
 
@@ -1070,7 +1084,7 @@ System.out.println("lang:"+lang);
 		    
 		    String helpBody=help.getBody();
 		    //<sdmTag width="240" height="320" imgName="help-admin-271423211-1296048546820_langIs_en_poIs_0.jpg" /> 
-		    String imgPart="<sdmTag.*/>" ;
+		    String imgPart="<sdmTag.*?>" ;
 			Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
 			Matcher matcher = pattern.matcher(helpBody);
 			 

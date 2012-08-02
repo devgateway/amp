@@ -240,9 +240,9 @@ function initializeGlobalVariables(){
 	<style>
     	*{margin:0px;padding:0px;}
 
-		#stepscontainer{width:960px;margin:0 auto;padding:20px;background:#fff;font-family:arial;font-size:12px;}
+		#stepscontainer{width:960px;margin:0 auto;padding:5px;background:#fff;font-family:arial;font-size:12px;}
 
-		#stepscontainer h2{text-align:center;text-transform:uppercase;font-size:18px;font-weight:normal;margin:0px 0px 0px 0px; background-color: #4A687A; color:#FFFFFF; padding:10px;}
+		#stepscontainer h2{text-align:center;text-transform:uppercase;font-size:13px;font-weight:bold;margin:0px 0px 0px 0px; background-color: #4A687A; color:#FFFFFF; padding:10px;}
 
 		.stepsbox{border:1px solid #d0d0d0;padding:10px;margin:0px 0px 20px 0px; background-color: #FBFBFB;}
 
@@ -252,7 +252,7 @@ function initializeGlobalVariables(){
 
 		.boxes{background:url(/TEMPLATE/ampTemplate/img_2/split.gif) repeat-y center;border:1px solid #d0d0d0;position:relative; background-color:#FFFFFF;}
 
-		.stepsbox h3{background:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif) repeat-x;height:40px;margin:0px;padding:10px 10px 0px 10px;color:#a2a5a7;line-height:10px;}
+		.stepsbox h3{background:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif) repeat-x;height:40px;margin:0px;padding:9px 10px 0px 10px;color:#76797A;line-height:10px; font-size:12px;}
 
 		.innerbox{height:250px;overflow:auto;}
 
@@ -268,7 +268,8 @@ function initializeGlobalVariables(){
 
 		.rightbox ul{margin:10px;}
 
-		.rightbox ul li {padding:5px;}
+		.rightbox ul li {padding:2px;}
+		.rightbox ul li input {margin-right:5px;}
 
 		.stepsbox ul li label{padding:0px 0px 0px 10px;}
 
@@ -568,12 +569,12 @@ function initializeGlobalVariables(){
 										</div>
 										<div class="rightbox" id="sectorDivContent" style="display: none;">
 												<h3><digi:trn>Member Selector</digi:trn>
-												<input onkeypress="clearSearch('sectorDivList')"
+												<div style="float:right; margin-top:-7px; padding:0;"><input onkeypress="clearSearch('sectorDivList')"
 															id="sectorDivList_search" type="text" class="inputx" />
-														<input type="button" class="buttonx"
+														<input type="button" class="buttonx_sm"
 															onclick="findPrev('sectorDivList')" value='&lt;&lt;' />
 														<input type="button" onclick="findNext('sectorDivList')"
-															class="buttonx" value="&gt;&gt;" />
+															class="buttonx_sm" value="&gt;&gt;" /></div>
 												</h3>	
 												<div class="innerbox" id="sectorDivList">
 													<ul style="list-style-type: none;margin-left: 0px;">

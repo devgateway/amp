@@ -118,6 +118,9 @@ var trnAllSubSector = "";
 var trnAllRegions = "";
 var trnAllZones = "";
 var trnMultipleZones = "";
+var trnMultipleOrgGrp = ""; 
+var trnMultipleRegion = ""; 
+var trnMultipleSector = ""; 
 var trnODAGrowth = "";
 var trnSavingInformation = "";
 var trnSavedInformation = "";
@@ -197,6 +200,9 @@ function initializeTranslations(){
 	trnAllRegions ="<digi:trn jsFriendly='true'>ALL Regions</digi:trn>"; 
 	trnAllZones = "<digi:trn jsFriendly='true'>ALL Zones</digi:trn>"; 
 	trnMultipleZones = "<digi:trn jsFriendly='true'>Multiple Zones</digi:trn>";
+	trnMultipleOrgGrp = "<digi:trn jsFriendly='true'>Multiple Org. Groups</digi:trn>"; 
+	trnMultipleRegion = "<digi:trn jsFriendly='true'>Multiple Regions</digi:trn>"; 
+	trnMultipleSector = "<digi:trn jsFriendly='true'>Multiple Sectors</digi:trn>"; 
 	trnODAGrowth = "<digi:trn jsFriendly='true'>ODA Growth Percentage</digi:trn>"; 
 	trnSavingInformation = "<digi:trn>saving information, please wait</digi:trn>..."; 
 	trnSavedInformation = "<digi:trn>Information was saved</digi:trn>"; 
@@ -464,17 +470,10 @@ function initializeGlobalVariables(){
 											<div
 												class="innerbox" id="orgGrpDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li><c:if
-															test="${visualizationform.filter.dashboardType eq '1' }">
-															<input type="radio" value="-1" id="org_grp_check_all"
-																name="org_grp_check"
-																onClick="uncheckAllRelatedEntities('organization_check')" />
-														</c:if> <c:if
-															test="${visualizationform.filter.dashboardType ne '1' }">
-															<input type="checkbox" id="org_grp_check_all" value="-1"
+													<li><input type="checkbox" id="org_grp_check_all" value="-1"
 																name="org_grp_check"
 																onClick="allOptionChecked(this,'org_grp_check','organization_check')" />
-														</c:if> <span><digi:trn>All</digi:trn>
+													<span><digi:trn>All</digi:trn>
 													</span></li>
 													<c:forEach
 														items="${visualizationform.filter.orgGroupWithOrgsList}"
@@ -482,19 +481,11 @@ function initializeGlobalVariables(){
 														<c:set var="orgGrp">
 															<c:out value="${item.mainEntity.orgGrpName}"/>
 														</c:set>
-														<li><c:if
-																test="${visualizationform.filter.dashboardType eq '1' }">
-																<input type="radio" name="org_grp_check"
-																	title="${orgGrp}"
-																	value="${item.mainEntity.ampOrgGrpId}"
-																	onClick="checkUncheckRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															</c:if> <c:if
-																test="${visualizationform.filter.dashboardType ne '1' }">
-																<input type="checkbox" name="org_grp_check"
+														<li><input type="checkbox" name="org_grp_check"
 																	title="${orgGrp}"
 																	value="${item.mainEntity.ampOrgGrpId}"
 																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															</c:if> <span><c:out value="${orgGrp}"/>
+															<span><c:out value="${orgGrp}"/>
 														</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
@@ -523,35 +514,21 @@ function initializeGlobalVariables(){
 											
 											<div class="innerbox" id="regionDivList">
 												<ul>
-													<li><c:if
-															test="${visualizationform.filter.dashboardType eq '2' }">
-															<input type="radio" id="region_check_all"
-																name="region_check" value="-1"
-																onClick="uncheckAllRelatedEntities('zone_check')" />
-														</c:if> <c:if
-															test="${visualizationform.filter.dashboardType ne '2' }">
-															<input type="checkbox" id="region_check_all"
+													<li>
+														<input type="checkbox" id="region_check_all"
 																name="region_check" value="-1"
 																onClick="allOptionChecked(this,'region_check','zone_check')" />
-														</c:if> <span><digi:trn>All</digi:trn>
+														<span><digi:trn>All</digi:trn>
 													</span></li>
 													<c:forEach
 														items="${visualizationform.filter.regionWithZones}"
 														var="item">
-														<li><c:if
-																test="${visualizationform.filter.dashboardType eq '2' }">
-																<input type="radio" name="region_check"
-																	title="${item.mainEntity.name}"
-																	value="${item.mainEntity.id}"
-																	onClick="checkUncheckRelatedEntities(this,'zone_check',${item.mainEntity.id})" />
-															</c:if> <c:if
-																test="${visualizationform.filter.dashboardType ne '2' }">
-																<input type="checkbox" name="region_check"
+														<li><input type="checkbox" name="region_check"
 																	title="${item.mainEntity.name}"
 																	value="${item.mainEntity.id}"
 																	onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})">
-															</c:if> <span><c:out value="${item.mainEntity.name}"/>
-														</span> <br />
+															<span><c:out value="${item.mainEntity.name}"/>
+															</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
 																	var="zone">

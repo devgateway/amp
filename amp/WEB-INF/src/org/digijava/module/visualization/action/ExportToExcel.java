@@ -37,6 +37,8 @@ import org.digijava.module.visualization.util.DbUtil;
 import javax.servlet.ServletContext;
 import org.digijava.module.aim.util.SectorUtil;
 
+import com.lowagie.text.Paragraph;
+
 public class ExportToExcel extends Action {
 
 	private static Logger logger = Logger.getLogger(ExportToExcel.class);
@@ -79,6 +81,9 @@ public class ExportToExcel extends Action {
 			String filtersOrganizationsTrn = TranslatorWorker.translateText("Organizations", langCode, siteId);
 			String filtersSectorsTrn = TranslatorWorker.translateText("Sectors", langCode, siteId);
 			String filtersLocationsTrn = TranslatorWorker.translateText("Locations", langCode, siteId);
+			String filtersSubSectorsTrn = TranslatorWorker.translateText("Sub-Sectors", langCode, siteId);
+			String filtersRegionsTrn = TranslatorWorker.translateText("Regions", langCode, siteId);
+			String filtersZonesTrn = TranslatorWorker.translateText("Zones", langCode, siteId);
 			String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
 			String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
 	        String topPrjTrn = TranslatorWorker.translateText("Top Projects", langCode, siteId);
@@ -249,7 +254,12 @@ public class ExportToExcel extends Action {
 	        rowNum++;
             HSSFCell cell = row.createCell(cellNum);
             //sheet.addMergedRegion(new CellRangeAddress(1,1,0,5));
-	        HSSFRichTextString header = new HSSFRichTextString(vForm.getDashboard().getName());
+            HSSFRichTextString header;
+            if(vForm.getDashboard()!=null){
+            	header = new HSSFRichTextString(vForm.getDashboard().getName());
+            } else {
+            	header = new HSSFRichTextString(dashboardTypeTrn.toUpperCase() + " " + dashboardTrn.toUpperCase());
+            }
 	        cell.setCellValue(header);
 	        cell.setCellStyle(titleCS);
 	        
@@ -442,8 +452,8 @@ public class ExportToExcel extends Action {
 	        rowNum = rowNum + 2;
 	        cellNum = 0;
 	        
-	        if (vForm.getFilter().getShowProjectsRanking()){
-		        headerText = null;
+	        if (vForm.getFilter().getShowProjectsRanking()==null || vForm.getFilter().getShowProjectsRanking()){
+           	 	headerText = null;
 	        	row = sheet.createRow(rowNum++);
 	        	cell = row.createCell(cellNum++);
 	            headerText = new HSSFRichTextString(topPrjTrn + " (" + currName + ")");

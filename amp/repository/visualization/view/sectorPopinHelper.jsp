@@ -11,19 +11,10 @@
 	<ul style="list-style-type: none">
 		<c:forEach items="${item.subordinateEntityList}" var="sectorHelper">
 			<li>
-				<c:if
-					test="${visualizationform.filter.dashboardType eq '3' }">
-					<input type="radio" name="sector_check"
-						title="${sectorHelper.mainEntity.name}"
-						value="${sectorHelper.mainEntity.ampSectorId}"
-						onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})">
-				</c:if>
-				<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-					<input type="checkbox" name="sector_check"
+				<input type="checkbox" name="sector_check"
 						title="${sectorHelper.mainEntity.name}"
 						value="${sectorHelper.mainEntity.ampSectorId}"
 						onClick="manageSectorEntities(this,${item.mainEntity.id},${sectorHelper.mainEntity.ampSectorId})" />
-				</c:if>
 				<span>${sectorHelper.mainEntity.name}</span><br />
 				<ul style="list-style-type: none">
 					<c:forEach items="${sectorHelper.subordinateEntityList}"

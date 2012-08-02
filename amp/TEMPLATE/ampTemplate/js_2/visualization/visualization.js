@@ -1347,7 +1347,11 @@ function refreshBoxes(o){
 				name1 = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
 			}
 		} else {
-			name1 = getSelectionsFromElement("org_grp_check",true);
+			if (getSelectionsFromElement("org_grp_check",false).indexOf(',') !=-1) {
+				name1 = trnMultipleOrgGrp;
+			} else {
+				name1 = getSelectionsFromElement("org_grp_check",true);
+			}
 		}
 		if (getSelectionsFromElement("organization_check",true)==""){
 			if (document.getElementById("org_dropdown_id").selectedIndex != 0) {
@@ -1374,7 +1378,11 @@ function refreshBoxes(o){
 				name1 = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
 			}
 		} else {
-			name1 = getSelectionsFromElement("sector_check",true);
+			if (getSelectionsFromElement("sector_check",false).indexOf(',') !=-1) {
+				name1 = trnMultipleSector;
+			} else {
+				name1 = getSelectionsFromElement("sector_check",true);
+			}
 		}
 		if (getSelectionsFromElement("sub_sector_check",true)==""){
 			if (document.getElementById("sub_sector_dropdown_id").selectedIndex != 0) {
@@ -1401,7 +1409,11 @@ function refreshBoxes(o){
 				name1 = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
 			}
 		} else {
-			name1 = getSelectionsFromElement("region_check",true);
+			if (getSelectionsFromElement("region_check",false).indexOf(',') !=-1) {
+				name1 = trnMultipleRegion;
+			} else {
+				name1 = getSelectionsFromElement("region_check",true);
+			}
 		}
 		if (getSelectionsFromElement("zone_check",true)==""){
 			if (document.getElementById("zone_dropdown_id").selectedIndex != 0) {
@@ -1893,7 +1905,7 @@ function callbackGetGraphs(id,baseType) {
 			$("#"+id2).removeClass("side_opt_sel");	
 		}
 	}
-	switch(baseType){
+	/*switch(baseType){
 	case 0:
 		var elems = document.getElementsByName("org_grp_check");
 		for ( var i = 0; i < elems.length; i++) {
@@ -1950,7 +1962,7 @@ function callbackGetGraphs(id,baseType) {
 			elems[i].type="radio";
 		}
 		break;
-	}
+	}*/
 	if (id != null){
 		var transaction = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getGraphsFromDashboard&id=" + id, callbackGetGraphsCall, null);
 	}

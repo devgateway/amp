@@ -98,7 +98,10 @@ public class ExportToWord extends Action {
 			String filtersOrganizationsTrn = TranslatorWorker.translateText("Organizations", langCode, siteId);
 			String filtersSectorsTrn = TranslatorWorker.translateText("Sectors", langCode, siteId);
 			String filtersLocationsTrn = TranslatorWorker.translateText("Locations", langCode, siteId);
-        	String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
+			String filtersSubSectorsTrn = TranslatorWorker.translateText("Sub-Sectors", langCode, siteId);
+			String filtersRegionsTrn = TranslatorWorker.translateText("Regions", langCode, siteId);
+			String filtersZonesTrn = TranslatorWorker.translateText("Zones", langCode, siteId);
+			String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
             String topPrjTrn = TranslatorWorker.translateText("Top Projects", langCode, siteId);
             String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
             String topSectorTrn = TranslatorWorker.translateText("Top Sectors", langCode, siteId);
@@ -165,12 +168,109 @@ public class ExportToWord extends Action {
             doc.setFooter(footer);
             doc.setMargins(20, 20, 40, 40);
             doc.open();
-            //Paragraph pageTitle = new Paragraph(dashboardTypeTrn.toUpperCase() + " " + dashboardTrn.toUpperCase(), TITLEFONT);
-            Paragraph pageTitle = new Paragraph(vForm.getDashboard().getName().toUpperCase(), TITLEFONT);
+            Paragraph pageTitle;
+            if(vForm.getDashboard()!=null){
+            	pageTitle = new Paragraph(vForm.getDashboard().getName().toUpperCase(), TITLEFONT);
+            } else {
+            	pageTitle = new Paragraph(dashboardTypeTrn.toUpperCase() + " " + dashboardTrn.toUpperCase(), TITLEFONT);
+            }
             pageTitle.setAlignment(Element.ALIGN_CENTER);
             doc.add(pageTitle);
             doc.add(new Paragraph(" "));
      
+            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+            	String itemList = filtersOrgGroupTrn + ": ";
+                Long[] orgGroupIds = vForm.getFilter().getSelOrgGroupIds();
+                if (orgGroupIds != null && orgGroupIds.length != 0 && orgGroupIds[0]!=-1) {
+    				for (int i = 0; i < orgGroupIds.length; i++) {
+    					itemList = itemList + DbUtil.getOrgGroup(orgGroupIds[i]).getOrgGrpName() + "; ";
+    				}
+    			} else {
+    				itemList = itemList + filtersAllTrn;
+    			}
+            	Paragraph pageSubTitle = new Paragraph(itemList, SUBTITLEFONT);
+            	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(pageSubTitle);
+                
+                itemList = filtersOrganizationsTrn + ": ";
+                Long[] orgIds = vForm.getFilter().getOrgIds();
+                if (orgIds != null && orgIds.length != 0 && orgIds[0]!=-1) {
+    				for (int i = 0; i < orgIds.length; i++) {
+    					itemList = itemList + DbUtil.getOrganisation(orgIds[i]).getName() + "; ";
+    				}
+    			} else {
+    				itemList = itemList + filtersAllTrn;
+    			}
+                pageSubTitle = new Paragraph(itemList, SUBTITLEFONT);
+            	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(pageSubTitle);
+                
+                doc.add(new Paragraph(" "));
+            }
+     
+            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+            	String itemList = filtersSectorsTrn + ": ";
+            	String itemList2 = filtersSubSectorsTrn + ": ";
+            	Long[] sectorIds = vForm.getFilter().getSelSectorIds();
+            	boolean hasSub = false;
+                if (sectorIds != null && sectorIds.length != 0 && sectorIds[0]!=-1) {
+    				for (int i = 0; i < sectorIds.length; i++) {
+    					if (SectorUtil.getAmpSector(sectorIds[i]).getParent()==null){
+    						itemList = itemList + SectorUtil.getAmpSector(sectorIds[i]).getName() + "; ";
+    					} else {
+    						hasSub = true;
+    						itemList2 = itemList2 + SectorUtil.getAmpSector(sectorIds[i]).getName() + "; ";
+    					}
+    				}
+    			} else {
+    				itemList = itemList + filtersAllTrn;
+    			}
+                if (!hasSub) {
+                	itemList2 = itemList2 + filtersAllTrn;
+				}
+            	Paragraph pageSubTitle = new Paragraph(itemList, SUBTITLEFONT);
+            	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(pageSubTitle);
+                
+                pageSubTitle = new Paragraph(itemList2, SUBTITLEFONT);
+            	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(pageSubTitle);
+                
+                doc.add(new Paragraph(" "));
+            }
+     
+            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+            	String itemList = filtersRegionsTrn + ": ";
+            	String itemList2 = filtersZonesTrn + ": ";
+            	Long[] locationIds = vForm.getFilter().getSelLocationIds();
+            	boolean hasSub = false;
+                if (locationIds != null && locationIds.length != 0 && locationIds[0]!=-1) {
+    				for (int i = 0; i < locationIds.length; i++) {
+    					if (LocationUtil.getAmpCategoryValueLocationById(locationIds[i]).getParentLocation().getParentLocation()==null){
+    						itemList = itemList + LocationUtil.getAmpCategoryValueLocationById(locationIds[i]).getName() + "; ";
+    					} else {
+    						hasSub = true;
+    						itemList2 = itemList2 + LocationUtil.getAmpCategoryValueLocationById(locationIds[i]).getName() + "; ";
+    					}
+    				}
+    			} else {
+    				itemList = itemList + filtersAllTrn;
+    			}
+                if (!hasSub) {
+                	itemList2 = itemList2 + filtersAllTrn;
+				}
+            	
+                Paragraph pageSubTitle = new Paragraph(itemList, SUBTITLEFONT);
+            	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(pageSubTitle);
+                
+                pageSubTitle = new Paragraph(itemList2, SUBTITLEFONT);
+            	pageSubTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(pageSubTitle);
+                
+                doc.add(new Paragraph(" "));
+            }
+            
             RtfCell cell = null;
             List list = null;
             int colspan = 0;
@@ -325,8 +425,8 @@ public class ExportToWord extends Action {
 	        
             Paragraph subTitle = null;
           //Top projects table.
-            if (vForm.getFilter().getShowProjectsRanking()){
-            	subTitle = new Paragraph(topPrjTrn + " (" + currName + ")", SUBTITLEFONT);
+            if (vForm.getFilter().getShowProjectsRanking()==null || vForm.getFilter().getShowProjectsRanking()){
+           	 	subTitle = new Paragraph(topPrjTrn + " (" + currName + ")", SUBTITLEFONT);
                 subTitle.setAlignment(Element.ALIGN_LEFT);
                 doc.add(subTitle);
                 Table topPrjTbl = null;

@@ -144,21 +144,31 @@ public class DataDispatcher extends DispatchAction {
 			visualizationForm.getFilter().setSelSectorConfigId(configId);
 		}
 
-		if ((subSecsIds == null || subSecsIds.length == 0 || subSecsIds[0] == -1) && (subSecsId == null || subSecsId == -1)) {
-			if (secsIds == null || secsIds.length == 0 || secsIds[0] == -1) {
-				Long[] temp = {secsId};
-				visualizationForm.getFilter().setSelSectorIds(temp);
-			} else {
-				visualizationForm.getFilter().setSectorId(-1l);//unset sectorId
-				visualizationForm.getFilter().setSelSectorIds(secsIds);
-			}	
+		int arrayLength = 0; //workaround to allow multi selection of sectors and subsectors
+		Long[] tempArray;
+		if (secsIds != null)
+			arrayLength += secsIds.length;
+		if (subSecsIds != null)
+			arrayLength += subSecsIds.length;
+		
+		if (arrayLength>0){
+			tempArray = new Long[arrayLength];
+			int offset = 0;
+			for (int i = 0; i < secsIds.length; i++) {
+				tempArray[i] = secsIds[i];
+				offset = i;
+			}
+			for (int i = 0; i < subSecsIds.length; i++) {
+				tempArray[offset+1+i] = subSecsIds[i];
+			}
+			visualizationForm.getFilter().setSelSectorIds(tempArray);
 		} else {
-			if (subSecsIds == null || subSecsIds.length == 0 || subSecsIds[0] == -1) {
+			if (subSecsId!=null && subSecsId!=-1){
 				Long[] temp = {subSecsId};
 				visualizationForm.getFilter().setSelSectorIds(temp);
 			} else {
-				visualizationForm.getFilter().setSubSectorId(-1l);//unset subSectorId
-				visualizationForm.getFilter().setSelSectorIds(subSecsIds);
+				Long[] temp = {secsId};
+				visualizationForm.getFilter().setSelSectorIds(temp);
 			}
 		}
 		
@@ -167,24 +177,33 @@ public class DataDispatcher extends DispatchAction {
 		Long[] regsIds = visualizationForm.getFilter().getRegionIds();
 		Long[] zonesIds = visualizationForm.getFilter().getZoneIds();
 		
-		if ((zonesIds == null || zonesIds.length == 0 || zonesIds[0] == -1) && (zonesId == null || zonesId == -1)) {
-			if (regsIds == null || regsIds.length == 0 || regsIds[0] == -1) {
-				Long[] temp = {regsId};
-				visualizationForm.getFilter().setSelLocationIds(temp);
-			} else {
-				visualizationForm.getFilter().setRegionId(-1l);//unset regionId
-				visualizationForm.getFilter().setSelLocationIds(regsIds);
+		arrayLength = 0; //workaround to allow multi selection of regions and zones
+		if (regsIds != null)
+			arrayLength += regsIds.length;
+		if (zonesIds != null)
+			arrayLength += zonesIds.length;
+		
+		if (arrayLength>0){
+			tempArray = new Long[arrayLength];
+			int offset = 0;
+			for (int i = 0; i < regsIds.length; i++) {
+				tempArray[i] = regsIds[i];
+				offset = i;
 			}
+			for (int i = 0; i < zonesIds.length; i++) {
+				tempArray[offset+1+i] = zonesIds[i];
+			}
+			visualizationForm.getFilter().setSelLocationIds(tempArray);
 		} else {
-			if (zonesIds == null || zonesIds.length == 0 || zonesIds[0] == -1) {
+			if (zonesId!=null && zonesId!=-1){
 				Long[] temp = {zonesId};
 				visualizationForm.getFilter().setSelLocationIds(temp);
 			} else {
-				visualizationForm.getFilter().setZoneId(-1l);//unset zoneId
-				visualizationForm.getFilter().setSelLocationIds(zonesIds);
+				Long[] temp = {regsId};
+				visualizationForm.getFilter().setSelLocationIds(temp);
 			}
 		}
-
+		
 		DashboardUtil.getSummaryAndRankInformation(visualizationForm, request);
         request.getSession().setAttribute(DashboardUtil.VISUALIZATION_PROGRESS_SESSION, trnStep8);
 		JSONObject root = new JSONObject();

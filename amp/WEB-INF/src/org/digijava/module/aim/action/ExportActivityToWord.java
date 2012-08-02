@@ -1482,6 +1482,7 @@ public class ExportActivityToWord extends Action {
 			}
 			
 			result=result.replaceAll("\\<.*?>","");
+			result=result.replaceAll("(\\t|\\r)", "");
             result=result.replaceAll("&lt;", "<");
 			result = result.replaceAll("&gt;",">");
             result = result.replaceAll("&amp;","&");

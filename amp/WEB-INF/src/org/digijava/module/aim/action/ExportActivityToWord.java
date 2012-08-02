@@ -582,11 +582,14 @@ public class ExportActivityToWord extends Action {
                     Set<AmpActivityContact> groupedContactTypeSet = contactGrouper.get(contactType);
                     eshContactInfoTable.addRowData(new ExportSectionHelperRowData(getContactTypeLable(contactType), null, null,  false));
                     for (AmpActivityContact contact : groupedContactTypeSet) {
-                        String contFunction = contact.getContact().getFunction() != null ?
+                    	String contFunction = contact.getContact().getFunction() != null ?
                                 contact.getContact().getFunction() : "-";
 
+                        String contEmail = contact.getContact().getEmails() != null ?
+                        		contact.getContact().getEmails().iterator().next() : "-";
+                                
                         eshContactInfoTable.addRowData(new ExportSectionHelperRowData(contact.getContact().getNameAndLastName(), null, null,  false).
-                                addRowData(contact.getContact().getEmails().iterator().next()).
+                                addRowData(contEmail).
                                 addRowData(contFunction));
 
 

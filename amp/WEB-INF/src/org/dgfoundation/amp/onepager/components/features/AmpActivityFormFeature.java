@@ -11,9 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractChoice;
@@ -33,10 +36,12 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.behaviors.JQueryBehavior;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
@@ -206,44 +211,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			@Override
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
-				
-				// visit form children and add to the ajax request the invalid ones
-				form.visitChildren(FormComponent.class,
-						new IVisitor<FormComponent, Void>() {
-							@Override
-							public void component(FormComponent component,
-									IVisit<Void> visit) {
-								if (!component.isValid()) {
-									target.appendJavaScript("$('#"+ component.getMarkupId() +"').parents().show();");
-									target.appendJavaScript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
-									target.add(component);
-									
-									//some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields
-									//like for example a list of sectors with percentages
-									//when these AmpCollectionValidatorFieldS are detected, their validation is revisited
-									if (component instanceof HiddenField) {									
-										if(component.getParent() instanceof AmpCollectionValidatorField<?, ?>) 
-											((AmpCollectionValidatorField)component.getParent()).reloadValidationField(target);									
-									} else {
-										target.focusComponent(component);
-										String js = null;
-										
-										//we simulate onClick over AmpGroupFieldS because radiochoices are treated differently they can't receive onChange.
-										//For the rest of the components we use onChange
-										if(component instanceof RadioChoice<?> || component instanceof CheckBoxMultipleChoice
-												|| component  instanceof RadioGroup<?> || component instanceof CheckGroup) 
-											js=String.format("$('#%s').click();",component.getMarkupId());										
-										else 											
-											js=String.format("$('#%s').change();",component.getMarkupId());
-										
-										target.appendJavaScript(js);
-										target.add(component);
-									}
-								}
-							}
-						});
-				
-				target.add(feedbackPanel);
+				formSubmitErrorHandle(form, target, feedbackPanel);
 			}
 			
 		};
@@ -262,6 +230,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();"));
 		saveAsDraft.setVisible(true);
 		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		saveAsDraft.add(new Behavior(){
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.renderJavaScriptReference(new PackageResourceReference(AmpActivityFormFeature.class, "draftSaveNavigationPanel.js"));
+			}
+		});
 		activityForm.add(saveAsDraft);
 		final RadioGroup<Integer> myDraftOpts = new RadioGroup<Integer>("draftRedirectedGroup", new Model<Integer>(GO_TO_DESKTOP));
 		Radio<Integer> radioDesktop=new Radio<Integer>("draftRedirectedDesktop", new Model<Integer>(GO_TO_DESKTOP));
@@ -303,14 +278,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				// process the form for this request
 				form.process(this.getButton());
 				//only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
-				if(!form.hasError())  saveMethod(target, am, feedbackPanel, true);
-				
-				
+				if(!form.hasError())  
+					saveMethod(target, am, feedbackPanel, true);
+				else
+					onError(target, form);
 			}
+			
 			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
+			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
-				target.add(feedbackPanel);
+				formSubmitErrorHandle(form, target, feedbackPanel); 
 			}
 		};
 		saveAsDraftAction.getButton().setDefaultFormProcessing(false); //disable global validation of the form
@@ -391,6 +368,45 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		quickMenu(am, listModel);
 	}
 	
+	protected void formSubmitErrorHandle(Form<?> form, final AjaxRequestTarget target, FeedbackPanel feedbackPanel) {
+		// visit form children and add to the ajax request the invalid ones
+		form.visitChildren(FormComponent.class,
+				new IVisitor<FormComponent, Void>() {
+					@Override
+					public void component(FormComponent component,
+							IVisit<Void> visit) {
+						if (!component.isValid()) {
+							target.appendJavaScript("$('#"+ component.getMarkupId() +"').parents().show();");
+							target.appendJavaScript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
+							target.add(component);
+							
+							//some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields
+							//like for example a list of sectors with percentages
+							//when these AmpCollectionValidatorFieldS are detected, their validation is revisited
+							if (component instanceof HiddenField) {									
+								if(component.getParent() instanceof AmpCollectionValidatorField<?, ?>) 
+									((AmpCollectionValidatorField)component.getParent()).reloadValidationField(target);									
+							} else {
+								target.focusComponent(component);
+								String js = null;
+								
+								//we simulate onClick over AmpGroupFieldS because radiochoices are treated differently they can't receive onChange.
+								//For the rest of the components we use onChange
+								if(component instanceof RadioChoice<?> || component instanceof CheckBoxMultipleChoice
+										|| component  instanceof RadioGroup<?> || component instanceof CheckGroup) 
+									js=String.format("$('#%s').click();",component.getMarkupId());										
+								else 											
+									js=String.format("$('#%s').change();",component.getMarkupId());
+								
+								target.appendJavaScript(js);
+								target.add(component);
+							}
+						}
+					}
+				});
+		target.add(feedbackPanel);
+	}
+
 	protected void saveMethod(AjaxRequestTarget target,
 			IModel<AmpActivityVersion> am, FeedbackPanel feedbackPanel,
 			boolean draft) {

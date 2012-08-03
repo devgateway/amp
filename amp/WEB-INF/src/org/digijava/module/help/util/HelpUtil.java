@@ -314,7 +314,7 @@ public class HelpUtil {
 //beginTransaction();
 			session.saveOrUpdate(topic);
 			//tx.commit();
-			if (topic.getTopicType()!=GlossaryUtil.TYPE_GLOSSARY){
+			if (topic.getTopicType()==null || !topic.getTopicType().equals(GlossaryUtil.TYPE_GLOSSARY)){
 				//skip lucene work for glossary topics.
 				saveOrUpdateFromLucene(topic, request, update);
 			}

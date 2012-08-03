@@ -135,7 +135,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	}
 
 	
-public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret) {
+public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret, boolean hierarchyPurpose) {
 	
 	if(metaCell.getColumn().getName().equals(columnName) ) {
 		//we need to get the percentage, it is stored in the MetaText of related to the owner of the current cell
@@ -147,7 +147,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret)
 			MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedHierarchyCell.getMetaData(),ArConstants.PERCENTAGE);
 			if(percentMeta!=null) {
 				Double percentage=(Double) percentMeta.getValue() ;
-				ret.setPercentage(percentage.doubleValue(), relatedHierarchyCell);			
+				ret.setPercentage(percentage.doubleValue(), relatedHierarchyCell, hierarchyPurpose);			
 			}
 			}
 		}
@@ -266,7 +266,7 @@ public Cell filter(Cell metaCell,Set ids) {
 						continue;
 					//column is needed to get the tokenExpression on computed fields
 					ret.setColumn(this.getColumn());
-					applyMetaFilter(col.getColumn().getColumnName(), metaCell, ret);
+					applyMetaFilter(col.getColumn().getColumnName(), metaCell, ret, true);
 			}
 			
 			 

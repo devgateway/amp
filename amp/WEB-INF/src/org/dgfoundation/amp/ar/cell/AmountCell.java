@@ -368,7 +368,13 @@ public class AmountCell extends Cell {
 		return ret;
 	}
 
-	public void setPercentage(double percentage, MetaTextCell source) {
+	/**
+	 * 
+	 * @param percentage
+	 * @param source
+	 * @param hierarchyPurpose tells whether this percentage comes from a filter or a hierarchy
+	 */
+	public void setPercentage(double percentage, MetaTextCell source, boolean hierarchyPurpose) {
 		Column sourceCol = source.getColumn();
 		
 		initializePercentageMaps();
@@ -398,9 +404,11 @@ public class AmountCell extends Cell {
 		else if ( keyName.contains(ArConstants.COLUMN_SECTOR_LOCATION) )
 			keyName	= ArConstants.COLUMN_REGION;
 		
-		columnCellValue.put(keyName, source.getValue().toString(), source.getId(), percentage, dimensionClass);
+		
+		columnCellValue.put(keyName, source.getValue().toString(), source.getId(), percentage, dimensionClass, hierarchyPurpose);
 		double percentSum	= columnCellValue.getPercentageSum(keyName);
-		columnPercent.put(keyName, percentSum);
+		if ( percentSum > 0 )
+			columnPercent.put(keyName, percentSum);
 		
 //		if (columnPercent.containsKey(sourceCol.getName())) {
 //			

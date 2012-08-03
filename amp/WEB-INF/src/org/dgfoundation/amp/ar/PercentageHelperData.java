@@ -10,20 +10,25 @@ public class PercentageHelperData {
 	Class dimensionClass;
 	
 	
+	boolean hierarchyPurpoase;
+	
+	
+	
+	
 	public PercentageHelperData(String columnType, String item, Long itemId,
-			double percentage, Class dimensionClass) {
+			double percentage, Class dimensionClass, boolean hierarchyPurpoase) {
 		super();
 		this.columnType = columnType;
 		this.item = item;
 		this.itemId = itemId;
 		this.percentage = percentage;
-		this.dimensionClass	= dimensionClass;
+		this.dimensionClass = dimensionClass;
+		this.hierarchyPurpoase = hierarchyPurpoase;
 	}
-	
-	public boolean isDescendent(PercentageHelperData phd) {
-		return isDescendent(phd.getItemId());
+	public boolean hasAsDescendent(PercentageHelperData phd) {
+		return hasAsDescendent(phd.getItemId());
 	}
-	public boolean isDescendent(Long id) {
+	public boolean hasAsDescendent(Long id) {
 		if ( this.itemId == null  || this.dimensionClass == null || id == null )
 			return false;
 		return ARDimension.areItemsLinked(this.itemId, id, this.dimensionClass);
@@ -93,6 +98,18 @@ public class PercentageHelperData {
 		this.dimensionClass = dimensionClass;
 	}
 	
+	/**
+	 * @return the hierarchyPurpoase
+	 */
+	public boolean getHierarchyPurpoase() {
+		return hierarchyPurpoase;
+	}
+	/**
+	 * @param hierarchyPurpoase the hierarchyPurpoase to set
+	 */
+	public void setHierarchyPurpoase(boolean hierarchyPurpoase) {
+		this.hierarchyPurpoase = hierarchyPurpoase;
+	}
 	@Override
 	public String toString() {
 		return this.columnType + " | " + this.item + " | " + this.itemId + " | " + this.percentage + " | " + this.dimensionClass;

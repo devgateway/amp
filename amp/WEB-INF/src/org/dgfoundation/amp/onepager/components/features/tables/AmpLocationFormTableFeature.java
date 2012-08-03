@@ -148,10 +148,11 @@ public class AmpLocationFormTableFeature extends
 				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField){
 					@Override
 					protected void onBeforeRender() {
-						super.onBeforeRender();
+						
 						if (this.isEnabled()){
 							this.setEnabled(!disablePercentagesForInternational.getObject());
 						}
+						super.onBeforeRender();
 					}
 				};				
 				item.add(percentageField);

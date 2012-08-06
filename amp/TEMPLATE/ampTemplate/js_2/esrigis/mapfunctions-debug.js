@@ -179,7 +179,7 @@ function createMapAddLayers(myService1, myService2) {
 		//dojo.connect(dijit.byId('map'), 'resize', resizeMap);
 		dojo.byId('map_zoom_slider').style.top = '95px';
 		getActivities(false);
-		getStructures(false);
+		//getStructures(false);
 	});
 	
 	// add the legend
@@ -624,30 +624,16 @@ function MapFind(activity) {
 				}
 			});
 			pgraphic.setAttributes({
-						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
-								+ activity.id
-								+ '~isPreview=1" target="_blank">'
-								+ activity.activityname
-								+ '</a>',
-						"Donors" : '<b>' + donorname + '</b>',
 						"Location" : '<b>' + location.name
 								+ '</b>',
-						"Primary Sector" : '<b>'
-								+ primarysector + '</b>',
-						"Total commitments" : '<b>'
-								+ activity.commitments + ' '
-								+ activity.currecycode + '</b>',
-						"Total disbursements" : '<b>'
-								+ activity.disbursements + ' '
-								+ activity.currecycode + '</b>',
 						"Commitments for this location" : '<b>'
-								+ location.commitments + ' '
-								+ activity.currecycode + '</b>',
+								+ location.commitments
+								+ '</b>',
 						"Disbursements for this location" : '<b>'
 								+ location.disbursements
-								+ ' '
-								+ activity.currecycode + '</b>',
-						"Code" : '' + donorCode + ''
+								+ '</b>',
+						"Code" : '' + donorCode + '',
+						"id" :activity.id
 					});
 			location.isdisplayed = true;
 			features.push(pgraphic);
@@ -1403,6 +1389,75 @@ function placemedia(){
 
 
 
+//Get info windows content
+
+function getContent(graphicAttributes, baseGraphic) {
+    var attributes;
+
+    var xhrArgs = {
+    	url : "/esrigis/datadispatcher.do?getcontent=true&id="+graphicAttributes.id,
+        handleAs : "json",
+        sync : true,
+        load : function(attr) {
+                dojo.forEach(attr[0].sectors, function(sector) {
+    				primarysector = sector.sectorName;
+    				primarysectorschema = sector.sectorScheme;
+    				primarypercentage = sector.sectorPercentage;
+    			});
+                var donorname;
+    			var donorCode;
+    			dojo.forEach(attr[0].donors, function(donor) {
+    				if (donorname == null) {
+    					donorname = donor.donorname;
+    					donorCode = donor.donorCode;
+    				} else {
+    					donorname = donorname + ","
+    							+ donor.donorname;
+    				}
+    			});
+                attr=({
+					"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
+							+ attr[0].id
+							+ '~isPreview=1" target="_blank">'
+							+ attr[0].activityname
+							+ '</a>',
+					"Donors" : '<b>' + donorname + '</b>',
+					"Location" : '<b>' + graphicAttributes.Location
+							+ '</b>',
+					"Primary Sector" : '<b>'
+							+ primarysector + '</b>',
+					"Total commitments" : '<b>'
+							+ attr[0].commitments + ' '
+							+ attr[0].currecycode + '</b>',
+					"Total disbursements" : '<b>'
+							+ attr[0].disbursements + ' '
+							+ attr[0].currecycode + '</b>',
+					"Commitments for this location" : '<b>'
+							+ graphicAttributes["Commitments for this location"]+ ' '
+							+ attr[0].currecycode + '</b>',
+					"Disbursements for this location" : '<b>'
+							+ graphicAttributes["Disbursements for this location"]
+							+ ' '
+							+ attr[0].currecycode + '</b>',
+					"Code" : '' + donorCode + ''
+					z
+				});
+            if (baseGraphic) {
+                attr.baseGraphic = baseGraphic;
+                attributes = attr;
+            } else {
+                attributes = attr;
+            }
+
+        },
+        error : function(error) {
+            console.log(error);
+        }
+
+    }
+    var deferred = dojo.xhrGet(xhrArgs);
+    return attributes;
+}
 
 
 

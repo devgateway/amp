@@ -233,7 +233,7 @@ public class TeamUtil {
         Session session = null;
         Collection col = new ArrayList();
         try {
-            session = PersistenceManager.getRequestDBSession();
+            session = PersistenceManager.getSession();
             String query = "select team from " + AmpTeam.class.getName()
                 + " team where (team.parentTeamId.ampTeamId=:pid) order by name";
             Query qry = session.createQuery(query);

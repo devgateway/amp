@@ -674,6 +674,18 @@ public class DbHelper {
         return activities;
 	}
 	
+	public static AmpActivityVersion getActivityById(Long id) {
+        Session session = null;
+        AmpActivityVersion activity=null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            activity =  (AmpActivityVersion) session.load(AmpActivityVersion.class, id);
+            
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp Structure Type from database ", ex);
+        }
+		return activity;
+    }
 	
 	public static List<AmpMapConfig> getMaps() {
 		Session session = null;

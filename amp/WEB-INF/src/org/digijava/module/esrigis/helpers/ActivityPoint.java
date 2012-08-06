@@ -17,20 +17,29 @@ import net.sf.json.JSON;
  */
 public class ActivityPoint {
 
+	public String getDonorcode() {
+		return donorcode;
+	}
+
+	public void setDonorcode(String donorcode) {
+		this.donorcode = donorcode;
+	}
+
 	private static final long serialVersionUID = 1L;
 	
 	private String id;
 	private String ampactivityid;
 	private String activityname;
-	private String commitments;
-	private String disbursements;
-	private String expenditures;
+	//private String commitments;
+	//private String disbursements;
+	//private String expenditures;
 	private ArrayList<SimpleLocation> locations;
 	private ArrayList<Structure> structures;
     private String implementationlevel;
-    private List<ActivitySector> sectors;
+    //private List<ActivitySector> sectors;
     private List<SimpleDonor> donors;
-    private String currecycode; 
+    //private String currecycode; 
+    private String donorcode; 
     
     public ActivityPoint() {
 		super();
@@ -45,15 +54,15 @@ public class ActivityPoint {
 			String disbursements, ArrayList<SimpleLocation> locations) {
 		super();
 		this.activityname = activityname;
-		this.commitments = commitments;
-		this.disbursements = disbursements;
+		//this.commitments = commitments;
+		//this.disbursements = disbursements;
 		this.setLocations(locations);
 	}
 
 	public void setActivityname(String activityname) {
 		this.activityname = activityname;
 	}
-
+/*
 	public String getCommitments() {
 		return commitments;
 	}
@@ -69,7 +78,7 @@ public class ActivityPoint {
 	public void setDisbursements(String disbursements) {
 		this.disbursements = disbursements;
 	}
-	
+	*/
 	public void setLocations(ArrayList<SimpleLocation> locations) {
 		this.locations = locations;
 	}
@@ -85,7 +94,7 @@ public class ActivityPoint {
 	public String getImplementationlevel() {
 		return implementationlevel;
 	}
-
+/*
 	public String getExpenditures() {
 		return expenditures;
 	}
@@ -101,7 +110,7 @@ public class ActivityPoint {
 	public void setSectors(List<ActivitySector> sectors) {
 		this.sectors = sectors;
 	}
-
+*/
 	public String getAmpactivityid() {
 		return ampactivityid;
 	}
@@ -134,7 +143,7 @@ public class ActivityPoint {
 	public void setDonors(List<SimpleDonor> donors) {
 		this.donors = donors;
 	}
-
+/*
 	public String getCurrecycode() {
 		return currecycode;
 	}
@@ -142,6 +151,6 @@ public class ActivityPoint {
 	public void setCurrecycode(String currecycode) {
 		this.currecycode = currecycode;
 	}
-
+*/
 }
 	

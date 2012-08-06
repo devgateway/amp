@@ -142,8 +142,19 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
             }
         } else { //single marker or cluster flare mouse over
             if (graphic.attributes.baseGraphic) { //cluster flare
-                graphic.attributes.baseGraphic.task.cancel();
+                if (graphic.attributes.id) {
+                    baseGraphic = graphic.attributes.baseGraphic;
+                    var attr = getContent(graphic.attributes, baseGraphic);
+                    graphic.setAttributes(attr);
+                    graphic.attributes.baseGraphic.task.cancel();
+                }
+            } else {
+                if (graphic.attributes.id) {
+                    var attr = getContent(graphic.attributes, null);
+                    graphic.setAttributes(attr);
+                }
             }
+
             this.showInfoWindow(graphic);
             return;
         }

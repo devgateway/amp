@@ -54,6 +54,7 @@ import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.helpers.ActivityPoint;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapFilter;
+import org.digijava.module.esrigis.helpers.PointContent;
 import org.digijava.module.esrigis.helpers.QueryUtil;
 import org.digijava.module.esrigis.helpers.SimpleDonor;
 import org.digijava.module.esrigis.helpers.SimpleLocation;
@@ -103,6 +104,8 @@ public class DataDispatcher extends MultiAction {
 			return modeGetMedia(mapping, form, request, response);
 		}else if (request.getParameter("shownational") != null) { 
 			return modeShowNational(mapping, form, request, response);
+		}else if (request.getParameter("getcontent") != null){
+			return modeGetContent(mapping, form, request, response);
 		}
 		return null;
 	}
@@ -128,7 +131,7 @@ public class DataDispatcher extends MultiAction {
 
 			FundingCalculationsHelper calculations = new FundingCalculationsHelper();
 			Iterator fundItr = aA.getFunding().iterator();
-			ap.setDonors(new ArrayList<SimpleDonor>());
+			//ap.setDonors(new ArrayList<SimpleDonor>());
 			while (fundItr.hasNext()) {
 				AmpFunding ampFunding = (AmpFunding) fundItr.next();
 				Collection fundDetails = ampFunding.getFundingDetails();
@@ -137,13 +140,13 @@ public class DataDispatcher extends MultiAction {
 				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
 				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
 				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
-				ap.getDonors().add(donor);
+				//ap.getDonors().add(donor);
 			}
-			ap.setCommitments(calculations.getTotalCommitments().toString());
-			ap.setDisbursements(calculations.getTotActualDisb().toString());
-			ap.setExpenditures(calculations.getTotPlannedExp().toString());
-			ap.setSectors(SectorsToJson(aA));
-			ap.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
+			//ap.setCommitments(calculations.getTotalCommitments().toString());
+			//ap.setDisbursements(calculations.getTotActualDisb().toString());
+			//ap.setExpenditures(calculations.getTotPlannedExp().toString());
+			//ap.setSectors(SectorsToJson(aA));
+			//ap.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
 			ArrayList<SimpleLocation> sla = new ArrayList<SimpleLocation>();
 			for (Iterator iterator2 = aA.getLocations().iterator(); iterator2.hasNext();) {
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
@@ -293,6 +296,51 @@ public class DataDispatcher extends MultiAction {
 		return null;
 	}
 
+	public ActionForward modeGetContent(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		DataDispatcherForm maphelperform = (DataDispatcherForm) form;
+		HttpSession session = request.getSession();
+		AmpActivityVersion activity = DbHelper.getActivityById(new Long(request.getParameter("id")));
+		FundingCalculationsHelper calculations = new FundingCalculationsHelper();
+		Iterator fundItr = activity.getFunding().iterator();
+		
+		JSONArray jsonArray = new JSONArray();
+		PointContent ct = new PointContent();
+		ct.setDonors(new ArrayList<SimpleDonor>());
+		while (fundItr.hasNext()) {
+			AmpFunding ampFunding = (AmpFunding) fundItr.next();
+			Collection fundDetails = ampFunding.getFundingDetails();
+			calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
+			SimpleDonor donor = new SimpleDonor(); 
+			donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
+			donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
+			donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
+			ct.getDonors().add(donor);
+		}
+		ct.setId(activity.getIdentifier().toString());
+		ct.setActivityname(activity.getName());
+		ct.setCommitments(calculations.getTotalCommitments().toString());
+		ct.setDisbursements(calculations.getTotActualDisb().toString());
+		ct.setExpenditures(calculations.getTotPlannedExp().toString());
+		ct.setSectors(SectorsToJson(activity));
+		ct.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
+		
+		jsonArray.add(ct);
+		
+		PrintWriter pw;
+		try {
+			pw = response.getWriter();
+			pw.write(jsonArray.toString());
+			pw.flush();
+			pw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	public ActionForward modeShowActivities(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -306,8 +354,7 @@ public class DataDispatcher extends MultiAction {
 		List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
 		list = DbHelper.getActivities(maphelperform.getFilter());
 		Boolean isaggregatable = true;
-		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator
-				.hasNext();) {
+		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
 			ActivityPoint ap = new ActivityPoint();
 			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
 			ap.setId(aA.getIdentifier().toString());
@@ -327,11 +374,11 @@ public class DataDispatcher extends MultiAction {
 				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 				ap.getDonors().add(donor);
 			}
-			ap.setCommitments(calculations.getTotalCommitments().toString());
-			ap.setDisbursements(calculations.getTotActualDisb().toString());
-			ap.setExpenditures(calculations.getTotPlannedExp().toString());
-			ap.setSectors(SectorsToJson(aA));
-			ap.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
+			//ap.setCommitments(calculations.getTotalCommitments().toString());
+			//ap.setDisbursements(calculations.getTotActualDisb().toString());
+			//ap.setExpenditures(calculations.getTotPlannedExp().toString());
+			//ap.setSectors(SectorsToJson(aA));
+			//ap.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
 			ArrayList<SimpleLocation> sla = new ArrayList<SimpleLocation>();
 			for (Iterator iterator2 = aA.getLocations().iterator(); iterator2.hasNext();) {
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
@@ -366,7 +413,6 @@ public class DataDispatcher extends MultiAction {
 						sl.setIslocated(true);
 					}
 					if (alocation.getLocationPercentage()!=null){
-						sl.setPercentage(alocation.getLocationPercentage().toString());
 						sl.setCommitments(QueryUtil.getPercentage(calculations.getTotalCommitments().getValue(),new BigDecimal(alocation.getLocationPercentage())));
 						sl.setDisbursements(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(alocation.getLocationPercentage())));
 						sl.setExpenditures(QueryUtil.getPercentage(calculations.getTotActualExp().getValue(),new BigDecimal(alocation.getLocationPercentage())));

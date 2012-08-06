@@ -1439,8 +1439,7 @@ function getContent(graphicAttributes, baseGraphic) {
 							+ graphicAttributes["Disbursements for this location"]
 							+ ' '
 							+ attr[0].currecycode + '</b>',
-					"Code" : '' + donorCode + ''
-					z
+					"Code" : '' + donorCode 
 				});
             if (baseGraphic) {
                 attr.baseGraphic = baseGraphic;

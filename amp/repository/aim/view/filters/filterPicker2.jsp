@@ -154,8 +154,8 @@ StopWatch.next("Filters", true);
 							</html:select>
 							</div>
 					</div>
-					<div style="clear:both;">&nbsp;</div>
 					</div>
+					<div style="clear:both;">&nbsp;</div>
 				</feature:display>
 			</div>
 		</div>

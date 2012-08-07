@@ -54,9 +54,9 @@ public class ColumnReportData extends ReportData {
 				if ( ARUtil.hasHierarchy(this.getReportMetadata().getHierarchies(), ArConstants.COLUMN_REGION) && 
 						( ArConstants.COLUMN_ZONE.equals(element.name) || ArConstants.COLUMN_DISTRICT.equals(element.name) ) ){
 					continue;
-				}else if(checkProgramsHierarchy(element)){
+				}else if(checkProgramsHierarchy(ArConstants.PROGRAMS_COLUMNS,element)){
 					continue;
-				} 
+				}
 				int visCol=element.getVisibleRows();
 				if(visCol>ret) ret=visCol;
 		    }
@@ -64,13 +64,13 @@ public class ColumnReportData extends ReportData {
 	}
     
     	
-    private Boolean checkProgramsHierarchy(Column element){
+    private Boolean checkProgramsHierarchy(List<String> columnNameList, Column element){
 		Boolean retval = false;
-		for (Iterator iterator = ArConstants.PROGRAMS_COLUMNS.iterator(); iterator.hasNext();) {
-			String program = (String) iterator.next();
+		for (Iterator<String> iterator = columnNameList.iterator(); iterator.hasNext();) {
+			String program = iterator.next();
 			if (ARUtil.hasHierarchy(this.getReportMetadata().getHierarchies(),program)){
-				for (Iterator iterator2 = ArConstants.PROGRAMS_COLUMNS.iterator(); iterator2.hasNext();) {
-					String program1 = (String) iterator2.next();
+				for (Iterator<String> iterator2 = columnNameList.iterator(); iterator2.hasNext();) {
+					String program1 = iterator2.next();
 						if (element.name.equalsIgnoreCase(program1)){
 							retval = true;
 							break;

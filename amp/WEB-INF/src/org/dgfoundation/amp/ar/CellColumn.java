@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -136,6 +137,7 @@ public class CellColumn extends Column {
 		CellColumn dest = (CellColumn) this.newInstance();
 		ListCell lc = new ListCell();
 		Iterator i = this.iterator();
+		HashMap<Long, ListCell> ownerToCells = new HashMap<Long, ListCell>();
 		while (i.hasNext()) {
 			try {
 				Object objelement = i.next();
@@ -143,12 +145,12 @@ public class CellColumn extends Column {
 				if (!(objelement instanceof Column)) {
 
 					Cell element = (Cell) objelement;
-
+					
 					// if we don't have items in the cell list, just add the
 					// cell
-					if (lc.size() == 0)
+					/*if (lc.size() == 0)
 						lc.addCell(element);
-					else
+					else*/
 					// if we have, verify if the owner of one cell in the list
 					// is
 					// the same
@@ -160,7 +162,7 @@ public class CellColumn extends Column {
 					// dest column
 					// if it has only one, add just that element to the dest
 					// colmn
-					if (lc.getCell(0).getOwnerId().equals(element.getOwnerId()))
+					/*if (lc.getCell(0).getOwnerId().equals(element.getOwnerId()))
 						lc.addCell(element);
 					else {
 						if (lc.size() == 1)
@@ -169,13 +171,34 @@ public class CellColumn extends Column {
 							dest.addCell(lc);
 						lc = new ListCell();
 						lc.addCell(element);
+					}*/
+					
+					ListCell listCell	= ownerToCells.get(element.getOwnerId());
+					if ( listCell == null ) {
+						listCell	= new ListCell();
+						ownerToCells.put(element.getOwnerId(), listCell);
 					}
+					listCell.addCell(element);
+					
 				}
 			} catch (IncompatibleCellException e) {
 				logger.error(e);
 				e.printStackTrace();
 			}
 
+		}
+		Iterator<Entry<Long, ListCell>> iter	= ownerToCells.entrySet().iterator();
+		while (iter.hasNext() ) {
+			Entry<Long, ListCell> entry			= iter.next();
+			ListCell lCell						= entry.getValue();
+			if ( lCell != null && lCell.size() > 0 ) {
+				if ( lCell.size() == 1 ) {
+					dest.addCell( lCell.getCell(0) );
+				}
+				else {
+					dest.addCell(lCell);
+				}
+			}
 		}
 
 		if (lc.size() == 1)

@@ -103,6 +103,8 @@ StopWatch.next("Filters", true);
 					<%@include file="bigFilterTable.jsp" %>
 				</div>
 				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
+				<div style="clear:both;">&nbsp;</div>
+				<div class="other_opts">
 				<div style="width: 20%; padding: 5px; float: left; ">
 					<c:set var="tooltip_translation">
 						<digi:trn>Specify keywords to look for in the project data.</digi:trn>
@@ -151,6 +153,8 @@ StopWatch.next("Filters", true);
 	                         	<html:optionsCollection property="computedYearsRange" label="wrappedInstance" value="wrappedInstance" />
 							</html:select>
 							</div>
+					</div>
+					<div style="clear:both;">&nbsp;</div>
 					</div>
 				</feature:display>
 			</div>

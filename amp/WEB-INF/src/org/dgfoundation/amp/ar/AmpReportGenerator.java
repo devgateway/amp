@@ -374,7 +374,7 @@ public class AmpReportGenerator extends ReportGenerator {
 					while (fundingIt.hasNext()) {
 						CategAmountCell cac = (CategAmountCell) fundingIt
 								.next();
-						cac.applyMetaFilter(c.getName(), fakeMc, cac);
+						cac.applyMetaFilter(c.getName(), fakeMc, cac, false);
 					}
 					
 					for ( CellColumn tempCellColumn: rawColumnsByName.values() ) {
@@ -385,7 +385,7 @@ public class AmpReportGenerator extends ReportGenerator {
 								if ( cacParent.getMergedCells() != null ) 
 									for ( Object cacObj: cacParent.getMergedCells() ) {
 										CategAmountCell cac	= (CategAmountCell) cacObj;
-										cac.applyMetaFilter(c.getName(), fakeMc, cac); 
+										cac.applyMetaFilter(c.getName(), fakeMc, cac, false); 
 									}
 							}
 						}

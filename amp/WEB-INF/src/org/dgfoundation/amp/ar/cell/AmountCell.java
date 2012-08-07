@@ -16,6 +16,7 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.PercentageHelperMap;
 import org.dgfoundation.amp.ar.workers.AmountColWorker;
 import org.digijava.module.aim.helper.FormatHelper;
 
@@ -40,13 +41,23 @@ public class AmountCell extends Cell {
 		return columnPercent;
 	}
 
-	public Map<String, Comparable> getColumnCellValue() {
+	
+
+	/**
+	 * @return the columnCellValue
+	 */
+	public PercentageHelperMap getColumnCellValue() {
 		return columnCellValue;
 	}
 
-	public void setColumnCellValue(Map<String, Comparable> columnCellValue) {
+	/**
+	 * @param columnCellValue the columnCellValue to set
+	 */
+	public void setColumnCellValue(PercentageHelperMap columnCellValue) {
 		this.columnCellValue = columnCellValue;
 	}
+
+
 
 	public void setColumnPercent(Map<String, Double> columnPercent) {
 		this.columnPercent = columnPercent;
@@ -69,7 +80,7 @@ public class AmountCell extends Cell {
 	 * We apply percentage only if there were no other percentages applied
 	 */
 	protected Map<String, Double> columnPercent;
-	protected Map<String, Comparable> columnCellValue;
+	protected PercentageHelperMap columnCellValue;
 
 	/**
 	 * @return Returns the toExchangeRate.
@@ -89,7 +100,7 @@ public class AmountCell extends Cell {
 	private void initializePercentageMaps() {
 		if (columnPercent == null || columnCellValue == null) {
 			columnPercent = new HashMap<String, Double>();
-			columnCellValue = new HashMap<String, Comparable>();
+			columnCellValue = new PercentageHelperMap();
 		}
 	}
 
@@ -317,7 +328,9 @@ public class AmountCell extends Cell {
 		
 		if (ret == null)	return ret;
 		
-		if(this.getColumnCellValue()!=null) ret.setColumnCellValue(new HashMap<String, Comparable>(this.getColumnCellValue()));
+		if(this.getColumnCellValue()!=null)
+			ret.setColumnCellValue( new PercentageHelperMap(this.getColumnCellValue()) );
+		
 		if(this.getColumnPercent()!=null) ret.setColumnPercent(new HashMap<String, Double>(this.getColumnPercent()));
 		
 		if (ret.getMergedCells() == null || ret.getMergedCells().size() == 0)
@@ -355,82 +368,115 @@ public class AmountCell extends Cell {
 		return ret;
 	}
 
-	public void setPercentage(double percentage, MetaTextCell source) {
+	/**
+	 * 
+	 * @param percentage
+	 * @param source
+	 * @param hierarchyPurpose tells whether this percentage comes from a filter or a hierarchy
+	 */
+	public void setPercentage(double percentage, MetaTextCell source, boolean hierarchyPurpose) {
 		Column sourceCol = source.getColumn();
 		
 		initializePercentageMaps();
 		logger.debug("percent "+percentage +" apply to "+this+" (hash"+this.getHashCode()+") with source "+sourceCol.getName());
 		logger.debug("...column already has "+columnPercent+" for "+columnCellValue);
 		// never apply same percentage of same value again
-		if (columnPercent.containsKey(sourceCol.getName()) && columnCellValue.get(sourceCol.getName()).equals(source.getValue())) return;
+		//if (columnPercent.containsKey(sourceCol.getName()) && columnCellValue.get(sourceCol.getName()).equals(source.getValue())) return;
 
 		// we search if there is another percentage of the same column - we add
 		// (the sum) of it
-		if (columnPercent.containsKey(sourceCol.getName())) {
-			columnPercent.put(sourceCol.getName(), columnPercent.get(sourceCol
-					.getName())
-					+ percentage);
-			columnCellValue.put(sourceCol.getName(), (Comparable) source
-					.getValue());
-			return;
-		}
-
-		String sectorPercentColName=null;
-		for (String colPercent : columnPercent.keySet()) 
-		    if(colPercent.endsWith(ArConstants.COLUMN_ANY_SECTOR)) sectorPercentColName=colPercent; 
+		Class dimensionClass	= sourceCol.getDimensionClass();
+		String keyName			= sourceCol.getName();
+		if ( keyName.endsWith(ArConstants.COLUMN_ANY_SECTOR) )
+			keyName	= ArConstants.COLUMN_ANY_SECTOR;
+		else if ( keyName.contains(ArConstants.COLUMN_ANY_NATPROG) )
+			keyName	= ArConstants.COLUMN_ANY_NATPROG;
+		else if ( keyName.contains(ArConstants.COLUMN_ANY_SECONDARYPROG) )
+			keyName	= ArConstants.COLUMN_ANY_SECONDARYPROG;
+		else if ( keyName.contains(ArConstants.COLUMN_ANY_PRIMARYPROG) )
+			keyName	= ArConstants.COLUMN_ANY_PRIMARYPROG;
+		else if ( keyName.contains(ArConstants.COLUMN_REGION) )
+			keyName	= ArConstants.COLUMN_REGION;
+		else if ( keyName.contains(ArConstants.COLUMN_ZONE) )
+			keyName	= ArConstants.COLUMN_REGION;
+		else if ( keyName.contains(ArConstants.COLUMN_DISTRICT) )
+			keyName	= ArConstants.COLUMN_REGION;
+		else if ( keyName.contains(ArConstants.COLUMN_SECTOR_LOCATION) )
+			keyName	= ArConstants.COLUMN_REGION;
 		
+		columnCellValue.put(keyName, source.getValue().toString(), source.getId(), percentage, dimensionClass, hierarchyPurpose);
+		double percentSum	= columnCellValue.getPercentageSum(keyName);
+		if ( percentSum > 0 )
+			columnPercent.put(keyName, percentSum);
 		
-		if (sectorPercentColName!=null
-				&& sourceCol.getName().endsWith(ArConstants.COLUMN_ANY_SECTOR)) {
-			// we forget the sector percentage, and apply the sub-sector
-			// percentage:
-			columnPercent.remove(sectorPercentColName);
-			columnCellValue.remove(sectorPercentColName);
-			columnPercent.put( sourceCol.getName(), percentage);
-			columnCellValue.put(sourceCol.getName(),
-					(Comparable) source.getValue());
-			return;
-		}
+//		if (columnPercent.containsKey(sourceCol.getName())) {
+//			
+//			columnCellValue.put
+//			
+//			columnPercent.put(sourceCol.getName(), columnPercent.get(sourceCol
+//					.getName())
+//					+ percentage);
+//			columnCellValue.put(sourceCol.getName(), (Comparable) source
+//					.getValue());
+//			return;
+//		}
+//
+//		String sectorPercentColName=null;
+//		for (String colPercent : columnPercent.keySet()) 
+//		    if(colPercent.endsWith(ArConstants.COLUMN_ANY_SECTOR)) sectorPercentColName=colPercent; 
+//		
+//		
+//		if (sectorPercentColName!=null
+//				&& sourceCol.getName().endsWith(ArConstants.COLUMN_ANY_SECTOR)) {
+//			// we forget the sector percentage, and apply the sub-sector
+//			// percentage:
+//			columnPercent.remove(sectorPercentColName);
+//			columnCellValue.remove(sectorPercentColName);
+//			columnPercent.put( sourceCol.getName(), percentage);
+//			columnCellValue.put(sourceCol.getName(),
+//					(Comparable) source.getValue());
+//			return;
+//		}
 		
-		/**
-		 * For hierarchies with programs
-		 */
-		this.replacePercentage(ArConstants.COLUMN_ANY_NATPROG, ArConstants.COLUMN_ANY_NATPROG, source, sourceCol, percentage);
-		this.replacePercentage(ArConstants.COLUMN_ANY_SECONDARYPROG, ArConstants.COLUMN_ANY_SECONDARYPROG, source, sourceCol, percentage);
-		this.replacePercentage(ArConstants.COLUMN_ANY_PRIMARYPROG, ArConstants.COLUMN_ANY_PRIMARYPROG, source, sourceCol, percentage);
-
-
-		/**
-		 * For locations
-		 */
-		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_ZONE, source, sourceCol, percentage);
-		this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
-		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
+//		/**
+//		 * For hierarchies with programs
+//		 */
+//		this.replacePercentage(ArConstants.COLUMN_ANY_NATPROG, ArConstants.COLUMN_ANY_NATPROG, source, sourceCol, percentage);
+//		this.replacePercentage(ArConstants.COLUMN_ANY_SECONDARYPROG, ArConstants.COLUMN_ANY_SECONDARYPROG, source, sourceCol, percentage);
+//		this.replacePercentage(ArConstants.COLUMN_ANY_PRIMARYPROG, ArConstants.COLUMN_ANY_PRIMARYPROG, source, sourceCol, percentage);
+//
+//
+//		/**
+//		 * For locations
+//		 */
+//		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_ZONE, source, sourceCol, percentage);
+//		this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
+//		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_DISTRICT, source, sourceCol, percentage);
+//		
+//		this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
+//		this.replacePercentage(ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
+//		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
 		
-		this.replacePercentage(ArConstants.COLUMN_ZONE, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
-		this.replacePercentage(ArConstants.COLUMN_DISTRICT, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
-		this.replacePercentage(ArConstants.COLUMN_REGION, ArConstants.COLUMN_SECTOR_LOCATION, source, sourceCol, percentage);
-		
-		columnPercent.put(sourceCol.getName(), percentage);
-		columnCellValue
-				.put(sourceCol.getName(), (Comparable) source.getValue());
+//		columnPercent.put(sourceCol.getName(), percentage);
+//		columnCellValue
+//				.put(sourceCol.getName(), (Comparable) source.getValue());
 	}
 	
-	private boolean replacePercentage (String srcColumnsName, String destColumnsName,  MetaTextCell source,  Column sourceCol, double percentage) {
-		String percentColName	= null;
-		for (String colPercent : columnPercent.keySet()) 
-			if(colPercent.contains(srcColumnsName)) percentColName=colPercent;
-		if ( percentColName != null &&
-				sourceCol.getName().contains(destColumnsName) ) {
-			columnPercent.remove(percentColName);
-			columnCellValue.remove(percentColName);
-			columnPercent.put( sourceCol.getName(), percentage);
-			columnCellValue.put(sourceCol.getName(),
-					(Comparable) source.getValue());
-			return true;
-		}
-		return false;
-	}
+//	private boolean replacePercentage (String srcColumnsName, String destColumnsName,  MetaTextCell source,  Column sourceCol, double percentage) {
+//		String percentColName	= null;
+//		for (String colPercent : columnPercent.keySet()) 
+//			if(colPercent.contains(srcColumnsName)) percentColName=colPercent;
+//		if ( percentColName != null &&
+//				sourceCol.getName().contains(destColumnsName) ) {
+//			columnPercent.remove(percentColName);
+//			columnCellValue.remove(percentColName);
+//			columnPercent.put( sourceCol.getName(), percentage);
+//			columnCellValue.put(sourceCol.getName(),
+//					(Comparable) source.getValue());
+//			return true;
+//		}
+//		return false;
+//	}
 
 	@Override
 	public void merge(Cell c1, Cell c2) {
@@ -474,5 +520,6 @@ public class AmountCell extends Cell {
 	public double getInitialAmount() {
 		return this.originalAmount;
 	}
+	
 
 }

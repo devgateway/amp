@@ -145,7 +145,7 @@ StopWatch.next("Filters", true);
 						</div>
 				</div>
 				<feature:display name="Computed Columns Filters" module="Filter Section">
-					<div style="margin-left: 80%;width: 20%; height: 30%; padding: 10px; ">
+					<div style="margin-left: 80%;width: 20%; height: 30%; padding:5px; ">
 						<span style="white-space: nowrap"><b><digi:trn>Computed Columns</digi:trn> </b></span>
 							<div style="margin-top:10px;">
 							<html:select property="computedYear"  style="width: 100px" styleClass="inp-text">

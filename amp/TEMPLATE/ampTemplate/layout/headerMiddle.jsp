@@ -143,7 +143,18 @@ ${fn:replace(message,quote,escapedQuote)}
 	                  	<div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
 	                    	<div class="bd bd_drop">                    
 	                    		<ul class="first-of-type"> 
-															
+									
+									<module:display name="Map Module" >
+										<feature:display name="Show in public view" module="Map Module">
+			                            	<li class="yuiampmenuitem_drop">
+			                              	<a target="_blank" class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/esrigis/mainmap.do?public=true"  onclick="return canExit()">
+			                                	<digi:trn key="fm:gis">Advanced GIS</digi:trn>
+			                                </a> 
+		                                	</li>
+	                              		</feature:display>
+									</module:display>
+									
+																								
 									<module:display name="GIS DASHBOARD" >
 										<feature:display name="Show in public view" module="GIS DASHBOARD">
 			                            	<li class="yuiampmenuitem_drop">

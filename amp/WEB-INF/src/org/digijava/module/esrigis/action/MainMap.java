@@ -61,6 +61,9 @@ public class MainMap extends Action{
 		
 		if (filter == null){
 			filter = new MapFilter();
+			if(request.getParameter("public")!=null && request.getParameter("public").equalsIgnoreCase("true")){
+				filter.setFromPublicView(true);
+			}
 			initializeFilter(filter);
 			dataDispatcherForm.setFilter(filter);
 		}else{
@@ -69,6 +72,9 @@ public class MainMap extends Action{
 				List<AmpStructureType> sts = new ArrayList<AmpStructureType>();
 				sts = (List<AmpStructureType>) DbHelper.getAllStructureTypes();
 				filter.setStructureTypes(sts);
+			}
+			if(request.getParameter("public")!=null && request.getParameter("public").equalsIgnoreCase("true")){
+				filter.setFromPublicView(true);
 			}
 			
 		}

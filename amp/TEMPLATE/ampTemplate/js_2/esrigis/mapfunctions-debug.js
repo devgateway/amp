@@ -179,7 +179,7 @@ function createMapAddLayers(myService1, myService2) {
 		//dojo.connect(dijit.byId('map'), 'resize', resizeMap);
 		dojo.byId('map_zoom_slider').style.top = '95px';
 		getActivities(false);
-		//getStructures(false);
+		getStructures(false);
 	});
 	
 	// add the legend

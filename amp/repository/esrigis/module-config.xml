@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <module-config>
 	<name>esrigis</name>
-	<security login-required="true" default="READ">
-		<action login-required="true" pattern="/mainmap" />
+	<security login-required="false" default="READ">
+		<action login-required="false" pattern="/mainmap" />
 	</security>
 	
 	<hibernate-classes required="false">

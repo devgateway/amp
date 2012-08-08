@@ -466,7 +466,7 @@
         	</table>
         </div>
         </feature:display>	
-        <div id="navToolbar" dojoType="dijit.Toolbar" region="center" style="position:absolute; right:180px; top:20px; z-Index:999;display: none;margin-top: 40px;">
+        <div id="navToolbar" dojoType="dijit.Toolbar" region="leading" style="z-Index:999;display: none;">
         <div class="toolscontainer" style="margin:5px 0px 0px 0px;">
         	<div class="gisBoxHeader">
 			  	<h3>Tools panel</h3><a href="#"></a>

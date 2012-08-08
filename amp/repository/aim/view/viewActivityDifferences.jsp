@@ -50,7 +50,7 @@
 		<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 			<ul id="MyTabs" class="yui-nav">
 				<li class="selected">
-					<a href=""/><div><digi:trn>Compare Activities</digi:trn></div></a>
+					<a/><div><digi:trn>Compare Activities</digi:trn></div></a>
 				</li>
 			</ul>
 		</div>

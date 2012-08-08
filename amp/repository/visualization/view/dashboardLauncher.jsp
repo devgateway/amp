@@ -290,7 +290,7 @@ function initializeGlobalVariables(){
 
 	<div id="stepscontainer">
 
-    	<h2><digi:trn>Step 1: Select a Sashboard Type</digi:trn></h2>
+    	<h2><digi:trn>Step 1: Select a Dashboard Type</digi:trn></h2>
 
     	<div id="step1" class="stepsbox">
 

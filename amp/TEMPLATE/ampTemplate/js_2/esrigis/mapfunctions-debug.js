@@ -50,10 +50,8 @@ var DISTRICT;
 var COUNT;
 var GEO_ID;
 var basemapsarray = new Array();
-// var povertyratesurl =
-// "http://4.79.228.117:8399/arcgis/rest/services/Liberia_Pop_Density_and_Poverty/MapServer/9";
-// var population =
-// "http://4.79.228.117:8399/arcgis/rest/services/LiberiaPopulaitionDensity/MapServer";
+var povertyratesurl;
+var population;
 
 function init() {
 	var xhrArgs = {
@@ -82,6 +80,12 @@ function init() {
 				case 9:
 					nationalborderurl= map.mapurl;
 					break;
+				case 10:
+					povertyratesurl= map.mapurl;
+					break;
+				case 11:
+					population= map.mapurl;
+					break;
 				default:
 					break;
 				}
@@ -99,24 +103,18 @@ function init() {
 	basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {
 		id : 'base'
 	}); // Levels at which this layer will be visible);
-	countrymap = new esri.layers.ArcGISDynamicMapServiceLayer(countrymapurl, {
-		opacity : 0.50,
-		id : 'countrymap'
-	});
+	countrymap = new esri.layers.ArcGISDynamicMapServiceLayer(countrymapurl, {opacity : 0.50,id : 'countrymap'});
 
 	/*
-	 * povertyratesmap = new esri.layers.FeatureLayer(povertyratesurl, { mode:
-	 * esri.layers.FeatureLayer.MODE_ONDEMAND,outFields: ["*"],
-	 * id:'indicator',opacity : 0.50, visible:false });
-	 * 
-	 * populationmap = new
-	 * esri.layers.ArcGISDynamicMapServiceLayer(population,{opacity :
-	 * 0.80,visible:false,id:'census'});
+	 povertyratesmap = new esri.layers.FeatureLayer(povertyratesurl, { mode:
+	 esri.layers.FeatureLayer.MODE_ONDEMAND,outFields: ["*"],
+	 id:'indicator',opacity : 0.80, visible:false });
 	 */
-	
+	povertyratesmap = new esri.layers.ArcGISDynamicMapServiceLayer(povertyratesurl,{opacity :0.80,visible:false,id:'indicator'});
+	populationmap = new esri.layers.ArcGISDynamicMapServiceLayer(population,{opacity :0.80,visible:false,id:'census'});
 	bordermap= new esri.layers.ArcGISDynamicMapServiceLayer(nationalborderurl,{opacity :0.90,visible:false,id:'border'});
-	
 	geometryService = new esri.tasks.GeometryService(geometryServiceurl);
+	
 	esriConfig.defaults.io.proxyUrl = "/esrigis/esriproxy.do";
 
 	var layerLoadCount = 0;
@@ -147,6 +145,7 @@ function init() {
 		});
 	}
 	
+	var dnd = new dojo.dnd.Moveable(dojo.byId("poplegendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
 }
@@ -176,29 +175,21 @@ function createMapAddLayers(myService1, myService2) {
 		map = new esri.Map("map", {lods : customLods,extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
 		dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
-		//dojo.connect(dijit.byId('map'), 'resize', resizeMap);
 		dojo.byId('map_zoom_slider').style.top = '95px';
 		getActivities(false);
 		getStructures(false);
 	});
-	
-	// add the legend
-	dojo.connect(map, 'onLayersAddResult', function(results) {
-		var layerInfo = dojo.map(results, function(layer, index) {
-			return {
-				layer : layer.layer,
-				title : layer.layer.name
-			};
-		});
-		if (layerInfo.length > 0) {
-			var legendDijit = new esri.dijit.Legend({
-				map : map,
-				layerInfos : layerInfo
-			}, "legendDiv");
-			legendDijit.startup();
-		}
-	});
-
+	/*
+	 dojo.connect(map,'onLayersAddResult',function(results){
+         //add the legend
+          var legend = new esri.dijit.Legend({
+            map:map,
+            layerInfos:[{layer:povertyratesmap,title:"Poverty"}],
+            arrangement:esri.dijit.Legend.ALIGN_RIGHT
+          },"legendDiv");
+          legend.startup();
+     });
+	*/
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",
 			extentHistoryChangeHandler);
@@ -209,10 +200,10 @@ function createMapAddLayers(myService1, myService2) {
 	map.addLayer(myService1);
 	map.addLayer(myService2);
 	map.addLayer(bordermap);
-	// map.addLayers([povertyratesmap,populationmap]);
-
-	// dojo.connect(map, "onExtentChange", showExtent);
-
+	map.addLayer(populationmap);
+	map.addLayer(povertyratesmap);	
+	//dojo.connect(map, "onExtentChange", showExtent);
+	
 	createBasemapGalleryEsri();
 	createBasemapGallery();
 	maxExtent = map.extent;
@@ -230,11 +221,16 @@ function toggleindicatormap(id) {
 	if (layer.visible) {
 		layer.hide();
 		$('#legendDiv').hide('slow');
+		$('#poplegendDiv').hide('slow');
 		functionalayer.show();
 		indicatoractive = false;
 	} else if (!indicatoractive) {
 		layer.show();
-		$('#legendDiv').show('slow');
+		if (id=='indicator'){
+			$('#legendDiv').show('slow');
+		}else{
+			$('#poplegendDiv').show('slow');
+		}
 		functionalayer.hide();
 		indicatoractive = true;
 	}

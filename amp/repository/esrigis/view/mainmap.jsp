@@ -358,7 +358,12 @@
  		<div class='legendHeader' id="fakecolor">Donor Legend<br/><hr/></div>
  		<div id="pointsLegend" class="legendContent" style="rigth:10px;top:421px;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
-        <div id="legendDiv" class="legendContent" style="top:320px;left:470px;"></div>
+        <div id="legendDiv" class="legendContent" style="top:585px;left:65px;width: 165px;">
+        	<img src="/TEMPLATE/ampTemplate/img_2/gis/legend-poverty.jpg">	
+        </div>
+        <div id="poplegendDiv" class="legendContent" style="top:570px;left:65px;width: 180px;">
+        	<img src="/TEMPLATE/ampTemplate/img_2/gis/population-legend.jpg">	
+        </div>
         <div id="NationalDiv" class="legendContent" style="top:310px;left:74%;font-size: 10px;width: 170px;">
         	<p id="nationalp">
         		<digi:trn>Click here to see national projects</digi:trn>

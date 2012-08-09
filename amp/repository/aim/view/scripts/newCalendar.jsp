@@ -229,15 +229,14 @@
 		
 		var dialogId		= objectId + '_dialog';
 		var calDivWrapper	= objectId + '_calDivWrapper';
-		
 		var dialog		= calendarWrapperDialogs[dialogId];
 		if ( dialog == null ) {
-			var renderDiv	= document.getElementById(buttonId);
+			var renderDiv	= document.getElementById(buttonId).parentNode;
 			while ( renderDiv != null ) {
-				renderDiv	= renderDiv.parentNode;
 				var yuiEl 	= new YAHOO.util.Element(renderDiv);
-				if ( renderDiv.tagName.toLowerCase() == "div" && yuiEl.hasClass("yui-overlay") )
+				if ( renderDiv.tagName != null && renderDiv.tagName.toLowerCase() == "div" && yuiEl.hasClass("yui-overlay") )
 					break;
+				renderDiv	= renderDiv.parentNode;
 			}
 			if ( renderDiv == null )
 				renderDiv	= document.body;
@@ -311,6 +310,13 @@
 		dialog.align("bl", "tr");
 		
 		
+	}
+	
+	/*Just for compatibility reasons with functions that were used with the old DHTMLSuite calendar widget*/
+	function pickDateWithClear(buttonId,inputObject,clearId) {
+		if ( inputObject.id == null )
+			inputObject.id = "tb" + new Date().getTime();
+		pickDateById(buttonId, inputObject.id);
 	}
 
 

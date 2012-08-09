@@ -675,7 +675,7 @@ function collapseAll() {
 					<digi:edit key="${objKey}"></digi:edit></b>
 				</c:if>
 				<hr/>
-				<logic:present name="aimEditActivityForm" property="coments.allComments">
+				<logic:present name="aimEditActivityForm" property="comments.allComments">
 					<digi:trn>Purpose Comments</digi:trn>:&nbsp;<hr>
 					<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 						<logic:equal name="comments" property="key" value="Purpose Assumption">

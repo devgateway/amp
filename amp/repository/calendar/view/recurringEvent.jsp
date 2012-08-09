@@ -153,7 +153,7 @@ function eventType(){
 				}
 			}
 			document.getElementById("weekDays").value = result;
-			recurrDays = 7 * document.getElementById("recurrWeekly").value;
+			recurrDays = 7 * rec;
 	    	
 		}
 

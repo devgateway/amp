@@ -2582,7 +2582,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 							.getTransactionAmount());
 					AmpCurrency currency = CurrencyUtil.getAmpcurrency(detail
 							.getCurrencyCode());
-					if(detail.getAdjustmentTypeName().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()) &&transactionYear==currentYear){
+					if(detail.getAdjustmentTypeName().toString().equalsIgnoreCase((CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) &&transactionYear==currentYear){
 						if (detail.getTransactionType() == Constants.DISBURSEMENT||detail.getTransactionType() == Constants.EXPENDITURE){
 							AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
 									detail.getTransactionType(),
@@ -2621,7 +2621,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 							.getTransactionAmount());
 					AmpCurrency currency = CurrencyUtil.getAmpcurrency(detail
 							.getCurrencyCode());
-					if(detail.getAdjustmentTypeName().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()) &&transactionYear==currentYear){
+					if(detail.getAdjustmentTypeName().toString().equalsIgnoreCase((CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) &&transactionYear==currentYear){
 						if (detail.getTransactionType() == Constants.DISBURSEMENT||detail.getTransactionType() == Constants.COMMITMENT){
 							AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
 									detail.getTransactionType(),

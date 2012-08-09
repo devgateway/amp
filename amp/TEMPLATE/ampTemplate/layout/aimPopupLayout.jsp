@@ -41,9 +41,7 @@
 	.invisible-item{display: none;}
 .white-item{color: white;}
 .marginal-five{margin-right:5px;}
-a {
-color: #376091;
-}
+
 	</style>
 </head>
 <body bgcolor="#ffffff">

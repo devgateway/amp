@@ -58,7 +58,7 @@ Filters.prototype.success	= function (o) {
 		
 		this.saveFilters	= new SaveFilters(this, false);
 		
-		initCalendar();
+		//initCalendar();
 		document.getElementById("filterPickerSubmitButton").onclick	= function() { return false;};
 		YAHOO.util.Event.removeListener("filterPickerSubmitButton", "click");
 		YAHOO.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters, this.saveFilters ) ;

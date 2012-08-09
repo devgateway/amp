@@ -346,7 +346,7 @@ saveReportEngine	= null;
 		});
 		YAHOO.amptab.init();
 
-		initCalendar();
+		
 
 		<field:display name="Project Category" feature="Identification">
 			try {

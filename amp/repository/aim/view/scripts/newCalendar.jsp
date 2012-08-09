@@ -14,37 +14,124 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dragDropTree.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-calendar.js"/>"></script>
 
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/calendar/assets/skins/sam/calendar.css">
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/calendar/calendar-min.js"></script> 
+
 <!-- code for rendering that nice calendar -->
 <bean:define id="langBean" name="org.digijava.kernel.navigation_language" scope="request" type="org.digijava.kernel.entity.Locale" toScope="page" />
 <bean:define id="lang" name="langBean" property="code" scope="page" toScope="page" />
 
-<script type="text/javascript">
-	var myCalendarModel;
-	var calendarObjForForm;
-	myCalendarModel = new DHTMLSuite.calendarModel();
-	myCalendarModel.setLanguageCode('<bean:write name="lang" />'); 
-	calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false}); 
-	calendarObjForForm.setCalendarModelReference(myCalendarModel);
-	
-	calendarObjForForm.setCallbackFunctionOnClose("userCloseEvt");
+<style type="text/css">
+    /* Clear calendar's float, using dialog inbuilt form element */
+   .yui-dialog .bd form {
+        clear:left;
+    }
 
-	function initCalendar(){
-		//due to problems in the initialization that is done before this function
-		//in the filters we need to initialize the calendar when showing it!
-		myCalendarModel = new DHTMLSuite.calendarModel();
-		myCalendarModel.setLanguageCode('<bean:write name="lang" />'); 
-		calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false}); 
-		calendarObjForForm.setCalendarModelReference(myCalendarModel);
-		
-		calendarObjForForm.setCallbackFunctionOnClose("userCloseEvt");
-	}
+    /* Have calendar squeeze upto bd bounding box */
+    .yui-dialog .bd {
+        padding:0;
+    }
+
+   .yui-dialog .hd {
+        text-align:left;
+    }
+
+    /* Center buttons in the footer */
+    .yui-dialog .ft .button-group {
+        text-align:center;
+    }
+
+    /* Prevent border-collapse:collapse from bleeding through in IE6, IE7 */
+    .yui-overlay-hidden table {
+        *display:none;
+    }
+
+    /* Remove calendar's border and set padding in ems instead of px, so we can specify an width in ems for the container */
+    .cal-div-wrapper {
+        border:none;
+        padding:1em;
+    }
+
+    /* Datefield look/feel */
+    .datefield {
+        position:relative;
+        top:10px;
+        left:10px;
+        white-space:nowrap;
+        border:1px solid black;
+        background-color:#eee;
+        width:25em;
+        padding:5px;
+    }
+
+    .datefield input,
+    .datefield button,
+    .datefield label  {
+        vertical-align:middle;
+    }
+
+    .datefield label  {
+        font-weight:bold;
+    }
+
+    .datefield input  {
+        width:15em;
+    }
+
+    .datefield button  {
+        padding:0 5px 0 5px;
+        margin-left:2px;
+    }
+
+    .datefield button img {
+        padding:0;
+        margin:0;
+        vertical-align:middle;
+    }
+
+    /* Example box */
+    .box {
+        position:relative;
+        height:30em;
+    }
+</style>
+
+
+
+<script type="text/javascript">
+
+	YUI_MONTH_NAMES_LONG = ["<digi:trn>January</digi:trn>", 
+	   					 "<digi:trn>February</digi:trn>", 
+						 "<digi:trn>March</digi:trn>", 
+						 "<digi:trn>April</digi:trn>", 
+						 "<digi:trn>May</digi:trn>", 
+						 "<digi:trn>June</digi:trn>", 
+						 "<digi:trn>July</digi:trn>", 
+						 "<digi:trn>August</digi:trn>", 
+						 "<digi:trn>September</digi:trn>", 
+						 "<digi:trn>October</digi:trn>", 
+						 "<digi:trn>November</digi:trn>", 
+						 "<digi:trn>December</digi:trn>"];
 	
-	function userCloseEvt(obj) {		
-		DHTMLSuite.variableStorage.arrayOfDhtmlSuiteObjects[ind].hide();
-	}
+	YUI_MONTH_NAMES_MEDIUM = ["<digi:trn>Jan</digi:trn>", 
+		   					 "<digi:trn>Feb</digi:trn>", 
+							 "<digi:trn>Mar</digi:trn>", 
+							 "<digi:trn>Apr</digi:trn>", 
+							 "<digi:trn>May</digi:trn>", 
+							 "<digi:trn>Jun</digi:trn>", 
+							 "<digi:trn>Jul</digi:trn>", 
+							 "<digi:trn>Aug</digi:trn>", 
+							 "<digi:trn>Sep</digi:trn>", 
+							 "<digi:trn>Oct</digi:trn>", 
+							 "<digi:trn>Nov</digi:trn>", 
+							 "<digi:trn>Dec</digi:trn>"];
 	
+	YUI_DAY_NAMES_SHORT	= ["<digi:trn>Su</digi:trn>", "<digi:trn>Mo</digi:trn>", "<digi:trn>Tu</digi:trn>", "<digi:trn>We</digi:trn>", 
+                           "<digi:trn>Th</digi:trn>", "<digi:trn>Fr</digi:trn>", "<digi:trn>Sa</digi:trn>"];
 	
-	
+	YUI_DAY_NAMES_MEDIUM = ["<digi:trn>Sun</digi:trn>", "<digi:trn>Mon</digi:trn>", "<digi:trn>Tue</digi:trn>", "<digi:trn>Wed</digi:trn>", 
+                               "<digi:trn>Thu</digi:trn>", "<digi:trn>Fri</digi:trn>", "<digi:trn>Sat</digi:trn>"];
+
 	var dateFormat = '<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT) %>';
 	if (dateFormat == 'null')
 		dateFormat = 'dd/mm/yyyy';
@@ -52,7 +139,6 @@
 	
 	function getDateFromCalendar(inputArray)
 	{
-		var references = calendarObjForForm.getHtmlElementReferences(); // Get back reference to form field.
 		var format = dateFormat;
 		var monthPos, dayPos, yearPos;
 		var month = inputArray.month;
@@ -89,198 +175,144 @@
 			}
 		}	
 		
-		references.myDate.value = result;
-                if(references.mySameDate!=null){
-                    references.mySameDate.value = result;
-                }
-		calendarObjForForm.hide();			
+		
+		return result;
+		
 	}	
-
-	function pickDate(buttonObj,inputObject)
-	{
-		var butt = document.getElementById(buttonObj);
-		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
-		calendarObjForForm.setCalendarPositionByHTMLElement(butt,0,intY+butt.offsetHeight-80);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-		
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}		
-	}
-        function pickDateWithSameAs(buttonObj,inputObject,clearObj,sameAsInput,sameCheckBox,clearObjSame) //also sets visibility for clear button after the selection has been done
-	{
-		pickDateWithClear(buttonObj,inputObject,clearObj);
-                var checkbox = document.getElementById(sameCheckBox);
-                var objSame=calendarObjForForm.htmlElementReferences.mySameDate;
-                 if(objSame!=null){
-                        calendarObjForForm.htmlElementReferences.mySameDate=null;
-                 }
-                if(checkbox!=null&&checkbox.checked){
-                    calendarObjForForm.addHtmlElementReference('mySameDate', sameAsInput);
-                    var clrSameButton = document.getElementById(clearObjSame);
-                    clrSameButton.style.display="inline";
-                }// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-	}
 	
-	function pickDateWithClear(buttonObj,inputObject,clearObj) //also sets visibility for clear button after the selection has been done
+	function dateStringToObject (dateStr, format ) {
+		
+		var monthPos, dayPos, yearPos;
+		var monthLen, dayLen=2, yearLen=4;
+		if (format.toLowerCase().indexOf('mmm') != -1){
+			monthPos = format.toLowerCase().indexOf('mmm');
+			yearPos = format.indexOf('yyyy');
+			dayPos = format.indexOf('dd');
+			monthLen = 3;
+		}
+		else{
+			monthPos = format.toLowerCase().indexOf('mm');
+			yearPos = format.toLowerCase().indexOf('yyyy');
+			dayPos = format.toLowerCase().indexOf('dd');
+			monthLen = 2;
+		}
+		
+		var month	= dateStr.substr(monthPos, monthLen);
+		var day		= dateStr.substr(dayPos, dayLen);
+		var year	= dateStr.substr(yearPos, yearLen);
+		
+		if ( monthLen == 3 ) {
+			for (var i=0; i<YUI_MONTH_NAMES_MEDIUM.length; i++) {
+				if ( month.toLowerCase() == YUI_MONTH_NAMES_MEDIUM[i].toLowerCase() ) {
+					month	= i + 1;
+					break;
+				}
+			}
+		}
+		return {
+			month: month,
+			day:day,
+			year:year
+		};
+		
+	}
+
+	
+	
+	function pickDateById(buttonId,objectId)
 	{
-                var objSame=calendarObjForForm.htmlElementReferences.mySameDate;
-                if(objSame!=null){
-                    calendarObjForForm.htmlElementReferences.mySameDate=null;
+		
+		textboxEl			= document.getElementById(objectId);
+		
+		if ( typeof(calendarWrapperDialogs) == 'undefined' || calendarWrapperDialogs == null )
+			calendarWrapperDialogs	= new Object();
+		
+		var dialogId		= objectId + '_dialog';
+		var calDivWrapper	= objectId + '_calDivWrapper';
+		
+		var dialog		= calendarWrapperDialogs[dialogId];
+		if ( dialog == null ) {
+			var renderDiv	= document.getElementById(buttonId);
+			while ( renderDiv != null ) {
+				renderDiv	= renderDiv.parentNode;
+				var yuiEl 	= new YAHOO.util.Element(renderDiv);
+				if ( renderDiv.tagName.toLowerCase() == "div" && yuiEl.hasClass("yui-overlay") )
+					break;
+			}
+			if ( renderDiv == null )
+				renderDiv	= document.body;
+			
+			dialog		= new YAHOO.widget.Dialog(dialogId, {
+		        visible:false,
+		        context:[buttonId,  "bl", "tr"],
+		        draggable:false,
+		        close:true
+		        
+		    });
+			dialog.setHeader('<digi:trn>Pick A Date</digi:trn>');
+            dialog.setBody('<div class="yui-skin-sam"><div class="cal-div-wrapper" id="'+calDivWrapper+'"></div></div>');
+            dialog.render( renderDiv );
+            dialog.showEvent.subscribe(function() {
+                if (YAHOO.env.ua.ie) {
+                    // Since we're hiding the table using yui-overlay-hidden, we 
+                    // want to let the dialog know that the content size has changed, when
+                    // shown
+                    dialog.fireEvent("changeContent");
                 }
-		var butt = document.getElementById(buttonObj);
-		var clr = document.getElementById(clearObj);
-		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
-		calendarObjForForm.setCalendarPositionByHTMLElement(butt,0,intY+butt.offsetHeight-80);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-		
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}		
-		
-		//set Clear link visible
-	
-		clr.style.display="inline";		
+            });
+			calendarWrapperDialogs[dialogId] 	= dialog;
+			
+			var calendar 	= new YAHOO.widget.Calendar(calDivWrapper, {
+				navigator: true,
+                iframe:false,          // Turn iframe off, since container has iframe support.
+                hide_blank_weeks:true  // Enable, to demonstrate how we handle changing height, using changeContent
+            });
+			calendar.cfg.setProperty("MONTHS_LONG", YUI_MONTH_NAMES_LONG );
+			
+			calendar.cfg.setProperty("WEEKDAYS_SHORT", YUI_DAY_NAMES_SHORT);
+			calendar.cfg.setProperty("WEEKDAYS_MEDIUM",YUI_DAY_NAMES_MEDIUM);
+			if ( textboxEl.value != null && textboxEl.value.length > 0 ) {
+				var dateObj			= dateStringToObject(textboxEl.value,dateFormat);
+				calendar.cfg.setProperty("selected", dateObj.month + "/" + dateObj.day + "/" + dateObj.year );
+				calendar.cfg.setProperty("pagedate", dateObj.month + "/" + dateObj.year );
+			}
+			
+            calendar.render();
+            
+            calendar.selectEvent.subscribe(function() {
+                if (calendar.getSelectedDates().length > 0) {
 
-		
-		var obj=calendarObjForForm.htmlElementReferences.myDate;
-		DHTMLSuite.commonObj.addEvent(calendarObjForForm.divElementClose,'click',function(){ if (obj.value=="") {clearDate(obj, clearObj)} });
-		
-	}
-	
-	function clearDisplay(editBox, clearLink){ //Display the clear link or not ?
-		var clr = document.getElementById(clearLink);
-		if (editBox != undefined){
-			if (editBox.value != "")
-				clr.style.display="inline";
-			else
-				clr.style.display="none";
+                    var selDate = calendar.getSelectedDates()[0];
+
+                    // Pretty Date Output, using Calendar's Locale values: Friday, 8 February 2008
+                   // var wStr = calendar.cfg.getProperty("WEEKDAYS_LONG")[selDate.getDay()];
+                    var dStr = selDate.getDate() + "";
+                   // var mStr = calendar.cfg.getProperty("MONTHS_LONG")[selDate.getMonth()];
+                    var yStr = selDate.getFullYear() + "";
+    				var mStr = (selDate.getMonth()+1) + "";
+    				if ( mStr.length == 1 )
+                    	mStr	= "0" + mStr;
+    				if ( dStr.length == 1 )
+    					dStr	= "0" + dStr;
+    				
+                    var parameter = {
+                    	year: yStr,
+                    	month: mStr,
+                    	day: dStr
+                    };
+                    var dateString	= getDateFromCalendar(parameter);
+                    textboxEl.value = dateString;
+                } 
+                dialog.hide();
+            });
+            
 		}
-	}
-	function clearDate(editBox, clearLink){	//The clear link has been pressed
-		var clr = document.getElementById(clearLink);
-		editBox.value = "";
-		clr.style.display="none";
-	}
-	
-	
-	function pickDateObjName(buttonObj,objectName)
-	{
-		var butt = document.getElementById(buttonObj);
-		var inputObjects = document.getElementsByName(objectName);
-		var inputObject = inputObjects[0];
-		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
-		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-160,intY+butt.offsetHeight-80);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
+		dialog.show();
+		dialog.align("bl", "tr");
 		
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}		
-	}
-	
-	function pickDateById(buttonObj,objectId)
-	{
-		var	format=	dateFormat;
-		var butt = document.getElementById(buttonObj);
-		var inputObject = document.getElementById(objectId);
-		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
 		
-		//alert(butt);
-		//alert(inputObject);
-		
-		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-160,intY+butt.offsetHeight-80);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,format);	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}		
 	}
 
 
-	function pickDateById_divContent(buttonObj,objectId)
-	{
-		var	format=	dateFormat;
-		var div = document.getElementById('divContent');
-		var butt = document.getElementById(buttonObj);
-		var inputObject = document.getElementById(objectId);
-		
-		//alert(butt.y);
-		//alert(inputObject);
-		
-		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
-		calendarObjForForm.setCalendarPositionByHTMLElement(div,div.offsetWidth / 2, intY +(div.offsetHeight / 2));	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,format);	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}		
-	}
-	
-	function pickDateCurrency(buttonObj,inputObject)
-	{
-		var butt = document.getElementById(buttonObj);
-		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
-		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-160,intY+butt.offsetHeight-40);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-		
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}
-	
-	}
-	function pickDateByIdDxDy(buttonObj,objectId,dx,dy)
-	{
-		var butt = document.getElementById(buttonObj);
-		var inputObject = document.getElementById(objectId);
-		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
-		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-dx,intY+butt.offsetHeight-dy);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-		
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}		
-	}
-	function pickDateByIdDxDyWOScroll(buttonObj,objectId,dx,dy)
-	{
-		var butt = document.getElementById(buttonObj);
-		var inputObject = document.getElementById(objectId);
-		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
-		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-dx,-dy);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-		
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}		
-	}
 	
 </script>		

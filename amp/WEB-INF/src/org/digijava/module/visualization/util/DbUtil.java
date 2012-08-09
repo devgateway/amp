@@ -491,8 +491,12 @@ public class DbUtil {
 	                oql += DashboardUtil.getTeamQuery(teamMember);
 	            }
 	            if (locationCondition) {
-	            	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-	                oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+	            	if (locationIds[0].equals(0l)) {
+	            		oql += " and actloc is NULL "; //Unallocated condition
+	    			} else {
+	    				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+	    	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+	    			}
 	            }
 	
 	            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
@@ -584,8 +588,12 @@ public class DbUtil {
                 oql += DashboardUtil.getTeamQuery(teamMember);
             }
             if (locationCondition) {
-            	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-                oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+            	if (locationIds[0].equals(0l)) {
+            		oql += " and actloc is NULL "; //Unallocated condition
+    			} else {
+    				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+    	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+    			}
             }
             if (sectorCondition) {
             	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
@@ -716,8 +724,12 @@ public class DbUtil {
 	                oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
 	            }
 	            if (sectorCondition) {
-	            	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
-	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+	            	if (locationIds[0].equals(0l)) {
+	            		oql += " and actloc is NULL "; //Unallocated condition
+	    			} else {
+	    				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+	    	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+	    			}
 	            }
 	           
 	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
@@ -996,8 +1008,12 @@ public class DbUtil {
             oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
         }
         if (locationCondition) {
-        	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+        	if (locationIds[0].equals(0l)) {
+        		oql += " and actloc is NULL "; //Unallocated condition
+			} else {
+				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+			}
         }
 
         if (sectorCondition) {
@@ -1309,8 +1325,12 @@ public class DbUtil {
             oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
         }
         if (locationCondition) {
-        	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+        	if (locationIds[0].equals(0l)) {
+        		oql += " and actloc is NULL "; //Unallocated condition
+			} else {
+				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+			}
         }
 
         if (sectorCondition) {

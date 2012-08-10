@@ -35,7 +35,10 @@ public class PercentageHelperMap extends HashMap<String, PercentageHelperList> {
 		if ( dataList == null ) {
 			dataList	= new PercentageHelperList();
 			PercentageHelperData newPhd	= new PercentageHelperData(colType,item, itemId, percentage, dimensionClass, hierarchyPurpose);
-			dataList.add(newPhd);
+			if ( newPhd.getHierarchyPurpoase() )
+				dataList.setHierarchy(newPhd);
+			else
+				dataList.add(newPhd);
 			this.put(colType, dataList);
 		}
 		else {
@@ -159,6 +162,10 @@ public class PercentageHelperMap extends HashMap<String, PercentageHelperList> {
 			this.hierarchy = hierarchy;
 		}
 		
+		@Override
+		public String toString() {
+			return "H: " + hierarchy + " F: " + super.toString();
+		}
 		
 		
 	}

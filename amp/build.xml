@@ -39,19 +39,19 @@
 	</condition>
 	
 	<!-- amp_clean specific -->
-	<condition property="jdbc.password" value="1234">
+	<condition property="jdbc.password" value="aid321">
 	 	<not>
 	 		<isset property="jdbc.password"/>                              
 	 	</not>
 	 </condition>
 
-	<condition property="jdbc.user" value="postgres">
+	<condition property="jdbc.user" value="amp">
 	 	<not>
 	 		<isset property="jdbc.user"/>                              
 	 	</not>
 	 </condition>
 	
-	<condition property="jdbc.port" value="5432">
+	<condition property="jdbc.port" value="5433">
 	 	<not>
 	 		<isset property="jdbc.port"/>                              
 	 	</not>
@@ -75,6 +75,12 @@
     <property name="doc.path" value="./doc/api"/>
     <property name="doc.src" value="./src/java"/>
     <property name="gen-src" value="./gen-src"/>
+
+    <path id="libraries">
+        <fileset dir="${lib}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
 
 
     <!-- classpath for Struts 1.1 -->
@@ -111,7 +117,7 @@
 	
 	
   <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
-    <classpath refid="xjc.classpath" />
+    <classpath refid="libraries" />
   </taskdef>
 
     <!-- Check timestamp on files -->

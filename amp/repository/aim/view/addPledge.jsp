@@ -1449,34 +1449,83 @@ function validateData(){
 		i++;
 	}
 	
-	if (document.getElementsByName("contact1Email")[0]!=null && document.getElementsByName("contact1Email")[0].value.length>0 && document.getElementsByName("contact1Email")[0].value.indexOf("@") == -1){
+	if (document.getElementsByName("contact1Email")[0]!=null && document.getElementsByName("contact1Email")[0].value.length>0 && !verifyEmail(document.getElementsByName("contact1Email")[0].value)){
 		highligthObject(document.getElementsByName("contact1Email")[0],true);
 		errors = true;
 	} else {
 		highligthObject(document.getElementsByName("contact1Email")[0],false);
 	}
 	
-	if (document.getElementsByName("contactAlternate1Email")[0]!=null && document.getElementsByName("contactAlternate1Email")[0].value.length>0 && document.getElementsByName("contactAlternate1Email")[0].value.indexOf("@") == -1){
+	if (document.getElementsByName("contactAlternate1Email")[0]!=null && document.getElementsByName("contactAlternate1Email")[0].value.length>0 && !verifyEmail(document.getElementsByName("contactAlternate1Email")[0].value)){
 		highligthObject(document.getElementsByName("contactAlternate1Email")[0],true);
 		errors = true;
 	} else {
 		highligthObject(document.getElementsByName("contactAlternate1Email")[0],false);
 	}
 
-	if (document.getElementsByName("contact2Email")[0]!=null && document.getElementsByName("contact2Email")[0].value.length>0 && document.getElementsByName("contact2Email")[0].value.indexOf("@") == -1){
+	if (document.getElementsByName("contact2Email")[0]!=null && document.getElementsByName("contact2Email")[0].value.length>0 && !verifyEmail(document.getElementsByName("contact2Email")[0].value)){
 		highligthObject(document.getElementsByName("contact2Email")[0],true);
 		errors = true;
 	} else {
 		highligthObject(document.getElementsByName("contact2Email")[0],false);
 	}
 	
-	if (document.getElementsByName("contactAlternate2Email")[0]!=null && document.getElementsByName("contactAlternate2Email")[0].value.length>0 && document.getElementsByName("contactAlternate2Email")[0].value.indexOf("@") == -1){
+	if (document.getElementsByName("contactAlternate2Email")[0]!=null && document.getElementsByName("contactAlternate2Email")[0].value.length>0 && !verifyEmail(document.getElementsByName("contactAlternate2Email")[0].value)){
 		highligthObject(document.getElementsByName("contactAlternate2Email")[0],true);
 		errors = true;
 	} else {
 		highligthObject(document.getElementsByName("contactAlternate2Email")[0],false);
 	}
 
+	var tmp = replaceAll(replaceAll(document.getElementsByName("contact1Telephone")[0].value, "-", ""), " ", "");
+	if (document.getElementsByName("contact1Telephone")[0]!=null && document.getElementsByName("contact1Telephone")[0].value.length>0 && isNaN(tmp)){
+		highligthObject(document.getElementsByName("contact1Telephone")[0],true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementsByName("contact1Telephone")[0],false);
+	}
+
+	tmp = replaceAll(replaceAll(document.getElementsByName("contact1Fax")[0].value, "-", ""), " ", "");
+	if (document.getElementsByName("contact1Fax")[0]!=null && document.getElementsByName("contact1Fax")[0].value.length>0 && isNaN(tmp)){
+		highligthObject(document.getElementsByName("contact1Fax")[0],true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementsByName("contact1Fax")[0],false);
+	}
+
+	tmp = replaceAll(replaceAll(document.getElementsByName("contactAlternate1Telephone")[0].value, "-", ""), " ", "");
+	if (document.getElementsByName("contactAlternate1Telephone")[0]!=null && document.getElementsByName("contactAlternate1Telephone")[0].value.length>0 && isNaN(tmp)){
+		highligthObject(document.getElementsByName("contactAlternate1Telephone")[0],true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementsByName("contactAlternate1Telephone")[0],false);
+	}
+
+	tmp = replaceAll(replaceAll(document.getElementsByName("contact2Telephone")[0].value, "-", ""), " ", "");
+	if (document.getElementsByName("contact2Telephone")[0]!=null && document.getElementsByName("contact2Telephone")[0].value.length>0 && isNaN(tmp)){
+		highligthObject(document.getElementsByName("contact2Telephone")[0],true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementsByName("contact2Telephone")[0],false);
+	}
+
+	tmp = replaceAll(replaceAll(document.getElementsByName("contact2Fax")[0].value, "-", ""), " ", "");
+	if (document.getElementsByName("contact2Fax")[0]!=null && document.getElementsByName("contact2Fax")[0].value.length>0 && isNaN(tmp)){
+		highligthObject(document.getElementsByName("contact2Fax")[0],true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementsByName("contact2Fax")[0],false);
+	}
+
+	tmp = replaceAll(replaceAll(document.getElementsByName("contactAlternate2Telephone")[0].value, "-", ""), " ", "");
+	if (document.getElementsByName("contactAlternate2Telephone")[0]!=null && document.getElementsByName("contactAlternate2Telephone")[0].value.length>0 && isNaN(tmp)){
+		highligthObject(document.getElementsByName("contactAlternate2Telephone")[0],true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementsByName("contactAlternate2Telephone")[0],false);
+	}
+
+	
 	<c:set var="checkErrors">
 	  <digi:trn>
 	  	Please, check values highlighted in red.
@@ -1495,6 +1544,14 @@ function replaceAll(str, find, replace){
 	      str = str.toString().replace(find,replace);
 	  return str;
 	}
+
+function verifyEmail(email) {
+	var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	if (!filter.test(email)) {
+		return false;
+	}
+	return true;
+}
 
 
 </script>

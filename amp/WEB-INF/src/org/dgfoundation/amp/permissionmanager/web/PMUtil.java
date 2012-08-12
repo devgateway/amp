@@ -359,7 +359,7 @@ public final class PMUtil {
 		AmpPMGateReadEditWrapper noAccess = new AmpPMGateReadEditWrapper(new Long(101),"No Access", "false", BooleanGate.class, Boolean.FALSE,Boolean.TRUE);
 		initializeAndSaveGatePermission(session,cp, noAccess ,false, PMUtil.PERM_NO_ACCESS);
 
-//session.flush(); 
+//
 		return cp;
 	}
 	
@@ -792,8 +792,8 @@ public final class PMUtil {
 			for (PermissionMap permissionMap : pmList) {
 				if(permissionMap!=null) {
 				    Permission p=permissionMap.getPermission();
-				    result+="Assigned Field Permission : "+p.getName()+"; ";
-				    result = getContentInfoPermission(result, p);
+				    result+="Assigned FIELD Permission : "+p.getName()+";\n";
+				    result = getContentInfoFieldPermission(result, p);
 				}
 			}
 		}
@@ -801,8 +801,8 @@ public final class PMUtil {
 			Permission p = PermissionUtil.getGlobalPermissionForPermissibleClass(AmpModulesVisibility.class);
 			if(p!=null){
 				String name = p.getName()!=null?p.getName():"";
-			    result+="GLOBAL Permission : "+name+"; ";
-			    result = getContentInfoPermission(result, p);
+			    result+="GLOBAL Permission : "+name+";\n";
+			    result = getContentInfoGlobalPermission(result, p);
 			}
 			else result+="No GLOBAL Permission";
 		}
@@ -812,13 +812,14 @@ public final class PMUtil {
 
 
 
-	private static String getContentInfoPermission(String result, Permission p) {
+	private static String getContentInfoGlobalPermission(String result, Permission p) {
 		if (p!=null && p.isDedicated()) {
 			CompositePermission cp = (CompositePermission)p;
 			//result+=" - cp:"+cp.getName();
 			String userInfo		 = "";
 			String workspaceInfo = "";
 			String orgRoleInfo	 = "";
+			//PMUtil.PERM_ROLE , PMUtil.PERM_WORKSPACE
 			for (Iterator<Permission> it = cp.getPermissions().iterator(); it.hasNext();) {
 				GatePermission pGate = (GatePermission) it.next();
 				if(UserLevelGate.class.getName().compareTo(pGate.getGateTypeName()) == 0)
@@ -834,8 +835,36 @@ public final class PMUtil {
 		return result;
 	}
 
+	private static String getContentInfoFieldPermission(String result, Permission p) {
+		if (p!=null && p.isDedicated()) {
+			CompositePermission cp = (CompositePermission)p;
+			//result+=" - cp:"+cp.getName();
+			String userInfo		 = "";
+			String workspaceInfo = "";
+			for (Iterator<Permission> it = cp.getPermissions().iterator(); it.hasNext();) {
+				GatePermission pGate = (GatePermission) it.next();
+				
+				if(pGate.hasParameter(StrategyPermSelectGate.class.getName()+"("+PMUtil.PERM_ROLE+")"))
+					userInfo+=buildInfoLogicalGate(pGate);
+				if(pGate.hasParameter(StrategyPermSelectGate.class.getName()+"("+PMUtil.PERM_WORKSPACE+")"))
+					workspaceInfo+=buildInfoLogicalGate(pGate);
+				
+			}
+			result +=userInfo + workspaceInfo;
+		}
+		return result;
+	}
 
 
+	private static String buildInfoLogicalGate(GatePermission pGate){
+		String info = "";
+		
+		info+=pGate.getName().substring(pGate.getName().lastIndexOf('-')+2, pGate.getName().length());
+		
+		info+=": "+listToString(pGate.getActions(),",")+";\n";
+		
+		return info;
+	}
 
 	private static String buildInfoGate(GatePermission pGate, int type) {
 		String info	= "";
@@ -851,7 +880,7 @@ public final class PMUtil {
 				}
 			else if (type == 2)
 					s = permissionRoles.get(s);
-			info+=s+": "+listToString(pGate.getActions(),",")+"; ";
+			info+=s+": "+listToString(pGate.getActions(),",")+";\n";
 		}
 		return info; 
 	}

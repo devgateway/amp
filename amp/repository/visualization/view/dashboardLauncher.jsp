@@ -462,10 +462,10 @@ function initializeGlobalVariables(){
 											<h3><div style="float:left;"><digi:trn>Member Selector</digi:trn></div>
 											<div style="float:right; padding:0;"><input onkeypress="clearSearch('orgGrpDivList')"
 														id="orgGrpDivList_search" type="text" class="inputx" /> <input
-														type="button" class="buttonx"
+														type="button" class="buttonx_sm"
 														onclick="findPrev('orgGrpDivList')" value='&lt;&lt;' /> <input
 														type="button" onclick="findNext('orgGrpDivList')"
-														class="buttonx" value="&gt;&gt;" /></div>
+														class="buttonx_sm" value="&gt;&gt;" /></div>
 											</h3>			
 											<div
 												class="innerbox" id="orgGrpDivList">
@@ -506,10 +506,10 @@ function initializeGlobalVariables(){
 											<h3><div style="float:left;"><digi:trn>Member Selector</digi:trn></div>
 											<div style="float:right; padding:0;"><input onkeypress="clearSearch('regionDivList')"
 														id="regionDivList_search" type="text" class="inputx" /> <input
-														type="button" class="buttonx"
+														type="button" class="buttonx_sm"
 														onclick="findPrev('regionDivList')" value='&lt;&lt;' /> <input
 														type="button" onclick="findNext('regionDivList')"
-														class="buttonx" value="&gt;&gt;" /></div>
+														class="buttonx_sm" value="&gt;&gt;" /></div>
 											</h3>	
 											
 											<div class="innerbox" id="regionDivList">

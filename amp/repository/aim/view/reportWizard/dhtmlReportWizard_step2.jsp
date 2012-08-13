@@ -13,7 +13,7 @@
    
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/reportWizard/searchColumn.js"/>"></script>
+
 
 						<div id="columns_step_div" class="main_side_cont yui-hidden" style="${topBottomPadding}">
 							<c:set var="stepNum" value="1"  scope="request" />

@@ -459,13 +459,13 @@ function initializeGlobalVariables(){
 											</div>
 										</div>
 										<div class="rightbox" id="orgGrpContent" style="display: none;">
-											<h3><digi:trn>Member Selector</digi:trn>
-											<input onkeypress="clearSearch('orgGrpDivList')"
+											<h3><div style="float:left;"><digi:trn>Member Selector</digi:trn></div>
+											<div style="float:right; padding:0;"><input onkeypress="clearSearch('orgGrpDivList')"
 														id="orgGrpDivList_search" type="text" class="inputx" /> <input
 														type="button" class="buttonx"
 														onclick="findPrev('orgGrpDivList')" value='&lt;&lt;' /> <input
 														type="button" onclick="findNext('orgGrpDivList')"
-														class="buttonx" value="&gt;&gt;" />
+														class="buttonx" value="&gt;&gt;" /></div>
 											</h3>			
 											<div
 												class="innerbox" id="orgGrpDivList">
@@ -503,13 +503,13 @@ function initializeGlobalVariables(){
 											</div>
 										</div>
 										<div class="rightbox" id="regionDivContent" style="display: none;">
-											<h3><digi:trn>Member Selector</digi:trn>
-											<input onkeypress="clearSearch('regionDivList')"
+											<h3><div style="float:left;"><digi:trn>Member Selector</digi:trn></div>
+											<div style="float:right; padding:0;"><input onkeypress="clearSearch('regionDivList')"
 														id="regionDivList_search" type="text" class="inputx" /> <input
 														type="button" class="buttonx"
 														onclick="findPrev('regionDivList')" value='&lt;&lt;' /> <input
 														type="button" onclick="findNext('regionDivList')"
-														class="buttonx" value="&gt;&gt;" />
+														class="buttonx" value="&gt;&gt;" /></div>
 											</h3>	
 											
 											<div class="innerbox" id="regionDivList">
@@ -546,7 +546,7 @@ function initializeGlobalVariables(){
 										</div>
 										<div class="rightbox" id="sectorDivContent" style="display: none;">
 												<h3><div style="float:left;"><digi:trn>Member Selector</digi:trn></div>
-												<div style="float:right; margin-top:-7px; padding:0;"><input onkeypress="clearSearch('sectorDivList')"
+												<div style="float:right; padding:0;"><input onkeypress="clearSearch('sectorDivList')"
 															id="sectorDivList_search" type="text" class="inputx" />
 														<input type="button" class="buttonx_sm"
 															onclick="findPrev('sectorDivList')" value='&lt;&lt;' />

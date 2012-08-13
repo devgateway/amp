@@ -125,6 +125,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			
 			final AmpActivityBudgetExtrasPanel budgetExtras = new AmpActivityBudgetExtrasPanel("budgetExtras", am, "Budget Extras");
 			budgetExtras.setOutputMarkupId(true);
+			budgetExtras.setIgnoreFmVisibility(true);
 
 			WebMarkupContainer budgetExtrasContainter = new WebMarkupContainer("budgetExtrasContainer");
 			budgetExtrasContainter.add(budgetExtras);
@@ -148,7 +149,6 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 							new PropertyModel<Set<AmpCategoryValue>>(am,"categories"),
 							CategoryConstants.ACTIVITY_BUDGET_KEY),
 							CategoryConstants.ACTIVITY_BUDGET_NAME, true, true, null, AmpFMTypes.MODULE);
-			/*
 			activityBudget.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
 				private static final long serialVersionUID = 1L;
 
@@ -162,6 +162,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 				}
 				
 				private void updateExtraFields(AjaxRequestTarget target){
+					target.add(budgetExtras);
 					target.add(budgetExtras.getParent());
 					budgetClassification.addToTargetActivityBudget(target);
 				}
@@ -187,7 +188,6 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					updateExtraFields(target);
 				}
 			});
-			 */
 			add(activityBudget);
 
 			AmpCategoryGroupFieldPanel financialInstrument = new AmpCategoryGroupFieldPanel(

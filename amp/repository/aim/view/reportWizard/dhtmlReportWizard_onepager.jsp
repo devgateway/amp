@@ -102,7 +102,6 @@
 	<c:set var="reportUsesFilters">true</c:set>
 </c:if> 
 
-
 <c:if test="${myForm.desktopTab}">
 	<c:set var="pageTitle">
 		<digi:trn key="aim:reportwizard:tabgenerator">Tab Generator</digi:trn>
@@ -136,6 +135,9 @@
 	</c:set>
 	<c:set var="summary" scope="request">
 		<digi:trn key="aim:summaryTab">Summary Tab</digi:trn>
+	</c:set>
+	<c:set var="typeAndDescription" scope="request"> 
+		<digi:trn key="rep:wizard:dhtmlTab:tabTypeAndDescription">Select Tab Type and Add Description </digi:trn> 
 	</c:set>
 </c:if>
 <c:if test="${!myForm.desktopTab}">
@@ -174,6 +176,9 @@
 	</c:set>
 	<c:set var="PledgesFunding" scope="request">
 		<digi:trn key="aim:pledgesfunding">Pledges Report</digi:trn>
+	</c:set>
+	<c:set var="typeAndDescription" scope="request"> 
+		<digi:trn key="rep:wizard:dhtmlReport:reportTypeAndDescription">Select Report Type and Add Description </digi:trn> 
 	</c:set>
 </c:if>
 <c:set var="disableFundingType">false</c:set>

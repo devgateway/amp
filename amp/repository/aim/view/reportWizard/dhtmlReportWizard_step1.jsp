@@ -24,9 +24,9 @@
 							<c:set var="tableVisibility">display: none;</c:set>
 							<div style="clear:both;">&nbsp;</div>
 							<fieldset style="background-color: #F6F6F6; width:97%;">
-								<legend onclick="toggleMoreSettings()" id="moreSettingsLegend" style="cursor: pointer;">+ <digi:trn>Select Report Type and Add Description</digi:trn></legend>
+								<legend onclick="toggleMoreSettings()" id="moreSettingsLegend" style="cursor: pointer;">+ <digi:trn>${typeAndDescription}</digi:trn></legend>
 								<div id="moreSettingsInfoDiv" onclick="toggleMoreSettings()" style="cursor: pointer;">
-									<digi:trn>Click 'Select Report Type and Add Description' to expand</digi:trn>....
+									<digi:trn>Click '${typeAndDescription}' to expand</digi:trn>....
 								</div>	
 						</c:if>
 							<table style="${tableVisibility}" width="99%" border="0" cellspacing="0" cellpadding="0" id="moreSettingsTable">

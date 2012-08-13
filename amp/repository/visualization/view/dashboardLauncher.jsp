@@ -256,9 +256,9 @@ function initializeGlobalVariables(){
 
 		.rightbox{ float:right;width:465px;border:1px solid #fff;}
 
-		.boxes{background:url(/TEMPLATE/ampTemplate/img_2/split.gif) repeat-y center;border:1px solid #d0d0d0;position:relative; background-color:#FFFFFF;}
+		.boxes{background:url(/TEMPLATE/ampTemplate/img_2/split.gif) repeat-y center;border:1px solid #d0d0d0;background-color:#FFFFFF;}
 
-		.stepsbox h3{background:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif) repeat-x;height:40px;margin:0px;padding:9px 10px 0px 10px;color:#76797A;line-height:10px; font-size:12px;}
+		.stepsbox h3{background:url(/TEMPLATE/ampTemplate/img_2/ins_header.gif) repeat-x;height:40px;margin:0px;padding:5px 10px 0px 10px;color:#76797A;line-height:10px; font-size:12px;}
 
 		.innerbox{height:250px;overflow:auto;}
 
@@ -339,7 +339,7 @@ function initializeGlobalVariables(){
 
     	<div id="step2" class="stepsbox" >
 			<div class="boxes">
-				<div style="float:left;width:465px;border:1px solid #fff;">
+				<div style="float:left;width:450px;border:1px solid #fff;">
 				<ul>
 					<li>
 						<html:radio property="filter.transactionTypeFilter" styleId="transaction_type_0" value="0">
@@ -360,7 +360,7 @@ function initializeGlobalVariables(){
 					</li>
 				</ul>
 				</div>
-				<div style="float:right; width:465px;border:1px solid #fff;">
+				<div style="float:right; width:450px;border:1px solid #fff;">
 				<ul>
 					<li>
 						<html:checkbox property="filter.showProjectsRanking" styleId="show_projects_ranking">
@@ -545,7 +545,7 @@ function initializeGlobalVariables(){
 											</div>
 										</div>
 										<div class="rightbox" id="sectorDivContent" style="display: none;">
-												<h3><digi:trn>Member Selector</digi:trn>
+												<h3><div style="float:left;"><digi:trn>Member Selector</digi:trn></div>
 												<div style="float:right; margin-top:-7px; padding:0;"><input onkeypress="clearSearch('sectorDivList')"
 															id="sectorDivList_search" type="text" class="inputx" />
 														<input type="button" class="buttonx_sm"

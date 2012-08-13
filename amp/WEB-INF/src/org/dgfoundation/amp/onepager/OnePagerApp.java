@@ -3,6 +3,8 @@
  */
 package org.dgfoundation.amp.onepager;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.Request;
@@ -108,8 +110,8 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 MetaDataRoleAuthorizationStrategy.authorize(PermissionManager.class, "ROLE_AUTHENTICATED");
 		 
 		 
-		 getApplicationSettings().setPageExpiredErrorPage(AmpLoginRedirectPage.class);
-		 getApplicationSettings().setAccessDeniedPage(AmpLoginRedirectPage.class);
+		 //getApplicationSettings().setPageExpiredErrorPage(AmpLoginRedirectPage.class);
+		 //getApplicationSettings().setAccessDeniedPage(AmpLoginRedirectPage.class);
 		
 		 //wicket session timeout
 		 //WebRequest request = (WebRequest) WebRequestCycle.get().getRequest();
@@ -138,6 +140,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 //set UTF-8 as the default encoding for all requests
 		 getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
 		 getMarkupSettings().setDefaultMarkupEncoding("UTF-8"); 
+
 	 }
 
 

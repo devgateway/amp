@@ -870,8 +870,8 @@ public class ActivityUtil {
 	    		if(activityContact.getId() != null){
 	    			activityContact =(AmpActivityContact) session.merge(activityContact);
 	    			//session.saveOrUpdate(activityContact);
-	    			session.flush();
-	    			session.clear();
+	    			//session.flush();
+	    			//session.clear();
 	    		}else{
 	    			session.saveOrUpdate(activityContact);
 	    		}	    		

@@ -756,7 +756,7 @@
 
 <feature:display name="Pledges Columns" module="Pledges"></feature:display>
 <field:display feature="Pledges Columns" name="Pledges Titles"></field:display>
-<field:display feature="Pledges Columns" name="Pledges Donor"></field:display>
+<field:display feature="Pledges Columns" name="Pledges Donor Group"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Aid Modality"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Regions"></field:display>
 <field:display feature="Pledges Columns" name="Pledges Zones"></field:display>

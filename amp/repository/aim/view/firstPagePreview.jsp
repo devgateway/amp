@@ -211,7 +211,7 @@ function initFileUploads() {
 				<digi:form action="/uploadThumbnail.do" method="post" enctype="multipart/form-data" >
 					<table cellpadding="3" cellspacing="3" border="0">
 						<tr id="tr_path_thumbnail">
-						<td><strong><digi:trn key="selectThumbnail">Select Thumbnail to upload:</digi:trn><font color="red">*</font></strong></td>
+						<td><strong><digi:trn key="selectThumbnail">Select Thumbnail to upload:</digi:trn><font color="red"></font></strong></td>
 						<td>
 							<div class="fileinputs"> 
 								<input id="thumbnail" name="thumbnail" type="file" class="file">

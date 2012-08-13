@@ -397,7 +397,7 @@
 												<td align="left">
 													<html:select property="selectedCountryResidence" styleClass="inp-text">
 														<c:forEach var="cn"	items="${umAddUserForm.countryResidence}">
-															<html:option value="${cn.iso}">${cn.name}</html:option>
+															<html:option value="${cn.iso}"><c:out value="${cn.name}"></c:out></html:option>
 														</c:forEach>
 													</html:select>
 												</td>

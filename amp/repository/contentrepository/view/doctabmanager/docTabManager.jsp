@@ -87,9 +87,9 @@ var trnObj		= {
 		publicListObj.sendRequest();
 	}
 	function showTitlePanel() {
+		var titlePanelDivEl		= document.getElementById("titlePanel");
 		if ( titlePanelObj == null ) {
-			var titlePanelDivEl		= document.getElementById("titlePanel");
-			titlePanelDivEl.style.display	= "";
+			titlePanelDivEl.style.display	= "block";
 			titlePanelObj	= new YAHOO.widget.Panel("titlePanel", 
 					{ 	visible:true,
 						width: "400px", 
@@ -98,9 +98,8 @@ var trnObj		= {
 						underlay:"shadow", 
 						modal: true,
 						close:true, 
-						visible:false, 
 						draggable:true } );
-			titlePanelObj.render( );
+			titlePanelObj.render();
 		}
 		titlePanelObj.show();
 		titlePanelDivEl.getElementsByTagName("input")[0].focus();
@@ -123,6 +122,9 @@ var trnObj		= {
 		if ( document.forms["crDocTabManagerForm"].savingFilterName.value != "" ) {
 			document.forms["crDocTabManagerForm"].action	= "/contentrepository/publicDocTabManager.do?action=save";
 			document.forms["crDocTabManagerForm"].submit();
+		} else {
+			alert ("<digi:trn>Please enter a valid name for the filter</digi:trn>");
+			document.forms["crDocTabManagerForm"].savingFilterName.focus();
 		}
 	}
 	
@@ -263,14 +265,13 @@ var trnObj		= {
 </table>
 
 <div id="titlePanel" class="invisible-item">
+<digi:form action="/publicDocTabManager.do" method="POST">	
 	<div class="hd" style="font-size: 8pt">
 		<digi:trn>Please enter a name for the filter</digi:trn>
 	</div>
-	<div class="bd" id="titlePanelBody">
-		<digi:form action="/publicDocTabManager.do" method="POST">	
-			<html:text onkeypress="return checkEnter(event);" property="savingFilterName" styleClass="inp-text" 
-			style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
-		</digi:form>
+	<div class="bd" id="titlePanelBody">		
+		<html:text onkeypress="return checkEnter(event);" property="savingFilterName" styleClass="inp-text" 
+			style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />		
 	</div>
 	<div class="ft" align="right">
 		<button id="save_button" type="button" class="buton" onclick="saveFilter();">
@@ -278,6 +279,7 @@ var trnObj		= {
 		</button>
 		&nbsp;&nbsp;&nbsp;
 	</div>
+</digi:form>
 </div>
 
 

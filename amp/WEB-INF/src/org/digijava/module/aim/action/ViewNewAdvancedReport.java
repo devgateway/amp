@@ -90,8 +90,8 @@ public class ViewNewAdvancedReport extends Action {
 		String lastReportId	= (String)request.getSession().getAttribute("LAST_REPORT_ID") ; 
 		String ampReportId 	= request.getParameter("ampReportId");
 		if ( request.getParameter("queryEngine") == null || "false".equals(request.getParameter("queryEngine")) ){
-		if ( ampReportId != null && lastReportId != null && !ampReportId.equals(lastReportId) )
-			 request.getSession().setAttribute(ArConstants.REPORTS_FILTER, null);
+			if ( ampReportId != null && lastReportId != null && !ampReportId.equals(lastReportId) )
+				 request.getSession().setAttribute(ArConstants.REPORTS_FILTER, null);
 		}
 		
 		if ( ampReportId != null )
@@ -226,7 +226,7 @@ public class ViewNewAdvancedReport extends Action {
 		httpSession.setAttribute("progressValue", ++progressValue); 
 		httpSession.setAttribute("progressTotalRows", request.getAttribute("recordsPerPage"));
 		
-		if (resetSettings){
+		if (resetSettings && (ampReportId==null || !ampReportId.equals(lastReportId) )){
 			filter.setCalendarType(null); //reset the calendar type to take the type from ws settings by default.
 			filter.setCurrency(null);
 		}

@@ -74,7 +74,9 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		add(new ListEditorRemoveButton("delFunding", "Delete Funding Item", translatedMessage){
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
+				AmpOrganisation org = fundingModel.getObject().getAmpDonorOrgId();
 				super.onClick(target);
+				parent.updateFundingGroups(org, target);
 				target.add(parent);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
 			}
@@ -118,7 +120,9 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				ListItem listItem = findParent(ListItem.class);
 				AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
 				AmpFunding funding = fundingModel.getObject();
+				AmpOrganisation oldOrg = funding.getAmpDonorOrgId();
 				fundingSection.switchOrg(listItem, funding, choice, target);
+				fundingSection.updateFundingGroups(oldOrg, target);
 			}
 			@Override
 			public Integer getChoiceLevel(AmpOrganisation choice) {

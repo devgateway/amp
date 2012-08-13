@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -76,6 +77,43 @@ public class AmpDonorFundingFormSectionFeature extends
 		target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(list.getParent()));
 	}
 
+	public void updateFundingGroups(AmpOrganisation missing, AjaxRequestTarget target){
+		Iterator<AmpFunding> it = fundingModel.getObject().iterator();
+		boolean found = false;
+		while (it.hasNext()) {
+			AmpFunding funding = (AmpFunding) it.next();
+			AmpOrganisation org = funding.getAmpDonorOrgId();
+			if (missing.getAmpOrgId() == org.getAmpOrgId()){
+				found = true;
+				break;
+			}
+		}
+		
+		if (!found){
+			int idx = -1;
+			ListItem<AmpOrganisation> delItem = null;
+			for (int i = 0; i < list.size(); i++){
+				ListItem<AmpOrganisation> item = (ListItem<AmpOrganisation>) list.get(i);
+				AmpOrganisation org = item.getModelObject();
+				if (missing.getAmpOrgId() == org.getAmpOrgId()){
+					idx = item.getIndex();
+					delItem = item;
+				}
+			}
+			if (idx > -1){
+				for (int i = idx + 1; i < list.size(); i++){
+					ListItem< ? > item = (ListItem< ? >)list.get(i);
+					item.setIndex(item.getIndex() - 1);
+				}
+				
+				list.items.remove(idx);
+				list.updateModel();
+				target.add(list.getParent());
+				list.remove(delItem);
+				listItems.remove(missing);
+			}
+		}
+	}
 	/**
 	 * @param id
 	 * @param fmName

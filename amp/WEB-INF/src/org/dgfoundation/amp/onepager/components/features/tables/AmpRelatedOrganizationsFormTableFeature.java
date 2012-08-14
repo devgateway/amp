@@ -28,6 +28,7 @@ import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
@@ -128,11 +129,12 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 			@Override
 			protected void populateItem(final ListItem<AmpOrgRole> item) {
 				final MarkupContainer listParent=this.getParent();
-				item.add(new TextField<String>(
-						"departmentDivision",
-						new PropertyModel<String>(item.getModel(), "additionalInfo")));
 				
-				AmpOrganisation o= item.getModelObject().getOrganisation();
+				item.add(new AmpTextFieldPanel<String>(
+						"departmentDivision",
+						new PropertyModel<String>(item.getModel(), "additionalInfo"), "relOrgadditionalInfo", true));
+				
+			//	AmpOrganisation o= item.getModelObject().getOrganisation();
 				item.add(new Label("name", item.getModelObject().getOrganisation().getAcronymAndName()));	
 				
 				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(), "percentage");

@@ -52,8 +52,11 @@ public class ColumnReportData extends ReportData {
 				Column element = (Column) i.next();
 				//TODO same check should be done for all related colums (sectors, programs)
 				if ( ARUtil.hasHierarchy(this.getReportMetadata().getHierarchies(), ArConstants.COLUMN_REGION) && 
-						( ArConstants.COLUMN_ZONE.equals(element.name) || ArConstants.COLUMN_DISTRICT.equals(element.name) ) )
+						( ArConstants.COLUMN_ZONE.equals(element.name) || ArConstants.COLUMN_DISTRICT.equals(element.name) ) ){
 					continue;
+				}else if(checkProgramsHierarchy(ArConstants.PROGRAMS_COLUMNS,element)){
+					continue;
+				}
 				int visCol=element.getVisibleRows();
 				if(visCol>ret) ret=visCol;
 		    }
@@ -61,10 +64,24 @@ public class ColumnReportData extends ReportData {
 	}
     
     	
-    	/**
-	 * @param name
-	 */
-	
+    private Boolean checkProgramsHierarchy(List<String> columnNameList, Column element){
+		Boolean retval = false;
+		for (Iterator<String> iterator = columnNameList.iterator(); iterator.hasNext();) {
+			String program = iterator.next();
+			if (ARUtil.hasHierarchy(this.getReportMetadata().getHierarchies(),program)){
+				for (Iterator<String> iterator2 = columnNameList.iterator(); iterator2.hasNext();) {
+					String program1 = iterator2.next();
+						if (element.name.equalsIgnoreCase(program1)){
+							retval = true;
+							break;
+						}
+				}
+			}
+		}
+		return retval;
+    }
+    
+    
 	public ColumnReportData(String name) {
 		super(name);
 		// TODO Auto-generated constructor stub

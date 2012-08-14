@@ -1582,7 +1582,7 @@ border-right: 1px solid rgb(208, 208, 208);
 												<td>&nbsp;</td>
 												<td><b>Year</b></td>
 												<td><b>Type of staff</b></td>
-												<td><b>Number of stuff</b></td>
+												<td><b>Number of staff</b></td>
 												<td>&nbsp;</td>
 												<td>&nbsp;</td>
 												</tr>

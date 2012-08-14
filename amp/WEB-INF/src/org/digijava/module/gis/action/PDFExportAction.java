@@ -2069,7 +2069,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		chart.setBackgroundPaint(new Color(206, 226, 251));
 		Plot plot = chart.getPlot();
 		plot.setBackgroundPaint(new Color(206, 226, 251));
-		plot.setNoDataMessage("There is no data available for the selected filters. Please adjust the date and/or donor filters");
+        String noDatamessage = TranslatorWorker.translateText("There is no data available for the selected filters. Please adjust the date and/or donor filters",locale,siteId);
+        plot.setNoDataMessage(noDatamessage);
 		java.awt.Font font = new java.awt.Font(null, 0, 15);
 		plot.setNoDataMessageFont(font);
 

@@ -424,7 +424,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 													</b>																								</td>
 											</tr>
 											<tr>
-												<td><html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id">
+												<td><html:select property="selectedOrgGrpId" styleId="org_grp_dropdown_id" styleClass="inp-text" >
 													<option selected="selected" value="-1">-<digi:trn>Select from below</digi:trn>-</option>
 													<html:optionsCollection property="orgGroups" value="ampOrgGrpId" label="orgGrpName" />
 												</html:select></td>
@@ -1315,178 +1315,179 @@ function trim(stringToTrim) {
 	return stringToTrim.replace(/^\s+|\s+$/g,"");
 }
 
+var setFocus = null;
+
+function highligthObject(object,on){
+	if (on){
+		if (setFocus==null)
+			setFocus=object;
+		object.style.borderColor="#FF0000";
+		object.style.borderWidth="3px";
+		setFocus.focus();
+	} else {
+		object.style.borderColor="#CCCCCC";
+		object.style.borderWidth="1px";
+	}
+}
+
 function validateData(){
-	<c:set var="pleaseInsertTitle">
-	  <digi:trn key="aim:pleaseInsertTitle">
-	 	 Please, insert a pledge title.
-	  </digi:trn>
-	</c:set>
+	var errors = false;
+	setFocus = null;
 	if (document.getElementsByName("pledgeTitleId")[0]==null || document.getElementsByName("pledgeTitleId")[0].value==-1 || document.getElementsByName("pledgeTitleId")[0].value==0){
-		alert ("${pleaseInsertTitle}")
-		return false;
+		highligthObject(document.getElementById("pledgeTitleDropDown"),true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementById("pledgeTitleDropDown"),false);
 	}
-	<c:set var="pleaseSelectOrgGrp">
-	  <digi:trn>
-	 	 Please, select one organisation group.
-	  </digi:trn>
-	</c:set>
+
 	if (document.getElementById("org_grp_dropdown_id")==null || document.getElementById("org_grp_dropdown_id").value==-1){
-		alert ("${pleaseSelectOrgGrp}")
-		return false;
+		highligthObject(document.getElementById("org_grp_dropdown_id"),true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementById("org_grp_dropdown_id"),false);
 	}
-	<c:set var="insertPercentage">
-	  <digi:trn key="aim:insertPercentage">
-	 	 Percentages can not be empty or 0.
-	  </digi:trn>
-	</c:set>
-	<c:set var="percentageSectorTotal">
-	  <digi:trn key="aim:sumOfSectorPercentagesMustBe100">
-	 	 Sum of sector percentages must be 100.
-	  </digi:trn>
-	</c:set>
+	
 	var i = 0;
 	var percent = 100;
 	while (document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0]!=null){
 		var temp = 0;
 		temp = temp + document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0].value;
 		if (document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0].value.length==0 || temp==0){
-			alert ("${insertPercentage}")
-			return false;
+			highligthObject(document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0],true);
+			errors = true;
+		} else {
+			highligthObject(document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0],false);
 		}
 		i++;
 		percent = percent - temp;
 	}
 	if(percent!=0 && percent!=100){
-		alert ("${percentageSectorTotal}")
-		return false;
+		while (document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0]!=null){
+			highligthObject(document.getElementsByName("pledgeSectors["+i+"].sectorPercentage")[0],true);
+			errors = true;
+			i++;
+		}
 	}	
 
-	<c:set var="percentageLocationTotal">
-	  <digi:trn key="aim:sumOfLocationPercentagesMustBe100">
-	 	 Sum of location percentages must be 100.
-	  </digi:trn>
-	</c:set>
 	i=0;
 	percent = 100;
 	while (document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0]!=null){
 		var temp = 0;
 		temp = temp + document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0].value;
 		if (document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0].value.length==0 || temp==0){
-			alert ("${insertPercentage}")
-			return false;
+			highligthObject(document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0],true);
+			errors = true;
+		} else {
+			highligthObject(document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0],false);
 		}
 		i++;
 		percent = percent - temp;
 	}
 	if(percent!=0 && percent!=100){
-		alert ("${percentageLocationTotal}")
-		return false;
+		while (document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0]!=null){
+			highligthObject(document.getElementsByName("selectedLocs["+i+"].locationpercentage")[0],true);
+			errors = true;
+			i++;
+		}
 	}	
 
-	<c:set var="percentageProgramTotal">
-	  <digi:trn key="aim:sumOfProgramPercentagesMustBe100">
-	 	 Sum of program percentages must be 100.
-	  </digi:trn>
-	</c:set>
 	i = 0;
 	percent = 100;
 	while (document.getElementsByName("selectedProgs["+i+"].programpercentage")[0]!=null){
-			var temp = 0;
+		var temp = 0;
 		temp = temp + document.getElementsByName("selectedProgs["+i+"].programpercentage")[0].value;
 		if (document.getElementsByName("selectedProgs["+i+"].programpercentage")[0].value.length==0 || temp==0){
-			alert ("${insertPercentage}")
-				return false;
-			}
+			highligthObject(document.getElementsByName("selectedProgs["+i+"].programpercentage")[0],true);
+			errors = true;
+		} else {
+			highligthObject(document.getElementsByName("selectedProgs["+i+"].programpercentage")[0],false);
+		}
 		i++;
 		percent = percent - temp;
-		}
+	}
 	if(percent!=0 && percent!=100){
-		alert ("${percentageProgramTotal}")
-		return false;
+		while (document.getElementsByName("selectedProgs["+i+"].programpercentage")[0]!=null){
+			highligthObject(document.getElementsByName("selectedProgs["+i+"].programpercentage")[0],true);
+			errors = true;
+			i++;
+		}
 	}
 	
-	<c:set var="addFunding">
-	  <digi:trn key="aim:addFunding">
-	 	 Pledges should have at least one funding.
-	  </digi:trn>
-	</c:set>
-	i = 0;
-	
-	<c:set var="insertAmount">
-	  <digi:trn key="aim:insertAmount">
-	  	Please, insert amount greater than 0 for each funding.
-	  </digi:trn>
-	</c:set>
-	<c:set var="insertNumeric">
-	  <digi:trn key="aim:insertNumericValue">
-	  	Please, amount should be a numeric value.
-	  </digi:trn>
-	</c:set>
 	i = 0;
 	while (i<=numFund){
 		if (document.getElementsByName("fund_"+i+"_4")[0]!=null){
 			var temp = 0;
 			temp = temp + document.getElementsByName("fund_"+i+"_4")[0].value;
 			if (document.getElementsByName("fund_"+i+"_4")[0].value.length==0 || temp==0){
-				alert ("${insertAmount}")
-				return false;
-			}
-			var tmp = replaceAll(document.getElementsByName("fund_"+i+"_4")[0].value, " ", "");
-			alert ("temp: "+tmp);
-			if (isNaN(tmp)){
-				alert ("${insertNumeric}")
-				return false;
+				highligthObject(document.getElementsByName("fund_"+i+"_4")[0],true);
+				errors = true;
+			} else {
+				var tmp = replaceAll(document.getElementsByName("fund_"+i+"_4")[0].value, " ", "");
+				if (isNaN(tmp)){
+					highligthObject(document.getElementsByName("fund_"+i+"_4")[0],true);
+					errors = true;
+				} else {
+					highligthObject(document.getElementsByName("fund_"+i+"_4")[0],false);
+				}
 			}
 		}
 		i++;
 	}
 	
-	<c:set var="selectCurrency">
-	  <digi:trn key="aim:selectCurrency">
-	  	Please, select a currency.
-	  </digi:trn>
-	</c:set>
 	i = 0;
 	while (i<=numFund){
 		if (document.getElementsByName("fund_"+i+"_5")[0]!=null){
 			var temp = 0;
 			temp = document.getElementsByName("fund_"+i+"_5")[0].value;
 			if (temp==-1){
-				alert ("${selectCurrency}")
-				return false;
+				highligthObject(document.getElementsByName("fund_"+i+"_5")[0],true);
+				errors = true;
+			} else {
+				highligthObject(document.getElementsByName("fund_"+i+"_5")[0],false);
 			}
 		}
 		i++;
 	}
 	
-
-	<c:set var="insertValidEmail">
-	  <digi:trn key="aim:insertValidEmail">
-	 	 Please, insert a valid Email.
-	  </digi:trn>
-	</c:set>
-	
 	if (document.getElementsByName("contact1Email")[0]!=null && document.getElementsByName("contact1Email")[0].value.length>0 && document.getElementsByName("contact1Email")[0].value.indexOf("@") == -1){
-		alert ("${insertValidEmail}")
-		return false;
+		highligthObject(document.getElementsByName("contact1Email")[0],true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementsByName("contact1Email")[0],false);
 	}
 	
 	if (document.getElementsByName("contactAlternate1Email")[0]!=null && document.getElementsByName("contactAlternate1Email")[0].value.length>0 && document.getElementsByName("contactAlternate1Email")[0].value.indexOf("@") == -1){
-		alert ("${insertValidEmail}")
-		return false;
+		highligthObject(document.getElementsByName("contactAlternate1Email")[0],true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementsByName("contactAlternate1Email")[0],false);
 	}
 
 	if (document.getElementsByName("contact2Email")[0]!=null && document.getElementsByName("contact2Email")[0].value.length>0 && document.getElementsByName("contact2Email")[0].value.indexOf("@") == -1){
-		alert ("${insertValidEmail}")
-		return false;
+		highligthObject(document.getElementsByName("contact2Email")[0],true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementsByName("contact2Email")[0],false);
 	}
 	
 	if (document.getElementsByName("contactAlternate2Email")[0]!=null && document.getElementsByName("contactAlternate2Email")[0].value.length>0 && document.getElementsByName("contactAlternate2Email")[0].value.indexOf("@") == -1){
-		alert ("${insertValidEmail}")
+		highligthObject(document.getElementsByName("contactAlternate2Email")[0],true);
+		errors = true;
+	} else {
+		highligthObject(document.getElementsByName("contactAlternate2Email")[0],false);
+	}
+
+	<c:set var="checkErrors">
+	  <digi:trn>
+	  	Please, check values highlighted in red.
+	  </digi:trn>
+	</c:set>
+	if (errors){
+		alert ("${checkErrors}")
 		return false;
 	}
-	
-	return true;
+	else
+		return true
 }
 
 function replaceAll(str, find, replace){

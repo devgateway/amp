@@ -339,9 +339,24 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 			                                  	<select name="options"  onchange="if(this.value!='noselection'){gsfValue.value=this.value}" styleClass="inp-text;width:100%" 
 			                                  	value='<%=globalSett.getGlobalSettingsValue()%>'>
 			                                      <option value="noselection"><digi:trn key="aim:gloablSetting:selectFormat">(Select Format)</digi:trn> </option>
-			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
-			                                        <option value="${global.key}">${global.value}</option>
-			                                      </logic:iterate>
+	
+					                                    		<%
+					                                    			
+				                                    			for (Object obj: aimGlobalSettingsForm.getPossibleValues(globalSett.getGlobalSettingsName().trim())) {
+				                                    				org.digijava.module.aim.helper.KeyValue key=(org.digijava.module.aim.helper.KeyValue)obj;
+				                                    				if (key.getValue().equals(globalSett.getGlobalSettingsValue())) {
+				                   
+				                                    			%>
+				                                    					<option selected="selected" value="<%=key.getKey()%>"><%=key.getValue()%></option>
+				                                    			<%
+				                                    				} else {
+				                                    			%>
+					                                    				<option  value="<%=key.getKey()%>"><%=key.getValue()%></option>
+					                                    		<%
+					                                    			}
+					                                    		  }
+					                                    		%>
+		
 			                                    </select>
 			                                    <digi:trn key="aim:gloablSetting:predefinedFormat">(Predefined Format)</digi:trn> <br>
 			                                    

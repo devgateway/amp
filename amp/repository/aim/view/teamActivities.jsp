@@ -63,9 +63,22 @@
 	}
 
 	function sortMe(val) {
+		
+		<c:set var="unarchivedTab"><%=GetTeamActivities.UNARCHIVED_SUB_TAB %></c:set>
+		<c:set var="archivedTab"><%=GetTeamActivities.ARCHIVED_SUB_TAB %></c:set>
+		<c:if test="${selectedSubTab==unarchivedTab}">
+		     var archiveselected =false ;	
+	     </c:if>
+	     <c:if test="${selectedSubTab==archivedTab}">
+	     var archiveselected =true ;	
+     </c:if>
+			
 		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do" />
-			url = "<%= sel %>" ;
-
+			 url = "<%= sel %>" ;
+           // url = '/aim/teamActivityList.do~showArchivedActivities=false~dest=teamLead~tId=-1~subtab=0';
+           if (typeof archiveselected != 'undefined') 
+               url = url +'~showArchivedActivities='+archiveselected;
+             
 			var sval = document.aimTeamActivitiesForm.sort.value;
 			var soval = document.aimTeamActivitiesForm.sortOrder.value;
 

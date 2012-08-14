@@ -314,7 +314,7 @@ public class HelpUtil {
 //beginTransaction();
 			session.saveOrUpdate(topic);
 			//tx.commit();
-			if (topic.getTopicType()!=GlossaryUtil.TYPE_GLOSSARY){
+			if (topic.getTopicType()==null || !topic.getTopicType().equals(GlossaryUtil.TYPE_GLOSSARY)){
 				//skip lucene work for glossary topics.
 				saveOrUpdateFromLucene(topic, request, update);
 			}
@@ -875,18 +875,25 @@ System.out.println("lang:"+lang);
  		Session session = null;
  		Query query = null;
  		ObjectFactory objFactory = new ObjectFactory();		
- 		
+         Set imageUniqueChecker = new HashSet();
+         
  		try {
  			session = PersistenceManager.getRequestDBSession();
  			String queryString = "from "+ HelpTopic.class.getName();
  			query = session.createQuery(queryString);
 
- 		    Iterator<HelpTopic> itr = query.list().iterator();
+             List<HelpTopic> qRes = query.list();
+ 		    //Iterator<HelpTopic> itr = qRes.iterator();
+            
 
- 			while (itr.hasNext()) {
+             
+ 			for (HelpTopic item : qRes) {
  				AmpHelpType helpout=objFactory.createAmpHelpType();
- 				
- 				HelpTopic item = (HelpTopic) itr.next();
+
+
+ 				//HelpTopic item = (HelpTopic) itr.next();
+
+
  				helpout.setTitleTrnKey(item.getTitleTrnKey());
  				helpout.setTopicKey(item.getTopicKey());
  				helpout.setKeywordsTrnKey(item.getKeywordsTrnKey());
@@ -911,16 +918,44 @@ System.out.println("lang:"+lang);
                 				 HelpLang helplang = new HelpLang();
                 				 String editorBody = editor.getBody();
                 					 
-                				 String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;//<img\s.*?src\=\".*showImage\.do\?.*?activeParagraphOrder\=.*\"\s?/>;
+                			//String imgPart="(<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*?\"\\s?/>)" ;//<img\s.*?src\=\".*showImage\.do\?.*?activeParagraphOrder\=.*\"\s?/>;
+                                String imgPart="<img.*?src=\"/sdm/showImage\\.do.*?>";
              				 Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
              				 Matcher matcher = pattern.matcher(editorBody);
-                			 
+
              				 while (matcher.find()){         							 
              					 String imgTag=matcher.group(0);
+                                  /*
+                                  String urlParams = "activeParagraphOrder=(\\d+).*?documentId=(\\d+)";
+                                  Pattern urlPattern = Pattern.compile(urlParams,Pattern.MULTILINE);
+                                  Matcher urlMatcher = urlPattern.matcher(imgTag);
+                                  */
              					 //get the image and put it in zip
-             					 String paragraphOrder= imgTag.substring(imgTag.indexOf("activeParagraphOrder=")+21,imgTag.lastIndexOf("&"));
-             					 String docId = imgTag.substring(imgTag.indexOf("documentId=")+11, imgTag.indexOf("\"",imgTag.indexOf("documentId=")+11));
-             					 String imgName = item.getBodyEditKey()+"_langIs_"+lang+"_poIs_"+paragraphOrder;
+                                  String paragraphOrder = null;
+                                  int activeParagraphOrderIdxOf = imgTag.indexOf("activeParagraphOrder=");
+                                  int idxOfAmp = imgTag.indexOf("&");
+                                  if (activeParagraphOrderIdxOf > -1 && idxOfAmp > -1) {
+             					    paragraphOrder = imgTag.substring(activeParagraphOrderIdxOf + 21, idxOfAmp);
+                                  }
+                                  String docId = null;
+                                  int documentIdIdxOf = imgTag.lastIndexOf("documentId=");
+                                  if (documentIdIdxOf > -1) {
+             					    docId = imgTag.substring(documentIdIdxOf + 11, imgTag.indexOf("\"",imgTag.indexOf("documentId=")+11));
+                                  }
+
+                                  String imgName = null;
+
+                                  if (paragraphOrder != null && docId != null) {
+                                    imgName = item.getBodyEditKey()+"_langIs_"+lang+"_poIs_"+paragraphOrder;
+                                  }
+
+                                  if (!imageUniqueChecker.contains(imgName) && paragraphOrder != null && docId != null) {
+                                      imageUniqueChecker.add(imgName);
+
+
+                                  Long docIdObj = new Long (docId);
+                                  Long paragraphOrderObj = new Long (paragraphOrder);
+
              					 SdmItem sdmItem = org.digijava.module.sdm.util.DbUtil.getSdmItem(new Long (docId), new Long (paragraphOrder));
              					 //get image extensions
              					 String imgType=sdmItem.getContentType();
@@ -936,7 +971,7 @@ System.out.println("lang:"+lang);
              				     out.write(buf, 0, len);
              				     // Complete the entry
              				     out.closeEntry();
-             							 
+                              }
              					 //replace editor body with new tag
              					 String newTag = "<sdmTag " + imgTag.substring(5,imgTag.indexOf("src=")) + "imgName=\""+imgName+"\" />";
              					 editorBody = matcher.replaceFirst(newTag);
@@ -1049,7 +1084,7 @@ System.out.println("lang:"+lang);
 		    
 		    String helpBody=help.getBody();
 		    //<sdmTag width="240" height="320" imgName="help-admin-271423211-1296048546820_langIs_en_poIs_0.jpg" /> 
-		    String imgPart="<sdmTag.*/>" ;
+		    String imgPart="<sdmTag.*?>" ;
 			Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
 			Matcher matcher = pattern.matcher(helpBody);
 			 

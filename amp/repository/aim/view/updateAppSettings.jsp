@@ -315,7 +315,7 @@ function loadShareRules(){
 										</c:forEach>
 									</html:select>
 												<br />
-									<a style="cursor:pointer;color:#006699" onClick="if(document.getElementById('defaultReport').value == 0) {alert('<digi:trn key="aim:defaultTeamReportDetailsAlertMessage">Please select a default report</digi:trn>');return false;}else{showMyPanel();}"><digi:trn key="aim:defaultTeamReportDetailsMessage">Click here for details</digi:trn></a>
+									<a style="cursor:pointer;color:#006699" onClick="if(document.getElementById('defaultReport').value == 0) {alert('<digi:trn key="aim:defaultTeamTabDetailsAlertMessage">Please select a default tab</digi:trn>');return false;}else{showMyPanel();}"><digi:trn key="aim:defaultTeamTabDetailsMessage">Click here for details</digi:trn></a>
 								</td>
 							</tr>
 							<tr>

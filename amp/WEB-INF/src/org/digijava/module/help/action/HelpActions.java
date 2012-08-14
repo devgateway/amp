@@ -923,6 +923,7 @@ public class HelpActions extends DispatchAction {
 		helpForm.getTopicTree().clear();
 		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
 		helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
+        helpForm.setGlossaryTree(HelpUtil.getGlossaryTopicsTree(siteId, moduleInstance));
 		return mapping.findForward("admin");
 	}
 	

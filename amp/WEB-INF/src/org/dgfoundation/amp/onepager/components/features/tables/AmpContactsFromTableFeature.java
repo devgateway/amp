@@ -75,12 +75,14 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
             public List<AmpActivityContact> getObject() {
                 Set<AmpActivityContact> allContacts = setModel.getObject();
                 Set<AmpActivityContact> specificContacts = new TreeSet<AmpActivityContact>();
-                Iterator<AmpActivityContact> it = allContacts.iterator();
-                while (it.hasNext()) {
-                    AmpActivityContact ampActContact = (AmpActivityContact) it.next();
-                    if (specificType.compareTo(ampActContact.getContactType()) == 0) {
-                        specificContacts.add(ampActContact);
-                    }
+                if (allContacts != null){
+                	Iterator<AmpActivityContact> it = allContacts.iterator();
+                	while (it.hasNext()) {
+                		AmpActivityContact ampActContact = (AmpActivityContact) it.next();
+                		if (specificType.compareTo(ampActContact.getContactType()) == 0) {
+                			specificContacts.add(ampActContact);
+                		}
+                	}
                 }
                 return new ArrayList<AmpActivityContact>(specificContacts);
             }

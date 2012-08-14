@@ -45,7 +45,10 @@ public class AmpStructuresFormSectionFeature extends
 
 			@Override
 			public ArrayList<AmpStructure> getObject() {
-				return new ArrayList<AmpStructure>(setModel.getObject());
+				if (setModel != null && setModel.getObject() != null)
+					return new ArrayList<AmpStructure>(setModel.getObject());
+				else
+					return null;
 			}
 		};
 		

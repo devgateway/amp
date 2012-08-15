@@ -589,12 +589,12 @@ border-right: 1px solid rgb(208, 208, 208);
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
+							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();fPanel.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);" class="buttonx"><digi:trn>Add Resource</digi:trn>
+							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
+							        	</button>
 						        		<input type="text" id="privateSearchStr">
 						        		<button id="privateSearchButtonId" type="button" class="buttonx">
 							        		<digi:trn>Search</digi:trn>
-							        	</button>
-							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();fPanel.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);" class="buttonx"><digi:trn>Add Resource</digi:trn>
-							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 							        	</button>
 								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',false);fPanel.hide();menuPanelForUser.hide();">
 								    		<digi:trn>Filters</digi:trn>

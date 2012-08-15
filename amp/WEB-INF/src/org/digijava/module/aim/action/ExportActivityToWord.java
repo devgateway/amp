@@ -704,28 +704,27 @@ public class ExportActivityToWord extends Action {
 
         ExportSectionHelper eshTitle = new ExportSectionHelper("Components", true).setWidth(100f).setAlign("left");
 
-                retVal.add(createSectionTable(eshTitle, request, ampContext));
+        if(FeaturesUtil.isVisibleModule("/Activity Form/Components", ampContext)){
+           retVal.add(createSectionTable(eshTitle, request, ampContext));
+
+           if (act.getComponentFundings() != null && !act.getComponentFundings().isEmpty()) {
+                Set<AmpComponentFunding> compFnds = act.getComponentFundings();
+
+                ExportSectionHelper eshCompFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+                for (AmpComponentFunding compFnd : compFnds) {
+
+                    eshCompFundingDetails.addRowData((new ExportSectionHelperRowData(compFnd.getComponent().getTitle(), null, null, false)).
+                            addRowData(getTransactionTypeLable(compFnd.getTransactionType()), true).
+                            addRowData(compFnd.getAdjustmentType().getLabel(), true).
+                            addRowData(DateConversion.ConvertDateToString(compFnd.getTransactionDate())).
+                            addRowData(compFnd.getTransactionAmount().toString()).
+                            addRowData(compFnd.getCurrency().getCurrencyCode()));
 
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Components", ampContext)){
-                    if (act.getComponentFundings() != null && !act.getComponentFundings().isEmpty()) {
-                        Set<AmpComponentFunding> compFnds = act.getComponentFundings();
-
-                        ExportSectionHelper eshCompFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                        for (AmpComponentFunding compFnd : compFnds) {
-
-                            eshCompFundingDetails.addRowData((new ExportSectionHelperRowData(compFnd.getComponent().getTitle(), null, null, false)).
-                                    addRowData(getTransactionTypeLable(compFnd.getTransactionType()), true).
-                                    addRowData(compFnd.getAdjustmentType().getLabel(), true).
-                                    addRowData(DateConversion.ConvertDateToString(compFnd.getTransactionDate())).
-                                    addRowData(compFnd.getTransactionAmount().toString()).
-                                    addRowData(compFnd.getCurrency().getCurrencyCode()));
-
-
-                            retVal.add(createSectionTable(eshCompFundingDetails, request, ampContext));
-                        }
-                    }
+                    retVal.add(createSectionTable(eshCompFundingDetails, request, ampContext));
                 }
+            }
+        }
 
         return retVal;
     }
@@ -737,28 +736,26 @@ public class ExportActivityToWord extends Action {
         List<Table> retVal = new ArrayList<Table>();
 
         ExportSectionHelper eshTitle = new ExportSectionHelper("Regional Fundings", true).setWidth(100f).setAlign("left");
-
+        	if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding", ampContext)){
                 retVal.add(createSectionTable(eshTitle, request, ampContext));
 
+                if (act.getRegionalFundings() != null && !act.getRegionalFundings().isEmpty()) {
+                    Set<AmpRegionalFunding> regFnds = act.getRegionalFundings();
 
-                if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding", ampContext)){
-                    if (act.getRegionalFundings() != null && !act.getRegionalFundings().isEmpty()) {
-                        Set<AmpRegionalFunding> regFnds = act.getRegionalFundings();
-
-                        ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                        for (AmpRegionalFunding regFnd : regFnds) {
-                            eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd.getTransactionType()), null, null, true)).
-                                                                            addRowData(regFnd.getRegionLocation().getName()).
-                                                                            addRowData(regFnd.getAdjustmentType().getLabel(), true).
-                                                                            addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate())).
-                                                                            addRowData(regFnd.getTransactionAmount().toString()).
-                                                                            addRowData(regFnd.getCurrency().getCurrencyCode()));
+                    ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+                    for (AmpRegionalFunding regFnd : regFnds) {
+                        eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd.getTransactionType()), null, null, true)).
+                                                                        addRowData(regFnd.getRegionLocation().getName()).
+                                                                        addRowData(regFnd.getAdjustmentType().getLabel(), true).
+                                                                        addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate())).
+                                                                        addRowData(regFnd.getTransactionAmount().toString()).
+                                                                        addRowData(regFnd.getCurrency().getCurrencyCode()));
 
 
-                            retVal.add(createSectionTable(eshRegFundingDetails, request, ampContext));
-                        }
+                        retVal.add(createSectionTable(eshRegFundingDetails, request, ampContext));
                     }
                 }
+            }
         
         return retVal;
     }

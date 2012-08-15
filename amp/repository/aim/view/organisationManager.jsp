@@ -316,8 +316,7 @@
 																								</c:if>
 																							</td>
 																							<c:if test="${!aimOrgManagerForm.adminSide}">
-																							<td class="inside" bgcolor=#F2F2F2>
-																									<digi:trn>Edit</digi:trn>
+																							<td class="inside" bgcolor=#F2F2F2> &nbsp;
 																							</td>
 																							</c:if>
 																						</tr>

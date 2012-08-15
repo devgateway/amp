@@ -133,16 +133,12 @@
 									<logic:notEmpty name="documentData" property="labels">
 										<logic:iterate id="label" name="documentData" property="labels">
 											<c:set var="labelUUIDs">${labelUUIDs}'${label.uuid}',</c:set>
-											<span style="height:22px;white-space: nowrap;">
-												<span style="-moz-border-radius:3px;border-radius: 3px;padding:3px;background-color: ${label.backgroundColor}; color: ${label.color};">
-													${label.name}
-												</span>
+											<span style="height:22px;white-space: nowrap;"><span style="-moz-border-radius:3px;border-radius: 3px;padding:3px;background-color: ${label.backgroundColor}; color: ${label.color};">${label.name}</span>
 												<logic:equal name="documentData" property="hasVersioningRights" value="true">
 													<strong>&nbsp;</strong><span onclick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.remove('${documentData.uuid}','${label.uuid}');" 
 													onmouseout="switchColors(this);" onmouseover="switchColors(this);" 
 													style="-moz-border-radius:3px;border-radius: 3px;padding:3px;background-color: ${label.backgroundColor}; color: ${label.color};cursor: pointer">X</span>
 												</logic:equal>
-													&nbsp;&nbsp;
 											</span>
 										</logic:iterate>
 									</logic:notEmpty>

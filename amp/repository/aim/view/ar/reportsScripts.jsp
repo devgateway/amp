@@ -541,7 +541,7 @@ function initFormatPopup(){
 	
 		var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
 		
-		if (customDecimalPlaces.toLowerCase()=="custom"){
+		if (customDecimalPlaces.toLowerCase()=="-2"){
 			document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled=false;
 		}else{
 			document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value="";
@@ -568,7 +568,7 @@ function changeFormat(){
 		decimalSymbol=("custom"==decimalSymbol.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value:decimalSymbol;
 	
 	var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
-		customDecimalPlaces=("custom"==customDecimalPlaces.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
+		customDecimalPlaces=("-2"==customDecimalPlaces.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
 	
 	var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
 
@@ -595,7 +595,7 @@ function validateFormat(){
 		decimalSymbol=("custom"==decimalSymbol.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value:decimalSymbol;
 	
 	var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
-		customDecimalPlaces=("custom"==customDecimalPlaces.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
+		customDecimalPlaces=("-2"==customDecimalPlaces.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
 	
 	var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
 	

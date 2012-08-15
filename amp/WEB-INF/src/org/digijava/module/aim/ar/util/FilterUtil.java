@@ -283,9 +283,16 @@ public class FilterUtil {
 			form.setCustomDecimalSymbol("CUSTOM");
 			form.setCustomDecimalSymbolTxt(filter.getDecimalseparator() );
 		}
-		if (filter.getMaximumFractionDigits() != null && filter.getMaximumFractionDigits() > -1) {
-			form.setCustomDecimalPlaces(filter.getMaximumFractionDigits() );
+		if (filter.getMaximumFractionDigits() != null  ) {
+			if ( filter.getMaximumFractionDigits() > 5 ) {
+				form.setCustomDecimalPlaces( -2 );
+				form.setCustomDecimalPlacesTxt(filter.getMaximumFractionDigits());
+			}
+			else 
+				form.setCustomDecimalPlaces(filter.getMaximumFractionDigits());
 		}
+		if ( filter.getCustomusegroupings() != null )
+			form.setCustomUseGrouping(filter.getCustomusegroupings());
 		
 	}
 	

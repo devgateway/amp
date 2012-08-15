@@ -103,9 +103,7 @@ StopWatch.next("Filters", true);
 					<%@include file="bigFilterTable.jsp" %>
 				</div>
 				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
-				<div style="clear:both;">&nbsp;</div>
-				<div class="other_opts">
-				<div style="width: 20%; padding: 5px; float: left; ">
+				<div style="width: 20%; height: 30%; padding: 10px; float: left; ">
 					<c:set var="tooltip_translation">
 						<digi:trn>Specify keywords to look for in the project data.</digi:trn>
 					</c:set>
@@ -114,7 +112,7 @@ StopWatch.next("Filters", true);
 						src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
 					<div style="margin-top:10px;"><html:text property="indexString" style="width: 150px"	styleClass="inp-text"  /></div>
 				</div>
-				<div style="width: 38%; padding: 5px; float: left;">
+				<div style="width: 38%; height:30%; padding: 10px; float: left;">
 					<b><digi:trn>Date Filter</digi:trn> </b>
 					
 					<div style="margin-top:7px;">
@@ -135,7 +133,7 @@ StopWatch.next("Filters", true);
 						</tr>
 					</table></div>
 				</div>
-				<div style="width: 17%; padding: 5px; float: left;">
+				<div style="width: 17%; height: 30%; padding: 10px; float: left;">
 					<span style="white-space: nowrap"><b><digi:trn>Actual Approval Year</digi:trn> </b></span>
 						<div style="margin-top:10px;">
 						<html:select property="actualAppYear"  style="width: 100px" styleClass="inp-text">
@@ -145,7 +143,7 @@ StopWatch.next("Filters", true);
 						</div>
 				</div>
 				<feature:display name="Computed Columns Filters" module="Filter Section">
-					<div style="margin-left: 80%;width: 20%; height: 30%; padding:5px; ">
+					<div style="margin-left: 80%;width: 20%; height: 30%; padding: 10px; ">
 						<span style="white-space: nowrap"><b><digi:trn>Computed Columns</digi:trn> </b></span>
 							<div style="margin-top:10px;">
 							<html:select property="computedYear"  style="width: 100px" styleClass="inp-text">
@@ -154,8 +152,6 @@ StopWatch.next("Filters", true);
 							</html:select>
 							</div>
 					</div>
-					</div>
-					<div style="clear:both;">&nbsp;</div>
 				</feature:display>
 			</div>
 		</div>
@@ -174,7 +170,7 @@ StopWatch.next("Filters", true);
 				<option value="0"><digi:trn>Any keyword</digi:trn></option>
 				<option value="1"><digi:trn>All keywords</digi:trn></option>
 			</html:select>
-		
+			
 </div>
 <div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
 	<html:checkbox property="justSearch" value="true" />&nbsp;

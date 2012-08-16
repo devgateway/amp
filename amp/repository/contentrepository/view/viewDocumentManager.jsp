@@ -604,6 +604,9 @@ border-right: 1px solid rgb(208, 208, 208);
 								    		<digi:trn>Labels</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
+								    	<button id="privateClearButtonId" type="button" onclick="document.getElementById('privateSearchStr').value='';privateListObj.sendRequest();"  class="buttonx">
+							        		<digi:trn>Clear</digi:trn>
+							        	</button>
 								    </td>
 								</tr>
 								<tr><td><hr style="width: 100%;margin-left: 0px; height:2px;"/></td></tr>
@@ -661,6 +664,9 @@ border-right: 1px solid rgb(208, 208, 208);
 								    		<digi:trn>Labels</digi:trn>
 								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
+								    	<button id="teamClearButtonId" type="button" onclick="document.getElementById('teamSearchStr').value='';teamListObj.sendRequest();"  class="buttonx">
+							        		<digi:trn>Clear</digi:trn>
+							        	</button>
 									</td>
 								</tr>						
 								<tr><td><hr style="width: 100%;margin-left: 0px; height:2px;"/></td></tr>	
@@ -707,6 +713,9 @@ border-right: 1px solid rgb(208, 208, 208);
 									    		<digi:trn>Labels</digi:trn>
 									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 									    	</button>
+									    	<button id="sharedClearButtonId" type="button" onclick="document.getElementById('sharedSearchStr').value=''; sharedListObj.sendRequest();"  class="buttonx">
+							        		<digi:trn>Clear</digi:trn>
+							        	</button>
 										</td>
 									</tr>						
 									<tr><td><hr style="width: 100%;margin-left: 0px; height:2px;"/></td></tr>	
@@ -740,6 +749,10 @@ border-right: 1px solid rgb(208, 208, 208);
 							        		<button id="publicSearchButtonId" type="button" class="buttonx">
 								        		<digi:trn>Search</digi:trn>
 								        	</button>
+								        	<button id="publicClearButtonId" type="button" onclick="document.getElementById('publicSearchStr').value=''; publicListObj.sendRequest();"  class="buttonx">
+							        		<digi:trn>Clear</digi:trn>
+								        	
+								        	
 										</td>
 									</tr>
 									<tr>

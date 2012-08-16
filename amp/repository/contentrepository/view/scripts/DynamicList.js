@@ -106,7 +106,7 @@ FilterWrapper.prototype.kToHTML	= function() {
 	if ( this.filterKeywords.length > 0 ) {		
 		ret += "<span>";
 		for (var i=0;i < this.filterKeywords.length ; i ++){
-			ret += this.filterKeywords[i]+" ";
+			ret += this.filterKeywords[i].key +" ";
 		}
 		ret += "</span>, ";		
 	}

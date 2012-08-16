@@ -243,13 +243,25 @@
 									    	<b class="ins_title">
 									    		<a  style="color:black" href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
 														<b><digi:trn key="aim:activityListinWorkspace">List of Activities in the Workspace</digi:trn></b>
-													</a>
+													<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='activity' && aimTeamActivitiesForm.sortOrder=='asc'}">
+														<img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+													</c:if>
+													<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='activity' && aimTeamActivitiesForm.sortOrder=='desc'}">
+														<img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+													</c:if>
+												</a>												
 									    	</b>
 									    </td>
 									    <td width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="border:none;" >
 									    	<b class="ins_title">
 									    		<a  style="color:black" href="javascript:sortMe('donor')" title="Click here to sort by Donors">
 														<b><digi:trn key="aim:donors">Donors</digi:trn></b>
+														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='donor' && aimTeamActivitiesForm.sortOrder=='asc'}">
+															<img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+														</c:if>
+														<c:if test="${empty aimTeamActivitiesForm.sort || aimTeamActivitiesForm.sort=='donor' && aimTeamActivitiesForm.sortOrder=='desc'}">
+															<img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+														</c:if>
 													</a>
 									    	</b>
 									    </td>

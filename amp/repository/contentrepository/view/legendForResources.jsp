@@ -31,7 +31,7 @@
 		<hr/>
 		<b class="green">*<digi:trn>star</digi:trn></b> - <digi:trn>indicates shared version of the document</digi:trn>
 		<hr/>
-		<b class="red"><digi:trn>red text</digi:trn></b> - <digi:trn>Document Needs Aproval To Become Team Doc.</digi:trn>
+		<b class="red"><digi:trn>red text</digi:trn></b> - <digi:trn>Document Needs Approval To Become Team Doc.</digi:trn>
 		<hr/>
 		<b class="green"><digi:trn>green text</digi:trn></b> - <digi:trn>Some Version of this Document needs Approval</digi:trn>
 </div>

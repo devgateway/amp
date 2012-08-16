@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.web.pages;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -158,6 +159,13 @@ public class OnePager extends AmpHeaderFooter {
 			editLockRefresher = new WebMarkupContainer("editLockRefresher");
 		if (!newActivity){
 			editLockRefresher.add(new AbstractAjaxTimerBehavior(ActivityGatekeeper.getRefreshInterval()){
+
+				@Override
+				public boolean canCallListenerInterface(Component component,
+						Method method) {
+					return true;
+				}
+				
 				@Override
 				protected void onTimer(AjaxRequestTarget target) {
 					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());

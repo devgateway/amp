@@ -192,7 +192,6 @@ public class ActivityUtil {
 
 		} finally {
 			ActivityGatekeeper.unlockActivity(String.valueOf(am.getId()), am.getEditingKey());
-			AmpActivityModel.endConversation();
 			try {
 				ServletContext sc = wicketSession.getHttpSession().getServletContext();
 				Site site = wicketSession.getSite();
@@ -201,6 +200,7 @@ public class ActivityUtil {
 			} catch (Exception e) {
 				logger.error("error while trying to update lucene logs:", e);
 			}
+			AmpActivityModel.endConversation();
 		}
 	}
 

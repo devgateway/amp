@@ -155,6 +155,6 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 
 <br>					
 <div class="buttons" align="center">					
-	<input type="button" value="Close" class="buttonx_sm btn" onclick="hidePWorkspaceframe()">
+	<input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx_sm btn" onclick="hidePWorkspaceframe()">
 </div>
 	

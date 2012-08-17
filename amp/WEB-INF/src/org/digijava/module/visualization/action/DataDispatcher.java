@@ -92,6 +92,9 @@ public class DataDispatcher extends DispatchAction {
 
 		ArrayList<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (tm!=null && tm.getTeamAccessType().equals("Management")) {
+			visualizationForm.getFilter().setFromPublicView(true);// sets as public view when team is management, so it shows only approved activities
+        } 
 		if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
 			visualizationForm.getFilter().setTeamMember(tm);
         } else {

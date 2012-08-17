@@ -448,6 +448,7 @@
 	<page name="contactsPrintPreview" page="addressBookPrintPreview"></page>
 	
 	<page name="wicketHeader" page="wicketHeader"></page>
+	<page name="wicketAdminHeader" page="wicketAdminHeader"></page>
 	<page name="wicketFooter" page="wicketFooter"></page>
 	<page page="importRegions" name="importRegionLayout" title="Import Regions" />
 	<page page="orgProfileReportGenerator" name="aim_orgProfileReportGenerator" title="Donor Report Generator" />

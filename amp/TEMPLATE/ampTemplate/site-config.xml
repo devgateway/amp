@@ -550,11 +550,31 @@
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 		</layout>
 
+		<layout name="wicketAdminHeaderLayout" extends="noLayout" file="wicketAdminHeaderLayout.jsp">
+	    	<put name="version">&ampVersion;</put>
+			<put name="build_version">&buildDate;</put>
+			<put-item name="headerTop" layout="headerTopLayout"/>
+			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
+	    	<put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
+			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
+			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
+			
+			<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
+		</layout>
+
 		<page-group masterLayout="wicketHeaderLayout">
 			<module name="aim">
 				<page>wicketHeader</page>
 			</module>
 		</page-group>
+		
+		<page-group masterLayout="wicketAdminHeaderLayout">
+			<module name="aim">
+				<page>wicketAdminHeader</page>
+			</module>
+		</page-group>
+		
 		
 		<page-group masterLayout="wicketFooterLayout">
 			<module name="aim">

@@ -152,7 +152,8 @@ function showHidePositions(id,selectedPosition){
 	    cache : false,
 	    type: 'get',
 	    success: function(data, status) {
-	    	var arrayPosition = jQuery.parseJSON(data);
+    		updateChangesAppliedInfo(id);	
+    		var arrayPosition = jQuery.parseJSON(data);
 	    	var selects=$("select[class^='savePositionDropDow']");
 	    	for(var j=0;j<selects.length;j++){
 	    		var index=1;
@@ -198,7 +199,27 @@ function showHidePositions(id,selectedPosition){
 	
 }
 
+function updateProcessingChangesInfo(id){
+	var processingChangesStr = "<img src='/TEMPLATE/ampTemplate/images/amploading.gif' width='10' height='10' />" + 
+	"<digi:trn>applying changes</digi:trn>";
+	updateStatusInfo(id, processingChangesStr, "black");
+}
+
+function updateChangesAppliedInfo(id){
+	var changesAppliedStr = "<b><digi:trn>changes applied</digi:trn></b>";
+	updateStatusInfo(id, changesAppliedStr, "green");
+}
+
+function updateStatusInfo(id, statusStr, color){
+	if (id == null)return;
+	var savePositionStatusInfoDiv = $(".savePositionStatusInfo" + id); 
+	savePositionStatusInfoDiv.html(statusStr);
+	savePositionStatusInfoDiv.css("color", color);
+	savePositionStatusInfoDiv.css("white-space", "nowrap");
+}
+
 function savePosition(id){
+	updateProcessingChangesInfo(id);
 	var selectId="select.savePositionDropDown"+id;
 	var selectedPosition=$(selectId+  " option:selected").val();
 	$("select[class^='savePositionDropDow']").attr('disabled', 'disabled');
@@ -727,6 +748,7 @@ $(document).ready(function() {
             																							<option value="${i}" <c:if test="${position==i}">selected</c:if>><c:out value="${i+1}" /></option>
             																						</c:forEach>	
 																					</select>
+																					<div class="savePositionStatusInfo${report.ampReportId}" style="font-size:9px;"></div>
 																					</div>
 
 					                                								 <c:remove var="position" />

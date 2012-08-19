@@ -255,7 +255,8 @@ border-right: 1px solid rgb(208, 208, 208);
 
 		
 		
-		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj",null, trnObj);
+ 		publicListObj			= new PublicDynamicList(document.getElementById("public_markup"), "publicListObj","publicFilterDivId", trnObj);       
+		publicListObj.filterInfoDivId	= "publicFilterInfo";
 		publicListObj.setKeywordTextboxInformation("publicSearchStr","publicSearchButtonId");
 		//publicListObj.sendRequest();
 		repositoryTabView				= new YAHOO.widget.TabView("demo");
@@ -422,6 +423,15 @@ border-right: 1px solid rgb(208, 208, 208);
 	var menuPanelForUser	= new ActionsMenu("actionsButtonId","actionsMenu",false,trnObj);
 	var menuPanelForTeam	= new ActionsMenu("actionsButtonIdTeam","actionsMenu", true, trnObj);
 
+	
+	
+	function reset(objListStr)
+	{		
+		document.getElementById(objListStr+'SearchStr').value='';		
+		eval(objListStr +'ListObj.sendRequest()');	
+	}
+	
+	
 </script>
 <field:display name="Create From Template" feature="Add Resources">
 	<script type="text/javascript">
@@ -604,7 +614,7 @@ border-right: 1px solid rgb(208, 208, 208);
 								    		<digi:trn>Labels</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-								    	<button id="privateClearButtonId" type="button" onclick="document.getElementById('privateSearchStr').value='';privateListObj.sendRequest();"  class="buttonx">
+									        <button id="privateClearButtonId" type="button" onclick="reset('private');"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 							        	</button>
 								    </td>
@@ -664,7 +674,7 @@ border-right: 1px solid rgb(208, 208, 208);
 								    		<digi:trn>Labels</digi:trn>
 								    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-								    	<button id="teamClearButtonId" type="button" onclick="document.getElementById('teamSearchStr').value='';teamListObj.sendRequest();"  class="buttonx">
+								    	 <button id="teamClearButtonId" type="button" onclick="reset('team');"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 							        	</button>
 									</td>
@@ -713,7 +723,7 @@ border-right: 1px solid rgb(208, 208, 208);
 									    		<digi:trn>Labels</digi:trn>
 									    		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 									    	</button>
-									    	<button id="sharedClearButtonId" type="button" onclick="document.getElementById('sharedSearchStr').value=''; sharedListObj.sendRequest();"  class="buttonx">
+									    	<button id="sharedClearButtonId" type="button" onclick="reset('shared');"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 							        	</button>
 										</td>
@@ -749,7 +759,7 @@ border-right: 1px solid rgb(208, 208, 208);
 							        		<button id="publicSearchButtonId" type="button" class="buttonx">
 								        		<digi:trn>Search</digi:trn>
 								        	</button>
-								        	<button id="publicClearButtonId" type="button" onclick="document.getElementById('publicSearchStr').value=''; publicListObj.sendRequest();"  class="buttonx">
+											<button id="publicClearButtonId" type="button" onclick="reset('public');"  class="buttonx">
 							        		<digi:trn>Clear</digi:trn>
 								        	
 								        	

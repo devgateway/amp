@@ -216,7 +216,11 @@ AbstractDynamicList.prototype.resetFilterData		= function (shouldRetrieveFilters
 
 AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 	var divEl	= document.getElementById(divId);
-	var form	= divEl.getElementsByTagName("form")[0];
+	var form	=  null;
+	if(divEl != null)
+	{
+	form = divEl.getElementsByTagName("form")[0];
+	
 	for (var field in this.filterWrapper) {
 		if ( field.indexOf("filter") == 0 && field!="filterLabels" && field!="filterKeywords") {
 			var selectEl	= form.elements[field];
@@ -226,6 +230,7 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 			this.filterWrapper[field].push( new KeyValue(optionEl.value, optionEl.text) );
 		}
 	}
+	}	
 	if (this.searchBox != null && this.searchBox.value.length > 0) {
 		var typedText = this.searchBox.value.split(" ");
 		this.filterWrapper["filterKeywords"] = new Array();

@@ -734,7 +734,7 @@ h1.admintitle{font-size:16px;text-transform:none;color: #376091;padding:0px 0px 
 .invisible-item{display: none;}
 .white-item{color: white;}
 .marginal-five{margin-right:5px;}
-.invisible-item-hidden{visibility: hidden;}
+.invisible-item-hidden{visibility: hidden; display:none;}
 
 .reg_butt input {width:85px !important;}
 
@@ -800,3 +800,6 @@ span.geostyle{background:#f1f1f1;padding:3px;border:1px solid #e0e0e0;color:#5d5
 .dashboard_generator_opt {padding-bottom:10px;}
 .otherCriteriaBigTable {height:230px;}
 .other_opts {height:70px;}
+
+#toolbarDivStep0 .buttonx {line-height:15px;}
+#moreSettingsTable .main_side_cont {background-color:none;}

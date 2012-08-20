@@ -530,7 +530,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				}
 			}
 		};
-		list.setReuseItems(true);
+		list.setReuseItems(false);
 		activityForm.add(list);
 	}
 

@@ -581,7 +581,7 @@ function collapseAll() {
 			
 			<module:display name="/Activity Form/Identification/Objective Comments" parentModule="/Activity Form/Identification">
 				<logic:present name="currentMember" scope="session">
-					<digi:trn key="aim:objectiveComments">Objective Comments</digi:trn>
+					<digi:trn key="aim:objectiveComments">Objective Comments</digi:trn>:&nbsp;
 						<ul>
 						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
 							<logic:equal name="comments" property="key" value="Objective Assumption">
@@ -662,6 +662,7 @@ function collapseAll() {
 			<module:display name="/Activity Form/Identification/Project Impact" parentModule="/Activity Form/Identification">
 				<logic:present name="aimEditActivityForm" property="identification.projectImpact">
 					<bean:define id="boldText" toScope="request" value="true"/>
+					<bean:define id="useColonInLabel" toScope="request" value="true"/>
 					<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
 					<bean:define id="largeTextKey" toScope="request">
 						<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
@@ -875,7 +876,7 @@ function collapseAll() {
 						 
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
 			<field:display name="Government Agreement Number" feature="Identification">
-				<digi:trn>Government Agreement Number</digi:trn><br />
+				<digi:trn>Government Agreement Number</digi:trn>:&nbsp;<br />
 				<b><c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/></b><hr /></field:display>
 	</module:display>
 	<!-- END IDENTIFICATION SECTION -->

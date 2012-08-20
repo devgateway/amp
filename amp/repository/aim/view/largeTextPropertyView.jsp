@@ -12,7 +12,7 @@
 
 
 <field:display feature="${largeTextFeature}" name="${largeTextLabel}">
-	<digi:trn key="aim:${largeTextLabel}">${largeTextLabel}</digi:trn>
+	<digi:trn key="aim:${largeTextLabel}">${largeTextLabel}</digi:trn><c:if test="${useColonInLabel}">:&nbsp;</c:if>
 	<c:if test="${largeTextKey!=null}">
 		<c:if test="${boldText}">
 			<b><digi:edit key="${largeTextKey}"></digi:edit></b>

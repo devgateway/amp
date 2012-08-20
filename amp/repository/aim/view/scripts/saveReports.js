@@ -11,7 +11,11 @@ SaveReportEngine.prototype.getOriginalReportName	= function () {
 	return document.getElementById("saveOriginalReportName").value;
 }
 SaveReportEngine.prototype.getReportName	= function () {
-	return document.getElementById("saveReportName").value;
+	var reportName = document.getElementById("saveReportName").value; 
+	if(reportName){
+		reportName = trim(reportName);
+	}
+	return reportName;	
 }
 SaveReportEngine.prototype.getReportId		= function () {
 	return document.getElementById("saveReportId").value;

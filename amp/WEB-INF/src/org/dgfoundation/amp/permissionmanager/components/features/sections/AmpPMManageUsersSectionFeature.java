@@ -49,6 +49,7 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		usersOrgs.getLabelContainer().add(new AttributeModifier("class",new Model("perm_h3")));
 		usersOrgs.setIgnorePermissions(true);
 		usersOrgs.setVisibilityAllowed(true);
+		usersOrgs.setIgnoreFmVisibility(true);
 		usersOrgs.setOutputMarkupId(true);
 		usersOrgs.setVisible(false);
 		add(usersOrgs);
@@ -56,11 +57,14 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		final AmpPMManageUsersTableFeaturePanel usersTable = new AmpPMManageUsersTableFeaturePanel("users", usersModel, "Users");
 		usersTable.setVisibilityAllowed(true);
 		usersTable.setIgnorePermissions(true);
+		usersTable.setIgnoreFmVisibility(true);
 		usersTable.setOutputMarkupId(true);
 		usersTable.setVisible(true);
 		add(usersTable);
+		
 		final AmpPMAjaxPagingNavigator paginator = new AmpPMAjaxPagingNavigator("navigator", (PageableListView)usersTable.getList());
 		paginator.setVisibilityAllowed(true);
+		paginator.setVisible(true);
 		add(paginator);
 		idsList = usersTable.getList();
 		
@@ -90,6 +94,7 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 		searchUsers.getTextField().add(sizeModifier);
 		searchUsers.setVisibilityAllowed(true);
 		searchUsers.setIgnorePermissions(true);
+		searchUsers.setIgnoreFmVisibility(true);
 		add(searchUsers);
 		
 		AmpAjaxLinkField addVerifiedOrgsBtn = new AmpAjaxLinkField("addOrgsToUsers","Add Verified Organizations Button","Add Verified Organizations"){

@@ -45,13 +45,7 @@ public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel 
 			protected void populateItem(final ListItem<User> item) {
 				item.add(new Label("userLabel", item.getModelObject().getName()));
 				item.add(new Label("userEmailLabel", item.getModelObject().getEmail()));
-			//	item.add(new Label("editUser", "editMe"));
-//				String tooltipText = "info text de test";
-//				if (tooltipText != null) {
-//					BeautyTipBehavior toolTip = new BeautyTipBehavior(tooltipText);
-//					toolTip.setPositionPreference(TipPosition.right);
-//					item.add(toolTip);
-//				}
+
 				final TransparentWebMarkupContainer slider;
 				slider = new TransparentWebMarkupContainer("sliderUserInfo");
 				slider.setOutputMarkupId(true);

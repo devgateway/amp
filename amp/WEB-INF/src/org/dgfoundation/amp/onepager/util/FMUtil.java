@@ -143,7 +143,8 @@ public final class FMUtil {
 
 			AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 			//for admin user fields will be visible
-			if("yes".compareTo(session.getIsAdmin()) ==0 ) return true;
+			if( fmPathString.compareTo("Permission Manager") ==0 && "yes".compareTo(session.getIsAdmin()) ==0 ) 
+				return true;
 			
 			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) context.getAttribute("ampTreeVisibility");
 			if(ampTreeVisibility!=null){

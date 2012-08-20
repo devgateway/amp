@@ -40,7 +40,11 @@ public class PermissionManagerFormFeature  extends AmpFeaturePanel{
 		}
 		s.addAll(users);
 		final IModel<Set<User>> usersModel = new Model((Serializable)s);
-		adminPMForm.add(new AmpPMManageUsersSectionFeature("manageUsers", "Manage Users", usersModel));
+		AmpPMManageUsersSectionFeature ampPMManageUsersSectionFeature = new AmpPMManageUsersSectionFeature("manageUsers", "Manage Users", usersModel);
+		ampPMManageUsersSectionFeature.setVisibilityAllowed(true);
+		ampPMManageUsersSectionFeature.setVisible(true);
+		ampPMManageUsersSectionFeature.setOutputMarkupId(true);
+		adminPMForm.add(ampPMManageUsersSectionFeature);
 		
 		AmpPMManageWorkspacesSectionFeature workspaceSection = new AmpPMManageWorkspacesSectionFeature("manageWorkspaces", teamsModel, "Manage Workspaces", false);
 		adminPMForm.add(workspaceSection);

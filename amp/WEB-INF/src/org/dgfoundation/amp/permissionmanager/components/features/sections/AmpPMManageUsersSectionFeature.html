@@ -1,29 +1,31 @@
 <wicket:extend>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="710" border="0" cellspacing="0" cellpadding="0">
 	<tr>
-		<td valign="top">
-			<div class="search_lbl" wicket:id="searchUsers"/>
+		<td width="710" valign="top" align="left" colspan="2">
+			<span class="search_lbl" wicket:id="addOrgsToUsers"/>
 		</td>
-		<td valign="top" align="right">
-			<!-- input type="button" wicket:id="addOrgsToUsers" value="Add Organizations to Users" class="buttonx" /> -->
-			<div class="search_lbl" wicket:id="addOrgsToUsers"/>
+	</tr>
+	<tr><td colspan ="2"><hr/></td></tr>
+	<tr>
+		<td width="710" valign="top" colspan="2">
+			<span class="search_lbl" wicket:id="searchUsers"/>
 		</td>
 	</tr>
 	<tr><td colspan ="2"><hr /></td></tr>
-  <tr>
-    <td width="710" valign="top" colspan="2">
-    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
-    		<tr>
-    			<td>
-    				<div class="search_lbl" wicket:id="users"/>
-					<center><div wicket:id="navigator" /></center>
-				</td>
-    		</tr>
-    		<tr>
-    			<td colspan="4"><div wicket:id="assignMultiUsersMultiOrgs" /></td>
-    		</tr>
-    	</table>
-	</td>
+    <tr>
+	    <td width="710" valign="top" colspan="2">
+	    	<table width="90%" border="0" cellspacing="0" cellpadding="0">
+	    		<tr>
+	    			<td colspan="4">
+	    				<div class="search_lbl" wicket:id="users"/>
+						<center><div wicket:id="navigator" /></center>
+					</td>
+	    		</tr>
+	    		<tr>
+	    			<td colspan="4"><div wicket:id="assignMultiUsersMultiOrgs" /></td>
+	    		</tr>
+	    	</table>
+		</td>
   </tr>
 </table>
 </wicket:extend>

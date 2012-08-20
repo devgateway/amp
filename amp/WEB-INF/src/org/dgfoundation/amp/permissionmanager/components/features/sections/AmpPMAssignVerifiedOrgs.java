@@ -69,7 +69,11 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 		// TODO Auto-generated constructor stub
 		AmpPMVerifiedOrganizationsTableFeaturePanel searchVerifiedOrgs = new AmpPMVerifiedOrganizationsTableFeaturePanel("verifiedOrgs", orgsModel, "Verified Organizations", true);
 		searchVerifiedOrgs.setTableWidth(480);
+		searchVerifiedOrgs.setOutputMarkupId(true);
+		searchVerifiedOrgs.setVisibilityAllowed(true);
+		searchVerifiedOrgs.setIgnorePermissions(true);
 		add(searchVerifiedOrgs);
+		
 		AmpPMAjaxPagingNavigator pager = new AmpPMAjaxPagingNavigator("verifiedOrgsNavigator", (PageableListView)searchVerifiedOrgs.getList());
 		add(pager);
 		idOrgsList = searchVerifiedOrgs.getList();
@@ -156,7 +160,6 @@ public class AmpPMAssignVerifiedOrgs extends AmpFeaturePanel {
 			public void onClick() {
 				try {
 					for (User user : usersModel.getObject()) {
-						//user.getAssignedOrgs().clear();
 						PMUtil.addOrganizationsToUser(user, orgsModel.getObject());
 						DbUtil.updateUser(user);
 					}

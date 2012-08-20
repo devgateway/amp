@@ -62,6 +62,7 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 	 * @param hideLabel
 	 * @throws Exception
 	 */
+	
 	public AmpPMSearchOrganizationsFeaturePanel(String id,final IModel<User> userModel, String fmName, boolean hideLabel) throws Exception {
 		super(id, userModel, fmName, hideLabel);
 
@@ -79,7 +80,7 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
-				return choice.getName();
+				return org.digijava.module.aim.util.DbUtil.filter(choice.getName());
 			}
 			
 			@Override
@@ -106,11 +107,6 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
-				
-				
-				
 			}
 
 			@Override
@@ -119,39 +115,7 @@ public class AmpPMSearchOrganizationsFeaturePanel extends AmpFeaturePanel {
 				return null;
 			}
 		};
-//		AttributeModifier sizeModifier = new AttributeModifier("size",new Model(35));
-//		autoComplete.add(sizeModifier);
 		add(autoComplete);
-	//	final AmpComboboxFieldPanel<AmpOrganisation> searchOrgs=new AmpComboboxFieldPanel<AmpOrganisation>("searchOrganizations", "Search Organizations", autoComplete);
-		
-
-//		add(new Link("saveButton"){
-//			@Override
-//			public void onClick() {
-//				try {
-//					DbUtil.updateUser(model.getObject());
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//
-//		add(new Link("resetButton"){
-//			@Override
-//			public void onClick() {
-//				model.getObject().getAssignedOrgs().clear();
-//				model.getObject().getAssignedOrgs().addAll(org.digijava.module.aim.util.DbUtil.getUser(model.getObject().getEmail()).getAssignedOrgs());
-//				idsList.removeAll();
-//			}
-//		});
-//
-//		add(new Link("cancelButton"){
-//			@Override
-//			public void onClick() {
-//			}
-//			
-//		});
-			
 		
 	}
 

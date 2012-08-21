@@ -169,7 +169,7 @@ YAHOO.util.Event.addListener(window, "load", initDynamicTable1);
 	function initDynamicTable1() {
 	    YAHOO.example.XHR_JSON = new function() {
 	        var timestamp=new Date().getTime();
-	        this.myDataSource = new YAHOO.util.DataSource("/aim/searchAvailableUsers.do?timestamp="+timestamp);
+	        this.myDataSource = new YAHOO.util.DataSource("/aim/searchAvailableUsers.do?timestamp="+timestamp+"&");
 	        this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 	        //this.myDataSource.connXhrMode = "queueRequests";
 	        this.myDataSource.responseSchema = {

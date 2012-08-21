@@ -217,6 +217,8 @@ public class AmpSectorsFormTableFeature extends
 				else 
 					activitySector.setSectorPercentage(100f); 
 				activitySector.setClassificationConfig(sectorClassification);
+				if(setModel.getObject()  == null)
+					setModel.setObject(new HashSet<AmpActivitySector>());
 				setModel.getObject().add(activitySector);
 				list.removeAll();
 				target.add(list.getParent());

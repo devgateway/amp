@@ -345,6 +345,7 @@ public class DashboardFilter {
 
     public void setCurrencyId(Long currency) {
         this.currencyId = currency;
+        this.currencyIdQuickFilter = currency;
     }
 
     public void setCurrencyIdQuickFilter(Long currency) {

@@ -32,7 +32,7 @@ function adjustQuickLinks(){
 	var currentScrollTop = mainContentTop - $(window).scrollTop();
 	if (currentScrollTop < 0)
 		currentScrollTop = 2;
-	if ($('#footer').offset().top < $('#rightMenu').offset().top + $('#rightMenu').height())
+	if ( $('#footer').offset() !=null &&  $('#footer').offset().top < $('#rightMenu').offset().top + $('#rightMenu').height())
 		currentScrollTop = $('#footer').offset().top - $('#rightMenu').height() - $(window).scrollTop();
 	
 	$('#rightMenu').css('top', currentScrollTop + "px");

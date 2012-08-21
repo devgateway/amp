@@ -82,27 +82,27 @@ function addLocation() {
 
 function removeLocation() {
 	<c:set var="confirmDelete">
-	  <digi:trn key="aim:removeSelectedLocationsMessage">
-	 	 Remove selected locations?
-	  </digi:trn>
+	  <digi:trn>Remove selected locations?</digi:trn>
 	</c:set>
-	if (confirm("${confirmDelete}")){
-		var i = 1
-		var delStr = "deleteLocs="
-		while (document.getElementById("checkLoc"+i)!=null){
-			if(document.getElementById("checkLoc"+i).checked==true){
-				delStr = delStr + "_" + i;
-			}
-			i++;
+	<c:set var="selectlocmsg">
+	  <digi:trn>Please, select a location first.</digi:trn>
+	</c:set>
+	var i = 1;
+	var delStr = "deleteLocs=";
+	while (document.getElementById("checkLoc"+i)!=null){
+		if(document.getElementById("checkLoc"+i).checked==true){
+			delStr = delStr + "_" + i;
 		}
-		if (delStr.length < 13){
-			alert ("Please, select a location first.");
-		} else {
-			document.pledgeForm.target = "_self";
-			document.pledgeForm.action="/removePledgeLocation.do?"+delStr;
-			document.pledgeForm.submit();
+		i++;
+	}
+	
+	if (delStr.length < 13){
+		alert ("${selectlocmsg}");
+	} else if (confirm("${confirmDelete}")){
+		document.pledgeForm.target = "_self";
+		document.pledgeForm.action="/removePledgeLocation.do?"+delStr;
+		document.pledgeForm.submit();
 		}
-	}			
 }
 function addProgram(programType) {
 
@@ -116,28 +116,28 @@ function addProgram(programType) {
 }
 function removeProgram() {
 	<c:set var="confirmDelete">
-	  <digi:trn key="aim:removeSelectedProgramsMessage">
-	 	 Remove selected programs?
-	  </digi:trn>
+	  <digi:trn >Remove selected programs?</digi:trn>
 	</c:set>
-	if (confirm("${confirmDelete}")){
-		var i = 1
-		var delStr = "deleteProgs="
-		while (document.getElementById("checkProg"+i)!=null){
-			if(document.getElementById("checkProg"+i).checked==true){
-				delStr = delStr + "_" + i;
-			}
-			i++;
+	<c:set var="selectprogram">
+	  <digi:trn >Please, select a program first.</digi:trn>
+	</c:set>
+	var i = 1;
+	var delStr = "deleteProgs=";
+	while (document.getElementById("checkProg"+i)!=null){
+		if(document.getElementById("checkProg"+i).checked==true){
+			delStr = delStr + "_" + i;
 		}
-		if (delStr.length < 14){
-			alert ("Please, select a program first.");
-		} else {
-			document.pledgeForm.target = "_self";
-			document.pledgeForm.action="/removePledgeProgram.do?"+delStr;
-			document.pledgeForm.submit();
-		}
-	}			
-}
+		i++;
+	}
+	if (delStr.length < 14){
+		alert ("${selectprogram}");
+	} else if (confirm("${confirmDelete}")){
+		document.pledgeForm.target = "_self";
+		document.pledgeForm.action="/removePledgeProgram.do?"+delStr;
+		document.pledgeForm.submit();
+	}
+}			
+
 function addSectors(editAct,configId) {
 /*  openNewWindow(600, 450);
   document.aimEditActivityForm.action = "/selectSectors.do?edit=true&configId="+configId;
@@ -159,26 +159,25 @@ function addSector(param)
 
 function removeSector() {
 	<c:set var="confirmDelete">
-	  <digi:trn key="aim:removeSelectedSectorsMessage">
-	 	 Remove selected sectors?
-	  </digi:trn>
+	  <digi:trn>Remove selected sectors?</digi:trn>
 	</c:set>
-	if (confirm("${confirmDelete}")){
-		var i = 1
-		var delStr = "deleteSect="
-		while (document.getElementById("checkSect"+i)!=null){
-			if(document.getElementById("checkSect"+i).checked==true){
-				delStr = delStr + "_" + i;
-			}
-			i++;
+	<c:set var="selectsectorfirst">
+	  <digi:trn>Please, select a sector first.</digi:trn>
+	</c:set>
+	var i = 1;
+	var delStr = "deleteSect=";
+	while (document.getElementById("checkSect"+i)!=null){
+		if(document.getElementById("checkSect"+i).checked==true){
+			delStr = delStr + "_" + i;
 		}
-		if (delStr.length < 13){
-			alert ("Please, select a sector first.");
-		} else {
-			document.pledgeForm.target = "_self";
-			document.pledgeForm.action="/removePledgeSector.do?"+delStr;
-			document.pledgeForm.submit();
-		}	
+		i++;
+	}
+	if (delStr.length < 13){
+		alert ("${selectsectorfirst}");
+	} else if (confirm("${confirmDelete}")){
+		document.pledgeForm.target = "_self";
+		document.pledgeForm.action="/removePledgeSector.do?"+delStr;
+		document.pledgeForm.submit();
 	}	
 }
 

@@ -598,11 +598,11 @@ function collapseAll() {
 			</module:display>
 					
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-			<field:display name="NPD Clasification" feature="Identification">
-				<digi:trn>NPD Clasification</digi:trn>:&nbsp;<br />
-				<b><c:out value="${aimEditActivityForm.identification.clasiNPD}"/></b>
-				<hr />
-			</field:display>
+<!--			<field:display name="NPD Clasification" feature="Identification">-->
+<!--				<digi:trn>NPD Clasification</digi:trn>:&nbsp;<br />-->
+<!--				<b><c:out value="${aimEditActivityForm.identification.clasiNPD}"/></b>-->
+<!--				<hr />-->
+<!--			</field:display>-->
 			
 			<module:display name="/Activity Form/Identification/Lessons Learned" parentModule="/Activity Form/Identification">
 				<digi:trn>Lessons Learned</digi:trn>:&nbsp;<br />
@@ -855,31 +855,33 @@ function collapseAll() {
 		</module:display>
 		
 		<module:display name="/Activity Form/Identification/Budget Extras" parentModule="/Activity Form/Identification">
-			<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
-				<digi:trn>FY</digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
-				<br />
-			</module:display>
-			<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Vote</digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>
-				<br />
-			</module:display>
-				<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Sub-Vote </digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.subVote"/></b>
-				<br />
-			</module:display>
-			<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program" parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Sub-Program</digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.subProgram"/></b>
-				<br />
-			</module:display>
-			<module:display name="/Activity Form/Identification/Budget Extras/Project Code" parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Project Code</digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
-				<br />
-			</module:display>
+			<c:if test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
+				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
+					<digi:trn>FY</digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
+					<br />
+				</module:display>
+				<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
+					<digi:trn>Vote</digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>
+					<br />
+				</module:display>
+					<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
+					<digi:trn>Sub-Vote </digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.subVote"/></b>
+					<br />
+				</module:display>
+				<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program" parentModule="/Activity Form/Identification/Budget Extras">
+					<digi:trn>Sub-Program</digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.subProgram"/></b>
+					<br />
+				</module:display>
+				<module:display name="/Activity Form/Identification/Budget Extras/Project Code" parentModule="/Activity Form/Identification/Budget Extras">
+					<digi:trn>Project Code</digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
+					<br />
+				</module:display>
+			</c:if>
 		</module:display>
 		<hr>	
 		<module:display name="/Activity Form/Identification/Budget Classification" parentModule="/Activity Form/Identification">

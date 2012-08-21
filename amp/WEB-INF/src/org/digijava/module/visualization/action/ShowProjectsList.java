@@ -143,7 +143,7 @@ public class ShowProjectsList extends Action {
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
-		if (type.equals("FundingChart")){
+		if (type.equals("Fundings")){
             activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
             itemProjectsList.put("", getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
             visualizationForm.setItemProjectsList(itemProjectsList);
@@ -165,7 +165,7 @@ public class ShowProjectsList extends Action {
             itemProjectsList.put("", getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
-		if (type.equals("FinancingInstrument")){
+		if (type.equals("AidModality")){
             activities = DbUtil.getActivityList(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
             itemProjectsList.put("", getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
             visualizationForm.setItemProjectsList(itemProjectsList);

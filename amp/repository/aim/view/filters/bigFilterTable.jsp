@@ -35,7 +35,7 @@
 							onclick="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
 							onMouseover="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).markRow(false)" 
 							onMouseout="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).unmarkRow(false)">
-							<td>
+							<td class="inside">
 								<div class="selector_type_cont">
 									<digi:trn>${element.name}</digi:trn>
 									<span style="float: right;">

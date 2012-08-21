@@ -781,7 +781,7 @@ function initializeGlobalVariables(){
 <div class="dashboard_stat"><a onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
 <div class="dashboard_stat" style="display:none;" id="currentDisplaySettings" >
 	<table cellpadding="0" cellspacing="0" border="0" width="100%">
-	<tr style="background-color:#FAFAFA;" >
+	<tr style="background-color:#FAFAFA;">
 	<td style="font-size:11px;font-family:Arial,Helvetica,sans-serif; padding-top:5px; padding-bottom:5px; padding-left:5px;" valign="top">
 	<strong>
 	<digi:trn>Selected Filters</digi:trn>:</strong>

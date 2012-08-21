@@ -272,11 +272,11 @@
             <tr>
               <td class=f-names noWrap style="padding-bottom:10px;"><FONT color=red>*</FONT>
                 <digi:trn key="um:countryOfResidence">Country of Residence </digi:trn>              </td>
-              <td align="right"  class="orgtype" style="padding-bottom:10px;"><html:select  property="selectedCountryResidence" styleClass="inp-text" >
-                  <c:forEach var="cn" items="${aimUserRegisterForm.countryResidence}">
-                    <html:option value="${cn.iso}">${cn.name}</html:option>
-                  </c:forEach>
-                </html:select>              </td>
+              <td align="right"  class="orgtype" style="padding-bottom:10px;">
+              	<html:select  property="selectedCountryResidence" styleClass="inp-text" >
+                  <html:optionsCollection name="aimUserRegisterForm" property="countryResidence" value="iso" label="name" />
+                </html:select>              
+              </td>
               <td>&nbsp;</td>
               <td class=f-names noWrap style="padding-bottom:10px;"><digi:trn key="um:mailingAddress">Mailing Address </digi:trn>              </td>
               <td align="right" style="padding-bottom:10px;"><html:text property="mailingAddress" size="20" styleClass="inp-text"/>              </td>

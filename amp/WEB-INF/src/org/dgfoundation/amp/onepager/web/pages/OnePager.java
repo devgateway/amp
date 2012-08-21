@@ -21,10 +21,10 @@ import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
@@ -133,7 +133,7 @@ public class OnePager extends AmpHeaderFooter {
 			String key = ActivityGatekeeper.lockActivity(activityId, ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
 			if (key == null){ //lock not aquired
 				//redirect page
-				setResponsePage(new RedirectPage(ActivityGatekeeper.buildRedirectLink(activityId)));
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(ActivityGatekeeper.buildRedirectLink(activityId)));
 				//return;
 			}
 			
@@ -170,7 +170,7 @@ public class OnePager extends AmpHeaderFooter {
 				protected void onTimer(AjaxRequestTarget target) {
 					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
 					if (editLockRefresher.isEnabled() && refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED) 
-						setResponsePage(new RedirectPage(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()))));
+						getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()))));
 					
 					if (DEBUG_ACTIVITY_LOCK){
 						if (refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED)

@@ -2028,7 +2028,7 @@ public class TeamMemberUtil {
 
 	}
 	public static  void addDesktopTab(Long reportId, Long teamMemberId,Integer position) {
-		Transaction tr=null;
+		//Transaction tr=null;
 		Session dbSession =null;
 		AmpDesktopTabSelection sel=null;
 		try{
@@ -2058,13 +2058,13 @@ public class TeamMemberUtil {
 			tabs.add(sel);
 			report.getDesktopTabSelections().add(sel);
 			dbSession.save(sel);
-			tr.commit();
+			//tr.commit();
 //session.flush();
 			
 		}
 		catch (Exception e) {
 			logger.error("unable to save tab", e);
-			tr.rollback();
+			//tr.rollback();
 		}
 	}
 	public static void removeDesktopTab(Long reportId, Long teamMemberId,Integer position) {

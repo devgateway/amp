@@ -1,8 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public class AmpActivityGroup {
+public class AmpActivityGroup implements Serializable{
+	private static final long serialVersionUID = 1L;
 
 	private Long ampActivityGroupId;
 	private AmpActivityVersion ampActivityLastVersion;

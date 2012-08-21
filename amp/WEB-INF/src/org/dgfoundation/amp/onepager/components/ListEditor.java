@@ -66,11 +66,11 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 	@Override
 	public void updateModel(){
 		Set<T> set = model.getObject();
-		if (set == null){
+		if (set == null)
 			set = new HashSet<T>();
-			model.setObject(set);
-		}
 		set.clear();
 		set.addAll(items);
+		//setObject last, in order to work with custom set models
+		model.setObject(set);
 	}
 }

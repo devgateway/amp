@@ -572,12 +572,14 @@ $(document).ready(function() {
 	                              <digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
 							                              									<b>
 							                              										<p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
-																									<c:if test="${fn:length(report.name) > 25}" >
-																										<c:out value="${fn:substring(report.name, 0, 25)}" />...
-																									</c:if>
-																									<c:if test="${fn:length(report.name) <= 25}" >
-																										<c:out value="${report.name}" /> 
-																									</c:if>
+																									<c:choose>
+																										<c:when test="${fn:length(report.name) > 25}">
+																											<c:out value="${fn:substring(report.name, 0, 25)}" />...
+																										</c:when>
+																										<c:otherwise>
+																											<c:out value="${report.name}"/>
+																										</c:otherwise>
+																									</c:choose>
 							                     	         									</p>  
 							                              									</b>
 																						</digi:link>
@@ -585,12 +587,14 @@ $(document).ready(function() {
 						                          									<c:if test="${aimTeamReportsForm.showTabs}">
 						                          										<b>
 																                            <p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
-																								<c:if test="${fn:length(report.name) > 25}" >
-																									<c:out value="${fn:substring(report.name, 0, 25)}" />...
-																								</c:if>
-																								<c:if test="${fn:length(report.name) < 25}" >
-																									<c:out value="${report.name}"/>
-																								</c:if>
+																								<c:choose>
+																									<c:when test="${fn:length(report.name) > 25}">
+																										<c:out value="${fn:substring(report.name, 0, 25)}" />...
+																									</c:when>
+																									<c:otherwise>
+																										<c:out value="${report.name}"/>
+																									</c:otherwise>
+																								</c:choose>
 															                                </p>  
 						                              									</b>
 						                          									</c:if>

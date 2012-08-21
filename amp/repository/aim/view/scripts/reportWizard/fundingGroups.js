@@ -90,7 +90,7 @@ YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["pledge"]= new Array(
-		 'Related Projects', 'Pledges Donor', 'Pledges Regions', 'Pledges Aid Modality'
+		 'Related Projects', 'Pledges Donor Group', 'Pledges Regions', 'Pledges Aid Modality'
 		, 'Pledges Type Of Assistance'
 		
 	);

@@ -801,3 +801,8 @@ span.geostyle{background:#f1f1f1;padding:3px;border:1px solid #e0e0e0;color:#5d5
 
 .main_side_cont .buttonx {line-height:15px;}
 .main_side_cont .buttonx_dis {line-height:15px;}
+
+.add_form_title .inputx {width:120px !important;}
+.add_form_description .inputx {width:120px !important;}
+.add_form_latitude .inputx {width:120px !important;}
+.add_form_longtitude .inputx {width:120px !important;}

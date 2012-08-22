@@ -12,6 +12,7 @@
 		<property name="teamName" column="teamName" type="java.lang.String" />
 		<property name="authorName" column="authorName" type="java.lang.String" />
 		<property name="authorEmail" column="authorEmail" type="java.lang.String" />
+		<property name="userid" column="userid" type="java.lang.Long" />
 		<property name="editorName" column="editorName" type="java.lang.String" />
 		<property name="editorEmail" column="editorEmail" type="java.lang.String" />
 		<property name="loggedDate" column="loggedDate" type="java.sql.Timestamp" />

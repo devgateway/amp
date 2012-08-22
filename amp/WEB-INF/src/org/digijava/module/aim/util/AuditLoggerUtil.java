@@ -180,6 +180,7 @@ public class AuditLoggerUtil {
 					aal.setAuthorEmail(tm.getEmail());
 					aal.setLoggedDate(ts);
 				}
+				aal.setUserid(DbUtil.getUser(tm.getEmail()).getId());
 				aal.setEditorEmail(tm.getEmail());
 				aal.setEditorName(tm.getMemberName());
 				aal.setAction("update");

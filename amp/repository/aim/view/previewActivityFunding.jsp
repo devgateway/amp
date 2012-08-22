@@ -165,7 +165,7 @@
 														<jsp:include page="previewActivityFundingCommitments.jsp" />
 													</module:display>
 													<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements" 
-														parentModule="/Activity Form/Donor Funding/Funding Item">
+							 							parentModule="/Activity Form/Donor Funding/Funding Item">
 														<jsp:include page="previewActivityFundingDisbursement.jsp" />
 													</module:display>
 
@@ -173,11 +173,6 @@
 														parentModule="/Activity Form/Donor Funding/Funding Item">
 														<jsp:include page="previewActivityFundingExpenditures.jsp" />
 													</module:display>
-
-                                                   <module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures" 
-														parentModule="/Activity Form/Donor Funding/Funding Item">
-                                                        <jsp:include page="previewActivityFundingExpenditures.jsp" />
-                                                  </module:display>
 
 													<feature:display module="Funding" name="Undisbursed Balance">
 													<jsp:include page="previewActivityFundingUndisbursedBalance.jsp" />

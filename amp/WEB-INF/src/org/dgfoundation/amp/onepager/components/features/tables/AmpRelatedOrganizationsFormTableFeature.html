@@ -26,7 +26,9 @@
 	<tr>
 		<td colspan="4" class="inside" align="center" >
 			<span wicket:id="ajaxIndicator"/>
-			<span wicket:id="relOrgPercentageTotal"/>
+			<wicket:fm fmNames="percentage">
+				<span wicket:id="relOrgPercentageTotal"/>
+			</wicket:fm>
 			<span wicket:id="uniqueOrgsValidator"/>			
 		</td>
 	</tr>
@@ -37,9 +39,11 @@
 						<td align="left">
 							<span wicket:id="search"/>	
 						</td>
-						<td class="related_org_buttn" valign="bottom">
-							<span wicket:id="dividePercentage" style="margin-top: 10px;"/>
-						</td>
+						<wicket:fm fmNames="percentage">
+							<td class="related_org_buttn" valign="bottom">
+								<span wicket:id="dividePercentage" style="margin-top: 10px;"/>
+							</td>
+						</wicket:fm>
 					</tr>
 			</table>
 		</td>		

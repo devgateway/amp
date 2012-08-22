@@ -75,7 +75,7 @@ public class SaveText
         boolean exists = true;
         Editor editor = DbUtil.getEditor(site.getSiteId(), formBean.getKey(),
                                      formBean.getLang());
-        if (editor == null) {
+        if (editor == null || !editor.getLanguage().equals(formBean.getLang())) {
             editor = new Editor();
             exists = false;
             editor.setSiteId(site.getSiteId());

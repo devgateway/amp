@@ -599,18 +599,18 @@ border-right: 1px solid rgb(208, 208, 208);
 							<table border="0" cellPadding="1" cellSpacing="0" width="100%"style="position: relative; left: 0px" >
 								<tr>
 						        	<td>
-							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();fPanel.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);" class="buttonx"><digi:trn>Add Resource</digi:trn>
+							        	<button id="actionsButtonId" type="button" onclick="menuPanelForUser.toggleUserView();fPanel.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);" class="buttonx button_resources"><digi:trn>Add Resource</digi:trn>
 							        		<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 							        	</button>
 						        		<input type="text" id="privateSearchStr">
-						        		<button id="privateSearchButtonId" type="button" class="buttonx">
+						        		<button id="privateSearchButtonId" type="button" class="buttonx button_resources">
 							        		<digi:trn>Search</digi:trn>
 							        	</button>
-								    	<button id="filterButtonId" class="buttonx" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',false);fPanel.hide();menuPanelForUser.hide();">
+								    	<button id="filterButtonId" class="buttonx button_resources" type="button" onclick="privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',false);fPanel.hide();menuPanelForUser.hide();">
 								    		<digi:trn>Filters</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>
-								    	<button id="labelButtonId" class="buttonx" type="button" onclick="fPanel.toggleView();menuPanelForUser.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);">
+								    	<button id="labelButtonId" class="buttonx button_resources" type="button" onclick="fPanel.toggleView();menuPanelForUser.hide();privateListObj.getFilterPanel('filterButtonId','privateFilterDivId',true);">
 								    		<digi:trn>Labels</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 								    	</button>

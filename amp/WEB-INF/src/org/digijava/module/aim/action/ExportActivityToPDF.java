@@ -229,7 +229,7 @@ public class ExportActivityToPDF extends Action {
 			
 			//objective comments
 			HashMap allComments = new HashMap();
-			if(teamMember!=null){ //Objective Comments shouldn't show up on Publc View
+			if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments", ampContext)){ //Objective Comments shouldn't show up on Publc View
 				ArrayList<AmpComments> colAux	= null;
 	            Collection ampFields = DbUtil.getAmpFields();
 	            
@@ -246,17 +246,17 @@ public class ExportActivityToPDF extends Action {
 	            for (Object commentKey : allComments.keySet()) {            	
 					String key=(String)commentKey;
 					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
-					if(key.equalsIgnoreCase("Objective Assumption") && FeaturesUtil.isVisibleField("Objective Assumption", ampContext)){
+					if(key.equalsIgnoreCase("Objective Assumption") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Assumption", ampContext)){
 						for (AmpComments value : values) {
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption", locale, siteId)+" :",titleFont));
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
 						}					
-					}else if(key.equalsIgnoreCase("Objective Verification") && FeaturesUtil.isVisibleField("Objective Verification", ampContext)){
+					}else if(key.equalsIgnoreCase("Objective Verification") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Verification", ampContext)){
 						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Verification", locale, siteId)+" :",titleFont));
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
 						}					
-					}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators") && FeaturesUtil.isVisibleField("Objective Assumption", ampContext)) {
+					}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Objectively Verifiable Indicators", ampContext)) {
 						for (AmpComments value : values) {
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
 							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
@@ -365,30 +365,31 @@ public class ExportActivityToPDF extends Action {
 			
 			
 			// results cell
-			if(FeaturesUtil.isVisibleField("Results", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results", ampContext)){
 				columnName=TranslatorWorker.translateText("Results",locale,siteId);
 				columnVal=processEditTagValue(request, activity.getResults());
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
-				
-				/**
-				 *  Results Comments
-				 */
+			}
+			/**
+			 *  Results Comments
+			 */
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments", ampContext)){
 				PdfPTable resultsCommentsTable=new PdfPTable(2);
-	            resultsCommentsTable.getDefaultCell().setBorder(0);
-	            for (Object commentKey : allComments.keySet()) {            	
+		           resultsCommentsTable.getDefaultCell().setBorder(0);
+		           for (Object commentKey : allComments.keySet()) {            	
 					String key=(String)commentKey;
 					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
-					if(key.equalsIgnoreCase("Results Assumption")){
+					if(key.equalsIgnoreCase("Results Assumption") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments/Results Assumption", ampContext)){
 						for (AmpComments value : values) {
 							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Assumption", locale, siteId)+" :",titleFont));
 							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
 						}					
-					}else if(key.equalsIgnoreCase("Results Verification")){
+					}else if(key.equalsIgnoreCase("Results Verification") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments/Results Verification", ampContext)){
 						for (AmpComments value : values) {
 							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Verification", locale, siteId)+" :",titleFont));
 							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
 						}					
-					}else if (key.equalsIgnoreCase("Results Objectively Verifiable Indicators")) {
+					}else if (key.equalsIgnoreCase("Results Objectively Verifiable Indicators")&& FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments/Results Objectively Verifiable Indicators", ampContext)) {
 						for (AmpComments value : values) {
 							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
 							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						

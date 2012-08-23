@@ -3,9 +3,10 @@ package org.digijava.module.aim.action;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,9 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.lowagie.text.Cell;
-import org.apache.ecs.xml.XML;
-import org.apache.ecs.xml.XMLDocument;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -35,7 +33,9 @@ import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpImputation;
@@ -45,7 +45,6 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.EditActivityForm.Planning;
@@ -59,13 +58,13 @@ import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.visualization.action.ExportToPDF;
 
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Chunk;
@@ -74,6 +73,8 @@ import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
 
@@ -680,10 +681,10 @@ public class ExportActivityToWord extends Action {
                             eshIssuesTable.addRowData(new ExportSectionHelperRowData(issue.getName() + "  " + DateConversion.ConvertDateToString(issue.getIssueDate()), null, null, false));
                             if (issue.getMeasures() != null && !issue.getMeasures().isEmpty()) {
                                 for (AmpMeasure measure : (Set<AmpMeasure>) issue.getMeasures()) {
-                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" •" + measure.getName(), null, null, false)));
+                                    eshIssuesTable.addRowData((new ExportSectionHelperRowData(" ï¿½" + measure.getName(), null, null, false)));
                                     if(measure.getActors() != null && !measure.getActors().isEmpty()) {
                                         for (AmpActor actor : (Set<AmpActor>) measure.getActors()) {
-                                            eshIssuesTable.addRowData((new ExportSectionHelperRowData("  •" + actor.getName(), null, null, false)));
+                                            eshIssuesTable.addRowData((new ExportSectionHelperRowData("  ï¿½" + actor.getName(), null, null, false)));
                                         }
                                     }
                                 }
@@ -857,49 +858,53 @@ public class ExportActivityToWord extends Action {
 			applyEmptyCell(identificationSubTable1);
 		}
 		
-//				if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments", ampContext)) {
-//					//objective comments
-//					HashMap allComments = new HashMap();
-//					if(teamMember!=null){ //Objective Comments shouldn't show up on Publc View
-//						ArrayList<AmpComments> colAux	= null;
-//			            Collection ampFields = DbUtil.getAmpFields();
-//			            
-//			            if (ampFields!=null) {
-//			            	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
-//			                    AmpField field = (AmpField) itAux.next();
-//			                    colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
-//			                    allComments.put(field.getFieldName(), colAux);
-//			                  }
-//			            }
-//			            
-//			            Table objTable=new Table(2);
-//			            objTable.getDefaultCell().setBorder(0);
-//			            for (Object commentKey : allComments.keySet()) {            	
-//							String key=(String)commentKey;
-//							List<AmpComments> values=(List<AmpComments>)allComments.get(key);
-//							if(key.equalsIgnoreCase("Objective Assumption")){
-//								for (AmpComments value : values) {
-//									objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption", request)+" :",PLAINFONT));
-//									objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(),request),BOLDFONT));
-//								}					
-//							}else if(key.equalsIgnoreCase("Objective Verification")){
-//								for (AmpComments value : values) {
-//									objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators",request)+" :",PLAINFONT));
-//									objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), request),BOLDFONT));
-//								}					
-//							}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators")) {
-//								for (AmpComments value : values) {
-//									objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators",request)+" :",PLAINFONT));
-//									objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(),request),BOLDFONT));						
-//								}
-//							}
-//						}			            
-//			            generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Objective Comments",request), objTable,null);
-//			            rowAmountForCell1++;
-//			            
-//					}
-//				}
-		
+		ArrayList<AmpComments> colAux	= null;
+        Collection ampFields = DbUtil.getAmpFields();
+        
+
+        
+		HashMap allComments = new HashMap();
+		Long actId=new Long(request.getParameter("activityid"));
+        if (ampFields!=null) {
+        	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
+                AmpField field = (AmpField) itAux.next();
+                colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
+                allComments.put(field.getFieldName(), colAux);
+              }
+        }
+
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments", ampContext)) {
+			TeamMember teamMember = (TeamMember) request.getSession().getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+			//objective comments
+			if(teamMember!=null ){ //Objective Comments shouldn't show up on Publc View
+	            
+	            Table objTable=new Table(2);
+	            objTable.getDefaultCell().setBorder(0);
+	            for (Object commentKey : allComments.keySet()) {            	
+					String key=(String)commentKey;
+					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
+					if(key.equalsIgnoreCase("Objective Assumption") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Assumption", ampContext)){
+						for (AmpComments value : values) {
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption", request)+" :",PLAINFONT));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(),request),BOLDFONT));
+						}					
+					}else if(key.equalsIgnoreCase("Objective Verification") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Verification", ampContext)){
+						for (AmpComments value : values) {
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Verification",request)+" :",PLAINFONT));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), request),BOLDFONT));
+						}					
+					}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Objectively Verifiable Indicators", ampContext)) {
+						for (AmpComments value : values) {
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators",request)+" :",PLAINFONT));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(),request),BOLDFONT));						
+						}
+					}
+				}			            
+	            generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Objective Comments",request), objTable,null);
+	            applyEmptyCell(identificationSubTable1);
+			}
+		}
+
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Description", ampContext)){
 			columnName=TranslatorWorker.translateText("Description",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getDescription()),null);
@@ -965,6 +970,49 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getProjectManagement()),null);
 			applyEmptyCell(identificationSubTable1);
 		}
+		
+		//Results
+        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        String locale = RequestUtils.getNavigationLanguage(request).getCode();
+
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results", ampContext)){
+			
+			columnName=TranslatorWorker.translateText("Results",locale,siteId);
+			columnVal=processEditTagValue(request, identification.getResults());
+			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
+			applyEmptyCell(identificationSubTable1);
+		}
+		/**
+		 *  Results Comments
+		 */
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments", ampContext)){
+
+			Table objTable=new Table(2);
+			objTable.getDefaultCell().setBorder(0);
+	        for (Object commentKey : allComments.keySet()) {            	
+        	   String key=(String)commentKey;
+        	   List<AmpComments> values=(List<AmpComments>)allComments.get(key);
+        	   if(key.equalsIgnoreCase("Results Assumption") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments/Results Assumption", ampContext)){
+        		   for (AmpComments value : values) {
+        			   objTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Assumption", locale, siteId)+" :",PLAINFONT));
+        			   objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),BOLDFONT));
+        		   }					
+				}else if(key.equalsIgnoreCase("Results Verification") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments/Results Verification", ampContext)){
+					for (AmpComments value : values) {
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Verification", locale, siteId)+" :",PLAINFONT));
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),BOLDFONT));
+					}					
+				}else if (key.equalsIgnoreCase("Results Objectively Verifiable Indicators")&& FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments/Results Objectively Verifiable Indicators", ampContext)) {
+					for (AmpComments value : values) {
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Objectively Verifiable Indicators", locale, siteId)+" :",PLAINFONT));
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),BOLDFONT));						
+					}
+				}
+			}
+            generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Results Comments",request), objTable,null);
+            applyEmptyCell(identificationSubTable1);
+		}
+				
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Accession Instrument", ampContext)){
 			columnName=TranslatorWorker.translateText("Accession Instrument",request);

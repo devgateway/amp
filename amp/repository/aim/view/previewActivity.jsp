@@ -584,25 +584,28 @@ function collapseAll() {
 					<digi:trn key="aim:objectiveComments">Objective Comments</digi:trn>:&nbsp;
 						<ul>
 						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
-							<logic:equal name="comments" property="key" value="Objective Assumption">
-								<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-									<li>
-										<digi:trn>Objective Assumption</digi:trn>:&nbsp;<br />								
-										<b><bean:write name="comment" property="comment" /></b>
-										<br />
-									</li>
-								</logic:iterate>
-							</logic:equal>
-							<logic:equal name="comments" property="key" value="Objective Verification">
-								<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-									<li>
-										<digi:trn>Objective Verification</digi:trn>:&nbsp;	<br />								
-										<b><bean:write name="comment" property="comment" /></b>
-									<br/>
-									</li>
-								</logic:iterate>
-							</logic:equal>
-							
+							<module:display name="/Activity Form/Identification/Objective Comments/Objective Assumption" parentModule="/Activity Form/Identification/Objective Comments">
+								<logic:equal name="comments" property="key" value="Objective Assumption">
+									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+										<li>
+											<digi:trn>Objective Assumption</digi:trn>:&nbsp;<br />								
+											<b><bean:write name="comment" property="comment" /></b>
+											<br />
+										</li>
+									</logic:iterate>
+								</logic:equal>
+							</module:display>	
+							<module:display name="/Activity Form/Identification/Objective Comments/Objective Verification" parentModule="/Activity Form/Identification/Objective Comments">
+								<logic:equal name="comments" property="key" value="Objective Verification">
+									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+										<li>
+											<digi:trn>Objective Verification</digi:trn>:&nbsp;	<br />								
+											<b><bean:write name="comment" property="comment" /></b>
+										<br/>
+										</li>
+									</logic:iterate>
+								</logic:equal>
+							</module:display>							
 							<module:display name="/Activity Form/Identification/Objective Comments/Objective Objectively Verifiable Indicators" 
 								parentModule="/Activity Form/Identification/Objective Comments">
 								<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
@@ -765,38 +768,46 @@ function collapseAll() {
 						<hr>
 					</c:if> 
 				<logic:present name="aimEditActivityForm" property="comments.allComments">
-					<digi:trn>Results Comments</digi:trn>
-					<ul>
-					<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
-						<logic:equal name="comments" property="key" value="Results Assumption">
-							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								<li>
-								<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:<br />
-								<b><bean:write name="comment" property="comment" /></b>
-								<br/>
-								</li>
-							</logic:iterate>
-						</logic:equal>
-						<logic:equal name="comments" property="key" value="Results Verification">
-							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								<li>
-								<digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:<br />
-								<b><bean:write name="comment" property="comment" /></b>
-								<br/>
-								</li>
-							</logic:iterate>
-						</logic:equal>
-						<logic:equal name="comments" property="key" value="Results Objectively Verifiable Indicators">
-							<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
-								 <li>
-									<digi:trn key="aim:resultsObjectivelyVerifiableIndicators">Results Objectively Verifiable Indicators</digi:trn>:<br />
-								<b><bean:write name="comment" property="comment" /></b>
-								<br/>
-								</li>
-							</logic:iterate>
-						</logic:equal>
-					</logic:iterate>
-					</ul>
+					<module:display name="/Activity Form/Identification/Results Comments" parentModule="/Activity Form/Identification">
+						<digi:trn>Results Comments</digi:trn>
+						<ul>
+						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
+							<module:display name="/Activity Form/Identification/Results Comments/Results Assumption" parentModule="/Activity Form/Identification/Results Comments">
+								<logic:equal name="comments" property="key" value="Results Assumption">
+									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+										<li>
+										<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:<br />
+										<b><bean:write name="comment" property="comment" /></b>
+										<br/>
+										</li>
+									</logic:iterate>
+								</logic:equal>
+							</module:display>
+							<module:display name="/Activity Form/Identification/Results Comments/Results Verification" parentModule="/Activity Form/Identification/Results Comments">							
+								<logic:equal name="comments" property="key" value="Results Verification">
+									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+										<li>
+										<digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:<br />
+										<b><bean:write name="comment" property="comment" /></b>
+										<br/>
+										</li>
+									</logic:iterate>
+								</logic:equal>
+							</module:display>
+							<module:display name="/Activity Form/Identification/Results Comments/Results Objectively Verifiable Indicators" parentModule="/Activity Form/Identification/Results Comments">							
+								<logic:equal name="comments" property="key" value="Results Objectively Verifiable Indicators">
+									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+										 <li>
+											<digi:trn key="aim:resultsObjectivelyVerifiableIndicators">Results Objectively Verifiable Indicators</digi:trn>:<br />
+										<b><bean:write name="comment" property="comment" /></b>
+										<br/>
+										</li>
+									</logic:iterate>
+								</logic:equal>
+							</module:display>								
+						</logic:iterate>
+						</ul>
+					</module:display>
 					<hr/>
 				</logic:present>
 			</module:display>

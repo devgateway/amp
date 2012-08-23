@@ -110,11 +110,18 @@ function init() {
 	 esri.layers.FeatureLayer.MODE_ONDEMAND,outFields: ["*"],
 	 id:'indicator',opacity : 0.80, visible:false });
 	 */
-	povertyratesmap = new esri.layers.ArcGISDynamicMapServiceLayer(povertyratesurl,{opacity :0.80,visible:false,id:'indicator'});
-	populationmap = new esri.layers.ArcGISDynamicMapServiceLayer(population,{opacity :0.80,visible:false,id:'census'});
-	bordermap= new esri.layers.ArcGISDynamicMapServiceLayer(nationalborderurl,{opacity :0.90,visible:false,id:'border'});
-	geometryService = new esri.tasks.GeometryService(geometryServiceurl);
-	
+	if (povertyratesurl){
+		povertyratesmap = new esri.layers.ArcGISDynamicMapServiceLayer(povertyratesurl,{opacity :0.80,visible:false,id:'indicator'});
+	}
+	if (population){
+		populationmap = new esri.layers.ArcGISDynamicMapServiceLayer(population,{opacity :0.80,visible:false,id:'census'});
+	}
+	if (nationalborderurl){
+		bordermap= new esri.layers.ArcGISDynamicMapServiceLayer(nationalborderurl,{opacity :0.90,visible:false,id:'border'});
+	}
+	if (geometryServiceurl){
+		geometryService = new esri.tasks.GeometryService(geometryServiceurl);
+	}
 	esriConfig.defaults.io.proxyUrl = "/esrigis/esriproxy.do";
 
 	var layerLoadCount = 0;
@@ -179,17 +186,7 @@ function createMapAddLayers(myService1, myService2) {
 		getActivities(false);
 		getStructures(false);
 	});
-	/*
-	 dojo.connect(map,'onLayersAddResult',function(results){
-         //add the legend
-          var legend = new esri.dijit.Legend({
-            map:map,
-            layerInfos:[{layer:povertyratesmap,title:"Poverty"}],
-            arrangement:esri.dijit.Legend.ALIGN_RIGHT
-          },"legendDiv");
-          legend.startup();
-     });
-	*/
+	
 	navToolbar = new esri.toolbars.Navigation(map);
 	dojo.connect(navToolbar, "onExtentHistoryChange",
 			extentHistoryChangeHandler);
@@ -199,9 +196,16 @@ function createMapAddLayers(myService1, myService2) {
 
 	map.addLayer(myService1);
 	map.addLayer(myService2);
-	map.addLayer(bordermap);
-	map.addLayer(populationmap);
-	map.addLayer(povertyratesmap);	
+	
+	if (bordermap){
+		map.addLayer(bordermap);
+	}
+	if (populationmap){
+		map.addLayer(populationmap);
+	}
+	if (povertyratesurl){
+		map.addLayer(povertyratesmap);
+	}
 	//dojo.connect(map, "onExtentChange", showExtent);
 	
 	createBasemapGalleryEsri();

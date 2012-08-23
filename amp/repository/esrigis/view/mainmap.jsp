@@ -410,20 +410,14 @@
         	<table id="sourceheader" width="95%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
         		<tbody>
 					<tr>
-						<td valign="top" style="font-weight: bolder;width: 350px;">
+						<td valign="top" style="font-weight: bolder;width: 590px;">
 							<digi:trn>Activity Name</digi:trn>
 						</td>
-						<td valign="top" style="font-weight: bolder;width: 100px;">
+						<td valign="top" style="font-weight: bolder;width: 160px;">
 							<digi:trn>Activity Id</digi:trn>
 						</td>
 						<td valign="top" style="font-weight: bolder;">
 							<digi:trn>Donors</digi:trn>
-						</td>
-						<td valign="top" style="font-weight: bolder;">
-							<digi:trn>Commitments</digi:trn>
-						</td>
-						<td valign="top" style="font-weight: bolder;">
-							<digi:trn>Disbursements</digi:trn>
 						</td>
 					</tr>
 				</tbody>

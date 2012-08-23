@@ -166,7 +166,7 @@ function filldatasourcetable(){
 	var table = document.getElementById("sourcecontent");
 	var rowCount = table.rows.length;
     var cell;
-    var strlength = 45;  // set to the number of characters you want to keep
+    var strlength = 100;  // set to the number of characters you want to keep
     var trimmedPathname;
     var donors='';
     
@@ -195,11 +195,11 @@ function filldatasourcetable(){
     	cell1.innerHTML= donors;
     	cell1.setAttribute("width","120px");
     	
-    	cell1 = row.insertCell(3);
-    	cell1.innerHTML= activitiesarray[int].commitments;
+    	//cell1 = row.insertCell(3);
+    	//cell1.innerHTML= activitiesarray[int].commitments;
     	
-    	cell3 = row.insertCell(4);
-    	cell3.innerHTML= activitiesarray[int].disbursements;
+    	//cell3 = row.insertCell(4);
+    	//cell3.innerHTML= activitiesarray[int].disbursements;
     }
 }
 
@@ -208,7 +208,7 @@ function filldatasourcetablenational(){
 	var table = document.getElementById("sourcecontent");
 	var rowCount = table.rows.length;
     var cell;
-    var strlength = 45;  // set to the number of characters you want to keep
+    var strlength = 100;  // set to the number of characters you want to keep
     var trimmedPathname;
     var donors='';
     
@@ -237,11 +237,10 @@ function filldatasourcetablenational(){
     	cell1.innerHTML= donors;
     	cell1.setAttribute("width","120px");
     	
-    	cell1 = row.insertCell(3);
-    	cell1.innerHTML= nationalactivitiesarray[int].commitments;
-    	
-    	cell3 = row.insertCell(4);
-    	cell3.innerHTML= nationalactivitiesarray[int].disbursements;
+    	//cell1 = row.insertCell(3);
+    	//cell1.innerHTML= nationalactivitiesarray[int].commitments;
+    	//cell3 = row.insertCell(4);
+    	//cell3.innerHTML= nationalactivitiesarray[int].disbursements;
     }
 }
 

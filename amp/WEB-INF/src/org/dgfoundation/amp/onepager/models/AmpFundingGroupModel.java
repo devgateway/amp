@@ -24,7 +24,9 @@ public class AmpFundingGroupModel implements IModel<Set<AmpOrganisation>> {
 	public Set<AmpOrganisation> getObject() {
 		HashSet<AmpOrganisation> orgsSet = new HashSet<AmpOrganisation>();
 		Set<AmpFunding> fSet = model.getObject();
-		Iterator<AmpFunding> fSetIt = fSet.iterator();
+		if(fSet == null)
+			return orgsSet;
+		Iterator<AmpFunding> fSetIt = fSet.iterator();		
 		while (fSetIt.hasNext()) {
 			AmpFunding funding = (AmpFunding) fSetIt.next();
 			orgsSet.add(funding.getAmpDonorOrgId());

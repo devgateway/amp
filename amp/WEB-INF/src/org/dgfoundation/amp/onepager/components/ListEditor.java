@@ -69,7 +69,8 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 		if (set == null)
 			set = new HashSet<T>();
 		set.clear();
-		set.addAll(items);
+		if(items != null)
+		   set.addAll(items);
 		//setObject last, in order to work with custom set models
 		model.setObject(set);
 	}

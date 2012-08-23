@@ -197,6 +197,8 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				else 
 					aap.setProgramPercentage(100f); 
 				
+				if (setModel.getObject() == null)
+					setModel.setObject(new HashSet<AmpActivityProgram>());
 				setModel.getObject().add(aap);
 
 				list.removeAll();

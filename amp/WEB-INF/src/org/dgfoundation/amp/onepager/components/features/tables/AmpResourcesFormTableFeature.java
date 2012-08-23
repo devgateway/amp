@@ -136,6 +136,8 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                 List<TemporaryDocument> ret = new ArrayList<TemporaryDocument>();
                 ret.addAll(existingTmpDocs);
 
+                if (am.getObject().getActivityDocuments() == null)
+        			am.getObject().setActivityDocuments(new HashSet<AmpActivityDocument>());
 				Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
 
 				while (it.hasNext()) {

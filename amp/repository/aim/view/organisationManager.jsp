@@ -122,7 +122,7 @@
 						<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 							<jsp:include page="teamSetupMenu.jsp" flush="true"/>
 					
-					<table style="width:100%;">
+					<table style="width:97%;">
 					</c:if>
 					<tr>
 						<td width="250"><digi:trn key="aim:orgManagerType">Type</digi:trn>&nbsp;
@@ -179,10 +179,10 @@
 					</tr>
 
 					<tr>
-						<td noWrap width=867 vAlign="top" colspan="7">
+						<td noWrap vAlign="top" colspan="7">
 							<table width="100%" cellspacing="0" cellpadding="0">
 								<tr>
-									<td noWrap width=750 vAlign="top">
+									<td noWrap vAlign="top">
 										<table bgColor=#ffffff cellpadding="0" cellspacing="0"
 											width="100%">
 
@@ -316,7 +316,7 @@
 																								</c:if>
 																							</td>
 																							<c:if test="${!aimOrgManagerForm.adminSide}">
-																							<td class="inside" bgcolor=#F2F2F2> &nbsp;
+																							<td class="inside" bgcolor=#F2F2F2>&nbsp; 
 																							</td>
 																							</c:if>
 																						</tr>

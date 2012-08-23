@@ -131,7 +131,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 								GlobalSettingsConstants.MIXED_IMPLEMENTATION_LOCATION);
 						if ("false".equals(mixedImplementationLocation)){
 							Set<AmpActivityLocation> set = locationsTable.getSetModel().getObject();
-							if(set.size()>0) {
+							if(set!=null && set.size()>0) {
 								locationsTable.getSetModel().getObject().clear();
 								locationsTable.getList().removeAll();
 								target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));

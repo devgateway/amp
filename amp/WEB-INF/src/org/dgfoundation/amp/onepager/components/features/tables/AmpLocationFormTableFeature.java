@@ -311,6 +311,10 @@ public class AmpLocationFormTableFeature extends
 				}
 
 				activityLocation.setActivity(am.getObject());
+				
+				if (setModel.getObject() == null)
+					setModel.setObject(new HashSet<AmpActivityLocation>());
+				
 				Set<AmpActivityLocation> set = setModel.getObject();
 				set.add(activityLocation);
 				// toggleHeading(target, setModel.getObject());

@@ -69,7 +69,7 @@ function showUser(email){
 									<jsp:include page="teamSetupMenu.jsp"  />
 										
 
-							<table class="inside" width="100%" cellpadding="0" cellspacing="0">
+							<table class="inside" width="970" cellpadding="0" cellspacing="0">
 								<tr>
 							    <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">
 							    	<b class="ins_title">

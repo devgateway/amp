@@ -140,7 +140,7 @@
 										<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>
 									</div>
 						
-									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0">									
+									<table class="inside normal" cellpadding="0" cellspacing="0" width=970>									
 									
 									
 										<tr style="border-top:1px solid #cccccc;border-bottom:1px solid #cccccc;">

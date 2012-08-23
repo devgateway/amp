@@ -231,7 +231,7 @@
 										</tr>
 										<tr>
                                         <td style="background:#ccc;">
-                                        	<table cellpadding="1" cellspacing="1" border="0" width="100%"style="background:none;border:none;">
+                                        	<table cellpadding="1" cellspacing="1" border="0" width="970" style="background:none;border:none;">
                                             	<tr>
                                                 <td width="5" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"  style="border:none;width:25px;border-left:none;" >
 									  		<input type="checkbox" id="checkAll">

@@ -192,6 +192,24 @@ public class ExportActivityToPDF extends Action {
 				columnName=TranslatorWorker.translateText("AMP ID",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,activity.getAmpId());
 			}
+
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason", ampContext)){
+				columnName=TranslatorWorker.translateText("Status",request);
+				columnVal="";
+				catVal = null;
+				Long statusId = myForm.getIdentification().getStatusId();
+				if(statusId!=null && statusId!=0){
+					catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(statusId);
+				}					
+				if(catVal!=null){
+					columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+				}
+				if(myForm.getIdentification().getStatusReason() != null){
+					columnVal += myForm.getIdentification().getStatusReason();
+				}
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
+			
 			//contract Number
 			if(FeaturesUtil.isVisibleField("Contract Number", ampContext)){
 				columnName=TranslatorWorker.translateText("Contract Number",locale,siteId);

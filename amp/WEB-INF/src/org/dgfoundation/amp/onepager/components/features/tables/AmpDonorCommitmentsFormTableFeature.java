@@ -112,6 +112,8 @@ public class AmpDonorCommitmentsFormTableFeature extends
 						super.onClick(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.add(parent.getFundingInfo());
+						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 					};
 				});
 			}

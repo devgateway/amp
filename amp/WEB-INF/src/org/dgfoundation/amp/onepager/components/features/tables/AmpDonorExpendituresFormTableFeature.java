@@ -97,7 +97,8 @@ public class AmpDonorExpendituresFormTableFeature extends
 						amountSumComparator.reloadValidationField(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.add(parent.getFundingInfo());
-						
+						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 						
 						parent.visitChildren(AmpCollectionValidatorField.class,
 								new IVisitor<AmpCollectionValidatorField, Void>() {

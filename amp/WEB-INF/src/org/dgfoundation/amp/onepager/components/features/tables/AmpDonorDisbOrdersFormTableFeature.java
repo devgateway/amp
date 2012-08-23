@@ -9,6 +9,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
@@ -75,6 +76,8 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 						super.onClick(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.add(parent.getFundingInfo());
+						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 					};
 				});
 			}

@@ -165,6 +165,8 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						super.onClick(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.add(parent.getFundingInfo());
+						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
+						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 						updateModel();
 						
 						parent.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>(){

@@ -150,7 +150,7 @@ function trim(stringToTrim) {
 							<jsp:include page="teamSetupMenu.jsp" flush="true"/>
 
 								<c:if test="${subtabId == 0 }">
-									<table class="inside" width="100%" cellpadding="0" cellspacing="0">
+									<table class="inside" width="970" cellpadding="0" cellspacing="0">
 										<tr>
 										    <td width=30% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Team name</digi:trn></b></td>
 										    <td width=40% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Team Description</digi:trn></b></td>

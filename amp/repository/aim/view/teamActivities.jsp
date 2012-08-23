@@ -194,7 +194,7 @@
 									</c:if>	
 									<jsp:include page="teamSetupMenu.jsp"  />
 									
-									<table class="inside normal" width="100%" cellpadding="0" cellspacing="0" style="border:none;">
+									<table class="inside normal" width="970" cellpadding="0" cellspacing="0" style="border:none;">
 										<tr>
 											<td>
 												<table>

@@ -149,7 +149,7 @@ function addTeamMember(id) {
 											</div>
 
 										
-										<table class="inside members normal" width="100%" cellpadding="0" cellspacing="0">
+										<table class="inside members normal" width="970" cellpadding="0" cellspacing="0">
 											<tr>
 											  	<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside">&nbsp;</td>
 											    <td width=50% background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Name</digi:trn></b></td>

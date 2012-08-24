@@ -158,6 +158,9 @@ public class AmpDonorFundingFormSectionFeature extends
 					fg.getList().addItem(funding);
 				}
 				else{
+					if (fundingModel.getObject() == null)
+						fundingModel.setObject(new LinkedHashSet<AmpFunding>());
+					
 					fundingModel.getObject().add(funding);
 					super.addItem(org);
 				}

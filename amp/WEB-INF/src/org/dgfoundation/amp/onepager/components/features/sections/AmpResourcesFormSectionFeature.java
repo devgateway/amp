@@ -69,6 +69,9 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 			@Override
 			public void onSelect(AjaxRequestTarget target, NodeWrapper choice) {
 				Set<AmpActivityDocument> existingActDocs = am.getObject().getActivityDocuments();
+				if (am.getObject().getActivityDocuments() == null)
+					am.getObject().setActivityDocuments(new HashSet<AmpActivityDocument>());
+				
 				boolean docExists = false;
 				
 				if(choice.getUuid() != null){

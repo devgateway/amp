@@ -41,6 +41,9 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 	}
 	
 	public final void origAddItem(T value){
+		
+		if(items == null)
+			items = new ArrayList<T>();
 		items.add(value);
 		ListItem<T> item = new ListItem<T>(newChildId(), 
 				items.size() - 1);

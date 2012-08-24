@@ -270,6 +270,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 				target.appendJavaScript("YAHOO.util.Dom.get('"
 						+ indicator.getMarkupId() + "').style.display = 'none';");
 				CHOICE choice = getSelectedChoice(DbUtil.deFilter(selectedString, false));
+				
 				onSelect(target, choice);
 			}
 		};

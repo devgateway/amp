@@ -88,6 +88,10 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 				AmpActivityInternalId activityInternalId = new AmpActivityInternalId();
 				activityInternalId.setOrganisation(choice);
 				activityInternalId.setAmpActivity(am.getObject());
+				
+				if (setModel.getObject() == null)
+					setModel.setObject(new HashSet<AmpActivityInternalId>());
+				
 				Set<AmpActivityInternalId> set = setModel.getObject();
 				set.add(activityInternalId);
 				idsList.removeAll();

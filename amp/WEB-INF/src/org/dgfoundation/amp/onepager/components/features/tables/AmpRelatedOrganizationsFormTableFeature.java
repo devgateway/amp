@@ -204,6 +204,10 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 					ampOrgRole.setPercentage(0d);
 				else 
 					ampOrgRole.setPercentage(100d);
+				
+				if (setModel.getObject() == null)
+					setModel.setObject(new HashSet<AmpOrgRole>());
+				
 				setModel.getObject().add(ampOrgRole);
 				uniqueCollectionValidationField.reloadValidationField(target);
 				list.removeAll();

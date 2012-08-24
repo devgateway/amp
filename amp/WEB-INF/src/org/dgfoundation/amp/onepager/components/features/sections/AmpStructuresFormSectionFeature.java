@@ -5,7 +5,6 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -36,7 +35,7 @@ public class AmpStructuresFormSectionFeature extends
 		super(id, fmName, am);
 		final PropertyModel<Set<AmpStructure>> setModel=new PropertyModel<Set<AmpStructure>>(am,"structures");
 		if (setModel.getObject() == null)
-			setModel.setObject(new TreeSet());
+			setModel.setObject(new TreeSet<AmpStructure>());
 		final ListView<AmpStructure> list;
 
 		
@@ -66,6 +65,9 @@ public class AmpStructuresFormSectionFeature extends
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				AmpStructure stru = new AmpStructure();
+				if (setModel.getObject() == null)
+					setModel.setObject(new TreeSet<AmpStructure>());
+
 				setModel.getObject().add(stru);
 				target.add(this.getParent());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));

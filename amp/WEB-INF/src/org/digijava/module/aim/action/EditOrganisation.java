@@ -300,6 +300,9 @@ public class EditOrganisation extends DispatchAction {
           editForm.setSectors(activitySectors);
       }
       
+      if (organization.getAmpSecSchemeId() != null) {
+          editForm.setAmpSecSchemeId(organization.getAmpSecSchemeId().getAmpSecSchemeId());
+      }
       
       if (organization.getAmpFiscalCalId() != null) {
           editForm.setFiscalCalId(organization.getAmpFiscalCalId().getAmpFiscalCalId());
@@ -1191,7 +1194,10 @@ public class EditOrganisation extends DispatchAction {
       organization.setOrgUrl(editForm.getOrgUrl());
       organization.setPrimaryPurpose(editForm.getOrgPrimaryPurpose());
 
-     
+      Long schemeId = editForm.getAmpSecSchemeId();
+      if(schemeId != null && schemeId > 0){
+    	  organization.setAmpSecSchemeId(DbUtil.getAmpSectorSchemeById(schemeId));
+      }
 
       // staff information
       if (organization.getStaffInfos() == null) {

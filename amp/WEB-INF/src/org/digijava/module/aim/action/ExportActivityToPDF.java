@@ -182,7 +182,7 @@ public class ExportActivityToPDF extends Action {
 			titleCell.setBackgroundColor(new Color(0,102,153));
 			mainLayout.addCell(titleCell);			
 			//activity name cells
-			if(FeaturesUtil.isVisibleField("Project Title", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Title", ampContext)){
 				columnName=TranslatorWorker.translateText("Activity Name",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,activity.getName());
 			}
@@ -216,13 +216,13 @@ public class ExportActivityToPDF extends Action {
 				createGeneralInfoRow(mainLayout,columnName,activity.getConvenioNumcont());
 			}
 			//project comments
-			if(FeaturesUtil.isVisibleField("Project Comments", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments", ampContext)){
 				columnName=TranslatorWorker.translateText("Project Comments",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectComments()));
 			}			
 			
 			//objective
-			if(FeaturesUtil.isVisibleField("Objective", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective", ampContext)){
 				columnName=TranslatorWorker.translateText("Objectives",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getObjective()));
 			}
@@ -277,51 +277,57 @@ public class ExportActivityToPDF extends Action {
 				mainLayout.addCell(objectiveCommentsCell2);
 			}
 			//Description cell
-			if(FeaturesUtil.isVisibleField("Description", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Description", ampContext)){
 				columnName=TranslatorWorker.translateText("Description",locale,siteId);				
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getDescription()));
 			}
 			//Lessons learned
-			if(FeaturesUtil.isVisibleField("Lessons Learned", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext)){
 				columnName=TranslatorWorker.translateText("Lessons Learned",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getLessonsLearned()));
 			}
 			//Project Impact
-			if(FeaturesUtil.isVisibleField("Project Impact", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Impact", ampContext)){
 				columnName=TranslatorWorker.translateText("Project Impact",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectImpact()));
 			}
 			//Activity Summary
-			columnName=TranslatorWorker.translateText("Activity Summary",locale,siteId);
-			createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getActivitySummary()));
-			
+			if(activity.getActivitySummary()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Summary", ampContext)){
+				columnName=TranslatorWorker.translateText("Activity Summary",locale,siteId);
+				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getActivitySummary()));
+			}
 			//Contracting Arrangements
-			columnName=TranslatorWorker.translateText("Contracting Arrangements",locale,siteId);
-			columnVal=processEditTagValue(request, activity.getContractingArrangements());
-			createGeneralInfoRow(mainLayout,columnName,columnVal);
-			
+			if(activity.getContractingArrangements()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Contracting Arrangements", ampContext)){
+				columnName=TranslatorWorker.translateText("Contracting Arrangements",locale,siteId);
+				columnVal=processEditTagValue(request, activity.getContractingArrangements());
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
 			//Conditionality and Sequencing
-			columnName=TranslatorWorker.translateText("Conditionality and Sequencing",locale,siteId);
-			columnVal=processEditTagValue(request, activity.getCondSeq());
-			createGeneralInfoRow(mainLayout,columnName,columnVal);
-			
+			if(activity.getCondSeq()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionality and Sequencing", ampContext)){			
+				columnName=TranslatorWorker.translateText("Conditionality and Sequencing",locale,siteId);
+				columnVal=processEditTagValue(request, activity.getCondSeq());
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}			
 			//Linked Activities
-			columnName=TranslatorWorker.translateText("Linked Activities",locale,siteId);
-			columnVal=processEditTagValue(request, activity.getLinkedActivities());
-			createGeneralInfoRow(mainLayout,columnName,columnVal);
-			
+			if(activity.getLinkedActivities()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Linked Activities", ampContext)){			
+				columnName=TranslatorWorker.translateText("Linked Activities",locale,siteId);
+				columnVal=processEditTagValue(request, activity.getLinkedActivities());
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
 			//Conditionalities
-			columnName=TranslatorWorker.translateText("Conditionalities",locale,siteId);
-			columnVal=processEditTagValue(request, activity.getConditionality());
-			createGeneralInfoRow(mainLayout,columnName,columnVal);
-			
+			if(activity.getConditionality()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionalities", ampContext)){
+				columnName=TranslatorWorker.translateText("Conditionalities",locale,siteId);
+				columnVal=processEditTagValue(request, activity.getConditionality());
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
 			//Project Management
-			columnName=TranslatorWorker.translateText("Project Management",locale,siteId);
-			columnVal=processEditTagValue(request, activity.getProjectManagement());
-			createGeneralInfoRow(mainLayout,columnName,columnVal);
-			
+			if(activity.getProjectManagement()!= null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Management", ampContext)){
+				columnName=TranslatorWorker.translateText("Project Management",locale,siteId);
+				columnVal=processEditTagValue(request, activity.getProjectManagement());
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
 			//Purpose cell
-			if(FeaturesUtil.isVisibleField("Purpose", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Purpose", ampContext)){
 				columnName=TranslatorWorker.translateText("Purpose",locale,siteId);
 				columnVal=processEditTagValue(request, activity.getPurpose());
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
@@ -412,7 +418,7 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 * Accession Instrument cell
 			 */
-			if(FeaturesUtil.isVisibleField("Accession Instrument", ampContext)){				
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Accession Instrument", ampContext)){				
 				if(myForm.getIdentification().getAccessionInstrument()!=null && myForm.getIdentification().getAccessionInstrument().longValue()>0){
 					columnName=TranslatorWorker.translateText("Accession Instrument",locale,siteId);
 					catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getIdentification().getAccessionInstrument());
@@ -424,7 +430,7 @@ public class ExportActivityToPDF extends Action {
 			}			
 			
 			// A.C. Chapter cell
-			if(FeaturesUtil.isVisibleField("A.C. Chapter", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/A.C. Chapter", ampContext)){
 				if(myForm.getIdentification().getAcChapter()!=null && myForm.getIdentification().getAcChapter().longValue()>0){
 					columnName=TranslatorWorker.translateText("A.C. Chapter",locale,siteId);
 					catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getIdentification().getAcChapter());
@@ -436,13 +442,13 @@ public class ExportActivityToPDF extends Action {
 			}			
 			
 			//Cris Number
-			if(FeaturesUtil.isVisibleField("Cris Number", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Cris Number", ampContext)){
 				columnName=TranslatorWorker.translateText("Cris Number",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,activity.getCrisNumber());
 			}			
 			
 			//Project Category	
-			if(FeaturesUtil.isVisibleField("Project Category", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Category", ampContext)){
 				if(myForm.getIdentification().getProjectCategory()!=null && myForm.getIdentification().getProjectCategory().longValue()>0){
 					columnName=TranslatorWorker.translateText("Project Category",locale,siteId);
 					catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getIdentification().getProjectCategory());
@@ -472,7 +478,7 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 * Humanitarian Aid
 			 */
-			if(FeaturesUtil.isVisibleField("Humanitarian Aid", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid", ampContext)){
 				String value="";
 				if(activity.getHumanitarianAid()!=null && activity.getHumanitarianAid()){
 					value="Yes";

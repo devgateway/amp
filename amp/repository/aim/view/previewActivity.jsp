@@ -662,26 +662,28 @@ function collapseAll() {
 			</module:display>
 					
 			<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
-			<module:display name="/Activity Form/Identification/Project Impact" parentModule="/Activity Form/Identification">
-				<logic:present name="aimEditActivityForm" property="identification.projectImpact">
-					<bean:define id="boldText" toScope="request" value="true"/>
-					<bean:define id="useColonInLabel" toScope="request" value="true"/>
-					<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
-					<bean:define id="largeTextKey" toScope="request">
-						<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
-					</bean:define>
-					<jsp:include page="largeTextPropertyView.jsp" />
-				</logic:present>
-			</module:display>
+			<logic:present name="aimEditActivityForm" property="identification.projectImpact">
+				<bean:define id="moduleName" value="/Activity Form/Identification/Project Impact" toScope="request"/>
+				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
+				<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
+				<bean:define id="largeTextKey" toScope="request">
+					<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
+				</bean:define>
+				<jsp:include page="largeTextPropertyView.jsp" />
+			</logic:present>
 			
-			<logic:present name="aimEditActivityForm" property="identification.activitySummary">
+		 	<logic:present name="aimEditActivityForm" property="identification.activitySummary"> 
+				<bean:define id="moduleName" value="/Activity Form/Identification/Activity Summary" toScope="request"/>
+				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
 					<c:out value="${aimEditActivityForm.identification.activitySummary}"/>
 				</bean:define>
 				<jsp:include page="largeTextPropertyView.jsp" />
-			</logic:present>
+		 	</logic:present> 
 			<logic:present name="aimEditActivityForm" property="identification.contractingArrangements">
+				<bean:define id="moduleName" value="/Activity Form/Identification/Contracting Arrangements" toScope="request"/>
+				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Contracting Arrangements" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
 					<c:out value="${aimEditActivityForm.identification.contractingArrangements}"/>
@@ -689,6 +691,8 @@ function collapseAll() {
 				<jsp:include page="largeTextPropertyView.jsp" />
 			</logic:present>
 			<logic:present name="aimEditActivityForm" property="identification.condSeq">
+				<bean:define id="moduleName" value="/Activity Form/Identification/Conditionality and Sequencing" toScope="request"/>
+				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Conditionality and Sequencing" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
 					<c:out value="${aimEditActivityForm.identification.condSeq}" />
@@ -696,6 +700,8 @@ function collapseAll() {
 				<jsp:include page="largeTextPropertyView.jsp" />
 			</logic:present>
 			<logic:present name="aimEditActivityForm" property="identification.linkedActivities">
+				<bean:define id="moduleName" value="/Activity Form/Identification/Linked Activities" toScope="request"/>
+				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Linked Activities" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
 					<c:out value="${aimEditActivityForm.identification.linkedActivities}"/>
@@ -703,6 +709,8 @@ function collapseAll() {
 				<jsp:include page="largeTextPropertyView.jsp" />
 			</logic:present>
 			<logic:present name="aimEditActivityForm" property="identification.conditionality">
+				<bean:define id="moduleName" value="/Activity Form/Identification/Conditionalities" toScope="request"/>
+				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Conditionalities" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
 					<c:out value="${aimEditActivityForm.identification.conditionality}"/>
@@ -710,6 +718,8 @@ function collapseAll() {
 				<jsp:include page="largeTextPropertyView.jsp" />
 			</logic:present>
 			<logic:present name="aimEditActivityForm" property="identification.projectManagement">
+				<bean:define id="moduleName" value="/Activity Form/Identification/Project Management" toScope="request"/>
+				<bean:define id="parentModule" value="/Activity Form/Identification" toScope="request"/>
 				<bean:define id="largeTextLabel" value="Project Management" toScope="request"/>
 				<bean:define id="largeTextKey" toScope="request">
 					<c:out value="${aimEditActivityForm.identification.projectManagement}"/>
@@ -822,14 +832,14 @@ function collapseAll() {
 			</module:display>
 			
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-			<field:display name="Project Implementing Unit" feature="Identification">
+			<module:display name="/Activity Form/Identification/Project Implementing Unit" parentModule="/Activity Form/Identification">
 			
 				<digi:trn>Project Implementing Unit</digi:trn><br />
 				<c:if test="${aimEditActivityForm.identification.projectImplUnitId > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectImplUnitId}"/></b>
 				</c:if> 
 				<hr/>
-			</field:display>
+			</module:display>
 					 
 			<module:display name="/Activity Form/Identification/A.C. Chapter" parentModule="/Activity Form/Identification">
 				<digi:trn>A.C. Chapter</digi:trn><br />
@@ -877,18 +887,18 @@ function collapseAll() {
 			</module:display>
 							
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-			<field:display name="Project Category" feature="Identification">
+			<module:display name="/Activity Form/Identification/Project Category" parentModule="/Activity Form/Identification">
 				<digi:trn>Project Category</digi:trn><br />
 				<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
 					<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/></b>
 				</c:if>
 					<hr />	
-			</field:display>
+			</module:display>
 						 
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-			<field:display name="Government Agreement Number" feature="Identification">
+			<module:display name="/Activity Form/Identification/Government Agreement Number" parentModule="/Activity Form/Identification">
 				<digi:trn>Government Agreement Number</digi:trn>:&nbsp;<br />
-				<b><c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/></b><hr /></field:display>
+				<b><c:out value="${aimEditActivityForm.identification.govAgreementNumber}"/></b><hr /></module:display>
 	</module:display>
 	<!-- END IDENTIFICATION SECTION -->
 	<!-- BUDGET SECTION -->

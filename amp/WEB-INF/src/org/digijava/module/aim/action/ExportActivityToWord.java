@@ -923,7 +923,7 @@ public class ExportActivityToWord extends Action {
 			applyEmptyCell(identificationSubTable1);
 		}
 		
-		if(FeaturesUtil.isVisibleField("Lessons Learned", ampContext)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext)){
 			columnName=TranslatorWorker.translateText("Lessons Learned",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,identification.getLessonsLearned(),null);
 			applyEmptyCell(identificationSubTable1);
@@ -935,37 +935,37 @@ public class ExportActivityToWord extends Action {
 			applyEmptyCell(identificationSubTable1);
 		}
 		
-		if(identification.getActivitySummary() !=null){
+		if(identification.getActivitySummary() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Summary", ampContext)){
 			columnName=TranslatorWorker.translateText("Activity Summary",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getActivitySummary()),null);
 			applyEmptyCell(identificationSubTable1);
 		}
 		
-		if(identification.getContractingArrangements() !=null){
+		if(identification.getContractingArrangements() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Contracting Arrangements", ampContext)){
 			columnName=TranslatorWorker.translateText("Contracting Arrangements",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getContractingArrangements()),null);
 			applyEmptyCell(identificationSubTable1);
 		}
 		
-		if(identification.getCondSeq() !=null){
+		if(identification.getCondSeq() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionality and Sequencing", ampContext)){
 			columnName=TranslatorWorker.translateText("Conditionality and Sequencing",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getCondSeq()),null);
 			applyEmptyCell(identificationSubTable1);
 		}
 		
-		if(identification.getLinkedActivities() !=null){
+		if(identification.getLinkedActivities() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Linked Activities", ampContext)){
 			columnName=TranslatorWorker.translateText("Linked Activities",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getLinkedActivities()),null);
 			applyEmptyCell(identificationSubTable1);
 		}
 		
-		if(identification.getConditionality() !=null){
+		if(identification.getConditionality() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionalities", ampContext)){
 			columnName=TranslatorWorker.translateText("Conditionalities",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getConditionality()),null);
 			applyEmptyCell(identificationSubTable1);
 		}
 		
-		if(identification.getProjectManagement() !=null){
+		if(identification.getProjectManagement() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Management", ampContext)){
 			columnName=TranslatorWorker.translateText("Project Management",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getProjectManagement()),null);
 			applyEmptyCell(identificationSubTable1);
@@ -1028,7 +1028,7 @@ public class ExportActivityToWord extends Action {
 			applyEmptyCell(identificationSubTable1);
 		}	
 		
-		if(FeaturesUtil.isVisibleField("Project Implementing Unit", ampContext)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Implementing Unit", ampContext)){
 			columnName=TranslatorWorker.translateText("Project Implementing Unit",request);
 			columnVal="";
 			catVal = null;
@@ -1123,7 +1123,7 @@ public class ExportActivityToWord extends Action {
 			applyEmptyCell(identificationSubTable1);
 		}
 		
-		if(FeaturesUtil.isVisibleField("Project Category", ampContext)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Category", ampContext)){
 			columnName=TranslatorWorker.translateText("Project Category",request);
 			columnVal="";
 			catVal = null;
@@ -1137,7 +1137,7 @@ public class ExportActivityToWord extends Action {
 			applyEmptyCell(identificationSubTable1);
 		}
 		
-		if(FeaturesUtil.isVisibleField("Government Agreement Number", ampContext)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Agreement Number", ampContext)){
 			columnName=TranslatorWorker.translateText("Government Agreement Number",request);
 			columnVal="";
 			catVal = null;

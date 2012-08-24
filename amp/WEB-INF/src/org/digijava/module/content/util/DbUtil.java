@@ -155,8 +155,11 @@ public class DbUtil {
 					.iterator();
 			while (itr.hasNext()) {
                 AmpContentItemThumbnail delItem = itr.next();
-                Query q = sess.createQuery("delete from " + AmpContentItemThumbnail.class.getName() + " where ampContentItemThumbnailId = " + String.valueOf(delItem.getAmpContentItemThumbnailId().longValue()));
-                q.executeUpdate();
+                                
+                if (delItem.getAmpContentItemThumbnailId() != null){
+	                Query q = sess.createQuery("delete from " + AmpContentItemThumbnail.class.getName() + " where ampContentItemThumbnailId = " + String.valueOf(delItem.getAmpContentItemThumbnailId().longValue()));
+	                q.executeUpdate();
+                }
 				//sess.delete(delItem);
 			}
 			//tx.commit();
@@ -164,12 +167,12 @@ public class DbUtil {
 			if (e instanceof JDBCException)
 				throw (JDBCException) e;
 			logger.error("Exception " + e.toString());
-			try {
-				tx.rollback();
-			} catch (HibernateException ex) {
-				logger.error("rollback() failed");
-				logger.error(ex.toString());
-			}
+//			try {
+//				tx.rollback();
+//			} catch (HibernateException ex) {
+//				logger.error("rollback() failed");
+//				logger.error(ex.toString());
+//			}
 		} 
 
 	}

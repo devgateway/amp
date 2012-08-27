@@ -3,6 +3,15 @@ dojo.require("dojox.lang.functional.lambda");
 dojo.require("dojox.lang.functional.curry");
 dojo.require("dojox.lang.functional.fold");
 
+var checkInitialization = function() {
+	if(typeof esri == "undefined")
+		setTimeout(checkInitialization , 2000);
+	else
+		clusterModule();
+}
+
+var clusterModule = function() {
+
 dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
 
     constructor: function(options) {
@@ -426,3 +435,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
         hideLoading();
     }
 });
+
+}
+
+checkInitialization();

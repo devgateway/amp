@@ -14,10 +14,9 @@
 	<tr>
 		<td width=14>&nbsp;
 		</td>
-		<td align=left valign="top" width=520><br>
+		<td align=left valign="top" width=1000><br>
 			<table border="0" cellPadding=5 cellspacing="0" width="100%">
 				<tr>
-					<td width="3%">&nbsp;</td>
 					<td align=left class=title noWrap colspan="2">
 						<b>
 						<digi:trn key="aim:newUserRegistrationSuccess">Congratulations, your AMP registration was successful. The next step is to contact your AMP Software Administrator so that you can be assigned to a workspace.</digi:trn>
@@ -25,9 +24,6 @@
 					</td>
 				</tr>
 			</table>
-		</td>
-		<td bgColor=#f7f7f4 valign="top">
-
 		</td>
 	</tr>
 </table>

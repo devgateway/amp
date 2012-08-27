@@ -213,7 +213,7 @@
 							<c:if test="${aimEditActivityForm.funding.showPlanned}">
 	                        <tr>
 	                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase;">
-	                            	<digi:trn key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS: </digi:trn>
+	                            	<digi:trn key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS </digi:trn>:
 	                            </td>
 	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
 	                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
@@ -230,7 +230,7 @@
                         <tr>
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB; text-transform: uppercase"><digi:trn
-                                key='aim:totalactualcommittment'> TOTAL ACTUAL COMMITMENTS: </digi:trn>
+                                key='aim:totalactualcommittment'> TOTAL ACTUAL COMMITMENTS </digi:trn>:
                             </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB">
@@ -246,7 +246,7 @@
                         <c:if test="${aimEditActivityForm.funding.showPipeline}">
 						<tr>
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase"><digi:trn
-                                key='aim:totalactualcommittment'> TOTAL PIPELINE COMMITMENTS: </digi:trn>
+                                key='aim:totalactualcommittment'> TOTAL PIPELINE COMMITMENTS </digi:trn>:
                             </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
                                 <c:if test="${not empty aimEditActivityForm.funding.totalPipelineCommitments}">
@@ -265,8 +265,8 @@
                         <tr>
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
                             	<digi:trn key='aim:totalplanneddisbursement'>
-                                TOTAL PLANNED DISBURSEMENT:	
-                                </digi:trn>
+                                TOTAL PLANNED DISBURSEMENT	
+                                </digi:trn>:
                             </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB">
@@ -284,7 +284,7 @@
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB"><digi:trn
                                 key='aim:totalActualdisbursement'>
-                                TOTAL ACTUAL DISBURSEMENT </digi:trn>
+                                TOTAL ACTUAL DISBURSEMENT </digi:trn>:
                             </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB">
@@ -305,7 +305,7 @@
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB; text-transform: uppercase"><digi:trn
                                 key="aim:totalActualExpenditures">
-                                  TOTAL PLANNED EXPENDITURES             </digi:trn></td>
+                                  TOTAL PLANNED EXPENDITURES             </digi:trn>: </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB">
                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
@@ -322,7 +322,7 @@
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB; text-transform: uppercase"><digi:trn
                                 key="aim:totalplannedExpenditures">
-                                    TOTAL ACTUAL EXPENDITURES       	 	 </digi:trn></td>
+                                    TOTAL ACTUAL EXPENDITURES       	 	 </digi:trn>: </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB">
                                 
@@ -349,7 +349,7 @@
                                 extension, the amount thus spent. Disbursements record the actual
                                 international transfer of financial resources, or of goods or
                                 services valued at the cost to the donor</digi:trn>'>
-                          TOTAL ACTUAL DISBURSMENT ORDERS </a></digi:trn>
+                          TOTAL ACTUAL DISBURSMENT ORDERS </a></digi:trn>: 
                         </td>
                           <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB; text-transform: uppercase;">
@@ -366,7 +366,7 @@
                       	<tr>
                             <td bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
-                                <digi:trn key="aim:undisbursedBalance"> UNDISBURSED BALANCE</digi:trn>
+                                <digi:trn key="aim:undisbursedBalance"> UNDISBURSED BALANCE</digi:trn>:
                              </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
                                 <c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
@@ -380,7 +380,7 @@
                         </feature:display>
                        <tr>
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
-                                <digi:trn key="aim:undisbursedBalance"> CONSUMPTION RATE</digi:trn></td>
+                                <digi:trn key="aim:undisbursedBalance"> CONSUMPTION RATE</digi:trn>: </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
                             	 <c:if test="${not empty aimEditActivityForm.funding.consumptionRate}">
                                 	<b>${aimEditActivityForm.funding.consumptionRate}</b>
@@ -390,7 +390,7 @@
                         </tr>
                          <tr>
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
-                                <digi:trn>DELIVERY RATE</digi:trn></td>
+                                <digi:trn>DELIVERY RATE</digi:trn>: </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
                                 <c:if test="${not empty aimEditActivityForm.funding.consumptionRate}">
                                 <b>${aimEditActivityForm.funding.deliveryRate}</b>

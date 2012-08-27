@@ -71,7 +71,7 @@
 	</c:if>
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
-			<digi:trn key='aim:subtotalplannedcommittment'> SUBTOTAL PLANNED COMMITMENTS:</digi:trn>
+			<digi:trn key='aim:subtotalplannedcommittment'> SUBTOTAL PLANNED COMMITMENTS</digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
@@ -143,7 +143,7 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-			key='aim:subtotalactualcommittment'> SUBTOTAL ACTUAL COMMITMENTS: </digi:trn>
+			key='aim:subtotalactualcommittment'> SUBTOTAL ACTUAL COMMITMENTS </digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
 			<c:if test="${not empty funding.subtotalActualCommitments}">

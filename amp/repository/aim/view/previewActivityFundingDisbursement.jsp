@@ -92,7 +92,7 @@
 	<tr bgcolor="#ffffff">
 		<td colspan="4" bgcolor="#FFFFCC"
 			style="text-transform: uppercase; text-transform: uppercase"><digi:trn
-			key="aim:actualisbursements">ACTUAL DISBURSEMENT</digi:trn></td>
+			key="aim:actualisbursements">ACTUAL DISBURSEMENT</digi:trn>:</td>
 	</tr>
 
 	<!-- Start Actual Disbursements -->
@@ -144,7 +144,7 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000"><digi:trn
-			key='aim:subtotalActualdisbursement'>SUBTOTAL ACTUAL DISBURSEMENT </digi:trn>
+			key='aim:subtotalActualdisbursement'>SUBTOTAL ACTUAL DISBURSEMENT </digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">

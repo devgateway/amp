@@ -1209,7 +1209,7 @@ function collapseAll() {
 			<table>
 				<tr>
 					<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-						<digi:trn key="aim:level">Implementation Level</digi:trn>					
+						<digi:trn key="aim:level">Implementation Level</digi:trn>:					
 					</td>
 					<td bgcolor="#ffffff">
 						<c:if test="${aimEditActivityForm.location.levelId>0}">
@@ -1223,7 +1223,7 @@ function collapseAll() {
 			<table style="font-size:11px;">
 				<tr>
 					<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-						<digi:trn key="aim:implementationLocation">Implementation Location</digi:trn>					</td>
+						<digi:trn key="aim:implementationLocation">Implementation Location</digi:trn>:					</td>
 					<td bgcolor="#ffffff">
 						<c:if test="${aimEditActivityForm.location.implemLocationLevel>0}">
 							<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.location.implemLocationLevel}"/></b>

@@ -1138,8 +1138,8 @@ function collapseAll() {
 		<div id="locationdiv">
 		<module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
 			<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
-				<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 					<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
+						<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 						<tr>
 							<td width="85%">
 								<c:forEach var="ancestorLoc" items="${selectedLocs.ancestorLocationNames}">
@@ -1154,8 +1154,11 @@ function collapseAll() {
 								</field:display>							
 							</td>
 						</tr>
+						</table>
+						<hr/>
 					</c:forEach>
 					<module:display name="GIS DASHBOARD">
+					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 					<tr>
 						<td colspan="2">
 						<br>
@@ -1189,8 +1192,11 @@ function collapseAll() {
 						</logic:notEmpty>						
 						</td>
 					</tr>
+					</table>
+					<hr/>
 					</module:display>
 					<field:display name="Show Map In Activity Preview" feature="Map Options">
+					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
 					<tr>
 						<td colspan="2">
 							<script type="text/javascript">
@@ -1201,8 +1207,9 @@ function collapseAll() {
 							<jsp:include page="previewmap.jsp"/>						
 						</td>
 					</tr>
+					</table>
+					<hr/>
 					</field:display>
-				</table>
 			</c:if>
 		</module:display>
 		<module:display name="/Activity Form/Location/Implementation Level" parentModule="/Activity Form/Location">
@@ -1218,6 +1225,7 @@ function collapseAll() {
 					</td>
 				</tr>
 			</table>
+			<hr/>
 		</module:display>
 		<module:display name="/Activity Form/Location/Implementation Location" parentModule="/Activity Form/Location">
 			<table style="font-size:11px;">
@@ -1231,6 +1239,7 @@ function collapseAll() {
 					</td>
 				</tr>
 			</table>
+			<hr/>
 		</module:display>
 	</div>
 </fieldset>

@@ -158,8 +158,10 @@ public class DataDispatcher extends DispatchAction {
 				tempArray[i] = secsIds[i];
 				offset = i;
 			}
-			for (int i = 0; i < subSecsIds.length; i++) {
-				tempArray[offset+1+i] = subSecsIds[i];
+			if (subSecsIds != null){
+				for (int i = 0; i < subSecsIds.length; i++) {
+					tempArray[offset+1+i] = subSecsIds[i];
+				}
 			}
 			visualizationForm.getFilter().setSelSectorIds(tempArray);
 		} else {
@@ -190,8 +192,10 @@ public class DataDispatcher extends DispatchAction {
 				tempArray[i] = regsIds[i];
 				offset = i;
 			}
-			for (int i = 0; i < zonesIds.length; i++) {
-				tempArray[offset+1+i] = zonesIds[i];
+			if (zonesIds != null){
+				for (int i = 0; i < zonesIds.length; i++) {
+					tempArray[offset+1+i] = zonesIds[i];
+				}
 			}
 			visualizationForm.getFilter().setSelLocationIds(tempArray);
 		} else {

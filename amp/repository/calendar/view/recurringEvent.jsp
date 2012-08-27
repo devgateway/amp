@@ -286,7 +286,17 @@ function resetRecurrent(){
 	for ( var i = 0; i < rps.length; i++) {
 		rps[i].value = "";
 	}
-	submit();
+	
+	var owd = document.getElementsByName("occurrWeekDays");
+	for ( var i = 0; i < owd.length; i++) {
+		owd[i].checked = false;
+	}
+
+	$("#recSelectedEndHour").val("00");
+	$("#recSelectedEndMinute").val("00");
+	$("#selectedStartMonth").val("01");
+	var initialEndDate = '<bean:write name="calendarEventForm" property="recurrEndDate"/>';
+	$("#recurrSelectedEndDate").val(initialEndDate);
 }
 
 </script>

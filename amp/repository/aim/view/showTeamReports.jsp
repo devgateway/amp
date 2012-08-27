@@ -592,8 +592,7 @@ $(document).ready(function() {
 																					</c:if>
 																					<c:if test="${aimTeamReportsForm.showTabs}">
 																						<tr>
-																							<td colspan="4"><digi:trn
-																									key="aim:notabspresent">No tabs present</digi:trn>
+																							<td colspan="4"><digi:trn key="aim:notabspresent">No tabs present</digi:trn>
 																							</td>
 																						</tr>
 																					</c:if>
@@ -604,11 +603,9 @@ $(document).ready(function() {
 																				<logic:iterate name="aimTeamReportsForm"
 																					property="reportsList" id="report" indexId="idx"
 																					type="org.digijava.module.aim.dbentity.AmpReports">
-																					<tr
-																						onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue() % 2 == 1 ? "\'#dbe5f1\'"
-							: "\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');"
+																					<tr onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue() % 2 == 1 ? "\'#dbe5f1\'" : "\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');"
 																						onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue() % 2 == 1 ? "\'#dbe5f1\'"
-							: "\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');">
+																					: "\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');">
 																						<%
 																							if (idx.intValue() % 2 == 1)
 																										color = "#dbe5f1";
@@ -647,7 +644,7 @@ $(document).ready(function() {
 																											<c:if test="${fn:length(report.name) > 25}">
 																												<c:out
 																													value="${fn:substring(report.name, 0, 25)}" />...
-																									</c:if>
+																											</c:if>
 																											<c:if test="${fn:length(report.name) <= 25}">
 																												<c:out value="${report.name}" />
 																											</c:if>
@@ -668,25 +665,20 @@ $(document).ready(function() {
 																										</c:if>
 																									</p>
 																								</b>
-																							</c:if> <logic:present name="report"
-																								property="reportDescription">
+																							</c:if> 
+																							<logic:present name="report" property="reportDescription">
 																								<p style="max-width: 400px; white-space: normal"
 																									title="${report.reportDescription}">
-																									<c:if
-																										test="${fn:length(report.reportDescription) > 120}">
-																										<c:out
-																											value="${fn:substring(report.reportDescription, 0, 120)}" />...
-																											<digi:trn
-																										key="aim:reportDescription">${fn:substring(report.reportDescription, 0, 120)}</digi:trn> 
-																							</c:if>
-																									<c:if
-																										test="${fn:length(report.reportDescription) < 120}">
-																										<digi:trn
-																										key="aim:reportDescription">${report.reportDescription}</digi:trn> 
-																										
-																							digi:		</c:if>
+																									<c:if test="${fn:length(report.reportDescription) > 120}">
+																										<c:out value="${fn:substring(report.reportDescription, 0, 120)}" />...
+																											<digi:trn key="aim:reportDescription">${fn:substring(report.reportDescription, 0, 120)}</digi:trn> 
+																									</c:if>
+																									<c:if test="${fn:length(report.reportDescription) < 120 && fn:length(report.reportDescription) >0}">
+																										<digi:trn>${report.reportDescription}</digi:trn> 
+																									</c:if>
 																								</p>
-																							</logic:present></td>
+																							</logic:present>
+																							</td>
 																						<td align="center" class="inside"
 																							style="padding-right: 15px; padding-left: 15px; font-size: 11px;"
 																							bgcolor="<%=color%>">
@@ -717,20 +709,14 @@ $(document).ready(function() {
 																									<%
 																										if (report.getType() != null
 																															&& report.getType().equals(new Long(1))) {
-																									%> <digi:trn
-																										key="aim:donorType">donor</digi:trn> <%
- 	} else if (report.getType() != null
- 						&& report.getType().equals(new Long(3))) {
- %> <digi:trn
-																										key="aim:regionalType">regional</digi:trn> <%
- 	} else if (report.getType() != null
- 						&& report.getType().equals(new Long(2))) {
- %> <digi:trn
+																									%> <digi:trn key="aim:donorType">donor</digi:trn> <%} else if (report.getType() != null
+ 																									&& report.getType().equals(new Long(3))) {%> 
+ 																									<digi:trn key="aim:regionalType">regional</digi:trn> <%} else if (report.getType() != null
+ 																									&& report.getType().equals(new Long(2))) {
+ 																									%> <digi:trn
 																										key="aim:componentType">component</digi:trn> <%
- 	} else if (report.getType() != null
- 						&& report.getType().equals(new Long(4))) {
- %> <digi:trn
-																										key="aim:contributionType">contribution</digi:trn>
+ 																									} else if (report.getType() != null && report.getType().equals(new Long(4))) {%> 
+ 																									<digi:trn key="aim:contributionType">contribution</digi:trn>
 																									<%
 																										} else if (report.getType() != null
 																															&& report.getType().equals(new Long(5))) {

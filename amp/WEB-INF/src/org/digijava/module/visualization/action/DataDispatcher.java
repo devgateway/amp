@@ -247,6 +247,7 @@ public class DataDispatcher extends DispatchAction {
 		if (orgsGrpIds!=null && orgsGrpIds.length>0 && orgsGrpIds[0]!=-1) {
 			for (int i = 0; i < orgsGrpIds.length; i++) {
 				child.put("name", DbUtil.getOrgGroup(orgsGrpIds[i]).getOrgGrpName());
+				child.put("id", DbUtil.getOrgGroup(orgsGrpIds[i]).getAmpOrgGrpId());
 				selOrgGroups.add(child);
 			}
 		}
@@ -257,6 +258,7 @@ public class DataDispatcher extends DispatchAction {
 		if (orgsIds!=null && orgsIds.length>0 && orgsIds[0]!=-1) {
 			for (int i = 0; i < orgsIds.length; i++) {
 				child.put("name", DbUtil.getOrganisation(orgsIds[i]).getName());
+				child.put("id", DbUtil.getOrganisation(orgsIds[i]).getAmpOrgId());
 				selOrgs.add(child);
 			}
 		}
@@ -328,6 +330,7 @@ public class DataDispatcher extends DispatchAction {
 		if (regsIds!=null && regsIds.length>0 && regsIds[0]!=-1) {
 			for (int i = 0; i < regsIds.length; i++) {
 				child.put("name", LocationUtil.getAmpCategoryValueLocationById(regsIds[i]).getName());
+				child.put("id", LocationUtil.getAmpCategoryValueLocationById(regsIds[i]).getId());
 				selRegions.add(child);
 			}
 		}
@@ -338,6 +341,7 @@ public class DataDispatcher extends DispatchAction {
 		if (zonesIds!=null && zonesIds.length>0 && zonesIds[0]!=-1) {
 			for (int i = 0; i < zonesIds.length; i++) {
 				child.put("name", LocationUtil.getAmpCategoryValueLocationById(zonesIds[i]).getName());
+				child.put("id", LocationUtil.getAmpCategoryValueLocationById(zonesIds[i]).getId());
 				selZones.add(child);
 			}
 		}
@@ -356,6 +360,7 @@ public class DataDispatcher extends DispatchAction {
 		if (secsIds!=null && secsIds.length>0 && secsIds[0]!=-1) {
 			for (int i = 0; i < secsIds.length; i++) {
 				child.put("name", SectorUtil.getAmpSector(secsIds[i]).getName());
+				child.put("id", SectorUtil.getAmpSector(secsIds[i]).getAmpSectorId());
 				selSectors.add(child);
 			}
 		}
@@ -366,6 +371,7 @@ public class DataDispatcher extends DispatchAction {
 		if (subSecsIds!=null && subSecsIds.length>0 && subSecsIds[0]!=-1) {
 			for (int i = 0; i < subSecsIds.length; i++) {
 				child.put("name", SectorUtil.getAmpSector(subSecsIds[i]).getName());
+				child.put("id", SectorUtil.getAmpSector(subSecsIds[i]).getAmpSectorId());
 				selSubSectors.add(child);
 			}
 		}

@@ -756,6 +756,7 @@ function initializeGlobalVariables(){
 <html:hidden property="filter.groupSeparator" styleId="groupSeparator" />
 <html:hidden property="filter.decimalSeparator" styleId="decimalSeparator" />
 <html:hidden property="filter.fromPublicView" styleId="fromPublicView" />
+<html:hidden property="filter.fromGenerator" styleId="fromGenerator" />
 
 <div class="dashboard_header">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->

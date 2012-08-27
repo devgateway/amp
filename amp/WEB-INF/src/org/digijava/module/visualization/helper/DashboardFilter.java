@@ -91,6 +91,7 @@ public class DashboardFilter {
     private Boolean showDonorsRanking;
     private Boolean showSectorsRanking;
     private Boolean showRegionsRanking;
+    private Boolean fromGenerator;
     
     private Long activityId;
     private int decimalsToShow;
@@ -824,6 +825,14 @@ public class DashboardFilter {
 
 	public void setShowRegionsRanking(Boolean showRegionsRanking) {
 		this.showRegionsRanking = showRegionsRanking;
+	}
+
+	public Boolean getFromGenerator() {
+		return fromGenerator;
+	}
+
+	public void setFromGenerator(Boolean fromGenerator) {
+		this.fromGenerator = fromGenerator;
 	}
 
 	

@@ -999,7 +999,8 @@ function refreshBoxes(o){
 	var valNumOfSecs="";
 	var valNumOfRegs="";
 	var valAvgProjSize="";
-	
+	var fromGenerator = document.getElementById("fromGenerator").value;
+
 	for(var j = 0; j < results.children.length; j++){
 		var child = results.children[j];
 		switch(child.type){
@@ -1063,6 +1064,8 @@ function refreshBoxes(o){
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
 						inner2 = inner2 + child.list[i].name + " - ";
+						if (fromGenerator=="true")
+							checkOptionByNameAndValue("org_grp_check",child.list[i].id);
 					}
 					inner = inner + "<hr/>";
 					var div = document.getElementById("org_group_list_id");
@@ -1084,6 +1087,8 @@ function refreshBoxes(o){
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
 						inner2 = inner2 + child.list[i].name + " - ";
+						if (fromGenerator=="true")
+							checkOptionByNameAndValue("organization_check",child.list[i].id);
 					}
 					inner = inner + "<hr/>";
 					var div = document.getElementById("org_list_id");
@@ -1105,6 +1110,8 @@ function refreshBoxes(o){
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
 						inner2 = inner2 + child.list[i].name + " - ";
+						if (fromGenerator=="true")
+							checkOptionByNameAndValue("region_check",child.list[i].id);
 					}
 					inner = inner + "<hr/>";
 					var div = document.getElementById("region_list_id");
@@ -1124,6 +1131,8 @@ function refreshBoxes(o){
 					inner = "<hr/>";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
+						if (fromGenerator=="true")
+							checkOptionByNameAndValue("zone_check",child.list[i].id);
 					}
 					inner = inner + "<hr/>";
 					var div = document.getElementById("zone_list_id");
@@ -1158,6 +1167,8 @@ function refreshBoxes(o){
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
 						inner2 = inner2 + child.list[i].name + " - ";
+						if (fromGenerator=="true")
+							checkOptionByNameAndValue("sector_check",child.list[i].id);
 					}
 					inner = inner + "<hr/>";
 					var div = document.getElementById("sector_list_id");
@@ -1177,6 +1188,8 @@ function refreshBoxes(o){
 					inner = "<hr/>";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
+						if (fromGenerator=="true")
+							checkOptionByNameAndValue("sub_sector_check",child.list[i].id);
 					}
 					inner = inner + "<hr/>";
 					var div = document.getElementById("sub_sector_list_id");
@@ -1338,6 +1351,8 @@ function refreshBoxes(o){
 	var div = document.getElementById("divSummaryInfo");
 	div.innerHTML = inner;
 
+	document.getElementById("fromGenerator").value = false;
+	
 	var namePlaceholder = document.getElementById("dashboard_name");
 	if (dashboardType==1) {
 		var name1 = "";
@@ -2072,3 +2087,13 @@ function getQueryParameter ( parameterName ) {
 	  }
 	  return "null";
 	}
+
+function checkOptionByNameAndValue (checkName, value) {
+	var checks = document.getElementsByName(checkName);
+	for ( var i = 0; i < checks.length; i++) {
+		if (checks[i].value == value){
+			checks[i].checked = true;
+		}
+	}
+}
+

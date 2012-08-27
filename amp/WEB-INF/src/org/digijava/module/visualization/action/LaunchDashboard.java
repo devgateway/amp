@@ -183,6 +183,8 @@ public class LaunchDashboard extends Action {
 			dForm.setGraphList(list);
 		}
 		
+		dForm.getFilter().setFromGenerator(true);
+		
 		return mapping.findForward("forward");
 
 	}

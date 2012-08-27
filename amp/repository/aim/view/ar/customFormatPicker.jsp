@@ -63,7 +63,7 @@
 		              <html:option value="3">3</html:option>
 		              <html:option value="4">4</html:option>
 		              <html:option value="5">5</html:option>
-		              <html:option value="CUSTOM">
+		              <html:option value="-2">
 		                <digi:trn key="aim:formatPicket:custom">Custom</digi:trn>
 		              </html:option>
 	            </html:select>

@@ -15,6 +15,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -107,7 +110,18 @@ public class ShowProjectsList extends Action {
 			//activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 			for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];
-				String itemName = LocationUtil.getAmpLocationByCVLocation(long1).getLocation().getName();
+				String itemName;
+				if(!long1.equals(0l)){
+					itemName = LocationUtil.getAmpLocationByCVLocation(long1).getLocation().getName();
+				} else {
+					String locale = RequestUtils.getNavigationLanguage(request).getCode();
+			        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+			        try {
+			        	itemName = TranslatorWorker.translateText("Unallocated", locale, siteId);
+					} catch (WorkerException e) {
+						itemName = "Unallocated";
+					}
+				}
 				Long[] id1 = {long1};
 				newFilter.setSelLocationIds(id1);
 				activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);

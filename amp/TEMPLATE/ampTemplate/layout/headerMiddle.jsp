@@ -386,8 +386,18 @@ function adminHelp(){
 <jsp:include page="gisMenu.jsp" />
 	
 	function teamWorkspaceSetup(a) {
-		if (canExit()) window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";
-		else return false;	
+		if (canExit()){
+			if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){
+ 	 	 	 	var referLink = document.createElement('a');
+ 	 	 	 	referLink.href = "/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";
+ 	 	 	 	document.body.appendChild(referLink);
+ 	 	 	 	referLink.click();
+ 	 	 	 } else {
+ 	 	 		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";
+ 	 	 	 }
+		} else {
+			return false;
+		}	
 	}
 	function addMessage(fillTypesAndLevels) {
 		window.location.href="/message/messageActions.do?editingMessage=false&actionType="+fillTypesAndLevels;

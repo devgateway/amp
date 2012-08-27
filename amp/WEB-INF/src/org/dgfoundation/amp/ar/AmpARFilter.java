@@ -283,6 +283,8 @@ public class AmpARFilter extends PropertyListable {
 	private Boolean amountinmillion;
 	private String decimalseparator;
 	private String groupingseparator;
+	private Integer groupingsize;
+	private Boolean customusegroupings;
 	private Integer maximumFractionDigits;
 	
 	
@@ -1942,4 +1944,35 @@ public class AmpARFilter extends PropertyListable {
 		result = m.replaceAll(MoConstants.CACHED_ACTIVITY_TABLE);
 		return result;
 	}
+
+	/**
+	 * @return the groupingsize
+	 */
+	public Integer getGroupingsize() {
+		return groupingsize;
+	}
+
+	/**
+	 * @param groupingsize the groupingsize to set
+	 */
+	public void setGroupingsize(Integer groupingsize) {
+		this.groupingsize = groupingsize;
+	}
+
+	/**
+	 * @return the customusegroupings
+	 */
+	public Boolean getCustomusegroupings() {
+		return customusegroupings;
+	}
+
+	/**
+	 * @param customusegroupings the customusegroupings to set
+	 */
+	public void setCustomusegroupings(Boolean customusegroupings) {
+		this.customusegroupings = customusegroupings;
+	}
+
+	
+
 }

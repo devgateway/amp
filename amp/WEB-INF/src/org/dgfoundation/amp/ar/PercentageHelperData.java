@@ -112,7 +112,7 @@ public class PercentageHelperData {
 	}
 	@Override
 	public String toString() {
-		return this.columnType + " | " + this.item + " | " + this.itemId + " | " + this.percentage + " | " + this.dimensionClass;
+		return this.columnType + " | " + this.item + " | " + this.itemId + " | " + this.percentage ;
 	}
 	
 }

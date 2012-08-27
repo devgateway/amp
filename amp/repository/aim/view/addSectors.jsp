@@ -257,7 +257,8 @@
 			YAHOOAmp.util.Connect.asyncRequest("POST", url, specialCallback, postString);
 		}
 		else{
-			alert("Please, select a sector first!");
+			var message = '<digi:trn key="aim:Pleaseselecasectorfirst">Please, select a sector first!</digi:trn>';
+			alert(message);
 			return false;
 		}
 	}

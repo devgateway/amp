@@ -161,10 +161,13 @@ public class ReportsFilterPicker extends MultiAction {
 					tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
 			
 			String applyFormat				= request.getParameter("applyFormat");
+			String applyStr					= request.getParameter("apply");
 			AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
-			if ( existingFilter != null ) { 
-				FilterUtil.populateForm(filterForm, existingFilter);
-				request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
+			if ( existingFilter != null ) {
+				if ( !"true".equals(applyStr) ) {
+					FilterUtil.populateForm(filterForm, existingFilter);
+					request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
+				}
 				if (filterForm.getCalendar() == null){
 					filterForm.setCalendar(existingFilter.getCalendarType()==null ? tempSettings.getFiscalCalendar().getAmpFiscalCalId() : existingFilter.getCalendarType().getAmpFiscalCalId());
 				}
@@ -1471,23 +1474,39 @@ public class ReportsFilterPicker extends MultiAction {
 
 		DecimalFormat custom = new DecimalFormat();
 		DecimalFormatSymbols ds = new DecimalFormatSymbols();
-		ds.setDecimalSeparator((!"CUSTOM".equalsIgnoreCase(filterForm.getCustomDecimalSymbol()) ? filterForm.getCustomDecimalSymbol().charAt(0) : filterForm.getCustomDecimalSymbolTxt().charAt(0)));
+		String decimalSeparator	= !"CUSTOM".equalsIgnoreCase(filterForm.getCustomDecimalSymbol()) ? 
+				filterForm.getCustomDecimalSymbol().substring(0, 1) : filterForm.getCustomDecimalSymbolTxt().substring(0, 1);
+		ds.setDecimalSeparator(  decimalSeparator.charAt(0) );
 		
-		if (filterForm.getCustomUseGrouping().booleanValue() == true) {			
-			ds.setGroupingSeparator((!"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? filterForm.getCustomGroupCharacter().charAt(0) : filterForm.getCustomGroupCharacterTxt()
-							.charAt(0)));			
+		arf.setDecimalseparator(decimalSeparator);
+		
+		
+		if (filterForm.getCustomUseGrouping().booleanValue() == true) {
+			String groupingSeparator = !"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? 
+					filterForm.getCustomGroupCharacter().substring(0, 1) : filterForm.getCustomGroupCharacterTxt().substring(0, 1);
+			ds.setGroupingSeparator( groupingSeparator.charAt(0) );			
+			arf.setGroupingseparator( groupingSeparator );
 			custom.setGroupingUsed(filterForm.getCustomUseGrouping());
-			custom.setGroupingSize(filterForm.getCustomGroupSize());			
+			custom.setGroupingSize(filterForm.getCustomGroupSize());	
+			
+			arf.setGroupingsize(filterForm.getCustomGroupSize());
+			arf.setCustomusegroupings(filterForm.getCustomUseGrouping());
 		}
 		
-		custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
+		//custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
 		custom.setDecimalFormatSymbols(ds);
 		arf.setAmountinthousand(filterForm.getAmountinthousandsint());
 		arf.setAmountinmillion(filterForm.getAmountinmillions());
-		arf.setDecimalseparator(filterForm.getCustomDecimalSymbolTxt());
-		arf.setGroupingseparator(filterForm.getCustomGroupCharacterTxt());
-		if (filterForm.getCustomDecimalPlaces() > -1)
-			arf.setMaximumFractionDigits(filterForm.getCustomDecimalPlaces() );
+		
+		
+		Integer maximumDecimalPlaces	= filterForm.getCustomDecimalPlaces();
+		if ( maximumDecimalPlaces == -2 ) {//CUSTOM
+			arf.setMaximumFractionDigits(filterForm.getCustomDecimalPlacesTxt());
+		}
+		else if (maximumDecimalPlaces > -1)
+			arf.setMaximumFractionDigits(maximumDecimalPlaces );
+		custom.setMaximumFractionDigits( arf.getMaximumFractionDigits() );
+		
 		arf.setCurrentFormat(custom);
 
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency(), AmpOrganisation.class));

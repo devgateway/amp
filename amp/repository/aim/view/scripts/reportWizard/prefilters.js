@@ -58,7 +58,7 @@ Filters.prototype.success	= function (o) {
 		
 		this.saveFilters	= new SaveFilters(this, false);
 		
-		initCalendar();
+		//initCalendar();
 		document.getElementById("filterPickerSubmitButton").onclick	= function() { return false;};
 		YAHOO.util.Event.removeListener("filterPickerSubmitButton", "click");
 		YAHOO.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters, this.saveFilters ) ;
@@ -96,8 +96,8 @@ Filters.prototype.showSettings	= function() {
 	this.settingsPanel.center();
 	this.settingsPanel.show();
 	
-	document.getElementById("applyFormatBtn").onclick	= function() { return false;};
 	YAHOO.util.Event.removeListener("applyFormatBtn", "click");
+	document.getElementById("applyFormatBtn").onclick	= function() { return false;};
 	YAHOO.util.Event.addListener("applyFormatBtn", "click", this.saveFilters.saveFilters, this.saveFilters, this.saveFilters);
 };
 
@@ -112,7 +112,7 @@ SaveFilters.prototype.saveFilters	= function (e, obj) {
 	var formName	= "aimReportsFilterPickerForm" + (this.showSettings?"3":"");
 	YAHOO.util.Connect.setForm( document.getElementsByName(formName)[0] );
 	var additionalParams	= this.showSettings?"&sourceIsReportWizard=true":"";
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + avoidIECacheParam + additionalParams, obj);
+	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true&applyFormat=Apply%20Format" + avoidIECacheParam + additionalParams, obj);
 	
 	if ( this.showSettings ) {
 		
@@ -160,7 +160,7 @@ function initFormatPopup(){
 	}
 
 	var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
-	if (customDecimalPlaces.toLowerCase()=="custom"){
+	if (customDecimalPlaces.toLowerCase()=="-2"){
 		document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled=false;
 	}else{
 		document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value="";
@@ -187,7 +187,7 @@ function changeFormat(){
 		decimalSymbol=(decimalSymbol.toLowerCase()=="custom")?document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value:decimalSymbol;
 	
 	var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
-		customDecimalPlaces=(customDecimalPlaces.toLowerCase()=="custom")?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
+		customDecimalPlaces=(customDecimalPlaces.toLowerCase()=="-2")?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
 	
 	var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
 	

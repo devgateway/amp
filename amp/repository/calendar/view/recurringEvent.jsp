@@ -138,24 +138,23 @@ function eventType(){
 		if(Weekly){
 			var rec = document.getElementById("recurrWeekly").value;
 
-			if(document.getElementById("recurrWeekly").value=='' || document.getElementById("recurrWeekly").value=='0'){
-	            alert ('<digi:trn jsFriendly="true">Recurring period should be higher than 0</digi:trn>');
-	            periodValid = false;
-	   		}else{
-				var result = "";
-			    document.getElementById("type").value = 'week';
-		        document.getElementById("hidden").value = rec;
-		        document.getElementById("hiddenMonth").value = '';
-		        for(i=0; i<document.getElementsByName("occurrWeekDays").length; i++){
-					var elemId = ""+document.getElementsByName("occurrWeekDays")[i].id;
-					if(document.getElementsByName("occurrWeekDays")[i].checked == true && elemId.indexOf('checkDay') !=-1){
-						var day = document.getElementsByName("occurrWeekDays")[i].value;
-						result += day;
-					}
+			if(document.getElementById("recurrWeekly").value=='' || document.getElementById("recurrWeekly").value=='0')
+				rec='1'; //we assume every week if text field is ommited 
+
+			var result = "";
+		    document.getElementById("type").value = 'week';
+	        document.getElementById("hidden").value = rec;
+	        document.getElementById("hiddenMonth").value = '';
+	        for(i=0; i<document.getElementsByName("occurrWeekDays").length; i++){
+				var elemId = ""+document.getElementsByName("occurrWeekDays")[i].id;
+				if(document.getElementsByName("occurrWeekDays")[i].checked == true && elemId.indexOf('checkDay') !=-1){
+					var day = document.getElementsByName("occurrWeekDays")[i].value;
+					result += day;
 				}
-				document.getElementById("weekDays").value = result;
-				recurrDays = 7 * document.getElementById("recurrWeekly").value;
-	    	}
+			}
+			document.getElementById("weekDays").value = result;
+			recurrDays = 7 * rec;
+	    	
 		}
 
 		var diffDays = (compareDates(occStartDate, occEndDate, true) / (24 * 60 * 60 * 1000));

@@ -1580,9 +1580,9 @@ border-right: 1px solid rgb(208, 208, 208);
                                                 <table cellspacing="0" cellpadding="0" id="staffTable" width=100%>
 												<tr class="tableOdd tableHeader" style="background-color:#C7D4DB; color:#000000; font-weight:bold; font-size:11px; text-align:center;" width=100%>
 												<td>&nbsp;</td>
-												<td><b>Year</b></td>
-												<td><b>Type of staff</b></td>
-												<td><b>Number of staff</b></td>
+												<td><b><digi:trn>Year</digi:trn></b></td>
+												<td><b><digi:trn>Type of staff</digi:trn></b></td>
+												<td><b><digi:trn>Number of staff</digi:trn></b></td>
 												<td>&nbsp;</td>
 												<td>&nbsp;</td>
 												</tr>

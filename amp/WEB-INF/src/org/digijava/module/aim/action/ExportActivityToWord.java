@@ -847,7 +847,7 @@ public class ExportActivityToWord extends Action {
 				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
 			}
 			if(identification.getStatusReason() != null){
-				columnVal += identification.getStatusReason();
+				columnVal += processHtml(request, identification.getStatusReason());
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 			applyEmptyCell(identificationSubTable1);
@@ -1514,33 +1514,35 @@ public class ExportActivityToWord extends Action {
 	//cuts <p> and </p> tags from editTag value
 	private String processEditTagValue(HttpServletRequest request,String editTagKey) throws Exception {
 		String result=getEditTagValue(request,editTagKey);
+		return processHtml(request, result);
+	}
+	
+	private String processHtml(HttpServletRequest request,String text) throws Exception {
 		
-		if(result!=null && result.indexOf("<![endif]-->") != -1){
-			result = result.substring(result.lastIndexOf("<![endif]-->")+"<![endif]-->".length()); 
+		if(text!=null && text.indexOf("<![endif]-->") != -1){
+			text = text.substring(text.lastIndexOf("<![endif]-->")+"<![endif]-->".length()); 
 		}
 		
-		if(result!=null){
+		if(text!=null){
 			String formatterPrefix = "<![endif]-->";  //some records contain wordpress tags in comments,which need to be filtered
-			if(result.indexOf(formatterPrefix) != -1){
-				result = result.substring(result.lastIndexOf(formatterPrefix)+formatterPrefix.length());				
+			if(text.indexOf(formatterPrefix) != -1){
+				text = text.substring(text.lastIndexOf(formatterPrefix)+formatterPrefix.length());				
 			}
-			if(result.startsWith("<span")){
-				result = result.substring(result.indexOf(">")+1);
-				result = result.substring(0,result.indexOf("</span>"));
+			if(text.startsWith("<span")){
+				text = text.substring(text.indexOf(">")+1);
+				text = text.substring(0,text.indexOf("</span>"));
 			}
 			
-			result=result.replaceAll("\\<.*?>","");
-			result=result.replaceAll("(\\t|\\r)", "");
-            result=result.replaceAll("&lt;", "<");
-			result = result.replaceAll("&gt;",">");
-            result = result.replaceAll("&amp;","&");
-            result = result.replaceAll("&rsquo;","'");
+			text = text.replaceAll("\\<.*?>","");
+			text = text.replaceAll("&lt;", "<");
+			text = text.replaceAll("&gt;",">");
+			text = text.replaceAll("&amp;","&");
+			text = text.replaceAll("&rsquo;","'");
             
 		}
 		
-		return ExportActivityToPdfUtil.unhtmlentities(result);
-	}
-	
+		return ExportActivityToPdfUtil.unhtmlentities(text);
+	}	
 	private String buildProgramsOutput(List<AmpActivityProgram> programs) {
 		String result="";
 		for (AmpActivityProgram pr :programs) {			

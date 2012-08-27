@@ -7,7 +7,8 @@
     <script>
       <lang delimiter=";" type="postgres">
       	UPDATE amp_columns SET columnName = 'Proposed Project Amount' WHERE columnName ='Proposed Project Cost';
-		INSERT INTO amp_columns_order (SELECT (SELECT max(id)+1 FROM amp_columns_order),'Proposed Project Cost',(SELECT max(indexOrder) + 1 FROM amp_columns_order)  WHERE NOT EXISTS (select * from amp_columns_order where columnName='Proposed Project Cost') );
+		INSERT INTO amp_columns_order (SELECT nextval('amp_columns_order_seq'),'Proposed Project Cost',(SELECT max(indexOrder) + 1 FROM amp_columns_order)  
+			WHERE NOT EXISTS (select * from amp_columns_order where columnName='Proposed Project Cost') );
       </lang>
     </script>
   </apply>

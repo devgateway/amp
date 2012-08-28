@@ -521,10 +521,10 @@ public class ExportActivityToPDF extends Action {
 			 
 			
             //Planning
-			if(FeaturesUtil.isVisibleFeature("Planning", ampContext)){			
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Planning", ampContext)){			
 				String outputValue="";
 				
-				if(FeaturesUtil.isVisibleField("Line Ministry Rank", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank", ampContext)){
 					outputValue=TranslatorWorker.translateText("Line Ministry Rank", locale, siteId)+ "\t: ";
 					if(activity.getLineMinRank()!=null && activity.getLineMinRank().intValue()>0){
                                                outputValue+=(activity.getLineMinRank())+"\n";
@@ -535,7 +535,7 @@ public class ExportActivityToPDF extends Action {
 					}
 				}
 				
-				if(FeaturesUtil.isVisibleField("Ministry of Planning Rank", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Ministry of Planning Rank", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Ministry of Planning Rank", locale, siteId)+ "\t: ";
 					if(activity.getPlanMinRank()!=null && activity.getPlanMinRank().intValue()>0){
                                             outputValue+=(activity.getPlanMinRank())+"\n";	    
@@ -544,11 +544,11 @@ public class ExportActivityToPDF extends Action {
 					}
 				}
 				
-				if(FeaturesUtil.isVisibleField("Proposed Approval Date", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Proposed Approval Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalAppDate()+"\n";
 				}
 				
-				if(FeaturesUtil.isVisibleField("Actual Approval Date", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Actual Approval Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getRevisedAppDate()+"\n";
 				}
 				
@@ -556,19 +556,19 @@ public class ExportActivityToPDF extends Action {
 					outputValue+=TranslatorWorker.translateText("Original Start Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalStartDate()+"\n";
 				}
 				
-				if(FeaturesUtil.isVisibleField("Final Date for Contracting", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Final Date for Contracting ", locale, siteId)+ "\t: " + myForm.getPlanning().getContractingDate()+"\n";
 				}
 				
-				if(FeaturesUtil.isVisibleField("Final Date for Disbursements", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Final Date for Disbursements ", locale, siteId)+ "\t: " + myForm.getPlanning().getDisbursementsDate()+"\n";
 				}
 				
-				if(FeaturesUtil.isVisibleField("Actual Start Date", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Actual Start Date ", locale, siteId)+ "\t: " +myForm.getPlanning().getRevisedStartDate() +"\n";
 				}
 				
-				if(FeaturesUtil.isVisibleField("Proposed Completion Date", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)+ "\t: " +myForm.getPlanning().getProposedCompDate() +"\n";
 				}
 				
@@ -612,9 +612,9 @@ public class ExportActivityToPDF extends Action {
 			}
 			
 			//LOCATIONS
-        	if(FeaturesUtil.isVisibleFeature("Location", ampContext)){
+        	if(FeaturesUtil.isVisibleModule("/Activity Form/Location", ampContext)){
         		//locations
-    			if(FeaturesUtil.isVisibleField("Implementation Location", ampContext)){
+    			if(FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Location", ampContext)){
     				if(myForm.getLocation().getSelectedLocs()!=null){
     	    			output="";
     	    			for (Location loc  : myForm.getLocation().getSelectedLocs()) {
@@ -638,7 +638,7 @@ public class ExportActivityToPDF extends Action {
     			}
             	
             	//level
-    			if(FeaturesUtil.isVisibleField("Implementation Level", ampContext)){
+    			if(FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Level", ampContext)){
     				translatedValue="";    				
     				if(myForm.getLocation()!=null && myForm.getLocation().getLevelId()!=null && myForm.getLocation().getLevelId()>0){    	        		
     	    			catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getLocation().getLevelId());
@@ -657,7 +657,7 @@ public class ExportActivityToPDF extends Action {
         	}
         	
         	//Sector
-        	if(FeaturesUtil.isVisibleFeature("Sectors", ampContext)){
+        	if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors", ampContext)){
         		output="";
         		PdfPCell sectorCell1=new PdfPCell();
             	p1=new Paragraph(TranslatorWorker.translateText("Sectors",locale,siteId),titleFont);
@@ -700,10 +700,10 @@ public class ExportActivityToPDF extends Action {
     					}
     				}				
     			}
-    			if(FeaturesUtil.isVisibleField("Primary Sector", ampContext)){
+    			if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/Primary Sectors", ampContext)){
     				output+=primary+"\n";
     			}
-    			if(FeaturesUtil.isVisibleField("Secondary Sector", ampContext)){
+    			if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/Secondary Sectors", ampContext)){
     				output+=secondary;
     			}
     			PdfPCell sectorCell2=new PdfPCell();
@@ -727,7 +727,7 @@ public class ExportActivityToPDF extends Action {
 			
 			//NPD Programs
 			if(FeaturesUtil.isVisibleFeature("NPD Programs", ampContext)){
-				if(FeaturesUtil.isVisibleField("National Planning Objectives", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/National Plan Objective", ampContext)){
 					//National Plan Objective
 					if(myForm.getPrograms().getNationalPlanObjectivePrograms()!=null){
 						columnName=TranslatorWorker.translateText("National Plan Objective",locale,siteId);
@@ -736,7 +736,7 @@ public class ExportActivityToPDF extends Action {
 					}
 				}
 				
-				if(FeaturesUtil.isVisibleField("Primary Program", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Primary Programs", ampContext)){
 					//Primary Programs
 					if(myForm.getPrograms().getPrimaryPrograms()!=null){
 						columnName=TranslatorWorker.translateText("Primary Programs",locale,siteId);
@@ -745,7 +745,7 @@ public class ExportActivityToPDF extends Action {
 					}
 				}
 
-				if(FeaturesUtil.isVisibleField("Secondary Program", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Secondary Programs", ampContext)){
 					//secondary Programs
 					if(myForm.getPrograms().getSecondaryPrograms()!=null){
 						columnName=TranslatorWorker.translateText("Secondary Programs",locale,siteId);
@@ -766,7 +766,7 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 * Regional Funding
 			 */
-			if(FeaturesUtil.isVisibleFeature("Regional Funding", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding", ampContext)){
 				PdfPCell regFundingCell1=new PdfPCell();
 				p1=new Paragraph(TranslatorWorker.translateText("Regional Funding",locale,siteId),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
@@ -791,17 +791,17 @@ public class ExportActivityToPDF extends Action {
 						regFundingCell1.setBorder(0);
 						regFundingNested.addCell(nestedCell1);
 						
-						if(FeaturesUtil.isVisibleFeature("Commitments", ampContext) && regFunf.getCommitments()!=null){ //create commitment row
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding/Region Item/Commitments", ampContext) && regFunf.getCommitments()!=null){ //create commitment row
 							PdfPTable commitmentsTable=buildRegionalFundingInfoOutput(TranslatorWorker.translateText("Commitment",locale,siteId),(List<FundingDetail>)regFunf.getCommitments(),locale,siteId,ampContext);
 							regFundingNested.addCell(commitmentsTable);						
 						}
 						
-						if(FeaturesUtil.isVisibleFeature("Disbursement", ampContext) && regFunf.getDisbursements()!=null){ //create disbursments row 
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding/Region Item/Disbursements", ampContext) && regFunf.getDisbursements()!=null){ //create disbursments row 
 							PdfPTable disbTable=buildRegionalFundingInfoOutput( TranslatorWorker.translateText("Disbursment",locale,siteId),(List<FundingDetail>)regFunf.getDisbursements(),locale,siteId,ampContext);
 							regFundingNested.addCell(disbTable);
 						}
 						
-						if(FeaturesUtil.isVisibleFeature("Expenditures", ampContext) && regFunf.getExpenditures()!=null){ //create expenditure row
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding/Region Item/Expenditures", ampContext) && regFunf.getExpenditures()!=null){ //create expenditure row
 							PdfPTable expTable=buildRegionalFundingInfoOutput( TranslatorWorker.translateText("Expenditures",locale,siteId), (List<FundingDetail>)regFunf.getExpenditures(),locale,siteId,ampContext);
 							regFundingNested.addCell(expTable);
 						}
@@ -820,14 +820,14 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 * Issues
 			 */
-			if(FeaturesUtil.isVisibleModule("Issues", ampContext) && FeaturesUtil.isVisibleField("Issues", ampContext)){
+			if(FeaturesUtil.isVisibleModule("Issues", ampContext)){
 				buildIssuesPart(myForm, mainLayout,locale,siteId,ampContext);
 			}			
 			
 			/**
 			 * related documents
 			 */
-			if(FeaturesUtil.isVisibleFeature("Related Documents", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Related Documents", ampContext)){
 				buildRelatedDocsPart(myForm, mainLayout, event,locale,siteId,ampContext);
 			}			
 			
@@ -847,32 +847,32 @@ public class ExportActivityToPDF extends Action {
 				relOrgCell2.setBorder(0);
 				PdfPTable relatedOrgnested=new PdfPTable(1); //table that holds all related organisations			
 				//Responsible Organizations
-				if(FeaturesUtil.isVisibleFeature("Responsible Organization", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization", ampContext)){
 					buildRelatedOrganisationsOutput(relatedOrgnested,"Responsible Organization",myForm.getAgencies().getRespOrganisations(),locale,siteId,ampContext);
 				}				
 				//Executing Agency
-				if(FeaturesUtil.isVisibleFeature("Executing Agency", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency", ampContext)){
 					buildRelatedOrganisationsOutput(relatedOrgnested,"Executing Agency",myForm.getAgencies().getExecutingAgencies(),locale,siteId,ampContext);
 				}				
 				//Implementing Agency
-				if(FeaturesUtil.isVisibleFeature("Implementing Agency", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency", ampContext)){
 					buildRelatedOrganisationsOutput(relatedOrgnested,"Implementing Agency",myForm.getAgencies().getImpAgencies(),locale,siteId,ampContext);
 				}				
 				//Beneficiary Agency
-				if(FeaturesUtil.isVisibleFeature("Beneficiary Agency", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency", ampContext)){
 					buildRelatedOrganisationsOutput(relatedOrgnested,"Beneficiary Agency",myForm.getAgencies().getBenAgencies(),locale,siteId,ampContext);
 				}				
 				//Contracting Agency
-				if(FeaturesUtil.isVisibleFeature("Contracting Agency", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency", ampContext)){
 					buildRelatedOrganisationsOutput(relatedOrgnested,"Contracting Agency",myForm.getAgencies().getConAgencies(),locale,siteId,ampContext);
 				}
 				
 				//Sector Group
-				if(FeaturesUtil.isVisibleFeature("Sector Group", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Sector Group", ampContext)){
 					buildRelatedOrganisationsOutput(relatedOrgnested,"Sector Group",myForm.getAgencies().getSectGroups(),locale,siteId,ampContext);
 				}
 				//Regional Group
-				if(FeaturesUtil.isVisibleFeature("Regional Group", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Regional Group", ampContext)){
 					buildRelatedOrganisationsOutput(relatedOrgnested,"Regional Group",myForm.getAgencies().getRegGroups(),locale,siteId,ampContext);
 				}			
 				
@@ -885,23 +885,23 @@ public class ExportActivityToPDF extends Action {
 			 */
 			if(FeaturesUtil.isVisibleModule("Contact Information", ampContext)){
 				//Donor funding contact information
-				if(FeaturesUtil.isVisibleFeature("Donor Contact Information", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Donor Contact Information", ampContext)){
 					buildContactInfoOutput(mainLayout,"Donor funding contact information",myForm.getContactInformation().getDonorContacts(),locale,siteId,ampContext);
 				}						
 				//MOFED contact information
-				if(FeaturesUtil.isVisibleFeature("Government Contact Information", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Mofed Contact Information", ampContext)){
 					buildContactInfoOutput(mainLayout,"MOFED contact information",myForm.getContactInformation().getMofedContacts(),locale,siteId,ampContext);	
 				}				
 				//Sec Min funding contact information
-				if(FeaturesUtil.isVisibleFeature("Project Coordinator Contact Information", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Project Coordinator Contact Information", ampContext)){
 					buildContactInfoOutput(mainLayout,"Sector Ministry contact information",myForm.getContactInformation().getSectorMinistryContacts(),locale,siteId,ampContext);	
 				}				
 				//Project Coordinator contact information
-				if(FeaturesUtil.isVisibleFeature("Sector Ministry Contact Information", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Sector Ministry Contact Information", ampContext)){
 					buildContactInfoOutput(mainLayout,"Proj. Coordinator contact information",myForm.getContactInformation().getProjCoordinatorContacts(),locale,siteId,ampContext);	
 				}				
 				//Implementing/executing agency contact information
-				if(FeaturesUtil.isVisibleFeature("Implementing/Executing Agency Contact Information", ampContext)){
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Contacts/Implementing Executing Agency Contact Information", ampContext)){
 					buildContactInfoOutput(mainLayout,"Implementing/Executing Agency contact information",myForm.getContactInformation().getImplExecutingAgencyContacts(),locale,siteId,ampContext);	
 				}				
 			}			
@@ -909,7 +909,7 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 * Proposed Project Cost
 			 */
-			if(FeaturesUtil.isVisibleFeature("Proposed Project Cost", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Proposed Project Cost", ampContext)){
 				String costOutput="";
 				columnName=TranslatorWorker.translateText("Proposed Project Cost",locale,siteId);
 				if(myForm.getFunding().getProProjCost()!=null){
@@ -932,14 +932,14 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 * Costing
 			 */
-			if(FeaturesUtil.isVisibleFeature("Costing", ampContext)){
+			if(FeaturesUtil.isVisibleModule("Activity Costing", ampContext)){
 				buildCostingPart(request, actId, mainLayout,locale,siteId,ampContext);
 			}			
 			
 			/**
 			 * Build IPA contracting
 			 */
-			if(FeaturesUtil.isVisibleFeature("Contracting", ampContext)){
+			if(FeaturesUtil.isVisibleModule("Contracting", ampContext)){
 				PdfPCell ipaContract1=new PdfPCell();
 				ipaContract1.setBorder(0);
 				ipaContract1.setBackgroundColor(new Color(244,244,242));
@@ -2194,7 +2194,7 @@ public class ExportActivityToPDF extends Action {
 							}
 							
 							//Financial Instrument
-							if(FeaturesUtil.isVisibleField("Financial Instrument", ampContext)){								
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Financial Instrument", ampContext)){								
 								PdfPCell foInstrumentCell1=new PdfPCell();
 								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
 								foInstrumentCell1.setBorder(0);
@@ -2226,7 +2226,7 @@ public class ExportActivityToPDF extends Action {
 							}
 							
 							//Donor objective
-							if(FeaturesUtil.isVisibleField("Donor Objective", ampContext)){								
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Donor Objective", ampContext)){								
 								PdfPCell donorObjCell1=new PdfPCell();
 								donorObjCell1.setBackgroundColor(new Color(221,221,221));
 								donorObjCell1.setBorder(0);

@@ -469,7 +469,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalAppDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleField("/Activity Form/Planning/Actual Approval Date", ampContext)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext)){
 			columnName=TranslatorWorker.translateText("Actual Approval Date"+": ",request);
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedAppDate(),null);
 		}
@@ -484,7 +484,7 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getDisbursementsDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleField("/Activity Form/Planning/Proposed Completion Date", ampContext)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
 			columnName=TranslatorWorker.translateText("Proposed Completion Date"+": ",request);
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getDisbursementsDate(),null);
 		}
@@ -512,13 +512,13 @@ public class ExportActivityToWord extends Action {
 
         retVal.add(createSectionTable(eshTitle, request, ampContext));
 
-        Set<AmpFundingDetail> allComponents = new HashSet<AmpFundingDetail>();
-        
-        for (AmpFunding f : (Set<AmpFunding>) act.getFunding()) {
-            if (f.getFundingDetails() != null && !f.getFundingDetails().isEmpty()) {
-                allComponents.addAll(f.getFundingDetails());
-            }
-        }
+//        Set<AmpFundingDetail> allComponents = new HashSet<AmpFundingDetail>();
+//        
+//        for (AmpFunding f : (Set<AmpFunding>) act.getFunding()) {
+//            if (f.getFundingDetails() != null && !f.getFundingDetails().isEmpty()) {
+//                allComponents.addAll(f.getFundingDetails());
+//            }
+//        }
         Site site = RequestUtils.getSite(request);
         Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
         String siteId=site.getSiteId();
@@ -532,19 +532,19 @@ public class ExportActivityToWord extends Action {
         translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
 
 
-        FundingCalculationsHelper fch = new FundingCalculationsHelper();
-        fch.doCalculations(allComponents, currencyCode);
+//        FundingCalculationsHelper fch = new FundingCalculationsHelper();
+//        fch.doCalculations(allComponents, currencyCode);
 
 
 
 
         ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
         eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
-                                                addRowData(FormatHelper.formatNumber(fch.getTotalCommitments().getValue())).
+                                                addRowData(FormatHelper.formatNumber(act.getFunAmount())).
                                                 addRowData(translatedCurrency));
 
         eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Proposed Completion Date ", null, null,  true).
-                                                        addRowData(DateConversion.ConvertDateToString(act.getProposedCompletionDate())));
+                                                        addRowData(DateConversion.ConvertDateToString(act.getFunDate())));
 
 
         retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));

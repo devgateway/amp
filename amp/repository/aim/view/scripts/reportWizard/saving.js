@@ -148,7 +148,7 @@ SaveReportEngine.prototype.decideToShowTitlePanel	= function () {
 
 SaveReportEngine.prototype.showTitlePanel	= function () {
 	if ( this.titlePanel == null ) {
-		document.getElementById("titlePanel").style.display	= "";
+		document.getElementById("titlePanel").style.display	= "block";
 		this.titlePanel	= new YAHOO.widget.Panel("titlePanel", 
 				{ 	visible:true,
 					width: "400px", 

@@ -5146,7 +5146,7 @@ public class DbUtil {
     	Session session = null;
     	try {
     		session = PersistenceManager.getRequestDBSession();
-            String queryString = "select count(l) from " + AmpOrgGroup.class.getName() + " l " + "where l.orgGrpName=:name ";
+            String queryString = "select count(l) from " + AmpOrgGroup.class.getName() + " l " + "where upper(l.orgGrpName) like upper(:name) ";
             if (id != null) {
             	queryString += " and l.ampOrgGrpId!="+id;
             }

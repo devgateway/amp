@@ -122,7 +122,7 @@
 													<table border="0" cellspacing="3" cellpadding="3" align="center">
   <tr>
     <td align="right"><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	</td>
-    <td><html:text property="orgGrpName" size="35" /></td>
+    <td><html:text property="orgGrpName" size="35" /></td><td><digi:errors /></td>
   </tr>
     <tr>
     <td align="right"><digi:trn key="aim:orgGroupCode">Group Code</digi:trn></td>

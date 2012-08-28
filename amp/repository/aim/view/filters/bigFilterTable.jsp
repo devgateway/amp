@@ -68,20 +68,36 @@
 					<logic:iterate id="element" name="elements" scope="page">
 						<div style="height: ${100-selectorHeaderSize}%; display:none; border: 1px solid #CCCCCC; overflow: auto; background: white;width:100%" id="${element.htmlDivId}">
 							<bean:define id="reqEntityList" name="element" property="rootHierarchyListable.children" toScope="request" />
-							<bean:define id="reqSelectedEntityIds" toScope="request">${element.actionFormProperty}</bean:define>
+							
 							<div class="hiddenNameDiv" style="display: none;"><digi:trn>${element.name}</digi:trn></div>
-							<ul style="list-style-type: none;">
-								<li>
-									<input type="checkbox" onclick="toggleCheckChildren(this);buildLabels();" class="root_checkbox"/> 
-										<span style="font-family: Arial; font-size: 12px;">
-											<digi:trn><c:out value="${element.rootHierarchyListable.label}"/></digi:trn>
-										</span>
-										<div style="display:none">
-											${element.rootHierarchyListable.additionalSearchString}
-										</div>
-									<%@include file="hierarchyLister.jsp" %>
-								</li>
-							</ul>
+							<bean:define id="entityType" toScope="page">checkboxlist</bean:define>
+							<c:catch>
+								<bean:define id="entityType" toScope="page">${element.rootHierarchyListable.type}</bean:define>
+							</c:catch>
+							<c:choose>
+								<c:when test="${entityType=='datelist' }">
+									<br/><br/>
+									&nbsp;&nbsp;<strong>${element.rootHierarchyListable.label}</strong>
+									<%@include file="dateLister.jsp" %>
+								</c:when>
+								<c:otherwise>
+									<bean:define id="reqSelectedEntityIds" toScope="request">${element.actionFormProperty}</bean:define>
+									<ul style="list-style-type: none;">
+										<li>
+											<input type="checkbox" onclick="toggleCheckChildren(this);buildLabels();" class="root_checkbox"/> 
+												<span style="font-family: Arial; font-size: 12px;">
+													<digi:trn><c:out value="${element.rootHierarchyListable.label}"/></digi:trn>
+												</span>
+												<div style="display:none">
+													${element.rootHierarchyListable.additionalSearchString}
+												</div>
+											<%@include file="hierarchyLister.jsp" %>
+										</li>
+									</ul>
+							
+								</c:otherwise>
+							</c:choose>
+							
 						</div>
 						<c:set var="displayProperty"> display: none;</c:set>
 					</logic:iterate>

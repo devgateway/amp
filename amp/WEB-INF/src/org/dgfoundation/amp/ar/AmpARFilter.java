@@ -36,7 +36,6 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
@@ -259,6 +258,13 @@ public class AmpARFilter extends PropertyListable {
 	private Collection<Integer> planMinRank;
 	private String fromDate;
 	private String toDate;
+	
+	private String fromActivityStartDate;
+	private String toActivityStartDate;
+	
+	private String fromActivityActualCompletionDate;
+	private String toActivityActualCompletionDate;
+	
 	private Integer fromMonth;
 	private Integer yearFrom;
 	private Integer toMonth;
@@ -551,6 +557,29 @@ public class AmpARFilter extends PropertyListable {
 	public AmpARFilter() {
 		super();
 		this.generatedFilterQuery = initialFilterQuery;
+	}
+	
+	private String createDateCriteria(String to, String from, String sqlColumn) {
+		String dateCriteria	 	= "";
+		try {
+			if ( (to != null && to.length() > 0)  ) {
+				dateCriteria	= sqlColumn + " <= '" + sdfOut.format(sdfIn.parse(to)) + "'";
+			}
+			if ( (from != null && from.length() > 0)  ) {
+				if ( dateCriteria.length() > 0 ) {
+					dateCriteria += " AND ";
+				}
+				else
+					dateCriteria	= "";
+				
+				dateCriteria	+= sqlColumn + " >= '" + sdfOut.format(sdfIn.parse(from)) + "'";
+			}
+		}
+		catch (ParseException pe) {
+			pe.printStackTrace();
+		}
+		
+		return dateCriteria;
 	}
 
 	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter) {
@@ -881,6 +910,18 @@ public class AmpARFilter extends PropertyListable {
 				e.printStackTrace();
 			}		
 			queryAppend(TO_DATE_FILTER);
+		}
+		
+		String ACTIVITY_START_DATE_FILTER	 	= this.createDateCriteria(toActivityStartDate, fromActivityStartDate, "asd.actual_start_date");
+		if ( ACTIVITY_START_DATE_FILTER.length() > 0 ) {
+			ACTIVITY_START_DATE_FILTER = "SELECT asd.amp_activity_id from v_actual_start_date asd WHERE " + ACTIVITY_START_DATE_FILTER;
+			queryAppend(ACTIVITY_START_DATE_FILTER);
+		}
+		
+		String ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER	 	= this.createDateCriteria(toActivityStartDate, fromActivityStartDate, "acd.actual_completion_date");
+		if ( ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER.length() > 0 ) {
+			ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER = "SELECT acd.amp_activity_id from v_actual_completion_date acd WHERE " + ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER;
+			queryAppend(ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER);
 		}
 		
 		/*
@@ -1722,6 +1763,67 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setToDate(String toDate) {
 		this.toDate = toDate;
+	}
+	
+
+	/**
+	 * @return the fromActivityStartDate
+	 */
+	public String getFromActivityStartDate() {
+		return fromActivityStartDate;
+	}
+
+	/**
+	 * @param fromActivityStartDate the fromActivityStartDate to set
+	 */
+	public void setFromActivityStartDate(String fromActivityStartDate) {
+		this.fromActivityStartDate = fromActivityStartDate;
+	}
+
+	/**
+	 * @return the toActivityStartDate
+	 */
+	public String getToActivityStartDate() {
+		return toActivityStartDate;
+	}
+
+	/**
+	 * @param toActivityStartDate the toActivityStartDate to set
+	 */
+	public void setToActivityStartDate(String toActivityStartDate) {
+		this.toActivityStartDate = toActivityStartDate;
+	}
+	
+	
+
+	/**
+	 * @return the fromActivityActualCompletionDate
+	 */
+	public String getFromActivityActualCompletionDate() {
+		return fromActivityActualCompletionDate;
+	}
+
+	/**
+	 * @param fromActivityActualCompletionDate the fromActivityActualCompletionDate to set
+	 */
+	public void setFromActivityActualCompletionDate(
+			String fromActivityActualCompletionDate) {
+		this.fromActivityActualCompletionDate = fromActivityActualCompletionDate;
+	}
+
+	/**
+	 * @return the toActivityActualCompletionDate
+	 */
+	public String getToActivityActualCompletionDate() {
+		return toActivityActualCompletionDate;
+	}
+
+	/**
+	 * @param toActivityActualCompletionDate the toActivityActualCompletionDate to set
+	 */
+	public void setToActivityActualCompletionDate(
+			String toActivityActualCompletionDate) {
+		this.toActivityActualCompletionDate = toActivityActualCompletionDate;
 	}
 
 	public Collection<String> getApprovalStatusSelected() {

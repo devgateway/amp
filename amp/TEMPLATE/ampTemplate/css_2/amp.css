@@ -663,7 +663,7 @@ div.adminicon{float:right;}
 .yui-panel {
     border-collapse: separate;
     font-family:arial;
-	font-size:12px;
+	font-size:12px !important;
 }
 /**-----IE FIXES-----**/
 html.ie .main_menu{height:25px;margin:0 auto;text-align:left;border:none;position:relative;padding:0px;width:1000px;margin:0 auto;z-index:9000;margin-top:3px;}

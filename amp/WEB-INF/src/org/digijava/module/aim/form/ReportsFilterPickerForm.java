@@ -100,6 +100,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer fromMonth;
 	private String fromDate;
 	private String toDate;
+	
+	private String fromActivityStartDate;
+	private String toActivityStartDate;
+	
+	private String fromActivityActualCompletionDate;
+	private String toActivityActualCompletionDate;
+	
 	private Long countYear;
 	private Long currency;
 	private Long calendar;
@@ -424,6 +431,10 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.selectedArchivedStatus=new Object[]{"1"};
 				this.selectedProjectImplUnit=null;
 				this.selectedMultiDonor	= null;
+				this.fromActivityStartDate = null;
+				this.toActivityStartDate = null;
+				this.fromActivityActualCompletionDate = null;
+				this.toActivityActualCompletionDate = null;
 			}
 		}
 		
@@ -1104,6 +1115,64 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedMultiDonor(Object[] selectedMultiDonor) {
 		this.selectedMultiDonor = selectedMultiDonor;
+	}
+
+	/**
+	 * @return the fromActivityStartDate
+	 */
+	public String getFromActivityStartDate() {
+		return fromActivityStartDate;
+	}
+
+	/**
+	 * @param fromActivityStartDate the fromActivityStartDate to set
+	 */
+	public void setFromActivityStartDate(String fromActivityStartDate) {
+		this.fromActivityStartDate = fromActivityStartDate;
+	}
+
+	/**
+	 * @return the toActivityStartDate
+	 */
+	public String getToActivityStartDate() {
+		return toActivityStartDate;
+	}
+
+	/**
+	 * @param toActivityStartDate the toActivityStartDate to set
+	 */
+	public void setToActivityStartDate(String toActivityStartDate) {
+		this.toActivityStartDate = toActivityStartDate;
+	}
+
+	/**
+	 * @return the fromActivityActualCompletionDate
+	 */
+	public String getFromActivityActualCompletionDate() {
+		return fromActivityActualCompletionDate;
+	}
+
+	/**
+	 * @param fromActivityActualCompletionDate the fromActivityActualCompletionDate to set
+	 */
+	public void setFromActivityActualCompletionDate(
+			String fromActivityActualCompletionDate) {
+		this.fromActivityActualCompletionDate = fromActivityActualCompletionDate;
+	}
+
+	/**
+	 * @return the toActivityActualCompletionDate
+	 */
+	public String getToActivityActualCompletionDate() {
+		return toActivityActualCompletionDate;
+	}
+
+	/**
+	 * @param toActivityActualCompletionDate the toActivityActualCompletionDate to set
+	 */
+	public void setToActivityActualCompletionDate(
+			String toActivityActualCompletionDate) {
+		this.toActivityActualCompletionDate = toActivityActualCompletionDate;
 	}
 
 	

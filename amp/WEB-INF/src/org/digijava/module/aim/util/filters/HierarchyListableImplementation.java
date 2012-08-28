@@ -18,6 +18,11 @@ public class HierarchyListableImplementation implements HierarchyListable {
 	private boolean translateable	= true;
 
 
+	
+	public String getType () {
+		return "checkboxlist";
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.digijava.module.aim.util.HierarchyListable#getCountDescendants()
 	 */

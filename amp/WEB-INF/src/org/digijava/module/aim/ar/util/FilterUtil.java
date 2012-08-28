@@ -207,6 +207,12 @@ public class FilterUtil {
 		form.setToMonth( filter.getToMonth() );
 		form.setFromDate( filter.getFromDate() );
 		form.setToDate( filter.getToDate() );
+		
+		form.setToActivityStartDate(filter.getToActivityStartDate());
+		form.setFromActivityStartDate(filter.getFromActivityStartDate());
+		
+		form.setToActivityActualCompletionDate(filter.getToActivityActualCompletionDate() );
+		form.setFromActivityActualCompletionDate(filter.getFromActivityActualCompletionDate());
 
 		if (filter.getCurrency() != null)
 			form.setCurrency( filter.getCurrency().getAmpCurrencyId() );

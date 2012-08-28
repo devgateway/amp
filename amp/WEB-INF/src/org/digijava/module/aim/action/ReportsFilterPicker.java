@@ -72,6 +72,7 @@ import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.filters.DateListableImplementation;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.digijava.module.aim.util.time.StopWatch;
@@ -832,6 +833,63 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
 		
+		if (true ) {
+			
+			Collection<DateListableImplementation> children		= 
+					new ArrayList<DateListableImplementation>();
+			DateListableImplementation fromDate			= new DateListableImplementation();	
+			fromDate.setLabel("From");
+			fromDate.setUniqueId("fromActivityStartDate");
+			fromDate.setActionFormProperty("fromActivityStartDate");
+			fromDate.setTranslateable(true);
+			children.add(fromDate);
+			
+			DateListableImplementation toDate			= new DateListableImplementation();	
+			toDate.setLabel("To");
+			toDate.setUniqueId("toActivityStartDate");
+			toDate.setActionFormProperty("toActivityStartDate");
+			toDate.setTranslateable(true);
+			children.add(toDate);
+			
+			DateListableImplementation rootDate			= new DateListableImplementation();
+			rootDate.setLabel("Activity Start Date");
+			rootDate.setTranslateable(true);
+			rootDate.setUniqueId("0");
+			rootDate.setChildren(children);
+			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
+					new GroupingElement<HierarchyListableImplementation>("Activity Start Date", "filter_activity_start_date_div", rootDate, "");
+			
+			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
+		}
+		if (true ) {
+			
+			Collection<DateListableImplementation> children		= 
+					new ArrayList<DateListableImplementation>();
+			DateListableImplementation fromDate			= new DateListableImplementation();	
+			fromDate.setLabel("From");
+			fromDate.setUniqueId("fromActivityActualCompletionDate");
+			fromDate.setActionFormProperty("fromActivityActualCompletionDate");
+			fromDate.setTranslateable(true);
+			children.add(fromDate);
+			
+			DateListableImplementation toDate			= new DateListableImplementation();	
+			toDate.setLabel("To");
+			toDate.setUniqueId("toActivityActualCompletionDate");
+			toDate.setActionFormProperty("toActivityActualCompletionDate");
+			toDate.setTranslateable(true);
+			children.add(toDate);
+			
+			DateListableImplementation rootDate			= new DateListableImplementation();
+			rootDate.setLabel("Activity Completion Date");
+			rootDate.setTranslateable(true);
+			rootDate.setUniqueId("0");
+			rootDate.setChildren(children);
+			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
+					new GroupingElement<HierarchyListableImplementation>("Activity Completion Date", "filter_activity_actual_completion_date_div", rootDate, "");
+			
+			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
+		}
+		
 
 		/**
 		 * This has been moved in SectorUtil.getAmpSectorsAndSubSectors();
@@ -1228,6 +1286,11 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1 ? null : new Integer(filterForm.getToMonth().intValue()));
 		arf.setFromDate(filterForm.getFromDate() == null ? null : new String(filterForm.getFromDate()));
 		arf.setToDate(filterForm.getToDate() == null ? null : new String(filterForm.getToDate()));
+		
+		arf.setToActivityStartDate(filterForm.getToActivityStartDate() );
+		arf.setFromActivityStartDate(filterForm.getFromActivityStartDate() );
+		arf.setToActivityActualCompletionDate(filterForm.getFromActivityActualCompletionDate() );
+		arf.setFromActivityActualCompletionDate(filterForm.getFromActivityActualCompletionDate());
 
 		if (filterForm.getComputedYear()!=-1){
 			arf.setComputedYear(filterForm.getComputedYear());

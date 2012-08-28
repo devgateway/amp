@@ -579,8 +579,10 @@ public class GetFoundingDetails extends Action {
                         Object[] fundingList = (Object[])filteredData[1];
 //                        request.getSession().removeAttribute("GIS_FILTER_RESULTS");
                         Map fundingLocationMap = (Map) fundingList[0];
-                        FundingData totalFunding = (FundingData) fundingList[1];
-
+                        FundingData totalFunding = null;
+                        if (fundingList.length>1){
+	                        totalFunding = (FundingData) fundingList[1];
+                        }
                         XMLDocument segmendDataInfo = new XMLDocument();
                         segmendDataInfo.setCodeset("UTF-8");
 
@@ -588,12 +590,19 @@ public class GetFoundingDetails extends Action {
 
 
                         XML root = new XML("funding");
-
-                        root.addAttribute("totalCommitment",FormatHelper.formatNumber(totalFunding.getCommitment().doubleValue()));
-                        root.addAttribute("totalDisbursement",FormatHelper.formatNumber(totalFunding.getDisbursement().doubleValue()));
-                        root.addAttribute("totalExpenditure",FormatHelper.formatNumber(totalFunding.getExpenditure().doubleValue()));
-                        root.addAttribute("totalPlannedDisbursement",FormatHelper.formatNumber(totalFunding.getPlannedDisbursement().doubleValue()));
-
+                        
+                        if (totalFunding==null) {
+                        	root.addAttribute("totalCommitment",FormatHelper.formatNumber(0));
+                            root.addAttribute("totalDisbursement",FormatHelper.formatNumber(0));
+                            root.addAttribute("totalExpenditure",FormatHelper.formatNumber(0));
+                            root.addAttribute("totalPlannedDisbursement",FormatHelper.formatNumber(0));
+						} else {
+							root.addAttribute("totalCommitment",FormatHelper.formatNumber(totalFunding.getCommitment().doubleValue()));
+	                        root.addAttribute("totalDisbursement",FormatHelper.formatNumber(totalFunding.getDisbursement().doubleValue()));
+	                        root.addAttribute("totalExpenditure",FormatHelper.formatNumber(totalFunding.getExpenditure().doubleValue()));
+	                        root.addAttribute("totalPlannedDisbursement",FormatHelper.formatNumber(totalFunding.getPlannedDisbursement().doubleValue()));
+						}
+                        
                         segmendDataInfo.addElement(root);
                         Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
                         while (locFoundingMapIt.hasNext()) {

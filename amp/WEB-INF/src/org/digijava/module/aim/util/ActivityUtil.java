@@ -4388,13 +4388,13 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		  }
 	}
 	
-	public static String collectionToCSV(Collection<AmpActivity> activities) {
+	public static String collectionToCSV(Collection<AmpActivityVersion> activities) {
 		if ( activities == null )
 			return null;
 		String ret	= "";
-		Iterator<AmpActivity> iter	= activities.iterator();
+		Iterator<AmpActivityVersion> iter	= activities.iterator();
 		while ( iter.hasNext() ) {
-			AmpActivity activity	= iter.next();
+			AmpActivityVersion activity	= iter.next();
 			if ( activity.getName() != null ) {
 				ret	+= "'" + activity.getName() + "'" + ", ";
 			}

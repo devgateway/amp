@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <script langauage="JavaScript">
 	function onDelete() {
-		var flag = confirm("Delete this Scheme?");
+		var flag = confirm("Delete this Sector?");
 		return flag;
 	}
 	function updateScheme(id,levelType) {

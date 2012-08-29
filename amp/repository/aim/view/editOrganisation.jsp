@@ -851,6 +851,10 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
 
         function removeSelectedContacts(){
         	var atLeastOneIsChecked = false;
+        	if(document.aimAddOrgForm.selectedContactInfoIds instanceof Node)
+        		atLeastOneIsChecked = document.aimAddOrgForm.selectedContactInfoIds.checked;
+        	else if(document.aimAddOrgForm.selectedContactInfoIds instanceof NodeList)
+        	{
         	for (var i = 0; ((i < document.aimAddOrgForm.selectedContactInfoIds.length) && (atLeastOneIsChecked == false)) ; i++){
         		if (document.aimAddOrgForm.selectedContactInfoIds[i].checked) { 
                 	atLeastOneIsChecked = true;
@@ -858,7 +862,8 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
                 	atLeastOneIsChecked = false;
                 	
                 }
-            }
+             }
+        	}
         	if (atLeastOneIsChecked) {
             	<digi:context name="remConts" property="context/module/moduleinstance/editOrganisation.do" />
                 document.aimAddOrgForm.action = "${remConts}";

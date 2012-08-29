@@ -60,9 +60,15 @@ public class EditOrgType extends DispatchAction {
 			String locale = navigationLanguage.getCode();
 			
 			int typesAmountWithGivenName=DbUtil.getOrgTypesAmount(editForm.getOrgType(),editForm.getAmpOrgTypeId());
+			int typesAmountWithGivenCode=DbUtil.getOrgTypesByCode(editForm.getOrgTypeCode(),editForm.getAmpOrgTypeId());			
 			if(typesAmountWithGivenName>0){
 				ActionMessages errors = new ActionMessages();
 				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationTypeManager.saveOrgTypeError",TranslatorWorker.translateText("Please choose other name as it is currently in use by some other organization type!", locale, siteId)));
+	            saveErrors(request, errors);
+				return mapping.findForward("forward");
+			}else if(typesAmountWithGivenCode>0){
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationTypeManager.saveOrgTypeCodeError",TranslatorWorker.translateText("Please choose other Type code as it is currently in use by some other organization type!", locale, siteId)));
 	            saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}else{

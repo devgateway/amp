@@ -7018,7 +7018,7 @@ public class DbUtil {
         int count=0;
         try {
         	 sess = PersistenceManager.getRequestDBSession();
-             String queryString = "select count(*) from " + AmpOrgType.class.getName() + " o where o.orgType='"+name+"'";
+             String queryString = "select count(*) from " + AmpOrgType.class.getName() + " o where upper(o.orgType) like upper('"+name+"')";
              if(groupId!=null && groupId.longValue()!=0){
             	 queryString += " and o.ampOrgTypeId!="+groupId;
              }
@@ -7026,6 +7026,24 @@ public class DbUtil {
              count=((Integer)qry.uniqueResult()).intValue();
 		} catch (Exception e) {
 			logger.error("Exception while getting org types amount:" +e.getMessage());
+		}
+        return count;
+    }
+
+	public static int getOrgTypesByCode(String code,Long typeId) throws Exception{
+    	Session sess = null;
+        Query qry = null;
+        int count=0;
+        try {
+        	 sess = PersistenceManager.getRequestDBSession();
+             String queryString = "select count(*) from " + AmpOrgType.class.getName() + " o where upper(o.orgTypeCode) like upper('"+code+"')";
+             if(typeId!=null && typeId.longValue()!=0){
+            	 queryString += " and o.ampOrgTypeId!="+typeId;
+             }
+             qry = sess.createQuery(queryString);
+             count=((Integer)qry.uniqueResult()).intValue();
+		} catch (Exception e) {
+			logger.error("Exception while getting org types by code:" +e.getMessage());
 		}
         return count;
     }

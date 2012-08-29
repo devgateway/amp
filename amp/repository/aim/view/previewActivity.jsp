@@ -411,7 +411,7 @@ function collapseAll() {
 			<field:display name="Duration of Project" feature="Planning">
 				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Completion Date - Actual Start Date</digi:trn>" width="10" height=10 border="0">
 				<digi:trn>Duration of project</digi:trn>: <br/>
-				<b>${aimEditActivityForm.planning.projectPeriod }</b>
+				<b>${aimEditActivityForm.planning.projectPeriod }&nbsp; </b><digi:trn>Months</digi:trn>
 				<hr/>
 			</field:display>
 			<field:display name="Delivery rate" feature="Funding Information">

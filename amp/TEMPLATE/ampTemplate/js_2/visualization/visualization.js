@@ -9,7 +9,7 @@ function initializePage(){
 	    conf = conf == undefined ? new Array() : conf;
 	    conf.id = conf.id == undefined ? 'yuiLoadingPanel':confi.id;
 	    conf.header = conf.header == undefined ? trnLoading:conf.header;
-	    conf.width = conf.width == undefined ? '240px':conf.width;
+	    conf.width = conf.width == undefined ? '440px':conf.width;
 	    this.conf = conf;
 	    this.cancelEvent = new YAHOO.util.CustomEvent("cancelEvent", this);
 	    this.init();
@@ -805,7 +805,7 @@ function refreshLoadingPanel(){
 }
 var callbackUpdateLoadingPanel = {
 		  success: function(o) {
-			   loadingPanel.loadingPanel.setBody(o.responseText + '<img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
+			   loadingPanel.loadingPanel.setBody(o.responseText + '<br/> <img src="/TEMPLATE/ampTemplate/img_2/rel_interstitial_loading.gif" />');
 			   loadingPanel.loadingPanel.render(document.body);
 		       var cancelLink = document.createElement('a');
 		       $D.setStyle(cancelLink, 'cursor', 'pointer');

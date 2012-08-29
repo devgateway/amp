@@ -290,7 +290,7 @@ YAHOO.namespace("YAHOO.amp");
 	 	for (var i = 0;  i < number.length;  i++) {
 	 		var ch = number.charAt(i);
 	  		if (validChars.indexOf(ch)==-1){
-	  			alert('<digi:trn jsFriendly="true">enter correct phone number</digi:trn>');	   			
+	  			alert('<digi:trn jsFriendly="true">enter correct number</digi:trn>');	   			
 	   			return false;
 	  		}
 	 	}	 

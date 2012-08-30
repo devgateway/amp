@@ -1621,7 +1621,11 @@ function getTitlesObjects(){
 	var objs = document.getElementsByTagName("span");
 	var arrReturnElements = new Array();
 	for ( var i = 0; i < objs.length; i++) {
-		if (objs[i].getAttribute("class")=="legend_label"){
+		if(navigator.appName == "Microsoft Internet Explorer")
+			var att = objs[i].getAttribute("className");
+		else
+			var att = objs[i].getAttribute("class");
+		if (att=="legend_label"){
 			arrReturnElements.push(objs[i]);
 		}
 	}

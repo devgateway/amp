@@ -170,7 +170,7 @@ public class ExportActivityToWord extends Action {
 	            Table identificationSubTable1 = new Table(2);
 	            identificationSubTable1.setWidths(new float[]{1f,2f});
 	            identificationSubTable1.setWidth(100);
-	            
+	            identificationSubTable1.setBorder(0);
 	            generateIdentificationPart(request, ampContext, p1,identificationSubTable1);
 	            identificationTblCell1.add(identificationSubTable1);
 	            //identificationTbl.addCell(identificationTblCell1);
@@ -833,7 +833,6 @@ public class ExportActivityToWord extends Action {
 		if(FeaturesUtil.isVisibleField("AMP ID", ampContext)){
 			columnName=TranslatorWorker.translateText("AMP ID",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,identification.getAmpId(),null);					
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason", ampContext)){
@@ -850,12 +849,10 @@ public class ExportActivityToWord extends Action {
 				columnVal += processHtml(request, identification.getStatusReason());
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective", ampContext)){
 			columnName=TranslatorWorker.translateText("Objectives",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getObjectives()),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		ArrayList<AmpComments> colAux	= null;
@@ -901,56 +898,47 @@ public class ExportActivityToWord extends Action {
 					}
 				}			            
 	            generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Objective Comments",request), objTable,null);
-	            applyEmptyCell(identificationSubTable1);
 			}
 		}
 
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Description", ampContext)){
 			columnName=TranslatorWorker.translateText("Description",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getDescription()),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments", ampContext)){
 			columnName=TranslatorWorker.translateText("Project Comments",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getProjectComments()),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext)){
 			columnName=TranslatorWorker.translateText("NPD Clasification",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,identification.getClasiNPD(),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext)){
 			columnName=TranslatorWorker.translateText("Lessons Learned",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,identification.getLessonsLearned(),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Impact", ampContext)){
 			columnName=TranslatorWorker.translateText("Project Impact",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getProjectImpact()),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(identification.getActivitySummary() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Summary", ampContext)){
 			columnName=TranslatorWorker.translateText("Activity Summary",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getActivitySummary()),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(identification.getContractingArrangements() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Contracting Arrangements", ampContext)){
 			columnName=TranslatorWorker.translateText("Contracting Arrangements",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getContractingArrangements()),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(identification.getCondSeq() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionality and Sequencing", ampContext)){
 			columnName=TranslatorWorker.translateText("Conditionality and Sequencing",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getCondSeq()),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(identification.getLinkedActivities() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Linked Activities", ampContext)){
@@ -962,13 +950,11 @@ public class ExportActivityToWord extends Action {
 		if(identification.getConditionality() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionalities", ampContext)){
 			columnName=TranslatorWorker.translateText("Conditionalities",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getConditionality()),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(identification.getProjectManagement() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Management", ampContext)){
 			columnName=TranslatorWorker.translateText("Project Management",request);
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getProjectManagement()),null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		//Results
@@ -980,7 +966,6 @@ public class ExportActivityToWord extends Action {
 			columnName=TranslatorWorker.translateText("Results",locale,siteId);
 			columnVal=processEditTagValue(request, identification.getResults());
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		/**
 		 *  Results Comments
@@ -1010,7 +995,6 @@ public class ExportActivityToWord extends Action {
 				}
 			}
             generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Results Comments",request), objTable,null);
-            applyEmptyCell(identificationSubTable1);
 		}
 				
 		
@@ -1025,7 +1009,6 @@ public class ExportActivityToWord extends Action {
 				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}	
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Implementing Unit", ampContext)){
@@ -1039,7 +1022,6 @@ public class ExportActivityToWord extends Action {
 				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
 			}					
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}
 			
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/A.C. Chapter", ampContext)){
@@ -1053,7 +1035,6 @@ public class ExportActivityToWord extends Action {
 				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}	
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Cris Number", ampContext)){
@@ -1064,7 +1045,6 @@ public class ExportActivityToWord extends Action {
 				columnVal = identification.getCrisNumber();
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Procurement System", ampContext)){
@@ -1078,7 +1058,6 @@ public class ExportActivityToWord extends Action {
 				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Reporting System", ampContext)){
@@ -1092,7 +1071,6 @@ public class ExportActivityToWord extends Action {
 				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Audit System", ampContext)){
@@ -1106,7 +1084,6 @@ public class ExportActivityToWord extends Action {
 				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Institutions", ampContext)){
@@ -1120,7 +1097,6 @@ public class ExportActivityToWord extends Action {
 				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Category", ampContext)){
@@ -1134,7 +1110,6 @@ public class ExportActivityToWord extends Action {
 				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Agreement Number", ampContext)){
@@ -1145,12 +1120,10 @@ public class ExportActivityToWord extends Action {
 				columnVal	= identification.getGovAgreementNumber();
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Budget", ampContext)){
 			cell = new RtfCell();
-			cell.setColspan(2);
 			cell.setBorder(0);
 			if (identification.getBudgetCV()!=null) {
 				if(identification.getBudgetCV().equals(identification.getBudgetCVOn())){
@@ -1176,8 +1149,10 @@ public class ExportActivityToWord extends Action {
 				}
 			}
 			
-			identificationSubTable1.addCell(cell);					
-			applyEmptyCell(identificationSubTable1);
+			identificationSubTable1.addCell(cell);			
+			cell=new RtfCell();
+			cell.setBorder(0);
+			identificationSubTable1.addCell(cell);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras", ampContext)){
@@ -1201,7 +1176,6 @@ public class ExportActivityToWord extends Action {
 				columnName=TranslatorWorker.translateText("Project Code",request);
 				generateOverAllTableRows(identificationSubTable1,columnName,identification.getProjectCode(),null);
 			}
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Classification", ampContext)){
@@ -1233,12 +1207,10 @@ public class ExportActivityToWord extends Action {
 				}
 			}
 			identificationSubTable1.addCell(cell);
-			applyEmptyCell(identificationSubTable1);
 		}
 		
 		if(FeaturesUtil.isVisibleField("Organizations and Project ID", ampContext)){
 			cell = new RtfCell();
-			cell.setColspan(2);
 			cell.setBorder(0);
 			cell.add(new Paragraph(TranslatorWorker.translateText("Organizations and Project ID",request)+": ",PLAINFONT));
 			if(identification.getSelectedOrganizations()!=null){
@@ -1250,7 +1222,9 @@ public class ExportActivityToWord extends Action {
 			}			
 			
 			identificationSubTable1.addCell(cell);
-			applyEmptyCell(identificationSubTable1);
+			cell=new RtfCell();
+			cell.setBorder(0);
+			identificationSubTable1.addCell(cell);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid", ampContext)){
@@ -1267,7 +1241,6 @@ public class ExportActivityToWord extends Action {
 			}
 			cell.add(new Paragraph(columnVal,BOLDFONT));
 			identificationSubTable1.addCell(cell);
-			applyEmptyCell(identificationSubTable1);
 		}
 	}
 
@@ -1538,7 +1511,7 @@ public class ExportActivityToWord extends Action {
 			text = text.replaceAll("&gt;",">");
 			text = text.replaceAll("&amp;","&");
 			text = text.replaceAll("&rsquo;","'");
-            
+			text = text.replaceAll("\\r","");
 		}
 		
 		return ExportActivityToPdfUtil.unhtmlentities(text);

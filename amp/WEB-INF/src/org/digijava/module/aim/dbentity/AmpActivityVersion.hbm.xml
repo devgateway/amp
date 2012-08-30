@@ -99,6 +99,7 @@
 		<property name="subVote" column="subVote" type="java.lang.String" />
 		<property name="subProgram" column="subProgram" type="java.lang.String" />
 		<property name="projectCode" column="project_code" type="java.lang.String" />
+		<property name="ministryCode" column="ministry_code" type="java.lang.String" />
 		<property name="crisNumber" column="cris_number" type="java.lang.String" />
 		<property name="gbsSbs" column="gbsSbs" type="java.lang.Long" />
 		<property name="governmentApprovalProcedures" column="governmentApprovalProcedures"

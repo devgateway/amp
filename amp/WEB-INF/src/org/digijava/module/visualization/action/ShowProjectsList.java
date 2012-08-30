@@ -2,6 +2,7 @@ package org.digijava.module.visualization.action;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,12 +20,15 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
@@ -43,6 +47,9 @@ public class ShowProjectsList extends Action {
 		String id = request.getParameter("id");
 		String startYear = request.getParameter("startYear");
 		String endYear = request.getParameter("endYear");
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        String itemName = "";
 		
 		int startYearInt = 0;
 		if (startYear.contains("-")) {
@@ -110,13 +117,10 @@ public class ShowProjectsList extends Action {
 			//activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 			for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];
-				String itemName;
 				if(!long1.equals(0l)){
 					itemName = LocationUtil.getAmpLocationByCVLocation(long1).getLocation().getName();
 				} else {
-					String locale = RequestUtils.getNavigationLanguage(request).getCode();
-			        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-			        try {
+					try {
 			        	itemName = TranslatorWorker.translateText("Unallocated", locale, siteId);
 					} catch (WorkerException e) {
 						itemName = "Unallocated";
@@ -135,7 +139,7 @@ public class ShowProjectsList extends Action {
 			//activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 			for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];
-				String itemName = SectorUtil.getAmpSector(long1).getName();
+				itemName = SectorUtil.getAmpSector(long1).getName();
 				Long[] id1 = {long1};
 				newFilter.setSelSectorIds(id1);
 				activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
@@ -149,7 +153,7 @@ public class ShowProjectsList extends Action {
 			//activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 			for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];
-				String itemName = DbUtil.getOrganisation(long1).getName();
+				itemName = DbUtil.getOrganisation(long1).getName();
 				Long[] id1 = {long1};
 				newFilter.setOrgIds(id1);
 				activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
@@ -158,30 +162,63 @@ public class ShowProjectsList extends Action {
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		if (type.equals("Fundings")){
+			try {
+				switch (Integer.parseInt(id)) {
+				case Constants.COMMITMENT:
+					itemName = TranslatorWorker.translateText("ODA Historical Trend - Commitments", locale, siteId);		
+					break;
+				case Constants.DISBURSEMENT:
+					itemName = TranslatorWorker.translateText("ODA Historical Trend - Disbursements", locale, siteId);
+					break;
+				case Constants.EXPENDITURE:
+					itemName = TranslatorWorker.translateText("ODA Historical Trend - Expenditures", locale, siteId);
+					break;
+				default:
+					break;
+				}
+			} catch (WorkerException e) {
+				itemName = "ODA Historical Trend";
+			}
             activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-            itemProjectsList.put("", getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+            itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		if (type.equals("AidPredictability")){
     		HardCodedCategoryValue adjustmentType;
     		
-    		if(id.equalsIgnoreCase(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()))
+    		if(id.equalsIgnoreCase(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
     			adjustmentType = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL;
-    		else
+    			itemName = TranslatorWorker.translateText("Aid Predictability - Actual", locale, siteId);
+    		} else {
     			adjustmentType = CategoryConstants.ADJUSTMENT_TYPE_PLANNED;
-    			
+    			itemName = TranslatorWorker.translateText("Aid Predictability - Planned", locale, siteId);
+    		}
             activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType);
-            itemProjectsList.put("", getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+            itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		if (type.equals("AidType")){
-            activities = DbUtil.getActivityList(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-            itemProjectsList.put("", getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+			Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+	        for (Iterator iterator = categoryValues.iterator(); iterator.hasNext();) {
+				AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+				if (ampCategoryValue.getId()== Long.parseLong(id)) {
+					itemName = TranslatorWorker.translateText("Aid Type - " + ampCategoryValue.getValue(), locale, siteId);
+				}
+			}
+			activities = DbUtil.getActivityList(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+            itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		if (type.equals("AidModality")){
-            activities = DbUtil.getActivityList(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-            itemProjectsList.put("", getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+			Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+	        for (Iterator iterator = categoryValues.iterator(); iterator.hasNext();) {
+				AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+				if (ampCategoryValue.getId()== Long.parseLong(id)) {
+					itemName = TranslatorWorker.translateText("Aid Type - " + ampCategoryValue.getValue(), locale, siteId);
+				}
+			}
+			activities = DbUtil.getActivityList(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+            itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		/*if(activities.size() > 0){

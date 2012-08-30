@@ -234,7 +234,7 @@ public class ShowProjectsList extends Action {
 	        	AmpActivityVersion act = it.next();
 	        	newFilter.setActivityId(act.getAmpActivityId());
 	        	DecimalWraper fundingCal = null;
-	        	if (type.equals("FundingChart")){
+	        	if (type.equals("Fundings")){
 	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	        	} else if (type.equals("AidPredictability")){
 	        		HardCodedCategoryValue adjustmentType;
@@ -246,7 +246,7 @@ public class ShowProjectsList extends Action {
 	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), adjustmentType);
 	        	} else if (type.equals("AidType")){
 	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, Long.parseLong(id), null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-	        	} else if (type.equals("FinancingInstrument")){
+	        	} else if (type.equals("AidModality")){
 	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, Long.parseLong(id), newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	        	} else if (type.equals("SectorProfile")){
 	        		Long[] id1 = {Long.parseLong(id)};

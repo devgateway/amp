@@ -955,7 +955,7 @@ public class EditOrganisation extends DispatchAction {
       	editForm.setPrimaryOrgContIds(null);
       }
       
-      organization.setName(editForm.getName());
+      organization.setName(editForm.getName().trim());
       organization.setAcronym(editForm.getAcronym());
       organization.setFundingorgid(editForm.getFundingorgid());
       organization.setAddress(editForm.getAddress());

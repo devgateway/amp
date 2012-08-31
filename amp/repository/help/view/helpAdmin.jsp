@@ -438,8 +438,4 @@ function IsEmpty(){
  </center>
  <script type="text/javascript">
 	initFileUploads();
-	if ( document.crDocumentManagerForm.pageCloseFlag.value == "true" ) {
-			window.opener.location.replace(window.opener.location.href); 
-			window.close();
-		}
 </script>

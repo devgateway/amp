@@ -328,7 +328,7 @@ function selectCurrentLocation(){
 	var typeText = typeSelect.options[typeSelect.selectedIndex].text; 
 	var typeValue = typeSelect.options[typeSelect.selectedIndex].value; 
 	if (typeValue){
-		sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 32, 37);
+		sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 21, 25);
 	}else{
 		sms = new esri.symbol.SimpleMarkerSymbol();
 		sms.setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE);
@@ -463,7 +463,7 @@ function locate() {
     
 	
 	if (typeValue!=""){
-		symbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 32, 37);
+		symbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id=' + typeValue, 21, 25);
 	}else{
 		symbol = new esri.symbol.SimpleMarkerSymbol();
 		symbol.setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE);

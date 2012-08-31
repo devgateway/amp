@@ -1085,7 +1085,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 					function(structure) {
 						var sms = new esri.symbol.PictureMarkerSymbol(
 								'/esrigis/structureTypeManager.do~action=displayIcon~id='
-										+ structure.typeId, 32, 37);
+										+ structure.typeId, 21, 25);
 						var pgraphic;
 
 						if (structure.shape == "") {

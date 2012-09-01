@@ -106,7 +106,7 @@ public class RelatedOrgGate extends Gate {
 	    while (i.hasNext()) {
 		AmpOrgRole element = (AmpOrgRole) i.next();
 		String roleCode = element.getRole().getRoleCode();
-		if (element.getOrganisation().getAmpOrgId().equals(user.getAssignedOrgId()))
+		if (user.hasVerifiedOrganizationId(element.getOrganisation().getAmpOrgId()))
 		    return true;
 	    }
 	    

@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.security.auth.Subject;
@@ -443,5 +444,18 @@ public class User
    		this.assignedOrgs = assignedOrgs;
    	}
 
+	public boolean hasVerifiedOrganizationId(Long ampOrgId) {
+   		//First, check if the user has the Funding Organization in the property this.getAssignedOrgId()
+   		if(ampOrgId == null) return false;
+   		if(this.assignedOrgId != null && this.assignedOrgId.equals(ampOrgId)) return true;
+   		//If it's not there, check in the Set<AmpOrganisation> assignedOrgs
+   		Iterator<AmpOrganisation> it = this.assignedOrgs.iterator();
+   		while(it.hasNext()){
+   			AmpOrganisation currentOrganization = it.next();
+   			if(currentOrganization.getAmpOrgId().equals(ampOrgId))
+   				return true;
+   		}
+   		return false;
+	}
 	
 }

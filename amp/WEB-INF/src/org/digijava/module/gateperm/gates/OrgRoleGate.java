@@ -101,7 +101,7 @@ public class OrgRoleGate extends Gate {
 	if(org!=null && "DN".equals(paramRoleCode) ) {
 		String roleCode=(String) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
 		if(roleCode==null) throw new RuntimeException("CURRENT_ORG specified in scope without CURRENT_ORG_ROLE!");
-		if(roleCode.equals(paramRoleCode) && org.getAmpOrgId().equals(user.getAssignedOrgId())) return true;
+		if(roleCode.equals(paramRoleCode) && user.hasVerifiedOrganizationId(org.getAmpOrgId())) return true;
 		//an org was in the scope, do not continue with the logic and deny access
 		return false;
 	}
@@ -112,11 +112,10 @@ public class OrgRoleGate extends Gate {
 		return false;
 	    Iterator i = ampa.getOrgrole().iterator();
 	    while (i.hasNext()) {
-		AmpOrgRole element = (AmpOrgRole) i.next();
-		String roleCode = element.getRole().getRoleCode();
-		if (roleCode.equals(paramRoleCode)
-			&& element.getOrganisation().getAmpOrgId().equals(user.getAssignedOrgId()))
-		    return true;
+			AmpOrgRole element = (AmpOrgRole) i.next();
+			String roleCode = element.getRole().getRoleCode();
+			if (roleCode.equals(paramRoleCode) && user.hasVerifiedOrganizationId(element.getOrganisation().getAmpOrgId()))
+			    return true;
 	    }
 	    
 

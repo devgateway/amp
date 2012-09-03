@@ -825,10 +825,18 @@ session.setAttribute("progressValue", counter);
 		</logic:notEqual>
 	<logic:equal name="report" property="totalUniqueRows" value="0">
 		<tr>
-			<td style="font-family: Arial;font-style: italic;font-size: 10x"> 
-				<digi:trn key="rep:pop:filteredreport">The specified filtered report does not hold any data. Either
-					pick a different filter criteria or use another report.	
-				</digi:trn>
+			<td style="font-family: Arial;font-style: italic;font-size: 10x">
+				<c:choose>
+					<c:when test="${param.queryEngine =='true'}">
+						<digi:trn key="rep:pop:filteredSearch">The specified filters does not hold any data. Pick a different filter criteria.	
+						</digi:trn>
+					</c:when>
+					<c:otherwise>
+						<digi:trn key="rep:pop:filteredreport">The specified filtered report does not hold any data. Either
+							pick a different filter criteria or use another report.	
+						</digi:trn>
+					</c:otherwise>
+				</c:choose>
 			</td>
 		</tr>
 	</logic:equal>

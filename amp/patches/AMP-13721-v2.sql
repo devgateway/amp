@@ -1,0 +1,1 @@
+UPDATE amp_organisation SET name=trim(name);

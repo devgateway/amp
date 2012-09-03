@@ -90,4 +90,7 @@ public class GlobalSettingsConstants {
 	public static final String ACTIVITY_FORM_ONE_PAGER = "Activity Form - One Pager";	
 	
 	public static final String PUBLIC_PORTAL = "Public Portal";	
+
+    public static final String REPORTS_EMPTY_VALUES_AS_ZERO_XLS= "Show empty values as zero in Reports export to XLS";
+
 }

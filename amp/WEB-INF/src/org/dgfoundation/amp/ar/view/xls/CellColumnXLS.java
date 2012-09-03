@@ -14,6 +14,8 @@ import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -56,7 +58,7 @@ public class CellColumnXLS extends XLSExporter {
 		 c.invokeExporter(this);
 		 else {
 			 HSSFCell cell=this.getRegularCell();
-			 if (col.getClass().toString().equalsIgnoreCase("class org.dgfoundation.amp.ar.TotalAmountColumn")){
+			 if (col.getClass().toString().equalsIgnoreCase("class org.dgfoundation.amp.ar.TotalAmountColumn") && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS)){
 				 cell.setCellValue(0);
 			 }else{
 				 cell.setCellValue(" ");

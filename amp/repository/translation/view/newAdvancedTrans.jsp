@@ -161,13 +161,13 @@ th {
 		<digi:trn>Show translations which have value only in english</digi:trn>
 		<div class="controlPanel">
 			<div class="clearfix">
-				<div style="float:left;padding: 1px">
+				<div style="float:left;padding: 5px">
 					<div><digi:trn>Search for</digi:trn>:</div>
-					<html:text name="newAdvancedTrnForm" property="searchTerm" styleClass="searchTermInput" styleId="searchTerm"/>&nbsp;
+					<html:text style="top:10px;" name="newAdvancedTrnForm" property="searchTerm" styleClass="searchTermInput" styleId="searchTerm"/>&nbsp;
 				</div>
 				<div style="float:left;padding: 5px">
 				<div><digi:trn>Search language</digi:trn>:</div>
-					<html:select property="selectedLocale">
+					<html:select style="top:10px;" property="selectedLocale">
 						<c:forEach var="lng" items="${newAdvancedTrnForm.languages}">
 							<html:option value="${lng.code}"><digi:trn>${lng.name}</digi:trn></html:option>
 						</c:forEach>
@@ -177,7 +177,7 @@ th {
 				
 				<div style="float:left;padding: 5px">
 				<div><digi:trn>Result</digi:trn>:</div>
-					<html:select property="itemsPerPage">
+					<html:select style="top:10px;" property="itemsPerPage">
 							<html:option value="10">10</html:option>
 							<html:option value="20">20</html:option>
 							<html:option value="25">25</html:option>
@@ -185,11 +185,11 @@ th {
 							<html:option value="100">100</html:option>
 					</html:select>
 				</div>
-				<div style="float:left">
+				<div style="float:left;padding:5px;">
 					<div>&nbsp;</div>&nbsp;
                     <input type="submit" value="<digi:trn>Search</digi:trn>" id="btnDoSearch" class="buttonx"/>
 				</div>
-				<div style="float: left">
+				<div style="float: left;padding:5px;">
 					<div>&nbsp;</div>&nbsp;
 					<input type="submit" value="<digi:trn>View All</digi:trn>"
 						id="btnViewAll" class="buttonx"  title="<digi:trn>Click here to view all translations in database</digi:trn>"/>

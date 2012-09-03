@@ -11,7 +11,10 @@
 <%@ page import="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem" %>
 
 <digi:instance property="beMapActionsForm"/>
+<script type="text/javascript">
+var trnAlertBadFile = "<digi:trn jsFriendly='true'>Invalid file extension</digi:trn>";
 
+</script>
 
 <digi:ref href="/repository/budgetexport/view/css/budgetexport.css" type="text/css" rel="stylesheet" />	
 	

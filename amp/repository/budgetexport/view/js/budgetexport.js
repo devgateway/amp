@@ -1,9 +1,32 @@
+
+function validateFile(oForm) {
+    var arrInputs = oForm.getElementsByTagName("input");
+    var validExtension = ".csv";
+    for (var i = 0; i < arrInputs.length; i++) {
+        var oInput = arrInputs[i];
+        if (oInput.type == "file") {
+            var sFileName = oInput.value;
+            if (sFileName.length > 0) {
+            	if (sFileName.substr(sFileName.length - validExtension.length, validExtension.length).toLowerCase() == validExtension){
+            		return true;
+            	} else {
+            		return false;
+            	}
+            }
+        }
+    }
+    return false;
+}
+
 function uploadFile(obj) {
 	
-		obj.form.setAttribute("accept-charset", "UTF-8");
-		obj.form.action=obj.form.action + "?action=upload";
-		obj.form.submit();
-		
+		if (validateFile(obj.form)){
+			obj.form.setAttribute("accept-charset", "UTF-8");
+			obj.form.action=obj.form.action + "?action=upload";
+			obj.form.submit();
+		} else {
+			alert(trnAlertBadFile);
+		}
 	}
 	
 	function saveMapping(obj) {

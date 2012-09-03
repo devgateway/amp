@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -146,14 +149,17 @@
 																           <html:text property="orgTypeCode" size="60" style="border:1px solid #CCCCCC;" />																		</td>
 																	</tr>
 																	<tr>
-                                                                        <td colspan="2" align="center">
+                                                                        <td colspan="2" align="center">                                   
+                                                                         <feature:display name="Organization Manager Type" module="Organization Manager" >                                      	
                                                                             <fieldset style="padding-left:200px; border:1px solid #CCCCCC; background-color:#FFFFFF; text-align: left;">
                                                                             <html:radio property="classification" value="GOVERNMENTAL"><digi:trn>Governmental</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="NGO"><digi:trn>NGO</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="REGIONAL"><digi:trn>Regional</digi:trn></html:radio><br>
                                                                             <html:radio property="classification" value="FUND"><digi:trn>FUND</digi:trn></html:radio><br>
                                                                             <input style="margin-top:10px;" type="button" onclick="resetRadioButtons()" value="<digi:trn>Deselect</digi:trn>" class="buttonx"/>
-                                                                            </fieldset>                                                                        </td>
+                                                                            </fieldset> 
+                                                                          </feature:display> 
+                                                                      </td>
 																	</tr>
 																																		
 																	<tr align="center">

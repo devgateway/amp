@@ -88,7 +88,8 @@
 <module:display name="Map Module"></module:display>
 
 <module:display name="Organization Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
-
+<feature:display name="Organization Manager Type" module="Organization Manager" ></feature:display>
+ 
 <module:display name="PUBLIC VIEW"></module:display> 
 <module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>

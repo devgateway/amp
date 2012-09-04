@@ -12,6 +12,15 @@ function search() {
 	}
 	return true;
 }
+
+function searchEnter(e)
+{
+    if (typeof e == 'undefined' && window.event) 
+        e = window.event; 
+    if (e.keyCode == 13)
+    	$("#searchButton").click();
+}
+
 </script>
 
 <c:set var="suffix">
@@ -35,7 +44,7 @@ _big
 									<div class="search_label"><digi:trn>Keyword</digi:trn>:</div>
 								</td>
 								<td align="left" class="tbl_spacing">
-									<input name="" type="text" class="inputx" style="width:90px;" id="keyword">
+									<input name="" type="text" class="inputx" style="width:90px;" onkeypress="searchEnter(event)" id="keyword">
 								</td>
 						</tr>
 						<tr>
@@ -65,7 +74,7 @@ _big
 							</tr>
 							<tr>
 								<td colspan="2" align="center">
-									<input onclick="search()" type="button" class="buttonx" value="<digi:trn>Search</digi:trn>" style="margin-top: 10px">
+									<input onclick="search()" id="searchButton" type="button" class="buttonx" value="<digi:trn>Search</digi:trn>" style="margin-top: 10px">
 								</td>
 							</tr>
 							<tr>

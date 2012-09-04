@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -110,7 +111,7 @@ public class ShowProjectsList extends Action {
         
         DashboardFilter newFilter = filter.getCopyFilterForFunding();
         List<AmpActivityVersion> activities = null;
-        Map<String, Map<AmpActivityVersion, BigDecimal>> itemProjectsList = new HashMap<String, Map<AmpActivityVersion, BigDecimal>>();
+        Map<String, Map<AmpActivityVersion, BigDecimal>> itemProjectsList = new TreeMap<String, Map<AmpActivityVersion, BigDecimal>>();
         if (type.equals("RegionProfile")){
 	    	//Long[] ids = {Long.parseLong(id)};
         	//newFilter.setSelLocationIds(ids);
@@ -265,7 +266,7 @@ public class ShowProjectsList extends Action {
         }
 	    if(activities.size() > 0){
 	        Iterator<AmpActivityVersion> it = activities.iterator();
-	        Map<AmpActivityVersion, BigDecimal> itemProjectsList = new HashMap<AmpActivityVersion, BigDecimal>();
+	        Map<AmpActivityVersion, BigDecimal> itemProjectsList = new TreeMap<AmpActivityVersion, BigDecimal>();
 	        BigDecimal totalSum = BigDecimal.ZERO;
 	        while(it.hasNext()){
 	        	AmpActivityVersion act = it.next();

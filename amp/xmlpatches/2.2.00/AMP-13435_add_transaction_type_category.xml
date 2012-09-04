@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-13435</jira>
+  <keyword>transaction type category</keyword>
+  <author>Arty</author>
+  <description>Create the transaction type category</description>
+  
+  <trigger type="all">
+		<condition type="custom">
+			<script returnVar="cnt">
+				<lang type="postgres">SELECT count(*) from amp_category_class where keyname='transaction_type'</lang>
+			</script>
+			<test>cnt == 0</test>
+		</condition>
+	</trigger>
+	
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+		    INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)
+		    VALUES (nextval('amp_category_class_seq'), 'Transaction Type' , 'transaction_type', '', 'f', 'f');
+		    
+		    INSERT INTO amp_category_value(id, category_value, amp_category_class_id, index_column)
+		    VALUES (nextval('amp_category_value_seq'), 'Commitments',
+		    		(select id from amp_category_class where keyname='transaction_type'), 0);
+
+		    INSERT INTO amp_category_value(id, category_value, amp_category_class_id, index_column)
+		    VALUES (nextval('amp_category_value_seq'), 'Disbursement Orders',
+		    		(select id from amp_category_class where keyname='transaction_type'), 1);
+
+		    INSERT INTO amp_category_value(id, category_value, amp_category_class_id, index_column)
+		    VALUES (nextval('amp_category_value_seq'), 'Disbursements',
+		    		(select id from amp_category_class where keyname='transaction_type'), 2);
+
+		    INSERT INTO amp_category_value(id, category_value, amp_category_class_id, index_column)
+		    VALUES (nextval('amp_category_value_seq'), 'Expenditures',
+		    		(select id from amp_category_class where keyname='transaction_type'), 3);
+
+    	 </lang>
+    </script>
+  </apply>
+
+</tns:patch>

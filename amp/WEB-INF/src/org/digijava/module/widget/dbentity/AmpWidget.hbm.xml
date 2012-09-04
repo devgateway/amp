@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.widget.dbentity.AmpWidget" table="AMP_WIDGET"
+		discriminator-value="w">
+		<cache usage="read-write" />
+		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="native">
+				<param name="sequence">AMP_WIDGET_seq</param>
+			</generator>
+		</id>
+
+		<discriminator column="widget_type" />
+		<property name="name" column="widget_name" type="java.lang.String" />
+		<property name="code" column="widget_code" type="java.lang.String" />
+		<property name="nameAsTitle" column="name_as_title" type="java.lang.Boolean" />
+
+		<subclass name="org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart"
+			discriminator-value="indsecchart">
+			<many-to-one name="indicator" column="ind_connect_id"
+				class="org.digijava.module.aim.dbentity.IndicatorSector" cascade="none" />
+		</subclass>
+
+	
+
+		<subclass name="org.digijava.module.widget.dbentity.AmpDaTable" discriminator-value="tbl">
+			<property name="cssClass" column="css_class" type="java.lang.String" />
+			<property name="htmlStyle" column="html_style" type="java.lang.String" />
+			<property name="width" column="table_width" type="java.lang.String" />
+			<set name="columns" lazy="true" inverse="true" order-by="order_no asc"
+				cascade="all-delete-orphan">
+				<key column="table_widget_id" />
+				<one-to-many class="org.digijava.module.widget.dbentity.AmpDaColumn" />
+			</set>
+		</subclass>
+
+	<subclass discriminator-value="secTbl" name="org.digijava.module.widget.dbentity.AmpSectorTableWidget">
+      <set cascade="all-delete-orphan" inverse="true" lazy="true" name="sectorsColumns" order-by="order_number asc">
+        <key column="sector_widget_table_id"/>
+        <one-to-many class="org.digijava.module.widget.dbentity.AmpSectorOrder"/>
+      </set>
+      <set cascade="all-delete-orphan" inverse="true" lazy="true" name="years" order-by="column_order asc">
+        <key column="sector_widget_table_id"/>
+        <one-to-many class="org.digijava.module.widget.dbentity.AmpSectorTableYear"/>
+      </set>
+      <property column="donor_year" name="donorYear" type="java.lang.Long"/>
+    </subclass>
+    <subclass discriminator-value="piTbl" name="org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget">
+      <list cascade="all-delete-orphan" inverse="true" lazy="true" name="parisIndicators">
+        <key column="pi_table_widget_id"/>
+		<list-index column="index_column"/>
+        <one-to-many class="org.digijava.module.widget.dbentity.AmpParisIndicatorBaseTargetValues"/>
+      </list>
+      <property column="donor_group_year" name="donorGroupYear" type="java.lang.Long"/>
+    </subclass>
+     <subclass discriminator-value="topTenDonors" name="org.digijava.module.widget.dbentity.AmpWidgetTopTenDonorGroups"/>
+
+	</class>
+</hibernate-mapping>

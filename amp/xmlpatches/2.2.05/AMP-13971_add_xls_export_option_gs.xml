@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-13971</jira>
+	<keyword>Global Settings</keyword>
+	<keyword>Reports Excel</keyword>
+	<author>FFerreyra</author>
+	<trigger type="all">
+		<condition type="entryInTableMissing" tablename="AMP_GLOBAL_SETTINGS"
+			columnname="settingsName" columnvalue="Show empty values as zero in Reports export to XLS" />
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				insert into amp_global_settings(id,settingsName,settingsValue,possibleValues,description, section) values(nextval('amp_global_settings_seq'),'Show empty values as zero in Reports export to XLS','true','t_Boolean','Show empty values as zero in Reports export to XLS', 'funding');
+			</lang>
+		</script>
+	</apply>
+
+</tns:patch>

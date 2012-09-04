@@ -1,0 +1,3 @@
+CREATE or replace view `v_regional_observations` AS select `ai`.`amp_activity_id` AS `amp_activity_id`,`ai`.`name` AS `name`,`ai`.`amp_regional_observation_id` AS `amp_regional_observation_id`,ai.observationDate from (`amp_regional_observation` `ai` join `amp_activity` `a`) where (`ai`.`amp_activity_id` = `a`.`amp_activity_id`) order by `ai`.`amp_activity_id`;
+insert ignore into amp_columns(columnName, aliasName, cellType,extractorView) values ("Regional Observations","regionalObservations","org.dgfoundation.amp.ar.cell.TextCell","v_regional_observations");
+insert ignore into `amp_columns_order`(`columnName`,`indexOrder`) SELECT 'Regional Observations', max(`indexOrder`) + 1 from `amp_columns_order`;

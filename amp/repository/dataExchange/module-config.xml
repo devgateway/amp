@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>dataExchange</name>
+	<security login-required="true" default="READ">
+		<action login-required="true" pattern="/exportWizard"/>  
+		<action login-required="true" pattern="/export"/> 
+		<action login-required="ture" pattern="/importWizard"/>  
+		<action login-required="true" pattern="/import"/> 
+	</security>
+	<!-- highlights classes Begin-->
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.dataExchange.dbentity.DEMappingFields</hibernate-class>
+		<hibernate-class>org.digijava.module.dataExchange.dbentity.DESourceSetting</hibernate-class>
+		<hibernate-class>org.digijava.module.dataExchange.dbentity.DELogPerExecution</hibernate-class>
+		<hibernate-class>org.digijava.module.dataExchange.dbentity.DELogPerItem</hibernate-class>
+	</hibernate-classes>
+	<!-- highlights classes End-->
+</module-config>

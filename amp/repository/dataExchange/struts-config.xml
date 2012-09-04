@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="deExportForm" type="org.digijava.module.dataExchange.form.ExportForm"/>
+		<form-bean name="deImportForm" type="org.digijava.module.dataExchange.form.ImportForm"/>
+		<form-bean name="importChaptersForm" type="org.digijava.module.dataExchange.form.ImportChaptersForm"/>
+		<form-bean name="showLogsForm" type="org.digijava.module.dataExchange.form.ShowLogsForm"/>
+		<form-bean name="mapFieldsForm" type="org.digijava.module.dataExchange.form.MapFieldsForm"/>
+		<form-bean name="createSourceForm" type="org.digijava.module.dataExchange.form.CreateSourceForm"/>
+		<form-bean name="manageSourceForm" type="org.digijava.module.dataExchange.form.ManageSourceForm"/>
+	</form-beans>
+	<action-mappings>
+		<!-- Export routine -->
+    	<action path="/dataExchange/exportWizard" scope="session" type="org.digijava.module.dataExchange.action.ExportWizardAction" name="deExportForm" validate="false" parameter="method">
+			<forward name="default" path="/showLayout.do?layout=exportWizard"/>
+		</action> 
+		
+		<!--  Import routine -->
+		
+		
+		<action path="/dataExchange/indexDE" forward="/showLayout.do?layout=indexDE" />
+		
+		
+		<action path="/dataExchange/importWizard" forward="/showLayout.do?layout=importWizard" />
+		<action path="/dataExchange/import" scope="session" type="org.digijava.module.dataExchange.action.ImportAction" name="deImportForm" validate="false" parameter="method">
+			<forward name="forward" path="/showLayout.do?layout=importWizard"/>
+			<forward name="forwardError" path="/dataExchange/import.do" redirect="true"/>
+			<forward name="afterUploadFile" path="/showLayout.do?layout=importWizardAfterUploadFile"/>
+		</action> 
+		
+		<action path="/dataExchange/importChapters" scope="request" type="org.digijava.module.dataExchange.action.ImportChaptersAction" name="importChaptersForm" validate="false" parameter="method">
+			<forward name="forward" path="/showLayout.do?layout=importChapters"/>
+		</action> 
+		
+		<action path="/dataExchange/showLogs" scope="session" type="org.digijava.module.dataExchange.action.ShowLogsAction" name="showLogsForm" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=de_showLogs"/>
+			<forward name="feed" path="/showLayout.do?layout=de_logFeed"/>
+			<forward name="showLogItemDetails" path="/showLayout.do?layout=de_showLogItemDetails" />
+			<forward name="viewExecutionLog" path="/showLayout.do?layout=de_viewExecutionLog" />
+		</action> 
+		<action path="/dataExchange/mapFields" scope="session" type="org.digijava.module.dataExchange.action.MapFieldsAction" name="mapFieldsForm" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=de_mapFields"/>
+			<forward name="mapFields" path="/showLayout.do?layout=de_mapFields" />
+		</action> 
+		
+		<action path="/dataExchange/manageSource" scope="request" type="org.digijava.module.dataExchange.action.ManageSourceAction" name="manageSourceForm" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=de_showSources"/>
+			<forward name="showSources" path="/dataExchange/manageSource.do?htmlView=true"/>
+			<forward name="showSourceDetails" path="/showLayout.do?layout=de_showSourceDetails"/>
+		</action>
+		
+		<action path="/dataExchange/createEditSource" scope="session" type="org.digijava.module.dataExchange.action.CreateEditSourceActions" name="createSourceForm" validate="false" parameter="action">
+			<forward name="forward" path="/showLayout.do?layout=de_createSourceWizard"/>
+			<forward name="showSources" redirect="true" path="/dataExchange/manageSource.do" />
+		</action>
+		
+		
+	</action-mappings>
+</struts-config>

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd" [
+	<!ENTITY activityFields
+	'
+		<property name="ampId" column="amp_id" type="java.lang.String" />
+		<property name="name" column="name" type="java.lang.String" />
+		<property name="govAgreementNumber" column="gov_agreement_number" type="java.lang.String" />
+		<property name="budgetCodeProjectID" column="budget_code_project_id" type="java.lang.String" />
+		<property name="budgetsector" column="budget_sector" type="java.lang.Long"/>
+		<property name="budgetorganization" column="budget_organization" type="java.lang.Long"/>
+		<property name="budgetdepartment" column="budget_department" type="java.lang.Long"/>
+		<property name="budgetprogram" column="budget_program" type="java.lang.Long"/>
+		<property name="budget" column="budget" type="java.lang.Integer" />
+		
+		<property name="description" column="description" type="text" />
+		<property name="lessonsLearned" column="lessons_learned" type="text" />
+		<property name="objective" column="objectives" type="text" />
+		<property name="results" column="results" type="text" />
+		<property name="purpose" column="purpose" type="text" />
+
+		<property name="projectComments" column="projectComments" type="text" />
+		
+		<property name="projectImpact" column="project_impact" type="text" />
+		<property name="activitySummary" column="activity_summary" type="text" />
+		<property name="contractingArrangements" column="contracting_arrangements" type="text" />
+		<property name="condSeq" column="cond_seq" type="text" />
+		<property name="linkedActivities" column="linked_activities" type="text" />
+		<property name="conditionality" column="conditionality" type="text" />
+		<property name="projectManagement" column="project_management" type="text" />
+		<property name="contractDetails" column="contract_details" type="text" />
+
+
+		<property name="activityLevel" column="activity_level_id" type="java.lang.Long" />
+
+		<property name="documentSpace" column="document_space" type="java.lang.String" />
+		<property name="language" column="language" type="java.lang.String" />
+		<property name="version" column="version" type="java.lang.String" />
+
+		<property name="equalOpportunity" column="equalOpportunity" type="java.lang.String" />
+		<property name="environment" column="environment" type="java.lang.String" />
+		<property name="minorities" column="minorities" type="java.lang.String" />
+
+		<property name="draft" column="draft" type="java.lang.Boolean" />
+		<property name="deleted" column="deleted" type="java.lang.Boolean" />
+		<property name="createdAsDraft" column="created_as_draft" type="boolean" />
+
+		<property name="calType" column="cal_type" type="java.lang.String" />
+		<property name="activityApprovalDate" column="activity_approval_date" type="java.util.Date" />
+		<!-- defunct -->
+		<property name="activityStartDate" column="activity_start_date" type="java.util.Date" />
+		<!-- defunct -->
+		<property name="activityCloseDate" column="activity_close_date" type="java.util.Date" />
+		<!-- defunct -->
+		<property name="originalCompDate" column="original_comp_date" type="java.util.Date" />
+		<!-- defunct -->
+		<property name="contractingDate" column="contracting_date" type="java.util.Date" /><!-- defunct -->
+		<property name="disbursmentsDate" column="disbursments_date" type="java.util.Date" />
+		<!-- defunct -->
+		<property name="condition" column="condition_" type="text" />
+
+		<property name="contactName" column="contact_name" type="java.lang.String" /><!-- defunct -->
+
+
+		<property name="comments" column="comments" type="text" />
+		<property name="statusReason" column="status_reason" type="text" />
+
+		<property name="proposedStartDate" column="proposed_start_date" type="java.util.Date" />
+		<property name="actualStartDate" column="actual_start_date" type="java.util.Date" />
+		<property name="proposedApprovalDate" column="proposed_approval_date" type="java.util.Date" />
+		<property name="actualApprovalDate" column="actual_approval_date" type="java.util.Date" />
+
+		<property name="actualCompletionDate" column="actual_completion_date" type="java.util.Date" />
+		<property name="proposedCompletionDate" column="proposed_completion_date"
+			type="java.util.Date" />
+
+		<property name="createdDate" column="date_created" type="java.util.Date" />
+		<property name="updatedDate" column="date_updated" type="java.util.Date" />
+		<property name="iatiLastUpdatedDate" column="iati_last_update_date" type="java.util.Date" />
+		
+		
+		<property name="programDescription" column="program_description" type="text" />
+		<property name="contractors" column="contractors" type="text" />
+
+		<property access="field" name="funAmount" column="proj_cost_amount" type="java.lang.Double" />
+		<property name="funDate" column="proj_cost_date" type="java.util.Date" />
+		<property name="currencyCode" column="proj_cost_currcode" type="java.lang.String" />
+
+		<!-- Start Bolivia Specific Fields -->
+		<property name="convenioDateFilter" column="convenio_date_filter" type="java.util.Date" />
+		<property name="convenioNumcont" column="convenio_numcont" type="java.lang.String" />
+		<property name="clasiNPD" column="classi_code" type="java.lang.String" />
+		<!-- End Bolivia Specific Fields -->
+
+		<!--
+			tanzania adds
+		-->
+		<property name="FY" column="FY" type="java.lang.String" />
+		<property name="vote" column="vote" type="java.lang.String" />
+		<property name="subVote" column="subVote" type="java.lang.String" />
+		<property name="subProgram" column="subProgram" type="java.lang.String" />
+		<property name="projectCode" column="project_code" type="java.lang.String" />
+		<property name="crisNumber" column="cris_number" type="java.lang.String" />
+		<property name="gbsSbs" column="gbsSbs" type="java.lang.Long" />
+		<property name="governmentApprovalProcedures" column="governmentApprovalProcedures"
+			type="java.lang.Boolean" />
+		<property name="jointCriteria" column="jointCriteria" type="java.lang.Boolean" />
+		<property name="humanitarianAid" column="humanitarianAid" type="java.lang.Boolean" />
+		<property name="archived" column="archived" type="java.lang.Boolean" />
+
+		<many-to-one name="themeId" column="amp_theme_id"
+			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" />
+		<!-- <many-to-one name="modality" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>  -->
+		<many-to-one name="modality" column="amp_categ_val_modality_id"
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
+		<many-to-one name="team" column="amp_team_id"
+			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
+
+		<many-to-one name="author" column="author" class="org.digijava.kernel.user.User"
+			cascade="none" /><!-- defunct -->
+		<many-to-one name="activityCreator" column="activity_creator"
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
+
+		<property name="approvalStatus" column="approval_status" type="java.lang.String" />
+
+		<property name="lineMinRank" column="line_min_rank" type="java.lang.Integer" />
+		<property name="planMinRank" column="plan_min_rank" type="java.lang.Integer" />
+
+		<property name="customField1" column="customField1" type="java.lang.String" />
+		<property name="customField2" column="customField2" type="java.lang.String" />
+		<property name="customField3" column="customField3" type="java.lang.Long" />
+		<property name="customField4" column="customField4" type="java.util.Date" />
+		<property name="customField5" column="customField5" type="java.lang.String" />
+		<property name="customField6" column="customField6" type="java.lang.Boolean" />
+		
+		<many-to-one name="chapter" column="chapter_code" class="org.digijava.module.aim.dbentity.AmpChapter" cascade="none" />
+		
+		<many-to-one name="ampActivityGroup" column="amp_activity_group_id"
+			class="org.digijava.module.aim.dbentity.AmpActivityGroup" cascade="none" />
+		<many-to-one name="ampActivityGroupCached" column="amp_activity_group_id"
+			class="org.digijava.module.aim.dbentity.AmpActivityGroupCached" cascade="none" insert="false" update="false"/>
+		<many-to-one name="ampActivityPreviousVersion" column="amp_activity_previous_version_id"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+		<property name="modifiedDate" column="modified_date" type="java.util.Date" />
+		<many-to-one name="modifiedBy" column="modified_by"
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
+
+		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="none">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<many-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
+				column="amp_categoryvalue_id" />
+		</set>
+
+		<set name="activityDocuments" lazy="false" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityDocument" />
+		</set>
+
+		<set name="orgrole" cascade="all-delete-orphan" inverse="true">
+			<key column="activity" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRole" />
+		</set>
+
+		<set name="sectors" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivitySector" />
+		</set>
+
+		<set name="contracts" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write" />
+			<key column="activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.IPAContract" />
+		</set>
+
+		<!--
+		DEPRECATED
+		<set name="activityPrograms" table="AMP_ACTIVITY_THEME" cascade="none">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id" />
+		</set>
+		-->
+
+		<!-- set name="locations" table="AMP_ACTIVITY_LOCATION" lazy="true">
+			<cache usage="read-write"/>
+			<key column="amp_activity_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpLocation" column="amp_location_id"/>
+			</set-->
+
+		<set name="locations" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write"/>
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityLocation" />
+		</set>
+
+		<set name="costs" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.EUActivity" />
+		</set>
+
+
+
+
+		<set name="internalIds" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityInternalId" />
+		</set>
+
+
+		<set name="funding" cascade="all-delete-orphan" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpFunding" />
+		</set>
+
+		<set name="components" table="AMP_ACTIVITY_COMPONENTS" lazy="true" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpComponent"
+				column="amp_component_id" />
+		</set>
+		
+		<set name="structures" table="AMP_ACTIVITY_STRUCTURES" lazy="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpStructure"
+				column="amp_structure_id" />
+		</set>
+		
+		<set name="componentProgress"  cascade="none">
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpPhysicalPerformance" />
+		</set>
+	
+		
+		<set name="componentFundings" lazy="true" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponentFunding" />
+		</set>			
+		
+		<set name="member" table="AMP_MEMBER_ACTIVITIES" lazy="true">
+			<key column="amp_activity_id" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember"
+				column="amp_member_id" />
+		</set>
+
+		<set name="issues" cascade="all-delete-orphan" order-by="amp_issue_id asc" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpIssues" />
+		</set>
+		
+		<set name="regionalObservations" cascade="all-delete-orphan" order-by="amp_regional_observation_id asc" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpRegionalObservation" />
+		</set>
+
+		<set name="lineMinistryObservations" cascade="all-delete-orphan" order-by="amp_line_ministry_observation_id asc" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpLineMinistryObservation" />
+		</set>
+
+		<set name="regionalFundings" cascade="all-delete-orphan" inverse="true" lazy="false">
+			<cache usage="read-write" />
+			<key column="activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpRegionalFunding" />
+		</set>
+
+		<set name="survey" cascade="save-update" table="AMP_AHSURVEY" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey" />
+		</set>
+		<set name="actPrograms" cascade="all" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityProgram" />
+		</set>
+
+		<set name="indicators" lazy="true" cascade="none" inverse="true" order-by="id">
+			<key column="activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.IndicatorActivity" />
+		</set>
+
+		<many-to-one name="approvedBy" column="approvedBy"
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
+		<property name="approvalDate" column="approvalDate" type="java.util.Date" />
+
+		<set name="activityContacts" inverse="true" cascade="delete" lazy="false">
+			<key column="activity_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityContact" />
+		</set>
+		
+		<property name="mergedActivity" column="merged_activity" type="java.lang.Boolean" />
+		<many-to-one name="mergeSource1" column="merge_source1"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+		<many-to-one name="mergeSource2" column="merge_source2"
+			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
+	' 
+	>
+]>
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpActivityVersion" table="amp_activity_version" optimistic-lock="all" dynamic-update="true">
+		<cache usage="read-write" />
+		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_ACTIVITY_VERSION_seq</param>
+			</generator>
+		</id>
+		
+		&activityFields;
+	</class>
+	
+	<class name="org.digijava.module.aim.dbentity.AmpActivity" table="amp_activity" polymorphism="explicit">
+		<cache usage="read-write" />
+		<id name="ampActivityId" column="amp_activity_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_ACTIVITY_VERSION_seq</param>
+			</generator>
+		</id>
+		<!-- 
+		<subselect>
+			select * from amp_activity
+		</subselect>
+		<synchronize table="amp_activity"/>
+		<id column="amp_activity_id" />
+		 -->		
+
+		&activityFields;		
+	</class>
+</hibernate-mapping>

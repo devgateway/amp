@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="false" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-12862</jira>
+  <keyword>Permissions Workspaces</keyword>
+  <author>Dan</author> 
+  <description>Set permission_strategy with default value</description>
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+		UPDATE amp_team SET  permission_strategy='No Access' WHERE permission_strategy is NULL;
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

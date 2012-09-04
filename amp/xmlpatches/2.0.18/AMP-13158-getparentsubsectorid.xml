@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-13158</jira>
+    <keyword>Sub Sector</keyword>
+    <keyword>getparentsubsectorid</keyword>
+    <author>Diego Dimunzio</author>
+    <description>Function to get exchange rates using base currency as setting</description>
+       <apply>
+        <script>
+            <lang  delimiter="@" type="postgres">
+				CREATE OR REPLACE FUNCTION getparentsubsectorid(sectorid bigint)
+  				RETURNS bigint AS
+				$BODY$
+				 declare
+				         sid bigint;
+				         depth int;
+				 BEGIN                   
+				         select getSectorDepth(sectorId) into depth;
+				         if (depth = 1) then return sectorId;
+				         end if;         
+				         if (depth = 2) then 
+				                 select parent_sector_id into sid from amp_sector where amp_sector_id=sectorId;
+				         return sid;     
+				         end if;
+				 return 0;
+				 END;
+				 $BODY$
+				 LANGUAGE plpgsql VOLATILE
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

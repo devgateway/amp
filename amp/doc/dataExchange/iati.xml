@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<iati-activities version="1.01" generated-datetime="2011-05-27T12:00:13Z">
+	<iati-activity xml:lang="en" default-currency="GBP"
+		hierarchy="1">
+		<reporting-org ref="GB-1" type="10">Department for
+			International Development</reporting-org>
+		<participating-org ref="GB" type="10" role="Funding">UNITED
+			KINGDOM</participating-org>
+		<participating-org ref="GB-1" type="10" role="Extending">Department
+			for International Development</participating-org>
+		<iati-identifier>GB-1-108528</iati-identifier>
+		<title>Livelihoods &amp; Forestry Programme</title>
+		<description>Assets of rural communities enhanced through more
+			equitable, efficient and sustainable use of forest resources
+		</description>
+		<activity-date type="end-actual">2011-09-30Z</activity-date>
+		<activity-date type="end-planned">2011-09-30Z</activity-date>
+		<activity-date type="start-actual">2000-11-02Z</activity-date>
+		<activity-date type="start-planned">2001-01-01Z</activity-date>
+		<activity-status code="2">Implementation</activity-status>
+		<contact-info>
+			<organisation>Department for International Development</organisation>
+			<telephone>+44 (0) 1355 84 3132</telephone>
+			<email>enquiry@dfid.gov.uk</email>
+			<mailing-address>Public Enquiry Point, Abercrombie House, Eaglesham
+				Road, East Kilbride, Glasgow G75 8EA</mailing-address>
+		</contact-info>
+		<default-tied-status code="5">Untied
+		</default-tied-status>
+		<related-activity ref="GB-1-108528-101" type="2">PROCOFSERVICES
+			for Livelihoods &amp; Forestry Programme</related-activity>
+		<related-activity ref="GB-1-108528-102" type="2">NOTFORPROFITORG
+			for Livelihoods &amp; Forestry Programme</related-activity>
+		<related-activity ref="GB-1-108528-103" type="2">PROCUREMENTOFGOODS
+			for Livelihoods &amp; Forestry Programme</related-activity>
+		<related-activity ref="GB-1-108528-104" type="2">NONBUDSUPPFINAID
+			for Livelihoods &amp; Forestry Programme</related-activity>
+	</iati-activity>
+	<iati-activity xml:lang="en" default-currency="GBP"
+		hierarchy="2">
+		<reporting-org ref="GB-1" type="10">Department for International Development</reporting-org>
+		<participating-org ref="GB" type="10" role="Funding">UNITED
+			KINGDOM</participating-org>
+		<participating-org ref="GB-1" type="10" role="Extending">Department
+			for International Development</participating-org>
+		<participating-org ref="51000" role="Implementing">University,
+			college or other teaching institution, research institute or
+			think-tank</participating-org>
+		<recipient-country code="NP">Nepal</recipient-country>
+		<collaboration-type code="1">Bilateral
+		</collaboration-type>
+		<default-flow-type code="10">ODA</default-flow-type>
+		<default-aid-type code="C01">Project-type interventions
+		</default-aid-type>
+		<default-finance-type code="110">Aid grant excluding
+			debt reorganisation</default-finance-type>
+		<iati-identifier>GB-1-108528-101</iati-identifier>
+		<title>PROCOFSERVICES for Livelihoods &amp; Forestry Programme</title>
+		<sector code="31220">Forestry development</sector>
+		<activity-date type="end-actual">2010-12-31Z</activity-date>
+		<activity-date type="end-planned">2010-12-31Z</activity-date>
+		<activity-date type="start-actual">2001-01-01Z</activity-date>
+		<activity-date type="start-planned">2001-01-01Z</activity-date>
+		<activity-status code="2">Implementation</activity-status>
+		<contact-info>
+			<organisation>Department for International Development</organisation>
+			<telephone>+44 (0) 1355 84 3132</telephone>
+			<email>enquiry@dfid.gov.uk</email>
+			<mailing-address>Public Enquiry Point, Abercrombie House, Eaglesham
+				Road, East Kilbride, Glasgow G75 8EA</mailing-address>
+		</contact-info>
+		<default-tied-status code="5">Untied
+		</default-tied-status>
+		<policy-marker code="1" vocabulary="DAC" significance="1">Gender
+			Equality</policy-marker>
+		<policy-marker code="2" vocabulary="DAC" significance="1">Aid
+			to Environment</policy-marker>
+		<policy-marker code="3" vocabulary="DAC" significance="0">Participatory
+			Development/Good Governance</policy-marker>
+		<policy-marker code="4" vocabulary="DAC" significance="2">Trade
+			Development</policy-marker>
+		<policy-marker code="5" vocabulary="DAC" significance="0">Aid
+			Targeting the Objectives of the Convention on Biological Diversity
+		</policy-marker>
+		<policy-marker code="6" vocabulary="DAC" significance="0">Aid
+			Targeting the Objectives of the Framework Convention on Climate
+			Change - Mitigation</policy-marker>
+		<policy-marker code="7" vocabulary="DAC" significance="0">Aid
+			Targeting the Objectives of the Framework Convention on Climate
+			Change - Adaptation</policy-marker>
+		<policy-marker code="8" vocabulary="DAC" significance="0">Aid
+			Targeting the Objectives of the Convention to Combat Desertification
+		</policy-marker>
+		<transaction>
+			<value value-date="2001-04-01Z">782150</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2001-04-01Z">Budget for financial year
+				2001</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2002-04-01Z">1210887</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2002-04-01Z">Budget for financial year
+				2002</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2003-04-01Z">1596129</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2003-04-01Z">Budget for financial year
+				2003</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2004-04-01Z">1779339</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2004-04-01Z">Budget for financial year
+				2004</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2005-04-01Z">1394139</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2005-04-01Z">Budget for financial year
+				2005</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2006-04-01Z">1847428</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2006-04-01Z">Budget for financial year
+				2006</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2007-04-01Z">1884052</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2007-04-01Z">Budget for financial year
+				2007</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2008-04-01Z">3242284</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2008-04-01Z">Budget for financial year
+				2008</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2009-04-01Z">4854932</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2009-04-01Z">Budget for financial year
+				2009</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2010-04-01Z">2900000</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2010-04-01Z">Budget for financial year
+				2010</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2011-04-01Z">2122742</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2011-04-01Z">Budget for financial year
+				2011</transaction-date>
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-06-03Z">1443399</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-06-03Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-07-21Z">377698</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1" >Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-07-21Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-07-21Z">-35547</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-07-21Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-07-21Z">299239</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-07-21Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-09-17Z">-71094</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-09-17Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-09-17Z">518914</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-09-17Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-09-20Z">284799</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-09-20Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-10-04Z">262033</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-10-04Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-10-27Z">136460</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-10-27Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-10-27Z">-67238</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-10-27Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2010-12-10Z">143773</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2010-12-10Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2011-01-13Z">118226</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2011-01-13Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2011-02-08Z">118725</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2011-02-08Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2011-02-25Z">134726</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2011-02-25Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2011-03-21Z">280163</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2011-03-21Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2011-03-21Z">241077</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org ref="51000">University, college or other teaching
+				institution, research institute or think-tank</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2011-03-21Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2011-04-26Z">139880</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org>Journal Transaction</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2011-04-26Z" />
+		</transaction>
+		<transaction>
+			<value currency="GBP" value-date="2011-04-28Z">-139880</value>
+			<transaction-type code="E">Expenditure
+			</transaction-type>
+			<provider-org ref="GB-1">Department for
+				International Development</provider-org>
+			<receiver-org>Journal Transaction</receiver-org>
+			<description>Technical &amp; Advisory services</description>
+			<transaction-date iso-date="2011-04-28Z" />
+		</transaction>
+		<related-activity ref="GB-1-108528" type="1">Livelihoods
+			&amp; Forestry Programme</related-activity>
+		<related-activity ref="GB-1-108528-102" type="3">NOTFORPROFITORG
+			for Livelihoods &amp; Forestry Programme</related-activity>
+		<related-activity ref="GB-1-108528-103" type="3">PROCUREMENTOFGOODS
+			for Livelihoods &amp; Forestry Programme</related-activity>
+		<related-activity ref="GB-1-108528-104" type="3">NONBUDSUPPFINAID
+			for Livelihoods &amp; Forestry Programme</related-activity>
+		<legacy-data name="31220 Forestry Development" value="31220"
+			iati-equivalent="sector" />
+	</iati-activity>
+	<iati-activity xml:lang="en" default-currency="GBP"
+		hierarchy="2">
+		<reporting-org ref="GB-1" type="10">Department for
+			International Development</reporting-org>
+		<participating-org ref="GB" type="10" role="Funding">UNITED
+			KINGDOM</participating-org>
+		<participating-org ref="GB-1" type="10" role="Extending">Department
+			for International Development</participating-org>
+		<participating-org ref="20000" role="Implementing">NON-GOVERNMENTAL
+			ORGANISATIONS (NGOs) AND CIVIL SOCIETY</participating-org>
+		<recipient-country code="NP">Nepal</recipient-country>
+		<collaboration-type code="5">Aid through NGOs
+		</collaboration-type>
+		<default-flow-type code="10">ODA</default-flow-type>
+		<default-aid-type code="C01">Project-type interventions
+		</default-aid-type>
+		<default-finance-type code="110">Aid grant excluding
+			debt reorganisation</default-finance-type>
+		<iati-identifier>GB-1-108528-102</iati-identifier>
+		<title>NOTFORPROFITORG for Livelihoods &amp; Forestry Programme
+		</title>
+		<sector code="31220">Forestry development</sector>
+		<activity-date type="end-actual">2010-12-31Z</activity-date>
+		<activity-date type="end-planned">2010-12-31Z</activity-date>
+		<activity-date type="start-actual">2001-01-01Z</activity-date>
+		<activity-date type="start-planned">2001-01-01Z</activity-date>
+		<activity-status code="2">Implementation</activity-status>
+		<contact-info>
+			<organisation>Department for International Development</organisation>
+			<telephone>+44 (0) 1355 84 3132</telephone>
+			<email>enquiry@dfid.gov.uk</email>
+			<mailing-address>Public Enquiry Point, Abercrombie House, Eaglesham
+				Road, East Kilbride, Glasgow G75 8EA</mailing-address>
+		</contact-info>
+		<default-tied-status code="5">Untied
+		</default-tied-status>
+		<policy-marker code="1" vocabulary="DAC" significance="1">Gender
+			Equality</policy-marker>
+		<policy-marker code="2" vocabulary="DAC" significance="1">Aid
+			to Environment</policy-marker>
+		<policy-marker code="3" vocabulary="DAC" significance="0">Participatory
+			Development/Good Governance</policy-marker>
+		<policy-marker code="4" vocabulary="DAC" significance="2">Trade
+			Development</policy-marker>
+		<policy-marker code="5" vocabulary="DAC" significance="0">Aid
+			Targeting the Objectives of the Convention on Biological Diversity
+		</policy-marker>
+		<policy-marker code="6" vocabulary="DAC" significance="0">Aid
+			Targeting the Objectives of the Framework Convention on Climate
+			Change - Mitigation</policy-marker>
+		<policy-marker code="7" vocabulary="DAC" significance="0">Aid
+			Targeting the Objectives of the Framework Convention on Climate
+			Change - Adaptation</policy-marker>
+		<policy-marker code="8" vocabulary="DAC" significance="0">Aid
+			Targeting the Objectives of the Convention to Combat Desertification
+		</policy-marker>
+		<transaction>
+			<value value-date="2004-04-01Z">40371</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2004-04-01Z">Budget for financial year
+				2004</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2005-04-01Z">17839</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2005-04-01Z">Budget for financial year
+				2005</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2006-04-01Z">18545</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2006-04-01Z">Budget for financial year
+				2006</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2007-04-01Z">5611</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2007-04-01Z">Budget for financial year
+				2007</transaction-date>
+		</transaction>
+		<transaction>
+			<value value-date="2008-04-01Z">-2763</value>
+			<transaction-type code="C">Commitment</transaction-type>
+			<transaction-date iso-date="2008-04-01Z">Budget for financial year
+				2008</transaction-date>
+		</transaction>
+		<related-activity ref="GB-1-108528" type="1">Livelihoods
+			&amp; Forestry Programme</related-activity>
+		<related-activity ref="GB-1-108528-101" type="3">PROCOFSERVICES
+			for Livelihoods &amp; Forestry Programme</related-activity>
+		<related-activity ref="GB-1-108528-103" type="3">PROCUREMENTOFGOODS
+			for Livelihoods &amp; Forestry Programme</related-activity>
+		<related-activity ref="GB-1-108528-104" type="3">NONBUDSUPPFINAID
+			for Livelihoods &amp; Forestry Programme</related-activity>
+		<legacy-data name="31220 Forestry Development" value="31220"
+			iati-equivalent="sector" />
+	</iati-activity>
+</iati-activities>

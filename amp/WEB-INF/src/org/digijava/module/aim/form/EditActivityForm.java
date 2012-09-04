@@ -1256,7 +1256,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			BigDecimal projectPeriod=null;
 			Date actualStartDate=DateConversion.getDate(this.revisedStartDate);
 			Date proposedCompletionDate=DateConversion.getDate(this.proposedCompDate);
+			Date currentCompletionDate=DateConversion.getDate(this.currentCompDate);
 			try {
+				if(actualStartDate!=null && currentCompletionDate!=null){
+					projectPeriod=MathExpression.getMonthDifference(new BigDecimal(currentCompletionDate.getTime()),new BigDecimal(actualStartDate.getTime()));					
+				}else
 				if(actualStartDate!=null&&proposedCompletionDate!=null){
 					projectPeriod=MathExpression.getMonthDifference(new BigDecimal(proposedCompletionDate.getTime()),new BigDecimal(actualStartDate.getTime()));		
 				}

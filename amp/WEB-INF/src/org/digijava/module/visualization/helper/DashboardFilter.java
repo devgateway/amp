@@ -422,6 +422,7 @@ public class DashboardFilter {
 
     public void setWorkspaceOnly(Boolean workspaceOnly) {
         this.workspaceOnly = workspaceOnly;
+        this.workspaceOnlyQuickFilter = workspaceOnly;
     }
     
     public Boolean getWorkspaceOnlyQuickFilter() {

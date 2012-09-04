@@ -65,6 +65,7 @@ public class AmountCell extends Cell {
 
 	public int compareTo(Object o) {
 		AmountCell ac = (AmountCell) o;
+		if (this.getId() == null || ac.getId() == null) return 0;
 		return this.getId().compareTo(ac.getId());
 	}
 

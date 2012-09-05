@@ -489,6 +489,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String subVote;
 		private String subProgram;
 		private String projectCode;
+		private String ministryCode;
 		private Long gbsSbs;
 		private String approvalStatus;
 		private String previousApprovalStatus;
@@ -679,6 +680,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setProjectCode(String projectCode) {
 			this.projectCode = projectCode;
+		}
+		
+		public String getMinistryCode() {
+			return ministryCode;
+		}
+
+		public void setMinistryCode(String ministryCode) {
+			this.ministryCode = ministryCode;
 		}
 
 		public Long getGbsSbs() {

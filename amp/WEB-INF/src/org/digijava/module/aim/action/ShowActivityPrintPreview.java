@@ -1153,6 +1153,8 @@ public class ShowActivityPrintPreview
                 	eaForm.getIdentification().setSubProgram(activity.getSubProgram().trim());
                 if(activity.getProjectCode()!=null)
                 	eaForm.getIdentification().setProjectCode(activity.getProjectCode().trim());
+                if(activity.getMinistryCode()!=null)
+                	eaForm.getIdentification().setMinistryCode(activity.getMinistryCode().trim());
                 
                 eaForm.getIdentification().setGbsSbs(activity.getGbsSbs());
                 eaForm.getIdentification().setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
@@ -1262,6 +1264,7 @@ public class ShowActivityPrintPreview
 				eaForm.getIdentification().setSubVote(null);
 				eaForm.getIdentification().setSubProgram(null);
 				eaForm.getIdentification().setProjectCode(null);
+				eaForm.getIdentification().setMinistryCode(null);
 				eaForm.getIdentification().setGbsSbs(null);
 				
 				eaForm.getIdentification().setGovernmentApprovalProcedures(false);

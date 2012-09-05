@@ -17,6 +17,8 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * @author Diego Dimunzio
@@ -48,6 +50,13 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 	public String setTeamQuery(String schema) {
 		String newschema = "";
 		newschema = schema.replaceAll("(?:@donorquery)+", getQueryText());
+		try {
+			newschema = newschema.replaceAll("(?:@Actual)+", CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId().toString());
+			newschema = newschema.replaceAll("(?:@Planned)+", CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PLANNED).getId().toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		logger.info("Query = " + getQueryText());
 		return Translate(newschema);
 	}

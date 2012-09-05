@@ -119,7 +119,7 @@ function IsEmpty(){
   	function imp(){
   		if(IsEmpty() == false){
   	  		
-				alert("The content of the imported file is not ok. Please import a .xml file exported from this menu.");
+				alert("The content of the imported file is not ok. Please import a .zip file exported from this menu.");
   	  		}else{
 	  			<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=importing" />
 				helpForm.action="${url}";
@@ -354,7 +354,7 @@ function IsEmpty(){
 	<tr>
 		<td align="left">
   			<input type="button" onclick="imp()" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'/>
-<!--		<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>-->
+<!--		<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>--> <digi:errors/>
 	    </td>
 	</tr>
 	 <tr id="img_-1" onclick="expandHelp(-1);"  src="/ampTemplate/images/tree_plus.gif"/>

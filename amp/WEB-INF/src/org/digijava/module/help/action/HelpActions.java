@@ -34,6 +34,8 @@ import org.apache.lucene.search.Hits;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
@@ -41,6 +43,7 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -829,7 +832,14 @@ public class HelpActions extends DispatchAction {
         String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
         
 		FormFile myFile = helpForm.getFileUploaded();
-
+		
+		if (!myFile.getFileName().endsWith(".zip")){
+			String locale = RequestUtils.getNavigationLanguage(request).getCode();
+			ActionMessages errors = new ActionMessages();
+			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTemplate",TranslatorWorker.translateText("The content of the imported file is not ok. Please import a .zip file exported from this menu.", locale, siteId)));
+            saveErrors(request, errors);
+		}
+		
         ZipInputStream zis = new ZipInputStream(myFile.getInputStream());
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ZipEntry entry;

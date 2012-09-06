@@ -13,7 +13,7 @@
 <script langauage="JavaScript">
 	function onDelete() {
 	<c:set var="translation">
-		<digi:trn key="aim:ConfirmDelete">Delete this Scheme ?</digi:trn>
+		<digi:trn key="aim:ConfirmDelete">Delete this Sector ?</digi:trn>
 	</c:set>
 		var flag = confirm("${translation}");
 		return flag;

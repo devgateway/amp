@@ -182,7 +182,7 @@
 						<td noWrap vAlign="top" colspan="7">
 							<table width="100%" cellspacing="0" cellpadding="0">
 								<tr>
-									<td noWrap vAlign="top">
+									<td noWrap vAlign="top"  width="70%" >
 										<table bgColor=#ffffff cellpadding="0" cellspacing="0"
 											width="100%">
 
@@ -556,7 +556,7 @@
 											</logic:notEmpty>
 										</table></td>
 											<digi:secure actions="ADMIN">
-									<td noWrap width="100%" vAlign="top" style="padding-top: 10px;"><jsp:include
+									<td noWrap width="20%" vAlign="top" style="padding-top: 10px;"><jsp:include
 											page="orgManagerOtherLinks.jsp" /></td>
 										</digi:secure>
 								</tr>

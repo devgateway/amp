@@ -14,6 +14,23 @@ function searchFunction()
 	var searchCriteria = document.getElementById("searchCriteria").value;
 
 	var dhtmlArray = document.getElementsByName("dhtmltreeArray");
+	
+//	IE Fix - document.getElementsByName() doesn't work for ie
+	if (navigator.appVersion.indexOf("MSIE") != -1)
+       {
+
+	 var elem = document.getElementsByTagName('ul');
+	 dhtmlArray = new Array();
+     for(i = 0,iarr = 0; i < elem.length; i++) {
+          att = elem[i].getAttribute("name");
+          if(att == "dhtmltreeArray") {
+        	  dhtmlArray[iarr] = elem[i];
+               iarr++;
+          }
+       }
+    
+    }
+	
 
 	var searchableObjectsLIObject = new Array();
 	var searchableObjectsLITree = new Array();

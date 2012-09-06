@@ -248,7 +248,7 @@ YAHOO.namespace("YAHOO.amp");
     	}
     	if(phoneNumbers!=null){
         	for(var i=0;i < phoneNumbers.length; i++){
-            	if(checkNumber(phoneNumbers[i].value)==false){            		
+            	if(checkNumber(phoneNumbers[i].value, true)==false){            		
             		return false;
             	}
         	}
@@ -268,7 +268,7 @@ YAHOO.namespace("YAHOO.amp");
     		for(var i=0;i < faxes.length; i++){
     			if(faxes[i].value==''){
         			alert('<digi:trn jsFriendly="true">Please enter fax</digi:trn>');
-        		}else if(checkNumber(faxes[i].value)==false){
+        		}else if(checkNumber(faxes[i].value, false)==false){
             		return false;
             	}
         	}
@@ -285,12 +285,15 @@ YAHOO.namespace("YAHOO.amp");
 	 	return true;
 	}
 	
-	function checkNumber(number){
+	function checkNumber(number, phone){
 	 	var validChars= "0123456789/-()+ ";
 	 	for (var i = 0;  i < number.length;  i++) {
 	 		var ch = number.charAt(i);
 	  		if (validChars.indexOf(ch)==-1){
-	  			alert('<digi:trn jsFriendly="true">enter correct number</digi:trn>');	   			
+	  			if(phone == true)
+	  			  alert('<digi:trn jsFriendly="true">enter correct phone number</digi:trn>');	
+	  			else
+	  			  alert('<digi:trn jsFriendly="true">enter correct fax number</digi:trn>');		
 	   			return false;
 	  		}
 	 	}	 

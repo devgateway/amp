@@ -861,6 +861,11 @@ function collapseAll() {
 					<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
 					<br />
 				</module:display>
+				<module:display name="/Activity Form/Identification/Budget Extras/Ministry Code"  parentModule="/Activity Form/Identification/Budget Extras">
+					<digi:trn>Ministry Code</digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.ministryCode"/></b>
+					<br />
+				</module:display>
 				<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
 					<digi:trn>Vote</digi:trn>:&nbsp;
 					<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>

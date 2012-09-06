@@ -396,6 +396,11 @@ body {background:none;}
 											<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
 											<br />
 										</module:display>
+										<module:display name="/Activity Form/Identification/Budget Extras/Ministry Code"  parentModule="/Activity Form/Identification/Budget Extras">
+											<digi:trn>Ministry Code</digi:trn>:&nbsp;
+											<b><bean:write name="aimEditActivityForm" property="identification.ministryCode"/></b>
+											<br />
+										</module:display>
 										<module:display name="/Activity Form/Identification/Budget Extras/Project Code"  parentModule="/Activity Form/Identification/Budget Extras">
 											<digi:trn>Project Code</digi:trn>:&nbsp;
 											<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>

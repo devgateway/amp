@@ -259,11 +259,14 @@ public class AmpARFilter extends PropertyListable {
 	private String fromDate;
 	private String toDate;
 	
-	private String fromActivityStartDate;
+	private String fromActivityStartDate; // view: v_actual_start_date, column name: Actual Start Date
 	private String toActivityStartDate;
 	
-	private String fromActivityActualCompletionDate;
-	private String toActivityActualCompletionDate;
+	private String fromActivityActualCompletionDate; // view: v_actual_completion_date, column name: Current Completion Date
+	private String toActivityActualCompletionDate;  // view: v_actual_completion_date, column name: Current Completion Date
+	
+	private String fromActivityFinalContractingDate; // view: v_contracting_date, column name: Final Date for Contracting
+	private String toActivityFinalContractingDate;  // view: v_contracting_date, column name: Final Date for Contracting
 	
 	private Integer fromMonth;
 	private Integer yearFrom;
@@ -922,6 +925,12 @@ public class AmpARFilter extends PropertyListable {
 		if ( ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER = "SELECT acd.amp_activity_id from v_actual_completion_date acd WHERE " + ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER;
 			queryAppend(ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER);
+		}
+		
+		String ACTIVITY_FINAL_CONTRACTING_DATE_FILTER	 	= this.createDateCriteria(toActivityFinalContractingDate, fromActivityFinalContractingDate, "ctrd.contracting_date");
+		if ( ACTIVITY_FINAL_CONTRACTING_DATE_FILTER.length() > 0 ) {
+			ACTIVITY_FINAL_CONTRACTING_DATE_FILTER = "SELECT ctrd.amp_activity_id from v_contracting_date ctrd WHERE " + ACTIVITY_FINAL_CONTRACTING_DATE_FILTER;
+			queryAppend(ACTIVITY_FINAL_CONTRACTING_DATE_FILTER);
 		}
 		
 		/*
@@ -1824,6 +1833,37 @@ public class AmpARFilter extends PropertyListable {
 	public void setToActivityActualCompletionDate(
 			String toActivityActualCompletionDate) {
 		this.toActivityActualCompletionDate = toActivityActualCompletionDate;
+	}
+	
+
+	/**
+	 * @return the fromActivityFinalContractingDate
+	 */
+	public String getFromActivityFinalContractingDate() {
+		return fromActivityFinalContractingDate;
+	}
+
+	/**
+	 * @param fromActivityFinalContractingDate the fromActivityFinalContractingDate to set
+	 */
+	public void setFromActivityFinalContractingDate(
+			String fromActivityFinalContractingDate) {
+		this.fromActivityFinalContractingDate = fromActivityFinalContractingDate;
+	}
+
+	/**
+	 * @return the toActivityFinalContractingDate
+	 */
+	public String getToActivityFinalContractingDate() {
+		return toActivityFinalContractingDate;
+	}
+
+	/**
+	 * @param toActivityFinalContractingDate the toActivityFinalContractingDate to set
+	 */
+	public void setToActivityFinalContractingDate(
+			String toActivityFinalContractingDate) {
+		this.toActivityFinalContractingDate = toActivityFinalContractingDate;
 	}
 
 	public Collection<String> getApprovalStatusSelected() {

@@ -107,6 +107,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private String fromActivityActualCompletionDate;
 	private String toActivityActualCompletionDate;
 	
+	private String fromActivityFinalContractingDate; 
+	private String toActivityFinalContractingDate;  
+	
 	private Long countYear;
 	private Long currency;
 	private Long calendar;
@@ -435,6 +438,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.toActivityStartDate = null;
 				this.fromActivityActualCompletionDate = null;
 				this.toActivityActualCompletionDate = null;
+				this.fromActivityFinalContractingDate = null;
+				this.toActivityFinalContractingDate = null;
 			}
 		}
 		
@@ -1173,6 +1178,36 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setToActivityActualCompletionDate(
 			String toActivityActualCompletionDate) {
 		this.toActivityActualCompletionDate = toActivityActualCompletionDate;
+	}
+
+	/**
+	 * @return the fromActivityFinalContractingDate
+	 */
+	public String getFromActivityFinalContractingDate() {
+		return fromActivityFinalContractingDate;
+	}
+
+	/**
+	 * @param fromActivityFinalContractingDate the fromActivityFinalContractingDate to set
+	 */
+	public void setFromActivityFinalContractingDate(
+			String fromActivityFinalContractingDate) {
+		this.fromActivityFinalContractingDate = fromActivityFinalContractingDate;
+	}
+
+	/**
+	 * @return the toActivityFinalContractingDate
+	 */
+	public String getToActivityFinalContractingDate() {
+		return toActivityFinalContractingDate;
+	}
+
+	/**
+	 * @param toActivityFinalContractingDate the toActivityFinalContractingDate to set
+	 */
+	public void setToActivityFinalContractingDate(
+			String toActivityFinalContractingDate) {
+		this.toActivityFinalContractingDate = toActivityFinalContractingDate;
 	}
 
 	

@@ -77,7 +77,7 @@
 							<c:choose>
 								<c:when test="${entityType=='datelist' }">
 									<br/><br/>
-									&nbsp;&nbsp;<strong>${element.rootHierarchyListable.label}</strong>
+									&nbsp;&nbsp;<strong><digi:trn>${element.rootHierarchyListable.label}</digi:trn></strong>
 									<%@include file="dateLister.jsp" %>
 								</c:when>
 								<c:otherwise>

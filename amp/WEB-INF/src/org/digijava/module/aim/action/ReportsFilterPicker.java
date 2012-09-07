@@ -833,7 +833,7 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
 		
-		if (true ) {
+		if (FeaturesUtil.isVisibleField("Actual Start Date", ampContext) ) {
 			
 			Collection<DateListableImplementation> children		= 
 					new ArrayList<DateListableImplementation>();
@@ -852,16 +852,16 @@ public class ReportsFilterPicker extends MultiAction {
 			children.add(toDate);
 			
 			DateListableImplementation rootDate			= new DateListableImplementation();
-			rootDate.setLabel("Activity Start Date");
+			rootDate.setLabel("Actual Start Date");
 			rootDate.setTranslateable(true);
 			rootDate.setUniqueId("0");
 			rootDate.setChildren(children);
 			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
-					new GroupingElement<HierarchyListableImplementation>("Activity Start Date", "filter_activity_start_date_div", rootDate, "");
+					new GroupingElement<HierarchyListableImplementation>("Actual Start Date", "filter_activity_start_date_div", rootDate, "");
 			
 			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
 		}
-		if (true ) {
+		if (FeaturesUtil.isVisibleField("Current Completion Date", ampContext) ) {
 			
 			Collection<DateListableImplementation> children		= 
 					new ArrayList<DateListableImplementation>();
@@ -880,12 +880,39 @@ public class ReportsFilterPicker extends MultiAction {
 			children.add(toDate);
 			
 			DateListableImplementation rootDate			= new DateListableImplementation();
-			rootDate.setLabel("Activity Completion Date");
+			rootDate.setLabel("Current Completion Date");
 			rootDate.setTranslateable(true);
 			rootDate.setUniqueId("0");
 			rootDate.setChildren(children);
 			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
-					new GroupingElement<HierarchyListableImplementation>("Activity Completion Date", "filter_activity_actual_completion_date_div", rootDate, "");
+					new GroupingElement<HierarchyListableImplementation>("Current Completion Date", "filter_activity_actual_completion_date_div", rootDate, "");
+			
+			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
+		}
+		if (FeaturesUtil.isVisibleField("Final Date for Contracting", ampContext) ) {
+			Collection<DateListableImplementation> children		= 
+					new ArrayList<DateListableImplementation>();
+			DateListableImplementation fromDate			= new DateListableImplementation();	
+			fromDate.setLabel("From");
+			fromDate.setUniqueId("fromActivityFinalContractingDate");
+			fromDate.setActionFormProperty("fromActivityFinalContractingDate");
+			fromDate.setTranslateable(true);
+			children.add(fromDate);
+			
+			DateListableImplementation toDate			= new DateListableImplementation();	
+			toDate.setLabel("To");
+			toDate.setUniqueId("toActivityFinalContractingDate");
+			toDate.setActionFormProperty("toActivityFinalContractingDate");
+			toDate.setTranslateable(true);
+			children.add(toDate);
+			
+			DateListableImplementation rootDate			= new DateListableImplementation();
+			rootDate.setLabel("Final Date for Contracting");
+			rootDate.setTranslateable(true);
+			rootDate.setUniqueId("0");
+			rootDate.setChildren(children);
+			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
+					new GroupingElement<HierarchyListableImplementation>("Final Date for Contracting", "filter_activity_final_contracting_date_div", rootDate, "");
 			
 			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
 		}
@@ -1289,8 +1316,12 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		arf.setToActivityStartDate(filterForm.getToActivityStartDate() );
 		arf.setFromActivityStartDate(filterForm.getFromActivityStartDate() );
-		arf.setToActivityActualCompletionDate(filterForm.getFromActivityActualCompletionDate() );
+		
+		arf.setToActivityActualCompletionDate(filterForm.getToActivityActualCompletionDate() );
 		arf.setFromActivityActualCompletionDate(filterForm.getFromActivityActualCompletionDate());
+		
+		arf.setToActivityFinalContractingDate(filterForm.getToActivityFinalContractingDate() );
+		arf.setFromActivityFinalContractingDate(filterForm.getFromActivityFinalContractingDate());
 
 		if (filterForm.getComputedYear()!=-1){
 			arf.setComputedYear(filterForm.getComputedYear());

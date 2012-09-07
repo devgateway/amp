@@ -918,7 +918,7 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(ACTIVITY_START_DATE_FILTER);
 		}
 		
-		String ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER	 	= this.createDateCriteria(toActivityStartDate, fromActivityStartDate, "acd.actual_completion_date");
+		String ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER	 	= this.createDateCriteria(toActivityActualCompletionDate, fromActivityActualCompletionDate, "acd.actual_completion_date");
 		if ( ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER = "SELECT acd.amp_activity_id from v_actual_completion_date acd WHERE " + ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER;
 			queryAppend(ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER);

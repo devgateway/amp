@@ -11,18 +11,18 @@
 		
 <%@page import="org.digijava.module.aim.helper.Constants"%>
 
-		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container_core-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element-beta-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection-min.js"/>"></script>
         
-		<script type="text/javascript" src="<digi:file src="script/yui/dragdrop-min.js"/>"></script>
- 	 	<script type="text/javascript" src="<digi:file src="script/yui/event-min.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/dragdrop-min.js"/>"></script>
+ 	 	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/event-min.js"/>"></script>
         <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element-beta-min.js"/>"></script> 
 
         <!-- Core + Skin CSS -->
         <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />

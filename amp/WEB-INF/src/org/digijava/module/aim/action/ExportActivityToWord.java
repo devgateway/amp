@@ -1501,11 +1501,24 @@ public class ExportActivityToWord extends Action {
 			if(text.indexOf(formatterPrefix) != -1){
 				text = text.substring(text.lastIndexOf(formatterPrefix)+formatterPrefix.length());				
 			}
-			if(text.startsWith("<span")){
-				text = text.substring(text.indexOf(">")+1);
-				text = text.substring(0,text.indexOf("</span>"));
+			while (text.contains("<!--")){ //remove possible comments 
+				String text1 = text.substring(0,text.indexOf("<!--"));
+				String text2 = text.substring(text.lastIndexOf("-->")+("-->").length()+1);
+				text = text1 + text2;
 			}
 			
+			String[] possibleTags = {"span","table","tr","td","tbody","p","style","ul","li","div"};
+			
+			for (int i = 0; i < possibleTags.length; i++) { //remove all possible tags
+				String tag = possibleTags[i];
+				while(text.contains("<"+tag)){
+					String text1 = text.substring(0,text.indexOf("<"+tag));
+					String text2 = text.substring(text.indexOf(">", text.indexOf("<"+tag))+1,text.lastIndexOf("</"+tag+">"));
+					String text3 = text.length()==text.lastIndexOf("</"+tag+">")+("</"+tag+">").length()? "" : text.substring(text.lastIndexOf("</"+tag+">")+("</"+tag+">").length()+1);
+					text = text1 + text2 + text3;
+				}
+			}
+						
 			text = text.replaceAll("\\<.*?>","");
 			text = text.replaceAll("&lt;", "<");
 			text = text.replaceAll("&gt;",">");
@@ -1516,6 +1529,7 @@ public class ExportActivityToWord extends Action {
 		
 		return ExportActivityToPdfUtil.unhtmlentities(text);
 	}	
+
 	private String buildProgramsOutput(List<AmpActivityProgram> programs) {
 		String result="";
 		for (AmpActivityProgram pr :programs) {			

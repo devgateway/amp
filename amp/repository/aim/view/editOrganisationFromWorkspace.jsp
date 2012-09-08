@@ -594,9 +594,9 @@ initContactScript();
 										<tr>
 											<td colspan="2">
 											<div style="margin-top:15px; margin-left:15px; line-height:18px;">
-												<digi:trn>Organization Name</digi:trn> <b><c:out value="${aimAddOrgForm.name}" /></b><br>
-															<digi:trn>Organization Type</digi:trn> <b><c:out value="${aimAddOrgForm.orgTypeName}" /></b><br>
-															<digi:trn>Organization Group</digi:trn> <b><c:out value="${aimAddOrgForm.orgGroupName}" /></b>
+												<digi:trn>Organization Name</digi:trn>: <b><c:out value="${aimAddOrgForm.name}" /></b><br>
+															<digi:trn>Organization Type</digi:trn>: <b><c:out value="${aimAddOrgForm.orgTypeName}" /></b><br>
+															<digi:trn>Organization Group</digi:trn>: <b><c:out value="${aimAddOrgForm.orgGroupName}" /></b>
 															</div>
 											</td>
 

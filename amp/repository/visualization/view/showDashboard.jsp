@@ -1100,18 +1100,18 @@ function initializeGlobalVariables(){
 	<table cellspacing="0" cellpadding="0" width="100%"> 
 		<tr>
 			<td>
-				<a href="javascript:document.getElementById('FundingsTitleLegend').scrollIntoView(true);"><digi:trn>Funding Chart</digi:trn></a> - 
-				<a href="javascript:document.getElementById('AidPredictabilityTitleLegend').scrollIntoView(true);"><digi:trn>Aid Predictability Chart</digi:trn></a> - 
-				<a href="javascript:document.getElementById('AidTypeTitleLegend').scrollIntoView(true);"><digi:trn>Aid Type Chart</digi:trn></a> - 
-				<a href="javascript:document.getElementById('FinancingInstrumentTitleLegend').scrollIntoView(true);"><digi:trn>Financing Instrument Chart</digi:trn></a> - 
+				<a href="javascript:scrollToGraph('FundingsTitleLegend');"><digi:trn>Funding Chart</digi:trn></a> - 
+				<a href="javascript:scrollToGraph('AidPredictabilityTitleLegend');"><digi:trn>Aid Predictability Chart</digi:trn></a> - 
+				<a href="javascript:scrollToGraph('AidTypeTitleLegend');"><digi:trn>Aid Type Chart</digi:trn></a> - 
+				<a href="javascript:scrollToGraph('FinancingInstrumentTitleLegend');"><digi:trn>Financing Instrument Chart</digi:trn></a> - 
 				<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-					<a href="javascript:document.getElementById('DonorProfileTitleLegend').scrollIntoView(true);"><digi:trn>Donor Chart</digi:trn></a> - 
+					<a href="javascript:scrollToGraph('DonorProfileTitleLegend');"><digi:trn>Donor Chart</digi:trn></a> - 
 				</c:if>
 				<c:if test="${visualizationform.filter.dashboardType ne '3' }">
-					<a href="javascript:document.getElementById('SectorProfileTitleLegend').scrollIntoView(true);"><digi:trn>Sector Chart</digi:trn></a> - 
+					<a href="javascript:scrollToGraph('SectorProfileTitleLegend');"><digi:trn>Sector Chart</digi:trn></a> - 
 				</c:if>
 				<c:if test="${visualizationform.filter.dashboardType ne '2' }">
-					<a href="javascript:document.getElementById('RegionProfileTitleLegend').scrollIntoView(true);"><digi:trn>Region Chart</digi:trn></a> - 
+					<a href="javascript:scrollToGraph('RegionProfileTitleLegend');"><digi:trn>Region Chart</digi:trn></a> - 
 				</c:if>
 				
 			</td>
@@ -1245,7 +1245,7 @@ function initializeGlobalVariables(){
 
 <div id="demo" class="yui-navset">
 	<ul class="yui-nav">
-		<li><a href="#tab1"><div id="visualizationDiv"><digi:trn>Visualization</digi:trn></div></a></li>
+		<li><a href="#tab1" id="visualizationTab"><div id="visualizationDiv"><digi:trn>Visualization</digi:trn></div></a></li>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
 		<li><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
 		<c:if test="${!visualizationform.filter.fromPublicView}">

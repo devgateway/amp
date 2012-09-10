@@ -2101,3 +2101,8 @@ function checkOptionByNameAndValue (checkName, value) {
 	}
 }
 
+function scrollToGraph(graph) {
+	document.getElementById('visualizationTab').click();
+	document.getElementById(graph).scrollIntoView(true);
+}
+

@@ -11,6 +11,11 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
+
+<style>
+ .dateInputMarker{}
+</style>
+
 <bean:define id="entityList" toScope="page" scope="request" name="reqEntityList" />
 
 
@@ -32,7 +37,7 @@
 							</div>
 						</td>
 						<td>
-							<html:text readonly="true" property="${entity.actionFormProperty}" styleId="filter_input_${entity.uniqueId }" />
+							<html:text readonly="true" property="${entity.actionFormProperty}" styleId="filter_input_${entity.uniqueId }" styleClass="dateInputMarker" />
 							<a id="filter_a_${entity.uniqueId }" style="background-color: #F6FAFF;" href='javascript:pickDateById("filter_a_${entity.uniqueId }","filter_input_${entity.uniqueId }")'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0" />
 							</a>

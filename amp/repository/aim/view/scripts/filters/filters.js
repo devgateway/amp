@@ -63,10 +63,15 @@ function resetFilter(){
  		resetElement(aimReportsFilterPickerForm.lineMinRanks);
  		resetElement(aimReportsFilterPickerForm.planMinRanks);
  		resetElement(aimReportsFilterPickerForm.selectedArchivedStatus);
- 		for (var i=0; i<aimReportsFilterPickerForm.selectedArchivedStatus.length; i++) {
- 			var inputEl	= aimReportsFilterPickerForm.selectedArchivedStatus[i];
- 			if (inputEl.value==1)
- 				inputEl.checked = true;
+ 		try {
+	 		for (var i=0; i<aimReportsFilterPickerForm.selectedArchivedStatus.length; i++) {
+	 			var inputEl	= aimReportsFilterPickerForm.selectedArchivedStatus[i];
+	 			if (inputEl.value==1)
+	 				inputEl.checked = true;
+	 		}
+ 		}
+ 		catch(e){
+ 			;
  		}
 
 			
@@ -74,6 +79,14 @@ function resetFilter(){
 		if (aimReportsFilterPickerForm.computedYear){
 			aimReportsFilterPickerForm.computedYear.selectedIndex=0;
 		}
+		
+		var dateInputEls = YAHOO.util.Dom.getElementsByClassName('dateInputMarker', 'input');
+		if ( dateInputEls != null ) {
+			for (var i=0; i< dateInputEls.length; i++ ) {
+				dateInputEls[i].value = "";
+			}
+		}
+		
 	}
 
 function resetElement( elem ) {

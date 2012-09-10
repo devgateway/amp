@@ -159,7 +159,7 @@ function addTeamMember(id) {
 							<tr>
 								<td valign="top">
 									<br />
-                                	<div style="background:none repeat scroll 0 0 #FFFFFF;border-bottom: 1px solid #D0D0D0;border: 1px solid #D0D0D0;display: block;padding: 10px;">
+                                	<div style="width:100%;background:none repeat scroll 0 0 #FFFFFF;border-bottom: 1px solid #D0D0D0;border: 1px solid #D0D0D0;display: block;padding: 10px;">
 									<table align="center" cellpadding="0" cellspacing="0" width="100%">	
 										<tr>
 											<td valign="top" align="center">

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-13894</jira>
+  <keyword>Activity Version</keyword>
+  <keyword>updatedBy</keyword>
+  <author>Marianela Moras</author>
+  <description>This patch drops column updated_by on table amp_activity_version, previously dropped and recreated views depending on it </description> 
+  <trigger type="all">
+      <condition  type="columnExists" tablename="amp_activity_version" columnname="updated_by"  />
+  </trigger> 
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+DROP VIEW v_actual_completion_date;
+DROP VIEW v_budget_code_project_id;
+DROP VIEW v_budget_extras_fy;
+DROP VIEW v_capital_and_exp;
+DROP VIEW v_funding_end_date;
+DROP VIEW v_funding_start_date;
+DROP VIEW v_multi_donor;
+DROP VIEW v_on_off_budget;
+DROP VIEW v_subprogram;
+DROP VIEW v_subvote;
+DROP VIEW v_vote;
+DROP VIEW v_pledges_funding_st;
+DROP VIEW amp_activity;
+
+CREATE OR REPLACE VIEW amp_activity AS 
+ SELECT amp_activity_version.amp_activity_id, amp_activity_version.amp_id, amp_activity_version.name, amp_activity_version.gov_agreement_number, amp_activity_version.budget_code_project_id, amp_activity_version.description, amp_activity_version.lessons_learned, amp_activity_version.objectives, amp_activity_version.results, amp_activity_version.purpose, amp_activity_version.projectcomments, amp_activity_version.project_impact, amp_activity_version.activity_summary, amp_activity_version.contracting_arrangements, amp_activity_version.cond_seq, amp_activity_version.linked_activities, amp_activity_version.conditionality, amp_activity_version.project_management, amp_activity_version.contract_details, amp_activity_version.activity_level_id, amp_activity_version.document_space, amp_activity_version.language, amp_activity_version.budget, amp_activity_version.version, amp_activity_version.equalopportunity, amp_activity_version.environment, amp_activity_version.minorities, amp_activity_version.draft, amp_activity_version.created_as_draft, amp_activity_version.cal_type, amp_activity_version.activity_approval_date, amp_activity_version.activity_start_date, amp_activity_version.activity_close_date, amp_activity_version.original_comp_date, amp_activity_version.contracting_date, amp_activity_version.disbursments_date, amp_activity_version.condition_, amp_activity_version.contact_name, amp_activity_version.comments, amp_activity_version.status_reason, amp_activity_version.proposed_start_date, amp_activity_version.actual_start_date, amp_activity_version.proposed_approval_date, amp_activity_version.actual_approval_date, amp_activity_version.actual_completion_date, amp_activity_version.proposed_completion_date, amp_activity_version.date_created, amp_activity_version.date_updated, amp_activity_version.program_description, amp_activity_version.contractors, amp_activity_version.proj_cost_amount, amp_activity_version.proj_cost_date, amp_activity_version.proj_cost_currcode, amp_activity_version.convenio_date_filter, amp_activity_version.convenio_numcont, amp_activity_version.classi_code, amp_activity_version.fy, amp_activity_version.vote, amp_activity_version.subvote, amp_activity_version.subprogram, amp_activity_version.project_code, amp_activity_version.cris_number, amp_activity_version.gbssbs, amp_activity_version.governmentapprovalprocedures, amp_activity_version.jointcriteria, amp_activity_version.humanitarianaid, amp_activity_version.amp_theme_id, amp_activity_version.amp_categ_val_modality_id, amp_activity_version.amp_team_id, amp_activity_version.author, amp_activity_version.activity_creator, amp_activity_version.approval_status, amp_activity_version.line_min_rank, amp_activity_version.plan_min_rank, amp_activity_version.customfield1, amp_activity_version.customfield2, amp_activity_version.customfield3, amp_activity_version.customfield4, amp_activity_version.customfield5, amp_activity_version.customfield6, amp_activity_version.approvedby, amp_activity_version.approvaldate, amp_activity_version.chapter_code, amp_activity_version.budget_sector, amp_activity_version.budget_organization, amp_activity_version.budget_department, amp_activity_version.budget_program, amp_activity_version.archived, amp_activity_version.amp_activity_group_id, amp_activity_version.amp_activity_previous_version_id, amp_activity_version.modified_date, amp_activity_version.modified_by, amp_activity_version.iati_last_update_date, amp_activity_version.deleted, amp_activity_version.merged_activity, amp_activity_version.merge_source1, amp_activity_version.merge_source2
+   FROM amp_activity_version, amp_activity_group
+  WHERE amp_activity_version.amp_activity_id = amp_activity_group.amp_activity_last_version_id AND amp_activity_version.deleted = false;
+ALTER TABLE amp_activity OWNER TO amp;
+
+
+CREATE OR REPLACE VIEW v_actual_completion_date AS 
+ SELECT amp_activity.amp_activity_id, amp_activity.actual_completion_date
+   FROM amp_activity
+  ORDER BY amp_activity.amp_activity_id;
+ALTER TABLE v_actual_completion_date OWNER TO amp;
+
+CREATE OR REPLACE VIEW v_budget_code_project_id AS 
+ SELECT a.amp_activity_id, a.budget_code_project_id
+   FROM amp_activity a
+  ORDER BY a.amp_activity_id;
+ALTER TABLE v_budget_code_project_id OWNER TO amp;
+
+CREATE OR REPLACE VIEW v_budget_extras_fy AS 
+ SELECT a.amp_activity_id, a.fy
+   FROM amp_activity a
+  ORDER BY a.amp_activity_id;
+ALTER TABLE v_budget_extras_fy OWNER TO amp;
+
+CREATE OR REPLACE VIEW v_capital_and_exp AS 
+         SELECT amp_activity.amp_activity_id, 'Capital'::text AS text
+           FROM amp_activity
+UNION 
+         SELECT amp_activity.amp_activity_id, 'Expenditure'::text AS text
+           FROM amp_activity
+  ORDER BY 1;
+ALTER TABLE v_capital_and_exp OWNER TO amp;
+
+CREATE OR REPLACE VIEW v_funding_end_date AS 
+ SELECT f.amp_activity_id, f.amp_funding_id, f.actual_completion_date
+   FROM amp_funding f
+   JOIN amp_activity a ON f.amp_activity_id = a.amp_activity_id
+  ORDER BY f.amp_activity_id;
+ALTER TABLE v_funding_end_date OWNER TO amp;
+
+
+CREATE OR REPLACE VIEW v_funding_start_date AS 
+ SELECT f.amp_activity_id, f.amp_funding_id, f.actual_start_date
+   FROM amp_funding f
+   JOIN amp_activity a ON f.amp_activity_id = a.amp_activity_id
+  ORDER BY f.amp_activity_id;
+ALTER TABLE v_funding_start_date OWNER TO amp;
+
+CREATE OR REPLACE VIEW v_multi_donor AS 
+ SELECT a.amp_activity_id, 
+        CASE
+            WHEN count(DISTINCT f.amp_donor_org_id) > 1 THEN 'yes'::text
+            ELSE 'no'::text
+        END AS value
+   FROM amp_activity a
+   LEFT JOIN amp_funding f ON a.amp_activity_id = f.amp_activity_id
+  GROUP BY a.amp_activity_id;
+ALTER TABLE v_multi_donor OWNER TO amp;
+
+CREATE OR REPLACE VIEW v_on_off_budget AS 
+ SELECT a.amp_activity_id, 
+        CASE
+            WHEN acv.id IS NULL THEN 'Unallocated'::text
+            ELSE acv.category_value::text
+        END AS budget, acv.id AS budget_id
+   FROM amp_activities_categoryvalues aac
+   JOIN amp_category_value acv ON aac.amp_categoryvalue_id = acv.id
+   JOIN amp_category_class acc ON acc.id = acv.amp_category_class_id AND acc.keyname::text = 'activity_budget'::text
+   RIGHT JOIN amp_activity a ON a.amp_activity_id = aac.amp_activity_id
+  ORDER BY a.amp_activity_id;
+ALTER TABLE v_on_off_budget OWNER TO amp;
+
+CREATE OR REPLACE VIEW v_subprogram AS 
+ SELECT a.amp_activity_id, a.subprogram
+   FROM amp_activity a
+  WHERE btrim(a.subprogram::text) <> ''::text;
+ALTER TABLE v_subprogram OWNER TO amp;
+
+CREATE OR REPLACE VIEW v_subvote AS 
+ SELECT a.amp_activity_id, a.subvote
+   FROM amp_activity a
+  WHERE btrim(a.subvote::text) <> ''::text;
+ALTER TABLE v_subvote OWNER TO amp;
+
+
+CREATE OR REPLACE VIEW v_vote AS 
+ SELECT a.amp_activity_id, a.vote
+   FROM amp_activity a
+  WHERE btrim(a.vote::text) <> ''::text;
+ALTER TABLE v_vote OWNER TO amp;
+
+
+CREATE OR REPLACE VIEW v_pledges_funding_st AS 
+         SELECT f.id AS pledge_id, d.name AS donor_name, afd.amp_fund_detail_id, afd.transaction_type, afd.adjustment_type, cval3.category_value AS adjustment_type_name, afd.transaction_date, afd.transaction_amount, c.currency_code, cval.id AS terms_assist_id, cval.category_value AS terms_assist_name, b.org_grp_name, ot.org_type AS donor_type_name, cval2.category_value AS financing_instrument_name, cval2.id AS financing_instrument_id, d.amp_org_id AS org_id, d.org_grp_id, ot.amp_org_type_id AS org_type_id
+           FROM amp_funding_pledges f
+      JOIN amp_funding_pledges_details fd ON f.id = fd.pledge_id
+   LEFT JOIN amp_category_value cval ON cval.id = fd.type_of_assistance
+   LEFT JOIN amp_currency c ON c.amp_currency_id = fd.currency
+   JOIN amp_organisation d ON d.amp_org_id = f.amp_org_id
+   LEFT JOIN amp_org_group b ON b.amp_org_grp_id = d.org_grp_id
+   LEFT JOIN amp_org_type ot ON ot.org_type_code::text = d.org_type_code::text
+   LEFT JOIN amp_category_value cval2 ON cval2.id = fd.aid_modality
+   JOIN amp_funding_detail afd ON afd.pledge_id = f.id
+   LEFT JOIN amp_category_value cval3 ON cval3.id = afd.adjustment_type
+   JOIN amp_funding ampf ON ampf.amp_funding_id = afd.amp_funding_id
+  WHERE (ampf.amp_activity_id IN ( SELECT amp_activity.amp_activity_id
+   FROM amp_activity))
+UNION ALL 
+         SELECT f.id AS pledge_id, d.name AS donor_name, fd.id AS amp_fund_detail_id, 7 AS transaction_type, 1 AS adjustment_type, 'Actual'::text AS adjustment_type_name, to_date('02 Jan '::text || fd.year::text, 'DD Mon YYYY'::text) AS transaction_date, fd.amount AS transaction_amount, c.currency_code, cval.id AS terms_assist_id, cval.category_value AS terms_assist_name, b.org_grp_name, ot.org_type AS donor_type_name, cval2.category_value AS financing_instrument_name, cval2.id AS financing_instrument_id, d.amp_org_id AS org_id, d.org_grp_id, ot.amp_org_type_id AS org_type_id
+           FROM amp_funding_pledges f
+      JOIN amp_funding_pledges_details fd ON f.id = fd.pledge_id
+   LEFT JOIN amp_category_value cval ON cval.id = fd.type_of_assistance
+   LEFT JOIN amp_currency c ON c.amp_currency_id = fd.currency
+   JOIN amp_organisation d ON d.amp_org_id = f.amp_org_id
+   LEFT JOIN amp_org_group b ON b.amp_org_grp_id = d.org_grp_id
+   LEFT JOIN amp_org_type ot ON ot.org_type_code::text = d.org_type_code::text
+   LEFT JOIN amp_category_value cval2 ON cval2.id = fd.aid_modality
+   JOIN amp_funding_detail afd ON afd.pledge_id = f.id
+   LEFT JOIN amp_category_value cval3 ON cval3.id = afd.adjustment_type
+   JOIN amp_funding ampf ON ampf.amp_funding_id = afd.amp_funding_id
+  WHERE (ampf.amp_activity_id IN ( SELECT amp_activity.amp_activity_id
+   FROM amp_activity));
+ALTER TABLE v_pledges_funding_st OWNER TO amp;
+
+ALTER TABLE amp_activity_version DROP COLUMN updated_by;
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

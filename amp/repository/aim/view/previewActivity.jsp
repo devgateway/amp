@@ -2332,7 +2332,7 @@ function collapseAll() {
 				</tr>
 				<tr bgcolor="#f0f0f0">
 					<td>
-						<digi:trn key="aim:proposedCompletionDate">Proposed Completion Date</digi:trn>					
+						<digi:trn>Date</digi:trn>					
 					</td>
 					<td bgcolor="#f0f0f0" align="left" width="150">
 						<c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">

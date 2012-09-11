@@ -12,6 +12,7 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
@@ -67,7 +68,8 @@ public class ReportHeadingsXLS extends XLSExporter {
 		colId.reset();
 		
 		columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
-		for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
+		int maxColumnDepth = columnReport.getMaxColumnDepth();
+		for (int curDepth = 0; curDepth <= maxColumnDepth; curDepth++) {
 			row = sheet.createRow(rowId.shortValue());
 			
 			
@@ -165,6 +167,16 @@ public class ReportHeadingsXLS extends XLSExporter {
 						*/
 						if (!this.getMetadata().getHideActivities()){
 							if(rowsp>1) makeRowSpan(rowsp-1,true);
+						}
+						
+						/**
+						 * on the totals column there are no years to be displayed
+						 */
+						if ( this.getMetadata().getHideActivities() && curDepth == 1 && 
+								ArConstants.COLUMN_TOTAL.equals( col.getName() )) { 
+							
+								makeRowSpan(maxColumnDepth-1, true);
+							
 						}
 						
 						if (element2.getWidth() > 1){

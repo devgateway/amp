@@ -111,7 +111,8 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
 		};
 
 		String ret = "";
-		ret = this.pointOfDeliveryDonor.getAcronym();
+		if (this.pointOfDeliveryDonor != null)
+			ret = this.pointOfDeliveryDonor.getAcronym();
 		List<AmpAhsurveyResponse> auxList = new ArrayList<AmpAhsurveyResponse>(this.responses);
 		Collections.sort(auxList, surveyComparator);
 		Iterator<AmpAhsurveyResponse> iter = auxList.iterator();

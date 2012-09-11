@@ -9,7 +9,6 @@ import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.FeedbackLabel;
 
 /**
  * @author mihai
@@ -32,8 +31,7 @@ public class ChoiceComponentVisualErrorBehavior extends AjaxFormChoiceComponentE
      * Constructor.
      *
      * @param event of type {@link String} (for example 'onblur', 'onkeyup', etc.)
-     * @param updateComponent is the {@link Component} that must be updated (for example the {@link FeedbackLabel}
-     *        containing the error message for this {@link FormComponent})  
+     * @param updateComponent is the {@link Component} that must be updated
      */
     public ChoiceComponentVisualErrorBehavior(String event,Component updateComponent) {
         super(event);

@@ -385,7 +385,11 @@ div.tabpanel div.tab-row a:hover {
 .marginal-five{margin-right:5px;}
 .invisible-item-hidden{visibility: hidden;}
 
-.feedbackPanel{padding-left: 20px; list-style-type: square; font-weight:bold;}
+.feedbackPanel{
+	padding-left: 2px; 
+	list-style-type: none; 
+	font-weight:bold;
+}
 .feedbackPanelERROR{color: red;}
 .feedbackPanelINFO{color: green;}
 /* -- ONE PAGER END -- */

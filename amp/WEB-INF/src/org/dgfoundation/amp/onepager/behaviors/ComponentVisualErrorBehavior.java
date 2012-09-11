@@ -5,7 +5,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.FeedbackLabel;
 
 /**
  * Behavior that checks if a {@link FormComponent} is valid. Valid {@link FormComponent} objects get the CSS class
@@ -35,8 +34,7 @@ public class ComponentVisualErrorBehavior extends AjaxFormComponentUpdatingBehav
      * Constructor.
      *
      * @param event of type {@link String} (for example 'onblur', 'onkeyup', etc.)
-     * @param updateComponent is the {@link Component} that must be updated (for example the {@link FeedbackLabel}
-     *        containing the error message for this {@link FormComponent})  
+     * @param updateComponent is the {@link Component} that must be updated  
      */
     public ComponentVisualErrorBehavior(String event, Component updateComponent) {
         super(event);        

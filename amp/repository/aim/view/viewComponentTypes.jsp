@@ -126,7 +126,7 @@ if (onDelete()){
                                     <digi:trn key="aim:deleteType">Delete</digi:trn>
                                   </c:set>
 								  <c:set var="ForDelete">
-                                    <digi:trn key="aim:cantDeleteType">Can't delete type because it's assigned to an Compoenent</digi:trn>
+                                    <digi:trn key="aim:cantDeleteType">Can't delete type because it's assigned to an Component</digi:trn>
                                   </c:set>
                                   <c:if test="${!empty componentTypesList.components}">
                                     [<a title="${ForDelete}"  style="text-decoration:none;color:#999999">${delete}</a>]

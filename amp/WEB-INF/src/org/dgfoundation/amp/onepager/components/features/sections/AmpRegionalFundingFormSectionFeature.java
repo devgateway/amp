@@ -59,6 +59,8 @@ public class AmpRegionalFundingFormSectionFeature extends
 			@Override
 			public List<AmpCategoryValueLocations> getObject() {
 				Set<AmpCategoryValueLocations> s = new HashSet<AmpCategoryValueLocations>();
+				if (locationModel.getObject() == null)
+					locationModel.setObject(new HashSet());
 				for (AmpActivityLocation location : locationModel.getObject())
 					if (CategoryManagerUtil.equalsCategoryValue(location
 							.getLocation().getLocation()

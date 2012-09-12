@@ -1303,61 +1303,62 @@ public class ExportActivityToPDF extends Action {
 				columnName=TranslatorWorker.translateText("Created On",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,myForm.getIdentification().getCreatedDate());
 			}			
-			
-			/**
-			 * Custom Fields
-			 */
-			if(myForm.getCustomFields()!=null && myForm.getCustomFields().size()>0){
-				for (CustomField<?> customField : myForm.getCustomFields()) {
-					if(FeaturesUtil.isVisibleField(customField.getFM_field(), ampContext)){
-						PdfPCell customFields1=new PdfPCell();
-						customFields1.setBorder(0);
-						customFields1.setBackgroundColor(new Color(244,244,242));
-						Paragraph customFields1P=new Paragraph(TranslatorWorker.translateText(customField.getName(), locale, siteId),titleFont);
-						customFields1P.setAlignment(Element.ALIGN_RIGHT);
-						customFields1.addElement(customFields1P);
-						mainLayout.addCell(customFields1);
-						
-						PdfPCell customFields2=new PdfPCell();
-						customFields2.setBorder(0);
-						Paragraph customFields2P=new Paragraph(" ");					
-						if(customField instanceof ComboBoxCustomField){
-							customFields2P=new Paragraph(((ComboBoxCustomField) customField).getOptions().get(customField.getValue()),plainFont);
-						}else if(customField instanceof CategoryCustomField){
-							if(((CategoryCustomField)customField).getValue()!=null && ((CategoryCustomField)customField).getValue()>0){
-								catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(((CategoryCustomField)customField).getValue());
-								if(catVal!=null){
-									translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
-									customFields2P=new Paragraph(translatedValue,plainFont);
-								}
-							}					
-						}else if(customField instanceof DateCustomField){
-							customFields2P=new Paragraph(((DateCustomField) customField).getStrDate(),plainFont);
-						}else if(customField instanceof RadioOptionCustomField){
-							String outputVal=" ";
-							for (String option : ((RadioOptionCustomField) customField).getOptions().keySet()) {
-								if(option.equals(customField.getValue())){
-									outputVal+=((RadioOptionCustomField) customField).getOptions().get(option)+" ";
-								}
-							}
-							customFields2P=new Paragraph(outputVal,plainFont);
-						}else if(customField instanceof CheckCustomField){
-							if(((CheckCustomField)customField).getValue()!=null && ((CheckCustomField)customField).getValue()){
-								customFields2P=new Paragraph(((CheckCustomField)customField).getLabelTrue(),plainFont);
-							}else if(((CheckCustomField)customField).getValue()!=null && !((CheckCustomField)customField).getValue()){
-								customFields2P=new Paragraph(((CheckCustomField)customField).getLabelFalse(),plainFont);
-							}
-						}else{
-							if(customField.getValue()!=null){
-								customFields2P=new Paragraph(customField.getValue().toString(),plainFont);
-							}
-						}
-						customFields2.addElement(customFields2P);
-						mainLayout.addCell(customFields2);
-					}					
-					
-				}
-			}
+
+// AMP-13881: commented since custom fields are not in use anymore
+//			/**
+//			 * Custom Fields
+//			 */
+//			if(myForm.getCustomFields()!=null && myForm.getCustomFields().size()>0){
+//				for (CustomField<?> customField : myForm.getCustomFields()) {
+//					if(FeaturesUtil.isVisibleField(customField.getFM_field(), ampContext)){
+//						PdfPCell customFields1=new PdfPCell();
+//						customFields1.setBorder(0);
+//						customFields1.setBackgroundColor(new Color(244,244,242));
+//						Paragraph customFields1P=new Paragraph(TranslatorWorker.translateText(customField.getName(), locale, siteId),titleFont);
+//						customFields1P.setAlignment(Element.ALIGN_RIGHT);
+//						customFields1.addElement(customFields1P);
+//						mainLayout.addCell(customFields1);
+//						
+//						PdfPCell customFields2=new PdfPCell();
+//						customFields2.setBorder(0);
+//						Paragraph customFields2P=new Paragraph(" ");					
+//						if(customField instanceof ComboBoxCustomField){
+//							customFields2P=new Paragraph(((ComboBoxCustomField) customField).getOptions().get(customField.getValue()),plainFont);
+//						}else if(customField instanceof CategoryCustomField){
+//							if(((CategoryCustomField)customField).getValue()!=null && ((CategoryCustomField)customField).getValue()>0){
+//								catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(((CategoryCustomField)customField).getValue());
+//								if(catVal!=null){
+//									translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+//									customFields2P=new Paragraph(translatedValue,plainFont);
+//								}
+//							}					
+//						}else if(customField instanceof DateCustomField){
+//							customFields2P=new Paragraph(((DateCustomField) customField).getStrDate(),plainFont);
+//						}else if(customField instanceof RadioOptionCustomField){
+//							String outputVal=" ";
+//							for (String option : ((RadioOptionCustomField) customField).getOptions().keySet()) {
+//								if(option.equals(customField.getValue())){
+//									outputVal+=((RadioOptionCustomField) customField).getOptions().get(option)+" ";
+//								}
+//							}
+//							customFields2P=new Paragraph(outputVal,plainFont);
+//						}else if(customField instanceof CheckCustomField){
+//							if(((CheckCustomField)customField).getValue()!=null && ((CheckCustomField)customField).getValue()){
+//								customFields2P=new Paragraph(((CheckCustomField)customField).getLabelTrue(),plainFont);
+//							}else if(((CheckCustomField)customField).getValue()!=null && !((CheckCustomField)customField).getValue()){
+//								customFields2P=new Paragraph(((CheckCustomField)customField).getLabelFalse(),plainFont);
+//							}
+//						}else{
+//							if(customField.getValue()!=null){
+//								customFields2P=new Paragraph(customField.getValue().toString(),plainFont);
+//							}
+//						}
+//						customFields2.addElement(customFields2P);
+//						mainLayout.addCell(customFields2);
+//					}					
+//					
+//				}
+//			}
 			
 			/**
 			 * Activity - Performance

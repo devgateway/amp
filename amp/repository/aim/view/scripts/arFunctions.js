@@ -165,12 +165,12 @@ function toggleRows(caller,hideId){
 function showAllRows() {
 	
 	tb = document.getElementById('reportTable');
-	for(i=1 ; i< tb.rows.length; i++){
+	for(var i=1 ; i< tb.rows.length; i++){
 		 tb.rows[i].style.display = '';
 	}
 	//change  +/- images now...
 	imgs = tb.getElementsByTagName('img');
-	for(i=0 ; i< imgs.length; i++){
+	for(var i=0 ; i< imgs.length; i++){
 		if(imgs[i].id=='toggleImage')  {
 			imgs[i].alt='shown';
 			imgs[i].src=minus_sign;
@@ -180,7 +180,7 @@ function showAllRows() {
 
 function hideAllRows() {
 	tb = document.getElementById('reportTable');
-	for(i=1 ; i< tb.rows.length; i++){
+	for(var i=1 ; i< tb.rows.length; i++){
 		if(tb.rows[i].title=='' || tb.rows[i].title>2) {
 		 tb.rows[i].style.display = 'none';
 		 }
@@ -188,7 +188,7 @@ function hideAllRows() {
 
 	//change  +/- images now...
 	imgs = tb.getElementsByTagName('img');
-	for(i=0 ; i< imgs.length; i++){
+	for(var i=0 ; i< imgs.length; i++){
 		if(imgs[i].id=='toggleImage')  {
 			imgs[i].alt='hidden';
 			imgs[i].src=plus_sign;
@@ -429,7 +429,7 @@ RowSelector.prototype.colorRow	= function (color) {
 			}
 		}
 	}
-}
+};
 
 RowSelector.prototype.markRow	= function (forever) {
 	if ( forever ) {
@@ -440,7 +440,7 @@ RowSelector.prototype.markRow	= function (forever) {
 		if ( !this.forever ) {
 			this.colorRow( this.markerColor );
 		}
-}
+};
 
 RowSelector.prototype.unmarkRow	= function (forever) {
 	if ( forever ) {
@@ -451,7 +451,7 @@ RowSelector.prototype.unmarkRow	= function (forever) {
 		if ( !this.forever ) {
 			this.colorRow("");
 		}
-}
+};
 
 RowSelector.prototype.toggleRow	= function () {
 	if ( this.isMarked ) {
@@ -468,7 +468,7 @@ RowSelector.prototype.toggleRow	= function () {
 			this.callback.onSelect();
 		}
 	}
-}
+};
 
 UniqueRowSelector.prototype				= new RowSelector();
 UniqueRowSelector.prototype.parent		= RowSelector;
@@ -500,7 +500,7 @@ UniqueRowSelector.prototype.toggleRow	= function () {
 			this.callback.onSelect();
 		}
 	}
-}
+};
 
 function RowManagerProperty(skippedClass, baseId, markerColor) {
 	this.lastSelectedRow	=  null;
@@ -514,7 +514,7 @@ function sortHierarchy( columnName, prevOrder ) {
 	var descending			= 1; 
 	if ( prevOrder=="descending" ) 
 		descending			= 0;
-	var subForm				= document.forms["aimAdvancedReportForm"];
+	var subForm				= document.getElementsByName("aimAdvancedReportForm")[0];
 	for ( var i=0; i<subForm.levelPicked.options.length; i++ ) {
 		if (subForm.levelPicked.options[i].text == columnName) { 
 			subForm.levelPicked.selectedIndex	= i;

@@ -72,7 +72,7 @@
 							<div class="hiddenNameDiv" style="display: none;"><digi:trn>${element.name}</digi:trn></div>
 							<ul style="list-style-type: none;">
 								<li>
-									<input type="checkbox" onclick="toggleCheckChildren(this);buildLabels();" class="root_checkbox"/> 
+									<input type="checkbox" onclick="toggleCheckChildren(this);" class="root_checkbox"/> 
 										<span style="font-family: Arial; font-size: 12px;">
 											<digi:trn><c:out value="${element.rootHierarchyListable.label}"/></digi:trn>
 										</span>

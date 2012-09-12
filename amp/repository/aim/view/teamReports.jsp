@@ -438,27 +438,32 @@ function validate() {
        <digi:trn>Please choose a tab to remove</digi:trn>
    </c:set>
   </c:if>	
-				
+	
+  if(document.aimTeamReportsForm.selReports){
 	if(document.aimTeamReportsForm.selReports.checked != null) {
 		if (document.aimTeamReportsForm.selReports.checked == false) {				
 			alert("${message}");
 			return false;
-		}
+		};
 	} else {
 		var length = document.aimTeamReportsForm.selReports.length;
 		var flag = 0;
-		for (i = 0; i < length; i ++) {
+		for (var i = 0; i < length; i ++) {
 			if (document.aimTeamReportsForm.selReports[i].checked == true) {
 				flag = 1;
 				break;
-			}
+			};
 		}
 		if (flag == 0) {
 			alert("${message}");
 			return false;
-		}
+		};
 	}
 	return true;
+  }else{
+	  	alert("<digi:trn>There are no selection to remove</digi:trn>");
+		return false;
+  };
 }
     function confirmDelete() {
 	var valid = validate();

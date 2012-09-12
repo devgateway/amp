@@ -117,8 +117,12 @@ public class UpdateTeamReports extends Action {
 	            if(toIndex > col.size()){
 	            	toIndex = col.size();
 	            }
-	            col = ((List)col).subList(fromIndex, toIndex);
-	            totalPages=Math.ceil(1.0*size/defReportsPerPage);
+	            if(fromIndex <= toIndex) {
+	               col = ((List)col).subList(fromIndex, toIndex);
+	               totalPages=Math.ceil(1.0*size/defReportsPerPage);
+	            }
+	            else
+	            	totalPages=new Double(FIRST_PAGE);
 	        }else{
 	              //  col= TeamUtil.getAllUnassignedTeamReports(id, tabs);
 	                totalPages=new Double(FIRST_PAGE);

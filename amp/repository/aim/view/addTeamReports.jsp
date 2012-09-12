@@ -214,7 +214,7 @@
 										</tr>
 										<logic:empty name="aimTeamReportsForm" property="reports">
 											<tr>
-												<td   class="inside1"   class="inside1">
+												<td   class="inside1"   colspan="7">
 													<c:if test="${aimTeamReportsForm.showReportList == true}">
 														<digi:trn key="aim:noReportsPresent">No reports present</digi:trn>
 													</c:if>

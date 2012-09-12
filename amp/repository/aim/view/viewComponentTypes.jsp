@@ -116,7 +116,7 @@ if (onDelete()){
                                 <bean:write  name="componentTypesList" property="name"/>                                </td>
                                 <td width="100" height="20" align="center" nowrap="nowrap" bgcolor="#ffffff" class="inside">
                                   <c:set var="ToEditType">
-                                  <digi:trn key="aim:clickToEditType">Click here to Edit Type</digi:trn>
+                                  <digi:trn>Click here to Edit Type</digi:trn>
                                 </c:set>
                                 <c:set var="edit">
                                   <digi:trn key="aim:edit">Edit</digi:trn>
@@ -126,13 +126,13 @@ if (onDelete()){
                                     <digi:trn key="aim:deleteType">Delete</digi:trn>
                                   </c:set>
 								  <c:set var="ForDelete">
-                                    <digi:trn key="aim:cantDeleteType">Can't delete type because it's assigned to an Component</digi:trn>
+                                    <digi:trn>Can't delete type because it's assigned to a component</digi:trn>
                                   </c:set>
                                   <c:if test="${!empty componentTypesList.components}">
                                     [<a title="${ForDelete}"  style="text-decoration:none;color:#999999">${delete}</a>]
                                   </c:if>
                                  <c:set var="ForDelete">
-                                   <digi:trn key="aim:clickToDeleteType">Click here to delete Type</digi:trn>
+                                   <digi:trn>Click here to delete Type</digi:trn>
                                  </c:set>
                                   <c:if test="${empty componentTypesList.components}">
                                     [<a title="${ForDeleteComponent}"  href="javascript:deleteType(${componentTypesList.type_id});">${delete}</a>]                                  </c:if>                                

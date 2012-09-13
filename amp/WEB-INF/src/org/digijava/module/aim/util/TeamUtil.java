@@ -1677,11 +1677,15 @@ public class TeamUtil {
 	    					queryString += " and r.drilldownTab=false ";
 	    				}
 	    			}
-	                if(keyword != null){
-	                	queryString += " and r.name like '%"+keyword+"%' ";
+	                if(keyword!=null&&keyword.trim().length()>0){
+	                	queryString += " and lower(r.name) like lower(:keyword) ";
 	                }
+	                
 	                queryString += " order by r.name";
 	                qry = session.createQuery(queryString);
+	                if(keyword!=null&&keyword.trim().length()>0){
+	                	 qry.setString("keyword", '%' + keyword + '%');
+	                }
 	                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
 	                                 Hibernate.LONG);
 	                Iterator itrTemp = qry.list().iterator();
@@ -1732,12 +1736,15 @@ public class TeamUtil {
 					queryString += " and r.drilldownTab=false ";
 				}
 			}
-            if(keyword != null){
-            	queryString += " and tr.report.name like '%"+keyword+"%' ";
+            if(keyword!=null&&keyword.trim().length()>0){
+            	queryString += " and lower(tr.report.name) like lower(:keyword) ";
             }
             queryString += "  order by tr.report";
             Query qry = session.createQuery(queryString);
             
+            if(keyword!=null&&keyword.trim().length()>0){
+           	 	qry.setString("keyword", '%' + keyword + '%');
+            }
             qry.setFirstResult(currentPage);
             qry.setMaxResults(recordPerPage);
             qry.setLong("teamId", teamId);
@@ -1769,13 +1776,16 @@ public class TeamUtil {
 					queryString += " and r.drilldownTab=false ";
 				}
 			}
-           if(keyword != null){
-           	queryString += " and tr.report.name like '%"+keyword+"%' ";
+           if(keyword!=null&&keyword.trim().length()>0){
+        	   queryString += " and lower(tr.report.name) like lower(:keyword) ";
            }
            queryString += " order by tr.report";
            
            Query qry = session.createQuery(queryString);
-           qry.setLong("teamId", teamId);
+           if(keyword!=null&&keyword.trim().length()>0){
+        	   qry.setString("keyword", '%' + keyword + '%');
+	       }
+	       qry.setLong("teamId", teamId);
            col = qry.list();
            size=col.size();
        } catch(Exception e) {

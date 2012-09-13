@@ -198,78 +198,79 @@ public class ExportActivityToPDF extends Action {
 				createGeneralInfoRow(mainLayout,columnName,activity.getConvenioNumcont());
 			}
 			//project comments
-			if(FeaturesUtil.isVisibleField("Project Comments", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments", ampContext)){
 				columnName=TranslatorWorker.translateText("Project Comments",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectComments()));
 			}			
 			
 			//objective
-			if(FeaturesUtil.isVisibleField("Objective", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective", ampContext)){
 				columnName=TranslatorWorker.translateText("Objectives",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getObjective()));
 			}
-			
-			//objective comments
 			HashMap allComments = new HashMap();
-			if(teamMember!=null){ //Objective Comments shouldn't show up on Publc View
-				ArrayList<AmpComments> colAux	= null;
-	            Collection ampFields = DbUtil.getAmpFields();
-	            
-	            if (ampFields!=null) {
-	            	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
-	                    AmpField field = (AmpField) itAux.next();
-	                    colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
-	                    allComments.put(field.getFieldName(), colAux);
-	                  }
-	            }
-	            
-	            PdfPTable objTable=new PdfPTable(2);
-	            objTable.getDefaultCell().setBorder(0);
-	            for (Object commentKey : allComments.keySet()) {            	
-					String key=(String)commentKey;
-					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
-					if(key.equalsIgnoreCase("Objective Assumption") && FeaturesUtil.isVisibleField("Objective Assumption", ampContext)){
-						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption", locale, siteId)+" :",titleFont));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
-						}					
-					}else if(key.equalsIgnoreCase("Objective Verification") && FeaturesUtil.isVisibleField("Objective Verification", ampContext)){
-						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
-						}					
-					}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators") && FeaturesUtil.isVisibleField("Objective Assumption", ampContext)) {
-						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments", ampContext)){
+			//objective comments
+				if(teamMember!=null){ //Objective Comments shouldn't show up on Publc View
+					ArrayList<AmpComments> colAux	= null;
+		            Collection ampFields = DbUtil.getAmpFields();
+		            
+		            if (ampFields!=null) {
+		            	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
+		                    AmpField field = (AmpField) itAux.next();
+		                    colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
+		                    allComments.put(field.getFieldName(), colAux);
+		                  }
+		            }
+		            
+		            PdfPTable objTable=new PdfPTable(2);
+		            objTable.getDefaultCell().setBorder(0);
+		            for (Object commentKey : allComments.keySet()) {            	
+						String key=(String)commentKey;
+						List<AmpComments> values=(List<AmpComments>)allComments.get(key);
+						if(key.equalsIgnoreCase("Objective Assumption") && FeaturesUtil.isVisibleField("Objective Assumption", ampContext)){
+							for (AmpComments value : values) {
+								objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption", locale, siteId)+" :",titleFont));
+								objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							}					
+						}else if(key.equalsIgnoreCase("Objective Verification") && FeaturesUtil.isVisibleField("Objective Verification", ampContext)){
+							for (AmpComments value : values) {
+								objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
+								objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							}					
+						}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators") && FeaturesUtil.isVisibleField("Objective Assumption", ampContext)) {
+							for (AmpComments value : values) {
+								objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
+								objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+							}
 						}
 					}
+		            
+		            PdfPCell objectiveCommentsCell1=new PdfPCell();
+		            p1=new Paragraph(TranslatorWorker.translateText("Objective Comments",locale,siteId),titleFont);
+		            p1.setAlignment(Element.ALIGN_RIGHT);
+					objectiveCommentsCell1.addElement(p1);
+					objectiveCommentsCell1.setBackgroundColor(new Color(244,244,242));
+					objectiveCommentsCell1.setBorder(0);		
+					mainLayout.addCell(objectiveCommentsCell1);
+					
+					PdfPCell objectiveCommentsCell2=new PdfPCell(objTable);
+					objectiveCommentsCell2.setBorder(0);
+					mainLayout.addCell(objectiveCommentsCell2);
 				}
-	            
-	            PdfPCell objectiveCommentsCell1=new PdfPCell();
-	            p1=new Paragraph(TranslatorWorker.translateText("Objective Comments",locale,siteId),titleFont);
-	            p1.setAlignment(Element.ALIGN_RIGHT);
-				objectiveCommentsCell1.addElement(p1);
-				objectiveCommentsCell1.setBackgroundColor(new Color(244,244,242));
-				objectiveCommentsCell1.setBorder(0);		
-				mainLayout.addCell(objectiveCommentsCell1);
-				
-				PdfPCell objectiveCommentsCell2=new PdfPCell(objTable);
-				objectiveCommentsCell2.setBorder(0);
-				mainLayout.addCell(objectiveCommentsCell2);
 			}
 			//Description cell
-			if(FeaturesUtil.isVisibleField("Description", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Description", ampContext)){
 				columnName=TranslatorWorker.translateText("Description",locale,siteId);				
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getDescription()));
 			}
 			//Lessons learned
-			if(FeaturesUtil.isVisibleField("Lessons Learned", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext)){
 				columnName=TranslatorWorker.translateText("Lessons Learned",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getLessonsLearned()));
 			}
 			//Project Impact
-			if(FeaturesUtil.isVisibleField("Project Impact", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Impact", ampContext)){
 				columnName=TranslatorWorker.translateText("Project Impact",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getProjectImpact()));
 			}
@@ -278,76 +279,82 @@ public class ExportActivityToPDF extends Action {
 			createGeneralInfoRow(mainLayout,columnName,processEditTagValue(request, activity.getActivitySummary()));
 			
 			//Contracting Arrangements
-			columnName=TranslatorWorker.translateText("Contracting Arrangements",locale,siteId);
-			columnVal=processEditTagValue(request, activity.getContractingArrangements());
-			createGeneralInfoRow(mainLayout,columnName,columnVal);
-			
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Contracting Arrangements", ampContext)){
+				columnName=TranslatorWorker.translateText("Contracting Arrangements",locale,siteId);
+				columnVal=processEditTagValue(request, activity.getContractingArrangements());
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
 			//Conditionality and Sequencing
-			columnName=TranslatorWorker.translateText("Conditionality and Sequencing",locale,siteId);
-			columnVal=processEditTagValue(request, activity.getCondSeq());
-			createGeneralInfoRow(mainLayout,columnName,columnVal);
-			
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionality and Sequencing", ampContext)){
+				columnName=TranslatorWorker.translateText("Conditionality and Sequencing",locale,siteId);
+				columnVal=processEditTagValue(request, activity.getCondSeq());
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
 			//Linked Activities
-			columnName=TranslatorWorker.translateText("Linked Activities",locale,siteId);
-			columnVal=processEditTagValue(request, activity.getLinkedActivities());
-			createGeneralInfoRow(mainLayout,columnName,columnVal);
-			
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Linked Activities", ampContext)){
+				columnName=TranslatorWorker.translateText("Linked Activities",locale,siteId);
+				columnVal=processEditTagValue(request, activity.getLinkedActivities());
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
 			//Conditionalities
-			columnName=TranslatorWorker.translateText("Conditionalities",locale,siteId);
-			columnVal=processEditTagValue(request, activity.getConditionality());
-			createGeneralInfoRow(mainLayout,columnName,columnVal);
-			
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionalities", ampContext)){
+				columnName=TranslatorWorker.translateText("Conditionalities",locale,siteId);
+				columnVal=processEditTagValue(request, activity.getConditionality());
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
 			//Project Management
-			columnName=TranslatorWorker.translateText("Project Management",locale,siteId);
-			columnVal=processEditTagValue(request, activity.getProjectManagement());
-			createGeneralInfoRow(mainLayout,columnName,columnVal);
-			
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Management", ampContext)){
+				columnName=TranslatorWorker.translateText("Project Management",locale,siteId);
+				columnVal=processEditTagValue(request, activity.getProjectManagement());
+				createGeneralInfoRow(mainLayout,columnName,columnVal);
+			}
 			//Purpose cell
-			if(FeaturesUtil.isVisibleField("Purpose", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Purpose", ampContext)){
 				columnName=TranslatorWorker.translateText("Purpose",locale,siteId);
 				columnVal=processEditTagValue(request, activity.getPurpose());
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
-				
-				//purpose comments
-				PdfPCell purposeCommentsCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Purpose Comments",locale,siteId),titleFont);
-				p1.setAlignment(Element.ALIGN_RIGHT);
-				purposeCommentsCell1.addElement(p1);
-				purposeCommentsCell1.setBackgroundColor(new Color(244,244,242));
-				purposeCommentsCell1.setBorder(0);
-				mainLayout.addCell(purposeCommentsCell1);
-				
-				PdfPTable purposeTable=new PdfPTable(2);
-	            purposeTable.getDefaultCell().setBorder(0);
-	            for (Object commentKey : allComments.keySet()) {            	
-					String key=(String)commentKey;
-					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
-					if(key.equalsIgnoreCase("Purpose Assumption")){
-						for (AmpComments value : values) {
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Assumption", locale, siteId)+" :",titleFont));
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
-						}					
-					}else if(key.equalsIgnoreCase("Purpose Verification")){
-						for (AmpComments value : values) {
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Verification", locale, siteId)+" :",titleFont));
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
-						}					
-					}else if (key.equalsIgnoreCase("Purpose Objectively Verifiable Indicators")) {
-						for (AmpComments value : values) {
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Purpose Comments", ampContext)){
+					//purpose comments
+					PdfPCell purposeCommentsCell1=new PdfPCell();
+					p1=new Paragraph(TranslatorWorker.translateText("Purpose Comments",locale,siteId),titleFont);
+					p1.setAlignment(Element.ALIGN_RIGHT);
+					purposeCommentsCell1.addElement(p1);
+					purposeCommentsCell1.setBackgroundColor(new Color(244,244,242));
+					purposeCommentsCell1.setBorder(0);
+					mainLayout.addCell(purposeCommentsCell1);
+					
+					PdfPTable purposeTable=new PdfPTable(2);
+		            purposeTable.getDefaultCell().setBorder(0);
+		            for (Object commentKey : allComments.keySet()) {            	
+						String key=(String)commentKey;
+						List<AmpComments> values=(List<AmpComments>)allComments.get(key);
+						if(key.equalsIgnoreCase("Purpose Assumption")){
+							for (AmpComments value : values) {
+								purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Assumption", locale, siteId)+" :",titleFont));
+								purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							}					
+						}else if(key.equalsIgnoreCase("Purpose Verification")){
+							for (AmpComments value : values) {
+								purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Verification", locale, siteId)+" :",titleFont));
+								purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							}					
+						}else if (key.equalsIgnoreCase("Purpose Objectively Verifiable Indicators")) {
+							for (AmpComments value : values) {
+								purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
+								purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+							}
 						}
 					}
+					
+					PdfPCell purposeCommentsCell2=new PdfPCell(purposeTable);
+					purposeCommentsCell2.setBorder(0);
+					mainLayout.addCell(purposeCommentsCell2);
 				}
-				
-				PdfPCell purposeCommentsCell2=new PdfPCell(purposeTable);
-				purposeCommentsCell2.setBorder(0);
-				mainLayout.addCell(purposeCommentsCell2);
 			}
 			
 			
 			// results cell
-			if(FeaturesUtil.isVisibleField("Results", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results", ampContext)){
 				columnName=TranslatorWorker.translateText("Results",locale,siteId);
 				columnVal=processEditTagValue(request, activity.getResults());
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
@@ -355,39 +362,41 @@ public class ExportActivityToPDF extends Action {
 				/**
 				 *  Results Comments
 				 */
-				PdfPTable resultsCommentsTable=new PdfPTable(2);
-	            resultsCommentsTable.getDefaultCell().setBorder(0);
-	            for (Object commentKey : allComments.keySet()) {            	
-					String key=(String)commentKey;
-					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
-					if(key.equalsIgnoreCase("Results Assumption")){
-						for (AmpComments value : values) {
-							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Assumption", locale, siteId)+" :",titleFont));
-							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
-						}					
-					}else if(key.equalsIgnoreCase("Results Verification")){
-						for (AmpComments value : values) {
-							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Verification", locale, siteId)+" :",titleFont));
-							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
-						}					
-					}else if (key.equalsIgnoreCase("Results Objectively Verifiable Indicators")) {
-						for (AmpComments value : values) {
-							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
-							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results Comments", ampContext)){
+					PdfPTable resultsCommentsTable=new PdfPTable(2);
+		            resultsCommentsTable.getDefaultCell().setBorder(0);
+		            for (Object commentKey : allComments.keySet()) {            	
+						String key=(String)commentKey;
+						List<AmpComments> values=(List<AmpComments>)allComments.get(key);
+						if(key.equalsIgnoreCase("Results Assumption")){
+							for (AmpComments value : values) {
+								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Assumption", locale, siteId)+" :",titleFont));
+								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							}					
+						}else if(key.equalsIgnoreCase("Results Verification")){
+							for (AmpComments value : values) {
+								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Verification", locale, siteId)+" :",titleFont));
+								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							}					
+						}else if (key.equalsIgnoreCase("Results Objectively Verifiable Indicators")) {
+							for (AmpComments value : values) {
+								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
+								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+							}
 						}
 					}
+					PdfPCell resultsCommentsCell1=new PdfPCell();
+					p1=new Paragraph(TranslatorWorker.translateText("Results Comments",locale,siteId),titleFont);
+					p1.setAlignment(Element.ALIGN_RIGHT);
+					resultsCommentsCell1.addElement(p1);
+					resultsCommentsCell1.setBackgroundColor(new Color(244,244,242));
+					resultsCommentsCell1.setBorder(0);
+					mainLayout.addCell(resultsCommentsCell1);
+					
+					PdfPCell resultsCommentsCell2=new PdfPCell(resultsCommentsTable);
+					resultsCommentsCell2.setBorder(0);
+					mainLayout.addCell(resultsCommentsCell2);
 				}
-				PdfPCell resultsCommentsCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Results Comments",locale,siteId),titleFont);
-				p1.setAlignment(Element.ALIGN_RIGHT);
-				resultsCommentsCell1.addElement(p1);
-				resultsCommentsCell1.setBackgroundColor(new Color(244,244,242));
-				resultsCommentsCell1.setBorder(0);
-				mainLayout.addCell(resultsCommentsCell1);
-				
-				PdfPCell resultsCommentsCell2=new PdfPCell(resultsCommentsTable);
-				resultsCommentsCell2.setBorder(0);
-				mainLayout.addCell(resultsCommentsCell2);
 			}
 			
 			/**

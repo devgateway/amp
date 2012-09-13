@@ -378,7 +378,7 @@ function collapseAll() {
 			<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements" 
 														parentModule="/Activity Form/Donor Funding/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
-			<digi:trn>Total Actual Distributements</digi:trn>:<br/>
+			<digi:trn>Total Actual Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
 	                <b>
 	                 <bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /> 
@@ -394,7 +394,7 @@ function collapseAll() {
 			<hr/>
 			</c:if>
 			<c:if test="${aimEditActivityForm.funding.showPlanned}">
-			<digi:trn>Total Planned Distributements</digi:trn>:<br/>
+			<digi:trn>Total Planned Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
 	                <b>
 	                 <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> 

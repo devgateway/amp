@@ -278,7 +278,7 @@ public class DbUtil {
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.getSession();
             
-            String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
+            String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
             Query query = session.createQuery(queryString);
             query.setString("email", user);
             

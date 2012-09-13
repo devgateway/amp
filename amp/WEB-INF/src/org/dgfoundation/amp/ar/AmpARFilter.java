@@ -365,17 +365,19 @@ public class AmpARFilter extends PropertyListable {
 		if (request.getParameter("ampReportId")!=null && !request.getParameter("ampReportId").equals("")){
 			ampReportId = request.getParameter("ampReportId");
 			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
-			
-			this.budgetExport	= ampReport.getBudgetExporter()==null ? false:ampReport.getBudgetExporter();
-			
-			Site site = RequestUtils.getSite(request);
-			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-			String siteId = site.getId().toString();
-			String locale = navigationLanguage.getCode();
-			ampReport.setSiteId(siteId);
-			ampReport.setLocale(locale);
-			if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
-					this.generatedFilterQuery = initialPledgeFilterQuery;
+			if (ampReport != null)
+			{
+				this.budgetExport	= ampReport.getBudgetExporter()==null ? false:ampReport.getBudgetExporter();
+				
+				Site site = RequestUtils.getSite(request);
+				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+				String siteId = site.getId().toString();
+				String locale = navigationLanguage.getCode();
+				ampReport.setSiteId(siteId);
+				ampReport.setLocale(locale);
+				if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
+						this.generatedFilterQuery = initialPledgeFilterQuery;
+				}
 			}
 		}
 		if (ampReportId == null) {

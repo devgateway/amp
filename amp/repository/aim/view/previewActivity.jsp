@@ -448,7 +448,7 @@ function collapseAll() {
 			<field:display name="Duration of Project" feature="Planning">
 				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Completion Date - Actual Start Date</digi:trn>" width="10" height=10 border="0">
 				<digi:trn>Duration of project</digi:trn>: <br/>
-				<b>${aimEditActivityForm.planning.projectPeriod }</b>
+				<b>${aimEditActivityForm.planning.projectPeriod }&nbsp; </b><digi:trn>Months</digi:trn>
 				<hr/>
 			</field:display>
 			<field:display name="Delivery rate" feature="Funding Information">
@@ -644,11 +644,11 @@ function collapseAll() {
 			</module:display>
 					
 			<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-			<field:display name="NPD Clasification" feature="Identification">
-				<digi:trn>NPD Clasification</digi:trn>:&nbsp;<br />
-				<b><c:out value="${aimEditActivityForm.identification.clasiNPD}"/></b>
-				<hr />
-			</field:display>
+<!--			<field:display name="NPD Clasification" feature="Identification">-->
+<!--				<digi:trn>NPD Clasification</digi:trn>:&nbsp;<br />-->
+<!--				<b><c:out value="${aimEditActivityForm.identification.clasiNPD}"/></b>-->
+<!--				<hr />-->
+<!--			</field:display>-->
 			
 			<module:display name="/Activity Form/Identification/Lessons Learned" parentModule="/Activity Form/Identification">
 				<digi:trn>Lessons Learned</digi:trn>:&nbsp;<br />
@@ -938,31 +938,41 @@ function collapseAll() {
 		</module:display>
 		
 		<module:display name="/Activity Form/Identification/Budget Extras" parentModule="/Activity Form/Identification">
-			<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
-				<digi:trn>FY</digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
-				<br />
-			</module:display>
-			<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Vote</digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>
-				<br />
-			</module:display>
-				<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Sub-Vote </digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.subVote"/></b>
-				<br />
-			</module:display>
-			<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program" parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Sub-Program</digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.subProgram"/></b>
-				<br />
-			</module:display>
-			<module:display name="/Activity Form/Identification/Budget Extras/Project Code" parentModule="/Activity Form/Identification/Budget Extras">
-				<digi:trn>Project Code</digi:trn>:&nbsp;
-				<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
-				<br />
-			</module:display>
+			<c:if test="${aimEditActivityForm.identification.budgetCV==aimEditActivityForm.identification.budgetCVOn}">
+				<module:display name="/Activity Form/Identification/Budget Extras/FY" parentModule="/Activity Form/Identification">
+					<digi:trn>FY</digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.FY"/></b>
+					<br />
+				</module:display>
+				<module:display name="/Activity Form/Identification/Budget Extras/Ministry Code"  parentModule="/Activity Form/Identification/Budget Extras">
+					<digi:trn>Ministry Code</digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.ministryCode"/></b>
+					<br />
+				</module:display>
+				
+				<module:display name="/Activity Form/Identification/Budget Extras/Project Code" parentModule="/Activity Form/Identification/Budget Extras">
+					<digi:trn>Project Code</digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.projectCode"/></b>
+					<br />
+				</module:display>
+				
+				<module:display name="/Activity Form/Identification/Budget Extras/Vote"  parentModule="/Activity Form/Identification/Budget Extras">
+					<digi:trn>Vote</digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.vote"/></b>
+					<br />
+				</module:display>
+					<module:display name="/Activity Form/Identification/Budget Extras/Sub-Vote"  parentModule="/Activity Form/Identification/Budget Extras">
+					<digi:trn>Sub-Vote </digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.subVote"/></b>
+					<br />
+				</module:display>
+				<module:display name="/Activity Form/Identification/Budget Extras/Sub-Program" parentModule="/Activity Form/Identification/Budget Extras">
+					<digi:trn>Sub-Program</digi:trn>:&nbsp;
+					<b><bean:write name="aimEditActivityForm" property="identification.subProgram"/></b>
+					<br />
+				</module:display>
+				
+			</c:if>
 		</module:display>
 		<hr>	
 		<module:display name="/Activity Form/Identification/Budget Classification" parentModule="/Activity Form/Identification">
@@ -2417,7 +2427,7 @@ function collapseAll() {
 				</tr>
 				<tr bgcolor="#f0f0f0">
 					<td>
-						<digi:trn key="aim:proposedCompletionDate">Proposed Completion Date</digi:trn>					
+						<digi:trn>Date</digi:trn>					
 					</td>
 					<td bgcolor="#f0f0f0" align="left" width="150">
 						<c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">

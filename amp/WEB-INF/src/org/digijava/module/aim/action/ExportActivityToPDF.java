@@ -552,8 +552,8 @@ public class ExportActivityToPDF extends Action {
 					outputValue+=TranslatorWorker.translateText("Actual Approval Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getRevisedAppDate()+"\n";
 				}
 				
-				if(FeaturesUtil.isVisibleField("Original Start Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Original Start Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalStartDate()+"\n";
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext)){
+					outputValue+=TranslatorWorker.translateText("Proposed Start Date", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalStartDate()+"\n";
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext)){
@@ -572,9 +572,12 @@ public class ExportActivityToPDF extends Action {
 					outputValue+=TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)+ "\t: " +myForm.getPlanning().getProposedCompDate() +"\n";
 				}
 				
-				if(FeaturesUtil.isVisibleField("Current Completion Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Current Completion Date ", locale, siteId)+ "\t: " +myForm.getPlanning().getCurrentCompDate() +"\n";
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
+					outputValue+=TranslatorWorker.translateText("Actual Completion Date", locale, siteId)+ "\t: " +myForm.getPlanning().getCurrentCompDate() +"\n";
 				}		
+				if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
+					outputValue+=TranslatorWorker.translateText("Duration of Project", locale, siteId)+ "\t: " +myForm.getPlanning().getProjectPeriod() +"\n";
+				}
 				
 				columnName=TranslatorWorker.translateText("Planning",locale,siteId);
 				createGeneralInfoRow(mainLayout,columnName,outputValue);
@@ -618,19 +621,11 @@ public class ExportActivityToPDF extends Action {
     				if(myForm.getLocation().getSelectedLocs()!=null){
     	    			output="";
     	    			for (Location loc  : myForm.getLocation().getSelectedLocs()) {
-    						if(loc.getCountry()!=null && loc.getCountry().length()>0){
-    							output+="["+loc.getCountry()+"]";
-    						}
-    						if(loc.getRegion()!=null && loc.getRegion().length()>0){
-    							output+="["+loc.getRegion()+"]";
-    						}
-    						if(loc.getZone()!=null && loc.getZone().length()>0){
-    							output+="["+loc.getZone()+"]";
-    						}
-    						if(loc.getWoreda()!=null && loc.getWoreda().length()>0){
-    							output+="["+loc.getWoreda()+"]";
-    						}
-    						output+="\t["+loc.getPercent()+"]\n";
+    	    				for(String locName : loc.getAncestorLocationNames()){
+    	    					output+="["+locName+"] ";
+    	    				}
+    	    				
+    						output+="\t "+loc.getPercent()+"% \n";
     					}    					
     	        	}
     				columnName=TranslatorWorker.translateText("Locations",locale,siteId);
@@ -2138,7 +2133,6 @@ public class ExportActivityToPDF extends Action {
 
 	private void buildFundingInformationPart(EditActivityForm myForm,PdfPTable mainLayout,String locale,Long siteId,ServletContext ampContext) throws WorkerException, DocumentException {
 		Paragraph p1;
-		String output="";
 		PdfPCell fundingCell1=new PdfPCell();
 		p1=new Paragraph(TranslatorWorker.translateText("Funding",locale,siteId),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
@@ -2157,6 +2151,7 @@ public class ExportActivityToPDF extends Action {
 				if(fundingOrganisation.getFundings()!=null){
 					drawTotals=true;
 					for (Funding funding : (Collection<Funding>)fundingOrganisation.getFundings()) {
+						String output="";				
 						//general info rows
 						if(FeaturesUtil.isVisibleFeature("Funding Information", ampContext)){
 							//funding org id
@@ -2260,11 +2255,11 @@ public class ExportActivityToPDF extends Action {
 											
 						//PLANNED COMITMENTS
 						if(FeaturesUtil.isVisibleFeature("Planned Commitments", ampContext)){
-							output+=TranslatorWorker.translateText("PLANNED COMMITMENTS",locale,siteId);
+							output=TranslatorWorker.translateText("PLANNED COMMITMENTS",locale,siteId);
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
 							}
-							PdfPCell plCommCell1=new PdfPCell(new Paragraph(output,plainFont));
+							PdfPCell plCommCell1=new PdfPCell(new Paragraph(output,titleFont));
 							plCommCell1.setBorder(0);
 							plCommCell1.setBackgroundColor(new Color(255,255,204));
 							plCommCell1.setColspan(3);
@@ -2276,24 +2271,14 @@ public class ExportActivityToPDF extends Action {
 							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 								if(fd.getTransactionType()==0){
 									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
-										PdfPCell plCommCell2=new PdfPCell();
-										plCommCell2.setBorder(0);
-										plCommCell2.setBackgroundColor(new Color(221,221,221));
-										plCommCell2.setColspan(3);
-										//inner table with funding information																				
-										plCommCell2.addElement(buildFundingInfoInnerTable(fd,fundingCommitmentsFMfields,locale,siteId,ampContext));
-										fundingTable.addCell(plCommCell2);
+										buildFundingInfoInnerTable(fundingTable, fd,fundingCommitmentsFMfields,locale,siteId,ampContext);
 									}
 								}
 							}
 							
 							
-							if(FeaturesUtil.isVisibleField("Planned Commitments", ampContext)){
-								output=(funding.getSubtotalPlannedCommitments()!=null && funding.getSubtotalPlannedCommitments().length()>0)?	funding.getSubtotalPlannedCommitments()+currencyCode : "";								
-								PdfPCell subTotalPlComm=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL PLANNED COMMITMENTS:",locale,siteId)+" \t\t         "+output,plainFont));
-								subTotalPlComm.setBackgroundColor(new Color(221,221,221));
-								subTotalPlComm.setColspan(3);
-								fundingTable.addCell(subTotalPlComm);
+							if(FeaturesUtil.isVisibleFeature("Planned Commitments", ampContext)){
+								createSubtotalRow(fundingTable, "SUBTOTAL PLANNED COMMITMENTS:", funding.getSubtotalPlannedCommitments(), locale, siteId, currencyCode);
 							}
 							
 							
@@ -2302,7 +2287,7 @@ public class ExportActivityToPDF extends Action {
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
 							}
-							PdfPCell actCommCell1=new PdfPCell(new Paragraph(output,plainFont));
+							PdfPCell actCommCell1=new PdfPCell(new Paragraph(output,titleFont));
 							actCommCell1.setBorder(0);
 							actCommCell1.setBackgroundColor(new Color(255,255,204));
 							actCommCell1.setColspan(3);
@@ -2311,23 +2296,12 @@ public class ExportActivityToPDF extends Action {
 							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 								if(fd.getTransactionType()==0){
 									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
-										PdfPCell actCommCell2=new PdfPCell();
-										actCommCell2.setBorder(0);
-										actCommCell2.setBackgroundColor(new Color(221,221,221));
-										actCommCell2.setColspan(3);
-										//inner table with funding information										
-										actCommCell2.addElement(buildFundingInfoInnerTable(fd,fundingCommitmentsFMfields,locale,siteId,ampContext));
-										fundingTable.addCell(actCommCell2);
+										buildFundingInfoInnerTable(fundingTable, fd,fundingCommitmentsFMfields,locale,siteId,ampContext);
 									}
 								}
 							}
 							
-							
-							output=(funding.getSubtotalActualCommitments()!=null && funding.getSubtotalActualCommitments().length()>0)?	funding.getSubtotalActualCommitments()+currencyCode : "";
-							PdfPCell subTotalActComm=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL ACTUAL COMMITMENTS:",locale,siteId)+" \t\t          "+output,plainFont));
-							subTotalActComm.setBackgroundColor(new Color(221,221,221));
-							subTotalActComm.setColspan(3);
-							fundingTable.addCell(subTotalActComm);
+							createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL COMMITMENTS:", funding.getSubtotalActualCommitments(), locale, siteId, currencyCode);
 						}
 						
 						//DISBURSEMENTS
@@ -2339,7 +2313,7 @@ public class ExportActivityToPDF extends Action {
 								if(myForm.getFunding().isFixerate()){
 									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
 								}
-								PdfPCell plDisbCell1=new PdfPCell(new Paragraph(output,plainFont));
+								PdfPCell plDisbCell1=new PdfPCell(new Paragraph(output,titleFont));
 								plDisbCell1.setBorder(0);
 								plDisbCell1.setBackgroundColor(new Color(255,255,204));
 								plDisbCell1.setColspan(3);
@@ -2351,23 +2325,11 @@ public class ExportActivityToPDF extends Action {
 										for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 											if(fd.getTransactionType()==1){
 												if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
-													PdfPCell plDisbCell2=new PdfPCell();
-													plDisbCell2.setBorder(0);
-													plDisbCell2.setBackgroundColor(new Color(221,221,221));
-													plDisbCell2.setColspan(3);
-													//inner table with funding information												
-													plDisbCell2.addElement(buildFundingInfoInnerTable(fd,fundingDisbursementsFMfields,locale,siteId,ampContext));
-													fundingTable.addCell(plDisbCell2);
+													buildFundingInfoInnerTable(fundingTable, fd,fundingDisbursementsFMfields,locale,siteId,ampContext);
 												}
 											}
 										}									
-										
-										output=(funding.getSubtotalPlannedDisbursements()!=null && funding.getSubtotalPlannedDisbursements().length()>0)?	funding.getSubtotalPlannedDisbursements()+currencyCode : "";
-										PdfPCell subTotalPlDisb=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL PLANNED DISBURSEMENT:",locale,siteId)+" \t\t         "+output, plainFont));
-										subTotalPlDisb.setBackgroundColor(new Color(221,221,221));
-										subTotalPlDisb.setColspan(3);
-										subTotalPlDisb.setBorder(0);
-										fundingTable.addCell(subTotalPlDisb);
+										createSubtotalRow(fundingTable, "SUBTOTAL PLANNED DISBURSEMENT:", funding.getSubtotalPlannedDisbursements(), locale, siteId, currencyCode);
 									}
 																
 									//actual disbursement
@@ -2375,7 +2337,7 @@ public class ExportActivityToPDF extends Action {
 									if(myForm.getFunding().isFixerate()){
 										output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
 									}
-									PdfPCell actDisbCell1=new PdfPCell(new Paragraph(output,plainFont));
+									PdfPCell actDisbCell1=new PdfPCell(new Paragraph(output,titleFont));
 									actDisbCell1.setBorder(0);
 									actDisbCell1.setBackgroundColor(new Color(255,255,204));
 									actDisbCell1.setColspan(3);
@@ -2385,22 +2347,12 @@ public class ExportActivityToPDF extends Action {
 										for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 											if(fd.getTransactionType()==1){
 												if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
-													PdfPCell plDisbCell2=new PdfPCell();
-													plDisbCell2.setBorder(0);
-													plDisbCell2.setBackgroundColor(new Color(221,221,221));
-													plDisbCell2.setColspan(3);
-													//inner table with funding information
-													plDisbCell2.addElement(buildFundingInfoInnerTable(fd,fundingDisbursementsFMfields,locale,siteId,ampContext));
-													fundingTable.addCell(plDisbCell2);
+													buildFundingInfoInnerTable(fundingTable, fd,fundingDisbursementsFMfields,locale,siteId,ampContext);													
 												}
 											}
 										}
 									}
-									output=(funding.getSubtotalDisbursements()!=null && funding.getSubtotalDisbursements().length()>0)?	funding.getSubtotalDisbursements()+currencyCode : "";
-									PdfPCell subTotalActDisb=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL ACTUAL DISBURSEMENT:",locale,siteId)+" \t\t         "+output, plainFont));
-									subTotalActDisb.setBackgroundColor(new Color(221,221,221));
-									subTotalActDisb.setColspan(3);
-									fundingTable.addCell(subTotalActDisb);
+									createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL DISBURSEMENT:", funding.getSubtotalDisbursements(), locale, siteId, currencyCode);
 								}
 							}
 							
@@ -2411,7 +2363,7 @@ public class ExportActivityToPDF extends Action {
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
 							}
-							PdfPCell plExpCell1=new PdfPCell(new Paragraph(output,plainFont));
+							PdfPCell plExpCell1=new PdfPCell(new Paragraph(output,titleFont));
 							plExpCell1.setBorder(0);
 							plExpCell1.setBackgroundColor(new Color(255,255,204));
 							plExpCell1.setColspan(3);
@@ -2422,29 +2374,18 @@ public class ExportActivityToPDF extends Action {
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 									if(fd.getTransactionType()==2){
 										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
-											PdfPCell plDisbCell2=new PdfPCell();
-											plDisbCell2.setBorder(0);
-											plDisbCell2.setBackgroundColor(new Color(221,221,221));
-											plDisbCell2.setColspan(3);
-											//inner table with funding information											
-											plDisbCell2.addElement(buildFundingInfoInnerTable(fd,fundingExpendituresFMfields,locale,siteId,ampContext));
-											fundingTable.addCell(plDisbCell2);
+											buildFundingInfoInnerTable(fundingTable, fd,fundingExpendituresFMfields,locale,siteId,ampContext);
 										}
 									}
 								}
-								
-								output=(funding.getSubtotalPlannedExpenditures()!=null && funding.getSubtotalPlannedExpenditures().length()>0)?	funding.getSubtotalPlannedExpenditures()+currencyCode : "";
-								PdfPCell subTotalPlExp=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL PLANNED EXPENDITURES:",locale,siteId)+" \t\t         "+output, plainFont));
-								subTotalPlExp.setBackgroundColor(new Color(221,221,221));
-								subTotalPlExp.setColspan(3);
-								fundingTable.addCell(subTotalPlExp);
+								createSubtotalRow(fundingTable, "SUBTOTAL PLANNED EXPENDITURES:", funding.getSubtotalPlannedExpenditures(), locale, siteId, currencyCode);
 								
 								//actual expenditures
 								output=TranslatorWorker.translateText("ACTUAL EXPENDITURES::",locale,siteId);
 								if(myForm.getFunding().isFixerate()){
 									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
 								}
-								PdfPCell actExpCell1=new PdfPCell(new Paragraph(output,plainFont));
+								PdfPCell actExpCell1=new PdfPCell(new Paragraph(output,titleFont));
 								actExpCell1.setBorder(0);
 								actExpCell1.setBackgroundColor(new Color(255,255,204));
 								actExpCell1.setColspan(3);
@@ -2453,22 +2394,11 @@ public class ExportActivityToPDF extends Action {
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 									if(fd.getTransactionType()==2){
 										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
-											PdfPCell plDisbCell2=new PdfPCell();
-											plDisbCell2.setBorder(0);
-											plDisbCell2.setBackgroundColor(new Color(221,221,221));
-											plDisbCell2.setColspan(3);
-											//inner table with funding information											
-											plDisbCell2.addElement(buildFundingInfoInnerTable(fd,fundingExpendituresFMfields,locale,siteId,ampContext));
-											fundingTable.addCell(plDisbCell2);
+											buildFundingInfoInnerTable(fundingTable, fd,fundingExpendituresFMfields,locale,siteId,ampContext);
 										}
 									}
 								}								
-								
-								output=(funding.getSubtotalExpenditures()!=null && funding.getSubtotalExpenditures().length()>0) ? funding.getSubtotalExpenditures()+currencyCode : "";
-								PdfPCell subTotalActExp=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL ACTUAL EXPENDITURES:",locale,siteId)+" \t\t         "+output,plainFont));
-								subTotalActExp.setBackgroundColor(new Color(221,221,221));
-								subTotalActExp.setColspan(3);
-								fundingTable.addCell(subTotalActExp);
+								createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL EXPENDITURES:", funding.getSubtotalExpenditures(), locale, siteId, currencyCode);
 							}
 							
 						}
@@ -2479,7 +2409,7 @@ public class ExportActivityToPDF extends Action {
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
 							}
-							PdfPCell actDisbOrdCell1=new PdfPCell(new Paragraph(output,plainFont));
+							PdfPCell actDisbOrdCell1=new PdfPCell(new Paragraph(output,titleFont));
 							actDisbOrdCell1.setBorder(0);
 							actDisbOrdCell1.setBackgroundColor(new Color(255,255,204));
 							actDisbOrdCell1.setColspan(3);
@@ -2489,23 +2419,12 @@ public class ExportActivityToPDF extends Action {
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 									if(fd.getTransactionType()==2){
 										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
-											PdfPCell plDisbCell2=new PdfPCell();
-											plDisbCell2.setBorder(0);
-											plDisbCell2.setBackgroundColor(new Color(221,221,221));
-											plDisbCell2.setColspan(3);
-											//inner table with funding information
-											plDisbCell2.addElement(buildFundingInfoInnerTable(fd,fundingDisbOrdersFMfields,locale,siteId,ampContext));
-											fundingTable.addCell(plDisbCell2);
+											buildFundingInfoInnerTable(fundingTable, fd,fundingDisbOrdersFMfields,locale,siteId,ampContext);											
 										}
 									}
 								}
 							}
-							
-							output=(funding.getSubtotalActualDisbursementsOrders()!=null && funding.getSubtotalActualDisbursementsOrders().length()>0)?	funding.getSubtotalActualDisbursementsOrders()+currencyCode : "";
-							PdfPCell subTotalDisbOrd=new PdfPCell(new Paragraph(TranslatorWorker.translateText("SUBTOTAL DISBURSMENT ORDERS:",locale,siteId)+" \t\t          "+output,plainFont));
-							subTotalDisbOrd.setBackgroundColor(new Color(221,221,221));
-							subTotalDisbOrd.setColspan(3);
-							fundingTable.addCell(subTotalDisbOrd);
+							createSubtotalRow(fundingTable, "SUBTOTAL DISBURSMENT ORDERS:", funding.getSubtotalActualDisbursementsOrders(), locale, siteId, currencyCode);
 						}
 						
 						//UNDISBURSED BALANCE
@@ -2626,6 +2545,26 @@ public class ExportActivityToPDF extends Action {
 		//return fundingTable;
 	}
 
+	private void createSubtotalRow(PdfPTable fundingTable, String title, String value, String locale, Long siteId, String currencyCode) throws WorkerException{
+		
+		String output= (value != null && value.trim().length() > 0 ) ? value + " " + currencyCode : "";								
+		PdfPCell subTotal=new PdfPCell(new Paragraph(TranslatorWorker.translateText(title, locale, siteId),plainFont));
+		subTotal.setBackgroundColor(new Color(221,221,221));
+		subTotal.setColspan(2);
+		subTotal.setBorderWidthBottom(0);
+		subTotal.setBorderWidthTop(0.5f);
+		subTotal.setBorderWidthLeft(0);
+		subTotal.setBorderWidthRight(0);
+		fundingTable.addCell(subTotal);
+		
+		subTotal=new PdfPCell(new Paragraph(output,plainFont));
+		subTotal.setBackgroundColor(new Color(221,221,221));
+		subTotal.setBorderWidthBottom(0);
+		subTotal.setBorderWidthTop(0.5f);
+		subTotal.setBorderWidthLeft(0);
+		subTotal.setBorderWidthRight(0);
+		fundingTable.addCell(subTotal);
+	}
 	private void addTotalAmountsCellsToFundingTable(PdfPTable fundingTable,String totalAmountType, String totalsOutput) throws WorkerException {
 		Paragraph p1;
 		PdfPCell totalPC=new PdfPCell(new Paragraph(totalAmountType,plainFont));
@@ -2674,16 +2613,9 @@ public class ExportActivityToPDF extends Action {
 		mainLayout.addCell(cell2);
 	}
 	
-	private PdfPTable  buildFundingInfoInnerTable(FundingDetail fd,String []fmFields,String locale,Long siteId,ServletContext ampContext) throws WorkerException {
-		int visibleFieldsCounter=0;		
-		for(int i=0;i<fmFields.length;i++){
-			if(FeaturesUtil.isVisibleField(fmFields[i], ampContext)){
-				visibleFieldsCounter++;
-			}
-		}
-		PdfPTable infoTable=new PdfPTable(visibleFieldsCounter);
-		infoTable.getDefaultCell().setBorder(0);		
+	private void  buildFundingInfoInnerTable(PdfPTable infoTable, FundingDetail fd,String []fmFields,String locale,Long siteId,ServletContext ampContext) throws WorkerException {
 		PdfPCell innerCell=new PdfPCell();
+
 		if(FeaturesUtil.isVisibleField(fmFields[0], ampContext)){
 			innerCell.setBorder(0);
 			innerCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue(),locale,siteId),plainFont));
@@ -2698,7 +2630,7 @@ public class ExportActivityToPDF extends Action {
 		if(FeaturesUtil.isVisibleField(fmFields[2], ampContext)){
 			String output="";
 			if(fd.getTransactionAmount()!=null && fd.getTransactionAmount().length()>0){
-				output=fd.getTransactionAmount()+fd.getCurrencyCode();
+				output=fd.getTransactionAmount()+" " + fd.getCurrencyCode();
 			}
 			innerCell=new PdfPCell(new Paragraph(output,plainFont));
 			innerCell.setBorder(0);
@@ -2713,8 +2645,8 @@ public class ExportActivityToPDF extends Action {
 			innerCell.setBorder(0);
 			infoTable.addCell(innerCell);
 		}		
-		return infoTable;
-	}
+	}	
+
 	
 	private String  getEditTagValue(HttpServletRequest request,String editKey) throws Exception{
 		Site site = RequestUtils.getSite(request);
@@ -2841,7 +2773,7 @@ public class ExportActivityToPDF extends Action {
 				output+=fd.getTransactionAmount();
 			}
 			if(FeaturesUtil.isVisibleFeature(fmFields[3], ampContext)){
-				output+=fd.getCurrencyCode();
+				output+= " " + fd.getCurrencyCode();
 			}
 			cell=new PdfPCell();
 			paragraph=new Paragraph(output,plainFont);

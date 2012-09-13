@@ -592,7 +592,12 @@ public class AmpARFilter extends PropertyListable {
 		
 			String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
 				+ Util.toCSString(donnorgAgency) + ")";
-		
+			String DONOR_TYPE_FILTER	= "SELECT v.id FROM v_pledges_donor_type v WHERE org_type_id IN ("
+				+ Util.toCSString(donorTypes) + ")";
+
+			String DONOR_GROUP_FILTER = "SELECT v.pledge_id FROM v_pledges_donor_group v WHERE amp_org_grp_id IN ("
+					+ Util.toCSString(donorGroups) + ")";
+
 			
 //			String REGION_SELECTED_FILTER = "SELECT v.pledge_id FROM v_pledges_regions v WHERE region_id ="
 //				+ (regionSelected==null?null:regionSelected.getIdentifier());
@@ -611,6 +616,14 @@ public class AmpARFilter extends PropertyListable {
 			if (donnorgAgency != null && donnorgAgency.size() > 0){
 					PledgequeryAppend(DONNOR_AGENCY_FILTER);
 			}
+			
+
+			if (donorGroups != null && donorGroups.size() > 0)
+				PledgequeryAppend(DONOR_GROUP_FILTER);
+			
+			if (donorTypes != null && donorTypes.size() > 0)
+				PledgequeryAppend(DONOR_TYPE_FILTER);
+			
 //			if (regionSelected != null){
 //				PledgequeryAppend(REGION_SELECTED_FILTER);
 //			}

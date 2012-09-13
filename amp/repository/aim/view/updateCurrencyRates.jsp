@@ -91,11 +91,23 @@ function closePopup() {
 <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 	<tr>
 		<td align=left valign="top">
+			<br>
+			<br>
+			<br>
 			<table cellpadding="0" cellspacing="0" width="100%" class="inside" style="background-color: white; border-width: 1px;">
 				<tr style="background-color: #F2F2F2;">
 					<td vAlign="center" width="100%" align ="center" height="20" style="font-size: 12px;">
 						<digi:trn key="aim:currencyRateEditor">Currency Rate Editor</digi:trn>
-					</td></tr>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<br>
+						<br>
+						<br>
+						<br>
+					</td>
+				</tr>
 				<tr>
 					<td align="center">
 						<table border="0" cellpadding="2" cellspacing="1" width="100%">
@@ -109,26 +121,6 @@ function closePopup() {
 										<html:optionsCollection property="currencyCodes"
 										value="currencyCode" label="currencyCode" />&nbsp;&nbsp;&nbsp;
 									</html:select>
-								</td>
-							</tr>
-							<tr>
-								<td align="right" valign="middle" width="50%">
-									<FONT color=red>*</FONT>
-									<digi:trn key="aim:exchangeRateDate">Exchange rate date</digi:trn>&nbsp;
-								</td>
-								<td align="left" valign="middle">
-									<table cellpadding="0" cellspacing="0">
-										<tr>
-											<td>
-												<html:text property="updateCRateDate" size="10" styleClass="inp-text" readonly="true" styleId="updateCRateDate"/>
-											</td>
-											<td align="left" vAlign="center">&nbsp;
-								 				<a id="date1" href='javascript:pickDateCurrency("date1",document.aimCurrencyRateFormPop.updateCRateDate)'>
-													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
-												</a>
-											</td>
-										</tr>
-									</table>
 								</td>
 							</tr>
 							<tr>
@@ -166,6 +158,27 @@ function closePopup() {
 								</td>
 							</tr>
 							<tr>
+								<td align="right" valign="middle" width="50%">
+									<FONT color=red>*</FONT>
+									<digi:trn key="aim:exchangeRateDate">Exchange rate date</digi:trn>&nbsp;
+								</td>
+								<td align="left" valign="middle">
+									<table cellpadding="0" cellspacing="0">
+										<tr>
+											<td>
+												<html:text property="updateCRateDate" size="10" styleClass="inp-text" readonly="true" styleId="updateCRateDate"/>
+											</td>
+											<td align="left" vAlign="center">&nbsp;
+								 				<a id="date1" href='javascript:pickDateById("date1","updateCRateDate")'>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+												</a>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							
+							<tr>
 								<td colspan="2">
 									<table width="100%" cellpadding="3" cellspacing="3" border="0">
 										<tr>
@@ -195,6 +208,8 @@ function closePopup() {
 					</td>
 				</tr>
 			</table>
+			<br>
+			<br>
 		</td>
 	</tr>
 </table>

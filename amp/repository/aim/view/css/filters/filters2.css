@@ -12,6 +12,10 @@ div.otherCriteriaBigTable{
 	height: 65%;
 }
 
+div.otherCriteriaBigTable div.grouping_selector_wrapper_body {
+	overflow: auto;
+}
+
 .memberSelectorHeader {
 	font-weight: bold; 
 	font-size: small;

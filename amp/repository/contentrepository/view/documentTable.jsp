@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 			
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.net.URLDecoder"%>
@@ -97,18 +98,27 @@
 									</c:set>
 									<c:choose>
 										<c:when test="${documentData.webLink != null}" >
+											<c:set var="shouldCutLink" value="${fn:length(documentData.name) > 18 }"></c:set>
 											<a onmouseover="Tip('${translation} ${documentData.webLink}')" onmouseout="UnTip()" 
 													 onclick="window.open('${documentData.webLink}')"
 												style="cursor:pointer; color: blue; font-size: 12px">  
 										</c:when>
 										<c:otherwise>
+											<c:set var="shouldCutLink" value="false"></c:set>
 											<a onmouseover="Tip('<digi:trn>Download</digi:trn> file')" onmouseout="UnTip()" onClick="downloadFile('${documentData.uuid}');"  
 												style="cursor:pointer; color: #222222; font-size: 12px">
 												<!-- onClick="downloadFile('${documentData.nodeVersionUUID}');"  I think no need for nodeVersionUUID parameter. it shuld match the download link from Actions menu-->
 												
 										</c:otherwise>
 									</c:choose>
-										 <bean:write name="documentData" property="name" />
+										<c:choose>
+											<c:when test="${shouldCutLink}">
+												<c:out value="${fn:substring(documentData.name, 0, 18)}"></c:out>...
+											</c:when>
+											<c:otherwise>
+												<bean:write name="documentData" property="name" />
+											</c:otherwise>
+										</c:choose>
 									<c:if test="${documentData.webLink != null}" >
 										<c:set var="isUrl" scope="page" value="true" />
 										</a>

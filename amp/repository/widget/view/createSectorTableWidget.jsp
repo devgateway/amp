@@ -68,13 +68,32 @@
                document.sectorTableWidgetForm.submit();
            }
 
-           function removeSectors() {
-               <digi:context name="addEditSectorTable" property="context/widget/sectorTableManager.do~actType=remSectors" />
+           function removeSectors() { 
+	           var atLeastOneSectorChecked = false;
+        	   var selSectors = document.sectorTableWidgetForm.selectedSectors;
+               
+               if (selSectors.checked == true) {
+            	   atLeastOneSectorChecked = true;
+               } else {
+		           for (var index = 0; ((index < selSectors.length) && (!atLeastOneSectorChecked)); index++) {		        	   
+			           if (selSectors.checked == "true") {
+			        	   atLeastOneSectorChecked = true;
+			           } else if (selSectors[index].checked) {
+		        		   atLeastOneSectorChecked = true;
+		        	   }
+		           }	
+               }
+	           if(!atLeastOneSectorChecked){
+	               alert("Please select at least one sector to remove");
+	               return false;
+	           } else {
+               	<digi:context name="addEditSectorTable" property="context/widget/sectorTableManager.do~actType=remSectors" />
                        document.sectorTableWidgetForm.action = "${addEditSectorTable}";
                        document.sectorTableWidgetForm.target = "_self";
                        document.sectorTableWidgetForm.submit();
+           		}
 
-                   }
+           }
 
                    function moveUp(sectorId){
          <digi:context name="addEditSectorTable" property="context/widget/sectorTableManager.do~actType=reorderUp" />
@@ -179,9 +198,9 @@
                                     <c:forEach var="sector" items="${sectorTableWidgetForm.sectors}" varStatus="status">
                                         <tr>
                                             <td>
-                                                <html:multibox property="selectedSectors">
-                                                    <c:out value="${sector.sector.ampSectorId}"/>
-                                                </html:multibox>
+                                                <html:checkbox name="sectorTableWidgetForm" styleId="selSectors${status.count}"
+                                                	property="selectedSectors" value="${sector.sector.ampSectorId}">
+                                                </html:checkbox>
                                                 <c:out value="${sector.sector.name}"/>
                                             </td>
                                           

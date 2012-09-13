@@ -58,7 +58,7 @@ public final class ArConstants {
 	
 	public final static String PERSPECTIVE="Perspective";
 
-	
+	public final static String RELATED_PROJECTS="Related Projects";
 	public final static String DONOR="Donor Agency";
 	public final static String MODE_OF_PAYMENT="Mode of Payment";
 	public final static String MODE_OF_PAYMENT_TOTAL="Total";

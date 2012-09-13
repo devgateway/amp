@@ -114,6 +114,7 @@ public class ResetAll extends Action
 				eaForm.getIdentification().setSubVote(null);
 				eaForm.getIdentification().setSubProgram(null);
 				eaForm.getIdentification().setProjectCode(null);
+				eaForm.getIdentification().setMinistryCode(null);
 				eaForm.getIdentification().setGbsSbs(null);
 				eaForm.getIdentification().setGovernmentApprovalProcedures(new Boolean(false));
 				eaForm.getIdentification().setJointCriteria(new Boolean(false));

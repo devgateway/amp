@@ -489,6 +489,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String subVote;
 		private String subProgram;
 		private String projectCode;
+		private String ministryCode;
 		private Long gbsSbs;
 		private String approvalStatus;
 		private String previousApprovalStatus;
@@ -679,6 +680,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setProjectCode(String projectCode) {
 			this.projectCode = projectCode;
+		}
+		
+		public String getMinistryCode() {
+			return ministryCode;
+		}
+
+		public void setMinistryCode(String ministryCode) {
+			this.ministryCode = ministryCode;
 		}
 
 		public Long getGbsSbs() {
@@ -1256,7 +1265,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			BigDecimal projectPeriod=null;
 			Date actualStartDate=DateConversion.getDate(this.revisedStartDate);
 			Date proposedCompletionDate=DateConversion.getDate(this.proposedCompDate);
+			Date currentCompletionDate=DateConversion.getDate(this.currentCompDate);
 			try {
+				if(actualStartDate!=null && currentCompletionDate!=null){
+					projectPeriod=MathExpression.getMonthDifference(new BigDecimal(currentCompletionDate.getTime()),new BigDecimal(actualStartDate.getTime()));					
+				}else
 				if(actualStartDate!=null&&proposedCompletionDate!=null){
 					projectPeriod=MathExpression.getMonthDifference(new BigDecimal(proposedCompletionDate.getTime()),new BigDecimal(actualStartDate.getTime()));		
 				}

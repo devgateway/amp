@@ -242,7 +242,7 @@ function fnSubmit() {
 														<html:text property="filterByDateFrom" size="10" readonly="true"
 														styleId="filterByDateFrom" styleClass="inp-text"/>													</td>
 													<td align="left" vAlign="center">&nbsp;
-														<a id="date1" href='javascript:pickDate("date1",document.aimCurrencyRateForm.filterByDateFrom)'>
+														<a id="date1" href='javascript:pickDateById("date1","filterByDateFrom")'>
 															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">														</a>													</td>
 												</tr>
 											</table>										</td>

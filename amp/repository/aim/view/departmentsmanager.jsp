@@ -33,6 +33,12 @@ function validatesector(){
 	addDepartment();
 }
 
+function onDelete() {
+	if (!confirm('Are you sure you want to delete this Department ?')){		
+		return false;
+	}
+}
+
 function Edit(id) {
 	openNewWindow(450, 200);
 	<digi:context name="edit" property="context/module/moduleinstance/editdepartment.do" />

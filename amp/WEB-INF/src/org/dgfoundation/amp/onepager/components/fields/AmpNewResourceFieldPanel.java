@@ -35,7 +35,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  */
 public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 	
-	final String EXPRESSION = "^((https?|ftp|file|)://)?[a-zA-Z0-9\\-\\./=?]+$";
+	final String EXPRESSION = "^((https?|ftp|file|)://)?[a-zA-Z0-9\\-\\./=?,]+$";
 	
 	private WebMarkupContainer webLinkFeedbackContainer;
 	private Label webLinkFeedbackLabel;

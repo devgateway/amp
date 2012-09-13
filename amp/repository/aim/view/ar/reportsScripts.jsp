@@ -293,7 +293,16 @@ saveReportEngine	= null;
 		myPanel3.setBody("");
 		myPanel3.render(document.body);
 		
-		var msgP4='\n<digi:trn jsFriendly="true">Please select report settings</digi:trn>';
+		
+		<c:choose>
+		<c:when test="${param.queryEngine!='true' }">
+			var msgP4='\n<digi:trn jsFriendly="true">Please select tab settings</digi:trn>';
+		</c:when>
+		<c:otherwise>
+			var msgP4='\n<digi:trn jsFriendly="true">Please select report settings</digi:trn>';
+		</c:otherwise>
+		</c:choose>
+
 		myPanel4.setHeader(msgP4);
 		myPanel4.setBody("");
 		myPanel4.render(document.body);

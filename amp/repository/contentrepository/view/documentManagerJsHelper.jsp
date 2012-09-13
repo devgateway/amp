@@ -147,6 +147,7 @@ font-weight : bold;
 
 
 <script type="text/javascript">
+	var prevPage = null;
 	var applylabels = "<digi:trn>Apply Labels</digi:trn>";
 	var nonetext = "<digi:trn>none</digi:trn>";
 	YAHOO.namespace("YAHOO.amp");
@@ -418,8 +419,8 @@ myTable.enhanceMarkup = function(markupName) {
                 }
                 
         }
-    })	
-    
+    });	
+	
     var oConfigs = { 
     		 // Create the Paginator	       
 	         paginator:myPaginator,        
@@ -913,6 +914,10 @@ function getCallbackForOtherDocuments(containerElement, windowController, datata
 					
 					updateFilterPanel(divId,null);
 					
+					if (prevPage && prevPage > 0){ 
+						//Re-establish the page that was being viewed before the ajax request
+						datatable.configs.paginator.setPage(parseInt(prevPage), false);
+					}
 					 
 					//createToolTips(containerElement);
 				},

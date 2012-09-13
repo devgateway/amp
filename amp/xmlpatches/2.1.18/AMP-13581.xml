@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-13581</jira>
+  <keyword>proposed cost</keyword>
+  <author>Diego</author>
+  <description>v_proposed_cost</description>
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+	CREATE OR REPLACE VIEW v_proposed_cost AS 
+    SELECT amp_activity.amp_activity_id, amp_activity.amp_activity_id AS object_id, amp_activity.amp_activity_id AS object_id2, amp_activity.proj_cost_amount AS transaction_amount, amp_activity.proj_cost_currcode AS currency_code, amp_activity.proj_cost_date AS transaction_date
+    FROM amp_activity
+    WHERE amp_activity.proj_cost_amount IS NOT NULL AND amp_activity.proj_cost_date IS NOT NULL;
+    
+   </lang>
+    </script>
+  </apply>
+
+</tns:patch>

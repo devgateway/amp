@@ -345,6 +345,7 @@ LoggerIdentifiable, Cloneable {
 	 * Tanzania adds
 	 */
 
+	@VersionableFieldSimple(fieldTitle = "FY")
 	protected String FY;
 	@VersionableFieldSimple(fieldTitle = "Vote")
 	protected String vote;
@@ -354,6 +355,11 @@ LoggerIdentifiable, Cloneable {
 	protected String subProgram;
 	@VersionableFieldSimple(fieldTitle = "Project Code")
 	protected String projectCode;
+	@VersionableFieldSimple(fieldTitle = "Ministry Code")
+	protected String ministryCode;
+
+	
+	
 	@VersionableFieldSimple(fieldTitle = "CRIS Number")
 	protected String crisNumber;
 
@@ -1406,6 +1412,14 @@ contactName = string;
 
 	public void setVote(String vote) {
 		this.vote = vote;
+	}
+
+	public String getMinistryCode() {
+		return ministryCode;
+	}
+
+	public void setMinistryCode(String ministryCode) {
+		this.ministryCode = ministryCode;
 	}
 
 	public AmpTeamMember getCreatedBy() {

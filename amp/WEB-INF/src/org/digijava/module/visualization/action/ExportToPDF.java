@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -25,6 +26,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.visualization.form.VisualizationForm;
@@ -432,459 +434,520 @@ public class ExportToPDF extends Action {
 	            }
         	}
           //Funding Table.
-            if (!fundingOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(fundingTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-                doc.add(new Paragraph(" "));
-            }
-            if (fundingOpt.equals("1") || fundingOpt.equals("3")){
-	            PdfPTable fundingTbl = null;
-	            String[] fundingRows = vForm.getExportData().getFundingTableData().split("<");
-	            colspan = (fundingRows[1].split(">").length + 1)/2; 
-	            fundingTbl = new PdfPTable(colspan);
-	            fundingTbl.setWidthPercentage(100);
-	            //PdfPCell fundingTitleCell = new PdfPCell(new Paragraph(fundingTrn + " (" + currName + ")", HEADERFONT));
-	            //fundingTitleCell.setColspan(colspan);
-	            //fundingTbl.addCell(fundingTitleCell);
-	            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            fundingTbl.addCell(cell);
-	            singleRow = fundingRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	fundingTbl.addCell(cell);
-				}
-	            for (int i = 1; i < fundingRows.length; i++) {
-	            	singleRow = fundingRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
-	                	
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	fundingTbl.addCell(cell);
-	    			}
-				}
-	            doc.add(fundingTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (fundingOpt.equals("2") || fundingOpt.equals("3")){
-	            PdfPTable fundingGraph = new PdfPTable(1);
-	            fundingGraph.setWidthPercentage(100);
-	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-	            //img = Image.getInstance(vForm.getExportData().getFundingGraph(),null);
-	            fundingGraph.addCell(img);
-	            //cell = new PdfPCell(new Paragraph(fundingTrn, HEADERFONT));
-	            //fundingGraph.addCell(cell);
-	            doc.add(fundingGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
-          //ODA Growth 
-            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
-            	if (!ODAGrowthOpt.equals("0")){
-                	doc.newPage();
-                	subTitle = new Paragraph(ODAGrowthTrn + " (" + currName + ")", SUBTITLEFONT);
-                    subTitle.setAlignment(Element.ALIGN_LEFT);
-                    doc.add(subTitle);
-                    doc.add(new Paragraph(" "));
-                }
-            	if (ODAGrowthOpt.equals("1") || ODAGrowthOpt.equals("3")){
-    	            PdfPTable ODAGrowthTbl = null;
-    	            String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
-    	            colspan = (ODAGrowthRows[1].split(">").length); 
-    	            ODAGrowthTbl = new PdfPTable(colspan);
-    	            ODAGrowthTbl.setWidthPercentage(100);
-    	            singleRow = ODAGrowthRows[1].split(">");
-    	            for (int i = 0; i < singleRow.length; i++) {
-    	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
-    	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    	            	ODAGrowthTbl.addCell(cell);
-    				}
-    	            for (int i = 2; i < ODAGrowthRows.length; i++) {
-    	            	singleRow = ODAGrowthRows[i].split(">");
-    	            	for (int j = 0; j < singleRow.length; j++) {
-    	                	if(j > 0) { //Skip first and last column
-    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-    	                	}
-    	                	else
-    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
-//    	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
-    	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-    	                	ODAGrowthTbl.addCell(cell);
-    	    			}
-    				}
-    	            doc.add(ODAGrowthTbl);
-    	            doc.add(new Paragraph(" "));
-                }
-            	if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
-	            	PdfPTable ODAGraph = new PdfPTable(1);
-		            ODAGraph.setWidthPercentage(100);
+            boolean fundingVisible = false;
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR)
+	        	fundingVisible = FeaturesUtil.isVisibleFeature("Org. Dashboard - ODA Historical Trend - Funding chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.REGION)
+	        	fundingVisible = FeaturesUtil.isVisibleFeature("Region Dashboard - ODA Historical Trend - Funding chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.SECTOR)
+	        	fundingVisible = FeaturesUtil.isVisibleFeature("Sector Dashboard - ODA Historical Trend - Funding chart", ampContext);
+	        if (fundingVisible) {
+		        if (!fundingOpt.equals("0")){
+	            	doc.newPage();
+	            	subTitle = new Paragraph(fundingTrn + " (" + currName + ")", SUBTITLEFONT);
+	                subTitle.setAlignment(Element.ALIGN_LEFT);
+	                doc.add(subTitle);
+	                doc.add(new Paragraph(" "));
+	            }
+	            if (fundingOpt.equals("1") || fundingOpt.equals("3")){
+		            PdfPTable fundingTbl = null;
+		            String[] fundingRows = vForm.getExportData().getFundingTableData().split("<");
+		            colspan = (fundingRows[1].split(">").length + 1)/2; 
+		            fundingTbl = new PdfPTable(colspan);
+		            fundingTbl.setWidthPercentage(100);
+		            //PdfPCell fundingTitleCell = new PdfPCell(new Paragraph(fundingTrn + " (" + currName + ")", HEADERFONT));
+		            //fundingTitleCell.setColspan(colspan);
+		            //fundingTbl.addCell(fundingTitleCell);
+		            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            fundingTbl.addCell(cell);
+		            singleRow = fundingRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i=i+2) {
+		            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	fundingTbl.addCell(cell);
+					}
+		            for (int i = 1; i < fundingRows.length; i++) {
+		            	singleRow = fundingRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j=j+2) {
+		                	if(j > 0) {
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+		                	
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	fundingTbl.addCell(cell);
+		    			}
+					}
+		            doc.add(fundingTbl);
+		            doc.add(new Paragraph(" "));
+	            }
+	            if (fundingOpt.equals("2") || fundingOpt.equals("3")){
+		            PdfPTable fundingGraph = new PdfPTable(1);
+		            fundingGraph.setWidthPercentage(100);
 		            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-		            ImageIO.write(vForm.getExportData().getODAGrowthGraph(), "png", ba);
+		            ImageIO.write(vForm.getExportData().getFundingGraph(), "png", ba);
 		            img = Image.getInstance(ba.toByteArray());
 		            //img = Image.getInstance(vForm.getExportData().getFundingGraph(),null);
-		            ODAGraph.addCell(img);
-		            //cell = new PdfPCell(new Paragraph(odaGrowthTrn, HEADERFONT));
-		            //ODAGraph.addCell(cell);
-		            doc.add(ODAGraph);
+		            fundingGraph.addCell(img);
+		            //cell = new PdfPCell(new Paragraph(fundingTrn, HEADERFONT));
+		            //fundingGraph.addCell(cell);
+		            doc.add(fundingGraph);
 		            doc.add(new Paragraph(" "));
 	            }
-            }
+	        }
+	        
+          //ODA Growth 
+	        boolean ODAGrowthVisible = false;
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR)
+	        	ODAGrowthVisible = FeaturesUtil.isVisibleFeature("Org. Dashboard - ODA Growth Percentage", ampContext);
+	        if (ODAGrowthVisible) {
+				if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+	            	if (!ODAGrowthOpt.equals("0")){
+	                	doc.newPage();
+	                	subTitle = new Paragraph(ODAGrowthTrn + " (" + currName + ")", SUBTITLEFONT);
+	                    subTitle.setAlignment(Element.ALIGN_LEFT);
+	                    doc.add(subTitle);
+	                    doc.add(new Paragraph(" "));
+	                }
+	            	if (ODAGrowthOpt.equals("1") || ODAGrowthOpt.equals("3")){
+	    	            PdfPTable ODAGrowthTbl = null;
+	    	            String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
+	    	            colspan = (ODAGrowthRows[1].split(">").length); 
+	    	            ODAGrowthTbl = new PdfPTable(colspan);
+	    	            ODAGrowthTbl.setWidthPercentage(100);
+	    	            singleRow = ODAGrowthRows[1].split(">");
+	    	            for (int i = 0; i < singleRow.length; i++) {
+	    	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+	    	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	    	            	ODAGrowthTbl.addCell(cell);
+	    				}
+	    	            for (int i = 2; i < ODAGrowthRows.length; i++) {
+	    	            	singleRow = ODAGrowthRows[i].split(">");
+	    	            	for (int j = 0; j < singleRow.length; j++) {
+	    	                	if(j > 0) { //Skip first and last column
+	    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+	    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+	    	                	}
+	    	                	else
+	    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+	//    	                	cell = new PdfPCell(new Paragraph(singleRow[j]));
+	    	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+	    	                	ODAGrowthTbl.addCell(cell);
+	    	    			}
+	    				}
+	    	            doc.add(ODAGrowthTbl);
+	    	            doc.add(new Paragraph(" "));
+	                }
+	            	if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
+		            	PdfPTable ODAGraph = new PdfPTable(1);
+			            ODAGraph.setWidthPercentage(100);
+			            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+			            ImageIO.write(vForm.getExportData().getODAGrowthGraph(), "png", ba);
+			            img = Image.getInstance(ba.toByteArray());
+			            //img = Image.getInstance(vForm.getExportData().getFundingGraph(),null);
+			            ODAGraph.addCell(img);
+			            //cell = new PdfPCell(new Paragraph(odaGrowthTrn, HEADERFONT));
+			            //ODAGraph.addCell(cell);
+			            doc.add(ODAGraph);
+			            doc.add(new Paragraph(" "));
+		            }
+	            }
+	        }
           
           //Aid Predictability Table.
-            if (!aidPredicOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(aidPredTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-                doc.add(new Paragraph(" "));
-            }
-            if (aidPredicOpt.equals("1") || aidPredicOpt.equals("3")){
-	            PdfPTable aidPredTbl = null;
-	            String[] aidPredRows = vForm.getExportData().getAidPredicTableData().split("<");
-	            colspan = (aidPredRows[1].split(">").length + 1)/2; 
-	            aidPredTbl = new PdfPTable(colspan);
-	            aidPredTbl.setWidthPercentage(100);
-	            //PdfPCell aidPredTitleCell = new PdfPCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONT));
-	            //aidPredTitleCell.setColspan(colspan);
-	            //aidPredTbl.addCell(aidPredTitleCell);
-	            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            aidPredTbl.addCell(cell);
-	            cell = new PdfPCell(new Paragraph(plannedTrn, HEADERFONT));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            aidPredTbl.addCell(cell);
-	            cell = new PdfPCell(new Paragraph(actualTrn, HEADERFONT));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            aidPredTbl.addCell(cell);
-	            for (int i = 1; i < aidPredRows.length; i++) {
-	            	singleRow = aidPredRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) { //Skip first and last column
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	aidPredTbl.addCell(cell);
-	    			}
-				}
-	            doc.add(aidPredTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (aidPredicOpt.equals("2") || aidPredicOpt.equals("3")){
-	            PdfPTable aidPredGraph = new PdfPTable(1);
-	            aidPredGraph.setWidthPercentage(100);
-	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getAidPredictabilityGraph(), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-	            //img = Image.getInstance(vForm.getExportData().getAidPredictabilityGraph(),null);
-	            aidPredGraph.addCell(img);
-	            //cell = new PdfPCell(new Paragraph(aidPredTrn, HEADERFONT));
-	            //aidPredGraph.addCell(cell);
-	            doc.add(aidPredGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
+	        boolean aidPredVisible = false;
+		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR)
+		    	aidPredVisible = FeaturesUtil.isVisibleFeature("Org. Dashboard - Aid Predictability chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.REGION)
+	        	aidPredVisible = FeaturesUtil.isVisibleFeature("Region Dashboard - Aid Predictability chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.SECTOR)
+	        	aidPredVisible = FeaturesUtil.isVisibleFeature("Sector Dashboard - Aid Predictability chart", ampContext);
+		    if (aidPredVisible) {
+				if (!aidPredicOpt.equals("0")){
+	            	doc.newPage();
+	            	subTitle = new Paragraph(aidPredTrn + " (" + currName + ")", SUBTITLEFONT);
+	                subTitle.setAlignment(Element.ALIGN_LEFT);
+	                doc.add(subTitle);
+	                doc.add(new Paragraph(" "));
+	            }
+	            if (aidPredicOpt.equals("1") || aidPredicOpt.equals("3")){
+		            PdfPTable aidPredTbl = null;
+		            String[] aidPredRows = vForm.getExportData().getAidPredicTableData().split("<");
+		            colspan = (aidPredRows[1].split(">").length + 1)/2; 
+		            aidPredTbl = new PdfPTable(colspan);
+		            aidPredTbl.setWidthPercentage(100);
+		            //PdfPCell aidPredTitleCell = new PdfPCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONT));
+		            //aidPredTitleCell.setColspan(colspan);
+		            //aidPredTbl.addCell(aidPredTitleCell);
+		            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            aidPredTbl.addCell(cell);
+		            cell = new PdfPCell(new Paragraph(plannedTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            aidPredTbl.addCell(cell);
+		            cell = new PdfPCell(new Paragraph(actualTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            aidPredTbl.addCell(cell);
+		            for (int i = 1; i < aidPredRows.length; i++) {
+		            	singleRow = aidPredRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j=j+2) {
+		                	if(j > 0) { //Skip first and last column
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	aidPredTbl.addCell(cell);
+		    			}
+					}
+		            doc.add(aidPredTbl);
+		            doc.add(new Paragraph(" "));
+	            }
+	            if (aidPredicOpt.equals("2") || aidPredicOpt.equals("3")){
+		            PdfPTable aidPredGraph = new PdfPTable(1);
+		            aidPredGraph.setWidthPercentage(100);
+		            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+		            ImageIO.write(vForm.getExportData().getAidPredictabilityGraph(), "png", ba);
+		            img = Image.getInstance(ba.toByteArray());
+		            //img = Image.getInstance(vForm.getExportData().getAidPredictabilityGraph(),null);
+		            aidPredGraph.addCell(img);
+		            //cell = new PdfPCell(new Paragraph(aidPredTrn, HEADERFONT));
+		            //aidPredGraph.addCell(cell);
+		            doc.add(aidPredGraph);
+		            doc.add(new Paragraph(" "));
+	            }
+		    }
+		    
           //Aid Type Table.
-            if (!aidTypeOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(aidTypeTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-                doc.add(new Paragraph(" "));
-            }
-            if (aidTypeOpt.equals("1") || aidTypeOpt.equals("3")){
-	            PdfPTable aidTypeTbl = null;
-	            String[] aidTypeRows = vForm.getExportData().getAidTypeTableData().split("<");
-	            colspan = (aidTypeRows[1].split(">").length + 1)/2; 
-	            aidTypeTbl = new PdfPTable(colspan);
-	            aidTypeTbl.setWidthPercentage(100);
-	            //PdfPCell aidTypeTitleCell = new PdfPCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONT));
-	            //aidTypeTitleCell.setColspan(colspan);
-	            //aidTypeTbl.addCell(aidTypeTitleCell);
-	            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            aidTypeTbl.addCell(cell);
-	            singleRow = aidTypeRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	aidTypeTbl.addCell(cell);
-				}
-	            for (int i = 1; i < aidTypeRows.length; i++) {
-	            	singleRow = aidTypeRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) { //Skip first and last column
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	aidTypeTbl.addCell(cell);
-	    			}
-				}
-	            doc.add(aidTypeTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (aidTypeOpt.equals("2") || aidTypeOpt.equals("3")){
-	            PdfPTable aidTypeGraph = new PdfPTable(1);
-	            aidTypeGraph.setWidthPercentage(100);
-	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getAidTypeGraph(), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-	            //img = Image.getInstance(vForm.getExportData().getAidTypeGraph(),null);
-	            aidTypeGraph.addCell(img);
-	            //cell = new PdfPCell(new Paragraph(aidTypeTrn, HEADERFONT));
-	            //aidTypeGraph.addCell(cell);
-	            doc.add(aidTypeGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
+		    boolean aidTypeVisible = false;
+		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR)
+		    	aidTypeVisible = FeaturesUtil.isVisibleFeature("Org. Dashboard - Aid Type chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.REGION)
+	        	aidTypeVisible = FeaturesUtil.isVisibleFeature("Region Dashboard - Aid Type chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.SECTOR)
+	        	aidTypeVisible = FeaturesUtil.isVisibleFeature("Sector Dashboard - Aid Type chart", ampContext);
+		    if (aidTypeVisible) {
+				if (!aidTypeOpt.equals("0")){
+	            	doc.newPage();
+	            	subTitle = new Paragraph(aidTypeTrn + " (" + currName + ")", SUBTITLEFONT);
+	                subTitle.setAlignment(Element.ALIGN_LEFT);
+	                doc.add(subTitle);
+	                doc.add(new Paragraph(" "));
+	            }
+	            if (aidTypeOpt.equals("1") || aidTypeOpt.equals("3")){
+		            PdfPTable aidTypeTbl = null;
+		            String[] aidTypeRows = vForm.getExportData().getAidTypeTableData().split("<");
+		            colspan = (aidTypeRows[1].split(">").length + 1)/2; 
+		            aidTypeTbl = new PdfPTable(colspan);
+		            aidTypeTbl.setWidthPercentage(100);
+		            //PdfPCell aidTypeTitleCell = new PdfPCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONT));
+		            //aidTypeTitleCell.setColspan(colspan);
+		            //aidTypeTbl.addCell(aidTypeTitleCell);
+		            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            aidTypeTbl.addCell(cell);
+		            singleRow = aidTypeRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i=i+2) {
+		            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	aidTypeTbl.addCell(cell);
+					}
+		            for (int i = 1; i < aidTypeRows.length; i++) {
+		            	singleRow = aidTypeRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j=j+2) {
+		                	if(j > 0) { //Skip first and last column
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	aidTypeTbl.addCell(cell);
+		    			}
+					}
+		            doc.add(aidTypeTbl);
+		            doc.add(new Paragraph(" "));
+	            }
+	            if (aidTypeOpt.equals("2") || aidTypeOpt.equals("3")){
+		            PdfPTable aidTypeGraph = new PdfPTable(1);
+		            aidTypeGraph.setWidthPercentage(100);
+		            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+		            ImageIO.write(vForm.getExportData().getAidTypeGraph(), "png", ba);
+		            img = Image.getInstance(ba.toByteArray());
+		            //img = Image.getInstance(vForm.getExportData().getAidTypeGraph(),null);
+		            aidTypeGraph.addCell(img);
+		            //cell = new PdfPCell(new Paragraph(aidTypeTrn, HEADERFONT));
+		            //aidTypeGraph.addCell(cell);
+		            doc.add(aidTypeGraph);
+		            doc.add(new Paragraph(" "));
+	            }
+		    }
             
           //Financing Instrument Table.
-            if (!financingInstOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(finInstTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-                doc.add(new Paragraph(" "));
-            }
-            if (financingInstOpt.equals("1") || financingInstOpt.equals("3")){
-                PdfPTable finInstTbl = null;
-	            String[] finInstRows = vForm.getExportData().getFinancingInstTableData().split("<");
-	            colspan = (finInstRows[1].split(">").length + 1)/2; 
-	            finInstTbl = new PdfPTable(colspan);
-	            finInstTbl.setWidthPercentage(100);
-	            //PdfPCell finInstTitleCell = new PdfPCell(new Paragraph(finInstTrn + " (" + currName + ")", HEADERFONT));
-	            //finInstTitleCell.setColspan(colspan);
-	            //finInstTbl.addCell(finInstTitleCell);
-	            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            finInstTbl.addCell(cell);
-	            singleRow = finInstRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	finInstTbl.addCell(cell);
-				}
-	            for (int i = 1; i < finInstRows.length; i++) {
-	            	singleRow = finInstRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) { //Skip first and last column
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	finInstTbl.addCell(cell);
-	    			}
-				}
-	            doc.add(finInstTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (financingInstOpt.equals("2") || financingInstOpt.equals("3")){
-                PdfPTable finInstGraph = new PdfPTable(1);
-	            finInstGraph.setWidthPercentage(100);
-	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(vForm.getExportData().getFinancingInstGraph(), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-	            //img = Image.getInstance(vForm.getExportData().getFinancingInstGraph(),null);
-	            finInstGraph.addCell(img);
-	            //cell = new PdfPCell(new Paragraph(finInstTrn, HEADERFONT));
-	            //finInstGraph.addCell(cell);
-	            doc.add(finInstGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
+		    boolean finInstVisible = false;
+		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR)
+		    	finInstVisible = FeaturesUtil.isVisibleFeature("Org. Dashboard - Financing Instrument chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.REGION)
+	        	finInstVisible = FeaturesUtil.isVisibleFeature("Region Dashboard - Financing Instrument chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.SECTOR)
+	        	finInstVisible = FeaturesUtil.isVisibleFeature("Sector Dashboard - Financing Instrument chart", ampContext);
+		    if (finInstVisible) {
+			    if (!financingInstOpt.equals("0")){
+	            	doc.newPage();
+	            	subTitle = new Paragraph(finInstTrn + " (" + currName + ")", SUBTITLEFONT);
+	                subTitle.setAlignment(Element.ALIGN_LEFT);
+	                doc.add(subTitle);
+	                doc.add(new Paragraph(" "));
+	            }
+	            if (financingInstOpt.equals("1") || financingInstOpt.equals("3")){
+	                PdfPTable finInstTbl = null;
+		            String[] finInstRows = vForm.getExportData().getFinancingInstTableData().split("<");
+		            colspan = (finInstRows[1].split(">").length + 1)/2; 
+		            finInstTbl = new PdfPTable(colspan);
+		            finInstTbl.setWidthPercentage(100);
+		            //PdfPCell finInstTitleCell = new PdfPCell(new Paragraph(finInstTrn + " (" + currName + ")", HEADERFONT));
+		            //finInstTitleCell.setColspan(colspan);
+		            //finInstTbl.addCell(finInstTitleCell);
+		            cell = new PdfPCell(new Paragraph(yearTrn, HEADERFONT));
+		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            finInstTbl.addCell(cell);
+		            singleRow = finInstRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i=i+2) {
+		            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		            	finInstTbl.addCell(cell);
+					}
+		            for (int i = 1; i < finInstRows.length; i++) {
+		            	singleRow = finInstRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j=j+2) {
+		                	if(j > 0) { //Skip first and last column
+			                	BigDecimal bd = new BigDecimal(singleRow[j]);
+		                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+		                	}
+		                	else
+		                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		                	finInstTbl.addCell(cell);
+		    			}
+					}
+		            doc.add(finInstTbl);
+		            doc.add(new Paragraph(" "));
+	            }
+	            if (financingInstOpt.equals("2") || financingInstOpt.equals("3")){
+	                PdfPTable finInstGraph = new PdfPTable(1);
+		            finInstGraph.setWidthPercentage(100);
+		            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+		            ImageIO.write(vForm.getExportData().getFinancingInstGraph(), "png", ba);
+		            img = Image.getInstance(ba.toByteArray());
+		            //img = Image.getInstance(vForm.getExportData().getFinancingInstGraph(),null);
+		            finInstGraph.addCell(img);
+		            //cell = new PdfPCell(new Paragraph(finInstTrn, HEADERFONT));
+		            //finInstGraph.addCell(cell);
+		            doc.add(finInstGraph);
+		            doc.add(new Paragraph(" "));
+	            }
+		    }
             
           //Sector Profile Table.
-            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
-	            if (!sectorOpt.equals("0")){
-	            	doc.newPage();
-	            	subTitle = new Paragraph(sectorProfTrn + " (" + currName + ")", SUBTITLEFONT);
-	                subTitle.setAlignment(Element.ALIGN_LEFT);
-	                doc.add(subTitle);
-	                doc.add(new Paragraph(" "));
+		    boolean sectorProfileVisible = false;
+		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR)
+		    	sectorProfileVisible = FeaturesUtil.isVisibleFeature("Org. Dashboard - Sector Profile chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.REGION)
+	        	sectorProfileVisible = FeaturesUtil.isVisibleFeature("Region Dashboard - Sector Profile chart", ampContext);
+		    if (sectorProfileVisible) {
+			    if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+		            if (!sectorOpt.equals("0")){
+		            	doc.newPage();
+		            	subTitle = new Paragraph(sectorProfTrn + " (" + currName + ")", SUBTITLEFONT);
+		                subTitle.setAlignment(Element.ALIGN_LEFT);
+		                doc.add(subTitle);
+		                doc.add(new Paragraph(" "));
+		            }
+		            if (sectorOpt.equals("1") || sectorOpt.equals("3")){
+		                PdfPTable sectorProfTbl = null;
+			            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
+			            colspan = sectorProfRows[1].split(">").length; 
+			            sectorProfTbl = new PdfPTable(colspan);
+			            sectorProfTbl.setWidthPercentage(100);
+			            //PdfPCell sectorProfTitleCell = new PdfPCell(new Paragraph(sectorProfTrn + " (" + currName + ")", HEADERFONT));
+			            //sectorProfTitleCell.setColspan(colspan);
+			            //sectorProfTbl.addCell(sectorProfTitleCell);
+			            cell = new PdfPCell(new Paragraph(sectorTrn, HEADERFONT));
+			            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            sectorProfTbl.addCell(cell);
+			            singleRow = sectorProfRows[1].split(">");
+			            for (int i = 1; i < singleRow.length; i++) {
+			            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+			            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			                sectorProfTbl.addCell(cell);
+						}
+			            for (int i = 2; i < sectorProfRows.length; i++) {
+			            	singleRow = sectorProfRows[i].split(">");
+			            	for (int j = 0; j < singleRow.length; j++) {
+	    	                	if(j > 0) { //Skip first and last column
+	    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+	    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+	    	                	}
+	    	                	else
+	    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+			                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			                	sectorProfTbl.addCell(cell);
+			    			}
+						}
+			            doc.add(sectorProfTbl);
+			            doc.add(new Paragraph(" "));
+		            }
+		            if (sectorOpt.equals("2") || sectorOpt.equals("3")){
+		                PdfPTable sectorGraph = new PdfPTable(1);
+			            sectorGraph.setWidthPercentage(100);
+			            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+			            ImageIO.write(vForm.getExportData().getSectorGraph(), "png", ba);
+			            img = Image.getInstance(ba.toByteArray());
+			            //img = Image.getInstance(vForm.getExportData().getSectorGraph(),null);
+			            sectorGraph.addCell(img);
+			            //cell = new PdfPCell(new Paragraph(sectorProfTrn, HEADERFONT));
+			            //sectorGraph.addCell(cell);
+			            doc.add(sectorGraph);
+			            doc.add(new Paragraph(" "));
+		            }
 	            }
-	            if (sectorOpt.equals("1") || sectorOpt.equals("3")){
-	                PdfPTable sectorProfTbl = null;
-		            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
-		            colspan = sectorProfRows[1].split(">").length; 
-		            sectorProfTbl = new PdfPTable(colspan);
-		            sectorProfTbl.setWidthPercentage(100);
-		            //PdfPCell sectorProfTitleCell = new PdfPCell(new Paragraph(sectorProfTrn + " (" + currName + ")", HEADERFONT));
-		            //sectorProfTitleCell.setColspan(colspan);
-		            //sectorProfTbl.addCell(sectorProfTitleCell);
-		            cell = new PdfPCell(new Paragraph(sectorTrn, HEADERFONT));
-		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            sectorProfTbl.addCell(cell);
-		            singleRow = sectorProfRows[1].split(">");
-		            for (int i = 1; i < singleRow.length; i++) {
-		            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
-		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		                sectorProfTbl.addCell(cell);
-					}
-		            for (int i = 2; i < sectorProfRows.length; i++) {
-		            	singleRow = sectorProfRows[i].split(">");
-		            	for (int j = 0; j < singleRow.length; j++) {
-    	                	if(j > 0) { //Skip first and last column
-    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-    	                	}
-    	                	else
-    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
-		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		                	sectorProfTbl.addCell(cell);
-		    			}
-					}
-		            doc.add(sectorProfTbl);
-		            doc.add(new Paragraph(" "));
-	            }
-	            if (sectorOpt.equals("2") || sectorOpt.equals("3")){
-	                PdfPTable sectorGraph = new PdfPTable(1);
-		            sectorGraph.setWidthPercentage(100);
-		            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-		            ImageIO.write(vForm.getExportData().getSectorGraph(), "png", ba);
-		            img = Image.getInstance(ba.toByteArray());
-		            //img = Image.getInstance(vForm.getExportData().getSectorGraph(),null);
-		            sectorGraph.addCell(img);
-		            //cell = new PdfPCell(new Paragraph(sectorProfTrn, HEADERFONT));
-		            //sectorGraph.addCell(cell);
-		            doc.add(sectorGraph);
-		            doc.add(new Paragraph(" "));
-	            }
-            }
-            
+		    }
+		    
           //Region Profile Table.
-            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
-	            if (!regionOpt.equals("0")){
-	            	doc.newPage();
-	            	subTitle = new Paragraph(regionProfTrn + " (" + currName + ")", SUBTITLEFONT);
-	                subTitle.setAlignment(Element.ALIGN_LEFT);
-	                doc.add(subTitle);
-	                doc.add(new Paragraph(" "));
+		    boolean regionProfileVisible = false;
+		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR)
+		    	regionProfileVisible = FeaturesUtil.isVisibleFeature("Org. Dashboard - Region Profile chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.SECTOR)
+	        	regionProfileVisible = FeaturesUtil.isVisibleFeature("Sector Dashboard - Region Profile chart", ampContext);
+		    if (regionProfileVisible) {
+			    if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+		            if (!regionOpt.equals("0")){
+		            	doc.newPage();
+		            	subTitle = new Paragraph(regionProfTrn + " (" + currName + ")", SUBTITLEFONT);
+		                subTitle.setAlignment(Element.ALIGN_LEFT);
+		                doc.add(subTitle);
+		                doc.add(new Paragraph(" "));
+		            }
+		            if (regionOpt.equals("1") || regionOpt.equals("3")){
+		                PdfPTable regionProfTbl = null;
+			            String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
+			            colspan = regionProfRows[1].split(">").length; 
+			            regionProfTbl = new PdfPTable(colspan);
+			            regionProfTbl.setWidthPercentage(100);
+			            //PdfPCell regionProfTitleCell = new PdfPCell(new Paragraph(regionProfTrn + " (" + currName + ")", HEADERFONT));
+			            //regionProfTitleCell.setColspan(colspan);
+			            //regionProfTbl.addCell(regionProfTitleCell);
+			            cell = new PdfPCell(new Paragraph(regionTrn, HEADERFONT));
+			            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            regionProfTbl.addCell(cell);
+			            singleRow = regionProfRows[1].split(">");
+			            for (int i = 1; i < singleRow.length; i++) {
+			            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+			            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            	regionProfTbl.addCell(cell);
+						}
+			            
+			            for (int i = 2; i < regionProfRows.length; i++) {
+			            	singleRow = regionProfRows[i].split(">");
+			            	for (int j = 0; j < singleRow.length; j++) {
+	    	                	if(j > 0) { //Skip first and last column
+	    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+	    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+	    	                	}
+	    	                	else
+	    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+			                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			                	regionProfTbl.addCell(cell);
+			    			}
+						}
+			            doc.add(regionProfTbl);
+			            doc.add(new Paragraph(" "));
+		            }
+		            if (regionOpt.equals("2") || regionOpt.equals("3")){
+			            PdfPTable regionGraph = new PdfPTable(1);
+			            regionGraph.setWidthPercentage(100);
+			            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+			            ImageIO.write(vForm.getExportData().getRegionGraph(), "png", ba);
+			            img = Image.getInstance(ba.toByteArray());
+			            //img = Image.getInstance(vForm.getExportData().getRegionGraph(),null);
+			            regionGraph.addCell(img);
+			            //cell = new PdfPCell(new Paragraph(regionProfTrn, HEADERFONT));
+			            //regionGraph.addCell(cell);
+			            doc.add(regionGraph);
+			            doc.add(new Paragraph(" "));
+		            }
 	            }
-	            if (regionOpt.equals("1") || regionOpt.equals("3")){
-	                PdfPTable regionProfTbl = null;
-		            String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
-		            colspan = regionProfRows[1].split(">").length; 
-		            regionProfTbl = new PdfPTable(colspan);
-		            regionProfTbl.setWidthPercentage(100);
-		            //PdfPCell regionProfTitleCell = new PdfPCell(new Paragraph(regionProfTrn + " (" + currName + ")", HEADERFONT));
-		            //regionProfTitleCell.setColspan(colspan);
-		            //regionProfTbl.addCell(regionProfTitleCell);
-		            cell = new PdfPCell(new Paragraph(regionTrn, HEADERFONT));
-		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            regionProfTbl.addCell(cell);
-		            singleRow = regionProfRows[1].split(">");
-		            for (int i = 1; i < singleRow.length; i++) {
-		            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
-		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            	regionProfTbl.addCell(cell);
-					}
-		            
-		            for (int i = 2; i < regionProfRows.length; i++) {
-		            	singleRow = regionProfRows[i].split(">");
-		            	for (int j = 0; j < singleRow.length; j++) {
-    	                	if(j > 0) { //Skip first and last column
-    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-    	                	}
-    	                	else
-    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
-		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		                	regionProfTbl.addCell(cell);
-		    			}
-					}
-		            doc.add(regionProfTbl);
-		            doc.add(new Paragraph(" "));
-	            }
-	            if (regionOpt.equals("2") || regionOpt.equals("3")){
-		            PdfPTable regionGraph = new PdfPTable(1);
-		            regionGraph.setWidthPercentage(100);
-		            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-		            ImageIO.write(vForm.getExportData().getRegionGraph(), "png", ba);
-		            img = Image.getInstance(ba.toByteArray());
-		            //img = Image.getInstance(vForm.getExportData().getRegionGraph(),null);
-		            regionGraph.addCell(img);
-		            //cell = new PdfPCell(new Paragraph(regionProfTrn, HEADERFONT));
-		            //regionGraph.addCell(cell);
-		            doc.add(regionGraph);
-		            doc.add(new Paragraph(" "));
-	            }
-            }
+		    }
             
           //Donor Profile Table.
-            if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
-	            if (!donorOpt.equals("0")){
-	            	doc.newPage();
-	            	subTitle = new Paragraph(donorProfTrn + " (" + currName + ")", SUBTITLEFONT);
-	                subTitle.setAlignment(Element.ALIGN_LEFT);
-	                doc.add(subTitle);
-	                doc.add(new Paragraph(" "));
+		    boolean donorProfileVisible = false;
+		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.REGION)
+		    	regionProfileVisible = FeaturesUtil.isVisibleFeature("Region Dashboard - Donor Profile chart", ampContext);
+	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.SECTOR)
+	        	regionProfileVisible = FeaturesUtil.isVisibleFeature("Sector Dashboard - Donor Profile chart", ampContext);
+	        if (donorProfileVisible) {
+				if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+		            if (!donorOpt.equals("0")){
+		            	doc.newPage();
+		            	subTitle = new Paragraph(donorProfTrn + " (" + currName + ")", SUBTITLEFONT);
+		                subTitle.setAlignment(Element.ALIGN_LEFT);
+		                doc.add(subTitle);
+		                doc.add(new Paragraph(" "));
+		            }
+		            if (donorOpt.equals("1") || donorOpt.equals("3")){
+		                PdfPTable donorProfTbl = null;
+			            String[] donorProfRows = vForm.getExportData().getDonorTableData().split("<");
+			            colspan = donorProfRows[1].split(">").length; 
+			            donorProfTbl = new PdfPTable(colspan);
+			            donorProfTbl.setWidthPercentage(100);
+			            //PdfPCell donorProfTitleCell = new PdfPCell(new Paragraph(donorProfTrn + " (" + currName + ")", HEADERFONT));
+			            //donorProfTitleCell.setColspan(colspan);
+			            //donorProfTbl.addCell(donorProfTitleCell);
+			            cell = new PdfPCell(new Paragraph(donorTrn, HEADERFONT));
+			            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            donorProfTbl.addCell(cell);
+			            singleRow = donorProfRows[1].split(">");
+			            for (int i = 1; i < singleRow.length; i++) {
+			            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+			            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            	donorProfTbl.addCell(cell);
+						}
+			            for (int i = 2; i < donorProfRows.length; i++) {
+			            	singleRow = donorProfRows[i].split(">");
+			            	for (int j = 0; j < singleRow.length; j++) {
+	    	                	if(j > 0) { //Skip first and last column
+	    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+	    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+	    	                	}
+	    	                	else
+	    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
+			                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			                	donorProfTbl.addCell(cell);
+			    			}
+						}
+			            doc.add(donorProfTbl);
+			            doc.add(new Paragraph(" "));
+		            }
+		            if (donorOpt.equals("2") || donorOpt.equals("3")){
+			            PdfPTable donorGraph = new PdfPTable(1);
+			            donorGraph.setWidthPercentage(100);
+			            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+			            ImageIO.write(vForm.getExportData().getDonorGraph(), "png", ba);
+			            img = Image.getInstance(ba.toByteArray());
+			            //img = Image.getInstance(vForm.getExportData().getRegionGraph(),null);
+			            donorGraph.addCell(img);
+			            //cell = new PdfPCell(new Paragraph(regionProfTrn, HEADERFONT));
+			            //donorGraph.addCell(cell);
+			            doc.add(donorGraph);
+			            doc.add(new Paragraph(" "));
+		            }
 	            }
-	            if (donorOpt.equals("1") || donorOpt.equals("3")){
-	                PdfPTable donorProfTbl = null;
-		            String[] donorProfRows = vForm.getExportData().getDonorTableData().split("<");
-		            colspan = donorProfRows[1].split(">").length; 
-		            donorProfTbl = new PdfPTable(colspan);
-		            donorProfTbl.setWidthPercentage(100);
-		            //PdfPCell donorProfTitleCell = new PdfPCell(new Paragraph(donorProfTrn + " (" + currName + ")", HEADERFONT));
-		            //donorProfTitleCell.setColspan(colspan);
-		            //donorProfTbl.addCell(donorProfTitleCell);
-		            cell = new PdfPCell(new Paragraph(donorTrn, HEADERFONT));
-		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            donorProfTbl.addCell(cell);
-		            singleRow = donorProfRows[1].split(">");
-		            for (int i = 1; i < singleRow.length; i++) {
-		            	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
-		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            	donorProfTbl.addCell(cell);
-					}
-		            for (int i = 2; i < donorProfRows.length; i++) {
-		            	singleRow = donorProfRows[i].split(">");
-		            	for (int j = 0; j < singleRow.length; j++) {
-    	                	if(j > 0) { //Skip first and last column
-    		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-    	                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-    	                	}
-    	                	else
-    	                		cell = new PdfPCell(new Paragraph(singleRow[j]));
-		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		                	donorProfTbl.addCell(cell);
-		    			}
-					}
-		            doc.add(donorProfTbl);
-		            doc.add(new Paragraph(" "));
-	            }
-	            if (donorOpt.equals("2") || donorOpt.equals("3")){
-		            PdfPTable donorGraph = new PdfPTable(1);
-		            donorGraph.setWidthPercentage(100);
-		            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-		            ImageIO.write(vForm.getExportData().getDonorGraph(), "png", ba);
-		            img = Image.getInstance(ba.toByteArray());
-		            //img = Image.getInstance(vForm.getExportData().getRegionGraph(),null);
-		            donorGraph.addCell(img);
-		            //cell = new PdfPCell(new Paragraph(regionProfTrn, HEADERFONT));
-		            //donorGraph.addCell(cell);
-		            doc.add(donorGraph);
-		            doc.add(new Paragraph(" "));
-	            }
-            }
+	        }
+	        
             //close document
             doc.close();
             response.setContentLength(baos.size());

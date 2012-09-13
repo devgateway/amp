@@ -262,7 +262,17 @@ public class CategAmountColWorker extends ColumnWorker {
 				acc.getMetaData().add(termsAssistMeta);
 			}
 		}
-
+		
+		if (columnsMetaData.containsKey("related_project")) {
+			String relatedproject = retrieveValueFromRS(rs,columnsMetaData.get(  "related_project") );
+			if (relatedproject != null) {
+				MetaInfo relatedprojectmeta = this.getCachedMetaInfo(
+						ArConstants.RELATED_PROJECTS, relatedproject);
+				acc.getMetaData().add(relatedprojectmeta);
+			}
+		}
+		
+		
 		MetaInfo headMeta=null;
 		
 		if("region_name".equals(headMetaName)){

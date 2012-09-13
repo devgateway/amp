@@ -404,6 +404,7 @@ border-right: 1px solid rgb(208, 208, 208);
 				this.sendLabelRequest(postStr);
 			},
 			sendLabelRequest: function (postStr) {
+				prevPage = $(".current-page").html();
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/label.do?', this, postStr);
 			},
 			failure: function () {

@@ -171,6 +171,14 @@ public Cell filter(Cell metaCell,Set ids) {
                        return null;  
                     }
                 }
+                
+                 if(metaCell.getColumn().getName().equals(ArConstants.RELATED_PROJECTS))  {
+                     String project=ret.getMetaValueString(ArConstants.RELATED_PROJECTS);
+                      if((project!=null&&!metaCell.getValue().toString().equals(project))&&(!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))){
+                         return null;  
+                      }
+                  }
+                 
                  
                 if(metaCell.getColumn().getName().equals(ArConstants.DONOR_GROUP))  {
                    String donorGrp=ret.getMetaValueString(ArConstants.DONOR_GROUP);
@@ -217,7 +225,7 @@ public Cell filter(Cell metaCell,Set ids) {
                     }
                 }
 
-		if(metaCell.getColumn().getName().equals(ArConstants.FINANCING_INSTRUMENT)) {
+               if(metaCell.getColumn().getName().equals(ArConstants.FINANCING_INSTRUMENT)) {
                    String financingInstr=ret.getMetaValueString(ArConstants.FINANCING_INSTRUMENT);
                     if(financingInstr!=null&&!metaCell.getValue().toString().equals(financingInstr)){
                        return null;  
@@ -244,9 +252,8 @@ public Cell filter(Cell metaCell,Set ids) {
                        return null;  
                     }
                 }
-				
-			
-		//apply metatext filters
+                
+        //apply metatext filters
 		if(metaCell instanceof MetaTextCell) {
 			//apply metatext filters for column Sector
 //		 applyMetaFilter("Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);

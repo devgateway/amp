@@ -563,6 +563,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     	  eaForm.getIdentification().setSelectedFYs(null);
     	  eaForm.getIdentification().setSubProgram(null);
     	  eaForm.getIdentification().setProjectCode(null);
+    	  eaForm.getIdentification().setMinistryCode(null);
     	  eaForm.getIdentification().setGbsSbs(null);
     	  eaForm.getIdentification().setGovernmentApprovalProcedures(null);
     	  eaForm.getIdentification().setJointCriteria(null);
@@ -831,6 +832,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             eaForm.getIdentification().setSubProgram(activity.getSubProgram().trim());
           if (activity.getProjectCode() != null)
             eaForm.getIdentification().setProjectCode(activity.getProjectCode().trim());
+          if (activity.getMinistryCode() != null)
+              eaForm.getIdentification().setMinistryCode(activity.getMinistryCode().trim());
 
           if (activity.getGbsSbs() != null)
             eaForm.getIdentification().setGbsSbs(activity.getGbsSbs());

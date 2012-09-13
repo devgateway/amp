@@ -222,7 +222,7 @@
 	function pickDateById(buttonId,objectId)
 	{
 		
-		textboxEl			= document.getElementById(objectId);
+		textboxEl= document.getElementById(objectId);
 		
 		if ( typeof(calendarWrapperDialogs) == 'undefined' || calendarWrapperDialogs == null )
 			calendarWrapperDialogs	= new Object();
@@ -308,8 +308,6 @@
 		}
 		dialog.show();
 		dialog.align("bl", "tr");
-		
-		
 	}
 	
 	/*Just for compatibility reasons with functions that were used with the old DHTMLSuite calendar widget*/

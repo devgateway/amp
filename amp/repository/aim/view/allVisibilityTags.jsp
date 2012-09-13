@@ -693,6 +693,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Logframe Preview Button" feature="Logframe"></field:display> 
 <field:display name="Measures Taken" feature="Issues"></field:display> 
 <field:display name="Ministry of Planning Rank" feature="Planning"></field:display> 
+<field:display name="Ministry Code" feature="Budget"></field:display>
 <field:display name="Minorities" feature="Cross Cutting Issues"></field:display>
 <field:display name="Multi Donor" feature="Funding Information"></field:display> 
 <field:display name="Multi Sector Configuration" feature="Sectors"></field:display> 

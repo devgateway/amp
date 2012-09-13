@@ -28,7 +28,7 @@
 				<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 			</div>
 		</div>
-		<div style="border: 1px solid #CCCCCC; height: ${100-selectorHeaderSize}%; width: 100%; background: white;">		
+		<div style="border: 1px solid #CCCCCC; height: ${100-selectorHeaderSize}%; width: 100%; background: white;" class="grouping_selector_wrapper_body">		
 				<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 					<logic:iterate id="element" name="elements" scope="page">
 						<tr style="cursor: pointer;"
@@ -72,7 +72,7 @@
 							<div class="hiddenNameDiv" style="display: none;"><digi:trn>${element.name}</digi:trn></div>
 							<ul style="list-style-type: none;">
 								<li>
-									<input type="checkbox" onclick="toggleCheckChildren(this);" class="root_checkbox"/> 
+									<input type="checkbox" onclick="toggleCheckChildren(this);if(typeof buildLabels == 'function') buildLabels();" class="root_checkbox"/> 
 										<span style="font-family: Arial; font-size: 12px;">
 											<digi:trn><c:out value="${element.rootHierarchyListable.label}"/></digi:trn>
 										</span>

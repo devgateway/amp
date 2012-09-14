@@ -132,6 +132,8 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 			@Override
 			public List<TemporaryDocument> getObject() {
 				HashSet<TemporaryDocument> newItems = getSession().getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
+				if(newItems == null)
+					newItems = new HashSet<TemporaryDocument>();
 				HashSet<AmpActivityDocument> delItems = getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
                 List<TemporaryDocument> ret = new ArrayList<TemporaryDocument>();
                 ret.addAll(existingTmpDocs);

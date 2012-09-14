@@ -782,11 +782,13 @@ public class DynLocationManagerUtil {
 			if ( DynLocationManagerUtil.regionsOfDefaultCountry.size() == 0 ) {
 		 	 	AmpCategoryValueLocations country = DynLocationManagerUtil.getLocationByIso( 
 		 	 	FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY );
-		 	 	country = getLocationOpenedSession( country.getId() );
-		 	 	
-		 	 	Set<AmpCategoryValueLocations> children				= country.getChildLocations();
-		 	 	
-		 	 	DynLocationManagerUtil.regionsOfDefaultCountry.addAll(children);
+		 	 	if (country != null){
+			 	 	country = getLocationOpenedSession( country.getId() );
+			 	 	
+			 	 	Set<AmpCategoryValueLocations> children				= country.getChildLocations();
+			 	 	
+			 	 	DynLocationManagerUtil.regionsOfDefaultCountry.addAll(children);
+		 	 	}
 			}
 	 	 	
  	 		ret	= new ArrayList<AmpCategoryValueLocations>( DynLocationManagerUtil.regionsOfDefaultCountry.size() );

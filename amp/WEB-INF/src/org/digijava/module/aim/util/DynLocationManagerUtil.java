@@ -1053,7 +1053,7 @@ public class DynLocationManagerUtil {
 				String longitude=getValue(cell);
 				cell=hssfRow.getCell(k++);
 				String geoID=getValue(cell);
-				if (geoID.contains(".0")){
+				if (geoID!=null && geoID.contains(".0")){
 					geoID = geoID.replace(".0", "");
 				}
 				cell=hssfRow.getCell(k++);

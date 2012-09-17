@@ -52,6 +52,7 @@ public class ShowDashboard extends Action {
 		
 		HttpSession session = request.getSession();
 	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	    visualizationForm.getFilter().setTeamMember(tm);
 		boolean fromPublicView = false;
 		if (tm == null) {
 			fromPublicView = true;
@@ -303,7 +304,7 @@ public class ShowDashboard extends Action {
         }
         HttpSession httpSession = request.getSession();
         TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");
-		AmpApplicationSettings tempSettings = null;
+        AmpApplicationSettings tempSettings = null;
 		if (teamMember != null) {
 			tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 			if (tempSettings!=null && tempSettings.getCurrency()!=null){

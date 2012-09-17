@@ -93,11 +93,11 @@ public class DataDispatcher extends DispatchAction {
 
 		ArrayList<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
+		//if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
 			visualizationForm.getFilter().setTeamMember(tm);
-        } else {
-        	visualizationForm.getFilter().setTeamMember(null);
-        }
+        //} else {
+        //	visualizationForm.getFilter().setTeamMember(null);
+        //}
 		
 		visualizationForm.getFilter().setOrgGroupIds(getLongArrayFromParameter(request.getParameter("orgGroupIds")));
 		visualizationForm.getFilter().setOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	

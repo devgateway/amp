@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -566,7 +568,7 @@ public class DashboardUtil {
         return qr;
     }
 	
-	public static String getTeamQuery(TeamMember teamMember) {
+	public static String getTeamQuery(TeamMember teamMember, Boolean workspaceOnly) {
         String qr = "";
         if (teamMember != null) {
             AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
@@ -575,27 +577,30 @@ public class DashboardUtil {
             String relatedOrgs = "";
             String teamIds = "";
             if (teamMember.getTeamAccessType().equals("Management")) {
-                qr += " and act.draft=false and act.approvalStatus ='approved' ";
+            	qr += " and act.draft=false and act.approvalStatus ='approved' ";
             }
-            qr += " and (";
-            for (AmpTeam tm : teams) {
-                if (tm.getComputation() != null && tm.getComputation()) {
-                    relatedOrgs += getComputationOrgsQry(tm);
+            if (workspaceOnly!=null && workspaceOnly) {
+            	qr += " and (";
+                for (AmpTeam tm : teams) {
+                    if (tm.getComputation() != null && tm.getComputation()) {
+                        relatedOrgs += getComputationOrgsQry(tm);
+                    }
+                    teamIds += tm.getAmpTeamId() + ",";
+
                 }
-                teamIds += tm.getAmpTeamId() + ",";
+                if (teamIds.length() > 1) {
+                    teamIds = teamIds.substring(0, teamIds.length() - 1);
+                    qr += " act.team.ampTeamId in ( " + teamIds + ")";
 
-            }
-            if (teamIds.length() > 1) {
-                teamIds = teamIds.substring(0, teamIds.length() - 1);
-                qr += " act.team.ampTeamId in ( " + teamIds + ")";
-
-            }
-            if (relatedOrgs.length() > 1) {
-                relatedOrgs = relatedOrgs.substring(0, relatedOrgs.length() - 1);
-                qr += " or f.ampDonorOrgId in(" + relatedOrgs + ")";
-            }
-            qr += ")";
-
+                }
+                if (relatedOrgs.length() > 1) {
+                    relatedOrgs = relatedOrgs.substring(0, relatedOrgs.length() - 1);
+                    qr += " or f.ampDonorOrgId in(" + relatedOrgs + ")";
+                }
+                qr += ")";
+			} else {
+				qr += " and act.team is not null ";
+			}
         } else {
             qr += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
         }

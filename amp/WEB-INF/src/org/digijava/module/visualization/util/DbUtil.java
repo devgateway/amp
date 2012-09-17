@@ -291,7 +291,7 @@ public class DbUtil {
         }
         else
         {
-            oql += DashboardUtil.getTeamQuery(tm);
+            oql += DashboardUtil.getTeamQuery(tm, filter.getWorkspaceOnly());
         }
         
         oql += " and actloc is NULL ";
@@ -399,7 +399,7 @@ public class DbUtil {
 	            }
 	            else
 	            {
-	                oql += DashboardUtil.getTeamQuery(teamMember);
+	                oql += DashboardUtil.getTeamQuery(teamMember, filter.getWorkspaceOnly());
 	            }
 	            if (sectorCondition) {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
@@ -497,7 +497,7 @@ public class DbUtil {
 	            }
 	            else
 	            {
-	                oql += DashboardUtil.getTeamQuery(teamMember);
+	                oql += DashboardUtil.getTeamQuery(teamMember, filter.getWorkspaceOnly());
 	            }
 	            if (locationCondition) {
 	            	if (locationIds[0].equals(0l)) {
@@ -597,7 +597,7 @@ public class DbUtil {
             }
             else
             {
-                oql += DashboardUtil.getTeamQuery(teamMember);
+                oql += DashboardUtil.getTeamQuery(teamMember, filter.getWorkspaceOnly());
             }
             if (locationCondition) {
             	if (locationIds[0].equals(0l)) {
@@ -732,7 +732,7 @@ public class DbUtil {
 	            }
 	            else
 	            {
-	                oql += DashboardUtil.getTeamQuery(teamMember);
+	                oql += DashboardUtil.getTeamQuery(teamMember, filter.getWorkspaceOnly());
 	            }
 	            if (locationCondition) {
 	            	if (locationIds[0].equals(0l)) {
@@ -889,7 +889,7 @@ public class DbUtil {
         }
         else
         {
-            oql += DashboardUtil.getTeamQuery(tm);
+            oql += DashboardUtil.getTeamQuery(tm, filter.getWorkspaceOnly());
         }
 
         if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
@@ -1064,7 +1064,7 @@ public class DbUtil {
         }
         else
         {
-            oql += DashboardUtil.getTeamQuery(tm);
+            oql += DashboardUtil.getTeamQuery(tm, filter.getWorkspaceOnly());
         }
 
         if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
@@ -1383,7 +1383,7 @@ public class DbUtil {
         }
         else
         {
-            oql += DashboardUtil.getTeamQuery(tm);
+            oql += DashboardUtil.getTeamQuery(tm, filter.getWorkspaceOnly());
         }
 
         if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {

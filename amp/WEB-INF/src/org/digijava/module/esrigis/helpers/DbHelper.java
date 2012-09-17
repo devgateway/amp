@@ -287,7 +287,7 @@ public class DbHelper {
 	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 	            
 	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-	                oql += DashboardUtil.getTeamQueryManagement();
+	                oql += QueryUtil.getTeamQueryManagement();
 	            }
 	            else
 	            {
@@ -384,11 +384,11 @@ public class DbHelper {
 	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 	            
 	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-	                oql += DashboardUtil.getTeamQueryManagement();
+	                oql += QueryUtil.getTeamQueryManagement();
 	            }
 	            else
 	            {
-	                oql += DashboardUtil.getTeamQuery(teamMember);
+	                oql += QueryUtil.getTeamQuery(teamMember);
 	            }
 	            if (sectorCondition) {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
@@ -495,11 +495,11 @@ public class DbHelper {
 			oql += ActivityUtil.getApprovedActivityQueryString("act");
 		}
         if(filter.getFromPublicView() != filter.getFromPublicView()){
-            oql += DashboardUtil.getTeamQueryManagement();
+            oql += QueryUtil.getTeamQueryManagement();
         }
         else
         {
-            oql += DashboardUtil.getTeamQuery(tm);
+            oql += QueryUtil.getTeamQuery(tm);
         }
 
         Session session = PersistenceManager.getRequestDBSession();

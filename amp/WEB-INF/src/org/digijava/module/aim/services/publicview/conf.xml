@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report-table-config baseUrl="http://localhost:8080/" 
+	workFileDir="D:/transformer_test/datadir/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="conf.xsd">
+		<tables>
+			<table name="reportOne">
+				<report-url>aim/csvExport.do~view=reset~ampReportId=2446~publicView=true~asXml=true</report-url>
+				<xsl-file>reportXmlTransformer.xslt</xsl-file>
+				<html-file>one.html</html-file>
+			</table>
+			<table name="reportTwo">
+				<report-url>aim/csvExport.do~view=reset~ampReportId=2446~publicView=true~asXml=true</report-url>
+				<xsl-file>reportXmlTransformer1.xslt</xsl-file>
+				<html-file>two.html</html-file>
+			</table>
+			<table name="reportThree">
+				<report-url>aim/csvExport.do~view=reset~ampReportId=2446~publicView=true~asXml=true</report-url>
+				<xsl-file>reportXmlTransformer2.xslt</xsl-file>
+				<html-file>three.html</html-file>
+			</table>
+		</tables>
+</report-table-config>

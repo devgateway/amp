@@ -2,10 +2,14 @@ package org.digijava.module.aim.services.publicview;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.services.publicview.conf.Configuration;
+import org.digijava.module.aim.services.publicview.conf.ConfigurationUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.xml.sax.InputSource;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -13,6 +17,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +36,8 @@ import java.util.Properties;
 public class PublicViewReportCreator implements Job {
     private static Logger logger = Logger.getLogger(PublicViewReportCreator.class);
     private static Properties transformationConfig = null;
+    private static Configuration conf;
+
     public static final String TRANSFORM_CONF_XSLT = "xslTransformerPath";
     public static final String TRANSFORM_CONF_HTML = "outputHtmlPath";
     public static final String TRANSFORM_CONF_REPORT_URL = "reportURL";
@@ -39,32 +46,34 @@ public class PublicViewReportCreator implements Job {
         try {
 
 
-            String xmlScrUrl = getTransformationConfigProperty(TRANSFORM_CONF_REPORT_URL);
-            URL xmlScr = new URL(xmlScrUrl);
 
-            URLConnection connection = xmlScr.openConnection();
-            connection.addRequestProperty("Referer",xmlScrUrl);
-            connection.connect();
+            Configuration conf = ConfigurationUtil.initConfig();
 
-            InputStream in = connection.getInputStream();
-            
-            /*
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(in, writer, "UTF8");
-            String xmlStr = writer.toString();
-             */
+            if (conf != null && conf.getTables() != null) {
+                for (Configuration.Table tbl : conf.getTables()) {
+                    String xmlScrUrl = conf.getBaseUrl() + tbl.getReportUrl();
+                    URL xmlScr = new URL(xmlScrUrl);
 
-            TransformerFactory tFactory = TransformerFactory.newInstance();
-            try {
-                Transformer transformer = tFactory.newTransformer(new StreamSource(getTransformationConfigProperty(TRANSFORM_CONF_XSLT)));
-                transformer.transform (new StreamSource (in), new StreamResult ( new FileOutputStream(getTransformationConfigProperty(TRANSFORM_CONF_HTML))));
-            } catch (TransformerConfigurationException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (TransformerException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+                    URLConnection connection = xmlScr.openConnection();
+                    connection.addRequestProperty("Referer",xmlScrUrl);
+                    connection.connect();
 
-            int tmp=3;
+                    InputStream in = connection.getInputStream();
+
+                    TransformerFactory tFactory = TransformerFactory.newInstance();
+                    try {
+                        Transformer transformer = tFactory.newTransformer(new StreamSource(conf.getWorkFileDir() + tbl.getXslFile()));
+                        transformer.transform (new StreamSource (in), new StreamResult (new FileOutputStream(conf.getWorkFileDir() + tbl.getHtmlFile())));
+                    } catch (TransformerConfigurationException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    } catch (TransformerException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+                }
+             }
+
+
+        } catch (JAXBException e) {
         } catch (MalformedURLException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (IOException e) {
@@ -88,6 +97,15 @@ public class PublicViewReportCreator implements Job {
     }
 
     public static String getTransformationConfigProperty (String property) {
+        Configuration conf = null;
+        try {
+            conf = ConfigurationUtil.getConfiguration();
+        } catch (JAXBException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         String retVal = null;
         if (transformationConfig == null) {
             transformationConfig = getTransformationConfig();

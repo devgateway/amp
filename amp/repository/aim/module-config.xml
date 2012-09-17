@@ -30,6 +30,8 @@
 		<action login-required="false" pattern="/BudgetManager" />
 		<action login-required="true" pattern="/saveFMDescription" />
 		<action login-required="false" pattern="/getLoginStatus" />
+		<action login-required="false" pattern="/reportTableProxy" />
+
 	</security>
 
 	<!-- AIM classes Begin-->

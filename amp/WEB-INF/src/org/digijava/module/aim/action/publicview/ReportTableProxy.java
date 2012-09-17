@@ -1,11 +1,13 @@
-package org.digijava.module.aim.action;
+package org.digijava.module.aim.action.publicview;
 
+import net.sf.ehcache.config.Configuration;
 import org.apache.commons.io.IOUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.services.publicview.PublicViewReportCreator;
+import org.digijava.module.aim.services.publicview.conf.ConfigurationUtil;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -23,14 +25,13 @@ import java.io.FileInputStream;
  */
 public class ReportTableProxy extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-        FileInputStream htmlFileIS = new FileInputStream(PublicViewReportCreator.getTransformationConfigProperty(PublicViewReportCreator.TRANSFORM_CONF_HTML));
+        String configName = request.getParameter("configName");
+        FileInputStream htmlFileIS = new FileInputStream(ConfigurationUtil.getHTMLPathForConfig(configName));
         response.setContentType("text/html");
-
         ServletOutputStream sos = response.getOutputStream();
         IOUtils.copy(htmlFileIS, sos);
         sos.flush();
         sos.close();
-
         return null;
     }
 }

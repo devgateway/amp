@@ -572,3 +572,6 @@ CREATE INDEX idx_pri_prog_name ON cached_v_m_donor_funding (primary_program_name
 CREATE INDEX idx_sec_prog_name ON cached_v_m_donor_funding (secondary_program_name);
 CREATE INDEX idx_pri_sector_name ON cached_v_m_donor_funding (p_sectorname);
 CREATE INDEX idx_nac_prog_name ON cached_v_m_donor_funding (national_program_name);
+
+drop table if EXISTS cached_v_results;
+create table cached_v_results as SELECT amp_activity.amp_activity_id, btrim(dg_editor.body) AS ebody FROM amp_activity, dg_editor WHERE (amp_activity.results = (dg_editor.editor_key)::text) ORDER BY amp_activity.amp_activity_id;

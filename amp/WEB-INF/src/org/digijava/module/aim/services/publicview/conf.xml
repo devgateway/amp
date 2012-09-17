@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report-table-config baseUrl="http://timor.ampdev.net/" 
+<report-table-config baseUrl="https://timor.ampdev.net/" 
 	workFileDir="/home/gkvizhinadze/timor/datadir/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="conf.xsd">
 		<tables>
 			<table name="reportOne">

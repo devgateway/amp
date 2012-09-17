@@ -1215,7 +1215,7 @@ function addActivity() {
 function selectionFunction(evt) {
 	if (addActivityMode || searchactive) {
 		var tooltipHolder = dojo.byId("tooltipHolder");
-		tooltipHolder.innerHTML = "Select a point";
+		tooltipHolder.innerHTML = translate('Select a point');
 		tooltipHolder.style.display = "block";
 		tooltipHolder.style.top = evt.pageY + 5 + "px";
 		tooltipHolder.style.left = evt.pageX + 5 + "px";

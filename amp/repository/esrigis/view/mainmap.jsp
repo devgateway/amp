@@ -256,6 +256,10 @@
             value = "<digi:trn>Others</digi:trn>";
             return value;
          }
+        if(text == "Select a point") {
+            value = "<digi:trn>Select a point</digi:trn>";
+            return value;
+         }
         return text;
     	}
 	
@@ -390,7 +394,7 @@
         <!-- Filter -->
         <div id="selectedfilter" class="legendContent" style="top:80px;left:100px;display:none;width: 35%;"> 
         	<div onclick="$('#selectedfilter').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
-        	<div class="legendHeader">Selected Filters<br/><hr/></div>
+        	<div class="legendHeader"><digi:trn>Selected Filters</digi:trn><br/><hr/></div>
         	<table width="90%" cellspacing="0" cellpadding="0" border="0">
         		<tbody>
 					<tr>
@@ -439,7 +443,10 @@
         				<input type="text" id="distance" style="width: 50px;"/> 
         			</td>
         			<td>
-        				<input type="button" id="sbyd" width="5px" value="Go"/> 
+        				<c:set var="trnGoBtn">
+                        	<digi:trn key="aim:btnClose">Go</digi:trn>
+                       </c:set>
+        				<input type="button" id="sbyd" width="5px" value="${trnGoBtn}"/> 
         			</td>
         		</tr>
         	</table>
@@ -468,7 +475,7 @@
         <div id="navToolbar" dojoType="dijit.Toolbar" region="leading" style="z-Index:999;display: none;">
         <div class="toolscontainer" style="margin:5px 0px 0px 0px;">
         	<div class="gisBoxHeader">
-			  	<h3>Tools panel</h3><a href="#"></a>
+			  	<h3><digi:trn>Tools panel</digi:trn></h3><a href="#"></a>
             </div>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);"><digi:trn>Zoom In</digi:trn></div>
 			<div class="mapButton" dojoType="dijit.form.Button" id="zoomout" iconClass="zoomoutIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_OUT);"><digi:trn>Zoom Out</digi:trn></div>

@@ -92,7 +92,7 @@
 										</tr>
 										<tr>
 											<td>
-												<b>Fiscal Calendar:</b>
+												<b><digi:trn>Fiscal Calendar</digi:trn>:</b>
 											</td>
 											<td><html:select property="filter.fiscalCalendarId"
 													styleId="fiscalCalendar_dropdown_Id"
@@ -279,7 +279,7 @@
 							<div id="divRegionsFilter">
 								<div class="selector_content_org_prof"
 									style="line-height: 25px; width: 490px;">
-									<b>Region:</b> <img
+									<b><digi:trn>Region</digi:trn>:</b> <img
 										src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" /><br />
 									<html:select property="filter.regionIds" multiple="true"
 										styleId="region_dropdown_ids" styleClass="dropdwn_sm"

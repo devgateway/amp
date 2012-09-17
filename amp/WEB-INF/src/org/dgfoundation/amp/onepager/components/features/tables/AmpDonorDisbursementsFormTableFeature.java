@@ -6,9 +6,8 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -48,6 +47,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 	private static final long serialVersionUID = 1L;
 	private boolean alertIfExpenditureBiggerDisbursment = false;  
 	private boolean alertIfDisbursmentBiggerCommitments = false;
+	private final static int SELECTOR_SIZE = 80;
 	/**
 	 * @param id
 	 * @param model
@@ -124,11 +124,13 @@ public class AmpDonorDisbursementsFormTableFeature extends
                 capitalSpendingPercentage.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("5")));
                 item.add(capitalSpendingPercentage);
 
-				item.add(new AmpSelectFieldPanel<String>("disbOrderId",
+                AmpSelectFieldPanel<String> disbOrdIdSelector = new AmpSelectFieldPanel<String>("disbOrderId",
 						new PropertyModel<String>(item.getModel(),
 								"disbOrderId")
 								,disbOrderIdModel,
-						"Disbursement Order Id", true, true));
+						"Disbursement Order Id", true, true);
+                disbOrdIdSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
+				item.add(disbOrdIdSelector);
 				
 				ArrayList<IPAContract> contractList;
 				if (model.getObject().getAmpActivityId() != null && model.getObject().getAmpActivityId().getContracts() != null)
@@ -136,12 +138,15 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						.getAmpActivityId().getContracts());
 				else
 					contractList = new ArrayList<IPAContract>();
-				item.add(new AmpSelectFieldPanel<IPAContract>("contract",
+				AmpSelectFieldPanel<IPAContract> contractSelector = new AmpSelectFieldPanel<IPAContract>("contract",
 						new PropertyModel<IPAContract>(item.getModel(),
 								"contract"),
 						contractList,
-						"Contract", true, true));
-
+						"Contract", true, true);
+				
+				contractSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
+				item.add(contractSelector);
+				
 				IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {
 					protected java.util.List<FundingPledges> load() {
 						return PledgesEntityHelper
@@ -150,7 +155,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 					};
 				};
 				
-				item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",
+				AmpSelectFieldPanel<FundingPledges> pledgeSelector = new AmpSelectFieldPanel<FundingPledges>("pledge",
 						new PropertyModel<FundingPledges>(item.getModel(),
 								"pledgeid"), pledgesModel,
 						"Pledges", true, true, new ChoiceRenderer<FundingPledges>() {
@@ -158,7 +163,9 @@ public class AmpDonorDisbursementsFormTableFeature extends
 							public Object getDisplayValue(FundingPledges arg0) {
 								return arg0.getTitle();
 							}
-						}));
+						});
+				pledgeSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
+				item.add(pledgeSelector);
 				item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"){
 					protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);

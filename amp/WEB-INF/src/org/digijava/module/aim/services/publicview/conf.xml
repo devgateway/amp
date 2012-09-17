@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<report-table-config baseUrl="http://localhost:8080/" 
-	workFileDir="D:/transformer_test/datadir/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="conf.xsd">
+<report-table-config baseUrl="http://timor.ampdev.net/" 
+	workFileDir="/home/gkvizhinadze/timor/datadir/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="conf.xsd">
 		<tables>
 			<table name="reportOne">
 				<report-url>aim/csvExport.do~view=reset~ampReportId=2446~publicView=true~asXml=true</report-url>

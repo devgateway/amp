@@ -187,7 +187,8 @@ public class DbHelper {
 			
 			//Additional clause to get the last version
 			if (ActivityVersionUtil.isVersioningEnabled()){
-				oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";			
+				oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
+				oql += " and (act.deleted = false or act.deleted is null)";
 			}
 			
 			if (filter.isModeexport()){
@@ -306,7 +307,7 @@ public class DbHelper {
 	            Query query = session.createQuery(oql);
 	            query.setDate("startDate", startDate);
 	            query.setDate("endDate", endDate);
-	            query.setDate("endDate", endDate);
+	            
 	            query.setString("implementationLevel", implementationLevel);
 	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
 	            //    query.setLong("orgGroupId", orgGroupId);

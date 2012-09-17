@@ -200,7 +200,7 @@ function createMapAddLayers(myService1, myService2) {
 	if (bordermap){
 		map.addLayer(bordermap);
 	}
-	if (populationmap){
+	if (population){
 		map.addLayer(populationmap);
 	}
 	if (povertyratesurl){

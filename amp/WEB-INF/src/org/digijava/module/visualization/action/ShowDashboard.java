@@ -52,7 +52,6 @@ public class ShowDashboard extends Action {
 		
 		HttpSession session = request.getSession();
 	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-	    visualizationForm.getFilter().setTeamMember(tm);
 		boolean fromPublicView = false;
 		if (tm == null) {
 			fromPublicView = true;

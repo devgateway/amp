@@ -568,7 +568,7 @@ public class DashboardUtil {
         return qr;
     }
 	
-	public static String getTeamQuery(TeamMember teamMember, Boolean workspaceOnly) {
+	public static String getTeamQuery(TeamMember teamMember) {
         String qr = "";
         if (teamMember != null) {
             AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
@@ -577,30 +577,27 @@ public class DashboardUtil {
             String relatedOrgs = "";
             String teamIds = "";
             if (teamMember.getTeamAccessType().equals("Management")) {
-            	qr += " and act.draft=false and act.approvalStatus ='approved' ";
+                qr += " and act.draft=false and act.approvalStatus ='approved' ";
             }
-            if (workspaceOnly!=null && workspaceOnly) {
-            	qr += " and (";
-                for (AmpTeam tm : teams) {
-                    if (tm.getComputation() != null && tm.getComputation()) {
-                        relatedOrgs += getComputationOrgsQry(tm);
-                    }
-                    teamIds += tm.getAmpTeamId() + ",";
+            qr += " and (";
+            for (AmpTeam tm : teams) {
+                if (tm.getComputation() != null && tm.getComputation()) {
+                    relatedOrgs += getComputationOrgsQry(tm);
+                }
+                teamIds += tm.getAmpTeamId() + ",";
 
-                }
-                if (teamIds.length() > 1) {
-                    teamIds = teamIds.substring(0, teamIds.length() - 1);
-                    qr += " act.team.ampTeamId in ( " + teamIds + ")";
+            }
+            if (teamIds.length() > 1) {
+                teamIds = teamIds.substring(0, teamIds.length() - 1);
+                qr += " act.team.ampTeamId in ( " + teamIds + ")";
 
-                }
-                if (relatedOrgs.length() > 1) {
-                    relatedOrgs = relatedOrgs.substring(0, relatedOrgs.length() - 1);
-                    qr += " or f.ampDonorOrgId in(" + relatedOrgs + ")";
-                }
-                qr += ")";
-			} else {
-				qr += " and act.team is not null ";
-			}
+            }
+            if (relatedOrgs.length() > 1) {
+                relatedOrgs = relatedOrgs.substring(0, relatedOrgs.length() - 1);
+                qr += " or f.ampDonorOrgId in(" + relatedOrgs + ")";
+            }
+            qr += ")";
+
         } else {
             qr += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
         }

@@ -291,7 +291,7 @@ public class DbHelper {
 	            }
 	            else
 	            {
-	                oql += DashboardUtil.getTeamQuery(teamMember);
+	                oql += QueryUtil.getTeamQuery(teamMember);
 	            }
 	            if (sectorCondition) {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";

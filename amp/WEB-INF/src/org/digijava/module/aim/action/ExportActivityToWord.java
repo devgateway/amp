@@ -1511,10 +1511,22 @@ public class ExportActivityToWord extends Action {
 			
 			for (int i = 0; i < possibleTags.length; i++) { //remove all possible tags
 				String tag = possibleTags[i];
-				while(text.contains("<"+tag)){
-					String text1 = text.substring(0,text.indexOf("<"+tag));
-					String text2 = text.substring(text.indexOf(">", text.indexOf("<"+tag))+1,text.lastIndexOf("</"+tag+">"));
-					String text3 = text.length()==text.lastIndexOf("</"+tag+">")+("</"+tag+">").length()? "" : text.substring(text.lastIndexOf("</"+tag+">")+("</"+tag+">").length()+1);
+				
+				String startTagStr = "<"+tag;
+				String endTagStr = "</"+tag+">";
+				
+				int endTagLength = endTagStr.length();
+				
+				
+				while(text.contains(startTagStr)){
+					
+					int firstIndexOfStartTag = text.indexOf(startTagStr);
+					int beginIndex = text.indexOf(">", firstIndexOfStartTag)+1;
+					int firstIndexOfEndTag = text.indexOf(endTagStr, beginIndex);
+					
+					String text1 = text.substring(0,firstIndexOfStartTag);
+					String text2 = text.substring(beginIndex, firstIndexOfEndTag);
+					String text3 = text.length()==firstIndexOfEndTag + endTagLength? "" : text.substring(firstIndexOfEndTag + endTagLength);
 					text = text1 + text2 + text3;
 				}
 			}

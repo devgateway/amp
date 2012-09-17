@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE page [
-<!ENTITY ampVersion "1.17.17">
-<!ENTITY buildDate "22.09.2012">
+<!ENTITY ampVersion "1.16.16">
+<!ENTITY buildDate "22.03.2012">
 ]>
 <site-config>
 	<site-layout>
@@ -14,10 +14,10 @@
             <put-item name="filters" module="orgProfile"  page="filter"/>
              <put-item name="chart1" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart2" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="chart9" module="widget" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="chart3" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart4" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart5" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="chart7" module="widget" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="chart6" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="chart7" module="widget" instance="default" teaser="teaserOfWidget"/>
             <put-item name="chart8" module="widget" instance="default" teaser="teaserOfWidget"/>
 			
@@ -33,20 +33,20 @@
 <!--			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>-->
 			<put-item name="widget1" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget2" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget9" module="widget" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="widget3" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget4" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget5" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget7" module="widget" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="widget6" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget7" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget8" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget9" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget10" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget11" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget12" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget19" module="widget" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="widget13" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget14" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget15" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget17" module="widget" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="widget16" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="pieChart" module="widget" instance="default" teaser="teaserOfSectorByDonor"/>
 			<put-item name="body" module="gis" page="gisDashboard"/>
 		</layout>
@@ -225,7 +225,7 @@
 			<put-item name="body" module="content" instance="default" teaser="contentView"/>
 		</layout>
 		<layout name="headerTopLayout" file="headerTop.jsp">
- 	 	    <put-item name="logWidget" file="loginWidget9.jsp"/>
+ 	 	    <put-item name="logWidget" file="loginWidget3.jsp"/>
  	 	</layout>
 		<layout name="loginBody" file="loginLayout.jsp">
 			<put name="title">Please log in</put>

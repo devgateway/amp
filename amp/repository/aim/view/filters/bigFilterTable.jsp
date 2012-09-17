@@ -88,7 +88,7 @@
 												<span style="font-family: Arial; font-size: 12px;">
 													<digi:trn><c:out value="${element.rootHierarchyListable.label}"/></digi:trn>
 												</span>
-												<div style="display:none">
+												<div class="additionalSearchStringMarker" style="display:none">
 													${element.rootHierarchyListable.additionalSearchString}
 												</div>
 											<%@include file="hierarchyLister.jsp" %>

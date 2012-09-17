@@ -83,6 +83,7 @@ SearchManager.prototype.findNext	= function() {
 			return;
 		var spans				= this.getMainElements();//this.divEl.getElementsByTagName("span");
 		var additionalSrchDivs	= this.getAdditionalElements();//this.divEl.getElementsByTagName("DIV");
+		debugger;
 		//console.log(spans.length);
 		//console.log(additionalSrchDivs.length);
 		var numFound	= 0;
@@ -97,7 +98,7 @@ SearchManager.prototype.findNext	= function() {
 				var additionalSrchDivString	= '';
 				if(additionalSrchDivs.length > 0){
 					if (i>0) {
-						additionalSrchDivString = additionalSrchDivs[i-1].innerHTML.toLowerCase();
+						additionalSrchDivString = additionalSrchDivs[i].innerHTML.toLowerCase();
 					}
 				}				 
 				
@@ -148,7 +149,7 @@ SearchManager.prototype.findPrev	= function() {
 			var additionalSrchDivString	= '';
 			if(additionalSrchDivs.length > 0){
 				if (i>0) {
-					additionalSrchDivString = additionalSrchDivs[i - 1].innerHTML.toLowerCase();
+					additionalSrchDivString = additionalSrchDivs[i].innerHTML.toLowerCase();
 				}
 			}
 			
@@ -216,7 +217,7 @@ StandardSearchManager.prototype.getAdditionalElements	= function() {
 	var myDivs = this.divEl.getElementsByTagName("div");
 	var retVal= new Array();
 	for (var i=0;i<myDivs.length;i++){
-		if(myDivs[i].className!='hiddenNameDiv'){
+		if(myDivs[i].className=='additionalSearchStringMarker'){
 			retVal.push(myDivs[i]);
 		}
 	}

@@ -43,7 +43,7 @@
 									<c:out value="${entity.label}"/> 
 								</c:if>
 							</span>
-							<div style="display:none">
+							<div style="display:none" class="additionalSearchStringMarker">
 								<c:out value="${entity.additionalSearchString}"/>
 							</div>
 						</td>

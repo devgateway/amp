@@ -151,13 +151,19 @@ clearDisplay(document.aimAddOrgForm.lineMinRegDate, "clearLineMin");
             var year=document.aimAddOrgForm.selectedYear;
             var type=document.aimAddOrgForm.typeOfStaff;
             var number=document.aimAddOrgForm.numberOfStaff;
-            var errorMsg= '<digi:trn jsFriendly="true">Please enter numeric value only</digi:trn>';
-            if (isNaN(number.value)||number.value=='') {
+            var errorMsg= '<digi:trn jsFriendly="true">Please enter numeric value only for staff</digi:trn>';
+            if (isNaN(number.value)) {
                 alert(errorMsg);
                 number.value = "";
                 return false;
             }
-
+            errorMsg= '<digi:trn jsFriendly="true">Please enter number of staff</digi:trn>';
+            if (number.value=='') {
+                alert(errorMsg);
+                number.value = "";
+                return false;
+            }
+            
             if(year.value=='-1'){
                 errorMsg='<digi:trn jsFriendly="true">Please select year!</digi:trn>';
                 alert(errorMsg);

@@ -25,7 +25,7 @@
 .paging_sel {color:#FFFFFF; background-color:#FF6000; padding:2px 2px 2px 4px;text-align:center;}
 .l_sm {font-size:11px; color:#376091;}
 .tab_opt {background-color:#F2F2F2;}
-.tab_opt_box {border:1px solid #EBEBEB;}
+.tab_opt_box {border:1px solid #EBEBEB;max-height:100px;overflow:auto;}
 .tab_opt_box_cont {padding:5px; font-size:11px; background-color:#FAFAFA;}
 .tab_opt_cont {padding:5px; font-size:11px; color:#CCCCCC;}
 .show_hide_setting {

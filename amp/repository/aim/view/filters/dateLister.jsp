@@ -20,7 +20,7 @@
 
 
 <logic:notEmpty name="entityList">
-		<table style="margin: 30px;">
+		<table style="margin: 45px;">
 		<logic:iterate id="entity" name="entityList" scope="page">
 					<tr>
 						<td>
@@ -36,7 +36,7 @@
 								<c:out value="${entity.additionalSearchString}"/>
 							</div>
 						</td>
-						<td>
+						<td >
 							<html:text readonly="true" property="${entity.actionFormProperty}" styleId="filter_input_${entity.uniqueId }" styleClass="dateInputMarker" />
 							<a id="filter_a_${entity.uniqueId }" style="background-color: #F6FAFF;" href='javascript:pickDateById("filter_a_${entity.uniqueId }","filter_input_${entity.uniqueId }")'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0" />

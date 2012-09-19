@@ -10,21 +10,26 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpStructureField;
-import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureType;
+import org.digijava.module.aim.util.StructuresUtil;
 
-/**
- * @author fferreyra@developmentgateway.org since May 16, 2011
- */
 public class AmpStructuresFormSectionFeature extends
 		AmpFormSectionFeaturePanel {
 
@@ -36,7 +41,7 @@ public class AmpStructuresFormSectionFeature extends
 		final PropertyModel<Set<AmpStructure>> setModel=new PropertyModel<Set<AmpStructure>>(am,"structures");
 		if (setModel.getObject() == null)
 			setModel.setObject(new TreeSet<AmpStructure>());
-		final ListView<AmpStructure> list;
+		final ListEditor<AmpStructure> list;
 
 		
 		IModel<List<AmpStructure>> listModel = new AbstractReadOnlyModel<List<AmpStructure>>() {
@@ -51,27 +56,73 @@ public class AmpStructuresFormSectionFeature extends
 			}
 		};
 		
-		list = new ListView<AmpStructure>("list", listModel) {
-			
+		list = new ListEditor<AmpStructure>("list", setModel) {
 			@Override
-			protected void populateItem(ListItem<AmpStructure> stru) {
-				AmpStructureField acf = new AmpStructureField("structure", am, PersistentObjectModel.getModel(stru.getModelObject()), "Structure");
-				stru.add(acf);
+			protected void onPopulateItem(
+					org.dgfoundation.amp.onepager.components.ListItem<AmpStructure> item) {
+				IModel<AmpStructure> structureModel = item.getModel();
+				AmpSelectFieldPanel<AmpStructureType> structureTypes = new  AmpSelectFieldPanel<AmpStructureType>("structureTypes", new PropertyModel<AmpStructureType>(structureModel, "type"),
+						new LoadableDetachableModel<List<AmpStructureType>>() {
+							private static final long serialVersionUID = 1L;
+		
+							@Override
+							protected List<AmpStructureType> load() {
+								return new ArrayList<AmpStructureType>(StructuresUtil.getAmpStructureTypes());
+							}		
+						}, 
+						"Structure Type",true, false,  new ChoiceRenderer<AmpStructureType>("name","typeId")) ;
+
+				structureTypes.getChoiceContainer().setRequired(true);
+				structureTypes.setOutputMarkupId(true);
+				item.add(structureTypes);
+				
+				final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(structureModel, "title"), "Structure Title",true, true);
+				name.setOutputMarkupId(true);
+				name.getTextContainer().add(new AttributeAppender("size", new Model("10px"), ";"));
+				name.setTextContainerDefaultMaxSize();
+				name.getTextContainer().setRequired(true);
+				item.add(name);
+				
+				final AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel<String>(structureModel, "description"),"Structure Description",false, true, true);
+				description.setOutputMarkupId(true);
+
+				description.getTextAreaContainer().add(new SimpleAttributeModifier("cols", "20"));
+				item.add(description);		
+
+				final AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitude", new PropertyModel<String>(structureModel, "longitude"),"Structure Longitude", true, true);
+				longitude.setOutputMarkupId(true);
+				longitude.setTextContainerDefaultMaxSize();
+
+				longitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+				item.add(longitude);
+
+				final AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String>("latitude", new PropertyModel<String>(structureModel, "latitude"),"Structure Latitude", true, true);
+				latitude.setTextContainerDefaultMaxSize();
+				latitude.setOutputMarkupId(true);
+
+				latitude.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+				item.add(latitude);
+
+				final AmpTextFieldPanel<String> shape = new AmpTextFieldPanel<String>("shape", new PropertyModel<String>(structureModel, "shape"),"Structure Shape", true, true);
+				shape.setOutputMarkupId(true);
+				
+				shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
+				item.add(shape);
+
+				ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure");
+				item.add(delbutton);
 			}
 		};
+		
 		add(list);
 		
 		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton", "Add Structure", "Add Structure") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				AmpStructure stru = new AmpStructure();
-				if (setModel.getObject() == null)
-					setModel.setObject(new TreeSet<AmpStructure>());
-
-				setModel.getObject().add(stru);
+				list.addItem(stru);
 				target.add(this.getParent());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
-				list.removeAll();
 			}
 		};
 		add(addbutton);

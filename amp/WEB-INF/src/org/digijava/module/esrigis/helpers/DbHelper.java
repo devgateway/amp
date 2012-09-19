@@ -452,9 +452,14 @@ public class DbHelper {
             oql = "select fd ";
         }
         oql += " from ";
-        oql += AmpFundingDetail.class.getName()
-                + " as fd inner join fd.ampFundingId f ";
+        oql += AmpFundingDetail.class.getName()  + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
+        
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " inner join act.ampActivityGroupCached actGroup ";
+        else
+        	oql += " inner join act.ampActivityGroup actGroup ";
+        
         if (locationCondition) {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         }
@@ -501,7 +506,12 @@ public class DbHelper {
         {
             oql += QueryUtil.getTeamQuery(tm);
         }
-
+        
+        if (ActivityVersionUtil.isVersioningEnabled()){
+			oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
+			oql += " and (act.deleted = false or act.deleted is null)";
+		}
+        
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
         try {
@@ -523,6 +533,7 @@ public class DbHelper {
             if (filter.getActivityId()!=null) {
                 query.setLong("activityId", filter.getActivityId());
             }
+            
             fundingDets = query.list();
             /*the objects returned by query  and   selected currency
             are passed doCalculations  method*/
@@ -782,8 +793,7 @@ public class DbHelper {
 		return (Long[]) tempSectorIds.toArray(new Long[0]);
 	}
 
-	public static Long[] getAllDescendantsLocation(Long[] locationIds,
-			ArrayList<AmpCategoryValueLocations> allLocationsList) {
+	public static Long[] getAllDescendantsLocation(Long[] locationIds,ArrayList<AmpCategoryValueLocations> allLocationsList) {
     	List<Long> tempLocationsIds = new ArrayList<Long>();
 		for(AmpCategoryValueLocations as : allLocationsList){
 			for(Long i : locationIds){

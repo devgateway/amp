@@ -129,7 +129,7 @@ function getMinValue(array, measure) {
 		if (currentMeasure < minValue)
 			minValue = currentMeasure;
 	}
-	return minValue - 100;
+	return minValue - 1000;
 }
 
 

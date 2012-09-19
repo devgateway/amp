@@ -898,7 +898,7 @@ function addResultsToMap(featureSet) {
 		rangeColors.push([ parseFloat(min + (i * breaks)),
 				parseFloat(min + ((i + 1) * breaks)) ]);
 		renderer.addBreak(parseFloat(min + (i * breaks)), parseFloat(min
-				+ ((i + 1) * breaks)), new esri.symbol.SimpleFillSymbol(
+				+ ((i+2) * breaks)), new esri.symbol.SimpleFillSymbol(
 				esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, colors[i]));
 	}
 

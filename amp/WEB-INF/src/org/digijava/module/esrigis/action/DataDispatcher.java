@@ -481,12 +481,14 @@ public class DataDispatcher extends MultiAction {
 
 			MapFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelLocationIds(allids);
+			
 			BigDecimal amountCommitments = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.COMMITMENT, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId()).getValue()
 					.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 			BigDecimal amountDisbursements = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.DISBURSEMENT, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId())
 					.getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 			BigDecimal amountExpenditures = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.EXPENDITURE, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId()).getValue()
 					.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+			
 			String keyName = "";
 			String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY
 					.getValueKey();

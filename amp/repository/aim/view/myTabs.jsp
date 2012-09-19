@@ -171,12 +171,12 @@ var myTabsObject;
 		if(tabObject.parentNode.tagName == "A")
 		{
 			tabObject.parentNode.title = labelComplete;
-			tabObject.parentNode.rel= "ajaxcontentarea" 
+			tabObject.parentNode.rel= "ajaxcontentarea"; 
 			tabObject.parentNode.href = url;
 			tabObject.parentNode.id = id;
 		}
 		var len = document.getElementById("scrollableDiv").getElementsByTagName("DIV").length;
-		for (i = 0; i < len; i++) 
+		for (var i = 0; i < len; i++) 
 			{	
 			document.getElementById("scrollableDiv").getElementsByTagName("DIV")[i].style.display='';
 			}
@@ -328,7 +328,7 @@ function toggleSettings(){
 <div class="yui-content" style="display:none">
 </div>
 </div>
-<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; height:637px;font-size:12px;">
+<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid #D0D0D0; height:637px; overflow:auto; font-size:12px;">
 	<digi:trn key="aim:addATab">
 		 Click on one of the tabs to display activities. You can add more tabs by using the Tab Manager.
 	</digi:trn>

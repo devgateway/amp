@@ -129,6 +129,7 @@ public class UpdateAppSettings extends Action {
 			if (ampAppSettings != null && loadValues) {
 				uForm.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 				uForm.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
+				uForm.setNumberOfPagesToDisplay(ampAppSettings.getNumberOfPagesToDisplay());
 
 				Integer reportsPerPage = ampAppSettings.getDefaultReportsPerPage();
 				if (reportsPerPage == null) {
@@ -295,6 +296,7 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings = new AmpApplicationSettings();
 				ampAppSettings.setAmpAppSettingsId(uForm.getAppSettingsId());
 				ampAppSettings.setDefaultRecordsPerPage(new Integer(uForm.getDefRecsPerPage()));
+				ampAppSettings.setNumberOfPagesToDisplay(new Integer(uForm.getNumberOfPagesToDisplay()));
 				ampAppSettings.setReportStartYear((new Integer(uForm.getReportStartYear())));
 				ampAppSettings.setReportEndYear((new Integer(uForm.getReportEndYear())));
 				ampAppSettings.setDefaultReportsPerPage(uForm.getDefReportsPerPage());
@@ -435,6 +437,7 @@ public class UpdateAppSettings extends Action {
 
 		/* set all values except id from oldSettings to newSettings */
 		oldSettings.setDefaultRecordsPerPage(newSettings.getDefaultRecordsPerPage());
+		oldSettings.setNumberOfPagesToDisplay(newSettings.getNumberOfPagesToDisplay());
 		oldSettings.setDefaultReportsPerPage(newSettings.getDefaultReportsPerPage());
 		oldSettings.setCurrency(newSettings.getCurrency());
 		oldSettings.setFiscalCalendar(newSettings.getFiscalCalendar());
@@ -455,6 +458,7 @@ public class UpdateAppSettings extends Action {
 		ApplicationSettings appSettings = new ApplicationSettings();
 		appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 		appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
+		appSettings.setNumberOfPagesToDisplay(ampAppSettings.getNumberOfPagesToDisplay());
 		appSettings.setReportStartYear(ampAppSettings.getReportStartYear());
 		appSettings.setReportEndYear(ampAppSettings.getReportEndYear());
 

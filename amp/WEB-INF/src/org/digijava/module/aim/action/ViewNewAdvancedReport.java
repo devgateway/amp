@@ -140,17 +140,15 @@ public class ViewNewAdvancedReport extends Action {
 			if(tm!=null)
 			ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 		
+		Integer recordsPerPage = new Integer(100);
+		
 		if (ampAppSettings != null){
 			if( ampAppSettings.getDefaultRecordsPerPage().intValue() != 0){
-				request.setAttribute("recordsPerPage", ampAppSettings.getDefaultRecordsPerPage());
+				recordsPerPage = ampAppSettings.getDefaultRecordsPerPage();
 			}else{
-				request.setAttribute("recordsPerPage", Integer.MAX_VALUE);
+				recordsPerPage = Integer.MAX_VALUE;
 			}
-		}else{
-			request.setAttribute("recordsPerPage", new Integer(100));
 		}
-		
-		
 		//check currency code:
 		if(httpSession.getAttribute("reportCurrencyCode")==null) httpSession.setAttribute("reportCurrencyCode",Constants.DEFAULT_CURRENCY);
 		
@@ -224,7 +222,7 @@ public class ViewNewAdvancedReport extends Action {
 		}
 		
 		httpSession.setAttribute("progressValue", ++progressValue); 
-		httpSession.setAttribute("progressTotalRows", request.getAttribute("recordsPerPage"));
+		httpSession.setAttribute("progressTotalRows", recordsPerPage);
 		
 		if (resetSettings && (ampReportId==null || !ampReportId.equals(lastReportId) )){
 			filter.setCalendarType(null); //reset the calendar type to take the type from ws settings by default.
@@ -342,7 +340,7 @@ public class ViewNewAdvancedReport extends Action {
 	
 		if(startRow==null && endRow==null) {
 		    startRow="0";
-		    Integer rpp = (Integer)request.getAttribute("recordsPerPage");
+		    Integer rpp = recordsPerPage;
 		    rpp = rpp - 1; //Zero indexed array 
 		    endRow=rpp.toString();
 		}
@@ -360,9 +358,9 @@ public class ViewNewAdvancedReport extends Action {
 		if (!pagination){
 			startRow="0";
 			endRow=Integer.MAX_VALUE+"";
-			request.setAttribute("recordsPerPage", Integer.MAX_VALUE);
+			recordsPerPage = Integer.MAX_VALUE;
 		}
-		
+		request.setAttribute("recordsPerPage", recordsPerPage);
 		if(startRow!=null) rd.setStartRow(Integer.parseInt(startRow));
 		if(endRow!=null) rd.setEndRow(Integer.parseInt(endRow));
 		rd.setCurrentRowNumber(0);
@@ -371,6 +369,8 @@ public class ViewNewAdvancedReport extends Action {
 	
 		request.setAttribute("extraTitle",ar.getName());
 		rd.setCurrentView(viewFormat);
+
+		setPaginationOfPagesParameters(request, rd.getVisibleRows(), recordsPerPage, ampAppSettings.getNumberOfPagesToDisplay());
 		
 		// CHANGES FOR AMP-9649 => the siteid and locale are set for translation purposes
 		Site site = RequestUtils.getSite(request);
@@ -394,7 +394,35 @@ public class ViewNewAdvancedReport extends Action {
 		return mapping.findForward("forward");
 	}
 
+	private void setPaginationOfPagesParameters(HttpServletRequest request, Integer totalRows, Integer recordsPerPage, Integer numberOfPagesToDisplay ){
+		//Pagination of pages
+		if (numberOfPagesToDisplay == null){
+			numberOfPagesToDisplay = 10;
+		}
+		String startRowStr = request.getParameter("startRow");
+		Integer startRow = startRowStr == null ? 0 : Integer.parseInt(startRowStr);
 
+		Integer totalPagesRemainder = totalRows % recordsPerPage;
+		Integer totalPages = totalPagesRemainder > 0 ? (totalRows / recordsPerPage) + 1 : (totalRows / recordsPerPage);
+		
+		Integer currentPage = startRow / recordsPerPage; 
+		Integer currentPageOfPages = currentPage / numberOfPagesToDisplay;
+		Integer startPage = currentPageOfPages * numberOfPagesToDisplay;
+		Integer endPage = startPage + numberOfPagesToDisplay;
+		if (endPage > totalPages){
+			endPage = totalPages;
+		}
+		Integer startPageRow = startPage * recordsPerPage;
+		Integer endPageRow = (endPage * recordsPerPage) - 1;
+		if (endPageRow > totalRows){
+			endPageRow = totalRows;
+		}
+		
+		request.setAttribute("startPageRow", startPageRow);
+		request.setAttribute("endPageRow", endPageRow);
+		request.setAttribute("lastPage", totalPages);
+	}
+	
 	private void saveOrUpdateReportLog(TeamMember tm, AmpReports ar) {
 		/* In case the report object is not a db object do nothing */
 		if ( ar.getAmpReportId() <= 0 )

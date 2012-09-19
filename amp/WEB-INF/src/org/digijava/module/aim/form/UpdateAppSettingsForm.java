@@ -18,6 +18,8 @@ public class UpdateAppSettingsForm extends ActionForm {
 	private Long appSettingsId = null;
 
 	private Integer defRecsPerPage;
+	
+	private Integer numberOfPagesToDisplay;
 
 	private String language = null;
 	
@@ -351,6 +353,14 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	public void setWorkspaceType(String workspaceType) {
 		this.workspaceType = workspaceType;
+	}
+
+	public Integer getNumberOfPagesToDisplay() {
+		return numberOfPagesToDisplay;
+	}
+
+	public void setNumberOfPagesToDisplay(Integer numberOfPagesToDisplay) {
+		this.numberOfPagesToDisplay = numberOfPagesToDisplay;
 	}
 	
 }

@@ -10,6 +10,7 @@
 			</generator>
 		</id>
 		<property name="defaultRecordsPerPage" column="def_rec_per_page" type="java.lang.Integer" />
+		<property name="numberOfPagesToDisplay" column="num_pages_to_display" type="java.lang.Integer" />
 		<property name="defaultReportsPerPage" column="def_rep_per_page" type="java.lang.Integer" />
 		<property name="reportStartYear" column="report_start_year" type="java.lang.Integer" />
 		<property name="reportEndYear" column="report_end_year" type="java.lang.Integer" />

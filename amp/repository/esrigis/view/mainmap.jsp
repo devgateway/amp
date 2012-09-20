@@ -107,7 +107,7 @@
      			$('#distancediv').toggle();
      			searchactive = true;
   	  		}else{
-				alert('The value must be numeric and positive');
+				alert('<digi:trn>"The value must be numeric and positive"</digi:trn>');
   	  	  	}
      	});
 	});

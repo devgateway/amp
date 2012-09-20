@@ -131,7 +131,7 @@ public class DataDispatcher extends MultiAction {
 
 			FundingCalculationsHelper calculations = new FundingCalculationsHelper();
 			Iterator fundItr = aA.getFunding().iterator();
-			//ap.setDonors(new ArrayList<SimpleDonor>());
+			ap.setDonors(new ArrayList<SimpleDonor>());
 			while (fundItr.hasNext()) {
 				AmpFunding ampFunding = (AmpFunding) fundItr.next();
 				Collection fundDetails = ampFunding.getFundingDetails();
@@ -140,7 +140,7 @@ public class DataDispatcher extends MultiAction {
 				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
 				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
 				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
-				//ap.getDonors().add(donor);
+				ap.getDonors().add(donor);
 			}
 			//ap.setCommitments(calculations.getTotalCommitments().toString());
 			//ap.setDisbursements(calculations.getTotActualDisb().toString());

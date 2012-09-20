@@ -65,14 +65,17 @@ border: none;
 function toggleSettings(){
 	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
 	var displaySettingsButton = document.getElementById('displaySettingsButton');
+	var framediv  = document.getElementById('ajaxcontentarea');
 	if(currentDisplaySettings.style.display == "block"){
 		currentDisplaySettings.style.display = "none";
 		displaySettingsButton.innerHTML = "${showCurrSettings}";
+		framediv.style.height=637;
 	}
 	else
 	{
 		currentDisplaySettings.style.display = "block";
 		displaySettingsButton.innerHTML = "${hideCurrSettings}";
+		framediv.style.height=737;
 	}
 }
 	

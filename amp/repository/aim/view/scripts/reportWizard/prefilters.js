@@ -1,10 +1,11 @@
 function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage, 
-				savingDataMessage, cannotSaveFiltersMessage, doReset,settingsPanelName) {
+				savingDataMessage, cannotSaveFiltersMessage, doReset,settingsPanelName, validationMsgs) {
 	this.connectionFailureMessage	= connectionFailureMessage;
 	this.filterProblemsMessage		= filterProblemsMessage;
 	this.loadingDataMessage			= loadingDataMessage;
 	this.savingDataMessage			= savingDataMessage;
 	this.cannotSaveFiltersMessage	= cannotSaveFiltersMessage;
+	this.validationMsgs = validationMsgs;
         this.settingsPanelName=settingsPanelName;
         this.filterPanelName=filterPanelName;
 	
@@ -98,13 +99,72 @@ Filters.prototype.showSettings	= function() {
 	
 	YAHOO.util.Event.removeListener("applyFormatBtn", "click");
 	document.getElementById("applyFormatBtn").onclick	= function() { return false;};
-	YAHOO.util.Event.addListener("applyFormatBtn", "click", this.saveFilters.saveFilters, this.saveFilters, this.saveFilters);
+	YAHOO.util.Event.addListener("applyFormatBtn", "click", this.saveFilters.validateAndSaveFilters, this.saveFilters, this.saveFilters);
 };
 
 function SaveFilters (filterObj, showSettings) {
 	this.filterObj		= filterObj;
 	this.showSettings	= showSettings==null?false:showSettings;
 	this.panel		= this.showSettings?filterObj.settingsPanel:filterObj.filterPanel;
+};
+
+SaveFilters.prototype.validateAndSaveFilters	= function (e, obj) {
+	if (this.validateFormat()){
+		this.saveFilters(e, obj);
+	}
+};
+SaveFilters.prototype.validateFormat = function(){
+		var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
+			decimalSymbol=("custom"==decimalSymbol.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value:decimalSymbol;
+		
+		var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
+			customDecimalPlaces=("-2"==customDecimalPlaces.toLowerCase())?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
+		
+		var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
+		
+		var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
+			customGroupCharacter=("custom"==customGroupCharacter.toLowerCase())?document.aimReportsFilterPickerForm3.customGroupCharacterTxt.value:customGroupCharacter;
+		
+		var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;
+		
+		if ((decimalSymbol==customGroupCharacter)&&(customUseGrouping)){
+		        var msg= this.filterObj.validationMsgs[0];
+				alert(msg);
+				return false;
+		}
+		var validNumbers="0123456789";
+		
+		if (decimalSymbol=="" || customGroupCharacter==""){
+			 var msg= this.filterObj.validationMsgs[1];
+			alert(msg);
+			return false;
+		}
+		
+		
+		if ((validNumbers.indexOf(decimalSymbol)!=-1)||(validNumbers.indexOf(customGroupCharacter)!=-1)){
+			     var msg= this.filterObj.validationMsgs[2];
+				alert(msg);
+				return false;
+		}
+		
+		if ((customGroupSize < 1) && (document.aimReportsFilterPickerForm3.customUseGrouping.checked == true)) {
+			  var msg= this.filterObj.validationMsgs[3];
+				alert(msg);
+				return false;
+		}
+		
+		var yearStart = $('#renderStartYear') ? $('#renderStartYear').val() : null;
+		var yearEnd = $('#renderEndYear') ? $('#renderEndYear').val() : null;
+		if (yearStart && yearEnd){
+			yearStart = parseInt(yearStart);
+			yearEnd = parseInt(yearEnd);
+			if( yearStart > 0 && yearEnd > 0 && yearStart > yearEnd ){
+				var msg= this.filterObj.validationMsgs[4]; 
+				alert(msg);
+				return false;
+			};
+		}
+		return true;
 };
 
 SaveFilters.prototype.saveFilters	= function (e, obj) {

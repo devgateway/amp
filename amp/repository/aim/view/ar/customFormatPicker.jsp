@@ -153,14 +153,14 @@
 			</td>
 			<td>
 				<digi:trn>From</digi:trn>:
-					<html:select styleClass="dropdwn_sm" property="renderStartYear">
+					<html:select styleClass="dropdwn_sm" property="renderStartYear" styleId="renderStartYear">
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
 						<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
 					</html:select> &nbsp;
 					<digi:trn>To</digi:trn>: &nbsp; 
-					<html:select property="renderEndYear" styleClass="dropdwn_sm">
+					<html:select property="renderEndYear" styleClass="dropdwn_sm" styleId="renderEndYear">
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>

@@ -156,7 +156,8 @@ function continueInitialization( e, rmParams ){
 		MyDragAndDropObject.selectObjsByDbId ("source_measures_ul", "dest_measures_ul", selectedMeas);
 
 		repFilters					= new Filters(rmParams.filterPanelName, rmParams.failureMessage, rmParams.filterProblemsMessage, 
-											rmParams.loadingDataMessage, rmParams.savingDataMessage, rmParams.cannotSaveFiltersMessage, !rmParams.reportUsesFilters, rmParams.settingsPanelName) ;
+											rmParams.loadingDataMessage, rmParams.savingDataMessage, rmParams.cannotSaveFiltersMessage, !rmParams.reportUsesFilters, rmParams.settingsPanelName,
+											rmParams.validationMsgs) ;
 		
 		saveReportEngine			= new SaveReportEngine(rmParams.savingRepTabMessage,rmParams.failureMessage);
 											

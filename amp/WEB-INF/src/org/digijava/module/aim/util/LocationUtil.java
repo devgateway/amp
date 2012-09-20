@@ -1096,6 +1096,7 @@ public class LocationUtil {
             return getTopAncestor(parent, beforeImpLoc);
         }
     }
+    
     public static class HelperLocationAncestorLocationNamesAsc implements Comparator<Location> {
 
         Locale locale;

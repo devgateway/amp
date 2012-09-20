@@ -266,6 +266,12 @@ public class DbHelper {
 	            oql += AmpFundingDetail.class.getName()
 	                    + " as fd inner join fd.ampFundingId f ";
 	            oql += " inner join f.ampActivityId act ";
+	            
+	            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+	            	oql += " inner join act.ampActivityGroupCached actGroup ";
+	            else
+	            	oql += " inner join act.ampActivityGroup actGroup ";
+	            
 	            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            oql += " inner join loc.parentCategoryValue parcv ";
 	            if (sectorCondition) {
@@ -300,15 +306,33 @@ public class DbHelper {
 	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
 					oql += ActivityUtil.getApprovedActivityQueryString("act");
 				}
-	            oql += "  and parcv.value = :implementationLevel";
 	            
+	            if (ActivityVersionUtil.isVersioningEnabled()){
+	    			oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
+	    			oql += " and (act.deleted = false or act.deleted is null)";
+	    		}
+	            
+	            if ("zone".equalsIgnoreCase(implementationLevel)){
+	            	oql += "  and (parcv.value =:implementationLevel or parcv.value =:district or parcv.value =:communal)";
+	            }else{
+	            	oql += "  and (parcv.value =:implementationLevel or parcv.value =:zone or parcv.value =:district or parcv.value =:communal)";
+	            }
 	            oql+=" order by loc.parentCategoryValue";
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
 	            query.setDate("startDate", startDate);
 	            query.setDate("endDate", endDate);
 	            
-	            query.setString("implementationLevel", implementationLevel);
+	            if ("zone".equalsIgnoreCase(implementationLevel)){
+	            	query.setString("implementationLevel", implementationLevel);
+	            	query.setString("district", "District");
+	            	query.setString("communal", "Communal section");
+	            }else{
+	            	query.setString("implementationLevel", implementationLevel);
+	            	query.setString("zone", "Zone");
+	            	query.setString("district", "District");
+	            	query.setString("communal", "Communal section");
+	            }
 	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
 	            //    query.setLong("orgGroupId", orgGroupId);
 	            //}

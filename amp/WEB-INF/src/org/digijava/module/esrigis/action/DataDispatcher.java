@@ -490,16 +490,16 @@ public class DataDispatcher extends MultiAction {
 					.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 			
 			String keyName = "";
+			String geocode = "";
+			
 			String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY
 					.getValueKey();
-			if (location.getParentCategoryValue().getValue()
-					.equals(implLocation)) {
+			if (location.getParentCategoryValue().getValue().equals(implLocation)) {
 				keyName = "National";
 			} else {
 				Long zoneIds[] = filter.getZoneIds();
 				if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
-					implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION
-							.getValueKey();
+					implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
 					if (location.getParentCategoryValue().getValue().equals(implLocation)) {
 						keyName = "Regional";
 					} else {
@@ -507,14 +507,28 @@ public class DataDispatcher extends MultiAction {
 						keyName = parent.getName();
 					}
 				} else {
-					AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
-					keyName = parent.getName();
+					if (implementationLevel.equalsIgnoreCase("Region")){
+						AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
+						keyName = parent.getName();
+						geocode= parent.getGeoCode();
+					}else{
+						implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.getValueKey();
+						if (!location.getParentCategoryValue().getValue().equalsIgnoreCase(implLocation)){
+							AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
+							keyName = parent.getName();
+							geocode= parent.getGeoCode();
+						}else{
+							keyName = location.getName();
+							geocode= location.getGeoCode();
+						}
+					}
+					
 				}
 
 			}
 			SimpleLocation locationJSON = new SimpleLocation();
 			locationJSON.setName(keyName);
-			locationJSON.setGeoId(location.getGeoCode());
+			locationJSON.setGeoId(geocode);
 			locationJSON.setCommitments(amountCommitments.toPlainString());
 			locationJSON.setDisbursements(amountDisbursements.toPlainString());
 			locationJSON.setExpenditures(amountExpenditures.toPlainString());

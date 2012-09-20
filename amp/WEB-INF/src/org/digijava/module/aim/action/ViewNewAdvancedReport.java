@@ -369,8 +369,11 @@ public class ViewNewAdvancedReport extends Action {
 	
 		request.setAttribute("extraTitle",ar.getName());
 		rd.setCurrentView(viewFormat);
-
-		setPaginationOfPagesParameters(request, rd.getVisibleRows(), recordsPerPage, ampAppSettings.getNumberOfPagesToDisplay());
+		Integer numberOfPagesToDisplay = 10;
+		if(ampAppSettings != null){
+			numberOfPagesToDisplay = ampAppSettings.getNumberOfPagesToDisplay();
+		}
+		setPaginationOfPagesParameters(request, rd.getVisibleRows(), recordsPerPage, numberOfPagesToDisplay);
 		
 		// CHANGES FOR AMP-9649 => the siteid and locale are set for translation purposes
 		Site site = RequestUtils.getSite(request);

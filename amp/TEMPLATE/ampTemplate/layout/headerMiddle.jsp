@@ -145,7 +145,7 @@ ${fn:replace(message,quote,escapedQuote)}
 	                    		<ul class="first-of-type"> 
 									
 									<module:display name="Map Module" >
-										<feature:display name="Show in public view" module="Map Module">
+										<feature:display name="Show map in public view" module="Map Module">
 			                            	<li class="yuiampmenuitem_drop">
 			                              	<a target="_blank" class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/esrigis/mainmap.do?public=true"  onclick="return canExit()">
 			                                	<digi:trn key="fm:gis">Advanced GIS</digi:trn>

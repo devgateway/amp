@@ -103,15 +103,6 @@ StopWatch.next("Filters", true);
 					<%@include file="bigFilterTable.jsp" %>
 				</div>
 				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
-				<div style="width: 20%; height: 30%; padding: 10px; float: left; ">
-					<c:set var="tooltip_translation">
-						<digi:trn>Specify keywords to look for in the project data.</digi:trn>
-					</c:set>
-					<b><digi:trn>Keyword Search</digi:trn> </b>
-					<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
-						src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
-					<div style="margin-top:10px;"><html:text property="indexString" style="width: 150px"	styleClass="inp-text"  /></div>
-				</div>
 				<div style="width: 38%; height:30%; padding: 10px; float: left;">
 					<b><digi:trn>Date Filter</digi:trn> </b>
 					

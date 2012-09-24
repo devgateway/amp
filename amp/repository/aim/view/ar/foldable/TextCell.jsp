@@ -9,7 +9,7 @@
 <logic:present name="starFlag" scope="request">
 	<bean:define id="starFlagLocal" name="starFlag" scope="request" toScope="page" />
 </logic:present>
-<div class="desktop_project_name_sel" style="max-width:250px;">
+<div class="desktop_project_name_sel" style="max-width:250px; word-wrap:break-word;">
 	<logic:present name="starFlag" scope="request">
 		<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 		<bean:define id="starFlag" value="" scope="page" toScope="request" />

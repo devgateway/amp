@@ -14,6 +14,7 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
@@ -90,14 +91,18 @@ public class TrailCellsXLS extends XLSExporter {
 			if (grd.getParent().getParent() == null)
 				modifiedName = "TOTAL";
 			
-			if (grd.getReportMetadata().isHideActivities()!=null){
+			if (grd.getReportMetadata().isHideActivities()!=null && !(grd.getReportMetadata().getType() == ArConstants.PLEDGES_TYPE)){
 				if (grd.getReportMetadata()!=null && grd.getReportMetadata().isHideActivities())
 					//cell.setCellValue(indent + modified);
 					cell.setCellValue(indent + modifiedName+" ("+grd.getTotalUniqueRows()+")");
 				else
 					cell.setCellValue(indent + modifiedName+" ("+grd.getTotalUniqueRows()+")");
 			}else{
-				cell.setCellValue(indent + modifiedName+" ("+grd.getTotalUniqueRows()+")");
+				if (!(grd.getReportMetadata().getType() == ArConstants.PLEDGES_TYPE)){
+					cell.setCellValue(indent + modifiedName+" ("+grd.getTotalUniqueRows()+")");
+				}else{
+					cell.setCellValue(indent + modifiedName);
+				}
 			}
 			colId.inc();
 			Iterator i = grd.getTrailCells().iterator();

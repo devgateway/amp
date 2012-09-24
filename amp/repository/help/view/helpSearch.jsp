@@ -82,6 +82,10 @@ function select(title){
 
 }  
 
+function resetKeyword(){
+	document.getElementById("selected").value='';
+}
+
 function search(){
  
 	var key = document.getElementById("selected").value;
@@ -221,10 +225,16 @@ function enter(event) {
 	  <input type="text" name="keywords" onkeyup="showHint(this.value,event);" onkeypress="enter(event);" id="selected" />
 			<div style="background-color:white;overflow:auto;display: block; text-align: left;" id="livesearch">
 			</div>
+			
 			 <c:set var="searchtpc">
 				<digi:trn key="help:SearchText">Search Topic</digi:trn>
-			</c:set>
-	  		<input type="button" class="dr-menu"  value="${searchtpc}" onclick="search();"/></div>
+			</c:set>			 
+	  		    <input type="button" class="dr-menu"  value="${searchtpc}" onclick="search();"/>  		
+	  		<c:set var="cleartpc">
+	  		   <digi:trn >Reset</digi:trn>
+	  		</c:set>
+	  		<input type="button" class="dr-menu"  value="${cleartpc}" onclick="resetKeyword();"/></div>
+	  		
 		</div>
 	  </div>
 	</div>

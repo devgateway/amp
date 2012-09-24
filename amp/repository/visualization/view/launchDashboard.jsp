@@ -568,7 +568,7 @@ function initializeGlobalVariables(){
 														styleId="startYear_dropdown" styleClass="dropdwn_sm"
 														style="width:70px;">
 														<html:optionsCollection property="filter.years"
-															label="wrappedInstance" value="wrappedInstance" />
+															label="key" value="value" />
 													</html:select></td>
 												<td><b><digi:trn>Show in top ranks</digi:trn>:</b>
 												</td>
@@ -599,7 +599,7 @@ function initializeGlobalVariables(){
 														styleId="endYear_dropdown" styleClass="dropdwn_sm"
 														style="width:70px;">
 														<html:optionsCollection property="filter.years"
-															label="wrappedInstance" value="wrappedInstance" />
+															label="key" value="value" />
 													</html:select></td>
 												<td><b><digi:trn>Show amounts in thousands</digi:trn>:</b>
 												</td>
@@ -621,15 +621,7 @@ function initializeGlobalVariables(){
 														<html:option value="4">4</html:option>
 														<html:option value="5">5</html:option>
 													</html:select></td>
-												<!--<td><b><digi:trn>Year To Compare Growth</digi:trn>:</b>
-												</td>
-												<td><html:select property="filter.yearToCompare"
-														styleId="yearToCompare_dropdown" styleClass="dropdwn_sm"
-														style="width:70px;">
-														<html:optionsCollection property="filter.years"
-															label="wrappedInstance" value="wrappedInstance" />
-													</html:select></td>
-											--></tr>
+												</tr>
 										</table>
 									</div>
 								</div>
@@ -854,7 +846,7 @@ function initializeGlobalVariables(){
 		 	</td>
 			<td align="right">
 				<html:select property="filter.startYearQuickFilter" styleId="startYearQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
-					<html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+					<html:optionsCollection property="filter.years" label="key" value="value" />
 				</html:select>
 		 	</td>
 		</tr>
@@ -863,7 +855,7 @@ function initializeGlobalVariables(){
 		 	</td>
 			<td align="right">
 				<html:select property="filter.endYearQuickFilter" styleId="endYearQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
-					<html:optionsCollection property="filter.years" label="wrappedInstance" value="wrappedInstance" />
+					<html:optionsCollection property="filter.years" label="key" value="value" />
 				</html:select>
 		 	</td>
 		</tr>

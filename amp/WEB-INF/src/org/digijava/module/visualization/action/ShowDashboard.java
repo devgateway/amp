@@ -3,8 +3,11 @@ package org.digijava.module.visualization.action;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,6 +18,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -36,6 +42,7 @@ import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.digijava.module.visualization.util.Constants;
+import org.digijava.module.visualization.util.DashboardUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class ShowDashboard extends Action {
@@ -130,6 +137,8 @@ public class ShowDashboard extends Action {
 
 	private void initializeFilter(DashboardFilter filter, HttpServletRequest request) {
 		filter.setDashboardType(Constants.DashboardType.DONOR);
+		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
 		filter.setOrgGroups(orgGroups);
@@ -195,19 +204,27 @@ public class ShowDashboard extends Action {
 			filter.setEndYearFilter(year);
 			filter.setYearToCompare(year-1);
 		}
-		filter.setYears(new ArrayList<BeanWrapperImpl>());
-		long yearFrom = Long
-				.parseLong(FeaturesUtil
+		filter.setYears(new TreeMap<String, Integer>());
+		int yearFrom = Integer.parseInt(FeaturesUtil
 						.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
-		long countYear = Long
-				.parseLong(FeaturesUtil
+		int countYear = Integer.parseInt(FeaturesUtil
 						.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
 		long maxYear = yearFrom + countYear;
 		if (maxYear < filter.getStartYear()) {
 			maxYear = filter.getStartYear();
 		}
-		for (long i = yearFrom; i <= maxYear; i++) {
-			filter.getYears().add(new BeanWrapperImpl(new Long(i)));
+		for (int i = yearFrom; i <= maxYear; i++) {
+			Long fiscalCalendarId = filter.getFiscalCalendarId();
+			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+			String headingFY;
+			try {
+				headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+			} catch (WorkerException e) {
+				headingFY = "FY";
+			}
+			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+			filter.getYears().put(yearName,i);
 		}
 
 		Collection calendars = DbUtil.getAllFisCalenders();

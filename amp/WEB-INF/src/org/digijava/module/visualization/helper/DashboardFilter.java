@@ -1,9 +1,12 @@
 package org.digijava.module.visualization.helper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -68,7 +71,7 @@ public class DashboardFilter {
     
     private List<AmpCategoryValueLocations> locationsSelected;
    
-    private Collection<BeanWrapperImpl> years;
+    private Map<String, Integer> years;
     private int transactionType = 1;
     private int transactionTypeQuickFilter = 1;
     private int transactionTypeFilter = 1;
@@ -408,11 +411,11 @@ public class DashboardFilter {
 		this.defaultEndYear = defaultEndYear;
 	}
 
-	public Collection<BeanWrapperImpl> getYears() {
+	public Map<String, Integer> getYears() {
         return years;
     }
 
-    public void setYears(Collection<BeanWrapperImpl> years) {
+    public void setYears(Map<String, Integer> years) {
         this.years = years;
     }
     

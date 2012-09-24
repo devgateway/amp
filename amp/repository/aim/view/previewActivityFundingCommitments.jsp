@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 
+
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
@@ -20,6 +21,9 @@
 <module:display name="/Activity Form/Donor Funding/Funding Item/Commitments" 
 														parentModule="/Activity Form/Donor Funding/Funding Item">
 	<c:if test="${aimEditActivityForm.funding.showPlanned}">
+	
+<c:if test="${!empty funding.plannedCommitmentsDetails}">
+	
 	<tr bgcolor="#ffffff">
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
 			style="text-transform: uppercase;"><a
@@ -32,6 +36,9 @@
 			</c:if>
 		</td>
 	</tr>
+ 	
+
+	
 	<c:if test="${!empty funding.fundingDetails}">
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
@@ -83,10 +90,11 @@
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 	</c:if>
-
+</c:if>	
 
 	<tr><td colspan="4" height="7px"></td></tr>
 	<c:if test="${aimEditActivityForm.funding.showActual}">
+	<c:if test="${!empty funding.actualCommitmentsDetails}">
 	<tr>
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase">
 			<a title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
@@ -153,7 +161,10 @@
 		<td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 	</c:if>
+	</c:if>	
+	
 	<c:if test="${aimEditActivityForm.funding.showPipeline}">
+	<c:if test="${!empty funding.pipelineCommitmentsDetails}">
 	<tr>
 		<td colspan="4" height="7px"></td></tr>
 		<!-- PIPELINE COMMITMENTS -->
@@ -225,6 +236,7 @@
                 <td align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
         </tr>
         </c:if>
+        </c:if>	
         <tr><td colspan="4" height="7px"></td></tr>
      </module:display>
 <!-- End commitments-->

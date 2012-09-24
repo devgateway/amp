@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * @author jose
@@ -330,6 +331,122 @@ public class Funding implements Serializable
 		this.groupVersionedFunding = groupVersionedFunding;
 	}
 	
+	
+	public Collection<FundingDetail> getPlannedCommitmentsDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.COMMITMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()))
+					retDetails.add(detail);
+			}
+			return retDetails;
+		}
+		return fundingDetails;
+	}
+
+	public Collection<FundingDetail> getActualCommitmentsDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.COMMITMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()))
+					retDetails.add(detail);
+			}
+			return retDetails;
+		}
+		return fundingDetails;
+	}
+	
+	public Collection<FundingDetail> getPipelineCommitmentsDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.COMMITMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey()))
+					retDetails.add(detail);
+			}
+			return retDetails;
+		}
+		return fundingDetails;
+	}
+	
+	
+	public Collection<FundingDetail> getPlannedDisbursementDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.DISBURSEMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()))
+					retDetails.add(detail);
+			}
+			return retDetails;
+		}
+		return fundingDetails;
+	}
+	
+	public Collection<FundingDetail> getActualDisbursementDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.DISBURSEMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()))
+					retDetails.add(detail);
+			}
+			return retDetails;
+		}
+		return fundingDetails;
+	}
+	
+	public Collection<FundingDetail> getPipelineDisbursementDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.DISBURSEMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey()))
+					retDetails.add(detail);
+			}
+			return retDetails;
+		}
+		return fundingDetails;
+	}
+	
+	
+
+	
+	public Collection<FundingDetail> getPlannedExpendituresDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.EXPENDITURE && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()))
+					retDetails.add(detail);
+			}
+			return retDetails;
+		}
+		return fundingDetails;
+	}
+	
+	public Collection<FundingDetail> getActualExpendituresDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.EXPENDITURE && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()))
+					retDetails.add(detail);
+			}
+			return retDetails;
+		}
+		return fundingDetails;
+	}
+	
+	public Collection<FundingDetail> getPipelineExpendituresDetails() {
+		if(fundingDetails != null){
+			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
+				if(detail.getTransactionType() == Constants.EXPENDITURE && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey()))
+					retDetails.add(detail);
+			}
+			return retDetails;
+		}
+		return fundingDetails;
+	}
+	
+	
+	
+
 	public Collection<FundingDetail> getCommitmentsDetails() {
 		if(fundingDetails != null){
 			List<FundingDetail> commitments = new ArrayList<FundingDetail>();
@@ -340,6 +457,7 @@ public class Funding implements Serializable
 		}
 		return fundingDetails;
 	}
+	
 	public Collection<FundingDetail> getDisbursementsDetails() {
 		if(fundingDetails != null){
 			List<FundingDetail> disbursements = new ArrayList<FundingDetail>();

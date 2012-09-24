@@ -18,6 +18,7 @@
 <digi:instance property="aimEditActivityForm" />
 
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
+<c:if test="${!empty funding.plannedExpendituresDetails}">
 <tr bgcolor="#FFFFCC">
 	<td colspan="4" style="text-transform: uppercase"><a
 		title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
@@ -81,10 +82,12 @@
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 	</c:if>
+	</c:if>
 	<tr>
 		<td colspan="4" height="7px"></td>
 	</tr>
 	<c:if test="${aimEditActivityForm.funding.showActual}">
+	<c:if test="${!empty funding.actualExpendituresDetails}">
 	<tr bgcolor="#FFFFCC">
 		<td colspan="4" style="text-transform: uppercase">
 			<a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
@@ -149,6 +152,7 @@
            </td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+	</c:if>
 	</c:if>
 	<tr>
 		<td colspan="4" height="7px"></td>

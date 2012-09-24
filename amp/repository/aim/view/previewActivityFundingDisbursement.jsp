@@ -15,6 +15,7 @@
 <module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements" 
 														parentModule="/Activity Form/Donor Funding/Funding Item">
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
+<c:if test="${!empty funding.plannedDisbursementDetails}">
 	<tr bgcolor="#ffffff">
 		<td height="20" colspan="4" bgcolor="#FFFFCC"
 			style="text-transform: uppercase"><a
@@ -69,6 +70,7 @@
 		</logic:equal>
 	</logic:iterate>
 	</c:if>
+	
 	<!-- End Planned Disbursements -->
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
@@ -84,13 +86,14 @@
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 	</c:if>
+	</c:if>
 	
 	<c:if test="${aimEditActivityForm.funding.showActual}">
-
+<c:if test="${!empty funding.actualDisbursementDetails}">
 	
 <tr><td colspan="4" height="7px"></td></tr>
 	<tr bgcolor="#ffffff">
-		<td colspan="4" bgcolor="#FFFFCC"
+		<td colspan="4" bgcolor="#FFFFCC" 
 			style="text-transform: uppercase; text-transform: uppercase"><digi:trn
 			key="aim:actualisbursements">ACTUAL DISBURSEMENT</digi:trn>:</td>
 	</tr>
@@ -155,6 +158,7 @@
                    
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+	</c:if>
 	</c:if>
 	</module:display>
 

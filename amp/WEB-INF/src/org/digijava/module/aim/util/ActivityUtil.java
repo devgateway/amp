@@ -4907,7 +4907,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
             
             boolean isSearchByName = actName!=null && "".compareTo(actName.trim())!=0;
 			if(isSearchByName) {
-            	queryString = "select f.ampActivityId, f.ampId,  f.name,  f.team, ampGroup  from " + AmpActivity.class.getName()+
+            	queryString = "select f.ampActivityId, f.ampId,  f.name,  ampTeam, ampGroup  from " + AmpActivity.class.getName()+
             	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup where upper(f.name) like upper(:name) and (deleted = false or deleted is null)";
             }
             else

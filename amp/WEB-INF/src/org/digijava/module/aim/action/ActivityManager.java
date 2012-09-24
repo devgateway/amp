@@ -126,7 +126,7 @@ public class ActivityManager extends Action {
 	}
 
 	private void searchActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivityFake> activities = ActivityUtil.getAllActivitiesAdmin(actForm.getKeyword());
+		List<AmpActivityFake> activities = ActivityUtil.getAllActivitiesAdmin(actForm.getKeyword().trim());
 		actForm.setAllActivityList(activities);
 		sortActivities(actForm,request);
 	}

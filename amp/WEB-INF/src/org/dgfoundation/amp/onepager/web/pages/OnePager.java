@@ -208,7 +208,8 @@ public class OnePager extends AmpHeaderFooter {
         	String value = null;
         	if (segment.hasNext())
         		value = segment.next();
-        	parameters.add(key, value);
+        	if (value != null)
+        		parameters.add(key, value);
         }
         
         return parameters.isEmpty() ? null : parameters;

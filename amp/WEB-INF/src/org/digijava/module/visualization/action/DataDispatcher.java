@@ -97,12 +97,18 @@ public class DataDispatcher extends DispatchAction {
         	visualizationForm.getFilter().setTeamMember(null);
         }
 		
-		visualizationForm.getFilter().setOrgGroupIds(getLongArrayFromParameter(request.getParameter("orgGroupIds")));
-		visualizationForm.getFilter().setOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	
-		visualizationForm.getFilter().setZoneIds(getLongArrayFromParameter(request.getParameter("zoneIds")));
-		visualizationForm.getFilter().setSectorIds(getLongArrayFromParameter(request.getParameter("sectorIds")));
-		visualizationForm.getFilter().setSubSectorIds(getLongArrayFromParameter(request.getParameter("subSectorIds")));
-		visualizationForm.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
+		if (request.getParameter("orgGroupIds")!=null && !request.getParameter("orgGroupIds").equals("null"))
+			visualizationForm.getFilter().setOrgGroupIds(getLongArrayFromParameter(request.getParameter("orgGroupIds")));
+		if (request.getParameter("orgIds")!=null && !request.getParameter("orgIds").equals("null"))
+			visualizationForm.getFilter().setOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	
+		if (request.getParameter("zoneIds")!=null && !request.getParameter("zoneIds").equals("null"))
+			visualizationForm.getFilter().setZoneIds(getLongArrayFromParameter(request.getParameter("zoneIds")));
+		if (request.getParameter("sectorIds")!=null && !request.getParameter("sectorIds").equals("null"))
+			visualizationForm.getFilter().setSectorIds(getLongArrayFromParameter(request.getParameter("sectorIds")));
+		if (request.getParameter("subSectorIds")!=null && !request.getParameter("subSectorIds").equals("null"))
+			visualizationForm.getFilter().setSubSectorIds(getLongArrayFromParameter(request.getParameter("subSectorIds")));
+		if (request.getParameter("regionIds")!=null && !request.getParameter("regionIds").equals("null"))
+			visualizationForm.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
 		
 		Long[] orgsGrpIds = visualizationForm.getFilter().getOrgGroupIds();
 		Long orgsGrpId = visualizationForm.getFilter().getOrgGroupId();
@@ -137,7 +143,7 @@ public class DataDispatcher extends DispatchAction {
 		Long[] subSecsIds = visualizationForm.getFilter().getSubSectorIds();
 		String configIdAsString=request.getParameter("selSectorConfigId");
 		Long configId = null;
-		if(configIdAsString!=null&&!configIdAsString.equals("")){
+		if(configIdAsString!=null&&!configIdAsString.equals("")&&!configIdAsString.equals("null")){
 			configId = Long.parseLong(configIdAsString);
 			visualizationForm.getFilter().setSelSectorConfigId(configId);
 		}
@@ -2106,17 +2112,13 @@ public class DataDispatcher extends DispatchAction {
 	            }
 	            regionData += "<" + loc.getName() + ">";
                 for (Long i = startYear; i <= endYear; i++) {
-	    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-	    			Long[] ids = new Long[1];
-	    			if (loc.getId()!=null)
-	    				ids[0] = loc.getId();
-	    			else
-	    				ids[0] = 0l;
-	    			newFilter.setSelLocationIds(ids);
-	    			newFilter.setAllLocationsList(filter.getAllLocationsList());
+                	Long[] ids = {loc.getId()};
+        			Long[] tempLocationsIds = filter.getSelLocationIds();
+        			filter.setSelLocationIds(ids);
 	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-	                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	                DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	                filter.setSelLocationIds(tempLocationsIds);
 	                BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	                regionData += amount.compareTo(BigDecimal.ZERO) == 0 ? "0>" : amount.toPlainString() + ">";
 	                if (index <= 4){

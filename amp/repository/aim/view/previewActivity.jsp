@@ -1094,10 +1094,10 @@ function collapseAll() {
 			<b>${aimEditActivityForm.planning.originalStartDate}</b>		</module:display>
 							
 		<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-		<field:display name="Actual Start Date" feature="Planning">
+		<module:display name="/Activity Form/Planning/Actual Start Date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Actual Start Date </digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.revisedStartDate}</b>		</field:display>
+			<b>${aimEditActivityForm.planning.revisedStartDate}</b>		</module:display>
 							
 		<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 			<hr>
@@ -1105,10 +1105,10 @@ function collapseAll() {
 			<b>${aimEditActivityForm.planning.originalAppDate}</b>		</module:display>
 							
 		<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-		<field:display name="Actual Approval Date" feature="Planning">
+		<module:display name="/Activity Form/Planning/Actual Approval Date" parentModule="/Activity Form/Planning">
 			<hr>
 				<digi:trn>Actual Approval Date</digi:trn>:&nbsp;
-				<b>${aimEditActivityForm.planning.revisedAppDate}</b>		</field:display>
+				<b>${aimEditActivityForm.planning.revisedAppDate}</b>		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 			<hr>
@@ -1121,10 +1121,10 @@ function collapseAll() {
 			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>		</module:display>
 		
 		<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-		<field:display name="Proposed Completion Date" feature="Planning">
+		<module:display name="/Activity Form/Planning/Proposed Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Proposed Completion Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.proposedCompDate}</b>		</field:display>
+			<b>${aimEditActivityForm.planning.proposedCompDate}</b>		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
 			<hr>

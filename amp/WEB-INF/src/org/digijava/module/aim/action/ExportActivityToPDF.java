@@ -544,16 +544,20 @@ public class ExportActivityToPDF extends Action {
 					}
 				}
 				
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext)){
+					outputValue+=TranslatorWorker.translateText("Proposed Start Date", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalStartDate()+"\n";
+				}
+
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date", ampContext)){
+					outputValue+=TranslatorWorker.translateText("Actual Start Date ", locale, siteId)+ "\t: " +myForm.getPlanning().getRevisedStartDate() +"\n";
+				}
+
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Proposed Approval Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalAppDate()+"\n";
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Actual Approval Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getRevisedAppDate()+"\n";
-				}
-				
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Proposed Start Date", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalStartDate()+"\n";
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext)){
@@ -564,10 +568,6 @@ public class ExportActivityToPDF extends Action {
 					outputValue+=TranslatorWorker.translateText("Final Date for Disbursements ", locale, siteId)+ "\t: " + myForm.getPlanning().getDisbursementsDate()+"\n";
 				}
 				
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Actual Start Date ", locale, siteId)+ "\t: " +myForm.getPlanning().getRevisedStartDate() +"\n";
-				}
-				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
 					outputValue+=TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)+ "\t: " +myForm.getPlanning().getProposedCompDate() +"\n";
 				}
@@ -576,7 +576,8 @@ public class ExportActivityToPDF extends Action {
 					outputValue+=TranslatorWorker.translateText("Actual Completion Date", locale, siteId)+ "\t: " +myForm.getPlanning().getCurrentCompDate() +"\n";
 				}		
 				if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Duration of Project", locale, siteId)+ "\t: " +myForm.getPlanning().getProjectPeriod() +"\n";
+					String durationStr = myForm.getPlanning().getProjectPeriod() != null ? myForm.getPlanning().getProjectPeriod().toString(): "";
+					outputValue+=TranslatorWorker.translateText("Duration of Project", locale, siteId)+ "\t: " + durationStr +"\n";
 				}
 				
 				columnName=TranslatorWorker.translateText("Planning",locale,siteId);

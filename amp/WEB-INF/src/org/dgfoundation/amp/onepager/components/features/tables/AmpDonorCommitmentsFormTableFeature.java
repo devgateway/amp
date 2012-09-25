@@ -66,6 +66,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		wmc.add(amountSumComparator.getIndicatorAppender());
 		amountSumComparator.setSecondCollectionModel(disbursementModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(false);
+		amountSumComparator.setEnableValidation(alertIfDisbursmentBiggerCommitments);
 		add(amountSumComparator);			
 			
 		

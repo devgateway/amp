@@ -68,6 +68,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 		wmc.add(amountSumComparator.getIndicatorAppender());;
 		amountSumComparator.setSecondCollectionModel(disbursementModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(true);
+		amountSumComparator.setEnableValidation(alertIfExpenditureBiggerDisbursment);
 		add(amountSumComparator);			
 		
 		
@@ -94,13 +95,15 @@ public class AmpDonorExpendituresFormTableFeature extends
 					protected void onClick(final org.apache.wicket.ajax.AjaxRequestTarget target) {
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);
 						super.onClick(target);
-						amountSumComparator.reloadValidationField(target);
+						if(alertIfExpenditureBiggerDisbursment)
+						    amountSumComparator.reloadValidationField(target);
 						parent.getFundingInfo().checkChoicesRequired(list.getCount());
 						target.add(parent.getFundingInfo());
 						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 						
-						parent.visitChildren(AmpCollectionValidatorField.class,
+					//	if(alertIfExpenditureBiggerDisbursment) {
+						   parent.visitChildren(AmpCollectionValidatorField.class,
 								new IVisitor<AmpCollectionValidatorField, Void>() {
 									@Override
 									public void component(AmpCollectionValidatorField component,
@@ -110,6 +113,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 										visit.dontGoDeeper();
 									}
 								});
+						//   }
 					};
 				});
 			}

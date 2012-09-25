@@ -92,6 +92,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		amountSumComparator.setIndicatorAppender(iValidator);
 		amountSumComparator.setSecondCollectionModel(commitmentModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(true);
+		amountSumComparator.setEnableValidation(alertIfDisbursmentBiggerCommitments);
 		add(amountSumComparator);
 		
 		
@@ -100,6 +101,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		amountSumComparator1.setIndicatorAppender(iValidator);
 		amountSumComparator1.setSecondCollectionModel(expenditureModel);
 		amountSumComparator1.setAlertIfCurrentModelAmountSumBig(false);
+		amountSumComparator1.setEnableValidation(alertIfExpenditureBiggerDisbursment);
 		add(amountSumComparator1);
 		
 		list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, new AmpFundingDetail.FundingDetailComparator()) {

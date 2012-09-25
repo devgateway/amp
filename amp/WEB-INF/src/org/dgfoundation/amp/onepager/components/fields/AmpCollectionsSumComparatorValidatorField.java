@@ -18,6 +18,8 @@ public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionV
 	AbstractReadOnlyModel<List<T>> secondAmountListModel;
 
 	private boolean currentModelAmountSumBig;
+	private boolean enableValidation = true;
+	
 	
 	/**
 	 * 
@@ -47,7 +49,9 @@ public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionV
 			}
 			
 			@Override
-			public Double getObject() {		
+			public Double getObject() {	
+				if(!enableValidation)
+					return new Double(0);
 				double sum1 =calculateSum(setModel.getObject());
 				double sum2 =calculateSum(secondAmountListModel.getObject());
 				if(currentModelAmountSumBig)
@@ -150,6 +154,12 @@ public class AmpCollectionsSumComparatorValidatorField<T> extends AmpCollectionV
 
 	public void setAlertIfCurrentModelAmountSumBig(boolean currentModelAmountSumBig) {
 		this.currentModelAmountSumBig=currentModelAmountSumBig;
+		
+	}
+
+
+	public void setEnableValidation(boolean enableValidation) {
+		this.enableValidation = enableValidation;
 		
 	}
 	

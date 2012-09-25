@@ -603,7 +603,9 @@ public class TeamUtil {
                 	updTeam.setFilterDataSet(new HashSet());
                 else
                 	updTeam.getFilterDataSet().clear();
-                updTeam.getFilterDataSet().addAll(team.getFilterDataSet());
+                if (team.getFilterDataSet() != null){
+                	updTeam.getFilterDataSet().addAll(team.getFilterDataSet());
+                }
                 session.saveOrUpdate(updTeam);
 
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "

@@ -186,14 +186,14 @@ function filldatasourcetable(){
     	cell = row.insertCell(0);
     	var url = '<a title="'+activitiesarray[int].activityname+'"href="/aim/viewActivityPreview.do~pageId=2~activityId='+activitiesarray[int].id+'~isPreview=1" target="_blank" style="text-decoration:none;">'+trimmedPathname+'...</a>'
     	cell.innerHTML= url;
-    	cell.setAttribute("width","350px");
+    	cell.setAttribute("width","60%");
     	cell0 = row.insertCell(1);
     	cell0.innerHTML= activitiesarray[int].ampactivityid;
-    	cell0.setAttribute("width","100px");
+    	cell0.setAttribute("width","20%");
     	
     	cell1 = row.insertCell(2);
     	cell1.innerHTML= donors;
-    	cell1.setAttribute("width","120px");
+    	cell1.setAttribute("width","20%");
     	
     	//cell1 = row.insertCell(3);
     	//cell1.innerHTML= activitiesarray[int].commitments;

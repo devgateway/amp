@@ -414,10 +414,10 @@
         	<table id="sourceheader" width="95%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
         		<tbody>
 					<tr>
-						<td valign="top" style="font-weight: bolder;width: 590px;">
+						<td valign="top" style="font-weight: bolder;width: 60%;">
 							<digi:trn>Activity Name</digi:trn>
 						</td>
-						<td valign="top" style="font-weight: bolder;width: 160px;">
+						<td valign="top" style="font-weight: bolder;width: 20%;">
 							<digi:trn>Activity Id</digi:trn>
 						</td>
 						<td valign="top" style="font-weight: bolder;">

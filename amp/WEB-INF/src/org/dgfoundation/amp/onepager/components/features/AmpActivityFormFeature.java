@@ -46,6 +46,7 @@ import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -109,7 +110,21 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	 */
 	public void toggleSemanticValidation(final boolean enabled, Form<?> form,
 			final AjaxRequestTarget target) {
+		//Force preupdate of the percentage fields so that sum validators can evaluate
+		form.visitChildren(AmpPercentageTextField.class,
+				new IVisitor<AmpPercentageTextField, Void>() {
 
+					@Override
+					public void component(AmpPercentageTextField ifs,
+							IVisit<Void> visit) {
+						TextField<Double> pf = ifs.getTextContainer();
+						String js = String.format("$('#%s').blur();",
+								pf.getMarkupId());
+						target.appendJavaScript(js);
+						//target.add(ifs);
+					}
+				});
+		
 		// visit all the semantic validator fields and enable/disable them
 		form.visitChildren(AmpSemanticValidatorField.class,
 				new IVisitor<AmpSemanticValidatorField<?>, Void>() {
@@ -141,6 +156,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						visit.stop();
 					}
 				});
+		
 	}
 
 	private ListView<AmpComponentPanel> featureList;

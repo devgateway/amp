@@ -120,9 +120,9 @@ public class ExportActivityToPDF extends Action {
 	private static final String [] fundingExpendituresFMfields={"Adjustment Type Expenditure","Date Expenditure","Amount Expenditure","Currency Expenditure"};
 	private static final String [] fundingDisbOrdersFMfields={"Adjustment Type of Disbursement Order","Date of Disbursement Order","Amount of Disbursement Order","Currency of Disbursement Order"};
 	
-	private static final String [] componentCommitmentsFMfields={"Components Actual/Planned Commitments","Components Amount Commitments","Components Currency Commitments","Components Date Commitments"};
-	private static final String [] componentDisbursementsFMfields={"Components Actual/Planned Disbursements","Components Amount Disbursements","Components Currency Disbursements","Components Date Disbursements"};
-	private static final String [] componentExpendituresFMfields={"Components Actual/Planned Expenditures","Components Amount Expenditures","Components Currency Expenditures","Components Date Expenditures"};
+	private static final String [] componentCommitmentsFMfields={"/Activity Form/Components/Component/Components Commitments","/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount","/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency","/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"};
+	private static final String [] componentDisbursementsFMfields={"/Activity Form/Components/Component/Components Disbursements","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"};
+	private static final String [] componentExpendituresFMfields={"/Activity Form/Components/Component/Components Expeditures","/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Amount","/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Currency","/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Transaction Date"};
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)	throws Exception {
 		EditActivityForm myForm=(EditActivityForm)form;
@@ -1903,7 +1903,7 @@ public class ExportActivityToPDF extends Action {
 
 	private void buildComponentsPart(EditActivityForm myForm,PdfPTable mainLayout,String locale,Long siteId,ServletContext ampContext)	throws WorkerException, DocumentException {
 		Paragraph p1;
-		if(GlobalSettings.getInstance().getShowComponentFundingByYear()!=null && FeaturesUtil.isVisibleModule("Components", ampContext)){
+		if(GlobalSettings.getInstance().getShowComponentFundingByYear()!=null && FeaturesUtil.isVisibleModule("/Activity Form/Components", ampContext)){
 			PdfPCell compCell1=new PdfPCell();
 			p1=new Paragraph(TranslatorWorker.translateText("Components",locale,siteId),titleFont);
 			p1.setAlignment(Element.ALIGN_RIGHT);
@@ -1946,7 +1946,7 @@ public class ExportActivityToPDF extends Action {
 						financeCompNestedCell.setBackgroundColor(new Color(244,244,242));
 						financeCompNestedCell.setBorder(0);
 						financeCompNestedCell.setColspan(2);
-						p1=new Paragraph(TranslatorWorker.translateText("Finance of the component",locale,siteId),titleFont);
+						p1=new Paragraph(TranslatorWorker.translateText("Component Funding",locale,siteId),titleFont);
 						p1.setAlignment(Element.ALIGN_LEFT);
 						financeCompNestedCell.addElement(p1);						
 						componentsNestedTable.addCell(financeCompNestedCell);
@@ -2394,7 +2394,7 @@ public class ExportActivityToPDF extends Action {
 								createSubtotalRow(fundingTable, "SUBTOTAL PLANNED EXPENDITURES:", funding.getSubtotalPlannedExpenditures(), locale, siteId, currencyCode);
 								
 								//actual expenditures
-								output=TranslatorWorker.translateText("ACTUAL EXPENDITURES::",locale,siteId);
+								output=TranslatorWorker.translateText("ACTUAL EXPENDITURES:",locale,siteId);
 								if(myForm.getFunding().isFixerate()){
 									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
 								}
@@ -2634,11 +2634,15 @@ public class ExportActivityToPDF extends Action {
 			innerCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue(),locale,siteId),plainFont));
 			innerCell.setBorder(0);
 			infoTable.addCell(innerCell);
+		}else{
+			addEmptyCell(infoTable);
 		}
 		if(FeaturesUtil.isVisibleField(fmFields[1], ampContext)){
 			innerCell=new PdfPCell(new Paragraph(fd.getTransactionDate(),plainFont));
 			innerCell.setBorder(0);
 			infoTable.addCell(innerCell);
+		}else{
+			addEmptyCell(infoTable);
 		}
 		if(FeaturesUtil.isVisibleField(fmFields[2], ampContext)){
 			String output="";
@@ -2648,6 +2652,8 @@ public class ExportActivityToPDF extends Action {
 			innerCell=new PdfPCell(new Paragraph(output,plainFont));
 			innerCell.setBorder(0);
 			infoTable.addCell(innerCell);
+		}else{
+			addEmptyCell(infoTable);
 		}		
 		String formattedRate="";
 		if(fd.getFormattedRate()!=null){
@@ -2659,7 +2665,14 @@ public class ExportActivityToPDF extends Action {
 			infoTable.addCell(innerCell);
 		}		
 	}	
+	
+	private void addEmptyCell(PdfPTable infoTable){
+		PdfPCell innerCell = new PdfPCell();
+		innerCell.setBorder(0);
+		innerCell.setBorder(0);
+		infoTable.addCell(innerCell);
 
+	}
 	
 	private String  getEditTagValue(HttpServletRequest request,String editKey) throws Exception{
 		Site site = RequestUtils.getSite(request);
@@ -2750,7 +2763,7 @@ public class ExportActivityToPDF extends Action {
 		
 		int visibleFmFieldsAmount=0;
 		for(int i=0;i<fmFields.length;i++){
-			if(FeaturesUtil.isVisibleField(fmFields[i], ampContext)){
+			if(FeaturesUtil.isVisibleModule(fmFields[i], ampContext)){
 				visibleFmFieldsAmount++;
 			}
 		}
@@ -2762,45 +2775,47 @@ public class ExportActivityToPDF extends Action {
 //				widthArray[i]=1f;
 //			}			
 //		}
-		PdfPTable fdTable=new PdfPTable(visibleFmFieldsAmount);
-//		fdTable.setWidths(widthArray);
-		for (FundingDetail fd : listToIterate) {
-			if(FeaturesUtil.isVisibleField(fmFields[0], ampContext)){
+		if (visibleFmFieldsAmount > 0){
+			PdfPTable fdTable=new PdfPTable(visibleFmFieldsAmount);
+	//		fdTable.setWidths(widthArray);
+			for (FundingDetail fd : listToIterate) {
+				if(FeaturesUtil.isVisibleModule(fmFields[0], ampContext)){
+					cell=new PdfPCell();
+					paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue(),locale,siteId),plainFont);
+					cell.addElement(paragraph);
+					cell.setBorder(0);
+					fdTable.addCell(cell);
+				}			
+				
+				if(FeaturesUtil.isVisibleModule(fmFields[1], ampContext)){
+					cell=new PdfPCell();
+					paragraph=new Paragraph(fd.getTransactionDate(),plainFont);
+					cell.addElement(paragraph);
+					cell.setBorder(0);
+					fdTable.addCell(cell);
+				}
+				
+				String output="";
+				if(FeaturesUtil.isVisibleModule(fmFields[2], ampContext)){
+					output+=fd.getTransactionAmount();
+				}
+				if(FeaturesUtil.isVisibleModule(fmFields[3], ampContext)){
+					output+= " " + fd.getCurrencyCode();
+				}
 				cell=new PdfPCell();
-				paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue(),locale,siteId),plainFont);
+				paragraph=new Paragraph(output,plainFont);
 				cell.addElement(paragraph);
 				cell.setBorder(0);
 				fdTable.addCell(cell);
-			}			
-			
-			if(FeaturesUtil.isVisibleField(fmFields[1], ampContext)){
+				
 				cell=new PdfPCell();
-				paragraph=new Paragraph(fd.getTransactionDate(),plainFont);
+				paragraph=new Paragraph(fd.getFormattedRate()!=null?fd.getFormattedRate():" ",plainFont);
 				cell.addElement(paragraph);
 				cell.setBorder(0);
 				fdTable.addCell(cell);
+				}
+				nestedTable.addCell(fdTable);
 			}
-			
-			String output="";
-			if(FeaturesUtil.isVisibleFeature(fmFields[2], ampContext)){
-				output+=fd.getTransactionAmount();
-			}
-			if(FeaturesUtil.isVisibleFeature(fmFields[3], ampContext)){
-				output+= " " + fd.getCurrencyCode();
-			}
-			cell=new PdfPCell();
-			paragraph=new Paragraph(output,plainFont);
-			cell.addElement(paragraph);
-			cell.setBorder(0);
-			fdTable.addCell(cell);
-			
-			cell=new PdfPCell();
-			paragraph=new Paragraph(fd.getFormattedRate()!=null?fd.getFormattedRate():" ",plainFont);
-			cell.addElement(paragraph);
-			cell.setBorder(0);
-			fdTable.addCell(cell);
-		}
-		nestedTable.addCell(fdTable);
 		return nestedTable;
 	}
 	

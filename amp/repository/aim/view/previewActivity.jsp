@@ -1559,7 +1559,6 @@ function collapseAll() {
 <!-- END REGIONAL FUNDING -->
 
 <!-- COMPONENTS -->
-<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="false">
 <module:display name="/Activity Form/Components" parentModule="/Activity Form">
 <fieldset>
 	<legend>
@@ -1568,6 +1567,7 @@ function collapseAll() {
 		</span>	
 	</legend>
 	<div id="componentdiv">
+<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="false">
 		<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
 			<c:forEach var="comp" items="${aimEditActivityForm.components.selectedComponents}">
 				<table width="100%" cellSpacing="1" cellPadding="1">
@@ -1645,8 +1645,8 @@ function collapseAll() {
 											<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 												<c:forEach var="fd" items="${comp.disbursements}">
 													<tr>
-														<module:display name="/Activity Form/Components/Component/Components Disbursements/Add Disbursement"
-																parentModule="/Activity Form/Components/Component/Components Disbursements">
+														<module:display name="/Activity Form/Components/Component/Components Disbursements"
+																parentModule="/Activity Form/Components/Component">
 															<td width="50" bgcolor="#f0f0f0"> 
 																<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																	<b><c:out value="${fd.adjustmentTypeName}" /></b>
@@ -1762,6 +1762,7 @@ function collapseAll() {
 		</table>
 	</c:forEach>
 	</c:if>
+	</logic:equal>
 	<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="true">
 		<c:if test="${!empty aimEditActivityForm.components.selectedComponents}">
 			<c:forEach var="comp" items="${aimEditActivityForm.components.selectedComponents}">
@@ -1840,7 +1841,6 @@ function collapseAll() {
 	</div>
 </fieldset>
 </module:display>
-</logic:equal>
 <!-- END COMPONENTS -->
 <!-- ISSUES SECTION -->
 <module:display name="/Activity Form/Issues Section" parentModule="/Activity Form">

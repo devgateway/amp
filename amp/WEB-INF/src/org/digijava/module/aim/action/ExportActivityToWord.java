@@ -34,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -400,7 +401,8 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
-                for (Table tbl : getComponentTables(request, ampContext, activity)) {
+                List<Table> componentTables = getComponentTables(request, ampContext, activity);
+				for (Table tbl : componentTables) {
                     doc.add(tbl);
                 }
 
@@ -708,23 +710,31 @@ public class ExportActivityToWord extends Action {
         if(FeaturesUtil.isVisibleModule("/Activity Form/Components", ampContext)){
            retVal.add(createSectionTable(eshTitle, request, ampContext));
 
-           if (act.getComponentFundings() != null && !act.getComponentFundings().isEmpty()) {
-                Set<AmpComponentFunding> compFnds = act.getComponentFundings();
+           for (AmpComponent comp : act.getComponents()){
 
-                ExportSectionHelper eshCompFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                for (AmpComponentFunding compFnd : compFnds) {
+        	   ExportSectionHelper eshCompFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+        	   eshCompFundingDetails.addRowData((new ExportSectionHelperRowData(comp.getTitle(), null, null, false)));
+        	   String compDesc = comp.getDescription() != null ? comp.getDescription() : "";
+        	   eshCompFundingDetails.addRowData((new ExportSectionHelperRowData("Description", null, null, true)).addRowData(compDesc));
 
-                    eshCompFundingDetails.addRowData((new ExportSectionHelperRowData(compFnd.getComponent().getTitle(), null, null, false)).
-                            addRowData(getTransactionTypeLable(compFnd.getTransactionType()), true).
-                            addRowData(compFnd.getAdjustmentType().getLabel(), true).
-                            addRowData(DateConversion.ConvertDateToString(compFnd.getTransactionDate())).
-                            addRowData(compFnd.getTransactionAmount().toString()).
-                            addRowData(compFnd.getCurrency().getCurrencyCode()));
-
-
-                    retVal.add(createSectionTable(eshCompFundingDetails, request, ampContext));
-                }
-            }
+        	   eshCompFundingDetails.addRowData((new ExportSectionHelperRowData("Component Funding", null, null, true)));
+        	   
+        	   if (act.getComponentFundings() != null && !act.getComponentFundings().isEmpty()) {
+	                Set<AmpComponentFunding> compFnds = act.getComponentFundings();
+	                
+	                for (AmpComponentFunding compFnd : compFnds) {
+	                	if(compFnd.getComponent().getTitle().equals(comp.getTitle())){
+		                    eshCompFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(compFnd.getTransactionType()), null, null, true)).
+		                            //addRowData(getTransactionTypeLable(compFnd.getTransactionType()), true).
+		                            addRowData(compFnd.getAdjustmentType().getLabel(), true).
+		                            addRowData(DateConversion.ConvertDateToString(compFnd.getTransactionDate())).
+		                            addRowData(compFnd.getTransactionAmount().toString()).
+		                            addRowData(compFnd.getCurrency().getCurrencyCode()));
+	                	}
+	                }
+                	retVal.add(createSectionTable(eshCompFundingDetails, request, ampContext));
+	            }        	   
+           }
         }
 
         return retVal;

@@ -11,8 +11,6 @@ public class ListItem<T> extends Item<T>{
 
 	private class ListItemModel extends AbstractReadOnlyModel<T>{
 		public T getObject(){
-			if (((ListEditor<T>)ListItem.this.getParent()).items == null)
-				return null;
 			return ((ListEditor<T>)ListItem.this.getParent())
 			.items.get(getIndex());
 		}

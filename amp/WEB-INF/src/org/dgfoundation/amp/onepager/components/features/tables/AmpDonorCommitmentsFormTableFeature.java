@@ -66,7 +66,8 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		wmc.add(amountSumComparator.getIndicatorAppender());
 		amountSumComparator.setSecondCollectionModel(disbursementModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(false);
-		amountSumComparator.setEnableValidation(alertIfDisbursmentBiggerCommitments);
+		amountSumComparator.setVisibilityAllowed(alertIfDisbursmentBiggerCommitments);
+		wmc.setVisibilityAllowed(alertIfDisbursmentBiggerCommitments);
 		add(amountSumComparator);			
 			
 		
@@ -79,8 +80,8 @@ public class AmpDonorCommitmentsFormTableFeature extends
 
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 
-				if(alertIfDisbursmentBiggerCommitments)
-					amountComponent.setAmountValidator(amountSumComparator); 	
+				
+				amountComponent.setAmountValidator(amountSumComparator); 	
 				item.add(amountComponent);
 
 				IModel<List<FundingPledges>> pledgesModel = new LoadableDetachableModel<List<FundingPledges>>() {

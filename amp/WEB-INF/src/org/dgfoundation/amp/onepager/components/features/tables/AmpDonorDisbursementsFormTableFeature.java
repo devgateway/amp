@@ -92,7 +92,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		amountSumComparator.setIndicatorAppender(iValidator);
 		amountSumComparator.setSecondCollectionModel(commitmentModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(true);
-		amountSumComparator.setEnableValidation(alertIfDisbursmentBiggerCommitments);
+		amountSumComparator.setVisibilityAllowed(alertIfDisbursmentBiggerCommitments);
 		add(amountSumComparator);
 		
 		
@@ -101,7 +101,8 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		amountSumComparator1.setIndicatorAppender(iValidator);
 		amountSumComparator1.setSecondCollectionModel(expenditureModel);
 		amountSumComparator1.setAlertIfCurrentModelAmountSumBig(false);
-		amountSumComparator1.setEnableValidation(alertIfExpenditureBiggerDisbursment);
+		amountSumComparator1.setVisibilityAllowed(alertIfExpenditureBiggerDisbursment);
+		wmc.setVisibilityAllowed(alertIfDisbursmentBiggerCommitments || alertIfExpenditureBiggerDisbursment);
 		add(amountSumComparator1);
 		
 		list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, new AmpFundingDetail.FundingDetailComparator()) {
@@ -111,11 +112,9 @@ public class AmpDonorDisbursementsFormTableFeature extends
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
-
-				if(alertIfExpenditureBiggerDisbursment)
-					amountComponent.setAmountValidator(amountSumComparator1);
-				if(alertIfDisbursmentBiggerCommitments)
-					amountComponent.setAmountValidator(amountSumComparator); 	
+				
+				amountComponent.setAmountValidator(amountSumComparator1);
+				amountComponent.setAmountValidator(amountSumComparator); 	
 				item.add(amountComponent);
 
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(

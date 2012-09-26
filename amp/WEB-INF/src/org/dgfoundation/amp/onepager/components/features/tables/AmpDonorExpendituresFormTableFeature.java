@@ -68,7 +68,8 @@ public class AmpDonorExpendituresFormTableFeature extends
 		wmc.add(amountSumComparator.getIndicatorAppender());;
 		amountSumComparator.setSecondCollectionModel(disbursementModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(true);
-		amountSumComparator.setEnableValidation(alertIfExpenditureBiggerDisbursment);
+		amountSumComparator.setVisibilityAllowed(alertIfExpenditureBiggerDisbursment);
+		wmc.setVisibilityAllowed(alertIfExpenditureBiggerDisbursment);
 		add(amountSumComparator);			
 		
 		
@@ -80,8 +81,8 @@ public class AmpDonorExpendituresFormTableFeature extends
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 				final AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
 
-				if(alertIfExpenditureBiggerDisbursment)
-					amountComponent.setAmountValidator(amountSumComparator); 	
+				
+				 amountComponent.setAmountValidator(amountSumComparator); 	
 				item.add(amountComponent);
 				
 				AmpTextFieldPanel<String> classification = new AmpTextFieldPanel<String>(

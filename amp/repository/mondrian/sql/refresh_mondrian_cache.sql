@@ -576,5 +576,5 @@ CREATE INDEX idx_nac_prog_name ON cached_v_m_donor_funding (national_program_nam
 drop table if EXISTS cached_v_results;
 create table cached_v_results as SELECT amp_activity.amp_activity_id, btrim(dg_editor.body) AS ebody FROM amp_activity, dg_editor WHERE (amp_activity.results = (dg_editor.editor_key)::text) ORDER BY amp_activity.amp_activity_id;
 
-drop table if EXISTS cached_v_proposed_start_date
+drop table if EXISTS cached_v_proposed_start_date;
 create table cached_v_proposed_start_date as SELECT amp_activity.amp_activity_id, amp_activity.proposed_start_date FROM amp_activity ORDER BY amp_activity.amp_activity_id;

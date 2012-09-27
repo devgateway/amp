@@ -54,6 +54,9 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -125,7 +128,6 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.gateperm.core.GatePermConst;
-import org.hibernate.Query;
 import org.hibernate.Session;
 
 
@@ -2167,6 +2169,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     			}
     	}
     }
+    setLineMinistryObservationsToForm(activity, eaForm);
 	
 	
 	
@@ -2180,7 +2183,47 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     	return mapping.findForward("forwardDebugFM");
     return mapping.findForward("forward");
   }
+  
+  private void setLineMinistryObservationsToForm(AmpActivityVersion activity, EditActivityForm eaForm){
+	    if(activity.getLineMinistryObservations() != null && activity.getLineMinistryObservations().size()>0){
+				ArrayList issueList = new ArrayList();
+				
+				for(AmpLineMinistryObservation ampLineMinistryObservation : activity.getLineMinistryObservations()){
+					Issues issue = new Issues();
+					issue.setId(ampLineMinistryObservation.getAmpLineMinistryObservationId());
+					issue.setName(ampLineMinistryObservation.getName());
+					issue.setIssueDate(FormatHelper.formatDate(ampLineMinistryObservation.getObservationDate()));
+					ArrayList measureList = new ArrayList();
+					if (ampLineMinistryObservation.getLineMinistryObservationMeasures() != null) {
+						
+						for(AmpLineMinistryObservationMeasure ampMeasure: ampLineMinistryObservation.getLineMinistryObservationMeasures()){
+							Measures measure = new Measures();
+							measure.setId(ampMeasure.getAmpLineMinistryObservationMeasureId());
+							measure.setName(ampMeasure.getName());
+							ArrayList actorList = new ArrayList();
+							if (ampMeasure.getActors() != null) {
+								for(AmpLineMinistryObservationActor actor : ampMeasure.getActors()){
+									AmpActor auxAmpActor = new AmpActor();
+									auxAmpActor.setAmpActorId(actor.getAmpLineMinistryObservationActorId());
+									auxAmpActor.setName(actor.getName());
+									actorList.add(auxAmpActor);
+								}
+							}
+							measure.setActors(actorList);
+							measureList.add(measure);
+						}
+					}
+					issue.setMeasures(measureList);
+					issueList.add(issue);					
+				}
 
+				eaForm.getLineMinistryObservations().setIssues(issueList);
+			} else {
+				eaForm.getLineMinistryObservations().setIssues(null);
+			}
+	  
+  }
+  
   private EditActivityForm setSectorsToForm(EditActivityForm form, AmpActivityVersion activity) {
 		Collection sectors = activity.getSectors();
 

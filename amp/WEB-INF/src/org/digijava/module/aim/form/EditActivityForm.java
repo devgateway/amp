@@ -7,6 +7,8 @@ package org.digijava.module.aim.form;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -37,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -70,8 +73,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.springframework.beans.BeanWrapperImpl;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 public class EditActivityForm extends ActionForm implements Serializable {
 
@@ -118,6 +119,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private List<AmpActivityContact> projCoordinatorContacts;
 	private List<AmpActivityContact> implExecutingAgencyContacts;
 	
+	private Issues lineMinistryObservations;
 	/**
 	 * Map Api url for locations map
 	 */
@@ -175,6 +177,18 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public void setSurveyFundings(Collection<SurveyFunding> surveyFundings) {
 		this.surveyFundings = surveyFundings;
 	}
+
+	public Issues getLineMinistryObservations() {
+		if (this.lineMinistryObservations == null) {
+			this.lineMinistryObservations = new Issues();
+		}
+		return lineMinistryObservations;
+	}
+
+	public void setLineMinistryObservations(Issues lineMinistryObservations) {
+		this.lineMinistryObservations = lineMinistryObservations;
+	}
+
 
 	public class ActivityContactInfo{
 		

@@ -1994,6 +1994,8 @@ function collapseAll() {
 </fieldset>
 </module:display>
 
+<jsp:include page="previewActivityLineMinistryObservations.jsp"></jsp:include>
+
 <!-- RELATED ORGANIZATIONS SECTION -->
 <module:display name="/Activity Form/Related Organizations" parentModule="/Activity Form">
 <fieldset>

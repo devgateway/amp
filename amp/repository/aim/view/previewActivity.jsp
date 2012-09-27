@@ -286,43 +286,36 @@ function collapseAll() {
 	<div class="activity_preview_header">
 	  <table width="990" border="0" cellpadding="0" cellspacing="0">
 	  <tr>
-	    <td width="710">
+	    <td width="60%">
 	    	<div class="activity_preview_name"><c:out value="${aimEditActivityForm.identification.title}"/></div>
             <div style="clear:both;"></div>
-	    </td>
-	    <td width=130>
-	    	<div class="l_sm">
+			<div class="l_sm">
 	    	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 			 	<font color="red"><digi:trn>Amounts in thousands</digi:trn></font>
 			</gs:test>
 	    	</div>
             <div style="clear:both;"></div>
+
 	    </td>
 		<logic:present name="currentMember" scope="session">
 	    
-	    <td align=right nowrap="nowrap">
+	    <td align=right width=40%>
 	    	<c:set var="trn">
 				<digi:trn>Export To PDF</digi:trn>
 			</c:set> 
 			<a onclick="javascript:exportToPdf(${actId})" class="l_sm" style="cursor: pointer; color:#376091;" title="${trn}">
 				<img src="img_2/ico_pdf.gif" />${trn}
 			</a>
-	    </td>
-	    <td width="10">&nbsp;</td>	    
-	    <td align=right nowrap="nowrap">	    	
 			<a onclick="javascript:exportToWord(${actId})" class="l_sm" style="cursor: pointer; color:#376091;">
 				<img src="img_2/ico_word.gif" />
 				<digi:trn>Export to Word</digi:trn>
 			</a>
-	    </td>
-	    <td width="10">&nbsp;</td>
-	    <td align=right nowrap="nowrap">
 	    	<a onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" class="l_sm" style="cursor: pointer; color:#376091;" title="<digi:trn key="aim:print">Print</digi:trn>">
 	    		<img src="img_2/ico_print.gif" width="15" height="18" />
 	    		<digi:trn key="aim:print">Print</digi:trn>
 	    	</a>
 	    </td>
-		</logic:present>
+	    </logic:present>
 	  </tr>
 	</table>
 	</div>

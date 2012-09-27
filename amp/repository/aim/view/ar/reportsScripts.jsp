@@ -622,7 +622,7 @@ function validateFormat(){
 	
 	if (decimalSymbol=="" || customGroupCharacter==""){
 		 var msg='<digi:trn key="rep:format:badSymbolEmpty">Symbols can not be a empty, you can use the space character</digi:trn>';
-		alert(msg)
+		alert(msg);
 		return false;
 	}
 	

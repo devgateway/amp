@@ -25,7 +25,7 @@
 .paging_sel {color:#FFFFFF; background-color:#FF6000; padding:2px 2px 2px 4px;text-align:center;}
 .l_sm {font-size:11px; color:#376091;}
 .tab_opt {background-color:#F2F2F2;}
-.tab_opt_box {border:1px solid #EBEBEB;}
+.tab_opt_box {border:1px solid #EBEBEB;max-height:100px;overflow:auto;}
 .tab_opt_box_cont {padding:5px; font-size:11px; background-color:#FAFAFA;}
 .tab_opt_cont {padding:5px; font-size:11px; color:#CCCCCC;}
 .show_hide_setting {
@@ -555,101 +555,11 @@ session.setAttribute("progressValue", counter);
 	          		</tr>
 	          	</table>
 			</div>	
-			
-			<div class="paging">
-	   			<c:if test="${report.visibleRows/recordsPerPage>1}">
-				<c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
-				<c:if test="${recordsPerPage ne max_value}">
-	           	<logic:notEqual name="viewFormat" value="print">
-		               	<logic:equal name="viewFormat" value="foldable">
-						<c:if test="${report.startRow != 0}">
-		                  		<!-- Go to FIRST PAGE -->
-		                  	<c:choose>
-			                  	<c:when test="${param.queryEngine!='true' }">
-			                  		<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>');">	
-			                  				&lt;&lt;
-			                  		</a>
-			                  		&nbsp;|&nbsp;
-			                  		<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>');">	
-			  		            		<digi:trn key="aim:previous">Previous</digi:trn>
-			                  		</a>
-			                  		&nbsp;|&nbsp;
-			                  	</c:when>
-			                  	<c:otherwise>
-			                  		<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=0~endRow=${recordsPerPage-1}~queryEngine=true');">	
-			                  				&lt;&lt;
-			                  		</a>
-			                  		&nbsp;|&nbsp;
-			                  		<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${report.startRow-recordsPerPage}~endRow=${report.startRow-1}~queryEngine=true');">	
-			  		            		<digi:trn key="aim:previous">Previous</digi:trn>
-			                  		</a>
-			                  		&nbsp;|&nbsp;
-			                  	</c:otherwise>
-			                </c:choose>
-		                  	</c:if>
-					</logic:equal>
-					<c:set var="lastPage">0</c:set>
-		            <c:forEach var="i" begin="0" end="${report.visibleRows}" step="${recordsPerPage}">
-						<logic:equal name="viewFormat" value="html2">
-							<a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html2~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
-						</logic:equal>
-		                  <logic:equal name="viewFormat" value="html">
-		                      <a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
-		                  </logic:equal>
-		                  <logic:equal name="viewFormat" value="foldable">
-		                  	<c:choose>
-			                  	<c:when test="${param.queryEngine!='true' }">
-			                      <a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">
-			                    </c:when>
-			                    <c:otherwise>
-			                    	<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${i}~endRow=${i+recordsPerPage-1}~queryEngine=true');">	
-			                    </c:otherwise>
-		                    </c:choose>	
-		                  </logic:equal>
-		                  <c:choose>							
-		                      <c:when  test="${i eq report.startRow}">
-		                          <b class="paging_sel">
-		                          	<fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/>
-		                          </b>
-		                      </c:when>
-		                      <c:otherwise>
-		                          <fmt:formatNumber value="${(i/recordsPerPage) + 1}" maxFractionDigits="0"/>
-		                      </c:otherwise>								
-		                  </c:choose>
-		                  </a>
-		                  &nbsp;|&nbsp;
-		              	<c:set var="lastPage">
-		                  	${lastPage+1}
-		                  </c:set>
-					</c:forEach>
-					<logic:equal name="viewFormat" value="foldable">
-						<c:if test="${(report.startRow+recordsPerPage+1) <= report.visibleRows}">
-							<c:choose>
-			                  	<c:when test="${param.queryEngine!='true' }">
-									<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	
-				                    	<digi:trn key="aim:next">Next</digi:trn>
-				                    </a>
-				                    &nbsp;|&nbsp;
-				                   	<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)}"/>');">	
-				                      &gt;&gt;
-									</a>
-								</c:when>
-								<c:otherwise>
-									<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${report.startRow+recordsPerPage}~endRow=${report.startRow+(recordsPerPage*2)-1}~queryEngine=true');">	
-				                    	<digi:trn key="aim:next">Next</digi:trn>
-				                    </a>
-				                    &nbsp;|&nbsp;
-				                   	<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${((lastPage-1)*recordsPerPage)}~endRow=${(lastPage*recordsPerPage)}~queryEngine=true');">	
-				                      &gt;&gt;
-									</a>
-								</c:otherwise>
-							</c:choose>
-						</c:if>
-					</logic:equal>
-			</logic:notEqual>
-			</c:if>
-	        </c:if>
-		</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<jsp:include page="viewNewAdvancedReportPaginator.jsp"></jsp:include>
 		</td>
 	</tr>
 	</logic:equal>
@@ -725,101 +635,7 @@ session.setAttribute("progressValue", counter);
 		</logic:equal>
 		<tr>
 			<td style="padding-left: 5px;padding-right: 5px">
-			<!-- PAGINATION -->	 
-				<div class="paging">
-		   			<c:if test="${report.visibleRows/recordsPerPage>1}">
-					<c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
-					<c:if test="${recordsPerPage ne max_value}">
-		           	<logic:notEqual name="viewFormat" value="print">
-			               	<logic:equal name="viewFormat" value="foldable">
-							<c:if test="${report.startRow != 0}">
-			                  	<c:choose>
-			                  	<c:when test="${param.queryEngine!='true' }">
-			                  		<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=0~endRow=<c:out value="${recordsPerPage-1}"/>');">	
-			                  				&lt;&lt;
-			                  		</a>
-			                  		&nbsp;|&nbsp;
-			                  		<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>');">	
-			  		            		<digi:trn key="aim:previous">Previous</digi:trn>
-			                  		</a>
-			                  		&nbsp;|&nbsp;
-			                  	</c:when>
-			                  	<c:otherwise>
-			                  		<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=0~endRow=${recordsPerPage-1}~queryEngine=true');">	
-			                  				&lt;&lt;
-			                  		</a>
-			                  		&nbsp;|&nbsp;
-			                  		<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${report.startRow-recordsPerPage}~endRow=${report.startRow-1}~queryEngine=true');">	
-			  		            		<digi:trn key="aim:previous">Previous</digi:trn>
-			                  		</a>
-			                  		&nbsp;|&nbsp;
-			                  	</c:otherwise>
-			                </c:choose>
-			                  	</c:if>
-						</logic:equal>
-						<c:set var="lastPage">0</c:set>
-			            <c:forEach var="i" begin="0" end="${report.visibleRows}" step="${recordsPerPage}">
-			            	<logic:equal name="viewFormat" value="html2">
-								<a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html2~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=false~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
-							</logic:equal>
-			                  <logic:equal name="viewFormat" value="html">
-			                      <a class="l_sm" style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
-			                  </logic:equal>
-			                  <logic:equal name="viewFormat" value="foldable">
-			                  <c:choose>
-			                  	<c:when test="${param.queryEngine!='true' }">
-			                      <a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage-1}"/>');">
-			                    </c:when>
-			                    <c:otherwise>
-			                    	<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${i}~endRow=${i+recordsPerPage-1}~queryEngine=true');">	
-			                    </c:otherwise>
-		                    </c:choose>	
-			                  </logic:equal>
-			                  <c:choose>							
-			                      <c:when  test="${i eq report.startRow}">
-			                          <b class="paging_sel">
-			                          	<fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/>
-			                          </b>
-			                      </c:when>
-			                      <c:otherwise>
-			                          <fmt:formatNumber value="${(i/recordsPerPage) + 1}" maxFractionDigits="0"/>
-			                      </c:otherwise>								
-			                  </c:choose>
-			                  </a>
-			                  &nbsp;|&nbsp;
-			              	<c:set var="lastPage">
-			                  	${lastPage+1}
-			                  </c:set>
-						</c:forEach>
-						<logic:equal name="viewFormat" value="foldable">
-							<c:if test="${(report.startRow+recordsPerPage+1) <= report.visibleRows}">
-								<c:choose>
-			                  	<c:when test="${param.queryEngine!='true' }">
-									<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	
-				                    	<digi:trn key="aim:next">Next</digi:trn>
-				                    </a>
-				                    &nbsp;|&nbsp;
-				                   	<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)}"/>');">	
-				                      &gt;&gt;
-									</a>
-								</c:when>
-								<c:otherwise>
-									<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${report.startRow+recordsPerPage}~endRow=${report.startRow+(recordsPerPage*2)-1}~queryEngine=true');">	
-				                    	<digi:trn key="aim:next">Next</digi:trn>
-				                    </a>
-				                    &nbsp;|&nbsp;
-				                   	<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${((lastPage-1)*recordsPerPage)}~endRow=${(lastPage*recordsPerPage)}~queryEngine=true');">	
-				                      &gt;&gt;
-									</a>
-								</c:otherwise>
-							</c:choose>
-							</c:if>
-						</logic:equal>
-				</logic:notEqual>
-				</c:if>
-		        </c:if>
-			</div>
-           <!-- END PAGINATION -->
+			<jsp:include page="viewNewAdvancedReportPaginator.jsp"></jsp:include>
 		</td>
 	</tr>
 		</logic:notEqual>

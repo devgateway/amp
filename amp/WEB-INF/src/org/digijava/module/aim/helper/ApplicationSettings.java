@@ -7,6 +7,7 @@ public class ApplicationSettings {
 
 		  private Long appSettingsId;
 		  private Integer defRecsPerPage;
+		  private Integer numberOfPagesToDisplay;
 		  private String language;
 		  private Long currencyId;
 		  private Long fisCalId;
@@ -94,5 +95,13 @@ public Long getAppSettingsId() {
 
 		public void setReportEndYear(Integer reportEndYear) {
 		    this.reportEndYear = reportEndYear;
+		}
+
+		public Integer getNumberOfPagesToDisplay() {
+			return numberOfPagesToDisplay;
+		}
+
+		public void setNumberOfPagesToDisplay(Integer numberOfPagesToDisplay) {
+			this.numberOfPagesToDisplay = numberOfPagesToDisplay;
 		}
 }

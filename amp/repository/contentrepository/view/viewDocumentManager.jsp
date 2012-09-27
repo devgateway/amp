@@ -184,13 +184,46 @@ border-right: 1px solid rgb(208, 208, 208);
 	var breadcrumbName='Resources';
 	var breadCrumbObj = null;
 	var privateSeachObj = null;
-		
+	var fPanel = null;
+	var teamFPanel = null;
+	var sharedFPanel = null;
+	
+	function closePopups(){
+		//Closing popups
+		if(menuPanelForUser){
+			menuPanelForUser.hide();
+		}
+		if(menuPanelForTeam){
+			menuPanelForTeam.hide();
+		}
+		if(privateListObj && privateListObj.getFilterPanel()){
+			privateListObj.getFilterPanel().hide();
+		}
+		if(teamListObj && teamListObj.getFilterPanel()){
+			teamListObj.getFilterPanel().hide();
+		}
+		if(sharedListObj && sharedListObj.getFilterPanel()){
+			sharedListObj.getFilterPanel().hide();
+		}
+		if(fPanel){
+			fPanel.hide();
+		}
+		if(teamFPanel){
+			teamFPanel.hide();
+		}
+		if(sharedFPanel){
+			sharedFPanel.hide();
+		}
+	}
+	
 	function loadTab() {
 		var visibleTabs =0;
 		var myDoc =  document.getElementById("my_res");
 		var teamDoc =  document.getElementById("team_res");
 		var sharedDoc =  document.getElementById("shared_res");
 		var publicDoc =  document.getElementById("public_res");
+		
+		closePopups();
 		
 		if (myDoc !=null) {
 			visibleTabs ++;

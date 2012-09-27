@@ -203,6 +203,13 @@
 		var rd				= document.getElementsByName("reportDescription")[0];
 		//rd.style.height		= (rd.parentNode.offsetHeight - 40) + "px";
 		
+		//validation messages
+	    var equalSymbolMsg = '<digi:trn key="rep:format:equalsSymbol">Decimal Symbol and group symbol must be diferents</digi:trn>';
+		var badSymbolEmptyMsg ='<digi:trn key="rep:format:badSymbolEmpty">Symbols can not be a empty, you can use the space character</digi:trn>';
+		var badSymbolNumberMsg = '<digi:trn key="rep:format:badSymbolNumber">Symbols can not be a number</digi:trn>';
+		var badGorupSize = '<digi:trn key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
+		var badYearRange = '<digi:trn key="rep:format:badYearRange">Year Range To should be greater than From</digi:trn>';
+
 		repManagerParams	= { // Global scoped object
 				desktopTab: ${myForm.desktopTab},
 				onePager: ${myForm.onePager},
@@ -219,8 +226,8 @@
 				previewTotalCostTrn: "${previewTotalCostTrn}",
 				previewReportTotalsTrn: "${previewReportTotalsTrn}",
 				previewUnselectedMeasureTrn: "${previewUnselectedMeasureTrn}",
-				monthNames:["${january}","${february}","${march}","${april}","${may}","${june}","${july}","${august}","${september}","${october}","${november}","${december}"]
-				
+				monthNames:["${january}","${february}","${march}","${april}","${may}","${june}","${july}","${august}","${september}","${october}","${november}","${december}"],
+				validationMsgs:[equalSymbolMsg, badSymbolEmptyMsg, badSymbolNumberMsg, badGorupSize, badYearRange]						
 			};
 		
 		//YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');

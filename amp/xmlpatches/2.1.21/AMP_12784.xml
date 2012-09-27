@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-12784</jira>
+    <keyword>numberOfPagesToDisplay</keyword>
+    <keyword>AmpAppSettings</keyword>
+    <author>Marianela Moras</author>
+    <description>Adding num_pages_to_display into amp_application_settings table </description>
+	<trigger type="all">
+		<condition  type="tableOrViewExists">amp_application_settings</condition>
+  	</trigger> 
+       <apply>
+        <script>
+            <lang  delimiter=";" type="postgres">
+			ALTER TABLE amp_application_settings ADD COLUMN num_pages_to_display bigint;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

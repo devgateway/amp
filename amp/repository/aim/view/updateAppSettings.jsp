@@ -23,7 +23,13 @@ var helpBodyAct=' <digi:trn jsFriendly="true"> Please enter a number greater tha
 var helpTitle='<digi:trn jsFriendly="true">Report Sheet</digi:trn>';
 function validade(){
 	var defReportsPerPage = document.getElementById("defRecsPerPage");
-  	if(parseInt(defReportsPerPage.value)<1){
+  	if(parseInt(defReportsPerPage.value)<=1){
+	  alert(helpBodyAct);
+	  return false;
+  	}
+
+  	var numberOfPagesToDisplay = document.getElementById("numberOfPagesToDisplay");
+  	if(parseInt(numberOfPagesToDisplay.value)<=1){
 	  alert(helpBodyAct);
 	  return false;
   	}
@@ -205,6 +211,15 @@ function loadShareRules(){
                   </a>
 								</td>
 							</tr>
+							<tr>
+								<td class="inside">
+									<digi:trn key="aim:numberofpagestodisplay">Number of Pages to display in paginator</digi:trn>
+				                </td>
+                				<td class="inside">
+									<html:text property="numberOfPagesToDisplay" size="5"  styleClass="inputx insidex" styleId="numberOfPagesToDisplay"/>
+								</td>
+							</tr>
+
 							<tr>
 								<td class="inside">
 									<digi:trn key="aim:numberreportsperpage">Number of reports per page</digi:trn>

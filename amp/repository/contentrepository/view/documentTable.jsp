@@ -316,7 +316,7 @@
 									<logic:equal name="documentData" property="hasVersioningRights" value="true">
 										<br />
 										<a style="cursor:pointer; text-decoration:none; color: blue" id="addLabelLink_${documentData.uuid}"
-										onClick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.docUUID='${documentData.uuid}';fAddPanel.toggleViewWithSel(${labelUUIDs});fAddPanel.reposition('addLabelLink_${documentData.uuid}');" 
+										onClick="labelCallbackObj.dynamicList=${dynamicListLocal};labelCallbackObj.docUUID='${documentData.uuid}';fAddPanel.toggleViewWithSel(${labelUUIDs});fAddPanel.reposition('Actions${documentData.uuid}');" 
 										title="<digi:trn>Click here to add new labels to this document</digi:trn>">
 											<digi:trn>Labels</digi:trn>
 									</logic:equal>

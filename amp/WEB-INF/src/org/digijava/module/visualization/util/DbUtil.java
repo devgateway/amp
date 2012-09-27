@@ -405,7 +405,7 @@ public class DbUtil {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
 	            }
 	
-	            oql += "  and (parcv.value = 'Region' OR parcv.value = 'Zone' OR parcv.value = 'District') ";// get not only regions, but any subregions that might have data
+	            oql += "  and (parcv.value = 'Region' ) ";// get not only regions, but any subregions that might have data
 
 	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
 	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
@@ -1900,4 +1900,27 @@ public class DbUtil {
 	}
 	
 	
+	public static Collection<AmpCategoryValueLocations> getChildLocationById(Long id) {
+		Session session = null;
+		Collection<AmpCategoryValueLocations> ret = new ArrayList<AmpCategoryValueLocations>();;
+		Iterator<AmpCategoryValueLocations> iter = null;
+ 	 	try {
+ 	 		session = PersistenceManager.getSession();
+ 	 		String queryString = "select loc from "
+ 	 		+ AmpCategoryValueLocations.class.getName()
+ 	 		+ " loc where (loc.parentLocation=:id)" ;                   
+ 	 		Query qry = session.createQuery(queryString);
+ 	 		qry.setLong("id", id);
+ 	 		iter = qry.list().iterator();
+
+			while (iter.hasNext()) {
+				AmpCategoryValueLocations acv = (AmpCategoryValueLocations) iter.next();
+				ret.add(acv);
+			}
+ 	 		return ret;
+ 	 	} catch (Exception e) {
+ 	 		e.printStackTrace();
+ 	 	}
+ 	 	return null;
+ 	}
 }

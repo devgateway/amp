@@ -158,13 +158,13 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{column2}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="117" y="17" width="584" height="1"/>
+				<reportElement x="118" y="17" width="583" height="1"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="17" width="118" height="1">
+				<reportElement x="1" y="17" width="117" height="1">
 					<printWhenExpression><![CDATA[($F{year}).equals($P{PI_LAST_YEAR}) ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>

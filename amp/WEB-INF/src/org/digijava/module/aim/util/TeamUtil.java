@@ -1739,13 +1739,14 @@ public class TeamUtil {
 				}
 			}
             if(keyword!=null&&keyword.trim().length()>0){
-            	queryString += " and lower(tr.report.name) like lower(:keyword) ";
+            	queryString += " and (lower(tr.report.name) like lower(:keyword) or lower(tr.report.ownerId.user.firstNames) like lower(:keyword) " +
+            			"or lower(tr.report.ownerId.user.lastName) like lower(:keyword))";
             }
             queryString += "  order by tr.report";
             Query qry = session.createQuery(queryString);
             
             if(keyword!=null&&keyword.trim().length()>0){
-           	 	qry.setString("keyword", '%' + keyword + '%');
+           	 	qry.setString("keyword", '%' + keyword.trim() + '%');
             }
             qry.setFirstResult(currentPage);
             qry.setMaxResults(recordPerPage);

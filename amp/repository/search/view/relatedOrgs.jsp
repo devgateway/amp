@@ -6,12 +6,31 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<script type="text/javascript">
+<!--
+	function toggleResultsGroup(groupId){
+		var div = $('#div_'+groupId);
+		var imgPlus = $('#'+groupId + '_plus');
+		var imgMinus = $('#'+groupId + '_minus');
+		
+		if(div.is(":visible") == true){
+			div.hide();
+			imgMinus.hide();
+			imgPlus.show();
+		}else{
+			div.show();
+			imgMinus.show();
+			imgPlus.hide();
+		}
+	}
+//-->
+</script>
 <logic:present name="resultActivitiesWithOrgs" scope="request">
     <tr>
         <td bgcolor="#dadada">
-            <img id="activityRows${requestScope.relatedOrgIndex}_plus"  onclick="toggleResultsGroup('activityRows'+${requestScope.relatedOrgIndex})" src="/TEMPLATE/ampTemplate/images/arrow_right.gif" align="absmiddle" style="float:left;"/>
-            <img id="activityRows${requestScope.relatedOrgIndex}_minus" onclick="toggleResultsGroup('activityRows'+${requestScope.relatedOrgIndex})" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display:none;float:left;" align="absmiddle"/>
-            &nbsp;&nbsp;${fn:length(requestScope.resultActivitiesWithOrgs)} <strong><digi:trn>activities using this organization as ${requestScope.relatedOrgType}. Please try another keyword</digi:trn></strong>
+            <img id="activityRows${requestScope.relatedOrgIndex}_plus"  onclick="toggleResultsGroup('activityRows${requestScope.relatedOrgIndex}')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif" align="absmiddle" style="float:left;"/>
+            <img id="activityRows${requestScope.relatedOrgIndex}_minus" onclick="toggleResultsGroup('activityRows${requestScope.relatedOrgIndex}')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display:none;float:left;" align="absmiddle"/>
+            &nbsp;&nbsp;${fn:length(requestScope.resultActivitiesWithOrgs)} <strong><digi:trn>activities using this organization as ${requestScope.relatedOrgType}.</digi:trn></strong>
         </td>
     </tr>
     <tr>

@@ -186,12 +186,11 @@ function trim(stringToTrim) {
 														<c:set var="translation">
 															<digi:trn>Please select from below</digi:trn>
 														</c:set>															
-														<tr style="background:#f4f4f2;" colspan="3">
-															<td width="150" align="right" bgcolor="#f4f4f2">
+														<tr style="background:#f4f4f2;">
+															<td width="150" align="center" bgcolor="#f4f4f2" colspan="3">
+															<div style="text-align:center;">
 																<font color="red"><b>*</b></font>
 																<digi:trn key="aim:workspaceGroup">Workspace Group</digi:trn>
-															</td>
-															<td align="left" bgcolor="#f4f4f2">
 																<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
 																	<b><bean:write name="aimUpdateWorkspaceForm" property="workspaceGroup" /></b>
 																</logic:equal>
@@ -203,7 +202,7 @@ function trim(stringToTrim) {
 																</logic:equal>
 																<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
 																	<category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="workspaceGroup" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.WORKSPACE_GROUP_KEY %>" styleClass="inp-text" />
-																</logic:equal>
+																</logic:equal></div>
 															</td>
 														</tr>
 										<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" >
@@ -217,7 +216,7 @@ function trim(stringToTrim) {
 											</tr>
 										</logic:notEmpty>
 										<tr>
-											<td class="inside" colspan="3">
+											<td colspan="3">
 												<digi:errors/>
 											</td>	
 										</tr>

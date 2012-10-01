@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-10107</jira>
+  <keyword>computed teams default off budget</keyword>
+  <author>mihai</author> 
+  <description>Filter by date hides projects</description>
+  
+   <trigger type="all">
+      <condition  type="entryInTableExists" tablename="amp_global_settings" columnname="settingsName" columnvalue="Filter by date hides projects" inverted="true" />
+ 	</trigger>
+ 	
+  <apply>
+    <script>
+      <lang delimiter=";" type="sql">
+		insert into amp_global_settings(id, settingsName,settingsValue,possibleValues, description,section) values(nextval('amp_global_settings_seq'), 'Filter by date hides projects','false','t_Boolean','When using the date filter in reports/tabs, the projects that do not hold funding within the specified filter will not be displayed in the report','funding');
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

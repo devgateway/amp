@@ -1,0 +1,37 @@
+<wicket:extend>
+		<tr>
+			<td colspan="2">
+				<span wicket:id="addbutton" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<table class="inside">
+					<tr>
+						<td background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" align="left" class="inside" colspan="7">
+							<b class="ins_header"><wicket:trn>Structure</wicket:trn></b>
+						</td>
+					</tr>
+					<tr>
+						<td background="images/ins_bg.gif" class="inside" align="right"><b class="ins_title"><wicket:trn key="trn:type">Type</wicket:trn></b></td>
+						<td background="images/ins_bg.gif" class="inside" align="left"><b class="ins_title"><wicket:trn key="trn:title">Title</wicket:trn></b></td>	
+						<td background="images/ins_bg.gif" class="inside" align="left"><b class="ins_title"><wicket:trn key="trn:description">Description</wicket:trn></b></td>	
+						<td background="images/ins_bg.gif" class="inside" align="left"><b class="ins_title"><wicket:trn key="trn:latitude">Latitude</wicket:trn></b></td>	
+						<td background="images/ins_bg.gif" class="inside" align="left"><b class="ins_title"><wicket:trn key="trn:longitude">Longitude</wicket:trn></b></td>	
+						<td background="images/ins_bg.gif" class="inside" align="left"><b class="ins_title"><wicket:trn key="trn:shape">Shape</wicket:trn></b></td>	
+						<td background="images/ins_bg.gif" class="inside" align="left"><b class="ins_title">&nbsp;</b></td>	
+					</tr>
+					<tr wicket:id="list">
+						<td class="inside" align="right"><span wicket:id="structureTypes" /></td>
+						<td class="inside add_form_title"><span  wicket:id="name" /></td>
+						<td class="inside add_form_description"><span wicket:id="description" /></td>
+						<td class="inside add_form_latitude"><span wicket:id="latitude" /></td>
+						<td class="inside add_form_longtitude"><span wicket:id="longitude" /></td>
+						<td class="inside"><input type="button" onClick="callGisPopup(this)" size="3" value="Map"><span style="display:none" wicket:id="shape" /></td>
+						<td class="inside" align="left"><span wicket:id="deleteStructure"/></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		
+</wicket:extend>

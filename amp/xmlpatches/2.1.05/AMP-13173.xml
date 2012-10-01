@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-13173</jira>
+    <keyword>getparentsubsectorid</keyword>
+    <author>Mauricio Bertoli</author>
+    <description>Function to get parents from subsector</description>
+       <apply>
+        <script>
+            <lang  delimiter="@" type="postgres">
+				CREATE OR REPLACE FUNCTION getparentsubsectorid(sectorid bigint)
+				  RETURNS bigint AS
+				$BODY$
+				declare
+					secid bigint;
+					depth int;
+				BEGIN      	 	
+					select getSectorDepth(sectorId) into depth; 
+					if (depth = 1) then return sectorId;
+					end if; 	
+					if (depth = 2) then 
+						select parent_sector_id into secid from amp_sector where amp_sector_id=sectorId;
+					return secid; 	
+					end if;
+				return 0;
+				END;
+				$BODY$
+				  LANGUAGE plpgsql VOLATILE
+            </lang>
+        </script>
+    </apply>
+</tns:patch>
+

@@ -1,0 +1,994 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	 Copyright (c) 2009 Team Axiis
+
+	 Permission is hereby granted, free of charge, to any person
+	 obtaining a copy of this software and associated documentation
+	 files (the "Software"), to deal in the Software without
+	 restriction, including without limitation the rights to use,
+	 copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 copies of the Software, and to permit persons to whom the
+	 Software is furnished to do so, subject to the following
+	 conditions:
+
+	 The above copyright notice and this permission notice shall be
+	 included in all copies or substantial portions of the Software.
+
+	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+	 OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+	 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+	 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+	 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+	 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+	 OTHER DEALINGS IN THE SOFTWARE.
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:charts="org.axiis.charts.*"
+	layout="absolute"
+	backgroundGradientColors="[0xDDDDDD,0xDDDDDD]"
+	creationComplete="application1_creationCompleteHandler(event)"
+	xmlns:axiis="http://www.axiis.org/2009"
+	xmlns:series="org.axiis.charts.series.*"
+	xmlns:groupings="org.axiis.charts.groupings.*"
+	xmlns:degrafa="http://www.degrafa.com/2007"
+	xmlns:states="org.axiis.states.*"
+	xmlns:paint="org.axiis.paint.*"
+	xmlns:Examples="Examples.*"
+	xmlns:axis="org.axiis.charts.axis.*"
+	xmlns:labels="org.axiis.charts.labels.*"
+	xmlns:utils="org.axiis.utils.*">
+
+	<mx:HTTPService id="service" result="service_resultHandler(event)"  fault="service_faultHandler(event)" method="POST">
+		<mx:request>
+			<linechart>true</linechart>
+		</mx:request>
+	</mx:HTTPService>
+	<mx:Style>
+		
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import com.exportUtil.*;
+			
+			import flash.events.MouseEvent;
+			import flash.external.ExternalInterface;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.events.IndexChangedEvent;
+			import mx.events.MoveEvent;
+			import mx.events.SliderEvent;
+			import mx.managers.DragManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.ArrayUtil;
+			
+			import org.axiis.core.AxiisSprite;
+			import org.axiis.data.DataSet;
+			import org.axiis.events.LayoutItemEvent;
+			import org.axiis.utils.ObjectUtils;
+
+			private var xS:int; 
+			private var yS:int;
+
+			private var ds:DataSet = new DataSet();
+			private var groupSeparator:String = null;
+			private var decimalSeparator:String = null;
+			private var decimalsToShow:String = null;
+			private var currCode:String = null;
+			private var palette:Array = new Array();
+
+			
+			//Variables for the service URL
+			private var curUrl:String = "";
+			private var strUrl:String = "";
+			private var dataAction:String = "";
+
+			//Variables for translated messages
+			private var trnMessagePanel:String = "";
+			private var trnMessageEmpty:String = "";
+			private var trnMessageLoadingPanel:String = "";
+			private var trnMessageLoading:String = "";
+
+			/**
+			 * This example is using xml data read from the file system. 
+			 * In practical usage, you'ld have some data in a model that you want to display
+			 * that may be XML or may be in arrayCollections or arrays. In most cases, you'll
+			 * need to massage the data into a format that's suitable for the display you're
+			 * trying to achieve. 
+			 */
+			public function start():void
+			{
+				this.ds = new DataSet();
+				ds.processCsvAsTable(String(service.lastResult), false);
+
+				//LineSeriesGroup expects each unique series as a row
+				//Since our data has the time entries on each row (a common format for temporal data) we want to pivot the data
+				//This then makes a column for each unique time entrie and a row for each unique column.
+				ds.pivotTable(0);
+				dataProvider = ds.data.pivot.rows;
+				
+
+				var categoriesLocal:ArrayCollection = new ArrayCollection(); // Create an array as source for the legend
+				try {
+					for(var j:Number = 0; j < dataProvider.length; j++){
+						var str:String = dataProvider[j].pivotName;
+						if(str.indexOf("#") != -1) //If contains a token, remove it
+						{
+							str = str.split("#")[0];
+						}
+						categoriesLocal.addItem({"pivotName" : str.replace("&placeHolder;",",") });
+					}
+				} catch (errObject:Error) {
+				}
+				categories = categoriesLocal; 
+				if(categoriesLocal.length > 0)
+				{
+					dc.visible = true;
+					messagePanel.visible = false;
+					sizePanel(0, 0);					
+				}
+				else
+				{
+					dc.visible = false;
+					messagePanel.visible = true;
+					sizePanel(300, 200);
+				}
+				var currentValue:Number;
+				var maxValue:Number = 0;
+				try {
+					for(j = 0; j < dataProvider.length; j++){
+						var arrCol= dataProvider[j].columns;
+						for(var k:Number = 0; k < arrCol.length; k++){
+							currentValue = Number(arrCol[k].value);
+							if (maxValue < currentValue) maxValue = currentValue;
+						}
+					}
+				} catch (errObject:Error) {
+				}
+				var magnitude:Number;
+				magnitude = Math.pow(10,(Math.round(maxValue).toString().length));
+				//for 10.000 to 99.999 it's 100.000, now determine the segment there.
+				//determine in which quarter of the magnitude the value is
+				var newMaxValue:Number = getDeterminedMaxValue(magnitude, maxValue, magnitude/10);
+				//Lets divide further for larger numbers
+				if(maxValue > 10000){
+					newMaxValue = getDeterminedMaxValue(magnitude, maxValue, magnitude/100);
+				}
+				
+				vScale.maxValue = newMaxValue*10;
+				vScale.minValue = 0;
+
+				// Set the intial dp to the intial setting of the %data slider
+				hScale.dataProvider=ds.data.pivot.header.slice(1,dataSlice+1);
+				hAxis.invalidateDataProvider();
+				// Has to be called any time the dataCanvas dp is changed
+				dc.invalidateDisplayList();
+				//Get all variables from flashvars
+				var paletteStr:String = null;
+				var i:Number;
+				groupSeparator = LoaderInfo(this.root.loaderInfo).parameters.groupSeparator;
+				decimalSeparator = LoaderInfo(this.root.loaderInfo).parameters.decimalSeparator;
+				decimalsToShow = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DecimalsToShow')}"));
+				currCode = LoaderInfo(this.root.loaderInfo).parameters.currCode;
+				paletteStr = LoaderInfo(this.root.loaderInfo).parameters.palette;
+				var palArray:Array = paletteStr.split(",");
+				
+				for (i = 0; i < palArray.length; i++){
+					var tmp:Number = palArray[i];
+					palette.push(tmp);
+				}
+				if (groupSeparator == ""){
+					groupSeparator = " ";
+				}
+				
+				//Set formatting for the numbers in the chart
+				formatter.decimalSeparatorFrom=decimalSeparator;
+				formatter.decimalSeparatorTo=decimalSeparator;
+				formatter.thousandsSeparatorFrom=groupSeparator;
+				formatter.thousandsSeparatorTo=groupSeparator;
+				formatter.precision = decimalsToShow;
+				
+				var delayer:Delay = new Delay(captureSnapshot,4000,1); //capture snapshot
+				//Set the title and the rest of the parameters for legend
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var title:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Title')}"));
+				currCode = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Currency')}"));
+				var fontFamily:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontFamily')}"));
+				var fontSize:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'FontSize')}"));
+				var boldTitle:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Bold')}"));
+				var showLegend:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ShowLegend')}"));
+
+				//Get Global setting for the fonts
+				var globalFontFamily:String =  String(ExternalInterface.call("function(){ return getValueToFlash('Global', 'FontFamily')}"));				
+				var globalFontSize:String =  String(ExternalInterface.call("function(){ return getValueToFlash('Global', 'FontSize')}"));				
+				var globalFontWeight:String =  String(ExternalInterface.call("function(){ return getValueToFlash('Global', 'FontWeight')}"));
+				
+				this.fontFamily = globalFontFamily;
+				this.fontSize = Number(globalFontSize);
+				this.fontWeight = globalFontWeight;
+				
+				
+				chartLabel.text = title;
+				if(fontFamily != "")
+					chartLabel.setStyle("fontFamily", fontFamily);
+				else
+					chartLabel.setStyle("fontFamily", "Arial");
+				
+				chartLabel.setStyle("fontSize", fontSize);
+				
+				if(boldTitle == "true")
+					chartLabel.setStyle("fontWeight", "bold");
+				else
+					chartLabel.setStyle("fontWeight", "normal");
+				
+				if(showLegend == "true") 
+					legendLayout.visible = true;
+				else
+					legendLayout.visible = false;
+
+				messageLoadingPanel.visible = false;
+				sizeLoadingPanel(0, 0);
+				//dc.visible = true;
+				
+			}
+			private function getDeterminedMaxValue(magnitude, maxValue, step){
+				var determinedMaxValue:Number = 0;
+				for(var tenth:Number = magnitude; tenth > 0; tenth = tenth - step)
+				{
+					if(maxValue > tenth){
+						determinedMaxValue = tenth + step;
+						break;
+					}
+				}
+				return determinedMaxValue;
+			}
+			private function sizePanel(w:uint, h:uint):void {
+				messagePanel.width = w;
+				messagePanel.height = h;
+			}
+			private function sizeLoadingPanel(w:uint, h:uint):void {
+				messageLoadingPanel.width = w;
+				messageLoadingPanel.height = h;
+			}		
+			private function captureSnapshot():void
+			{
+				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
+				var strDomain:String = "";
+				var strProtocol:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
+					strDomain = "localhost:8080";
+				}
+				else
+				{
+					strProtocol = curUrl.split('/')[0];
+					strDomain = curUrl.split('/')[2];
+				}
+				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
+			}
+			/**
+			 * This function is called when the % data slider changes.
+			 * It's merely using the current slider value to slice the underlying array
+			 * and show more or less of the data
+			 */ 
+			private function sliceData():void {
+				hScale.dataProvider=ds.data.pivot.header.slice(1,dataSlice+1);
+				hAxis.invalidateDataProvider();
+				myLineGroup.invalidateDataProvider();
+				dc.invalidateDisplayList(); 
+			}
+
+			/**
+			 * The labelFunction property of the LineSeriesGroup, and other components, allow you to 
+			 * to determine how each to format each label the component displays
+			 */
+			private function axisLabel(obj:Object):String
+			{
+				if (obj!=null && obj<10 && obj>0){
+					if(Math.round(Number(obj)) == Number(obj))
+						formatter.precision = 0;
+					else{
+						if(vScale.maxValue < 1) //Add precision for small numbers
+						{
+							formatter.precision = 3;
+						}
+						else
+						{
+							formatter.precision = 2;
+						}
+					}
+				} else {
+					formatter.precision = 0;
+				}
+				return formatter.format(obj);
+			}
+			
+
+			/**
+			 * This function determines whether or not a point in the plotCollection should be graphed
+			 * This particular one looks at the index property of the obj to see if it should be included. This assumes there's an index property
+			 * These functions are usefull if you have not specifically massaged the data so that the extraneouse data has been removed.
+			 * The axiis dataset will provide the index value and it will indicate a column in the data set. Here you can specify 
+			 * columns to not include. 
+			 * If you do massage your data, the plotFilterFunction will not need to be used.
+			 */
+			private function filterColumns(obj:Object):Boolean
+			{
+				//Don't want filter fields, trim columns
+				if (obj.index < 1 || obj.index > dataSlice)
+					return false;
+				else
+					return true;
+			}
+
+			/**
+			 * The dataFilterFunction property of a LineSeriesGroup allows you to specify a filter such as this that allows you to decide
+			 * on the fly, which lines to include in rendering so you don't need to manipulate the underlying data set
+			 */
+			private function filterRows(obj:Object):Boolean
+			{
+				//Trim our rows
+				if (obj.pivotName == "Apples")
+					return false;
+				else
+					return true;
+			}
+			protected function service_resultHandler(event:ResultEvent):void
+			{
+				start();
+			}
+			
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				//Initialize variables and get the URL for the service that will provide data
+				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
+				var start:Boolean = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.start;
+				curUrl = String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
+				dataAction = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataAction')}"));
+				dataField = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'DataField')}"));
+				strUrl ="/visualization/dataDispatcher.do";
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
+
+				trnMessagePanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessagePanel','')}"));
+				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
+				trnMessageLoadingPanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoadingPanel','')}"));
+				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
+				
+				messagePanel.title = trnMessagePanel;
+				messageEmpty.text = trnMessageEmpty;
+				messageLoadingPanel.title = trnMessageLoadingPanel;
+				messageLoading.text = trnMessageLoading;
+				
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var labelArray:Array = new Array();
+				for(var year:int = startYear; year <= endYear; year++){
+					labelArray.push(year);
+				} 
+				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
+
+				var strDomain:String = "";
+				var strProtocol:String = "";
+				if(curUrl.indexOf("file://") > -1){
+					strProtocol = "http:";
+					strDomain = "localhost:8080";
+				}
+				else
+				{
+					strProtocol = curUrl.split('/')[0];
+					strDomain = curUrl.split('/')[2];
+				}
+				service.url = strProtocol + "//" + strDomain + strUrl;
+				var params:Object = {
+					"linechart" : "true",
+					"action"	: dataAction
+				};
+				
+				//Handle special parameter cases
+				if(idContainer == "AidType"){
+					params = {
+						"linechart" : "true",
+						"typeofaid" : "true",
+						"action"	: dataAction
+					};
+				}
+				if(itemId != null && itemId != "-1"){
+					params["itemId"] = itemId;
+				}
+
+				if(start)
+					service.send(params);
+				try {
+					ExternalInterface.addCallback("refreshGraph", refreshGraph);			
+				}
+				catch(errObject:Error){
+					//Fail silently when running standalone
+				}
+			}
+
+			public function refreshGraph():void
+			{
+				
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
+				
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				itemId = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'ItemId')}"));
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var labelArray:Array = new Array();
+				for(var year:int = startYear; year <= endYear; year++){
+					labelArray.push(year);
+				} 
+				sliderYear.labels = labelArray;
+				sliderYear.values[0] = startYear;
+				sliderYear.values[1] = endYear;
+				
+				var params:Object = {};
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
+				params["divide"] = divide;
+				params["linechart"] = "true";
+				params["action"] =  dataAction;
+				if(idContainer == "AidType"){
+					params = {
+						"typeofaid" : "true",
+						"divide": divide,
+						"linechart" : "true",
+						"action"	: dataAction
+					};
+					params["startYear"] = sliderYear.values[0];
+					params["endYear"] = sliderYear.values[1];
+				}
+				if(itemId != null && itemId != "-1"){
+					params["itemId"] = itemId;
+				}
+				service.send(params);
+			}
+
+			public function itemClick(evt:LayoutItemEvent):void{
+				var axiisSprite:AxiisSprite = evt.item;
+				var data:Object=axiisSprite.data[myLineGroup.plotCollection][myLineGroup.currentPlotIndex];
+				var array:Array = ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField).split("#");
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				if (array[1]!=null){
+					ExternalInterface.call("itemClick", array[1], idContainer, data.name);
+				}
+			}
+			
+			private function dataTipLabelFunction(axiisSprite:AxiisSprite):String
+			{
+				if (myLineGroup.currentPlotIndex < 0)
+					return "";
+				var data:Object=axiisSprite.data[myLineGroup.plotCollection][myLineGroup.currentPlotIndex];
+				var array:Array = ObjectUtils.getProperty(myLineGroup, axiisSprite["data"], myLineGroup.labelField).split("#");
+				return "<b>" + array[0] + "</b><br/>" + ObjectUtils.getProperty(myLineGroup, data, myLineGroup.plotLabelField) + "<br/>" + formatter.format(Number(ObjectUtils.getProperty(myLineGroup, data, myLineGroup.dataField))) + " " + currCode;
+				
+			}
+
+			//Section added for Drag&drop of Title
+
+			private function mouseOverHandler(event:MouseEvent):void 
+			{                
+				var dragInitiator:Label=Label(event.currentTarget);
+				var ds:DragSource = new DragSource();
+				ds.addData(dragInitiator, "text");               
+				
+				xS=event.localX; 
+				yS=event.localY;
+				
+				var textProxy:Label = new Label();
+				textProxy.text = dragInitiator.text;
+				textProxy.setStyle("fontSize", dragInitiator.getStyle("fontSize"));
+				textProxy.setStyle("fontFamily", dragInitiator.getStyle("fontFamily"));
+				DragManager.doDrag(dragInitiator, ds, event, textProxy, -xS, -yS);
+			}
+			private function dragEnterHandler(event:DragEvent):void {
+				if (event.dragSource.hasFormat("text"))
+				{
+					DragManager.acceptDragDrop(Canvas(event.currentTarget));
+				}
+			}
+			
+			private function dragDropHandler(event:DragEvent):void {
+				Label(event.dragInitiator).x = Canvas(event.currentTarget).mouseX;
+				Label(event.dragInitiator).y = Canvas(event.currentTarget).mouseY;
+			}
+			
+			private function getLegendY(currentIndex:Number ,y:Number):Number{
+				var ret = 0;
+				if (currentIndex < 4){
+					ret = y-5;
+				} else if (currentIndex < 8){
+					ret = y+25;
+				} else {
+					ret = y+55;
+					sliderYear.y = 440;
+				}
+				return ret;
+			}
+			
+			private function getLegendX(currentIndex:Number ,x:Number):Number{
+				return (currentIndex < 4) ? currentIndex*160 : (currentIndex < 8) ? (currentIndex-4)*160 : (currentIndex-8)*160;
+			}
+			
+			protected function service_faultHandler(event:FaultEvent):void
+			{
+				dc.visible = false;
+				messagePanel.title = "Network Error.";
+				messagePanel.visible = true;
+				sizePanel(300, 200);
+			}
+
+			protected function sliderYear_changeHandler(event:SliderEvent):void
+			{
+				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
+				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
+				
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				
+				var params:Object = {};
+				params["startYear"] = sliderYear.values[0];
+				params["endYear"] = sliderYear.values[1];
+				params["divide"] = divide;
+				params["linechart"] = "true";
+				params["action"] = dataAction;
+				if(idContainer == "AidType"){
+					params = {
+						"typeofaid" : "true",
+						"divide": divide,
+						"linechart" : "true",
+						"action": dataAction
+					};
+					params["startYear"] = sliderYear.values[0];
+					params["endYear"] = sliderYear.values[1];
+				}
+				if(itemId != null && itemId != "-1"){
+					params["itemId"] = itemId;
+				}
+				service.send(params);
+				var delayer:Delay = new Delay(captureSnapshot,4000,1);
+			}
+
+		]]>
+	</mx:Script>
+	
+	<!-- places a convenient background on the chart -->
+
+	<mx:CurrencyFormatter currencySymbol=""
+		precision="0"
+		id="formatter"
+		alignSymbol="right"
+		useThousandsSeparator="true"/>
+
+	<!--  GLOBAL VARIABLES -->
+	<mx:Number id="startYear"></mx:Number>
+	<mx:Number id="endYear"></mx:Number>
+	<mx:Object id="categories"/>
+	<mx:Object id="dataProvider"/>
+	<mx:String id="verticalField"/>
+	<mx:Number id="percentGap">.02</mx:Number>
+	<mx:String id="dataField">fundingtype</mx:String>
+	<mx:String id="itemId">-1</mx:String>
+	<mx:String id="fontFamily">Arial</mx:String>
+	<mx:Number id="fontSize">12</mx:Number>
+	<mx:String id="fontWeight">bold</mx:String>
+	<mx:String id="dataFontFamily">Arial</mx:String>
+	<mx:Number id="dataFontSize">12</mx:Number>
+	<mx:String id="dataFontWeight">bold</mx:String>
+	<mx:Resize id="resize" />
+	<!--   
+	NumericExpression provides a convenient place to store the results of numeric calculations used in multiple places within an MXML document. 
+	By binding the results of a complex numeric computation to a NumericExpression's value property, you allow other objects to bind on that 
+	value without the overhead of re-running the original computation.
+	-->
+	<utils:NumericExpression id="tension" value="{slider/210}" valueChanged="{if (myLineGroup) dc.invalidateDisplayList();}"/>
+
+	<!--
+	BooleanExpression provides a convenient place to store the results of boolean calculations used in multiple places within an MXML document. 
+	By binding the results of a complex boolean expression to a BooleanExpression's value property, you allow other objects to bind on that 
+	value without the overhead of re-running the original expression.
+	
+	For example, this markup will populate two labels with the text "true" but (a || b || c || d || e || true) will only have been evaluated once.
+	                 
+	<BooleanExpression id="be0" value="{a || b || c || d || e || true}" />
+	<mx:Label text="{be0.value}" />
+	<mx:Label text="{be0.value}" />
+	-->
+	              
+
+	<!--  
+	A scale that deals with linear numeric data.
+	-->
+	<axiis:LinearScale id="vScale" dataProvider="{dataProvider}" minLayout="0"  minValue="0" maxLayout="{myLineGroup.height}" />
+	<!--
+	A scale that converts categorical (String) data into layout space. The categories are assumed to be sorted alphabetically. 
+	-->
+	<axiis:CategoricalScale id="hScale"
+		minLayout="0"
+		maxLayout="{myLineGroup.width}"
+	 />
+
+	<mx:Canvas id="mxc1" 
+			   backgroundColor="white"
+			   horizontalCenter="0"
+			   verticalCenter="0"
+			   width="634" 
+			   height="460"
+			   dragEnter="dragEnterHandler(event);" 
+			   dragDrop="dragDropHandler(event);"
+			   >
+	<!--
+	DataCanvas manages the placement and the rendering of layouts.
+	They can have backgroundGeometries, foregroundGeometries, and layouts.
+	They inherit from Canvas
+	-->
+		<axiis:DataCanvas top="0"
+						  bottom="0"
+						  width="{this.width}"
+						  id="dc"
+						  verticalCenter="0"
+						  horizontalCenter="0" 
+						  left="40"
+						  right="80"
+						  showDataTips="true"
+						  strokes="{strokes}"
+						  fills="{fills}"
+						  palettes="{palettes}"
+						  >
+
+		<!-- Background -->
+		<!-- backgrounds appear behind the graph. There are also foregroundGeometries for doing annotations on top of the graph 
+			verticalScale="{vScale}"			The vertical scale used for scaling data to actual screen units		
+			tickStroke="{axisStroke}"			The stroke used to put the hash or tick marks on an axis
+			width="{dc.width}"
+			height="{myLineGroup.height}"
+			showDataTips="false"				A flag that indicates to DataCanvas that it should listen for mouse events that signal the need to create a data tip.
+			showGridArea="false"				Whether or not the grid cells are displayed
+			showGridLine="false"				Whether or not lines are drawn between grid cells
+			showLabels="false"					Whether or not to show labels on the axis
+			fontFamily="Myriad Pro"
+			fontColor="0"
+			fontSize="14"
+			tickGap="5"
+			majorTickSpacing="50"				The space between successive major tick marks. There is also a minorTickSpacing. Length of marks can be adjusted as well majorTickLength
+			labelFunction="{axisLabel}"			A function that is used to determine how each item in the dataProvider should be labeled along the axis.
+		-->
+		<axiis:backgroundGeometries>
+			<!--
+			VAxis renders values from bottom to top between a minimum and maximum value, and is intended to be rendered to the left of other layouts to provide a point of reference for those visualizations.
+			VAxis can optionally label each major tick mark or render gridlines aligned to the axis itself. 
+			-->
+			<axis:VAxis verticalScale="{vScale}"
+						tickStroke="{axisStroke}"
+						y="{myLineGroup.y}"
+						width="{dc.width}"
+						height="{myLineGroup.height}"
+						showDataTips="false"
+						fontColor="0"
+						fontFamily="{fontFamily}"
+						fontSize="{fontSize}"
+						fontWeight="{fontWeight}"
+						labelFunction="{axisLabel}"
+						majorTickSpacing="28"
+						showGridArea="true"
+						gridFill="{gridAreaFill}"
+						/>
+			<!--
+			<axis:VAxis 
+			id="vAxis"
+			y="{myLineGroup.y}"
+			verticalScale="{vScale}"
+			tickStroke="{axisStroke}"
+			width="{dc.width}"
+			height="{myLineGroup.height}"
+			showDataTips="false"
+			fontFamily="{fontFamily}"
+			fontSize="{fontSize}"
+			fontWeight="{fontWeight}"
+			fontColor="0"
+			tickGap="20"
+			majorTickSpacing="28"
+			labelFunction="{axisLabel}"
+			showGridArea="true"
+			gridFill="{gridAreaFill}"
+			/>
+			HCategoryAxis renders values from left to right between a indexed collection of string values and is intended to be rendered beneath other layouts to provide a point of reference for those visualizations.
+			HCategory Axis trys to optmize its layout based on the maximum widht/length of all labels in collection 
+			-->
+			<axiis:HCategoryAxis 
+				id="hAxis"
+				x="{myLineGroup.x}"
+				categoryScale="{this.hScale}"
+				width="{myLineGroup.width}"
+				dataProvider="{hScale.dataProvider}"
+				height="50"
+				y="{myLineGroup.height+myLineGroup.y}"
+				fontFamily="{fontFamily}"
+				fontSize="{fontSize}"
+				fontWeight="{fontWeight}"
+				/>
+			<!-- this is the actual x axis line -->
+			<degrafa:Line 
+				x="0"
+				x1="{myLineGroup.x + myLineGroup.width}"
+				y="{myLineGroup.y + myLineGroup.height}"
+				y1="{myLineGroup.y + myLineGroup.height}"
+				stroke="{axisStroke}"/>
+		</axiis:backgroundGeometries>
+
+		<!-- Layouts -->
+		<!--
+				Layouts are composite components consisting of ReferenceRepeaters (the
+				loop that defines a repeated bounding pattern)  DrawingGeometries
+				(what you are going to draw) and Layouts (child layouts) 
+		-->
+		<axiis:layouts>
+		
+			<!-- LineSeriesGroup
+				 Line series group renders multiple lines for a series of data points. This can be used to create visualizations that use curved surfaces such as stream graphs and line charts.
+				 
+					x="12"											x-location relative to paren
+					y="0"											y-location relative to parent
+					height="{dc.height-70}"							height of display essentially
+					width="{dc.width}"								width
+					tension="{tension.value}"						The tension used to render the curves in this chart. A value of 0 results in straight lines while a value of 1 results in exaggerated Bezier curves.
+					markerColor="{areaPalette.currentColor}"		The color at the center of the markers.		
+					dataFilterFunction="{filterRows}"				This provides a way to further refine a layouts dataProvider by providing access to a custom filter data filter function. 
+																	This allows developers to easily visualize subsets of the data without having to change the underlying data structure. 
+					showArea="{area.selected}"						Whether the area beneath the lines should be filled.
+					plotFilterFunction="{filterColumns}"			A filter function that will be used to determine whether a given data point should be included in the rendering.			
+					markerSize="8"									The diameter in pixels of the markers shown at each data point.			
+					showMarker="{showMarker.selected}"				Whether or not markers should be displayed at each data point
+					mode="{int(layoutGroup.selectedValue)}"			The layout mode used to render the lines. One of {MODE_BASELINE,MODE_STACK_ZERO,MODE_STACK_FLOW}.	
+					dataProvider="{dataProvider}"					EG: var myLines is an ArrayCollection || Array of Line
+																		Line is an object that has a name property, a plotPointsCollection property of PlotPoint, and an optional index which would be it's order in myLines
+																		PlotPoint is an object with an index property, an xvalue property used for display of text or the x-value, and a yvalue property which is the y-value
+					plotCollection="columns"						The name of the property on the objects in the dataProvider that contains the data to plot 
+																	It is expected that the plot collection is a collection of objects - like Array or ArrayCollection and contains the series of data to be plotted. 
+																	i.e. dataProvider=myLines is Array || ArrayCollection myLines[0].myPlotCollection is Array || ArrayCollection
+					dataField="value"								The property within each item in the dataProvider that contains the field used to determine the value of the item. (essentially the y value)							
+					labelField="pivotName"							The property within each item in the dataProvider that contains the field used to determine the label for the item.
+					xDataField="name"								The property within each item in the dataProvider that contains the field used to determine the value of the item on the horizontal axis.
+					plotLabelField="name"							The property on the items in the dataProvider that contains the label field for the entire plot.				
+					verticalScale="{vScale}"						The vertical scale, IScale, used to scale data values to chart values 
+					horizontalScale="{hScale}"						The horizontal scale, IScale, used to scale data values to chart values
+					stroke="{myStroke}"								The stroke used to render lines
+					fill="{areaFill}"								The fill used to render the area beneath the lines if area rendering is enabled.
+					enableRollOver="true"							Turns on/off the default roll-over state
+					currentDatum									The item in the dataProvider that the layout is currently rendering.
+					currentIndex									The index of the item in the dataProvider that the layout is currently rendering.
+					currentLabel									The label of the item in the dataProvider that the layout is currently rendering, as determine by taking currentDatum[labelField], if a labelField is defined.
+					currentReference								The geometry that is being used to render the current data item as it appears after the necessary iterations of the referenceRepeater have been executed.
+					currentValue									The value of the item in the dataProvider that the layout is currently rendering, as determined by taking currentDatum[dataField], if a dataField is defined.								
+			-->
+			<groupings:LineSeriesGroup id="myLineGroup"
+				x="12"
+				y="50"
+				height="{280}"
+				width="{dc.width-25}"
+				tension="{tension.value}"
+				markerColor="{areaPalette.currentColor}"		
+				dataFilterFunction="{filterRows}"
+				showArea="{area}"
+				plotFilterFunction="{filterColumns}"
+				markerSize="8"
+				showMarker="{showMarker}"
+				mode="{int(layoutGroup)}"
+				dataProvider="{dataProvider}"
+				plotCollection="columns"
+				dataField="value"
+				labelField="pivotName"
+				xDataField="name"
+				plotLabelField="name"
+				verticalScale="{vScale}"
+				horizontalScale="{hScale}"
+				stroke="{myStroke}"
+				fill="{areaFill}"
+				itemClick="this.itemClick(event);"
+				dataTipLabelFunction="{dataTipLabelFunction}"
+				enableRollOver="true"
+				/>
+			<axiis:HBoxLayout id="legendLayout" 
+							  x="-40"
+							  y="{myLineGroup.height+myLineGroup.y+35}"
+							  width="{mxc1.width}"
+							  height="50"
+							  dataProvider="{categories}"
+							  dataField="pivotName" 
+							  showDataTips="false"
+							  > 
+				<axiis:drawingGeometries> 
+					<degrafa:RasterText 
+						id="legendText" 
+						y="{getLegendY(legendLayout.currentIndex,legendLayout.currentReference.y)}" 
+						x="{getLegendX(legendLayout.currentIndex,legendLayout.currentReference.x)}" 
+						text="{legendLayout.currentDatum['pivotName']}" 
+						fontFamily="{fontFamily}"
+						fontWeight="{fontWeight}"
+						fontSize="{fontSize}"
+						wordWrap="true"
+						width="150"
+						height="50"
+						autoSize="left"
+						/> 
+					<degrafa:RegularRectangle 
+						id="legendSquare" width="10" height="10" fill="{legendFill}" 
+						y="{getLegendY(legendLayout.currentIndex,legendLayout.currentReference.y)+4}" 
+						x="{getLegendX(legendLayout.currentIndex,legendLayout.currentReference.x)-14}"/>
+				</axiis:drawingGeometries> 
+			</axiis:HBoxLayout> 
+				 
+		</axiis:layouts>
+		
+	</axiis:DataCanvas>
+	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="420" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
+	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
+
+	</mx:Canvas>
+	<!--  PALLETTES & FILLS & STROKES -->
+
+	<!--
+	LayoutPalette will generate an Array of colors based on a Layout. The produced colors will be equally distributed between two given anchor colors 
+	and will contain x values where x is the number of objects in the Layout's dataProvider. As the Layout renders and its currentIndex property is incremented, 
+	the LayoutPalette's currentColor will be incremented as well. Binding on the currentColor allows you vary the color of a fill or stroke used 
+	in the Layout's drawingGeometries  as the Layout renders. Very cool.	
+	
+	LayoutPalette will generates an Array of colors for a Layout. By default, LayoutPalette uses the Flex 3 Halo color scheme, but this can be overridden using 
+	the colors property. As the currentIndex of the Layout driving this palette changes, the currentColor property is updated to the color at the currentIndex in
+	the array. If the layout needs more colors than the array contains, the colors wraps around the array using the mod operator.
+	
+	NOTE: The major difference between Layout and LayoutAuto: 
+			Layout works off of currentIndex for a layout so you only get as many colors as there are for that index values
+			LayoutAuto works off the length of the dataProvider to decide how manu colors to generate so there will be many more colors
+			If you want a series with repeating colors from series to series use Layout. 
+			If you want different colors for all bars, use LayoutAuto
+	--> 
+	<mx:Array id="palettes">
+		<axiis:LayoutPalette layout="{myLineGroup}" colors="{palette}" id="outerPalette"/> 
+		<axiis:LayoutPalette layout="{myLineGroup}" colors="{palette}" id="clusterPalette"/> 
+		<axiis:LayoutPalette layout="{myLineGroup}" colors="{palette}" id="areaPalette"/> 
+		<axiis:LayoutPalette layout="{legendLayout}" colors="{palette}" id="legendPalette"/> 
+		<!--<paint:LayoutAutoPalette id="outerPalette" layout="{myLineGroup}" colorFrom="0xCC3333" colorTo="0x3333CC"/>
+		<paint:LayoutAutoPalette id="clusterPalette" layout="{myLineGroup}" colorFrom="{outerPalette.currentColor}" colorTo="{outerPalette.currentColor | 0x337f00}"/>
+		<paint:LayoutAutoPalette id="areaPalette" layout="{myLineGroup}" colorFrom="0x3333CC" colorTo="0xCC3333"/>-->
+	</mx:Array>
+	
+	<!--
+	A LinearGradientFill lets you specify a gradient fill
+	angle defines the transition across the content
+	A GradientStop defines the objects that control a transition as part of a gradient fill. Stops will be equally spaced unless ratio is specified
+	-->
+	<mx:Array id="fills">
+		<degrafa:SolidFill id="gridAreaFill" color="{0xEEEEEE}">
+		</degrafa:SolidFill>
+		<degrafa:LinearGradientFill id="areaFill" angle="90" enableEvents="false">
+			<degrafa:GradientStop color="{areaPalette.currentColor}" alpha=".95"/>
+			<degrafa:GradientStop color="{areaPalette.currentColor | 0x999933}" alpha=".65"/>
+		</degrafa:LinearGradientFill>
+		<degrafa:SolidFill id="legendFill" 
+						   color="{legendPalette.currentColor}" /> 
+		<degrafa:LinearGradientFill id="legendFill2" angle="90" enableEvents="false">
+			<degrafa:GradientStop color="{legendPalette.currentColor}" alpha=".95"/>
+			<degrafa:GradientStop color="{legendPalette.currentColor | 0x999933}" alpha=".65"/>
+		</degrafa:LinearGradientFill>
+
+		<degrafa:LinearGradientFill id="clusterFill" angle="45" enableEvents="false">
+			<degrafa:GradientStop color="{clusterPalette.currentColor}"/>
+			<degrafa:GradientStop color="{clusterPalette.currentColor | 0xFFFFFF}" alpha=".85"/>
+		</degrafa:LinearGradientFill>
+	</mx:Array>
+	
+	<!--
+	LinearGradientStroke is gradient filled stroke as opposed to just one color. pixelHinting is used to hint strokes to full pixels.
+	SolidStroke is typicaly solid stroke. caps define line ends and can put additional lenght on a line. Useful where lines overlap
+	-->
+	<mx:Array id="strokes">
+		<degrafa:LinearGradientStroke id="colStroke" pixelHinting="true" angle="45" enableEvents="false">
+			<degrafa:GradientStop color="0xFFFFFF" alpha=".7"/>
+			<degrafa:GradientStop color="0xFFFFFF" alpha=".3"/>
+		</degrafa:LinearGradientStroke>
+		<degrafa:SolidStroke 
+			color="0xFFFFFF" 
+			alpha=".3"/>
+		<degrafa:SolidStroke 
+			id="axisStroke" 
+			color="0x000000"  
+			pixelHinting="true"/>
+		<degrafa:SolidStroke
+			id="myStroke"
+			color="{areaPalette.currentColor}"
+			weight="1"
+			alpha="1"
+			caps="none"
+			pixelHinting="true"/>
+	</mx:Array>
+
+	<!-- DISPLAY OBJECTS -->
+	<mx:Number id="dataSlice">20</mx:Number>
+	<mx:Number id="slider">25</mx:Number>
+	<mx:Number id="labelRotate">0</mx:Number>
+	<mx:Boolean id="area">false</mx:Boolean>
+	<mx:Boolean id="showMarker">true</mx:Boolean>
+	<mx:Number id="layoutGroup">{LineSeriesGroup.MODE_BASELINE}</mx:Number>
+
+<!--
+	<mx:HBox id="myBox" bottom="50" horizontalCenter="0">
+		<mx:HBox>
+			<mx:Label text="Line Curve" textAlign="right" verticalCenter="0"/>
+			<mx:HSlider width="80"
+				id="slider"
+				minimum="1"
+				maximum="80"
+				value="35"
+				liveDragging="true"
+				showTrackHighlight="false"
+				verticalCenter="-5"/>
+		</mx:HBox>
+		<mx:Label text="|"/>
+		<mx:HBox>
+			<mx:Label text="% Data" textAlign="right" verticalCenter="0"/>
+			<mx:HSlider
+				id="dataSlice"
+				width="80"
+				minimum="3"
+				maximum="220"
+				value="30"
+				snapInterval="1"
+				change="{sliceData();}"
+				showTrackHighlight="false"
+				verticalCenter="-5"/>
+		</mx:HBox>
+		<mx:HBox>
+		<mx:Label text="Label Rotation" textAlign="right" verticalCenter="0"/>
+			<mx:HSlider
+				id="labelRotate" 
+				width="80"
+				minimum="0"
+				maximum="90"
+				value="0"
+				snapInterval="1"
+				change="{hAxis.labelRotation=labelRotate.value;dc.invalidateDisplayList();}"
+				showTrackHighlight="false"
+				verticalCenter="-5"/>
+		</mx:HBox>
+		<mx:Label text="|"/>
+		<mx:HBox>
+			<mx:Label text="Area" textAlign="right" verticalCenter="0"/>
+			<mx:CheckBox id="area" change="{dc.invalidateDisplayList();}" selected="true"/>
+		</mx:HBox>
+		<mx:Label text="|"/>
+		<mx:HBox>
+			<mx:Label text="Marker" textAlign="right" verticalCenter="0"/>
+			<mx:CheckBox id="showMarker" change="{dc.invalidateDisplayList();}"/>
+		</mx:HBox>
+		<mx:Label text="|"/>
+		<mx:Spacer width="20"/>
+		<mx:HBox>
+			<mx:RadioButtonGroup id="layoutGroup" change="{dc.invalidateDisplayList();}"/>
+			<mx:RadioButton label="Overlay" group="{layoutGroup}" value="{LineSeriesGroup.MODE_BASELINE}" selected="true"/>
+			<mx:RadioButton label="Stack" group="{layoutGroup}" value="{LineSeriesGroup.MODE_STACK_ZERO}"/>
+			<mx:RadioButton label="Flow" group="{layoutGroup}" value="{LineSeriesGroup.MODE_STACK_FLOW}"/>
+		</mx:HBox>
+	</mx:HBox>
+-->
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageEmpty" fontWeight="bold" fontSize="13" color="black" text="No data to show"/>
+	</mx:Panel>
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Loading" width="0" height="0" id="messageLoadingPanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageLoading" fontWeight="bold" fontSize="13" color="black" text="Loading data..."/>
+	</mx:Panel>
+
+</mx:Application>

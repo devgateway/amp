@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="org.digijava.kernel.dbentity.Country" table="DG_COUNTRIES" lazy="false">
+		<cache usage="read-write" />
+		<id column="ISO" name="iso" type="string">
+			<generator class="assigned" />
+		</id>
+		<property column="COUNTRY_ID" length="38" name="countryId" type="java.lang.Long" />
+		<property column="COUNTRY_NAME" length="200" name="countryName" type="string" />
+		<property column="ISO3" length="3" name="iso3" type="string" />
+		<property column="STAT" length="1" name="stat" type="string" />
+		<property column="SHOW_CTRY" length="1" name="showCtry" type="string" />
+		<property column="DEC_CTRY" length="1" name="decCtryFlag" type="string" />
+		<property column="MESSAGE_LANG_KEY" length="200" name="messageLangKey" type="string" />
+		<property column="AVAILABLE" name="available" type="boolean" />
+	</class>
+
+</hibernate-mapping>

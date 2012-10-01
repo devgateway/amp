@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-13529</jira>
+  <keyword>pledge</keyword>
+  <author>Mauricio</author>
+  <description>Set field organization group by organization selected</description>
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+			UPDATE amp_funding_pledges fp SET amp_org_grp_id = (SELECT org_grp_id FROM amp_organisation WHERE amp_org_id = fp.amp_org_id);
+      </lang>
+    </script>
+  </apply>
+
+</tns:patch>

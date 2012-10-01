@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-10682</jira>
+	<keyword>Tabs</keyword>
+	<author>Alexandru Gartner</author>
+	<author>Medea Gugushvili</author>
+	<description>Moving patch written by Alex to 2 and fix getlocationidbyimplloc for postgresql</description>
+	 <apply>
+        <script>
+            <lang  delimiter="@" type="postgres">
+              CREATE OR REPLACE FUNCTION getlocationidbyimplloc(paramcvlocationid bigint, impllocation character varying)
+				RETURNS bigint AS
+				$BODY$
+				declare ret bigint;	
+				declare	cValueId bigint;
+				declare	currentValueId bigint;
+				declare	parentCvLocationId bigint;
+				declare	cvLocationId bigint;
+				BEGIN
+					cvLocationId := paramCvLocationId;
+					currentValueId	:= 0;
+					parentCvLocationId := cvLocationId;
+					select v.id into cValueId from amp_category_value v, amp_category_class c where 
+					c.keyName='implementation_location' AND v.category_value=implLocation AND c.id=v.amp_category_class_id;
+					WHILE currentValueId!=cValueId AND parentCvLocationId is not null LOOP	
+					cvLocationId:= parentCvLocationId;
+					select loc.parent_category_value, loc.parent_location into currentValueId,parentCvLocationId 
+					from amp_category_value_location loc where loc.id=cvLocationId;	
+					end LOOP;
+					if currentValueId=cValueId THEN	return cvLocationId;
+					end if;	
+					return null; 
+				end;
+				$BODY$
+				LANGUAGE plpgsql VOLATILE@
+            </lang>
+        </script>
+		<script>
+			<lang delimiter=";" type="postgres">
+			CREATE OR REPLACE VIEW v_districts AS 
+			 SELECT ra.amp_activity_id, getlocationname(getlocationidbyimplloc(l.location_id, 'District'::character varying)) AS location_name, getlocationidbyimplloc(l.location_id, 'District'::character varying) AS location_id, sum(ra.location_percentage) AS location_percentage
+			   FROM amp_activity_location ra, amp_location l
+			  WHERE ra.amp_location_id = l.amp_location_id AND getlocationidbyimplloc(l.location_id, 'District'::character varying) IS NOT NULL
+			  GROUP BY ra.amp_activity_id, getlocationidbyimplloc(l.location_id, 'District'::character varying);
+            </lang>
+		</script>
+	</apply>
+</tns:patch>

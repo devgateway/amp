@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-11297</jira>
+	<keyword>PCD Comment</keyword>
+	<author>Medea</author>
+	<description>>Add PCD Comment Field</description>
+	<trigger type="all">
+		<condition type="entryInTableMissing" tablename="amp_field"
+			columnname="field_name" columnvalue="Proposed Completion Date" />
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				insert into amp_field(amp_field_id,field_name) values (nextval('amp_field_seq'),'Proposed Completion Date');
+			</lang>
+		</script>
+	</apply>
+
+</tns:patch>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iati-activities version="1.0">
+  <iati-activity default-currency="USD" xml:lang="en">
+        <activity-website>http://web.worldbank.org/external/projects/main?pagePK=64283627&amp;piPK=73230&amp;theSitePK=40941&amp;menuPK=228424&amp;Projectid=P073821</activity-website>
+        <reporting-org>World Bank</reporting-org>
+        <other-identifier owner-ref="" owner-name="World Bank">P073821</other-identifier>
+        <title>Multi-Sectoral AIDS Project (MAP)</title>
+        <description type="objectives">Here the Objetives</description>
+        <description type="summary">Here the sumary description</description>
+        <recipient-country ref="MWI">Malawi</recipient-country>
+        <participating-org role="donor" ref="" type="multilateral" xml:lang="">World Bank</participating-org>
+        <participating-org role="beneficiary" ref="" type="" xml:lang="">GOVERNMENT OF MALAWI</participating-org>
+        <participating-org role="implementing" ref="" type="" xml:lang="">NATIONAL AIDS COMMISSION</participating-org>
+        <sector vocabulary="WB" ref="BC" percentage="47">Central government administration</sector>
+        <sector vocabulary="WB" ref="JB" percentage="38">Other social services</sector>
+        <sector vocabulary="WB" ref="JA" percentage="10">Health</sector>
+        <sector vocabulary="WB" ref="BH" percentage="5">Sub-national government administration</sector>
+        <finance-type ref="loan" xml:lang="en">Specific Investment Loan</finance-type>
+        <contact-info>
+            <organization>World Bank</organization>
+            <person-name>Dutta, Sheila</person-name>
+        </contact-info>
+        <aid-type>Grant</aid-type>
+        <total-cost></total-cost>
+        <!-- 
+        Types : 
+              original budged = Planned Commitment 
+              updated budged = = Planned Commitment 
+              Planned Disbursement =  Planned Disbursement
+        Value :
+                funding amount and date
+        -->
+        <budget-planned type="original-budget" period="annual">
+          <period-start>2009-04-01</period-start> 
+          <period-end>2010-03-31</period-end> 
+          <value value-date="2009-04-01">422558</value> 
+        </budget-planned>
+        <budget-planned type="original-budget" period="annual">
+          <period-start>2010-04-01</period-start> 
+          <period-end>2011-03-31</period-end> 
+          <value value-date="2010-04-01">304184</value> 
+        </budget-planned>
+        <transaction flow="incoming" type="disbursment">
+           <!--value-date used for exhange calculations-->
+             <value currency="USD" value-date="2008-12-31" ref="">37459999</value>
+              <!--When it's blank we have to take participating-org role=donor-->
+              <provider-org provider-activity-id="" ref="WB">World Bank</provider-org>
+              <!--When it's blank we have to take participating-org role=beneficiary-->
+              <receiver-org receiver-activity-id=""></receiver-org>
+              <description>Notes</description>
+              <!--Transaction date the date when the tansaction was sign-->
+              <milestone-date>2008-12-31</milestone-date>
+              <aid-type>loan</aid-type>
+        </transaction>
+         <transaction flow="" ref="" type="commitment">
+            <value currency="" value-date="2001-04-03" type="">10973490</value>
+            <provider-org provider-activity-id="" ref="WB">World Bank</provider-org>
+        </transaction>
+        
+    </iati-activity>
+</iati-activities>

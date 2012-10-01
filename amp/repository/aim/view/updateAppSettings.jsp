@@ -180,6 +180,9 @@ function loadShareRules(){
 								 <DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 								<![endif]-->
 								<table class="inside" width="100%" cellpadding="0" cellspacing="0">
+								<tr bgcolor=#C7D4DB>
+								<td colspan=2 align=center style="padding:5px;">Application Settings</td>
+								</tr>
 							<logic:equal name="aimUpdateAppSettingsForm" property="updated" value="true">
 								<tr>
 									<td class="inside" colspan="2">
@@ -200,8 +203,8 @@ function loadShareRules(){
 									</td>
 								</tr>
 							</logic:equal>
-							<tr>
-								<td class="inside">
+							<tr bgcolor=#f8f8f8>
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn key="aim:numberactivitiesprojectsperpage">Number of activities/projects per page</digi:trn>
                 </td>
                 <td class="inside">
@@ -212,7 +215,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside">
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn key="aim:numberofpagestodisplay">Number of Pages to display in paginator</digi:trn>
 				                </td>
                 				<td class="inside">
@@ -220,8 +223,8 @@ function loadShareRules(){
 								</td>
 							</tr>
 
-							<tr>
-								<td class="inside">
+							<tr bgcolor=#f8f8f8>
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn key="aim:numberreportsperpage">Number of reports per page</digi:trn>
 								</td>
 								<td class="inside">
@@ -232,7 +235,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside">
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn key="aim:defLanguage">Language</digi:trn>
 								</td>
 								<td class="inside">
@@ -252,8 +255,8 @@ function loadShareRules(){
 									</html:select>
 								</td>
 							</tr>
-							<tr>
-								<td class="inside">
+							<tr bgcolor=#f8f8f8>
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn key="aim:defCurrency">Currency</digi:trn>
 								</td>
 								<td class="inside">
@@ -264,7 +267,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside">
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn key="aim:defValidation">Validation</digi:trn>
 								</td>
 								<td class="inside">
@@ -287,8 +290,8 @@ function loadShareRules(){
 									</html:select>
 								</td>
 							</tr>
-							<tr>
-								<td class="inside">
+							<tr bgcolor=#f8f8f8>
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn key="aim:reportsDefaultStartYear">Reports Default Start Year</digi:trn>
 								</td>
 								<td class="inside">
@@ -296,15 +299,15 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside">
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn key="aim:reportsDefaultEndYear">Reports Default End Year</digi:trn>
 								</td>
 								<td class="inside">
 									<html:text property="reportEndYear" size="5"  styleClass="inputx insidex"/>
 								</td>
 							</tr>
-							<tr>
-								<td class="inside">
+							<tr bgcolor=#f8f8f8>
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn key="aim:defFisCalendar">Fiscal Calendar</digi:trn>
 								</td>
 								<td class="inside">
@@ -315,7 +318,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside">
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn key="aim:defaultTeamTab">Default Team Tab</digi:trn>
 								</td>
 								<td class="inside">
@@ -333,8 +336,8 @@ function loadShareRules(){
 									<a style="cursor:pointer;color:#006699" onClick="if(document.getElementById('defaultReport').value == 0) {alert('<digi:trn key="aim:defaultTeamTabDetailsAlertMessage">Please select a default tab</digi:trn>');return false;}else{showMyPanel();}"><digi:trn key="aim:defaultTeamTabDetailsMessage">Click here for details</digi:trn></a>
 								</td>
 							</tr>
-							<tr>
-								<td class="inside">
+							<tr bgcolor=#f8f8f8>
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn>Rights for Team Resources</digi:trn>
 								</td>
 								<td class="inside">
@@ -351,7 +354,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside">
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn>Rights for Sharing Team Resources Across Workspaces</digi:trn>
 								</td>
 								<td class="inside">
@@ -367,8 +370,8 @@ function loadShareRules(){
 									</html:select>
 								</td>
 							</tr>
-							<tr>
-								<td class="inside">
+							<tr bgcolor=#f8f8f8>
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<digi:trn>Rights For Publishing Resources</digi:trn>
 								</td>
 								<td class="inside">
@@ -391,7 +394,7 @@ function loadShareRules(){
 								<c:if test="${aimUpdateAppSettingsForm.allowPublishingResources==2}">
 									<c:set var="displayDiv"></c:set>
 								</c:if>
-								<td class="inside">
+								<td class="inside" style="font-size:12px; font-weight:bold;">
 									<div style="${displayDiv}"  id="memDiv">
 										<digi:trn>Members</digi:trn>
 									</div>															
@@ -410,7 +413,7 @@ function loadShareRules(){
 									</td>														
 								</tr>
 							<tr>
-								<td class="inside" colspan="2"><digi:errors/></td>
+								<td colspan="2"><digi:errors/></td>
               </tr>
             </table>
 						

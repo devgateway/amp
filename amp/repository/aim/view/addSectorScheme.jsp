@@ -89,7 +89,7 @@
 															<digi:trn key="aim:SchemeCode">Scheme Code</digi:trn><font color="red">*</font>:
 														</td>
 														<td>
-															<html:text name ="aimAddSectorForm" property="secSchemeCode" size="5"/> 
+															<html:text name ="aimAddSectorForm" property="secSchemeCode" size="20"/> 
 														</td>
 													</tr>
 													<tr>

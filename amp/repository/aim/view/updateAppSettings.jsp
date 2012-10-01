@@ -181,7 +181,7 @@ function loadShareRules(){
 								<![endif]-->
 								<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 								<tr bgcolor=#C7D4DB>
-								<td colspan=2 align=center style="padding:5px;">Application Settings</td>
+								<td colspan=2 align=center style="padding:5px; font-size:12px; font-weight:bold;">Application Settings</td>
 								</tr>
 							<logic:equal name="aimUpdateAppSettingsForm" property="updated" value="true">
 								<tr>
@@ -394,12 +394,12 @@ function loadShareRules(){
 								<c:if test="${aimUpdateAppSettingsForm.allowPublishingResources==2}">
 									<c:set var="displayDiv"></c:set>
 								</c:if>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td style="font-size:12px; font-weight:bold;">
 									<div style="${displayDiv}"  id="memDiv">
 										<digi:trn>Members</digi:trn>
 									</div>															
 								</td>
-								<td class="inside">
+								<td>
 									<div style="${displayDiv}"  id="membersDiv">																	
 										<html:select name="aimUpdateAppSettingsForm" property="selTeamMembers" multiple="true" styleId="selTeamMembers" style="width:300px;height:200px" styleClass="inputx insidex">
 											<logic:empty name="aimUpdateAppSettingsForm" property="teamMembers">

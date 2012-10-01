@@ -187,7 +187,7 @@ function trim(stringToTrim) {
 															<digi:trn>Please select from below</digi:trn>
 														</c:set>															
 														<tr style="background:#f4f4f2;">
-															<td width="150" align="center" bgcolor="#f4f4f2" colspan="3">
+															<td class="inside" align="center" bgcolor="#f4f4f2" colspan="3">
 															<div style="text-align:center;">
 																<font color="red"><b>*</b></font>
 																<digi:trn key="aim:workspaceGroup">Workspace Group</digi:trn>
@@ -217,10 +217,11 @@ function trim(stringToTrim) {
 										</logic:notEmpty>
 										<tr>
 											<td colspan="3">
-												<digi:errors/>
+												
 											</td>	
 										</tr>
 									</table>
+									
 									<c:set var="translation">
 										<digi:trn key="aim:btnSave">Save</digi:trn>
 									</c:set>

@@ -204,7 +204,7 @@ function loadShareRules(){
 								</tr>
 							</logic:equal>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn key="aim:numberactivitiesprojectsperpage">Number of activities/projects per page</digi:trn>
                 </td>
                 <td class="inside">
@@ -215,7 +215,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn key="aim:numberofpagestodisplay">Number of Pages to display in paginator</digi:trn>
 				                </td>
                 				<td class="inside">
@@ -224,7 +224,7 @@ function loadShareRules(){
 							</tr>
 
 							<tr bgcolor=#f8f8f8>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn key="aim:numberreportsperpage">Number of reports per page</digi:trn>
 								</td>
 								<td class="inside">
@@ -235,7 +235,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn key="aim:defLanguage">Language</digi:trn>
 								</td>
 								<td class="inside">
@@ -256,7 +256,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn key="aim:defCurrency">Currency</digi:trn>
 								</td>
 								<td class="inside">
@@ -267,7 +267,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn key="aim:defValidation">Validation</digi:trn>
 								</td>
 								<td class="inside">
@@ -291,7 +291,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn key="aim:reportsDefaultStartYear">Reports Default Start Year</digi:trn>
 								</td>
 								<td class="inside">
@@ -299,7 +299,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn key="aim:reportsDefaultEndYear">Reports Default End Year</digi:trn>
 								</td>
 								<td class="inside">
@@ -307,7 +307,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn key="aim:defFisCalendar">Fiscal Calendar</digi:trn>
 								</td>
 								<td class="inside">
@@ -318,7 +318,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn key="aim:defaultTeamTab">Default Team Tab</digi:trn>
 								</td>
 								<td class="inside">
@@ -337,7 +337,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn>Rights for Team Resources</digi:trn>
 								</td>
 								<td class="inside">
@@ -354,7 +354,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn>Rights for Sharing Team Resources Across Workspaces</digi:trn>
 								</td>
 								<td class="inside">
@@ -371,7 +371,7 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside" style="font-size:12px; font-weight:bold;">
+								<td class="inside 12_bold">
 									<digi:trn>Rights For Publishing Resources</digi:trn>
 								</td>
 								<td class="inside">
@@ -394,7 +394,7 @@ function loadShareRules(){
 								<c:if test="${aimUpdateAppSettingsForm.allowPublishingResources==2}">
 									<c:set var="displayDiv"></c:set>
 								</c:if>
-								<td style="font-size:12px; font-weight:bold;">
+								<td class="12_bold">
 									<div style="${displayDiv}"  id="memDiv">
 										<digi:trn>Members</digi:trn>
 									</div>															

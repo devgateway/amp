@@ -25,6 +25,7 @@ package org.digijava.kernel.request;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -100,6 +101,13 @@ public class RequestProcessor
 	
 	private static String httpPort = null;
 	private static String httpsPort = null;
+
+    private static Set<String> bypassRefererCheckActions = null;
+
+    static {
+        bypassRefererCheckActions = new HashSet<String>();
+        bypassRefererCheckActions.add("/aim/confirmRegisteration.do");
+    }
 
     public static class ModuleSecurityException
         extends RuntimeException {};
@@ -263,7 +271,14 @@ public class RequestProcessor
         		commonURL = commonURL.substring(0, idx);
         	}
         	String oldCommonURL = new String(commonURL);
+            
+            String actionPath = request.getRequestURL().substring(request.getRequestURL().indexOf("/", request.getRequestURL().indexOf("://") + 3));
+            if (bypassRefererCheckActions.contains(actionPath)) {
+                referrer = request.getRequestURL().toString();
+            }
+
         	if (referrer != null){
+
         		String commonREF = new String(referrer);
         		commonREF = commonREF.substring(commonREF.indexOf("://") + 3);
         		idx = commonREF.indexOf('/');

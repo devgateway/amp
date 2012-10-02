@@ -204,8 +204,8 @@ function loadShareRules(){
 								</tr>
 							</logic:equal>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside 12_bold">
-									<digi:trn key="aim:numberactivitiesprojectsperpage">Number of activities/projects per page</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn key="aim:numberactivitiesprojectsperpage">Number of activities/projects per page</digi:trn></div>
                 </td>
                 <td class="inside">
 									<html:text property="defRecsPerPage" size="5"  styleClass="inputx insidex" styleId="defRecsPerPage"/>
@@ -215,8 +215,8 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside 12_bold">
-									<digi:trn key="aim:numberofpagestodisplay">Number of Pages to display in paginator</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn key="aim:numberofpagestodisplay">Number of Pages to display in paginator</digi:trn></div>
 				                </td>
                 				<td class="inside">
 									<html:text property="numberOfPagesToDisplay" size="5"  styleClass="inputx insidex" styleId="numberOfPagesToDisplay"/>
@@ -224,8 +224,8 @@ function loadShareRules(){
 							</tr>
 
 							<tr bgcolor=#f8f8f8>
-								<td class="inside 12_bold">
-									<digi:trn key="aim:numberreportsperpage">Number of reports per page</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn key="aim:numberreportsperpage">Number of reports per page</digi:trn></div>
 								</td>
 								<td class="inside">
 									<html:text property="defReportsPerPage" size="5"  styleClass="inputx insidex" styleId="repsPerPage"/>
@@ -235,8 +235,8 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside 12_bold">
-									<digi:trn key="aim:defLanguage">Language</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn key="aim:defLanguage">Language</digi:trn></div>
 								</td>
 								<td class="inside">
 									<html:select property="language" styleClass="inputx insidex">
@@ -256,8 +256,8 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside 12_bold">
-									<digi:trn key="aim:defCurrency">Currency</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn key="aim:defCurrency">Currency</digi:trn></div>
 								</td>
 								<td class="inside">
 									<html:select property="currencyId" styleClass="inputx insidex">
@@ -267,8 +267,8 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside 12_bold">
-									<digi:trn key="aim:defValidation">Validation</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn key="aim:defValidation">Validation</digi:trn></div>
 								</td>
 								<td class="inside">
 									<bean:define id="newOnly" value=""/>
@@ -291,24 +291,24 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside 12_bold">
-									<digi:trn key="aim:reportsDefaultStartYear">Reports Default Start Year</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn key="aim:reportsDefaultStartYear">Reports Default Start Year</digi:trn></div>
 								</td>
 								<td class="inside">
 									<html:text property="reportStartYear" size="5"  styleClass="inputx insidex"/>
 								</td>
 							</tr>
 							<tr>
-								<td class="inside 12_bold">
-									<digi:trn key="aim:reportsDefaultEndYear">Reports Default End Year</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn key="aim:reportsDefaultEndYear">Reports Default End Year</digi:trn></div>
 								</td>
 								<td class="inside">
 									<html:text property="reportEndYear" size="5"  styleClass="inputx insidex"/>
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside 12_bold">
-									<digi:trn key="aim:defFisCalendar">Fiscal Calendar</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn key="aim:defFisCalendar">Fiscal Calendar</digi:trn></div>
 								</td>
 								<td class="inside">
 									<html:select property="fisCalendarId" styleClass="inputx insidex">
@@ -318,8 +318,8 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside 12_bold">
-									<digi:trn key="aim:defaultTeamTab">Default Team Tab</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn key="aim:defaultTeamTab">Default Team Tab</digi:trn></div>
 								</td>
 								<td class="inside">
 									<html:select property="defaultReportForTeamId" styleClass="inputx insidex"  styleId="defaultReport">
@@ -337,8 +337,8 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside 12_bold">
-									<digi:trn>Rights for Team Resources</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn>Rights for Team Resources</digi:trn></div>
 								</td>
 								<td class="inside">
 									<html:select property="allowAddTeamRes" styleClass="inputx insidex" onchange="return loadShareRules()" styleId="allowAddTeamRes">
@@ -354,8 +354,8 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr>
-								<td class="inside 12_bold">
-									<digi:trn>Rights for Sharing Team Resources Across Workspaces</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn>Rights for Sharing Team Resources Across Workspaces</digi:trn></div>
 								</td>
 								<td class="inside">
 									<html:select property="allowShareAccrossWRK" styleClass="inputx insidex">
@@ -371,8 +371,8 @@ function loadShareRules(){
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
-								<td class="inside 12_bold">
-									<digi:trn>Rights For Publishing Resources</digi:trn>
+								<td class="inside">
+									<div class="bold_12"><digi:trn>Rights For Publishing Resources</digi:trn></div>
 								</td>
 								<td class="inside">
 									<html:select property="allowPublishingResources" styleClass="inputx insidex" onchange="publishingRigthsChanged()" styleId="publResRights">
@@ -394,10 +394,10 @@ function loadShareRules(){
 								<c:if test="${aimUpdateAppSettingsForm.allowPublishingResources==2}">
 									<c:set var="displayDiv"></c:set>
 								</c:if>
-								<td class="12_bold">
-									<div style="${displayDiv}"  id="memDiv">
+								<td>
+									<div class="bold_12"><div style="${displayDiv}"  id="memDiv">
 										<digi:trn>Members</digi:trn>
-									</div>															
+									</div></div>															
 								</td>
 								<td>
 									<div style="${displayDiv}"  id="membersDiv">																	

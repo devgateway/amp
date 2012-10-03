@@ -33,6 +33,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -1868,23 +1869,52 @@ public class DataDispatcher extends DispatchAction {
 			root.put("ID", parentId);
 			root.put("objectType", objectType);
 			root.put("children", children);
-		}
-		else{
-			if (parentId != null && objectType != null && (objectType.equals("Config") || objectType.equals("Config"))){
-				Long configId = Long.parseLong(parentId);
-		        if (configId != null) {
-		        	List<AmpSector> sectors=DbUtil.getParentSectorsFromConfig(configId);
-	                for(AmpSector sector:sectors){
-	                	JSONObject child = new JSONObject();
-    					child.put("ID", sector.getAmpSectorId());
-    					child.put("name",sector.getName());
-    					children.add(child);
-	                }
-	            }
-				root.put("ID", parentId);
-				root.put("objectType", objectType);
-				root.put("children", children);
+		} else if (parentId != null && objectType != null && (objectType.equals("Config"))){
+			Long configId = Long.parseLong(parentId);
+	        if (configId != null) {
+	        	List<AmpSector> sectors=DbUtil.getParentSectorsFromConfig(configId);
+                for(AmpSector sector:sectors){
+                	JSONObject child = new JSONObject();
+					child.put("ID", sector.getAmpSectorId());
+					child.put("name",sector.getName());
+					children.add(child);
+                }
+            }
+			root.put("ID", parentId);
+			root.put("objectType", objectType);
+			root.put("children", children);
+			
+		} else if (parentId != null && objectType != null && (objectType.equals("FiscalCalendar"))){
+			Long calendarId = Long.parseLong(parentId);
+			String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+			String locale = RequestUtils.getNavigationLanguage(request).getCode();
+			int yearFrom = Integer.parseInt(FeaturesUtil
+					.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+			int countYear = Integer.parseInt(FeaturesUtil
+							.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+			long maxYear = yearFrom + countYear;
+			if (maxYear < visualizationForm.getFilter().getStartYear()) {
+				maxYear = visualizationForm.getFilter().getStartYear();
 			}
+			for (int i = yearFrom; i <= maxYear; i++) {
+				Date startDate = DashboardUtil.getStartDate(calendarId, i);
+				Date endDate = DashboardUtil.getEndDate(calendarId, i);
+				String headingFY;
+				try {
+					headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+				} catch (WorkerException e) {
+					headingFY = "FY";
+				}
+				String yearName = DashboardUtil.getYearName(headingFY, calendarId, startDate, endDate);
+				JSONObject child = new JSONObject();
+				child.put("value", i);
+				child.put("key",yearName);
+				children.add(child);
+			}
+			
+			root.put("ID", parentId);
+			root.put("objectType", objectType);
+			root.put("children", children);
 			
 		}
 		response.setContentType("text/json-comment-filtered");
@@ -2744,4 +2774,7 @@ public class DataDispatcher extends DispatchAction {
 		}
 		return null;
 	}
+	
+	
+	
 }

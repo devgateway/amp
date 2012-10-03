@@ -647,18 +647,40 @@ var callbackChildrenCall = {
 			    			zonesDropdown.options[zonesDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
 			    		break;
-			    	  case "Config":
-				    		var sectorDropdown = document.getElementById("sector_dropdown_id");
-				    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
-				    		subSectorDropdown.options.length = 0;
-				    		sectorDropdown.options.length = 0;
-				    		subSectorDropdown.options[0] = new Option(trnAll, -1);
-				    		sectorDropdown.options[0] = new Option(trnAll, -1);
-				    		for(var i = 0; i < results.children.length; i++){
-				    			sectorDropdown.options[sectorDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
-				    		}
-				    		break;
-			    	
+			    	case "Config":
+			    		var sectorDropdown = document.getElementById("sector_dropdown_id");
+			    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
+			    		subSectorDropdown.options.length = 0;
+			    		sectorDropdown.options.length = 0;
+			    		subSectorDropdown.options[0] = new Option(trnAll, -1);
+			    		sectorDropdown.options[0] = new Option(trnAll, -1);
+			    		for(var i = 0; i < results.children.length; i++){
+			    			sectorDropdown.options[sectorDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+			    		}
+			    		break;
+			    	case "FiscalCalendar":
+			    		var startYearSelectedIndex = document.getElementById("startYear_dropdown").selectedIndex;
+			    		var endYearSelectedIndex = document.getElementById("endYear_dropdown").selectedIndex;
+			    		var startYearQuickFilterDropdown = document.getElementById("startYearQuickFilter_dropdown");
+			    		var endYearQuickFilterDropdown = document.getElementById("endYearQuickFilter_dropdown");
+			    		var startYearDropdown = document.getElementById("startYear_dropdown");
+			    		var endYearDropdown = document.getElementById("endYear_dropdown");
+			    		startYearQuickFilterDropdown.options.length = 0;
+			    		endYearQuickFilterDropdown.options.length = 0;
+			    		startYearDropdown.options.length = 0;
+			    		endYearDropdown.options.length = 0;
+			    		for(var i = 0; i < results.children.length; i++){
+			    			startYearQuickFilterDropdown.options[startYearQuickFilterDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+			    			endYearQuickFilterDropdown.options[endYearQuickFilterDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+			    			startYearDropdown.options[startYearDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+			    			endYearDropdown.options[endYearDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+			    		}
+			    		startYearQuickFilterDropdown.selectedIndex = startYearSelectedIndex;
+			    		endYearQuickFilterDropdown.selectedIndex = endYearSelectedIndex;
+			    		startYearDropdown.selectedIndex = startYearSelectedIndex;
+			    		endYearDropdown.selectedIndex = endYearSelectedIndex;
+			    		break;
+			    		
 			    }
 			}
 			catch (e) {
@@ -711,6 +733,9 @@ function callbackChildren(e) {
 			break;
 		case "org_group_dropdown_id":
 			objectType = "Organization";
+			break;
+		case "fiscalCalendar_dropdown_Id":
+			objectType = "FiscalCalendar";
 			break;
 	}
 
@@ -1641,6 +1666,7 @@ YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("sector_config_dropdown_id", "change", callbackChildren);
+YAHOO.util.Event.addListener("fiscalCalendar_dropdown_Id", "change", callbackChildren);
 YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
 YAHOO.util.Event.addListener("applyButtonPopin", "click", applyFilterPopin);
 YAHOO.util.Event.addListener("visualizationDiv", "click", refreshGraphs);
@@ -2105,4 +2131,3 @@ function scrollToGraph(graph) {
 	document.getElementById('visualizationTab').click();
 	document.getElementById(graph).scrollIntoView(true);
 }
-

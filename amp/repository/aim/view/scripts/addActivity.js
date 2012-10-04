@@ -33,7 +33,8 @@ function quitRnot()
 function quitRnot1(message)
 {
 	var msg= message;
-	if (message == 'no')
+	if (message == 'no' || 
+			message =='')
 		return true;
 	
 	var temp = confirm(msg);

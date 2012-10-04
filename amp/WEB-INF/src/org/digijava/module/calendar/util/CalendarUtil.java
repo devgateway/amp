@@ -278,9 +278,14 @@ public class CalendarUtil {
 					css+=".dhx_cal_event_clear.event_"+item.getId()+"{";
                     css+="background-color:"+item.getColor()+";";
 					css+="color:white;}";
-
-                    css+=".dhx_cal_event_clear.event_"+item.getId()+" span {";
+					
+                    // ========================
+                    css+=".dhx_month_head.event_"+item.getId()+" {";
+                    css+="background-color:"+item.getColor()+";";
 					css+="color:white;}";
+					
+					
+					
 				}
 				
 				

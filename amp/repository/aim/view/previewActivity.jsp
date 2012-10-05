@@ -1887,7 +1887,6 @@ function collapseAll() {
 </module:display>
 </module:display>
 <!-- END ISSUES SECTION -->
-</fieldset>
 	
 <!-- DOCUMENT SECTION -->
 <module:display name="/Activity Form/Related Documents" parentModule="/Activity Form">

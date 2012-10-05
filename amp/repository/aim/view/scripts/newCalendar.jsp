@@ -217,6 +217,10 @@
 		
 	}
 
+	function clearDate(objectId){
+		var textboxEl= document.getElementById(objectId);
+		textboxEl.value = "";
+	}
 	
 	
 	function pickDateById(buttonId,objectId)

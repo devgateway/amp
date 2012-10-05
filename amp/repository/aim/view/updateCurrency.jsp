@@ -16,7 +16,7 @@
 
 function validate() {
   if (isEmpty(document.aimCurrencyForm.currencyCode.value) ||
-  checkCode(document.aimCurrencyForm.currencyCode.value)== false) {
+  checkCode(document.aimCurrencyForm.currencyCode)== false) {
     alert("Invalid currency code entered");
     document.aimCurrencyForm.currencyCode.focus();
     return false;
@@ -63,12 +63,15 @@ function checkName(val){
   return true;
 }
 
-function checkCode(val){
+function checkCode(input){
+	var val = input.value.toUpperCase();
+	
   if(val.match("[^A-Z]")){
     return false;
   }else if(val.length>3){
     return false;
   }
+  input.value = val; 
   return true;
 }
 

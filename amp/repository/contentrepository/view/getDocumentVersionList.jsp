@@ -81,7 +81,7 @@
 										</c:set>
 										
 										<a style="cursor:pointer; text-decoration:underline; color: blue"
-										onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
+										onClick="downloadFile('<bean:write name='documentData' property='uuid' />');"
 										title="${translation }"><img src= "/repository/contentrepository/view/images/check_out.gif" border="0"></a>
 									</c:when>
 									<c:otherwise>

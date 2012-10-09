@@ -269,6 +269,9 @@ public class ShowActivityPrintPreview
                 eaForm.getPlanning().setOriginalStartDate(DateConversion
                                             .ConvertDateToString(activity
                     .getProposedStartDate()));
+                eaForm.getPlanning().setOriginalCompDate(DateConversion
+                                            .ConvertDateToString(activity
+                    .getOriginalCompDate()));
                 eaForm
                 .getPlanning().setRevisedStartDate(DateConversion
                                          .ConvertDateToString(activity
@@ -1189,6 +1192,7 @@ public class ShowActivityPrintPreview
                 eaForm.getPlanning().setOriginalAppDate(null);
                 eaForm.getPlanning().setRevisedAppDate(null);
                 eaForm.getPlanning().setOriginalStartDate(null);
+                eaForm.getPlanning().setOriginalCompDate(null);
                 eaForm.getPlanning().setRevisedStartDate(null);
                 eaForm.getPlanning().setCurrentCompDate(null);
                 eaForm.getDocuments().setDocumentSpace(null);
@@ -1202,6 +1206,7 @@ public class ShowActivityPrintPreview
                 eaForm.getPlanning().setOriginalAppDate(null);
                 eaForm.getPlanning().setRevisedAppDate(null);
                 eaForm.getPlanning().setOriginalStartDate(null);
+                eaForm.getPlanning().setOriginalCompDate(null);
                 eaForm.getPlanning().setRevisedStartDate(null);
                 eaForm.getPlanning().setCurrentCompDate(null);
                 eaForm.getPlanning().setProposedCompDate(null);

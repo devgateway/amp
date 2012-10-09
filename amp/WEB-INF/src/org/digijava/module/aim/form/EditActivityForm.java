@@ -1270,6 +1270,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String contractingDate;
 		private String disbursementsDate;
 		private String proposedCompDate;
+		private String originalCompDate;
 		private String currentCompDate;
 		private String revisedCompDate;
 		private Collection activityCloseDates;
@@ -1343,6 +1344,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setRevisedAppDate(String revisedAppDate) {
 			this.revisedAppDate = revisedAppDate;
+		}
+		
+		public String getOriginalCompDate() {
+			return originalCompDate;
+		}
+
+		public void setOriginalCompDate(String originalCompDate) {
+			this.originalCompDate = originalCompDate;
 		}
 
 		public String getOriginalStartDate() {

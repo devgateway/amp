@@ -992,6 +992,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                                      .ConvertDateToString(activity.
               getProposedCompletionDate()));
 
+          eaForm.getPlanning().setOriginalCompDate(DateConversion
+                                    .ConvertDateToString(activity
+              .getOriginalCompDate()));
+          
           eaForm.getPlanning().setCurrentCompDate(DateConversion
                                     .ConvertDateToString(activity
               .getActualCompletionDate()));

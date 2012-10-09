@@ -59,6 +59,7 @@ import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.ComparableMonth;
@@ -203,7 +204,7 @@ public final class ARUtil {
 		Session session = PersistenceManager.getSession();
 
 		TeamMember teamMember = (TeamMember) httpSession
-				.getAttribute("currentMember");
+				.getAttribute(Constants.CURRENT_MEMBER);
 		if ( r == null) {
 			r = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
 		}

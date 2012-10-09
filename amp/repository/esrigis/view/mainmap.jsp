@@ -365,6 +365,20 @@
         <div id="legendDiv" class="legendContent" style="top:585px;left:65px;width: 165px;">
         	<img src="/TEMPLATE/ampTemplate/img_2/gis/legend-poverty.jpg">	
         </div>
+        
+        <div id="structuresdiv" class="legendContent" style="left:70px;top:80px;overflow-y:scroll;height: 500px;">
+        	<table>
+        		<c:forEach  var="structureType" items="${requestScope.structureTypesList}">
+	          	<tr>
+	            	<td>${structureType.name} </td>
+	            	<td align="center">
+	            		<img id="imgPlaceholder" src="/esrigis/mainmap.do~action=displayIcon~id=${structureType.typeId}" style="border:1px solid black;"/>
+	            	</td>
+	         	</tr>
+	    		</c:forEach>
+	    	</table>
+        </div>
+        
         <div id="poplegendDiv" class="legendContent" style="top:570px;left:65px;width: 180px;">
         	<img src="/TEMPLATE/ampTemplate/img_2/gis/population-legend.jpg">	
         </div>

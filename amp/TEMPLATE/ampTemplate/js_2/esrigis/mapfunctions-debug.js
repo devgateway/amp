@@ -155,6 +155,7 @@ function init() {
 	var dnd = new dojo.dnd.Moveable(dojo.byId("poplegendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
+	
 }
 
 /**
@@ -1036,9 +1037,11 @@ function getStructures(clear) {
 	if (structureGraphicLayer) {
 		if (structureGraphicLayer.visible) {
 			structureGraphicLayer.hide();
+			$('#structuresdiv').hide('slow');
 		} else {
 			structureGraphicLayer.show();
 			map.infoWindow.resize(400, 250);
+			$('#structuresdiv').show('slow');
 		}
 	} else {
 		structureGraphicLayer = esri.layers.GraphicsLayer({

@@ -564,9 +564,7 @@ public class DashboardUtil {
             getTeams(team, teams);
             String relatedOrgs = "";
             String teamIds = "";
-            if (teamMember.getTeamAccessType().equals("Management")) {
-                qr += " and act.draft=false and act.approvalStatus ='approved' ";
-            }
+            qr += " and act.draft=false and act.approvalStatus ='approved' ";
             qr += " and (";
             for (AmpTeam tm : teams) {
                 if (tm.getComputation() != null && tm.getComputation()) {

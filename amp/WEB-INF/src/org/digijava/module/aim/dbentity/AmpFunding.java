@@ -16,6 +16,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 
 public class AmpFunding implements Serializable, Versionable, Cloneable {
+
 	private Long ampFundingId;
 	private AmpOrganisation ampDonorOrgId;
 	private AmpActivityVersion ampActivityId;
@@ -54,7 +55,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private AmpCategoryValue financingInstrument;
 	private AmpCategoryValue fundingStatus;
 	private AmpCategoryValue modeOfPayment;
-	
+	private String loanTerms;
 	private Long groupVersionedFunding;
 
     private Float capitalSpendingPercentage;
@@ -435,6 +436,15 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 		this.modeOfPayment = modeOfPayment;
 	}
 
+	public String getLoanTerms() {
+		return loanTerms;
+	}
+
+	public void setLoanTerms(String loanTerms) {
+		this.loanTerms = loanTerms;
+	}
+	
+	
 	@Override
 	public boolean equalsForVersioning(Object obj) {
 		AmpFunding auxFunding = (AmpFunding) obj;

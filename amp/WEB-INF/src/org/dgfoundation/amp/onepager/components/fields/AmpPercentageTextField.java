@@ -8,7 +8,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.validation.validator.MinimumValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 
 /**
@@ -39,7 +38,7 @@ public class AmpPercentageTextField extends AmpTextFieldPanel<Double> {
 		
 		textContainer.setType(Double.class);
 		textContainer.setRequired(true);
-		textContainer.add(new MinimumValidator<Double>(0.1d));
+		textContainer.add(new RangeValidator<Double>(0.1d, null));
 	}
 	
 	@Override

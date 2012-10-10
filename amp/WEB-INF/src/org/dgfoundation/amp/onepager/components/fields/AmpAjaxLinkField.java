@@ -3,16 +3,12 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import javax.servlet.ServletContext;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.LabelTranslatorBehaviour;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -77,7 +73,7 @@ public abstract class AmpAjaxLinkField extends AmpFieldPanel<Void> {
 			button.setOutputMarkupId(true);
 			button.add(new LabelTranslatorBehaviour());
 			button.add(new AttributeAppender("style", new Model("text-decoration: underline; color: #0CAD0C;"), ""));
-			button.add(new SimpleAttributeModifier("key", genKey));
+			button.add(new AttributeModifier("key", genKey));
 		}
 		
 		add(button);

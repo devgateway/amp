@@ -90,7 +90,7 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 			}
 		};
 		addPermForm.add(resetPermBtn);
-		resetPermBtn.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		resetPermBtn.getButton().add(new AttributeModifier("class", new Model("buttonx")));
 		
 		AmpButtonField  saveAndSubmit = new AmpButtonField("savePermissionButton", "Save Permission Button", true, true) {
 			
@@ -103,7 +103,7 @@ public class AmpPMAddPermissionFormFeaturePanel extends AmpComponentPanel {
 				System.out.println("PM new permission created");
 			}
 		};
-		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model("buttonx")));
 		addPermForm.add(saveAndSubmit);
 		
 		//adding the form

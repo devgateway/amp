@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -160,13 +160,12 @@ public class AmpLocationFormTableFeature extends
 
 				String expressionLatitude = "(^\\+?([1-8])?\\d(\\.\\d+)?$)|(^-90$)|(^-(([1-8])?\\d(\\.\\d+)?$))";
             	PatternValidator latitudeValidator = new PatternValidator(expressionLatitude) {
+            		
             		@Override
-            		protected void onValidate(IValidatable<String> validatable)
-            		{
+            		public void validate(IValidatable<String> validatable) {
             			// Check value against pattern
-            			if (!getPattern().matcher(validatable.getValue()).matches())
-            			{
-            				error(validatable, "CoordinatesValidator");
+            			if (!getPattern().matcher(validatable.getValue()).matches()){
+            				error("CoordinatesValidator");
             			}
             		}
            		};
@@ -174,26 +173,24 @@ public class AmpLocationFormTableFeature extends
 				AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String> ("latitudeid", 
 						new PropertyModel<String>(item.getModel(), "latitude"), "Latitude", true, true);
 				latitude.getTextContainer().add(latitudeValidator);
-				latitude.getTextContainer().add(new SimpleAttributeModifier("style", "width: 100px"));
+				latitude.getTextContainer().add(new AttributeModifier("style", "width: 100px"));
 				latitude.setTextContainerDefaultMaxSize();
 				item.add(latitude);
 
 				String expressionLongitude = "(^\\+?1[0-7]\\d(\\.\\d+)?$)|(^\\+?([1-9])?\\d(\\.\\d+)?$)|(^-180$)|(^-1[1-7]\\d(\\.\\d+)?$)|(^-[1-9]\\d(\\.\\d+)?$)|(^\\-\\d(\\.\\d+)?$)";
             	PatternValidator longitudeValidator = new PatternValidator(expressionLongitude) {
             		@Override
-            		protected void onValidate(IValidatable<String> validatable)
-            		{
-            			if (!getPattern().matcher(validatable.getValue()).matches())
-            			{
-            				error(validatable, "CoordinatesValidator");
+            		public void validate(IValidatable<String> validatable) {
+            			if (!getPattern().matcher(validatable.getValue()).matches()){
+            				error("CoordinatesValidator");
             			}
-            		}            	
-            		};
+            		}
+           		};
 				AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitudeid", 
 						new PropertyModel<String>(item.getModel(), "Longitude"), "Longitude", true, true);
 				longitude.getTextContainer().add(longitudeValidator);
 				longitude.setTextContainerDefaultMaxSize();
-				longitude.getTextContainer().add(new SimpleAttributeModifier("style", "width: 100px"));
+				longitude.getTextContainer().add(new AttributeModifier("style", "width: 100px"));
 				item.add(longitude);
 				
 				

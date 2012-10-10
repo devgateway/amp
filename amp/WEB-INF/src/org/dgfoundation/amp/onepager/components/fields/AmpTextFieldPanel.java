@@ -27,7 +27,7 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 	}
 	
 	public void setTextContainerMaxSize(int maxSize) {
-		 getTextContainer().add((IValidator<T>) new StringValidator.MaximumLengthValidator(maxSize));
+		 getTextContainer().add(StringValidator.maximumLength(maxSize));
 	}
 	public void setTextContainerDefaultMaxSize() {
 		setTextContainerMaxSize(DEFAULT_MAX_SIZE);

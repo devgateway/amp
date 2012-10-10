@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteSettings;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
@@ -225,7 +225,7 @@ public abstract class AbstractAutoCompleteTextField<CHOICE> extends TextField {
 		super(id, model);
 		setType(type);
 
-		add(new SimpleAttributeModifier("autocomplete", "off"));
+		add(new AttributeModifier("autocomplete", "off"));
 
 //		settings.setShowListOnEmptyInput(true);
 //		settings.setUseSmartPositioning(true);

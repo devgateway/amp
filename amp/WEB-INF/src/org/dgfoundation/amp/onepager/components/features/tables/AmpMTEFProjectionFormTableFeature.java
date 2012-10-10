@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -39,7 +39,7 @@ public class AmpMTEFProjectionFormTableFeature extends
 			IModel<AmpFunding> model) throws Exception {
 		super(id, model, fmName);
 		
-		getTableId().add(new SimpleAttributeModifier("width", "620"));
+		getTableId().add(new AttributeModifier("width", "620"));
 		
 		final IModel<Set<AmpFundingMTEFProjection>> setModel = new PropertyModel<Set<AmpFundingMTEFProjection>>(
 				model, "mtefProjections");

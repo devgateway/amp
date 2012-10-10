@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.util.template.JavaScriptTemplate;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.dgfoundation.amp.onepager.OnePagerConst;
@@ -33,7 +34,7 @@ public class DocumentReadyBehavior extends Behavior {
 		PackageTextTemplate ptt = new PackageTextTemplate(DocumentReadyBehavior.class, JS_FILE_NAME);
 		ptt.interpolate(variables);
 		JavaScriptTemplate jst = new JavaScriptTemplate(ptt);
-		response.renderString(jst.asString());
+		response.render(StringHeaderItem.forString(jst.asString()));
 	}
 	
 	

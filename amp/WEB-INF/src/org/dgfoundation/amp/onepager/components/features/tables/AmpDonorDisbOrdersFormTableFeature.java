@@ -49,7 +49,7 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 								item.getModel(), "disbOrderId"),
 						"Disbursement Order ID",true);
 				disbOrderId.setEnabled(false);
-				disbOrderId.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("5")));
+				disbOrderId.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
 				item.add(disbOrderId);
 				
 				ArrayList<IPAContract> contractList;

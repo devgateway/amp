@@ -118,7 +118,7 @@ LoggerIdentifiable, Cloneable {
 	@VersionableFieldSimple(fieldTitle = "Activity Close Date")
 	protected Date activityCloseDate ;    // defunct
 	@VersionableFieldSimple(fieldTitle = "Original Date")
-	protected Date originalCompDate;      // defunct
+	protected Date originalCompDate;
 	@VersionableFieldSimple(fieldTitle = "Contracting Date")
 	protected Date contractingDate;
 	@VersionableFieldSimple(fieldTitle = "Disbursement Date")

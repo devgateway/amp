@@ -6,8 +6,8 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxCallDecorator;
-import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -55,27 +55,28 @@ public abstract class AmpLinkField extends AmpFieldPanel<Void> {
 	public AmpLinkField(String id, String fmName,final IModel<String> qModel, boolean hideLabel, boolean hideNewLine) {
 		super(id, fmName, hideLabel, hideNewLine);
 		link = new IndicatingAjaxLink<String>(
-				"fieldLink", new Model<String>(fmName)) {
+				"fieldLink", new Model<String>(fmName))  {
 			private static final long serialVersionUID = -5699378405978605979L;
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				AmpLinkField.this.onClick(target);
 			}
-			
+
 			@Override
-		    protected IAjaxCallDecorator getAjaxCallDecorator() {
-				if(qModel==null) return super.getAjaxCallDecorator(); else
-		        return new AjaxCallDecorator() {
+			protected void updateAjaxAttributes(
+					AjaxRequestAttributes attributes) {
+				super.updateAjaxAttributes(attributes);
+				AjaxCallListener myAjaxCallListener = new AjaxCallListener() {
 					@Override
-					public CharSequence decorateScript(Component c,
-							CharSequence script) {
-		                return "if(!confirm('"+qModel.getObject()+"')) return false;" + script;
+					public CharSequence getPrecondition(Component component) {
+						if(qModel==null) return null; 
+						else
+							return "if(!confirm('"+qModel.getObject()+"')) return false;";	
 					}
-		        };
-
-		    }
-
+				};
+				attributes.getAjaxCallListeners().add(myAjaxCallListener);
+			}
 		};
 		add(link);
 	}

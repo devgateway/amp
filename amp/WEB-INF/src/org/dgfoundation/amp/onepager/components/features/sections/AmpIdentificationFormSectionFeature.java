@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
@@ -76,8 +76,8 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			//title.getTextContainer().add(new AmpRequiredFieldValidator<String>(title));
 			title.getTextAreaContainer().setRequired(true);
 			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));
-			title.getTextAreaContainer().add(new StringValidator.MaximumLengthValidator(255));
-			title.getTextAreaContainer().add(new SimpleAttributeModifier("style", "width: 710px"));
+			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
+			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px"));
 			add(title);
 			status = new AmpCategorySelectFieldPanel(
 					"status", CategoryConstants.ACTIVITY_STATUS_KEY,

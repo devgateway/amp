@@ -10,9 +10,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,8 +24,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.dgfoundation.amp.onepager.behaviors.ChoiceComponentVisualErrorBehavior;
-import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior2;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -126,8 +122,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	
 	/**
 	 * This is a special {@link AjaxEventBehavior} crafted for visual ajax error feedback.
-	 * This can come in several flavors, for example the {@link AbstractChoice}S is using a different kind of event, {@link ChoiceComponentVisualErrorBehavior}
-	 * By default we use {@link ComponentVisualErrorBehavior}
+	 * This can come in several flavors, for example the {@link AbstractChoice}S is using a different kind of event,
+	 * By default we use {@link ComponentVisualErrorBehavior2}
 	 * @return the event behavior to be added to the form component, triggering ajax validation
 	 */
 	protected Behavior visualErrorBehavior() {
@@ -223,7 +219,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		add(requiredStar);
 		titleLabel = new TrnLabel("fieldLabel", fmName);
 		if (((AmpAuthWebSession)getSession()).isFmMode()){
-			titleLabel.add(new SimpleAttributeModifier("title", "Original field name: " + fmName));
+			titleLabel.add(new AttributeModifier("title", "Original field name: " + fmName));
 		}
 		titleLabel.setVisible(!hideLabel);
 		add(titleLabel);

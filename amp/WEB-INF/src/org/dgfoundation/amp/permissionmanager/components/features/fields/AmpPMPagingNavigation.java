@@ -46,12 +46,12 @@ public class AmpPMPagingNavigation extends AjaxPagingNavigation {
 	@Override
 	protected void populateItem(LoopItem loopItem) {
 		// Get the index of page this link shall point to
-		final int pageIndex = loopItem.getIndex();
+		final long pageIndex = loopItem.getIndex();
 		
 		// Add a page link pointing to the page
 		final AbstractLink link = super.newPagingNavigationLink("pageLink", pageable, pageIndex);
 		link.add(new TitleAppender(pageIndex));
-		int currentPage = pageable.getCurrentPage();
+		long currentPage = pageable.getCurrentPage();
 		if(currentPage == pageIndex)
 			link.add(new AttributeModifier("class",new Model("paging_sel")));
 		loopItem.add(link);
@@ -75,7 +75,7 @@ public class AmpPMPagingNavigation extends AjaxPagingNavigation {
 		/** resource key for the message */
 		private static final String RES = "PagingNavigation.page";
 		/** page number */
-		private final int page;
+		private final long page;
 
 		/**
 		 * Constructor
@@ -83,7 +83,7 @@ public class AmpPMPagingNavigation extends AjaxPagingNavigation {
 		 * @param page
 		 *            page number to use as the ${page} var
 		 */
-		public TitleAppender(int page)
+		public TitleAppender(long page)
 		{
 			this.page = page;
 		}

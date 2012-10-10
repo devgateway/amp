@@ -44,7 +44,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> {
 				return converter; 
 			}
 		};
-		amount.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
+		amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 		add(amount);
 		
 		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {

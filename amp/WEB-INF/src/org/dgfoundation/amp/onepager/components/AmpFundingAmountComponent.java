@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -83,7 +82,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 			}
 		};
 		amount.getTextContainer().setRequired(true);
-		amount.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("9")));
+		amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("9")));
 		
 		
 		add(amount);
@@ -101,12 +100,12 @@ public class AmpFundingAmountComponent<T> extends Panel {
 				currencyList,
 				fmCurrency, true, false);
 		currency.getChoiceContainer().setRequired(true);
-		currency.getChoiceContainer().add(new SimpleAttributeModifier("class", "dropdwn_currency"));
+		currency.getChoiceContainer().add(new AttributeModifier("class", "dropdwn_currency"));
 		add(currency);
 		date = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(
 				model, propertyDate), fmDate,true);
 		date.getDate().setRequired(true);
-		date.getDate().add(new SimpleAttributeModifier("class", "inputx_date"));
+		date.getDate().add(new AttributeModifier("class", "inputx_date"));
 		add(date);
 		setRenderBodyOnly(true);
 	}

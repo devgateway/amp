@@ -4,27 +4,17 @@
  */
 package org.dgfoundation.amp.onepager.translation;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
-import org.apache.wicket.Session;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.SiteUtils;
 
 /**
  * Translatable label
@@ -64,7 +54,7 @@ public class TrnLabel extends Label {
 		if (TranslatorUtil.isTranslatorMode(getSession())){
 			if (key == null)
 				throw new IllegalArgumentException("Parameter \"key\" can't be null!");
-			this.add(new SimpleAttributeModifier("key", key));
+			this.add(new AttributeModifier("key", key));
 		}
 	}
 	

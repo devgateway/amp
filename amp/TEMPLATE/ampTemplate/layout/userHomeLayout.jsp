@@ -11,7 +11,6 @@
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 <html>
 	<digi:base />
-	<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 	<digi:context name="digiContext" property="context"/>
 	<head>
@@ -29,20 +28,6 @@
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="Expires" CONTENT="0">
 		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
-		
-        <!-- Dependencies --> 
-        <script type="text/javascript" src="<digi:file src="js_2/yui/yahoo-dom-event.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="js_2/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="js_2/yui/element-beta-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="js_2/yui/connection-min.js"/>"></script>
-        
-        <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="js_2/yui/menu-min.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="js_2/yui/yahoo-dom-event.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="js_2/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="js_2/yui/menu-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="js_2/yui/element-beta-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="js_2/yui/tabview-min.js"/>"></script>
         
         <link type="text/css" href="css_2/tabs.css" rel="stylesheet" />
         

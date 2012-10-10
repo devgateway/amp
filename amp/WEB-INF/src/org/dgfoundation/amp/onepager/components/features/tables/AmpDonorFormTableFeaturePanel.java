@@ -5,7 +5,6 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -13,16 +12,14 @@ import java.util.Set;
 
 
 import org.apache.log4j.Logger;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
-import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.models.AmpTransactionTypeDonorFundingDetailModel;
-import org.digijava.module.aim.action.EditActivity;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.exception.NoCategoryClassException;
@@ -53,7 +50,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 			int titleHeaderColSpan) throws Exception {
 		super(id, model, fmName);
 
-		getTableId().add(new SimpleAttributeModifier("width", "620"));
+		getTableId().add(new AttributeModifier("width", "620"));
 		
 		setTitleHeaderColSpan(titleHeaderColSpan);
 		parentModel = new PropertyModel<Set<AmpFundingDetail>>(model,

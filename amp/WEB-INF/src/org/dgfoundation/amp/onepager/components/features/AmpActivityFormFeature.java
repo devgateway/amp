@@ -16,7 +16,8 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractChoice;
@@ -232,7 +233,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model<String>("window.onbeforeunload = null; for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), "");
 		
-		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model<String>("sideMenuButtons")));
+		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);
 		saveAndSubmit.getButton().setDefaultFormProcessing(false);
 		activityForm.add(saveAndSubmit);
@@ -244,12 +245,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();"));
 		saveAsDraft.setVisible(true);
-		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		saveAsDraft.getButton().add(new AttributeModifier("class", new Model("sideMenuButtons")));
 		saveAsDraft.add(new Behavior(){
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
-				response.renderJavaScriptReference(new PackageResourceReference(AmpActivityFormFeature.class, "draftSaveNavigationPanel.js"));
+				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpActivityFormFeature.class, "draftSaveNavigationPanel.js")));
 			}
 		});
 		activityForm.add(saveAsDraft);
@@ -306,7 +307,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		};
 		saveAsDraftAction.getButton().setDefaultFormProcessing(false); //disable global validation of the form
-		saveAsDraftAction.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		saveAsDraftAction.getButton().add(new AttributeModifier("class", new Model("sideMenuButtons")));
 		saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model("this.disabled='disabled';"), ""));
 		saveAsDraftAction.getButton().add(updateEditors);
 		activityForm.add(saveAsDraftAction);
@@ -317,7 +318,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();"));
 		cancelSaveAsDraft.setVisible(true);
-		cancelSaveAsDraft.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		cancelSaveAsDraft.getButton().add(new AttributeModifier("class", new Model("sideMenuButtons")));
 		activityForm.add(cancelSaveAsDraft);
 		
 		/*
@@ -352,7 +353,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				target.add(feedbackPanel);
 			}
 		};
-		preview.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
+		preview.getButton().add(new AttributeModifier("class", new Model("sideMenuButtons")));
 		if (am.getObject().getAmpActivityId() == null)
 			preview.setVisible(false);
 		
@@ -545,7 +546,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					tmp.setVisible(false);
 					item.setVisible(false);
 					item.add(tmp);
-					//item.add(new SimpleAttributeModifier("style", "display: none"));
+					//item.add(new AttributeModifier("style", "display: none"));
 				}
 			}
 		};

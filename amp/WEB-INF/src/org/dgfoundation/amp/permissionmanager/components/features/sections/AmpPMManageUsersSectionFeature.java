@@ -111,7 +111,7 @@ public class AmpPMManageUsersSectionFeature extends AmpPMSectionFeaturePanel {
 			}
 			
 		};
-		addVerifiedOrgsBtn.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		addVerifiedOrgsBtn.getButton().add(new AttributeModifier("class", new Model("buttonx")));
 		addVerifiedOrgsBtn.setVisibilityAllowed(true);
 		add(addVerifiedOrgsBtn);
 		

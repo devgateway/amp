@@ -18,8 +18,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-import org.apache.wicket.validation.validator.MaximumValidator;
-import org.apache.wicket.validation.validator.MinimumValidator;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
@@ -120,9 +119,8 @@ public class AmpDonorDisbursementsFormTableFeature extends
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
                                         "capitalSpendingPercentage",
                                         new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage",true);
-                capitalSpendingPercentage.getTextContainer().add(new MinimumValidator<Float>(0f));
-                capitalSpendingPercentage.getTextContainer().add(new MaximumValidator<Float>(100f));
-                capitalSpendingPercentage.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("5")));
+                capitalSpendingPercentage.getTextContainer().add(new RangeValidator<Float>(0f, 100f));
+                capitalSpendingPercentage.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
                 item.add(capitalSpendingPercentage);
 
                 AmpSelectFieldPanel<String> disbOrdIdSelector = new AmpSelectFieldPanel<String>("disbOrderId",

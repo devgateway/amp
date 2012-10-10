@@ -10,8 +10,8 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.tree.BaseTree;
-import org.apache.wicket.markup.html.tree.LabelIconPanel;
+import org.apache.wicket.extensions.markup.html.tree.BaseTree;
+import org.apache.wicket.extensions.markup.html.tree.LabelIconPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -42,8 +42,8 @@ public class AmpPMCheckBoxIconPanel extends LabelIconPanel {
 	}
 	
 	/**
-	 * @see org.apache.wicket.markup.html.tree.LabelIconPanel#addComponents(org.apache.wicket.model.IModel,
-	 *      org.apache.wicket.markup.html.tree.BaseTree)
+	 * @see org.apache.wicket.extensions.markup.html.tree.LabelIconPanel#addComponents(org.apache.wicket.model.IModel,
+	 *      org.apache.wicket.extensions.markup.html.tree.BaseTree)
 	 */
 	protected void addComponents(final IModel model, final BaseTree tree)
 	{
@@ -72,9 +72,9 @@ public class AmpPMCheckBoxIconPanel extends LabelIconPanel {
 		WebMarkupContainer downloadLinkImg = new WebMarkupContainer("infoTip");
 		String info = "";
 		info = PMUtil.generatePermInfo(ampTree.getAmpObjectVisibility());
-		downloadLinkImg.add(new AttributeModifier("src", true, new Model(extPath)));
+		downloadLinkImg.add(new AttributeModifier("src", new Model(extPath)));
 		//ampTree.getAmpObjectVisibility().getId().toString()
-		downloadLinkImg.add(new AttributeModifier("title", true, new Model(info)));
+		downloadLinkImg.add(new AttributeModifier("title", new Model(info)));
 		add(downloadLinkImg);
 	}
 

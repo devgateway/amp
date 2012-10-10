@@ -3,30 +3,24 @@
  */
 package org.dgfoundation.amp.permissionmanager.web.pages;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
-import org.dgfoundation.amp.onepager.behaviors.DocumentReadyBehavior;
-import org.dgfoundation.amp.onepager.behaviors.JQueryBehavior;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
@@ -57,37 +51,22 @@ public class AmpPMHeaderFooter extends WebPage {
 			}
         }
 		
-		add(new JQueryBehavior());
-		add(new DocumentReadyBehavior());
 		AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
 		add(ampajax);
-		//final CharSequence callBackUrl = ampajax.getCallbackUrl();
-/*
-		IModel variablesModel = new AbstractReadOnlyModel() {
-			public Map getObject() {
-				Map<String, CharSequence> variables = new HashMap<String, CharSequence>(2);
-				variables.put("callBackUrl", callBackUrl);
-				String OnePager = "false";
-				variables.put("onepagerMode", OnePager);
-				return variables;
+		add(new IndicatingAjaxLink("fmmode", new Model("FM Mode")) {
+			@Override
+			public void onClick(AjaxRequestTarget arg0) {
+				AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+				if (session.isFmMode())
+					session.setFmMode(false);
+				else
+					session.setFmMode(true);
+				setResponsePage(PermissionManager.class);
 			}
-		};
-		
- */
-		   add(new IndicatingAjaxLink("fmmode", new Model("FM Mode")) {
-			    @Override
-			    public void onClick(AjaxRequestTarget arg0) {
-			     AmpAuthWebSession session = (AmpAuthWebSession) getSession();
-			     if (session.isFmMode())
-			      session.setFmMode(false);
-			     else
-			      session.setFmMode(true);
-			     setResponsePage(PermissionManager.class);
-			    }
-			   });
-			add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketAdminHeaderLayout", "$(\"#switchTranslationMode\").attr('href', 'javascript:wicketSwitchTranslationMode()');$(\"#switchFMMode\").css(\"display\", \"block\");"));
-			add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));
-		
+		});
+		add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketAdminHeaderLayout", "$(\"#switchTranslationMode\").attr('href', 'javascript:wicketSwitchTranslationMode()');$(\"#switchFMMode\").css(\"display\", \"block\");"));
+		add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));
+
 	}
 	
 	public HttpServletRequest getServletRequest(){
@@ -110,10 +89,8 @@ public class AmpPMHeaderFooter extends WebPage {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		//TODO:1.5
-		//response.renderJavaScriptReference(new PackageResourceReference("/ckeditor/ckeditor.js"));
-		response.renderJavaScriptReference("/ckeditor/ckeditor.js");
-		response.renderJavaScriptReference(new PackageResourceReference(AmpStructuresFormSectionFeature.class, "gisPopup.js"));
+		response.render(JavaScriptHeaderItem.forUrl("/ckeditor/ckeditor.js"));
+		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpStructuresFormSectionFeature.class, "gisPopup.js")));
 	}
 	
 }

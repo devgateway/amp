@@ -15,7 +15,8 @@ YAHOO.widget.WicketDataSource.prototype.makeConnection = function(oRequest, oCal
     var onWicketSuccessFn = function() {
         _this.handleResponse(oRequest, _this.responseArray, oCallback, oCaller, tId);
     };    
-    wicketAjaxGet(this.callbackUrl + '&q=' + oRequest, onWicketSuccessFn);
+    var callUrl=this.callbackUrl + '&q=' + oRequest;
+    Wicket.Ajax.get({"u":callUrl, "coh": [onWicketSuccessFn]});
 };
 
 function ac_preg_quote( str ) {

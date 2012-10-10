@@ -14,7 +14,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableMultiLineLabel;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -77,17 +77,17 @@ public class AmpCommentPanel extends AmpFieldPanel {
 		// addComment.add(new
 		// BeautyTipBehavior(TranslatorUtil.getTranslatedText("Add new comment. Submit by pressing [ENTER] or cancel by pressing [ESC]")));
 		addComment.setModelObject(trnAddComment);
-		addComment.add(new SimpleAttributeModifier("onclick",
+		addComment.add(new AttributeModifier("onclick",
 				"if (this.value=='" + trnAddComment + "' || this.value=='"
 						+ savedMsg + "' || this.value=='" + notSavedMsg
 						+ "') this.value='';"));
-		addComment.add(new SimpleAttributeModifier("onblur",
+		addComment.add(new AttributeModifier("onblur",
 				" if (this.value=='') this.value='" + trnAddComment + "';"));
 
-		String keypress = "var kc=wicketKeyCode(event); if (kc==27) {this.blur();} else if (kc!=13) { return true; } else {this.nextSibling.onclick(); this.blur(); return false;}";
-		addComment.add(new SimpleAttributeModifier("onkeypress",
+		String keypress = "var kc=event.keyCode; if (kc==27) {this.blur();} else if (kc!=13) { return true; } else {this.nextSibling.click(); this.blur(); return false;}";
+		addComment.add(new AttributeModifier("onkeypress",
 				"if (Wicket.Browser.isSafari()) { return; };" + keypress));
-		addComment.add(new SimpleAttributeModifier("onkeydown",
+		addComment.add(new AttributeModifier("onkeydown",
 				"if (!Wicket.Browser.isSafari()) { return; };" + keypress));
 
 		form.add(addComment);

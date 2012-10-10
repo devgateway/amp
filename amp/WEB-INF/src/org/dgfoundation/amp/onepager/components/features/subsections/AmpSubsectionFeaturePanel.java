@@ -5,9 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 
 /**

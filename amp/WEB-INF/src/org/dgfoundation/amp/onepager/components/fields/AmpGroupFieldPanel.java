@@ -6,17 +6,11 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.markup.html.form.AbstractChoice;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.behaviors.ChoiceComponentVisualErrorBehavior;
-import org.dgfoundation.amp.onepager.behaviors.ComponentVisualErrorBehavior;
 import org.dgfoundation.amp.onepager.models.AmpMultiValueDropDownChoiceModel;
 
 /**

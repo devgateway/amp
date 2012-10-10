@@ -6,7 +6,7 @@ package org.dgfoundation.amp.onepager.translation;
 
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -48,8 +48,8 @@ public abstract class TrnAjaxButton extends AjaxButton {
 	private void trnAjaxButton(String key){
 		if (TranslatorUtil.isTranslatorMode(getSession())){
 			super.setOutputMarkupId(true);
-			super.add(new SimpleAttributeModifier("onmouseover", "spawnEditBox(this.id);"));
-			super.add(new SimpleAttributeModifier("key", key));
+			super.add(new AttributeModifier("onmouseover", "spawnEditBox(this.id);"));
+			super.add(new AttributeModifier("key", key));
 			super.add(new AttributeAppender("style", new Model("text-decoration: underline; color: #6CE66C;"), ""));
 		}
 	}

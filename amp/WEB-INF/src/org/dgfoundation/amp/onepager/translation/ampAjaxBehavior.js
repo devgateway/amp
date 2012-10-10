@@ -32,7 +32,7 @@ function spawnEditBox(labelId) {
 		//spawn a new edit box
 		editor = document.createElement('input');
 		editor.setAttribute('id', editId);
-		var keypress = 'var kc=wicketKeyCode(event); if (kc==27) showLabel("'+ myId +'"); else if (kc!=13) { return true; } else saveEditBox("'+ myId +'");';
+		var keypress = 'var kc=event.keyCode; if (kc==27) showLabel("'+ myId +'"); else if (kc!=13) { return true; } else saveEditBox("'+ myId +'");';
 		editor.setAttribute('onkeypress', 'if (Wicket.Browser.isSafari()) { return; }; ' + keypress);
 		editor.setAttribute('onkeydown', 'if (!Wicket.Browser.isSafari()) { return; }; ' + keypress);
 		editor.setAttribute('class', 'inputx');
@@ -97,7 +97,7 @@ function saveEditBox(labelId){
 				 '&editorVal='+editor.value +
 				 '&labelId='+labelId;
 	
-	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
+	var wcall = Wicket.Ajax.get({"u":getAmpAjaxCallBackUrl() + params});
 }
 
 function wicketSwitchTranslationMode(){
@@ -106,7 +106,7 @@ function wicketSwitchTranslationMode(){
 	var actId = path.substr(path.indexOf(onepagerPath) + onepagerPath.length);
 	
 	var params = '&method=switchtranslatormode&activity=' + actId;
-	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
+	var wcall = Wicket.Ajax.get({"u":getAmpAjaxCallBackUrl() + params});
 }
 
 function wicketSwitchFMMode(){
@@ -115,6 +115,6 @@ function wicketSwitchFMMode(){
 	var actId = path.substr(path.indexOf(onepagerPath) + onepagerPath.length);
 	
 	var params = '&method=switchfmmode&activity=' + actId;
-	var wcall = wicketAjaxGet(getAmpAjaxCallBackUrl() + params, null, null, null);
+	var wcall = Wicket.Ajax.get({"u":getAmpAjaxCallBackUrl() + params});
 }
 

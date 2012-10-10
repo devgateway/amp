@@ -3,21 +3,12 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.tree.AbstractTree;
+import org.apache.wicket.extensions.markup.html.tree.AbstractTree;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
-import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 
 /**
  * @author dan

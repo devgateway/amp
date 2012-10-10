@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
@@ -75,7 +76,7 @@ public class AmpPMManageUsersTableFeaturePanel extends AmpFormTableFeaturePanel 
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		 for (TransparentWebMarkupContainer c: sliders) {
-			response.renderOnDomReadyJavaScript(OnePagerUtil.getToggleJS(c));	
+			 response.render(OnDomReadyHeaderItem.forScript(OnePagerUtil.getToggleJS(c)));
 		};
 		 
 	}

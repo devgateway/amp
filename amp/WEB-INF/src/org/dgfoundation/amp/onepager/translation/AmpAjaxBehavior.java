@@ -11,7 +11,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.template.JavaScriptTemplate;
@@ -139,7 +140,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 		PackageTextTemplate ptt = new PackageTextTemplate(AmpAjaxBehavior.class, JS_FILE_NAME);
 		ptt.interpolate(variables);
 		JavaScriptTemplate jst = new JavaScriptTemplate(ptt);
-		response.renderString(jst.asString());
+		response.render(StringHeaderItem.forString(jst.asString()));
 
 	}
 }

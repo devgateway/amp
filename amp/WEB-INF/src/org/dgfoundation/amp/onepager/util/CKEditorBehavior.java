@@ -2,7 +2,8 @@ package org.dgfoundation.amp.onepager.util;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 
@@ -19,7 +20,7 @@ public class CKEditorBehavior extends Behavior{
 
 		String renderOnDomReady = getRenderOnDomReadyJavaScript(response);
         if (renderOnDomReady != null)
-            response.renderOnDomReadyJavaScript(renderOnDomReady);
+        	response.render(OnDomReadyHeaderItem.forScript(renderOnDomReady));
         /*
          * 
         String renderJavaScript = getRenderJavaScript(response);

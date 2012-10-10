@@ -3,9 +3,10 @@
  */
 package org.dgfoundation.amp.permissionmanager.components.features.sections;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -57,7 +58,7 @@ public class AmpPMSectionFeaturePanel extends AmpFeaturePanel implements IHeader
 		sliderPM.setOutputMarkupId(true);
 		add(sliderPM);
 		Image img = new Image("perm_open",  new Model<String>(""));
-		img.add(new SimpleAttributeModifier("src", "/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif"));
+		img.add(new AttributeModifier("src", "/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif"));
 		
 		add(img);
 
@@ -70,7 +71,7 @@ public class AmpPMSectionFeaturePanel extends AmpFeaturePanel implements IHeader
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		if(!jsAdded)
-			response.renderOnDomReadyJavaScript(OnePagerUtil.getToggleJS(getSliderPM()));
+			response.render(OnDomReadyHeaderItem.forScript(OnePagerUtil.getToggleJS(getSliderPM())));
 		jsAdded=true;
 	}
 	

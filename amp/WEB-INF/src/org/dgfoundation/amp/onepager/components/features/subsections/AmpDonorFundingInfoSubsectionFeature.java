@@ -6,20 +6,15 @@ package org.dgfoundation.amp.onepager.components.features.subsections;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.MaximumValidator;
-import org.apache.wicket.validation.validator.MinimumValidator;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.categorymanager.action.CategoryManager;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 4, 2010
@@ -70,10 +65,10 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				          new PropertyModel<String>(model, "loanTerms"), 
 				          "Loan Terms", false, false, false);
 		
-		loanTerms.getTextAreaContainer().add(new SimpleAttributeModifier("style", "width: 225px; height: 65px;"));          	
+		loanTerms.getTextAreaContainer().add(new AttributeModifier("style", "width: 225px; height: 65px;"));          	
 			
 		AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
-		boolean isLoan = (value.getValue().equals(CategoryConstants.TYPE_OF_ASSITANCE_LOAN.getValueKey()));
+		boolean isLoan = (value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey()));
 		loanTerms.getTextAreaContainer().setVisible(isLoan);
 	    loanTerms.getTitleLabel().setVisible(isLoan);  
 	    add(loanTerms);
@@ -83,7 +78,7 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
-				boolean isLoan = (value.getValue().equals(CategoryConstants.TYPE_OF_ASSITANCE_LOAN.getValueKey()));
+				boolean isLoan = (value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey()));
 				loanTerms.getTextAreaContainer().setVisible(isLoan);
         	    loanTerms.getTitleLabel().setVisible(isLoan);            	
             	target.add(loanTerms);

@@ -11,14 +11,14 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.wicket.Session;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.dgfoundation.amp.onepager.behaviors.DocumentReadyBehavior;
-import org.dgfoundation.amp.onepager.behaviors.JQueryBehavior;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
@@ -49,33 +49,10 @@ public class AmpHeaderFooter extends WebPage {
             	Session.get().setLocale(new Locale(TranslatorWorker.getDefaultLocalCode()));
         }
 		
-		add(new JQueryBehavior());
 		add(new DocumentReadyBehavior());
 		AmpAjaxBehavior ampajax = new AmpAjaxBehavior();
 		add(ampajax);
 		
-		//TODO:1.5
-		/*
-		final CharSequence callBackUrl = ampajax.getCallbackUrl();
-
-		IModel variablesModel = new AbstractReadOnlyModel() {
-			public Map getObject() {
-				Map<String, CharSequence> variables = new HashMap<String, CharSequence>(
-						2);
-				variables.put("callBackUrl", callBackUrl);
-				String activityFormOnePager = "false";
-				try {
-					activityFormOnePager = FeaturesUtil.getGlobalSettingValue(
-							GlobalSettingsConstants.ACTIVITY_FORM_ONE_PAGER);
-				} catch (Exception ignored) {}
-				variables.put("onepagerMode", activityFormOnePager);
-				variables.put("onepagerPath", "/" + OnePagerConst.ONEPAGER_URL_PREFIX + "/" + OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY + "/");
-				return variables;
-			}
-		};
-		add(TextTemplateHeaderContributor.forJavaScript(AmpAjaxBehavior.class,
-				"translations.js", variablesModel));
-		*/
 		add(new UrlEmbederComponent("wHeader", "/showLayout.do?layout=wicketHeader", "$(\"#switchTranslationMode\").attr('href', 'javascript:wicketSwitchTranslationMode()');$(\"#switchFMMode\").css(\"display\", \"block\");"));
 		add(new UrlEmbederComponent("wFooter", "/showLayout.do?layout=wicketFooter"));
 	}
@@ -100,9 +77,7 @@ public class AmpHeaderFooter extends WebPage {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		//TODO:1.5
-		//response.renderJavaScriptReference(new PackageResourceReference("/ckeditor/ckeditor.js"));
-		response.renderJavaScriptReference("/ckeditor/ckeditor.js");
-		response.renderJavaScriptReference(new PackageResourceReference(AmpStructuresFormSectionFeature.class, "gisPopup.js"));
+		response.render(JavaScriptHeaderItem.forUrl("/ckeditor/ckeditor.js"));
+		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpStructuresFormSectionFeature.class, "gisPopup.js")));
 	}
 }

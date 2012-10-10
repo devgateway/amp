@@ -129,12 +129,7 @@ public class PersistentObjectModel<T> extends LoadableDetachableModel<T>{
 			throw new RuntimeException(e);
 		}
 	}
-	
-	@Override
-	public T getObject() {
-		return super.getObject();
-	}
-	
+		
 	public void setObject(T object) {
 		setPrivateFields(object);
 		super.setObject(object);

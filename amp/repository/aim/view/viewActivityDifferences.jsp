@@ -57,34 +57,34 @@
 		<div style="border: 1px solid rgb(208, 208, 208); padding: 10px;font-size:12px; height: 100%;" class="contentstyle" id="ajaxcontentarea">
 			<table border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF" id="dataTable" width="100%">
 				<tr>
-					<td background="img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 1px; width: 13%">
+					<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" width="15%" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 1px; width: 13%">
 	            		<div align="center">
 	                		<strong><digi:trn>Value name</digi:trn></strong>
 	            		</div>
 	        		</td>
-					<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-right-width: 0px; width: 29%">
+					<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-right-width: 0px; width: 29%">
 	            		<div align="center">
 	                		<strong><digi:trn>First version (Older)</digi:trn></strong>
 	            		</div>
 	        		</td>
 	        		<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
-	        			<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
+	        			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px;">
 		            		<div align="center">
 		                		&nbsp;
 		            		</div>
 		        		</td>
-		        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; width: 29%">
+		        		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; width: 29%">
 		            		<div align="center">
 		                		<strong><digi:trn>Merge</digi:trn></strong>
 		            		</div>
 		        		</td>
-		        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-right-width: 0px;">
+		        		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-right-width: 0px;">
 		            		<div align="center">
 		                		&nbsp;
 		            		</div>
 		        		</td>
 	        		</logic:equal>
-	        		<td background="img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 0px; width: 29%">
+	        		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" style="background-repeat: repeat-x; font-size: 12px; border-left-width: 0px; width: 29%">
 	            		<div align="center">
 	                		<strong><digi:trn>Second version (Newer)</digi:trn></strong>
 	            		</div>

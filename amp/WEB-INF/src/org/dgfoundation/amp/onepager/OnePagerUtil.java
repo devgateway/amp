@@ -26,7 +26,6 @@ import org.apache.wicket.model.util.SetModel;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.dgfoundation.amp.onepager.behaviors.AmpComponentVisualErrorInterface;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
@@ -160,38 +159,6 @@ public final class OnePagerUtil {
 		}
 	}
 	
-	 /**
-     * Changes the CSS class of the linked {@link FormComponent} via AJAX.
-     *
-     * @param ajaxRequestTarget of type AjaxRequestTarget
-     * @param valid Was the validation successful?
-     * @param cssClass The CSS class that must be set on the linked {@link FormComponent}
-     * @param component the component rendering the error
-     * @param rectangleHighlight draws a red rectangle around the component - does not work well for {@link RadioChoice} so we use <code>false</code> here for now
-     */
-	 public static void changeCssClass(final AmpComponentVisualErrorInterface component, AjaxRequestTarget ajaxRequestTarget, boolean valid, String cssClass, final boolean rectangleHighlight) {
-	    	if(cssClass==null) return;
-	        FormComponent formComponent = component.getRelatedFormComponent();
-	        if(formComponent.isValid() == valid){
-	        	formComponent.add(
-				new AttributeModifier("class", true, new Model(cssClass)) {
-					@Override
-					protected String newValue(final String currentValue,
-							final String replacementValue) {
-						if(!currentValue.equals(AmpComponentVisualErrorInterface.INVALID_CLASS)) component.setPreviousClass(currentValue);
-						if(rectangleHighlight) return replacementValue;
-						return currentValue;
-					}
-				});
-	      	
-	            ajaxRequestTarget.add(formComponent);
-	            ajaxRequestTarget.appendJavaScript("$('#"+ formComponent.getMarkupId() +"').parents().show();");
-	        }
-
-	        if(component.getUpdateComponent()!=null){
-	            ajaxRequestTarget.add(component.getUpdateComponent().getParent());
-	        }
-	    }
 
 	/**
 	 * Use to set the slider for current component only

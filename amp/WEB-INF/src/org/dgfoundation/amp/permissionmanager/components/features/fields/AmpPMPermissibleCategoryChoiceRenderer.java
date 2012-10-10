@@ -4,7 +4,6 @@
 package org.dgfoundation.amp.permissionmanager.components.features.fields;
 
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.util.lang.PropertyResolver;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 
 /**

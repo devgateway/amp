@@ -9,8 +9,9 @@ package org.dgfoundation.amp.onepager.util;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 
 public class UrlEmbederComponent extends Label {
@@ -28,12 +29,12 @@ public class UrlEmbederComponent extends Label {
 		setRenderBodyOnly(false);
 		setOutputMarkupId(true);
 		final String markupId = this.getMarkupId(true);
-		this.add(new AbstractBehavior() {
+		this.add(new Behavior() {
 			
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
-				response.renderOnLoadJavaScript("$.ajaxSetup({cache: false});$(\"#" + markupId + "\").html(\"\").load(\""+ url +"\", function() { " + callBackJs + " });$.ajaxSetup({cache: true});");
+				response.render(OnLoadHeaderItem.forScript("$.ajaxSetup({cache: false});$(\"#" + markupId + "\").html(\"\").load(\""+ url +"\", function() { " + callBackJs + " });$.ajaxSetup({cache: true});"));
 			}
 		});
 	}

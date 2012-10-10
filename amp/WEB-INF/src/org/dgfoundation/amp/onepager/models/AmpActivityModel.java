@@ -4,10 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -19,7 +15,6 @@ import org.digijava.kernel.startup.AmpSessionListener;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
-import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -107,15 +102,6 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	@Override
 	public void detach() {
 	}
-
-	@Override
-	public AmpActivityVersion getObject() {
-		if (a == null) {
-			a = load();
-		}
-		return a;
-	}
-
 
 	/**
 	 * @see #beginConversation()

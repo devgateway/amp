@@ -13,7 +13,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.MinimumValidator;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
@@ -95,8 +95,8 @@ public class AmpDonorCommitmentsFormTableFeature extends
 				AmpTextFieldPanel<Double> exchangeRate = new AmpTextFieldPanel<Double>("exchangeRate",
 						new PropertyModel<Double>(item.getModel(), "fixedExchangeRate"), "Exchange Rate",true,true);
 
-				exchangeRate.getTextContainer().add(new MinimumValidator<Double>(0.001d));
-				exchangeRate.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("6")));
+				exchangeRate.getTextContainer().add(new RangeValidator<Double>(0.001d, null));
+				exchangeRate.getTextContainer().add(new AttributeModifier("size", new Model<String>("6")));
 				item.add(exchangeRate);
 
 				item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",

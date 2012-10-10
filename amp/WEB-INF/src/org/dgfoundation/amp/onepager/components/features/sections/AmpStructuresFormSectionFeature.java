@@ -11,7 +11,7 @@ import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -86,7 +86,7 @@ public class AmpStructuresFormSectionFeature extends
 				final AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel<String>(structureModel, "description"),"Structure Description",false, true, true);
 				description.setOutputMarkupId(true);
 
-				description.getTextAreaContainer().add(new SimpleAttributeModifier("cols", "20"));
+				description.getTextAreaContainer().add(new AttributeModifier("cols", "20"));
 				item.add(description);		
 
 				final AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitude", new PropertyModel<String>(structureModel, "longitude"),"Structure Longitude", true, true);

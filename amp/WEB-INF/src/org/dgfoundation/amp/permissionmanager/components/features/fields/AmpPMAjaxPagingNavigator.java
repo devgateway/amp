@@ -5,7 +5,7 @@ package org.dgfoundation.amp.permissionmanager.components.features.fields;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
@@ -63,7 +63,7 @@ public class AmpPMAjaxPagingNavigator extends AjaxPagingNavigator {
 		return new AmpPMPagingNavigation(id, pageable, labelProvider);
 	}
 	
-	private final class TitleAppender extends AbstractBehavior
+	private final class TitleAppender extends Behavior
 	{
 		private static final long serialVersionUID = 1L;
 

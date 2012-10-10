@@ -4,13 +4,13 @@
  */
 package org.dgfoundation.amp.onepager.translation;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 
 /**
  * @author aartimon@dginternational.org
  * since Oct 4, 2010
  */
-public class LabelTranslatorBehaviour extends SimpleAttributeModifier {
+public class LabelTranslatorBehaviour extends AttributeModifier {
 
 	private static final long serialVersionUID = 1L;
 	

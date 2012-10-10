@@ -90,7 +90,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 				target.add(AmpPMAssignGlobalPermissionComponentPanel.this);
 			}
 		};
-		resetGlobalPerm.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		resetGlobalPerm.getButton().add(new AttributeModifier("class", new Model("buttonx")));
 		form.add(resetGlobalPerm);
 
 		AmpButtonField saveAndSubmit = new AmpButtonField("saveGlobalPermissionButton", "Save Global Permission", "Save", true, true){
@@ -99,7 +99,7 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 					infoGlobalPermModel.setObject("Permission saved");
 			}
 		};
-		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model("buttonx")));
 		form.add(saveAndSubmit);
 		add(form);
 	}

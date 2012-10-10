@@ -116,7 +116,7 @@ public class CategoryConstants {
 	
 	public static final HardCodedCategoryValue TYPE_OF_ASSITANCE_GRANT	= 
 		new CategoryConstants.HardCodedCategoryValue("type_of_assistence","Grant", true);
-	public static final HardCodedCategoryValue TYPE_OF_ASSITANCE_LOAN	= 
+	public static final HardCodedCategoryValue TYPE_OF_ASSISTANCE_LOAN	= 
 			new CategoryConstants.HardCodedCategoryValue("type_of_assistence","Loan", true);
 	
 	public static final HardCodedCategoryValue LOGFRAME_OBJECTIVE	= 

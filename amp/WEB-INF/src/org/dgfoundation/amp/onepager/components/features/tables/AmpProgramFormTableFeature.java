@@ -12,7 +12,7 @@ import java.util.Set;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -118,7 +118,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				PropertyModel<Double> percModel = new PropertyModel<Double>(
 						item.getModel(), "programPercentage");
 				AmpPercentageTextField percentageField = new AmpPercentageTextField("percent", percModel, "programPercentage",percentageValidationField);
-				percentageField.getTextContainer().add(new SimpleAttributeModifier("style", "width: 40px;"));
+				percentageField.getTextContainer().add(new AttributeModifier("style", "width: 40px;"));
 				item.add(percentageField);
 				
 				item.add(new Label("name", item.getModelObject().getHierarchyNames(true)).setEscapeModelStrings(false));

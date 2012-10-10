@@ -178,7 +178,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 				target.add(AmpPMAssignFieldPermissionComponentPanel.this);
 			}
 		};
-		resetFieldPermBtn.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		resetFieldPermBtn.getButton().add(new AttributeModifier("class", new Model("buttonx")));
 		form.add(resetFieldPermBtn);
 		
 		
@@ -195,7 +195,7 @@ public class AmpPMAssignFieldPermissionComponentPanel extends AmpComponentPanel 
 					System.out.println("PM field permission assigned");
 			}
 		};
-		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("buttonx")));
+		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model("buttonx")));
 		form.add(saveAndSubmit);
 		
 		add(form);

@@ -97,10 +97,7 @@ font-weight : bold;
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/documentPanelHelper.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/DynamicList.js'/>" > </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > </script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-
-
 
 <%@page import="java.net.URLDecoder"%>
 

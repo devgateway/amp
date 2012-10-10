@@ -11,12 +11,12 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.IClusterable;
+import org.apache.wicket.util.io.IClusterable;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.tree.BaseTree;
+import org.apache.wicket.extensions.markup.html.tree.BaseTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.EnumeratedType;
@@ -52,7 +52,7 @@ public class AmpPMCheckBoxTree extends BaseTree {
 
 	
 	/**
-	 * @see org.apache.wicket.markup.html.tree.BaseTree#newNodeComponent(java.lang.String,
+	 * @see org.apache.wicket.extensions.markup.html.tree.BaseTree#newNodeComponent(java.lang.String,
 	 *      org.apache.wicket.model.IModel)
 	 */
 	protected Component newNodeComponent(String id, IModel model)

@@ -5,14 +5,14 @@
 package org.dgfoundation.amp.onepager.behaviors;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.FormComponent;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 25, 2010
  */
-public class ValidationStyleBehavior extends AbstractBehavior {
+public class ValidationStyleBehavior extends Behavior {
 
 
 	/**

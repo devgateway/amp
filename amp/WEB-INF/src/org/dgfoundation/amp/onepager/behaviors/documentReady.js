@@ -124,22 +124,16 @@ function pageLeaveConfirmationEnabler(){
 			  }
 		  }
 	}
-	
-	//Listener to remove the leave page confirmation on errors
-	oldAjaxRequestCallback = Wicket.Ajax.Request.prototype.stateChangeCallback;
-	Wicket.Ajax.Request.prototype.stateChangeCallback = function(){
-	    var t = this.transport;
-	    try{
-	    	if (t != null && t.readyState != 1) {
-	       		var tmp = t.getResponseHeader("Ajax-Location"); 
-	       		if (typeof(tmp) != "undefined" && tmp != null){
-	       			window.onbeforeunload=null;
-	       		}
-	    	}
-	    }catch(ignore){};
-	    
-	    return oldAjaxRequestCallback.call(this);    
-	};
+	oldAjaxCallProcessAjaxResponse = Wicket.Ajax.Call.prototype.processAjaxResponse;
+	Wicket.Ajax.Call.prototype.processAjaxResponse = function (data, textStatus, jqXHR, context){
+		if (jqXHR != null && jqXHR.readyState == 4){
+			var tmp = jqXHR.getResponseHeader('Ajax-Location');
+			if (typeof(tmp) != "undefined" && tmp != null){
+				window.onbeforeunload=null;
+			}
+		}
+		return oldAjaxCallProcessAjaxResponse.call(this, data, textStatus, jqXHR, context);
+	}
 }
 
 $(document).ready(function(){

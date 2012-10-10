@@ -89,7 +89,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 						"classification", new PropertyModel<String>(
 								item.getModel(), "expCategory"),
 						"Expenditure Classification",true);
-				classification.getTextContainer().add(new AttributeModifier("size", true, new Model<String>("12")));
+				classification.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 				classification.setTextContainerDefaultMaxSize();
 				item.add(classification);
 				item.add(new ListEditorRemoveButton("delExp", "Delete Expenditure"){
@@ -110,7 +110,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 									public void component(AmpCollectionValidatorField component,
 											IVisit<Void> visit) {
 										component.reloadValidationField(target);
-										target.addComponent(component.getParent());
+										target.add(component.getParent());
 										visit.dontGoDeeper();
 									}
 								});

@@ -16,6 +16,7 @@ import org.apache.wicket.extensions.markup.html.form.DateTextField;
 
 public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegionMarkupIdProvider {
 	private static final Logger logger = Logger.getLogger(ComponentVisualErrorBehavior2.class);
+	public static final String INVALID_CLASS="formcomponent invalid";
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -23,9 +24,9 @@ public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegi
 		if (!((FormComponent<?>) component).isValid()){
 			String c1 = tag.getAttribute("class");
 			if (c1 == null)
-				tag.put("class", AmpComponentVisualErrorInterface.INVALID_CLASS);
+				tag.put("class", INVALID_CLASS);
 			else
-				tag.put("class", AmpComponentVisualErrorInterface.INVALID_CLASS + " " + c1);
+				tag.put("class", INVALID_CLASS + " " + c1);
 		}
 	}
 	
@@ -39,12 +40,11 @@ public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegi
 	
 	@Override
 	public void afterRender(Component component) {
-		FeedbackMessages messages = component.getSession().getFeedbackMessages();
+		FeedbackMessages messages = component.getFeedbackMessages();
 		Response r = component.getResponse();
-		if (messages.hasMessageFor(component)){
+		if (component.hasFeedbackMessage()){
 			r.write("<ul class=\"feedbackPanel\">");
-			IFeedbackMessageFilter filter = new ComponentFeedbackMessageFilter(component);
-			for (FeedbackMessage message: messages.messages(filter)){
+			for (FeedbackMessage message: messages){
 				r.write("<li class=\"feedbackPanel");
 				r.write(message.getLevelAsString().toUpperCase());
 				r.write("\">");

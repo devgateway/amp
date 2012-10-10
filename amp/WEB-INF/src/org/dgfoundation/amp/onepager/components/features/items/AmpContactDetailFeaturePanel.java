@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractChoice;
@@ -173,14 +173,14 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         AmpTextFieldPanel<String> detailField=new AmpTextFieldPanel<String>("detail", value, fmName, true,true);
                         if(item.getModelObject().getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
                         	TextField<String> detailTextField=detailField.getTextContainer();
-                        	detailTextField.add(new SimpleAttributeModifier("size", "50"));
+                        	detailTextField.add(new AttributeModifier("size", "50"));
                         	detailTextField.setRequired(true);
                         	ContactEmailValidator validator=new ContactEmailValidator(model.getObject().getId());
                         	detailTextField.add(validator);
                         }
                         else{
                         	TextField<String> detailTextField=detailField.getTextContainer();
-                        	detailTextField.add(new SimpleAttributeModifier("size", "50"));
+                        	detailTextField.add(new AttributeModifier("size", "50"));
                         	detailTextField.add(new PatternValidator(EXPRESSION));
                         	detailTextField.setRequired(true);
                         }
@@ -196,7 +196,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                             TextField<String> detailTextField=phn.getTextContainer();
                         	detailTextField.setRequired(true);
                         	detailTextField.add(new PatternValidator(EXPRESSION));
-                        	detailTextField.add(new SimpleAttributeModifier("size", "50"));
+                        	detailTextField.add(new AttributeModifier("size", "50"));
                             AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true);
                             AbstractChoice<?, AmpCategoryValue> choiceContainer = phoneTitle.getChoiceContainer();
                         	List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();

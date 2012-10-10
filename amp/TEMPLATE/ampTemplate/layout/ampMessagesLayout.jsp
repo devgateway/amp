@@ -28,20 +28,8 @@
 		<META HTTP-EQUIV="Expires" CONTENT="0">
 		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
 		
-        <!-- Dependencies --> 
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element-beta-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection-min.js"/>"></script>
-        
-        <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu-min.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/yahoo-dom-event.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/menu-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/element-beta-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/tabview-min.js"/>"></script>
-        
+        <!-- Jquery Base Library -->
+		<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
         <link type="text/css" href="<digi:file src="/TEMPLATE/ampTemplate/css_2/tabs.css"/>" rel="stylesheet" />
         
 	</head>

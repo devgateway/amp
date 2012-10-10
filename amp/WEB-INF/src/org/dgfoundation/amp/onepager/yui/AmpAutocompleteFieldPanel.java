@@ -17,9 +17,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -120,25 +122,28 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 
 	/**
 	 * Initializes the {@link #onSelectBehavior} callBackUrl Adds the
-	 * wicketAjaxGet function that can call the Wicket behavior from JavaScript
+	 * Wicket.Ajax.get function that can call the Wicket behavior from JavaScript
 	 */
 	@Override
 	protected void onBeforeRender() {
 		super.onBeforeRender();
 
 		final CharSequence url = onSelectBehavior.getCallbackUrl();
-		textField.add(new AbstractBehavior() {
+		textField.add(new Behavior() {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				String js = "function callWicket"
 						+ textField.getMarkupId()
-						+ "(selectedString) { var wcall = wicketAjaxGet ('"
+						+ "(selectedString) { " +
+						"var wcall = Wicket.Ajax.get({\"u\":\""
 						+ url
-						+ "&selectedString='+selectedString, function() { }, function() { } ) }";
-				response.renderJavaScript(js,
-						"callWicket-" + textField.getMarkupId());
+						+ "&selectedString=\"+selectedString})}";
+				response.render(JavaScriptHeaderItem.forScript(js, "callWicket-" + textField.getMarkupId()));
+				//TODO: REMOVE it no issues, pre-Wicket6
+				//response.renderJavaScript(js,
+				//		"callWicket-" + textField.getMarkupId());
 			}
 		});
 
@@ -225,10 +230,13 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);
-				response.renderJavaScriptReference(new PackageResourceReference(
+				response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"));
+				response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"));
+				response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"));
+				response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"));
+				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(
 						AmpAutocompleteFieldPanel.class,
-						"AmpAutocompleteCommonScripts.js"));
-				
+						"AmpAutocompleteCommonScripts.js")));
 				IModel variablesModel = new AbstractReadOnlyModel() {
 					public Map getObject() {
 						Map<String, CharSequence> variables = new HashMap<String, CharSequence>(
@@ -237,7 +245,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 						return variables;
 					}
 				};
-				response.renderJavaScriptReference(new TextTemplateResourceReference(clazz, jsName, variablesModel));
+				response.render(JavaScriptHeaderItem.forReference(new TextTemplateResourceReference(clazz, jsName, variablesModel)));
 				/*
 				 * currently renderOnDomReadyJavaScript doesn't work as expected in IE8
 				 * that is why jquery's $(document).ready has been added here
@@ -246,13 +254,13 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 				String disableControl = "true";
 				if (textField.getParent().isEnabled())
 					disableControl = "false";
-				response.renderOnDomReadyJavaScript("$(document).ready(function() {"+getJsVarName()
+				response.render(OnDomReadyHeaderItem.forScript("$(document).ready(function() {"+getJsVarName()
 						+ " = new YAHOO.widget."+ autoCompeleteVar+"('"
 						+ textField.getMarkupId() + "', '" + getCallbackUrl()
 						+ "', '" + container.getMarkupId() + "', '"
 						+ toggleButton.getMarkupId() + "', '"
 						+ indicator.getMarkupId() + "', " +useCache+ ", " + disableControl + ");" 
-						+ "});");
+						+ "});"));
 			}
 		});
 

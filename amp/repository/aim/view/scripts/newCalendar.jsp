@@ -247,7 +247,7 @@
 			
 			dialog		= new YAHOO.widget.Dialog(dialogId, {
 		        visible:false,
-		        context:[buttonId,  "bl", "tr"],
+		        context:[buttonId,  "tl", "br"],
 		        draggable:false,
 		        close:true
 		        
@@ -311,7 +311,7 @@
             
 		}
 		dialog.show();
-		dialog.align("bl", "tr");
+		dialog.align("tl", "br");
 	}
 	
 	/*Just for compatibility reasons with functions that were used with the old DHTMLSuite calendar widget*/

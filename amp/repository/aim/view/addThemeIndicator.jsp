@@ -104,7 +104,7 @@ function editIndicator(id,parentid,type){
 
 function addData(id){
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do" />
-  openURLinWindow("<%= addEditIndicator %>?parent=" + id,575, 300);
+  openURLinWindow("<%= addEditIndicator %>?parent=" + id,625, 550);
 }
 
 function checkValues(){

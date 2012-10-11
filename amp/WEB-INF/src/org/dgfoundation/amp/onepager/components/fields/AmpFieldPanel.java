@@ -4,13 +4,14 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import java.util.Iterator;
+import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
@@ -199,7 +200,7 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		this(id, model, fmName, hideLabel, hideNewLine, showReqStarForNotReqComp, false);
 	}
 	
-	public AmpFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine, final boolean showReqStarForNotReqComp, boolean enableReqStar){
+	public AmpFieldPanel(String id, IModel<T> model, final String fmName,boolean hideLabel, boolean hideNewLine, final boolean showReqStarForNotReqComp, boolean enableReqStar){
 		super(id, model,fmName, AmpFMTypes.MODULE);
 		this.fmType = AmpFMTypes.MODULE;
 		
@@ -221,10 +222,26 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		};
 		requiredStar.setVisible(!hideNewLine||enableReqStar);
 		add(requiredStar);
-		titleLabel = new TrnLabel("fieldLabel", fmName);
-		if (((AmpAuthWebSession)getSession()).isFmMode()){
-			titleLabel.add(new SimpleAttributeModifier("title", "Original field name: " + fmName));
-		}
+		titleLabel = new TrnLabel("fieldLabel", fmName){
+			private Behavior titleBehavior = new SimpleAttributeModifier("title", "Original field name: " + fmName);
+			
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				if (((AmpAuthWebSession)getSession()).isFmMode()){
+					titleLabel.add(titleBehavior);
+				}
+				else{
+					List<? extends Behavior> list = this.getBehaviors();
+					Iterator<? extends Behavior> it = list.iterator();
+					while (it.hasNext()) {
+						Behavior behavior = (Behavior) it.next();
+						if (behavior == titleBehavior)
+							this.remove(behavior);
+					}
+				}
+			}
+		};
 		titleLabel.setVisible(!hideLabel);
 		add(titleLabel);
 		newLine = new WebMarkupContainer("newLine");

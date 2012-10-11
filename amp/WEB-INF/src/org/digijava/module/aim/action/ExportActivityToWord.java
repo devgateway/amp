@@ -820,7 +820,7 @@ public class ExportActivityToWord extends Action {
                                 eshDonorFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true)).
                                         addRowData(fndDet.getAdjustmentType().getLabel(), true).
                                         addRowData(DateConversion.ConvertDateToString(fndDet.getTransactionDate())).
-                                        addRowData(fndDet.getTransactionAmount().toString()).
+                                        addRowData(FormatHelper.formatNumber(fndDet.getTransactionAmount())).
                                         addRowData(fndDet.getAmpCurrencyId().getCurrencyCode()));
                             }
 

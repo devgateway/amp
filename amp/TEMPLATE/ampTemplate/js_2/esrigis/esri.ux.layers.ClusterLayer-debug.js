@@ -212,7 +212,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 	currentSymbol = this.symbolBank.single;
                 
                 ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin(graphic.attributes[i], { baseGraphic: graphic }), this._infoTemplate);
-//                alert(ptGraphic.attributes["Code"]);
+               // alert(ptGraphic.attributes["Code"]);
 
                 //try to always bring flare graphic to front of everything else
                 p = this.add(ptGraphic);

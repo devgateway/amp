@@ -149,46 +149,46 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{PI_COL6}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement key="line-13" mode="Opaque" x="534" y="2" width="1" height="67" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-13" mode="Opaque" x="535" y="2" width="1" height="67" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement mode="Opaque" x="535" y="2" width="75" height="67" backcolor="#CCCCCC"/>
+				<reportElement mode="Opaque" x="536" y="2" width="75" height="67" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="false" pdfEncoding="Cp1250"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{PI_COL7}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement key="line-13" mode="Opaque" x="610" y="2" width="1" height="67" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-13" mode="Opaque" x="611" y="2" width="1" height="67" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement mode="Opaque" x="611" y="2" width="75" height="67" backcolor="#CCCCCC"/>
+				<reportElement mode="Opaque" x="612" y="2" width="75" height="67" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="false" pdfEncoding="Cp1250"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{PI_COL8}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement key="line-13" mode="Opaque" x="686" y="2" width="1" height="67" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-13" mode="Opaque" x="687" y="2" width="1" height="67" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement mode="Opaque" x="687" y="2" width="75" height="67" backcolor="#CCCCCC"/>
+				<reportElement mode="Opaque" x="688" y="2" width="75" height="67" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="false" pdfEncoding="Cp1250"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{PI_COL9}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement key="line-13" mode="Opaque" x="762" y="2" width="1" height="67" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-13" mode="Opaque" x="763" y="2" width="1" height="67" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
@@ -226,7 +226,7 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="25" width="169" height="1">
+				<reportElement x="1" y="25" width="168" height="1">
 					<printWhenExpression><![CDATA[($F{year}).equals($P{PI_LAST_YEAR}) ? Boolean.TRUE : Boolean.FALSE]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
@@ -280,7 +280,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{column4}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="534" y="0" width="1" height="25"/>
+				<reportElement x="535" y="0" width="1" height="25"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -291,7 +291,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{column5}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="610" y="0" width="1" height="25"/>
+				<reportElement x="611" y="0" width="1" height="25"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -302,7 +302,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{column6}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="686" y="0" width="1" height="25"/>
+				<reportElement x="687" y="0" width="1" height="25"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -313,7 +313,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{column7}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="762" y="0" width="1" height="25"/>
+				<reportElement x="763" y="0" width="1" height="25"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>

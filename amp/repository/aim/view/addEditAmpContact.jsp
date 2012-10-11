@@ -568,7 +568,10 @@
 											     	<category:showoptions multiselect="false" firstLine="${translation}" name="addressbookForm" property="title"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.CONTACT_TITLE_KEY%>" styleClass="nputx insidex address-title" outerid="contactTitle"/>     
 											    </td>
 								    			<td valign="top" class="t_mid"><b style="padding-left:5px;"><digi:trn>Organization</digi:trn>: </b><br />
-													<html:text property="organisationName"  size="33" styleClass="inputx insidex"/> 
+													<c:set var="translationOrgName">
+											       		<digi:trn>If organisation doesn't exist in the system, then it can be added in this textbox</digi:trn>
+											       	</c:set>
+													<html:text property="organisationName"  size="33" styleClass="inputx insidex" title="${translationOrgName}" /> <br />
 													<aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${addressbookForm}" styleClass="buttonx_sm btn_save">
 														<digi:trn>Add Organizations</digi:trn>
 													</aim:addOrganizationButton>

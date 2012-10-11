@@ -126,6 +126,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			final AmpActivityBudgetExtrasPanel budgetExtras = new AmpActivityBudgetExtrasPanel("budgetExtras", am, "Budget Extras");
 			budgetExtras.setOutputMarkupId(true);
 			budgetExtras.setIgnoreFmVisibility(true);
+			budgetExtras.setIgnorePermissions(true);
 
 			WebMarkupContainer budgetExtrasContainter = new WebMarkupContainer("budgetExtrasContainer");
 			budgetExtrasContainter.add(budgetExtras);

@@ -57,7 +57,6 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
@@ -74,8 +73,6 @@ import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
 
@@ -629,31 +626,55 @@ public class ExportActivityToWord extends Action {
 
                         Map <String, Set<AmpOrgRole>> roleGrouper = new HashMap<String, Set<AmpOrgRole>>();
                         ExportSectionHelper eshRelatedOrgsTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                        for (AmpOrgRole orgRile : orgRoles) {
-                            if (!roleGrouper.containsKey(orgRile.getRole().getName())) {
-                                roleGrouper.put(orgRile.getRole().getName(), new HashSet<AmpOrgRole>());
+                        for (AmpOrgRole orgRole : orgRoles) {
+                            if (!roleGrouper.containsKey(orgRole.getRole().getRoleCode())) {
+                                roleGrouper.put(orgRole.getRole().getRoleCode(), new HashSet<AmpOrgRole>());
                             }
 
-                            roleGrouper.get(orgRile.getRole().getName()).add(orgRile);
+                            roleGrouper.get(orgRole.getRole().getRoleCode()).add(orgRole);
 
                             //eshIssuesTable.addRowData(new ExportSectionHelperRowData(orgRile.getRole().getName(), false));
                             //retVal.add(createSectionTable(eshIssuesTable, request));
                         }
                         
-                        for (String roleName : roleGrouper.keySet()) {
-                            Set<AmpOrgRole> groupedRoleSet = roleGrouper.get(roleName);
-                            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(roleName, null, null,  true));
-                            for (AmpOrgRole role : groupedRoleSet) {
-                                Double orgPercentage = role.getPercentage() == null ? new Double(0) : role.getPercentage();
-                                eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).
-                                        addRowData(role.getOrganisation().getName()).
-                                        addRowData(orgPercentage.toString() + "%"));
+                        for (String roleCode : roleGrouper.keySet()) {
+                        	Set<AmpOrgRole> groupedRoleSet = roleGrouper.get(roleCode);
+                        	
+                        	if (roleCode.equals(Constants.RESPONSIBLE_ORGANISATION) &&
+                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization", ampContext)){
+                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Responsible Organization");
+                        	}
+                        	
+                        	if (roleCode.equals(Constants.EXECUTING_AGENCY) &&
+                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency", ampContext)){
+                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Executing Agency");
+                        	}
+                        	
+                        	if (roleCode.equals(Constants.IMPLEMENTING_AGENCY) &&
+                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency", ampContext)){
+                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Implementing Agency");
+                        	}
+                        	
+                        	if (roleCode.equals(Constants.BENEFICIARY_AGENCY) &&
+                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency", ampContext)){
+                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Beneficiary Agency");
+                        	}
+                            
+                        	if (roleCode.equals(Constants.CONTRACTING_AGENCY) &&
+                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency", ampContext)){
+                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Contracting Agency");
+                        	}
+                        	
+                        	if (roleCode.equals(Constants.SECTOR_GROUP) &&
+                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Sector Group", ampContext)){
+                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Sector Group");
+                        	}
 
-
-                                
-                            }
-
-                            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(null,null,null, false).setSeparator(true));
+                        	if (roleCode.equals(Constants.REGIONAL_GROUP) &&
+                        			FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Regional Group", ampContext)){
+                        		buildRoleOrgInfo(eshRelatedOrgsTable, groupedRoleSet, "Regional Group");
+                        	}
+                        	
                         }
 
                         retVal.add(createSectionTable(eshRelatedOrgsTable, request, ampContext));
@@ -661,6 +682,18 @@ public class ExportActivityToWord extends Action {
                 }
 
         return retVal;
+    }
+    
+    private void buildRoleOrgInfo(ExportSectionHelper eshRelatedOrgsTable, Set<AmpOrgRole> groupedRoleSet, String roleName){
+    	
+        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(roleName, null, null,  true));
+        for (AmpOrgRole role : groupedRoleSet) {
+            Double orgPercentage = role.getPercentage() == null ? new Double(0) : role.getPercentage();
+            eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(" ", null, null,  false).
+                    addRowData(role.getOrganisation().getName()).
+                    addRowData(orgPercentage.toString() + "%"));
+        }
+        eshRelatedOrgsTable.addRowData(new ExportSectionHelperRowData(null,null,null, false).setSeparator(true));
     }
 
     /*

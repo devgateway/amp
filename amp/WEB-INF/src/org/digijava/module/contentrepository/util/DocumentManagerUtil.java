@@ -97,35 +97,38 @@ public class DocumentManagerUtil {
 	}
 	
 	public static Session getReadSession(HttpSession httpSession) {
-		Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_READ_SESSION);
+		synchronized (httpSession) {
 		
-		if ( jcrSession!=null && !jcrSession.isLive() ) {
-			jcrSession.logout();
-			jcrSession			= null;
-		}
-		
-		if (jcrSession == null) {
+			Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_READ_SESSION);
+			
+			if ( jcrSession!=null && !jcrSession.isLive() ) {
+				jcrSession.logout();
+				jcrSession			= null;
+			}
+			
+			if (jcrSession == null) {
+				try {
+					jcrSession	= getJCRRepository(httpSession).login();
+					httpSession.setAttribute(CrConstants.JCR_READ_SESSION, jcrSession);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				}
+			}
+			
 			try {
-				jcrSession	= getJCRRepository(httpSession).login();
-				httpSession.setAttribute(CrConstants.JCR_READ_SESSION, jcrSession);
-			} catch (Exception e) {
+				jcrSession.getRootNode().refresh(false);
+			} catch (InvalidItemStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return null;
+			} catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
+			return jcrSession;
 		}
-		
-		try {
-			jcrSession.getRootNode().refresh(false);
-		} catch (InvalidItemStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return jcrSession;
 	}
 	
 	public static Session getWriteSession(HttpServletRequest request) {
@@ -140,58 +143,61 @@ public class DocumentManagerUtil {
 	}
 	
 	public static Session getWriteSession(HttpSession httpSession) {
-		Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
 		
-		if ( jcrSession!=null && !jcrSession.isLive() ) {
-			jcrSession.logout();
-			jcrSession			= null;
-		}
-		
-		if (jcrSession == null) {
+		synchronized (httpSession) {
+			Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
+			
+			if ( jcrSession!=null && !jcrSession.isLive() ) {
+				jcrSession.logout();
+				jcrSession			= null;
+			}
+			
+			if (jcrSession == null) {
+				try {
+					TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+					if (teamMember == null) {
+						throw new Exception("No TeamMember found in HttpSession !");
+					}
+					   /* From add organization the user is always admin and this user has not email*/
+					String userName;
+					if (teamMember.getEmail() != null) {
+					   userName = teamMember.getEmail();
+					} else {
+					   userName = "admin@amp.org";
+					}
+					
+					SimpleCredentials creden	= new SimpleCredentials(userName, userName.toCharArray());
+					
+					Repository rep				= getJCRRepository(httpSession); 
+					
+					jcrSession					= rep.login( creden );
+					
+					jcrSession.save();
+					
+					httpSession.setAttribute(CrConstants.JCR_WRITE_SESSION, jcrSession);
+					
+					registerNamespace(jcrSession, "ampdoc", "http://amp-demo.code.ro/ampdoc");
+					registerNamespace(jcrSession, "amplabel", "http://amp-demo.code.ro/label");
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				}
+			}
+			
 			try {
-				TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
-				if (teamMember == null) {
-					throw new Exception("No TeamMember found in HttpSession !");
-				}
-				   /* From add organization the user is always admin and this user has not email*/
-				String userName;
-				if (teamMember.getEmail() != null) {
-				   userName = teamMember.getEmail();
-				} else {
-				   userName = "admin@amp.org";
-				}
-				
-				SimpleCredentials creden	= new SimpleCredentials(userName, userName.toCharArray());
-				
-				Repository rep				= getJCRRepository(httpSession); 
-				
-				jcrSession					= rep.login( creden );
-				
-				jcrSession.save();
-				
-				httpSession.setAttribute(CrConstants.JCR_WRITE_SESSION, jcrSession);
-				
-				registerNamespace(jcrSession, "ampdoc", "http://amp-demo.code.ro/ampdoc");
-				registerNamespace(jcrSession, "amplabel", "http://amp-demo.code.ro/label");
-				
-			} catch (Exception e) {
+				jcrSession.getRootNode().refresh(false);
+			} catch (InvalidItemStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return null;
+			} catch (RepositoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
+			return jcrSession;
 		}
-		
-		try {
-			jcrSession.getRootNode().refresh(false);
-		} catch (InvalidItemStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return jcrSession;
 	}
 	
 	public static NodeWrapper getReadNodeWrapper(String uuid, HttpServletRequest request) {

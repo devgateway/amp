@@ -302,7 +302,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																					<input type="text" name="baseValDate" value="<bean:write name="indicator" property="baseValDate" />" class="inputx" size="10" readonly="true" id="baseValDate">
 																				</td>
 																				<td align="left" vAlign="center" class="inside">
-																					<a id="date1" href='javascript:pickDate("date1",document.aimUpdateIndicatorValuesForm.baseValDate)'>
+																					<a id="date1" href='javascript:pickDateById("date1","baseValDate")'>
 																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																					</a>
 																				</td>
@@ -350,7 +350,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																						<input type="text" name="targetValDate" value="<bean:write name="indicator" property="targetValDate" />" class="inputx" size="10" readonly="true" id="targetValDate">
 																					</td>
 																					<td align="left" vAlign="center" class="inside">
-																						<a id="date2" href='javascript:pickDate("date2",document.aimUpdateIndicatorValuesForm.targetValDate)'>
+																						<a id="date2" href='javascript:pickDateById("date2","targetValDate")'>
 																							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																						</a>
 																					</td>
@@ -383,7 +383,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																						<input type="text" name="revisedTargetValDate" value="<bean:write name="indicator" property="revisedTargetValDate" />" class="inputx" size="10" readonly="true" id="revisedTargetValDate">
 																					</td class="inside">
 																					<td align="left" vAlign="center" class="inside">
-																						<a id="date3" href='javascript:pickDate("date3",document.aimUpdateIndicatorValuesForm.revisedTargetValDate)'>
+																						<a id="date3" href='javascript:pickDateById("date3","revisedTargetValDate")'>
 																							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 																						</a>
 																					</td>

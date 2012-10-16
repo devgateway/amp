@@ -125,16 +125,16 @@ function toggleRows(caller,hideId){
 			if(tb.rows[i].children[3]!=null){
 				var amountdiv_2=tb.rows[i].children[3].children[0];
 				YAHOO.util.Dom.removeClass(amountdiv_2, 'desktop_project_count');
-				YAHOO.util.Dom.addClass(amountdiv_2, 'desktop_project_name_sel');	
+				YAHOO.util.Dom.addClass(amountdiv_2, 'desktop_project_count_sel desktop_project_name_sel');	
 			}
 			
 			if (amountdiv_1 != null && amountdiv_1.nodeName!='FONT'){
 				YAHOO.util.Dom.removeClass(amountdiv_1, 'desktop_project_count');
-				YAHOO.util.Dom.addClass(amountdiv_1, 'desktop_project_name_sel');
+				YAHOO.util.Dom.addClass(amountdiv_1, 'desktop_project_count_sel desktop_project_name_sel');
 			}
 			if (first != null && first.nodeName!='FONT'){
 				YAHOO.util.Dom.removeClass(first, 'desktop_project_count');
-				YAHOO.util.Dom.addClass(first, 'desktop_project_name_sel');
+				YAHOO.util.Dom.addClass(first, 'desktop_project_count_sel desktop_project_name_sel');
 			}
 		}
 		}

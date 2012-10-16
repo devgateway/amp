@@ -1779,7 +1779,7 @@ public class IndicatorUtil {
   			session = PersistenceManager.getRequestDBSession();
   		    String queryString = "select sec from "
                 + AmpSector.class.getName() + " sec "
-                + "where sec.name=:name";
+                + "where sec.name=:name and (sec.deleted is null or sec.deleted = false) ";
                 Query qry = session.createQuery(queryString);
                 qry.setString("name", sectorname);
    	

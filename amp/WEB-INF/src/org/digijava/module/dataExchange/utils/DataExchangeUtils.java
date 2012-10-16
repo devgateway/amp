@@ -875,7 +875,7 @@ public class DataExchangeUtils {
         try {
             sess = PersistenceManager.getRequestDBSession();
             queryString = "select o from " + AmpSector.class.getName()
-                + " o where (TRIM(o.name)=:sectorName)";
+                + " o where (TRIM(o.name)=:sectorName) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
             qry.setParameter("sectorName", name.trim(), Hibernate.STRING);
 
@@ -906,7 +906,7 @@ public class DataExchangeUtils {
         try {
             sess = PersistenceManager.getRequestDBSession();
             queryString = "select o from " + AmpSector.class.getName()
-                + " o where (LOWER(TRIM(o.name))=:sectorName) and (LOWER(TRIM(o.sectorCodeOfficial))=:sectorCode)";
+                + " o where (LOWER(TRIM(o.name))=:sectorName) and (LOWER(TRIM(o.sectorCodeOfficial))=:sectorCode) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
             qry.setParameter("sectorName", name.trim().toLowerCase(), Hibernate.STRING);
             qry.setParameter("sectorCode", code.trim().toLowerCase(), Hibernate.STRING);

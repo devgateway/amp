@@ -34,6 +34,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 	private Set aidlist;
 	private Set indicators;
 	private Set<AmpSector> sectors;
+	private Boolean deleted;
 
 	private boolean translateable = true;
 
@@ -250,6 +251,14 @@ public class AmpSector implements Serializable, Comparable, Identifiable,
 
 	public void setSectorCodeOfficial(String sectorCodeOfficial) {
 		this.sectorCodeOfficial = sectorCodeOfficial;
+	}
+	
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	@Override

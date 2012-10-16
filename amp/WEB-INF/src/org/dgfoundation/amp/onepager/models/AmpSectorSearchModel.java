@@ -56,6 +56,7 @@ public class AmpSectorSearchModel extends
 					Restrictions.eq("ampSecSchemeId", scheme));
 			if (input.trim().length() > 0)
 				junction.add(getTextCriterion("name", input));
+			junction.add( Restrictions.or( Restrictions.isNull("deleted"), Restrictions.eq( "deleted", null )));
 			crit.add(junction);
 			crit.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)

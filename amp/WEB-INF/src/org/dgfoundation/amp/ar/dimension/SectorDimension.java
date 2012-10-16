@@ -32,7 +32,7 @@ public class SectorDimension extends ARDimension {
 	@Override
 	public void initialize() throws HibernateException, SQLException {
 		Session session = PersistenceManager.getSession();
-		Query createQuery = session.createQuery("from "+AmpSector.class.getName());
+		Query createQuery = session.createQuery("select sector from "+AmpSector.class.getName()+" sector where (sector.deleted is null or sector.deleted = false)");
 		HashMap<Long,Long> sectorMap=new HashMap<Long, Long>();
 		links.put(AmpSector.class, sectorMap);
 		List list;

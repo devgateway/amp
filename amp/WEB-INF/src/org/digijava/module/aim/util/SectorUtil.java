@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -32,15 +33,15 @@ import org.hibernate.Transaction;
 
 /**
  * Utility class for persisting all Sector with Scheme related entities
+ * 
  * @author Govind G Dalwani
  */
-
 
 public class SectorUtil {
 
 	private static Logger logger = Logger.getLogger(SectorUtil.class);
 
-	public static Collection searchForSector(String keyword,Long ampSecSchemeId) {
+	public static Collection searchForSector(String keyword, Long ampSecSchemeId) {
 		Session session = null;
 		Collection col = new ArrayList();
 
@@ -50,68 +51,68 @@ public class SectorUtil {
 
 			session = PersistenceManager.getSession();
 			int tempIncr = 0;
-				logger.info("searching SECTORS...............");
-				/*String qryStr = "select country.countryId,country.countryName,region.ampRegionId,region.name "
-						+ "from "
-						+ Country.class.getName()
-						+ " country , "
-						+ AmpRegion.class.getName()
-						+ " "
-						+ "region where region.name like '%"
-						+ keyword
-						+ "%' and " + "country.iso = region.country"; */
+			logger.info("searching SECTORS...............");
+			/*
+			 * String qryStr =
+			 * "select country.countryId,country.countryName,region.ampRegionId,region.name "
+			 * + "from " + Country.class.getName() + " country , " +
+			 * AmpRegion.class.getName() + " " +
+			 * "region where region.name like '%" + keyword + "%' and " +
+			 * "country.iso = region.country";
+			 */
 
-				String qryStr = "select sector from " + AmpSector.class.getName()
-					+ " sector inner join sector.ampSecSchemeId "
-					+ " sscheme"
+			String qryStr = "select sector from " + AmpSector.class.getName()
+					+ " sector inner join sector.ampSecSchemeId " + " sscheme"
 					+ " where lower(sector.name) like '%"
-					+ keyword.toLowerCase()
-					+ "%'";
-                if (ampSecSchemeId != null) {
-                    qryStr += " and sscheme.ampSecSchemeId=:ampSecSchemeId";
-                }
+					+ keyword.toLowerCase() + "%' and (sector.deleted is null or sector.deleted = false) ";
+			if (ampSecSchemeId != null) {
+				qryStr += " and sscheme.ampSecSchemeId=:ampSecSchemeId";
+			}
 
-				Query qry = session.createQuery(qryStr);
-				//qry.setParameter("orgType", orgType, Hibernate.LONG) ;
-                if (ampSecSchemeId != null) {
-                qry.setLong("ampSecSchemeId", ampSecSchemeId);
-                }
-				//col =qry.list();
-				Iterator itr = qry.list().iterator();
+			Query qry = session.createQuery(qryStr);
+			// qry.setParameter("orgType", orgType, Hibernate.LONG) ;
+			if (ampSecSchemeId != null) {
+				qry.setLong("ampSecSchemeId", ampSecSchemeId);
+			}
+			// col =qry.list();
+			Iterator itr = qry.list().iterator();
 
-				ActivitySector sectr;
-				tempIncr = 0;
+			ActivitySector sectr;
+			tempIncr = 0;
 
-				while (itr.hasNext()) {
-					AmpSector as=(AmpSector) itr.next();
-					sectr = new ActivitySector();
-			   		sectr.setSectorScheme(as.getAmpSecSchemeId().getSecSchemeName());
-					if(as.getParentSectorId() != null){
-						
-						sectr.setSectorName(as.getParentSectorId().getName());
-						sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
-						sectr.setSubsectorLevel1Id(as.getAmpSectorId());
-						sectr.setSubsectorLevel1Name(as.getName());
-						
-						if(as.getParentSectorId().getParentSectorId() != null){
-						
-							sectr.setSectorName(as.getParentSectorId().getParentSectorId().getName());
-							sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
-							sectr.setSubsectorLevel1Id(as.getParentSectorId().getAmpSectorId());
-							sectr.setSubsectorLevel1Name(as.getParentSectorId().getName());
-							sectr.setSubsectorLevel2Id(as.getAmpSectorId());
-							sectr.setSubsectorLevel2Name(as.getName());
-							
-						}
-					}else{
-						
-						sectr.setSectorName(as.getName());
-				   		sectr.setSectorId(as.getAmpSectorId());
-						
-						
+			while (itr.hasNext()) {
+				AmpSector as = (AmpSector) itr.next();
+				sectr = new ActivitySector();
+				sectr.setSectorScheme(as.getAmpSecSchemeId().getSecSchemeName());
+				if (as.getParentSectorId() != null) {
+
+					sectr.setSectorName(as.getParentSectorId().getName());
+					sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
+					sectr.setSubsectorLevel1Id(as.getAmpSectorId());
+					sectr.setSubsectorLevel1Name(as.getName());
+
+					if (as.getParentSectorId().getParentSectorId() != null) {
+
+						sectr.setSectorName(as.getParentSectorId()
+								.getParentSectorId().getName());
+						sectr.setSectorId(as.getParentSectorId()
+								.getAmpSectorId());
+						sectr.setSubsectorLevel1Id(as.getParentSectorId()
+								.getAmpSectorId());
+						sectr.setSubsectorLevel1Name(as.getParentSectorId()
+								.getName());
+						sectr.setSubsectorLevel2Id(as.getAmpSectorId());
+						sectr.setSubsectorLevel2Name(as.getName());
+
 					}
-					col.add(sectr);
+				} else {
+
+					sectr.setSectorName(as.getName());
+					sectr.setSectorId(as.getAmpSectorId());
+
 				}
+				col.add(sectr);
+			}
 
 		} catch (Exception ex) {
 			logger.debug("Unable to search sectors" + ex);
@@ -123,7 +124,7 @@ public class SectorUtil {
 			}
 		}
 		return col;
-	}//End Search Sector.
+	}// End Search Sector.
 
 	public static List getAmpSectors(Long id) {
 		ArrayList ampSectors = new ArrayList();
@@ -150,7 +151,7 @@ public class SectorUtil {
 
 			iter = ampActivity.getSectors().iterator();
 			while (iter.hasNext()) {
-				//ampSector = (AmpSector) iter.next();
+				// ampSector = (AmpSector) iter.next();
 				ampSector = ((AmpActivitySector) iter.next()).getSectorId();
 				ampSectors.add(ampSector);
 			}
@@ -230,10 +231,11 @@ public class SectorUtil {
 		Collection<AmpSector> col = null;
 
 		try {
-			session = PersistenceManager.getSession();//TODO why not use thread session?
+			session = PersistenceManager.getSession();// TODO why not use thread
+														// session?
 			String queryString = "select s from " + AmpSector.class.getName()
 					+ " s " + "where amp_sec_scheme_id = " + secSchemeId
-					+ " and parent_sector_id is null " + "order by s.name";
+					+ " and parent_sector_id is null and (s.deleted is null or s.deleted = false)  " + "order by s.name";
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 
@@ -250,20 +252,27 @@ public class SectorUtil {
 		}
 		return col;
 	}
-	
+
 	public static Collection getAllParentSectors() {
 		Session session = null;
 		Collection col = null;
 
 		try {
 			session = PersistenceManager.getSession();
-			
-			String queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls where cls.primary=true ";
-			Query qry = session.createQuery(queryString);
-			AmpClassificationConfiguration auxConfig = (AmpClassificationConfiguration) qry.uniqueResult();
 
-			queryString = "select s from " + AmpSector.class.getName()
-				+ " s "	+ " where parent_sector_id is null and amp_sec_scheme_id = " + auxConfig.getClassification().getAmpSecSchemeId() + " order by s.name";
+			String queryString = "select cls from "
+					+ AmpClassificationConfiguration.class.getName()
+					+ " cls where cls.primary=true ";
+			Query qry = session.createQuery(queryString);
+			AmpClassificationConfiguration auxConfig = (AmpClassificationConfiguration) qry
+					.uniqueResult();
+
+			queryString = "select s from "
+					+ AmpSector.class.getName()
+					+ " s "
+					+ " where parent_sector_id is null and amp_sec_scheme_id = "
+					+ auxConfig.getClassification().getAmpSecSchemeId()
+					+ " and (s.deleted is null or s.deleted = false)  order by s.name";
 			qry = session.createQuery(queryString);
 			col = qry.list();
 
@@ -280,9 +289,7 @@ public class SectorUtil {
 		}
 		return col;
 	}
-	
-	
-	
+
 	public static List<AmpSector> getAllSectorsFromScheme(Long secSchemeId) {
 		Session session = null;
 		List<AmpSector> col = null;
@@ -290,7 +297,7 @@ public class SectorUtil {
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select s from " + AmpSector.class.getName()
-					+ " s " + "where amp_sec_scheme_id = " + secSchemeId;
+					+ " s " + "where amp_sec_scheme_id = " + secSchemeId + " and (s.deleted is null or s.deleted = false) ";
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 
@@ -315,16 +322,16 @@ public class SectorUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select sc from " + AmpSector.class.getName()
-					+ " sc order by sc.name";
+					+ "sc where (sc.deleted is null or sc.deleted = false) order by sc.name";
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 
 		} catch (Exception e) {
 			logger.error("Cannot get sectors, " + e);
-		} 
+		}
 		return col;
 	}
-	
+
 	public static Collection<AmpSector> getAllChildSectors(Long parSecId) {
 		Session session = null;
 		Collection col = null;
@@ -333,7 +340,7 @@ public class SectorUtil {
 			session = PersistenceManager.getSession();
 			String queryString = "select s from " + AmpSector.class.getName()
 					+ " s " + "where parent_sector_id = " + parSecId
-					+ " order by s.name";
+					+ " and (s.deleted is null or s.deleted = false) order by s.name";
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 
@@ -407,13 +414,13 @@ public class SectorUtil {
 
 			if (parentSecId.intValue() == 0) {
 				queryString = "select s from " + AmpSector.class.getName()
-						+ " s where s.parentSectorId is null order by s.name";
+						+ " s where s.parentSectorId is null and (s.deleted is null or s.deleted = false) order by s.name";
 
 				qry = session.createQuery(queryString);
 			} else {
 				queryString = "select s from " + AmpSector.class.getName()
 						+ " s where (s.parentSectorId=:parentSectorId) "
-						+ "order by s.name";
+						+ " and (s.deleted is null or s.deleted = false) order by s.name";
 
 				qry = session.createQuery(queryString);
 				qry.setParameter("parentSectorId", parentSecId, Hibernate.LONG);
@@ -464,7 +471,7 @@ public class SectorUtil {
 			session = PersistenceManager.getSession();
 			String queryString = new String();
 			queryString = "select s from " + AmpSector.class.getName()
-					+ " s where (s.ampSectorId=:ampSectorId)";
+					+ " s where (s.ampSectorId=:ampSectorId) and (s.deleted is null or s.deleted = false) ";
 
 			qry = session.createQuery(queryString);
 			qry.setParameter("ampSectorId", sectorId, Hibernate.LONG);
@@ -472,9 +479,10 @@ public class SectorUtil {
 
 			if (itr.hasNext()) {
 				ampSector = (AmpSector) itr.next();
-				sec = new Sector(ampSector.getAmpSectorId(), ampSector
-						.getName(), ampSector.getAmpOrgId().getAmpOrgId(),
-						DbUtil.getOrganisation(ampSector.getAmpOrgId().getAmpOrgId())
+				sec = new Sector(ampSector.getAmpSectorId(),
+						ampSector.getName(), ampSector.getAmpOrgId()
+								.getAmpOrgId(), DbUtil.getOrganisation(
+								ampSector.getAmpOrgId().getAmpOrgId())
 								.getName());
 
 			}
@@ -495,20 +503,19 @@ public class SectorUtil {
 		return sec;
 	}
 
-	public static AmpIndicatorSector getIndIcatorSector(Long indicatorId){
-		
+	public static AmpIndicatorSector getIndIcatorSector(Long indicatorId) {
+
 		Session session = null;
 		Query qry = null;
 		AmpIndicatorSector indSectorId = null;
 		Iterator itr = null;
-		
-		
+
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = new String();
 			queryString = "select s from " + AmpIndicatorSector.class.getName()
-			+ " s where (s.themeIndicatorId=:themeIndicatorId)";
-			
+					+ " s where (s.themeIndicatorId=:themeIndicatorId)";
+
 			qry = session.createQuery(queryString);
 			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
 			itr = qry.list().iterator();
@@ -516,46 +523,45 @@ public class SectorUtil {
 			if (itr.hasNext()) {
 				indSectorId = (AmpIndicatorSector) itr.next();
 			}
-			
+
 		} catch (Exception e) {
 			logger.error("Unable to get sector");
 			logger.debug("Exceptiion " + e);
 		}
-		
+
 		return indSectorId;
 	}
-	
-	public static boolean getIndIcatorSector(Long indicatorId,Long sectorId){
-		
+
+	public static boolean getIndIcatorSector(Long indicatorId, Long sectorId) {
+
 		Session session = null;
 		Query qry = null;
-		List <AmpIndicatorSector> indSectors = null;
-		boolean exist=false;
-		
-		
+		List<AmpIndicatorSector> indSectors = null;
+		boolean exist = false;
+
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = new String();
-			queryString = "select s from " + AmpIndicatorSector.class.getName()
-			+ " s where (s.themeIndicatorId=:themeIndicatorId) and s.sectorId=:sectorId";
-			
+			queryString = "select s from "
+					+ AmpIndicatorSector.class.getName()
+					+ " s where (s.themeIndicatorId=:themeIndicatorId) and s.sectorId=:sectorId";
+
 			qry = session.createQuery(queryString);
 			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
 			qry.setLong("sectorId", sectorId);
 			indSectors = qry.list();
-			if(indSectors!=null&&indSectors.size()>0){
-				exist=true;
+			if (indSectors != null && indSectors.size() > 0) {
+				exist = true;
 			}
 
-			
 		} catch (Exception e) {
 			logger.error("Unable to get sector");
 			logger.debug("Exceptiion " + e);
 		}
-		
+
 		return exist;
 	}
-	
+
 	public static AmpSector getAmpSector(Long id) {
 
 		Session session = null;
@@ -567,7 +573,7 @@ public class SectorUtil {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = new String();
 			queryString = "select s from " + AmpSector.class.getName()
-					+ " s where (s.ampSectorId=:ampSectorId)";
+					+ " s where (s.ampSectorId=:ampSectorId) and (s.deleted is null or s.deleted = false) ";
 
 			qry = session.createQuery(queryString);
 			qry.setParameter("ampSectorId", id, Hibernate.LONG);
@@ -581,7 +587,7 @@ public class SectorUtil {
 			logger.error("Unable to get amp_sector info");
 			logger.debug("Exceptiion " + ex);
 		}
-//session.flush();
+		// session.flush();
 		return ampSector;
 
 	}
@@ -628,14 +634,13 @@ public class SectorUtil {
 	public static void updateSector(AmpSector sector) {
 
 		if (sector.getParentSectorId() == null
-				&& organisationChanged(sector.getAmpSectorId(), sector
-						.getAmpOrgId()) == true) {
+				&& organisationChanged(sector.getAmpSectorId(),
+						sector.getAmpOrgId()) == true) {
 
 			updateSubSectors(sector, sector.getAmpOrgId());
 		}
 		DbUtil.update(sector);
 	}
-
 
 	public static ArrayList getAmpSectors() {
 		Session session = null;
@@ -649,7 +654,7 @@ public class SectorUtil {
 			session = PersistenceManager.getSession();
 			queryString = " select Sector from "
 					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is null order by Sector.name";
+					+ " Sector where Sector.parentSectorId is null and (Sector.deleted is null or Sector.deleted = false) order by Sector.name";
 			q = session.createQuery(queryString);
 			iter = q.list().iterator();
 
@@ -684,7 +689,7 @@ public class SectorUtil {
 			session = PersistenceManager.getSession();
 			queryString = " select Sector from "
 					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is not null order by Sector.name";
+					+ " Sector where Sector.parentSectorId is not null and (Sector.deleted is null or Sector.deleted = false) order by Sector.name";
 			q = session.createQuery(queryString);
 			iter = q.list().iterator();
 			while (iter.hasNext()) {
@@ -717,7 +722,7 @@ public class SectorUtil {
 			session = PersistenceManager.getSession();
 			queryString = " select Sector from "
 					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is not null and Sector.parentSectorId.ampSectorId=:ampSectorId";
+					+ " Sector where Sector.parentSectorId is not null and Sector.parentSectorId.ampSectorId=:ampSectorId and (Sector.deleted is null or Sector.deleted = false) ";
 			q = session.createQuery(queryString);
 			q.setParameter("ampSectorId", ampSectorId, Hibernate.LONG);
 			iter = q.list().iterator();
@@ -751,7 +756,7 @@ public class SectorUtil {
 		try {
 			session = PersistenceManager.getSession();
 			queryString = " select Sector from " + AmpSector.class.getName()
-					+ " Sector where Sector.ampSectorId=:ampSectorId";
+					+ " Sector where Sector.ampSectorId=:ampSectorId and (Sector.deleted is null or Sector.deleted = false) ";
 			q = session.createQuery(queryString);
 			q.setParameter("ampSectorId", ampSectorId, Hibernate.LONG);
 			iter = q.list().iterator();
@@ -759,8 +764,8 @@ public class SectorUtil {
 			ampSector = (AmpSector) iter.next();
 			while (ampSector.getParentSectorId() != null)
 				ampSector = ampSector.getParentSectorId();
-			//	ampSectorId=ampSector.getAmpSectorId();
-			//	logger.debug("Sector Id: " + ampSectorId);
+			// ampSectorId=ampSector.getAmpSectorId();
+			// logger.debug("Sector Id: " + ampSectorId);
 
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp sub sectors  from database "
@@ -774,32 +779,35 @@ public class SectorUtil {
 		}
 		return ampSector;
 	}
-	
-	public static Collection<AmpSector> getAmpParentSectors(Collection<AmpSector> sectors) {
-		if ( sectors != null ) {
-			ArrayList<AmpSector> retList	= new ArrayList<AmpSector>();
-			for (AmpSector sector: sectors) {
-				retList.addAll( SectorUtil.getAmpParentSectors( sector.getAmpSectorId() ) );
+
+	public static Collection<AmpSector> getAmpParentSectors(
+			Collection<AmpSector> sectors) {
+		if (sectors != null) {
+			ArrayList<AmpSector> retList = new ArrayList<AmpSector>();
+			for (AmpSector sector : sectors) {
+				retList.addAll(SectorUtil.getAmpParentSectors(sector
+						.getAmpSectorId()));
 			}
 			return retList;
 		}
 		return null;
 	}
-	
+
 	public static Collection<AmpSector> getAmpParentSectors(Long ampSectorId) {
 		Session session = null;
 		Query q = null;
-		Collection<AmpSector> ret	= new ArrayList<AmpSector>();
+		Collection<AmpSector> ret = new ArrayList<AmpSector>();
 		String queryString = null;
 		Iterator iter = null;
 
 		try {
 			session = PersistenceManager.getSession();
 
-			AmpSector ampSector = (AmpSector)session.load(AmpSector.class , ampSectorId );
+			AmpSector ampSector = (AmpSector) session.load(AmpSector.class,
+					ampSectorId);
 			while (ampSector.getParentSectorId() != null) {
 				ampSector = ampSector.getParentSectorId();
-				ret.add( ampSector );
+				ret.add(ampSector);
 			}
 
 		} catch (Exception ex) {
@@ -827,7 +835,7 @@ public class SectorUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			//queryString = " select Sector from " + AmpSector.class.getName()
+			// queryString = " select Sector from " + AmpSector.class.getName()
 			// + " Sector where Sector.parentSectorId is null order by
 			// Sector.name";
 
@@ -835,8 +843,8 @@ public class SectorUtil {
 					+ AmpSector.class.getName()
 					+ " sector, "
 					+ AmpActivity.class.getName()
-					+ " act where (sector.ampSecSchemeId = :ampSecSchemeId) and (act.ampActivityId = :ampActivityId) and sector.parentSectorId is null";
-			//queryString = "select sector from " + AmpSector.class.getName() +
+					+ " act where (sector.ampSecSchemeId = :ampSecSchemeId) and (act.ampActivityId = :ampActivityId) and sector.parentSectorId is null and (sector.deleted is null or sector.deleted = false) ";
+			// queryString = "select sector from " + AmpSector.class.getName() +
 			// " sector, " + AmpActivity.class.getName() + " act where
 			// (sector.ampSecSchemeId = :ampSecSchemeId) and (act.ampActivityId
 			// = :ampActivityId)";
@@ -871,7 +879,7 @@ public class SectorUtil {
 		try {
 			sess = PersistenceManager.getSession();
 			String queryString = "select s from " + AmpSector.class.getName()
-					+ " s where s.sectorCode like '%" + key + "%'";
+					+ " s where s.sectorCode like '%" + key + "%' and (s.deleted is null or s.deleted = false) ";
 			qry = sess.createQuery(queryString);
 			Iterator itr = qry.list().iterator();
 			col = new ArrayList();
@@ -904,7 +912,7 @@ public class SectorUtil {
 		try {
 			sess = PersistenceManager.getSession();
 			String queryString = "select s from " + AmpSector.class.getName()
-					+ " s where s.name like '%" + key + "%'";
+					+ " s where s.name like '%" + key + "%' and (s.deleted is null or s.deleted = false) ";
 			qry = sess.createQuery(queryString);
 			Iterator itr = qry.list().iterator();
 			col = new ArrayList();
@@ -937,7 +945,7 @@ public class SectorUtil {
 		try {
 			sess = PersistenceManager.getSession();
 			String qryString = "select s from " + AmpSector.class.getName()
-					+ " s where (s.ampSectorId=:ampSectorId)";
+					+ " s where (s.ampSectorId=:ampSectorId) and (s.deleted is null or s.deleted = false) ";
 
 			Query qry = sess.createQuery(qryString);
 			qry.setParameter("ampSectorId", sectorId, Hibernate.LONG);
@@ -972,54 +980,60 @@ public class SectorUtil {
 	 * 
 	 * 
 	 * @return List of sectors and sub-sectors ordered by sectors alphabetically
-	 *  and then by sub-sectors alphabetically (Ex. A, a1, a2, a3, B, b1, b2, etc...). 
-	 *  The names of the sectors are a embelished (upper case, or added some spaces) 
-	 *  for better presentation. 
-	 *  DO NOT save this objects back to the database  !!!! 
+	 *         and then by sub-sectors alphabetically (Ex. A, a1, a2, a3, B, b1,
+	 *         b2, etc...). The names of the sectors are a embelished (upper
+	 *         case, or added some spaces) for better presentation. DO NOT save
+	 *         this objects back to the database !!!!
 	 */
-	public static List<AmpSector> getAmpSectorsAndSubSectors( String configurationName ) {
-		List<AmpSector> ret 	= new ArrayList<AmpSector>();
-		Long id					= null;
+	public static List<AmpSector> getAmpSectorsAndSubSectors(
+			String configurationName) {
+		List<AmpSector> ret = new ArrayList<AmpSector>();
+		Long id = null;
 		try {
-			Collection<AmpClassificationConfiguration> configs	= 
-					 SectorUtil.getAllClassificationConfigs();
-			Iterator<AmpClassificationConfiguration> confIter	= configs.iterator();
-			while ( confIter.hasNext() ) {
-				AmpClassificationConfiguration conf		= confIter.next();
-				if ( configurationName.equals( conf.getName() ) ) {
-					if ( conf.getClassification()!= null )
-						id	= conf.getClassification().getAmpSecSchemeId();
+			Collection<AmpClassificationConfiguration> configs = SectorUtil
+					.getAllClassificationConfigs();
+			Iterator<AmpClassificationConfiguration> confIter = configs
+					.iterator();
+			while (confIter.hasNext()) {
+				AmpClassificationConfiguration conf = confIter.next();
+				if (configurationName.equals(conf.getName())) {
+					if (conf.getClassification() != null)
+						id = conf.getClassification().getAmpSecSchemeId();
 				}
 			}
-			if ( id != null ) {
-				Collection<AmpSector> dbReturnSet = SectorUtil.getAllParentSectors(id);
+			if (id != null) {
+				Collection<AmpSector> dbReturnSet = SectorUtil
+						.getAllParentSectors(id);
 				Iterator<AmpSector> iter = dbReturnSet.iterator();
 				while (iter.hasNext()) {
 					AmpSector ampSector = iter.next();
-					ampSector.setName( ampSector.getName().toUpperCase() );
+					ampSector.setName(ampSector.getName().toUpperCase());
 					ret.add(ampSector);
-					Collection<AmpSector> dbChildReturnSet = 
-							SectorUtil.getAllChildSectors( ampSector.getAmpSectorId() );
-					
+					Collection<AmpSector> dbChildReturnSet = SectorUtil
+							.getAllChildSectors(ampSector.getAmpSectorId());
+
 					Iterator<AmpSector> iterSub = dbChildReturnSet.iterator();
 					while (iterSub.hasNext()) {
 						AmpSector ampSubSector = (AmpSector) iterSub.next();
-						String temp = " -- " + ampSubSector.getName();				
+						String temp = " -- " + ampSubSector.getName();
 						ampSubSector.setName(temp);
 						ret.add(ampSubSector);
-						
-						Collection<AmpSector> dbChildReturnSet2		= 
-							SectorUtil.getAllChildSectors( ampSubSector.getAmpSectorId() );
-						if ( dbChildReturnSet2!=null && dbChildReturnSet2.size()>0 ) {
-							for (AmpSector ampSubSubSector: dbChildReturnSet2 ) {
-								ampSubSubSector.setName( " -- -- " +ampSubSubSector.getName() );
+
+						Collection<AmpSector> dbChildReturnSet2 = SectorUtil
+								.getAllChildSectors(ampSubSector
+										.getAmpSectorId());
+						if (dbChildReturnSet2 != null
+								&& dbChildReturnSet2.size() > 0) {
+							for (AmpSector ampSubSubSector : dbChildReturnSet2) {
+								ampSubSubSector.setName(" -- -- "
+										+ ampSubSubSector.getName());
 								ret.add(ampSubSubSector);
 							}
 						}
 					}
 				}
 			}
-		
+
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1028,539 +1042,565 @@ public class SectorUtil {
 		return ret;
 	}
 
-	public static List<AmpSector> getAmpSectorsAndSubSectorsHierarchy( String configurationName ) {
- 	 	List<AmpSector> ret     = new ArrayList<AmpSector>();
- 	 	Long id = null;
- 	 	try {
- 	 		Collection<AmpClassificationConfiguration> configs = SectorUtil.getAllClassificationConfigs();
- 	 		Iterator<AmpClassificationConfiguration> confIter       = configs.iterator();
- 	 		while ( confIter.hasNext() ) {
- 	 			AmpClassificationConfiguration conf = confIter.next();
- 	 			if ( configurationName.equals( conf.getName() ) ) {
- 	 				if ( conf.getClassification()!= null )
- 	 					id      = conf.getClassification().getAmpSecSchemeId();
- 	 			}
- 	 		}
- 	 		if ( id != null ) {
- 	 			Collection<AmpSector> dbReturnSet = SectorUtil.getAllParentSectors(id);
- 	 			Iterator<AmpSector> iter = dbReturnSet.iterator();
- 	 			while (iter.hasNext()) {
- 	 				AmpSector ampSector = iter.next();
- 	 				ampSector.setName( ampSector.getName().toUpperCase() );
- 	 				ret.add(ampSector);
- 	 				Collection<AmpSector> dbChildReturnSet = SectorUtil.getAllChildSectors( ampSector.getAmpSectorId() );
- 	 				ampSector.getChildren().addAll( dbChildReturnSet);
- 	 				if ( ampSector.getChildren() != null ) {
- 	 					Iterator<AmpSector> iter2	= ampSector.getChildren().iterator();
- 	 					while (iter2.hasNext() ) {
- 	 						AmpSector ampSubSector	= iter2.next();
- 	 						Collection<AmpSector> dbChildReturnSet2 = SectorUtil.getAllChildSectors( ampSubSector.getAmpSectorId() );
- 	 						if (dbChildReturnSet2 != null)
- 	 							ampSubSector.getChildren().addAll(dbChildReturnSet2);
- 	 					}
- 	 				}
- 	 			}
- 	 		}
+	public static List<AmpSector> getAmpSectorsAndSubSectorsHierarchy(
+			String configurationName) {
+		List<AmpSector> ret = new ArrayList<AmpSector>();
+		Long id = null;
+		try {
+			Collection<AmpClassificationConfiguration> configs = SectorUtil
+					.getAllClassificationConfigs();
+			Iterator<AmpClassificationConfiguration> confIter = configs
+					.iterator();
+			while (confIter.hasNext()) {
+				AmpClassificationConfiguration conf = confIter.next();
+				if (configurationName.equals(conf.getName())) {
+					if (conf.getClassification() != null)
+						id = conf.getClassification().getAmpSecSchemeId();
+				}
+			}
+			if (id != null) {
+				Collection<AmpSector> dbReturnSet = SectorUtil
+						.getAllParentSectors(id);
+				Iterator<AmpSector> iter = dbReturnSet.iterator();
+				while (iter.hasNext()) {
+					AmpSector ampSector = iter.next();
+					ampSector.setName(ampSector.getName().toUpperCase());
+					ret.add(ampSector);
+					Collection<AmpSector> dbChildReturnSet = SectorUtil
+							.getAllChildSectors(ampSector.getAmpSectorId());
+					ampSector.getChildren().addAll(dbChildReturnSet);
+					if (ampSector.getChildren() != null) {
+						Iterator<AmpSector> iter2 = ampSector.getChildren()
+								.iterator();
+						while (iter2.hasNext()) {
+							AmpSector ampSubSector = iter2.next();
+							Collection<AmpSector> dbChildReturnSet2 = SectorUtil
+									.getAllChildSectors(ampSubSector
+											.getAmpSectorId());
+							if (dbChildReturnSet2 != null)
+								ampSubSector.getChildren().addAll(
+										dbChildReturnSet2);
+						}
+					}
+				}
+			}
 		} catch (DgException e) {
-	 	 	e.printStackTrace();
- 	 	}
+			e.printStackTrace();
+		}
 		return ret;
- 	 }
+	}
 
-// Govind's Starts from here!!
+	// Govind's Starts from here!!
 	/*
 	 * this is to get the sector schemes from the ampSectorScheme table
 	 */
 	@SuppressWarnings("unchecked")
-	public static Collection<AmpSectorScheme> getSectorSchemes(){
+	public static Collection<AmpSectorScheme> getSectorSchemes() {
 		String queryString = null;
 		Session session = null;
 		Collection<AmpSectorScheme> col = null;
 		Query qry = null;
 
-		try
-		{
-			session = PersistenceManager.getSession();//TODO why not thread session? please check and remove this comment.
-			queryString ="select pi from "+AmpSectorScheme.class.getName()+" pi ";
+		try {
+			session = PersistenceManager.getSession();// TODO why not thread
+														// session? please check
+														// and remove this
+														// comment.
+			queryString = "select pi from " + AmpSectorScheme.class.getName()
+					+ " pi ";
 			qry = session.createQuery(queryString);
 			col = qry.list();
-		}
-		catch(Exception ex)
-		{
-			logger.error("Unable to get report names  from database " + ex.getMessage());
+		} catch (Exception ex) {
+			logger.error("Unable to get report names  from database "
+					+ ex.getMessage());
 			ex.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
+		} finally {
+			try {
 				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2)
-			{
+			} catch (Exception ex2) {
 				logger.error("releaseSession() failed ");
 			}
 		}
 		return col;
 	}
 
-/*
- * this is to get the level one sectors from the AmpSector table
- */
-	public static Collection getSectorLevel1(Integer schemeId)
-	{
+	/*
+	 * this is to get the level one sectors from the AmpSector table
+	 */
+	public static Collection getSectorLevel1(Integer schemeId) {
 		String queryString = null;
 		Session session = null;
 		Collection col = null;
 		Query qry = null;
 
-		try
-		{
+		try {
 			session = PersistenceManager.getSession();
-			queryString ="select pi from "+AmpSector.class.getName()+" pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null order by pi.name ";
+			queryString = "select pi from "
+					+ AmpSector.class.getName()
+					+ " pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null and (pi.deleted is null or pi.deleted = false) order by pi.name ";
 			qry = session.createQuery(queryString);
-			qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
+			qry.setParameter("schemeId", schemeId, Hibernate.INTEGER);
 			col = qry.list();
-//session.flush();
-		}
-		catch(Exception ex)
-		{
-			logger.error("Unable to get report names  from database " + ex.getMessage());
+			// session.flush();
+		} catch (Exception ex) {
+			logger.error("Unable to get report names  from database "
+					+ ex.getMessage());
 			ex.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
+		} finally {
+			try {
 				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2)
-			{
+			} catch (Exception ex2) {
 				logger.error("releaseSession() failed ");
 			}
 		}
 		return col;
 	}
-	
+
 	/*
 	 * this is to get the level one sectors that has some funding
 	 */
-		public static Collection getFundingLocationSectorLevel1(Integer schemeId)
-		{
-			String queryString = null;
-			Session session = null;
-			Collection col = null;
-			Query qry = null;
-
-			try
-			{
-				session = PersistenceManager.getSession();
-				queryString ="select pi from "+AmpSector.class.getName()+" pi " +
-						" where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null " +
-						" and " +
-						"(pi.ampSectorId in (select aas.sectorId from " + AmpActivitySector.class.getName()+ " aas" +
-								" where aas.activityId in (select al.activity from " + AmpActivityLocation.class.getName()+ " al) " +
-								" and aas.activityId in (select af.ampActivityId from " + AmpFunding.class.getName()+ " af " +
-										"where af.ampFundingId in (select afd.ampFundingId from " + AmpFundingDetail.class.getName()+ " afd)))" +
-						" or " +
-						" pi.ampSectorId in (select asec.parentSectorId from " + AmpSector.class.getName() + " asec " +
-								" where asec.ampSectorId in (select aas.sectorId from " + AmpActivitySector.class.getName()+ " aas" +
-									" where aas.activityId in (select al.activity from " + AmpActivityLocation.class.getName()+ " al) " +
-									" and aas.activityId in (select af.ampActivityId from " + AmpFunding.class.getName()+ " af " +
-											"where af.ampFundingId in (select afd.ampFundingId from " + AmpFundingDetail.class.getName()+ " afd))))" +
-						" or " +
-						" pi.ampSectorId in (select asector.parentSectorId from " + AmpSector.class.getName() + " asector " +
-								" where asector.ampSectorId in  (select asec.parentSectorId from " + AmpSector.class.getName() + " asec " +
-									" where asec.ampSectorId in (select aas.sectorId from " + AmpActivitySector.class.getName()+ " aas" +
-										" where aas.activityId in (select al.activity from " + AmpActivityLocation.class.getName()+ " al) " +
-										" and aas.activityId in (select af.ampActivityId from " + AmpFunding.class.getName()+ " af " +
-												"where af.ampFundingId in (select afd.ampFundingId from " + AmpFundingDetail.class.getName()+ " afd)))))" +
-											
-						") order by pi.name ";
-				
-				qry = session.createQuery(queryString);
-				qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
-				col = qry.list();
-//session.flush();
-			}
-			catch(Exception ex)
-			{
-				logger.error("Unable to get sectors with funding and location from database " + ex.getMessage());
-				ex.printStackTrace(System.out);
-			}
-			finally
-			{
-				try
-				{
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception ex2)
-				{
-					logger.error("releaseSession() failed ");
-				}
-			}
-			return col;
-		}
-	
-/*
- * get scheme to be edited
- */
-	public static Collection getEditScheme(Integer schemeId)
-	{
+	public static Collection getFundingLocationSectorLevel1(Integer schemeId) {
 		String queryString = null;
 		Session session = null;
 		Collection col = null;
 		Query qry = null;
 
-		try
-		{
+		try {
 			session = PersistenceManager.getSession();
-			queryString ="select pi from "+AmpSectorScheme.class.getName()+" pi where pi.ampSecSchemeId=:schemeId";
+			queryString = "select pi from "
+					+ AmpSector.class.getName()
+					+ " pi "
+					+ " where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null and (pi.deleted is null or pi.deleted = false) "
+					+ " and "
+					+ "(pi.ampSectorId in (select aas.sectorId from "
+					+ AmpActivitySector.class.getName()
+					+ " aas"
+					+ " where aas.activityId in (select al.activity from "
+					+ AmpActivityLocation.class.getName()
+					+ " al) "
+					+ " and aas.activityId in (select af.ampActivityId from "
+					+ AmpFunding.class.getName()
+					+ " af "
+					+ "where af.ampFundingId in (select afd.ampFundingId from "
+					+ AmpFundingDetail.class.getName()
+					+ " afd)))"
+					+ " or "
+					+ " pi.ampSectorId in (select asec.parentSectorId from "
+					+ AmpSector.class.getName()
+					+ " asec "
+					+ " where (asec.deleted is null or asec.deleted = false) and asec.ampSectorId in (select aas.sectorId from "
+					+ AmpActivitySector.class.getName()
+					+ " aas"
+					+ " where aas.activityId in (select al.activity from "
+					+ AmpActivityLocation.class.getName()
+					+ " al) "
+					+ " and aas.activityId in (select af.ampActivityId from "
+					+ AmpFunding.class.getName()
+					+ " af "
+					+ "where af.ampFundingId in (select afd.ampFundingId from "
+					+ AmpFundingDetail.class.getName()
+					+ " afd))))"
+					+ " or "
+					+ " pi.ampSectorId in (select asector.parentSectorId from "
+					+ AmpSector.class.getName()
+					+ " asector "
+					+ " where (asector.deleted is null or asector.deleted = false) and asector.ampSectorId in  (select asec.parentSectorId from "
+					+ AmpSector.class.getName() + " asec "
+					+ " where (asec.deleted is null or asec.deleted = false) and asec.ampSectorId in (select aas.sectorId from "
+					+ AmpActivitySector.class.getName() + " aas"
+					+ " where aas.activityId in (select al.activity from "
+					+ AmpActivityLocation.class.getName() + " al) "
+					+ " and aas.activityId in (select af.ampActivityId from "
+					+ AmpFunding.class.getName() + " af "
+					+ "where af.ampFundingId in (select afd.ampFundingId from "
+					+ AmpFundingDetail.class.getName() + " afd)))))" +
+
+					") order by pi.name ";
+
 			qry = session.createQuery(queryString);
-			qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
+			qry.setParameter("schemeId", schemeId, Hibernate.INTEGER);
 			col = qry.list();
-		}
-		catch(Exception ex)
-		{
-			logger.error("Unable to get report names  from database " + ex.getMessage());
+			// session.flush();
+		} catch (Exception ex) {
+			logger.error("Unable to get sectors with funding and location from database "
+					+ ex.getMessage());
 			ex.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
+		} finally {
+			try {
 				PersistenceManager.releaseSession(session);
-			}
-			catch (Exception ex2)
-			{
+			} catch (Exception ex2) {
 				logger.error("releaseSession() failed ");
 			}
 		}
 		return col;
 	}
-        
-        
-    /**
-     * Returns All  Configurations of Classifications
-     * 
-     * @return All Configurations
-     * @throws DgException If exception occurred
-     */
-    public static List<AmpClassificationConfiguration> getAllClassificationConfigs() throws DgException {
-        String queryString = null;
-        Session session = null;
-        List<AmpClassificationConfiguration> configs = null;
-        Query qry = null;
 
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls ";
-            qry = session.createQuery(queryString);
-            configs = qry.list();
-        } catch (Exception ex) {
-            logger.error("Unable to get report names  from database " + ex.getMessage());
-            throw new DgException(ex);
+	/*
+	 * get scheme to be edited
+	 */
+	public static Collection getEditScheme(Integer schemeId) {
+		String queryString = null;
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
 
-        }
-
-        return configs;
-    }
-
-    /**
-     * Returns Classification Configuration by Configuration Id
-     * 
-     * @param configId Configuration Id
-     * @return Classification Configuration using  Configuration Id
-     * @throws DgException If exception occurred
-     */
-    public static AmpClassificationConfiguration getClassificationConfigById(Long configId) throws DgException {
-
-        Session session = null;
-        AmpClassificationConfiguration config = null;
-
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            config = (AmpClassificationConfiguration) session.load(AmpClassificationConfiguration.class, configId);
-        } catch (Exception ex) {
-            logger.error("Unable to get configs from database " + ex.getMessage());
-            throw new DgException(ex);
-
-        }
-
-        return config;
-    }
-
-    /**
-     * Returns true if specified Scheme is selected as default classification 
-     * in the configuration
-     * otherwise returns false.
-     * 
-     * @param classificationId  Id of classification
-     * @return true If specified classification is selected as default classification 
-     * in the configuration
-     * @throws DgException If exception occurred
-     */
-    public static boolean isSchemeUsed(Long classificationId) throws DgException {
-
-        Session session = null;
-        boolean used = false;
-        String queryString = null;
-        List configs = null;
-        Query qry = null;
-
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls where cls.classification=:classificationId ";
-            qry = session.createQuery(queryString);
-            qry.setLong("classificationId", classificationId);
-            configs = qry.list();
-            if (configs != null && configs.size() > 0) {
-                used = true;
-            }
-        } catch (Exception ex) {
-            logger.error("Unable to get configs from database " + ex.getMessage());
-            throw new DgException(ex);
-
-        }
-
-        return used;
-    }
-
-    /**
-     * Returns true if specified classification is selected as default classification 
-     * in the configuration
-     * otherwise returns false.
-     * 
-     * @param classificationId  Id of classification
-     * @return true If specified classification is selected as default classification 
-     * in the configuration
-     * @throws DgException If exception occurred
-     */
-    public static boolean isClassificationUsed(Long classificationId) throws DgException {
-
-        Session session = null;
-        boolean used = false;
-        String queryString = null;
-        List configs = null;
-        Query qry = null;
-
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            queryString = "select aps from " + AmpActivitySector.class.getName() + " aps where aps.classificationConfig=:classificationId";
-            qry = session.createQuery(queryString);
-            qry.setLong("classificationId", classificationId);
-            configs = qry.list();
-            if (configs != null && configs.size() > 0) {
-                used = true;
-            }
-        } catch (Exception ex) {
-            logger.error("Unable to get configs from database " + ex.getMessage());
-            throw new DgException(ex);
-
-        }
-
-        return used;
-    }
-
-    /**
-     * adds or update classification configuration 
-     * 
-     * 
-     * @param configId  Id of configuration
-     * @param configName Name of configuration
-     * @param multiSector  
-     * @param classification Default classification
-     * @throws DgException If exception occurred
-     */
-    public static void saveClassificationConfig(Long configId, String configName, boolean multiSector, AmpSectorScheme classification) throws DgException {
-
-        Session session = null;
-        AmpClassificationConfiguration config = null;
-        Transaction tx = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            if (configId != null && !configId.equals(0l)) {
-                //Load existed configuration for update procedure.
-                config = (AmpClassificationConfiguration) session.load(AmpClassificationConfiguration.class, configId);
-            } else {
-                // Create new configuration
-                config = new AmpClassificationConfiguration();
-
-            }
-            config.setName(configName);
-            config.setMultisector(multiSector);
-            config.setClassification(classification);
-//beginTransaction();
-            session.saveOrUpdate(config);
-            //tx.commit();
-
-
-
-        } catch (Exception ex) {
-            logger.error("Unable to save config to database " + ex.getMessage());
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (Exception rbf) {
-                    logger.error("Rollback failed");
-                }
-            }
-            throw new DgException(ex);
-
-        }
-
-    }
-    
-    
-    
-    public static int getClassificationConfigCount(String name,Long id) throws Exception{
-		int retValue=0;
-		Session session=null;
-		String queryString =null;
-		Query query=null;
 		try {
-			session=PersistenceManager.getRequestDBSession();
-			queryString="select count(cc.id) from " +AmpClassificationConfiguration.class.getName() + " cc where lower(cc.name)=lower('"+name+"')";
-            if(id!=null){
-            	queryString+=" and cc.id!="+id;
-            }
-			query=session.createQuery(queryString);
-			retValue=(Integer)query.uniqueResult();
+			session = PersistenceManager.getSession();
+			queryString = "select pi from " + AmpSectorScheme.class.getName()
+					+ " pi where pi.ampSecSchemeId=:schemeId";
+			qry = session.createQuery(queryString);
+			qry.setParameter("schemeId", schemeId, Hibernate.INTEGER);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.error("Unable to get report names  from database "
+					+ ex.getMessage());
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return col;
+	}
+
+	/**
+	 * Returns All Configurations of Classifications
+	 * 
+	 * @return All Configurations
+	 * @throws DgException
+	 *             If exception occurred
+	 */
+	public static List<AmpClassificationConfiguration> getAllClassificationConfigs()
+			throws DgException {
+		String queryString = null;
+		Session session = null;
+		List<AmpClassificationConfiguration> configs = null;
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "select cls from "
+					+ AmpClassificationConfiguration.class.getName() + " cls ";
+			qry = session.createQuery(queryString);
+			configs = qry.list();
+		} catch (Exception ex) {
+			logger.error("Unable to get report names  from database "
+					+ ex.getMessage());
+			throw new DgException(ex);
+
+		}
+
+		return configs;
+	}
+
+	/**
+	 * Returns Classification Configuration by Configuration Id
+	 * 
+	 * @param configId
+	 *            Configuration Id
+	 * @return Classification Configuration using Configuration Id
+	 * @throws DgException
+	 *             If exception occurred
+	 */
+	public static AmpClassificationConfiguration getClassificationConfigById(
+			Long configId) throws DgException {
+
+		Session session = null;
+		AmpClassificationConfiguration config = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			config = (AmpClassificationConfiguration) session.load(
+					AmpClassificationConfiguration.class, configId);
+		} catch (Exception ex) {
+			logger.error("Unable to get configs from database "
+					+ ex.getMessage());
+			throw new DgException(ex);
+
+		}
+
+		return config;
+	}
+
+	/**
+	 * Returns true if specified Scheme is selected as default classification in
+	 * the configuration otherwise returns false.
+	 * 
+	 * @param classificationId
+	 *            Id of classification
+	 * @return true If specified classification is selected as default
+	 *         classification in the configuration
+	 * @throws DgException
+	 *             If exception occurred
+	 */
+	public static boolean isSchemeUsed(Long classificationId)
+			throws DgException {
+
+		Session session = null;
+		boolean used = false;
+		String queryString = null;
+		List configs = null;
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "select cls from "
+					+ AmpClassificationConfiguration.class.getName()
+					+ " cls where cls.classification=:classificationId ";
+			qry = session.createQuery(queryString);
+			qry.setLong("classificationId", classificationId);
+			configs = qry.list();
+			if (configs != null && configs.size() > 0) {
+				used = true;
+			}
+		} catch (Exception ex) {
+			logger.error("Unable to get configs from database "
+					+ ex.getMessage());
+			throw new DgException(ex);
+
+		}
+
+		return used;
+	}
+
+	/**
+	 * Returns true if specified classification is selected as default
+	 * classification in the configuration otherwise returns false.
+	 * 
+	 * @param classificationId
+	 *            Id of classification
+	 * @return true If specified classification is selected as default
+	 *         classification in the configuration
+	 * @throws DgException
+	 *             If exception occurred
+	 */
+	public static boolean isClassificationUsed(Long classificationId)
+			throws DgException {
+
+		Session session = null;
+		boolean used = false;
+		String queryString = null;
+		List configs = null;
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "select aps from "
+					+ AmpActivitySector.class.getName()
+					+ " aps where aps.classificationConfig=:classificationId";
+			qry = session.createQuery(queryString);
+			qry.setLong("classificationId", classificationId);
+			configs = qry.list();
+			if (configs != null && configs.size() > 0) {
+				used = true;
+			}
+		} catch (Exception ex) {
+			logger.error("Unable to get configs from database "
+					+ ex.getMessage());
+			throw new DgException(ex);
+
+		}
+
+		return used;
+	}
+
+	/**
+	 * adds or update classification configuration
+	 * 
+	 * 
+	 * @param configId
+	 *            Id of configuration
+	 * @param configName
+	 *            Name of configuration
+	 * @param multiSector
+	 * @param classification
+	 *            Default classification
+	 * @throws DgException
+	 *             If exception occurred
+	 */
+	public static void saveClassificationConfig(Long configId,
+			String configName, boolean multiSector,
+			AmpSectorScheme classification) throws DgException {
+
+		Session session = null;
+		AmpClassificationConfiguration config = null;
+		Transaction tx = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			if (configId != null && !configId.equals(0l)) {
+				// Load existed configuration for update procedure.
+				config = (AmpClassificationConfiguration) session.load(
+						AmpClassificationConfiguration.class, configId);
+			} else {
+				// Create new configuration
+				config = new AmpClassificationConfiguration();
+
+			}
+			config.setName(configName);
+			config.setMultisector(multiSector);
+			config.setClassification(classification);
+			// beginTransaction();
+			session.saveOrUpdate(config);
+			// tx.commit();
+
+		} catch (Exception ex) {
+			logger.error("Unable to save config to database " + ex.getMessage());
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed");
+				}
+			}
+			throw new DgException(ex);
+
+		}
+
+	}
+
+	public static int getClassificationConfigCount(String name, Long id)
+			throws Exception {
+		int retValue = 0;
+		Session session = null;
+		String queryString = null;
+		Query query = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "select count(cc.id) from "
+					+ AmpClassificationConfiguration.class.getName()
+					+ " cc where lower(cc.name)=lower('" + name + "')";
+			if (id != null) {
+				queryString += " and cc.id!=" + id;
+			}
+			query = session.createQuery(queryString);
+			retValue = (Integer) query.uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return retValue;
 	}
-    
-    /**
-     * Loads AmpClassificationConfiguration bean which is primary.
-     * Please see next method which is old version and was not touch to not damage anything.
-     * @return primary configuration
-     * @throws DgException
-     */
-    public static AmpClassificationConfiguration getPrimaryConfigClassification() throws DgException{
-        Session session = PersistenceManager.getRequestDBSession();
-        String queryString = null;
-        Query qry = null;
-        try {
-            queryString = "select config from "
-                    + AmpClassificationConfiguration.class.getName() +
-                    " config inner join config.classification cls "+
-                    " where config.primary=true ";
-            qry = session.createQuery(queryString);
-            //There must be only one primary configuration in database
-            return (AmpClassificationConfiguration) qry.uniqueResult();
 
-        } catch (Exception ex) {
-            logger.error("Unable to save config to database " + ex.getMessage());
-            throw new DgException(ex);
+	/**
+	 * Loads AmpClassificationConfiguration bean which is primary. Please see
+	 * next method which is old version and was not touch to not damage
+	 * anything.
+	 * 
+	 * @return primary configuration
+	 * @throws DgException
+	 */
+	public static AmpClassificationConfiguration getPrimaryConfigClassification()
+			throws DgException {
+		Session session = PersistenceManager.getRequestDBSession();
+		String queryString = null;
+		Query qry = null;
+		try {
+			queryString = "select config from "
+					+ AmpClassificationConfiguration.class.getName()
+					+ " config inner join config.classification cls "
+					+ " where config.primary=true ";
+			qry = session.createQuery(queryString);
+			// There must be only one primary configuration in database
+			return (AmpClassificationConfiguration) qry.uniqueResult();
 
-        }
-    }
-    
-    /**
-     * gets id of classification which is selected in primary configuration
-     * 
-     *
-     * @return Id of classification  
-     * @throws DgException If exception occurred
-     */
-    public static Long getPrimaryConfigClassificationId() throws DgException {
+		} catch (Exception ex) {
+			logger.error("Unable to save config to database " + ex.getMessage());
+			throw new DgException(ex);
 
-        Session session = null;
-        Long id = null;
-        String queryString = null;
-        Query qry = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            queryString = "select cls.ampSecSchemeId from "
-                    + AmpClassificationConfiguration.class.getName() +
-                    " config inner join config.classification cls "+
-                    " where config.primary=true ";
-//            queryString = "select cls.ampSecSchemeId from "
-//                + AmpClassificationConfiguration.class.getName() +
-//                " config inner join config.classification cls "+
-//                " where config.primary=true ";
-            qry = session.createQuery(queryString);
-            //There must be only one primary configuration in database
-            id=(Long)qry.uniqueResult();
+		}
+	}
 
-        } catch (Exception ex) {
-            logger.error("Unable to get config from database ",ex);
-            throw new DgException(ex);
+	/**
+	 * gets id of classification which is selected in primary configuration
+	 * 
+	 * 
+	 * @return Id of classification
+	 * @throws DgException
+	 *             If exception occurred
+	 */
+	public static Long getPrimaryConfigClassificationId() throws DgException {
 
-        }
-        return id;
+		Session session = null;
+		Long id = null;
+		String queryString = null;
+		Query qry = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "select cls.ampSecSchemeId from "
+					+ AmpClassificationConfiguration.class.getName()
+					+ " config inner join config.classification cls "
+					+ " where config.primary=true ";
+			// queryString = "select cls.ampSecSchemeId from "
+			// + AmpClassificationConfiguration.class.getName() +
+			// " config inner join config.classification cls "+
+			// " where config.primary=true ";
+			qry = session.createQuery(queryString);
+			// There must be only one primary configuration in database
+			id = (Long) qry.uniqueResult();
 
-    }
-    
-    /***
-     * 
-     * @param classificationId
-     */
-    public static void deleteClassification (Long classificationId){
-	   Session session = null;
-       AmpClassificationConfiguration config = null;
-       Transaction tx = null;
-       try {
-           session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-           config = (AmpClassificationConfiguration) session.load(AmpClassificationConfiguration.class, classificationId);
-           session.delete(config);
-           //tx.commit();
-//session.flush();
-       } catch (Exception e) {
-    	   logger.error(e);
-       }
-   }
-    /*
- * this is to delete a scheme
- */
-	public static void deleteScheme(Long schemeId)
-	{
+		} catch (Exception ex) {
+			logger.error("Unable to get config from database ", ex);
+			throw new DgException(ex);
+
+		}
+		return id;
+
+	}
+
+	/***
+	 * 
+	 * @param classificationId
+	 */
+	public static void deleteClassification(Long classificationId) {
+		Session session = null;
+		AmpClassificationConfiguration config = null;
+		Transaction tx = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			// beginTransaction();
+			config = (AmpClassificationConfiguration) session.load(
+					AmpClassificationConfiguration.class, classificationId);
+			session.delete(config);
+			// tx.commit();
+			// session.flush();
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/*
+	 * this is to delete a scheme
+	 */
+	public static void deleteScheme(Long schemeId) {
 		logger.info(" deleting the scheme");
 		Session session = null;
 		Transaction tx = null;
-		try
-		{
+		try {
 			session = PersistenceManager.getSession();
 			AmpSectorScheme scheme = (AmpSectorScheme) session.load(
-					AmpSectorScheme.class,schemeId);
-//beginTransaction();
+					AmpSectorScheme.class, schemeId);
+			// beginTransaction();
 			session.delete(scheme);
-			//tx.commit();
-		}
-		catch (Exception e)
-		{
+			// tx.commit();
+		} catch (Exception e) {
 			logger.error("Exception from deleteQuestion() :" + e.getMessage());
 			e.printStackTrace(System.out);
-			if (tx != null)
-			{
-				try
-				{
+			if (tx != null) {
+				try {
 					tx.rollback();
-				}
-				catch (Exception trbf)
-				{
+				} catch (Exception trbf) {
 					logger.error("Transaction roll back failed ");
 					e.printStackTrace(System.out);
 				}
 			}
-		}
-		finally
-		{
-			if (session != null)
-			{
-				try
-				{
+		} finally {
+			if (session != null) {
+				try {
 					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf)
-				{
-					logger.error("Failed to release session :" + rsf.getMessage());
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :"
+							+ rsf.getMessage());
 				}
 			}
 		}
@@ -1569,237 +1609,190 @@ public class SectorUtil {
 	/*
 	 * this is to get the level one sectors from the AmpSector table
 	 */
-		public static AmpSectorScheme getParentSchemeId(Long id)
-		{
-			String queryString = null;
-			Session session = null;
-			Collection col = null;
-			Query qry = null;
-			AmpSectorScheme schemeId=null;
+	public static AmpSectorScheme getParentSchemeId(Long id) {
+		String queryString = null;
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		AmpSectorScheme schemeId = null;
 
-			try
-			{
-				session = PersistenceManager.getSession();
+		try {
+			session = PersistenceManager.getSession();
 
-				AmpSector sec = (AmpSector) session.load(AmpSector.class,
-						id);
-				 schemeId = sec.getAmpSecSchemeId();
+			AmpSector sec = (AmpSector) session.load(AmpSector.class, id);
+			schemeId = sec.getAmpSecSchemeId();
 
+		} catch (Exception ex) {
+			logger.error("Unable to get report names  from database "
+					+ ex.getMessage());
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
 			}
-			catch(Exception ex)
-			{
-				logger.error("Unable to get report names  from database " + ex.getMessage());
-				ex.printStackTrace(System.out);
+		}
+		return schemeId;
+	}
+
+	public static void deleteSector(Long sectorId) {
+		logger.info(" deleting the Sector");
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = PersistenceManager.getSession();
+			AmpSector sector = (AmpSector) session.load(AmpSector.class,
+					sectorId);
+			// beginTransaction();
+			//sector.setAidlist(null);
+			sector.setDeleted(true);
+			session.saveOrUpdate(sector);
+			// tx.commit();
+		} catch (Exception e) {
+			logger.error("Exception from deleteQuestion() :" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception trbf) {
+					logger.error("Transaction roll back failed ");
+					e.printStackTrace(System.out);
+				}
 			}
-			finally
-			{
-				try
-				{
+		} /*finally {
+			if (session != null) {
+				try {
 					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception ex2)
-				{
-					logger.error("releaseSession() failed ");
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :"
+							+ rsf.getMessage());
 				}
 			}
-			return schemeId;
-		}
+		}*/
+	}
 
-                public static void deleteSector(Long sectorId)
-                                {
-                                        logger.info(" deleting the Sector");
-                                        Session session = null;
-                                        Transaction tx = null;
-                                        try
-                                        {
-                                                session = PersistenceManager.getSession();
-                                                AmpSector sector = (AmpSector) session.load(
-                                                                AmpSector.class,sectorId);
-//beginTransaction();
-                                                sector.setAidlist(null);
-                                                session.delete(sector);
-                                                //tx.commit();
-                                        }
-                                        catch (Exception e)
-                                        {
-                                                logger.error("Exception from deleteQuestion() :" + e.getMessage());
-                                                e.printStackTrace(System.out);
-                                                if (tx != null)
-                                                {
-                                                        try
-                                                        {
-                                                                tx.rollback();
-                                                        }
-                                                        catch (Exception trbf)
-                                                        {
-                                                                logger.error("Transaction roll back failed ");
-                                                                e.printStackTrace(System.out);
-                                                        }
-                                                }
-                                        }
-                                        finally
-                                        {
-                                                if (session != null)
-                                                {
-                                                        try
-                                                        {
-                                                                PersistenceManager.releaseSession(session);
-                                                        }
-                                                        catch (Exception rsf)
-                                                        {
-                                                                logger.error("Failed to release session :" + rsf.getMessage());
-                                                        }
-                                                }
-                                      }
-		}
+	public static void deleteIndSector(Long sectorid, Long indid) {
 
-         
-                
-                public static void deleteIndSector(Long sectorid,Long indid){
-	        	
-        	    logger.info(" deleting the indsectors");
-	   			Session session = null;
-	   			Transaction tx = null;
-	   			AmpThemeIndicators ampThemeInd=null;
-        	   
-        	   try {
-        		   session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-        		   ampThemeInd=(AmpThemeIndicators)session.load(AmpThemeIndicators.class,indid);
-        		   Iterator itr=ampThemeInd.getSectors().iterator();
-        		   while(itr.hasNext()){
-        			   AmpIndicatorSector ind=(AmpIndicatorSector)itr.next();
-        			   if(ind.getSectorId().getAmpSectorId().equals(sectorid)){
-        				   itr.remove();
-        				   session.delete(ind);
-        				     
-        			   }
-        		   }
-        		   session.update(ampThemeInd);
-        		   //tx.commit();
-//session.flush();
-        		   
-				
-			} catch (Exception e) {
-				// TODO: handle exception
-				logger.error("Exception from deleteIndSectors:" + e.getMessage());
-				e.printStackTrace(System.out);
+		logger.info(" deleting the indsectors");
+		Session session = null;
+		Transaction tx = null;
+		AmpThemeIndicators ampThemeInd = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			// beginTransaction();
+			ampThemeInd = (AmpThemeIndicators) session.load(
+					AmpThemeIndicators.class, indid);
+			Iterator itr = ampThemeInd.getSectors().iterator();
+			while (itr.hasNext()) {
+				AmpIndicatorSector ind = (AmpIndicatorSector) itr.next();
+				if (ind.getSectorId().getAmpSectorId().equals(sectorid)) {
+					itr.remove();
+					session.delete(ind);
+
+				}
 			}
-        	   
-           }
-                
+			session.update(ampThemeInd);
+			// tx.commit();
+			// session.flush();
 
-    public static Set<AmpSector> getSectorDescendents( Collection<AmpSector> parentSectors ) {
-    	Set<AmpSector> generatedSectors	= new HashSet<AmpSector>();
-    	
-    	generatedSectors.addAll( parentSectors );
-    	Iterator sectorIterator=parentSectors.iterator();
-		
-		while(sectorIterator.hasNext())
-		{//process each sector and get all its children
-			AmpSector currentSector=(AmpSector)sectorIterator.next();
-			if(currentSector!=null)
-			{
-				Collection childSectors=SectorUtil.getAllChildSectors(currentSector.getAmpSectorId());
-				generatedSectors.addAll(childSectors); //add the children sectors to the filter
-				
-				//add the grand children
-				Iterator childSectorsIterator=childSectors.iterator();
-				while(childSectorsIterator.hasNext())
-				{
-					AmpSector currentChild=(AmpSector)childSectorsIterator.next();
-					Collection grandChildrenSectors=SectorUtil.getAllChildSectors(currentChild.getAmpSectorId());
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("Exception from deleteIndSectors:" + e.getMessage());
+			e.printStackTrace(System.out);
+		}
+
+	}
+
+	public static Set<AmpSector> getSectorDescendents(
+			Collection<AmpSector> parentSectors) {
+		Set<AmpSector> generatedSectors = new HashSet<AmpSector>();
+
+		generatedSectors.addAll(parentSectors);
+		Iterator sectorIterator = parentSectors.iterator();
+
+		while (sectorIterator.hasNext()) {// process each sector and get all its
+											// children
+			AmpSector currentSector = (AmpSector) sectorIterator.next();
+			if (currentSector != null) {
+				Collection childSectors = SectorUtil
+						.getAllChildSectors(currentSector.getAmpSectorId());
+				generatedSectors.addAll(childSectors); // add the children
+														// sectors to the filter
+
+				// add the grand children
+				Iterator childSectorsIterator = childSectors.iterator();
+				while (childSectorsIterator.hasNext()) {
+					AmpSector currentChild = (AmpSector) childSectorsIterator
+							.next();
+					Collection grandChildrenSectors = SectorUtil
+							.getAllChildSectors(currentChild.getAmpSectorId());
 					generatedSectors.addAll(grandChildrenSectors);
 				}
-				
+
 			}
-		
+
 		}
-		
+
 		return generatedSectors;
-    }
-                
+	}
+
 	/*
 	 * this is to delete a sector
-
-		public static void deleteSector(Long schemeId)
-		{
-			logger.info(" deleting the scheme");
-			Session session = null;
-			Transaction tx = null;
-			try
-			{
-				session = PersistenceManager.getSession();
-				AmpSector scheme = (AmpSector) session.load(
-						AmpSectorScheme.class,schemeId);
-//beginTransaction();
-				session.delete(scheme);
-				//tx.commit();
-			}
-			catch (Exception e)
-			{
-				logger.error("Exception from deleteQuestion() :" + e.getMessage());
-				e.printStackTrace(System.out);
-				if (tx != null)
-				{
-					try
-					{
-						tx.rollback();
-					}
-					catch (Exception trbf)
-					{
-						logger.error("Transaction roll back failed ");
-						e.printStackTrace(System.out);
-					}
-				}
-			}
-			finally
-			{
-				if (session != null)
-				{
-					try
-					{
-						PersistenceManager.releaseSession(session);
-					}
-					catch (Exception rsf)
-					{
-						logger.error("Failed to release session :" + rsf.getMessage());
-					}
-				}
-			}
-		}
-                */
-    // This recursive method helps the generateLevelHierarchy method.
+	 * 
+	 * public static void deleteSector(Long schemeId) {
+	 * logger.info(" deleting the scheme"); Session session = null; Transaction
+	 * tx = null; try { session = PersistenceManager.getSession(); AmpSector
+	 * scheme = (AmpSector) session.load( AmpSectorScheme.class,schemeId);
+	 * //beginTransaction(); session.delete(scheme); //tx.commit(); } catch
+	 * (Exception e) { logger.error("Exception from deleteQuestion() :" +
+	 * e.getMessage()); e.printStackTrace(System.out); if (tx != null) { try {
+	 * tx.rollback(); } catch (Exception trbf) {
+	 * logger.error("Transaction roll back failed ");
+	 * e.printStackTrace(System.out); } } } finally { if (session != null) { try
+	 * { PersistenceManager.releaseSession(session); } catch (Exception rsf) {
+	 * logger.error("Failed to release session :" + rsf.getMessage()); } } } }
+	 */
+	// This recursive method helps the generateLevelHierarchy method.
 	public static AmpSector getTopLevelParent(AmpSector topLevelSector) {
 		if (topLevelSector.getParentSectorId() != null) {
-			topLevelSector = getTopLevelParent(topLevelSector.getParentSectorId());
+			topLevelSector = getTopLevelParent(topLevelSector
+					.getParentSectorId());
 		}
 		return topLevelSector;
 	}
-    //TODO replace with recursive method
-    public static List<AmpSector> getAllDescendants(Long parentId) {
-        // we have only three levels of sectors...
-        List<AmpSector> sectors = new ArrayList<AmpSector>();
-        sectors.add(getAmpSector(parentId));
-        List<AmpSector> childrenSectors = getAmpSubSectors(parentId);
-        if(childrenSectors!=null){
-            sectors.addAll(childrenSectors);
-             for (AmpSector sector : childrenSectors) {
-                List<AmpSector> grandChildren = getAmpSubSectors(sector.getAmpSectorId());
-                if( grandChildren!=null){
-                     sectors.addAll(grandChildren);
-                }
-            }
-        }
-        return sectors;
-    }
-    
-    public static List<AmpActivityVersion> getActivitiesForSector(Long id) {
+
+	// TODO replace with recursive method
+	public static List<AmpSector> getAllDescendants(Long parentId) {
+		// we have only three levels of sectors...
+		List<AmpSector> sectors = new ArrayList<AmpSector>();
+		sectors.add(getAmpSector(parentId));
+		List<AmpSector> childrenSectors = getAmpSubSectors(parentId);
+		if (childrenSectors != null) {
+			sectors.addAll(childrenSectors);
+			for (AmpSector sector : childrenSectors) {
+				List<AmpSector> grandChildren = getAmpSubSectors(sector
+						.getAmpSectorId());
+				if (grandChildren != null) {
+					sectors.addAll(grandChildren);
+				}
+			}
+		}
+		return sectors;
+	}
+
+	public static List<AmpActivityVersion> getActivitiesForSector(Long id) {
 		Session session = null;
 		List<AmpActivityVersion> activities = null;
 		try {
 			session = PersistenceManager.getSession();
-			String queryString = "select aps from " + AmpActivitySector.class.getName() + " aps where aps.sectorId.ampSectorId=:id";
+			String queryString = "select aps from "
+					+ AmpActivitySector.class.getName()
+					+ " aps,"
+					+ AmpActivityGroup.class.getName()
+					+ " apg "
+					+ " where aps.activityId.ampActivityId = apg.ampActivityLastVersion.ampActivityId and  aps.sectorId.ampSectorId=:id";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("id", id);
 			activities = qry.list();

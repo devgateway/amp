@@ -248,7 +248,7 @@ public class MapFieldsAction extends MultiAction {
 			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.secSchemeName, f.ampSecSchemeId from " + AmpSectorScheme.class.getName()+ " f");
 		}
 		if(DataExchangeConstants.IATI_SECTOR.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select concat(f.sectorCodeOfficial,concat(' - ',f.name)) as sname, f.ampSectorId  from " + AmpSector.class.getName()+ " f order by sname");
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select concat(f.sectorCodeOfficial,concat(' - ',f.name)) as sname, f.ampSectorId  from " + AmpSector.class.getName()+ " f  where (f.deleted is null or f.deleted = false) order by sname");
 		}
 		//type of assistance
 		if(CategoryConstants.TYPE_OF_ASSISTENCE_NAME.compareTo(ampClassTypeSelected)==0){

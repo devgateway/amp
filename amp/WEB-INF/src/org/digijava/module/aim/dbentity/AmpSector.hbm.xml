@@ -22,6 +22,7 @@
 		<property name="description" column="description"  type="text"/>
 		<property name="language" column="language" type="java.lang.String"/>
 		<property name="version" column="version" type="java.lang.String"/>
+		<property name="deleted" column="deleted" type="java.lang.Boolean"/>
 
 		<property name="segmentCode" column="segment_code" type="java.lang.Integer"/>
 

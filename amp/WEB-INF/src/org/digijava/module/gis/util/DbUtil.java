@@ -868,7 +868,7 @@ public class DbUtil {
                 qs.append(" sec where sec.parentSectorId.ampSectorId in ");
                 qs.append("(");
                 qs.append(whereCaluse);
-                qs.append(")");
+                qs.append(") and (sec.deleted is null or sec.deleted = false) ");
                 q = session.createQuery(qs.toString());
                 local = q.list();
             } catch (Exception ex) {
@@ -2837,7 +2837,7 @@ public class DbUtil {
             Session sess = PersistenceManager.getRequestDBSession();
             StringBuilder qs = new StringBuilder("select s.name from ");
             qs.append(AmpSector.class.getName());
-            qs.append(" as s where s.ampSectorId = :SEC_ID");
+            qs.append(" as s where s.ampSectorId = :SEC_ID  and (s.deleted is null or s.deleted = false) ");
             Query q = sess.createQuery(qs.toString());
             q.setLong("SEC_ID", sectorId);
             retVal = (String) q.uniqueResult();
@@ -2856,21 +2856,21 @@ public class DbUtil {
             Session sess = PersistenceManager.getRequestDBSession();
             StringBuilder queryStr = new StringBuilder("select s.name from ");
             queryStr.append(AmpSector.class.getName());
-            queryStr.append(" as s where s.parentSectorId=null and s.ampSectorId in ");
+            queryStr.append(" as s where s.parentSectorId=null and (s.deleted is null or s.deleted = false) and s.ampSectorId in ");
             queryStr.append(whereClause);
             Query q = sess.createQuery(queryStr.toString());
             result = q.list();
 
             queryStr = new StringBuilder("select s.parentSectorId.name from ");
             queryStr.append(AmpSector.class.getName());
-            queryStr.append(" as s where s.parentSectorId.parentSectorId=null and s.ampSectorId in ");
+            queryStr.append(" as s where s.parentSectorId.parentSectorId=null and (s.deleted is null or s.deleted = false) and s.ampSectorId in ");
             queryStr.append(whereClause);
             q = sess.createQuery(queryStr.toString());
             result.addAll(q.list());
 
             queryStr = new StringBuilder("select s.parentSectorId.parentSectorId.name from ");
             queryStr.append(AmpSector.class.getName());
-            queryStr.append(" as s where s.parentSectorId.parentSectorId.parentSectorId=null and s.ampSectorId in ");
+            queryStr.append(" as s where s.parentSectorId.parentSectorId.parentSectorId=null and (s.deleted is null or s.deleted = false) and s.ampSectorId in ");
             queryStr.append(whereClause);
             q = sess.createQuery(queryStr.toString());
             result.addAll(q.list());

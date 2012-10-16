@@ -133,7 +133,7 @@ public class DbUtil {
 
 	            queryString.append("SELECT DISTINCT sect FROM ");
 	            queryString.append(AmpSector.class.getName());
-	            queryString.append(" sect WHERE (sect.ampSectorId IN ");
+	            queryString.append(" sect WHERE (sect.deleted is null or sect.deleted = false) and (sect.ampSectorId IN ");
 
 	            queryString.append("(SELECT DISTINCT sec FROM ");	
 	            queryString.append(AmpActivitySector.class.getName());
@@ -1481,7 +1481,7 @@ public class DbUtil {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = new String();
 			queryString = "select s from " + AmpSector.class.getName()
-					+ " s where (s.ampSectorId=:ampSectorId)";
+					+ " s where (s.ampSectorId=:ampSectorId) and (s.deleted is null or s.deleted = false) ";
 
 			qry = session.createQuery(queryString);
 			qry.setParameter("ampSectorId", id, Hibernate.LONG);
@@ -1511,7 +1511,7 @@ public class DbUtil {
 			session = PersistenceManager.getSession();
 			queryString = " select new AmpSector(ampSectorId, parentSectorId) from "
 					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is not null and Sector.parentSectorId.ampSectorId=:ampSectorId";
+					+ " Sector where Sector.parentSectorId is not null and Sector.parentSectorId.ampSectorId=:ampSectorId and (Sector.deleted is null or Sector.deleted = false) ";
 			q = session.createQuery(queryString);
 			q.setParameter("ampSectorId", ampSectorId, Hibernate.LONG);
 			iter = q.list().iterator();
@@ -1546,7 +1546,7 @@ public class DbUtil {
 			session = PersistenceManager.getSession();
 			queryString = " select Sector from "
 					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is not null order by Sector.name";
+					+ " Sector where Sector.parentSectorId is not null and (Sector.deleted is null or Sector.deleted = false) order by Sector.name";
 			q = session.createQuery(queryString);
 			iter = q.list().iterator();
 

@@ -31,7 +31,9 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
         //set the map
         //TODO: find a way to not pass in the map as a config option.
         this._map = options.map;
-
+        
+        //Layer type 1-Activity points - 2-Structures
+        this._type = options.type;
         //base connections to update clusters during user/map interaction
         dojo.connect(this._map, 'onZoomStart', dojo.hitch(this, this.handleMapZoomStart));
         dojo.connect(this._map, 'onExtentChange', dojo.hitch(this, this.handleMapExtentChange));
@@ -206,11 +208,15 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 pt = new esri.geometry.Point(x, y, this._map.spatialReference);
                 var currentSymbol;
                 //Get donor code and draw
-                if (this.symbolBank[graphic.attributes[i].Code] != null)
+                if (this.symbolBank[graphic.attributes[i].Code] != null && this._type==1){
                 	currentSymbol = this.symbolBank[graphic.attributes[i].Code];
-                else
+                }
+                else if(this._type==1){
                 	currentSymbol = this.symbolBank.single;
-                
+                }
+                else{
+                	var currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ graphic.attributes[i].Type_id, 21, 25);
+                }
                 ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin(graphic.attributes[i], { baseGraphic: graphic }), this._infoTemplate);
                // alert(ptGraphic.attributes["Code"]);
 
@@ -393,7 +399,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                                 var graphicAtts = dojo.mixin(atts, { isCluster: true, clusterSize: col.length });
 
                                 //add cluster to map
-                                if (col.length <= 4) {
+                                if (col.length <= 4 && this._type==1) {
                                 	var growth = 12;
                                     dojo.forEach(col, function(point) {
                                     	var currentSymbol;
@@ -419,10 +425,13 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                             } else { //single graphic
                                 dojo.forEach(col, function(point) {
                                 	var currentSymbol;
-                                	if(point.attributes.Code)
+                                	if(point.attributes.Code && this._type==1){
                                     	currentSymbol = this.symbolBank[point.attributes.Code];
-                                	else
+                                	}else if (this._type==2) {
+                                		currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ point.attributes.Type_id, 22, 25);
+                                	}else{
                                 		currentSymbol = this.symbolBank.single;
+                                	}
                                     this.add(new esri.Graphic(point, currentSymbol, dojo.mixin(point.attributes, { isCluster: false }), this._infoTemplate));
                                 }, this);
                             }
@@ -431,8 +440,8 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 }, this);
             }
         }, this);
-        
-        hideLoading();
+        if(this._type==1)
+        	hideLoading();
     }
 });
 

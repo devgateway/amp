@@ -44,7 +44,6 @@
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
-   	
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
 <!-- Individual YUI CSS files --> 
@@ -62,7 +61,7 @@
       .deactivateIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_decline.png); width:16px; height:16px; }
     </style>
     
-<script type="text/javascript">
+   <script type="text/javascript">
 	$(function(){
   		$('#filterbtn').click(function(){
 			if (filterenable()){
@@ -351,6 +350,8 @@
 						<feature:display name="Show National" module="Map Module">
 							<li id="shownational" onclick="getNationalActivities();" style="cursor: pointer;"><digi:trn>Show National</digi:trn></li>
 						</feature:display>
+						<!-- li id="print_button" style="cursor: pointer;"></li-->
+						
 				     </ul>
 			     </div>
 		    </div>
@@ -367,12 +368,17 @@
         </div>
         
         <div id="structuresdiv" class="legendContent" style="left:70px;top:80px;overflow-y:scroll;height: 500px;">
+        	<div class='legendHeader'>
+        		<digi:trn>Structures</digi:trn>
+        		<br>
+        		<hr>
+        	</div>
         	<table>
         		<c:forEach  var="structureType" items="${requestScope.structureTypesList}">
 	          	<tr>
 	            	<td>${structureType.name} </td>
 	            	<td align="center">
-	            		<img id="imgPlaceholder" src="/esrigis/mainmap.do~action=displayIcon~id=${structureType.typeId}" style="border:1px solid black;"/>
+	            		<img id="imgPlaceholder" src="/esrigis/mainmap.do~action=displayIcon~id=${structureType.typeId}" style="border:1px solid black;width: 20px;height: 20px;"/>
 	            	</td>
 	         	</tr>
 	    		</c:forEach>

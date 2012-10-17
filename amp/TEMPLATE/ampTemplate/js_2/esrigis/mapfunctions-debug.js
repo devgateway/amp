@@ -17,16 +17,20 @@ dojo.require("esri.dijit.Legend");
 dojo.require("esri.layers.FeatureLayer");
 dojo.require("dojo.dnd.Moveable");
 dojo.require("dojo.io.script");
+//dojo.require("esri.dijit.Print");
+
 /*----variables---------*/
 var map, navToolbar, geometryService, findTask, findParams;
 var totallocations = 0;
 var features = new Array();
 var structures = new Array();
+var structurespoint = new Array();
 var timer_on = 0;
 var activitiesarray = new Array();
 var nationalactivitiesarray = new Array();
 var loading;
 var cL;
+var cLs;
 var basemapGallery;
 var activitieson;
 var structureson;
@@ -122,6 +126,7 @@ function init() {
 	if (geometryServiceurl){
 		geometryService = new esri.tasks.GeometryService(geometryServiceurl);
 	}
+	
 	esriConfig.defaults.io.proxyUrl = "/esrigis/esriproxy.do";
 
 	var layerLoadCount = 0;
@@ -155,6 +160,7 @@ function init() {
 	var dnd = new dojo.dnd.Moveable(dojo.byId("poplegendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
+	var dnd = new dojo.dnd.Moveable(dojo.byId("structuresdiv"));
 	
 }
 
@@ -179,13 +185,25 @@ function createMapAddLayers(myService1, myService2) {
 	       {"level" : 9,"resolution" : 19.1092570712683,"scale" : 72223.819286}, 
 	       {"level" : 10,"resolution" : 9.55462853563415,"scale" : 36111.909643}, 
 	       {"level" : 11,"resolution" : 4.77731426794937,"scale" : 18055.954822} ];
-	
-		map = new esri.Map("map", {lods : customLods,extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)});
+		
+		map = new esri.Map("map",{
+			lods : customLods,
+			extent : esri.geometry.geographicToWebMercator(myService2.fullExtent),
+			"fadeOnZoom": true,
+			"force3DTransforms": true,
+			"navigationMode": "css-transforms"
+		});
 		dojo.connect(map, 'onLoad', function(map) {
 		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
 		dojo.byId('map_zoom_slider').style.top = '95px';
 		getActivities(false);
 		getStructures(false);
+		/*printer = new esri.dijit.Print({
+		    map: map,
+		    url: "http://sampleserver6.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
+		  }, dojo.byId("print_button"));
+	    printer.startup();
+	*/
 	});
 	
 	navToolbar = new esri.toolbars.Navigation(map);
@@ -347,26 +365,23 @@ function showBuffer(geometries) {
 function findbydistance(evt) {
 	searchpoint = evt;
 	foundstr = [];
-	if (structures.length > 0) {
+	if (structurespoint.length > 0) {
 		var count = 0;
-		// var tasktime = structures.length * 5 * 1000 ;
-		// var t=setTimeout("showStInfoWindow();",tasktime);
-
 		var distParams = new esri.tasks.DistanceParameters();
-		for ( var int = 0; int < structures.length; int++) {
+		for ( var int = 0; int < structurespoint.length; int++) {
 			distParams.distanceUnit = esri.tasks.GeometryService.UNIT_KILOMETER;
 			distParams.geometry1 = evt.mapPoint;
-			distParams.geometry2 = structures[int].geometry;
+			distParams.geometry2 = structurespoint[int].geometry;
 			distParams.geodesic = true;
 
 			geometryService.distance(distParams, function(distance) {
 				if (distance <= searchdistance) {
 					// console.log("Results: " + distance + " " +
 					// structures[count].attributes.Activity );
-					foundstr.push(structures[count]);
+					foundstr.push(structurespoint[count]);
 				}
 				count++;
-				if (count + 1 > structures.length) {
+				if (count + 1 > structurespoint.length) {
 					showStInfoWindow();
 				}
 			});
@@ -773,16 +788,18 @@ function drawpoints() {
 						new dojo.Color([ 0, 0, 0 ]), 0), new dojo.Color([ 255,
 						69, 0, 0.65 ]));
 		var symbolBank = pointSymbolBank;
-
+		
 		cL = new esri.ux.layers.ClusterLayer(
 				{
 					displayOnPan : false,
 					map : map,
+					type:1,
 					symbolBank : symbolBank,
 					id : "activitiesMap",
 					features : features,
-					infoWindow : {
-						template : new esri.InfoTemplate(
+					infoWindow :{
+						template :
+							new esri.InfoTemplate(
 								translate('Activity Details'),
 								"<table style='font-size: 11px;'>"
 										+ "<tr><td><b>"+translate('Activity')+"<b></td><td> ${Activity}</td></tr>"
@@ -1052,9 +1069,11 @@ function getStructures(clear) {
 	if (structureGraphicLayer) {
 		if (structureGraphicLayer.visible) {
 			structureGraphicLayer.hide();
+			cLs.hide();
 			$('#structuresdiv').hide('slow');
 		} else {
 			structureGraphicLayer.show();
+			cLs.show();
 			map.infoWindow.resize(400, 250);
 			$('#structuresdiv').show('slow');
 		}
@@ -1064,6 +1083,7 @@ function getStructures(clear) {
 			id : "structuresMap",
 			visible : false
 		});
+		
 		structureson = true;
 		var xhrArgs = {
 			url : "/esrigis/datadispatcher.do?showstructures=true",
@@ -1072,8 +1092,10 @@ function getStructures(clear) {
 				dojo.forEach(jsonData, function(activity) {
 					MapFindStructure(activity, structureGraphicLayer);
 				});
+				
 				map.addLayer(structureGraphicLayer);
 				map.setExtent(map.extent.expand(1.01));
+				CluterStructures();
 			},
 			error : function(error) {
 				console.log(error);
@@ -1117,9 +1139,12 @@ function MapFindStructure(activity, structureGraphicLayer) {
 									+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
 						"Structure Type" : structure.type,
 						"Structure Description" : structure.description,
-						"Coordinates" : pt.x + " , " + pt.y
+						"Coordinates" : pt.x + " , " + pt.y,
+						"Type_id" : structure.typeId
 					});
-				structures.push(pgraphic);
+				structurespoint.push(pgraphic);
+				//structures.push(pgraphic);
+				
 				
 			} else {
 				var jsonObject = eval('(' + structure.shape + ')');
@@ -1156,10 +1181,71 @@ function MapFindStructure(activity, structureGraphicLayer) {
 					});
 	
 				}
+				structureGraphicLayer.add(pgraphic);
+				structures.push(pgraphic);
 			}
-			structureGraphicLayer.add(pgraphic);
-			structures.push(pgraphic);
 		});
+}
+
+
+function CluterStructures(){
+	var pointSymbolBank = new Array();
+	// Add standard symbols
+	pointSymbolBank["single"] = new esri.symbol.SimpleMarkerSymbol(
+			esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 10,
+			new esri.symbol.SimpleLineSymbol(
+					esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+					new dojo.Color([ 0, 0, 0, 1 ]), 1), new dojo.Color([
+					255, 215, 0, 1 ]));
+
+	pointSymbolBank["less16"] = new esri.symbol.SimpleMarkerSymbol(
+			esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 20,
+			new esri.symbol.SimpleLineSymbol(
+					esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+					new dojo.Color([ 0, 0, 0, 1 ]), 1), new dojo.Color([147, 112, 219, 1 ]));
+	pointSymbolBank["less30"] = new esri.symbol.SimpleMarkerSymbol(
+			esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 30,
+			new esri.symbol.SimpleLineSymbol(
+					esri.symbol.SimpleLineSymbol.STYLE_NULL,
+					new dojo.Color([ 0, 0, 0, 0 ]), 1), new dojo.Color([216,191,216, .85 ]));
+	pointSymbolBank["less50"] = new esri.symbol.SimpleMarkerSymbol(
+			esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 30,
+			new esri.symbol.SimpleLineSymbol(
+					esri.symbol.SimpleLineSymbol.STYLE_NULL,
+					new dojo.Color([ 0, 0, 0, 0 ]), 1), new dojo.Color([216,191,216, .70 ]));
+	pointSymbolBank["over50"] = new esri.symbol.SimpleMarkerSymbol(
+			esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 45,
+			new esri.symbol.SimpleLineSymbol(
+					esri.symbol.SimpleLineSymbol.STYLE_NULL,
+					new dojo.Color([ 0, 0, 0 ]), 0), new dojo.Color([ 216,191,216, 1 ]));
+	var symbolBank = pointSymbolBank;
+	
+	cLs = new esri.ux.layers.ClusterLayer(
+			{
+				displayOnPan : false,
+				map : map,
+				type:2,
+				symbolBank : symbolBank,
+				id : "structurescluster",
+				visible : false,
+				features : structurespoint,
+				infoWindow :{
+					template :
+						 new esri.InfoTemplate(
+						"Structure Details",
+						"<table style='font-size: 11px;'>"
+								+ "<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>"
+								+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
+								+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
+								+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
+								+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>"),
+					width : 250,
+					height : 250
+				},
+				flareLimit : 20,
+				flareDistanceFromCenter : 30
+			});
+	map.addLayer(cLs);
 }
 
 function ExportStructures() {
@@ -1376,7 +1462,6 @@ function placemedia(){
 		map.graphics.add(pgraphic);
 	}
 }
-
 
 
 //Get info windows content

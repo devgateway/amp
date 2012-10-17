@@ -257,7 +257,7 @@ public class DbUtil {
             Query q = null;
                 StringBuffer qs = new StringBuffer("select org.name, org.ampOrgId from ");
                 qs.append(AmpOrganisation.class.getName());
-                qs.append(" org");
+                qs.append(" org where (org.deleted is null or org.deleted = false) ");
                 q = session.createQuery(qs.toString());
             
             retVal = q.list();
@@ -276,7 +276,7 @@ public class DbUtil {
             String queryString = null;    
             queryString="select o.name, o.ampOrgId from " 
             	+ AmpOrganisation.class.getName()+ " o "
-            	+" where o.ampOrgId in (select f.ampDonorOrgId from "+ AmpFunding.class.getName() 
+            	+" where (o.deleted is null or o.deleted = false) and o.ampOrgId in (select f.ampDonorOrgId from "+ AmpFunding.class.getName() 
             	+" f where f.ampActivityId in (select al.activity from "
             	+ AmpActivityLocation.class.getName()+ " al)" 
             	+" and f.ampFundingId in (select afd.ampFundingId from "

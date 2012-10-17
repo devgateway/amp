@@ -41,7 +41,7 @@ public class ParisUtil {
 		try
 		{
 			session = PersistenceManager.getSession();				
-			queryString ="select distinct pi.acronym from "+ AmpOrganisation.class.getName() +" pi, " +AmpFunding.class.getName() + " f where pi.ampOrgId = f.ampDonorOrgId";
+			queryString ="select distinct pi.acronym from "+ AmpOrganisation.class.getName() +" pi, " +AmpFunding.class.getName() + " f where pi.ampOrgId = f.ampDonorOrgId and (pi.deleted is null or pi.deleted = false) ";
 				qry = session.createQuery(queryString);
 				Iterator itr1 = qry.list().iterator();
 				while(itr1.hasNext())

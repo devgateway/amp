@@ -79,7 +79,7 @@ public class ExportUtil {
             	from.append(AmpOrganisation.class.getName() + " as aOrg, ");
             	mainWhere.append(" and act.ampActivityId = afund.ampActivityId.ampActivityId ");
             	mainWhere.append(" and afund.ampDonorOrgId.ampOrgId = aOrg.ampOrgId ");
-
+            	mainWhere.append(" and (aOrg.deleted is null or aOrg.deleted = false) ");
             }
             from.delete(from.length()-2, from.length());
             

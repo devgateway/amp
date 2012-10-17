@@ -22,6 +22,7 @@
 		<property name="orgUrl" column="org_url" type="java.lang.String" />
 		<property name="acronym" column="acronym" type="java.lang.String" />
 		<property name="segmentCode" column="segment_code" type="java.lang.String" />
+		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 
 		<set name="sectors" table="AMP_ORGANISATION_SECTOR" cascade="none">
 			<cache usage="read-write" />

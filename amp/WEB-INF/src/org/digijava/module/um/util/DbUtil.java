@@ -1073,7 +1073,7 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getSession();
             String queryString = "select o from " + AmpOrganisation.class.getName()
-                + " o where (o.orgGrpId=:orgGrpId) order by o.name asc";
+                + " o where (o.orgGrpId=:orgGrpId) and (o.deleted is null or o.deleted = false)  order by o.name asc";
             qry = sess.createQuery(queryString);
             qry.setParameter("orgGrpId", Id, Hibernate.LONG);
             col = qry.list();
@@ -1167,7 +1167,7 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getSession();
             String queryString = "select o from " + AmpOrganisation.class.getName()
-                + " o where (o.orgType=:orgTypeId)";
+                + " o where (o.orgType=:orgTypeId) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
             qry.setParameter("orgTypeId", Id, Hibernate.LONG);
             col = qry.list();

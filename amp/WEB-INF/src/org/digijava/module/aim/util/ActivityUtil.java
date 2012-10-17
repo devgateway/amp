@@ -2496,7 +2496,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    int orgrolesCount = 0;
 	    try {
 	      session = PersistenceManager.getSession();
-	      String queryString = "select count(*) from " + AmpFunding.class.getName() +" f " + "where (f.ampDonorOrgId=:orgId)";
+	      String queryString = "select count(*) from " + AmpFunding.class.getName() +" f, "
+	    		  + AmpActivityGroup.class.getName()	+ " apg "
+	    		  + "where f.ampActivityId=apg.ampActivityLastVersion and (f.ampDonorOrgId=:orgId)";
 	      Query qry = session.createQuery(queryString);
 	      qry.setParameter("orgId", id, Hibernate.LONG);
 	      orgrolesCount = (Integer)qry.uniqueResult();

@@ -33,6 +33,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private AmpFiscalCalendar ampFiscalCalId;
 	private AmpSectorScheme ampSecSchemeId;
 	private String fundingorgid;
+	private Boolean deleted;
 	
 	private String budgetOrgCode;
 	
@@ -710,6 +711,14 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
     public String getOrgTypeName() {
         return this.orgGrpId.getOrgType().getOrgType();
     }
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
 	
 	
 }	

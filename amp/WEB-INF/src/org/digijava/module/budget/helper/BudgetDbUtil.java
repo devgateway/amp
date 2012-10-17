@@ -208,7 +208,7 @@ public class BudgetDbUtil {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select org from " + AmpOrganisation.class.getName() +
 			" org inner join org.budgetsectors s"+
-			" where (s.idsector=:budgedsectorid)";
+			" where (s.idsector=:budgedsectorid) and (org.deleted is null or org.deleted = false) ";
 	        
 	        q = session.createQuery(queryString);
 	        q.setLong("budgedsectorid", budgedsectorid);

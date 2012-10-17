@@ -26,7 +26,7 @@ public class BeneficiaryAgencyAdapter implements MappingEntityAdapter {
 
         StringBuilder objQueryStr = new StringBuilder("from ");
         objQueryStr.append(AmpOrganisation.class.getName());
-        objQueryStr.append(" beneficiaryOrg where beneficiaryOrg.ampOrgId in(");
+        objQueryStr.append(" beneficiaryOrg where (beneficiaryOrg.deleted is null or beneficiaryOrg.deleted = false)  and beneficiaryOrg.ampOrgId in(");
         objQueryStr.append(MappingEntityAdapterUtil.generateIdWhereClause(ids));
         objQueryStr.append(")");
         Query objQuery = sess.createQuery(objQueryStr.toString());

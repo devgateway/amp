@@ -236,7 +236,7 @@ public class MapFieldsAction extends MultiAction {
 			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.orgType, f.ampOrgTypeId from " + AmpOrgType.class.getName()+ " f order by f.orgType asc");
 		}
 		if(DataExchangeConstants.IATI_ORGANIZATION.compareTo(ampClassTypeSelected)==0){
-			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f order by f.name asc");
+			allEntities 	=	DataExchangeUtils.getNameIdAllEntities("select f.name, f.ampOrgId from " + AmpOrganisation.class.getName()+ " f where (f.deleted is null or f.deleted = false) order by f.name asc");
 		}
 		if(DataExchangeConstants.IATI_LOCATION.compareTo(ampClassTypeSelected)==0){
 			allEntities 	=	DataExchangeUtils.getNameIdAllLocations();

@@ -525,7 +525,7 @@ public class DataExchangeUtils {
         try {
             sess = PersistenceManager.getRequestDBSession();
             queryString = "select o from " + AmpOrganisation.class.getName()
-                + " o where (TRIM(o.name)=:orgName)";
+                + " o where (TRIM(o.name)=:orgName) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
             qry.setParameter("orgName", name.trim(), Hibernate.STRING);
 
@@ -629,7 +629,7 @@ public class DataExchangeUtils {
         try {
             sess = PersistenceManager.getRequestDBSession();
             queryString = "select o from " + AmpOrganisation.class.getName()
-                + " o where (TRIM(o.orgCode)=:orgCode)";
+                + " o where (TRIM(o.orgCode)=:orgCode) and (o.deleted is null or o.deleted = false) ";
             qry = sess.createQuery(queryString);
             qry.setParameter("orgCode", code.trim(), Hibernate.STRING);
 
@@ -1395,7 +1395,7 @@ public class DataExchangeUtils {
 		try {
 			session = PersistenceManager.getSession();
 			
-			String queryString = " SELECT aorg FROM " + AmpOrganisation.class.getName() + " aorg order by name";
+			String queryString = " SELECT aorg FROM " + AmpOrganisation.class.getName() + " aorg where (aorg.deleted is null or aorg.deleted = false)  order by name";
 			
 			Query qry = session.createQuery(queryString);
 			col = qry.list();

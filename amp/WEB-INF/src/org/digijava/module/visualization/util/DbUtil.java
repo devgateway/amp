@@ -93,7 +93,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getSession();
 			
-			String queryString = " SELECT aorg FROM " + AmpOrganisation.class.getName() + " aorg ";
+			String queryString = " SELECT aorg FROM " + AmpOrganisation.class.getName() + " aorg where (aorg.deleted is null or aorg.deleted = false)  ";
 			
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
@@ -111,7 +111,7 @@ public class DbUtil {
         	session = PersistenceManager.getSession();
 			String queryString = "SELECT DISTINCT s.* FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
 					+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id AND s.parent_sector_id is null "
-					+ "AND c.name='Primary'";
+					+ "AND c.name='Primary' AND ( s.deleted is null OR s.deleted = false) ";
              qry = session.createSQLQuery(queryString).addEntity(AmpSector.class);
              col = qry.list();
 		} catch (Exception ex) {
@@ -1239,7 +1239,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select o from "
                 + AmpOrganisation.class.getName() + " o "
-                + "where (o.ampOrgId=:id)";
+                + "where (o.ampOrgId=:id) and (o.deleted is null or o.deleted = false) ";
             Query qry = session.createQuery(queryString);
             qry.setParameter("id", id, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
@@ -1262,7 +1262,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select o from "
                 + AmpOrganisation.class.getName() + " o "
-                + "where (o.orgGrpId=:id)";
+                + "where (o.orgGrpId=:id) and (o.deleted is null or o.deleted = false) ";
             Query qry = session.createQuery(queryString);
             qry.setParameter("id", id, Hibernate.LONG);
             orgs = qry.list();
@@ -1434,7 +1434,7 @@ public class DbUtil {
             queryString.append(AmpOrganisation.class.getName());
             queryString.append(" org inner join org.organizationContacts orgContact  ");
             queryString.append(" inner join orgContact.contact con ");
-            queryString.append(" where org.ampOrgId=:orgId and orgContact.primaryContact=true ");
+            queryString.append(" where org.ampOrgId=:orgId and orgContact.primaryContact=true and (org.deleted is null or org.deleted = false) ");
 			qry = session.createQuery(queryString.toString());
 			qry.setLong("orgId", orgId);
 			contact=(AmpContact)qry.uniqueResult();

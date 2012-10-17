@@ -35,7 +35,7 @@ public class DonorGroupDimension extends ARDimension {
 	@Override
 	public void initialize() throws HibernateException, SQLException {
 		Session session = PersistenceManager.getSession();
-		Query createQuery = session.createQuery("from "+AmpOrganisation.class.getName());
+		Query createQuery = session.createQuery("select org from "+AmpOrganisation.class.getName()+" org where (org.deleted is null or org.deleted = false) ");
 		HashMap<Long,Long> typeMap=new HashMap<Long, Long>();
 		links.put(AmpOrgType.class,typeMap);
 

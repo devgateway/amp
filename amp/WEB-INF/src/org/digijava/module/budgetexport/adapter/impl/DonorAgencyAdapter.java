@@ -31,7 +31,7 @@ public class DonorAgencyAdapter implements MappingEntityAdapter {
 
         StringBuilder objQueryStr = new StringBuilder("from ");
         objQueryStr.append(AmpOrganisation.class.getName());
-        objQueryStr.append(" donorOrg where donorOrg.ampOrgId in(");
+        objQueryStr.append(" donorOrg where (donorOrg.deleted is null or donorOrg.deleted = false)  and donorOrg.ampOrgId in(");
         objQueryStr.append(MappingEntityAdapterUtil.generateIdWhereClause(ids));
         objQueryStr.append(")");
         Query objQuery = sess.createQuery(objQueryStr.toString());

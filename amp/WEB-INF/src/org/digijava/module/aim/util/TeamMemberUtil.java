@@ -85,7 +85,7 @@ public class TeamMemberUtil {
 			User user = tm.getUser();
 
 			String qryStr = "select o.ampOrgId from " + AmpOrganisation.class.getName() + " o " +
-					"where (o.name=:name)";
+					"where (o.name=:name) and (o.deleted is null or o.deleted = false) ";
 			Query qry = session.createQuery(qryStr);
 			qry.setParameter("name",user.getOrganizationName(),Hibernate.STRING);
 			Iterator itr = qry.list().iterator();

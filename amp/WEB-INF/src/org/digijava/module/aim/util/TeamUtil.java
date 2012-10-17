@@ -1165,8 +1165,8 @@ public class TeamUtil {
                     + "aor.activity in (" + inclause + ") and "
                     + "aor.role = role.ampRoleId and "
                     + "aor.organisation = org.ampOrgId and "
-                    + "role.roleCode = '" + Constants.FUNDING_AGENCY + "'"
-                    + " order by org.acronym asc";
+                    + "role.roleCode = '" + Constants.FUNDING_AGENCY + "' and "
+                    + "(org.deleted is null or org.deleted = false) order by org.acronym asc";
 
                 qry = session.createQuery(qryStr);
                 itr = qry.list().iterator();

@@ -41,7 +41,7 @@ public class ReportsUtil {
 
             String queryString = "select distinct ao.* from amp_organisation ao " +
 						"inner join amp_org_role aor on (aor.organisation = ao.amp_org_id) " +
-						"inner join amp_role ar on ((ar.amp_role_id = aor.role) and (ar.role_code=:roleCode)) ";
+						"inner join amp_role ar on ((ar.amp_role_id = aor.role) and (ar.role_code=:roleCode)) where (ao.deleted is null or ao.deleted = false) ";
             Query qry = session.createSQLQuery(queryString).addEntity(AmpOrganisation.class);
             qry.setCacheable(true);
             col = qry.setString("roleCode", roleCode).list();

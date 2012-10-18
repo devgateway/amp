@@ -73,7 +73,7 @@ public class AmpMTEFProjectionFormTableFeature extends
 
 				item.add(new AmpFundingAmountComponent<AmpFundingMTEFProjection>(
 						"fundingAmount", item.getModel(), "Amount", "amount",
-						"Currency", "ampCurrency", "Projection Date", "projectionDate"));
+						"Currency", "ampCurrency", "Projection Date", "projectionDate", true));
 
 				item.add(new ListEditorRemoveButton("delMtef", "Delete MTEF Projection"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {

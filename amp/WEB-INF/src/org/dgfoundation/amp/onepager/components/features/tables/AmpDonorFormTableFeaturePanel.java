@@ -124,7 +124,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 			IModel<AmpFundingDetail> model) {
 		return new AmpFundingAmountComponent<AmpFundingDetail>("fundingAmount",
 				model, "Amount", "transactionAmount", "Currency",
-				"ampCurrencyId", "Transaction Date", "transactionDate");
+				"ampCurrencyId", "Transaction Date", "transactionDate", false);
 	}
 
 	

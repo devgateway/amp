@@ -76,7 +76,7 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
 			IModel<AmpRegionalFunding> model) {
 		return new AmpFundingAmountComponent<AmpRegionalFunding>("fundingAmount",
 				model, "Amount", "transactionAmount", "Currency",
-				"currency", "Transaction Date", "transactionDate");
+				"currency", "Transaction Date", "transactionDate", false);
 	}
 
 	protected AmpDeleteLinkField getDeleteLinkField(String id, String fmName,

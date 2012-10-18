@@ -65,7 +65,7 @@ public class AmpContractDisbursementsSubsectionFeature extends
 				
 				AmpFundingAmountComponent<IPAContractDisbursement> funding = new AmpFundingAmountComponent<IPAContractDisbursement>("fundingAmount",
 						model, "Amount", "amount", "Currency",
-						"currency", "Transaction Date", "date");
+						"currency", "Transaction Date", "date", false);
 				item.add(funding);
 					
 				AmpDeleteLinkField delete = new AmpDeleteLinkField("delete", "Delete Contract Disbursement") {

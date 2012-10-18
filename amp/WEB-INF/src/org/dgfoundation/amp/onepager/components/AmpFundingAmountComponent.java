@@ -8,9 +8,11 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -28,8 +30,11 @@ import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.models.YearAsDateModel;
+import org.digijava.module.aim.action.AddFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
@@ -42,7 +47,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 
 	private AmpTextFieldPanel<Double> amount;
 	private AmpSelectFieldPanel<AmpCurrency> currency;
-	private AmpDatePickerFieldPanel date;
+	private Component date;
  
 	private Collection<AmpCollectionValidatorField> validationFields = new ArrayList<AmpCollectionValidatorField>();
 	/**
@@ -50,7 +55,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 	 */
 	public AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,
 			String propertyAmount, String fmCurrency, String propertyCurrency,
-			String fmDate, String propertyDate) {
+			String fmDate, String propertyDate, boolean isMTEFProjection) {
 		super(id, model);
 		amount = new AmpTextFieldPanel<Double>("amount",
 				new PropertyModel<Double>(model, propertyAmount), fmAmount,true,true) {
@@ -102,10 +107,32 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		currency.getChoiceContainer().setRequired(true);
 		currency.getChoiceContainer().add(new AttributeModifier("class", "dropdwn_currency"));
 		add(currency);
-		date = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(
-				model, propertyDate), fmDate,true);
-		date.getDate().setRequired(true);
-		date.getDate().add(new AttributeModifier("class", "inputx_date"));
+		if (!isMTEFProjection){
+			AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(
+					model, propertyDate), fmDate,true);
+			datetmp.getDate().setRequired(true);
+			datetmp.getDate().add(new AttributeModifier("class", "inputx_date"));
+			date = datetmp;
+		}
+		else{
+			IModel<List<String>> mtefYearsChoices = new AbstractReadOnlyModel<List<String>>() {
+				@Override
+				public List<String> getObject() {
+					List<KeyValue> years = AddFunding.generateAvailableMTEFProjectionYears(null);
+					List<String> ret = new ArrayList<String>();
+					Iterator<KeyValue> it = years.iterator();
+					while (it.hasNext()) {
+						KeyValue keyValue = (KeyValue) it.next();
+						ret.add(keyValue.getKey());
+					}
+					return ret;
+				}
+			};
+			YearAsDateModel yearModel = new YearAsDateModel(new PropertyModel<Date>(model, propertyDate));
+			AmpSelectFieldPanel<String> datetmp = new AmpSelectFieldPanel<String>("date", yearModel, mtefYearsChoices, fmDate, true, true);
+			datetmp.getChoiceContainer().setRequired(true);
+			date = datetmp;
+		}
 		add(date);
 		setRenderBodyOnly(true);
 	}
@@ -118,7 +145,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		return currency;
 	}
 
-	public AmpDatePickerFieldPanel getDate() {
+	public Component getDate() {
 		return date;
 	}
 	

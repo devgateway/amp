@@ -183,7 +183,7 @@ public class AmpComponentsFundingFormTableFeature extends
 					
 					AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<AmpComponentFunding>("fundingAmount",
 							model, "Amount", "transactionAmount", "Currency",
-							"currency", "Transaction Date", "transactionDate");
+							"currency", "Transaction Date", "transactionDate", false);
 					
 					 if(alertIfExpenditureBiggerDisbursment);
 					 	amountComponent.setAmountValidator(amountSumComparator1);

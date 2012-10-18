@@ -99,28 +99,36 @@ var updateFullList = {
 				var child = results.children[0];
 				switch(child.type){
 					case "ProjectsList":
-						inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a> <br />";
-						var isPublicView = document.getElementById("fromPublicView").value;
-						for(var i = 0; i < child.list.length; i++){
-							inner = inner + (i+1) + ". " + "";
-							if (isPublicView == "false"){
-								inner = inner + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.list[i].id + "~isPreview=1'>"  + child.list[i].name + "</a>" + "  <b>(" + child.list[i].value + ")</b> <hr />";
-							} else {
-								inner = inner + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+						if (child.list.length==0){
+							inner = "<b>"+trnNoDataToShow+"</b> <br />";
+						} else {
+							inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a> <br />";
+							var isPublicView = document.getElementById("fromPublicView").value;
+							for(var i = 0; i < child.list.length; i++){
+								inner = inner + (i+1) + ". " + "";
+								if (isPublicView == "false"){
+									inner = inner + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.list[i].id + "~isPreview=1'>"  + child.list[i].name + "</a>" + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								} else {
+									inner = inner + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
 							}
+							inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a>";
 						}
-						inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a>";
 						var div = document.getElementById("divFullProjects");
 						if (div!=null)
 							div.innerHTML = inner;
 						break;
 					case "DonorsList":
 						//if (dashboardType!=1) {
-							inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a> <br />";
-							for(var i = 0; i < child.list.length; i++){
-								inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+							if (child.list.length==0){
+								inner = "<b>"+trnNoDataToShow+"</b> <br />";
+							} else {
+								inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a> <br />";
+								for(var i = 0; i < child.list.length; i++){
+									inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
+								inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a>";
 							}
-							inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a>";
 							var div = document.getElementById("divFullDonors");
 							if (div!=null)
 								div.innerHTML = inner;
@@ -128,11 +136,15 @@ var updateFullList = {
 						break;
 					case "SectorsList":
 						//if (dashboardType!=3) {
-							inner = "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a> <br />";
-							for(var i = 0; i < child.list.length; i++){
-								inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+							if (child.list.length==0){
+								inner = "<b>"+trnNoDataToShow+"</b> <br />";
+							} else {
+								inner = "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a> <br />";
+								for(var i = 0; i < child.list.length; i++){
+									inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
+								inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a>";
 							}
-							inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a>";
 							var div = document.getElementById("divFullSectors");
 							if (div!=null)
 								div.innerHTML = inner;
@@ -140,11 +152,15 @@ var updateFullList = {
 						break;
 					case "RegionsList":
 						//if (dashboardType!=2) {
-							inner = "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a> <br />";
-							for(var i = 0; i < child.list.length; i++){
-								inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+							if (child.list.length==0){
+								inner = "<b>"+trnNoDataToShow+"</b> <br />";
+							} else {
+								inner = "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a> <br />";
+								for(var i = 0; i < child.list.length; i++){
+									inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
+								inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a>";
 							}
-							inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a>";
 							var div = document.getElementById("divFullRegions");
 							if (div!=null)
 								div.innerHTML = inner;
@@ -1031,16 +1047,20 @@ function refreshBoxes(o){
 		switch(child.type){
 			case "ProjectsList":
 				inner = "";
-				var isPublicView = document.getElementById("fromPublicView").value;
-				for(var i = 0; i < child.top.length; i++){
-					inner = inner + (i+1) + ". ";
-					if (isPublicView == "false"){
-						inner = inner + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>(" + child.top[i].value + ")</b> <hr />";
-					} else {
-						inner = inner + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+				if (child.top.length==0){
+					inner = "<b>"+trnNoDataToShow+"</b> <br />";
+				} else {
+					var isPublicView = document.getElementById("fromPublicView").value;
+					for(var i = 0; i < child.top.length; i++){
+						inner = inner + (i+1) + ". ";
+						if (isPublicView == "false"){
+							inner = inner + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						} else {
+							inner = inner + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
 					}
+					inner = inner + "<a href='javascript:showFullList(\"projects\")' style='float:right;'>"+trnShowFullList+"</a>";
 				}
-				inner = inner + "<a href='javascript:showFullList(\"projects\")' style='float:right;'>"+trnShowFullList+"</a>";
 				var div = document.getElementById("divTopProjects");
 				if (div!=null)
 					div.innerHTML = inner;
@@ -1048,10 +1068,14 @@ function refreshBoxes(o){
 			case "DonorsList":
 				//if (dashboardType!=1) {
 					inner = "";
-					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+					if (child.top.length==0){
+						inner = "<b>"+trnNoDataToShow+"</b> <br />";
+					} else {
+						for(var i = 0; i < child.top.length; i++){
+							inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
+						inner = inner + "<a href='javascript:showFullList(\"donors\")' style='float:right;'>"+trnShowFullList+"</a>";
 					}
-					inner = inner + "<a href='javascript:showFullList(\"donors\")' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopDonors");
 					if (div!=null)
 						div.innerHTML = inner;
@@ -1060,10 +1084,14 @@ function refreshBoxes(o){
 			case "SectorsList":
 				//if (dashboardType!=3) {
 					inner = "";
-					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+					if (child.top.length==0){
+						inner = "<b>"+trnNoDataToShow+"</b> <br />";
+					} else {
+							for(var i = 0; i < child.top.length; i++){
+							inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
+						inner = inner + "<a href='javascript:showFullList(\"sectors\")' style='float:right;'>"+trnShowFullList+"</a>";
 					}
-					inner = inner + "<a href='javascript:showFullList(\"sectors\")' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopSectors");
 					if (div!=null)
 						div.innerHTML = inner;
@@ -1072,10 +1100,14 @@ function refreshBoxes(o){
 			case "RegionsList":
 				//if (dashboardType!=2) {
 					inner = "";
-					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+					if (child.top.length==0){
+						inner = "<b>"+trnNoDataToShow+"</b> <br />";
+					} else {
+							for(var i = 0; i < child.top.length; i++){
+							inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
+						inner = inner + "<a href='javascript:showFullList(\"regions\")' style='float:right;'>"+trnShowFullList+"</a>";
 					}
-					inner = inner + "<a href='javascript:showFullList(\"regions\")' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopRegions");
 					if (div!=null)
 						div.innerHTML = inner;

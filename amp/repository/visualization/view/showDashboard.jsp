@@ -127,6 +127,7 @@ var trnODAGrowth = "";
 var trnSavingInformation = "";
 var trnSavedInformation = "";
 var trnFailedSave = "";
+var trnNoDataToShow = "";
 
 var alertBadDate="";
 var loadingPanel;
@@ -209,7 +210,7 @@ function initializeTranslations(){
 	trnSavedInformation = "<digi:trn>Information was saved</digi:trn>"; 
 	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
 	alertBadDate="<digi:trn>Start year can't be greater than end year</digi:trn>";
-	
+	trnNoDataToShow="<digi:trn>No data to show</digi:trn>";
 }
 function initializeGlobalVariables(){
 	//Other global variables
@@ -1930,6 +1931,7 @@ function initializeTranslations(){
 	trnSavedInformation = "<digi:trn>Information was saved</digi:trn>"; 
 	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
 	alertBadDate="<digi:trn>Start year can't be greater than end year</digi:trn>";
+	trnNoDataToShow="<digi:trn>No data to show</digi:trn>";
 }
 function initializeGlobalVariables(){
 	//Other global variables

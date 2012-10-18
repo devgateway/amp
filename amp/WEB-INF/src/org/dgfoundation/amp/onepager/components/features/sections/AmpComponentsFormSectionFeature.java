@@ -50,7 +50,6 @@ public class AmpComponentsFormSectionFeature extends
 					final org.dgfoundation.amp.onepager.components.ListItem<AmpComponent> comp) {
 				AmpComponentField acf = new AmpComponentField("component", am, PersistentObjectModel.getModel(comp.getModelObject()), "Component");
 				comp.add(acf);
-				
 				ListEditorRemoveButton delButton = new ListEditorRemoveButton("deleteComponent", "Delete Component"){
 					@Override
 					protected void onClick(AjaxRequestTarget target) {

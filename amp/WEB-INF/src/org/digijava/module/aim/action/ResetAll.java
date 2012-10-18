@@ -97,6 +97,7 @@ public class ResetAll extends Action
 				eaForm.getPlanning().setOriginalAppDate(null);
 				eaForm.getPlanning().setRevisedAppDate(null);
 				eaForm.getPlanning().setOriginalStartDate(null);
+				eaForm.getPlanning().setOriginalCompDate(null);
 				eaForm.getPlanning().setRevisedStartDate(null);
 				eaForm.getPlanning().setCurrentCompDate(null);
 				eaForm.getPlanning().setProposedCompDate(null);
@@ -210,6 +211,7 @@ public class ResetAll extends Action
 				eaForm.getPlanning().setOriginalAppDate(DateConversion.ConvertDateToString(activity.getProposedApprovalDate()));
 				eaForm.getPlanning().setRevisedAppDate(DateConversion.ConvertDateToString(activity.getActualApprovalDate()));
 				eaForm.getPlanning().setOriginalStartDate(DateConversion.ConvertDateToString(activity.getProposedStartDate()));
+				eaForm.getPlanning().setOriginalCompDate(DateConversion.ConvertDateToString(activity.getOriginalCompDate()));
 				eaForm.getPlanning().setRevisedStartDate(DateConversion.ConvertDateToString(activity.getActualStartDate()));
 				eaForm.getPlanning().setCurrentCompDate(DateConversion.ConvertDateToString(activity.getActualCompletionDate()));
 				eaForm.getPlanning().setDisbursementsDate(DateConversion.ConvertDateToString(activity.getDisbursmentsDate()));

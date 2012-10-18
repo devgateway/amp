@@ -4,8 +4,11 @@
  */
 package org.dgfoundation.amp.onepager.translation;
 
+import java.util.Iterator;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
@@ -29,6 +32,8 @@ public class TrnLabel extends Label {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(TrnLabel.class);
+	private static final Behavior LABEL_TRANSLATOR_BEHAVIOR = new LabelTranslatorBehaviour();
+	private static final Behavior LABEL_TRANSLATOR_STYLE = new AttributeAppender("style", new Model("text-decoration: underline; color: #0CAD0C;"), "");
 
 	private CharSequence key;
 
@@ -43,12 +48,17 @@ public class TrnLabel extends Label {
 		super(id, label);
 		super.setDefaultModelObject(translate(label));
 		addKeyAttribute(TranslatorWorker.generateTrnKey(label));
-		trnLabel();
 	}
 	public TrnLabel(String id, IModel<String> label) {
 		this(id, label.getObject());
 	}
 
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+		trnLabel();
+	}
+	
 	private void addKeyAttribute(String key){
 		this.key = key;
 		if (TranslatorUtil.isTranslatorMode(getSession())){
@@ -61,8 +71,18 @@ public class TrnLabel extends Label {
 	private void trnLabel(){
 		if (TranslatorUtil.isTranslatorMode(getSession())){
 			super.setOutputMarkupId(true);
-			this.add(new LabelTranslatorBehaviour());
-			this.add(new AttributeAppender("style", new Model("text-decoration: underline; color: #0CAD0C;"), ""));
+			this.add(LABEL_TRANSLATOR_BEHAVIOR);
+			this.add(LABEL_TRANSLATOR_STYLE);
+		}
+		else{
+			List<? extends Behavior> list = this.getBehaviors();
+			Iterator<? extends Behavior> it = list.iterator();
+			while (it.hasNext()) {
+				Behavior behavior = (Behavior) it.next();
+				if (behavior == LABEL_TRANSLATOR_BEHAVIOR || 
+						behavior == LABEL_TRANSLATOR_STYLE)
+					this.remove(behavior);
+			}
 		}
 	}
 	

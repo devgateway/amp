@@ -208,7 +208,7 @@
 																	<logic:empty name="aimOrgManagerForm"
 																		property="pagedCol">
 																		<tr>
-																			<td colspan="5"><b><digi:trn
+																			<td width="100%" colspan="5"><b><digi:trn
 																						key="aim:noOrganization">No
 		                                                        organization present</digi:trn>
 																			</b>

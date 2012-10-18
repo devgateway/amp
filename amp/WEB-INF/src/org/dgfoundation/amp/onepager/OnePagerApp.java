@@ -141,6 +141,8 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
 		 getMarkupSettings().setDefaultMarkupEncoding("UTF-8"); 
 
+		 
+		 getStoreSettings().setFileStoreFolder(new File("/mnt/ssd/wicket"));
 	 }
 
 

@@ -399,7 +399,7 @@ public class ViewNewAdvancedReport extends Action {
 
 	private void setPaginationOfPagesParameters(HttpServletRequest request, Integer totalRows, Integer recordsPerPage, Integer numberOfPagesToDisplay ){
 		//Pagination of pages
-		if (numberOfPagesToDisplay == null){
+		if (numberOfPagesToDisplay == null || numberOfPagesToDisplay < 1 ){
 			numberOfPagesToDisplay = 10;
 		}
 		String startRowStr = request.getParameter("startRow");

@@ -166,8 +166,6 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		cascadeFmToChildren=new IndicatingAjaxCheckBox("cascadeFmToChildren",new Model<Boolean>()) {			
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
-				
 			}
 		};
 		

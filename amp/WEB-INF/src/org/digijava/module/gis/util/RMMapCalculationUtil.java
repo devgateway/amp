@@ -82,7 +82,7 @@ public class RMMapCalculationUtil {
         Object[] activityRegionalFundings = null;
 
 
-        if (!filter.getMapModeFin().equalsIgnoreCase("pledgesData")) {
+        if (filter.getMapModeFin() == null || !filter.getMapModeFin().equalsIgnoreCase("pledgesData")) {
             if (isRegional == GisUtil.GIS_DONOR_FUNDINGS) {
             activityFundings = DbUtil.getActivityFundings(sectorCollector,
                                                            programsIds,

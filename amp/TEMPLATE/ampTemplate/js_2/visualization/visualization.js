@@ -99,28 +99,36 @@ var updateFullList = {
 				var child = results.children[0];
 				switch(child.type){
 					case "ProjectsList":
-						inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a> <br />";
-						var isPublicView = document.getElementById("fromPublicView").value;
-						for(var i = 0; i < child.list.length; i++){
-							inner = inner + (i+1) + ". " + "";
-							if (isPublicView == "false"){
-								inner = inner + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.list[i].id + "~isPreview=1'>"  + child.list[i].name + "</a>" + "  <b>(" + child.list[i].value + ")</b> <hr />";
-							} else {
-								inner = inner + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+						if (child.list.length==0){
+							inner = "<b>"+trnNoDataToShow+"</b> <br />";
+						} else {
+							inner = "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a> <br />";
+							var isPublicView = document.getElementById("fromPublicView").value;
+							for(var i = 0; i < child.list.length; i++){
+								inner = inner + (i+1) + ". " + "";
+								if (isPublicView == "false"){
+									inner = inner + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.list[i].id + "~isPreview=1'>"  + child.list[i].name + "</a>" + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								} else {
+									inner = inner + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
 							}
+							inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a>";
 						}
-						inner = inner + "<a href='javascript:hideFullProjects()' style='float:right;'>"+trnShowTop+"</a>";
 						var div = document.getElementById("divFullProjects");
 						if (div!=null)
 							div.innerHTML = inner;
 						break;
 					case "DonorsList":
 						//if (dashboardType!=1) {
-							inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a> <br />";
-							for(var i = 0; i < child.list.length; i++){
-								inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+							if (child.list.length==0){
+								inner = "<b>"+trnNoDataToShow+"</b> <br />";
+							} else {
+								inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a> <br />";
+								for(var i = 0; i < child.list.length; i++){
+									inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
+								inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a>";
 							}
-							inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a>";
 							var div = document.getElementById("divFullDonors");
 							if (div!=null)
 								div.innerHTML = inner;
@@ -128,11 +136,15 @@ var updateFullList = {
 						break;
 					case "SectorsList":
 						//if (dashboardType!=3) {
-							inner = "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a> <br />";
-							for(var i = 0; i < child.list.length; i++){
-								inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+							if (child.list.length==0){
+								inner = "<b>"+trnNoDataToShow+"</b> <br />";
+							} else {
+								inner = "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a> <br />";
+								for(var i = 0; i < child.list.length; i++){
+									inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
+								inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a>";
 							}
-							inner = inner + "<a href='javascript:hideFullSectors()' style='float:right;'>"+trnShowTop+"</a>";
 							var div = document.getElementById("divFullSectors");
 							if (div!=null)
 								div.innerHTML = inner;
@@ -140,11 +152,15 @@ var updateFullList = {
 						break;
 					case "RegionsList":
 						//if (dashboardType!=2) {
-							inner = "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a> <br />";
-							for(var i = 0; i < child.list.length; i++){
-								inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+							if (child.list.length==0){
+								inner = "<b>"+trnNoDataToShow+"</b> <br />";
+							} else {
+								inner = "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a> <br />";
+								for(var i = 0; i < child.list.length; i++){
+									inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
+								inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a>";
 							}
-							inner = inner + "<a href='javascript:hideFullRegions()' style='float:right;'>"+trnShowTop+"</a>";
 							var div = document.getElementById("divFullRegions");
 							if (div!=null)
 								div.innerHTML = inner;
@@ -647,18 +663,40 @@ var callbackChildrenCall = {
 			    			zonesDropdown.options[zonesDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
 			    		break;
-			    	  case "Config":
-				    		var sectorDropdown = document.getElementById("sector_dropdown_id");
-				    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
-				    		subSectorDropdown.options.length = 0;
-				    		sectorDropdown.options.length = 0;
-				    		subSectorDropdown.options[0] = new Option(trnAll, -1);
-				    		sectorDropdown.options[0] = new Option(trnAll, -1);
-				    		for(var i = 0; i < results.children.length; i++){
-				    			sectorDropdown.options[sectorDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
-				    		}
-				    		break;
-			    	
+			    	case "Config":
+			    		var sectorDropdown = document.getElementById("sector_dropdown_id");
+			    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
+			    		subSectorDropdown.options.length = 0;
+			    		sectorDropdown.options.length = 0;
+			    		subSectorDropdown.options[0] = new Option(trnAll, -1);
+			    		sectorDropdown.options[0] = new Option(trnAll, -1);
+			    		for(var i = 0; i < results.children.length; i++){
+			    			sectorDropdown.options[sectorDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+			    		}
+			    		break;
+			    	case "FiscalCalendar":
+			    		var startYearSelectedIndex = document.getElementById("startYear_dropdown").selectedIndex;
+			    		var endYearSelectedIndex = document.getElementById("endYear_dropdown").selectedIndex;
+			    		var startYearQuickFilterDropdown = document.getElementById("startYearQuickFilter_dropdown");
+			    		var endYearQuickFilterDropdown = document.getElementById("endYearQuickFilter_dropdown");
+			    		var startYearDropdown = document.getElementById("startYear_dropdown");
+			    		var endYearDropdown = document.getElementById("endYear_dropdown");
+			    		startYearQuickFilterDropdown.options.length = 0;
+			    		endYearQuickFilterDropdown.options.length = 0;
+			    		startYearDropdown.options.length = 0;
+			    		endYearDropdown.options.length = 0;
+			    		for(var i = 0; i < results.children.length; i++){
+			    			startYearQuickFilterDropdown.options[startYearQuickFilterDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+			    			endYearQuickFilterDropdown.options[endYearQuickFilterDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+			    			startYearDropdown.options[startYearDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+			    			endYearDropdown.options[endYearDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+			    		}
+			    		startYearQuickFilterDropdown.selectedIndex = startYearSelectedIndex;
+			    		endYearQuickFilterDropdown.selectedIndex = endYearSelectedIndex;
+			    		startYearDropdown.selectedIndex = startYearSelectedIndex;
+			    		endYearDropdown.selectedIndex = endYearSelectedIndex;
+			    		break;
+			    		
 			    }
 			}
 			catch (e) {
@@ -711,6 +749,9 @@ function callbackChildren(e) {
 			break;
 		case "org_group_dropdown_id":
 			objectType = "Organization";
+			break;
+		case "fiscalCalendar_dropdown_Id":
+			objectType = "FiscalCalendar";
 			break;
 	}
 
@@ -1006,16 +1047,20 @@ function refreshBoxes(o){
 		switch(child.type){
 			case "ProjectsList":
 				inner = "";
-				var isPublicView = document.getElementById("fromPublicView").value;
-				for(var i = 0; i < child.top.length; i++){
-					inner = inner + (i+1) + ". ";
-					if (isPublicView == "false"){
-						inner = inner + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>(" + child.top[i].value + ")</b> <hr />";
-					} else {
-						inner = inner + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+				if (child.top.length==0){
+					inner = "<b>"+trnNoDataToShow+"</b> <br />";
+				} else {
+					var isPublicView = document.getElementById("fromPublicView").value;
+					for(var i = 0; i < child.top.length; i++){
+						inner = inner + (i+1) + ". ";
+						if (isPublicView == "false"){
+							inner = inner + "<a target='_blank' href='/aim/viewActivityPreview.do~pageId=2~activityId=" + child.top[i].id + "~isPreview=1'>" + child.top[i].name + "</a>" + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						} else {
+							inner = inner + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
 					}
+					inner = inner + "<a href='javascript:showFullList(\"projects\")' style='float:right;'>"+trnShowFullList+"</a>";
 				}
-				inner = inner + "<a href='javascript:showFullList(\"projects\")' style='float:right;'>"+trnShowFullList+"</a>";
 				var div = document.getElementById("divTopProjects");
 				if (div!=null)
 					div.innerHTML = inner;
@@ -1023,10 +1068,14 @@ function refreshBoxes(o){
 			case "DonorsList":
 				//if (dashboardType!=1) {
 					inner = "";
-					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+					if (child.top.length==0){
+						inner = "<b>"+trnNoDataToShow+"</b> <br />";
+					} else {
+						for(var i = 0; i < child.top.length; i++){
+							inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
+						inner = inner + "<a href='javascript:showFullList(\"donors\")' style='float:right;'>"+trnShowFullList+"</a>";
 					}
-					inner = inner + "<a href='javascript:showFullList(\"donors\")' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopDonors");
 					if (div!=null)
 						div.innerHTML = inner;
@@ -1035,10 +1084,14 @@ function refreshBoxes(o){
 			case "SectorsList":
 				//if (dashboardType!=3) {
 					inner = "";
-					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+					if (child.top.length==0){
+						inner = "<b>"+trnNoDataToShow+"</b> <br />";
+					} else {
+							for(var i = 0; i < child.top.length; i++){
+							inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
+						inner = inner + "<a href='javascript:showFullList(\"sectors\")' style='float:right;'>"+trnShowFullList+"</a>";
 					}
-					inner = inner + "<a href='javascript:showFullList(\"sectors\")' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopSectors");
 					if (div!=null)
 						div.innerHTML = inner;
@@ -1047,10 +1100,14 @@ function refreshBoxes(o){
 			case "RegionsList":
 				//if (dashboardType!=2) {
 					inner = "";
-					for(var i = 0; i < child.top.length; i++){
-						inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+					if (child.top.length==0){
+						inner = "<b>"+trnNoDataToShow+"</b> <br />";
+					} else {
+							for(var i = 0; i < child.top.length; i++){
+							inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
+						inner = inner + "<a href='javascript:showFullList(\"regions\")' style='float:right;'>"+trnShowFullList+"</a>";
 					}
-					inner = inner + "<a href='javascript:showFullList(\"regions\")' style='float:right;'>"+trnShowFullList+"</a>";
 					var div = document.getElementById("divTopRegions");
 					if (div!=null)
 						div.innerHTML = inner;
@@ -1641,6 +1698,7 @@ YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
 YAHOO.util.Event.addListener("sector_config_dropdown_id", "change", callbackChildren);
+YAHOO.util.Event.addListener("fiscalCalendar_dropdown_Id", "change", callbackChildren);
 YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
 YAHOO.util.Event.addListener("applyButtonPopin", "click", applyFilterPopin);
 YAHOO.util.Event.addListener("visualizationDiv", "click", refreshGraphs);
@@ -2105,4 +2163,3 @@ function scrollToGraph(graph) {
 	document.getElementById('visualizationTab').click();
 	document.getElementById(graph).scrollIntoView(true);
 }
-

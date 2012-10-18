@@ -153,14 +153,15 @@ public class SelectTeam extends Action {
             tm.setPledger(member.getUser().getPledger());
             tm.setPublishDocuments(member.getPublishDocPermission());
             tm.setApprover(member.getAmpMemberRole().isApprover());
-            AmpTeam.initializeTeamFiltersSession(member, request, session);
 			
             if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
                 tm.setTranslator(true);
             } else {
                 tm.setTranslator(false);
             }
-            session.setAttribute("currentMember", tm);
+            
+            session.setAttribute(Constants.CURRENT_MEMBER, tm);
+            AmpTeam.initializeTeamFiltersSession(member, request, session);
             PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
             session.setMaxInactiveInterval(-1);
             lForm.setLogin(true);

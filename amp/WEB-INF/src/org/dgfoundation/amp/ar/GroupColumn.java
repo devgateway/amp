@@ -170,6 +170,12 @@ public class GroupColumn extends Column {
             if (generateTotalCols || element.isRenderizable()) {
         	    metaSet.add(minfo);
         	    
+            	String unspecified = "";
+            	try {
+					unspecified = TranslatorWorker.translateText("Unspecified",reportMetadata.getLocale(),reportMetadata.getSiteId());
+				} catch (WorkerException e) {
+					e.printStackTrace();
+				}
         	    if (category.equalsIgnoreCase(ArConstants.YEAR)){
                 	MetaInfo minfo2=MetaInfo.getMetaInfo(element.getMetaData(),ArConstants.FISCAL_Y);
                 	
@@ -177,22 +183,18 @@ public class GroupColumn extends Column {
                 	if (reportMetadata.getType() == ArConstants.PLEDGES_TYPE){
 	                	SimpleDateFormat pledgesfakeyear = new SimpleDateFormat("yyyy");
 	                	String year = pledgesfakeyear.format(new Date(ArConstants.PLEDGE_FAKE_YEAR.getTime())).toString();
-	                	
+
 	                	if (minfo.getValue().toString().equalsIgnoreCase(year)){
-	                		try {
-								minfo2.setValue(TranslatorWorker.translateText("Unspecified",reportMetadata.getLocale(),reportMetadata.getSiteId()));
-							} catch (WorkerException e) {
-								e.printStackTrace();
-							}
+	                			minfo2.setValue(unspecified);
 	                	}
                 	}
                 	
-                	yearMapping.put(minfo.getValue().toString(),minfo2.getValue().toString());
+                	yearMapping.put(minfo.getValue().toString(),minfo2.getValue() == null ? unspecified : minfo2.getValue().toString());
                 	
                }
         	    if (category.equalsIgnoreCase(ArConstants.MONTH)){
                 	MetaInfo minfo2=MetaInfo.getMetaInfo(element.getMetaData(),ArConstants.FISCAL_M);
-                	monthMapping.put(minfo.getValue().toString(),minfo2.getValue().toString());
+                	monthMapping.put(minfo.getValue().toString(), minfo2.getValue() == null ? unspecified : minfo2.getValue().toString());
                 	
                }
             }

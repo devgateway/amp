@@ -135,7 +135,9 @@
 					i=i-1;
 				}
 			}
-			repManager.checkSteps();
+			if (typeof repManager != 'undefined') {
+				repManager.checkSteps();
+			}
 			return false;
 		}
 		MyDragAndDropObject.deselectObjs		= MyDragAndDropObject.selectObjs;

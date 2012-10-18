@@ -130,9 +130,9 @@ SaveReportEngine.prototype.success		= function (o) {
 	}
 	else
 		if ( getDesktopTab()=="true" )
-			window.location.replace("/aim/viewTeamReports.do?tabs=true&reset=true");
+			window.location.replace("/aim/viewTeamReports.do?tabs=true");
 		else
-			window.location.replace("/aim/viewTeamReports.do?tabs=false&reset=true");
+			window.location.replace("/aim/viewTeamReports.do?tabs=false");
 		
 }
 SaveReportEngine.prototype.failure			= function(o) {

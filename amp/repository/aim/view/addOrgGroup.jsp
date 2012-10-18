@@ -70,7 +70,7 @@
 <html:hidden property="ampOrgGrpId" />
 <html:hidden property="ampOrgId" />
 <h1><digi:trn key="aim:addOrgGroup">Add  Organization Group</digi:trn></h1>
-
+<digi:errors />
 <table width="650" border="0" cellspacing="3" cellpadding="3" align="center">
   <tr>
     <td align=right><label><digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font></label> </td>

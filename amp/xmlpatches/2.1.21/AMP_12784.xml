@@ -6,9 +6,17 @@
     <author>Marianela Moras</author>
     <description>Adding num_pages_to_display into amp_application_settings table </description>
 	<trigger type="all">
-		<condition  type="tableOrViewExists">amp_application_settings</condition>
+		<condition type="tableOrViewExists">amp_application_settings</condition>
+		<condition type="custom">
+ 			<script returnVar="count">
+				<lang type="postgres">
+					SELECT count(*) FROM pg_attribute WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'amp_application_settings') AND attname = 'num_pages_to_display';
+				</lang>
+			</script>
+ 			<test>count.intValue()==0</test>
+ 		</condition>
   	</trigger> 
-       <apply>
+    <apply>
         <script>
             <lang  delimiter=";" type="postgres">
 			ALTER TABLE amp_application_settings ADD COLUMN num_pages_to_display bigint;

@@ -241,7 +241,7 @@
                     children+='<ul>';
                     for(var i=0;i<childrenWorkspaces.length;i++){
                         var childrenWorkspace=childrenWorkspaces[i];
-                        children+='<li>'+childrenWorkspace.name.replace("\'", "\\'").replace("<", "&lt;").replace(">", "&gt;")+'</li>';
+                        children+='<li>'+childrenWorkspace.name.replace("\'", "'").replace("<", "&lt;").replace(">", "&gt;")+'</li>';
                     }
                     children+='</ul>';
                 }
@@ -252,11 +252,12 @@
                     compOrgs+='<ul>';
                     for(var i=0;i<childrenOrganizations.length;i++){
                         var childOrg=childrenOrganizations[i];
-                        compOrgs+='<li>'+childOrg.name.replace("\'", "\\'").replace("<", "&lt;").replace(">", "&gt;") +'</li>';
+                        compOrgs+='<li>'+childOrg.name.replace("\'", "'").replace("<", "&lt;").replace(">", "&gt;") +'</li>';
                     }
                     compOrgs+='</ul>';
                 }
-                var name=oRecord.getData( 'name' ).replace("\'", "\\'").replace("<", "&lt;").replace(">", "&gt;");
+          
+                var name=oRecord.getData( 'name' ).replace("\'", "'").replace("<", "&lt;").replace(">", "&gt;");
                 elCell.innerHTML =
                     name
                     +'<div id="tooltip'+oRecord.getData( 'ID' )+'" style="z-index:1;display:none">'+

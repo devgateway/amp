@@ -104,7 +104,8 @@ scheduler._init_year_tooltip=function(){
 		}
 		var G=G||event;
 		var H=G.target||G.srcElement;
-		if((H.className||"").indexOf("dhx_year_event")!=-1){
+		if((H.className||"").indexOf("dhx_year_event")!=-1
+				|| (H.className||"").indexOf("event_")!=-1){
 			scheduler.showToolTip(E(H.getAttribute("date")),getOffset(H),G,H)
 		}else{
 			scheduler.hideToolTip()
@@ -133,12 +134,16 @@ scheduler._get_year_cell=function(I){
 };
 
 var D=[];
-scheduler._mark_year_date=function(G){
+scheduler._mark_year_date=function(G, XX){
 	var H=this._get_year_cell(G);
 	if (H!=null){
-		H.className="dhx_month_head dhx_year_event";
+		if ( (H.className||"").indexOf("event_") !=-1) {
+			H.className="dhx_month_head dhx_year_event";
+	    }
+		else
+		 H.className="dhx_month_head event_"+ XX;
 		H.setAttribute("date",F(G));
-		D.push(H)
+		D.push(H);
 	}
 };
 
@@ -149,7 +154,7 @@ scheduler._unmark_year_date=function(G){
 scheduler._year_render_event=function(G){
 	var H=G.start_date;
 	while(H<G.end_date){
-		this._mark_year_date(H);
+		this._mark_year_date(H, G.type);
 		H=this.date.add(H,1,"day");
 	}
 };

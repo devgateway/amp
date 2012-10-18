@@ -10,6 +10,7 @@
   <apply>
     <script>
       <lang delimiter=";" type="postgres">
+      DROP VIEW v_donor_funding;
 		CREATE OR REPLACE VIEW v_donor_funding AS 
 
  SELECT f.amp_activity_id, f.amp_funding_id, fd.amp_fund_detail_id, d.name AS donor_name, fd.transaction_type,  

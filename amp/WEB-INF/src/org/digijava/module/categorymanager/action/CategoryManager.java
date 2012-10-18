@@ -100,13 +100,22 @@ public class CategoryManager extends Action {
 			if(myForm.getPossibleVals()==null){
 				myForm.setPossibleVals(new ArrayList<PossibleValue>());
 			}
-			for (int i=0; i<myForm.getNumOfAdditionalFields(); i++) {
-				PossibleValue value=new PossibleValue();
-				value.setValue("");
-				value.setId(null);
-				value.setDisable(false);
-				CategoryLabelsUtil.addUsedCategoriesToPossibleValue(myForm, value);
-				myForm.getPossibleVals().add(position, value);
+			boolean flagEmptyField = false;
+			for (int i = 0; i<myForm.getPossibleVals().size();i++){
+				if( myForm.getPossibleVals().get(i).getValue().isEmpty() && myForm.getPossibleVals().get(i).isDisable() == false){
+					flagEmptyField = true;
+					break;
+				}
+			}
+			if(!flagEmptyField){
+				for (int i=0; i<myForm.getNumOfAdditionalFields(); i++) {
+					PossibleValue value=new PossibleValue();
+					value.setValue("");
+					value.setId(null);
+					value.setDisable(false);
+					CategoryLabelsUtil.addUsedCategoriesToPossibleValue(myForm, value);
+					myForm.getPossibleVals().add(position, value);
+				}
 			}
 			return mapping.findForward("createOrEditCategory");
 		}

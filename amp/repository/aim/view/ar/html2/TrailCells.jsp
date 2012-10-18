@@ -79,6 +79,9 @@
 		<c:set var="firstCell" value="${false}"></c:set>
 	</c:if>
 	--%>
+	<c:if test="${addFakeColumn}">
+		<td></td>
+	</c:if>
 	<c:set var="firstCell" value="${false}"></c:set>
 	<logic:iterate name="reportData" property="trailCells"  id="cell" type="org.dgfoundation.amp.ar.cell.Cell" scope="page" indexId="cellIdx">
 			<c:if test="${cell!=null}">

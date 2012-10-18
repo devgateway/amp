@@ -219,26 +219,10 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		};
 		requiredStar.setVisible(!hideNewLine||enableReqStar);
 		add(requiredStar);
-		titleLabel = new TrnLabel("fieldLabel", fmName){
-			private Behavior titleBehavior = new SimpleAttributeModifier("title", "Original field name: " + fmName);
-			
-			@Override
-			protected void onConfigure() {
-				super.onConfigure();
-				if (((AmpAuthWebSession)getSession()).isFmMode()){
-					titleLabel.add(titleBehavior);
-				}
-				else{
-					List<? extends Behavior> list = this.getBehaviors();
-					Iterator<? extends Behavior> it = list.iterator();
-					while (it.hasNext()) {
-						Behavior behavior = (Behavior) it.next();
-						if (behavior == titleBehavior)
-							this.remove(behavior);
-					}
-				}
-			}
-		};
+		titleLabel = new TrnLabel("fieldLabel", fmName);
+		if (((AmpAuthWebSession)getSession()).isFmMode()){
+			titleLabel.add(new AttributeModifier("title", "Original field name: " + fmName));
+		}
 		titleLabel.setVisible(!hideLabel);
 		add(titleLabel);
 		newLine = new WebMarkupContainer("newLine");

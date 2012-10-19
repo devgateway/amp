@@ -97,6 +97,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	@Override   
 	public void setObject(AmpActivityVersion arg0) {
 		a = arg0;
+		super.setObject(a);
 	}
 
 	@Override

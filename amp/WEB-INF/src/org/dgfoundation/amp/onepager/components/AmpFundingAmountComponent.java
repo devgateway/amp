@@ -30,7 +30,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.models.YearAsDateModel;
+import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.digijava.module.aim.action.AddFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -128,9 +128,10 @@ public class AmpFundingAmountComponent<T> extends Panel {
 					return ret;
 				}
 			};
-			YearAsDateModel yearModel = new YearAsDateModel(new PropertyModel<Date>(model, propertyDate));
-			AmpSelectFieldPanel<String> datetmp = new AmpSelectFieldPanel<String>("date", yearModel, mtefYearsChoices, fmDate, true, true);
-			datetmp.getChoiceContainer().setRequired(true);
+			MTEFYearsModel yearModel = new MTEFYearsModel(new PropertyModel<Date>(model, propertyDate));
+			AmpTextFieldPanel<String> datetmp = new AmpTextFieldPanel<String>("date", yearModel, fmDate, true, true);
+			datetmp.getTextContainer().setEnabled(false);
+			datetmp.getTextContainer().add(new AttributeModifier("size", new Model<String>("10")));
 			date = datetmp;
 		}
 		add(date);

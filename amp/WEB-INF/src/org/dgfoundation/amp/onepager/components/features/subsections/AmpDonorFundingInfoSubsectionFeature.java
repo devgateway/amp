@@ -68,7 +68,7 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 		loanTerms.getTextAreaContainer().add(new AttributeModifier("style", "width: 225px; height: 65px;"));          	
 			
 		AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
-		boolean isLoan = (value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey()));
+		boolean isLoan = (value == null ? false : value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey()));
 		loanTerms.getTextAreaContainer().setVisible(isLoan);
 	    loanTerms.getTitleLabel().setVisible(isLoan);  
 	    add(loanTerms);

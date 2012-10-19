@@ -4,11 +4,15 @@
  */
 package org.dgfoundation.amp.onepager.components.features.subsections;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMTEFProjectionFormTableFeature;
@@ -41,6 +45,8 @@ public class AmpMTEFProjectionSubsectionFeature extends
 		super(id, fmName, model);
 		mtefTableFeature = new AmpMTEFProjectionFormTableFeature("mtefTableFeature", "MTEF Projections Table", model);
 		add(mtefTableFeature);
+		final IModel<Set<AmpFundingMTEFProjection>> setModel = new PropertyModel<Set<AmpFundingMTEFProjection>>(
+				model, "mtefProjections");
 		
 		AmpAjaxLinkField addMTEF=new AmpAjaxLinkField("addMTEF","Add Projection","Add Projection") {
 			@Override
@@ -49,6 +55,24 @@ public class AmpMTEFProjectionSubsectionFeature extends
 				projection.setAmpFunding(model.getObject());
 				//projection.setAmount(0d);
 //				projection.setProjectionDate(new Date(System.currentTimeMillis()));
+				Calendar calendar = Calendar.getInstance();
+				int currentYear = calendar.get(Calendar.YEAR) - 1;
+
+				Set<AmpFundingMTEFProjection> mtefSet = setModel.getObject();
+				if (mtefSet != null){
+					Iterator<AmpFundingMTEFProjection> it = mtefSet.iterator();
+					while (it.hasNext()) {
+						AmpFundingMTEFProjection mtefItem = (AmpFundingMTEFProjection) it
+								.next();
+						calendar.setTime(mtefItem.getProjectionDate());
+						int mtefItemYear = calendar.get(Calendar.YEAR);
+						if (mtefItemYear > currentYear)
+							currentYear = mtefItemYear;
+					}
+				}
+				calendar.set(Calendar.DAY_OF_YEAR, 1);
+				calendar.set(Calendar.YEAR, currentYear + 1);
+				projection.setProjectionDate(calendar.getTime());
 				projection.setReportingDate(new Date(System.currentTimeMillis()));
 				projection.setAmpCurrency(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
 				mtefTableFeature.getEditorList().addItem(projection);

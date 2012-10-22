@@ -424,10 +424,12 @@
 		}
 		
 		var responseRemoveOrganizationsSuccess = function(o) {
-			$("input[name='selOrgs']:checked").parent().parent().remove();
-			if($("input[name='selOrgs']").length==0){
-				$(".added_org_nc").hide(); 
-			}
+			$("select[name='selOrgs']").children().each(function(){
+				if (this.selected == true || this.selected == 'selected') {
+					$(this).remove();
+				}
+			})
+			
 		};
 		var responseRemoveOrganizationsFailure = function(o) {};
 		
@@ -438,18 +440,16 @@
 		 
 	
     function removeOrgs(){
-        <digi:context name="removeOrg" property="context/addressBook.do?actionType=removeOrganization"/>
+    	<digi:context name="removeOrg" property="context/addressBook.do?actionType=removeOrganization"/>
     	var url = "<%=removeOrg%>";
     	var params='';
-    	var count=$("input[name='selOrgs']:checked").each(function(index) {
-    		params+="&selOrgs="+this.value;
-    	});
-    	if(count.length==0){
-    		alert("<digi:trn>Please select organization(s) to remove</digi:trn>");
-    		return false;
-    	} 	
+    	$("select[name='selOrgs']").children().each(function(){
+        	if (this.selected == true || this.selected == 'selected') {
+            	params+="&selOrgs="+this.value;
+            }
+        })
     	YAHOO.util.Connect.asyncRequest('POST',url, removeOrganizationsCallback, params.substring(1));
-       
+    	
         }
            function showPanelLoading(msg){
             myPanel.setHeader(msg);
@@ -496,6 +496,7 @@
 		// hide loading image
 //        addLoadEvent(delBody);
 </script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
 <!-- Individual YUI CSS files --> 
 
@@ -572,28 +573,29 @@
 											       		<digi:trn>If organisation doesn't exist in the system, then it can be added in this textbox</digi:trn>
 											       	</c:set>
 													<html:text property="organisationName"  size="33" styleClass="inputx insidex" title="${translationOrgName}" /> <br />
+													
+													<table width="100%" cellspacing="1" cellPadding=5 class="added_org_nc">
+													<tr>
+													<td>
+													<html:select  multiple="multiple" property="selOrgs" size="4" style="width: 300px;">
+														<logic:notEmpty name="addressbookForm" property="organizations">
+															<logic:iterate name="addressbookForm" property="organizations" id="organization"type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																<html:option value="${organization.ampOrgId}" style="font-family: Arial;font-size:11px;">${organization.name}</html:option>
+															</logic:iterate>
+														</logic:notEmpty>
+							                		</html:select>
+							                		</td>
+							                		<td>
 													<aim:addOrganizationButton showAs="popin" refreshParentDocument="false" collection="organizations" form="${addressbookForm}" styleClass="buttonx_sm btn_save">
 														<digi:trn>Add Organizations</digi:trn>
 													</aim:addOrganizationButton>
 													<c:if test="${not empty addressbookForm.organizations}">
-														<table width="100%" cellspacing="1" cellPadding=5 class="added_org_nc">
-															<c:forEach var="organization" items="${addressbookForm.organizations}">
-																<tr>
-																	<td width="3px">
-																		<html:multibox property="selOrgs">
-																			<bean:write name="organization" property="ampOrgId" />
-																		</html:multibox>
-																	</td>
-																	<td align="left" class="l_mid_b"><bean:write name="organization" property="name" /></td>
-																</tr>
-															</c:forEach>
-															<tr>
-																<td colspan="2">
-																	<input type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' />
-																</td>
-															</tr>
-														</table>
+														<input type="button" class="buttonx_sm btn_save" onclick="javascript:removeOrgs();"value='<digi:trn>Remove Organization(s)</digi:trn>' />
 													</c:if>
+													</td>
+													</tr>
+													</table>
+													
 												</td>
 								    			<td valign="top"></td>
 								    		</tr>

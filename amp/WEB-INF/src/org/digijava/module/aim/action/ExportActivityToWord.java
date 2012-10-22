@@ -1428,19 +1428,25 @@ public class ExportActivityToWord extends Action {
 		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created by",request)+": ",columnVal,CELLCOLORGRAY);
 		
 		columnVal = "";
-		if(identification.getCreatedBy().getAmpTeam().getName()!=null){
-			columnVal +=  identification.getCreatedBy().getAmpTeam().getName();
-		}
-		if(identification.getCreatedBy().getAmpTeam().getAccessType()!=null){
-			columnVal += "-"+identification.getCreatedBy().getAmpTeam().getAccessType();
+		if(identification.getCreatedBy() != null)
+		{
+		    if(identification.getCreatedBy().getAmpTeam().getName()!=null){
+				columnVal +=  identification.getCreatedBy().getAmpTeam().getName();
+			}
+			if(identification.getCreatedBy().getAmpTeam().getAccessType()!=null){
+				columnVal += "-"+identification.getCreatedBy().getAmpTeam().getAccessType();
+			}
 		}
 		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Workspace of creator",request)+": ",columnVal,CELLCOLORGRAY);
 		
 		columnVal = "";
-		if(identification.getCreatedBy().getAmpTeam().getComputation()){
-			columnVal += TranslatorWorker.translateText("yes",request);
-		}else{
-			columnVal += TranslatorWorker.translateText("no",request);
+		if(identification.getCreatedBy() != null)
+		{
+			if(identification.getCreatedBy().getAmpTeam().getComputation()){
+				columnVal += TranslatorWorker.translateText("yes",request);
+			}else{
+				columnVal += TranslatorWorker.translateText("no",request);
+			}
 		}
 		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Computation",request)+": ",columnVal,CELLCOLORGRAY);
 		

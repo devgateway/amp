@@ -151,7 +151,7 @@ function validation(){
 
           <td bgColor=#ffffff  height="10" align="center" nowrap="nowrap">
             <html:text name="ind" property="creationDate" styleId="txtDate${index.count-1}" readonly="true" style="width:80px;"/>
-			<a id="date${index.count-1}" href='javascript:pickDateById("date${index.count-1}","txtDate${index.count-1}")'>
+			<a id="date${index.count-1}" href='javascript:pickDateById2("date${index.count-1}","txtDate${index.count-1}",false)'>
 				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0"> 
 			</a> 
 

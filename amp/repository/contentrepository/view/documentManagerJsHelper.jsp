@@ -1532,7 +1532,7 @@ function showActions(linkId, divId, category,timestamp){
 		actionPanel		= new YAHOO.widget.Overlay(linkId+"actionoverlay", { context:[linkId,"tl","bl"],
 			  visible:false,
 			  effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
-			  width:"150px" } );
+			  width:"150px",zIndex: 9 } );
 		var actionDivEl	= document.getElementById(divId);
 		actionDivEl.style.display	= "";
 		actionPanel.setBody( actionDivEl );

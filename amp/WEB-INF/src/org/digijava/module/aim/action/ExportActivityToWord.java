@@ -415,7 +415,7 @@ public class ExportActivityToWord extends Action {
                     doc.add(tbl);
                 }
 
-                for (Table tbl : getProposedProjectCostTables(request, ampContext, activity)) {
+                for (Table tbl : getProposedProjectCostTables(myForm, request, ampContext, activity)) {
                     doc.add(tbl);
                 }
 
@@ -504,7 +504,7 @@ public class ExportActivityToWord extends Action {
     /*
      * Proposed Project Cost
      */
-    private List<Table> getProposedProjectCostTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
+    private List<Table> getProposedProjectCostTables (EditActivityForm myForm, HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
 
         ExportSectionHelper eshTitle = new ExportSectionHelper("Proposed Project Cost", true).setWidth(100f).setAlign("left");
@@ -522,7 +522,7 @@ public class ExportActivityToWord extends Action {
         Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
         String siteId=site.getSiteId();
         String locale=navigationLanguage.getCode();
-        String currencyCode = (String) request.getSession().getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
+        String currencyCode = myForm.getFunding().getProProjCost().getCurrencyCode();
         if(currencyCode == null) {
             currencyCode = Constants.DEFAULT_CURRENCY;
         }

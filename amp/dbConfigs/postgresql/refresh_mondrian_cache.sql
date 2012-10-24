@@ -12,8 +12,14 @@ DROP TABLE IF EXISTS cached_v_implementation_level;
 CREATE TABLE cached_v_implementation_level AS SELECT * FROM v_implementation_level;
 DROP TABLE IF EXISTS cached_v_actual_completion_date;
 CREATE TABLE cached_v_actual_completion_date AS SELECT * FROM v_actual_completion_date;
+
 DROP TABLE IF EXISTS cached_v_sectors CASCADE;
 CREATE TABLE cached_v_sectors AS SELECT * FROM v_sectors;
+
+DROP TABLE IF EXISTS cached_v_m_sectors CASCADE;
+CREATE TABLE cached_v_m_sectors AS SELECT * FROM v_m_sectors;
+
+
 DROP TABLE IF EXISTS cached_v_regions;
 CREATE TABLE cached_v_regions AS SELECT * FROM v_regions;
 DROP TABLE IF EXISTS cached_v_financing_instrument;
@@ -60,7 +66,7 @@ CREATE TABLE cached_v_sub_sectors AS SELECT * FROM v_sub_sectors;
 DROP TABLE IF EXISTS cached_v_sub_sub_sectors;
 CREATE TABLE cached_v_sub_sub_sectors AS SELECT * FROM v_sub_sectors;
 
-DROP TABLE IF EXISTS cached_v_nationalobjectives_level_0;
+DROP TABLE IF EXISTS cached_v_nationalobjectives_level_0 CASCADE;
 CREATE TABLE cached_v_nationalobjectives_level_0 AS SELECT * FROM v_nationalobjectives_level_0;
 DROP TABLE IF EXISTS cached_v_nationalobjectives_level_1;
 CREATE TABLE cached_v_nationalobjectives_level_1 AS SELECT * FROM v_nationalobjectives_level_1;
@@ -142,6 +148,9 @@ DROP TABLE IF EXISTS cached_v_creation_date;
 CREATE TABLE cached_v_creation_date AS SELECT * FROM v_creation_date;
 DROP TABLE IF EXISTS cached_v_secondary_sectors;
 CREATE TABLE cached_v_secondary_sectors AS SELECT * FROM v_secondary_sectors;
+
+DROP TABLE IF EXISTS cached_v_m_secondary_sectors;
+CREATE TABLE cached_v_m_secondary_sectors AS SELECT * FROM v_m_secondary_sectors;
 
 DROP TABLE IF EXISTS cached_v_secondary_sub_sectors;
 CREATE TABLE cached_v_secondary_sub_sectors AS SELECT * FROM v_secondary_sub_sectors;
@@ -300,6 +309,22 @@ CREATE INDEX idx_region_id ON cached_v_m_regions (region_id);
 CREATE INDEX idx_st_activity ON cached_v_status (amp_activity_id);
 CREATE INDEX idx_st_id ON cached_v_status (amp_status_id);
 
+
+CREATE INDEX idx_mpsec_activity ON cached_v_m_sectors (amp_activity_id);
+CREATE INDEX idx_mpsec_name ON cached_v_m_sectors (sectorname);
+CREATE INDEX idx_mpsubsec_name ON cached_v_m_sectors (subsectorname);
+CREATE INDEX idx_msubsubpsec_name ON cached_v_m_sectors (subsubsectorname);
+CREATE INDEX idx_mpesc_id ON cached_v_m_sectors (amp_sector_id);
+CREATE INDEX idx_mpesc_per ON cached_v_m_sectors (sector_percentage);
+
+CREATE INDEX idx_mssec_activity ON cached_v_m_secondary_sectors (amp_activity_id);
+CREATE INDEX idx_mssec_name ON cached_v_m_secondary_sectors (sectorname);
+CREATE INDEX idx_mssubsec_name ON cached_v_m_secondary_sectors (subsectorname);
+CREATE INDEX idx_mssubsubpsec_name ON cached_v_m_secondary_sectors (subsubsectorname);
+CREATE INDEX idx_mssesc_id ON cached_v_m_secondary_sectors (amp_sector_id);
+CREATE INDEX idx_mssesc_per ON cached_v_m_secondary_sectors (sector_percentage);
+
+
 CREATE INDEX idx_psec_activity ON cached_v_sectors (amp_activity_id);
 CREATE INDEX idx_psec_name ON cached_v_sectors (sectorname);
 CREATE INDEX idx_pesc_id ON cached_v_sectors (amp_sector_id);
@@ -440,8 +465,17 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
          ot.amp_org_type_id AS org_type_id,
          fd.disbursement_order_rejected AS disb_ord_rej,
          s.sectorname AS p_sectorname,
+         s.subsectorname AS p_sub_sectorname,
+         s.subsubsectorname AS p_sub_sub_sectorname,
          s.sec_scheme_name AS p_amp_sec_scheme_name,
-         s.sector_percentage AS sector_precentage,
+         
+
+	 secs.sectorname AS s_sectorname,
+         secs.subsectorname AS s_sub_sectorname,
+         secs.subsubsectorname AS s_sub_sub_sectorname,
+         secs.sec_scheme_name AS s_amp_sec_scheme_name,
+         
+         
          rc.Region AS region,
           pp.name AS primary_program_name,
           ppl1.name as ppl1_name,
@@ -470,10 +504,8 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
           npl5.name as npl5_name,
           npl6.name as npl6_name,
           npl7.name as npl7_name,
-          npl8.name as npl8_name,
-          ssub.sectorname AS s_sub_sector_name,
-          secs.sectorname AS s_sectorname,
-          ss.sec_scheme_name AS s_amp_sec_scheme_name
+          npl8.name as npl8_name
+          
   from cached_amp_activity aa join amp_funding f on aa.amp_activity_id = f.amp_activity_id
        join amp_funding_detail fd on f.amp_funding_id = fd.amp_funding_id
        join amp_category_value cval on f.type_of_assistance_category_va = cval.id
@@ -483,10 +515,10 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
        join amp_org_type ot on b.org_type = ot.amp_org_type_id
        join amp_category_value cval2 on f.financing_instr_category_value = cval2.id
 
-       left join cached_v_sectors s on aa.amp_activity_id = s.amp_activity_id
+       left join cached_v_m_sectors s on aa.amp_activity_id = s.amp_activity_id
 
-       left join cached_v_secondary_sectors secs on aa.amp_activity_id = secs.amp_activity_id
-       left join cached_v_secondary_sub_sectors ssub on aa.amp_activity_id = ssub.amp_activity_id
+       left join cached_v_m_secondary_sectors secs on aa.amp_activity_id = secs.amp_activity_id
+       
        left join amp_sector_scheme ss on secs.amp_sector_scheme_id = ss.amp_sec_scheme_id
        join cached_v_m_regions rc on aa.amp_activity_id = rc.amp_activity_id
 
@@ -579,7 +611,7 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
            sp.program_percentage,
            np.program_percentage,
            secs.sector_percentage,
-           ssub.sector_percentage,
+           
            s.sector_percentage,
            s.sec_scheme_name,
 	   pp.name ,
@@ -609,9 +641,11 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
            npl6.name,
            npl7.name,
            npl8.name,
-           ssub.sectorname ,
-           secs.sectorname ,
-           ss.sec_scheme_name
+           p_sub_sectorname,
+           p_sub_sub_sectorname,
+           s_sub_sectorname,
+           s_sub_sub_sectorname,
+           s_amp_sec_scheme_name
            
   order by aa.amp_activity_id,
            s.sectorname,

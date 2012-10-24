@@ -91,6 +91,8 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 			shema = shema.replaceAll("#National_Program#", TranslatorWorker.translateText(MoConstants.NATIONAL_PROGRAM, locale, siteId));
 			shema = shema.replaceAll("#Sub-Sectors#", TranslatorWorker.translateText(MoConstants.SUB_SECTORS, locale, siteId));
 			shema = shema.replaceAll("#Sub-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.SUB_SUB_SECTORS, locale, siteId));
+			shema = shema.replaceAll("#Secondary-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.SEC_SUB_SECTORS, locale, siteId));
+			shema = shema.replaceAll("#Secondary-Sub-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.SEC_SUB_SUB_SECTORS, locale, siteId));
 			shema = shema.replaceAll("#Currency#", TranslatorWorker.translateText(MoConstants.CURRENCY, locale, siteId));
 			
 			shema = shema.replaceAll("#All_Activities#", TranslatorWorker.translateText(MoConstants.ALL_ACTIVITIES, locale, siteId));

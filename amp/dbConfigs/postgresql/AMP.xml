@@ -156,7 +156,7 @@
 		
 		<Dimension name="Secondary Sector" foreignKey="amp_activity_id">
 			<Hierarchy hasAll="true" allMemberCaption="#All_Secondary_Sectors#" allMemberName="All Primary Sectors"  caption="#Secondary_Sector#">
-				<Level name="Primary Sector Scheme" column="p_amp_sec_scheme_name"/>
+				<Level name="Primary Sector Scheme" column="s_amp_sec_scheme_name"/>
 				<Level name="Primary Sector" column="s_sectorname">
 				<NameExpression>
 						<SQL dialect="postgres">
@@ -213,27 +213,51 @@
 	</Dimension>
 	<Dimension name="Sub-Sector">
 		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="amp_activity_id" caption="#Sub-Sectors#">
-			<Level name="sub-sector" column="p_sub_sector_name">
+			<Level name="sub-sector" column="p_sub_sectorname">
 				<NameExpression>
 					<SQL dialect="postgres">
-						COALESCE(p_sub_sector_name,'#No_Data#')
+						COALESCE(p_sub_sectorname,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
 		</Hierarchy>
 	</Dimension>
 	
-	<!-- Dimension name="Sub-Sub-Sector">
+	<Dimension name="Sub-Sub-Sector">
 		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="amp_activity_id" caption="#Sub-Sub-Sectors#">
-			<Level name="sub-sub-sector" column="p_sub_sub_sector_name">
+			<Level name="sub-sub-sector" column="p_sub_sub_sectorname">
 				<NameExpression>
 					<SQL dialect="postgres">
-						COALESCE(p_sub_sub_sector_name,'#No_Data#')
+						COALESCE(p_sub_sub_sectorname,'#No_Data#')
 					</SQL>
 				</NameExpression>
 			</Level>
 		</Hierarchy>
-	</Dimension-->
+	</Dimension>
+	
+	<Dimension name="Secondary Sub-Sector">
+		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="amp_activity_id" caption="#Secondary-Sub-Sectors#">
+			<Level name="secondary-sub-sector" column="s_sub_sectorname">
+				<NameExpression>
+					<SQL dialect="postgres">
+						COALESCE(s_sub_sectorname,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
+	
+	<Dimension name="Secondary-Sub-Sub-Sector">
+		<Hierarchy hasAll="true" allMemberCaption="#All Sub-Sub-Sectors#" allMemberName="All Sub-Sectors" primaryKey="amp_activity_id" caption="#Secondary-Sub-Sub-Sectors#">
+			<Level name="secondary-sub-sub-sector" column="s_sub_sub_sectorname">
+				<NameExpression>
+					<SQL dialect="postgres">
+						COALESCE(s_sub_sub_sectorname,'#No_Data#')
+					</SQL>
+				</NameExpression>
+			</Level>
+		</Hierarchy>
+	</Dimension>
 	
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id" />

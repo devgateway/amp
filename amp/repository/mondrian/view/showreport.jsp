@@ -28,7 +28,11 @@ function go()
 
 -->
 </script>
-
+<style>
+	table {
+    font-size: 15px !important;
+}
+</style>
   
 <html>
  <jsp:include page="saveReport.jsp"  />
@@ -152,7 +156,7 @@ function go()
 <p>
 	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl" xslCache="true"/>
 <p>	
-<table>
+<table style="font-size: 12px;">
 	<tr>
     	<td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
     		<b><digi:trn key="aim:mondrian:datalastrefresedon">Data last refreshed on</digi:trn> <c:out value="${ShowReportForm.lastdate}"/></b>

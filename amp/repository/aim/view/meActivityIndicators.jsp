@@ -312,9 +312,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																					<digi:trn key="aim:meBaseValueComments">Comments</digi:trn>
 																				</td>
 																				<td colspan="4" class="inside">
-																					<textarea name="baseValComments" class="inputx" rows="2" cols="38">
-																						<bean:write name="indicator" property="baseValComments" />
-																					</textarea>
+																					<textarea name="baseValComments" class="inputx" rows="2" cols="38"><bean:write name="indicator" property="baseValComments" /></textarea>
 																				</td>
 																			</tr>
 																			<tr>
@@ -361,9 +359,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																					<digi:trn key="aim:meTargetValComments">Comments</digi:trn>
 																				</td>
 																				<td colspan="4" class="inside">
-																					<textarea name="targetValComments" class="inputx" rows="2" cols="38">
-																						<bean:write name="indicator" property="targetValComments" />
-																					</textarea>
+																					<textarea name="targetValComments" class="inputx" rows="2" cols="38"><bean:write name="indicator" property="targetValComments" /></textarea>
 																				</td>
 																			</tr>
 																			<c:if test="${indicator.targetValDate != null}">
@@ -393,9 +389,7 @@ document.aimUpdateIndicatorValuesForm.submit();
 																						<digi:trn key="aim:meRevisedTargetValComments">Comments</digi:trn>
 																					</td>
 																					<td colspan="4" class="inside">
-																						<textarea name="revisedTargetValComments" class="inputx" rows="2" cols="38">
-																							<bean:write name="indicator" property="revisedTargetValComments" />
-																						</textarea>
+																						<textarea name="revisedTargetValComments" class="inputx" rows="2" cols="38"><bean:write name="indicator" property="revisedTargetValComments" /></textarea>
 																					</td>
 																				</tr>
 																			</c:if>

@@ -32,6 +32,7 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 	protected WebMarkupContainer tableHeading;
 	protected TransparentWebMarkupContainer tableId;
 	protected WebMarkupContainer reqStar;
+	protected WebMarkupContainer infoImg;
     
 	protected ListView<L> list;
 
@@ -50,6 +51,11 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 		boolean currVisible=(source.size()!=0);
 		tableHeading.setVisible(currVisible);
 		if(prevVisible!=currVisible) target.add(tableHeading);
+	}
+	
+	public void addInfoText(String text){
+		infoImg.setVisibilityAllowed(true);
+		infoImg.add(new AttributeModifier("title", new Model<String>(text)));
 	}
 
 	public WebMarkupContainer getTitleHeader() {
@@ -115,7 +121,14 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 		reqStar = new WebMarkupContainer("requiredStar");
 		reqStar.setVisible(showRequiredStar);
 		titleHeader.add(reqStar);
+
+		infoImg = new WebMarkupContainer("infoImg");
+		infoImg.setVisibilityAllowed(false);
+		add(infoImg);
+		titleHeader.add(infoImg);
+		
 		add(titleHeader);
+		
 		
 		tableId = new TransparentWebMarkupContainer("tableId");
 		tableId.setOutputMarkupId(true);

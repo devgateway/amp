@@ -15,6 +15,7 @@ public class AmpClassificationConfiguration implements Serializable {
 	
 	private Long id;
     private String name;
+    private String description;
     private AmpSectorScheme classification;
     private boolean multisector ;
     private boolean primary;
@@ -50,8 +51,16 @@ public class AmpClassificationConfiguration implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+    
+    public String getDescription() {
+		return description;
+	}
 
-    public boolean isPrimary() {
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public boolean isPrimary() {
         return primary;
     }
     /**

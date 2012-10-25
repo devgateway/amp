@@ -11,6 +11,7 @@ public class SectorClassConfigForm extends ActionForm {
     private Long id;
     private String event;
     private String configName;
+    private String configDescription;
     private Long multiSectorSelecting;
     private Long sectorClassId;
     private List classificationConfigs;
@@ -46,8 +47,16 @@ public class SectorClassConfigForm extends ActionForm {
     public void setConfigName(String config) {
         this.configName = config;
     }
+    
+    public String getConfigDescription() {
+		return configDescription;
+	}
 
-    public List getClassifications() {
+	public void setConfigDescription(String configDescription) {
+		this.configDescription = configDescription;
+	}
+
+	public List getClassifications() {
         return classifications;
     }
 

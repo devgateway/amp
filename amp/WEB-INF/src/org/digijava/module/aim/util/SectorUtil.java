@@ -1375,7 +1375,7 @@ public class SectorUtil {
      * @param classification Default classification
      * @throws DgException If exception occurred
      */
-    public static void saveClassificationConfig(Long configId, String configName, boolean multiSector, AmpSectorScheme classification) throws DgException {
+    public static void saveClassificationConfig(Long configId, String configName, String description, boolean multiSector, AmpSectorScheme classification) throws DgException {
 
         Session session = null;
         AmpClassificationConfiguration config = null;
@@ -1391,6 +1391,7 @@ public class SectorUtil {
 
             }
             config.setName(configName);
+            config.setDescription(description);
             config.setMultisector(multiSector);
             config.setClassification(classification);
 //beginTransaction();

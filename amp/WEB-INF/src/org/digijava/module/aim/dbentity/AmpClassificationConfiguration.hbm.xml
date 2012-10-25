@@ -11,6 +11,7 @@
 		</id>
 
 		<property name="name" column="name" type="java.lang.String" />
+		<property name="description" column="description" type="java.lang.String" />
 		<property name="multisector" column="multisector" type="boolean" />
 		<property name="primary" column="is_primary_sector" type="boolean" />
 

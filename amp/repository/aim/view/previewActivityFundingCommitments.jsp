@@ -46,29 +46,30 @@
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">
 						<tr bgcolor="#ffffff">
 							<td height="18" width="40%" align="right" bgcolor="#ffffff">
-								<field:display name="Adjustment Type Commitment" feature="Commitments">
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Adjustment Type" parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 								<digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
 								</digi:trn>
-							</field:display>
+								</module:display>
 							</td>
 							<td height="18" align="right">
-								<field:display name="Date Commitment" feature="Commitments">
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Transaction Date" parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table
+								">
 									<b><bean:write name="fundingDetail" property="transactionDate"/></b>
-								</field:display>
+								</module:display>
 							</td>
 							<td height="18" align="right" bgcolor="#ffffff">
-							<field:display name="Amount Commitment" feature="Commitments">
+							<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Amount" parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 								<!-- <font color="blue">*</font> -->
 								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
-							</field:display> 
-								<field:display name="Currency Commitment" feature="Commitments">
+							</module:display> 
+								<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Currency" parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="currencyCode"/></b>
-								</field:display> &nbsp;</td>
+								</module:display> &nbsp;</td>
 							<td height="18">
-								<field:display name="Exchange Rate" feature="Funding Information">
+								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate" parentModule="/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
-								</field:display>
+								</module:display>
 							</td>
 						</tr>
 			

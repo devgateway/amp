@@ -134,7 +134,7 @@
 																</module:display>
 																
 																<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-																<field:display name="Donor Objective" feature="Funding Information">
+																<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Donor Objective" parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:donorobjective">Donor Objective</digi:trn>'>
@@ -145,7 +145,7 @@
 																			<b><bean:write name="funding" property="donorObjective" /></b>
 																		</td>
 																	</tr>
-																</field:display>
+																</module:display>
 															</table>
 															</td>
 														</tr>

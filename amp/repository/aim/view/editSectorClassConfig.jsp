@@ -136,6 +136,14 @@
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
+                                                                        <td>
+                                                                            <digi:trn>Description</digi:trn>:
+                                                                        </td>
+                                                                        <td>
+                                                                            <html:textarea  name ="aimSectorClassConfigForm" property="configDescription" rows="1" cols= "35" styleId="configNameId"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
                                                                         <td>&nbsp;
                                                                             
                                                                         </td>

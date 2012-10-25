@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 
 /**
@@ -54,8 +55,9 @@ public abstract class AmpFormTableFeaturePanel<T,L> extends AmpFeaturePanel<T> {
 	}
 	
 	public void addInfoText(String text){
+		String trnText = TranslatorUtil.getTranslation(text);
 		infoImg.setVisibilityAllowed(true);
-		infoImg.add(new AttributeModifier("title", new Model<String>(text)));
+		infoImg.add(new AttributeModifier("title", new Model<String>(trnText)));
 	}
 
 	public WebMarkupContainer getTitleHeader() {

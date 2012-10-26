@@ -4,11 +4,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.markup.html.link.Link;
+
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.SiteManager;
+import org.digijava.kernel.util.SiteUtils;
 
 public class AmpExceptionPage extends WebPage{
 
@@ -19,16 +28,85 @@ public class AmpExceptionPage extends WebPage{
 	private static final long serialVersionUID = -700176982783476225L;
 	
 	private String messageDetails;
+	private Site site;
 
 	public AmpExceptionPage(Exception e) {  
 		 
-		add(new ExternalLink("homePage", "/showDesktop.do", "Return to Desktop"));
-		 StringBuilder sb = new StringBuilder();  
-	        sb.append(e.getClass().toString()+"\n");  
-	        sb.append(joinStackTrace(e)); 
-	        messageDetails = sb.toString(); 
-		add(new TextArea<String>("messageDetails", new PropertyModel<String>( this,"messageDetails" ) ) );  
 		
+		site =((AmpAuthWebSession) getSession()).getSite();
+	//	add(new ExternalLink("homePage", "/showDesktop.do", "Return to Desktop"));
+		
+		
+		final WebMarkupContainer 	devInfo = new WebMarkupContainer("devInfo");
+		devInfo.setOutputMarkupId(true);
+		devInfo.setOutputMarkupPlaceholderTag(true);
+		devInfo.setVisible(false);
+		final AjaxLink<Void> developerNotesLink = new AjaxLink<Void>("developerNotesLink")
+        {
+           
+			private static final long serialVersionUID = 4688441490878648290L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				devInfo.setVisible(!devInfo.isVisible());
+				target.add(devInfo);
+			}
+        };
+		
+		add(developerNotesLink);
+		
+		final WebMarkupContainer 	errMsgDiv = new WebMarkupContainer("errMsgDiv");
+		errMsgDiv.setOutputMarkupId(true);
+		errMsgDiv.setOutputMarkupPlaceholderTag(true);
+		errMsgDiv.setVisible(true);
+		final AjaxLink<Void> exceptionDetailsLink = new AjaxLink<Void>("exceptionDetailsLink")
+		        {
+		           
+					private static final long serialVersionUID = 4688441777878648290L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						errMsgDiv.setVisible(!errMsgDiv.isVisible());
+						target.add(errMsgDiv);
+						
+					}
+		        };
+		
+        Label errorMessage = new Label("errorMessage",  new PropertyModel<String>( e,"message" ));
+        errMsgDiv.add(errorMessage);
+		Label siteLabel = new Label("site",  new PropertyModel<String>( site,"name" ));
+		errMsgDiv.add(siteLabel);        
+		devInfo.add(errMsgDiv);
+		devInfo.add(exceptionDetailsLink);
+		
+		
+		
+		
+		final WebMarkupContainer 	stackDiv = new WebMarkupContainer("stackDiv");
+		stackDiv.setOutputMarkupId(true);
+		stackDiv.setOutputMarkupPlaceholderTag(true);
+		stackDiv.setVisible(false);
+		final AjaxLink<Void> stackDivLink = new AjaxLink<Void>("stackDivLink")
+		        {
+		           
+					private static final long serialVersionUID = 4688441777878648290L;
+
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						stackDiv.setVisible(!stackDiv.isVisible());
+						target.add(stackDiv);
+						//target.add(devInfo);
+					}
+		        };
+		devInfo.add(stackDivLink);
+        StringBuilder sb = new StringBuilder();  
+        sb.append(e.getClass().toString()+"\n");  
+        sb.append(joinStackTrace(e)); 
+        messageDetails = sb.toString(); 
+        stackDiv.add(new TextArea<String>("messageDetails", new PropertyModel<String>( this,"messageDetails" ) ) );  
+		
+        devInfo.add(stackDiv);
+		add(devInfo);
 	 }
 	
 	  public static String joinStackTrace(Throwable e) {  

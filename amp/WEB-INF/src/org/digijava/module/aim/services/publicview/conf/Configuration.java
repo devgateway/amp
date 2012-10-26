@@ -53,6 +53,16 @@ public class Configuration {
         private String reportUrl;
         private String xslFile;
         private String htmlFile;
+        private boolean budgetExport;
+
+        @XmlAttribute(name="budgetExport")
+        public boolean isBudgetExport() {
+            return budgetExport;
+        }
+
+        public void setBudgetExport(boolean budgetExport) {
+            this.budgetExport = budgetExport;
+        }
 
         @XmlAttribute(name="name")
         public String getName() {

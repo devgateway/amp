@@ -13,13 +13,14 @@
 										<xs:element type="xs:string" name="html-file"/>
 									</xs:sequence>
 									<xs:attribute type="xs:string" name="name" use="optional"/>
+									<xs:attribute type="xs:boolean" name="budgetExport" use="optional"/>
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>
-			<xs:attribute type="xs:string" name="baseUrl"/>
+			<xs:attribute type="xs:anyURI" name="baseUrl"/>
 			<xs:attribute type="xs:string" name="workFileDir"/>
 		</xs:complexType>
 	</xs:element>

@@ -43,6 +43,9 @@
 			<forward name="forward" path="/showLayout.do?layout=addEditMapRule" />
 			<forward name="ruleList" path="budgetexport/showMapingRuleList.do"/>
 		</action>
+		<action  name="beBudgetExportForm" path="/budgetexport/budgetExportService" 
+				scope="request" type="org.digijava.module.budgetexport.action.BudgetExportService" validate="false"/>
+
 
 		<action  name="beMapActionsForm" path="/budgetexport/mapActions" 
 				scope="request" type="org.digijava.module.budgetexport.action.MapActions" validate="false" parameter="action">

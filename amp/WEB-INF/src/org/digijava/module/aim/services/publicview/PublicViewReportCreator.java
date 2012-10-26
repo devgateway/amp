@@ -51,23 +51,25 @@ public class PublicViewReportCreator implements Job {
 
             if (conf != null && conf.getTables() != null) {
                 for (Configuration.Table tbl : conf.getTables()) {
-                    String xmlScrUrl = conf.getBaseUrl() + tbl.getReportUrl();
-                    URL xmlScr = new URL(xmlScrUrl);
+                    if (!tbl.isBudgetExport()) {
+                        String xmlScrUrl = conf.getBaseUrl() + tbl.getReportUrl();
+                        URL xmlScr = new URL(xmlScrUrl);
 
-                    URLConnection connection = xmlScr.openConnection();
-                    connection.addRequestProperty("Referer",xmlScrUrl);
-                    connection.connect();
+                        URLConnection connection = xmlScr.openConnection();
+                        connection.addRequestProperty("Referer",xmlScrUrl);
+                        connection.connect();
 
-                    InputStream in = connection.getInputStream();
+                        InputStream in = connection.getInputStream();
 
-                    TransformerFactory tFactory = TransformerFactory.newInstance();
-                    try {
-                        Transformer transformer = tFactory.newTransformer(new StreamSource(conf.getWorkFileDir() + tbl.getXslFile()));
-                        transformer.transform (new StreamSource (in), new StreamResult (new FileOutputStream(conf.getWorkFileDir() + tbl.getHtmlFile())));
-                    } catch (TransformerConfigurationException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    } catch (TransformerException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        TransformerFactory tFactory = TransformerFactory.newInstance();
+                        try {
+                            Transformer transformer = tFactory.newTransformer(new StreamSource(conf.getWorkFileDir() + tbl.getXslFile()));
+                            transformer.transform (new StreamSource (in), new StreamResult (new FileOutputStream(conf.getWorkFileDir() + tbl.getHtmlFile())));
+                        } catch (TransformerConfigurationException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        } catch (TransformerException e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
                     }
                 }
              }

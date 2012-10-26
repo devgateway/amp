@@ -19,7 +19,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteManager;
 import org.digijava.kernel.util.SiteUtils;
 
-public class AmpExceptionPage extends WebPage{
+public class AmpExceptionPage extends  AmpHeaderFooter{
 
 	
 	/**
@@ -154,5 +154,12 @@ public class AmpExceptionPage extends WebPage{
 
 		public void setMessageDetails(String messageDetails) {
 			this.messageDetails = messageDetails;
+		}
+		
+		
+		
+		public boolean isErrorPage()
+		{
+			return true;
 		}
 }

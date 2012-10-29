@@ -216,7 +216,10 @@ public class AmpReportGenerator extends ReportGenerator {
 				AmpColumns col = rcol.getColumn();
 				String cellTypeName = col.getCellType();
 				String extractorView = "";
-				if (col.getExtractorView()!=null && this.filter.isPublicView()){
+				
+				if (col.getExtractorView()!=null && this.filter.isPublicView()
+						// AND not a report used for budget export
+						&& (this.reportMetadata.getBudgetExporter() == null || !this.reportMetadata.getBudgetExporter()) ){
 					extractorView = ArConstants.VIEW_PUBLIC_PREFIX+col.getExtractorView();
 				}else{
 					extractorView  = col.getExtractorView();

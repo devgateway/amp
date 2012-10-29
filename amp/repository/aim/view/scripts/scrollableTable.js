@@ -53,6 +53,11 @@ function scrollableTable(tableId,height){
 					var border=0;
 					var perPadding=0;
 					var perBorder=0;
+
+					if (!height){//there is no scroll bar, so the last header empty column is not necessary
+						var lastIndex = this.theader.rows[i].cells.length - 1;
+						this.theader.rows[i].removeChild (this.theader.rows[i].cells[lastIndex]);
+					}
 					
 					for (j=0;j < this.theader.rows[i].cells.length  ;j++){
 						var thisCell = this.theader.rows[i].cells[j]
@@ -240,9 +245,14 @@ function scrollableTable(tableId,height){
 			//set container properties
 		if (this.debug)
 			divContent.style.border="1px solid red";
-		divContent.style.overflow="scroll";
 		divContent.style.overflowX="hidden";
-		divContent.style.height=height+"px";
+		if(height){
+			divContent.style.overflow="scroll";
+			divContent.style.height=height+"px";
+		}else{
+			divContent.style.overflow="auto";
+			divContent.style.height="100%";
+		}
 		divContent.style.marginBottom="3px";
 		
 		//insert the div  before the original table

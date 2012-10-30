@@ -164,6 +164,10 @@ public Cell filter(Cell metaCell,Set ids) {
 			if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.COLUMN_CAPITAL_EXPENDITRURE)))
 				return null;
 		}
+		if ( metaCell.getColumn().getName().equals(ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT) ) {
+			if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT)))
+				return null;
+		}
 		
                  if(metaCell.getColumn().getName().equals(ArConstants.DONOR))  {
                    String donor=ret.getMetaValueString(ArConstants.DONOR);

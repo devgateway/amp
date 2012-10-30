@@ -156,7 +156,9 @@
 <feature:display name="Activity" module="M & E"></feature:display> 
 <feature:display name="Actual Commitments" module="Measures"></feature:display> 
 <feature:display name="Actual Disbursement Orders Measure" module="Measures"></feature:display> 
-<feature:display name="Actual Disbursements" module="Measures"></feature:display> 
+<feature:display name="Actual Disbursements" module="Measures"></feature:display>
+<feature:display name="Actual Disbursements - Recurrent" module="Measures"></feature:display>
+<feature:display name="Actual Disbursements - Capital" module="Measures"></feature:display> 
 <feature:display name="Actual Expenditures" module="Measures"></feature:display> 
 <feature:display name="AddMessageButton" module="Messages"></feature:display> 
 <feature:display name="Admin - Component Type" module="Components"></feature:display> 
@@ -301,7 +303,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display>
-<field:display feature="Funding Information" name="Capital - Expenditure"></field:display>  
+<field:display feature="Funding Information" name="Capital - Expenditure"></field:display>
+<field:display feature="Funding Information" name="Payment Capital - Recurrent"></field:display>  
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 

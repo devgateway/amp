@@ -172,6 +172,15 @@ public class CategoryConstants {
 	 public static final HardCodedCategoryValue ADJUSTMENT_TYPE_PIPELINE = 
 			 new CategoryConstants.HardCodedCategoryValue("adjustment_type", "Pipeline", false);
 	 
+	 public static final HardCodedCategoryValue MODE_OF_PAYMENT_SALARIES_WAGES = 
+			 new CategoryConstants.HardCodedCategoryValue("mode_of_payment", "Salaries and Wages", false);
+	 public static final HardCodedCategoryValue MODE_OF_PAYMENT_GOODS_SERVICES = 
+			 new CategoryConstants.HardCodedCategoryValue("mode_of_payment", "Goods or Services", false);
+	 public static final HardCodedCategoryValue MODE_OF_PAYMENT_MINOR_CAPITAL = 
+			 new CategoryConstants.HardCodedCategoryValue("mode_of_payment", "Minor Capital", false);
+	 public static final HardCodedCategoryValue MODE_OF_PAYMENT_CAPITAL_DEVELOPMENT = 
+			 new CategoryConstants.HardCodedCategoryValue("mode_of_payment", "Capital Development", false);
+	 
 	 
 	//Org. Manager : Staff Information type
 	 public static final String ORGANIZATION_STAFF_INFO_NAME="Staff Information Type";

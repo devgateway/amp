@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmountCellColumn;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -39,6 +40,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class CategAmountColWorker extends ColumnWorker {
 
+	private static Logger logger	= Logger.getLogger(CategAmountColWorker.class);
 	
 	protected Map metaInfoCache;
 

@@ -211,6 +211,7 @@ public final class ArConstants {
 	public final static String COLUMN_ANY_SECONDARYPROG	= "Secondary Program";
 	
 	public final static String COLUMN_CAPITAL_EXPENDITRURE	=	"Capital - Expenditure";
+	public final static String COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT="Payment Capital - Recurrent";
 	
 	//additional measures
 	public static final String GRAND_TOTAL_ACTUAL_COMMITMENTS = "GRAND_TOTAL_ACTUAL_COMMITMENTS";
@@ -298,7 +299,10 @@ public final class ArConstants {
 	public final static List<SyntheticColumnsMeta> syntheticColumns = Arrays.asList(
 			new SyntheticColumnsMeta("Planned Disbursements - Capital", new CapitalCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Capital","Planned Disbursements")),
 			new SyntheticColumnsMeta("Planned Disbursements - Expenditure", new CapitalExpenditureCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements - Expenditure","Planned Disbursements")),
-			new SyntheticColumnsMeta("Planned Disbursements", new CapitalSplitTotalsCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements","Planned Disbursements"))
+			new SyntheticColumnsMeta("Planned Disbursements", new CapitalSplitTotalsCellGenerator(ArConstants.CAPITAL_PERCENT, "Planned Disbursements","Planned Disbursements")),
+			new SyntheticColumnsMeta("Actual Disbursements - Capital", new ActualDisbCapitalCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements - Capital","Actual Disbursements")),
+			new SyntheticColumnsMeta("Actual Disbursements - Recurrent", new ActualDisbRecurrentCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements - Recurrent","Actual Disbursements")),
+			new SyntheticColumnsMeta("Actual Disbursements", new ActualDisbSplitCapRecTotalsCellGenerator(ArConstants.MODE_OF_PAYMENT, "Actual Disbursements","Actual Disbursements"))
 	) ;
 	
 	public static class SyntheticColumnsMeta {

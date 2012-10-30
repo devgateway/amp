@@ -60,6 +60,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
 				,'Project Category'
 				,'Funding Status'
 				,'Mode of Payment'
+				,'Payment Capital - Recurrent'
 				,'Budget Department'
 				,'Budget Organization'
 				,'Budget Sector'

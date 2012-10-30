@@ -33,6 +33,6 @@
 		</action>
 		<action name="datadispatcherform" path="/esrigis/datadispatcher" scope="session" validate="false" type="org.digijava.module.esrigis.action.DataDispatcher"/>
 		<action name="proxyform"  path="/esrigis/esriproxy" type="org.digijava.module.esrigis.action.EsriProxy"/>
-		<action name="exporterform"  path="/esrigis/excelexporter" type="org.digijava.module.esrigis.action.ExcelExporter"/>
+		<action name="datadispatcherform"  path="/esrigis/excelexporter" type="org.digijava.module.esrigis.action.ExcelExporter"/>
 	</action-mappings>
 </struts-config>

@@ -11,7 +11,16 @@ public class DataDispatcherForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
 	private MapFilter filter = null;
 	private String apiurl;
+	private String structures;
 	
+	public String getStructures() {
+		return structures;
+	}
+
+	public void setStructures(String structures) {
+		this.structures = structures;
+	}
+
 	public MapFilter getFilter() {
 		return filter;
 	}

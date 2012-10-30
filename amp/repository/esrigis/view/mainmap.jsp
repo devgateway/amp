@@ -262,6 +262,14 @@
         return text;
     	}
 	
+	function ExportStructures() {
+		<digi:context name="action" property="context/module/moduleinstance/excelexporter.do" />
+		document.datadispatcherform[1].action = "<%= action %>";
+		document.datadispatcherform[1].target = "_blank";
+		document.getElementById("st").value=structurestorequest();
+		document.datadispatcherform[1].submit();
+	}
+	
 </script>
 
  	<!-- Filter Styles -->
@@ -507,6 +515,8 @@
 		</div></div>
     </div>  
 	<div class="tooltip" style="position: absolute; display: block;z-index:100;" id="tooltipHolder"></div>
-
-  </body>
+	<digi:form action="/datadispatcher.do" method="post">
+		<html:hidden name="datadispatcherform" property="structures"  styleId="st"/>
+	</digi:form>
+	</body>
 </html>

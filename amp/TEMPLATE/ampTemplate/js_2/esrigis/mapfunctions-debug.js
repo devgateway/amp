@@ -397,12 +397,13 @@ function findbydistance(evt) {
 function showStInfoWindow() {
 	searchactive = false;
 	hideTooltip();
-	var content = "<table border='0' width='100%' cellpadding='0' cellspacing='0' style='border: 1px solid gray;font-size: 10px;'>"
-			+ "<tr>"
-			+ "<td align='center' width='200px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>Name</b></td>"
-			+ "<td align='center' width='100px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>Type</b></td>"
-			+ "<td align='center' width='300px' style='border-bottom: 1px solid gray;padding: 4px;'><b>Activity</b></td>"
-			+ "</tr>";
+	var content =
+	    "<table border='0' width='100%' cellpadding='0' cellspacing='0' style='border: 1px solid gray;font-size: 10px;'>"
+		+ "<tr>"
+		+ "<td align='center' width='200px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>Name</b></td>"
+		+ "<td align='center' width='100px' style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 4px;'><b>Type</b></td>"
+		+ "<td align='center' width='300px' style='border-bottom: 1px solid gray;padding: 4px;'><b>Activity</b></td>"
+		+ "</tr>";
 	if (map.infoWindow.isShowing) {
 		map.infoWindow.hide();
 	}
@@ -1246,18 +1247,6 @@ function CluterStructures(){
 				flareDistanceFromCenter : 30
 			});
 	map.addLayer(cLs);
-}
-
-function ExportStructures() {
-	// alert ("/esrigis/excelexporter.do?structures=" + structurestorequest());
-	window.open("/esrigis/excelexporter.do?structures="
-					+ structurestorequest());
-	/*
-	 * var xhrArgs = { url : "/esrigis/excelexporter.do?structures=" +
-	 * structurestorequest() , load: function(jsonData) {}, error :
-	 * function(error) { console.log(error); } }; // Call the asynchronous
-	 * xhrGet var deferred = dojo.xhrPost(xhrArgs);
-	 */
 }
 
 function structurestorequest() {

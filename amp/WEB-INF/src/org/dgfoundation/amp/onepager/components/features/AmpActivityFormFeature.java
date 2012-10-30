@@ -287,7 +287,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				target.appendJavaScript("hideDraftPanel();");
 				am.setObject(am.getObject());
 				
-				redirected=myDraftOpts.getModelObject();
+				redirected= new Integer(myDraftOpts.getModelObject());
 				toggleSemanticValidation(false, form,target);
 
 

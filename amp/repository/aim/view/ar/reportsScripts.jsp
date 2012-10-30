@@ -313,8 +313,31 @@ saveReportEngine	= null;
 		myPanel5.render(document.body);				
 	}
 	
+	function validateFilterDates(){
+		var validated = true;
+		//validate the dates entered are valid date
+		if (typeof validateInputDate == 'function'){
+			
+			if (!(validateInputDate('fromDate') && validateInputDate('toDate'))){
+					validated = false;			
+			}			
+			
+			$(".dateInputMarker").each( function(index) {
+				if(!validateInputDate(this.id)){
+					validated = false;	
+					return false;
+				}
+			});
+			
+		}
+		return validated;
+	}
+	
 	function submitFilters() {
 		//alert("SUBMITTING FILTERS");
+		if (!validateFilterDates()){
+			return;
+		}
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
 		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
 

@@ -10,7 +10,7 @@ tr.firstLevel, td.firstLevel {
 
 tr.secondLevel, td.secondLevel {
 	background: #D6DCDF;
-	border-bottom:#E2E2E2 1px solid;
+	border-bottom:#A9A9A9 2px solid;
 	border-right:#B6DDE8 1px solid;
 	padding-left: 5px;
 	padding-right: 3px;
@@ -20,7 +20,7 @@ tr.secondLevel, td.secondLevel {
 
 tr.thirdLevel, td.thirdLevel {
 	background: #E9EBED;
-	border-bottom:#E2E2E2 1px solid;
+	border-bottom:#A9A9A9 2px solid;
 	border-right:#DBEEF3 1px solid;
 	padding-left: 5px;
 	padding-right: 3px;

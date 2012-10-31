@@ -361,7 +361,7 @@ public class ReportsFilterPicker extends MultiAction {
  	 	}
         
         //TODO find/insert the feature that needs to be checked here
-        if (true){
+        if (FeaturesUtil.isVisibleField("Sector Tag", ampContext)){
  	 		HierarchyListableImplementation rootTagAmpSectors = new HierarchyListableImplementation();
  	 		rootTagAmpSectors.setLabel("Tag Sector");
  	 		rootTagAmpSectors.setUniqueId("0");

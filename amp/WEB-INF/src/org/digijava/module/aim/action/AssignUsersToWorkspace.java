@@ -126,6 +126,9 @@ public class AssignUsersToWorkspace extends Action {
 	
 	private String[] getCheckedUserIdsAndRoles(String [] submittedValues){		
 		List<String> container=new ArrayList<String>();
+		if(submittedValues == null)
+			return container.toArray(new String[container.size()]);
+					
 		for (int i = 0; i < submittedValues.length; i++) {
 			if(!submittedValues[i].equals("-1")){
 				container.add(submittedValues[i]);

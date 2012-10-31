@@ -181,6 +181,8 @@ public final class ArConstants {
 	public final static String COLUMN_ANY_SECTOR="Sector";
 	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
 	
+	public final static String COLUMN_SECTOR_TAG="Sector Tag";
+	
 	public final static List<String> COLUMN_ANY_RELATED_ORGS=Arrays.asList("Beneficiary Agency","Contracting Agency",
 							"Executing Agency","Implementing Agency","Regional Group","Responsible Organization","Sector Group");
 	

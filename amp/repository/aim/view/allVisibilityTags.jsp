@@ -853,6 +853,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Tertiary Sector Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector" feature="Sectors"></field:display>
+<field:display name="Sector Tag Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Sector Tag Sub-Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Sector Tag" feature="Sectors"></field:display>
 <field:display name="Validate Mandatory Tertiary Sector" feature="Sectors"></field:display>
 <field:display name="Search Feature - Executing Agency" feature="Search Feature"></field:display>
 <field:display name="Search Feature - Implementing Agency" feature="Search Feature"></field:display>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-14125</jira>
+	<keyword>Views</keyword>
+	<author>Alex</author>
+	<description>Views for Sector Tag Columns</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+			    	CREATE OR REPLACE VIEW v_tag_sectors AS 
+			    	SELECT sa.amp_activity_id, getsectorname(getparentsectorid(s.amp_sector_id)) AS sectorname,  
+			    	getparentsectorid(s.amp_sector_id) AS amp_sector_id, sum(sa.sector_percentage) AS sector_percentage, 
+			    	s.amp_sec_scheme_id AS amp_sector_scheme_id 
+			    	FROM amp_activity_sector sa, amp_sector s, amp_sector_scheme ss 
+			    	WHERE (((s.amp_sector_id = sa.amp_sector_id) AND (s.amp_sec_scheme_id IN 
+			    	 (SELECT amp_classification_config.classification_id FROM amp_classification_config 
+			    	  WHERE ((amp_classification_config.name)::text = 'Tag'::text)))) 
+			    	  AND (s.amp_sec_scheme_id = ss.amp_sec_scheme_id)) 
+			    	GROUP BY sa.amp_activity_id, getsectorname(getparentsectorid(s.amp_sector_id)), getparentsectorid(s.amp_sector_id), 
+			    	s.amp_sec_scheme_id ORDER BY sa.amp_activity_id, getsectorname(getparentsectorid(s.amp_sector_id));
+        		</lang>
+		</script>
+	</apply>
+</tns:patch>

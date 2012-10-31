@@ -11,6 +11,7 @@ public class AmpClassificationConfiguration implements Serializable {
 	public static final String PRIMARY_CLASSIFICATION_CONFIGURATION_NAME	= "Primary";
 	public static final String SECONDARY_CLASSIFICATION_CONFIGURATION_NAME	= "Secondary";
     public static final String TERTIARY_CLASSIFICATION_CONFIGURATION_NAME	= "Tertiary";
+    public static final String TAG_CLASSIFICATION_CONFIGURATION_NAME	= "Tag";
 	
 	
 	private Long id;

@@ -388,7 +388,7 @@ public class AmountCell extends Cell {
 		// (the sum) of it
 		Class dimensionClass	= sourceCol.getDimensionClass();
 		String keyName			= sourceCol.getName();
-		if ( keyName.endsWith(ArConstants.COLUMN_ANY_SECTOR) )
+		if ( keyName.endsWith(ArConstants.COLUMN_ANY_SECTOR)  || keyName.contains(ArConstants.COLUMN_SECTOR_TAG))
 			keyName	= ArConstants.COLUMN_ANY_SECTOR;
 		else if ( keyName.contains(ArConstants.COLUMN_ANY_NATPROG) )
 			keyName	= ArConstants.COLUMN_ANY_NATPROG;

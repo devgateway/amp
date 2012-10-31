@@ -322,9 +322,12 @@ public class ReportsFilterPicker extends MultiAction {
 		
  	 	List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
         List<AmpSector> tertiaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME);
+        List<AmpSector> tagAmpSectors 	= SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME);
+        
  	 	HierarchyListableUtil.changeTranslateable(ampSectors, false);
  	 	HierarchyListableUtil.changeTranslateable(secondaryAmpSectors, false);
  	 	HierarchyListableUtil.changeTranslateable(tertiaryAmpSectors, false);
+ 	 	HierarchyListableUtil.changeTranslateable(tagAmpSectors, false);
         
         
  	 	filterForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
@@ -356,6 +359,18 @@ public class ReportsFilterPicker extends MultiAction {
  	 		GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div", rootTertiaryAmpSectors, "selectedTertiarySectors");
  	 		filterForm.getSectorElements().add(tertiarySectorsElement);
  	 	}
+        
+        //TODO find/insert the feature that needs to be checked here
+        if (true){
+ 	 		HierarchyListableImplementation rootTagAmpSectors = new HierarchyListableImplementation();
+ 	 		rootTagAmpSectors.setLabel("Tag Sector");
+ 	 		rootTagAmpSectors.setUniqueId("0");
+ 	 		rootTagAmpSectors.setChildren(tagAmpSectors);
+ 	 		GroupingElement<HierarchyListableImplementation> tagSectorsElement = new GroupingElement<HierarchyListableImplementation>("Sector Tags", "filter_tag_sectors_div", rootTagAmpSectors, "selectedTagSectors");
+ 	 		filterForm.getSectorElements().add(tagSectorsElement);
+ 	 	}
+        
+        
  	 		
  	 	
         StopWatch.next("Filters", true, "before programs");
@@ -1191,6 +1206,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Set selectedSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSectors());
 		Set selectedSecondarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSecondarySectors());
         Set selectedTertiarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTertiarySectors());
+        Set selectedTagSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTagSectors() );
 
 		if (selectedSectors != null && selectedSectors.size() > 0) {
 			arf.setSelectedSectors(new HashSet());
@@ -1220,7 +1236,7 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setSelectedSecondarySectors(null);
 			arf.setSecondarySectorsAndAncestors(null);
 		}
-        	if (selectedTertiarySectors != null && selectedTertiarySectors.size() > 0) {
+        if (selectedTertiarySectors != null && selectedTertiarySectors.size() > 0) {
             arf.setSelectedTertiarySectors(new HashSet());
             arf.getSelectedTertiarySectors().addAll(selectedTertiarySectors);
             arf.setTertiarySectors(SectorUtil.getSectorDescendents(selectedTertiarySectors));
@@ -1232,6 +1248,20 @@ public class ReportsFilterPicker extends MultiAction {
             arf.setSelectedTertiarySectors(null);
             arf.setTertiarySectorsAndAncestors(null);
         }
+        	
+    	if (selectedTagSectors != null && selectedTagSectors.size() > 0) {
+			arf.setSelectedTagSectors(new HashSet());
+			arf.getSelectedTagSectors().addAll(selectedTagSectors);
+
+			arf.setTagSectors(SectorUtil.getSectorDescendents(selectedTagSectors));
+			arf.setTagSectorsAndAncestors( new HashSet<AmpSector>() );
+			arf.getTagSectorsAndAncestors().addAll( arf.getTagSectors() );
+			arf.getTagSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(selectedTagSectors) );
+		} else {
+			arf.setTagSectors(null);
+			arf.setSelectedTagSectors(null);
+			arf.setTagSectorsAndAncestors(null);
+		}
 
 		Set selectedNatPlanObj = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedNatPlanObj());
 		Set selectedPrimaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedPrimaryPrograms());
@@ -1654,6 +1684,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedSecondarySectors(null);
         filterForm.setSelectedTertiarySectors(null);
+        filterForm.setSelectedTagSectors(null);
         filterForm.setSelectedArchivedStatus(new Object[]{"1"});
 		filterForm.setAmountinthousands(false);
 		filterForm.setAmountinmillions(false);

@@ -115,6 +115,12 @@ public class AmpARFilter extends PropertyListable {
 	private Set selectedTertiarySectors = null;
     @PropertyListableIgnore
     private Set tertiarySectorsAndAncestors = null;
+    
+    @PropertyListableIgnore
+	private Set tagSectors = null;
+	private Set selectedTagSectors = null;
+    @PropertyListableIgnore
+    private Set tagSectorsAndAncestors = null;
 
 
 	@PropertyListableIgnore
@@ -773,6 +779,11 @@ public class AmpARFilter extends PropertyListable {
 				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
 				+ "AND c.name='Tertiary' AND aas.amp_sector_id in ("
 				+ Util.toCSString(tertiarySectors) + ")";
+       
+       String TAG_SECTOR_FILTER = "SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
+				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
+				+ "AND c.name='Tag' AND aas.amp_sector_id in ("
+				+ Util.toCSString(tagSectors) + ")";
 
 
 		String REGION_FILTER = "SELECT amp_activity_id FROM v_regions WHERE name IN ("
@@ -1103,6 +1114,9 @@ public class AmpARFilter extends PropertyListable {
         if (tertiarySectors != null && !tertiarySectors.isEmpty()) {
 			queryAppend(TERTIARY_SECTOR_FILTER);
 		}
+        if (tagSectors != null && tagSectors.size() > 0 ) {
+        	queryAppend(TAG_SECTOR_FILTER);
+        }
 		if (nationalPlanningObjectives != null
 				&& nationalPlanningObjectives.size() != 0) {
 			queryAppend(NATIONAL_PLAN_FILTER);
@@ -2128,6 +2142,30 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public void setCustomusegroupings(Boolean customusegroupings) {
 		this.customusegroupings = customusegroupings;
+	}
+	@PropertyListableIgnore
+	public Set getTagSectors() {
+		return tagSectors;
+	}
+
+	public void setTagSectors(Set tagSectors) {
+		this.tagSectors = tagSectors;
+	}
+
+	public Set getSelectedTagSectors() {
+		return selectedTagSectors;
+	}
+
+	public void setSelectedTagSectors(Set selectedTagSectors) {
+		this.selectedTagSectors = selectedTagSectors;
+	}
+	@PropertyListableIgnore
+	public Set getTagSectorsAndAncestors() {
+		return tagSectorsAndAncestors;
+	}
+
+	public void setTagSectorsAndAncestors(Set tagSectorsAndAncestors) {
+		this.tagSectorsAndAncestors = tagSectorsAndAncestors;
 	}
 
 	

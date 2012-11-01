@@ -346,7 +346,7 @@ public class DashboardUtil {
 		filter.setAllLocationsList(allLocationsList);
 
 		Collection activityListReduced = DbUtil.getActivities(filter);
-        HashMap<Long, AmpActivityVersion> activityList = new HashMap<Long, AmpActivityVersion>();
+        /*HashMap<Long, AmpActivityVersion> activityList = new HashMap<Long, AmpActivityVersion>();
         Iterator iter = activityListReduced.iterator();
         while (iter.hasNext()) {
             Object[] item = (Object[])iter.next();
@@ -355,11 +355,11 @@ public class DashboardUtil {
             String name = (String) item[2];
             AmpActivityVersion activity = new AmpActivityVersion(ampActivityId, name, ampId);
             activityList.put(ampActivityId, activity);
-        }
+        }*/
 		Collection<AmpSector> sectorList = DbUtil.getSectors(filter);
 		Collection<AmpCategoryValueLocations> regionList = DbUtil.getRegions(filter);
 		Collection<AmpOrganisation> donorList = DbUtil.getDonors(filter);
-		if (activityList.size()>0) {
+		if (activityListReduced.size()>0) {
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep2);
 	        List<AmpFundingDetail> preloadFundingDetails = DbUtil.getFundingDetails(filter, startDate, endDate, null, null);
 			DecimalWraper fundingCal = null;
@@ -375,11 +375,11 @@ public class DashboardUtil {
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep3);
 			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.DISBURSEMENT, adjustmentType);
 			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
-			form.getSummaryInformation().setNumberOfProjects(activityList.size());
+			form.getSummaryInformation().setNumberOfProjects(activityListReduced.size());
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());
 			form.getSummaryInformation().setNumberOfRegions(regionList.size());
 			form.getSummaryInformation().setNumberOfDonors(donorList.size());
-			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityList.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			form.getSummaryInformation().setAverageProjectSize((fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP).divide(new BigDecimal(activityListReduced.size()), filter.getDecimalsToShow(), RoundingMode.HALF_UP)).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			try {
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep4);
 		        if (filter.getShowSectorsRanking()==null || filter.getShowSectorsRanking() || isInGraphInList(form.getGraphList(),"SectorProfile")) {
@@ -393,7 +393,8 @@ public class DashboardUtil {
 		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep6);
 		        if (filter.getShowProjectsRanking()==null || filter.getShowProjectsRanking()) {
-		        	form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
+		        	//form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
+		        	form.getRanksInformation().setFullProjects(getRankActivities(activityListReduced, form.getFilter()));
 		        	form.getRanksInformation().setTopProjects(getTop(form.getRanksInformation().getFullProjects(),form.getFilter().getTopLists()));
 		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep7);

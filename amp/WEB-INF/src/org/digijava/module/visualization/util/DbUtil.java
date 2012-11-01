@@ -565,7 +565,7 @@ public class DbUtil {
          *
          */
         try {
-            String oql = "select act.ampActivityId, act.ampId, act.name from ";
+            String oql = "select act from ";
             oql += AmpFundingDetail.class.getName()
                     + " as fd inner join fd.ampFundingId f ";
             oql += " inner join f.ampActivityId act ";

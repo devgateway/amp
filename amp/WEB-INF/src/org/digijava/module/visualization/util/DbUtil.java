@@ -565,7 +565,7 @@ public class DbUtil {
          *
          */
         try {
-            String oql = "select act from ";
+        	String oql = "select act.ampActivityId, act.ampId, act.name from ";
             oql += AmpFundingDetail.class.getName()
                     + " as fd inner join fd.ampFundingId f ";
             oql += " inner join f.ampActivityId act ";
@@ -1142,17 +1142,72 @@ public class DbUtil {
     }
 	@SuppressWarnings("unchecked")
     public static Map<AmpActivityVersion, BigDecimal> getFundingByActivityList(Collection<Long> actList, String currCode,  Date startDate,
-            Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator) throws DgException {
+            Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
         
 		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
-    	
+		Long[] orgIds = filter.getOrgIds();
+        Long[] orgGroupIds = filter.getSelOrgGroupIds();
+        
+        TeamMember tm = filter.getTeamMember();
+        Long[] locationIds = filter.getSelLocationIds();
+        Long[] sectorIds = filter.getSelSectorIds();
+        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
+        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+
     	DecimalWraper total = null;
         String oql = "";
 
-        oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f ";
-    	oql += "where fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
+    	
+    	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " inner join act.ampActivityGroupCached actGroup ";
+        else
+        	oql += " inner join act.ampActivityGroup actGroup ";
+        if (locationCondition) 
+            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+        if (sectorCondition) {
+            oql += "  inner join act.sectors actsec ";
+            oql += "  inner join actsec.classificationConfig config  ";
+            oql += " inner join actsec.sectorId sec ";
+        }
+        if (sectorCondition) 
+        	oql += " where config.id=:config  ";
+        else
+        	oql += " where 1=1 ";
+        
+        oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
+        oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         oql += " and f.ampActivityId in (" + DashboardUtil.getInStatement(actList.toArray()) + ")";
+
+       
+        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) 
+                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
+        } else 
+            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
+        if (locationCondition) {
+        	if (locationIds[0].equals(0l)) {
+        		oql += " and actloc is NULL "; //Unallocated condition
+			} else {
+				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+			}
+        }
+        if (sectorCondition) {
+        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
+            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+        }
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+            oql += DashboardUtil.getTeamQueryManagement();
+        else
+            oql += DashboardUtil.getTeamQuery(tm);
+
+        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
+			oql += ActivityUtil.getNonDraftActivityQueryString("act");
+		}
+
+        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
@@ -1162,6 +1217,9 @@ public class DbUtil {
             query.setDate("endDate", endDate);
             query.setLong("transactionType", transactionType);
             query.setString("adjustmentType",adjustmentType.getValueKey());
+            if (sectorCondition) {
+            	query.setLong("config", filter.getSelSectorConfigId());
+            }
             fundingDets = query.list();
             /*the objects returned by query  and   selected currency
             are passed doCalculations  method*/

@@ -162,7 +162,7 @@ public final class PMUtil {
 			Class gate,String readFlag,	String editFlag, String description, 
 			boolean global, String strategyType ) throws HibernateException {
 		//LogicalGate g= new LogicalGate("WorkspacePermSelectGate(ROLE)","OrgRoleGate(DN)","AND");
-
+		
 		GatePermission baGate=new GatePermission(true);
 		baGate.setName(permissionName);
 		baGate.setDescription(description);
@@ -187,6 +187,25 @@ public final class PMUtil {
 			cp.getPermissions().add(baGate);
 		}
 	}
+
+	
+	private static void createGatePermissionGlobal(Session session, CompositePermission cp) {
+		{
+			GatePermission baGate=new GatePermission(true);
+			baGate.setName(cp.getName()+" Full Access");
+			baGate.setDescription(cp.getDescription());
+			baGate.getGateParameters().add(StrategyPermSelectGate.class.getName()+"(Full Access)");
+			baGate.getGateParameters().add(BooleanGate.class.getName()+"(true)");
+			baGate.getGateParameters().add(Integer.toString(LogicalGate.OPERATOR_AND));
+			baGate.setGateTypeName(LogicalGate.class.getName());
+			HashSet baActions=new HashSet();
+			 baActions.add(GatePermConst.Actions.EDIT);
+			 baActions.add(GatePermConst.Actions.VIEW);
+			baGate.setActions(baActions);
+			session.save(baGate);
+			cp.getPermissions().add(baGate);
+		}
+	}
 	
 	public static void deletePermissionMap(PermissionMap permissionMap, Session session){
 	    Permission p=permissionMap.getPermission();
@@ -202,7 +221,6 @@ public final class PMUtil {
 		Object object = session.load(Permission.class, cp.getId());
 		session.delete(object);
 	    }
-//session.flush();
 	}
 
 
@@ -270,6 +288,9 @@ public final class PMUtil {
 		for (AmpPMReadEditWrapper ampPMGateWrapper : gatesSet) {
 			initializeAndSaveGatePermission(session,cp,ampPMGateWrapper, true, null);
 		}
+		
+		PMUtil.createGatePermissionGlobal(session, cp);
+		
 		session.save(cp);
 		pm.setPermission(cp);	
 		session.save(pm);

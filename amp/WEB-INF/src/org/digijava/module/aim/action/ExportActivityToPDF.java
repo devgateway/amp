@@ -2409,7 +2409,7 @@ public class ExportActivityToPDF extends Action {
 		mainLayout.addCell(fundingCell1);
 		
 		PdfPTable fundingTable=new PdfPTable(3);
-		fundingTable.setWidths(new float[]{2f,2f,1f});
+		fundingTable.setWidths(new float[]{2f,2f,1.5f});
 		boolean drawTotals=false; //draw total planned commitment,total actual commitments e.t.c.
 		if(myForm.getFunding().getFundingOrganizations()!=null){	
 			String currencyCode=myForm.getCurrCode()!=null?myForm.getCurrCode():"";

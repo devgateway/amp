@@ -192,6 +192,7 @@ public class ReportWizardAction extends MultiAction {
 		}
 		rfpForm.setIsnewreport(true);
 		rfp.reset(rfpForm, request, mapping);
+		rfp.resetFormat(rfpForm, request, mapping);
 		rfpForm.setIsnewreport(false);
 		
 	}

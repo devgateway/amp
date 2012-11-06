@@ -297,9 +297,13 @@ public class FilterUtil {
 			else 
 				form.setCustomDecimalPlaces(filter.getMaximumFractionDigits());
 		}
-		if ( filter.getCustomusegroupings() != null )
+		if ( filter.getCustomusegroupings() != null ){
 			form.setCustomUseGrouping(filter.getCustomusegroupings());
-		
+		}
+		if ( filter.getGroupingsize() != null ){
+			form.setCustomGroupSize(filter.getGroupingsize());
+		}
+
 	}
 	
 }

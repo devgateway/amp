@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -238,7 +237,8 @@ public class ReportsFilterPicker extends MultiAction {
 		 filterForm.setCalendars(allFisCalenders);
 		 
 		 ArrayList<String> decimalseparators = new ArrayList<String>();
-		 String selecteddecimalseparator  = String.valueOf((FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator()));
+		 DecimalFormat defaultDecimalFormat = FormatHelper.getDecimalFormat();
+		String selecteddecimalseparator  = String.valueOf((defaultDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator()));
 		 
 		 if (!selecteddecimalseparator.equalsIgnoreCase(".") && !selecteddecimalseparator.equalsIgnoreCase(",") ){
 			 decimalseparators.add(selecteddecimalseparator);
@@ -250,7 +250,7 @@ public class ReportsFilterPicker extends MultiAction {
 		 filterForm.setAlldecimalSymbols(decimalseparators);
 		 
 		 ArrayList<String> groupseparators = new ArrayList<String>();
-		 String selectedgroupingseparator  = String.valueOf(FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getGroupingSeparator());
+		 String selectedgroupingseparator  = String.valueOf(defaultDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator());
 		 
 		 if (!selectedgroupingseparator.equalsIgnoreCase(".") && !selectedgroupingseparator.equalsIgnoreCase(",") ){
 			 groupseparators.add(selectedgroupingseparator);
@@ -263,10 +263,10 @@ public class ReportsFilterPicker extends MultiAction {
 		 
 		 if (filterForm.getCustomDecimalSymbol() == null) {
 			 filterForm.setCustomDecimalSymbol(selecteddecimalseparator);
-			 filterForm.setCustomDecimalPlaces(FormatHelper.getDecimalFormat().getMaximumFractionDigits());
+			 filterForm.setCustomDecimalPlaces(defaultDecimalFormat.getMaximumFractionDigits());
 			 filterForm.setCustomGroupCharacter(selectedgroupingseparator);
-			 filterForm.setCustomUseGrouping(FormatHelper.getDecimalFormat().isGroupingUsed());
-			 filterForm.setCustomGroupSize(FormatHelper.getDecimalFormat().getGroupingSize());
+			 filterForm.setCustomUseGrouping(defaultDecimalFormat.isGroupingUsed());
+			 filterForm.setCustomGroupSize(defaultDecimalFormat.getGroupingSize());
 		 }
 		
 		AmpApplicationSettings tempSettings = getAppSetting(request);
@@ -1602,6 +1602,10 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		else if (maximumDecimalPlaces > -1)
 			arf.setMaximumFractionDigits(maximumDecimalPlaces );
+		else{
+			DecimalFormat defaultDecimalFormat = FormatHelper.getDecimalFormat();
+			arf.setMaximumFractionDigits(defaultDecimalFormat.getMaximumFractionDigits());
+		}
 		custom.setMaximumFractionDigits( arf.getMaximumFractionDigits() );
 		
 		arf.setCurrentFormat(custom);
@@ -1702,7 +1706,10 @@ public class ReportsFilterPicker extends MultiAction {
 		HttpSession httpSession = request.getSession();
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		AmpARFilter arf = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-		arf.setCurrentFormat(null);
+		if (arf != null){
+			arf.setCurrentFormat(null);
+		}
+		filterForm.setDecimalSymbol(null);
 		filterForm.setCustomDecimalSymbol(null);
 		filterForm.setCustomDecimalPlaces(null);
 		filterForm.setCustomGroupCharacter(null);

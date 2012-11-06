@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -185,8 +186,8 @@ public class GlossaryUtil {
 		}
 
         if (siteId != null){
-			queryStr.append(" and trn.siteId = :SITE_ID_LONG");
-            queryStr.append(" and eng.siteId = :SITE_ID_LONG");
+			queryStr.append(" and trn.siteId = :SITE_ID");
+            queryStr.append(" and eng.siteId = :SITE_ID");
             queryStr.append(" and ht.siteId = :SITE_ID");
 
 		}
@@ -195,6 +196,9 @@ public class GlossaryUtil {
 		}
 
         Session session = PersistenceManager.getRequestDBSession();
+        /*Logger log = Logger.getLogger("org.hibernate.SQL");
+        log.setLevel(Level.DEBUG);*/
+        
 		Query query = session.createQuery(queryStr.toString());
 
 
@@ -213,15 +217,15 @@ public class GlossaryUtil {
 
         if (siteId != null){
 			query.setString("SITE_ID", siteId);
-            query.setLong("SITE_ID_LONG", siteIdLong);
+            //query.setLong("SITE_ID_LONG", siteIdLong);
 		}
 
         if (locale!=null && locale.length()>0){
 			query.setString("LANG", locale);
 		}
-
         retVal = query.list();
 
+        //log.setLevel(Level.INFO);
         return retVal;
     }
 

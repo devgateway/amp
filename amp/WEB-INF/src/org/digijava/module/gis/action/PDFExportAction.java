@@ -1121,7 +1121,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
         firstCell.setCellEvent(border);
         firstCell.addElement(paragraph);
         firstCell.setColspan(8);
-
+        firstCell.setPaddingBottom(5);
         PdfPCell secondCell = new PdfPCell();
         secondCell.setPadding(0);
         secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
@@ -1164,6 +1164,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
         PdfPCell regActComHeader = new PdfPCell();
         regActComHeader.setPadding(0);
+        regActComHeader.setPaddingBottom(5);
         regActComHeader.setBorder(Rectangle.NO_BORDER);
         regActComHeader.setBackgroundColor(new Color(34, 46, 93));
         regActComHeader.addElement(new Phrase(TranslatorWorker.translateText("Actual Commitment",locale, siteId), new Font(Font.HELVETICA, 6f, Font.BOLD, new Color(255, 255, 255))));
@@ -1213,6 +1214,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
             regCell.setBackgroundColor(rowColor);
             regCell.setPadding(0);
             regCell.setBorder(Rectangle.NO_BORDER);
+            regCell.setPaddingBottom(5);
             regCell.addElement(new Phrase(regName, new Font(Font.HELVETICA, 6f)));
 
             PdfPCell regActCom = new PdfPCell();

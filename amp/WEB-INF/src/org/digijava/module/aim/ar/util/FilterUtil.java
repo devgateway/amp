@@ -80,6 +80,16 @@ public class FilterUtil {
 			arf.setTertiarySectors(null);
 			arf.setTertiarySectorsAndAncestors(null);
 		}
+        
+    	if (arf.getSelectedTagSectors() != null && arf.getSelectedTagSectors().size() > 0) {
+			arf.setTagSectors(SectorUtil.getSectorDescendents( arf.getSelectedTagSectors() ));
+			arf.setTagSectorsAndAncestors( new HashSet<AmpSector>() );
+			arf.getTagSectorsAndAncestors().addAll( arf.getTagSectors() );
+			arf.getTagSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors( arf.getSelectedTagSectors() ) );
+		} else {
+			arf.setTagSectors(null);
+			arf.setTagSectorsAndAncestors(null);
+		}
 
 		if ( arf.getSelectedNatPlanObj() != null && arf.getSelectedNatPlanObj().size() > 0) {
 			arf.setNationalPlanningObjectives(new ArrayList( arf.getSelectedNatPlanObj() ));

@@ -207,12 +207,14 @@ public class IatiActivityWorker {
 	}
 	
 		// TODO Auto-generated method stub
-	public ArrayList<AmpMappedField> checkContent(int noAct) { 
+	public ArrayList<AmpMappedField> checkContent(int noAct, String hierarchies) { 
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
-		if(this.getiActivity()!=null && this.getiActivity().getHierarchy()!=null && "1".compareTo(this.getiActivity().getHierarchy()) == 0) {
-			System.out.println("Skipping activity no "+noAct+ " - Hierarchy no 1");
-			return null;
-		}
+		if(this.getiActivity()!=null && this.getiActivity().getHierarchy()!=null)
+			if(hierarchies!=null && !hierarchies.contains(this.getiActivity().getHierarchy())) 
+			{
+				System.out.println("Skipping activity no "+noAct+ " - Hierarchy no: "+this.getiActivity().getHierarchy());
+				return null;
+			}
 		try{
 			this.iatiLastUpdateDate = DataExchangeUtils.XMLGregorianDateToDate(this.getiActivity().getLastUpdatedDatetime());
 			for (Iterator<Object> it = this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg().iterator(); it.hasNext();) {

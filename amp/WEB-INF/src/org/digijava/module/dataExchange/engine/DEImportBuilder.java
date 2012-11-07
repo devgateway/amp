@@ -4,6 +4,9 @@
 package org.digijava.module.dataExchange.engine;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -15,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -25,6 +29,8 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.exception.DgException;
@@ -120,12 +126,18 @@ import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
+import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiIdentifier;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.hibernate.HibernateException;
 import org.hibernate.type.NullableType;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
 import org.xml.sax.SAXException;
 
 /**
@@ -138,6 +150,7 @@ public class DEImportBuilder {
 	
 	private static Logger logger = Logger.getLogger(DEImportBuilder.class);
 	private DEImportItem ampImportItem;
+	private ArrayList<String> changedIDs;
 
 
 	public HashMap<String, Boolean> getHashFields() {
@@ -1515,6 +1528,10 @@ public class DEImportBuilder {
 		return this.getDESourceSetting().getApprovalStatus();
 	}
 	
+	private String getHierarchies(){
+		return this.getDESourceSetting().getLanguageId();
+	}
+	
 	private DESourceSetting getDESourceSetting(){
 		return this.getSourceBuilder().getDESourceSetting();
 	}
@@ -2140,7 +2157,7 @@ public class DEImportBuilder {
 					//CHECK content
 					{
 						System.out.println(".......Starting processing activity "+noAct);
-						activityLogs	=	iWorker.checkContent(noAct);
+						activityLogs	=	iWorker.checkContent(noAct, this.getHierarchies());
 						System.out.println("..................End processing activity "+noAct);
 					}
 				else
@@ -2217,8 +2234,14 @@ public class DEImportBuilder {
 				item.setLogType(DELogPerItem.LOG_TYPE_INFO);
 				item.setDescription("The last version of IATI Activity is already imported");
 			}
+			else
+				if(this.changedIDs!=null && this.changedIDs.size()>0)
+					if( this.changedIDs.contains(iWorker.getIatiID()) )
+						{
+							item.setLogType(DELogPerItem.LOG_TYPE_INFO);
+							item.setDescription("The last version of IATI Activity is already imported");
+						}
 		}
-
 		log.getLogItems().add(item);
 	}
 	
@@ -2261,6 +2284,7 @@ public class DEImportBuilder {
 	public boolean checkIATIInputString(String inputLog){
 		boolean isOk = true;
 		IatiActivities iActs = null;
+		IatiActivities iActsPrevious = null;
 		DEImportValidationEventHandler log = new DEImportValidationEventHandler();
 		try {
 			JAXBContext jc = JAXBContext.newInstance(Constants.IATI_JAXB_INSTANCE);
@@ -2286,6 +2310,10 @@ public class DEImportBuilder {
 	                
 	                 //iActs = (IatiActivities) m.unmarshal(new FileInputStream(path+"doc/dataExchange/iati.xml")) ;
 	                 iActs = (IatiActivities) m.unmarshal(this.getAmpImportItem().getInputStream()) ;
+	                 iActsPrevious = (IatiActivities) m.unmarshal(this.getAmpImportItem().getPreviousInputStream()) ;
+	                 
+	                 this.changedIDs = checkXML(this.getAmpImportItem().getInputStream(), this.getAmpImportItem().getPreviousInputStream());
+	                 
 	           }
 	        } 
 			catch (SAXException e) {
@@ -2300,10 +2328,65 @@ public class DEImportBuilder {
 	        }
 	        inputLog += log.getLog();
 	        if(isOk)
-	        	this.getAmpImportItem().setIatiActivities(iActs);
+	        	{
+	        		this.getAmpImportItem().setIatiActivities(iActs);
+	        		this.getAmpImportItem().setPreviousIatiActivities(iActsPrevious);
+	        	}
 	        else this.getAmpImportItem().setIatiActivities(null);
 	        return isOk;
 	        
+	}
+	
+	private ArrayList<String> checkXML(InputStream inputStream,	InputStream previousInputStream) {
+		
+		ArrayList<String> resultIDs = new ArrayList<String>();
+		
+		Document currentDoc 	= getDocumentFromInputStream(inputStream);
+		Document previousDoc 	= getDocumentFromInputStream(previousInputStream);
+		
+		HashMap<String, String> currIds = getActivitiesIds(currentDoc);
+		HashMap<String, String> prevIds = getActivitiesIds(previousDoc);
+		
+		for (Map.Entry<String, String> entry : currIds.entrySet()) {
+			if(prevIds.containsKey(entry.getKey())){
+				if( prevIds.get(entry.getKey()).compareTo(currIds.get(entry.getKey())) ==0 )
+					resultIDs.add(entry.getKey());
+			}
+			//System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+        }
+		
+		return resultIDs;
+		
+	}
+	
+	private Document getDocumentFromInputStream (InputStream is){
+		Document doc = null;
+		StringWriter writer = new StringWriter();
+		try {
+			IOUtils.copy(is, writer, "UTF-8");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String iString = writer.toString();
+		doc	= Jsoup.parse(iString, "", Parser.xmlParser());
+		return doc;
+	}
+
+	private HashMap<String,String> getActivitiesIds(Document doc){
+		HashMap<String, String> result = new HashMap<String,String>();
+		Elements elementsByTag = doc.getElementsByTag("iati-activity");
+		for (Iterator iterator = elementsByTag.iterator(); iterator.hasNext();) {
+			Element act = (Element) iterator.next();
+			String actMD5 		= DataExchangeUtils.getMD5(act.toString());
+			Elements ids = act.getElementsByTag("iati-identifier");
+			for (Iterator iterator2 = ids.iterator(); iterator2.hasNext();) {
+				Element id = (Element) iterator2.next();
+				//System.out.println(id.text());
+				result.put(id.text(), actMD5);
+			}
+		}
+		return result;
 	}
 	
 	private void fillActivityWithContactInfo(List<ContactType> contacts,AmpActivity activity, String contactType) {
@@ -2334,6 +2417,14 @@ public class DEImportBuilder {
 			}			
 
 		}
+	}
+
+	public ArrayList<String> getChangedIDs() {
+		return changedIDs;
+	}
+
+	public void setChangedIDs(ArrayList<String> changedIDs) {
+		this.changedIDs = changedIDs;
 	}
 	
 }

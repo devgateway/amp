@@ -20,7 +20,19 @@ public class DEImportItem {
 	private SourceBuilder sourceBuilder;
 	private Activities activities;
 	private IatiActivities iatiActivities;
+	private IatiActivities previousIatiActivities;
 	
+	
+	public IatiActivities getPreviousIatiActivities() {
+		return previousIatiActivities;
+	}
+
+
+	public void setPreviousIatiActivities(IatiActivities previousIatiActivities) {
+		this.previousIatiActivities = previousIatiActivities;
+	}
+
+
 	public IatiActivities getIatiActivities() {
 		return iatiActivities;
 	}
@@ -76,5 +88,8 @@ public class DEImportItem {
 		return new ByteArrayInputStream(this.sourceBuilder.getInputString().getBytes());
 	}
 	
+	public InputStream getPreviousInputStream(){
+		return new ByteArrayInputStream(this.sourceBuilder.getPreviousInputStream().getBytes());
+	}
 
 }

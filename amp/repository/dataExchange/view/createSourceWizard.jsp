@@ -193,7 +193,7 @@ function cancelImportManager() {
 								<html:text property="name" styleClass="inputx"/>
 								<br /><br />
 								
-								<b><digi:trn>Please choose the language(s) that exist in imported file</digi:trn>:</b><br />
+								<b><digi:trn>Please choose the projects' hierarchy(s) to be imported</digi:trn>:</b><br />
 								<logic:iterate name="createSourceForm" property="languages" id="lang">
         							<html:multibox property="selectedLanguages" >
         								<bean:write name="lang"/>

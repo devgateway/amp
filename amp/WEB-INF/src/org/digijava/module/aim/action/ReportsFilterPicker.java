@@ -1142,7 +1142,8 @@ public class ReportsFilterPicker extends MultiAction {
 
 		HttpSession httpSession = request.getSession();
 		AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-		filter.setWidget(false);
+		if (filter != null) //fix filters not showing in workspace edit
+			filter.setWidget(false);
 		
 
 		if (httpSession.getAttribute(ArConstants.SELECTED_CURRENCY) == null) {

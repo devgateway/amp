@@ -113,11 +113,6 @@ queryValidCbObj	= {
 function validateSubmitQuery () {
 		var formName	= "aimReportsFilterPickerForm";
 		var filterForm		= document.getElementsByName(formName)[0];
-		
-		if (typeof validateFilterDates == 'function' && !validateFilterDates()){
-			return;
-		}
-		
 		var fromDate=filterForm.fromDate.value;
 		var toDate=filterForm.toDate.value;
 		if(fromDate!=null&&fromDate!=''&&toDate!=null&&toDate!=''){

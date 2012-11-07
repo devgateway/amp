@@ -146,7 +146,7 @@
 			monthPos = format.toLowerCase().indexOf('mmm');
 			yearPos = format.indexOf('yyyy');
 			dayPos = format.indexOf('dd');
-			month = YUI_MONTH_NAMES_MEDIUM[month -1];
+			month = inputArray.monthName;		
 		}
 		else{
 			monthPos = format.toLowerCase().indexOf('mm');
@@ -180,33 +180,8 @@
 		
 	}	
 	
-	function getRegExpForValidation(dayPos, monthPos, yearPos){
-		var regExp = null;
-		
-		if (dayPos < monthPos){
-			if (monthPos < yearPos)
-				regExp = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
-			else{
-				if (dayPos < yearPos)
-					regExp = /^\d{1,2}\/\d{1,4}\/\d{2}$/;
-				else
-					regExp = /^\d{1,4}\/\d{1,2}\/\d{2}$/;
-			}
-		}	
-		else{ //month < dayPos
-			if (yearPos < monthPos)
-				regExp = /^\d{1,4}\/\d{1,2}\/\d{2}$/;
-			else{
-				if (dayPos < yearPos)
-					regExp = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
-				else
-					regExp = /^\d{1,2}\/\d{1,4}\/\d{2}$/;
-			}
-		}
-		return regExp;
-	}
-	
 	function dateStringToObject (dateStr, format ) {
+		
 		var monthPos, dayPos, yearPos;
 		var monthLen, dayLen=2, yearLen=4;
 		if (format.toLowerCase().indexOf('mmm') != -1){
@@ -227,53 +202,24 @@
 		var year	= dateStr.substr(yearPos, yearLen);
 		
 		if ( monthLen == 3 ) {
-			var monthStr = month;
 			for (var i=0; i<YUI_MONTH_NAMES_MEDIUM.length; i++) {
 				if ( month.toLowerCase() == YUI_MONTH_NAMES_MEDIUM[i].toLowerCase() ) {
 					month	= i + 1;
 					break;
 				}
 			}
-			dateStr = dateStr.replace(monthStr, month+'');
 		}
-		
-		
-		var regExp = getRegExpForValidation(dayPos, monthPos, yearPos);
-		if (validateDateExp(dateStr, regExp, day, month - 1, year)){
-			return {
-				month: month,
-				day:day,
-				year:year
-			};
-			
-		}else{
-			return null;			
-		}
-	}
-
-	function validateDateExp(dateStr, re, day, month, year){
-			
-			   if (re.test(dateStr)) {
-			      var d = new Date(year, month, day);
-			      return d.getMonth() == month && d.getDate() == day && d.getFullYear() == year;
-			   }
-			   else {
-			      return false;
-			   }
+		return {
+			month: month,
+			day:day,
+			year:year
+		};
 		
 	}
 
-	function validateInputDate(objectId){
+	function clearDate(objectId){
 		var textboxEl= document.getElementById(objectId);
-		if (textboxEl.value){
-			var date = dateStringToObject(textboxEl.value, dateFormat);
-			if (date){
-				return true;
-			}
-			alert(textboxEl.value + ' <digi:trn>is not a valid date.</digi:trn>');
-			return false;
-		}
-		return true;
+		textboxEl.value = "";
 	}
 
 	function pickDateById(buttonId,objectId){
@@ -304,11 +250,11 @@
 			if(calendarUp == true){
 				var calendarCorner = "bl";
 				var objectCorner = "tr";
-				//console.log("true");
+				console.log("true");
 			}else{
 				var calendarCorner = "tl";
 				var objectCorner = "br";
-				//console.log("false");
+				console.log("false");
 			}
 			dialog		= new YAHOO.widget.Dialog(dialogId, {
 		        visible:false,
@@ -342,10 +288,8 @@
 			calendar.cfg.setProperty("WEEKDAYS_MEDIUM",YUI_DAY_NAMES_MEDIUM);
 			if ( textboxEl.value != null && textboxEl.value.length > 0 ) {
 				var dateObj			= dateStringToObject(textboxEl.value,dateFormat);
-				if (dateObj){
-					calendar.cfg.setProperty("selected", dateObj.month + "/" + dateObj.day + "/" + dateObj.year );
-					calendar.cfg.setProperty("pagedate", dateObj.month + "/" + dateObj.year );
-				}
+				calendar.cfg.setProperty("selected", dateObj.month + "/" + dateObj.day + "/" + dateObj.year );
+				calendar.cfg.setProperty("pagedate", dateObj.month + "/" + dateObj.year );
 			}
 			
             calendar.render();

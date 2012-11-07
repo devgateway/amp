@@ -37,10 +37,14 @@
 							</div>
 						</td>
 						<td >
-							<html:text property="${entity.actionFormProperty}" styleId="filter_input_${entity.uniqueId }" styleClass="dateInputMarker" />
+							<html:text readonly="true" property="${entity.actionFormProperty}" styleId="filter_input_${entity.uniqueId }" styleClass="dateInputMarker" />
 							<a id="filter_a_${entity.uniqueId }" style="background-color: #F6FAFF;" href='javascript:pickDateById("filter_a_${entity.uniqueId }","filter_input_${entity.uniqueId }")'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0" />
 							</a>
+							<a id="clearDate_${entity.uniqueId }" style="background-color: #F6FAFF;" href='javascript:clearDate("filter_input_${entity.uniqueId }")' title="<digi:trn>Clear</digi:trn>">
+								<img src="../ampTemplate/images/deleteIcon.gif" border="0">
+							</a>
+							
 						</td>
 					</tr>
 		</logic:iterate>

@@ -41,7 +41,7 @@ public class DashboardFilter {
     private TeamMember teamMember;
     private List<AmpCurrency>currencies;
     private List<AmpOrganisation>organizations;
-    private List<AmpOrganisation>organizationsSelected;
+    private Long[] selOrgIds;
     private List<AmpOrgGroup> orgGroups;
     private List<AmpSector>sectors;
     private List<AmpCategoryValueLocations> regions;
@@ -551,12 +551,12 @@ public class DashboardFilter {
 		return dashboardType;
 	}
 
-	public List<AmpOrganisation> getOrganizationsSelected() {
-		return organizationsSelected;
+	public Long[] getSelOrgIds() {
+		return selOrgIds;
 	}
 
-	public void setOrganizationsSelected(List<AmpOrganisation> organizationsSelected) {
-		this.organizationsSelected = organizationsSelected;
+	public void setSelOrgIds(Long[] selOrgIds) {
+		this.selOrgIds = selOrgIds;
 	}
 
 	public List<AmpSector> getSectors() {

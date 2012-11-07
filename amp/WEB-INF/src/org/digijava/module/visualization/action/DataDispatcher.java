@@ -127,18 +127,12 @@ public class DataDispatcher extends DispatchAction {
 		Long orgsId = visualizationForm.getFilter().getOrgId();
 		if (orgsIds == null || orgsIds.length == 0 || orgsIds[0] == -1) {
 			Long[] temp = {orgsId};
-			visualizationForm.getFilter().setOrgIds(temp);
-			orgs.add(DbUtil.getOrganisation(orgsId));
+			visualizationForm.getFilter().setSelOrgIds(temp);
+			//visualizationForm.getFilter().setOrgIds(temp);
 		} else {
 			visualizationForm.getFilter().setOrgId(-1l);//unset orgId
-			for (int i = 0; i < orgsIds.length; i++) {
-				Long long1 = orgsIds[i];
-				if(long1 != -1){
-					orgs.add(DbUtil.getOrganisation(long1));
-				}
-			}
+			visualizationForm.getFilter().setSelOrgIds(orgsIds);
 		}
-		visualizationForm.getFilter().setOrganizationsSelected(orgs);
 
 		Long secsId = visualizationForm.getFilter().getSectorId();
 		Long subSecsId = visualizationForm.getFilter().getSubSectorId();
@@ -1672,7 +1666,7 @@ public class DataDispatcher extends DispatchAction {
 				xmlString.append("<year name=\"" + yearName + "\">\n");
 				fundingData += "<" + yearName;
 				if (filter.isPledgeVisible() && pledgesVisible) {
-					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),
+					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter.getSelOrgIds(),
 							filter.getOrgGroupIds(), startDate, endDate,
 							currCode);
 					xmlString
@@ -1742,7 +1736,7 @@ public class DataDispatcher extends DispatchAction {
 
 			DecimalWraper fundingPledge =  new DecimalWraper();
 			if (filter.isPledgeVisible() && pledgesVisible) {
-				fundingPledge = DbUtil.getPledgesFunding(filter.getOrgIds(),filter.getSelOrgGroupIds(), startDate, endDate,currCode);
+				fundingPledge = DbUtil.getPledgesFunding(filter.getSelOrgIds(),filter.getSelOrgGroupIds(), startDate, endDate,currCode);
 				csvString.append(",");
 				csvString.append(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 				total = total.add(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
@@ -2398,9 +2392,9 @@ public class DataDispatcher extends DispatchAction {
         }
         Long fiscalCalendarId = filter.getFiscalCalendarId();
         Collection<AmpOrganisation> donorList = new ArrayList();
-        if (filter.getOrgIds()!= null && filter.getOrgIds().length > 0 && filter.getOrgIds()[0]!=-1) {
-			for (int i = 0; i < filter.getOrgIds().length; i++) {
-				donorList.add(DbUtil.getOrganisation(filter.getOrgIds()[i]));
+        if (filter.getSelOrgIds()!= null && filter.getSelOrgIds().length > 0 && filter.getSelOrgIds()[0]!=-1) {
+			for (int i = 0; i < filter.getSelOrgIds().length; i++) {
+				donorList.add(DbUtil.getOrganisation(filter.getSelOrgIds()[i]));
 			}
 		} else if (filter.getSelOrgGroupIds() != null && filter.getSelOrgGroupIds().length == 1 && filter.getSelOrgGroupIds()[0]!=-1) {
 			donorList.addAll(DbUtil.getOrganisationsFromGroup(filter.getSelOrgGroupIds()[0]));
@@ -2408,7 +2402,7 @@ public class DataDispatcher extends DispatchAction {
 			donorList.addAll(DbUtil.getDonors(filter));
 		}
         //donorList = DbUtil.getDonors(filter);
-        if (filter.getOrgIds()!= null && filter.getOrgIds().length == 1 && filter.getOrgIds()[0]!=-1){
+        if (filter.getSelOrgIds()!= null && filter.getSelOrgIds().length == 1 && filter.getSelOrgIds()[0]!=-1){
         	StringBuffer csvString = new StringBuffer();
             String odaGrowthData = "";
             Map<String, BigDecimal> map = new LinkedHashMap<String, BigDecimal>();

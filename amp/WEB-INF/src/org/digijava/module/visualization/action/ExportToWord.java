@@ -194,7 +194,7 @@ public class ExportToWord extends Action {
                 doc.add(pageSubTitle);
                 
                 itemList = filtersOrganizationsTrn + ": ";
-                Long[] orgIds = vForm.getFilter().getOrgIds();
+                Long[] orgIds = vForm.getFilter().getSelOrgIds();
                 if (orgIds != null && orgIds.length != 0 && orgIds[0]!=-1) {
     				for (int i = 0; i < orgIds.length; i++) {
     					itemList = itemList + DbUtil.getOrganisation(orgIds[i]).getName() + "; ";
@@ -310,7 +310,7 @@ public class ExportToWord extends Action {
             cell = new RtfCell(new Paragraph(filtersOrgGroupTrn + ": " + itemList));
             filtersTbl.addCell(cell);
             itemList = "";
-            Long[] orgIds = vForm.getFilter().getOrgIds();
+            Long[] orgIds = vForm.getFilter().getSelOrgIds();
             if (orgIds != null && orgIds.length != 0 && orgIds[0]!=-1) {
 				for (int i = 0; i < orgIds.length; i++) {
 					itemList = itemList + DbUtil.getOrganisation(orgIds[i]).getName() + "; ";

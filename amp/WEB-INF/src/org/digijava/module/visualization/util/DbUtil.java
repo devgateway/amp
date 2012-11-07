@@ -254,7 +254,7 @@ public class DbUtil {
     @SuppressWarnings("unchecked")
     public static List<AmpFundingDetail> getUnallocatedFunding(DashboardFilter filter)
             throws DgException {
-        Long[] orgIds = filter.getOrgIds();
+        Long[] orgIds = filter.getSelOrgIds();
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         int transactionType = filter.getTransactionType();
         TeamMember tm = filter.getTeamMember();
@@ -351,7 +351,7 @@ public class DbUtil {
 		} else {
 			
 	        Long[] orgGroupIds = filter.getSelOrgGroupIds();
-	        Long[] orgIds = filter.getOrgIds();
+	        Long[] orgIds = filter.getSelOrgIds();
 	        
 	        int transactionType = filter.getTransactionType();
 	        TeamMember teamMember = filter.getTeamMember();
@@ -449,7 +449,7 @@ public class DbUtil {
 		} else {
 			//Get the selected Organization Groups and Organizations
 			Long[] orgGroupIds = filter.getSelOrgGroupIds();
-	        Long[] orgIds = filter.getOrgIds();
+	        Long[] orgIds = filter.getSelOrgIds();
 	        
 	        //Get the funding transaction type
 	        int transactionType = filter.getTransactionType();
@@ -541,7 +541,7 @@ public class DbUtil {
     public static List getActivities(DashboardFilter filter) throws DgException {
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         List activities = null;
-        Long[] orgIds= filter.getOrgIds();
+        Long[] orgIds= filter.getSelOrgIds();
         
         int transactionType = filter.getTransactionType();
         TeamMember teamMember = filter.getTeamMember();
@@ -668,7 +668,7 @@ public class DbUtil {
 	public static List<AmpOrganisation> getDonors(DashboardFilter filter) throws DgException {
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         List<AmpOrganisation> donors = new ArrayList<AmpOrganisation>();
-        Long[] orgIds= filter.getOrgIds();
+        Long[] orgIds= filter.getSelOrgIds();
         if (orgGroupIds!=null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
 			if (orgGroupIds.length == 1) {
 				List<AmpOrganisation> donorsByGrp = org.digijava.module.aim.util.DbUtil.getOrganisationByGroupId(orgGroupIds[0]);
@@ -794,7 +794,7 @@ public class DbUtil {
         	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
 		} 
 
-        Long[] orgIds = filter.getOrgIds();
+        Long[] orgIds = filter.getSelOrgIds();
 
         Long[] orgsGrpIds = filter.getOrgGroupIds();
 		Long orgsGrpId = filter.getOrgGroupId();
@@ -980,7 +980,7 @@ public class DbUtil {
             Long financingInstrumentId) throws DgException {
         
         String oql = "";
-        Long[] orgIds = filter.getOrgIds();
+        Long[] orgIds = filter.getSelOrgIds();
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         
         TeamMember tm = filter.getTeamMember();
@@ -1145,7 +1145,7 @@ public class DbUtil {
             Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
         
 		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
-		Long[] orgIds = filter.getOrgIds();
+		Long[] orgIds = filter.getSelOrgIds();
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         
         TeamMember tm = filter.getTeamMember();
@@ -1371,7 +1371,7 @@ public class DbUtil {
         	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
 		} 
         
-        Long[] orgIds = filter.getOrgIds();
+        Long[] orgIds = filter.getSelOrgIds();
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         
         TeamMember tm = filter.getTeamMember();

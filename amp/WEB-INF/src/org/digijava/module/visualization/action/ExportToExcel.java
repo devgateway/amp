@@ -312,7 +312,7 @@ public class ExportToExcel extends Action {
             cell.setCellValue(headerText);
             cell.setCellStyle(cellStyleLeft);
             itemList = "";
-            Long[] orgIds = vForm.getFilter().getOrgIds();
+            Long[] orgIds = vForm.getFilter().getSelOrgIds();
             if (orgIds != null && orgIds.length != 0 && orgIds[0]!=-1) {
 				for (int i = 0; i < orgIds.length; i++) {
 					itemList = itemList + DbUtil.getOrganisation(orgIds[i]).getName() + "; ";

@@ -27,6 +27,8 @@
         padding:10px;
     }
  </style>
+<!-- Jquery Base Library -->
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>

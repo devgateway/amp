@@ -155,6 +155,8 @@ function init() {
 	var dnd = new dojo.dnd.Moveable(dojo.byId("poplegendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
+	var dnd = new dojo.dnd.Moveable(dojo.byId("structuresdiv"));
+	
 }
 
 /**
@@ -717,13 +719,28 @@ function drawpoints() {
 		// Create palette for individual donors
 		var pointSymbolBank = new Array();
 		for ( var i = 0; i < donorArray.length; i++) {
-			var pointObject = new esri.symbol.SimpleMarkerSymbol(
-					esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
-					new esri.symbol.SimpleLineSymbol(
-							esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-							colorsCualitative[i], 1), colorsCualitative[i]);
-			pointSymbolBank[donorArray[i].donorCode] = pointObject;
+			var pointObject;
+			   if(i < colorsCualitative.length)
+			   {
+			    pointObject = new esri.symbol.SimpleMarkerSymbol(
+			      esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+			      new esri.symbol.SimpleLineSymbol(
+			        esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+			        colorsCualitative[i], 1), colorsCualitative[i]);
+			   }
+			   else
+			   {
+			    pointObject = new esri.symbol.SimpleMarkerSymbol(
+			      esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+			      new esri.symbol.SimpleLineSymbol(
+			        esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+			        colorsCualitative[i], 1), new dojo.Color([255, 255, 255, 1]));
+			   }
+			   
+			   pointSymbolBank[donorArray[i].donorCode] = pointObject;
 		}
+		
+		
 		// Add standard symbols
 		pointSymbolBank["single"] = new esri.symbol.SimpleMarkerSymbol(
 				esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 10,
@@ -1036,9 +1053,11 @@ function getStructures(clear) {
 	if (structureGraphicLayer) {
 		if (structureGraphicLayer.visible) {
 			structureGraphicLayer.hide();
+			$('#structuresdiv').hide('slow');
 		} else {
 			structureGraphicLayer.show();
 			map.infoWindow.resize(400, 250);
+			$('#structuresdiv').show('slow');
 		}
 	} else {
 		structureGraphicLayer = esri.layers.GraphicsLayer({
@@ -1344,7 +1363,8 @@ function showLegendClusterDonor(pointSymbolBank) {
 	}
 	
 	htmlDiv += "<div class='legendContentContainer'>"
-		+ "<div class='legendContentValue' style='background-color:rgba('0,0,0');'></div></div>"
+		+ "<div class='legendContentValue' style='background-color:rgba(255,255,255,1);'></div>" 
+		+"</div>"
 		+ "<div class='legendContentLabel' title='"+translate('Others')+"'>"
 		+ translate('Others') + " </div><br/>";
 	

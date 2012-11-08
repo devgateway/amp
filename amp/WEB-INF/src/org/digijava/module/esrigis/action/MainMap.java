@@ -3,15 +3,19 @@ package org.digijava.module.esrigis.action;
  * Copyright (c) 2010 Development Gateway (www.developmentgateway.org)
  * @author Diego Dimunzio
  */
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -42,7 +46,8 @@ import org.digijava.module.visualization.util.Constants;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class MainMap extends Action{
-
+	private static Logger logger = Logger.getLogger(MainMap.class);
+	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
 		DataDispatcherForm dataDispatcherForm = (DataDispatcherForm) form;
 		MapFilter filter = dataDispatcherForm.getFilter();
@@ -50,6 +55,9 @@ public class MainMap extends Action{
 			filter = null;
 		}
 		
+		if (request.getParameter("action")!= null){
+			return displayIcon(mapping,form,request,response);
+		}
 		
 		List<AmpMapConfig> maps = (List<AmpMapConfig>) DbHelper.getMaps();
 		for (Iterator iterator = maps.iterator(); iterator.hasNext();) {
@@ -92,6 +100,10 @@ public class MainMap extends Action{
 			return mapping.findForward("popup");
 			
 		}
+		
+		Collection<AmpStructureType> sts = new ArrayList<AmpStructureType>();
+		sts = DbHelper.getAllStructureTypes();
+		request.setAttribute("structureTypesList", sts);
 		
 		return mapping.findForward("forward");
 	}
@@ -212,4 +224,38 @@ public class MainMap extends Action{
 	}
 	
 	
+	public ActionForward displayIcon(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+
+		String index = request.getParameter("id");
+
+		if (index != null) {
+				try {
+					Long structureTypeId = Long.parseLong(index);
+					AmpStructureType structureType = DbHelper.getStructureType(structureTypeId);
+					ServletOutputStream os = response.getOutputStream();
+					if (structureType.getIconFile() != null) {
+						response.setContentType(structureType.getIconFileContentType());
+						os.write(structureType.getIconFile());
+						os.flush();
+					}
+					else
+					{
+						BufferedImage bufferedImage = new BufferedImage(30, 30,
+								BufferedImage.TRANSLUCENT);
+						ImageIO.write(bufferedImage, "png", os);
+						os.flush();
+					}
+				} catch (NumberFormatException nfe) {
+					logger.error("Trying to parse " + index + " to int");
+				}
+		} else {
+			BufferedImage bufferedImage = new BufferedImage(30, 30,BufferedImage.TRANSLUCENT);
+			ServletOutputStream os = response.getOutputStream();
+			ImageIO.write(bufferedImage, "png", os);
+			os.flush();
+		}
+		return null;
+	}
 }

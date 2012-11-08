@@ -51,7 +51,7 @@ public class CompositePermission extends Permission {
 //			if ( o instanceof AmpModulesVisibility )
 //			{
 //				if( ((AmpModulesVisibility)o).getName().contains("Project Title") )
-//					System.out.println("---------------CompositePermission " + ((AmpModulesVisibility)o).getName()+ " actions: "+actions);
+//					logger.debug("---------------CompositePermission " + ((AmpModulesVisibility)o).getName()+ " actions: "+actions);
 //				
 //			}
 //			

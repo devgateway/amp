@@ -31,6 +31,8 @@
 		<property name="address" column="ADDRESS" type="java.lang.String" />
 		<many-to-one name="country" column="COUNTRY_ISO"
 			class="org.digijava.kernel.dbentity.Country" cascade="none" />
+		<many-to-one name="region" column="region_id"
+			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 		<property name="assignedOrgId" column="assigned_org_id" type="java.lang.Long" />
 		<many-to-one name="photo" column="image_id" class="org.digijava.kernel.entity.Image"
 			cascade="all" />

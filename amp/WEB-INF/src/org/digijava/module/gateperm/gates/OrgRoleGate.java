@@ -10,6 +10,7 @@ import java.util.Queue;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.TeamMember;
@@ -100,12 +101,21 @@ public class OrgRoleGate extends Gate {
 	FundingOrganization org=(FundingOrganization) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG);
 	if(org!=null && "DN".equals(paramRoleCode) ) {
 		String roleCode=(String) scope.get(GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
-		if(roleCode==null) throw new RuntimeException("CURRENT_ORG specified in scope without CURRENT_ORG_ROLE!");
-		if(roleCode.equals(paramRoleCode) && user.hasVerifiedOrganizationId(org.getAmpOrgId())) return true;
+		if(roleCode==null) 
+			throw new RuntimeException("CURRENT_ORG specified in scope without CURRENT_ORG_ROLE!");
+		if(roleCode.equals(paramRoleCode) && user.hasVerifiedOrganizationId(org.getAmpOrgId())) 
+			return true;
 		//an org was in the scope, do not continue with the logic and deny access
 		return false;
 	}
-	
+	//TODO: Temporary move to own gate
+	//check if the scope has a region in it, if it does use that directly
+	AmpCategoryValueLocations reg = (AmpCategoryValueLocations) scope.get(GatePermConst.ScopeKeys.CURRENT_REGION);
+	if(reg!=null && "DN".equals(paramRoleCode) ) {
+		if (user.getRegion() != null && reg.getId().equals(user.getRegion().getId()))
+			return true;
+		return false;
+	}
 	// iterate the assigned orgs:
 	if (ampa != null) {	    
 	    if (ampa.getOrgrole() == null)
@@ -117,8 +127,6 @@ public class OrgRoleGate extends Gate {
 			if (roleCode.equals(paramRoleCode) && user.hasVerifiedOrganizationId(element.getOrganisation().getAmpOrgId()))
 			    return true;
 	    }
-	    
-
 	}
 //	if (a != null) {
 //	    if (a.getRelOrgs() == null)

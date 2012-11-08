@@ -28,6 +28,7 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -37,8 +38,12 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
@@ -155,6 +160,8 @@ public class ViewEditUser extends Action {
                 uForm.setLanguages(userLangs);
             }
 
+            uForm.setRegions(DynLocationManagerUtil.getLocationsOfTypeRegionOfDefCountry());
+            
             Collection<AmpOrgType> orgTypeCol = DbUtil.getAllOrgTypes();
             if (orgTypeCol != null) {
                 uForm.setOrgTypes(orgTypeCol);
@@ -166,6 +173,7 @@ public class ViewEditUser extends Action {
             uForm.setName(null);
             uForm.setUrl(null);
             uForm.setSelectedCountryIso(null);
+            uForm.setSelectedRegionId(null);
             uForm.setSelectedLanguageCode(null);
             uForm.setSelectedOrgName(null);
 
@@ -189,24 +197,26 @@ public class ViewEditUser extends Action {
                 if (user.getCountry() != null) {
                     uForm.setSelectedCountryIso(user.getCountry().getIso());
                 }
+                
+                if (user.getRegion() != null) {
+                	uForm.setSelectedRegionId(user.getRegion().getId());
+                }
 
                 uForm.setId(user.getId());
                 uForm.setEmail(user.getEmail());
                 uForm.setFirstNames(user.getFirstNames());
-                uForm.setId(user.getId());
                 uForm.setLastName(user.getLastName());
                 uForm.setName(user.getName());
                 uForm.setUrl(user.getUrl());
                 uForm.setAssignedOrgId(user.getAssignedOrgId());
                 uForm.getAssignedOrgs().addAll(user.getAssignedOrgs());
                 uForm.setPledger(user.getPledger());
-                if(user.getAssignedOrgId()!=null) {
+                if(user.getAssignedOrgId()!=null && user.getAssignedOrgId() > 0) {
                     uForm.setOrgs(new ArrayList<AmpOrganisation>());
                     AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
                     if(organization != null){
                     	uForm.getOrgs().add(organization);
                     }
-
                 }
 
 
@@ -305,6 +315,7 @@ public class ViewEditUser extends Action {
                     }
 
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));
+                    user.setRegion(LocationUtil.getAmpCategoryValueLocationById(uForm.getSelectedRegionId()));
                     user.setEmail(uForm.getEmail());
                     user.setFirstNames(uForm.getFirstNames());
                     user.setLastName(uForm.getLastName());

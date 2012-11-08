@@ -39,6 +39,7 @@ import org.digijava.kernel.entity.OrganizationType;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class User
@@ -67,6 +68,7 @@ public class User
     private OrganizationType organizationType;
     private String referral;
     private Country country;
+    private AmpCategoryValueLocations region;
     private HashMap sitePreferences;
     private Set groups;
     private HashMap siteContentLocales;
@@ -456,6 +458,14 @@ public class User
    				return true;
    		}
    		return false;
+	}
+
+	public AmpCategoryValueLocations getRegion() {
+		return region;
+	}
+
+	public void setRegion(AmpCategoryValueLocations region) {
+		this.region = region;
 	}
 	
 }

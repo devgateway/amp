@@ -276,11 +276,7 @@ function isInvalid(field){
 																                <html:option value="-1">${translation}</html:option>
 																                <c:if test="${!empty umViewEditUserForm.countries}">
 																                  <c:forEach var="cn" items="${umViewEditUserForm.countries}">
-																                    <c:set var="cnName">
-																                    ${cn.name}
-																                      <%--<digi:trn key="aim:cn:${cn.name}">${cn.name}</digi:trn>--%>
-																                    </c:set>
-																                    <html:option value="${cn.iso}">${cnName}</html:option>
+																                    <html:option value="${cn.iso}">${cn.name}</html:option>
 																                  </c:forEach>
 																                </c:if>
 																             </html:select>
@@ -416,7 +412,26 @@ function isInvalid(field){
 																			</logic:notEmpty>                                                                                                                                                       
  	 	 	 															</td>
 																	</tr>
-                                                                    
+                                                          			<tr>
+																		<td width="169" height="30" align="right"style="font-size: 11px; font-weight: bold; color:#000;">
+																			<digi:trn>Verified Region</digi:trn>
+																	    </td>
+																	    <td width="190" height="30">
+																           <html:select name="umViewEditUserForm" property="selectedRegionId"  style="background-color: #FFFFFF;border: 1px solid #D0D0D0;color: #767676;font-size: 11px;margin: 5px;padding: 2px; width:180px;" styleId="country">
+																                <c:set var="translation">
+																                  <digi:trn>
+																                  --Select region--
+																                  </digi:trn>
+																                </c:set>
+																                <html:option value="-1">${translation}</html:option>
+																                <c:if test="${!empty umViewEditUserForm.regions}">
+																                  <c:forEach var="cn" items="${umViewEditUserForm.regions}">
+																                    <html:option value="${cn.id}">${cn.name}</html:option>
+																                  </c:forEach>
+																                </c:if>
+																             </html:select>
+																		</td>
+																	</tr>
                                                                     
 																	<tr>
 																		<td width="169" align="right" height="30"style="font-size: 11px;

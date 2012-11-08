@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -43,6 +44,9 @@ public class ViewEditUserForm extends ActionForm {
 	private String selectedCountryIso;
 	private Collection<CountryBean> countries;
 
+	private Long selectedRegionId;
+	private Collection<AmpCategoryValueLocations> regions;
+	
 	private String selectedLanguageCode;
 	private Collection languages;
 
@@ -354,5 +358,21 @@ public class ViewEditUserForm extends ActionForm {
 
 	public void setRole(Long role) {
 		this.role = role;
+	}
+
+	public Long getSelectedRegionId() {
+		return selectedRegionId;
+	}
+
+	public void setSelectedRegionId(Long selectedRegionId) {
+		this.selectedRegionId = selectedRegionId;
+	}
+
+	public Collection<AmpCategoryValueLocations> getRegions() {
+		return regions;
+	}
+
+	public void setRegions(Collection<AmpCategoryValueLocations> regions) {
+		this.regions = regions;
 	}
 }

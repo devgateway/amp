@@ -66,6 +66,7 @@ public final class GatePermConst {
 		public static final MetaInfo CURRENT_ORG_ROLE= new MetaInfo("currentOrgRole","Current displayed organisation role as string");
 		public static final MetaInfo FUNDING_DETAIL= new MetaInfo("currentFundingDetail","The org.digijava.module.aim.helper.FundingDetail currently " +
 				"in iteration in the funding popup");
+		public static final MetaInfo CURRENT_REGION = new MetaInfo("currentRegion", "Current displayed region");
 	}
 	
 	public static final Map<String,MetaInfo> scopeKeysMap 

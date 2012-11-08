@@ -26,7 +26,7 @@ import org.digijava.module.aim.helper.Constants;
  */
 public class AmpRegionalFundingItemFeaturePanel extends AmpFeaturePanel<Set<AmpRegionalFunding>> {
 	
-
+	private IModel<AmpCategoryValueLocations> cvLocationModel; 
 	
 	/**
 	 * @param id
@@ -37,6 +37,9 @@ public class AmpRegionalFundingItemFeaturePanel extends AmpFeaturePanel<Set<AmpR
 	public AmpRegionalFundingItemFeaturePanel(String id, String fmName,
 			IModel<AmpActivityVersion> am, IModel<Set<AmpRegionalFunding>> fundingModel, IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
 		super(id, fundingModel, fmName, true);
+		
+		this.cvLocationModel = cvLocationModel;
+		
 		AmpLabelFieldPanel<AmpCategoryValueLocations> regionLocation = new AmpLabelFieldPanel<AmpCategoryValueLocations>(
 				"region", cvLocationModel, "Region", true);
 		add(regionLocation);
@@ -55,4 +58,19 @@ public class AmpRegionalFundingItemFeaturePanel extends AmpFeaturePanel<Set<AmpR
 	
 	}
 
+	@Override
+	protected void onConfigure() {
+		/*
+		AmpAuthWebSession session = (AmpAuthWebSession) getSession();
+		if (cvLocationModel != null && cvLocationModel.getObject() != null){
+			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION, cvLocationModel.getObject());
+		}
+		*/
+		super.onConfigure();
+		/*
+		if (cvLocationModel != null && cvLocationModel.getObject() != null){
+			PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION);
+		}
+		*/
+	}
 }

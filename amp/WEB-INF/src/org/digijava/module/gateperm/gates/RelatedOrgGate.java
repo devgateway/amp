@@ -74,7 +74,7 @@ public class RelatedOrgGate extends Gate {
 	if ( o1 instanceof AmpModulesVisibility )
 	{
 		if( ((AmpModulesVisibility)o1).getName().contains("Project Title") )
-			System.out.println("---------------CompositePermission " + ((AmpModulesVisibility)o1).getName());
+			logger.debug("---------------CompositePermission " + ((AmpModulesVisibility)o1).getName());
 		
 	}
 

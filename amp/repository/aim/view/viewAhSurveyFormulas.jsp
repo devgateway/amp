@@ -24,6 +24,8 @@ function saveFormula(){
     he.value=ie.checked;
   }
   document.aimViewAhSurveyFormulasForm.submit();
+  document.location.href = "/viewAhSurveis.do";
+  
 }
 
 function changeFormula(){
@@ -52,6 +54,9 @@ function resetFormula(){
 <jsp:include page="teamPagesHeader.jsp"  />
 <digi:form action="/viewAhSurveyFormulas.do" >
   <html:hidden property="action" styleId="act" />
+  <table>
+    <tr>
+      <td>
   <table>
     <tr>
       <td colspan="2" valign="bottom" class="crumb" >
@@ -142,5 +147,68 @@ function resetFormula(){
         <input type="button" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" onclick="resetFormula();" style="font-family:verdana;font-size:8pt;">
       </td>
     </tr>
+  </table>
+  </td>
+  
+  
+  
+  <!-- Other Links -->
+
+ <td width=300 valign="top" align="right">
+										<table align="center" cellpadding="0" cellspacing="0"
+											width="300" border="0">
+											<tr>
+												<td>
+													<!-- Other Links -->
+													<table cellpadding="0" cellspacing="0" width="100">
+														<tr>
+															<td bgColor=#c9c9c7 class=box-title><digi:trn
+																	key="aim:otherLinks">
+																	<b style="font-weight: bold; font-size: 12px; padding-left:5px; color:#000000;"><digi:trn>Other links</digi:trn></b>
+																</digi:trn></td>
+															<td background="module/aim/images/corner-r.gif"
+																height="17" width=17>&nbsp;</td>
+														</tr>
+													</table></td>
+											</tr>
+											<tr>
+												<td bgColor=#ffffff>
+													<table cellPadding=0 cellspacing="0" width="100%" class="inside">
+														
+														<tr>
+															<td class="inside"><digi:img
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <digi:link module="aim" href="/admin.do">
+																	<digi:trn key="aim:AmpAdminHome">
+																Admin Home
+																</digi:trn>
+																</digi:link></td>
+														</tr>
+														
+														<!-- end of other links -->
+													</table></td>
+											</tr>
+											<tr>
+												<td bgColor=#ffffff>
+													<table cellPadding=0 cellspacing="0" width="100%" class="inside">
+														
+														<tr>
+															<td class="inside"><digi:img
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <digi:link module="aim" href="/viewAhSurveis.do">
+																	<digi:trn>
+																Paris Indicator Reports
+																</digi:trn>
+																</digi:link></td>
+														</tr>
+														
+														<!-- end of other links -->
+													</table></td>
+											</tr>
+										</table></td>
+  
+  
+  
+  </tr>
   </table>
 </digi:form>

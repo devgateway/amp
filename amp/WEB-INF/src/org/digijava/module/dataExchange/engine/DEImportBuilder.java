@@ -2310,7 +2310,8 @@ public class DEImportBuilder {
 	                
 	                 //iActs = (IatiActivities) m.unmarshal(new FileInputStream(path+"doc/dataExchange/iati.xml")) ;
 	                 iActs = (IatiActivities) m.unmarshal(this.getAmpImportItem().getInputStream()) ;
-	                 iActsPrevious = (IatiActivities) m.unmarshal(this.getAmpImportItem().getPreviousInputStream()) ;
+	                 if(this.getAmpImportItem().getPreviousInputStream() !=null)
+	                	 iActsPrevious = (IatiActivities) m.unmarshal(this.getAmpImportItem().getPreviousInputStream()) ;
 	                 
 	                 this.changedIDs = checkXML(this.getAmpImportItem().getInputStream(), this.getAmpImportItem().getPreviousInputStream());
 	                 
@@ -2330,9 +2331,15 @@ public class DEImportBuilder {
 	        if(isOk)
 	        	{
 	        		this.getAmpImportItem().setIatiActivities(iActs);
-	        		this.getAmpImportItem().setPreviousIatiActivities(iActsPrevious);
+	        		if(iActsPrevious!=null)
+	        			this.getAmpImportItem().setPreviousIatiActivities(iActsPrevious);
 	        	}
-	        else this.getAmpImportItem().setIatiActivities(null);
+	        else {
+	        	
+	        	this.getAmpImportItem().setIatiActivities(null);
+	        	this.getAmpImportItem().setPreviousIatiActivities(null);
+	        	
+	        }
 	        return isOk;
 	        
 	}

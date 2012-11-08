@@ -332,8 +332,8 @@ function collapseAll() {
 			</span>		
 		</legend>
 		<div class="field_text_big">
-			<module:display name="/Activity Form/Donor Funding/Funding Item/Commitments" 
-														parentModule="/Activity Form/Donor Funding/Funding Item">
+			<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments" 
+														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Actual Commitment</digi:trn>:<br/> 
 				<c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
@@ -368,8 +368,8 @@ function collapseAll() {
 		         </c:if>
 		       </module:display>
 			
-			<module:display name="/Activity Form/Donor Funding/Funding Item/Disbursements" 
-														parentModule="/Activity Form/Donor Funding/Funding Item">
+			<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements" 
+														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Actual Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
@@ -403,8 +403,8 @@ function collapseAll() {
 			<hr/>
 			</c:if>
 			</module:display>
-			<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures" 
-														parentModule="/Activity Form/Donor Funding/Funding Item">
+			<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Expenditures</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">

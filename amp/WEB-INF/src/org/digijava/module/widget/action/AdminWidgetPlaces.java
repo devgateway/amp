@@ -36,7 +36,7 @@ public class AdminWidgetPlaces extends DispatchAction {
 		if (places !=null && places.size()>0){
 			List<WidgetPlaceHelper> helpers = new ArrayList<WidgetPlaceHelper>(places.size());
 			for (AmpDaWidgetPlace place : places) {
-				helpers.add(new WidgetPlaceHelper(place));
+				helpers.add(new WidgetPlaceHelper(place,request));
 			}
 			pform.setPlaces(helpers);
 		}else{
@@ -59,13 +59,13 @@ public class AdminWidgetPlaces extends DispatchAction {
 		WidgetPlacesForm pform = (WidgetPlacesForm)form;
 		Long placeId = pform.getPlaceId();
 		AmpDaWidgetPlace place = WidgetUtil.getPlace(placeId);
-		WidgetPlaceHelper placeHelper = new WidgetPlaceHelper(place);
+		WidgetPlaceHelper placeHelper = new WidgetPlaceHelper(place,request);
 		pform.setPlace(placeHelper);
 		pform.setWidgetId(new Long(-1));
 		if (place.getAssignedWidget()!=null){
 			pform.setWidgetId(place.getAssignedWidget().getId());
 		}
-		pform.setWidgets(WidgetUtil.getAllWidgetsHelpers());
+		pform.setWidgets(WidgetUtil.getAllWidgetsHelpers(request));
 		return mapping.findForward("showAssignWidget");
 	}
 	public ActionForward save(ActionMapping mapping, ActionForm form,

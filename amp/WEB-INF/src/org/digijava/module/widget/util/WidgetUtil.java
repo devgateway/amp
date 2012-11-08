@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
@@ -471,7 +474,7 @@ public class WidgetUtil {
 	 * @throws DgException
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<WidgetPlaceHelper> getAllWidgetsHelpers() throws DgException{
+	public static List<WidgetPlaceHelper> getAllWidgetsHelpers(HttpServletRequest request) throws DgException{
 		List<WidgetPlaceHelper> result = null;
 		Session session = PersistenceManager.getRequestDBSession();
 		String oql = "from "+AmpWidget.class.getName() + " as w order by w.name";
@@ -482,7 +485,7 @@ public class WidgetUtil {
 			result = new ArrayList<WidgetPlaceHelper>(list.size());
 			for (Object row : list) {
 				AmpWidget widget = (AmpWidget)row;
-				WidgetPlaceHelper helper = new WidgetPlaceHelper(widget);
+				WidgetPlaceHelper helper = new WidgetPlaceHelper(widget,request);
 				result.add(helper);
 			}
 		} catch (Exception e) {

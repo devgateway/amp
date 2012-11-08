@@ -5,14 +5,17 @@
 				<td><span wicket:id="typeOfAssistance"/></td>
 				<td><span wicket:id="financingInstrument"/></td>
 				<td><span wicket:id="financingId"/></td>
-				<td rowspan=2><span wicket:id="loanTerms"/></td>	
 			</tr>
 		</wicket:fm>
-		<wicket:fm fmNames="Funding Status;Mode of Payment">
+		<wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms">
 			<tr align="left">
-				<td><span wicket:id="fundingStatus"/></td>
-				<td><span wicket:id="modeOfPayment"/></td>
-                <td><!--<span wicket:id="capitalSpendingPercentage"/>--></td>
+				<wicket:fm fmNames="Funding Status">
+					<td><span wicket:id="fundingStatus"/></td>
+				</wicket:fm>
+				<wicket:fm fmNames="Mode of Payment">
+					<td><span wicket:id="modeOfPayment"/></td>
+				</wicket:fm>
+                <td><span wicket:id="loanTerms"/></td>
 			</tr>
 		</wicket:fm>
 	</table>

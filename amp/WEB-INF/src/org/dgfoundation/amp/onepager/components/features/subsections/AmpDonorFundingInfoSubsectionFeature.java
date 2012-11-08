@@ -78,7 +78,7 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				AmpCategoryValue value = (AmpCategoryValue) typeOfAssistance.getChoiceContainer().getModelObject();
-				boolean isLoan = (value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey()));
+				boolean isLoan = (value == null ? false : (value.getValue().equals(CategoryConstants.TYPE_OF_ASSISTANCE_LOAN.getValueKey())));
 				loanTerms.getTextAreaContainer().setVisible(isLoan);
         	    loanTerms.getTitleLabel().setVisible(isLoan);            	
             	target.add(loanTerms);

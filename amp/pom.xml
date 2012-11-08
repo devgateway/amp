@@ -19,7 +19,7 @@
 		<repository>
 			<id>repo.pentaho.org</id>
 			<name>repo.pentaho.org-releases</name>
-			<url>http://repos${itory.pentaho.org/artifactory/pentaho</url>
+			<url>http://repository.pentaho.org/artifactory/pentaho</url>
 		</repository>
 		<repository>
 			<id>thirdparty.repo.pentaho.org</id>
@@ -855,6 +855,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.5.1</version>
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
@@ -873,6 +874,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.7</version>
 				<executions>
 					<execution>
 						<id>add-source</id>
@@ -895,7 +897,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.6</version>
-
 				<executions>
 					<execution>
 						<phase>generate-resources</phase>

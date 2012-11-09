@@ -13,6 +13,11 @@
 
 <jsp:include page="teamPagesHeader.jsp"  />
 
+
+<table cellPadding=5 cellspacing="0" width="100%" border="0" style="font-size:12px;">
+<tr>
+<td>
+
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
   <tr>
     <td class=r-dotted-lg width=14>&nbsp;</td>
@@ -102,6 +107,53 @@
 </td>
   </tr>
 </table>
+
+
+</td>
+
+
+<!-- Other Links -->
+
+ <td width=300 valign=top>
+										<table align="center" cellpadding="0" cellspacing="0"
+											width="300" border="0">
+											<tr>
+												<td>
+													<!-- Other Links -->
+													<table cellpadding="0" cellspacing="0" width="100">
+														<tr>
+															<td bgColor=#c9c9c7 class=box-title><digi:trn
+																	key="aim:otherLinks">
+																	<b style="font-weight: bold; font-size: 12px; padding-left:5px; color:#000000;"><digi:trn>Other links</digi:trn></b>
+																</digi:trn></td>
+															<td background="module/aim/images/corner-r.gif"
+																height="17" width=17>&nbsp;</td>
+														</tr>
+													</table></td>
+											</tr>
+											<tr>
+												<td bgColor=#ffffff>
+													<table cellPadding=0 cellspacing="0" width="100%" class="inside">
+														
+														<tr>
+															<td class="inside"><digi:img
+																	src="module/aim/images/arrow-014E86.gif" width="15"
+																	height="10" /> <digi:link module="aim" href="/admin.do">
+																	<digi:trn key="aim:AmpAdminHome">
+																Admin Home
+																</digi:trn>
+																</digi:link></td>
+														</tr>
+														
+														<!-- end of other links -->
+													</table></td>
+											</tr>
+										</table></td>
+
+
+</tr>
+</table>
+
 
 </div>
 

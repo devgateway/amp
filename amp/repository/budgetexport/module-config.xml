@@ -4,7 +4,9 @@
 
 	<security login-required="true" default="READ">
 		<action pattern="/budgetExport" />
+		<action login-required="false" pattern="/budgetExportService" />
 	</security>
+
 	<hibernate-classes required="true">
 		<hibernate-class>org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject</hibernate-class>
 		<hibernate-class>org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem</hibernate-class>

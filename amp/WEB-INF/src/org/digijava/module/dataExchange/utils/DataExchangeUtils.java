@@ -3,6 +3,11 @@
  */
 package org.digijava.module.dataExchange.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,19 +60,21 @@ import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
-import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.util.ExportBuilder;
+import org.digijava.module.sdm.dbentity.Sdm;
+import org.digijava.module.sdm.dbentity.SdmItem;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.type.NullableType;
+import org.springframework.util.FileCopyUtils;
 
 /**
  * @author dan
@@ -1600,6 +1607,49 @@ public class DataExchangeUtils {
 		
 	}
 
+	public static ByteArrayOutputStream getFileByOutputstream(Sdm attachedFile) throws SQLException, DgException {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		try {
+			 
+			SdmItem item = null;
+			if (attachedFile!=null) {
+				for (SdmItem sdmItem : (Set<SdmItem>)attachedFile.getItems()) {
+					item = sdmItem;
+					break;
+				}
+				ByteArrayInputStream inStream = new ByteArrayInputStream(item.getContent());
+				FileCopyUtils.copy(inStream, outputStream);
+			}	
+			
+			//FileCopyUtils.copy(msForm.getXmlFile().getInputStream(), outputStream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return outputStream;
+	}
+	
+	public static String getMD5(String s){
+		byte[] defaultBytes = s.getBytes();
+		String result="";
+		try{
+			MessageDigest algorithm = MessageDigest.getInstance("MD5");
+			algorithm.reset();
+			algorithm.update(defaultBytes);
+			byte messageDigest[] = algorithm.digest();
+		            
+			StringBuffer hexString = new StringBuffer();
+			for (int i=0;i<messageDigest.length;i++) {
+				hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+			}
+			String foo = messageDigest.toString();
+			System.out.println("sessionid "+s+" md5 version is "+hexString.toString());
+			result=hexString+"";
+		}catch(NoSuchAlgorithmException nsae){
+		            
+		}
+		return result;
+	}
 	
 }
 

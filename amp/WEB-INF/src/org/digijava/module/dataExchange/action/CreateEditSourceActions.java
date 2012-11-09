@@ -113,10 +113,16 @@ public class CreateEditSourceActions extends DispatchAction {
 		}
 		
 		//attach doc
-		Sdm oldDOc = null;
+		Sdm oldDoc = null;
 		if(myForm.getSdmDocument() == null){
-			oldDOc = srcSetting.getAttachedFile();
+			oldDoc = srcSetting.getAttachedFile();
 		}
+		
+		Sdm oldPrevDoc = null;
+		if(myForm.getSdmDocument() == null){
+			oldPrevDoc = srcSetting.getPreviousAttachedFile();
+		}
+		
 		
 		if(myForm.getUploadedFile() != null && myForm.getUploadedFile().getFileSize() >0){
 			attachFile(myForm);
@@ -131,11 +137,12 @@ public class CreateEditSourceActions extends DispatchAction {
         		doc=DbUtil.saveOrUpdateDocument(document);        		
         	}
         	srcSetting.setAttachedFile(doc);
+        	srcSetting.setPreviousAttachedFile(oldDoc);
 			
 			new SourceSettingDAO().saveObject(srcSetting);
 			
-			if(oldDOc!=null){
-				DbUtil.deleteDocument(oldDOc);
+			if(oldPrevDoc!=null){
+				DbUtil.deleteDocument(oldPrevDoc);
 			}
 			
 			
@@ -174,7 +181,7 @@ public class CreateEditSourceActions extends DispatchAction {
 	}
 	
 	private void fillForm (CreateSourceForm myform, HttpServletRequest request){
-		String[] langArray = {"en","fr","es"};
+		String[] langArray = {"1","2","3"};
 		if(myform.getLanguages() == null || myform.getLanguages().length < 1) myform.setLanguages(langArray);
 		
 		List<KeyValue> importStrategyValues	= new ArrayList<KeyValue>();

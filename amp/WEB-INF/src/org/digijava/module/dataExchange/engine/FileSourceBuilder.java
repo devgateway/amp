@@ -12,8 +12,8 @@ public class FileSourceBuilder extends SourceBuilder {
 	}
 	
 	public FileSourceBuilder(DESourceSetting ampSourceSetting,
-			String inputStream) {
-		super(ampSourceSetting, inputStream);
+			String inputStream, String previousInputStream) {
+		super(ampSourceSetting, inputStream, previousInputStream);
 		// TODO Auto-generated constructor stub
 	}
 	/**

@@ -31,7 +31,7 @@ public class ApplyFilters extends Action {
 				orgs.add(DbUtil.getOrganisation(Long.valueOf(orgIdsSpl[i])));
 			}
 		}
-		visualizationForm.getFilter().setOrganizationsSelected(orgs);
+		//visualizationForm.getFilter().setOrganizationsSelected(orgs);
 
 		String secIdsStr = request.getParameter("secIds");
 		String[] secIdsSpl = secIdsStr.split("-");

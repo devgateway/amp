@@ -40,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.budgetexport.util.BudgetExportConstants;
 
 /**
  * CSV Export is actually using the XLS export API. The difference is only at
@@ -59,6 +60,13 @@ public class CSVExportAction
 
     HttpSession session = request.getSession();
     boolean asXml = request.getParameter("asXml") != null && request.getParameter("asXml").equalsIgnoreCase("true");
+
+    if (asXml && request.getParameter("budgetExport") != null && request.getParameter("budgetExport").equalsIgnoreCase("true")) {
+        request.getSession().setAttribute(BudgetExportConstants.BUDGET_EXPORT_TYPE, "sometype");
+        request.getSession().setAttribute(BudgetExportConstants.BUDGET_EXPORT_PROJECT_ID, request.getParameter("projectId"));
+    }
+
+
     AmpARFilter arf= (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
     TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 	if(tm == null){
@@ -70,6 +78,9 @@ public class CSVExportAction
 			request.setAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB, "true");
 		}
 	}
+
+
+
     GroupReportData rd = ARUtil.generateReport(mapping, form, request,
                                                response);
 

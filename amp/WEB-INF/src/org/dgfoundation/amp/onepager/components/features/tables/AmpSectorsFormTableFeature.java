@@ -60,8 +60,11 @@ public class AmpSectorsFormTableFeature extends
 				am, "sectors");
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpActivitySector>());
-
+		if (sectorClassification.getDescription() != null)
+			addInfoText(sectorClassification.getDescription());
+		
 		IModel<List<AmpActivitySector>> listModel = new AbstractReadOnlyModel<List<AmpActivitySector>>() {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public List<AmpActivitySector> getObject() {

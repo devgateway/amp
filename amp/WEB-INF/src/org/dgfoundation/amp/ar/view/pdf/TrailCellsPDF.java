@@ -104,7 +104,7 @@ public class TrailCellsPDF extends PDFExporter {
 			PdfPCell pdfc = null;
 			if (grd.getReportMetadata().getHideActivities()){
 				PdfPCell pdfc2 = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
-				//pdfc2.setColspan(grd.getTotalDepth());
+				pdfc2.setColspan(grd.getTotalDepth());
 				table.addCell(pdfc2);
 				currentBackColor=new  Color(235,235,235);
 				pdfc2.setBackgroundColor(currentBackColor);

@@ -68,6 +68,8 @@ public class DESourceSetting implements XmlWrappable{
 	
 	private String language ; //non-db field
 	private Sdm attachedFile ;
+	
+	private Sdm previousAttachedFile ;
 
 	/**
 	 * @return the isImport
@@ -328,6 +330,14 @@ public class DESourceSetting implements XmlWrappable{
 
 	public void setAttachedFile(Sdm attachedFile) {
 		this.attachedFile = attachedFile;
+	}
+
+	public Sdm getPreviousAttachedFile() {
+		return previousAttachedFile;
+	}
+
+	public void setPreviousAttachedFile(Sdm previousAttachedFile) {
+		this.previousAttachedFile = previousAttachedFile;
 	}
 	
 }

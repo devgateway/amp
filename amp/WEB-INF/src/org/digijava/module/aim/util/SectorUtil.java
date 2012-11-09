@@ -1414,6 +1414,7 @@ public class SectorUtil {
 	 *            Id of configuration
 	 * @param configName
 	 *            Name of configuration
+	 * @param description 
 	 * @param multiSector
 	 * @param classification
 	 *            Default classification
@@ -1421,7 +1422,7 @@ public class SectorUtil {
 	 *             If exception occurred
 	 */
 	public static void saveClassificationConfig(Long configId,
-			String configName, boolean multiSector,
+			String configName, String description, boolean multiSector,
 			AmpSectorScheme classification) throws DgException {
 
 		Session session = null;
@@ -1439,6 +1440,7 @@ public class SectorUtil {
 
 			}
 			config.setName(configName);
+            config.setDescription(description);			
 			config.setMultisector(multiSector);
 			config.setClassification(classification);
 			// beginTransaction();

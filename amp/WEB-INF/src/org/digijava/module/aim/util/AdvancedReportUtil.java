@@ -47,6 +47,8 @@ public final class AdvancedReportUtil {
     
     private static Logger logger = Logger.getLogger(AdvancedReportUtil.class);
     
+    private final static Collection<AmpColumns> CACHED_COLUMNS_LIST = new ArrayList<AmpColumns>();
+    
 	public static void saveReport(AmpReports ampReports,Long ampTeamId,Long ampMemberId,boolean teamLead)
 	{
 		Session session = null;
@@ -225,6 +227,8 @@ public final class AdvancedReportUtil {
     
 	public static Collection getColumnList()
 	{
+		if ( CACHED_COLUMNS_LIST.size() > 0 )
+			return CACHED_COLUMNS_LIST;
 		Session session = null;
 		String sqlQuery = "";
 		boolean flag =false;
@@ -243,11 +247,11 @@ public final class AdvancedReportUtil {
 				while (iter.hasNext()) 
 				{
 					ampColumns = (AmpColumns) iter.next();
-					coll.add(ampColumns);
+					CACHED_COLUMNS_LIST.add(ampColumns);
 				}
 				flag = true;
 			}
-			return coll;
+			return CACHED_COLUMNS_LIST;
 		}
 		catch(Exception e)
 		{

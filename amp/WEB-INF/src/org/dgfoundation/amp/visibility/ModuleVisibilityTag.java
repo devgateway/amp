@@ -39,7 +39,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	private String enabled;
 	private String parentModule;
 	private String hasLevel;
-	private static Logger logger = Logger.getLogger(ModuleVisibilityTag.class);
+	private static final Logger logger = Logger.getLogger(ModuleVisibilityTag.class);
 	
 	public String getHasLevel() {
 		return hasLevel;
@@ -91,13 +91,17 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 					   
 						if(!existModuleinDB(ampTreeVisibility))
 						{//insert without parent??
-							synchronized (this) {
-								if(FeaturesUtil.getModuleVisibility(name)==null){
-									FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName(),this.getHasLevel());
-									logger.debug("Inserting module: " + this.getName());
-									AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-									ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-									ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+							if(parentModule!=null &&  FeaturesUtil.getModuleVisibility(parentModule)==null){
+								logger.error("FM tag ERROR: parentModule:"+ parentModule +" was not found! Please update the tag accordingly!");
+							}else{
+								synchronized (this) {
+									if(FeaturesUtil.getModuleVisibility(name)==null){
+										FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName(),this.getHasLevel());
+										logger.debug("Inserting module: " + this.getName());
+										AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+										ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+										ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+									}
 								}
 							}
 		   		   		}
@@ -105,30 +109,33 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 //							if(!checkTypeAndParentOfModule(ampTreeVisibility) || !checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))) //parent or type is not ok
 						if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
 							{
-								try{
-									//logger.info("Updating module: "+this.getName() +" with  id:"+ ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId() +"and his parent "+parentModule);
-									synchronized (this) {
-										if(!checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))){
-											logger.debug("Trying to update module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
-											AmpModulesVisibility moduleAux= ampTreeVisibility.getModuleByNameFromRoot(this.getName());
-											if(moduleAux!=null)
-												if(moduleAux.getId()!=null)
-												{
-													FeaturesUtil.updateModuleVisibility(moduleAux.getId(), parentModule);
-													logger.debug(".........updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
-												}
+							if(parentModule!=null &&  FeaturesUtil.getModuleVisibility(parentModule)==null){
+								logger.error("FM tag ERROR: parentModule:"+ parentModule +" was not found! Please update the tag accordingly!");
+							}else{
+									try{
+										//logger.info("Updating module: "+this.getName() +" with  id:"+ ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId() +"and his parent "+parentModule);
+										synchronized (this) {
+											if(!checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))){
+												logger.debug("Trying to update module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+												AmpModulesVisibility moduleAux= ampTreeVisibility.getModuleByNameFromRoot(this.getName());
+												if(moduleAux!=null)
+													if(moduleAux.getId()!=null)
+													{
+														FeaturesUtil.updateModuleVisibility(moduleAux.getId(), parentModule);
+														logger.debug(".........updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+													}
+											}
 										}
 									}
+									catch(Exception e)
+										{
+											e.printStackTrace();
+										}
+										AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+										ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+										ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 								}
-								catch(Exception e)
-									{
-										e.printStackTrace();
-									}
-									AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-									ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-									ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 							}
-						
 					}
 //					else return SKIP_BODY;
 //				}

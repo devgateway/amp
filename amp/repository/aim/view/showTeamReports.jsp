@@ -776,9 +776,16 @@ $(document).ready(function() {
 						    	                                    								<digi:trn key="aim:ClickEditReport">Click on this icon to edit report&nbsp;</digi:trn>
 						                                      									</c:if>
 					                                        								</c:set>
-						                                    								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
-						                                      									<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
-						                                    								</digi:link> 
+					                                        								<c:if test="${report.budgetExporter == true}">
+								                                    								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true" title="${translation}">
+								                                      									<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+								                                    								</digi:link> 
+								                                    							</c:if>
+								                                    							<c:if test="${report.budgetExporter == false}">
+								                                    								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
+								                                      									<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+								                                    								</digi:link> 
+								                                    							</c:if>
 					                                      									&nbsp;
 					                                      									<c:set var="translation">
 					                                      										<c:if test="${aimTeamReportsForm.showTabs}">

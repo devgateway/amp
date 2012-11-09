@@ -145,12 +145,11 @@ public class AmpMessageActions extends DispatchAction {
                 retVal.append("\n");
             }
         }
-        response.getOutputStream().print(retVal.toString());
-        /*
-        response.setContentType("text/xml");
-        contactsAutocompData.output(response.getOutputStream());
-        */
-        response.getOutputStream().close();
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF8"), true);
+        
+        out.print(retVal.toString());
+        out.close();
 	    return null;
 	}
 

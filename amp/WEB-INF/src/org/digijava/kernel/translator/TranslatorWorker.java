@@ -59,6 +59,7 @@ import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.util.AmpMath;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -217,6 +218,7 @@ public class TranslatorWorker {
 
     /**
      * Translates text to specified local.
+     * If nothing found, it retries to translate the string using the alternate site_id (please see the mess described in AMP-14236 and AMP-14232 for more info)
      * see #translateText(String, String, String) for more details.
      * @param text
      * @param keyWords
@@ -224,13 +226,66 @@ public class TranslatorWorker {
      * @param siteId
      * @return
      * @throws WorkerException
-     */
-    public static String translateText(String text, String keyWords, String locale, String siteId) throws WorkerException{
+     */    
+    public static String translateText(String text, String keyWords, String locale, String siteId) throws WorkerException
+    {
+    	if (text == null)
+    		text = "";
+    	
+    	TranslatorWorker worker = getInstance("");
+    	
+        //Try to find translation
+        Message msg = worker.getByBody(text, keyWords, locale, siteId);
+        if (msg != null)
+        	return msg.getMessage();
+        
+        // try to find alternate translation
+        String alternateSiteId = null;
+        try
+        {
+        	if (AmpMath.isNumeric(siteId))
+        	{
+        		// the given siteId is numeric, so search by the real siteId
+        		alternateSiteId = SiteCache.getInstance().getSite(Long.parseLong(siteId)).getSiteId();
+        	} else
+        	{
+        		alternateSiteId = SiteCache.getInstance().getSite(siteId).getId().toString();
+        	}
+        
+        	msg = worker.getByBody(text,  keyWords, locale, alternateSiteId);
+        	if (msg != null)
+        		return msg.getMessage();
+        }
+        catch(Exception e)
+        {
+        	logger.debug("Error while translating item " + text + "on site " + siteId);
+        }
+        
+        // Then try to find in default language
+    	msg = worker.getByBody(text, keyWords, getDefaultLocalCode(), siteId);
+    	if (msg != null)
+    		return msg.getMessage();
+    	
+    	msg = worker.getByBody(text, keyWords, getDefaultLocalCode(), alternateSiteId);
+    	if (msg != null)
+    		return msg.getMessage();
+    	
+        // no translations found => create a default entry
+        msg = new Message();
+        msg.setSiteId(siteId);
+        msg.setLocale(getDefaultLocalCode());
+        msg.setMessage(text);
+        msg.setKeyWords(keyWords);
+        msg.setKey(TranslatorWorker.generateTrnKey(text));
+        worker.save(msg);
+        
+        return text;
+    }
+    
+   /* public static String translateText_no_retry(String text, String keyWords, String locale, String siteId) throws WorkerException{
         String retVal = null;
-        if (text!=null) {
-		} else {
-			text="";
-		}
+        if (text == null) 
+        	text = "";
         
         TranslatorWorker worker = getInstance("");
         //Try to find translation
@@ -255,7 +310,7 @@ public class TranslatorWorker {
         	}
         }
         return retVal;
-    }
+    }*/
 
     public static TranslatorWorker getInstance(String key) {
         /** @todo temporary solution. needs to be read from digi.xml */

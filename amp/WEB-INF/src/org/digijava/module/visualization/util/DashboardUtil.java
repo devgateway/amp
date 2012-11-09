@@ -115,7 +115,7 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        map = DbUtil.getFundingByActivityList(actList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator);
+        map = DbUtil.getFundingByActivityList(actList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map);
 	}
 	
@@ -359,7 +359,7 @@ public class DashboardUtil {
 		Collection<AmpSector> sectorList = DbUtil.getSectors(filter);
 		Collection<AmpCategoryValueLocations> regionList = DbUtil.getRegions(filter);
 		Collection<AmpOrganisation> donorList = DbUtil.getDonors(filter);
-		if (activityList.size()>0) {
+		if (activityListReduced.size()>0) {
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep2);
 	        List<AmpFundingDetail> preloadFundingDetails = DbUtil.getFundingDetails(filter, startDate, endDate, null, null);
 			DecimalWraper fundingCal = null;
@@ -383,23 +383,44 @@ public class DashboardUtil {
 			try {
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep4);
 		        if (filter.getShowSectorsRanking()==null || filter.getShowSectorsRanking() || isInGraphInList(form.getGraphList(),"SectorProfile")) {
-		        	form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
-			        form.getRanksInformation().setTopSectors(getTop(form.getRanksInformation().getFullSectors(),form.getFilter().getTopLists()));
+		        	if (sectorList==null || sectorList.size()==0) {
+		        		form.getRanksInformation().setFullSectors(null);
+				        form.getRanksInformation().setTopSectors(null);
+					} else {
+						form.getRanksInformation().setFullSectors(getRankSectors(sectorList, form.getFilter(), null, null));
+				        form.getRanksInformation().setTopSectors(getTop(form.getRanksInformation().getFullSectors(),form.getFilter().getTopLists()));
+					}
 				} 
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep5);
 	        	if (filter.getShowRegionsRanking()==null || filter.getShowRegionsRanking() || isInGraphInList(form.getGraphList(),"RegionProfile")) {
-		        	form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null, request));
-		        	form.getRanksInformation().setTopRegions(getTop(form.getRanksInformation().getFullRegions(),form.getFilter().getTopLists()));
+	        		if (regionList==null || regionList.size()==0) {
+	        			form.getRanksInformation().setFullRegions(null);
+			        	form.getRanksInformation().setTopRegions(null);
+					} else {
+						form.getRanksInformation().setFullRegions(getRankRegions(regionList, form.getFilter(), null, null, request));
+			        	form.getRanksInformation().setTopRegions(getTop(form.getRanksInformation().getFullRegions(),form.getFilter().getTopLists()));
+					}
 		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep6);
 		        if (filter.getShowProjectsRanking()==null || filter.getShowProjectsRanking()) {
-		        	form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
-		        	form.getRanksInformation().setTopProjects(getTop(form.getRanksInformation().getFullProjects(),form.getFilter().getTopLists()));
+		        	if (activityList==null || activityList.size()==0) {
+		        		form.getRanksInformation().setFullProjects(null);
+			        	form.getRanksInformation().setTopProjects(null);
+					} else {
+						form.getRanksInformation().setFullProjects(getRankActivitiesByKey(activityList.keySet(), form.getFilter()));
+			        	//form.getRanksInformation().setFullProjects(getRankActivities(activityListReduced, form.getFilter()));
+			        	form.getRanksInformation().setTopProjects(getTop(form.getRanksInformation().getFullProjects(),form.getFilter().getTopLists()));
+					}
 		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep7);
 		        if (filter.getShowDonorsRanking()==null || filter.getShowDonorsRanking() || isInGraphInList(form.getGraphList(),"DonorProfile")) {
-		        	form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null, null));
-		        	form.getRanksInformation().setTopDonors(getTop(form.getRanksInformation().getFullDonors(),form.getFilter().getTopLists()));
+		        	if (donorList==null || donorList.size()==0) {
+		        		form.getRanksInformation().setFullDonors(null);
+			        	form.getRanksInformation().setTopDonors(null);
+					} else {
+						form.getRanksInformation().setFullDonors(getRankDonors(donorList, form.getFilter(), null, null));
+			        	form.getRanksInformation().setTopDonors(getTop(form.getRanksInformation().getFullDonors(),form.getFilter().getTopLists()));
+					}
 		        }
 			} catch (Exception e) {
 				e.printStackTrace();

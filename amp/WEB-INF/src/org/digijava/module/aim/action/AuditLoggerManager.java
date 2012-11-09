@@ -203,104 +203,44 @@ public class AuditLoggerManager extends MultiAction {
 		font.setBoldweight(font.BOLDWEIGHT_NORMAL);
 		HSSFCellStyle style = wb.createCellStyle();
 		HSSFCellStyle tstyle = wb.createCellStyle();
-		tstyle .setFont(titlefont);
-		tstyle .setAlignment(style.ALIGN_CENTER);
+		tstyle.setFont(titlefont);
+		tstyle.setAlignment(style.ALIGN_CENTER);
 		
-	    HSSFCell cell = row.createCell((short)0);
-		str = new HSSFRichTextString("Name");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle );
+		String[] columnNames = {"Name", "Object Type", "Team Name", "Author Name", "Creation Date", "Editor Name", "Change Date", "Action", "Details"};
+		int numberOfColumns = columnNames.length;
 		
-		cell = row.createCell((short)1);
-		str = new HSSFRichTextString("Object Type");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle );
-		
-		cell = row.createCell((short)2);
-		str = new HSSFRichTextString("Team Name");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle );
-		
-		cell = row.createCell((short)3);
-		str = new HSSFRichTextString("Author Name");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle);
-		
-		cell = row.createCell((short)4);
-		str = new HSSFRichTextString("Creation Date");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle);
-		
-		cell = row.createCell((short)5);
-		str = new HSSFRichTextString("Editor Name");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle);
-		
-		cell = row.createCell((short)6);
-		str = new HSSFRichTextString("Change Date");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle);
-		
-		cell = row.createCell((short)7);
-		str = new HSSFRichTextString("Action");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle);
-		
+		for(int i = 0; i < numberOfColumns; i++){
+			HSSFCell cell = row.createCell((short)i);
+			str = new HSSFRichTextString(columnNames[i]);
+			cell.setCellValue(str);
+			cell.setCellStyle(tstyle);
+		}
+	    
 		style.setFont(font);
 		int i = 1;
 		for (Iterator iterator = Xlslogs.iterator(); iterator.hasNext();) {
 			AmpAuditLogger ampAuditLogger = (AmpAuditLogger) iterator.next();
 			row = sheet.createRow((short)(i));
 			
-			cell = row.createCell((short)0);
-			str = new HSSFRichTextString(ampAuditLogger.getObjectName());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
+			String[] columnValues = new String[]{ampAuditLogger.getObjectName(), ampAuditLogger.getObjectTypeTrimmed(), ampAuditLogger.getTeamName(),
+					ampAuditLogger.getAuthorName(), ampAuditLogger.getSloggeddate(), ampAuditLogger.getEditorName(), ampAuditLogger.getSmodifydate(),
+					ampAuditLogger.getAction(), ampAuditLogger.getDetail()};
 			
-			cell = row.createCell((short)1);
-			str = new HSSFRichTextString(ampAuditLogger.getObjectTypeTrimmed());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
+			if (columnValues.length != numberOfColumns)
+				throw new RuntimeException("mismatching number of column names vs column values");
 			
-			cell = row.createCell((short)2);
-			str = new HSSFRichTextString(ampAuditLogger.getTeamName());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
+			for(short k = 0; k < numberOfColumns; k++){
+				HSSFCell cell = row.createCell(k);
+				str = new HSSFRichTextString(columnValues[k]);
+				cell.setCellValue(str);
+				cell.setCellStyle(style);
+			}
 			
-			cell = row.createCell((short)3);
-			str = new HSSFRichTextString(ampAuditLogger.getAuthorName());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)4);
-			str = new HSSFRichTextString(ampAuditLogger.getSloggeddate());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)5);
-			str = new HSSFRichTextString(ampAuditLogger.getEditorName());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)6);
-			str = new HSSFRichTextString(ampAuditLogger.getSmodifydate());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)7);
-			str = new HSSFRichTextString(ampAuditLogger.getAction());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
 			i++;
 		}
-		sheet.autoSizeColumn((short)0);
-		sheet.autoSizeColumn((short)1);
-		sheet.autoSizeColumn((short)2);
-		sheet.autoSizeColumn((short)3);
-		sheet.autoSizeColumn((short)4);
-		sheet.autoSizeColumn((short)5);
-		sheet.autoSizeColumn((short)6);
-		sheet.autoSizeColumn((short)7);
+		
+		for(short k = 0; k <= 8; k++)
+			sheet.autoSizeColumn(k);
 		
 		return wb;
 		

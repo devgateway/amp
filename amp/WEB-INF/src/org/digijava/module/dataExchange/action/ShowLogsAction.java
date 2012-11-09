@@ -6,7 +6,6 @@ package org.digijava.module.dataExchange.action;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,8 +30,8 @@ import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.util.ImportLogDAO;
 import org.digijava.module.dataExchange.util.SessionImportLogDAO;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
-import org.digijava.module.dataExchange.util.XmlCreator;
 import org.digijava.module.dataExchange.utils.Constants;
+import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.springframework.util.FileCopyUtils;
@@ -172,6 +171,30 @@ public class ShowLogsAction extends MultiAction {
 
 	private void importActivity(HttpServletRequest request, ShowLogsForm myForm, String itemId) throws SQLException, DgException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		Sdm attachedFile = new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId()).getAttachedFile();
+		outputStream = DataExchangeUtils.getFileByOutputstream(attachedFile);
+		
+		ByteArrayOutputStream previousOutputStream = new ByteArrayOutputStream();
+		Sdm previousAttachedFile = new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId()).getPreviousAttachedFile();
+		previousOutputStream = DataExchangeUtils.getFileByOutputstream(previousAttachedFile);
+		
+		String result = outputStream.toString();
+		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId() );
+		if(ss.getLogs() == null)
+			ss.setLogs(new ArrayList<DELogPerExecution>());
+		
+		FileSourceBuilder fsb	= new FileSourceBuilder(ss, result, previousOutputStream.toString());
+		DEImportItem 	deItem  = new DEImportItem(fsb);
+		DEImportBuilder deib 	= new DEImportBuilder(deItem);
+		if(itemId != null)
+			{
+				deib.runIATI(request,"import",itemId);
+			}
+	}
+
+	private void getFilebyOutputStream(ShowLogsForm myForm,
+			ByteArrayOutputStream outputStream) throws SQLException,
+			DgException {
 		try {
 			Sdm attachedFile = new SessionSourceSettingDAO().getSourceSettingById(myForm.getSelectedSourceId()).getAttachedFile();
 			SdmItem item = null;
@@ -186,18 +209,6 @@ public class ShowLogsAction extends MultiAction {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String result = outputStream.toString();
-		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId() );
-		if(ss.getLogs() == null)
-			ss.setLogs(new ArrayList<DELogPerExecution>());
-		
-		FileSourceBuilder fsb	= new FileSourceBuilder(ss, result);
-		DEImportItem 	deItem  = new DEImportItem(fsb);
-		DEImportBuilder deib 	= new DEImportBuilder(deItem);
-		if(itemId != null)
-			{
-				deib.runIATI(request,"import",itemId);
-			}
 	}
 	
 	public ActionForward modeShowItemLogs(ActionMapping mapping, ActionForm form,

@@ -1199,7 +1199,7 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend( MULTI_DONOR );
 		}
 
-		if (this.isPublicView()){
+		if ( this.isPublicView() && ! this.budgetExport  ){
 			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
 		}
 

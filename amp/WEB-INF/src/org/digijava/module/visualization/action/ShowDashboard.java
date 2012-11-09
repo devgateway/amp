@@ -139,7 +139,11 @@ public class ShowDashboard extends Action {
 		filter.setDashboardType(Constants.DashboardType.DONOR);
 		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-
+		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		if (value != null) {
+			Long fisCalId = Long.parseLong(value);
+			filter.setFiscalCalendarId(fisCalId);
+		}
 		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
 		filter.setOrgGroups(orgGroups);
 		List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupsWithOrgsList = new ArrayList<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>>();
@@ -244,12 +248,7 @@ public class ShowDashboard extends Action {
 		// orgForm.setFiscalCalendarId(fisCalId);
 		// }
 		// } else {
-		String value = FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		if (value != null) {
-			Long fisCalId = Long.parseLong(value);
-			filter.setFiscalCalendarId(fisCalId);
-		}
+		
 		// }
 		if (filter.getLargestProjectNumber() == null) {
 			filter.setLargestProjectNumber(10);

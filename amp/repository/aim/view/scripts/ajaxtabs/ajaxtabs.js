@@ -46,7 +46,7 @@ function loadpage(page_request, containerid){
 if (page_request.readyState == 4 && (page_request.status==200 || window.location.href.indexOf("http")==-1)){
 document.getElementById(containerid).innerHTML=page_request.responseText;
 	try
-	{	var reporTable=new scrollableTable("reportTable",460);
+	{	var reporTable=new scrollableTable("reportTable",null);
 			reporTable.debug=false;
 			reporTable.usePercentage=false;
 			reporTable.maxRowDepth=4;

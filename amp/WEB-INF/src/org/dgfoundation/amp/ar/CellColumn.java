@@ -289,7 +289,12 @@ public class CellColumn extends Column {
 	 */
 	@Override
 	public int getColumnDepth() {
-		return 1;
+		if (this.getName() != null && !this.getName().equals("")){
+			return 1;	
+		}else{
+			return 0;
+		}
+		
 	}
 
 	public void replaceCell(Cell oldCell, Cell newCell) {

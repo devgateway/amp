@@ -55,6 +55,12 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  */
 public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpActivityVersion,TemporaryDocument> {
 
+	
+
+
+	boolean refreshExistingDocs = false;
+	
+	
 	/**
 	 * @param id
 	 * @param fmName
@@ -73,11 +79,10 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 		if (am.getObject().getActivityDocuments() == null)
 			am.getObject().setActivityDocuments(new HashSet<AmpActivityDocument>());
 		
-		IModel<List<TemporaryDocument>> listModel = new AbstractReadOnlyModel<List<TemporaryDocument>>() {
+		IModel<List<TemporaryDocument>> listModel  = new AbstractReadOnlyModel<List<TemporaryDocument>>() {
 
-            private Map <String,String> docNames = new HashMap <String,String>();
             List<TemporaryDocument> existingTmpDocs = getExistingObject();
-
+            
             private List<TemporaryDocument> getExistingObject() {
                 AmpAuthWebSession session = (AmpAuthWebSession) getSession();
                 Iterator<AmpActivityDocument> it = setModel.getObject().iterator();
@@ -126,6 +131,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                     ret.add(td);
                 }
                 getSession().setMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES, existingDocTitles);
+                refreshExistingDocs = false;
                 return ret;
             }
 
@@ -138,6 +144,9 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 				if(delItems == null)
 					delItems = new HashSet<AmpActivityDocument>();
                 List<TemporaryDocument> ret = new ArrayList<TemporaryDocument>();
+               
+                if(refreshExistingDocs) 	
+                	existingTmpDocs = getExistingObject();
                 ret.addAll(existingTmpDocs);
 
                 if (am.getObject().getActivityDocuments() == null)
@@ -163,6 +172,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 			}
 		};
 
+		
 		list = new ListView<TemporaryDocument>("list", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			
@@ -269,9 +279,14 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 				item.add(delRelOrg);
 			}
 		};
-		//list.setReuseItems(true);
+		
 		add(list);
 
+	}
+	
+	
+	public void setRefreshExistingDocs(boolean refreshExistingDocs) {
+		this.refreshExistingDocs = refreshExistingDocs;
 	}
 
 }

@@ -294,7 +294,7 @@
     <div id="mainWindow" dojotype="dijit.layout.BorderContainer" design="headline" gutters="false" style="width:100%; height:100%;">
   		<div id="map" dojotype="dijit.layout.ContentPane" class="roundedCorners" region="center">
        </div>
-        <div id="basemapGallery region="center" ></div>
+        <div id="basemapGallery" region="center"></div>
        	<div id="basemapGalleryesri" region="center"></div>
        <div class="headerBackground"> </div>
        <div class="header"style="float:left;">

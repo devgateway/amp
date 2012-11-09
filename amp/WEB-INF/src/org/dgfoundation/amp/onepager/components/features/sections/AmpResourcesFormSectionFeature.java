@@ -16,6 +16,7 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpNewResourceFieldPanel;
+import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.AmpResourcesSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
@@ -90,7 +91,19 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 					ad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
 					am.getObject().getActivityDocuments().add(ad);
 				}
+				HashSet<AmpActivityDocument> delItems = getSession().getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);
+				if(delItems == null)
+					delItems = new HashSet<AmpActivityDocument>();
+				for(AmpActivityDocument delItem: delItems)
+				{
+					if(delItem.getUuid().equals(choice.getUuid()))
+					{
+						delItems.remove(delItem);
+						break;
+					}
+				}
 				
+				resourcesList.setRefreshExistingDocs(true);
 				target.add(resourcesList.getParent());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpResourcesFormSectionFeature.this));
 				

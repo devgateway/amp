@@ -21,7 +21,7 @@ public class TokenRepository {
 		public static final String ACTUAL_COMMITMENTS = "actualCommitmentsLogicalToken";
 
 		public static final String PLANED_DISBURSEMENT = "plannedDisbusementLogicalToken";
-		public static final String ACTUAL_DISBURSEMENT = "actualCommitmentsLogicalToken";
+		public static final String ACTUAL_DISBURSEMENT = "actualDisbursementLogicalToken";
 		
 		/*
 		public static final String PLEDGES_COMMITMENTS = "pledgeCommitmentsLogicalToken";

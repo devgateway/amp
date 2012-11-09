@@ -48,6 +48,7 @@ public class ManageClassificationConfig extends Action {
         if (event != null && event.equals("save")) {
                 Long configId = configForm.getId();
                 String configName = configForm.getConfigName();
+                String configDescription = configForm.getConfigDescription();
                 //check for duplication
                 int calCount = SectorUtil.getClassificationConfigCount(configName, configId);
 			 	if(calCount>0){
@@ -66,7 +67,7 @@ public class ManageClassificationConfig extends Action {
                     multiSector = true;
                 }
                 
-                SectorUtil.saveClassificationConfig(configId, configName, multiSector, classification);
+                SectorUtil.saveClassificationConfig(configId, configName, configDescription, multiSector, classification);
              
 
             } else {

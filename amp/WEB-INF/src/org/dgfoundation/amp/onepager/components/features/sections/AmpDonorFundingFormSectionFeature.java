@@ -56,10 +56,8 @@ public class AmpDonorFundingFormSectionFeature extends
 	
 	public void switchOrg(ListItem item, AmpFunding funding, AmpOrganisation newOrg, AjaxRequestTarget target){
 		AmpFundingGroupFeaturePanel existingFundGrp = listItems.get(funding.getAmpDonorOrgId());
-		
-		int idx = item.getIndex();
+			
 		existingFundGrp.getList().remove(item);
-		existingFundGrp.getList().items.remove(idx);
 		existingFundGrp.getList().updateModel();
 		
 		funding.setAmpDonorOrgId(newOrg);

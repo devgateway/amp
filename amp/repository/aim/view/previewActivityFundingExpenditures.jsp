@@ -11,8 +11,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
-<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures" 
-														parentModule="/Activity Form/Donor Funding/Funding Item">
+<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
 
 <!-- expenditures -->
 <digi:instance property="aimEditActivityForm" />
@@ -35,27 +35,27 @@
 
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF">
-							<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
-								parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
+								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 								<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value"/></b>
 								</digi:trn>
 							</module:display>
 							</td>
 							<td align="right">
-								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Transaction Date"
-									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Transaction Date"
+									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 									<b><bean:write name="fundingDetail" property="transactionDate"/></b>
 								</module:display>
 							</td>
 
 							<td align="right">
-								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Amount"
-									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Amount"
+									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 									<b><bean:write name="fundingDetail" property="transactionAmount"/></b>&nbsp;																								
 								</module:display>
-								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Currency"
-									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Currency"
+									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 									<b><bean:write name="fundingDetail" property="currencyCode"/></b>&nbsp;
 								</module:display>
 								</td>
@@ -103,26 +103,26 @@
 
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF">
-							<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
-								parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
+								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 								<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value"/></b>
 								</digi:trn>
 							</module:display>
 							</td>
 							<td align="right">
-								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Transaction Date"
-									parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Transaction Date"
+									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 									<b><bean:write name="fundingDetail" property="transactionDate"/></b>
 								</module:display>
 							</td>
 							<td align="right">
-								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Amount"
-										parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Amount"
+										parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 									<b><bean:write name="fundingDetail" property="transactionAmount"/></b>&nbsp;
 								</module:display>		
-								<module:display name="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Currency"
-										parentModule="/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table">
+								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Currency"
+										parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
 									<b><bean:write name="fundingDetail" property="currencyCode"/></b>
 								</module:display>&nbsp;
 							</td>

@@ -3,12 +3,15 @@
  */
 package org.dgfoundation.amp.onepager;
 
-import java.io.File;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Page;
+import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -17,6 +20,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
 import org.dgfoundation.amp.onepager.util.FMComponentResolver;
 import org.dgfoundation.amp.onepager.util.JspResolver;
+import org.dgfoundation.amp.onepager.web.pages.AmpExceptionPage;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.springframework.security.AuthenticationManager;
@@ -113,6 +117,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 //getApplicationSettings().setPageExpiredErrorPage(AmpLoginRedirectPage.class);
 		 //getApplicationSettings().setAccessDeniedPage(AmpLoginRedirectPage.class);
 		
+		 
 		 //wicket session timeout
 		 //WebRequest request = (WebRequest) WebRequestCycle.get().getRequest();
 		 //request.getHttpServletRequest().getSession().setMaxInactiveInterval(2 * 60 * 60); //2hours
@@ -140,6 +145,18 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 //set UTF-8 as the default encoding for all requests
 		 getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
 		 getMarkupSettings().setDefaultMarkupEncoding("UTF-8"); 
+		 
+		 
+		 // Error handling
+		 getRequestCycleListeners().add(new AbstractRequestCycleListener() {
+
+			 @Override  
+	          public IRequestHandler onException(RequestCycle cycle, Exception e) {  
+				 logger.error("", e);
+	              return new RenderPageRequestHandler(new PageProvider(new AmpExceptionPage(e)));  
+					}
+				});
+		 
 
 		 
 		 

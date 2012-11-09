@@ -221,9 +221,12 @@
 		var textboxEl= document.getElementById(objectId);
 		textboxEl.value = "";
 	}
+
+	function pickDateById(buttonId,objectId){
+		pickDateById2(buttonId, objectId, true);
+	}
 	
-	
-	function pickDateById(buttonId,objectId)
+	function pickDateById2(buttonId,objectId,calendarUp)
 	{
 		
 		textboxEl= document.getElementById(objectId);
@@ -244,10 +247,19 @@
 			}
 			if ( renderDiv == null )
 				renderDiv	= document.body;
-			
+			if(calendarUp == true){
+				var calendarCorner = "bl";
+				var objectCorner = "tr";
+				console.log("true");
+			}else{
+				var calendarCorner = "tl";
+				var objectCorner = "br";
+				console.log("false");
+			}
 			dialog		= new YAHOO.widget.Dialog(dialogId, {
 		        visible:false,
-		        context:[buttonId,  "tl", "br"],
+		        
+		        context:[buttonId,  calendarCorner, objectCorner],
 		        draggable:false,
 		        close:true
 		        
@@ -311,7 +323,7 @@
             
 		}
 		dialog.show();
-		dialog.align("tl", "br");
+		dialog.align(calendarCorner, objectCorner);
 	}
 	
 	/*Just for compatibility reasons with functions that were used with the old DHTMLSuite calendar widget*/

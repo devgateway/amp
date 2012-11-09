@@ -4,6 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.visibility.ModuleVisibilityTag;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpParisIndicatorTableWidget;
@@ -34,7 +40,7 @@ public class WidgetPlaceHelper implements Serializable{
 	private Long objectId;
 	private String objectName;
 	private String widgetCombinedName;
-	
+	private static final Logger logger = Logger.getLogger(ModuleVisibilityTag.class);
 	/**
 	 * Default constructor
 	 */
@@ -46,13 +52,13 @@ public class WidgetPlaceHelper implements Serializable{
 	 * Constructor from widget place entity bean.
 	 * @param place
 	 */
-	public WidgetPlaceHelper(AmpDaWidgetPlace place){
+	public WidgetPlaceHelper(AmpDaWidgetPlace place,HttpServletRequest request){
 		this.placeId = place.getId();
 		this.placeName = place.getName();
 		this.placeCode = place.getCode();
 		this.placeLastRenderTime = place.getLastRendered();
 		if (place.getAssignedWidget()!=null){
-			fromWidget(place.getAssignedWidget());
+			fromWidget(place.getAssignedWidget(), request);
 		}
 	}
 	
@@ -60,11 +66,11 @@ public class WidgetPlaceHelper implements Serializable{
 	 * Constructor from widget entity bean.
 	 * @param widget
 	 */
-	public WidgetPlaceHelper(AmpWidget widget){
-		fromWidget(widget);
+	public WidgetPlaceHelper(AmpWidget widget, HttpServletRequest request){
+		fromWidget(widget,request);
 	}
 	
-	   private void fromWidget(AmpWidget widget) {
+	   private void fromWidget(AmpWidget widget,final HttpServletRequest request) {
         this.widgetClassName = widget.getClass().getName();
         this.widgetId = widget.getId();
         this.widgetName = widget.getName();
@@ -76,28 +82,48 @@ public class WidgetPlaceHelper implements Serializable{
             @Override
             public void visit(AmpWidgetIndicatorChart chart) {
                 rendertype.add(WidgetUtil.CHART_INDICATOR);
-                rendertypeName.add("Indicator Chart");
+                try {
+					rendertypeName.add(TranslatorWorker.translateText("Indicator Chart", request));
+				} catch (WorkerException e) {
+					logger.error("TranslatorWorker error: translate text Indicator Chat",e);
+				}
             }
 
             @Override
             public void visit(AmpDaTable table) {
                 rendertype.add(WidgetUtil.TABLE);
-                rendertypeName.add("Table");
+                try {
+					rendertypeName.add(TranslatorWorker.translateText("Table", request));
+				} catch (WorkerException e) {
+					logger.error("TranslatorWorker error: translate text Table",e);
+				}
             }
             @Override
             public void visit(AmpSectorTableWidget table) {
                 rendertype.add(WidgetUtil.SECTOR_TABLE);
-                rendertypeName.add("Sector Table Widget");
+                try {
+					rendertypeName.add(TranslatorWorker.translateText("Sector Table Widget", request));
+				} catch (WorkerException e) {
+					logger.error("TranslatorWorker error: translate text Sector Table Widget",e);
+				}
             }
             @Override
             public void visit(AmpParisIndicatorTableWidget table) {
                 rendertype.add(WidgetUtil.PARIS_INDICAROR_TABLE);
-                rendertypeName.add("Paris Indicator Table Widget");
+                try {
+					rendertypeName.add(TranslatorWorker.translateText("Paris Indicator Table Widget", request));
+				} catch (WorkerException e) {
+					logger.error("TranslatorWorker error: translate text Paris Indicator Table Widget");
+				}
             }
             @Override
             public void visit(AmpWidgetTopTenDonorGroups table) {
                 rendertype.add(WidgetUtil.TOP_TEN_DONORS);
-                rendertypeName.add("Top Ten Donors Table Widget");
+                try {
+					rendertypeName.add(TranslatorWorker.translateText("Top Ten Donors Table Widget", request));
+				} catch (WorkerException e) {
+					logger.error("TranslatorWorker error: translate text Top Ten Donors Table Widget",e);
+				}
             }
         };
         widget.accept(adapter);

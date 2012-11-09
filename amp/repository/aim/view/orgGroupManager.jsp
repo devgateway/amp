@@ -274,7 +274,7 @@
 											<logic:notEmpty name="aimOrgGroupManagerForm" property="alphaPages">
 											<tr>
 												<td align="center" colspan="4" style="font-size:12px;">
-													<table width="90%" style="font-size:12px;">
+													<table maxWidth="90%" style="font-size:12px;">
 														<tr>
 														    <td>
 														    <c:if test="${not empty aimOrgGroupManagerForm.currentAlpha}">

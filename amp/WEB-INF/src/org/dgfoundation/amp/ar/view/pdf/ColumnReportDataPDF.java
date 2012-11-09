@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
@@ -75,8 +76,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 		String locale=parent.getReportMetadata().getLocale();
 		
 //		title
-		if ((columnReport.getParent() != null)&&(!columnReport.getName().equalsIgnoreCase(columnReport.getParent().getName()))
-				&& !parent.getReportMetadata().getHideActivities()) {
+		if ((columnReport.getParent() != null)&&(!columnReport.getName().equalsIgnoreCase(columnReport.getParent().getName()))) {
 			
 			//introducing the translaton issues
 			
@@ -134,42 +134,45 @@ public class ColumnReportDataPDF extends PDFExporter {
 					Column element2 = (Column) ii.next();
 					//element2.setMaxNameDisplayLength(16);
 					
-					String cellValue=element2.getName(metadata.getHideActivities());
-					//this value should be translated
-					String translatedCellValue=new String();
-					//String prefix="aim:reportBuilder:";
-					
-					try{
-						translatedCellValue=TranslatorWorker.translateText(cellValue,locale,siteId);
-					}catch (WorkerException e)
-						{
-						e.printStackTrace();
+					if ( !StringUtils.isEmpty(element2.getName()) ){
+
+						String cellValue=element2.getName(metadata.getHideActivities());
+						//this value should be translated
+						String translatedCellValue=new String();
+						//String prefix="aim:reportBuilder:";
 						
+						try{
+							translatedCellValue=TranslatorWorker.translateText(cellValue,locale,siteId);
+						}catch (WorkerException e)
+							{
+							e.printStackTrace();
+							
+							}
+						PdfPCell pdfc=null;
+						font.setSize(9);
+						if(translatedCellValue.compareTo("")==0){
+						    if(cellValue!=null && cellValue.length() < 18){
+							font.setSize(12);
+						    }
+						    pdfc = new PdfPCell(new Paragraph(cellValue,font));
+						   	
+						}else{
+						    if(translatedCellValue.length() < 18){
+							font.setSize(12);
+						    }
+						    pdfc = new PdfPCell(new Paragraph(translatedCellValue,font));
+						   }
+						
+						pdfc.setHorizontalAlignment(Element.ALIGN_CENTER);
+						pdfc.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						pdfc.setColspan(element2.getWidth());
+						if (rowsp > 1){
+							pdfc.setRowspan(rowsp);
 						}
-					PdfPCell pdfc=null;
-					font.setSize(9);
-					if(translatedCellValue.compareTo("")==0){
-					    if(cellValue!=null && cellValue.length() < 18){
-						font.setSize(12);
-					    }
-					    pdfc = new PdfPCell(new Paragraph(cellValue,font));
-					   	
-					}else{
-					    if(translatedCellValue.length() < 18){
-						font.setSize(12);
-					    }
-					    pdfc = new PdfPCell(new Paragraph(translatedCellValue,font));
-					   }
-					
-					pdfc.setHorizontalAlignment(Element.ALIGN_CENTER);
-					pdfc.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					pdfc.setColspan(element2.getWidth());
-					if (rowsp > 1){
-						pdfc.setRowspan(rowsp);
+						pdfc.setBackgroundColor(new Color(51,102,153));
+						//table.addCell(pdfc);
+						headingCells.add(pdfc);
 					}
-					pdfc.setBackgroundColor(new Color(51,102,153));
-					//table.addCell(pdfc);
-					headingCells.add(pdfc);
 				} else {
 					/*
 					PdfPCell pdfc = new PdfPCell(new Paragraph(""));

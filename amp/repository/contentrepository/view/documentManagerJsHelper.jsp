@@ -1,5 +1,6 @@
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <!-- Individual YUI CSS files -->
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
@@ -454,7 +455,27 @@ myTable.enhanceMarkup = function(markupName) {
 };
 
 function sortColumn() {
-	this.sortColumn(this.getColumn('date'),YAHOO.widget.DataTable.CLASS_DESC);
+	//debugger;
+	var columnSettingString = '<gs:value name="<%=GlobalSettingsConstants.DEFAULT_RESOURCES_SORT_COLUMN %>" />';
+	// the setting has the value [ColumnName]_[ASC/DESC];
+	
+	var separatorPos = columnSettingString.lastIndexOf('_');
+	var columnName = columnSettingString.substring(0, separatorPos);
+	var sortOrderStr = columnSettingString.substring(separatorPos + 1);
+	
+	var sortOrder = -1;
+	
+	switch(sortOrderStr)
+	{
+		case 'ASC': sortOrder = YAHOO.widget.DataTable.CLASS_ASC; break;
+		case 'DESC': sortOrder = YAHOO.widget.DataTable.CLASS_DESC; break;
+		default: alert('invalid sort column setting: ' + columnSettingString); 
+				sortOrder = YAHOO.widget.DataTable.CLASS_DESC;
+				columnName = 'date';
+				break;
+	}
+
+	this.sortColumn(this.getColumn(columnName), sortOrder);
 }
 
 function hideCategories(){

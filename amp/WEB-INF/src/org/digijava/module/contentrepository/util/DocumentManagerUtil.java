@@ -180,8 +180,8 @@ public class DocumentManagerUtil {
 					registerNamespace(jcrSession, "amplabel", "http://amp-demo.code.ro/label");
 					
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.warn("getWriteSession: " + e.getMessage());
+					//e.printStackTrace();
 					return null;
 				}
 			}

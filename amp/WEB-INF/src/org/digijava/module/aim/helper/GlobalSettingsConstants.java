@@ -93,4 +93,5 @@ public class GlobalSettingsConstants {
 
     public static final String REPORTS_EMPTY_VALUES_AS_ZERO_XLS= "Show empty values as zero in Reports export to XLS";
 
+    public static final String DEFAULT_RESOURCES_SORT_COLUMN = "Resource List Sort Column";
 }

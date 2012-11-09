@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.helper.KeyValue;
 public class GlobalSettingsForm extends ActionForm {
-	Collection gsfCol = null;
+	Collection<AmpGlobalSettings> gsfCol = null;
 	Collection countryNameCol = null;
 	String countryName = null;
 	Long gsfId;
@@ -18,8 +20,8 @@ public class GlobalSettingsForm extends ActionForm {
 	String globalSettingsName = null;
 	
 	
-	Map possibleValues 						= new HashMap(); // The values are of type org.digijava.module.aim.helper.KeyValue
-	Map possibleValuesDictionary 			= new HashMap(); // The values are of also of type HashMap (key-value)
+	Map<String, Collection<KeyValue>> possibleValues 	= new HashMap<String, Collection<KeyValue>>();
+	Map<String, Map<String, String>> possibleValuesDictionary = new HashMap<String, Map<String, String>>(); // The values are of also of type HashMap (key-value)
 	
 	Map<String, String> globalSettingsType	= new HashMap<String, String>();
 	
@@ -70,10 +72,10 @@ public class GlobalSettingsForm extends ActionForm {
 	public void setGsfValue(String gsfValue) {
 		this.gsfValue = gsfValue;
 	}
-	public Collection getGsfCol() {
+	public Collection<AmpGlobalSettings> getGsfCol() {
 		return gsfCol;
 	}
-	public void setGsfCol(Collection gsfCol) {
+	public void setGsfCol(Collection<AmpGlobalSettings> gsfCol) {
 		this.gsfCol = gsfCol;
 	}
 	public String getCountryName() {
@@ -89,18 +91,19 @@ public class GlobalSettingsForm extends ActionForm {
 		this.countryNameCol = countryNameCol;
 	}
 
-	public void setPossibleValues(String key, Collection values) {
+	public void setPossibleValues(String key, Collection<KeyValue> values) {
 		possibleValues.put(key, values);
 	}
-	public Collection getPossibleValues(String key) {
-		return (Collection) possibleValues.get(key);
+	
+	public Collection<KeyValue> getPossibleValues(String key) {
+		return possibleValues.get(key);
 	}
 	
-	public void setPossibleValuesDictionary(String key, Map dictionary) {
+	public void setPossibleValuesDictionary(String key, Map<String, String> dictionary) {
 		possibleValuesDictionary.put(key, dictionary);
 	}
-	public Map getPossibleValuesDictionary(String key) {
-		return (Map) possibleValuesDictionary.get(key);
+	public Map<String, String> getPossibleValuesDictionary(String key) {
+		return possibleValuesDictionary.get(key);
 	}
 	
 	public String getGlobalSettingType(String gsName) {

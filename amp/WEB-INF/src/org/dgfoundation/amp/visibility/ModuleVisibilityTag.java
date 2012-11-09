@@ -39,7 +39,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	private String enabled;
 	private String parentModule;
 	private String hasLevel;
-	private static Logger logger = Logger.getLogger(ModuleVisibilityTag.class);
+	private static final Logger logger = Logger.getLogger(ModuleVisibilityTag.class);
 	
 	public String getHasLevel() {
 		return hasLevel;

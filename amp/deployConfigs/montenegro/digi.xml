@@ -20,11 +20,11 @@
 
 
 	<forward-emails enabled="false">
-		<email>lasha@gateway.ge</email>
+		<email>support@dgfoundation.org</email>
 	</forward-emails>
 
 	<exception-emails>
-		<email>lasha@gateway.ge</email>
+		<email>support@dgfoundation.org</email>
 	</exception-emails>
 	
 	<enable-autologin>true</enable-autologin>

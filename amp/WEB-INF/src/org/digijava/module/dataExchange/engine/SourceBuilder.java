@@ -8,17 +8,45 @@ public abstract class SourceBuilder {
 	
 	protected DESourceSetting DESourceSetting;
 	protected String inputString;
+	protected String inputStringPrevious;
+	protected String previousInputStream;
+
+	public String getPreviousInputStream() {
+		return previousInputStream;
+	}
+
+
+	public void setPreviousInputStream(String previousInputStream) {
+		this.previousInputStream = previousInputStream;
+	}
+
+
+	public String getInputStringPrevious() {
+		return inputStringPrevious;
+	}
+
+
+	public void setInputStringPrevious(String inputStringPrevious) {
+		this.inputStringPrevious = inputStringPrevious;
+	}
+
 
 	public SourceBuilder() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-	public SourceBuilder(DESourceSetting DESourceSetting,
-			String inputStream) {
+	public SourceBuilder(DESourceSetting DESourceSetting, String inputStream) {
 		super();
 		this.DESourceSetting = DESourceSetting;
 		this.inputString = inputStream;
+		this.previousInputStream = null;
+	}
+	
+	public SourceBuilder(DESourceSetting DESourceSetting, String inputStream,String previousInputStream) {
+		super();
+		this.DESourceSetting = DESourceSetting;
+		this.inputString = inputStream;
+		this.previousInputStream = previousInputStream;
 	}
 	
 	public DESourceSetting getDESourceSetting() {

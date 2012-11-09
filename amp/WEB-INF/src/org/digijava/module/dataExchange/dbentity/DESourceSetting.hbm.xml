@@ -19,6 +19,7 @@
 		<property name="url" column="url" type="java.lang.String" />
 		
 		<many-to-one name="attachedFile" class="org.digijava.module.sdm.dbentity.Sdm" cascade="delete" column="attached_doc_id" unique="true"/>
+		<many-to-one name="previousAttachedFile" class="org.digijava.module.sdm.dbentity.Sdm" cascade="delete" column="previous_attached_doc_id" unique="true"/>
 		
 		<many-to-one name="importWorkspace" column="amp_team_id" lazy="false" 
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />

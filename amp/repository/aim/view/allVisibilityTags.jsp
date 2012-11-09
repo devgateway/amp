@@ -285,7 +285,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 	<feature:display name="${ampMeasures.aliasName}" module="Measures"></feature:display>
 </logic:iterate>
  
-<feature:display name="Enable New User Registration" module="Login - User Management"></feature:display> 
+
+ 
 <feature:display  name="Sector Table Widgets" module="WIDGETS"></feature:display>
 <feature:display  name="Paris Indicator Table Widgets" module="WIDGETS"></feature:display>
  
@@ -1036,6 +1037,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Enable New User Registration" module="Login - User Management"></feature:display>
+<feature:display name="Change Password" module="Login - User Management"></feature:display>
+<feature:display name="Trouble signing in" module="Login - User Management"></feature:display>
 
 <module:display name="Public Reports and Tabs" parentModule="PUBLIC VIEW"></module:display>
 <feature:display name="Filters" module="Public Reports and Tabs"></feature:display>

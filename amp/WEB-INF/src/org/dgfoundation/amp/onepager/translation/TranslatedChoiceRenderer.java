@@ -10,7 +10,10 @@ public class TranslatedChoiceRenderer<T> extends ChoiceRenderer<T> {
 	private static final long serialVersionUID = 1L;
 
 	public Object getDisplayValue(T object) {
-		return TranslatorUtil.getTranslatedText(object.toString());
+		if (object != null)
+			return TranslatorUtil.getTranslatedText(object.toString());
+		else 
+			return null;
 	}
 	
 }

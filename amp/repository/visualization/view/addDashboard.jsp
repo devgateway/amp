@@ -98,6 +98,7 @@ function removeGraph()
 
 function saveDashboard() {
 
+	document.getElementById("showInMenu2").value = document.getElementById("show_in_menu").checked;
 	if (validateData()){
 		var i = 0;
 		var param = "";
@@ -189,10 +190,16 @@ function validateData(){
 						<html:select property="baseType" styleId="baseType_dropdown" styleClass="inp-text" style="width:250px;">
 						<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
 						<html:option value="0"><digi:trn>None</digi:trn></html:option>
-						<html:option value="1"><digi:trn>Donor based</digi:trn></html:option>
+						<html:option value="1"><digi:trn>Organization based</digi:trn></html:option>
 						<html:option value="2"><digi:trn>Region based</digi:trn></html:option>
 						<html:option value="3"><digi:trn>Sector based</digi:trn></html:option>
 					</html:select></td>
+				</tr>
+				<tr>
+					<td><digi:trn><b>Show in AMP main menu</b></digi:trn>
+						<input type="checkbox" id="show_in_menu"/>
+						<html:hidden property="showInMenu" styleId="showInMenu2" />
+					</td>
 				</tr>
 				<tr>
 					<td>
@@ -309,6 +316,11 @@ var numGraphs = <%=idx%>;
 var tempGraphs = numGraphs;
 
 function init(){
+	if (document.getElementById("showInMenu2").value=='true') {
+		document.getElementById("show_in_menu").checked = true;
+	} else {
+		document.getElementById("show_in_menu").checked = false;
+	}
 	numGraphs = <%=idx%>;
 	tempGraphs = <%=idx%>;
 	if (tempGraphs==0){

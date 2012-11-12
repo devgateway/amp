@@ -86,7 +86,7 @@ var trnPledges = "";
 var trnAidPredictability = "";
 var trnAidType = "";
 var trnFinancingInstrument = "";
-var trnDonorProfile = "";
+var trnOrganizationProfile = "";
 var trnSectorProfile = "";
 var trnSubSectorProfile = "";
 var trnRegionProfile = "";
@@ -95,7 +95,9 @@ var trnShowFullList = "";
 var trnTopProjects = "";
 var trnTopSectors = "";
 var trnTopRegions = "";
-var trnTopDonors = "";
+var trnTopOrganizations = "";
+var trnTopNPOs = "";
+var trnTopPrograms = "";
 var trnShowFilterSetttings = "";
 var trnHideFilterSetttings = "";
 var trnTotalCommitments = "";
@@ -109,7 +111,7 @@ var trnFaxes = "";
 var trnNoContactInfo = "";
 var trnSave = "";
 var trnDescription = "";
-var trnBackgroundDonor = "";
+var trnBackgroundOrganization = "";
 var trnNoAdditionalInfo = "";
 var trnAllOrgGroups = "";
 var trnMultipleOrgs = "";
@@ -126,7 +128,7 @@ var trnODAGrowth = "";
 var trnSavingInformation = "";
 var trnSavedInformation = "";
 var trnFailedSave = "";
-
+var trnNoDataToShow = "";
 var alertBadDate="";
 var loadingPanel;
 var urlPdfExport = "";
@@ -149,13 +151,13 @@ function initializeTranslations(){
 	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
-	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
+	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Organizations</digi:trn>: ";
 	trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
 	trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
 	trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
 	trnTotalDisbsDescription="<digi:trn jsFriendly='true'>Sum of Disbursements on projets filtered.</digi:trn>";
 	trnNumOfProjsDescription="<digi:trn jsFriendly='true'>Number of Projects filtered.</digi:trn>";
-	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Donors on projects filtered</digi:trn>";
+	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Organizations on projects filtered</digi:trn>";
 	trnNumOfSecsDescription="<digi:trn jsFriendly='true'>Number of Sectors on projects filtered</digi:trn>";
 	trnNumOfRegsDescription="<digi:trn jsFriendly='true'>Number of Regions on projects filtered</digi:trn>";
 	trnAvgProjSizeDescription="<digi:trn jsFriendly='true'>Total Disbursements divided Number of Projects</digi:trn>";
@@ -166,7 +168,7 @@ function initializeTranslations(){
 	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
 	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
 	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
-	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
+	trnOrganizationProfile="<digi:trn jsFriendly='true'>Organization Profile</digi:trn>";
 	trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
 	trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
 	trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
@@ -175,7 +177,9 @@ function initializeTranslations(){
 	trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
 	trnTopSectors="<digi:trn jsFriendly='true'>Top Sectors</digi:trn>";
 	trnTopRegions="<digi:trn jsFriendly='true'>Top Regions</digi:trn>"; 
-	trnTopDonors="<digi:trn jsFriendly='true'>Top Donors</digi:trn>"; 
+	trnTopOrganizations="<digi:trn jsFriendly='true'>Top Organizations</digi:trn>"; 
+	trnTopNPOs="<digi:trn jsFriendly='true'>Top NPO</digi:trn>"; 
+	trnTopPrograms="<digi:trn jsFriendly='true'>Top Programs</digi:trn>"; 
 	trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter settings</digi:trn>"; 
 	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
 	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
@@ -189,7 +193,7 @@ function initializeTranslations(){
 	trnNoContactInfo ="<digi:trn>No Contact Information available for current filter</digi:trn>"; 
 	trnSave = "<digi:trn>Save</digi:trn>";
 	trnDescription = "<digi:trn>Description</digi:trn>";
-	trnBackgroundDonor = "<digi:trn>Background of donor</digi:trn>";
+	trnBackgroundOrganization = "<digi:trn>Background of organization</digi:trn>";
 	trnNoAdditionalInfo = "<digi:trn>No Additional Information available for current filter</digi:trn>";
 	trnAllOrgGroups = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
 	trnMultipleOrgs = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>"; 
@@ -207,7 +211,7 @@ function initializeTranslations(){
 	trnSavedInformation = "<digi:trn>Information was saved</digi:trn>"; 
 	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
 	alertBadDate="<digi:trn>Start year can't be greater than end year</digi:trn>";
-	
+	trnNoDataToShow="<digi:trn>No data to show</digi:trn>";
 }
 function initializeGlobalVariables(){
 	//Other global variables
@@ -609,6 +613,17 @@ function initializeGlobalVariables(){
 													</td>
 											</tr>
 											<tr>
+												<c:if test="${visualizationform.filter.dashboardType==1}">
+												<td><b><digi:trn>Type of Agency</digi:trn>:</b>
+												 	</td>
+													<td align="right">
+														<html:select property="filter.agencyTypeFilter" styleId="agencyType_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+															<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
+															<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
+															<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
+														</html:select>
+												 	</td>
+												</c:if>
 												<td><b><digi:trn>Decimals to show</digi:trn>:</b>
 												</td>
 												<td><html:select property="filter.decimalsToShow"
@@ -621,7 +636,9 @@ function initializeGlobalVariables(){
 														<html:option value="4">4</html:option>
 														<html:option value="5">5</html:option>
 													</html:select></td>
-												</tr>
+												<td></td>
+												<td></td>
+											</tr>
 										</table>
 									</div>
 								</div>
@@ -743,6 +760,7 @@ function initializeGlobalVariables(){
 <html:hidden property="filter.expendituresVisible" styleId="expendituresVisible" />
 <html:hidden property="filter.pledgeVisible" styleId="pledgeVisible"/>
 <html:hidden property="filter.transactionType" styleId="transactionType" />
+<html:hidden property="filter.agencyType" styleId="agencyType" />
 <html:hidden property="filter.currencyId" styleId="currencyId" />
 <html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
 <html:hidden property="filter.groupSeparator" styleId="groupSeparator" />
@@ -832,6 +850,19 @@ function initializeGlobalVariables(){
 				</html:select>
 		 	</td>
 		</tr>
+		<c:if test="${visualizationform.filter.dashboardType==1}">
+			<tr>
+				<td><digi:trn>Type of Agency</digi:trn>:
+			 	</td>
+				<td align="right">
+					<html:select property="filter.agencyTypeQuickFilter" styleId="agencyTypeQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+						<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
+						<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
+						<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
+					</html:select>
+			 	</td>
+			</tr>
+		</c:if>
 		<tr>
 			<td><digi:trn>Currency Type</digi:trn>:
 		 	</td>
@@ -1097,30 +1128,30 @@ function initializeGlobalVariables(){
 		</div>
 	</fieldset>
 </c:if>
-<c:if test="${visualizationform.filter.showDonorsRanking eq 'true'}">
+<c:if test="${visualizationform.filter.showOrganizationsRanking eq 'true'}">
 	<fieldset>
-		<legend><span id="topDonorsTitle" class=legend_label style="width:200px"></span></legend>
-		<div id="divTopDonors" class="field_text">
+		<legend><span id="topOrganizationsTitle" class=legend_label style="width:200px"></span></legend>
+		<div id="divTopOrganizations" class="field_text">
 			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.topDonors}" var="donorItem">
+			<c:forEach items="${visualizationform.ranksInformation.topOrganizations}" var="organizationItem">
 			<c:set var="index" value="${index+1}"/>
 			
-			 <c:out value="${index}"/>. <c:out value="${donorItem.key}"/>  <b>($<c:out value="${donorItem.value}"/>)</b>
+			 <c:out value="${index}"/>. <c:out value="${organizationItem.key}"/>  <b>($<c:out value="${organizationItem.value}"/>)</b>
 				<hr />
 			</c:forEach>
 		
-			<a href="javascript:showFullDonors()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+			<a href="javascript:showFullOrganizations()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
 		</div>
-		<div id="divFullDonors" class="field_text" style="display: none;">
+		<div id="divFullOrganizations" class="field_text" style="display: none;">
 			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.fullDonors}" var="donorItem">
+			<c:forEach items="${visualizationform.ranksInformation.fullOrganizations}" var="organizationItem">
 			<c:set var="index" value="${index+1}"/>
 			
-			 <c:out value="${index}"/>. <c:out value="${donorItem.key}"/>  <b>($<c:out value="${donorItem.value}"/>)</b>
+			 <c:out value="${index}"/>. <c:out value="${organizationItem.key}"/>  <b>($<c:out value="${organizationItem.value}"/>)</b>
 				<hr />
 			</c:forEach>
 		
-			<a href="javascript:hideFullDonors()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+			<a href="javascript:hideFullOrganizations()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
 		</div>
 	</fieldset>	
 </c:if>
@@ -1175,6 +1206,60 @@ function initializeGlobalVariables(){
 			</c:forEach>
 		
 			<a href="javascript:hideFullRegions()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+		</div>
+	</fieldset>	
+</c:if>
+<c:if test="${visualizationform.filter.showNPORanking eq 'true'}">
+	<fieldset>
+		<legend><span id="topNPOsTitle" class=legend_label style="width:200px"></span></legend>
+		<div id="divTopNPOs" class="field_text">
+			<c:set var="index" value="0"/>
+			<c:forEach items="${visualizationform.ranksInformation.topNPOs}" var="NPOItem">
+			<c:set var="index" value="${index+1}"/>
+			
+			 <c:out value="${index}"/>. <c:out value="${NPOItem.key}"/>  <b>($<c:out value="${NPOItem.value}"/>)</b>
+				<hr />
+			</c:forEach>
+		
+			<a href="javascript:showFullNPOs()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+		</div>
+		<div id="divFullNPOs" class="field_text" style="display: none;">
+			<c:set var="index" value="0"/>
+			<c:forEach items="${visualizationform.ranksInformation.fullNPOs}" var="NPOItem">
+			<c:set var="index" value="${index+1}"/>
+			
+			 <c:out value="${index}"/>. <c:out value="${NPOItem.key}"/>  <b>($<c:out value="${NPOItem.value}"/>)</b>
+				<hr />
+			</c:forEach>
+		
+			<a href="javascript:hideFullNPOs()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+		</div>
+	</fieldset>	
+</c:if>
+<c:if test="${visualizationform.filter.showProgramsRanking eq 'true'}">
+	<fieldset>
+		<legend><span id="topProgramsTitle" class=legend_label style="width:200px"></span></legend>
+		<div id="divTopPrograms" class="field_text">
+			<c:set var="index" value="0"/>
+			<c:forEach items="${visualizationform.ranksInformation.topPrograms}" var="programItem">
+			<c:set var="index" value="${index+1}"/>
+			
+			 <c:out value="${index}"/>. <c:out value="${programItem.key}"/>  <b>($<c:out value="${programItem.value}"/>)</b>
+				<hr />
+			</c:forEach>
+		
+			<a href="javascript:showFullPrograms()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+		</div>
+		<div id="divFullPrograms" class="field_text" style="display: none;">
+			<c:set var="index" value="0"/>
+			<c:forEach items="${visualizationform.ranksInformation.fullPrograms}" var="programItem">
+			<c:set var="index" value="${index+1}"/>
+			
+			 <c:out value="${index}"/>. <c:out value="${programItem.key}"/>  <b>($<c:out value="${programItem.value}"/>)</b>
+				<hr />
+			</c:forEach>
+		
+			<a href="javascript:hideFullPrograms()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
 		</div>
 	</fieldset>	
 </c:if>
@@ -1305,13 +1390,13 @@ function initializeTranslations(){
 	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
-	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
+	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Organizations</digi:trn>: ";
 	trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
 	trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
 	trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
 	trnTotalDisbsDescription="<digi:trn jsFriendly='true'>Sum of Disbursements on projets filtered.</digi:trn>";
 	trnNumOfProjsDescription="<digi:trn jsFriendly='true'>Number of Projects filtered.</digi:trn>";
-	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Donors on projects filtered</digi:trn>";
+	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Organizations on projects filtered</digi:trn>";
 	trnNumOfSecsDescription="<digi:trn jsFriendly='true'>Number of Sectors on projects filtered</digi:trn>";
 	trnNumOfRegsDescription="<digi:trn jsFriendly='true'>Number of Regions on projects filtered</digi:trn>";
 	trnAvgProjSizeDescription="<digi:trn jsFriendly='true'>Total Disbursements divided Number of Projects</digi:trn>";
@@ -1322,7 +1407,7 @@ function initializeTranslations(){
 	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
 	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
 	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
-	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
+	trnOrganizationProfile="<digi:trn jsFriendly='true'>Organization Profile</digi:trn>";
 	trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
 	trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
 	trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
@@ -1331,7 +1416,9 @@ function initializeTranslations(){
 	trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
 	trnTopSectors="<digi:trn jsFriendly='true'>Top Sectors</digi:trn>";
 	trnTopRegions="<digi:trn jsFriendly='true'>Top Regions</digi:trn>"; 
-	trnTopDonors="<digi:trn jsFriendly='true'>Top Donors</digi:trn>"; 
+	trnTopOrganizations="<digi:trn jsFriendly='true'>Top Organizations</digi:trn>"; 
+	trnTopNPOs="<digi:trn jsFriendly='true'>Top NPO</digi:trn>"; 
+	trnTopPrograms="<digi:trn jsFriendly='true'>Top Programs</digi:trn>"; 
 	trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter settings</digi:trn>"; 
 	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
 	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
@@ -1344,7 +1431,7 @@ function initializeTranslations(){
 	trnNoContactInfo ="<digi:trn>No Contact Information available for current filter</digi:trn>"; 
 	trnSave = "<digi:trn>Save</digi:trn>";
 	trnDescription = "<digi:trn>Description</digi:trn>";
-	trnBackgroundDonor = "<digi:trn>Background of donor</digi:trn>";
+	trnBackgroundOrganization = "<digi:trn>Background of organization</digi:trn>";
 	trnNoAdditionalInfo = "<digi:trn>No Additional Information available for current filter</digi:trn>";
 	trnAllOrgGroups = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
 	trnMultipleOrgs = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>"; 
@@ -1362,6 +1449,7 @@ function initializeTranslations(){
 	trnSavedInformation = "<digi:trn>Information was saved</digi:trn>"; 
 	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
 	alertBadDate="<digi:trn>Start year can't be greater than end year</digi:trn>";
+	trnNoDataToShow="<digi:trn>No data to show</digi:trn>";
 }
 function initializeGlobalVariables(){
 	//Other global variables

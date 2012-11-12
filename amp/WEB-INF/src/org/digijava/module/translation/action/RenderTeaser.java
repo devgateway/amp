@@ -22,6 +22,8 @@
 
 package org.digijava.module.translation.action;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,6 +32,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.translation.form.TranslationForm;
 import org.digijava.module.translation.util.TranslationManager;
 
@@ -51,7 +54,10 @@ public class RenderTeaser
             generateRoots = Boolean.valueOf(rootPathesParam).booleanValue();
         }
 
-        TranslationManager.generateLanguages(generateRoots, request, formBean);
+        Collection dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
+		request.getSession().setAttribute(Constants.MENU_DASHBOARDS, dashboards);
+        
+		TranslationManager.generateLanguages(generateRoots, request, formBean);
 
         return null;
     }

@@ -166,6 +166,17 @@ public class QueryUtil {
 		return oql;
 	}
 
+	 public static String getInStatement(Object[] ids) {
+	        String oql = "";
+	        for (int i = 0; i < ids.length; i++) {
+	            oql += "" + ids[i];
+	            if (i < ids.length - 1) {
+	                oql += ",";
+	            }
+	        }
+	        return oql;
+		}    
+	 
 	public static String getTeamQueryManagement() {
 		String qr = "";
 		qr += " and act.draft=false and act.approvalStatus ='approved' ";

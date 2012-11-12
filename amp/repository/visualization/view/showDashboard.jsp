@@ -87,7 +87,7 @@ var trnAidPredictability = "";
 var trnODAHistoricalTrend="";
 var trnAidType = "";
 var trnFinancingInstrument = "";
-var trnDonorProfile = "";
+var trnOrganizationProfile = "";
 var trnSectorProfile = "";
 var trnSubSectorProfile = "";
 var trnRegionProfile = "";
@@ -96,7 +96,7 @@ var trnShowFullList = "";
 var trnTopProjects = "";
 var trnTopSectors = "";
 var trnTopRegions = "";
-var trnTopDonors = "";
+var trnTopOrganizations = "";
 var trnShowFilterSetttings = "";
 var trnHideFilterSetttings = "";
 var trnTotalCommitments = "";
@@ -110,7 +110,7 @@ var trnFaxes = "";
 var trnNoContactInfo = "";
 var trnSave = "";
 var trnDescription = "";
-var trnBackgroundDonor = "";
+var trnBackgroundOrganization = "";
 var trnNoAdditionalInfo = "";
 var trnAllOrgGroups = "";
 var trnMultipleOrgs = "";
@@ -151,13 +151,13 @@ function initializeTranslations(){
 	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
-	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
+	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Organizations</digi:trn>: ";
 	trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
 	trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
 	trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
 	trnTotalDisbsDescription="<digi:trn jsFriendly='true'>Sum of Disbursements on projets filtered.</digi:trn>";
 	trnNumOfProjsDescription="<digi:trn jsFriendly='true'>Number of Projects filtered.</digi:trn>";
-	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Donors on projects filtered</digi:trn>";
+	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Organizations on projects filtered</digi:trn>";
 	trnNumOfSecsDescription="<digi:trn jsFriendly='true'>Number of Sectors on projects filtered</digi:trn>";
 	trnNumOfRegsDescription="<digi:trn jsFriendly='true'>Number of Regions on projects filtered</digi:trn>";
 	trnAvgProjSizeDescription="<digi:trn jsFriendly='true'>Total Disbursements divided Number of Projects</digi:trn>";
@@ -169,7 +169,7 @@ function initializeTranslations(){
 	trnODAHistoricalTrend="<digi:trn jsFriendly='true'>ODA Historical Trend</digi:trn>";
 	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
 	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
-	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
+	trnOrganizationProfile="<digi:trn jsFriendly='true'>Organization Profile</digi:trn>";
 	trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
 	trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
 	trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
@@ -178,7 +178,7 @@ function initializeTranslations(){
 	trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
 	trnTopSectors="<digi:trn jsFriendly='true'>Top Sectors</digi:trn>";
 	trnTopRegions="<digi:trn jsFriendly='true'>Top Regions</digi:trn>"; 
-	trnTopDonors="<digi:trn jsFriendly='true'>Top Donors</digi:trn>"; 
+	trnTopOrganizations="<digi:trn jsFriendly='true'>Top Organizations</digi:trn>"; 
 	trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter settings</digi:trn>"; 
 	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
 	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
@@ -192,7 +192,7 @@ function initializeTranslations(){
 	trnNoContactInfo ="<digi:trn>No Contact Information available for current filter</digi:trn>"; 
 	trnSave = "<digi:trn>Save</digi:trn>";
 	trnDescription = "<digi:trn>Description</digi:trn>";
-	trnBackgroundDonor = "<digi:trn>Background of donor</digi:trn>";
+	trnBackgroundOrganization = "<digi:trn>Background of organization</digi:trn>";
 	trnNoAdditionalInfo = "<digi:trn>No Additional Information available for current filter</digi:trn>";
 	trnAllOrgGroups = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
 	trnMultipleOrgs = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>"; 
@@ -231,7 +231,7 @@ function initializeGlobalVariables(){
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/flash/swfobject.js"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <digi:instance property="visualizationform"/>
 <digi:form action="/filters.do">
 
@@ -597,8 +597,15 @@ function initializeGlobalVariables(){
 														<html:option value="4">4</html:option>
 														<html:option value="5">5</html:option>
 													</html:select></td>
-													<td></td>
-													<td></td>
+													<td><b><digi:trn>Type of Agency</digi:trn>:</b>
+												 	</td>
+													<td align="right">
+														<html:select property="filter.agencyTypeFilter" styleId="agencyType_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+															<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
+															<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
+															<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
+														</html:select>
+												 	</td>
 													<td></td>
 													<td></td>
 												
@@ -708,12 +715,12 @@ function initializeGlobalVariables(){
 		        </td>
 		    	<c:if test="${visualizationform.filter.dashboardType ne '1' }">
     			<td class="inside" width="30%" valign="top">
-				<div class="selector_type"><b><digi:trn>Donor Profile</digi:trn></b></div>
+				<div class="selector_type"><b><digi:trn>Organization Profile</digi:trn></b></div>
 				<div>
-		            <html:radio property="exportData.exportDonorProfileOption" styleId="export_DonorProfile_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
-		            <html:radio property="exportData.exportDonorProfileOption" styleId="export_DonorProfile_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.exportDonorProfileOption" styleId="export_DonorProfile_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
-		            <html:radio property="exportData.exportDonorProfileOption" styleId="export_DonorProfile_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportOrganizationProfileOption" styleId="export_OrganizationProfile_0" value="0"><digi:trn>None</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportOrganizationProfileOption" styleId="export_OrganizationProfile_1" value="1"><digi:trn>Data Source Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportOrganizationProfileOption" styleId="export_OrganizationProfile_2" value="2"><digi:trn>Chart Only</digi:trn></html:radio><br />
+		            <html:radio property="exportData.exportOrganizationProfileOption" styleId="export_OrganizationProfile_3" value="3"><digi:trn>Data Source and Chart</digi:trn></html:radio><br />
 		        </div>
 		        </td>
 		        </c:if>
@@ -784,6 +791,7 @@ function initializeGlobalVariables(){
 <html:hidden property="filter.expendituresVisible" styleId="expendituresVisible" />
 <html:hidden property="filter.pledgeVisible" styleId="pledgeVisible"/>
 <html:hidden property="filter.transactionType" styleId="transactionType" />
+<html:hidden property="filter.agencyType" styleId="agencyType" />
 <html:hidden property="filter.currencyId" styleId="currencyId" />
 <html:hidden property="filter.fiscalCalendarId" styleId="fiscalCalendarId" />
 <html:hidden property="filter.groupSeparator" styleId="groupSeparator" />
@@ -868,6 +876,17 @@ function initializeGlobalVariables(){
 					<html:option value="0"><digi:trn>Commitments</digi:trn></html:option>
 					<html:option value="1"><digi:trn>Disbursements</digi:trn></html:option>
 					<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
+				</html:select>
+		 	</td>
+		</tr>
+		<tr>
+			<td><digi:trn>Type of Agency</digi:trn>:
+		 	</td>
+			<td align="right">
+				<html:select property="filter.agencyTypeQuickFilter" styleId="agencyTypeQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+					<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
+					<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
+					<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
 				</html:select>
 		 	</td>
 		</tr>
@@ -1106,7 +1125,7 @@ function initializeGlobalVariables(){
 				<a href="javascript:scrollToGraph('AidTypeTitleLegend');"><digi:trn>Aid Type Chart</digi:trn></a> - 
 				<a href="javascript:scrollToGraph('FinancingInstrumentTitleLegend');"><digi:trn>Financing Instrument Chart</digi:trn></a> - 
 				<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-					<a href="javascript:scrollToGraph('DonorProfileTitleLegend');"><digi:trn>Donor Chart</digi:trn></a> - 
+					<a href="javascript:scrollToGraph('OrganizationProfileTitleLegend');"><digi:trn>Organization Chart</digi:trn></a> - 
 				</c:if>
 				<c:if test="${visualizationform.filter.dashboardType ne '3' }">
 					<a href="javascript:scrollToGraph('SectorProfileTitleLegend');"><digi:trn>Sector Chart</digi:trn></a> - 
@@ -1147,28 +1166,28 @@ function initializeGlobalVariables(){
 </fieldset>
 <c:if test="${visualizationform.filter.dashboardType ne '1' }">
 	<fieldset>
-		<legend><span id="topDonorsTitle" class=legend_label style="width:200px"></span></legend>
-		<div id="divTopDonors" class="field_text">
+		<legend><span id="topOrganizationsTitle" class=legend_label style="width:200px"></span></legend>
+		<div id="divTopOrganizations" class="field_text">
 			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.topDonors}" var="donorItem">
+			<c:forEach items="${visualizationform.ranksInformation.topOrganizations}" var="organizationItem">
 			<c:set var="index" value="${index+1}"/>
 			
-			 <c:out value="${index}"/>. <c:out value="${donorItem.key}"/>  <b>($<c:out value="${donorItem.value}"/>)</b>
+			 <c:out value="${index}"/>. <c:out value="${organizationItem.key}"/>  <b>($<c:out value="${organizationItem.value}"/>)</b>
 				<hr />
 			</c:forEach>
 		
-			<a href="javascript:showFullDonors()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+			<a href="javascript:showFullOrganizations()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
 		</div>
-		<div id="divFullDonors" class="field_text" style="display: none;">
+		<div id="divFullOrganizations" class="field_text" style="display: none;">
 			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.fullDonors}" var="donorItem">
+			<c:forEach items="${visualizationform.ranksInformation.fullOrganizations}" var="organizationItem">
 			<c:set var="index" value="${index+1}"/>
 			
-			 <c:out value="${index}"/>. <c:out value="${donorItem.key}"/>  <b>($<c:out value="${donorItem.value}"/>)</b>
+			 <c:out value="${index}"/>. <c:out value="${organizationItem.key}"/>  <b>($<c:out value="${organizationItem.value}"/>)</b>
 				<hr />
 			</c:forEach>
 		
-			<a href="javascript:hideFullDonors()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+			<a href="javascript:hideFullOrganizations()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
 		</div>
 	</fieldset>	
 </c:if>
@@ -1655,54 +1674,54 @@ function initializeGlobalVariables(){
 		</c:if>
 		
 		<c:if test="${visualizationform.filter.dashboardType ne '1' }">
-		<c:set var="showDonorProfileChart">0</c:set>
+		<c:set var="showOrganizationProfileChart">0</c:set>
 		<c:if test="${visualizationform.filter.dashboardType eq '2' }">
-			<c:set var="showDonorProfileChart">
-			<feature:display name="Region Dashboard - Donor Profile chart" module="Region Dashboard">
+			<c:set var="showOrganizationProfileChart">
+			<feature:display name="Region Dashboard - Organization Profile chart" module="Region Dashboard">
 				1
 			</feature:display>
 			</c:set>
 		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '3' }">
-			<c:set var="showDonorProfileChart">
-			<feature:display name="Sector Dashboard - Donor Profile chart" module="Sector Dashboard">
+			<c:set var="showOrganizationProfileChart">
+			<feature:display name="Sector Dashboard - Organization Profile chart" module="Sector Dashboard">
 				1
 			</feature:display>
 			</c:set>
 		</c:if>
-		<c:if test="${showDonorProfileChart eq 1 }">
+		<c:if test="${showOrganizationProfileChart eq 1 }">
 			<fieldset class="chartFieldset">
-				<legend><span id="DonorProfileTitleLegend" class=legend_label></span></legend>
+				<legend><span id="OrganizationProfileTitleLegend" class=legend_label></span></legend>
 				<div style="float:left;">
-					<a onclick="toggleHeader(this, 'DonorProfileHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
-					<div id="DonorProfileHeader" class="chart_header" style="display:none;">
-					<digi:trn>Title</digi:trn> <input type="text" id="DonorProfileTitle" value="" size="50">
-					<input type="hidden" id="DonorProfileShowFontFamily" value="Verdana"/>
+					<a onclick="toggleHeader(this, 'OrganizationProfileHeader')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
+					<div id="OrganizationProfileHeader" class="chart_header" style="display:none;">
+					<digi:trn>Title</digi:trn> <input type="text" id="OrganizationProfileTitle" value="" size="50">
+					<input type="hidden" id="OrganizationProfileShowFontFamily" value="Verdana"/>
 					&nbsp;<digi:trn>Size</digi:trn>
-					<select id="DonorProfileFontSize">
+					<select id="OrganizationProfileFontSize">
 						<option value="12">12</option>
 						<option value="13">13</option>
 						<option value="14">14</option>
 						<option value="15">15</option>
 						<option value="16">16</option>
 					</select>
-					&nbsp;<input type="checkbox" id="DonorProfileBold"><label for="DonorProfileBold"><digi:trn>Bold</digi:trn></label><br/>
-					<input type="checkbox" id="DonorProfileShowLegend" checked="checked"><label id="DonorProfileShowLegendLabel" for="DonorProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
-					&nbsp;<input type="checkbox" id="DonorProfileDivide"><label id="DonorProfileDivideLabel" for="DonorProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
-					&nbsp;<input type="checkbox" id="DonorProfileShowDataLabel"><label id="DonorProfileShowDataLabelLabel" for="DonorProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
-					&nbsp;<input type="checkbox" id="DonorProfileRotateDataLabel"><label id="DonorProfileRotateDataLabelLabel" for="DonorProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
-					&nbsp;<input type="checkbox" id="DonorProfileIgnore" style="display: none;" checked="checked"><label id="DonorProfileIgnoreLabel" style="display: none;" for="DonorProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
-					<input type="hidden" id="DonorProfileDataAction" value="getDonorProfileGraphData" />
-					<input type="hidden" id="DonorProfileDataField" value="dataField" />
-					<input type="hidden" id="DonorProfileTitleLegendTrn" value="<digi:trn>Donor Profile</digi:trn>" />
-					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'DonorProfile')">
+					&nbsp;<input type="checkbox" id="OrganizationProfileBold"><label for="OrganizationProfileBold"><digi:trn>Bold</digi:trn></label><br/>
+					<input type="checkbox" id="OrganizationProfileShowLegend" checked="checked"><label id="OrganizationProfileShowLegendLabel" for="OrganizationProfileShowLegend"><digi:trn>Show legend</digi:trn></label>
+					&nbsp;<input type="checkbox" id="OrganizationProfileDivide"><label id="OrganizationProfileDivideLabel" for="OrganizationProfileDivide"><digi:trn>Divide by thousands</digi:trn></label>
+					&nbsp;<input type="checkbox" id="OrganizationProfileShowDataLabel"><label id="OrganizationProfileShowDataLabelLabel" for="OrganizationProfileShowDataLabel"><digi:trn>Show data label</digi:trn></label>
+					&nbsp;<input type="checkbox" id="OrganizationProfileRotateDataLabel"><label id="OrganizationProfileRotateDataLabelLabel" for="OrganizationProfileRotateDataLabel"><digi:trn>Rotate data label</digi:trn></label></br>
+					&nbsp;<input type="checkbox" id="OrganizationProfileIgnore" style="display: none;" checked="checked"><label id="OrganizationProfileIgnoreLabel" style="display: none;" for="OrganizationProfileIgnore"><digi:trn>Ignore big values</digi:trn></label></br>
+					<input type="hidden" id="OrganizationProfileDataAction" value="getOrganizationProfileGraphData" />
+					<input type="hidden" id="OrganizationProfileDataField" value="dataField" />
+					<input type="hidden" id="OrganizationProfileTitleLegendTrn" value="<digi:trn>Organization Profile</digi:trn>" />
+					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, 'OrganizationProfile')">
 					</div>
 				</div>
-				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'DonorProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'DonorProfile', true)" title="<digi:trn>Donut Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'DonorProfile', true)" title="<digi:trn>Line chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'DonorProfile', true)" title="<digi:trn>Data View</digi:trn>"/></div>
+				<div class="dash_graph_opt"><img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', 'OrganizationProfile', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', 'OrganizationProfile', true)" title="<digi:trn>Donut Chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', 'OrganizationProfile', true)" title="<digi:trn>Line chart</digi:trn>"/><img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', 'OrganizationProfile', true)" title="<digi:trn>Data View</digi:trn>"/></div>
 				<br />
 				<br />
 				<div class="flashcontent" name="flashContent">
-					<div id="DonorProfile">
+					<div id="OrganizationProfile">
 						<a href="http://www.adobe.com/go/getflashplayer" title="<digi:trn>Click here to get Adobe Flash player</digi:trn>">
 							<img src="/TEMPLATE/ampTemplate/img_2/get_flash_player.gif" alt="Get Adobe Flash player" />
 						</a>
@@ -1873,13 +1892,13 @@ function initializeTranslations(){
 	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
-	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
+	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Organizations</digi:trn>: ";
 	trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
 	trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
 	trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
 	trnTotalDisbsDescription="<digi:trn jsFriendly='true'>Sum of Disbursements on projets filtered.</digi:trn>";
 	trnNumOfProjsDescription="<digi:trn jsFriendly='true'>Number of Projects filtered.</digi:trn>";
-	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Donors on projects filtered</digi:trn>";
+	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Organizations on projects filtered</digi:trn>";
 	trnNumOfSecsDescription="<digi:trn jsFriendly='true'>Number of Sectors on projects filtered</digi:trn>";
 	trnNumOfRegsDescription="<digi:trn jsFriendly='true'>Number of Regions on projects filtered</digi:trn>";
 	trnAvgProjSizeDescription="<digi:trn jsFriendly='true'>Total Disbursements divided Number of Projects</digi:trn>";
@@ -1891,7 +1910,7 @@ function initializeTranslations(){
 	trnODAHistoricalTrend="<digi:trn jsFriendly='true'>ODA Historical Trend</digi:trn>";
 	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
 	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
-	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
+	trnOrganizationProfile="<digi:trn jsFriendly='true'>Organization Profile</digi:trn>";
 	trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
 	trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
 	trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
@@ -1900,7 +1919,7 @@ function initializeTranslations(){
 	trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
 	trnTopSectors="<digi:trn jsFriendly='true'>Top Sectors</digi:trn>";
 	trnTopRegions="<digi:trn jsFriendly='true'>Top Regions</digi:trn>"; 
-	trnTopDonors="<digi:trn jsFriendly='true'>Top Donors</digi:trn>"; 
+	trnTopOrganizations="<digi:trn jsFriendly='true'>Top Organizations</digi:trn>"; 
 	trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter settings</digi:trn>"; 
 	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
 	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
@@ -1913,7 +1932,7 @@ function initializeTranslations(){
 	trnNoContactInfo ="<digi:trn>No Contact Information available for current filter</digi:trn>"; 
 	trnSave = "<digi:trn>Save</digi:trn>";
 	trnDescription = "<digi:trn>Description</digi:trn>";
-	trnBackgroundDonor = "<digi:trn>Background of donor</digi:trn>";
+	trnBackgroundOrganization = "<digi:trn>Background of organization</digi:trn>";
 	trnNoAdditionalInfo = "<digi:trn>No Additional Information available for current filter</digi:trn>";
 	trnAllOrgGroups = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
 	trnMultipleOrgs = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>"; 

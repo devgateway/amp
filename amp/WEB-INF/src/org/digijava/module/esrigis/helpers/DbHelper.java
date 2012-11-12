@@ -37,7 +37,6 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
-import org.digijava.module.visualization.util.DashboardUtil; //TODO: Check this functions and use a common
 import org.digijava.module.visualization.util.DbUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
@@ -252,8 +251,8 @@ public class DbHelper {
 	        // apply calendar filter
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
 	        
-	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	        Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
 	        Long[] sectorIds = filter.getSelSectorIds();
 	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 	        /*
@@ -285,10 +284,10 @@ public class DbHelper {
 	            }
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
+	                    oql += QueryUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
 	                }
 	            } else {
-	                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
+	                oql += QueryUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
 	            }
 	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 	            
@@ -300,7 +299,7 @@ public class DbHelper {
 	                oql += QueryUtil.getTeamQuery(teamMember);
 	            }
 	            if (sectorCondition) {
-	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+	                oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
 	            }
 	
 	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
@@ -373,8 +372,8 @@ public class DbHelper {
 	        // apply calendar filter
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
 	        
-	        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
+	        Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
 	        Long[] sectorIds = filter.getSelSectorIds();
 	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 	        /*
@@ -400,10 +399,10 @@ public class DbHelper {
 	            }
 	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
 	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
+	                    oql += QueryUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
 	                }
 	            } else {
-	                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
+	                oql += QueryUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
 	            }
 	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 	            
@@ -415,7 +414,7 @@ public class DbHelper {
 	                oql += QueryUtil.getTeamQuery(teamMember);
 	            }
 	            if (sectorCondition) {
-	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+	                oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
 	            }
 	
 	            if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
@@ -495,17 +494,17 @@ public class DbHelper {
         oql += " where  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
+                oql += QueryUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
             }
         } else {
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
+            oql += QueryUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
         }
         if (locationCondition) {
-            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+            oql += " and loc.id in ("+QueryUtil.getInStatement(locationIds)+") ";
         }
 
         if (sectorCondition) {
-            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+            oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
         }
 
         if (filter.getActivityId()!=null) {

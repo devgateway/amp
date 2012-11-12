@@ -119,7 +119,26 @@ public class AmpFundingDetail implements Serializable, Cloneable {
             		if (percent1.compareTo(0.0f) == 0 || percent2.compareTo(0.0f) == 0) 
             			this.transactionAmount= 0d;
             		else
-            			this.transactionAmount=transactionAmount/percent1/percent2*100;
+            			this.transactionAmount=(transactionAmount*percent1/100)*percent2/100;
+            	else
+            		this.transactionAmount= 0d;
+            		
+            }
+        }
+        
+        // used in dashborads when there is a filter by location, sector and program
+        public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent1, Float percent2, Float percent3,Double fixedExchangeRate){
+            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
+            if((percent1==null||percent1==0)&&(percent2==null||percent2==0)&&(percent3==null||percent3==0)){
+            	this.transactionAmount=transactionAmount;
+            }
+            else{
+            	//Check if the the percentage is null before dividing. If it's null, the calculation cannot be done, so return 0
+            	if(percent1 != null && percent2 != null && percent3 != null)
+            		if (percent1.compareTo(0.0f) == 0 || percent2.compareTo(0.0f) == 0 || percent3.compareTo(0.0f) == 0) 
+            			this.transactionAmount= 0d;
+            		else
+            			this.transactionAmount= ((transactionAmount*percent1/100)*percent2/100)*percent3/100;
             	else
             		this.transactionAmount= 0d;
             		

@@ -30,6 +30,7 @@ public class AddDashboard extends Action {
 			dForm.setDashboardName(dashboard.getName());
 			dForm.setDashGraphList(DbUtil.getDashboardGraphByDashboard(dashboard.getId()));
 			dForm.setBaseType(dashboard.getBaseType());
+			dForm.setShowInMenu(dashboard.getShowInMenu());
 		}
 		dForm.setGraphList(DbUtil.getAllGraphs());
 		return mapping.findForward("forward");

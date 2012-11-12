@@ -15,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.visualization.dbentity.AmpDashboard;
 import org.digijava.module.visualization.dbentity.AmpGraph;
@@ -94,7 +95,7 @@ public class VisualizationForm extends ActionForm {
 		private Integer numberOfProjects; 
 		private Integer numberOfSectors; 
 		private Integer numberOfRegions; 
-		private Integer numberOfDonors; 
+		private Integer numberOfOrganizations; 
 		private BigDecimal averageProjectSize;
 
 		public BigDecimal getTotalCommitments() {
@@ -127,11 +128,11 @@ public class VisualizationForm extends ActionForm {
 		public void setNumberOfRegions(Integer numberOfRegions) {
 			this.numberOfRegions = numberOfRegions;
 		}
-		public Integer getNumberOfDonors() {
-			return numberOfDonors;
+		public Integer getNumberOfOrganizations() {
+			return numberOfOrganizations;
 		}
-		public void setNumberOfDonors(Integer numberOfDonors) {
-			this.numberOfDonors = numberOfDonors;
+		public void setNumberOfOrganizations(Integer numberOfOrganizations) {
+			this.numberOfOrganizations = numberOfOrganizations;
 		}
 		public BigDecimal getAverageProjectSize() {
 			return averageProjectSize;
@@ -154,26 +155,30 @@ public class VisualizationForm extends ActionForm {
 	}
 
 	public class RanksInformation {
-		private Map<AmpOrganisation, BigDecimal> topDonors;
-		private Map<AmpOrganisation, BigDecimal> fullDonors;
+		private Map<AmpOrganisation, BigDecimal> topOrganizations;
+		private Map<AmpOrganisation, BigDecimal> fullOrganizations;
 		private Map<AmpActivityVersion, BigDecimal> topProjects;
 		private Map<AmpActivityVersion, BigDecimal> fullProjects;
 		private Map<AmpCategoryValueLocations, BigDecimal> topRegions;
 		private Map<AmpCategoryValueLocations, BigDecimal> fullRegions;
 		private Map<AmpSector, BigDecimal> topSectors;
 		private Map<AmpSector, BigDecimal> fullSectors;
+		private Map<AmpTheme, BigDecimal> topPrograms;
+		private Map<AmpTheme, BigDecimal> fullPrograms;
+		private Map<AmpTheme, BigDecimal> topNPOs;
+		private Map<AmpTheme, BigDecimal> fullNPOs;
 		
-		public Map<AmpOrganisation, BigDecimal> getTopDonors() {
-			return topDonors;
+		public Map<AmpOrganisation, BigDecimal> getTopOrganizations() {
+			return topOrganizations;
 		}
-		public void setTopDonors(Map<AmpOrganisation, BigDecimal> topDonors) {
-			this.topDonors = topDonors;
+		public void setTopOrganizations(Map<AmpOrganisation, BigDecimal> topOrganizations) {
+			this.topOrganizations = topOrganizations;
 		}
-		public Map<AmpOrganisation, BigDecimal> getFullDonors() {
-			return fullDonors;
+		public Map<AmpOrganisation, BigDecimal> getFullOrganizations() {
+			return fullOrganizations;
 		}
-		public void setFullDonors(Map<AmpOrganisation, BigDecimal> fullDonors) {
-			this.fullDonors = fullDonors;
+		public void setFullOrganizations(Map<AmpOrganisation, BigDecimal> fullOrganizations) {
+			this.fullOrganizations = fullOrganizations;
 		}
 		public Map<AmpActivityVersion, BigDecimal> getTopProjects() {
 			return topProjects;
@@ -212,6 +217,30 @@ public class VisualizationForm extends ActionForm {
 		public void setFullSectors(Map<AmpSector, BigDecimal> fullSectors) {
 			this.fullSectors = fullSectors;
 		}
+		public Map<AmpTheme, BigDecimal> getTopPrograms() {
+			return topPrograms;
+		}
+		public void setTopPrograms(Map<AmpTheme, BigDecimal> topPrograms) {
+			this.topPrograms = topPrograms;
+		}
+		public Map<AmpTheme, BigDecimal> getFullPrograms() {
+			return fullPrograms;
+		}
+		public void setFullPrograms(Map<AmpTheme, BigDecimal> fullPrograms) {
+			this.fullPrograms = fullPrograms;
+		}
+		public Map<AmpTheme, BigDecimal> getTopNPOs() {
+			return topNPOs;
+		}
+		public void setTopNPOs(Map<AmpTheme, BigDecimal> topNPOs) {
+			this.topNPOs = topNPOs;
+		}
+		public Map<AmpTheme, BigDecimal> getFullNPOs() {
+			return fullNPOs;
+		}
+		public void setFullNPOs(Map<AmpTheme, BigDecimal> fullNPOs) {
+			this.fullNPOs = fullNPOs;
+		}
 	}
 
 	public void setExportData(ExportData exportData) {
@@ -226,19 +255,23 @@ public class VisualizationForm extends ActionForm {
 	}
 
 	public class ExportData {
+		private BufferedImage NPOGraph;
+		private BufferedImage programGraph;
 		private BufferedImage fundingGraph;
 		private BufferedImage aidPredictabilityGraph;
 		private BufferedImage aidTypeGraph;
 		private BufferedImage financingInstGraph;
-		private BufferedImage donorGraph;
+		private BufferedImage organizationGraph;
 		private BufferedImage sectorGraph;
 		private BufferedImage regionGraph;
 		private BufferedImage ODAGrowthGraph;
 		private String fundingTableData;
+		private String NPOTableData;
+		private String programTableData;
 		private String aidPredicTableData;
 		private String aidTypeTableData;
 		private String financingInstTableData;
-		private String donorTableData;
+		private String organizationTableData;
 		private String sectorTableData;
 		private String regionTableData;
 		private String ODAGrowthTableData;
@@ -246,7 +279,9 @@ public class VisualizationForm extends ActionForm {
 		private int exportAidPredictabilityOption = 3;
 		private int exportAidTypeOption = 3;
 		private int exportAidModalityOption = 3;
-		private int exportDonorProfileOption = 3;
+		private int exportOrganizationProfileOption = 3;
+		private int exportNPOProfileOption = 3;
+		private int exportProgramProfileOption = 3;
 		private int exportSectorProfileOption = 3;
 		private int exportRegionProfileOption = 3;
 		private int exportSummaryOption = 1;	
@@ -285,12 +320,12 @@ public class VisualizationForm extends ActionForm {
 			this.financingInstGraph = financingInstGraph;
 		}
 
-		public BufferedImage getDonorGraph() {
-			return donorGraph;
+		public BufferedImage getOrganizationGraph() {
+			return organizationGraph;
 		}
 
-		public void setDonorGraph(BufferedImage donorGraph) {
-			this.donorGraph = donorGraph;
+		public void setOrganizationGraph(BufferedImage organizationGraph) {
+			this.organizationGraph = organizationGraph;
 		}
 
 		public BufferedImage getSectorGraph() {
@@ -349,12 +384,12 @@ public class VisualizationForm extends ActionForm {
 			this.financingInstTableData = financingInstTableData;
 		}
 
-		public String getDonorTableData() {
-			return donorTableData;
+		public String getOrganizationTableData() {
+			return organizationTableData;
 		}
 
-		public void setDonorTableData(String donorTableData) {
-			this.donorTableData = donorTableData;
+		public void setOrganizationTableData(String organizationTableData) {
+			this.organizationTableData = organizationTableData;
 		}
 
 		public String getSectorTableData() {
@@ -413,12 +448,12 @@ public class VisualizationForm extends ActionForm {
 			this.exportAidModalityOption = exportAidModalityOption;
 		}
 
-		public int getExportDonorProfileOption() {
-			return exportDonorProfileOption;
+		public int getExportOrganizationProfileOption() {
+			return exportOrganizationProfileOption;
 		}
 
-		public void setExportDonorProfileOption(int exportDonorProfileOption) {
-			this.exportDonorProfileOption = exportDonorProfileOption;
+		public void setExportOrganizationProfileOption(int exportOrganizationProfileOption) {
+			this.exportOrganizationProfileOption = exportOrganizationProfileOption;
 		}
 
 		public int getExportSectorProfileOption() {
@@ -459,6 +494,54 @@ public class VisualizationForm extends ActionForm {
 
 		public void setExportODAGrowthOption(int exportODAGrowthOption) {
 			this.exportODAGrowthOption = exportODAGrowthOption;
+		}
+
+		public BufferedImage getNPOGraph() {
+			return NPOGraph;
+		}
+
+		public void setNPOGraph(BufferedImage nPOGraph) {
+			NPOGraph = nPOGraph;
+		}
+
+		public BufferedImage getProgramGraph() {
+			return programGraph;
+		}
+
+		public void setProgramGraph(BufferedImage programGraph) {
+			this.programGraph = programGraph;
+		}
+
+		public String getNPOTableData() {
+			return NPOTableData;
+		}
+
+		public void setNPOTableData(String nPOTableData) {
+			NPOTableData = nPOTableData;
+		}
+
+		public String getProgramTableData() {
+			return programTableData;
+		}
+
+		public void setProgramTableData(String programTableData) {
+			this.programTableData = programTableData;
+		}
+
+		public int getExportNPOProfileOption() {
+			return exportNPOProfileOption;
+		}
+
+		public void setExportNPOProfileOption(int exportNPOProfileOption) {
+			this.exportNPOProfileOption = exportNPOProfileOption;
+		}
+
+		public int getExportProgramProfileOption() {
+			return exportProgramProfileOption;
+		}
+
+		public void setExportProgramProfileOption(int exportProgramProfileOption) {
+			this.exportProgramProfileOption = exportProgramProfileOption;
 		}
 
 	}

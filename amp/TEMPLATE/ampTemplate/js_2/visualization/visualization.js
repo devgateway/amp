@@ -72,13 +72,21 @@ function showFullList(objectType){
 			divFullName = "divFullSectors";
 			divTopName = "divTopSectors";
 			break;
-		case "donors":
-			divFullName = "divFullDonors";
-			divTopName = "divTopDonors";
+		case "organizations":
+			divFullName = "divFullOrganizations";
+			divTopName = "divTopOrganizations";
 			break;
 		case "regions":
 			divFullName = "divFullRegions";
 			divTopName = "divTopRegions";
+			break;
+		case "NPOs":
+			divFullName = "divFullNPOs";
+			divTopName = "divTopNPOs";
+			break;
+		case "programs":
+			divFullName = "divFullPrograms";
+			divTopName = "divTopPrograms";
 			break;
 		case "projects":
 			divFullName = "divFullProjects";
@@ -118,18 +126,50 @@ var updateFullList = {
 						if (div!=null)
 							div.innerHTML = inner;
 						break;
-					case "DonorsList":
+					case "OrganizationsList":
 						//if (dashboardType!=1) {
 							if (child.list.length==0){
 								inner = "<b>"+trnNoDataToShow+"</b> <br />";
 							} else {
-								inner = "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a> <br />";
+								inner = "<a href='javascript:hideFullOrganizations()' style='float:right;'>"+trnShowTop+"</a> <br />";
 								for(var i = 0; i < child.list.length; i++){
 									inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
 								}
-								inner = inner + "<a href='javascript:hideFullDonors()' style='float:right;'>"+trnShowTop+"</a>";
+								inner = inner + "<a href='javascript:hideFullOrganizations()' style='float:right;'>"+trnShowTop+"</a>";
 							}
-							var div = document.getElementById("divFullDonors");
+							var div = document.getElementById("divFullOrganizations");
+							if (div!=null)
+								div.innerHTML = inner;
+						//}
+						break;
+					case "NPOsList":
+						//if (dashboardType!=1) {
+							if (child.list.length==0){
+								inner = "<b>"+trnNoDataToShow+"</b> <br />";
+							} else {
+								inner = "<a href='javascript:hideFullNPOs()' style='float:right;'>"+trnShowTop+"</a> <br />";
+								for(var i = 0; i < child.list.length; i++){
+									inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
+								inner = inner + "<a href='javascript:hideFullNPOs()' style='float:right;'>"+trnShowTop+"</a>";
+							}
+							var div = document.getElementById("divFullNPOs");
+							if (div!=null)
+								div.innerHTML = inner;
+						//}
+						break;
+					case "ProgramsList":
+						//if (dashboardType!=1) {
+							if (child.list.length==0){
+								inner = "<b>"+trnNoDataToShow+"</b> <br />";
+							} else {
+								inner = "<a href='javascript:hideFullPrograms()' style='float:right;'>"+trnShowTop+"</a> <br />";
+								for(var i = 0; i < child.list.length; i++){
+									inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
+								inner = inner + "<a href='javascript:hideFullPrograms()' style='float:right;'>"+trnShowTop+"</a>";
+							}
+							var div = document.getElementById("divFullPrograms");
 							if (div!=null)
 								div.innerHTML = inner;
 						//}
@@ -200,14 +240,28 @@ function hideFullRegions(){
 	divTop.style.display = "";
 }
 
-function hideFullDonors(){
-	var divFull = document.getElementById("divFullDonors");
-	var divTop = document.getElementById("divTopDonors");
+function hideFullNPOs(){
+	var divFull = document.getElementById("divFullNPOs");
+	var divTop = document.getElementById("divTopNPOs");
 	divFull.style.display = "none";
+	divFull.innerHTML = "";
 	divTop.style.display = "";
 }
 
+function hideFullPrograms(){
+	var divFull = document.getElementById("divFullPrograms");
+	var divTop = document.getElementById("divTopPrograms");
+	divFull.style.display = "none";
+	divFull.innerHTML = "";
+	divTop.style.display = "";
+}
 
+function hideFullOrganizations(){
+	var divFull = document.getElementById("divFullOrganizations");
+	var divTop = document.getElementById("divTopOrganizations");
+	divFull.style.display = "none";
+	divTop.style.display = "";
+}
 
 $D = YAHOO.util.Dom;
 $E = YAHOO.util.Event;
@@ -450,9 +504,11 @@ function doExport(){
 	options += "&aidPredicOpt=" + getOptionChecked("export_AidPredictability_");
 	options += "&aidTypeOpt=" + getOptionChecked("export_AidType_");
 	options += "&financingInstOpt=" + getOptionChecked("export_AidModality_");
-	options += "&donorOpt=" + getOptionChecked("export_DonorProfile_");
+	options += "&organizationOpt=" + getOptionChecked("export_OrganizationProfile_");
 	options += "&sectorOpt=" + getOptionChecked("export_SectorProfile_");
 	options += "&regionOpt=" + getOptionChecked("export_RegionProfile_");
+	options += "&NPOOpt=" + getOptionChecked("export_NPOProfile_");
+	options += "&programOpt=" + getOptionChecked("export_ProgramProfile_");
 	
 	var type = "" + getOptionChecked("export_type_");
 	if (type=="0") {
@@ -813,6 +869,11 @@ function callbackApplyFilter(e){
 	document.getElementById("endYear_dropdown").value = document.getElementById("endYearQuickFilter_dropdown").value;
 	document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
 	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
+	var dashboardType = document.getElementById("dashboardType").value;
+	if (dashboardType==1) {
+		document.getElementById("agencyType").value = document.getElementById("agencyTypeQuickFilter_dropdown").value;
+		document.getElementById("agencyType_dropdown").value = document.getElementById("agencyTypeQuickFilter_dropdown").value;
+	}
 	
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
@@ -904,7 +965,13 @@ function applyFilterPopin(e){
 	//Copy the values of the start/end year from the Advanced to the quick
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;
-
+	
+	var dashboardType = document.getElementById("dashboardType").value;
+	if (dashboardType==1) {
+		document.getElementById("agencyType").value = document.getElementById("agencyType_dropdown").options[document.getElementById("agencyType_dropdown").selectedIndex].value;
+		document.getElementById("agencyTypeQuickFilter_dropdown").value = document.getElementById("agencyType_dropdown").options[document.getElementById("agencyType_dropdown").selectedIndex].value;
+	}
+	
 	//document.getElementById("yearToCompare").value = document.getElementById("yearToCompare_dropdown").options[document.getElementById("yearToCompare_dropdown").selectedIndex].value;
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
 	document.getElementById("currencyQuickFilter_dropdown").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
@@ -987,6 +1054,17 @@ function refreshGraphs(){
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		nonRefreshedMovies.push(allGraphs[idx].children[0]);
 	}
+	//hardcode for hidden ODA growth chart when beneficiary agency is selected
+	var agencyType = document.getElementById("agencyType").value;
+	var odaElement = document.getElementById("ODAGrowthTitleLegend");
+
+	if (odaElement!=null){
+		if (agencyType==2) {
+			odaElement.parentElement.parentElement.style.display='none';
+		} else {
+			odaElement.parentElement.parentElement.style.display='block';
+		}
+	}
 	refreshAsync();
 }
 
@@ -1065,7 +1143,7 @@ function refreshBoxes(o){
 				if (div!=null)
 					div.innerHTML = inner;
 				break;
-			case "DonorsList":
+			case "OrganizationsList":
 				//if (dashboardType!=1) {
 					inner = "";
 					if (child.top.length==0){
@@ -1074,9 +1152,9 @@ function refreshBoxes(o){
 						for(var i = 0; i < child.top.length; i++){
 							inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
 						}
-						inner = inner + "<a href='javascript:showFullList(\"donors\")' style='float:right;'>"+trnShowFullList+"</a>";
+						inner = inner + "<a href='javascript:showFullList(\"organizations\")' style='float:right;'>"+trnShowFullList+"</a>";
 					}
-					var div = document.getElementById("divTopDonors");
+					var div = document.getElementById("divTopOrganizations");
 					if (div!=null)
 						div.innerHTML = inner;
 				//}
@@ -1109,6 +1187,38 @@ function refreshBoxes(o){
 						inner = inner + "<a href='javascript:showFullList(\"regions\")' style='float:right;'>"+trnShowFullList+"</a>";
 					}
 					var div = document.getElementById("divTopRegions");
+					if (div!=null)
+						div.innerHTML = inner;
+				//}
+				break;
+			case "NPOsList":
+				//if (dashboardType!=2) {
+					inner = "";
+					if (child.top.length==0){
+						inner = "<b>"+trnNoDataToShow+"</b> <br />";
+					} else {
+							for(var i = 0; i < child.top.length; i++){
+							inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
+						inner = inner + "<a href='javascript:showFullList(\"NPOs\")' style='float:right;'>"+trnShowFullList+"</a>";
+					}
+					var div = document.getElementById("divTopNPOs");
+					if (div!=null)
+						div.innerHTML = inner;
+				//}
+				break;
+			case "ProgramsList":
+				//if (dashboardType!=2) {
+					inner = "";
+					if (child.top.length==0){
+						inner = "<b>"+trnNoDataToShow+"</b> <br />";
+					} else {
+							for(var i = 0; i < child.top.length; i++){
+							inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
+						inner = inner + "<a href='javascript:showFullList(\"programs\")' style='float:right;'>"+trnShowFullList+"</a>";
+					}
+					var div = document.getElementById("divTopPrograms");
 					if (div!=null)
 						div.innerHTML = inner;
 				//}
@@ -1360,7 +1470,7 @@ function refreshBoxes(o){
 					var infoMarkup = new Array();
 					infoMarkup.push("<div id=\"saveResultMsg\"></div><table class=\"inside\"><tbody>");
 					infoMarkup.push("<tr>");
-					infoMarkup.push("<td class=\"inside\">" + trnBackgroundDonor +":</td>");
+					infoMarkup.push("<td class=\"inside\">" + trnBackgroundOrganization +":</td>");
 					infoMarkup.push("<td class=\"inside\">");
 					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"orgBackground\">");
 					infoMarkup.push(info.orgBackground);
@@ -1528,109 +1638,6 @@ function refreshBoxes(o){
 				input.value = trnTitle;
 		}
 	}
-	/*
-	try
-	{
-		if (dashboardType==1) {
-			var currentYear = document.getElementById("endYear").value;
-			var yearToCompare = document.getElementById("yearToCompare").value;
-			if (yearToCompare == "0" || yearToCompare == "" || yearToCompare == null || yearToCompare >= currentYear){
-				yearToCompare =  "" + (currentYear - 1);
-			}
-			var endYear =  "" + currentYear;
-			div = document.getElementById("ODAGrowthTitleLegend");
-			input = document.getElementById("ODAGrowthTitle");
-			if (document.getElementById("org_dropdown_id").selectedIndex == 0) {
-				value = trnODAGrowth + " " + " - " + fundType;
-			} else {
-				value = trnODAGrowth + " " + " - " + document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
-				if (getSelectionsFromElement("organization_check",true)!="" && getSelectionsFromElement("organization_check",false).indexOf(',') ==-1) {
-					value = trnODAGrowth + " " + " - " + getSelectionsFromElement("organization_check",true);
-				}
-			}
-			if (div != null)
-				div.innerHTML = value;
-			if (input != null)
-				input.value = value;
-		}
-		div = document.getElementById("FundingChartTitleLegend");
-		input = document.getElementById("FundingChartTitle");
-		value = trnODAHistoricalTrend + " - " + fundType;
-		if (div != null)
-			div.innerHTML = value;
-		if (input != null)
-			input.value = value;
-		
-		div = document.getElementById("AidPredictabilityTitleLegend");
-		input = document.getElementById("AidPredictabilityTitle");
-		value = trnAidPredictability + " - " + fundType;
-		if (div != null)
-			div.innerHTML = value;
-		if (input != null)
-			input.value = value;
-	
-		div = document.getElementById("AidTypeTitleLegend");
-		input = document.getElementById("AidTypeTitle");
-		value = trnAidType + " - " + fundType;
-		if (div != null)
-			div.innerHTML = value;
-		if (input != null)
-			input.value = value;
-	
-		div = document.getElementById("FinancingInstrumentTitleLegend");
-		input = document.getElementById("FinancingInstrumentTitle");
-		value = trnFinancingInstrument + " - " + fundType;
-		if (div != null)
-			div.innerHTML = value;
-		if (input != null)
-			input.value = value;
-	
-		if (dashboardType!=1) {
-			div = document.getElementById("DonorProfileTitleLegend");
-			input = document.getElementById("DonorProfileTitle");
-			value = trnDonorProfile + " - " + fundType;
-			if (div != null)
-				div.innerHTML = value;
-			if (input != null)
-				input.value = value;
-		}
-		if (dashboardType !=3 || dashboardType == 3) {
-			div = document.getElementById("SectorProfileTitleLegend");
-			input = document.getElementById("SectorProfileTitle");
-			isSubsector = (document.getElementById("SectorProfileItemId") && document.getElementById("SectorProfileItemId").value != "-1") ? true : false;
-			if(isSubsector){
-				value = trnSubSectorProfile + " - " + fundType;
-			}
-			else
-			{
-				value = trnSectorProfile + " - " + fundType;
-			}
-			if (div != null)
-				div.innerHTML = value;
-			if (input != null)
-				input.value = value;
-		}
-		if (dashboardType!=2 ||  dashboardType == 2) {
-			div = document.getElementById("RegionProfileTitleLegend");
-			input = document.getElementById("RegionProfileTitle");
-			isSubregion = (document.getElementById("RegionProfileItemId") && document.getElementById("RegionProfileItemId").value != "-1") ? true : false;
-			if(isSubregion){
-				value = trnSubRegionProfile + " - " + fundType;
-			}
-			else
-			{
-				value = trnRegionProfile + " - " + fundType;
-			}
-			if (div != null)
-				div.innerHTML = value;
-			if (input != null)
-				input.value = value;
-		}
-	}
-	catch(e){
-		
-	}
-	*/
 	var startYear = document.getElementById("startYear").value;
 	var endYear = document.getElementById("endYear").value;
 
@@ -1642,36 +1649,52 @@ function refreshBoxes(o){
 	}
 	if (div!=null)
 		div.innerHTML = inner;
-	//if (dashboardType!=3) {
-		div = document.getElementById("topSectorsTitle");
-		if (startYear == endYear) {
-			inner = trnTopSectors + " (" + startYear + ")";
-		} else {
-			inner = trnTopSectors + " (" + startYear + "-" + endYear + ")";
-		}
-		if (div!=null)
-			div.innerHTML = inner;
-	//}
-	//if (dashboardType!=1) {
-		div = document.getElementById("topDonorsTitle");
-		if (startYear == endYear) {
-			inner = trnTopDonors + " (" + startYear + ")";
-		} else {
-			inner = trnTopDonors + " (" + startYear + "-" + endYear + ")";
-		}
-		if (div!=null)
-			div.innerHTML = inner;
-	//}
-	//if (dashboardType!=2) {
-		div = document.getElementById("topRegionsTitle");
-		if (startYear == endYear) {
-			inner = trnTopRegions + " (" + startYear + ")";
-		} else {
-			inner = trnTopRegions + " (" + startYear + "-" + endYear + ")";
-		}
-		if (div!=null)
-			div.innerHTML = inner;
-	//}
+		
+	div = document.getElementById("topSectorsTitle");
+	if (startYear == endYear) {
+		inner = trnTopSectors + " (" + startYear + ")";
+	} else {
+		inner = trnTopSectors + " (" + startYear + "-" + endYear + ")";
+	}
+	if (div!=null)
+		div.innerHTML = inner;
+		
+	div = document.getElementById("topOrganizationsTitle");
+	if (startYear == endYear) {
+		inner = trnTopOrganizations + " (" + startYear + ")";
+	} else {
+		inner = trnTopOrganizations + " (" + startYear + "-" + endYear + ")";
+	}
+	if (div!=null)
+		div.innerHTML = inner;
+	
+	div = document.getElementById("topRegionsTitle");
+	if (startYear == endYear) {
+		inner = trnTopRegions + " (" + startYear + ")";
+	} else {
+		inner = trnTopRegions + " (" + startYear + "-" + endYear + ")";
+	}
+	if (div!=null)
+		div.innerHTML = inner;
+	
+	div = document.getElementById("topNPOsTitle");
+	if (startYear == endYear) {
+		inner = trnTopNPOs + " (" + startYear + ")";
+	} else {
+		inner = trnTopNPOs + " (" + startYear + "-" + endYear + ")";
+	}
+	if (div!=null)
+		div.innerHTML = inner;
+	
+	div = document.getElementById("topProgramsTitle");
+	if (startYear == endYear) {
+		inner = trnTopPrograms + " (" + startYear + ")";
+	} else {
+		inner = trnTopPrograms + " (" + startYear + "-" + endYear + ")";
+	}
+	if (div!=null)
+		div.innerHTML = inner;
+	
 }
 
 function getTitlesObjects(){
@@ -1709,13 +1732,18 @@ function initDashboard(){
 	var allGraphs = getElementsByName_iefix("div", "flashContent");
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		var id = allGraphs[idx].children[0].getAttribute("id");
-		if (id.indexOf("Profile")!=-1)
+		if (id.indexOf("Sector")!=-1)
+			changeChart(null, 'donut', id, true);
+		else if (id.indexOf("Region")!=-1)
+			changeChart(null, 'line', id, true);
+		else if (id.indexOf("Profile")!=-1)
 			changeChart(null, 'bar_profile', id, true);
 		else if (id.indexOf("Growth")!=-1)
 			changeChart(null, 'bar_growth', id, true);
 		else
 			changeChart(null, 'bar', id, true);
 	}
+	
 	callbackApplyFilter();
 }
 
@@ -1821,7 +1849,7 @@ function changeChart(e, chartType, container, useGeneric){
 	//Setting for cache in development mode
 //	var cache = "?rnd=" + Math.floor(Math.random()*50000);
 	var cache = "";
-	
+
 	switch(chartType){
 		case "bar":
 			if(useGeneric)
@@ -1951,13 +1979,18 @@ function reloadGraphs(){
 	var allGraphs = getElementsByName_iefix("div", "flashContent");
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		var id = allGraphs[idx].children[0].getAttribute("id");
-		if (id.indexOf("Profile")!=-1)
+		if (id.indexOf("Sector")!=-1)
+			changeChart('start', 'donut', id, true);
+		else if (id.indexOf("Region")!=-1)
+			changeChart('start', 'line', id, true);
+		else if (id.indexOf("Profile")!=-1)
 			changeChart('start', 'bar_profile', id, true);
 		else if (id.indexOf("Growth")!=-1)
 			changeChart('start', 'bar_growth', id, true);
 		else
 			changeChart('start', 'bar', id, true);
 	}
+	
 }
 
 function itemClick(id, type, startYear, endYear){
@@ -1981,6 +2014,15 @@ function callbackGetGraphs(id,baseType) {
 		} else {
 			$("#"+id2).removeClass("side_opt_sel");	
 		}
+	}
+	var typeSel1 = document.getElementById("agencyTypeSelector1");
+	var typeSel2 = document.getElementById("agencyTypeSelector2");
+	if (baseType==1||baseType=='undefined') {
+		typeSel1.style.display='block';
+		typeSel2.style.display='block';
+	} else {
+		typeSel1.style.display='none';
+		typeSel2.style.display='none';
 	}
 	/*switch(baseType){
 	case 0:
@@ -2082,6 +2124,7 @@ function launchDashboard(){
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
 	document.getElementById("startYear").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
 	document.getElementById("endYear").value = document.getElementById("endYear_dropdown").options[document.getElementById("endYear_dropdown").selectedIndex].value;
+	document.getElementById("agencyType").value = document.getElementById("agencyType_dropdown").options[document.getElementById("agencyType_dropdown").selectedIndex].value;
 	
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
 	document.getElementById("fiscalCalendarId").value = document.getElementById("fiscalCalendar_dropdown_Id").options[document.getElementById("fiscalCalendar_dropdown_Id").selectedIndex].value;
@@ -2110,9 +2153,11 @@ function launchDashboard(){
 		}
 	}
 	document.getElementById("showProjectsRanking").value = document.getElementById("show_projects_ranking").checked;
-	document.getElementById("showDonorsRanking").value = document.getElementById("show_donors_ranking").checked;
+	document.getElementById("showOrganizationsRanking").value = document.getElementById("show_organizations_ranking").checked;
 	document.getElementById("showSectorsRanking").value = document.getElementById("show_sectors_ranking").checked;
 	document.getElementById("showRegionsRanking").value = document.getElementById("show_regions_ranking").checked;
+	document.getElementById("showNPORanking").value = document.getElementById("show_NPO_ranking").checked;
+	document.getElementById("showProgramsRanking").value = document.getElementById("show_programs_ranking").checked;
 	
 	var params = "";
 	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);

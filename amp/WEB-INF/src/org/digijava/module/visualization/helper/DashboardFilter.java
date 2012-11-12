@@ -61,6 +61,7 @@ public class DashboardFilter {
     private Long[] zoneIds;
     private Long zoneId;
     
+    private Long[] selProgramIds;
     private Long[] selSectorIds;
     private Long[] selLocationIds;
     private Long[] selOrgGroupIds;
@@ -91,10 +92,15 @@ public class DashboardFilter {
     private Boolean showOnlyNonDraftActivities;
     private Boolean showAmountsInThousands;
     private Boolean showProjectsRanking;
-    private Boolean showDonorsRanking;
+    private Boolean showOrganizationsRanking;
     private Boolean showSectorsRanking;
     private Boolean showRegionsRanking;
+    private Boolean showNPORanking;
+    private Boolean showProgramsRanking;
     private Boolean fromGenerator;
+    private int agencyType;
+    private int agencyTypeQuickFilter;
+    private int agencyTypeFilter;
     
     private Long activityId;
     private int decimalsToShow;
@@ -807,12 +813,12 @@ public class DashboardFilter {
 		this.showProjectsRanking = showProjectsRanking;
 	}
 
-	public Boolean getShowDonorsRanking() {
-		return showDonorsRanking;
+	public Boolean getShowOrganizationsRanking() {
+		return showOrganizationsRanking;
 	}
 
-	public void setShowDonorsRanking(Boolean showDonorsRanking) {
-		this.showDonorsRanking = showDonorsRanking;
+	public void setShowOrganizationsRanking(Boolean showOrganizationsRanking) {
+		this.showOrganizationsRanking = showOrganizationsRanking;
 	}
 
 	public Boolean getShowSectorsRanking() {
@@ -837,6 +843,56 @@ public class DashboardFilter {
 
 	public void setFromGenerator(Boolean fromGenerator) {
 		this.fromGenerator = fromGenerator;
+	}
+
+	public int getAgencyType() {
+		return agencyType;
+	}
+
+	public void setAgencyType(int agencyType) {
+		this.agencyType = agencyType;
+		this.agencyTypeFilter = agencyType;
+		this.agencyTypeQuickFilter = agencyType;
+	}
+
+	public int getAgencyTypeQuickFilter() {
+		return agencyTypeQuickFilter;
+	}
+
+	public void setAgencyTypeQuickFilter(int agencyTypeQuickFilter) {
+		this.agencyTypeQuickFilter = agencyTypeQuickFilter;
+	}
+
+	public int getAgencyTypeFilter() {
+		return agencyTypeFilter;
+	}
+
+	public void setAgencyTypeFilter(int agencyTypeFilter) {
+		this.agencyTypeFilter = agencyTypeFilter;
+	}
+
+	public Long[] getSelProgramIds() {
+		return selProgramIds;
+	}
+
+	public void setSelProgramIds(Long[] selProgramIds) {
+		this.selProgramIds = selProgramIds;
+	}
+
+	public Boolean getShowNPORanking() {
+		return showNPORanking;
+	}
+
+	public void setShowNPORanking(Boolean showNPORanking) {
+		this.showNPORanking = showNPORanking;
+	}
+
+	public Boolean getShowProgramsRanking() {
+		return showProgramsRanking;
+	}
+
+	public void setShowProgramsRanking(Boolean showProgramsRanking) {
+		this.showProgramsRanking = showProgramsRanking;
 	}
 
 	

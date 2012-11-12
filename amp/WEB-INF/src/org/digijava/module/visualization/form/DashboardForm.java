@@ -24,6 +24,7 @@ public class DashboardForm extends ActionForm {
 	private Long dashboardId;
 	private DashboardFilter filter; 
 	private int baseType;
+	private Boolean showInMenu;
 	
 	public String getDashboardName() {
 		return dashboardName;
@@ -72,6 +73,12 @@ public class DashboardForm extends ActionForm {
 	}
 	public void setBaseType(int baseType) {
 		this.baseType = baseType;
+	}
+	public Boolean getShowInMenu() {
+		return showInMenu;
+	}
+	public void setShowInMenu(Boolean showInMenu) {
+		this.showInMenu = showInMenu;
 	}
 	
 }

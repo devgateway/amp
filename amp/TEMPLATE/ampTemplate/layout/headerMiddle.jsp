@@ -172,6 +172,16 @@ ${fn:replace(message,quote,escapedQuote)}
 				                                </a> 
 			                                </li>
 		                                </module:display>
+		                                <logic:present name="MENU_DASHBOARDS" scope="session">
+			                                <logic:iterate id="item" name="MENU_DASHBOARDS" scope="session" type="org.digijava.module.visualization.dbentity.AmpDashboard">
+												<li class="yuiampmenuitem_drop">
+													<a class="yuiampmenuitemlabel" href='/visualization/launchDashboard.do?reset=true&id=<bean:write name="item" property="id"/>' onclick="return canExit()">
+														<bean:write name="item" property="name"/>
+													</a>
+												</li>
+											</logic:iterate>
+										</logic:present>
+										<!--
 		                                
 		                                <module:display name="Org. Dashboard" parentModule="Visualization Dashboards">
 	                                        <feature:display name="Show Org. Dashboard in public View" module="Org. Dashboard">
@@ -201,7 +211,7 @@ ${fn:replace(message,quote,escapedQuote)}
 				                                </a> 
 			                                </li>
 			                                </feature:display>
-		                                </module:display>
+		                                </module:display>-->
 								</ul>
 						</div>
 						</div>                    
@@ -753,6 +763,14 @@ function adminHelp(){
 			                                </li>
 		                                </module:display>
 		                                
+		                                <logic:iterate id="item" name="MENU_DASHBOARDS" scope="session" type="org.digijava.module.visualization.dbentity.AmpDashboard">
+											<li class="yuiampmenuitem_drop">
+												<a class="yuiampmenuitemlabel" href='/visualization/launchDashboard.do?reset=true&id=<bean:write name="item" property="id"/>' onclick="return canExit()">
+													<bean:write name="item" property="name"/>
+												</a>
+											</li>
+										</logic:iterate><!--
+		                                
 		                                <module:display name="Org. Dashboard" parentModule="Visualization Dashboards">
 	                                        <li class="yuiampmenuitem_drop">
 				                              	<a class="yuiampmenuitemlabel" href="/visualization/showDashboard.do?reset=true&type=donor"  onclick="return canExit()">
@@ -777,7 +795,7 @@ function adminHelp(){
 			                                </li>
 		                                </module:display>
 		                                
-                                      </ul>
+                                      --></ul>
                                   </div>
                               </div>                    
                           </li>

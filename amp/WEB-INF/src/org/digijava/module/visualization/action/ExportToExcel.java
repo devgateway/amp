@@ -61,9 +61,11 @@ public class ExportToExcel extends Action {
         String aidPredicOpt = request.getParameter("aidPredicOpt");
         String aidTypeOpt = request.getParameter("aidTypeOpt");
         String financingInstOpt = request.getParameter("financingInstOpt");
-        String donorOpt = request.getParameter("donorOpt");
+        String organizationOpt = request.getParameter("organizationOpt");
         String sectorOpt = request.getParameter("sectorOpt");
         String regionOpt = request.getParameter("regionOpt");
+        String NPOOpt = request.getParameter("NPOOpt");
+        String programOpt = request.getParameter("programOpt");
         String summaryOpt = request.getParameter("summaryOpt");
     
     	try {
@@ -89,18 +91,22 @@ public class ExportToExcel extends Action {
 			String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
 	        String topPrjTrn = TranslatorWorker.translateText("Top Projects", langCode, siteId);
 	        String topSectorTrn = TranslatorWorker.translateText("Top Sectors", langCode, siteId);
-	        String topDonorTrn = TranslatorWorker.translateText("Top Donors", langCode, siteId);
+	        String topOrganizationTrn = TranslatorWorker.translateText("Top Organizations", langCode, siteId);
 	        String topRegionTrn = TranslatorWorker.translateText("Top Regions", langCode, siteId);
 	        String projectTrn = TranslatorWorker.translateText("Project", langCode, siteId);
 	        String sectorTrn = TranslatorWorker.translateText("Sector", langCode, siteId);
-	        String donorTrn = TranslatorWorker.translateText("Donor", langCode, siteId);
+	        String organizationTrn = TranslatorWorker.translateText("Organization", langCode, siteId);
+	        String NPOTrn = TranslatorWorker.translateText("NPO", langCode, siteId);
+	        String programTrn = TranslatorWorker.translateText("Program", langCode, siteId);
 	        String regionTrn = TranslatorWorker.translateText("Region", langCode, siteId);
 	        String aidPredTrn = TranslatorWorker.translateText("Aid Predictability", langCode, siteId);
 	        String aidTypeTrn = TranslatorWorker.translateText("Aid Type", langCode, siteId);
 	        String finInstTrn = TranslatorWorker.translateText("Financing Instrument", langCode, siteId);
 	        String sectorProfTrn = TranslatorWorker.translateText("Sector Profile", langCode, siteId);
 	        String regionProfTrn = TranslatorWorker.translateText("Region Profile", langCode, siteId);
-	        String donorProfTrn = TranslatorWorker.translateText("Donor Profile", langCode, siteId);
+	        String organizationProfTrn = TranslatorWorker.translateText("Organization Profile", langCode, siteId);
+	        String NPOProfTrn = TranslatorWorker.translateText("NPO Profile", langCode, siteId);
+	        String programProfTrn = TranslatorWorker.translateText("Program Profile", langCode, siteId);
 	        String plannedTrn = TranslatorWorker.translateText("Planned", langCode, siteId);
 	        String actualTrn = TranslatorWorker.translateText("Actual", langCode, siteId);
 	        String yearTrn = TranslatorWorker.translateText("Year", langCode, siteId);
@@ -110,7 +116,7 @@ public class ExportToExcel extends Action {
 	        String totalDisbsTrn = TranslatorWorker.translateText("Total Disbursements", langCode, siteId);
 	        String numberPrjTrn = TranslatorWorker.translateText("Number of Projects", langCode, siteId);
 	        String numberSecTrn = TranslatorWorker.translateText("Number of Sectors", langCode, siteId);
-	        String numberDonTrn = TranslatorWorker.translateText("Number of Donors", langCode, siteId);
+	        String numberDonTrn = TranslatorWorker.translateText("Number of Organizations", langCode, siteId);
 	        String numberRegTrn = TranslatorWorker.translateText("Number of Regions", langCode, siteId);
 	        String avgPrjZSizeTrn = TranslatorWorker.translateText("Average Project Size", langCode, siteId);
 	        String currName = vForm.getFilter().getCurrencyCode();
@@ -427,7 +433,7 @@ public class ExportToExcel extends Action {
 	            cell.setCellStyle(lastCellStyle);
 	            //if (vForm.getFilter().getDashboardType()!=org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
 	            	cell = row.createCell(cellNum++);
-	                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfDonors().toString());
+	                headerText = new HSSFRichTextString(vForm.getSummaryInformation().getNumberOfOrganizations().toString());
 	                cell.setCellValue(headerText);
 	                cell.setCellStyle(lastCellStyle);
 	            //}
@@ -1093,28 +1099,28 @@ public class ExportToExcel extends Action {
 			    }
 		    }
 		    
-		  //Donor Profile Table.
-		    boolean donorProfileVisible = false;
+		  //Organization Profile Table.
+		    boolean organizationProfileVisible = false;
 		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.REGION)
-		    	regionProfileVisible = FeaturesUtil.isVisibleFeature("Region Dashboard - Donor Profile chart", ampContext);
+		    	regionProfileVisible = FeaturesUtil.isVisibleFeature("Region Dashboard - Organization Profile chart", ampContext);
 	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.SECTOR)
-	        	regionProfileVisible = FeaturesUtil.isVisibleFeature("Sector Dashboard - Donor Profile chart", ampContext);
+	        	regionProfileVisible = FeaturesUtil.isVisibleFeature("Sector Dashboard - Organization Profile chart", ampContext);
 	        HSSFSheet sheet8 = null;
-	        if (donorProfileVisible) {
-			    if (!donorOpt.equals("0")){
-			    	sheet8 = wb.createSheet(donorProfTrn);
+	        if (organizationProfileVisible) {
+			    if (!organizationOpt.equals("0")){
+			    	sheet8 = wb.createSheet(organizationProfTrn);
 			    	rowNum=1;
 			    }
-			    if (donorOpt.equals("1") || donorOpt.equals("3")){
+			    if (organizationOpt.equals("1") || organizationOpt.equals("3")){
 			    	//rowNum = rowNum + 2;
 			        cellNum = 0;
 			        
 			        headerText = null;
 		        	row = sheet8.createRow(rowNum++);
 		        	cell = row.createCell(cellNum++);
-		        	String[] donorProfRows = vForm.getExportData().getDonorTableData().split("<");
+		        	String[] organizationProfRows = vForm.getExportData().getOrganizationTableData().split("<");
 		            
-		        	headerText = new HSSFRichTextString(donorProfTrn + " (" + currName + ")");
+		        	headerText = new HSSFRichTextString(organizationProfTrn + " (" + currName + ")");
 		            cell.setCellValue(headerText);
 		            cell.setCellStyle(subHeaderCS);
 		            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1122,25 +1128,25 @@ public class ExportToExcel extends Action {
 		            cellNum = 0;
 		            row = sheet8.createRow(rowNum++);
 		            cell = row.createCell(cellNum++);
-		            headerText = new HSSFRichTextString(donorTrn);
+		            headerText = new HSSFRichTextString(organizationTrn);
 		            cell.setCellValue(headerText);
 		            cell.setCellStyle(subHeaderCS);
-		            singleRow = donorProfRows[1].split(">");
+		            singleRow = organizationProfRows[1].split(">");
 		            for (int i = 1; i < singleRow.length; i++) {
 		            	cell = row.createCell(cellNum++);
 		 	            headerText = new HSSFRichTextString(singleRow[i]);
 		 	            cell.setCellValue(headerText);
 		 	            cell.setCellStyle(subHeaderCS);
 					}
-		            for (int i = 2; i < donorProfRows.length; i++) {
+		            for (int i = 2; i < organizationProfRows.length; i++) {
 			        	cellNum = 0;
 				        row = sheet8.createRow(rowNum++);
 				        HSSFCellStyle st = null;
-				    	if (i == donorProfRows.length-1)
+				    	if (i == organizationProfRows.length-1)
 				    		st = lastCellStyle;
 			            else
 			            	st = cellStyle;
-		            	singleRow = donorProfRows[i].split(">");
+		            	singleRow = organizationProfRows[i].split(">");
 		            	for (int j = 0; j < singleRow.length; j++) {
 		            		cell = row.createCell(cellNum++);
 		 		            headerText = new HSSFRichTextString(singleRow[j]);
@@ -1150,18 +1156,18 @@ public class ExportToExcel extends Action {
 					}
 			    }
 			    
-			    if (donorOpt.equals("2") || donorOpt.equals("3")){
+			    if (organizationOpt.equals("2") || organizationOpt.equals("3")){
 			    	rowNum++;
 			    	rowNum++;
 			        cellNum = 0;
 			        row = sheet8.createRow(rowNum++);
 		            cell = row.createCell(cellNum++);
-		            headerText = new HSSFRichTextString(donorProfTrn + " Chart");
+		            headerText = new HSSFRichTextString(organizationProfTrn + " Chart");
 		            cell.setCellValue(headerText);
 		            cell.setCellStyle(headerCS);
 		            
 			        ByteArrayOutputStream ba6 = new ByteArrayOutputStream();
-		            ImageIO.write(vForm.getExportData().getDonorGraph(), "png", ba6);
+		            ImageIO.write(vForm.getExportData().getOrganizationGraph(), "png", ba6);
 		            int pictureIndex6 = wb.addPicture(ba6.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
 		            HSSFPatriarch patriarch6 = sheet8.createDrawingPatriarch();
 		            HSSFPicture pic6 =  patriarch6.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex6);
@@ -1177,6 +1183,163 @@ public class ExportToExcel extends Action {
 			    }
 	        }
 	        
+	      //NPO Profile Table.
+		   HSSFSheet sheet9 = null;
+		    if (!NPOOpt.equals("0")){
+		    	sheet9 = wb.createSheet(NPOProfTrn);
+		    	rowNum=1;
+		    }
+		    if (NPOOpt.equals("1") || NPOOpt.equals("3")){
+		    	//rowNum = rowNum + 2;
+		        cellNum = 0;
+		        
+		        headerText = null;
+	        	row = sheet9.createRow(rowNum++);
+	        	cell = row.createCell(cellNum++);
+	        	String[] NPOProfRows = vForm.getExportData().getNPOTableData().split("<");
+	            
+	        	headerText = new HSSFRichTextString(NPOProfTrn + " (" + currName + ")");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            cellNum = 0;
+	            row = sheet9.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(NPOTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            singleRow = NPOProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	cell = row.createCell(cellNum++);
+	 	            headerText = new HSSFRichTextString(singleRow[i]);
+	 	            cell.setCellValue(headerText);
+	 	            cell.setCellStyle(subHeaderCS);
+				}
+	            for (int i = 2; i < NPOProfRows.length; i++) {
+		        	cellNum = 0;
+			        row = sheet9.createRow(rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == NPOProfRows.length-1)
+			    		st = lastCellStyle;
+		            else
+		            	st = cellStyle;
+	            	singleRow = NPOProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		cell = row.createCell(cellNum++);
+	 		            headerText = new HSSFRichTextString(singleRow[j]);
+	 		            cell.setCellValue(headerText);
+	 		            cell.setCellStyle(st);
+	    			}
+				}
+		    }
+		    
+		    if (NPOOpt.equals("2") || NPOOpt.equals("3")){
+		    	rowNum++;
+		    	rowNum++;
+		        cellNum = 0;
+		        row = sheet9.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(NPOProfTrn + " Chart");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(headerCS);
+	            
+		        ByteArrayOutputStream ba6 = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getNPOGraph(), "png", ba6);
+	            int pictureIndex6 = wb.addPicture(ba6.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+	            HSSFPatriarch patriarch6 = sheet9.createDrawingPatriarch();
+	            HSSFPicture pic6 =  patriarch6.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex6);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic6.getAnchor();
+	            anchor.setCol2((short)5);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic6.resize();
+		    }
+        
+        
+		  //Program Profile Table.
+		   HSSFSheet sheet10 = null;
+		    if (!programOpt.equals("0")){
+		    	sheet10 = wb.createSheet(programProfTrn);
+		    	rowNum=1;
+		    }
+		    if (programOpt.equals("1") || programOpt.equals("3")){
+		    	//rowNum = rowNum + 2;
+		        cellNum = 0;
+		        
+		        headerText = null;
+	        	row = sheet10.createRow(rowNum++);
+	        	cell = row.createCell(cellNum++);
+	        	String[] programProfRows = vForm.getExportData().getProgramTableData().split("<");
+	            
+	        	headerText = new HSSFRichTextString(programProfTrn + " (" + currName + ")");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            cellNum = 0;
+	            row = sheet10.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(programTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            singleRow = programProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	cell = row.createCell(cellNum++);
+	 	            headerText = new HSSFRichTextString(singleRow[i]);
+	 	            cell.setCellValue(headerText);
+	 	            cell.setCellStyle(subHeaderCS);
+				}
+	            for (int i = 2; i < programProfRows.length; i++) {
+		        	cellNum = 0;
+			        row = sheet10.createRow(rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == programProfRows.length-1)
+			    		st = lastCellStyle;
+		            else
+		            	st = cellStyle;
+	            	singleRow = programProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		cell = row.createCell(cellNum++);
+	 		            headerText = new HSSFRichTextString(singleRow[j]);
+	 		            cell.setCellValue(headerText);
+	 		            cell.setCellStyle(st);
+	    			}
+				}
+		    }
+		    
+		    if (programOpt.equals("2") || programOpt.equals("3")){
+		    	rowNum++;
+		    	rowNum++;
+		        cellNum = 0;
+		        row = sheet10.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(programProfTrn + " Chart");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(headerCS);
+	            
+		        ByteArrayOutputStream ba6 = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getProgramGraph(), "png", ba6);
+	            int pictureIndex6 = wb.addPicture(ba6.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+	            HSSFPatriarch patriarch6 = sheet10.createDrawingPatriarch();
+	            HSSFPicture pic6 =  patriarch6.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex6);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic6.getAnchor();
+	            anchor.setCol2((short)5);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic6.resize();
+		    }
+	        
+	        
+		    
 	        for(short i=0;i<10;i++){
 	             sheet.setColumnWidth(i , COLUMN_WIDTH);
 	        }
@@ -1220,77 +1383,17 @@ public class ExportToExcel extends Action {
 		             sheet8.setColumnWidth(i , COLUMN_WIDTH);
 		        }
 	        }
-            /*
-		    sheet.autoSizeColumn(0); 
-	        sheet.autoSizeColumn(1);
-	        sheet.autoSizeColumn(2);
-	        sheet.autoSizeColumn(3); 
-	        sheet.autoSizeColumn(4);
-	        sheet.autoSizeColumn(5);
-	        sheet.autoSizeColumn(6); 
-	        if (sheet2!=null){
-		        sheet2.autoSizeColumn(0); 
-		        sheet2.autoSizeColumn(1);
-		        sheet2.autoSizeColumn(2);
-		        sheet2.autoSizeColumn(3); 
-		        sheet2.autoSizeColumn(4);
-		        sheet2.autoSizeColumn(5);
-		        sheet2.autoSizeColumn(6); 
+	        if (sheet9!=null){ 
+	        	 for(short i=0;i<10;i++){
+		             sheet9.setColumnWidth(i , COLUMN_WIDTH);
+		        }
 	        }
-	        if (sheet3!=null){
-		        sheet3.autoSizeColumn(0); 
-		        sheet3.autoSizeColumn(1);
-		        sheet3.autoSizeColumn(2);
-		        sheet3.autoSizeColumn(3); 
-		        sheet3.autoSizeColumn(4);
-		        sheet3.autoSizeColumn(5);
-		        sheet3.autoSizeColumn(6); 
+	        if (sheet10!=null){ 
+	        	 for(short i=0;i<10;i++){
+		             sheet10.setColumnWidth(i , COLUMN_WIDTH);
+		        }
 	        }
-	        if (sheet4!=null){ 
-		        sheet4.autoSizeColumn(0); 
-		        sheet4.autoSizeColumn(1);
-		        sheet4.autoSizeColumn(2);
-		        sheet4.autoSizeColumn(3); 
-		        sheet4.autoSizeColumn(4);
-		        sheet4.autoSizeColumn(5);
-		        sheet4.autoSizeColumn(6); 
-	        }
-	        if (sheet5!=null){ 
-		        sheet5.autoSizeColumn(0); 
-		        sheet5.autoSizeColumn(1);
-		        sheet5.autoSizeColumn(2);
-		        sheet5.autoSizeColumn(3); 
-		        sheet5.autoSizeColumn(4);
-		        sheet5.autoSizeColumn(5);
-		        sheet5.autoSizeColumn(6); 
-	        }
-	        if (sheet6!=null){ 
-		        sheet6.autoSizeColumn(0); 
-		        sheet6.autoSizeColumn(1);
-		        sheet6.autoSizeColumn(2);
-		        sheet6.autoSizeColumn(3); 
-		        sheet6.autoSizeColumn(4);
-		        sheet6.autoSizeColumn(5);
-		        sheet6.autoSizeColumn(6); 
-	        }
-	        if (sheet7!=null){ 
-		        sheet7.autoSizeColumn(0); 
-		        sheet7.autoSizeColumn(1);
-		        sheet7.autoSizeColumn(2);
-		        sheet7.autoSizeColumn(3); 
-		        sheet7.autoSizeColumn(4);
-		        sheet7.autoSizeColumn(5);
-		        sheet7.autoSizeColumn(6); 
-	        }
-	        if (sheet8!=null){ 
-		        sheet8.autoSizeColumn(0); 
-		        sheet8.autoSizeColumn(1);
-		        sheet8.autoSizeColumn(2);
-		        sheet8.autoSizeColumn(3); 
-		        sheet8.autoSizeColumn(4);
-		        sheet8.autoSizeColumn(5);
-		        sheet8.autoSizeColumn(6); 
-	        }*/
+           
 	        wb.write(response.getOutputStream());
 	        
 		} catch (Exception e) {

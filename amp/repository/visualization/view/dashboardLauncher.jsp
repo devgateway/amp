@@ -85,7 +85,7 @@ var trnPledges = "";
 var trnAidPredictability = "";
 var trnAidType = "";
 var trnFinancingInstrument = "";
-var trnDonorProfile = "";
+var trnOrganizationProfile = "";
 var trnSectorProfile = "";
 var trnSubSectorProfile = "";
 var trnRegionProfile = "";
@@ -94,7 +94,7 @@ var trnShowFullList = "";
 var trnTopProjects = "";
 var trnTopSectors = "";
 var trnTopRegions = "";
-var trnTopDonors = "";
+var trnTopOrganizations = "";
 var trnShowFilterSetttings = "";
 var trnHideFilterSetttings = "";
 var trnTotalCommitments = "";
@@ -108,7 +108,7 @@ var trnFaxes = "";
 var trnNoContactInfo = "";
 var trnSave = "";
 var trnDescription = "";
-var trnBackgroundDonor = "";
+var trnBackgroundOrganization = "";
 var trnNoAdditionalInfo = "";
 var trnAllOrgGroups = "";
 var trnMultipleOrgs = "";
@@ -150,13 +150,13 @@ function initializeTranslations(){
 	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
 	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
 	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
-	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Donors</digi:trn>: ";
+	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Organizations</digi:trn>: ";
 	trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
 	trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
 	trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
 	trnTotalDisbsDescription="<digi:trn jsFriendly='true'>Sum of Disbursements on projets filtered.</digi:trn>";
 	trnNumOfProjsDescription="<digi:trn jsFriendly='true'>Number of Projects filtered.</digi:trn>";
-	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Donors on projects filtered</digi:trn>";
+	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Organizations on projects filtered</digi:trn>";
 	trnNumOfSecsDescription="<digi:trn jsFriendly='true'>Number of Sectors on projects filtered</digi:trn>";
 	trnNumOfRegsDescription="<digi:trn jsFriendly='true'>Number of Regions on projects filtered</digi:trn>";
 	trnAvgProjSizeDescription="<digi:trn jsFriendly='true'>Total Disbursements divided Number of Projects</digi:trn>";
@@ -167,7 +167,7 @@ function initializeTranslations(){
 	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
 	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
 	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
-	trnDonorProfile="<digi:trn jsFriendly='true'>Donor Profile</digi:trn>";
+	trnOrganizationProfile="<digi:trn jsFriendly='true'>Organization Profile</digi:trn>";
 	trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
 	trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
 	trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
@@ -176,7 +176,7 @@ function initializeTranslations(){
 	trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
 	trnTopSectors="<digi:trn jsFriendly='true'>Top Sectors</digi:trn>";
 	trnTopRegions="<digi:trn jsFriendly='true'>Top Regions</digi:trn>"; 
-	trnTopDonors="<digi:trn jsFriendly='true'>Top Donors</digi:trn>"; 
+	trnTopOrganizations="<digi:trn jsFriendly='true'>Top Organizations</digi:trn>"; 
 	trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter settings</digi:trn>"; 
 	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
 	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
@@ -190,7 +190,7 @@ function initializeTranslations(){
 	trnNoContactInfo ="<digi:trn>No Contact Information available for current filter</digi:trn>"; 
 	trnSave = "<digi:trn>Save</digi:trn>";
 	trnDescription = "<digi:trn>Description</digi:trn>";
-	trnBackgroundDonor = "<digi:trn>Background of donor</digi:trn>";
+	trnBackgroundOrganization = "<digi:trn>Background of organization</digi:trn>";
 	trnNoAdditionalInfo = "<digi:trn>No Additional Information available for current filter</digi:trn>";
 	trnAllOrgGroups = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
 	trnMultipleOrgs = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>"; 
@@ -368,8 +368,8 @@ function initializeGlobalVariables(){
 						</html:checkbox>
 					</li>
 					<li>
-						<html:checkbox property="filter.showDonorsRanking" styleId="show_donors_ranking">
-							<digi:trn>Show Donors Ranking</digi:trn>
+						<html:checkbox property="filter.showOrganizationsRanking" styleId="show_organizations_ranking">
+							<digi:trn>Show Organizations Ranking</digi:trn>
 						</html:checkbox>
 					</li>
 					<li>
@@ -380,6 +380,16 @@ function initializeGlobalVariables(){
 					<li>
 						<html:checkbox property="filter.showRegionsRanking" styleId="show_regions_ranking">
 							<digi:trn>Show Regions Ranking</digi:trn>
+						</html:checkbox>
+					</li>
+					<li>
+						<html:checkbox property="filter.showNPORanking" styleId="show_NPO_ranking">
+							<digi:trn>Show NPO Ranking</digi:trn>
+						</html:checkbox>
+					</li>
+					<li>
+						<html:checkbox property="filter.showProgramsRanking" styleId="show_programs_ranking">
+							<digi:trn>Show Programs Ranking</digi:trn>
 						</html:checkbox>
 					</li>
 					
@@ -596,49 +606,58 @@ function initializeGlobalVariables(){
 															label="key" value="value" />
 													</html:select></td>
 													<td rowspan=2 width=15>&nbsp;</td>
-   										 <td class="dashboard_generator_opt"><b><digi:trn>End year</digi:trn>:</b></td>
-  									     <td class="dashboard_generator_opt"><html:select property="filter.endYearFilter" styleId="endYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-														<html:optionsCollection property="filter.years" label="key" value="value" />
-													</html:select></td>
-													<td rowspan=2 width=15>&nbsp;</td>
-   										 <td class="dashboard_generator_opt"><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
-   										 <td class="dashboard_generator_opt"><html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:150px;">
-														<html:option value="-1">
-														<digi:trn>None</digi:trn>
-														</html:option>
-														<html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
-													</html:select></td>
-													<td rowspan=2 width=15>&nbsp;</td>
-													<td class="dashboard_generator_opt">&nbsp;</td>
-													<td class="dashboard_generator_opt">&nbsp;</td>
- 									 </tr>
-									  <tr>
-   										<td><b><digi:trn>Currency Type</digi:trn>:</b></td>
-  										    <td><html:select property="filter.currencyId" styleId="currencies_dropdown_ids" styleClass="dropdwn_sm" style="width:150px;">
-														<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
-													</html:select></td>
-    										<td><b><digi:trn>Show in top ranks</digi:trn>:</b></td>
-    									    <td><html:select property="filter.topLists" styleId="topLists_dropdown" styleClass="dropdwn_sm" style="width:70px;">
-														<html:option value="5">5</html:option>
-														<html:option value="10">10</html:option>
-														<html:option value="20">20</html:option>
-														<html:option value="50">50</html:option>
-													</html:select></td>
-													
-   											 <td><b><digi:trn>Decimals to show</digi:trn>:</b></td>
-    										 <td><html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+   										 <td class="dashboard_generator_opt"><b><digi:trn>Decimals to show</digi:trn>:</b></td>
+    										 <td class="dashboard_generator_opt"><html:select property="filter.decimalsToShow" styleId="decimalsToShow_dropdown" styleClass="dropdwn_sm" style="width:70px;">
 														<html:option value="0">0</html:option>
 														<html:option value="1">1</html:option>
 														<html:option value="2">2</html:option>
 														<html:option value="3">3</html:option>
 														<html:option value="4">4</html:option>
 														<html:option value="5">5</html:option>
+													</html:select>
+											</td>
+													<td rowspan=2 width=15>&nbsp;</td>
+   										 <td class="dashboard_generator_opt"><b><digi:trn>Fiscal Calendar</digi:trn>:</b></td>
+   										 <td class="dashboard_generator_opt"><html:select property="filter.fiscalCalendarId" styleId="fiscalCalendar_dropdown_Id" styleClass="dropdwn_sm" style="width:150px;">
+											<html:option value="-1">
+											<digi:trn>None</digi:trn>
+											</html:option>
+											<html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
+										</html:select></td>
+										<td rowspan=2 width=15>&nbsp;</td>
+										 <td class="dashboard_generator_opt"><b><digi:trn>Show amounts in thousands</digi:trn>:</b></td>
+ 										<td class="dashboard_generator_opt"><html:checkbox property="filter.showAmountsInThousands" styleId="show_amounts_in_thousands"/></td>
+										
+ 									 </tr>
+									 <tr>
+									 	<td class="dashboard_generator_opt"><b><digi:trn>End year</digi:trn>:</b></td>
+  									     <td class="dashboard_generator_opt"><html:select property="filter.endYearFilter" styleId="endYear_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+														<html:optionsCollection property="filter.years" label="key" value="value" />
+													</html:select></td>
+   										
+    										<td class="dashboard_generator_opt"><b><digi:trn>Show in top ranks</digi:trn>:</b></td>
+    									    <td class="dashboard_generator_opt"><html:select property="filter.topLists" styleId="topLists_dropdown" styleClass="dropdwn_sm" style="width:70px;">
+														<html:option value="5">5</html:option>
+														<html:option value="10">10</html:option>
+														<html:option value="20">20</html:option>
+														<html:option value="50">50</html:option>
+													</html:select></td>
+											<td class="dashboard_generator_opt"><b><digi:trn>Currency Type</digi:trn>:</b></td>
+  										    <td class="dashboard_generator_opt"><html:select property="filter.currencyId" styleId="currencies_dropdown_ids" styleClass="dropdwn_sm" style="width:150px;">
+														<html:optionsCollection property="filter.currencies" value="ampCurrencyId" label="currencyName" />
 													</html:select></td>
 													
- 											 <td><b><digi:trn>Show amounts in thousands</digi:trn>:</b></td>
- 											 <td><html:checkbox property="filter.showAmountsInThousands" styleId="show_amounts_in_thousands"/></td>
+   											 
+											<td class="dashboard_generator_opt" id="agencyTypeSelector1" style="display: none;"><b><digi:trn>Type of Agency</digi:trn>:</b></td>
+											<td class="dashboard_generator_opt" id="agencyTypeSelector2" style="display: none;">
+												<html:select property="filter.agencyTypeFilter" styleId="agencyType_dropdown" styleClass="dropdwn_sm" style="width:150px;">
+													<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
+													<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
+													<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
+												</html:select>
+										 	</td>	
 									  </tr>
-				</table>
+								</table>
 										
 									</div>
 								
@@ -654,7 +673,7 @@ function initializeGlobalVariables(){
 </html>
 <script type="text/javascript">
 	changeTab(0);
-	callbackGetGraphs(document.getElementsByName("dsbd")[0].getAttribute("id"));
+	callbackGetGraphs(document.getElementsByName("dsbd")[0].click());
 </script>
 
 <html:hidden property="filter.currencyCode" styleId="currencyCode" />
@@ -679,11 +698,13 @@ function initializeGlobalVariables(){
 <html:hidden property="filter.groupSeparator" styleId="groupSeparator" />
 <html:hidden property="filter.decimalSeparator" styleId="decimalSeparator" />
 <html:hidden property="filter.fromPublicView" styleId="fromPublicView" />
-
+<html:hidden property="filter.agencyType" styleId="agencyType" />
 <html:hidden property="filter.showProjectsRanking" styleId="showProjectsRanking" />
-<html:hidden property="filter.showDonorsRanking" styleId="showDonorsRanking" />
+<html:hidden property="filter.showOrganizationsRanking" styleId="showOrganizationsRanking" />
 <html:hidden property="filter.showSectorsRanking" styleId="showSectorsRanking" />
 <html:hidden property="filter.showRegionsRanking" styleId="showRegionsRanking" />
+<html:hidden property="filter.showNPORanking" styleId="showNPORanking" />
+<html:hidden property="filter.showProgramsRanking" styleId="showProgramsRanking" />
 
 </digi:form>
 

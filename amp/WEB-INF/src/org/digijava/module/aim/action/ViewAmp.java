@@ -81,6 +81,9 @@ public class ViewAmp
         Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
         session.setAttribute(Constants.USER_WORKSPACES, members);
         
+        Collection dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
+        session.setAttribute(Constants.MENU_DASHBOARDS, dashboards);
+        
         if (tm != null && tm.getTeamId() != null &&
         	tm.getTeamId().longValue() > 0) {
             String fwdUrl = "showDesktop.do";

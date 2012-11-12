@@ -109,13 +109,9 @@ public class ShowProjectsList extends Action {
             divideByMillionDenominator = new BigDecimal(1000);
         }
         
-        DashboardFilter newFilter = filter.getCopyFilterForFunding();
         List<AmpActivityVersion> activities = null;
         Map<String, Map<AmpActivityVersion, BigDecimal>> itemProjectsList = new TreeMap<String, Map<AmpActivityVersion, BigDecimal>>();
         if (type.equals("RegionProfile")){
-	    	//Long[] ids = {Long.parseLong(id)};
-        	//newFilter.setSelLocationIds(ids);
-			//activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 			for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];
 				if(!long1.equals(0l)){
@@ -128,36 +124,48 @@ public class ShowProjectsList extends Action {
 					}
 				}
 				Long[] id1 = {long1};
-				newFilter.setSelLocationIds(id1);
-				activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				Long[] temp = filter.getSelLocationIds();
+				filter.setSelLocationIds(id1);
+				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				filter.setSelLocationIds(temp);
 				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 	    }
 		if (type.equals("SectorProfile")){
-	    	//Long[] ids = {Long.parseLong(id)};
-	    	//newFilter.setSelSectorIds(ids);
-			//activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
 			for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];
 				itemName = SectorUtil.getAmpSector(long1).getName();
 				Long[] id1 = {long1};
-				newFilter.setSelSectorIds(id1);
-				activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				Long[] temp = filter.getSelSectorIds();
+				filter.setSelSectorIds(id1);
+				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				filter.setSelSectorIds(temp);
 				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
-		if (type.equals("DonorProfile")){
-	    	//Long[] ids = {Long.parseLong(id)};
-			//newFilter.setOrgIds(ids);
-			//activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), Constants.ACTUAL);
+		if (type.equals("OrganizationProfile")){
 			for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];
 				itemName = DbUtil.getOrganisation(long1).getName();
 				Long[] id1 = {long1};
-				newFilter.setOrgIds(id1);
-				activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				Long[] temp = filter.getOrgIds();
+				filter.setOrgIds(id1);
+				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				filter.setOrgIds(temp);
+				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
+			}
+			visualizationForm.setItemProjectsList(itemProjectsList);
+		}
+		if (type.equals("NPOProfile")||type.equals("ProgramProfile")){
+	    	for (int i = 0; i < ids.length; i++) {
+				Long long1 = ids[i];
+				itemName = DbUtil.getProgramById(long1).getName();
+				Long[] id1 = {long1};
+				filter.setSelProgramIds(id1);
+				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				filter.setSelProgramIds(null);
 				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -259,7 +267,6 @@ public class ShowProjectsList extends Action {
     		startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
     	}
-        DashboardFilter newFilter = filter.getCopyFilterForFunding();
         BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
         if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
             divideByMillionDenominator = new BigDecimal(1000);
@@ -270,10 +277,11 @@ public class ShowProjectsList extends Action {
 	        BigDecimal totalSum = BigDecimal.ZERO;
 	        while(it.hasNext()){
 	        	AmpActivityVersion act = it.next();
-	        	newFilter.setActivityId(act.getAmpActivityId());
+	        	Long temp = filter.getActivityId();
+	        	filter.setActivityId(act.getAmpActivityId());
 	        	DecimalWraper fundingCal = null;
 	        	if (type.equals("Fundings")){
-	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	        		fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	        	} else if (type.equals("AidPredictability")){
 	        		HardCodedCategoryValue adjustmentType;
 	        		
@@ -281,33 +289,39 @@ public class ShowProjectsList extends Action {
 	        			adjustmentType = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL;
 	        		else
 	        			adjustmentType = CategoryConstants.ADJUSTMENT_TYPE_PLANNED;
-	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), adjustmentType);
+	        		fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType);
 	        	} else if (type.equals("AidType")){
-	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, Long.parseLong(id), null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	        		fundingCal = DbUtil.getFunding(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	        	} else if (type.equals("AidModality")){
-	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, Long.parseLong(id), newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	        		fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	        	} else if (type.equals("SectorProfile")){
 	        		Long[] id1 = {Long.parseLong(id)};
-	        		newFilter.setSelSectorIds(id1);
-					fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-					newFilter.setSelSectorIds(null);
+	        		filter.setSelSectorIds(id1);
+					fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+					filter.setSelSectorIds(null);
+	        	} else if (type.equals("NPOProfile")||type.equals("ProgramProfile")){
+	        		Long[] id1 = {Long.parseLong(id)};
+	        		filter.setSelProgramIds(id1);
+					fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+					filter.setSelProgramIds(null);
 	        	} else if (type.equals("RegionProfile")){
 	        		Long[] id1 = {Long.parseLong(id)};
-	        		newFilter.setSelLocationIds(id1);
-					fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-					newFilter.setSelLocationIds(null);
+	        		filter.setSelLocationIds(id1);
+					fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+					filter.setSelLocationIds(null);
 	        	} else if (type.equals("DonorProfile")){
 	        		Long[] id1 = {Long.parseLong(id)};
-	        		newFilter.setOrgIds(id1);
-					fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-					newFilter.setOrgIds(null);
+	        		filter.setOrgIds(id1);
+					fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+					filter.setOrgIds(null);
 	        	} else {
-	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	        		fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	        	}
-	        	BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(newFilter.getDecimalsToShow(), RoundingMode.HALF_UP);
+	        	BigDecimal total = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        	totalSum = totalSum.add(total);
 	        	itemProjectsList.put(act, total);
-	        	newFilter.setActivityId(null);
+	        	filter.setActivityId(temp);
+	        	
 			}
 	        return itemProjectsList;
 		}

@@ -89,6 +89,7 @@ public class Constants
 	public static final Integer CURRENT = new Integer(2);
 	
 	public static final String USER_WORKSPACES="USER_WORKSPACES";
+	public static final String MENU_DASHBOARDS="MENU_DASHBOARDS";
 	//Removed by Govind
 	//public static  String COUNTRY_ISO = "";
 	//public static  String COUNTRY = "";

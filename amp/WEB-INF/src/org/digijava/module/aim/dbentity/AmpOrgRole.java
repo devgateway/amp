@@ -13,6 +13,7 @@ public class AmpOrgRole implements Serializable, Versionable, Cloneable
 	private AmpOrganisation organisation;
 	private AmpRole role;
 	private Double 	percentage;
+	private Long budgetCode;
 	private String additionalInfo;
 	
     public Double getPercentage() {
@@ -83,8 +84,14 @@ public class AmpOrgRole implements Serializable, Versionable, Cloneable
 	public void setAdditionalInfo(String additionalInfo) {
 		this.additionalInfo = additionalInfo;
 	}
-
 	
+	public Long getBudgetCode() {
+		return budgetCode;
+	}
+	public void setBudgetCode(Long budgetCode) {
+		this.budgetCode = budgetCode;
+	}
+
 	@Override
 	public boolean equalsForVersioning(Object obj) {
 		AmpOrgRole aux = (AmpOrgRole) obj;
@@ -108,12 +115,14 @@ public class AmpOrgRole implements Serializable, Versionable, Cloneable
 		}
 		if (this.additionalInfo != null && this.additionalInfo.trim().length() > 0)
 			out.getOutputs().add(new Output(null, new String[] {" Department/Division:"}, new Object[] {this.additionalInfo}));
+		if (this.budgetCode != null)
+			out.getOutputs().add(new Output(null, new String[] {" Budget Code:"}, new Object[] {this.budgetCode}));
 		return out;
 	}
 
 	@Override
 	public Object getValue() {
-		return "" + this.percentage + "" + this.additionalInfo;
+		return "" + this.percentage + "" + this.additionalInfo + "" + this.budgetCode;
 	}
 	
 	@Override

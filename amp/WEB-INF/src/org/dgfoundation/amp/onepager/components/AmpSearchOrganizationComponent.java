@@ -22,13 +22,10 @@ import org.digijava.module.aim.util.DbUtil;
 
 
 public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  implements IOnChangeListener{
+	private static final long serialVersionUID = 1L;
 
 	private AmpSelectFieldPanel<AmpOrgGroup> orgGroupPanel;
 	private AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel;
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	public AmpSearchOrganizationComponent(String id, IModel<T> model,
 			String fmName,  final AmpAutocompleteFieldPanel<AmpOrganisation> autocompletePanel){

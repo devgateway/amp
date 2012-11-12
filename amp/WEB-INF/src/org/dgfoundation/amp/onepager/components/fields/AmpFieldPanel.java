@@ -204,17 +204,19 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		setOutputMarkupId(true);
 		this.fmName = fmName;
 		
-		Label requiredStar = new Label("requiredStar", new Model("")){
+		Label requiredStar = new Label("requiredStar", new Model<String>("")){
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onBeforeRender() {
 				super.onBeforeRender();
 				if (((formComponent!=null && formComponent.isRequired())||showReqStarForNotReqComp)){
 					this.setDefaultModelObject("<font color=\"red\">*</font>");
-					this.add(new AttributeModifier("style", new Model("padding-left: -5px;")));
+					this.add(new AttributeModifier("style", new Model<String>("padding-left: -5px; float: left;")));
 					this.setEscapeModelStrings(false);
 				} 
 				else
-					this.add(new AttributeModifier("style", new Model("display: none;")));
+					this.add(new AttributeModifier("style", new Model<String>("display: none;")));
 			}
 		};
 		requiredStar.setVisible(!hideNewLine||enableReqStar);

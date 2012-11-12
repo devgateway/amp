@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+					DROP VIEW IF EXISTS v_component_funding;
 			    	CREATE OR REPLACE VIEW v_component_funding AS SELECT f.activity_id AS amp_activity_id, f.amp_component_funding_id, f.amp_component_funding_id AS amp_fund_detail_id, c.title AS component_name, f.transaction_type, f.adjustment_type, adj.category_value AS adjustment_type_name, f.transaction_date, f.transaction_amount, f.currency_id, cu.currency_code FROM amp_component_funding f, amp_components c, amp_currency cu, amp_category_value adj WHERE (((cu.amp_currency_id = f.currency_id) AND (f.amp_component_id = c.amp_component_id)) AND (f.adjustment_type = adj.id)) ORDER BY f.activity_id;;;
         		</lang>
 		</script>

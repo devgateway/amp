@@ -17,6 +17,7 @@ import org.dgfoundation.amp.onepager.validators.AmpUniqueCollectionValidator;
  */
 public abstract class AmpUniqueCollectionValidatorField<T> extends
 		AmpCollectionValidatorField<T, String> {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @param id
@@ -33,9 +34,10 @@ public abstract class AmpUniqueCollectionValidatorField<T> extends
 	 * @see org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField#getHiddenContainerModel(org.apache.wicket.model.IModel)
 	 */
 	@Override
-	public IModel getHiddenContainerModel(
+	public IModel<String> getHiddenContainerModel(
 			final IModel<? extends Collection<T>> collectionModel) {
-			Model<String> model=new Model<String>() {
+		Model<String> model=new Model<String>() {
+			private static final long serialVersionUID = 1L;
 			@Override
 			public String getObject() {
 				Set<Object> res=new TreeSet<Object>();

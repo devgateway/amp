@@ -4,8 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.validator.RangeValidator;
@@ -35,10 +35,10 @@ public class AmpPercentageTextField extends AmpTextFieldPanel<Double> {
 			AmpPercentageCollectionValidatorField<?> validationHiddenField) {
 		super(id, model, fmName, true, true, false, true);
 		this.validationHiddenField = validationHiddenField;
-		
 		textContainer.setType(Double.class);
 		textContainer.setRequired(true);
 		textContainer.add(new RangeValidator<Double>(0.1d, null));
+		textContainer.add(new AttributeModifier("style", "width: 40px;"));
 	}
 	
 	@Override

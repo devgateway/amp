@@ -12,23 +12,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
@@ -43,32 +40,41 @@ import org.digijava.module.aim.util.DbUtil;
  * @author aartimon@dginternational.org
  * since Oct 26, 2010
  */
-public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeaturePanel<AmpActivityVersion,AmpOrgRole> {
+public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeaturePanel<AmpActivityVersion, AmpOrgRole> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	protected AmpUniqueCollectionValidatorField<AmpOrgRole> uniqueCollectionValidationField;
+	protected AmpPercentageCollectionValidatorField<AmpOrgRole> percentageValidationField;
+	protected ListView<AmpOrgRole> list;
+	protected IModel<List<AmpOrgRole>> listModel;
+	protected IModel<Set<AmpOrgRole>> setModel;
+	private TransparentWebMarkupContainer updateColSpan1;
+	private TransparentWebMarkupContainer updateColSpan2;
 	/**
 	 * @param id
 	 * @param fmName
 	 * @param am
 	 * @throws Exception
 	 */
-	public AmpRelatedOrganizationsFormTableFeature(String id, String fmName,
+	protected AmpRelatedOrganizationsBaseTableFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am, final String roleName) throws Exception {
 		super(id, am, fmName);
-		final IModel<Set<AmpOrgRole>> setModel=new PropertyModel<Set<AmpOrgRole>>(am,"orgrole");
+		setModel=new PropertyModel<Set<AmpOrgRole>>(am,"orgrole");
 		if (setModel.getObject() == null)
-			setModel.setObject(new HashSet());
+			setModel.setObject(new HashSet<AmpOrgRole>());
 		
 		
 		final AmpRole specificRole = DbUtil.getAmpRole(roleName);
 
-		IModel<List<AmpOrgRole>> listModel = new AbstractReadOnlyModel<List<AmpOrgRole>>() {
+		listModel = new AbstractReadOnlyModel<List<AmpOrgRole>>() {
 			private static final long serialVersionUID = 3706184421459839210L;
 
 			@Override
 			public List<AmpOrgRole> getObject() {
 				ArrayList<AmpOrgRole> ret = new ArrayList<AmpOrgRole>();
-				if (setModel == null)
-					return ret;
 				Set<AmpOrgRole> allOrgRoles = setModel.getObject();
 				Set<AmpOrgRole> specificOrgRoles = new HashSet<AmpOrgRole>();  
 				
@@ -98,10 +104,17 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 				return ret;
 			}
 		};
+		
+		updateColSpan1 = new TransparentWebMarkupContainer("updateColSpan1");
+		add(updateColSpan1);
+		updateColSpan2 = new TransparentWebMarkupContainer("updateColSpan2");
+		add(updateColSpan2);
 
 		
-		final AmpUniqueCollectionValidatorField<AmpOrgRole> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpOrgRole>(
+		uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpOrgRole>(
 				"uniqueOrgsValidator", listModel, "Unique Orgs Validator") {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Object getIdentifier(AmpOrgRole t) {
 				return t.getOrganisation().getName();
@@ -113,8 +126,10 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 		add(wmc);
 		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
 		wmc.add(iValidator);
-		final AmpPercentageCollectionValidatorField<AmpOrgRole> percentageValidationField = new AmpPercentageCollectionValidatorField<AmpOrgRole>(
+		percentageValidationField = new AmpPercentageCollectionValidatorField<AmpOrgRole>(
 				"relOrgPercentageTotal", listModel, "relOrgPercentageTotal") {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Number getPercentage(AmpOrgRole item) {
 				return item.getPercentage();
@@ -123,43 +138,9 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 		percentageValidationField.setIndicatorAppender(iValidator);
 		add(percentageValidationField);
 
-
-		list = new ListView<AmpOrgRole>("list", listModel) {
-			private static final long serialVersionUID = 7218457979728871528L;
-			@Override
-			protected void populateItem(final ListItem<AmpOrgRole> item) {
-				final MarkupContainer listParent=this.getParent();
-				
-				item.add(new AmpTextFieldPanel<String>(
-						"departmentDivision",
-						new PropertyModel<String>(item.getModel(), "additionalInfo"), "relOrgadditionalInfo", true));
-				
-			//	AmpOrganisation o= item.getModelObject().getOrganisation();
-				item.add(new Label("name", item.getModelObject().getOrganisation().getAcronymAndName()));	
-				
-				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(), "percentage");
-				AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel, "percentage",percentageValidationField);
-				item.add(percentageField);
-				
-				AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField(
-						"delRelOrg", "Delete Related Organisation") {
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						setModel.getObject().remove(item.getModelObject());
-						uniqueCollectionValidationField.reloadValidationField(target);
-						list.removeAll();
-						target.add(listParent);
-					}
-				};
-				item.add(delRelOrg);
-				
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
-		
-		
 		add(new AmpDividePercentageField<AmpOrgRole>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void setPercentage(AmpOrgRole loc, int val) {
 				loc.setPercentage((double) val);
@@ -179,6 +160,8 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 		});
 
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,AmpOrganisationSearchModel.class) {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
 				return DbUtil.filter(choice.getName());
@@ -220,10 +203,17 @@ public class AmpRelatedOrganizationsFormTableFeature extends AmpFormTableFeature
 			}
 		};
 
-		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("search", new Model<String> (),
+		AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (),
 				"Search Organizations",   searchOrgs );
 		add(searchOrganization);
 
+	}
+	
+	@Override
+	public void setTitleHeaderColSpan(Integer colspan) {
+		super.setTitleHeaderColSpan(colspan);
+		updateColSpan1.add(new AttributeModifier("colspan", new Model<Integer>(colspan)));
+		updateColSpan2.add(new AttributeModifier("colspan", new Model<Integer>(colspan)));
 	}
 
 }

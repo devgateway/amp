@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-  <jira>AMP-12061</jira>
+  <jira>AMP-14061</jira>
   <keyword>Dashboard</keyword>
   <author>Mauricio</author> 
   <description>Add NPO and Program graphs to the table</description>
@@ -14,6 +14,8 @@
 		VALUES(nextval('amp_graph_seq'), 'Program Profile', 'getProgramProfileGraphData', 'ProgramProfile', false, true, true, true, true, false);
 
 		UPDATE amp_graph SET container_id = 'OrganizationProfile' WHERE container_id = 'DonorProfile';
+		UPDATE amp_graph SET name = 'Organization Profile' WHERE name = 'Donor Profile';
+		
       </lang>
     </script>
   </apply>

@@ -63,8 +63,28 @@ public class AmountCell extends Cell {
 		this.columnPercent = columnPercent;
 	}
 
-	public int compareTo(Object o) {
+	public int compareTo(Object o) 
+	{
 		AmountCell ac = (AmountCell) o;
+		Long thisId = this.getId();
+		Long otherId = ac.getId();
+
+		// AMP-14246: safeguard for NULLs, treat null as INFINITY
+		if (thisId == null)
+		{
+			if (otherId == null)
+				return 0;
+			
+			return 1; 
+		}
+		
+		if (otherId == null)
+		{
+			if (thisId == null)
+				return 0;
+			return -1;
+		}
+		
 		return this.getId().compareTo(ac.getId());
 	}
 

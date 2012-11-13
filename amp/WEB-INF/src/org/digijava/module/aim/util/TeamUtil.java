@@ -1673,12 +1673,15 @@ public class TeamUtil {
 	    				}
 	    			}
 	                if(keyword != null){
-	                	queryString += " and r.name like '%"+keyword+"%' ";
+	                	queryString += " and lower(r.name) like lower(:keyword)";
 	                }
 	                queryString += " order by r.name";
 	                qry = session.createQuery(queryString);
-	                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
-	                                 Hibernate.LONG);
+	                qry.setLong("id", ampTeamRep.getReport().getAmpReportId());
+	                
+	                if (keyword != null)
+	                	qry.setString("keyword", "%" + keyword + "%");
+
 	                Iterator itrTemp = qry.list().iterator();
 	                AmpReports ampReport = null;
 	                if(itrTemp.hasNext()) {
@@ -1711,7 +1714,7 @@ public class TeamUtil {
         }
         return col;
     }
-    public static List getTeamReportsCollection(Long teamId,int currentPage, int recordPerPage, Boolean tabs,String keyword) {
+    public static List getTeamReportsCollection(Long teamId, int currentPage, int recordPerPage, Boolean tabs, String keyword) {
         Session session = null;
         List col = new ArrayList<ReportsCollection>();
         try {
@@ -1728,7 +1731,7 @@ public class TeamUtil {
 				}
 			}
             if(keyword != null){
-            	queryString += " and tr.report.name like '%"+keyword+"%' ";
+            	queryString += " and lower(tr.report.name) like lower(:keyword) ";
             }
             queryString += "  order by tr.report";
             Query qry = session.createQuery(queryString);
@@ -1736,6 +1739,9 @@ public class TeamUtil {
             qry.setFirstResult(currentPage);
             qry.setMaxResults(recordPerPage);
             qry.setLong("teamId", teamId);
+            
+            if (keyword != null)
+            	qry.setString("keyword", "%" + keyword + "%");
 
             col=qry.list();
 
@@ -1765,12 +1771,16 @@ public class TeamUtil {
 				}
 			}
            if(keyword != null){
-           	queryString += " and tr.report.name like '%"+keyword+"%' ";
+           	queryString += " and lower(tr.report.name) like lower(:keyword)";
            }
            queryString += " order by tr.report";
            
            Query qry = session.createQuery(queryString);
            qry.setLong("teamId", teamId);
+           
+           if (keyword != null)
+        	   qry.setString("keyword", "%" + keyword + "%");
+
            col = qry.list();
            size=col.size();
        } catch(Exception e) {

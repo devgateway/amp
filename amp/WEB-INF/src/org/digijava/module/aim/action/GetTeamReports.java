@@ -96,7 +96,7 @@ public class GetTeamReports extends Action {
             Collection col =null;
             if(defReportsPerPage!=0){
                 int curPage=raForm.getCurrentPage()-1;
-                col= TeamUtil.getTeamReportsCollection(id,curPage*defReportsPerPage,defReportsPerPage,tabs,raForm.getKeyword());
+                col= TeamUtil.getTeamReportsCollection(id, curPage * defReportsPerPage, defReportsPerPage, tabs, raForm.getKeyword());
                 int size=TeamUtil.getTeamReportsCollectionSize(id,tabs,raForm.getKeyword());
                 totalPages=Math.ceil(1.0*size/defReportsPerPage);
              }

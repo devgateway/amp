@@ -285,12 +285,6 @@ function checkSelectedLanguages(){
 									<td bgColor=#ffffff>
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
-												<td class="inside">
-														<digi:link href="/msgCleanupManager.do?reset=true" >
-															<digi:trn>Translation Cleanup Manager</digi:trn></digi:link>
-												</td>
-											</tr>
-											<tr>
 												<!--<td>
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>-->
 												<td class="inside">
@@ -301,6 +295,13 @@ function checkSelectedLanguages(){
 													</digi:link>
 												</td>
 											</tr>
+											<tr>
+												<td class="inside">
+														<digi:link href="/msgCleanupManager.do?reset=true" >
+															<digi:trn>Translation Cleanup Manager</digi:trn></digi:link>
+												</td>
+											</tr>
+											
 											<!-- end of other links -->
 										</table>
 									</td>

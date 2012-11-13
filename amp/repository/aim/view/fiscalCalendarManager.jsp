@@ -224,6 +224,19 @@
 										</table>
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
+													<td class="inside">
+														<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+														<c:set var="translation">
+															<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+														</c:set>
+														<digi:link href="/admin.do" title="${translation}" >
+														<digi:trn key="aim:AmpAdminHome">
+														Admin Home
+														</digi:trn>
+														</digi:link>
+													</td>
+											</tr>
+											<tr>
 												<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 														<c:set var="translation">
@@ -233,19 +246,6 @@
 															<digi:trn key="aim:addNewFiscalCalendar">
 																Add a Fiscal Calendar </digi:trn>
 														</digi:link>
-												</td>
-											</tr>
-											<tr>
-												<td class="inside">
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-													<c:set var="translation">
-														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-													</c:set>
-													<digi:link href="/admin.do" title="${translation}" >
-													<digi:trn key="aim:AmpAdminHome">
-													Admin Home
-													</digi:trn>
-													</digi:link>
 												</td>
 											</tr>
 											<!-- end of other links -->

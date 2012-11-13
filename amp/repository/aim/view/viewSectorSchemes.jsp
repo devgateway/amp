@@ -191,7 +191,18 @@
 							<tr>
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellspacing="1" width="100%" class="inside">
-										<field:display name="Add Scheme Link" feature="Sectors">
+								<tr>
+									<td class="inside"><digi:img
+											src="module/aim/images/arrow-014E86.gif" width="15"
+											height="10" /> <c:set var="trnViewAdmin">
+											<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+										</c:set> <digi:link href="/admin.do" title="${trnViewAdmin}">
+											<digi:trn key="aim:AmpAdminHome">
+													Admin Home
+													</digi:trn>
+										</digi:link></td>
+								</tr>
+								<field:display name="Add Scheme Link" feature="Sectors">
 										<tr>
 											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
@@ -222,19 +233,7 @@
                                                                                      </tr>
 																				</field:display>
                                                                          
-										<tr>
-											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="trnViewAdmin">
-													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</c:set>
-												<digi:link href="/admin.do" title="${trnViewAdmin}" >
-												<digi:trn key="aim:AmpAdminHome">
-												Admin Home
-												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
+										
 										<!-- end of other links -->
 									</table>
 								</td>

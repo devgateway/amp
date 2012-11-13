@@ -204,7 +204,17 @@ div.fakefile2 input {
         </tr>
       </table>
 		<div align="center">
-		<html:submit styleClass="buttonx">Save</html:submit>
+			<table>
+				<tr>
+					<td>
+						<html:submit styleClass="buttonx"><digi:trn>Save</digi:trn></html:submit>
+					</td>
+					<td>
+						<html:submit styleClass="buttonx" onclick="return cancel();"><digi:trn>Cancel</digi:trn></html:submit>
+					</td>
+				</tr>
+			</table>
+		<%-- <html:submit styleClass="buttonx">Save</html:submit> --%>
 		</div>
       </td>
   </tr>
@@ -219,6 +229,15 @@ function edit(key) {
 	document.contentForm.editKey.value = key;
 	document.contentForm.submit();
 }
+
+function cancel()
+{
+	var subForm				= document.forms["structuretypeform"];
+	subForm.action			= "/esrigis/structureTypeManager.do";
+	subForm.submit();
+	return false;
+}
+
 function doAction(index, action, confirmation) {
 	if(confirmation){
 		var ret = confirm("<digi:trn jsFriendly='true'>Are you sure?</digi:trn>");

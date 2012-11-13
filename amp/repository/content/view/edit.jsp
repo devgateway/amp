@@ -438,7 +438,17 @@ div.fakefile2 input {
         </tr>
       </table>
 		<div align="center">
-		<html:submit styleClass="buttonx" styleId="saveContent"><digi:trn>Save</digi:trn></html:submit>
+		<table>
+			<tr>
+				<td>
+					<html:submit styleClass="buttonx" styleId="saveContent"><digi:trn>Save</digi:trn></html:submit>
+				</td>
+				<td>
+					<html:submit styleClass="buttonx" styleId="saveContent" onclick="return cancel()"><digi:trn>Cancel</digi:trn></html:submit>
+				</td>
+			</tr>
+		</table>
+		<%-- <html:submit styleClass="buttonx" styleId="saveContent"><digi:trn>Save</digi:trn></html:submit> --%>
 		</div>
       </td>
   </tr>
@@ -504,6 +514,13 @@ function doAction(index, action, confirmation) {
 	document.contentForm.action = "/content/contentManager.do?action=" + action +"&index=" + index;
 	document.contentForm.target = "_self";
 	document.contentForm.submit();
+}
+
+function cancel()
+{
+	var subForm				= document.forms["contentForm"];
+	subForm.action			= "/content/contentManager.do";
+	subForm.submit();
 }
 
 function setStripsTable(tableId, classOdd, classEven) {

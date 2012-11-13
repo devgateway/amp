@@ -507,7 +507,7 @@
 													<c:set var="btnCancel">
 														<digi:trn key="btn:cancel">Cancel</digi:trn>
 													</c:set> 
-													<html:submit value="${btnCancel}" styleClass="dr-menu" onclick="cancel()" /></td>
+													<html:submit value="${btnCancel}" styleClass="dr-menu" onclick="return cancel()" /></td>
 											</tr>
 											<tr>
 												<td colspan=3>&nbsp;</td>

@@ -42,6 +42,13 @@ function saveJc(){
     document.quartzJobClassManagerForm.submit();
   }
 }
+
+function cancel()
+{
+	document.quartzJobClassManagerForm.action = "/aim/quartzJobClassManager.do";
+	document.quartzJobClassManagerForm.submit();
+}
+
 </script>
 
 <digi:form action="/quartzJobClassManager.do" method="post">
@@ -114,11 +121,23 @@ function saveJc(){
             </td>
           </tr>
           <tr>
-            <td>
-              <c:set var="trn">
-                <digi:trn key="aim:job:btnSave">Save</digi:trn>
-              </c:set>
-              <input type="button" value="${trn}" onclick="saveJc()"/>
+            <td colspan="6">
+            	<table>
+            		<tr>
+            			<td>
+            				<c:set var="trn">
+                				<digi:trn key="aim:job:btnSave">Save</digi:trn>
+              				</c:set>
+              				<input type="button" value="${trn}" onclick="saveJc()"/>
+            			</td>
+            			<td>
+            				<c:set var="btnCancel">
+								<digi:trn key="btn:cancel">Cancel</digi:trn>
+							</c:set>
+            				<input type="button" value="${btnCancel}" onclick="cancel()" />
+            			</td>
+            		</tr>
+            	</table>
             </td>
           </tr>
         </table>

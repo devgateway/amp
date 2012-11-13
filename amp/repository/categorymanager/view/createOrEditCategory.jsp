@@ -112,6 +112,14 @@
         }
         
     }
+
+    function cancel()
+	{
+    	var subForm				= document.forms["cmCategoryManagerForm"];
+		subForm.action			= "/categorymanager/categoryManager.do";
+		subForm.submit();
+		return false;
+	}
     
     function validateText(){
     	var catValueKeys = $('input[id^="field"]');
@@ -479,10 +487,25 @@
 		</table>
 		<br />
 		<center>
-		<button type="button" onclick="return doSubmit();" style="vertical-align:bottom; padding: 1px;" class="buttonx">
+		<table>
+			<tr>
+				<td>
+					<button type="button" onclick="return doSubmit();" style="vertical-align:bottom; padding: 1px;" class="buttonx">
 			<img src="/TEMPLATE/ampTemplate/images/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
 			<digi:trn>Submit</digi:trn>
-		</button></center>
+		</button>
+				</td>
+				<td>
+					<button type="button" onclick="return cancel();" style="vertical-align:bottom; padding: 1px; height: 22px; width: 60px;" class="buttonx">
+						<digi:trn>Cancel</digi:trn>
+					</button>
+				</td>
+			</tr>
+		</table>
+		<%-- <button type="button" onclick="return doSubmit();" style="vertical-align:bottom; padding: 1px;" class="buttonx">
+			<img src="/TEMPLATE/ampTemplate/images/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
+			<digi:trn>Submit</digi:trn>
+		</button> --%></center>
 	</digi:form>
 				</td>
 				</tr>

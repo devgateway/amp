@@ -547,18 +547,18 @@ function banUser(txt) {
 														<tr>
 															<td class="inside"><digi:img
 																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link module="aim" href="/../um/addUser.do">
-																	<digi:trn key="aim:addNewUser">
-																Add new user																</digi:trn>
+																	height="10" /> <digi:link module="aim" href="/admin.do">
+																	<digi:trn key="aim:AmpAdminHome">
+																Admin Home
+																</digi:trn>
 																</digi:link></td>
 														</tr>
 														<tr>
 															<td class="inside"><digi:img
 																	src="module/aim/images/arrow-014E86.gif" width="15"
-																	height="10" /> <digi:link module="aim" href="/admin.do">
-																	<digi:trn key="aim:AmpAdminHome">
-																Admin Home
-																</digi:trn>
+																	height="10" /> <digi:link module="aim" href="/../um/addUser.do">
+																	<digi:trn key="aim:addNewUser">
+																Add new user																</digi:trn>
 																</digi:link></td>
 														</tr>
 														<tr>

@@ -136,17 +136,6 @@
 											<td class="inside">
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
-													<digi:trn>Click here to Add New Template</digi:trn>
-												</c:set>
-												<digi:link href="/tempDocManager.do?actType=addTemplateDocument" title="${translation}" >
-													<digi:trn>Add Template</digi:trn>
-												</digi:link>
-											</td>
-										</tr>																
-										<tr>
-											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="translation">
 													<digi:trn>Click here to goto Admin Home</digi:trn>
 												</c:set>
 												<digi:link href="/admin.do" title="${translation}" module="aim">
@@ -154,6 +143,17 @@
 												</digi:link>
 											</td>
 										</tr>
+										<tr>
+											<td class="inside">
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<c:set var="translation">
+													<digi:trn>Click here to Add New Template</digi:trn>
+												</c:set>
+												<digi:link href="/tempDocManager.do?actType=addTemplateDocument" title="${translation}" >
+													<digi:trn>Add Template</digi:trn>
+												</digi:link>
+											</td>
+										</tr>																
 										<!-- end of other links -->
 									</table>
 								</td>

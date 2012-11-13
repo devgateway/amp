@@ -28,6 +28,17 @@
 									<td bgColor=#ffffff>
 										<table cellPadding=5 cellspacing="1" width="100%" class="inside">
 											<tr>
+												<!--<td>
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>-->
+												<td class="inside">
+													<digi:link href="/admin.do">
+													<digi:trn key="aim:AmpAdminHome">
+													Admin Home
+													</digi:trn>
+													</digi:link>
+												</td>
+											</tr>
+											<tr>
 												<!--<td class="inside">
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>-->
 												<td class="inside">
@@ -62,17 +73,6 @@
 												</td>
 											</tr>
 											</field:display>
-											<tr>
-												<!--<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>-->
-												<td class="inside">
-													<digi:link href="/admin.do">
-													<digi:trn key="aim:AmpAdminHome">
-													Admin Home
-													</digi:trn>
-													</digi:link>
-												</td>
-											</tr>
 											<!-- end of other links -->
 										</table>
 									</td>

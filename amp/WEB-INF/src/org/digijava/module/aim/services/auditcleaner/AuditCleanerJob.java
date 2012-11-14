@@ -1,6 +1,7 @@
 package org.digijava.module.aim.services.auditcleaner;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.quartz.Job;
@@ -21,7 +22,7 @@ public class AuditCleanerJob implements Job {
 			throws JobExecutionException {
 
 		String deletetime = FeaturesUtil
-				.getGlobalSettingValue("Automatic Audit Logger Cleanup");
+				.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP);
 		logger.info("Starting to delete audit logs older than " + deletetime
 				+ " days.............................");
 		try {

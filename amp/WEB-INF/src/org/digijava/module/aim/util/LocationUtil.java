@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeException;
 import org.digijava.module.aim.helper.AmpLocations;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -938,7 +939,7 @@ public class LocationUtil {
 			queryString = " select l from " + AmpRegion.class.getName()
 					+ " l where l.country=:country order by l.name";
 			q = session.createQuery(queryString);
-			q.setParameter("country", FeaturesUtil.getGlobalSettingValue("Default Country"),Hibernate.STRING);
+			q.setParameter("country", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY),Hibernate.STRING);
 			iter = q.list().iterator();
 
 			while (iter.hasNext()) {

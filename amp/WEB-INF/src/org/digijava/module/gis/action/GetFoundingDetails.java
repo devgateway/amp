@@ -585,7 +585,7 @@ public class GetFoundingDetails extends Action {
                         segmendDataInfo.setCodeset("UTF-8");
 
                         String numberFormat = FeaturesUtil.getGlobalSettingValue(
-                                "Default Number Format");
+                                GlobalSettingsConstants.NUMBER_FORMAT);
                         //NumberFormat formatter = new DecimalFormat(numberFormat);
 
                         XML root = new XML("funding");
@@ -975,7 +975,7 @@ public class GetFoundingDetails extends Action {
                     XMLDocument segmendDataInfo = new XMLDocument();
 
                     String numberFormat = FeaturesUtil.getGlobalSettingValue(
-                            "Default Number Format");
+                            GlobalSettingsConstants.NUMBER_FORMAT);
                     //NumberFormat formatter = new DecimalFormat(numberFormat);
 
                     XML root = new XML("funding");
@@ -1156,7 +1156,7 @@ public class GetFoundingDetails extends Action {
                     tree.output(sos);
                 } else if (action.equalsIgnoreCase("filter")) {
 
-                    String isRegSetStr = FeaturesUtil.getGlobalSettingValue("GIS Funding Type");
+                    String isRegSetStr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GIS_FUNDING_TYPE);
                     boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("donor"))?GisUtil.GIS_DONOR_FUNDINGS:GisUtil.GIS_REGIONAL_FUNDINGS;
                     boolean isPublic = request.getParameter("isPublic") == null?false:true;
 

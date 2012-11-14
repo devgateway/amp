@@ -2036,7 +2036,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 					fp.setFiscalCalId(apps.getFisCalId());
 				} else {
 					fp.setFiscalCalId(FeaturesUtil
-							.getGlobalSettingValueLong("Default Calendar"));
+							.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR));
 				}
 			}
 

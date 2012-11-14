@@ -7,6 +7,7 @@ import java.util.Iterator;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.message.dbentity.AmpAlert;
@@ -54,7 +55,7 @@ public class AuditCleanerMsgJob implements Job {
 				message.setPriorityLevel(MessageConstants.PRIORITY_LEVEL_CRITICAL);
 				
 				message.setDescription(BODY_1
-						+ FeaturesUtil.getGlobalSettingValue("Automatic Audit Logger Cleanup")
+						+ FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP)
 						+ BODY_2 + FormatHelper.formatDate(AuditCleaner.getInstance().getNextcleanup()));
 				message.setCreationDate(new Date(System.currentTimeMillis()));
 				//message.setReceivers(strreceiveirs);

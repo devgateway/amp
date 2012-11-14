@@ -76,7 +76,7 @@ public class ShowRegionReport extends Action {
             gisRegReportForm.setEndYear(filterForm.getFilterEndYear());
 
             Long regLocId = Long.parseLong(request.getParameter("regLocId"));
-            String isRegSetStr = FeaturesUtil.getGlobalSettingValue("GIS Funding Type");
+            String isRegSetStr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GIS_FUNDING_TYPE);
             boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("donor"))?GisUtil.GIS_DONOR_FUNDINGS:GisUtil.GIS_REGIONAL_FUNDINGS;
             boolean isPublic = request.getParameter("isPublic") == null?false:true;
             Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(filterForm, regLocId, isRegional, isPublic);
@@ -145,7 +145,7 @@ public class ShowRegionReport extends Action {
             gisFilterForm.setSelectedCurrency(baseCurr);
 
             Long regLocId = Long.parseLong(request.getParameter("regLocId"));
-            String isRegSetStr = FeaturesUtil.getGlobalSettingValue("GIS Funding Type");
+            String isRegSetStr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GIS_FUNDING_TYPE);
             boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("donor"))?GisUtil.GIS_DONOR_FUNDINGS:GisUtil.GIS_REGIONAL_FUNDINGS;
             boolean isPublic = request.getParameter("isPublic") == null?false:true;
             Object[] filterResults = RMMapCalculationUtil.getFundingsFilteredForRegReport(gisFilterForm, regLocId, isRegional, isPublic);

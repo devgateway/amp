@@ -33,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.GlobalSettingsForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -109,7 +110,7 @@ public class GlobalSettings extends Action {
 	     	
 	    	ServletContext ampContext = this.getServlet().getServletContext();
 			AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
-			AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateById(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"));
+			AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateById(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE));
 	    	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 	    	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
 	    	
@@ -166,14 +167,14 @@ public class GlobalSettings extends Action {
 		for(AmpGlobalSettings amp: col){			
 			name =amp.getGlobalSettingsName();
 			value = amp.getGlobalSettingsValue();
-			if(name.compareToIgnoreCase("Daily Currency Rates Update Enabled")==0
+			if(name.compareToIgnoreCase(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_ENALBLED)==0
 					&& value.compareToIgnoreCase("On")==0){
 				update=true;
 			}
-			if(name.compareToIgnoreCase("Daily Currency Rates Update Hour")==0){
+			if(name.compareToIgnoreCase(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_HOUR)==0){
 				hour=amp.getGlobalSettingsValue();
 			}
-			if(name.compareToIgnoreCase("Daily Currency Rates Update Timeout")==0){
+			if(name.compareToIgnoreCase(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_TIMEOUT)==0){
 				timeout=amp.getGlobalSettingsValue();
 			}
 		}
@@ -197,7 +198,7 @@ public class GlobalSettings extends Action {
 			AmpGlobalSettings ampGls = (AmpGlobalSettings) iterator.next();
 			name = ampGls.getGlobalSettingsName();
 			value = ampGls.getGlobalSettingsValue();
-			if (name.equalsIgnoreCase("Automatic Audit Logger Cleanup")) {
+			if (name.equalsIgnoreCase(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP)) {
 				if ("-1".equalsIgnoreCase(value)) {
 					if ( AuditCleaner.getInstance().isRunning()){
 						AuditCleaner.getInstance().stop();
@@ -216,7 +217,7 @@ public class GlobalSettings extends Action {
 	 * @param gsForm
 	 */
 	private void auditTrialCleanerChanges(GlobalSettingsForm gsForm){
-		if (gsForm.getGlobalSettingsName().compareTo("Automatic Audit Logger Cleanup") ==0){
+		if (gsForm.getGlobalSettingsName().compareTo(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP) ==0){
 			if ("-1".equalsIgnoreCase(gsForm.getGsfValue())){
 				if (AuditCleaner.getInstance().isRunning()){
 					AuditCleaner.getInstance().stop();
@@ -238,7 +239,7 @@ public class GlobalSettings extends Action {
 			dailyCurrencyRatesChanges();
 		}
 		else{
-			if(gsForm.getGlobalSettingsName().compareTo("Daily Currency Rates Update Enabled")==0){
+			if(gsForm.getGlobalSettingsName().compareTo(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_ENALBLED)==0){
 				if(gsForm.getGsfValue().compareTo("On")==0){
 					Collection<AmpGlobalSettings> ampGSCollection = (Collection<AmpGlobalSettings>)gsForm.getGsfCol();
 					String hour=null;
@@ -246,10 +247,10 @@ public class GlobalSettings extends Action {
 					for(AmpGlobalSettings ampGS : ampGSCollection)
 					{
 						
-						if(ampGS.getGlobalSettingsName().compareTo("Daily Currency Rates Update Hour")==0){
+						if(ampGS.getGlobalSettingsName().compareTo(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_HOUR)==0){
 							hour=ampGS.getGlobalSettingsValue();
 						}
-						if(ampGS.getGlobalSettingsName().compareTo("Daily Currency Rates Update Timeout")==0){
+						if(ampGS.getGlobalSettingsName().compareTo(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_TIMEOUT)==0){
 							timeout=ampGS.getGlobalSettingsValue();
 						}
 					}
@@ -259,11 +260,11 @@ public class GlobalSettings extends Action {
 					CurrencyRatesService.stopCurrencyRatesService();
 				}
 			}
-			if(gsForm.getGlobalSettingsName().compareTo("Daily Currency Rates Update Hour")==0){
+			if(gsForm.getGlobalSettingsName().compareTo(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_HOUR)==0){
 				Collection<AmpGlobalSettings> ampGSCollection = (Collection<AmpGlobalSettings>)gsForm.getGsfCol();
 				for(AmpGlobalSettings ampGS : ampGSCollection)
 				{
-					int val = ampGS.getGlobalSettingsName().compareTo("Daily Currency Rates Update Enabled");
+					int val = ampGS.getGlobalSettingsName().compareTo(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_ENALBLED);
 					if(val==0){
 						if(ampGS.getGlobalSettingsValue().compareTo("On")==0){
 							CurrencyRatesService.startCurrencyRatesService(gsForm.getGsfValue(),"9");

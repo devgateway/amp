@@ -84,7 +84,7 @@ public class UpdateCurrencyRate extends Action {
 				
 							while ((line = in.readLine()) != null)
 							{
-								String separator=FeaturesUtil.getGlobalSettingValue("Default Exchange Rate Separator");
+								String separator=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.EXCHANGE_RATE_SEPARATOR);
 								if(separator==null || "".compareTo(separator)==0)
 									st = new StringTokenizer(line,",");
 								else st = new StringTokenizer(line, separator);

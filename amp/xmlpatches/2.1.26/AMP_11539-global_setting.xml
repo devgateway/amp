@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-11539</jira>
+	<keyword>Global Settings</keyword>
+	<keyword>Activity life</keyword>
+	<author>APopescu</author>
+	<trigger type="all">
+		<condition type="entryInTableMissing" tablename="AMP_GLOBAL_SETTINGS"
+			columnname="settingsName" columnvalue="Activity version life time in days" />
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				insert into amp_global_settings(id,settingsName,settingsValue,possibleValues,description, section) values(nextval('amp_global_settings_seq'),'Activity version life time in days','30','t_static_range','Days from last update until the activity is deleted', 'general');
+			</lang>
+		</script>
+	</apply>
+
+</tns:patch>

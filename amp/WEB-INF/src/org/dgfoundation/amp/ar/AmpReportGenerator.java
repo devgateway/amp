@@ -101,7 +101,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 			//split column for type of assistance ONLY when TOA is added as column
 			if(!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
-					ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns()) && "true".compareTo(FeaturesUtil.getGlobalSettingValue("Enabled Split by Type Of Assistance"))==0) {
+					ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns()) && "true".compareTo(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE))==0) {
 					ret.add(ArConstants.TERMS_OF_ASSISTANCE);
 				}
 			if(!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.MODE_OF_PAYMENT) &&

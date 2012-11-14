@@ -335,7 +335,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
             GisFilterForm filterForm = GisUtil.parseFilterRequest (request);
 
-            String isRegSetStr = FeaturesUtil.getGlobalSettingValue("GIS Funding Type");
+            String isRegSetStr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GIS_FUNDING_TYPE);
             boolean isRegional = (isRegSetStr == null || isRegSetStr.trim().equalsIgnoreCase("donor"))?GisUtil.GIS_DONOR_FUNDINGS:GisUtil.GIS_REGIONAL_FUNDINGS;
             boolean isPublic = request.getParameter("publicMode") == null?false:true;
             if (!isPublic && request.getSession().getAttribute("currentMember") == null) {

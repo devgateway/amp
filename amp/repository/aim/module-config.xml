@@ -38,6 +38,7 @@
 	<hibernate-classes required="false">
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpAhsurveyIndicatorCalcFormula</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityInternalId</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpAgreement</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStatus</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpPledge</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSector</hibernate-class>

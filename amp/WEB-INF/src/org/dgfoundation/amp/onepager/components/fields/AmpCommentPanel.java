@@ -48,7 +48,8 @@ import org.hibernate.Session;
 /**
  * Comment panel to be used in AjaxTabbedPanel, wrapped by a AmpCommentTab
  * 
- * @author aartimon@dginternational.org since Oct 7, 2010
+ * @author aartimon@dginternational.org 
+ * @since Oct 7, 2010
  */
 public class AmpCommentPanel extends AmpFieldPanel {
 
@@ -104,7 +105,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 			protected ArrayList<AmpComments> load() {
 				HashSet<AmpComments> tmp = org.apache.wicket.Session.get().getMetaData(OnePagerConst.COMMENTS_ITEMS);
 				
-				ArrayList list = new ArrayList();
+				ArrayList<AmpComments> list = new ArrayList<AmpComments>();
 				
 				if (tmp == null){
 					tmp = new HashSet();

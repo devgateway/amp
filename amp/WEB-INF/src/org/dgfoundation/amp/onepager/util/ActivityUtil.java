@@ -39,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -180,6 +181,7 @@ public class ActivityUtil {
 			saveResources(a); 
 			saveEditors(session); 
 			saveComments(a, session,draft); 
+			saveAgreements(session);
 			
 			updateComponentFunding(a, session);
 			
@@ -452,7 +454,21 @@ public class ActivityUtil {
 			}
 		}
 	}
-	
+
+	private static void saveAgreements(Session session) {
+		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
+		HashSet<AmpAgreement> agreements = s.getMetaData(OnePagerConst.AGREEMENT_ITEMS);
+		
+		
+		if (agreements == null)
+			return;
+		Iterator<AmpAgreement> it = agreements.iterator();
+		while (it.hasNext()) {
+			AmpAgreement agg = (AmpAgreement) it.next();
+			session.saveOrUpdate(agg);
+		}
+	}
+
 	private static void saveResources(AmpActivityVersion a) {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		

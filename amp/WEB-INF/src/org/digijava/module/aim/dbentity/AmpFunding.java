@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Output;
 
 public class AmpFunding implements Serializable, Versionable, Cloneable {
+	private static final long serialVersionUID = 1L;
 
 	private Long ampFundingId;
 	private AmpOrganisation ampDonorOrgId;
@@ -37,7 +37,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private String calType;
 	private String comments;
 	private Date signatureDate;
-	private Set fundingDetails;
+	private Set<AmpFundingDetail> fundingDetails;
 	private Set<AmpFundingMTEFProjection> mtefProjections;
 	// private AmpTermsAssist ampTermsAssistId ;
 	
@@ -57,10 +57,20 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	private AmpCategoryValue modeOfPayment;
 	private String loanTerms;
 	private Long groupVersionedFunding;
-
     private Float capitalSpendingPercentage;
+    private AmpAgreement agreement;
+    
+    
+    
+    public AmpAgreement getAgreement() {
+		return agreement;
+	}
 
-    public Float getCapitalSpendingPercentage() {
+	public void setAgreement(AmpAgreement agreement) {
+		this.agreement = agreement;
+	}
+
+	public Float getCapitalSpendingPercentage() {
         return capitalSpendingPercentage;
     }
 
@@ -122,7 +132,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	/**
 	 * @return
 	 */
-	public Set getFundingDetails() {
+	public Set<AmpFundingDetail> getFundingDetails() {
 		return fundingDetails;
 	}
 
@@ -213,7 +223,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 	/**
 	 * @param set
 	 */
-	public void setFundingDetails(Set set) {
+	public void setFundingDetails(Set<AmpFundingDetail> set) {
 		fundingDetails = set;
 	}
 

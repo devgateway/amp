@@ -8,15 +8,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.servlet.http.HttpSession;
-
 import org.apache.wicket.MetaDataKey;
-import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.digijava.kernel.startup.AmpSessionListener;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.helper.Constants;
-import org.hibernate.Session;
 
 /**
  * One Pager Constants
@@ -38,6 +35,7 @@ public final class OnePagerConst {
     public static final MetaDataKey<HashSet<TemporaryDocument>> RESOURCES_EXISTING_ITEM_TITLES = new MetaDataKey<HashSet<TemporaryDocument>>(){};
 
 	public static final MetaDataKey<HashMap<String, String>> EDITOR_ITEMS = new MetaDataKey<HashMap<String, String>>(){};
+	public static final MetaDataKey<HashSet<AmpAgreement>> AGREEMENT_ITEMS = new MetaDataKey<HashSet<AmpAgreement>>(){};
 
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_DELETED_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};

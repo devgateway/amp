@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -116,6 +117,7 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 		else
 			checkChoicesRequired(0);
 		
+		add(new AmpAgreementItemPanel("agreement", model, "Agreement"));
 
 	}
 }

@@ -20,12 +20,15 @@ import org.dgfoundation.amp.onepager.util.FMUtil.PathException;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 
 /**
+ * Component used by the wicket:fm tag in order to
+ * verify if all the listed AmpModules are visible
+ * and modifies current markupContainter visibility
  * 
  * @author aartimon@dginternational.org
  * @since Nov 21, 2011
  */
 public class TransparentFMWebMarkupContainer extends TransparentWebMarkupContainer {
-
+	private static final long serialVersionUID = 1L;
 	private Model<String> model;
 
 	public TransparentFMWebMarkupContainer(String id, Model<String> model) {

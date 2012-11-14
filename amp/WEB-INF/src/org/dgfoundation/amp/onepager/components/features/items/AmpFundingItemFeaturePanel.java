@@ -33,6 +33,7 @@ import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
@@ -45,9 +46,8 @@ import org.digijava.module.aim.util.DbUtil;
  * @author mpostelnicu@dgateway.org since Nov 3, 2010
  */
 public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
-	
+	private static final long serialVersionUID = 1L;
 
-	
 	private AmpDonorFundingInfoSubsectionFeature fundingInfo;
 	private AmpDonorDisbursementsSubsectionFeature disbursements;
 
@@ -62,7 +62,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		super(id, fundingModel, fmName, true);
 		
 		if (fundingModel.getObject().getFundingDetails() == null)
-			fundingModel.getObject().setFundingDetails(new TreeSet());
+			fundingModel.getObject().setFundingDetails(new TreeSet<AmpFundingDetail>());
 		
 		
 		final Label orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
@@ -72,6 +72,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");
 		
 		add(new ListEditorRemoveButton("delFunding", "Delete Funding Item", translatedMessage){
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				AmpOrganisation org = fundingModel.getObject().getAmpDonorOrgId();
@@ -83,6 +85,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		});
 		
 		AmpAjaxLinkField addNewFunding= new AmpAjaxLinkField("addAnotherFunding","New Funding Item","New Funding Item") {			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				parent.getList().addItem(fundingModel.getObject().getAmpDonorOrgId());
@@ -97,6 +101,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		add(donorObjective);
 		
 		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true, AmpOrganisationSearchModel.class) {			
+			private static final long serialVersionUID = 1L;
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {
 				return DbUtil.filter(choice.getName());
@@ -144,6 +149,8 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		add(searchOrganization);
 
 		AmpAjaxLinkField changeFundingOrg= new AmpAjaxLinkField("newOrgButton","Change Funding Organisation","Change Funding Organisation") {			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				searchOrganization.setVisible(true);

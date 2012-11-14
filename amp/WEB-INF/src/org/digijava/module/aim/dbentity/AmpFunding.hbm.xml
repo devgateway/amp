@@ -76,6 +76,8 @@
 			<key column="amp_funding_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingMTEFProjection" />
 		</set>
-
+		
+		<many-to-one name="agreement" column="agreement"
+			class="org.digijava.module.aim.dbentity.AmpAgreement" cascade="none" />
 	</class>
 </hibernate-mapping>

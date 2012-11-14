@@ -26,6 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -110,7 +111,8 @@ public class OnePager extends AmpHeaderFooter {
 		PageParameters parameters = decodePageParameters(getRequest());
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		session.reset();
-		String activityId = parameters.get(OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY).toString();
+		StringValue activityParam = parameters.get(OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY);
+		String activityId = (activityParam==null ? null : activityParam.toString());
 		boolean newActivity = false;
 		if ((activityId == null) || (activityId.compareTo("new") == 0)){
 			am = new AmpActivityModel();

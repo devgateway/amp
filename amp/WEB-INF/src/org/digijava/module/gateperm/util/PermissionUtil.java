@@ -14,12 +14,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMFieldPermissionViewer;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.Identifiable;
@@ -337,6 +339,46 @@ public final class PermissionUtil {
         }
     
     
+    public static Set<AmpPMFieldPermissionViewer> getAllAmpPMFieldPermissionViewers(Class permClass) {
+	Session session = null;
+	try {
+	    session = PersistenceManager.getRequestDBSession();
+
+	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
+		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is not null");
+	    query.setParameter("categoryName", permClass.getSimpleName());
+	    List col = query.list();
+	    Set<AmpPMFieldPermissionViewer> ret = new TreeSet<AmpPMFieldPermissionViewer>();
+	    Iterator i = col.iterator();
+	    while (i.hasNext()) {
+		PermissionMap element = (PermissionMap) i.next();
+			//ret.put(element.getObjectIdentifier(), element);
+		AmpPMFieldPermissionViewer v = new AmpPMFieldPermissionViewer(element);
+		ret.add(v);
+	    }
+	    return ret;
+	} catch (HibernateException e) {
+	    logger.error(e);
+	    throw new RuntimeException("HibernateException Exception encountered", e);
+	} catch (DgException e) {
+	    logger.error(e);
+	    // TODO Auto-generated catch block
+	    throw new RuntimeException("DgException Exception encountered", e);
+	} finally { 
+	    try {
+	    	PersistenceManager.releaseSession(session);
+	    } catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "HibernateException Exception encountered", e);
+
+	    } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+
+    }
+    
     public static Map<Long, PermissionMap> getAllPermissionMapsForPermissibleClass(Class permClass) {
 	Session session = null;
 	try {
@@ -371,7 +413,7 @@ public final class PermissionUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+		}
 
     }
     

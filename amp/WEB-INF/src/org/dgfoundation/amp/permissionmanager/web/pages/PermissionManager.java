@@ -8,10 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.permissionmanager.components.features.PermissionManagerFormFeature;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMFieldPermissionViewer;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.gateperm.util.PermissionUtil;
 import org.digijava.module.um.exception.UMException;
 
 /**
@@ -39,8 +43,12 @@ public class PermissionManager extends AmpPMHeaderFooter {
 		}
 		w.addAll(teams);
 		final IModel<Set<AmpTeam>> teamsModel = new Model((Serializable)w);
-	
-		add(new PermissionManagerFormFeature("permission", teamsModel, "Permission Manager"));
+		
+		
+		Set<AmpPMFieldPermissionViewer> permMaps = PermissionUtil.getAllAmpPMFieldPermissionViewers(AmpModulesVisibility.class);
+		final IModel<Set<AmpPMFieldPermissionViewer>> permsModel = new Model((Serializable)permMaps);
+
+		add(new PermissionManagerFormFeature("permission", teamsModel, permsModel, "Permission Manager"));
 	}
 
 }

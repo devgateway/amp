@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMFieldPermissionViewer;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageFieldPermissionsSectionFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.components.features.sections.AmpPMManageGlobalPermissionsSectionFeaturePanel;
@@ -20,11 +21,12 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.gateperm.core.Permission;
+import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.um.exception.UMException;
 
 public class PermissionManagerFormFeature  extends AmpFeaturePanel{
 
-	public PermissionManagerFormFeature(String id, IModel<Set<AmpTeam>> teamsModel, String fmName) throws Exception {
+	public PermissionManagerFormFeature(String id, IModel<Set<AmpTeam>> teamsModel,IModel<Set<AmpPMFieldPermissionViewer>> permsModel, String fmName) throws Exception {
 		super(id, teamsModel, fmName, true);
 		
 		Form adminPMForm = new Form("adminPMForm");
@@ -59,7 +61,7 @@ public class PermissionManagerFormFeature  extends AmpFeaturePanel{
 		
 		AmpTreeVisibilityModelBean tree	=	PMUtil.getAmpTreeFMPermissions();
 		final IModel<AmpTreeVisibilityModelBean> ampTreeVisibilityBeanModel =	new Model((Serializable)tree);
-		adminPMForm.add(new AmpPMManageFieldPermissionsSectionFeaturePanel("manageFieldLevelPermissions", ampTreeVisibilityBeanModel, "Manage Field Permissions",teamsModel, false, ampTreeVisibilityModel));
+		adminPMForm.add(new AmpPMManageFieldPermissionsSectionFeaturePanel("manageFieldLevelPermissions", ampTreeVisibilityBeanModel, "Manage Field Permissions",teamsModel, permsModel, false, ampTreeVisibilityModel));
 		add(adminPMForm);
 	}
 

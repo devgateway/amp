@@ -22,6 +22,7 @@ import javax.swing.tree.TreeModel;
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMGateReadEditWrapper;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMPermContentBean;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
@@ -856,7 +857,7 @@ public final class PMUtil {
 		return result;
 	}
 
-	private static String getContentInfoFieldPermission(String result, Permission p) {
+	public static String getContentInfoFieldPermission(String result, Permission p) {
 		if (p!=null && p.isDedicated()) {
 			CompositePermission cp = (CompositePermission)p;
 			//result+=" - cp:"+cp.getName();
@@ -871,10 +872,70 @@ public final class PMUtil {
 					workspaceInfo+=buildInfoLogicalGate(pGate);
 				
 			}
+			if(result == null) result = "";
 			result +=userInfo + workspaceInfo;
 		}
 		return result;
 	}
+	
+	
+	public static Set<AmpPMPermContentBean> getContentInfoFieldPermission(Permission p, StringBuilder strategy) {
+		Set<AmpPMPermContentBean> result	= new TreeSet<AmpPMPermContentBean>();
+		if (p!=null && p.isDedicated()) {
+			CompositePermission cp = (CompositePermission)p;
+			//result+=" - cp:"+cp.getName();
+//			Set<AmpPMPermContentBean> rolePerms = new TreeSet<AmpPMPermContentBean>();
+//			Set<AmpPMPermContentBean> wrkPerms	= new TreeSet<AmpPMPermContentBean>();
+			boolean permRole 	= false;
+			boolean wrkRole		= false;
+			for (Iterator<Permission> it = cp.getPermissions().iterator(); it.hasNext();) {
+				GatePermission pGate = (GatePermission) it.next();
+				
+				if(pGate.hasParameter(StrategyPermSelectGate.class.getName()+"("+PMUtil.PERM_ROLE+")"))
+					{
+						result.add(buildPermContentBean(pGate));
+						permRole = true;
+					}
+				if(pGate.hasParameter(StrategyPermSelectGate.class.getName()+"("+PMUtil.PERM_WORKSPACE+")"))
+					{
+						result.add(buildPermContentBean(pGate));
+						wrkRole	= true;
+					}
+				
+			}
+			
+			if(permRole && wrkRole)
+				strategy.append(PMUtil.PERM_ROLE_WORKSPACE);
+			else if(permRole && !wrkRole)
+					strategy.append(PMUtil.PERM_ROLE);
+				else strategy.append(PMUtil.PERM_WORKSPACE);
+//			result.addAll(rolePerms);
+//			result.addAll(wrkPerms);
+		}
+		return result;
+	}
+
+
+	
+	private static AmpPMPermContentBean buildPermContentBean(GatePermission pGate) {
+		// TODO Auto-generated method stub
+		
+		String label = pGate.getName().substring(pGate.getName().lastIndexOf('-')+2, pGate.getName().length());
+		Boolean view = false;
+		Boolean edit = false;
+		
+		if(pGate.getActions().contains(GatePermConst.Actions.EDIT))
+			edit = true;
+		
+		if(pGate.getActions().contains(GatePermConst.Actions.VIEW))
+			view = true;
+		
+		AmpPMPermContentBean cb = new AmpPMPermContentBean(label,view,edit);
+		
+		return cb;
+	}
+
+
 
 
 	private static String buildInfoLogicalGate(GatePermission pGate){
@@ -886,6 +947,8 @@ public final class PMUtil {
 		
 		return info;
 	}
+	
+
 
 	private static String buildInfoGate(GatePermission pGate, int type) {
 		String info	= "";

@@ -13,9 +13,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMFieldPermissionViewer;
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpTreeVisibilityModelBean;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.gateperm.core.PermissionMap;
 
 /**
  * @author dan
@@ -53,7 +55,7 @@ public class AmpPMManageFieldPermissionsSectionFeaturePanel extends AmpPMSection
 	 * @param ampTreeVisibilityModel2 
 	 * @throws Exception
 	 */
-	public AmpPMManageFieldPermissionsSectionFeaturePanel(String id,final IModel<AmpTreeVisibilityModelBean>  ampTreeVisibilityBeanModel, String fmName, final IModel<Set<AmpTeam>> teamsModel, boolean hideLabel, final IModel<AmpTreeVisibility> ampTreeVisibilityModel) throws Exception {
+	public AmpPMManageFieldPermissionsSectionFeaturePanel(String id,final IModel<AmpTreeVisibilityModelBean>  ampTreeVisibilityBeanModel, String fmName, final IModel<Set<AmpTeam>> teamsModel,final IModel<Set<AmpPMFieldPermissionViewer>> permsModel,  boolean hideLabel, final IModel<AmpTreeVisibility> ampTreeVisibilityModel) throws Exception {
 		super(id, ampTreeVisibilityBeanModel, fmName, hideLabel);
 		List<ITab> fieldPermissionsTabs = new ArrayList<ITab>();
 
@@ -70,8 +72,22 @@ public class AmpPMManageFieldPermissionsSectionFeaturePanel extends AmpPMSection
 		      }
 		});
 		
+		fieldPermissionsTabs.add(new AbstractTab(new Model(TranslatorUtil.getTranslation("View Assigned Field Permissions"))){
+		      public Panel getPanel(String panelId)
+		      {
+		    	AmpPMViewFieldPermissionPanel viewGlobalPerm = null;
+		    	try {
+		    		viewGlobalPerm = new AmpPMViewFieldPermissionPanel(panelId, permsModel, "View Assigned Field Permission");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		        return viewGlobalPerm;
+		      }
+		});
+		
 		AmpPMTabsFieldWrapper objTabs = new AmpPMTabsFieldWrapper("fieldPermsTabs", "Field Permissions", fieldPermissionsTabs,true);
-		add(objTabs); 
+		add(objTabs);
+		
 	}
 
 }

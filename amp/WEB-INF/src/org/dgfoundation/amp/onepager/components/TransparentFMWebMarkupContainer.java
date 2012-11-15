@@ -53,7 +53,7 @@ public class TransparentFMWebMarkupContainer extends TransparentWebMarkupContain
 			StringTokenizer tok = new StringTokenizer(names, ";");
 			while (tok.hasMoreElements()) {
 				String name = (String) tok.nextElement();
-				String fmPathString = fmPath + "/" + name;
+				String fmPathString = fmPath + "/" + name.replaceAll("/", " ");;
 				if(ampTreeVisibility!=null)
 					if (FMUtil.checkIsVisible(ampTreeVisibility, fmPathString, AmpFMTypes.MODULE)){
 						allInvisible = false;

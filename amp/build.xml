@@ -328,8 +328,10 @@
       <delete dir="${classes}"/>
       <delete dir="${doc.path}"/>
       <delete dir="${gen-src}"/>
-      <delete dir="${metainf}"/>    	
-   	  <delete dir="${webinf}/lib"/>      
+      <delete dir="${metainf}"/>
+	  <delete includeemptydirs="true">
+  	    <fileset dir="${webinf}/lib" includes="**/*"/>
+  	  </delete>
     </target>
                                  
 

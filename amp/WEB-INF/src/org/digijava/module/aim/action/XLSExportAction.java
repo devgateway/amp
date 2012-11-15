@@ -140,8 +140,12 @@ public class XLSExportAction extends Action {
 			rd.importLevelSorters(sorters,r.getHierarchies().size());
 			rd.applyLevelSorter();
 		}
+		
+		String plainReportParam = request.getParameter("plainReport");
+		Boolean isPlainReport = plainReportParam != null ? Boolean.valueOf(plainReportParam): false;
+		
 		GroupReportDataXLS grdx	= ARUtil.instatiateGroupReportDataXLS(request.getSession(), wb, sheet, row, rowId,
-		        colId, null, rd);
+		        colId, null, rd, isPlainReport);
 		grdx.setMetadata(r);
 			
 		

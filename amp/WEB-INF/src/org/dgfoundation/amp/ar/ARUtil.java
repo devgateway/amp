@@ -11,7 +11,6 @@ import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -27,8 +26,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
+import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -39,6 +38,8 @@ import org.dgfoundation.amp.ar.dimension.DonorTypeDimension;
 import org.dgfoundation.amp.ar.view.xls.ColumnReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+import org.dgfoundation.amp.ar.view.xls.PlainColumnReportDataXLS;
+import org.dgfoundation.amp.ar.view.xls.PlainGroupReportDataXLS;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
 import org.dgfoundation.amp.ar.workers.TextColWorker;
@@ -159,7 +160,7 @@ public final class ARUtil {
 		}
 	}
 	
-	public static Constructor getConstrByParamNo(Class c, int paramNo, boolean useBudgetClasses) {
+	public static Constructor getConstrByParamNo(Class c, int paramNo, boolean useBudgetClasses, boolean isPlainReport) {
 			if ( useBudgetClasses ) {
 				if (TextColWorker.class.equals(c))
 					c 	= BudgetTextColWorker.class;
@@ -173,9 +174,18 @@ public final class ARUtil {
 					c	= BudgetGroupReportDataXLS.class;
 				if ( ColumnReportDataXLS.class.equals(c) )
 					c	= BudgetColumnReportDataXLS.class;
+			}else if ( isPlainReport ) {
+				if ( GroupReportDataXLS.class.equals(c) )
+					c	= PlainGroupReportDataXLS.class;
+				if ( ColumnReportDataXLS.class.equals(c) )
+					c	= PlainColumnReportDataXLS.class;
 			}
 			
 			return ARUtil.getConstrByParamNo(c, paramNo);
+	}
+	
+	public static Constructor getConstrByParamNo(Class c, int paramNo, boolean useBudgetClasses) {
+		return getConstrByParamNo(c, paramNo, useBudgetClasses, false);
 	}
 	
 	public static Constructor getConstrByParamNo(Class c, int paramNo) {
@@ -623,6 +633,11 @@ public final class ARUtil {
 	
 	public static GroupReportDataXLS instatiateGroupReportDataXLS (HttpSession session, HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, GroupReportData rd) {
+		return instatiateGroupReportDataXLS(session, wb, sheet, row, rowId, colId, ownerId, rd, false);
+	}
+
+	public static GroupReportDataXLS instatiateGroupReportDataXLS (HttpSession session, HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+			IntWrapper colId, Long ownerId, GroupReportData rd, boolean isPlainReport) {
 		if (session != null ) {
 			String budgetTypeReport	= (String) session.getAttribute(BudgetExportConstants.BUDGET_EXPORT_TYPE );
 			if (budgetTypeReport != null ) {
@@ -631,10 +646,17 @@ public final class ARUtil {
 				return grd;
 			}
 		}
-		GroupReportDataXLS grd	= new GroupReportDataXLS(wb, sheet, row, rowId,
-		        							colId, null, rd);
-		
-		return grd;
+
+		if (isPlainReport){
+			GroupReportDataXLS grd	= new PlainGroupReportDataXLS(wb, sheet, row, rowId,
+					colId, null, rd);
+			return grd;
+			
+		}else{
+			GroupReportDataXLS grd	= new GroupReportDataXLS(wb, sheet, row, rowId,
+					colId, null, rd);
+			return grd;
+		}
 	}
 	
 	

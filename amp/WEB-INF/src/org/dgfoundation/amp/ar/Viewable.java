@@ -86,6 +86,10 @@ public abstract class Viewable implements Cloneable {
 	}
 	
 	public void invokeExporter(Exporter parent, boolean useBudgetClasses) {
+		this.invokeExporter(parent, useBudgetClasses, false);
+	}
+	
+	public void invokeExporter(Exporter parent, boolean useBudgetClasses, boolean isPlainReport) {
 		// try to instantiate the Generator
 		try {
 			// get the exporter class for this Viewable
@@ -93,7 +97,7 @@ public abstract class Viewable implements Cloneable {
 			Class c = Class.forName(viewer);
 			// get the first constructor - it SHOULD be the one that receives an
 			// Exporter object (parent)
-			Constructor cons	= ARUtil.getConstrByParamNo(c,2,useBudgetClasses);
+			Constructor cons	= ARUtil.getConstrByParamNo(c,2,useBudgetClasses, isPlainReport);
 			// instantiate an exporter object with reference to the parent
 			ARUtil.getConstrByParamNo(c,2);
 			Exporter exp = (Exporter) cons.newInstance(new Object[] { parent,

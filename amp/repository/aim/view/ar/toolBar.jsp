@@ -152,7 +152,8 @@ addLoadEvent(addpanel);
 	 request.setAttribute("ampReportId",ampReportId);
    String viewParam="";
    if("reset".equals(request.getParameter("view"))) viewParam="?view=reset";
-   String viewParamXLS="/xlsExport.do";      
+   String viewParamXLS="/xlsExport.do";
+   String viewParamPlainXLS="/xlsExport.do?plainReport=true";
    String viewParamPDF="/pdfExport.do";
    String viewParamCSV="/csvExport.do"+viewParam;
    String viewParamTree="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=tree";
@@ -165,6 +166,8 @@ addLoadEvent(addpanel);
 		var form=document.getElementById("exportSettingsForm");
 		if (type == "xls") {
 			form.action = "/aim"+"<%=viewParamXLS%>";
+		}if (type == "plainXls") {
+			form.action = "/aim"+"<%=viewParamPlainXLS%>";
 		} else if (type == "pdf") {
 			form.action = "/aim"+"<%=viewParamPDF%>";
 		}
@@ -204,6 +207,12 @@ addLoadEvent(addpanel);
 		<td noWrap align=left valign="center">		
 			<a href="#" target="_blank" onclick="toggleActionForm('xls'); return false;" title="<digi:trn>Download as XLS</digi:trn>">
 				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel" />
+			</a>
+		</td>
+
+		<td noWrap align=left valign="center">		
+			<a href="#" target="_blank" onclick="toggleActionForm('plainXls'); return false;" title="<digi:trn>Download as Plain XLS</digi:trn>">
+				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel as Plain Report" />
 			</a>
 		</td>
 

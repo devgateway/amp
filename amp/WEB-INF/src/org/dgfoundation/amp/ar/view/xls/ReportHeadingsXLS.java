@@ -237,7 +237,8 @@ public class ReportHeadingsXLS extends XLSExporter {
 				Iterator<Column> colIter	= columnReport.getItems().iterator();
 				while ( colIter.hasNext() ) {
 					Column tempCol	= colIter.next();
-					maxRowSpan		= (tempCol.getCurrentRowSpan()>maxRowSpan)?tempCol.getCurrentRowSpan():maxRowSpan;
+					int currentRowSpan = tempCol.getCurrentRowSpan() - 1;
+					maxRowSpan		= (currentRowSpan>maxRowSpan)?currentRowSpan:maxRowSpan;
 				}
 				if ( maxRowSpan > 3 ) maxRowSpan = 3;
                                     

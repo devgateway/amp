@@ -7,6 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
+<%-- This file renders the "Add Organisations" popup table --%>
+
+
 <digi:instance property="crDocToOrgForm" />
 <bean:define id="myForm" name="crDocToOrgForm" toScope="page" type="org.digijava.module.contentrepository.form.DocToOrgForm" />
 
@@ -49,6 +52,6 @@
 				form="${crDocToOrgForm}" styleClass="buttonx"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
 	 
 	 <c:set var="trnclose"><digi:trn>Close</digi:trn></c:set>
-	 <input class="buttonx" type="button" name="close" value="${trnclose}" onclick="organisationPanel.hide()">
+	 <input class="buttonx" type="button" name="close" value="${trnclose}" onclick="organisationPanel.hide(); location.reload();">
 </c:if>
 

@@ -5,6 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+
 <%@ page import="java.util.List"%>
 
 
@@ -24,6 +26,8 @@
 								<th><digi:trn>Date</digi:trn></th>
 								<th><digi:trn>Pub.Year</digi:trn></th>
 								<th><digi:trn>Size (MB)</digi:trn></th>
+								<field:display name="Resource Index" feature="Resource Columns"><th><digi:trn>Index</digi:trn></th></field:display>
+								<field:display name="Resource Category" feature="Resource Columns"><th><digi:trn>Index</digi:trn></th></field:display>								
 								<th><digi:trn>Notes</digi:trn></th>
 								<th><digi:trn>Actions</digi:trn></th>
 							</tr>
@@ -68,6 +72,17 @@
 								<td>
 									<bean:write name="documentData" property="fileSize" />
 								</td>
+								<field:display name="Resource Index" feature="Resource Columns">
+									<td>
+										<bean:write name="documentData" property="index" />
+									</td>
+								
+								</field:display>
+								<field:display name="Resource Category" feature="Resource Columns">
+									<td>
+										<bean:write name="documentData" property="category" />
+									</td>								
+								</field:display>
 								<td>
 									<bean:write name="documentData" property="notes" />
 									<a name="aDocumentUUID" class="invisible-item"><bean:write name="documentData" property="uuid" /></a>

@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<%-- This file renders the Resource-Filtering popup table. Add one <tr></tr> per filter criterium --%>
 <style>
 #docTypes {
 	width: 250px;
@@ -65,6 +66,19 @@
 					</select>
 				</td>
 			</tr>
+			<field:display name="Resource Organisations" feature="Resource Columns">			
+				<tr>
+					<td><div class="t_sm"><b><digi:trn>Organisations</digi:trn>:</b></div></td>
+					<td>
+						<select name="filterOrganisations" class="dropdwn_sm" style="width: 250px;">
+							<option value="-1"><digi:trn>Please select from below</digi:trn></option>
+							<c:forEach var="kvItem" items="${myFilterValues.possibleOrganisations}">
+								<option value="${kvItem.key}"><c:out value="${kvItem.value}"></c:out> </option>
+							</c:forEach>
+						</select>
+					</td>
+				</tr>
+			</field:display>			
 			<tr>
 				<td colspan="2" style="text-align: center;">
 					<button class="buttonx" type="button">

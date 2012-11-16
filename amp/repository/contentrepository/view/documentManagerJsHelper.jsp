@@ -6,6 +6,8 @@
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/tabview-core.css"> 
 
+<%-- Huge JS block included directly in the DocumentManager page --%>
+
 <style type="text/css">
 
 .yui-tt{ background: LightYellow; border-color: #CCCCCC }
@@ -29,7 +31,7 @@
 
 
 .versions_markup {margin:1em; overflow: auto; } 
-.versions_markup table {border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;} 
+.versions_markup table {width: 95%; border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;} 
 .versions_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:11px; color: black; text-align: center;border-right: white 1px solid;border-bottom: #cccccc 1px solid;}
 .versions_markup th a, .versions_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
 .versions_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
@@ -109,8 +111,38 @@ font-weight : bold;
 <c:set var="headerVersion">
 				<digi:trn>Version</digi:trn>
 </c:set>
+
+<script type="text/javascript">
+	var show_index = false;
+	var show_category = false;
+	var show_organisations = false;
+	
+	<feature:display name="Resource Columns" module="Content Repository"></feature:display>
+	
+	<field:display name="Resource Index" feature="Resource Columns">
+		show_index = true;
+	</field:display>
+	
+	<field:display name="Resource Category" feature="Resource Columns">
+		show_category = true;
+	</field:display>
+
+	<field:display name="Resource Organisations" feature="Resource Columns">
+		show_organisations = true;
+	</field:display>
+</script>
+
+
 <c:set var="headerType">
-				<digi:trn>Type</digi:trn>
+	<digi:trn>Type</digi:trn>
+</c:set>
+
+<c:set var="headerIndex">
+	<digi:trn>Index</digi:trn>
+</c:set>
+
+<c:set var="headerCategory">
+	<digi:trn>Category</digi:trn>
 </c:set>
 
 <c:set var="headerFileName">
@@ -118,15 +150,15 @@ font-weight : bold;
 </c:set>
 
 <c:set var="headerDate">
-				<digi:trn>Date</digi:trn>
+	<digi:trn>Date</digi:trn>
 </c:set>
 
 <c:set var="headerFileSize">
-				<digi:trn>Size (MB)</digi:trn>
+	<digi:trn>Size (MB)</digi:trn>
 </c:set>
 
 <c:set var="headerNotes">
-				<digi:trn>Notes</digi:trn>
+	<digi:trn>Notes</digi:trn>
 </c:set>
 
 <c:set var="headerAction">
@@ -179,13 +211,19 @@ font-weight : bold;
 	/* Function for creating YAHOO datatable for versions */
 	YAHOO.amp.table.enhanceVersionsMarkup = function() {
 		    this.columnHeadersForVersions = [
-			    {key:"v_ver_num",type:"number", text:"${headerVersion}",sortable:true},
-			    {key:"v_type",text:"${headerType}",sortable:true},
-		        {key:"v_file_name",text:"${headerFileName}",sortable:true},
-		        {key:"v_date",text:"${headerDate}",type:"date",sortable:true},
-		        {key:"size",type:"number",text:"${headerFileSize}",sortable:true},
-		        {key:"v_notes",text:"${headerNotes}",sortable:false},
-		        {key:"v_actions",text:"${headerAction}",sortable:false}
+			    {key:"v_ver_num", type:"number", text:"${headerVersion}", sortable:true},		    
+			    {key:"v_type", text:"${headerType}", sortable:true},
+		        {key:"v_file_name", text:"${headerFileName}", sortable:true},
+		        {key:"v_date", text:"${headerDate}",type:"date", sortable:true},
+		        {key:"size", type:"number",text:"${headerFileSize}", sortable:true},
+		        <field:display name="Resource Index" feature="Resource Columns">
+		        	{key:"resource_index", text:"${trans_headerResourceIndex}", sortable:true},
+		        </field:display>
+		        <field:display name="Resource Index" feature="Resource Columns">
+		        	{key:"resource_category", text:"${trans_headerResourceCategory}", sortable:true},
+		        </field:display>		        	
+		        {key:"v_notes", text:"${headerNotes}", sortable:false},
+		        {key:"v_actions", text:"${headerAction}", sortable:false}
 		    ];
 		    this.columnSetForVersions = new YAHOO.widget.ColumnSet(this.columnHeadersForVersions);
 	      var options					= {
@@ -271,6 +309,15 @@ font-weight : bold;
 </c:set>
 <c:set var="trans_headerSelect">
 	  <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Select</digi:trn> </b></span> 
+</c:set>
+<c:set var="trans_headerResourceIndex">
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Index</digi:trn></b></span>  
+</c:set>
+<c:set var="trans_headerResourceCategory">
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Category</digi:trn></b></span>  
+</c:set>
+<c:set var="trans_headerResourceOrganisations">
+	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Organisations</digi:trn></b></span>  
 </c:set>
 <c:set var="trans_headerResourceTitle">
 	 <span style='font-size:12px; font-family: Arial,sans-serif;'><b><digi:trn>Title</digi:trn></b></span>  
@@ -374,17 +421,23 @@ myTable.enhanceMarkup = function(markupName) {
     	    ];
 	}else {
 		//alert(3);
-	    this.columnHeaders = [
-      			{key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true,width:100},
-       		    {key:"type",label:"${trans_headerType}",sortable:true},
-       	        {key:"file_name",label:"${trans_headerFileName}",sortable:true,width:120},
-        	    {key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate },
-        	    {key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true},
-	   	        {key:"size",type:"number",label:"${trans_fileSize}",sortable:true},
-            	{key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true},
-	            {key:"labels",label:"${trans_headerLabels}",sortable:false},
-	            {key:"actions",label:"${trans_headerActions}",sortable:false}
-	    ];
+		//debugger;
+	    this.columnHeaders = [];
+	    this.columnHeaders.push({key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true, width:100});
+	    this.columnHeaders.push({key:"type",label:"${trans_headerType}",sortable:true});
+	    this.columnHeaders.push({key:"file_name",label:"${trans_headerFileName}",sortable:true/*, width:120*/});
+	    this.columnHeaders.push({key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate });
+	    this.columnHeaders.push({key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true});
+	    this.columnHeaders.push({key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true});
+	    if (show_index)
+	    	this.columnHeaders.push({key:"resource_index",label:"${trans_headerResourceIndex}", sortable:true/*, width:100*/});
+	    if (show_category)
+	    	this.columnHeaders.push({key:"resource_category",label:"${trans_headerResourceCategory}", sortable:true/*, width:100*/});
+	    if (show_organisations)
+	    	this.columnHeaders.push({key:"resource_organisations",label:"${trans_headerResourceOrganisations}", sortable:true/*, width:100*/});
+	    this.columnHeaders.push({key:"labels",label:"${trans_headerLabels}",sortable:false});
+	    this.columnHeaders.push({key:"size",type:"number",label:"${trans_fileSize}",sortable:true});	    
+	    this.columnHeaders.push({key:"actions",label:"${trans_headerActions}",sortable:false});
 	}
 //    this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
 //    var markup	 				= YAHOO.util.Dom.get(markupName);
@@ -436,6 +489,9 @@ myTable.enhanceMarkup = function(markupName) {
 			                           		 {key: "yearOfPublication"},
 			                           		 {key: "size"},
 			                           		 {key: "cm_doc_type"},
+			                           		{key: "resource_index"},
+			                           		{key: "resource_category"},
+			                           		{key: "resource_organisations"},
 			                           		 {key: "labels"},
 			                           		{key: "actions"}
 		                           		     	] 

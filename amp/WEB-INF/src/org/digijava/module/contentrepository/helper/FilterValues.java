@@ -12,15 +12,22 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.contentrepository.util.DocToOrgDAO;
 
+/**
+ * an instance of this class is constructed whenever it is needed to build a list of all the possible filtered-value-values (see filters.jsp for an example)
+ *
+ */
 public class FilterValues {
 	public List<String> possibleOwners;
 	public List<KeyValue> possibleTeams;
 	public List<KeyValue> possibleFileTypes;
+	public List<KeyValue> possibleOrganisations;
 	
 	public FilterValues(HttpServletRequest request) {
 		
@@ -43,6 +50,17 @@ public class FilterValues {
 				possibleTeams.add(kv);
 			}
 		}
+		
+		List<AmpOrganisation> allOrganisations = DocToOrgDAO.getAllUsedOrganisations();
+		possibleOrganisations = new ArrayList<KeyValue>();
+		if (allOrganisations != null)
+		{
+			java.util.SortedSet<KeyValue> orgs = new java.util.TreeSet<KeyValue>(KeyValue.valueComparator);
+			for(AmpOrganisation org:allOrganisations)
+				orgs.add(new KeyValue(org.getAmpOrgId().toString(), org.getAcronymAndName()));
+			possibleOrganisations.addAll(orgs);
+		}
+		
 		Site site = RequestUtils.getSite(request);
  	 	String siteId = site.getId().toString();
  	 	String locale = RequestUtils.getNavigationLanguage(request).getCode();
@@ -89,5 +107,14 @@ public class FilterValues {
 		this.possibleFileTypes = possibleFileTypes;
 	}
 	
+	public List<KeyValue> getPossibleOrganisations()
+	{
+		return possibleOrganisations;
+	}
+	
+	public void setPossibleOrganisations(List<KeyValue> possibleOrganisations)
+	{
+		this.possibleOrganisations = possibleOrganisations;
+	}
 	
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.jcrentity.Label;
+import org.digijava.module.contentrepository.util.DocToOrgDAO;
 
 public class DocumentData implements Comparable<DocumentData>, Serializable{
 	String name				= null;
@@ -20,6 +21,11 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	String contentType		= null;
 	String webLink			= null;
 	String cmDocType		= "";
+	
+	String category = null;
+	String index = null;
+	String organisations = null;
+	
 	double fileSize			= 0;
 	Calendar date = null;
 	String iconPath			= null;
@@ -63,14 +69,20 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	/** 
 	 * shows whether this document needs approval to become shared or not
 	 */
-	private boolean needsApproval=false;
-	private boolean isShared =false; //whether this resource is already shared.
-	boolean lastVersionIsShared		= false;
+	private boolean needsApproval = false;
+	private boolean isShared = false; //whether this resource is already shared.
+	boolean lastVersionIsShared = false;
 	
-	private boolean currentVersionNeedsApproval=false;
+	private boolean currentVersionNeedsApproval = false;
 	private boolean hasAnyVersionPendingApproval; // if any version of the node needs to be approved by Tl to be visible for team-members
-	private String baseNodeUUID=null; //in case documentData is just a version of some node, this property holds that main node uuid
-	private String nodeVersionUUID=null; //in case documentData is just a version of some node, this property stores it's uuid(this case nodeVersionUUID.equals(uuid))
+	private String baseNodeUUID = null; //in case documentData is just a version of some node, this property holds that main node uuid
+	private String nodeVersionUUID = null; //in case documentData is just a version of some node, this property stores it's uuid(this case nodeVersionUUID.equals(uuid))
+	
+	
+	public DocumentData()
+	{
+		
+	}
 	
 	public boolean getHasDeleteRights() {
 		return hasDeleteRights;
@@ -208,23 +220,27 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	public void setIconPath(String iconPath) {
 		this.iconPath = iconPath;
 	}
-	
-	
+		
 	public Long getCmDocTypeId() {
 		return cmDocTypeId;
 	}
+	
 	public void setCmDocTypeId(Long cmDocTypeId) {
 		this.cmDocTypeId = cmDocTypeId;
 	}
+	
 	public String getCmDocType() {
 		return cmDocType;
 	}
+	
 /*	public void setCmDocType(String cmDocType) { // This is not needed
 		this.cmDocType = cmDocType;
 	}*/
+	
 	public double getFileSize() {
 		return fileSize;
 	}
+	
 	public void setFileSize(double fileSize) {
 		this.fileSize = fileSize;
 	}
@@ -232,6 +248,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	public String getWebLink() {
 		return webLink;
 	}
+	
 	public void setWebLink(String webLink) {
 		this.webLink = webLink;
 	}
@@ -239,6 +256,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	public boolean isHasShareRights() {
 		return hasShareRights;
 	}
+	
 	public void setHasShareRights(boolean hasShareRights) {
 		this.hasShareRights = hasShareRights;
 	}
@@ -246,9 +264,11 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	public String getShareWith() {
 		return shareWith;
 	}
+	
 	public void setShareWith(String shareWith) {
 		this.shareWith = shareWith;
 	}
+	
 	public boolean isNeedsApproval() {
 		return needsApproval;
 	}
@@ -313,15 +333,19 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	public int compareTo(DocumentData o) {
 		return this.getDate().compareTo(o.date);
 	}
+	
 	public boolean isLastVersionIsShared() {
 		return lastVersionIsShared;
 	}
+	
 	public void setLastVersionIsShared(boolean lastVersionIsShared) {
 		this.lastVersionIsShared = lastVersionIsShared;
 	}
+	
 	public boolean isHasUnshareRights() {
 		return hasUnshareRights;
 	}
+	
 	public void setHasUnshareRights(boolean hasUnshareRights) {
 		this.hasUnshareRights = hasUnshareRights;
 	}	
@@ -329,60 +353,79 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	public boolean getIsShared() {
 		return isShared;
 	}
+	
 	public void setIsShared(boolean isShared) {
 		this.isShared = isShared;
 	}
+	
 	public boolean isCurrentVersionNeedsApproval() {
 		return currentVersionNeedsApproval;
 	}
+	
 	public void setCurrentVersionNeedsApproval(boolean currentVersionNeedsApproval) {
 		this.currentVersionNeedsApproval = currentVersionNeedsApproval;
 	}
+	
 	public String getBaseNodeUUID() {
 		return baseNodeUUID;
 	}
+	
 	public void setBaseNodeUUID(String baseNodeUUID) {
 		this.baseNodeUUID = baseNodeUUID;
 	}
+	
 	public boolean isHasApproveVersionRights() {
 		return hasApproveVersionRights;
 	}
+	
 	public void setHasApproveVersionRights(boolean hasApproveVersionRights) {
 		this.hasApproveVersionRights = hasApproveVersionRights;
 	}
+	
 	public String getYearofPublication() {
 		return yearofPublication;
 	}
+	
 	public void setYearofPublication(String yearofPublication) {
 		this.yearofPublication = yearofPublication;
 	}
+	
 	public boolean isHasAnyVersionPendingApproval() {
 		return hasAnyVersionPendingApproval;
 	}
+	
 	public void setHasAnyVersionPendingApproval(boolean hasAnyVersionPendingApproval) {
 		this.hasAnyVersionPendingApproval = hasAnyVersionPendingApproval;
 	}
+	
 	public String getNodeVersionUUID() {
 		return nodeVersionUUID;
 	}
+	
 	public void setNodeVersionUUID(String nodeVersionUUID) {
 		this.nodeVersionUUID = nodeVersionUUID;
 	}
+	
 	public List<Label> getLabels() {
 		return labels;
 	}
+	
 	public void setLabels(List<Label> labels) {
 		this.labels = labels;
 	}
+	
 	public Long getCreatorTeamId() {
 		return creatorTeamId;
 	}
+	
 	public void setCreatorTeamId(Long creatorTeamId) {
 		this.creatorTeamId = creatorTeamId;
 	}
+	
 	public String getCreatorEmail() {
 		return creatorEmail;
 	}
+	
 	public void setCreatorEmail(String creatorEmail) {
 		this.creatorEmail = creatorEmail;
 	}
@@ -394,4 +437,76 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 			return "/contentrepository/downloadFile.do?uuid=" + uuid;
 	}
 	
+	public String getCategory() {
+		return category;
+	}
+	
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
+	public String getIndex() {
+		return index;
+	}
+	
+	public void setIndex(String index) {
+		this.index = index;
+	}
+	
+	public String getOrganisations()
+	{
+		return organisations;
+	}
+	
+	public void setOrganisations(String generatedOrganisations)
+	{
+		// generatedOrganisations should be generated on the fly! See other parts of the code for the way to do it.
+		this.organisations = generatedOrganisations;
+	}
+	
+	/**
+	 * builds a DocumentData instance off a NodeWrapper. Pay special attention to the way uuid's are juggled here!
+	 * @param nodeWrapper - the NodeWrapper where all the main info comes
+	 * @param fileName - the filename (documentData.name)
+	 * @param uuid - either the uuid value to be stored in the documentData instance or, if null, nodeWrapper.uuid will be stored
+	 * @param nodeVersionUUID - documentData.nodeVersionUUID
+	 * @param request - may be null
+	 * @return
+	 */
+	public static DocumentData buildFromNodeWrapper(NodeWrapper nodeWrapper, String fileName, String uuid, String nodeVersionUUID, HttpServletRequest request)
+	{
+		DocumentData documentData		= new DocumentData();
+		documentData.setName(fileName );
+		if (uuid == null)
+			documentData.setUuid(nodeWrapper.getUuid());
+		else
+			documentData.setUuid(uuid);
+		if (nodeVersionUUID != null)
+			documentData.setNodeVersionUUID(nodeVersionUUID);
+		documentData.setTitle( nodeWrapper.getTitle() );
+		documentData.setDescription( nodeWrapper.getDescription() );
+		documentData.setNotes( nodeWrapper.getNotes() );
+		documentData.setFileSize( nodeWrapper.getFileSizeInMegabytes() );
+		documentData.setCalendar( nodeWrapper.getDate() );
+		documentData.setVersionNumber( nodeWrapper.getVersionNumber() );
+		documentData.setContentType( nodeWrapper.getContentType() );
+		documentData.setWebLink( nodeWrapper.getWebLink() );
+		documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
+		documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
+		documentData.setLabels( nodeWrapper.getLabels() );
+		documentData.setCreatorTeamId( nodeWrapper.getCreatorTeam() );
+		documentData.setCreatorEmail( nodeWrapper.getCreator() );
+		documentData.setIndex(nodeWrapper.getIndex());
+		documentData.setCategory(nodeWrapper.getCategory());
+		
+		if (request != null)
+		{
+			documentData.process(request);
+			documentData.computeIconPath(true);			
+		}
+		
+		documentData.setOrganisations(DocToOrgDAO.getOrganisationsAsString(documentData.getUuid()));
+		
+		return documentData;
+	}
 }

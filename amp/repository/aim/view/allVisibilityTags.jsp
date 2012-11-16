@@ -34,6 +34,7 @@
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Custom Fields" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Content Repository" parentModule="Resources"></module:display>
+
 <module:display name="Public Documents" parentModule="Resources"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -119,6 +120,11 @@
 <field:display name="Create From Template" feature="Add Resources"></field:display>
 <field:display name="Add Web Link" feature="Add Resources"></field:display>
 <field:display name="Upload Doc" feature="Add Resources"></field:display>
+
+<feature:display name="Resource Columns" module="Content Repository"></feature:display>
+<field:display name="Resource Index" feature="Resource Columns"></field:display>
+<field:display name="Resource Category" feature="Resource Columns"></field:display>
+<field:display name="Resource Organisations" feature="Resource Columns"></field:display>
 
 <feature:display name="Archived" module="Filter Section"></feature:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 

@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<%-- Looks like a dead file, not sure whether actually used anywhere --%>
+
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -344,12 +346,12 @@ div.fakefile2 input{
 										<td>
 											<FONT color=red>*</FONT>
 											<a title="<digi:trn key="aim:TitlefortheDocument">Title of the document to be attached</digi:trn>">
-											<digi:trn key="aim:title">Title</digi:trn>
+												<digi:trn key="aim:title">Title</digi:trn>
 											</a>
 										</td>
 										<td>
 											<a title="<digi:trn key="aim:TitlefortheDocument">Title of the document to be attached</digi:trn>">
-											<html:text property="docTitle"  styleClass="inp-text" size="50"/>
+												<html:text property="docTitle"  styleClass="inp-text" size="50"/>
 											</a>
 										</td>
 									</tr>
@@ -361,12 +363,12 @@ div.fakefile2 input{
 										<td>
 											<FONT color=red>*</FONT>
 											<a title="<digi:trn key="aim:TitlefortheDocument">Title of the document to be attached</digi:trn>">
-											<digi:trn key="aim:title">Title</digi:trn>
+												<digi:trn key="aim:title">Title</digi:trn>
 											</a>
 										</td>
 										<td>
 											<a title="<digi:trn key="aim:TitlefortheDocument">Title of the document to be attached</digi:trn>">
-											<html:text property="docTitle"  styleClass="inp-text" size="50"/>
+												<html:text property="docTitle"  styleClass="inp-text" size="50"/>
 											</a>
 										</td>
 									</tr>
@@ -378,12 +380,12 @@ div.fakefile2 input{
 									<tr>
 										<td>
 											<a title="<digi:trn key="aim:DescoftheDocument">Description of the contents and intent of the document</digi:trn>">
-											<digi:trn key="aim:description">Description</digi:trn>
+												<digi:trn key="aim:description">Description</digi:trn>
 											</a>
 										</td>
 										<td>
 											<a title="<digi:trn key="aim:DescoftheDocument">Description of the contents and intent of the document</digi:trn>">
-											<html:textarea property="docDescription" rows="4" cols="50" styleClass="inp-text"/>
+												<html:textarea property="docDescription" rows="4" cols="50" styleClass="inp-text"/>
 											</a>
 										</td>
 									</tr>
@@ -394,12 +396,12 @@ div.fakefile2 input{
 									<tr>
 										<td>
 											<a title="<digi:trn key="aim:DescoftheDocument">Description of the contents and intent of the document</digi:trn>">
-											<digi:trn key="aim:description">Description</digi:trn>
+												<digi:trn key="aim:description">Description</digi:trn>
 											</a>
 										</td>
 										<td>
 											<a title="<digi:trn key="aim:DescoftheDocument">Description of the contents and intent of the document</digi:trn>">
-											<html:textarea property="docDescription" rows="4" cols="50" styleClass="inp-text"/>
+												<html:textarea property="docDescription" rows="4" cols="50" styleClass="inp-text"/>
 											</a>
 										</td>
 									</tr>

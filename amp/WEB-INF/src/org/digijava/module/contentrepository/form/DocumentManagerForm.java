@@ -41,7 +41,12 @@ public class DocumentManagerForm extends ActionForm {
 	private String [] filterKeywords 		= null;
 	
 	private String docListInSession			= null;
-	private String showSharedDocs			=null;
+	private String showSharedDocs			= null;
+	private String filterOrganisations = null;
+
+	
+	private String docIndex = null;
+	private String docCategory = null;
 	
 	private TeamMember teamMember			= null;
 	private Collection teamMembers			= null;
@@ -236,7 +241,26 @@ public class DocumentManagerForm extends ActionForm {
 	public void setWebResource(boolean webResource) {
 		this.webResource = webResource;
 	}
+	
+	public String getDocIndex()
+	{
+		return docIndex;
+	}
+	
+	public void setDocIndex(String docIndex)
+	{
+		this.docIndex = docIndex;
+	}
 
+	public String getDocCategory()
+	{
+		return docCategory;
+	}
+	
+	public void setDocCategory(String docCategory)
+	{
+		this.docCategory = docCategory;
+	}
 
 	private    HashMap<String,String> errors = new HashMap<String, String>();
 	   private    HashMap<String,String> messages = new HashMap<String, String>();
@@ -411,5 +435,14 @@ public class DocumentManagerForm extends ActionForm {
 		this.filterKeywords = filterKeywords;
 	}
 
+	public String getFilterOrganisations()
+	{
+		return this.filterOrganisations;
+	}
+	
+	public void setFilterOrganisations(String org)
+	{
+		this.filterOrganisations = org;
+	}
 	
 }

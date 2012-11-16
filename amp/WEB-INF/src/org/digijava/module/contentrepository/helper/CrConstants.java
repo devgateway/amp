@@ -29,6 +29,8 @@ public class CrConstants {
 	public static final String PROPERTY_FILE_SIZE					= "ampdoc:fileSize";
 	public static final String PROPERTY_CM_DOCUMENT_TYPE			= "ampdoc:cmDocType";
 	public static final String PROPERTY_YEAR_OF_PUBLICATION			= "ampdoc:yearOfPublication";
+	public static final String PROPERTY_INDEX						= "ampdoc:index";
+	public static final String PROPERTY_CATEGORY					= "ampdoc:category";
 	
 	public static final String LABEL_PROPERTY_NAME					= "amplabel:name";
 	public static final String LABEL_PROPERTY_COLOR					= "amplabel:color";

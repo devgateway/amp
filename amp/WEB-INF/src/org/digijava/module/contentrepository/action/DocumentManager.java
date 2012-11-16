@@ -201,8 +201,13 @@ public class DocumentManager extends Action {
 			filterkeywords		= Arrays.asList(myForm.getFilterKeywords() );
 		}
 		
+		// organisationID to filter by: null, zero or negative numbers mean "no filtering"
+		Long orgId = null;
+		if (myForm.getFilterOrganisations() != null)
+			orgId = Long.parseLong(myForm.getFilterOrganisations());
+		
 		DocumentFilter documentFilter	= new DocumentFilter(source, filterLablesUUID, filterDocTypes, 
-						filterFileTypes, filterTeamIds, filterOwners,filterkeywords, myForm.getOtherUsername(),myForm.getOtherTeamId() );
+						filterFileTypes, filterTeamIds, filterOwners,filterkeywords, myForm.getOtherUsername(), myForm.getOtherTeamId(), orgId );
 		
 
 		if ( DocumentFilter.SOURCE_PRIVATE_DOCUMENTS.equals(documentFilter.getSource()) ) {
@@ -540,26 +545,9 @@ public class DocumentManager extends Action {
 				if ( fileName == null && nodeWrapper.getWebLink() == null ){
 					continue;
 				}
-				DocumentData documentData		= new DocumentData();
-				documentData.setName( fileName );
-				documentData.setUuid( documentNodeBaseVersionUUID );
-				documentData.setNodeVersionUUID(nodeWrapper.getUuid()); //if it's original,node then this value is equal to documentNodeBaseVersionUUID, otherwise it's node's visible version uuid
-				documentData.setTitle( nodeWrapper.getTitle() );
-				documentData.setDescription( nodeWrapper.getDescription() );
-				documentData.setNotes( nodeWrapper.getNotes() );
-				documentData.setFileSize( nodeWrapper.getFileSizeInMegabytes() );
-				documentData.setCalendar( nodeWrapper.getDate() );
-				documentData.setVersionNumber( nodeWrapper.getVersionNumber() );
-				documentData.setContentType( nodeWrapper.getContentType() );
-				documentData.setWebLink( nodeWrapper.getWebLink() );
-				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
-				documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
-				documentData.setLabels( nodeWrapper.getLabels() );
-				documentData.setCreatorTeamId( nodeWrapper.getCreatorTeam() );
-				documentData.setCreatorEmail( nodeWrapper.getCreator() );
-								
-				documentData.process(request);
-				documentData.computeIconPath(true);
+				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, documentNodeBaseVersionUUID, 
+							nodeWrapper.getUuid() /*if it's original,node then this value is equal to documentNodeBaseVersionUUID, otherwise it's node's visible version uuid */, 
+							request);
 				
 				if ( !CrConstants.PUBLIC_DOCS_TAB.equals(tabName) && showActionButtons) {
 					/**
@@ -763,25 +751,7 @@ public class DocumentManager extends Action {
 					continue;
 				}
 				
-				DocumentData documentData		= new DocumentData();
-				documentData.setName( fileName );
-				documentData.setUuid( nodeWrapper.getUuid() );
-				documentData.setTitle( nodeWrapper.getTitle() );
-				documentData.setDescription( nodeWrapper.getDescription() );
-				documentData.setNotes( nodeWrapper.getNotes() );
-				documentData.setFileSize( nodeWrapper.getFileSizeInMegabytes() );
-				documentData.setCalendar( nodeWrapper.getDate() );
-				documentData.setVersionNumber( nodeWrapper.getVersionNumber() );
-				documentData.setContentType( nodeWrapper.getContentType() );
-				documentData.setWebLink( nodeWrapper.getWebLink() );
-				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
-				documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
-				documentData.setLabels( nodeWrapper.getLabels() );
-				documentData.setCreatorTeamId( nodeWrapper.getCreatorTeam() );
-				documentData.setCreatorEmail( nodeWrapper.getCreator() );
-				
-				documentData.process(request);
-				documentData.computeIconPath(true);
+				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null, request);
 				
 				if(showActionsButton){
 					documentData.setHasUnshareRights(DocumentManagerRights.hasUnshareRights(documentNode, request, CrConstants.SHARED_DOCS_TAB));

@@ -189,6 +189,7 @@ border-right: 1px solid rgb(208, 208, 208);
 	var sharedFPanel = null;
 	
 	function closePopups(){
+
 		//Closing popups
 		if(menuPanelForUser){
 			menuPanelForUser.hide();
@@ -342,10 +343,9 @@ border-right: 1px solid rgb(208, 208, 208);
 	
 		templateFPanel	= new FilterAsYouTypePanel("templateLabelButtonId", 
 				getTemplateLabelsCb("docFromTemplateForm", "templateFilterInfoDiv"), "templateMainLabels", trnObj);
-		templateFPanel.initLabelArray(false);
-		
-		
+		templateFPanel.initLabelArray(false);		
 	}
+	
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
 </script>
 <script type="text/javascript">
@@ -511,13 +511,13 @@ border-right: 1px solid rgb(208, 208, 208);
 							<td>
 								<div class="t_sm"><b><digi:trn>Description</digi:trn>:</b></div>
 							</td>
-							<td><html:textarea property="docDescription" cols="" rows="" style="width:300px; height:100px;" styleClass="inputx"/></td>
+							<td><html:textarea property="docDescription" cols="" rows="" style="width:300px; height:70px;" styleClass="inputx"/></td>
 						</tr>
 						<tr>
 							<td>
 								<div class="t_sm"><b><digi:trn>Notes</digi:trn>:</b></div>
 							</td>
-							<td><html:textarea property="docNotes" cols="" rows="" style="width:300px; height:100px;" styleClass="inputx"/></td>
+							<td><html:textarea property="docNotes" cols="" rows="" style="width:300px; height:70px;" styleClass="inputx"/></td>
 						</tr>
 						<tr>
 		                    <td>
@@ -532,7 +532,34 @@ border-right: 1px solid rgb(208, 208, 208);
 		                        </html:select>
 		                    </td>
 		                </tr>
-						
+					<field:display name="Resource Index" feature="Resource Columns">
+						<tr>
+							<td>
+								<a title="<digi:trn>Document Index</digi:trn>">
+									<digi:trn>Index</digi:trn>
+								</a>
+							</td>
+							<td>
+								<a title="<digi:trn>Document Index</digi:trn>">
+									<html:textarea property="docIndex" cols="" rows="" style="width:300px; height:30px;" styleClass="inputx" />
+								</a>
+							</td>
+						</tr>
+					</field:display>								
+					<field:display name="Resource Category" feature="Resource Columns">
+						<tr>
+							<td>
+								<a title="<digi:trn>Document Category</digi:trn>">
+									<digi:trn>Category</digi:trn>
+								</a>
+							</td>
+							<td>
+								<a title="<digi:trn>Document Category</digi:trn>">
+									<html:textarea property="docCategory" cols="" rows="" style="width:300px; height:30px;" styleClass="inputx"/>
+								</a>
+							</td>
+						</tr>
+					</field:display>						
 						<tr>
 							<td>
 								<div class="t_sm"><b><digi:trn>Type</digi:trn>:</b></div>

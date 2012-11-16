@@ -21,9 +21,11 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocToOrgDAO;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
@@ -131,21 +133,7 @@ public class GetDesktopLinks extends TilesAction {
 				if (fileName == null && nodeWrapper.getWebLink() == null)
 					continue;
 
-				DocumentData documentData = new DocumentData();
-				documentData.setName(fileName);
-				documentData.setUuid(nodeWrapper.getUuid());
-				documentData.setTitle(nodeWrapper.getTitle());
-				documentData.setDescription(nodeWrapper.getDescription());
-				documentData.setNotes(nodeWrapper.getNotes());
-				documentData.setFileSize(nodeWrapper.getFileSizeInMegabytes());
-				documentData.setCalendar(nodeWrapper.getDate());
-				documentData.setVersionNumber(nodeWrapper.getVersionNumber());
-				documentData.setContentType(nodeWrapper.getContentType());
-				documentData.setWebLink(nodeWrapper.getWebLink());
-				documentData.setCmDocTypeId(nodeWrapper.getCmDocTypeId());
-				documentData.setDate(nodeWrapper.getCalendarDate());
-				documentData.process(request);
-				documentData.computeIconPath(true);
+				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, null, null, request);
 
 				if (!isPublicVersion) {
 					hasShowVersionsRights = DocumentManagerRights.hasShowVersionsRights(documentNode, request);

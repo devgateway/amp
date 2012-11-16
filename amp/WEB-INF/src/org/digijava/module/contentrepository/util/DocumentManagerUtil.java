@@ -464,26 +464,8 @@ public class DocumentManagerUtil {
 				if ( fileName == null && nodeWrapper.getWebLink() == null ){
 					continue;
 				}
-				DocumentData documentData		= new DocumentData();
-				documentData.setName( fileName );
-				documentData.setUuid( documentNodeBaseVersionUUID );
-				documentData.setNodeVersionUUID(nodeWrapper.getUuid()); //if it's original,node then this value is equal to documentNodeBaseVersionUUID, otherwise it's node's visible version uuid
-				documentData.setTitle( nodeWrapper.getTitle() );
-				documentData.setDescription( nodeWrapper.getDescription() );
-				documentData.setNotes( nodeWrapper.getNotes() );
-				documentData.setFileSize( nodeWrapper.getFileSizeInMegabytes() );
-				documentData.setCalendar( nodeWrapper.getDate() );
-				documentData.setVersionNumber( nodeWrapper.getVersionNumber() );
-				documentData.setContentType( nodeWrapper.getContentType() );
-				documentData.setWebLink( nodeWrapper.getWebLink() );
-				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
-				documentData.setYearofPublication(nodeWrapper.getYearOfPublication());
-				documentData.setLabels( nodeWrapper.getLabels() );
-				documentData.setCreatorTeamId( nodeWrapper.getCreatorTeam() );
-				documentData.setCreatorEmail( nodeWrapper.getCreator() );
-								
-				documentData.process(request);
-				documentData.computeIconPath(true);
+				
+				DocumentData documentData = DocumentData.buildFromNodeWrapper(nodeWrapper, fileName, documentNodeBaseVersionUUID, nodeWrapper.getUuid(), request);				
 				ret.add(documentData);
 			}	
 			return ret;

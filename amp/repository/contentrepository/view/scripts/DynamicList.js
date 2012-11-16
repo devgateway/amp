@@ -24,11 +24,12 @@ function KeyValue (key, value) {
 }
 function FilterWrapper( trnObj ) {
 	this.filterLabels	= new Array();
-	this.filterDocTypeIds	= new Array(); //key-value arrays
-	this.filterFileTypes	= new Array();
-	this.filterOwners		= new Array();
-	this.filterTeamIds		= new Array();
-	this.filterKeywords		= new Array();	
+	this.filterDocTypeIds		= new Array(); //key-value arrays
+	this.filterFileTypes		= new Array();
+	this.filterOwners			= new Array();
+	this.filterTeamIds			= new Array();
+	this.filterKeywords			= new Array();	
+	this.filterOrganisations	= new Array();
 	
 	this.trnObj				= {
 			labels: "Lables",
@@ -154,6 +155,7 @@ AbstractDynamicList.prototype.clearBody		= function () {
 	this.containerEl.innerHTML	= "";
 }
 
+/* the function called when "Apply Filters" is clicked: constructs an GET URL and loads it programmatically */
 AbstractDynamicList.prototype.sendRequest		= function (shouldRetrieveFilters) {
 	this.reqString		= "";
 	if ( shouldRetrieveFilters != null && !shouldRetrieveFilters) 
@@ -224,6 +226,8 @@ AbstractDynamicList.prototype.retrieveFilterData	= function (divId) {
 	for (var field in this.filterWrapper) {
 		if ( field.indexOf("filter") == 0 && field!="filterLabels" && field!="filterKeywords") {
 			var selectEl	= form.elements[field];
+			if(typeof selectEl == 'undefined')
+				continue;
 			var optionEl	= selectEl.options[selectEl.selectedIndex];
 			
 			this.filterWrapper[field]	= new Array();
@@ -281,11 +285,12 @@ AbstractDynamicList.prototype.getFilterPanel	= function (buttonId,divId,hide) {
 		
 		this.fPanel		= panel;
 		
+		/* Yep, hardcoded stuff: the filter buttons are hardcoded so that the first one is "Apply Filters", the second one is "Reset Filters" and the third one is "Close window" */
 		divEl.style.display	= "";
 		var buttonEls	= divEl.getElementsByTagName("button");
-		YAHOO.util.Event.on(buttonEls[0],"click", this.sendRequest, this, true);
-		YAHOO.util.Event.on(buttonEls[1],"click", this.sendResetRequest, this, true);
-		YAHOO.util.Event.on(buttonEls[2],"click", this.fPanel.hide, this.fPanel, true);
+		YAHOO.util.Event.on(buttonEls[0], "click", this.sendRequest, this, true);
+		YAHOO.util.Event.on(buttonEls[1], "click", this.sendResetRequest, this, true);
+		YAHOO.util.Event.on(buttonEls[2], "click", this.fPanel.hide, this.fPanel, true);
 	} else if (hide == true) {
 //		var isVisible = this.fPanel.get("visible");
 //		alert (isVisible);

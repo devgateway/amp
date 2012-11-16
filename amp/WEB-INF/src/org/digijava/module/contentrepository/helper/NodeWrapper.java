@@ -1,6 +1,7 @@
 package org.digijava.module.contentrepository.helper;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -39,6 +40,9 @@ import org.digijava.module.contentrepository.helper.template.WordOrPdfFileHelper
 import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
+/**
+ * a class wrapping a javax.jcr.Node instance for convenience reasons mainly (nice getters / setters which would otherwise be a soup of hardcoded strings and exception handling) 
+ */
 public class NodeWrapper{
 	
 	private static Logger logger	= Logger.getLogger(NodeWrapper.class);
@@ -120,9 +124,11 @@ public class NodeWrapper{
 				if(selYearOfPublication!=null && selYearOfPublication.intValue()!=-1){
 					yearOfPublicationDate=Calendar.getInstance();
 					yearOfPublicationDate.set(selYearOfPublication.intValue(), 1, 1);
-				}				
+				}
+				String docIndex = myForm.getDocIndex();
+				String docCategory = myForm.getDocCategory();
 				populateNode(isANewVersion, newNode, myForm.getDocTitle(), myForm.getDocDescription(), myForm.getDocNotes(), 
-					contentType, docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate);
+					contentType, docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate, docIndex, docCategory);
 			}
 			
 			this.node		= newNode;
@@ -142,7 +148,7 @@ public class NodeWrapper{
 	/**
 	 * create document from template
 	 */
-	public NodeWrapper(WordOrPdfFileHelper pdfOrWordFile,  HttpServletRequest myRequest, Node parentNode,boolean isANewVersion, ActionMessages errors) {
+	public NodeWrapper(WordOrPdfFileHelper pdfOrWordFile,  HttpServletRequest myRequest, Node parentNode, boolean isANewVersion, ActionMessages errors) {
 			
 		try {
 			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
@@ -160,16 +166,20 @@ public class NodeWrapper{
 			}
 			
 			newNode.setProperty(CrConstants.PROPERTY_DATA, pdfOrWordFile.getContent());
-			int uploadedFileSize	=pdfOrWordFile.getFileSize();
-			String fileName =pdfOrWordFile.getDocTitle()+"."+pdfOrWordFile.getFileType();
+			int uploadedFileSize	= pdfOrWordFile.getFileSize();
+			String fileName = pdfOrWordFile.getDocTitle()+"."+pdfOrWordFile.getFileType();
 			newNode.setProperty( CrConstants.PROPERTY_NAME, new String(fileName.getBytes("iso-8859-1"), "UTF8"));
 			newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize );
+			
+			//TODO: ask Garty whether these 2 fields should be null or fetched off pdfOrWordFile
+			String docIndex = null;
+			String docCategory = null;
 			
 			if ( !errorAppeared ) {
 				Calendar yearOfPublicationDate=null;								
 				populateNode(isANewVersion, newNode, pdfOrWordFile.getDocTitle(), null, null,
 						pdfOrWordFile.getContentType(), pdfOrWordFile.getDocumentType(),  
-						teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate);
+						teamMember.getEmail(), teamMember.getTeamId(),yearOfPublicationDate, docIndex, docCategory);
 			}
 			
 			this.node		= newNode;
@@ -271,14 +281,8 @@ public class NodeWrapper{
 				newNode.setProperty( CrConstants.PROPERTY_NAME, originalNode.getProperty(CrConstants.PROPERTY_NAME).getValue());
 				newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, originalNode.getProperty(CrConstants.PROPERTY_FILE_SIZE).getValue() );
 			}
-			String description=originalNode.getProperty(CrConstants.PROPERTY_DESCRIPTION).getString();
-			if(description!=null){
-				description=URLDecoder.decode(description, "UTF-8");
-			}			 
-			String docNotes=originalNode.getProperty(CrConstants.PROPERTY_NOTES).getString();
-			if(docNotes!=null){
-				description=URLDecoder.decode(docNotes, "UTF-8");
-			}
+			String description = decodeUTF8(originalNode.getProperty(CrConstants.PROPERTY_DESCRIPTION).getString());		 
+			String docNotes = decodeUTF8(originalNode.getProperty(CrConstants.PROPERTY_NOTES).getString());
 			
 			//year of publication
 			Calendar yearOfPublication=null;
@@ -286,7 +290,13 @@ public class NodeWrapper{
 				yearOfPublication=originalNode.getProperty(CrConstants.PROPERTY_YEAR_OF_PUBLICATION).getDate();
 			}
 			
-			populateNode(isANewVersion, newNode, URLDecoder.decode(docTitle, "UTF-8"), description, docNotes,contentType, docType , teamMember.getEmail(), teamMember.getTeamId(),yearOfPublication );
+			String docIndex = decodeUTF8(originalNode.getProperty(CrConstants.PROPERTY_INDEX).getString());
+			String docCategory = decodeUTF8(originalNode.getProperty(CrConstants.PROPERTY_CATEGORY).getString());
+			
+			populateNode(isANewVersion, newNode, decodeUTF8(docTitle), description, docNotes, contentType, 
+					docType, teamMember.getEmail(), teamMember.getTeamId(), yearOfPublication,
+					docIndex, docCategory);
+			
 			return newNode;
 			// this.node		= newNode;
 		} catch (Exception e) {
@@ -379,7 +389,8 @@ public class NodeWrapper{
 					yearofPublicationDate.set(yearofPublication.intValue(), 1, 1);
 				}
 				populateNode(isANewVersion,newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
-					contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail(), teamMember.getTeamId(), yearofPublicationDate );
+					contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail(), teamMember.getTeamId(), yearofPublicationDate,
+					tempDoc.getIndex(), tempDoc.getCategory());
 			} 
 			
 			this.node		= newNode;
@@ -399,7 +410,7 @@ public class NodeWrapper{
 	}
 	
 	private void populateNode(boolean isANewVersion,Node newNode, String docTitle, String docDescr, String docNotes, String contentType, Long cmDocType, 
-			String user, Long teamId,Calendar yearOfPublication) {
+			String user, Long teamId,Calendar yearOfPublication, String index, String category) {
 		try{
 			if (!isANewVersion) {
 				newNode.setProperty( CrConstants.PROPERTY_CREATOR, user );
@@ -414,10 +425,12 @@ public class NodeWrapper{
 			String encDescr		= URLEncoder.encode(docDescr, "UTF-8");
 			String encNotes		= URLEncoder.encode(docNotes, "UTF-8");
 			
-			newNode.setProperty( CrConstants.PROPERTY_TITLE, encTitle );
-			newNode.setProperty( CrConstants.PROPERTY_DESCRIPTION, encDescr );
-			newNode.setProperty( CrConstants.PROPERTY_NOTES, encNotes );
-			newNode.setProperty( CrConstants.PROPERTY_CONTENT_TYPE, contentType );
+			newNode.setProperty(CrConstants.PROPERTY_TITLE, encTitle );
+			newNode.setProperty(CrConstants.PROPERTY_DESCRIPTION, encDescr );
+			newNode.setProperty(CrConstants.PROPERTY_NOTES, encNotes );
+			newNode.setProperty(CrConstants.PROPERTY_CONTENT_TYPE, contentType );
+			newNode.setProperty(CrConstants.PROPERTY_INDEX, index);
+			newNode.setProperty(CrConstants.PROPERTY_CATEGORY, category);
 			
 			Node labelContainerNode	= newNode.addNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
 			labelContainerNode.addMixin("mix:versionable");
@@ -479,48 +492,51 @@ public class NodeWrapper{
 		}
 		return null;
 	}
-	
-	public String getTitle() {
-		Property title		=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_TITLE);
-		if ( title != null ) {
-			try {
-				String ret	= URLDecoder.decode( title.getString() ,"UTF-8");
-				return ret;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
+
+	public static String decodeUTF8(String str)
+	{
+		try
+		{
+			if (str == null)
+				return null;
+			return URLDecoder.decode(str, "UTF-8");
 		}
-		return null;
+		catch(UnsupportedEncodingException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public String getStringProperty(String propertyName)
+	{
+		Property value = DocumentManagerUtil.getPropertyFromNode(node, propertyName);
+		if (value == null)
+			return null;
+		try
+		{
+			return decodeUTF8(value.getString());
+		}
+		catch(RepositoryException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public String getTitle() 
+	{
+		return getStringProperty(CrConstants.PROPERTY_TITLE);
 	}
 	
 	public String getDescription() {
-		Property description	=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_DESCRIPTION);
-		if ( description != null ) {
-			try {
-				String ret	= URLDecoder.decode( description.getString() ,"UTF-8");
-				return ret;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-		}
-		return null;
+		return getStringProperty(CrConstants.PROPERTY_DESCRIPTION);
 	}
 	
 	public String getNotes() {
-		Property notes	=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_NOTES);
-		if ( notes != null ) {
-			try {
-				String ret	= URLDecoder.decode( notes.getString() ,"UTF-8");
-				return ret;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-		}
-		return null;
+		return getStringProperty(CrConstants.PROPERTY_NOTES);
 	}
+	
 	public String getDate() {
 		Property calProperty	=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_ADDING_DATE);
 		if ( calProperty != null ) {
@@ -579,16 +595,7 @@ public class NodeWrapper{
 	}
 	
 	public String getContentType() {
-		Property contentType	=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_CONTENT_TYPE);
-		if ( contentType != null ) {
-			try {
-				return contentType.getString();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-		}
-		return null;
+		return getStringProperty(CrConstants.PROPERTY_CONTENT_TYPE);
 	}
 	
 	public float getVersionNumber() {
@@ -605,29 +612,21 @@ public class NodeWrapper{
 	}
 	
 	public String getName() {
-		Property name	=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_NAME);
-		if ( name != null ) {
-			try {
-				return name.getString();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-		}
-		return null;
+		return getStringProperty(CrConstants.PROPERTY_NAME);
 	}
 	
 	public String getWebLink() {
-		Property webLinkProp		= DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_WEB_LINK);
-		if ( webLinkProp != null ) {
-			try{
-				return webLinkProp.getString(); 
-			}
-			catch ( Exception E ) {
-				E.printStackTrace();
-			}
-		}
-		return null;
+		return getStringProperty(CrConstants.PROPERTY_WEB_LINK);
+	}
+	
+	public String getIndex()
+	{
+		return getStringProperty(CrConstants.PROPERTY_INDEX);
+	}
+	
+	public String getCategory()
+	{
+		return getStringProperty(CrConstants.PROPERTY_CATEGORY);
 	}
 	
 	public Long getCmDocTypeId() {

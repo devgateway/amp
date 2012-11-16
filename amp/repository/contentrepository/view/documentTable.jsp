@@ -10,6 +10,9 @@
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.net.URLDecoder"%>
 
+<%-- Renders a list of documents to be parsed by YUM DataDable (and maybe used as html per se, not sure) --%>
+
+
 <logic:notEmpty name="checkBoxToHide" scope="request">
 	<bean:define id="checkBoxToHideLocal" value="true"></bean:define>
 </logic:notEmpty> 
@@ -137,6 +140,15 @@
 								<td>
 									${documentData.cmDocType }
 									<a  id="aflag${documentData.uuid}" class="invisible-item">&nbsp;</a>
+								</td>
+								<td>
+									<bean:write name="documentData" property="index" />
+								</td>
+								<td>
+									<bean:write name="documentData" property="category" />
+								</td>
+								<td>
+									<bean:write name="documentData" property="organisations" />								
 								</td>
 								<td>
 									<c:set var="labelUUIDs" value="[" />

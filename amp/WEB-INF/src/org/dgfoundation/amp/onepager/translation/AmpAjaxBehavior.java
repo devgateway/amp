@@ -106,8 +106,10 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 		
 		String id = request.getRequestParameters().getParameterValue("activity").toString();
 		ActivityGatekeeper.pageModeChange(id);
+		Component comp = getComponent();
+		target.add(comp);
 		
-		target.appendJavaScript("window.location.reload()");
+		//target.appendJavaScript("window.location.reload()");
 	}
 
 	private void switchFMMode(Request request, AjaxRequestTarget target){

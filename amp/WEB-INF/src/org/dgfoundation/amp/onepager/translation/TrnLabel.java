@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.translation;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
@@ -33,9 +34,10 @@ public class TrnLabel extends Label {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(TrnLabel.class);
 	private static final Behavior LABEL_TRANSLATOR_BEHAVIOR = new LabelTranslatorBehaviour();
-	private static final Behavior LABEL_TRANSLATOR_STYLE = new AttributeAppender("style", new Model("text-decoration: underline; color: #0CAD0C;"), "");
+	private static final Behavior LABEL_TRANSLATOR_STYLE = new AttributeAppender("style", new Model<String>("text-decoration: underline; color: #0CAD0C;"), "");
 
-	private CharSequence key;
+	private String key;
+	private String label;
 
 	
 	/**
@@ -46,6 +48,7 @@ public class TrnLabel extends Label {
 	 */
 	public TrnLabel(String id, String label) {
 		super(id, label);
+		this.label = label;
 		super.setDefaultModelObject(translate(label));
 		addKeyAttribute(TranslatorWorker.generateTrnKey(label));
 	}
@@ -57,15 +60,18 @@ public class TrnLabel extends Label {
 	protected void onConfigure() {
 		super.onConfigure();
 		trnLabel();
+		if (TranslatorUtil.isTranslatorMode(getSession())){
+			if (key == null)
+				throw new IllegalArgumentException("Parameter \"key\" can't be null!");
+			this.add(new AttributeModifier("key", key));
+		}
+		else{
+			this.add(AttributeModifier.remove("key"));
+		}
 	}
 	
 	private void addKeyAttribute(String key){
 		this.key = key;
-		if (TranslatorUtil.isTranslatorMode(getSession())){
-			if (key == null)
-				throw new IllegalArgumentException("Parameter \"key\" can't be null!");
-			this.add(new SimpleAttributeModifier("key", key));
-		}
 	}
 	
 	private void trnLabel(){
@@ -80,8 +86,11 @@ public class TrnLabel extends Label {
 			while (it.hasNext()) {
 				Behavior behavior = (Behavior) it.next();
 				if (behavior == LABEL_TRANSLATOR_BEHAVIOR || 
-						behavior == LABEL_TRANSLATOR_STYLE)
+						behavior == LABEL_TRANSLATOR_STYLE){
 					this.remove(behavior);
+					//means we were in translation mode and we need to refresh the model with the new translation
+					setDefaultModelObject(translate(label));
+				}
 			}
 		}
 	}

@@ -4,11 +4,8 @@
 */
 package org.dgfoundation.amp.onepager.translation;
 
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;

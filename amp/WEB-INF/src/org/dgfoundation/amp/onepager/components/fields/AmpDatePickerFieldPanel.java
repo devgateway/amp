@@ -95,10 +95,9 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 				}
 			}
 		};
-		sameAsOtherDatePicker.setIgnoreFmVisibility(true);
 		
 		if (otherDatePicker == null){
-			sameAsOtherDatePicker.setVisible(false);
+			sameAsOtherDatePicker.setVisibilityAllowed(false);
 		}
 		
 		add(sameAsOtherDatePicker);

@@ -1192,9 +1192,9 @@ public class FeaturesUtil {
 	 *
 	 * @return
 	 */
-	public static Collection getAMPFieldsVisibility() {
+	public static Collection<AmpFieldsVisibility> getAMPFieldsVisibility() {
 		Session session = null;
-		Collection col = new ArrayList();
+		Collection<AmpFieldsVisibility> col = new ArrayList<AmpFieldsVisibility>();
 		String qryStr = null;
 		Query qry = null;
 

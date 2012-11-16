@@ -17,14 +17,48 @@ private static final long serialVersionUID = 1L;
     private List<SimpleDonor> donors;
     private String currecycode; 
     private String id; 
-    
+	private String commitmentsforlocation;
+	private String disbursementsforlocation;
+	private String expendituresforlocation;
     
     public PointContent() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
     
-    public String getId() {
+
+	public PointContent(String commitments,
+			String disbursements, ArrayList<SimpleLocation> locations) {
+		super();
+		this.commitments = commitments;
+		this.disbursements = disbursements;
+	}
+    
+    public String getCommitmentsforlocation() {
+		return commitmentsforlocation;
+	}
+
+	public void setCommitmentsforlocation(String commitmentsforlocation) {
+		this.commitmentsforlocation = commitmentsforlocation;
+	}
+
+	public String getDisbursementsforlocation() {
+		return disbursementsforlocation;
+	}
+
+	public void setDisbursementsforlocation(String disbursementsforlocation) {
+		this.disbursementsforlocation = disbursementsforlocation;
+	}
+
+	public String getExpendituresforlocation() {
+		return expendituresforlocation;
+	}
+
+	public void setExpendituresforlocation(String expendituresforlocation) {
+		this.expendituresforlocation = expendituresforlocation;
+	}
+
+	public String getId() {
 		return id;
 	}
 
@@ -34,13 +68,6 @@ private static final long serialVersionUID = 1L;
     
 	public String getActivityname() {
 		return activityname;
-	}
-
-	public PointContent(String commitments,
-			String disbursements, ArrayList<SimpleLocation> locations) {
-		super();
-		this.commitments = commitments;
-		this.disbursements = disbursements;
 	}
 
 	public void setActivityname(String activityname) {

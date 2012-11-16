@@ -518,6 +518,7 @@ function getActivities(clear) {
 	showLoading();
 	if (clear && cL) {
 		cL.clear();
+		
 	}
 
 	var xhrArgs = {
@@ -650,7 +651,8 @@ function MapFind(activity) {
 								+ location.disbursements
 								+ '</b>',
 						"Code" : '' + donorCode + '',
-						"id" :activity.id
+						"id" :activity.id,
+						"name":location.name
 					});
 			location.isdisplayed = true;
 			features.push(pgraphic);
@@ -790,6 +792,10 @@ function drawpoints() {
 						69, 0, 0.65 ]));
 		var symbolBank = pointSymbolBank;
 		
+		if (map.getLayer('activitiesMap')){
+			map.removeLayer(cL);
+			cL=null;
+		}
 		cL = new esri.ux.layers.ClusterLayer(
 				{
 					displayOnPan : false,
@@ -1062,6 +1068,7 @@ function getStructures(clear) {
 		try {
 			structureGraphicLayer = null;
 			structures = [];
+			structurespoint=[];
 			map.removeLayer(map.getLayer("structuresMap"));
 		} catch (e) {
 			console.log(e);
@@ -1220,6 +1227,11 @@ function CluterStructures(){
 					esri.symbol.SimpleLineSymbol.STYLE_NULL,
 					new dojo.Color([ 0, 0, 0 ]), 0), new dojo.Color([ 216,191,216, 1 ]));
 	var symbolBank = pointSymbolBank;
+	
+	if (map.getLayer('structurescluster')){
+		map.removeLayer(cLs);
+		cLs=null;
+	}
 	
 	cLs = new esri.ux.layers.ClusterLayer(
 			{
@@ -1459,7 +1471,7 @@ function getContent(graphicAttributes, baseGraphic) {
     var attributes;
 
     var xhrArgs = {
-    	url : "/esrigis/datadispatcher.do?getcontent=true&id="+graphicAttributes.id,
+    	url : "/esrigis/datadispatcher.do?getcontent=true&id="+graphicAttributes.id+"&name="+graphicAttributes.name,
         handleAs : "json",
         sync : true,
         load : function(attr) {
@@ -1497,10 +1509,13 @@ function getContent(graphicAttributes, baseGraphic) {
 							+ attr[0].disbursements + ' '
 							+ attr[0].currecycode + '</b>',
 					"Commitments for this location" : '<b>'
-							+ graphicAttributes["Commitments for this location"]+ ' '
+							+ attr[0].commitmentsforlocation
+							//+ graphicAttributes["Commitments for this location"]+ ' '
+							+ ' '
 							+ attr[0].currecycode + '</b>',
 					"Disbursements for this location" : '<b>'
-							+ graphicAttributes["Disbursements for this location"]
+							+ attr[0].disbursementsforlocation
+							//+ graphicAttributes["Disbursements for this location"]
 							+ ' '
 							+ attr[0].currecycode + '</b>',
 					"Code" : '' + donorCode 

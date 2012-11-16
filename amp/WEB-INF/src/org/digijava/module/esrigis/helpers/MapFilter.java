@@ -5,17 +5,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONArray;
 
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.helper.TeamMember;
@@ -24,12 +24,11 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.springframework.beans.BeanWrapperImpl;
+import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 
 public class MapFilter {
 	private static final long serialVersionUID = 1L;
 	private boolean isinitialized;
-	private Long year;
 	private Long currencyId;
 	private Boolean workspaceOnly;
 	private TeamMember teamMember;
@@ -42,12 +41,24 @@ public class MapFilter {
 	private Long organizationsTypeId;
 	private BigDecimal fundingLimit;
 	private Boolean fundingLimitAbove;
-	private Boolean onBudget;
+	private Long onBudget;
 	private Long typeAssistanceId;
 	private Long financingInstrumentId;
 	private boolean modeexport;
 	private String reportfilterquery;
-	
+	private Long startYearFilter;
+	private Long endYearFilter;
+	private Map<Integer, Integer> years;
+    private Long startYear;
+    private Long endYear;
+    private Long defaultStartYear;
+    private Long defaultEndYear; 
+    private List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupWithOrgsList;
+    private List<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>> regionWithZones;
+    private List<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>> configWithSectorAndSubSectors;
+    private Long selSectorConfigId;
+    private List<AmpClassificationConfiguration> sectorConfigs;
+    
 	//	private List<AmpOrgType> projectStatuses;
 	private Long projectStatusId;
 	private List<AmpOrgType> organizationsTypeSelected;
@@ -80,7 +91,6 @@ public class MapFilter {
 	private List<AmpSector> sectorsSelected;
 	private List<AmpCategoryValueLocations> locationsSelected;
 
-	private Collection<BeanWrapperImpl> years;
 	private int transactionType;
 	private List<AmpFiscalCalendar> fiscalCalendars;
 	private Long fiscalCalendarId;
@@ -95,7 +105,7 @@ public class MapFilter {
 	private Boolean expendituresVisible = true;
 	private Boolean fromPublicView;
 	private Boolean showOnlyApprovedActivities;
-
+	
 	private Long activityId;
 	private int decimalsToShow;
 
@@ -118,7 +128,7 @@ public class MapFilter {
 		JSONArray result = new JSONArray();
 		SimpleFilter selectedfilter = new SimpleFilter();
 		selectedfilter.setCurrency(this.getCurrencyCode());
-		selectedfilter.setYear(this.getYear().toString());
+		selectedfilter.setYear(this.getStartYear().toString());
 		
 		Collection<AmpCategoryValue> categoryValues = null;
 		categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
@@ -249,10 +259,6 @@ public class MapFilter {
 			selectedfilter.setRegions(selregions);
 		}
 		
-		if (onBudget!=null){
-			selectedfilter.setOnbudget(onBudget);
-		}
-		
 		if (organizationsTypeId !=null && organizationsTypeId!=-1){
 			AmpOrgType orgtype = (AmpOrgType) DbUtil.getAmpOrgType(organizationsTypeId);
 			selectedfilter.setOrganizationtype(orgtype.getOrgType());
@@ -260,7 +266,105 @@ public class MapFilter {
 		result.add(selectedfilter);
 		return result;
 	}
+	
+	
+	public List<EntityRelatedListHelper<AmpClassificationConfiguration, EntityRelatedListHelper<AmpSector, AmpSector>>> getConfigWithSectorAndSubSectors() {
+		return configWithSectorAndSubSectors;
+	}
 
+	public void setConfigWithSectorAndSubSectors(
+			List<EntityRelatedListHelper<AmpClassificationConfiguration, EntityRelatedListHelper<AmpSector, AmpSector>>> configWithSectorAndSubSectors) {
+		this.configWithSectorAndSubSectors = configWithSectorAndSubSectors;
+	}
+	
+	
+	public List<AmpClassificationConfiguration> getSectorConfigs() {
+		return sectorConfigs;
+	}
+
+	public void setSectorConfigs(List<AmpClassificationConfiguration> sectorConfigs) {
+		this.sectorConfigs = sectorConfigs;
+	}
+
+	
+	public Long getSelSectorConfigId() {
+		return selSectorConfigId;
+	}
+
+	public void setSelSectorConfigId(Long selSectorConfigId) {
+		this.selSectorConfigId= selSectorConfigId;
+	}
+	
+	public List<EntityRelatedListHelper<AmpCategoryValueLocations, AmpCategoryValueLocations>> getRegionWithZones() {
+		return regionWithZones;
+	}
+
+	public void setRegionWithZones(
+			List<EntityRelatedListHelper<AmpCategoryValueLocations, AmpCategoryValueLocations>> regionWithZones) {
+		this.regionWithZones = regionWithZones;
+	}
+
+	
+	public List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> getOrgGroupWithOrgsList() {
+		return orgGroupWithOrgsList;
+	}
+
+
+	public void setOrgGroupWithOrgsList(
+			List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> orgGroupWithOrgsList) {
+		this.orgGroupWithOrgsList = orgGroupWithOrgsList;
+	}
+	
+    public Long getDefaultStartYear() {
+		return defaultStartYear;
+	}
+
+	public void setDefaultStartYear(Long defaultStartYear) {
+		this.defaultStartYear = defaultStartYear;
+	}
+
+	public Long getDefaultEndYear() {
+		return defaultEndYear;
+	}
+
+	public void setDefaultEndYear(Long defaultEndYear) {
+		this.defaultEndYear = defaultEndYear;
+	}
+    public Long getEndYear() {
+        return endYear;
+    }
+
+    public void setEndYear(Long year) {
+    	this.endYearFilter = year;
+        this.endYear = year;
+    }
+    
+    public Long getStartYear() {
+        return startYear;
+    }
+
+    public void setStartYear(Long year) {
+        this.startYear = year;
+        this.startYearFilter = year;
+    }
+	
+    
+	public void setEndYearFilter(Long endYearFilter) {
+		this.endYearFilter = endYearFilter;
+	}
+
+	public Long getEndYearFilter() {
+		return endYearFilter;
+	}
+    
+	public void setStartYearFilter(Long startYearFilter) {
+		this.startYearFilter = startYearFilter;
+	}
+
+	public Long getStartYearFilter() {
+		return startYearFilter;
+	}
+	
 	public boolean isIsinitialized() {
 		return isinitialized;
 	}
@@ -427,22 +531,14 @@ public class MapFilter {
 		this.organizations = organizations;
 	}
 
-	public Long getYear() {
-		return year;
-	}
+	public Map<Integer, Integer> getYears() {
+        return years;
+    }
 
-	public void setYear(Long year) {
-		this.year = year;
-	}
-
-	public Collection<BeanWrapperImpl> getYears() {
-		return years;
-	}
-
-	public void setYears(Collection<BeanWrapperImpl> years) {
-		this.years = years;
-	}
-
+    public void setYears(Map<Integer, Integer> years) {
+        this.years = years;
+    }
+    
 	public Boolean getWorkspaceOnly() {
 		return workspaceOnly;
 	}
@@ -754,12 +850,12 @@ public class MapFilter {
 	}
 
 
-	public void setOnBudget(Boolean onBudget) {
+	public void setOnBudget(Long onBudget) {
 		this.onBudget = onBudget;
 	}
 
 
-	public Boolean getOnBudget() {
+	public Long getOnBudget() {
 		return onBudget;
 	}
 

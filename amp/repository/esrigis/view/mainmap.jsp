@@ -65,7 +65,8 @@
 	$(function(){
   		$('#filterbtn').click(function(){
 			if (filterenable()){
-     			$('#filterdiv').toggle();
+     			//$('#filterdiv').toggle();
+     			showPopin();
 			}else{
 				alert('If you click filters, you will lose all your previus filter from reports - Filter is disable');
 			}
@@ -273,7 +274,11 @@
 </script>
 
  	<!-- Filter Styles -->
-   	<digi:ref href="css_2/visualization_yui_tabs.css" type="text/css" rel="stylesheet" />
+   	<digi:ref href="/TEMPLATE/ampTemplate/css_2/visualization_yui_tabs.css" type="text/css" rel="stylesheet" />
+   	<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/visualization.css" type="text/css" />
+   	<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
+   	<link href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" rel="stylesheet" type="text/css"></link>
+   	<link href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css" rel="stylesheet" type="text/css"></link>
 	
 	<!-- Filter Scripts-->
 	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script> 

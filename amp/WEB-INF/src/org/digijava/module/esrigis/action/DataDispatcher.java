@@ -75,7 +75,7 @@ public class DataDispatcher extends MultiAction {
 		DataDispatcherForm maphelperform = (DataDispatcherForm) form;
 		MapFilter filter = maphelperform.getFilter();
 		if (filter == null || !filter.isIsinitialized()) {
-			maphelperform.setFilter(QueryUtil.getNewFilter());
+			maphelperform.setFilter(QueryUtil.getNewFilter(request));
 			maphelperform.getFilter().setWorkspaceOnly(true);
 		}
 		response.setContentType("text/json");
@@ -318,6 +318,7 @@ public class DataDispatcher extends MultiAction {
 			donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 			ct.getDonors().add(donor);
 		}
+		
 		ct.setId(activity.getIdentifier().toString());
 		ct.setActivityname(activity.getName());
 		ct.setCommitments(calculations.getTotalCommitments().toString());
@@ -325,7 +326,16 @@ public class DataDispatcher extends MultiAction {
 		ct.setExpenditures(calculations.getTotPlannedExp().toString());
 		ct.setSectors(SectorsToJson(activity));
 		ct.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
-		
+		for (Iterator iterator = activity.getLocations().iterator(); iterator.hasNext();) {
+			AmpActivityLocation alocation = (AmpActivityLocation) iterator.next();
+			if (alocation.getLocation().getLocation().getName().equalsIgnoreCase(request.getParameter("name"))){
+				ct.setCommitmentsforlocation(QueryUtil.getPercentage(calculations.getTotalCommitments().getValue(),new BigDecimal(alocation.getLocationPercentage())));
+				ct.setDisbursementsforlocation(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(alocation.getLocationPercentage())));
+				ct.setExpendituresforlocation(QueryUtil.getPercentage(calculations.getTotActualExp().getValue(),new BigDecimal(alocation.getLocationPercentage())));
+				break;
+			}
+		}
+
 		jsonArray.add(ct);
 		
 		PrintWriter pw;
@@ -352,33 +362,34 @@ public class DataDispatcher extends MultiAction {
 
 		JSONArray jsonArray = new JSONArray();
 		List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
+		
+		long startTS=System.currentTimeMillis();
 		list = DbHelper.getActivities(maphelperform.getFilter());
+		long endTS=System.currentTimeMillis();
+		logger.info("getActivities in "+(endTS-startTS)/1000.0+" seconds. ");
+		
 		Boolean isaggregatable = true;
+		logger.info("Iteration Starts");
+		startTS=System.currentTimeMillis();
 		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
 			ActivityPoint ap = new ActivityPoint();
 			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
 			ap.setId(aA.getIdentifier().toString());
 			ap.setAmpactivityid(aA.getAmpId());
 			ap.setActivityname(aA.getName());
-
-			FundingCalculationsHelper calculations = new FundingCalculationsHelper();
+			
 			Iterator fundItr = aA.getFunding().iterator();
 			ap.setDonors(new ArrayList<SimpleDonor>());
 			while (fundItr.hasNext()) {
 				AmpFunding ampFunding = (AmpFunding) fundItr.next();
 				Collection fundDetails = ampFunding.getFundingDetails();
-				calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
 				SimpleDonor donor = new SimpleDonor(); 
 				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
 				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
 				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 				ap.getDonors().add(donor);
 			}
-			//ap.setCommitments(calculations.getTotalCommitments().toString());
-			//ap.setDisbursements(calculations.getTotActualDisb().toString());
-			//ap.setExpenditures(calculations.getTotPlannedExp().toString());
-			//ap.setSectors(SectorsToJson(aA));
-			//ap.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
+			
 			ArrayList<SimpleLocation> sla = new ArrayList<SimpleLocation>();
 			for (Iterator iterator2 = aA.getLocations().iterator(); iterator2.hasNext();) {
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
@@ -412,13 +423,7 @@ public class DataDispatcher extends MultiAction {
 					} else {
 						sl.setIslocated(true);
 					}
-					if (alocation.getLocationPercentage()!=null){
-						sl.setCommitments(QueryUtil.getPercentage(calculations.getTotalCommitments().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-						sl.setDisbursements(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-						sl.setExpenditures(QueryUtil.getPercentage(calculations.getTotActualExp().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-					}
 					if (isfiltered){
-//						if (locationIds.contains(alocation.getLocation().getLocation().getId()) || locationIds.contains(alocation.getLocation().getRegionLocation().getId()) ){
 						if (locationIds.contains(alocation.getLocation().getLocation().getId())){
 							sla.add(sl);
 						}
@@ -436,7 +441,11 @@ public class DataDispatcher extends MultiAction {
 				jsonArray.add(ap);
 			}
 		}
-
+		
+		endTS=System.currentTimeMillis();
+		logger.info("iteration done in "+(endTS-startTS)/1000.0+" seconds. ");
+		
+		
 		PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());
 		pw.flush();
@@ -455,8 +464,8 @@ public class DataDispatcher extends MultiAction {
 		filter.setTeamMember(tm);
 
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue() - filter.getYearsInRange());
-		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		String implementationLevel = "";
 		if (request.getParameter("level") != null && request.getParameter("level").equals("Region")) { 
 			implementationLevel = "Region";
@@ -729,7 +738,7 @@ public class DataDispatcher extends MultiAction {
 		
 		if (request.getParameter("reset") != null){
 			
-			datadispatcherform.setFilter(QueryUtil.getNewFilter());
+			datadispatcherform.setFilter(QueryUtil.getNewFilter(request));
 			datadispatcherform.getFilter().setWorkspaceOnly(true);
 			return modeShowActivities(mapping, datadispatcherform, request, response);
 		}
@@ -746,7 +755,8 @@ public class DataDispatcher extends MultiAction {
 		datadispatcherform.getFilter().setSubSectorIds(getLongArrayFromParameter(request.getParameter("subSectorIds")));
 		datadispatcherform.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
 		datadispatcherform.getFilter().setZoneIds(getLongArrayFromParameter(request.getParameter("zoneIds")));
-		datadispatcherform.getFilter().setOrganizationsTypeId(Long.parseLong(request.getParameter("organizationsTypeId")));
+		datadispatcherform.getFilter().setSelStructureTypes(getLongArrayFromParameter(request.getParameter("structuresIds")));
+		
 		Long[] orgsGrpIds =  datadispatcherform.getFilter().getOrgGroupIds();
 		Long orgsGrpId =  datadispatcherform.getFilter().getOrgGroupId();
 		if (orgsGrpIds == null || orgsGrpIds.length == 0 || orgsGrpIds[0] == -1) {

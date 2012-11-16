@@ -11,10 +11,17 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.taglibs.standard.tag.rt.fmt.FormatNumberTag;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -32,8 +39,11 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.digijava.module.visualization.util.Constants;
+import org.digijava.module.visualization.util.DashboardUtil;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.GregorianChronology;
@@ -126,10 +136,10 @@ public class QueryUtil {
 		String qry = "";
 		if (orgGroupView) {
 			qry = " and  f.ampDonorOrgId.orgGrpId.ampOrgGrpId in ("
-					+ getInStatement(selectedOrgGroups,0) + ") ";
+					+ getInStatement(selectedOrgGroups) + ") ";
 		} else {
 			qry = " and f.ampDonorOrgId in ("
-					+ getInStatement(selectedOrganizations,0) + ") ";
+					+ getInStatement(selectedOrganizations) + ") ";
 		}
 		return qry;
 	}
@@ -137,34 +147,34 @@ public class QueryUtil {
 		String qry = "";
 		if (orgGroupView) {
 			qry = " and  role.organisation.ampOrgGrpId in ("
-					+ getInStatement(selectedOrgGroups,0) + ") and role.roleCode = '" + typeCode +"' ";
+					+ getInStatement(selectedOrgGroups) + ") and role.roleCode = '" + typeCode +"' ";
 		} else {
 			qry = " and role.organisation.orgGrpId in ("
-					+ getInStatement(selectedOrganizations,0) + ") and role.roleCode = '" + typeCode +"' ";
+					+ getInStatement(selectedOrganizations) + ") and role.roleCode = '" + typeCode +"' ";
 		}
 		return qry;
 	}	
 	public static String getOrganizationTypeQuery(boolean orgTypeView, Long[] selectedOrganizations, Long[] selectedtypes) {
 		String qry = "";
 		if (orgTypeView) {
-			qry = " and  f.ampDonorOrgId.orgGrpId.orgType in ("+ getInStatement(selectedtypes,0) + ") ";
+			qry = " and  f.ampDonorOrgId.orgGrpId.orgType in ("+ getInStatement(selectedtypes) + ") ";
 		} else {
-			qry = " and f.ampDonorOrgId in ("+ getInStatement(selectedOrganizations,0) + ") ";
+			qry = " and f.ampDonorOrgId in ("+ getInStatement(selectedOrganizations) + ") ";
 		}
 		return qry;
 	}
 
 	
-	public static String getInStatement(Long ids[], int start) {
-		String oql = "";
-		for (int i = start; i < ids.length; i++) {
-			oql += "" + ids[i];
-			if (i < ids.length - 1) {
-				oql += ",";
-			}
-		}
-		return oql;
-	}
+	public static String getInStatement(Long ids[]) {
+        String oql = "";
+        for (int i = 0; i < ids.length; i++) {
+            oql += "" + ids[i];
+            if (i < ids.length - 1) {
+                oql += ",";
+            }
+        }
+        return oql;
+    }
 
 	 public static String getInStatement(Object[] ids) {
 	        String oql = "";
@@ -248,11 +258,40 @@ public class QueryUtil {
         return orgIds;
     }    
     
-    public static MapFilter getNewFilter(){
+    public static MapFilter getNewFilter(HttpServletRequest request){
+    	String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
     	MapFilter filter = new MapFilter();
+    	//List<AmpOrgGroup> orgGroups = new ArrayList(DbUtil.getAllOrgGroups());
+		//filter.setOrgGroups(orgGroups);
     	
-    	List<AmpOrgGroup> orgGroups = new ArrayList(DbUtil.getAllOrgGroups());
+    	
+    	List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
 		filter.setOrgGroups(orgGroups);
+		List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupsWithOrgsList = new ArrayList<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>>();
+		for(AmpOrgGroup orgGroup:orgGroups){
+			List<AmpOrganisation> organizations=DbUtil.getOrganisationByGroupId(orgGroup.getAmpOrgGrpId());
+			orgGroupsWithOrgsList.add(new EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>(orgGroup,organizations));
+		}
+		filter.setOrgGroupWithOrgsList(orgGroupsWithOrgsList);
+		
+		if (filter.getRegions() == null) {
+			try {
+				filter.setRegions(new ArrayList<AmpCategoryValueLocations>(
+						DynLocationManagerUtil.
+						getRegionsOfDefCountryHierarchy()));
+				List<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>> regionWithZones = new ArrayList<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>>();
+				for(AmpCategoryValueLocations region:filter.getRegions()){
+					List<AmpCategoryValueLocations> zones=new ArrayList<AmpCategoryValueLocations>(region.getChildLocations());
+					regionWithZones.add(new EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>(region,zones));
+				}
+				filter.setRegionWithZones(regionWithZones);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+    	
 		List<AmpOrganisation> orgs = null;
 
 		if (filter.getOrgGroupId() == null || filter.getOrgGroupId() == -1) {
@@ -269,28 +308,60 @@ public class QueryUtil {
 		List<AmpOrgType> orgtypes = new ArrayList<AmpOrgType>(DbUtil.getAllOrgTypes());
 		filter.setOrganizationsType(orgtypes);
 		
-		List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());
-		filter.setSectors(sectors);
-
-		if (filter.getYear() == null) {
+		//List<AmpSector> sectors = new ArrayList(org.digijava.module.visualization.util.DbUtil.getAllSectors());
+		//filter.setSectors(sectors);
+		
+		try {
+			if(filter.getSelSectorConfigId()==null){
+					filter.setSelSectorConfigId(SectorUtil.getPrimaryConfigClassification().getId());
+			}
+			filter.setSectorConfigs(SectorUtil.getAllClassificationConfigs());
+			filter.setConfigWithSectorAndSubSectors(new ArrayList<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>>());
+			List<AmpSector> sectors = org.digijava.module.visualization.util.DbUtil.getParentSectorsFromConfig(filter.getSelSectorConfigId());
+			filter.setSectors(sectors);
+			for(AmpClassificationConfiguration config: filter.getSectorConfigs()){
+				List<AmpSector> currentConfigSectors = org.digijava.module.visualization.util.DbUtil.getParentSectorsFromConfig(config.getId());
+				List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorsWithSubSectors = new ArrayList<EntityRelatedListHelper<AmpSector,AmpSector>>();
+				for(AmpSector sector:currentConfigSectors){;
+					List<AmpSector> sectorList=new ArrayList<AmpSector>(sector.getSectors());
+					sectorsWithSubSectors.add(new EntityRelatedListHelper<AmpSector,AmpSector>(sector,sectorList));
+				}
+				filter.getConfigWithSectorAndSubSectors().add(new EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>(config,sectorsWithSubSectors));
+				}
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		if (filter.getStartYear() == null) {
 			Long year = null;
 			try {
-				year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+				year = Long.parseLong(FeaturesUtil
+						.getGlobalSettingValue("Current Fiscal Year"));
 			} catch (NumberFormatException ex) {
 				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
 			}
-			filter.setYear(year);
+			filter.setDefaultStartYear(year - 3);
+			filter.setStartYear(year - 3);
+			filter.setStartYearFilter(year - 3);
+			filter.setEndYear(year);
+			filter.setDefaultEndYear(year);
 		}
-		filter.setYears(new ArrayList<BeanWrapperImpl>());
-		long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
-		long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+		filter.setYears(new TreeMap<Integer, Integer>());
+		int yearFrom = Integer
+				.parseInt(FeaturesUtil
+						.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+		int countYear = Integer
+				.parseInt(FeaturesUtil
+						.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
 		long maxYear = yearFrom + countYear;
-		if (maxYear < filter.getYear()) {
-			maxYear = filter.getYear();
+		if (maxYear < filter.getStartYear()) {
+			maxYear = filter.getStartYear();
 		}
-		for (long i = yearFrom; i <= maxYear; i++) {
-			filter.getYears().add(new BeanWrapperImpl(new Long(i)));
+		for (int i = yearFrom; i <= maxYear; i++) {
+			filter.getYears().put(i, i);
 		}
+		
 
 		Collection calendars = DbUtil.getAllFisCalenders();
 		if (calendars != null) {

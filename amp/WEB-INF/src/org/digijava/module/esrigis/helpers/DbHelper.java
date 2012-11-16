@@ -37,6 +37,7 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
+import org.digijava.module.visualization.util.DashboardUtil;
 import org.digijava.module.visualization.util.DbUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
@@ -59,8 +60,8 @@ public class DbHelper {
 		TeamMember teamMember = filter.getTeamMember();
 		// apply calendar filter
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue() - filter.getYearsInRange());
-		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+        Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		Long[] locationIds = filter.getSelLocationIds();
 		boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
 		Long[] zonesids = filter.getZoneIds();
@@ -76,14 +77,14 @@ public class DbHelper {
 		 */
 		try {
 			String oql = "select distinct act from ";
-			oql += AmpFundingDetail.class.getName()
-					+ " as fd inner join fd.ampFundingId f ";
+			oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
 			oql += " inner join f.ampActivityId act ";
-	        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+	        
+			if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
 	        	oql += " inner join act.ampActivityGroupCached actGroup ";
 	        else
 	        	oql += " inner join act.ampActivityGroup actGroup ";
-			//oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
+			
 			if (locationCondition) {
 				oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 			}
@@ -102,7 +103,8 @@ public class DbHelper {
 		    if (filter.getProjectStatusId()!=null){
 		    	oql+=" join  act.categories as categories ";
 		    }
-			oql += "  where fd.adjustmentType = "+CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId();
+		    
+		    oql += "  where fd.adjustmentType = "+CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId();
 			if (filter.getTransactionType() < 2) {
 				oql += " and fd.transactionType =:transactionType  ";
 			} else {
@@ -134,15 +136,14 @@ public class DbHelper {
 			}
 			if (!zonescondition && locationCondition) {
             	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-				oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds,0) + ") ";
+				oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds) + ") ";
 			}else if (zonescondition){
 				zonesids = getAllDescendantsLocation(zonesids, DbUtil.getAmpLocations());
-				oql += " and loc.id in (" + QueryUtil.getInStatement(zonesids,1) + ") ";
+				oql += " and loc.id in (" + QueryUtil.getInStatement(zonesids) + ") ";
 			}
 			
 			if (sectorCondition) {
-	        	sectorIds = getAllDescendants(sectorIds, DbUtil.getAmpSectors());
-				oql += " and sec.id in (" + QueryUtil.getInStatement(sectorIds,0) + ") ";
+				oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
 			}
 			
 			//Organization Type
@@ -164,20 +165,24 @@ public class DbHelper {
 				oql += " and categories.id in ("+filter.getProjectStatusId()+") ";
 	        }
 			// On/Off budget
-			if (filter.getOnBudget() != null && !filter.getProjectStatusId().equals(0l)) {
-				oql += " and act.budget is not null";
+			if (filter.getOnBudget() != null && !filter.getProjectStatusId().equals(0)) {
+				if (filter.getOnBudget()==1){
+					oql += " and act.budget is not null";
+				}else{
+					oql += " and act.budget is null";
+				}
 	        }
 			// Type of assistance
 			if (filter.getTypeAssistanceId() != null && !filter.getTypeAssistanceId().equals(0l)) {
-				oql += " and categories.id in ("+filter.getTypeAssistanceId()+") ";
+				oql += " and f.typeOfAssistance in ("+filter.getTypeAssistanceId()+") ";
 	        }
 			// Financing instrument
 			if (filter.getFinancingInstrumentId() != null && !filter.getFinancingInstrumentId().equals(0l)) {
-				oql += " and categories.id in ("+filter.getFinancingInstrumentId()+") ";
+				oql += " and f.financingInstrument in ("+filter.getFinancingInstrumentId()+") ";
 	        }
 			// Structure Types
 			if(structureTypeCondition){
-				oql += " and str.type.typeId in ("+QueryUtil.getInStatement(filter.getSelStructureTypes(),0)+") ";
+				oql += " and str.type.typeId in ("+QueryUtil.getInStatement(filter.getSelStructureTypes())+") ";
 			}
 
 			oql += ActivityUtil.getApprovedActivityQueryString("act");
@@ -251,8 +256,8 @@ public class DbHelper {
 	        // apply calendar filter
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
 	        
-	        Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-	        Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+	        Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 	        Long[] sectorIds = filter.getSelSectorIds();
 	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 	        /*
@@ -372,8 +377,8 @@ public class DbHelper {
 	        // apply calendar filter
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
 	        
-	        Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getYear().intValue()-filter.getYearsInRange());
-	        Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getYear().intValue());
+	        Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
+	        Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 	        Long[] sectorIds = filter.getSelSectorIds();
 	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 	        /*

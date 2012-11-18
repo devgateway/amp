@@ -117,9 +117,9 @@ public class ExportActivityToPDF extends Action {
 	private static final com.lowagie.text.Font plainFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11,Font.NORMAL);
 	private static final com.lowagie.text.Font titleFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11,Font.BOLD);
 
-	private static final String [] fundingCommitmentsFMfields={"/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Adjustment Type","/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Transaction Date","/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Amount","/Activity Form/Donor Funding/Funding Item/Commitments/Commitments Table/Currency","/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate"};
-	private static final String [] fundingDisbursementsFMfields={"/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Adjustment Type","/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Transaction Date","/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Amount","/Activity Form/Donor Funding/Funding Item/Disbursements/Disbursements Table/Currency"};
-	private static final String [] fundingExpendituresFMfields={"/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Adjustment Type","/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Transaction Date","/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Amount","/Activity Form/Donor Funding/Funding Item/Expenditures/Expenditures Table/Currency"};
+	private static final String [] fundingCommitmentsFMfields={"/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type","/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date","/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount","/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency","/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate"};
+	private static final String [] fundingDisbursementsFMfields={"/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Adjustment Type","/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Transaction Date","/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Amount","/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Currency"};
+	private static final String [] fundingExpendituresFMfields={"/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Adjustment Type","/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Transaction Date","/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Amount","/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Currency"};
 	private static final String [] fundingDisbOrdersFMfields={"/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Adjustment Type","/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Transaction Date","/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Amount","/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Currency"};
 	
 	private static final String [] componentCommitmentsFMfields={"/Activity Form/Components/Component/Components Commitments","/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount","/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency","/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"};
@@ -961,7 +961,7 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 * funding
 			 */
-			if(teamMember!=null && FeaturesUtil.isVisibleModule("Funding", ampContext)){ //funding Information shouldn't be visible on Public View
+			if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding", ampContext)){ //funding Information shouldn't be visible on Public View
 				//PdfPTable fundingTable = buildFundingInformationPart(myForm,mainLayout);
 				buildFundingInformationPart(myForm,mainLayout,locale,siteId,ampContext);
 			}			
@@ -2401,7 +2401,7 @@ public class ExportActivityToPDF extends Action {
 	private void buildFundingInformationPart(EditActivityForm myForm,PdfPTable mainLayout,String locale,Long siteId,ServletContext ampContext) throws WorkerException, DocumentException {
 		Paragraph p1;
 		PdfPCell fundingCell1=new PdfPCell();
-		p1=new Paragraph(TranslatorWorker.translateText("Donor Fundings",locale,siteId),titleFont);
+		p1=new Paragraph(TranslatorWorker.translateText("Donor Funding",locale,siteId),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		fundingCell1.addElement(p1);
 		fundingCell1.setBackgroundColor(new Color(244,244,242));
@@ -2413,15 +2413,21 @@ public class ExportActivityToPDF extends Action {
 		boolean drawTotals=false; //draw total planned commitment,total actual commitments e.t.c.
 		if(myForm.getFunding().getFundingOrganizations()!=null){	
 			String currencyCode=myForm.getCurrCode()!=null?myForm.getCurrCode():"";
+
+			boolean visibleModuleCommitments = FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments", ampContext);
+			boolean visibleModuleDisbursements = FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements", ampContext);
+			boolean visibleModuleExpenditures = FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures", ampContext);
+			boolean visibleModuleDisbOrders = FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursement Orders", ampContext);
+			
 			for (FundingOrganization fundingOrganisation : myForm.getFunding().getFundingOrganizations()) {
 				if(fundingOrganisation.getFundings()!=null){
 					drawTotals=true;
 					for (Funding funding : (Collection<Funding>)fundingOrganisation.getFundings()) {
 						String output="";				
 						//general info rows
-						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding", ampContext)){
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification", ampContext)){
 							//funding org id
-							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Funding Organization Id", ampContext)){								 
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id", ampContext)){								 
 								PdfPCell foIdCell1=new PdfPCell();
 								foIdCell1.setBackgroundColor(new Color(221,221,221));
 								foIdCell1.setBorder(0);
@@ -2437,7 +2443,7 @@ public class ExportActivityToPDF extends Action {
 							}
 							
 							//funding org. name
-							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Donor Organisation", ampContext)){								
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Donor Organisation", ampContext)){								
 								PdfPCell foNameCell1=new PdfPCell();
 								foNameCell1.setBackgroundColor(new Color(221,221,221));
 								foNameCell1.setBorder(0);
@@ -2453,7 +2459,7 @@ public class ExportActivityToPDF extends Action {
 							}
 							
 							//funding org Assistance
-							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Type of Assistence", ampContext)){								
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", ampContext)){								
 								PdfPCell foAssitanceCell1=new PdfPCell();
 								foAssitanceCell1.setBackgroundColor(new Color(221,221,221));
 								foAssitanceCell1.setBorder(0);
@@ -2469,7 +2475,7 @@ public class ExportActivityToPDF extends Action {
 							}
 							
 							//Financial Instrument
-							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Financing Instrument", ampContext)){								
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", ampContext)){								
 								PdfPCell foInstrumentCell1=new PdfPCell();
 								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
 								foInstrumentCell1.setBorder(0);
@@ -2485,7 +2491,7 @@ public class ExportActivityToPDF extends Action {
 							}
 							
 							//Funding status
-							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Funding Status", ampContext)){
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Funding Status", ampContext)){
 								PdfPCell foInstrumentCell1=new PdfPCell();
 								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
 								foInstrumentCell1.setBorder(0);
@@ -2501,7 +2507,7 @@ public class ExportActivityToPDF extends Action {
 							}
 							
 							//Mode of Payment
-							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Mode of Payment", ampContext)){
+							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment", ampContext)){
 								PdfPCell foInstrumentCell1=new PdfPCell();
 								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
 								foInstrumentCell1.setBorder(0);
@@ -2515,28 +2521,25 @@ public class ExportActivityToPDF extends Action {
 								foInstrumentCell2.setBackgroundColor(new Color(221,221,221));
 								fundingTable.addCell(foInstrumentCell2);
 							}
-
-							//Donor objective
-							if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Donor Objective", ampContext)){								
-								PdfPCell donorObjCell1=new PdfPCell();
-								donorObjCell1.setBackgroundColor(new Color(221,221,221));
-								donorObjCell1.setBorder(0);
-								p1=new Paragraph(TranslatorWorker.translateText("Donor Objective",locale,siteId)+":",plainFont);
-								donorObjCell1.addElement(p1);
-								fundingTable.addCell(donorObjCell1);
-								//meaning
-								PdfPCell donorObjCell2=new PdfPCell();
-								p1=new Paragraph(funding.getDonorObjective(),plainFont);						
-								donorObjCell2.addElement(p1);
-								donorObjCell2.setBorder(0);
-								donorObjCell2.setColspan(2);
-								donorObjCell2.setBackgroundColor(new Color(221,221,221));
-								fundingTable.addCell(donorObjCell2);
-							}
+						}
+						//Donor objective
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Donor Objective", ampContext)){								
+							PdfPCell donorObjCell1=new PdfPCell();
+							donorObjCell1.setBackgroundColor(new Color(221,221,221));
+							donorObjCell1.setBorder(0);
+							p1=new Paragraph(TranslatorWorker.translateText("Donor Objective",locale,siteId)+":",plainFont);
+							donorObjCell1.addElement(p1);
+							fundingTable.addCell(donorObjCell1);
+							//meaning
+							PdfPCell donorObjCell2=new PdfPCell();
+							p1=new Paragraph(funding.getDonorObjective(),plainFont);						
+							donorObjCell2.addElement(p1);
+							donorObjCell2.setBorder(0);
+							donorObjCell2.setColspan(2);
+							donorObjCell2.setBackgroundColor(new Color(221,221,221));
+							fundingTable.addCell(donorObjCell2);
 						}
 											
-						
-						boolean visibleModuleCommitments = FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Commitments", ampContext);
 						if(visibleModuleCommitments){
 							//PLANNED COMITMENTS
 							boolean visibleCommitmentsExchRate = FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate", ampContext);
@@ -2588,7 +2591,8 @@ public class ExportActivityToPDF extends Action {
 						}
 						}
 						//DISBURSEMENTS
-						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Disbursements", ampContext)){
+
+						if(visibleModuleDisbursements){
 							output="";
 							//planned disbursement
 							if(FeaturesUtil.isVisibleField("Planned Disbursement Preview", ampContext)){
@@ -2639,7 +2643,8 @@ public class ExportActivityToPDF extends Action {
 							}
 							
 						//EXPENDITURES
-						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Expenditures", ampContext)){
+						
+						if(visibleModuleExpenditures){
 							//planned expenditures
 							output=TranslatorWorker.translateText("PLANNED EXPENDITURES:",locale,siteId);
 							if(myForm.getFunding().isFixerate()){
@@ -2686,7 +2691,8 @@ public class ExportActivityToPDF extends Action {
 						}
 						
 						//ACTUAL DISBURSMENT ORDERS
-						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Disbursement Orders", ampContext)){
+						
+						if(visibleModuleDisbOrders){
 							output=TranslatorWorker.translateText("ACTUAL DISBURSMENT ORDERS:",locale,siteId);
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
@@ -2745,7 +2751,7 @@ public class ExportActivityToPDF extends Action {
 				empty.setBackgroundColor(new Color(255,255,255));
 				empty.setColspan(3);
 				fundingTable.addCell(empty);							
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Commitments", ampContext)){
+				if(visibleModuleCommitments){
 					//TOTAL PLANNED COMMITMENTS
 					totalAmountType=TranslatorWorker.translateText("TOTAL PLANNED COMMITMENTS",locale,siteId)+":";
 					if(myForm.getFunding().getTotalPlannedCommitments()!=null && myForm.getFunding().getTotalPlannedCommitments().length()>0){
@@ -2763,7 +2769,7 @@ public class ExportActivityToPDF extends Action {
 				}
 
 				//TOTAL PLANNED DISBURSEMENT
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Disbursements", ampContext)){
+				if(visibleModuleDisbursements){
 					totalAmountType=TranslatorWorker.translateText("TOTAL PLANNED DISBURSEMENT",locale,siteId)+":";
 					totalsOutput="";
 					if(myForm.getFunding().getTotalPlannedDisbursements()!=null && myForm.getFunding().getTotalPlannedDisbursements().length()>0){
@@ -2782,7 +2788,7 @@ public class ExportActivityToPDF extends Action {
 				}				
 				
 				//TOTAL PLANNED EXPENDITURES
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Expenditures", ampContext)){
+				if(visibleModuleExpenditures){
 					totalAmountType=TranslatorWorker.translateText("TOTAL PLANNED EXPENDITURES",locale,siteId)+":";
 					totalsOutput="";
 					if(myForm.getFunding().getTotalPlannedExpenditures()!=null && myForm.getFunding().getTotalPlannedExpenditures().length()>0){
@@ -2800,7 +2806,7 @@ public class ExportActivityToPDF extends Action {
 				}
 				
 				//TOTAL ACTUAL DISBURSeMENT ORDERS:
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Disbursement Orders", ampContext)){
+				if(visibleModuleDisbOrders){
 					totalAmountType=TranslatorWorker.translateText("TOTAL ACTUAL DISBURSeMENT ORDERS",locale,siteId)+":";
 					totalsOutput="";
 					if(myForm.getFunding().getTotalActualDisbursementsOrders()!=null && myForm.getFunding().getTotalActualDisbursementsOrders().length()>0){

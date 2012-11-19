@@ -50,7 +50,7 @@ public class FeaturesUtil {
 
 	private static Logger logger = Logger.getLogger(FeaturesUtil.class);
 
-	private static Collection globalSettingsCache = null;
+	private static Collection<AmpGlobalSettings> globalSettingsCache = null;
 
 	private ServletContext ampContext = null;
 
@@ -58,20 +58,18 @@ public class FeaturesUtil {
 	
 	public static void logGlobalSettingsCache() {
 		String log = "";
-		Iterator iter = globalSettingsCache.iterator();
-		while (iter.hasNext()) {
-			AmpGlobalSettings ampGlobalSetting = (AmpGlobalSettings) iter.next();
+		for (AmpGlobalSettings ampGlobalSetting:globalSettingsCache) {
 			log = log + ampGlobalSetting.getGlobalSettingsName() + ":" +
 			ampGlobalSetting.getGlobalSettingsValue() + ";";
 		}
 		logger.info("GlobalSettingsCache is -> " + log);
 	}
 
-	public static synchronized Collection getGlobalSettingsCache() {
+	public static synchronized Collection<AmpGlobalSettings> getGlobalSettingsCache() {
 		return globalSettingsCache;
 	}
 
-	public static synchronized void setGlobalSettingsCache(Collection
+	public static synchronized void setGlobalSettingsCache(Collection<AmpGlobalSettings>
 			globalSettings) {
 		globalSettingsCache = globalSettings;
 	}
@@ -928,8 +926,8 @@ public class FeaturesUtil {
 	/*
 	 * to get all the Global settings
 	 */
-	public static Collection getGlobalSettings() {
-		Collection coll = null;
+	public static Collection<AmpGlobalSettings> getGlobalSettings() {
+		Collection<AmpGlobalSettings> coll = null;
 		Session session = null;
 		Transaction tx = null;
 		String qryStr = null;

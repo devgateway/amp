@@ -281,7 +281,7 @@ public abstract class XLSExporter extends Exporter {
 	}
 	
 	
-	public void makeColSpan(int size,Boolean border) {
+	public void makeColSpan(int size, Boolean border) {
 		size--;
 		if(size<0) size=0;
 	

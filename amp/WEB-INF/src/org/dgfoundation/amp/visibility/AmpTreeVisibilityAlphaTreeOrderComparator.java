@@ -6,7 +6,6 @@ package org.dgfoundation.amp.visibility;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import org.apache.poi.hssf.record.formula.functions.T;
 
 /**
  * @author dan

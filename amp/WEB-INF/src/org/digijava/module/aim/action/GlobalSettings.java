@@ -99,7 +99,7 @@ public class GlobalSettings extends Action {
 			auditTrialCleanerChanges();
 		}
 		
-		Collection col = FeaturesUtil.getGlobalSettings();
+		Collection<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
 		if (refreshGlobalSettingsCache) {
 			FeaturesUtil.setGlobalSettingsCache(col);
 			FeaturesUtil.logGlobalSettingsCache();
@@ -115,11 +115,8 @@ public class GlobalSettings extends Action {
 	    	
 		}
 		gsForm.setGsfCol(col);
-		Iterator itr = col.iterator();
-		while (itr.hasNext())
+		for (AmpGlobalSettings ampGS:col)
 		{
-			AmpGlobalSettings ampGS = (AmpGlobalSettings)itr.next();
-			
 			//TODO: Add a new field to identify fields that need multiselect activated.
 	 	 	if(ampGS.getGlobalSettingsValue().indexOf(";") != -1) {
 	 	 		ampGS.setListOfValues(ampGS.getGlobalSettingsValue().split(";"));
@@ -133,15 +130,12 @@ public class GlobalSettings extends Action {
 			 *  if t_type => the value is checked to be of the specified type
 			 */
 			String possibleValuesTable		= ampGS.getGlobalSettingsPossibleValues();
-			Collection possibleValues		= null;
-			Map possibleValuesDictionary	= null;
+			Collection<KeyValue> possibleValues		= null;
+			Map<String, String> possibleValuesDictionary	= null;
 			if ( possibleValuesTable != null && possibleValuesTable.length() != 0 && possibleValuesTable.startsWith("v_") ) {
 				possibleValues				= this.getPossibleValues(possibleValuesTable);
-				possibleValuesDictionary	= new HashMap();
-				Iterator pvIterator			= possibleValues.iterator();
-
-				while (pvIterator.hasNext()) {
-					KeyValue keyValue	= (KeyValue) pvIterator.next();
+				possibleValuesDictionary	= new HashMap<String, String>();
+				for(KeyValue keyValue:possibleValues){
 					possibleValuesDictionary.put(keyValue.getKey(), keyValue.getValue());
 				}
 			}
@@ -193,8 +187,7 @@ public class GlobalSettings extends Action {
 		boolean update = false;
 		String name;
 		String value;
-		for (Iterator iterator = col.iterator(); iterator.hasNext();) {
-			AmpGlobalSettings ampGls = (AmpGlobalSettings) iterator.next();
+		for (AmpGlobalSettings ampGls:col) {
 			name = ampGls.getGlobalSettingsName();
 			value = ampGls.getGlobalSettingsValue();
 			if (name.equalsIgnoreCase("Automatic Audit Logger Cleanup")) {
@@ -240,7 +233,7 @@ public class GlobalSettings extends Action {
 		else{
 			if(gsForm.getGlobalSettingsName().compareTo("Daily Currency Rates Update Enabled")==0){
 				if(gsForm.getGsfValue().compareTo("On")==0){
-					Collection<AmpGlobalSettings> ampGSCollection = (Collection<AmpGlobalSettings>)gsForm.getGsfCol();
+					Collection<AmpGlobalSettings> ampGSCollection = gsForm.getGsfCol();
 					String hour=null;
 					String timeout=null;
 					for(AmpGlobalSettings ampGS : ampGSCollection)
@@ -260,7 +253,7 @@ public class GlobalSettings extends Action {
 				}
 			}
 			if(gsForm.getGlobalSettingsName().compareTo("Daily Currency Rates Update Hour")==0){
-				Collection<AmpGlobalSettings> ampGSCollection = (Collection<AmpGlobalSettings>)gsForm.getGsfCol();
+				Collection<AmpGlobalSettings> ampGSCollection = gsForm.getGsfCol();
 				for(AmpGlobalSettings ampGS : ampGSCollection)
 				{
 					int val = ampGS.getGlobalSettingsName().compareTo("Daily Currency Rates Update Enabled");
@@ -276,9 +269,9 @@ public class GlobalSettings extends Action {
 
 
 
-	private Collection getPossibleValues(String tableName)
+	private Collection<KeyValue> getPossibleValues(String tableName)
 	{
-		Collection ret 	= new Vector();
+		Collection<KeyValue> ret 	= new Vector<KeyValue>();
 		Session session = null;
 		String qryStr = null;
 		Query qry = null;
@@ -300,7 +293,7 @@ public class GlobalSettings extends Action {
 				while (rs.next()){
 
 					logger.info("Values:" + rs.getString(1) + "," + rs.getString(2) );
-					KeyValue keyValue	= new KeyValue( rs.getObject(1)+"", rs.getString(2) );
+					KeyValue keyValue	= new KeyValue( rs.getString(1), rs.getString(2) );
 					ret.add( keyValue );
 				}
 				conn.close();

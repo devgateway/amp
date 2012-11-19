@@ -75,11 +75,11 @@ public class DashboardUtil {
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
 		for (Iterator<AmpOrganisation> iterator = agencyList.iterator(); iterator.hasNext();) {
 			AmpOrganisation ampOrg = (AmpOrganisation) iterator.next();
-			Long[] oldIds = filter.getOrgIds();
 			Long[] ids = {ampOrg.getAmpOrgId()};
-			filter.setOrgIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-            filter.setOrgIds(oldIds);
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setOrgIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+            //filter.setOrgIds(oldIds);
             BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(ampOrg, total);
 		}
@@ -143,10 +143,10 @@ public class DashboardUtil {
 		for (Iterator<AmpCategoryValueLocations> iterator = regionsList.iterator(); iterator.hasNext();) {
 			AmpCategoryValueLocations location = (AmpCategoryValueLocations) iterator.next();
 			Long[] ids = {location.getId()};
-			Long[] tempLocationsIds = filter.getSelLocationIds();
-			filter.setSelLocationIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-			filter.setSelLocationIds(tempLocationsIds);
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setSelLocationIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			//filter.setSelLocationIds(tempLocationsIds);
             BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             //Get Top Level Zone/Region
             AmpCategoryValueLocations topLevelLocation = getTopLevelLocation(location);
@@ -182,10 +182,10 @@ public class DashboardUtil {
 			}
 			tempLoc.setId(nationalLoc.getId());
             Long[] ids = {nationalLoc.getId()};
-			Long[] tempLocationsIds = filter.getSelLocationIds();
-			filter.setSelLocationIds(ids);
-			DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-			filter.setSelLocationIds(tempLocationsIds);
+            DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setSelLocationIds(ids);
+			DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			//filter.setSelLocationIds(tempLocationsIds);
             BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             map.put(tempLoc, total);
 			            
@@ -204,10 +204,9 @@ public class DashboardUtil {
 			}
 			tempLoc2.setId(0l);
             Long[] ids2 = {0l};
-			tempLocationsIds = filter.getSelLocationIds();
-			filter.setSelLocationIds(ids2);
-			fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-			filter.setSelLocationIds(tempLocationsIds);
+			newFilter.setSelLocationIds(ids2);
+			fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			//filter.setSelLocationIds(tempLocationsIds);
             total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
             map.put(tempLoc2, total);
 		return sortByValue (map);
@@ -229,11 +228,11 @@ public class DashboardUtil {
 			AmpSector sector = (AmpSector) iterator.next();
 			Long[] ids = {sector.getAmpSectorId()};
 			//Save sector selection
-			Long[] tempArray = filter.getSelSectorIds();
-			filter.setSelSectorIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setSelSectorIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			filter.setSelSectorIds(tempArray);
+			//filter.setSelSectorIds(tempArray);
             AmpSector topLevelSector = getTopLevelParent(sector);
             if(map.containsKey(topLevelSector)){
             	BigDecimal currentTotal = map.get(topLevelSector);
@@ -263,10 +262,11 @@ public class DashboardUtil {
 			AmpTheme program = (AmpTheme) iterator.next();
 			Long[] ids = {program.getAmpThemeId()};
 			//Save sector selection
-			filter.setSelProgramIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setSelProgramIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			filter.setSelProgramIds(null);
+			//filter.setSelProgramIds(null);
 			AmpTheme topLevelProgram = getTopLevelProgram(program);
             //if(map.containsKey(topLevelProgram)){
             //	BigDecimal currentTotal = map.get(topLevelProgram);
@@ -295,10 +295,10 @@ public class DashboardUtil {
 		for (Iterator<AmpSector> iterator = sectorsList.iterator(); iterator.hasNext();) {
 			AmpSector sector = (AmpSector) iterator.next();
 			Long[] ids = {sector.getAmpSectorId()};
-			Long[] temp = filter.getSelSectorIds();
-			filter.setSelSectorIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-            filter.setSectorIds(temp);
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			newFilter.setSelSectorIds(ids);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+            //filter.setSectorIds(temp);
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(sector, total);
 		}

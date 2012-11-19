@@ -502,6 +502,8 @@ function doExport(){
 	options += "&ODAGrowthOpt=" + getOptionChecked("export_ODAGrowth_");
 	options += "&fundingOpt=" + getOptionChecked("export_Fundings_");
 	options += "&aidPredicOpt=" + getOptionChecked("export_AidPredictability_");
+	options += "&aidPredicQuarterOpt=" + getOptionChecked("export_AidPredictabilityQuarter_");
+	options += "&budgetBreakdownOpt=" + getOptionChecked("export_BudgetBreakdown_");
 	options += "&aidTypeOpt=" + getOptionChecked("export_AidType_");
 	options += "&financingInstOpt=" + getOptionChecked("export_AidModality_");
 	options += "&organizationOpt=" + getOptionChecked("export_OrganizationProfile_");
@@ -1736,6 +1738,8 @@ function initDashboard(){
 			changeChart(null, 'donut', id, true);
 		else if (id.indexOf("Region")!=-1)
 			changeChart(null, 'line', id, true);
+		else if (id.indexOf("Budget")!=-1)
+			changeChart('start', 'donut', id, true);
 		else if (id.indexOf("Profile")!=-1)
 			changeChart(null, 'bar_profile', id, true);
 		else if (id.indexOf("Growth")!=-1)
@@ -1774,6 +1778,13 @@ function getValueToFlash(idContainer, field){
 	}
 	if (field == 'DecimalsToShow'){
 		return document.getElementById("decimalsToShow").value;
+	}
+	if (field == 'sliderThumbCount'){ //hardcode to show only one thumb in slider year selector for quarter graph
+		if (idContainer == 'AidPredictabilityQuarter') {
+			return 1;
+		} else {
+			return 2;
+		}
 	}
 	var inputObject = document.getElementById(idContainer + field);
 	var returnValue;

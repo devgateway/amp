@@ -255,10 +255,12 @@ public class VisualizationForm extends ActionForm {
 	}
 
 	public class ExportData {
+		private BufferedImage budgetGraph;
 		private BufferedImage NPOGraph;
 		private BufferedImage programGraph;
 		private BufferedImage fundingGraph;
 		private BufferedImage aidPredictabilityGraph;
+		private BufferedImage aidPredictabilityQuarterGraph;
 		private BufferedImage aidTypeGraph;
 		private BufferedImage financingInstGraph;
 		private BufferedImage organizationGraph;
@@ -266,9 +268,11 @@ public class VisualizationForm extends ActionForm {
 		private BufferedImage regionGraph;
 		private BufferedImage ODAGrowthGraph;
 		private String fundingTableData;
+		private String budgetTableData;
 		private String NPOTableData;
 		private String programTableData;
 		private String aidPredicTableData;
+		private String aidPredicQuarterTableData;
 		private String aidTypeTableData;
 		private String financingInstTableData;
 		private String organizationTableData;
@@ -277,6 +281,7 @@ public class VisualizationForm extends ActionForm {
 		private String ODAGrowthTableData;
 		private int exportFundingsOption = 3;
 		private int exportAidPredictabilityOption = 3;
+		private int exportAidPredictabilityQuarterOption = 3;
 		private int exportAidTypeOption = 3;
 		private int exportAidModalityOption = 3;
 		private int exportOrganizationProfileOption = 3;
@@ -287,6 +292,7 @@ public class VisualizationForm extends ActionForm {
 		private int exportSummaryOption = 1;	
 		private int exportTypeOption = 0;
 		private int exportODAGrowthOption = 3;
+		private int exportBudgetBreakdownOption = 3;
 		
 		public BufferedImage getAidPredictabilityGraph() {
 			return aidPredictabilityGraph;
@@ -542,6 +548,56 @@ public class VisualizationForm extends ActionForm {
 
 		public void setExportProgramProfileOption(int exportProgramProfileOption) {
 			this.exportProgramProfileOption = exportProgramProfileOption;
+		}
+
+		public BufferedImage getAidPredictabilityQuarterGraph() {
+			return aidPredictabilityQuarterGraph;
+		}
+
+		public void setAidPredictabilityQuarterGraph(
+				BufferedImage aidPredictabilityQuarterGraph) {
+			this.aidPredictabilityQuarterGraph = aidPredictabilityQuarterGraph;
+		}
+
+		public String getAidPredicQuarterTableData() {
+			return aidPredicQuarterTableData;
+		}
+
+		public void setAidPredicQuarterTableData(String aidPredicQuarterTableData) {
+			this.aidPredicQuarterTableData = aidPredicQuarterTableData;
+		}
+
+		public int getExportAidPredictabilityQuarterOption() {
+			return exportAidPredictabilityQuarterOption;
+		}
+
+		public void setExportAidPredictabilityQuarterOption(
+				int exportAidPredictabilityQuarterOption) {
+			this.exportAidPredictabilityQuarterOption = exportAidPredictabilityQuarterOption;
+		}
+
+		public BufferedImage getBudgetGraph() {
+			return budgetGraph;
+		}
+
+		public void setBudgetGraph(BufferedImage budgetGraph) {
+			this.budgetGraph = budgetGraph;
+		}
+
+		public String getBudgetTableData() {
+			return budgetTableData;
+		}
+
+		public void setBudgetTableData(String budgetTableData) {
+			this.budgetTableData = budgetTableData;
+		}
+
+		public int getExportBudgetBreakdownOption() {
+			return exportBudgetBreakdownOption;
+		}
+
+		public void setExportBudgetBreakdownOption(int exportBudgetBreakdownOption) {
+			this.exportBudgetBreakdownOption = exportBudgetBreakdownOption;
 		}
 
 	}

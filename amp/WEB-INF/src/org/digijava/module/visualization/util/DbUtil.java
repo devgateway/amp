@@ -1008,6 +1008,10 @@ public class DbUtil {
             oql += " inner join actProg.program prog ";
 		}
 
+        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
+        	oql += " inner join act.categories categ ";
+		}
+
         if (sectorCondition) {
             oql += "  inner join act.sectors actsec ";
             oql += "  inner join actsec.classificationConfig config  ";
@@ -1044,6 +1048,14 @@ public class DbUtil {
         	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
+
+        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
+        	if (filter.getSelCVIds()[0]==-1) {
+        		oql += " and categ.id NOT in ("+DashboardUtil.getInStatement(filter.getBudgetCVIds())+") ";
+			} else {
+				oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelCVIds())+") ";
+			}
+		}
 
         if (filter.getActivityId()!=null) {
             oql += " and act.ampActivityId =:activityId ";
@@ -1598,6 +1610,10 @@ public class DbUtil {
             oql += " inner join actProg.program prog ";
 		}
         
+        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
+        	oql += " inner join act.categories categ ";
+		}
+        
         if (sectorCondition) {
         	oql += " where config.id=:config and  fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         } else {
@@ -1629,6 +1645,13 @@ public class DbUtil {
         	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
 		}
         
+        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
+        	if (filter.getSelCVIds()[0]==-1) {
+        		oql += " and categ.id NOT in ("+DashboardUtil.getInStatement(filter.getBudgetCVIds())+") ";
+			} else {
+				oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelCVIds())+") ";
+			}
+		}
         if (filter.getActivityId()!=null) {
             oql += " and act.ampActivityId =:activityId ";
         }

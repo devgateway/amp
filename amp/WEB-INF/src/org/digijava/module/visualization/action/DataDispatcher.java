@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -747,12 +748,13 @@ public class DataDispatcher extends DispatchAction {
 	            sectorData += "<" + sec.getName() + ">";
 	            for (Long i = startYear; i <= endYear.intValue(); i++) {
 	            	Long[] ids = {sec.getAmpSectorId()};
-	            	Long[] temp = filter.getSelSectorIds();
-	    			filter.setSelSectorIds(ids);
+	            	//Long[] temp = filter.getSelSectorIds();
+	            	DashboardFilter newFilter = filter.getCopyFilterForFunding();
+	    			newFilter.setSelSectorIds(ids);
 	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-	                DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-	                filter.setSelSectorIds(temp);
+	                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	                //filter.setSelSectorIds(temp);
 	                BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	                sectorData += amount.compareTo(BigDecimal.ZERO) == 0 ? "0>" : amount.toPlainString() + ">";
 	                if (index <= 4){
@@ -1108,11 +1110,12 @@ public class DataDispatcher extends DispatchAction {
 	            programData += "<" + prog.getName() + ">";
 	            for (Long i = startYear; i <= endYear.intValue(); i++) {
 	            	Long[] ids = {prog.getAmpThemeId()};
-	    			filter.setSelProgramIds(ids);
+	            	DashboardFilter newFilter = filter.getCopyFilterForFunding();
+	    			newFilter.setSelProgramIds(ids);
 	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-	                DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-	                filter.setSelProgramIds(null);
+	                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	                //filter.setSelProgramIds(null);
 	                BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	                programData += amount.compareTo(BigDecimal.ZERO) == 0 ? "0>" : amount.toPlainString() + ">";
 	                if (index <= 4){
@@ -1449,12 +1452,12 @@ public class DataDispatcher extends DispatchAction {
                 organizationData += "<" + org.getName() + ">";
                 for (Long i = startYear; i <= endYear; i++) {
         			Long[] ids = {org.getAmpOrgId()};
-        			Long[] temp = filter.getOrgIds();
-        			filter.setOrgIds(ids);
+        			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+	    			newFilter.setOrgIds(ids);
                     startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-                    DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-                    filter.setOrgIds(temp);
+                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+                    //filter.setOrgIds(temp);
                     BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     organizationData += amount.compareTo(BigDecimal.ZERO) == 0 ? "0>" : amount.toPlainString() + ">";
 	                if (index <= 4){
@@ -1813,6 +1816,254 @@ public class DataDispatcher extends DispatchAction {
 		
 	}
         
+	public ActionForward getBudgetBreakdownGraphData(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws java.lang.Exception {
+		
+
+		VisualizationForm visualizationForm = (VisualizationForm) form;
+                String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+
+		DashboardFilter filter = visualizationForm.getFilter();
+		
+		String format = request.getParameter("format");
+		Integer selectedYear = request.getParameter("year") != null ? Integer.valueOf(request.getParameter("year")) : null;
+
+
+		//boolean typeOfAid = request.getParameter("typeofaid") != null ? Boolean.parseBoolean(request.getParameter("typeofaid")) : false;
+		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
+		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
+		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
+
+		Long startYear, endYear;
+		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("startYear"));
+			endYear = Long.parseLong(request.getParameter("endYear"));
+		}
+		else
+		{
+			startYear = filter.getStartYear();
+			endYear = filter.getEndYear();
+		}
+		
+		if(divide){
+			filter.setDivideThousands(true);
+		}
+
+        DefaultCategoryDataset result = new DefaultCategoryDataset();
+        BigDecimal divideByDenominator;
+        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+
+        Date startDate = null;
+        Date endDate = null;
+
+        Long fiscalCalendarId = filter.getFiscalCalendarId();
+        Collection<AmpCategoryValue> categoryValues = null;
+        
+        categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY);
+        
+		startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear.intValue());
+        endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
+        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+
+        
+        BigDecimal amtTotal = BigDecimal.ZERO;
+        HashMap<AmpCategoryValue, BigDecimal> hm = new HashMap<AmpCategoryValue, BigDecimal>();
+        
+        for (Iterator iterator = categoryValues.iterator(); iterator.hasNext();) {
+			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
+			DecimalWraper funding = null;
+			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			Long[] selCVIds = {ampCategoryValue.getId()};
+			newFilter.setSelCVIds(selCVIds);
+            funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+            amtTotal = amtTotal.add(funding.getValue());
+            hm.put(ampCategoryValue, funding.getValue());
+		}
+       
+        
+       if(format != null && format.equals("xml")){
+			
+			StringBuffer xmlString = new StringBuffer();
+			if(donut){
+				StringBuffer yearLabels = new StringBuffer();
+				for (int i = startDate.getYear(); i <= endDate.getYear(); i++) {
+					Date startDateTemp = DashboardUtil.getStartDate(fiscalCalendarId, 1900+i);
+					Date endDateTemp = DashboardUtil.getEndDate(fiscalCalendarId, 1900+i);
+					String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDateTemp, endDateTemp);
+					yearLabels.append(yearName);
+					if(i != endDate.getYear())
+						yearLabels.append(",");
+				}
+				if(amtTotal.compareTo(BigDecimal.ZERO) == 1){
+					Iterator<AmpCategoryValue> it = categoryValues.iterator();
+					Long[] budgetCVIds = new Long[categoryValues.size()];
+					int i = 0;
+					while (it.hasNext()){
+						AmpCategoryValue value = it.next();
+						budgetCVIds[i++] = value.getId();
+						DecimalWraper funding = null;
+						DashboardFilter newFilter = filter.getCopyFilterForFunding();
+						Long[] selCVIds = {value.getId()};
+						newFilter.setSelCVIds(selCVIds);
+		                funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+						BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
+		                if(percentage.compareTo(new BigDecimal(1)) == 1){
+	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                	}
+					}
+					DashboardFilter newFilter = filter.getCopyFilterForFunding();
+					Long[] selCVIds = {-1l};
+					newFilter.setSelCVIds(selCVIds);
+					newFilter.setBudgetCVIds(budgetCVIds);
+	                DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+					BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
+	                if(percentage.compareTo(new BigDecimal(1)) == 1){
+                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" id=\"-1\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+                	}
+				} else {
+					xmlString.append("<dataField name=\"\">\n");
+					xmlString.append("</dataField>\n");
+				}
+			}
+			else
+			{
+				String budgetData = "";
+				
+                for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
+					startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+					endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+					String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+					xmlString.append("<year name=\"" + yearName + "\">\n");
+					budgetData += "<" + yearName;
+					Iterator<AmpCategoryValue> it = categoryValues.iterator();
+					Long[] budgetCVIds = new Long[categoryValues.size()];
+					int j = 0;
+					boolean hasValues = false;
+					while (it.hasNext()){
+						AmpCategoryValue value = it.next();
+						budgetCVIds[j++] = value.getId();
+						BigDecimal totalCategory = hm.get(value);
+						if(!totalCategory.equals(BigDecimal.ZERO)){
+			                DecimalWraper funding = null;
+			                DashboardFilter newFilter = filter.getCopyFilterForFunding();
+							Long[] selCVIds = {value.getId()};
+							newFilter.setSelCVIds(selCVIds);
+		                    funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			                hasValues = true;
+							xmlString.append("<dataField category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+							budgetData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+						}
+						else
+						{
+							budgetData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+						}
+					}
+					DashboardFilter newFilter = filter.getCopyFilterForFunding();
+					Long[] selCVIds = {-1l};
+					newFilter.setSelCVIds(selCVIds);
+					newFilter.setBudgetCVIds(budgetCVIds);
+	                DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+					xmlString.append("<dataField category=\"" +TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" id=\"-1\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+					if (!hasValues){
+						xmlString.append("<dataField category=\"Category\" id=\"0\" amount=\"0.00\" year=\"" + yearName + "\"/>\n");
+					}
+					xmlString.append("</year>\n");
+				}
+		        visualizationForm.getExportData().setBudgetTableData(budgetData);
+			}
+			if(divide){
+				filter.setDivideThousands(false);
+			}
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
+			
+			PrintWriter out = new PrintWriter(new OutputStreamWriter(
+					response.getOutputStream(), "UTF-8"), true);
+			out.println(xmlString.toString());
+			out.close();
+			return null;
+		}
+        
+        
+        
+        StringBuffer csvString = new StringBuffer();
+        String text = TranslatorWorker.translateText("Year",locale, siteId);
+
+		csvString.append("\"" + text + "\"");
+		csvString.append(",");
+		Iterator<AmpCategoryValue> it = categoryValues.iterator();
+		while (it.hasNext()){
+			AmpCategoryValue value = it.next();
+            String title = TranslatorWorker.translateText(value.getValue(),locale, siteId);
+			csvString.append("\"");
+			csvString.append(title);
+			csvString.append("#");
+            csvString.append(value.getId());
+			csvString.append("\"");
+			csvString.append(",");
+		}
+		String title = TranslatorWorker.translateText("Unallocated",locale, siteId);
+		csvString.append("\"");
+		csvString.append(title);
+		csvString.append("#");
+        csvString.append("-1");
+		csvString.append("\"");
+		csvString.append("\n");
+		
+		BigDecimal total = new BigDecimal(0);
+        for (Long i = startYear; i <= endYear; i++) {
+            startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+            endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+    		csvString.append(yearName);
+    		csvString.append(",");
+    		it = categoryValues.iterator();
+    		Long[] budgetCVIds = new Long[categoryValues.size()];
+			int j = 0;
+			while (it.hasNext()){
+    			AmpCategoryValue value = it.next();
+    			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+    			budgetCVIds[j++] = value.getId();
+				Long[] selCVIds = {value.getId()};
+				newFilter.setSelCVIds(selCVIds);
+                DecimalWraper funding = null;
+                funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+        		csvString.append(funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+        		total = total.add(funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+				csvString.append(",");
+    		}
+    		DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			Long[] selCVIds = {-1l};
+			newFilter.setSelCVIds(selCVIds);
+			newFilter.setBudgetCVIds(budgetCVIds);
+            DecimalWraper funding = null;
+            funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+    		csvString.append(funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+    		total = total.add(funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append("\n");
+        }
+        if(total.intValue()==0){
+        	csvString = new StringBuffer();
+        	csvString.append("Year");
+        }
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		response.setHeader("Pragma", "no-cache");
+		response.setDateHeader("Expires", 0);
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(
+    			response.getOutputStream(), "UTF-8"), true);
+
+    	out.println(csvString.toString());
+
+    	out.close();
+
+    	return null;
+		
+	}
 	
 	public ActionForward getAidPredictabilityGraphData(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
@@ -1939,6 +2190,260 @@ public class DataDispatcher extends DispatchAction {
 			}
 			csvString.append("\n");
 		}
+		if (nodata) {
+//			result = new DefaultCategoryDataset();
+		}
+		if(total.intValue()==0){
+        	csvString = new StringBuffer();
+        	csvString.append("Year");
+        }
+		if(divide){
+			filter.setDivideThousands(false);
+		}
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		response.setHeader("Pragma", "no-cache");
+		response.setDateHeader("Expires", 0);
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(
+				response.getOutputStream(), "UTF-8"), true);
+
+		out.println(csvString.toString());
+
+		out.close();
+
+		return null;
+	}
+	
+	public ActionForward getAidPredictabilityQuarterGraphData(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws java.lang.Exception {
+
+		VisualizationForm visualizationForm = (VisualizationForm) form;
+		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+
+		DashboardFilter filter = visualizationForm.getFilter();
+		
+		String format = request.getParameter("format");
+		
+		boolean nodata = true; // for displaying no data message
+		boolean donut = request.getParameter("donut") != null ? Boolean.parseBoolean(request.getParameter("donut")) : false;
+		boolean linechart = request.getParameter("linechart") != null ? Boolean.parseBoolean(request.getParameter("linechart")) : false;
+		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
+
+		Long startYear, endYear;
+		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
+				&& !request.getParameter("startYear").toString().equalsIgnoreCase("") && !request.getParameter("endYear").toString().equalsIgnoreCase(""))
+		{
+			startYear = Long.parseLong(request.getParameter("startYear"));
+			endYear = Long.parseLong(request.getParameter("endYear"));
+		}
+		else
+		{
+			startYear = filter.getStartYear();
+			endYear = filter.getEndYear();
+		}
+
+		if(divide){
+			filter.setDivideThousands(true);
+		}
+
+		BigDecimal divideByDenominator;
+        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+
+		Long currId = filter.getCurrencyId();
+		String currCode;
+		if (currId == null) {
+			currCode = "USD";
+			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currCode);
+			filter.setCurrencyId(currency.getAmpCurrencyId());
+			
+		} else {
+			currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+		}
+
+		Long fiscalCalendarId = filter.getFiscalCalendarId();
+
+		String plannedTitle = TranslatorWorker.translateText("Planned", locale, siteId);
+        String actualTitle = TranslatorWorker.translateText("Actual", locale, siteId); ;
+
+		if(format != null && format.equals("xml")){
+			StringBuffer xmlString = new StringBuffer();
+			//Loop funding types
+			String aidPredData = "";
+            //for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
+				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, endYear.intValue());
+				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
+				Calendar cal = Calendar.getInstance();  
+				String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+				String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+				DecimalWraper fundingPlanned = null;
+				DecimalWraper fundingActual = null;
+				Date startDateQ = null;
+				Date endDateQ = null;
+				//Q1
+				startDateQ = startDate;
+				cal.setTime(startDate);  
+				cal.add(Calendar.MONTH, 3); // add 3 month for quarter  
+				endDateQ = cal.getTime();
+				xmlString.append("<year name=\"" + yearName + "\r\n-Q1-\">\n");
+				aidPredData += "<" + yearName;
+	            fundingPlanned = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
+				xmlString.append("<dataField category=\""+plannedTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey() + "\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				aidPredData += ">Planned>" + fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				fundingActual = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				xmlString.append("<dataField category=\""+actualTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey() + "\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				aidPredData += ">Actual>" + fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				xmlString.append("</year>\n");
+				//Q2
+				startDateQ = endDateQ;
+				cal.setTime(startDate);  
+				cal.add(Calendar.MONTH, 6); // add 3 month for quarter  
+				endDateQ = cal.getTime();
+				xmlString.append("<year name=\"" + yearName + "\r\n-Q2-\">\n");
+				aidPredData += "<" + yearName;
+	            fundingPlanned = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
+				xmlString.append("<dataField category=\""+plannedTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey() + "\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				aidPredData += ">Planned>" + fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				fundingActual = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				xmlString.append("<dataField category=\""+actualTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey() + "\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				aidPredData += ">Actual>" + fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				xmlString.append("</year>\n");
+				//Q3
+				startDateQ = endDateQ;
+				cal.setTime(startDate);  
+				cal.add(Calendar.MONTH, 9); // add 3 month for quarter  
+				endDateQ = cal.getTime();
+				xmlString.append("<year name=\"" + yearName + "\r\n-Q3-\">\n");
+				aidPredData += "<" + yearName;
+	            fundingPlanned = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
+				xmlString.append("<dataField category=\""+plannedTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey() + "\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				aidPredData += ">Planned>" + fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				fundingActual = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				xmlString.append("<dataField category=\""+actualTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey() + "\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				aidPredData += ">Actual>" + fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				xmlString.append("</year>\n");
+				//Q4
+				startDateQ = endDateQ;
+				endDateQ = endDate;
+				xmlString.append("<year name=\"" + yearName + "\r\n-Q4-\">\n");
+				aidPredData += "<" + yearName;
+	            fundingPlanned = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
+				xmlString.append("<dataField category=\""+plannedTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey() + "\" amount=\""+ fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				aidPredData += ">Planned>" + fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				fundingActual = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				xmlString.append("<dataField category=\""+actualTitle+"\" id=\"" + CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey() + "\" amount=\""+ fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				aidPredData += ">Actual>" + fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				xmlString.append("</year>\n");
+				
+			//}
+			
+			visualizationForm.getExportData().setAidPredicQuarterTableData(aidPredData);
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Pragma", "no-cache");
+			response.setDateHeader("Expires", 0);
+			PrintWriter out = new PrintWriter(new OutputStreamWriter(
+					response.getOutputStream(), "UTF-8"), true);
+
+			out.println(xmlString.toString());
+
+			out.close();
+
+			return null;
+			
+			
+		}
+        
+        
+        StringBuffer csvString = new StringBuffer();
+        String text = TranslatorWorker.translateText("Period",locale, siteId);
+
+		csvString.append("\"" + text + "\"");
+		csvString.append(",");
+		csvString.append("\"" + plannedTitle);
+		csvString.append("#");
+        csvString.append(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey() + "\"");
+        csvString.append(",");
+		csvString.append("\"" + actualTitle);
+		csvString.append("#");
+        csvString.append(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey() + "\"");
+        csvString.append("\n");
+        BigDecimal total = new BigDecimal(0);
+        
+        //for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
+            // apply calendar filter
+            Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, endYear.intValue());
+            Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
+	        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+			
+			Calendar cal = Calendar.getInstance();  
+			DecimalWraper fundingPlanned = null;
+			DecimalWraper fundingActual = null;
+			Date startDateQ = null;
+			Date endDateQ = null;
+			//Q1
+			startDateQ = startDate;
+			cal.setTime(startDate);  
+			cal.add(Calendar.MONTH, 3); // add 3 month for quarter  
+			endDateQ = cal.getTime();
+			csvString.append(yearName+ " - Q1");
+			csvString.append(",");
+            fundingPlanned = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
+			csvString.append(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			total = total.add(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append(",");
+            fundingActual = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			csvString.append(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			total = total.add(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append("\n");
+			//Q2
+			startDateQ = endDateQ;
+			cal.setTime(startDate);  
+			cal.add(Calendar.MONTH, 6); // add 3 month for quarter  
+			endDateQ = cal.getTime();
+			csvString.append(yearName+ " - Q2");
+			csvString.append(",");
+            fundingPlanned = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
+			csvString.append(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			total = total.add(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append(",");
+            fundingActual = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			csvString.append(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			total = total.add(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append("\n");
+			//Q3
+			startDateQ = endDateQ;
+			cal.setTime(startDate);  
+			cal.add(Calendar.MONTH, 9); // add 3 month for quarter  
+			endDateQ = cal.getTime();
+			csvString.append(yearName+ " - Q3");
+			csvString.append(",");
+            fundingPlanned = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
+			csvString.append(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			total = total.add(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append(",");
+            fundingActual = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			csvString.append(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			total = total.add(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append("\n");
+			//Q4
+			startDateQ = endDateQ;
+			endDateQ = endDate;
+			csvString.append(yearName+ " - Q4");
+			csvString.append(",");
+            fundingPlanned = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
+			csvString.append(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			total = total.add(fundingPlanned.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append(",");
+            fundingActual = DbUtil.getFunding(filter, startDateQ, endDateQ,null,null,filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			csvString.append(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			total = total.add(fundingActual.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
+			csvString.append("\n");
+			
+			if (fundingPlanned.doubleValue() != 0 || fundingActual.doubleValue() != 0) {
+				nodata = false;
+			}
+		//}
 		if (nodata) {
 //			result = new DefaultCategoryDataset();
 		}
@@ -2626,12 +3131,12 @@ public class DataDispatcher extends DispatchAction {
 	            regionData += "<" + loc.getName() + ">";
                 for (Long i = startYear; i <= endYear; i++) {
                 	Long[] ids = {loc.getId()};
-        			Long[] tempLocationsIds = filter.getSelLocationIds();
-        			filter.setSelLocationIds(ids);
+                	DashboardFilter newFilter = filter.getCopyFilterForFunding();
+	    			newFilter.setSelLocationIds(ids);
 	                startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
 	                endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-	                DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-	                filter.setSelLocationIds(tempLocationsIds);
+	                DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	                //filter.setSelLocationIds(tempLocationsIds);
 	                BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	                regionData += amount.compareTo(BigDecimal.ZERO) == 0 ? "0>" : amount.toPlainString() + ">";
 	                if (index <= 4){
@@ -2756,6 +3261,7 @@ public class DataDispatcher extends DispatchAction {
 	      
 	}	
 
+	
 	public ActionForward getODAGrowthGraphData(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
@@ -2917,16 +3423,16 @@ public class DataDispatcher extends DispatchAction {
 	        for (Iterator iterator = organizationList.iterator(); iterator.hasNext();) {
 				AmpOrganisation ampOrganisation = (AmpOrganisation) iterator.next();
 				Long[] ids = {ampOrganisation.getAmpOrgId()};
-				Long[] temp = filter.getOrgIds();
-				filter.setOrgIds(ids);
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+    			newFilter.setOrgIds(ids);
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, year.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, year.intValue());
-	            DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	            BigDecimal amtCurrentYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, previousYear.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, previousYear.intValue());
-	            fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-	            filter.setOrgIds(temp);
+	            fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+	            //filter.setOrgIds(temp);
 	            BigDecimal amtPreviousYear = fundingCal.getValue().divide(divideByMillionDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	            if (amtCurrentYear.compareTo(BigDecimal.ZERO) == 1 && amtPreviousYear.compareTo(BigDecimal.ZERO) == 1){
 	            	BigDecimal growthPercent = amtCurrentYear.divide(amtPreviousYear, RoundingMode.HALF_UP).subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
@@ -3044,6 +3550,10 @@ public class DataDispatcher extends DispatchAction {
 	                if (graph.equals("AidPredictability")) {
 						vForm.getExportData().setAidPredictabilityGraph(image);
 						logger.info("Creating image from Aid Predictability graph");
+	                }
+	                if (graph.equals("AidPredictabilityQuarter")) {
+						vForm.getExportData().setAidPredictabilityQuarterGraph(image);
+						logger.info("Creating image from Aid Predictability Quarterly graph");
 	                }
 	                if (graph.equals("AidType")) {
 						vForm.getExportData().setAidTypeGraph(image);

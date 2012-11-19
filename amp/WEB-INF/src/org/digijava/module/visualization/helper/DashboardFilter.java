@@ -61,6 +61,8 @@ public class DashboardFilter {
     private Long[] zoneIds;
     private Long zoneId;
     
+    private Long[] budgetCVIds;
+    private Long[] selCVIds;
     private Long[] selProgramIds;
     private Long[] selSectorIds;
     private Long[] selLocationIds;
@@ -126,7 +128,8 @@ public class DashboardFilter {
     	DashboardFilter newFilter = new DashboardFilter();
     	
     	newFilter.setCurrencyId(this.getCurrencyId());
-    	newFilter.setOrgIds(this.getOrgIds());
+    	newFilter.setSelOrgIds(this.getOrgIds());
+    	newFilter.setOrgGroupIds(this.getOrgGroupIds());
     	newFilter.setOrgGroupId(this.getOrgGroupId());
     	newFilter.setTeamMember(this.getTeamMember());
     	newFilter.setSelLocationIds(this.getSelLocationIds());
@@ -138,6 +141,10 @@ public class DashboardFilter {
     	newFilter.setSelSectorConfigId(this.getSelSectorConfigId());
     	newFilter.setAllSectorList(this.getAllSectorList());
     	newFilter.setTransactionType(this.getTransactionType());
+    	newFilter.setAgencyType(this.getAgencyType());
+    	newFilter.setSelProgramIds(this.getSelProgramIds());
+    	newFilter.setSelCVIds(this.getSelCVIds());
+    	newFilter.setBudgetCVIds(this.getBudgetCVIds());
     	return newFilter;
     }
 	
@@ -893,6 +900,22 @@ public class DashboardFilter {
 
 	public void setShowProgramsRanking(Boolean showProgramsRanking) {
 		this.showProgramsRanking = showProgramsRanking;
+	}
+
+	public Long[] getSelCVIds() {
+		return selCVIds;
+	}
+
+	public void setSelCVIds(Long[] selCVIds) {
+		this.selCVIds = selCVIds;
+	}
+
+	public Long[] getBudgetCVIds() {
+		return budgetCVIds;
+	}
+
+	public void setBudgetCVIds(Long[] budgetCVIds) {
+		this.budgetCVIds = budgetCVIds;
 	}
 
 	

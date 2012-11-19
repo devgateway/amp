@@ -839,31 +839,7 @@ function initializeGlobalVariables(){
 				</td>
 			</tr>
 		</c:if>
-		<tr>
-			<td><digi:trn>Type of Funding</digi:trn>:
-		 	</td>
-			<td align="right">
-				<html:select property="filter.transactionTypeQuickFilter" styleId="transactionType_dropdown" styleClass="dropdwn_sm" style="width:145px;">
-					<html:option value="0"><digi:trn>Commitments</digi:trn></html:option>
-					<html:option value="1"><digi:trn>Disbursements</digi:trn></html:option>
-					<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
-				</html:select>
-		 	</td>
-		</tr>
-		<c:if test="${visualizationform.filter.dashboardType==1}">
-			<tr>
-				<td><digi:trn>Type of Agency</digi:trn>:
-			 	</td>
-				<td align="right">
-					<html:select property="filter.agencyTypeQuickFilter" styleId="agencyTypeQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
-						<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
-						<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
-						<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
-					</html:select>
-			 	</td>
-			</tr>
-		</c:if>
-		<tr>
+		
 			<td><digi:trn>Currency Type</digi:trn>:
 		 	</td>
 			<td align="right">
@@ -1086,6 +1062,37 @@ function initializeGlobalVariables(){
 	<hr />
 	<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm"><digi:trn>Advanced Filters</digi:trn></a></div></div>
 	</center>
+</fieldset>
+
+<fieldset>
+	<legend><span class=legend_label><digi:trn>Data Source</digi:trn></span></legend>
+	<table cellspacing="0" cellpadding="0" width="100%"> 
+		<tr>
+			<td><b><digi:trn>Type of Funding</digi:trn>:</b>
+		 	</td>
+			<td align="right">
+				<html:select property="filter.transactionTypeQuickFilter" styleId="transactionType_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+					<html:option value="0"><digi:trn>Commitments</digi:trn></html:option>
+					<html:option value="1"><digi:trn>Disbursements</digi:trn></html:option>
+					<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
+				</html:select>
+		 	</td>
+		</tr>
+		<c:if test="${visualizationform.filter.dashboardType==1}">
+			<tr>
+				<td><b><digi:trn>Type of Agency</digi:trn>:</b>
+			 	</td>
+				<td align="right">
+					<html:select property="filter.agencyTypeQuickFilter" styleId="agencyTypeQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+						<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
+						<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
+						<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
+					</html:select>
+			 	</td>
+			</tr>
+		</c:if>
+		<tr>
+	</table>
 </fieldset>
 
 <fieldset>

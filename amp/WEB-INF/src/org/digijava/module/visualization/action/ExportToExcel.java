@@ -59,6 +59,8 @@ public class ExportToExcel extends Action {
         String ODAGrowthOpt = request.getParameter("ODAGrowthOpt");
         String fundingOpt = request.getParameter("fundingOpt");
         String aidPredicOpt = request.getParameter("aidPredicOpt");
+        String aidPredicQuarterOpt = request.getParameter("aidPredicQuarterOpt");
+        String budgetBreakdownOpt = request.getParameter("budgetBreakdownOpt");
         String aidTypeOpt = request.getParameter("aidTypeOpt");
         String financingInstOpt = request.getParameter("financingInstOpt");
         String organizationOpt = request.getParameter("organizationOpt");
@@ -97,9 +99,11 @@ public class ExportToExcel extends Action {
 	        String sectorTrn = TranslatorWorker.translateText("Sector", langCode, siteId);
 	        String organizationTrn = TranslatorWorker.translateText("Organization", langCode, siteId);
 	        String NPOTrn = TranslatorWorker.translateText("NPO", langCode, siteId);
-	        String programTrn = TranslatorWorker.translateText("Program", langCode, siteId);
+	        String budgetBreakdownTrn = TranslatorWorker.translateText("Budget Breakdown", langCode, siteId);
+            String programTrn = TranslatorWorker.translateText("Program", langCode, siteId);
 	        String regionTrn = TranslatorWorker.translateText("Region", langCode, siteId);
 	        String aidPredTrn = TranslatorWorker.translateText("Aid Predictability", langCode, siteId);
+	        String aidPredQuarterTrn = TranslatorWorker.translateText("Aid Predictability Quarterly", langCode, siteId);
 	        String aidTypeTrn = TranslatorWorker.translateText("Aid Type", langCode, siteId);
 	        String finInstTrn = TranslatorWorker.translateText("Financing Instrument", langCode, siteId);
 	        String sectorProfTrn = TranslatorWorker.translateText("Sector Profile", langCode, siteId);
@@ -110,6 +114,7 @@ public class ExportToExcel extends Action {
 	        String plannedTrn = TranslatorWorker.translateText("Planned", langCode, siteId);
 	        String actualTrn = TranslatorWorker.translateText("Actual", langCode, siteId);
 	        String yearTrn = TranslatorWorker.translateText("Year", langCode, siteId);
+	        String quarterTrn = TranslatorWorker.translateText("Quarter", langCode, siteId);
 	        String dashboardTrn = TranslatorWorker.translateText("Dashboard", langCode, siteId);
 	        String summaryTrn = TranslatorWorker.translateText("Summary", langCode, siteId);
 	        String totalCommsTrn = TranslatorWorker.translateText("Total Commitments", langCode, siteId);
@@ -759,6 +764,161 @@ public class ExportToExcel extends Action {
 			    }
 		    }
 		    
+		  //Aid Predictability Quarter Table.
+	        HSSFSheet sheet11 = null;
+			if (!aidPredicQuarterOpt.equals("0")){
+		    	sheet11 = wb.createSheet(aidPredQuarterTrn);
+		    	rowNum=1;
+		    }
+		    if (aidPredicQuarterOpt.equals("1") || aidPredicQuarterOpt.equals("3")){
+		    	//rowNum = rowNum + 2;
+		        cellNum = 0;
+		        
+		        headerText = null;
+	        	row = sheet11.createRow(rowNum++);
+	        	cell = row.createCell(cellNum++);
+	        	String[] aidPredQuarterRows = vForm.getExportData().getAidPredicQuarterTableData().split("<");
+	            
+	        	headerText = new HSSFRichTextString(aidPredQuarterTrn + " (" + currName + ")");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            cellNum = 0;
+	            row = sheet11.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(quarterTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(plannedTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(actualTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            
+	            for (int i = 1; i < aidPredQuarterRows.length; i++) {
+		        	cellNum = 0;
+			        row = sheet11.createRow(rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == aidPredQuarterRows.length-1)
+			    		st = lastCellStyle;
+		            else
+		            	st = cellStyle;
+	            	singleRow = aidPredQuarterRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j=j+2) {
+	            		cell = row.createCell(cellNum++);
+	 		            headerText = new HSSFRichTextString(singleRow[j]);
+	 		            cell.setCellValue(headerText);
+	 		            cell.setCellStyle(st);
+	    			}
+				}
+		    }
+		    
+		    if (aidPredicQuarterOpt.equals("2") || aidPredicQuarterOpt.equals("3")){
+		    	rowNum++;
+		    	rowNum++;
+		        cellNum = 0;
+		        row = sheet11.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(aidPredQuarterTrn + " Chart");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(headerCS);
+	            
+		        ByteArrayOutputStream ba1 = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getAidPredictabilityQuarterGraph(), "png", ba1);
+	            int pictureIndex1 = wb.addPicture(ba1.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+	            HSSFPatriarch patriarch1 = sheet11.createDrawingPatriarch();
+	            HSSFPicture pic1 =  patriarch1.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)(cellNum+1), rowNum+25), pictureIndex1);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic1.getAnchor();
+	            anchor.setCol2((short)5);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic1.resize();
+		    }
+		    
+		  //Budget Breakdown Table.
+			if (!budgetBreakdownOpt.equals("0")){
+		    	sheet11 = wb.createSheet(budgetBreakdownTrn);
+		    	rowNum=1;
+		    }
+		    if (budgetBreakdownOpt.equals("1") || budgetBreakdownOpt.equals("3")){
+		    	//rowNum = rowNum + 2;
+		        cellNum = 0;
+		        
+		        headerText = null;
+	        	row = sheet11.createRow(rowNum++);
+	        	cell = row.createCell(cellNum++);
+	        	String[] budgetBreakdownRows = vForm.getExportData().getBudgetTableData().split("<");
+	            
+	        	headerText = new HSSFRichTextString(budgetBreakdownTrn + " (" + currName + ")");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            cellNum = 0;
+	            row = sheet11.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(yearTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            singleRow = budgetBreakdownRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i=i+2) {
+	            	cell = row.createCell(cellNum++);
+	 	            headerText = new HSSFRichTextString(singleRow[i]);
+	 	            cell.setCellValue(headerText);
+	 	            cell.setCellStyle(subHeaderCS);
+				}
+	            for (int i = 1; i < budgetBreakdownRows.length; i++) {
+		        	cellNum = 0;
+			        row = sheet11.createRow(rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == budgetBreakdownRows.length-1)
+			    		st = lastCellStyle;
+		            else
+		            	st = cellStyle;
+	            	singleRow = budgetBreakdownRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j=j+2) {
+	            		cell = row.createCell(cellNum++);
+	 		            headerText = new HSSFRichTextString(singleRow[j]);
+	 		            cell.setCellValue(headerText);
+	 		            cell.setCellStyle(st);
+	    			}
+				}
+		    }
+		    
+		    if (budgetBreakdownOpt.equals("2") || budgetBreakdownOpt.equals("3")){
+		    	rowNum++;
+		    	rowNum++;
+		        cellNum = 0;
+		        row = sheet11.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(budgetBreakdownTrn + " Chart");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(headerCS);
+	            
+		        ByteArrayOutputStream ba2 = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getBudgetGraph(), "png", ba2);
+	            int pictureIndex2 = wb.addPicture(ba2.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+	            HSSFPatriarch patriarch2 = sheet11.createDrawingPatriarch();
+	            HSSFPicture pic2 =  patriarch2.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex2);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic2.getAnchor();
+	            anchor.setCol2((short)5);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic2.resize();
+		    }
+	        
 		  //Aid Type Table.
 		    boolean aidTypeVisible = false;
 		    if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR)

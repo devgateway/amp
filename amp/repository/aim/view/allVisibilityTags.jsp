@@ -310,7 +310,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display>
 <field:display feature="Funding Information" name="Capital - Expenditure"></field:display>
-<field:display feature="Funding Information" name="Payment Capital - Recurrent"></field:display>  
+<field:display feature="Funding Information" name="Payment Capital - Recurrent"></field:display>
+<field:display feature="Funding Information" name="Agreement Title + Code"></field:display>
+<field:display feature="Funding Information" name="Agreement Code"></field:display>  
 <field:display feature="Government Contact Information" name="Government Email"></field:display> 
 <field:display feature="Government Contact Information" name="Government First Name"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 

@@ -76,6 +76,8 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Sector Tag'
                 , 'Sector Tag Sub-Sector'
                 , 'Sector Tag Sub-Sub-Sector'
+                , 'Agreement Title + Code'
+                , 'Agreement Code'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

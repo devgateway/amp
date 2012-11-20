@@ -212,7 +212,7 @@ addLoadEvent(addpanel);
 
 		<td noWrap align=left valign="center">		
 			<a href="#" target="_blank" onclick="toggleActionForm('plainXls'); return false;" title="<digi:trn>Download as Plain XLS</digi:trn>">
-				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_icon.jpg" border="0" alt="Export to Excel as Plain Report" />
+				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon.jpg" border="0" alt="Export to Excel as Plain Report" />
 			</a>
 		</td>
 

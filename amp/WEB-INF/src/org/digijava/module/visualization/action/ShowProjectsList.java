@@ -174,11 +174,12 @@ public class ShowProjectsList extends Action {
 		if (type.equals("BudgetBreakdown")){
 	    	for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];
-				itemName = DbUtil.getProgramById(long1).getName();
+				AmpCategoryValue categoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(long1);
+				itemName = categoryValue.getValue();
 				Long[] id1 = {long1};
-				filter.setBudgetCVIds(id1);
+				filter.setSelCVIds(id1);
 				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-				filter.setBudgetCVIds(null);
+				filter.setSelCVIds(null);
 				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -229,7 +230,43 @@ public class ShowProjectsList extends Action {
     			adjustmentType = CategoryConstants.ADJUSTMENT_TYPE_PLANNED;
     			itemName = TranslatorWorker.translateText("Aid Predictability Quarter - Planned", locale, siteId);
     		}
-            activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType);
+    		Date startDateQ = null;
+			Date endDateQ = null;
+			Calendar cal = Calendar.getInstance();  
+			Integer quarter = Integer.valueOf(id.split("-")[1]);
+    		switch (quarter) {
+    		case 1:
+				startDateQ = startDate;
+				cal.setTime(startDate);  
+				cal.add(Calendar.MONTH, 3); // add 3 month for quarter  
+				endDateQ = cal.getTime();
+				break;
+    		case 2:
+				cal.setTime(startDate);  
+				cal.add(Calendar.MONTH, 3); // add 3 month for quarter  
+				startDateQ = cal.getTime();
+				cal.setTime(startDate);  
+				cal.add(Calendar.MONTH, 6); // add 3 month for quarter  
+				endDateQ = cal.getTime();
+				break;
+    		case 3:
+    			cal.setTime(startDate);  
+				cal.add(Calendar.MONTH, 6); // add 3 month for quarter  
+				startDateQ = cal.getTime();
+				cal.setTime(startDate);  
+				cal.add(Calendar.MONTH, 9); // add 3 month for quarter  
+				endDateQ = cal.getTime();
+				break;
+    		case 4:
+    			cal.setTime(startDate);  
+				cal.add(Calendar.MONTH, 9); // add 3 month for quarter  
+				startDateQ = cal.getTime();
+				endDateQ = endDate;
+				break;
+			default:
+				break;
+			}
+            activities = DbUtil.getActivityList(filter, startDateQ, endDateQ, null, null, filter.getTransactionType(), adjustmentType);
             itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -328,7 +365,7 @@ public class ShowProjectsList extends Action {
 	        		Date startDateQ = null;
 					Date endDateQ = null;
 					Calendar cal = Calendar.getInstance();  
-					Integer quarter = Integer.valueOf(id.split("#")[1]);
+					Integer quarter = Integer.valueOf(id.split("-")[1]);
 	        		switch (quarter) {
 	        		case 1:
 						startDateQ = startDate;

@@ -32,8 +32,6 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
@@ -43,7 +41,6 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.hibernate.HibernateException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -271,7 +268,7 @@ public class AmpReportGenerator extends ReportGenerator {
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							columnName, rawColumns, this });
 				}
-
+				
 				ce.setRelatedColumn(col);
 				ce.setInternalCondition(columnFilterSQLClause);
 				if (request != null)

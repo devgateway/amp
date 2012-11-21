@@ -188,7 +188,27 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer actualAppYear=-1;
 	
 	private Long[] selectedProjectImplUnit;
+	
+	private Long reporttype;
+	
+	private Boolean workspaceonly;
+	
+	
+	public Boolean getWorkspaceonly() {
+		return workspaceonly;
+	}
 
+	public void setWorkspaceonly(Boolean workspaceonly) {
+		this.workspaceonly = workspaceonly;
+	}
+
+	public Long getReporttype() {
+		return reporttype;
+	}
+
+	public void setReporttype(Long reporttype) {
+		this.reporttype = reporttype;
+	}
 
 	public Integer getComputedYear() {
 		return computedYear;

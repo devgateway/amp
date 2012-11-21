@@ -288,7 +288,10 @@ public class ReportsFilterPicker extends MultiAction {
 				}
 			}
 		}
-
+		Session session = PersistenceManager.getSession();
+		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(filterForm.getAmpReportId()));
+		filterForm.setReporttype(r.getType());
+		
 		if(request.getParameter("init")!=null || "true".equals( request.getAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS)) ) 
 				return null; 
 		else 
@@ -1562,7 +1565,15 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setMultiDonor(null);
 
 		arf.setJustSearch(filterForm.getJustSearch()==null?false:filterForm.getJustSearch());
-
+		
+		
+		arf.setWorkspaceonly(filterForm.getWorkspaceonly()==null?false:filterForm.getWorkspaceonly());
+		if(arf.isWorkspaceonly()){
+			arf.setAmpTeamsforpledges(arf.getAmpTeams());
+		}else{
+			arf.setAmpTeamsforpledges(null);
+		}
+		
 		arf.setRenderStartYear((filterForm.getRenderStartYear() != -1) ? filterForm.getRenderStartYear() : 0);
 		arf.setRenderEndYear((filterForm.getRenderEndYear() != -1) ? filterForm.getRenderEndYear() : 0);
 

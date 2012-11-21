@@ -15,6 +15,7 @@
 <%@page import="org.digijava.module.aim.dbentity.AmpGlobalSettings"%>
 <%@page import="java.util.Collections"%>
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
+<%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 <link type="text/css" href="css_2/tabs.css" rel="stylesheet" />
@@ -173,6 +174,15 @@ StopWatch.next("Filters", true);
 	<html:checkbox property="justSearch" value="true" />&nbsp;
 	<digi:trn>Use filter as advanced search</digi:trn>
 </div>
+<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
+<%if (arf.isPublicView()==false){%>
+	<c:if test="${aimReportsFilterPickerForm.reporttype eq '5'}">
+		<div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
+			<html:checkbox property="workspaceonly" styleId="workspace_only"/>&nbsp;
+			<digi:trn>Show Only Activities From This Workspace</digi:trn>
+		</div>
+	</c:if>
+<%} %>
 
 <div style="clear:both;text-align:center;padding:2px 0px 0px 0px;margin-top: 20px;height: 15%;">
 				<html:hidden property="ampReportId" />
@@ -184,6 +194,7 @@ StopWatch.next("Filters", true);
 					<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
 				</html:button> </div>
 
+<html:hidden property="workspaceonly" styleId="workspaceOnly"/>
 </digi:form>
 
 <% 

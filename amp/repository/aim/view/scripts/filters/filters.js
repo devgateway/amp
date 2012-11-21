@@ -63,6 +63,9 @@ function resetFilter(){
  		resetElement(aimReportsFilterPickerForm.lineMinRanks);
  		resetElement(aimReportsFilterPickerForm.planMinRanks);
  		resetElement(aimReportsFilterPickerForm.selectedArchivedStatus);
+ 		if (document.getElementById("workspace_only")!=null){
+ 			document.getElementById("workspace_only").checked = false;
+ 		}
  		try {
 	 		for (var i=0; i<aimReportsFilterPickerForm.selectedArchivedStatus.length; i++) {
 	 			var inputEl	= aimReportsFilterPickerForm.selectedArchivedStatus[i];

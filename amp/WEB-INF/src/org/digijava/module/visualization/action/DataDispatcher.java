@@ -659,7 +659,7 @@ public class DataDispatcher extends DispatchAction {
 	 	            	Map.Entry entry = (Map.Entry)it.next();
 	 	                othersValue = othersValue.add((BigDecimal) entry.getValue());
 	 	                AmpSector sec = (AmpSector) entry.getKey();
-	 	                idsArrayStr = idsArrayStr + String.valueOf(sec.getAmpSectorId()) + "-";
+	 	                idsArrayStr = idsArrayStr + String.valueOf(sec.getAmpSectorId()) + "_";
 	 	            }
 	 	            BigDecimal percentage = getPercentage(othersValue, sectorTotal);
 	 	            if (donut){
@@ -788,7 +788,7 @@ public class DataDispatcher extends DispatchAction {
 	        for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
 				Long long1 = (Long) iterator.next();
 				idsArray[index] = long1;
-				idsArrayStr = idsArrayStr + String.valueOf(long1) + "-";
+				idsArrayStr = idsArrayStr + String.valueOf(long1) + "_";
 				index++;
 			}
 	        if (ids.size()!=0){
@@ -1021,7 +1021,7 @@ public class DataDispatcher extends DispatchAction {
 	 	            	Map.Entry entry = (Map.Entry)it.next();
 	 	                othersValue = othersValue.add((BigDecimal) entry.getValue());
 	 	                AmpTheme prog = (AmpTheme) entry.getKey();
-	 	                idsArrayStr = idsArrayStr + String.valueOf(prog.getAmpThemeId()) + "-";
+	 	                idsArrayStr = idsArrayStr + String.valueOf(prog.getAmpThemeId()) + "_";
 	 	            }
 	 	            BigDecimal percentage = getPercentage(othersValue, programTotal);
 	 	            if (donut){
@@ -1149,7 +1149,7 @@ public class DataDispatcher extends DispatchAction {
 	        for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
 				Long long1 = (Long) iterator.next();
 				idsArray[index] = long1;
-				idsArrayStr = idsArrayStr + String.valueOf(long1) + "-";
+				idsArrayStr = idsArrayStr + String.valueOf(long1) + "_";
 				index++;
 			}
 	        if (ids.size()!=0){
@@ -1371,7 +1371,7 @@ public class DataDispatcher extends DispatchAction {
      	            	Map.Entry entry = (Map.Entry)it.next();
      	                othersValue = othersValue.add((BigDecimal) entry.getValue());
      	                AmpOrganisation org = (AmpOrganisation) entry.getKey();
-	 	                idsArrayStr = idsArrayStr + String.valueOf(org.getAmpOrgId()) + "-";
+	 	                idsArrayStr = idsArrayStr + String.valueOf(org.getAmpOrgId()) + "_";
 	 	            }
      	           	BigDecimal percentage = getPercentage(othersValue, organizationTotal);
 	 	            if (donut){
@@ -1491,7 +1491,7 @@ public class DataDispatcher extends DispatchAction {
             for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
 				Long long1 = (Long) iterator.next();
 				idsArray[index] = long1;
-				idsArrayStr = idsArrayStr + String.valueOf(long1) + "-";
+				idsArrayStr = idsArrayStr + String.valueOf(long1) + "_";
 				index++;
 			}
             if (ids.size()!=0){
@@ -1919,11 +1919,11 @@ public class DataDispatcher extends DispatchAction {
 						budgetData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 					}
 				}
-				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				filter.setBudgetCVIds(budgetCVIds);
+                DashboardFilter newFilter = filter.getCopyFilterForFunding();
 				Long[] selCVIds = {-1l};
 				newFilter.setSelCVIds(selCVIds);
-				newFilter.setBudgetCVIds(budgetCVIds);
-                DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				xmlString.append("<dataField category=\"" +TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" id=\"-1\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
 				budgetData += ">" + TranslatorWorker.translateText("Unallocated",locale, siteId) + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				if (!hasValues){
@@ -1962,11 +1962,11 @@ public class DataDispatcher extends DispatchAction {
 	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
-					DashboardFilter newFilter = filter.getCopyFilterForFunding();
+					filter.setBudgetCVIds(budgetCVIds);
+	                DashboardFilter newFilter = filter.getCopyFilterForFunding();
 					Long[] selCVIds = {-1l};
 					newFilter.setSelCVIds(selCVIds);
-					newFilter.setBudgetCVIds(budgetCVIds);
-	                DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+					DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 					BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
 	                if(percentage.compareTo(new BigDecimal(1)) == 1){
                 		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" id=\"-1\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
@@ -2038,11 +2038,11 @@ public class DataDispatcher extends DispatchAction {
         		total = total.add(funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 				csvString.append(",");
     		}
-    		DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			filter.setBudgetCVIds(budgetCVIds);
+            DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			Long[] selCVIds = {-1l};
 			newFilter.setSelCVIds(selCVIds);
-			newFilter.setBudgetCVIds(budgetCVIds);
-            DecimalWraper funding = null;
+			DecimalWraper funding = null;
             funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
     		csvString.append(funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
     		total = total.add(funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
@@ -3051,7 +3051,7 @@ public class DataDispatcher extends DispatchAction {
 	 	            	Map.Entry entry = (Map.Entry)it.next();
 	 	                othersValue = othersValue.add((BigDecimal) entry.getValue());
 	 	                AmpCategoryValueLocations acvl = (AmpCategoryValueLocations) entry.getKey();
-	 	                idsArrayStr = idsArrayStr + String.valueOf(acvl.getId()) + "-";
+	 	                idsArrayStr = idsArrayStr + String.valueOf(acvl.getId()) + "_";
 	 	            }
 	 	            BigDecimal percentage = getPercentage(othersValue, regionTotal);
 	 	            if (donut){
@@ -3171,7 +3171,7 @@ public class DataDispatcher extends DispatchAction {
 	        for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
 				Long long1 = (Long) iterator.next();
 				idsArray[index] = long1;
-				idsArrayStr = idsArrayStr + String.valueOf(long1) + "-";
+				idsArrayStr = idsArrayStr + String.valueOf(long1) + "_";
 				index++;
 			}
 	        if (ids.size()!=0){

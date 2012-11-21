@@ -75,8 +75,8 @@ public class ShowProjectsList extends Action {
 		if (!type.contains("AidPredictability")) {
 			if (id==null || id.length()==0) {
 				return null;
-			} else if (id.contains("-")){
-				String[] strArr = id.split("-");
+			} else if (id.contains("_")){
+				String[] strArr = id.split("_");
 				ids = new Long[strArr.length];
 				for (int i = 0; i < strArr.length; i++) {
 					ids[i] = Long.parseLong(strArr[i]);
@@ -173,9 +173,17 @@ public class ShowProjectsList extends Action {
 		}
 		if (type.equals("BudgetBreakdown")){
 	    	for (int i = 0; i < ids.length; i++) {
-				Long long1 = ids[i];
-				AmpCategoryValue categoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(long1);
-				itemName = categoryValue.getValue();
+	    		Long long1 = ids[i];
+				if(!long1.equals(-1l)){
+					AmpCategoryValue categoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(long1);
+					itemName = categoryValue.getValue();
+				} else {
+					try {
+			        	itemName = TranslatorWorker.translateText("Unallocated", locale, siteId);
+					} catch (WorkerException e) {
+						itemName = "Unallocated";
+					}
+				}
 				Long[] id1 = {long1};
 				filter.setSelCVIds(id1);
 				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);

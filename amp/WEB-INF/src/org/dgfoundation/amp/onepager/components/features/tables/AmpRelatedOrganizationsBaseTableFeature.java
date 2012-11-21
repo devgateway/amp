@@ -48,7 +48,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	private static final long serialVersionUID = 1L;
 	protected AmpUniqueCollectionValidatorField<AmpOrgRole> uniqueCollectionValidationField;
 	protected AmpPercentageCollectionValidatorField<AmpOrgRole> percentageValidationField;
-	protected ListView<AmpOrgRole> list;
+	protected final IModel<ListView<AmpOrgRole>> list = new Model<ListView<AmpOrgRole>>();
 	protected IModel<List<AmpOrgRole>> listModel;
 	protected IModel<Set<AmpOrgRole>> setModel;
 	private TransparentWebMarkupContainer updateColSpan1;
@@ -183,7 +183,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 				ampOrgRole.setOrganisation(choice);
 				ampOrgRole.setActivity(am.getObject());
 				ampOrgRole.setRole(specificRole);
-				if(list.size()>0)
+				if(list.getObject().size()>0)
 					ampOrgRole.setPercentage(0d);
 				else 
 					ampOrgRole.setPercentage(100d);
@@ -193,8 +193,8 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 				
 				setModel.getObject().add(ampOrgRole);
 				uniqueCollectionValidationField.reloadValidationField(target);
-				list.removeAll();
-				target.add(list.getParent());
+				list.getObject().removeAll();
+				target.add(list.getObject().getParent());
 			}
 
 			@Override

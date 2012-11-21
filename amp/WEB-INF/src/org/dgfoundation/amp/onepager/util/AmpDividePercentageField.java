@@ -19,10 +19,10 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 	private static final long serialVersionUID = 1L;
 	
 	private IModel<Set<T>> setModel;
-	private ListView<T> list;
+	private IModel<ListView<T>> list;
 	
 	public AmpDividePercentageField(String id, String fmName,
-			String buttonCaption, IModel<Set<T>> setModel, ListView<T> list) {
+			String buttonCaption, IModel<Set<T>> setModel, IModel<ListView<T>> list) {
 		super(id, fmName, buttonCaption);
 		this.setModel = setModel;
 		this.list = list;
@@ -66,9 +66,9 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 			setPercentage(loc, getPercentage(loc) + delta);
 			dif = dif - delta;
 		}
-		list.removeAll();
+		list.getObject().removeAll();
 		
-		list.getParent().visitChildren(AmpCollectionValidatorField.class,
+		list.getObject().getParent().visitChildren(AmpCollectionValidatorField.class,
 				new IVisitor<AmpCollectionValidatorField, Void>() {
 					@Override
 					public void component(AmpCollectionValidatorField component,
@@ -77,7 +77,7 @@ public abstract class AmpDividePercentageField<T> extends AmpAjaxLinkField {
 						visit.dontGoDeeper();
 					}
 				});
-		target.add(list.getParent());
+		target.add(list.getObject().getParent());
 	}
 	
 	public abstract void setPercentage(T item, int val);

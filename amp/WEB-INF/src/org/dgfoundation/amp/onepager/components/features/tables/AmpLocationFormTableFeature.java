@@ -237,7 +237,7 @@ public class AmpLocationFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 
-		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, new Model(list)){
 			@Override
 			protected void onConfigure() {
 				super.onConfigure();

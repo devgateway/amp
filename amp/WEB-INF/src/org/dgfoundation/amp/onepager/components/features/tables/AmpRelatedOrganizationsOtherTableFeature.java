@@ -33,7 +33,7 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 	public AmpRelatedOrganizationsOtherTableFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am, final String roleName) throws Exception {
 		super(id, fmName, am, roleName);
-		list = new ListView<AmpOrgRole>("list", listModel) {
+		list.setObject(new ListView<AmpOrgRole>("list", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
 			protected void populateItem(final ListItem<AmpOrgRole> item) {
@@ -56,15 +56,15 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
 						uniqueCollectionValidationField.reloadValidationField(target);
-						list.removeAll();
+						list.getObject().removeAll();
 						target.add(listParent);
 					}
 				};
 				item.add(delRelOrg);
 			}
-		};
-		list.setReuseItems(true);
-		add(list);
+		});
+		list.getObject().setReuseItems(true);
+		add(list.getObject());
 	}
 
 }

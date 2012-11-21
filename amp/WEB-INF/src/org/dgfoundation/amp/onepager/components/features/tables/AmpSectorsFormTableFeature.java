@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
@@ -179,7 +180,9 @@ public class AmpSectorsFormTableFeature extends
 		list.setReuseItems(true);
 		add(list);
 		
-		add(new AmpDividePercentageField<AmpActivitySector>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
+		add(new AmpDividePercentageField<AmpActivitySector>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, new Model<ListView<AmpActivitySector>>(list)){
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void setPercentage(AmpActivitySector loc, int val) {
 				loc.setSectorPercentage((float) val);

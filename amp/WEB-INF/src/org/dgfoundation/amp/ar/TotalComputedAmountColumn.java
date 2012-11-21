@@ -86,11 +86,10 @@ public class TotalComputedAmountColumn extends TotalAmountColumn {
 		return new TotalComputedAmountColumn(this);
 	}
 
-	public List getTrailCells() {
-		ArrayList ar=new ArrayList();
-		ComputedAmountCell ac=new ComputedAmountCell();		
-		Iterator i=items.iterator();
-		
+	public List<ComputedAmountCell> getTrailCells() {
+		ArrayList<ComputedAmountCell> ar = new ArrayList<ComputedAmountCell>();
+		ComputedAmountCell ac = new ComputedAmountCell();		
+		Iterator i = items.iterator();
 		
 		Values groupValues=new Values();
 		

@@ -113,19 +113,19 @@ public class BudgetReportHeadingsXLS extends ReportHeadingsXLS {
 		}
 	}
 	
-	protected void prepareHeaderCellsList (List<Object> columns, String parentName, List<String> cellValues) {
+	protected void prepareHeaderCellsList (List columns, String parentName, List<String> cellValues) {
 		if ( columns == null ) {
 			ColumnReportData columnReport = (ColumnReportData) item;
 			columns			= columnReport.getItems();
 		}
 		
 		if ( columns != null ) {
-			Iterator<Object> iter	= columns.iterator();
+			Iterator iter	= columns.iterator();
 			while (iter.hasNext()) {
 				Column tempCol 		= (Column) iter.next();
 				String colName		= tempCol.getName(metadata.getHideActivities());
 				if ( ! ArConstants.COLUMN_TOTAL.equals(colName) ) {
-					List<Object> items 	= tempCol.getItems();
+					List items 	= tempCol.getItems();
 					String name	 = (parentName == null)?colName:parentName + " - " + colName;
 					if ( items != null && items.size() > 0 && items.get(0) instanceof Column ) {
 						this.prepareHeaderCellsList(items, name, cellValues);

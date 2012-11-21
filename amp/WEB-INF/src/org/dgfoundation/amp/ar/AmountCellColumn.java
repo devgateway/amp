@@ -79,13 +79,11 @@ public class AmountCellColumn extends CellColumn {
 		return res;
 	}
 
-	
 
-	
-	public List getTrailCells() {
-		ArrayList ar=new ArrayList();
-		Cell ac=new AmountCell();		
-		Iterator i=items.iterator();
+	public List<? extends AmountCell> getTrailCells() {
+		ArrayList<AmountCell> ar = new ArrayList<AmountCell>();
+		AmountCell ac = new AmountCell();		
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
 			//logger.info("Merging cell for owner "+element.getOwnerId()+" containing "+element.getMergedCells().size()+" merged cells");

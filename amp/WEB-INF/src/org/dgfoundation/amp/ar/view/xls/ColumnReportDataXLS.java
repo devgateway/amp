@@ -63,20 +63,14 @@ public class ColumnReportDataXLS extends XLSExporter {
 		// add data
 		if (metadata.getHideActivities() == null
 				|| metadata.getHideActivities().booleanValue() == false) {
-			Iterator i = columnReport.getOwnerIds().iterator();
-			
-			
-			while (i.hasNext()) {
-				Long element = (Long) i.next();
+			for (Long element:columnReport.getOwnerIds()) {
 				this.setOwnerId(element);
 				row = sheet.createRow(rowId.shortValue());
-				Iterator ii = columnReport.getItems().iterator();
 				if ( this.regularStyle == null )
 					this.getRegularStyle();
 				this.createFirstCells();
 
-				while (ii.hasNext()) {
-					Viewable velement = (Viewable) ii.next();
+				for (Viewable velement:columnReport.getItems()) {
 					this.invokeChildExporter(velement);
 				}
 				rowId.inc();

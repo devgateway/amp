@@ -1202,14 +1202,13 @@ private ActionForward showStep9(ActionMapping mapping,
 	        if (eaForm.getActivityId() != null) {
 	          ReportData rep = (ReportData) session.getAttribute("report");
 	          if (rep != null) {
-	            Collection ids = (Collection) rep.getOwnerIds();
-	            Iterator it = ids.iterator();
+	            Iterator<Long> it = rep.getOwnerIds().iterator();
 	
 	            while (it.hasNext()) {
-	              Long el = (Long) it.next();
+	              Long el = it.next();
 	              if (el.compareTo(eaForm.getActivityId()) == 0) {
 	                if (it.hasNext())
-	                  next = new Long( ( (Long) it.next()).longValue());
+	                  next = it.next();
 	                break;
 	              }
 	              prev = new Long(el.longValue());

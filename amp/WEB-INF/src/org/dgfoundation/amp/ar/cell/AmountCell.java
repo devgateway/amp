@@ -190,12 +190,10 @@ public class AmountCell extends Cell {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dgfoundation.amp.ar.cell.Cell#merge(org.dgfoundation.amp.ar.cell.Cell)
+	/**
+	 * c HAS to be AmountCell !
 	 */
-	public Cell merge(Cell c) {
+	public AmountCell merge(Cell c) {
 		AmountCell ret = new AmountCell();
 		AmountCell ac = (AmountCell) c;
 		ret.setOwnerId(c.getOwnerId());
@@ -371,7 +369,7 @@ public class AmountCell extends Cell {
 		return realRet;
 	}
 
-	public Cell newInstance() {
+	public AmountCell newInstance() {
 		return new AmountCell();
 	}
 

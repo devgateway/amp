@@ -27,7 +27,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	protected Set metaData;
 
 	@Override
-	public Cell merge(Cell c) {
+	public AmountCell merge(Cell c) {
 		AmountCell ret=(AmountCell) super.merge(c);
 		CategAmountCell realRet=new CategAmountCell(ret.getOwnerId());
 		realRet.getMergedCells().addAll(ret.getMergedCells());
@@ -55,7 +55,8 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 		return cummulativeShow;
 	}
 
-	public Cell newInstance() {
+	@Override
+	public AmountCell newInstance() {
 		return new CategAmountCell();
 	}
 	

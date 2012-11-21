@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -25,7 +26,7 @@ import org.digijava.module.aim.helper.KeyValue;
  * @since Jun 23, 2006
  *
  */
-public abstract class ReportData extends Viewable {
+public abstract class ReportData<K extends Viewable> extends Viewable {
     	
     	/**
     	 * This property is set with the cell that is responsible of creating the reportdata (in hierarchy).
@@ -141,9 +142,12 @@ public abstract class ReportData extends Viewable {
 	
 	protected String name;
 	
-	protected List trailCells;
+	protected List<AmountCell> trailCells;
 
-	protected List items;
+	/**
+	 * in GroupReportData the entries are of the type ReportData; in GroupColumn are of the type Column
+	 */
+	protected List<K> items;
 	
 	protected String sortByColumn;
 	protected boolean sortAscending;
@@ -156,7 +160,7 @@ public abstract class ReportData extends Viewable {
 	
 	private static String [] htmlClassNames 	= {"firstLevel", "secondLevel", "thirdLevel"};
 	
-	public abstract Collection getOwnerIds();
+	public abstract Collection<Long> getOwnerIds();
 
 	public abstract Integer getSourceColsCount();
 	
@@ -231,15 +235,15 @@ public abstract class ReportData extends Viewable {
 	/**
 	 * @return Returns the items.
 	 */
-	public List getItems() {
+	public List<K> getItems() {
 		return items;
 	}
 
-	public Iterator iterator() {
+	public Iterator<K> iterator() {
 		return items.iterator();
 	}
 		
-	public Object getItem(int idx) {
+	public K getItem(int idx) {
 		return items.get(idx);
 	}
 	
@@ -270,8 +274,8 @@ public abstract class ReportData extends Viewable {
 	public abstract void postProcess();
 	
 	public ReportData(String name) {
-		this.name=name;
-		items=new ArrayList();
+		this.name = name;
+		items = new ArrayList<K>();
 	}
 
 	/**
@@ -289,19 +293,23 @@ public abstract class ReportData extends Viewable {
 	}
 
 		
-	public List getTrailCells() {
+	/*public Set<AmountCell> getTrailsCells()
+	{
+		return new java.util.HashSet<AmountCell>();
+	}*/
+	
+	public List<AmountCell> getTrailCells() {
 		return trailCells;
 	}
 	
-	public List getTrailRow() {
-		ArrayList ret=new ArrayList();
-		Iterator i=items.iterator();
-		while (i.hasNext()) {
-			Column element = (Column) i.next();
+	/*public List<Cell> getTrailRow() {
+		ArrayList<Cell> ret=new ArrayList<Cell>();
+		for(Column element:items) 
+		{
 			ret.addAll(element.getTrailCells());
 		}
 		return ret;
-	}
+	}*/
 	
 	public abstract int getTotalDepth();
 	
@@ -340,9 +348,10 @@ public abstract class ReportData extends Viewable {
 	 * @param globalHeadingsDisplayed The globalHeadingsDisplayed to set.
 	 */
 	public void setGlobalHeadingsDisplayed(Boolean globalHeadingsDisplayed) {
-		if(this.getParent()!=null) this.getParent().setGlobalHeadingsDisplayed(globalHeadingsDisplayed);
+		if (this.getParent() != null) 
+			this.getParent().setGlobalHeadingsDisplayed(globalHeadingsDisplayed);
 		else
-		this.globalHeadingsDisplayed=globalHeadingsDisplayed;
+			this.globalHeadingsDisplayed=globalHeadingsDisplayed;
 	}
 
 
@@ -351,10 +360,8 @@ public abstract class ReportData extends Viewable {
 	 * @param columnName the column name to which the cell belongs
 	 * @return the cell or null if not found
 	 */
-	public Cell findTrailCell(String columnName) {
-		Iterator i=this.getTrailCells().iterator();
-		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
+	public AmountCell findTrailCell(String columnName) {
+		for (AmountCell element:getTrailCells()) {
 			if (element!=null){
 				if(columnName.equals(element.getColumn().getAbsoluteColumnName())) 
 					return element; 

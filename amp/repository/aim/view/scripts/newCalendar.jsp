@@ -250,11 +250,9 @@
 			if(calendarUp == true){
 				var calendarCorner = "bl";
 				var objectCorner = "tr";
-				console.log("true");
 			}else{
 				var calendarCorner = "tl";
 				var objectCorner = "br";
-				console.log("false");
 			}
 			dialog		= new YAHOO.widget.Dialog(dialogId, {
 		        visible:false,

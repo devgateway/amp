@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.GlobalSettingsForm;
@@ -98,6 +99,7 @@ public class GlobalSettings extends Action {
 			refreshGlobalSettingsCache	= true;
 			dailyCurrencyRatesChanges(null);
 			auditTrialCleanerChanges();
+			DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE).clear();
 		}
 		
 		Collection col = FeaturesUtil.getGlobalSettings();

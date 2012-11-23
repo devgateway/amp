@@ -289,8 +289,10 @@ public class ReportsFilterPicker extends MultiAction {
 			}
 		}
 		Session session = PersistenceManager.getSession();
-		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(filterForm.getAmpReportId()));
-		filterForm.setReporttype(r.getType());
+		if (filterForm.getAmpReportId()!=null){
+			AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(filterForm.getAmpReportId()));
+			filterForm.setReporttype(r.getType());
+		}
 		
 		if(request.getParameter("init")!=null || "true".equals( request.getAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS)) ) 
 				return null; 

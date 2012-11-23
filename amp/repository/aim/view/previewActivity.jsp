@@ -1158,11 +1158,13 @@ function collapseAll() {
 	</legend>
 	<div id="referencesdiv">
 	<ul>
-		<logic:iterate name="aimEditActivityForm" property="documents.referenceDocs" id="doc">
-			<li>
-				<bean:write name="doc" property="categoryValue"/>
-			</li>
-		</logic:iterate>
+		<logic:notEmpty name="aimEditActivityForm" property="documents.referenceDocs">
+			<logic:iterate name="aimEditActivityForm" property="documents.referenceDocs" id="doc">
+				<li>
+					<bean:write name="doc" property="categoryValue"/>
+				</li>
+			</logic:iterate>
+		</logic:notEmpty>
 	</ul>
 	</div>
 </fieldset>

@@ -8,9 +8,31 @@
 	<name>Aid Management Platform</name>
 	<properties>
 		<wicketVersion>6.0.0</wicketVersion>
+		<tomcatVersion>6.0.35</tomcatVersion>
 	</properties>
-
 	<repositories>
+		<repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>amp</name>
+          <url>http://artifactory.ampdev.net/artifactory/amp</url>
+        </repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>amp</name>
+			<url>http://artifactory.ampdev.net/artifactory/amp</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<!--
+	    OLD REPO's in case ampdev.net is down at some point
+		<repositories>
 		<repository>
 			<id>AMP Local</id>
 			<url>file://${basedir}/mvn-repo</url>
@@ -59,8 +81,9 @@
 			<url>http://repo1.maven.org/maven2</url>
 		</pluginRepository>
 	</pluginRepositories>
+	-->
+	
 	<dependencies>
-
 		<dependency>
 			<groupId>antlr</groupId>
 			<artifactId>antlr</artifactId>
@@ -750,13 +773,13 @@
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>jsp-api</artifactId>
-			<version>6.0.35</version>
+			<version>${tomcatVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>6.0.35</version>
+			<version>${tomcatVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- 

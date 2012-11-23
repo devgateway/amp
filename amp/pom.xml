@@ -9,6 +9,28 @@
 
 	<repositories>
 		<repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>amp</name>
+          <url>http://artifactory.ampdev.net/artifactory/amp</url>
+        </repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>amp</name>
+			<url>http://artifactory.ampdev.net/artifactory/amp</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<!--
+	    OLD REPO's in case ampdev.net is down at some point
+		<repositories>
+		<repository>
 			<id>AMP Local</id>
 			<url>file://${basedir}/mvn-repo</url>
 		</repository>
@@ -56,6 +78,8 @@
 			<url>http://repo1.maven.org/maven2</url>
 		</pluginRepository>
 	</pluginRepositories>
+	-->
+
 	<dependencies>
 
 		<dependency>

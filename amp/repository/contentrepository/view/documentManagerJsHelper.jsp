@@ -422,22 +422,41 @@ myTable.enhanceMarkup = function(markupName) {
 	}else {
 		//alert(3);
 		//debugger;
+		
+		var totalWidth = 70 + 50 + 40 + 50 + 50;
+		var freeWidth = 0;
+		var freeloaders = 4.5; // the 3 optional columns + 1.5 x cm_doc_type
+		
+		if (!show_index){
+			freeWidth += 40;
+			freeloaders --;
+		}
+		if (!show_category){
+			freeWidth += 50;
+			freeloaders --;
+		}
+		if (!show_organisations){
+			freeWidth += 50;
+			freeloaders --;
+		}
+		var extraSpacePerFreeLoader = freeloaders = 0 ? 0 : freeWidth / freeloaders;
+		
 	    this.columnHeaders = [];
 	    this.columnHeaders.push({key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true, width:100});
-	    this.columnHeaders.push({key:"type",label:"${trans_headerType}",sortable:true});
-	    this.columnHeaders.push({key:"file_name",label:"${trans_headerFileName}",sortable:true/*, width:120*/});
-	    this.columnHeaders.push({key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate });
-	    this.columnHeaders.push({key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true});
-	    this.columnHeaders.push({key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true});
+	    this.columnHeaders.push({key:"type",label:"${trans_headerType}",sortable:true, width: 30});
+	    this.columnHeaders.push({key:"file_name",label:"${trans_headerFileName}",sortable:true, width:70});
+	    this.columnHeaders.push({key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate, width:50 });
+	    this.columnHeaders.push({key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true, width:50});
+	    this.columnHeaders.push({key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true, width:50 + 3 * extraSpacePerFreeLoader / 2});
 	    if (show_index)
-	    	this.columnHeaders.push({key:"resource_index",label:"${trans_headerResourceIndex}", sortable:true/*, width:100*/});
+	    	this.columnHeaders.push({key:"resource_index",label:"${trans_headerResourceIndex}", sortable:true, width:40 + extraSpacePerFreeLoader});
 	    if (show_category)
-	    	this.columnHeaders.push({key:"resource_category",label:"${trans_headerResourceCategory}", sortable:true/*, width:100*/});
+	    	this.columnHeaders.push({key:"resource_category",label:"${trans_headerResourceCategory}", sortable:true, width:50 + extraSpacePerFreeLoader});
 	    if (show_organisations)
-	    	this.columnHeaders.push({key:"resource_organisations",label:"${trans_headerResourceOrganisations}", sortable:true/*, width:100*/});
-	    this.columnHeaders.push({key:"labels",label:"${trans_headerLabels}",sortable:false});
-	    this.columnHeaders.push({key:"size",type:"number",label:"${trans_fileSize}",sortable:true});	    
-	    this.columnHeaders.push({key:"actions",label:"${trans_headerActions}",sortable:false});
+	    	this.columnHeaders.push({key:"resource_organisations",label:"${trans_headerResourceOrganisations}", sortable:true, width:50 + extraSpacePerFreeLoader});
+	    this.columnHeaders.push({key:"labels",label:"${trans_headerLabels}",sortable:false, width:50});
+	    this.columnHeaders.push({key:"size",type:"number",label:"${trans_fileSize}",sortable:true, width:50});	    
+	    this.columnHeaders.push({key:"actions",label:"${trans_headerActions}",sortable:false, width:50});
 	}
 //    this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
 //    var markup	 				= YAHOO.util.Dom.get(markupName);
@@ -476,7 +495,7 @@ myTable.enhanceMarkup = function(markupName) {
     		 // Create the Paginator	       
 	         paginator:myPaginator,        
 	         MSG_EMPTY: "<digi:trn>No records found</digi:trn>",
-	         MSG_LOADING: "<digi:trn>Loading</digi:trn>"
+	         MSG_LOADING: "<digi:trn>Loading</digi:trn>",
 	        }; 
 
     var tableEl						= markup.getElementsByTagName("table")[0];
@@ -505,6 +524,7 @@ myTable.enhanceMarkup = function(markupName) {
 	dataTable.subscribe("rowMouseoverEvent", dataTable.onEventHighlightRow); 
 	dataTable.subscribe("rowMouseoutEvent", dataTable.onEventUnhighlightRow);
 	dataTable.subscribe('initEvent', sortColumn);
+	//dataTable.setAttribute('width', "785px");
 	
 	 
 	return dataTable;

@@ -154,7 +154,7 @@
 
 			
 
-					<div id="listContainerDiv" style='width:100%; height:300px; border: 0px; overflow-y:scroll;'>
+					<div id="listContainerDiv" style='width:100%; height:300px; border: 0px; overflow-y:scroll; overflow-x:scroll;'>
 			
 			
 					<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;" border="0">

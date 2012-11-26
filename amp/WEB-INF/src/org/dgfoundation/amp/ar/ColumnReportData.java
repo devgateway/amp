@@ -150,7 +150,7 @@ public class ColumnReportData extends ReportData<Column> {
 		
 		/* When summing up percentages for problem 2, we need to make sure we don't sum up the percentages of the same cell twice. 
 		 * So we use this set to verify what percentages were already summed up.*/
-		HashMap<Long,List> summedCellValues					= new HashMap<Long, List>();
+		HashMap<Long, List> summedCellValues					= new HashMap<Long, List>();
 		
 		/* This will store the last MetaTextCell created manually -- for problem 2 */
 		MetaTextCell metaFakeCell					= null;
@@ -176,9 +176,9 @@ public class ColumnReportData extends ReportData<Column> {
 					"GroupColumnS cannot be used as filter keys!");
 		if (keyCol == null)
 			throw new UnidentifiedItemException(
-					"Cannot found a Column with Id " + columnName
+					"Cannot find a Column with Id " + columnName
 							+ " in this ReportData");
-		TreeSet cats = new TreeSet();
+		TreeSet<Cell> cats = new TreeSet<Cell>();
 		Iterator i = keyCol.iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
@@ -187,10 +187,7 @@ public class ColumnReportData extends ReportData<Column> {
 		}
 
 		// we iterate each category from the set and search for matching rows
-		i = cats.iterator();
-		while (i.hasNext()) {
-			Cell cat = (Cell) i.next();
-			
+		for (Cell cat:cats) {			
 			if ( cat.compareTo(fakeCell) == 0 ) {
 				existsUnallocatedCateg = true;
 			}
@@ -211,7 +208,7 @@ public class ColumnReportData extends ReportData<Column> {
 			
 			
 			// construct the Set of ids that match the filter:
-			Set ids = new TreeSet();
+			Set<Long> ids = new TreeSet<Long>();
 			// TODO: we do not allow GroupColumnS for keyColumns
 			Iterator ii = keyCol.iterator();
 			while (ii.hasNext()) {
@@ -302,9 +299,9 @@ public class ColumnReportData extends ReportData<Column> {
 		/* Now that we have everything set we can filter-copy all the columns in the new ColumnReportDatas*/
 		Iterator<ColumnReportData> cellIter			= catToIds.keySet().iterator();
 		while ( cellIter.hasNext() ) {
-			ColumnReportData crd		= cellIter.next();
-			Set ids								= catToIds.get(crd);
-			Cell cat								= crd.getSplitterCell();
+			ColumnReportData crd	= cellIter.next();
+			Set<Long> ids			= catToIds.get(crd);
+			Cell cat				= crd.getSplitterCell();
 			
 			/* If this is the Unallocated category we add all remaining activity IDs to it*/
 			if ( crd.getSplitterCell().compareTo(fakeCell) == 0 ) {

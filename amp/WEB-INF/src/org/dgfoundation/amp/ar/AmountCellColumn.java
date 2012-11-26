@@ -64,7 +64,7 @@ public class AmountCellColumn extends CellColumn {
 	public Column postProcess() {
 		AmountCellColumn res=(AmountCellColumn) super.postProcess();
 		//now we get rid of those ListCellS, we merge the content - we can do that now because there is no forking in the future
-		for(int i=0;i<res.getItems().size();i++) {
+		for(int i = 0; i < res.getItems().size(); i++) {
 			Cell element = (Cell) res.getItem(i);
 			if(element instanceof ListCell) {
 				Cell repl=new AmountCell();

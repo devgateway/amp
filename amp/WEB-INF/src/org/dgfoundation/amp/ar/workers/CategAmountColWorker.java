@@ -170,14 +170,14 @@ public class CategAmountColWorker extends ColumnWorker {
 		double tr_amount = rs.getDouble("transaction_amount");
 		java.sql.Date td= rs.getDate("transaction_date");
 		
-		String currencyCode="";
+		String currencyCode = "";
 		
 		if (columnsMetaData.containsKey("currency_code")){
-		    currencyCode=rs.getString("currency_code");
+		    currencyCode = rs.getString("currency_code");
 		}
 		
-		String donorGroupName=null;
-		String donorTypeName=null;
+		String donorGroupName = null;
+		String donorTypeName = null;
 		Double fixedExchangeRate = null;
 		Double pledgetotal = null;
 		Double capitalPercent	= null;
@@ -186,7 +186,7 @@ public class CategAmountColWorker extends ColumnWorker {
 
 
 		if (columnsMetaData.containsKey("fixed_exchange_rate")){
-		    fixedExchangeRate=rs.getDouble("fixed_exchange_rate");
+		    fixedExchangeRate = rs.getDouble("fixed_exchange_rate");
 		}
 
 		if (columnsMetaData.containsKey("adjustment_type_name")){
@@ -194,7 +194,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 		
 		if(columnsMetaData.containsKey("donor_type_name"))
-			donorTypeName=retrieveValueFromRS(rs,columnsMetaData.get(  "donor_type_name") );
+			donorTypeName = retrieveValueFromRS(rs,columnsMetaData.get(  "donor_type_name") );
 					
 		
 		if (columnsMetaData.containsKey("transaction_type")){
@@ -213,18 +213,18 @@ public class CategAmountColWorker extends ColumnWorker {
 			capitalPercent	= rs.getDouble("capital_spend_percent");
 		}
 		
-		String value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
-		boolean skpyCategorize=("false".equalsIgnoreCase(value));
+		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
+/*		boolean skpyCategorize = ("false".equalsIgnoreCase(value));
         //if (generator.getReportMetadata().getHierarchies().contains()
 		//check if the column is a into Hierarchies //Ned to talk with mihai to find a better solution
 		
-		Set<AmpReportHierarchy> hierarchies =generator.getReportMetadata().getHierarchies(); 
+		Set<AmpReportHierarchy> hierarchies = generator.getReportMetadata().getHierarchies(); 
 		for (AmpReportHierarchy ampReportHierarchy : hierarchies) {
 			if (ArConstants.TERMS_OF_ASSISTANCE.equalsIgnoreCase(ampReportHierarchy.getColumn().getColumnName())){
-				skpyCategorize=false;
+				skpyCategorize = false;
 				break ;
 			}
-		}
+		} -- not used anymore */
 		
 			if (columnsMetaData.containsKey("terms_assist_name")){
 				String termsAssist = retrieveValueFromRS(rs,columnsMetaData.get(  "terms_assist_name") );
@@ -234,14 +234,14 @@ public class CategAmountColWorker extends ColumnWorker {
 			}
 			
 		if (columnsMetaData.containsKey("financing_instrument_name")){			
-		    	String financingInstrument = retrieveValueFromRS(rs,columnsMetaData.get(  "financing_instrument_name") );
+		    String financingInstrument = retrieveValueFromRS(rs,columnsMetaData.get(  "financing_instrument_name") );
 			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.FINANCING_INSTRUMENT,
 					financingInstrument);
 			acc.getMetaData().add(termsAssistMeta);
 		}
 
 		if (columnsMetaData.containsKey("mode_of_payment_name")) {
-			String modeOfPayment = retrieveValueFromRS(rs,columnsMetaData.get(  "mode_of_payment_name") );
+			String modeOfPayment = retrieveValueFromRS(rs, columnsMetaData.get(  "mode_of_payment_name") );
 			if (modeOfPayment != null) {
 				MetaInfo termsAssistMeta = this.getCachedMetaInfo(
 						ArConstants.MODE_OF_PAYMENT, modeOfPayment);
@@ -287,21 +287,21 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		if("donor_name".equals(headMetaName)){
 			String donorName = retrieveValueFromRS(rs,columnsMetaData.get(  "donor_name") );
-			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, (donorName!=null)?donorName.trim():donorName);			
+			headMeta = this.getCachedMetaInfo(ArConstants.DONOR, (donorName != null) ? donorName.trim() : donorName);			
 		}
 
-		if (filter.getAmountinthousand()==null) {
+		if (filter.getAmountinthousand() == null) {
 			if (Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
 				filter.setAmountinthousand(1);
 			else 
 				filter.setAmountinthousand(0);
 		} 
 		
-		if (filter.getAmountinthousand()==2){
+		if (filter.getAmountinthousand() == 2){
 			if (tr_amount != 0){
-				acc.setAmount(tr_amount*0.001d*0.001d);
+				acc.setAmount(tr_amount * 0.001d * 0.001d);
 			}
-		} else if (filter.getAmountinthousand()==1){
+		} else if (filter.getAmountinthousand() == 1){
 			if (tr_amount != 0){
 				acc.setAmount(tr_amount*0.001d);
 			}
@@ -348,7 +348,7 @@ public class CategAmountColWorker extends ColumnWorker {
 			break;
 		}
 
-		if(trStr!=null) {
+		if(trStr != null) {
 			MetaInfo trMs = this.getCachedMetaInfo(ArConstants.TRANSACTION_TYPE, trStr);
 			String fundMes = (String) adjMs.getValue()+ " " + (String) trMs.getValue();
 			Integer order = this.generator.getReportMetadata().getMeasureOrder(fundMes);

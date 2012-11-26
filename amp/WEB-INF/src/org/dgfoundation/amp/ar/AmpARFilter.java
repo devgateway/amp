@@ -354,6 +354,10 @@ public class AmpARFilter extends PropertyListable {
 		generatedFilterQuery += " AND id IN (" + filter + ")";
 	}
 	
+	/**
+	 * BOZO: non-trivially-slow function called at least 3 times per report render
+	 * @param request
+	 */
 	public void readRequestData(HttpServletRequest request) {
 		this.generatedFilterQuery = initialFilterQuery;
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
@@ -486,7 +490,7 @@ public class AmpARFilter extends PropertyListable {
 			
 			
 			
-if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
+			if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
 				worker = calendarType.getworker();
 				try {
 					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);

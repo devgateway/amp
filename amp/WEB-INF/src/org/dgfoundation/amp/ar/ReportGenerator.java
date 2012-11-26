@@ -58,13 +58,13 @@ public abstract class ReportGenerator {
 	 * the main method of this class. it generates a displayable report object
 	 */
 	public void generate() {
-		long startTS=System.currentTimeMillis();
+		long startTS = System.currentTimeMillis();
 		retrieveData();
-		long retrTS=System.currentTimeMillis();
+		long retrTS = System.currentTimeMillis();
 		
 		
 		prepareData();
-		long endTS=System.currentTimeMillis();
+		long endTS = System.currentTimeMillis();
 		logger.info("Report "+getReport().getName()+" generated in "+(endTS-startTS)/1000.0+" seconds. Data retrieval completed in "+(retrTS-startTS)/1000.0+" seconds");
 	}
 	

@@ -88,7 +88,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 
 	public abstract Column postProcess();
 
-	public abstract Column filterCopy(Cell filter, Set ids);
+	public abstract Column filterCopy(Cell filter, Set<Long> ids);
 	
 	public abstract boolean removeEmptyChildren(boolean checkFunding);
 

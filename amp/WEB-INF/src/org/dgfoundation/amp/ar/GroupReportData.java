@@ -44,7 +44,6 @@ public class GroupReportData extends ReportData<ReportData> {
 	public int getVisibleRows() {
     	Iterator i=items.iterator();
     	int ret = 0; //one was for the title/totals. now we are counting the title/totals only for summary report
-    	ret += 0; // BOZO: don't ask me why
     	
     	//if the report is summary then stop the processing here and return 1;
     	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
@@ -178,12 +177,9 @@ public class GroupReportData extends ReportData<ReportData> {
 	public GroupReportData horizSplitByCateg(String columnName)
 			throws UnidentifiedItemException, IncompatibleColumnException {
 		GroupReportData dest = new GroupReportData(this);
-		Iterator i = items.iterator();
-		while (i.hasNext()) {
-			ReportData element = (ReportData) i.next();
-			
+		for (ReportData element:items) {			
 			ReportData result= element.horizSplitByCateg(columnName);
-			if(result.getItems().size()!=0)
+			if (result.getItems().size() != 0)
 			    dest.addReport(result);
 			else dest.addReport(element);
 		}
@@ -199,8 +195,7 @@ public class GroupReportData extends ReportData<ReportData> {
 		
 	
 		// create trail cells
-		try {
-
+		try {			
 			trailCells = new ArrayList<AmountCell>();
 			if (items.size() > 0) {
 				ReportData<? extends Viewable> data = items.get(0);
@@ -235,7 +230,7 @@ public class GroupReportData extends ReportData<ReportData> {
 								+ element.getTrailCells().size());
 					} else
 						for (int j = 0; j < trailCells.size(); j++) {
-							AmountCell newc =null;
+							AmountCell newc = null;
 							
 							AmountCell c = trailCells.get(j);
 							AmountCell c2 = element.getTrailCells().get(j);

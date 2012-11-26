@@ -21,6 +21,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.collections.OrderedIterator;
 import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
@@ -55,8 +56,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class AmpReportGenerator extends ReportGenerator {
 
-	List<AmpReportColumn> extractable;
-	protected int extractableCount;
+	List<AmpReportColumn> extractable; // columns extractable while building the report
+	protected int extractableCount; // looks like extractable.size() [need to check!]
 	private List<String> columnsToBeRemoved;
 	private boolean debugMode=false;
 	private boolean pledgereport=false;
@@ -130,8 +131,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		List<AmpReportColumn> generated = new ArrayList<AmpReportColumn>();
 		List<AmpReportColumn> colNames = reportMetadata.getOrderedColumns();
 		Iterator<AmpReportColumn> i = colNames.iterator();
-		
-		
+			
+		// build extractable, extractableNames, generated
 		while (i.hasNext()) {
 			boolean skypIt=false;
 			AmpReportColumn element2 = (AmpReportColumn) i.next();
@@ -154,20 +155,18 @@ public class AmpReportGenerator extends ReportGenerator {
 		extractableCount += extractableNames.size();
 
 		// also add hierarchical columns to extractable:
-		Iterator<AmpReportHierarchy> ii = reportMetadata.getHierarchies()
-				.iterator();
-		while (ii.hasNext()) {
-			AmpReportHierarchy element = (AmpReportHierarchy) ii.next();
+		for (AmpReportHierarchy element:reportMetadata.getHierarchies()) {
 			AmpReportColumn arc = new AmpReportColumn();
 			arc.setColumn(element.getColumn());
 			arc.setOrderId(1L);
 			extractable.add(arc);
 		}
-		if(!filter.isJustSearch()){
-		    this.columnsToBeRemoved=
-		    ColumnFilterGenerator
-			.appendFilterRetrievableColumns(extractable, filter);
-		   // extractableCount += this.columnsToBeRemoved.size(); 
+					
+		if(!filter.isJustSearch())
+		{
+		    this.columnsToBeRemoved = ColumnFilterGenerator.appendFilterRetrievableColumns(extractable, filter);
+		   // extractableCount += this.columnsToBeRemoved.size();
+		    
 		}
 		
 		if (extractable.size() > 0) {
@@ -212,7 +211,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		try {
 
 			while (i.hasNext()) {
-				AmpReportColumn rcol = (AmpReportColumn) i.next();
+				AmpReportColumn rcol = i.next();
 				AmpColumns col = rcol.getColumn();
 				logger.info("Extracting column " + col.getColumnName()
 						+ " with view " + col.getExtractorView());
@@ -243,7 +242,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				String columnFilterSQLClause = "";
 				
 				if(!filter.isJustSearch()) {
-				columnFilterSQLClause=ColumnFilterGenerator
+					columnFilterSQLClause = ColumnFilterGenerator
 						.generateColumnFilterSQLClause(filter, col, true);
 				}
 
@@ -297,11 +296,11 @@ public class AmpReportGenerator extends ReportGenerator {
 							.newInstance();
 					column.setDimensionClass(cp.getDimensionClass());
 				}
-				logger.info("Adding column "+column.getName());
+				logger.info("Adding column " + column.getName());
 				CellColumn older = (CellColumn) rawColumns.getColumn(column.getColumnId());
-				if(older!=null) {
+				if (older != null) {
 				    for ( Object o : column.getItems() ) 
-					older.addCell(o);
+				    	older.addCell(o);
 				    
 				} else {
 					rawColumns.addColumn(rcol.getOrderId().intValue(), column);
@@ -334,20 +333,18 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		
 		while (i.hasNext()) {
-			AmpReportColumn elem = (AmpReportColumn) i.next();
-			Iterator it = elem.getColumn().getFilters().iterator();
+			AmpReportColumn elem = i.next();
 			boolean filterSelected=false;
-			while (it.hasNext()) {
-				AmpColumnsFilters acf = (AmpColumnsFilters) it.next();
+			for (AmpColumnsFilters acf:elem.getColumn().getFilters()) {
 				Object property = PropertyUtils.getSimpleProperty(filter, acf
 						.getBeanFieldName());
-				if(property!=null) filterSelected=true;
+				if (property != null) filterSelected = true;
 			}
 			
 			//do not apply percentage for columns that were not selected in filters or for columns that are actually hierarchies
-			if(!filterSelected || hierarchyNames.contains(elem.getColumn().getColumnName())) continue;
+			if (!filterSelected || hierarchyNames.contains(elem.getColumn().getColumnName())) continue;
 			
-			if (elem.getColumn().getFilterRetrievable()!=null && elem.getColumn().getFilterRetrievable().booleanValue()) {
+			if (elem.getColumn().getFilterRetrievable() != null && elem.getColumn().getFilterRetrievable().booleanValue()) {
 				CellColumn c = rawColumnsByName.get(elem.getColumn()
 						.getColumnName());
 				// construct a unique set of cell values to fake the metacells of
@@ -486,6 +483,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		boolean totalActualCommitmentsLoaded = false;
 		boolean totalActualCommitmentsAdded = false;
+		
+		//BOZO: here building the corrupted AMP-13527 newcol starts
 		GroupColumn newcol = new GroupColumn();
 		if (categorizeByFundingType) {
 			Set<AmpReportMeasures> measures = reportMetadata.getMeasures();
@@ -525,7 +524,7 @@ public class AmpReportGenerator extends ReportGenerator {
 					continue;
 
 				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
-				CellColumn cc = new TotalAmountColumn(metaInfo.getValue().toString(), true);
+				TotalAmountColumn cc = new TotalAmountColumn(metaInfo.getValue().toString(), true);
 				newcol.getItems().add(cc);
 				cc.setParent(newcol);
 
@@ -541,7 +540,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 			}
 		}
-		
+		// BOZO: AMP-13527 already manifested before getting to here (newcol.items[0/1]===column has 9 items in lieu of 12) 
 		//Calculate global totals for Computed MEasures that require it
 		TotalAmountColumn removeableColumn = null;
 		BigDecimal total = new BigDecimal(0);
@@ -552,10 +551,10 @@ public class AmpReportGenerator extends ReportGenerator {
 			if (el instanceof TotalAmountColumn){
 				TotalAmountColumn column = (TotalAmountColumn) el;
 				if(ArConstants.ACTUAL_COMMITMENTS.equalsIgnoreCase(column.getName())) {
-					Iterator iit = ((TotalAmountColumn) el).iterator();
+					Iterator<Cell> iit = column.iterator();
 					while(iit.hasNext())
 					{
-						Object el2 = iit.next();
+						Cell el2 = iit.next();
 						if (el2 instanceof CategAmountCell) {
 							CategAmountCell cac = (CategAmountCell) el2;
 							double dbl = cac.getAmount();
@@ -584,7 +583,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		Iterator<AmpReportMeasures> ii = xmeasuresList.iterator();
 		for (AmpReportMeasures ampReportMeasures : xmeasuresList) {
 			if (ampReportMeasures.getMeasure().getExpression()!=null){
-				AmpMeasures m=ampReportMeasures.getMeasure();
+				AmpMeasures m = ampReportMeasures.getMeasure();
 				TotalComputedMeasureColumn cTac=new TotalComputedMeasureColumn(m.getMeasureName());
 				cTac.setExpression(m.getExpression());
 				cTac.setDescription(m.getDescription());
@@ -761,7 +760,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		 * empty funding columns
 		 */
 		if ( ( reportMetadata.getDrilldownTab()==null || !reportMetadata.getDrilldownTab() ) && 
-				( reportMetadata.getAllowEmptyFundingColumns()==null || !reportMetadata.getAllowEmptyFundingColumns() ) )
+				( reportMetadata.getAllowEmptyFundingColumns() == null || !reportMetadata.getAllowEmptyFundingColumns() ) )
 				rawColumns.removeEmptyChildren(true);
 
 		report = new GroupReportData(reportMetadata.getName());
@@ -791,18 +790,19 @@ public class AmpReportGenerator extends ReportGenerator {
 		}else {
 			// perform removal of funding column when report has only Computed measures , or it a tab report
 			Set<AmpReportMeasures> ccmeasures = new HashSet<AmpReportMeasures>();
-			for (Iterator iterator = reportMetadata.getMeasures().iterator(); iterator.hasNext();) {
-			AmpReportMeasures measure = (AmpReportMeasures) iterator.next();
-			if (measure.getMeasure().getExpression() != null){
-				ccmeasures.add(measure);
+			for (Iterator<AmpReportMeasures> iterator = reportMetadata.getMeasures().iterator(); iterator.hasNext();) {
+				AmpReportMeasures measure = iterator.next();
+				if (measure.getMeasure().getExpression() != null){
+					ccmeasures.add(measure);
+				}
 			}
-		}
 			if (ccmeasures != null && ccmeasures.size() > 0){
 				if (ccmeasures.size() == reportMetadata.getMeasures().size()){
 					reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
 				}
 			}
 		}
+		
 		
 		// find out if this is a hierarchical report or not:
 		if (reportMetadata.getHierarchies().size() != 0)
@@ -821,15 +821,12 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * 
 	 */
 	protected void createHierarchies() {
-		List orderedHierarchies = ARUtil.createOrderedHierarchies(
+		List<AmpReportHierarchy> orderedHierarchies = ARUtil.createOrderedHierarchies(
 				reportMetadata.getShowAblesColumns(), reportMetadata.getHierarchies());
 		// add Unallocated fake items for activities missing hierarchy enabled
 		// data
-		Iterator i = orderedHierarchies.iterator();
-
-		while (i.hasNext()) {
-			Collection allIds = report.getOwnerIds();
-			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
+		for(AmpReportHierarchy element:orderedHierarchies) {
+			Collection<Long> allIds = report.getOwnerIds();
 			AmpColumns c = element.getColumn();
 			// the report always has one ColumnReportData since we did no
 			// processing, this is raw data:
@@ -849,9 +846,8 @@ public class AmpReportGenerator extends ReportGenerator {
 			// fakeC.setOwnerId(new Long(340));
 			// hc.addCell(fakeC);
 			// }
-			Iterator ii = allIds.iterator();
-			while (ii.hasNext()) {
-				Long id = (Long) ii.next();
+
+			for (Long id:allIds) {
 				Cell fakeC = hc.getWorker().newCellInstance();
 				fakeC.setOwnerId(id);
 				//
@@ -877,9 +873,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		}
 		// now we can create the hiearchy tree
-		i = orderedHierarchies.iterator();
-		while (i.hasNext()) {
-			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
+		for (AmpReportHierarchy element:orderedHierarchies) {
 			// TODO: the set is NOT a list, so the hierarchies are unordered.
 			AmpColumns c = element.getColumn();
 
@@ -902,11 +896,11 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * (categories).
 	 */
 	protected void categorizeData() {
-		Iterator i = reportMetadata.getOrderedColumns().iterator();
+		Iterator<AmpReportColumn> i = reportMetadata.getOrderedColumns().iterator();
 		while (i.hasNext()) {
-			AmpColumns element = ((AmpReportColumn) i.next()).getColumn();
+			AmpColumns element = i.next().getColumn();
 			String colName = element.getColumnName();
-			List cats = getColumnSubCategories(element.getColumnName());
+			List<String> cats = getColumnSubCategories(element.getColumnName());
 			Column c = rawColumns.getColumn(colName);
 			if (c instanceof GroupColumn)
 				continue; // ugly fix to AMP-2793 and the problem created by
@@ -945,8 +939,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		debugMode=(request.getParameter("debugMode")!=null);
 
-
-
+		
+		
 		logger.info("Master report query:" + filter.getGeneratedFilterQuery());
 
 		// remove the columns that are also hierarchies

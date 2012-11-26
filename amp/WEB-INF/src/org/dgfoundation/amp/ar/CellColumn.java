@@ -115,7 +115,7 @@ public class CellColumn extends Column {
 	 * @see org.dgfoundation.amp.ar.Column#filterCopy(org.dgfoundation.amp.ar.cell.Cell)
 	 */
 	@Override
-	public Column filterCopy(Cell metaCell, Set ids) {
+	public Column filterCopy(Cell metaCell, Set<Long> ids) {
 		CellColumn dest = (CellColumn) this.newInstance();
 		Iterator i = items.iterator();
 		while (i.hasNext()) {

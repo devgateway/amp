@@ -63,10 +63,10 @@ public class GroupColumn extends Column {
 	}
 	
 	public static Column verticalSplitByCategs(CellColumn src,
-            List categories, boolean generateTotalCols,AmpReports reportMetadata) {
+            List<String> categories, boolean generateTotalCols,AmpReports reportMetadata) {
 		
 		
-		return verticalSplitByCategs(src,categories,null,generateTotalCols, reportMetadata);
+		return verticalSplitByCategs(src, categories, null, generateTotalCols, reportMetadata);
 	}
 	
 	/**
@@ -81,8 +81,8 @@ public class GroupColumn extends Column {
 	 * @see MetaInfo, TotalAmountColumn, CategAmountCell
 	 */
     private static Column verticalSplitByCategs(Column src,
-            List categories, Set ids,boolean generateTotalCols,AmpReports reportMetadata) {
-        String cat = (String) categories.remove(0);
+            List<String> categories, Set ids, boolean generateTotalCols, AmpReports reportMetadata) {
+        String cat = categories.remove(0);
         if (categories.size() > 0)
             return verticalSplitByCategs(verticalSplitByCateg(src, cat,ids,
                     false,reportMetadata), categories, ids, generateTotalCols,reportMetadata);
@@ -100,9 +100,9 @@ public class GroupColumn extends Column {
      * @see verticalSplitByCategs
      */
     private static Column verticalSplitByCateg(Column src, 
-            String category,Set ids, boolean generateTotalCols,AmpReports reportMetadata) {    
-    	if(src instanceof CellColumn) 
-    		return verticalSplitByCateg((CellColumn)src,category,ids,generateTotalCols,reportMetadata);
+            String category, Set ids, boolean generateTotalCols, AmpReports reportMetadata) {    
+    	if (src instanceof CellColumn) 
+    		return verticalSplitByCateg((CellColumn)src, category, ids, generateTotalCols, reportMetadata);
     	else {
     		GroupColumn srcG=(GroupColumn) src;
     		GroupColumn dest=null;
@@ -139,12 +139,12 @@ public class GroupColumn extends Column {
     private static Column verticalSplitByCateg(CellColumn src,
     	String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
     	
-    	HashMap<String,String> yearMapping=new HashMap<String, String>();
-    	HashMap<String,String> monthMapping=new HashMap<String, String>();
+    	HashMap<String,String> yearMapping = new HashMap<String, String>();
+    	HashMap<String,String> monthMapping = new HashMap<String, String>();
     	
     	Column ret = new GroupColumn(src);
         Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
-        Iterator i = src.iterator();
+        Iterator<Cell> i = src.iterator();
        
         AmpARFilter myFilters	= null;
         try{
@@ -153,7 +153,7 @@ public class GroupColumn extends Column {
         catch (NullPointerException e) {
 			logger.warn("Could not get filter object when type is: " + category);
 		}
-       if ( (reportMetadata.getAllowEmptyFundingColumns()!=null && reportMetadata.getAllowEmptyFundingColumns()) && 
+       if ( (reportMetadata.getAllowEmptyFundingColumns() != null && reportMetadata.getAllowEmptyFundingColumns()) && 
     		  ( category.equals(ArConstants.YEAR) || category.equals(ArConstants.QUARTER) 
     		   	|| category.equals(ArConstants.MONTH) ) ) {
     	  ARUtil.insertEmptyColumns(category, src, metaSet, myFilters);
@@ -163,7 +163,7 @@ public class GroupColumn extends Column {
         while (i.hasNext()) {
             Categorizable element = (Categorizable) i.next();
             if(!element.isShow()) continue;
-            MetaInfo minfo=MetaInfo.getMetaInfo(element.getMetaData(),category);
+            MetaInfo minfo = MetaInfo.getMetaInfo(element.getMetaData(),category);
             if(minfo==null || minfo.getValue()==null) return null;
             	//if the year is not renderizable just not add it to minfo
            
@@ -285,10 +285,7 @@ public class GroupColumn extends Column {
         
 
         // iterate the set and create a subColumn for each of the metainfo
-        i = metaSet.iterator();
-        while (i.hasNext()) {
-        	MetaInfo element = (MetaInfo) i.next();
-        	
+        for (MetaInfo element:metaSet) {        	
         	//do not consider the Totals subcolumn in years/quarters as a real category
         	//if this category is found inside the grand totals column, ignore it 
             if(element.getCategory().equals(ArConstants.TERMS_OF_ASSISTANCE) && 
@@ -425,7 +422,7 @@ public class GroupColumn extends Column {
          
         if(ret.getItems().size()==0) {
         	AmountCellColumn acc=new AmountCellColumn(ret);
-        	Iterator ii=src.iterator();
+        	Iterator<Cell> ii=src.iterator();
         	while (ii.hasNext()) {
 				AmountCell element = (AmountCell) ii.next();
 				acc.addCell(element);
@@ -474,8 +471,9 @@ public class GroupColumn extends Column {
      * @param c
      */
     public void addColumn(Column c) {
-        if(!items.contains(c)) {items.add(c);        
-        c.setParent(this);
+        if (!items.contains(c)){
+        	items.add(c);        
+        	c.setParent(this);
         } else {
             Column older=(Column) items.get(items.indexOf(c));
             older.getItems().addAll(c.getItems());
@@ -483,11 +481,15 @@ public class GroupColumn extends Column {
     }
     
     public void addColumn(Integer idx,Column c){
-    	if(items.size()<idx.intValue()|| idx.intValue()==0) addColumn(c);else {
-    	if(idx.intValue()+1>items.size()) items.add(idx.intValue()-1,c);else
-    			items.add(idx.intValue(),c);
-    	c.setParent(this);
-    	}
+    	if (items.size() < idx.intValue() || idx.intValue() == 0) 
+    		addColumn(c);
+    	else {
+    		if(idx.intValue() + 1 > items.size()) 
+    			items.add(idx.intValue() - 1, c);
+    		else
+    			items.add(idx.intValue(), c);
+    		c.setParent(this);
+    		}
     }
 
     /**
@@ -532,7 +534,7 @@ public class GroupColumn extends Column {
      * 
      * @see org.dgfoundation.amp.ar.Column#filterCopy(org.dgfoundation.amp.ar.cell.Cell)
      */
-    public Column filterCopy(Cell filter, Set ids) {
+    public Column filterCopy(Cell filter, Set<Long> ids) {
         GroupColumn dest = new GroupColumn(this.getName());
         Iterator i = items.iterator();
         while (i.hasNext()) {

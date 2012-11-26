@@ -79,24 +79,24 @@ public abstract class ColumnWorker {
 	
 	public ColumnWorker(String condition,String viewName,String columnName,ReportGenerator generator) {
 		this.condition = condition;
-		this.columnName=columnName;
-		this.viewName= viewName;
-		this.sourceGroup=null;
-		extractor=true;
-		this.generator=generator;
+		this.columnName = columnName;
+		this.viewName=  viewName;
+		this.sourceGroup = null;
+		extractor = true;
+		this.generator = generator;
 	}	
 	
 	public ColumnWorker(String destName,GroupColumn source,ReportGenerator generator) {
-		this.columnName=destName;
-		this.sourceGroup=source;
-		extractor=false;
-		this.generator=generator;
+		this.columnName = destName;
+		this.sourceGroup = source;
+		extractor = false;
+		this.generator = generator;
 	}
 	
 	public Column populateCellColumn() {
 		Column c=null;
-		if(extractor) c= extractCellColumn(); else
-			c=generateCellColumn();
+		if (extractor) c = extractCellColumn(); 
+			else c = generateCellColumn();
 		c.setWorker(this);
 		c.setDescription(this.getRelatedColumn().getDescription());
 		return c;
@@ -128,11 +128,11 @@ public abstract class ColumnWorker {
 	
 	protected Column extractCellColumn() {
 		
-		Session sess=null;
-		Connection conn=null;
-		CellColumn cc=null;
+		Session sess = null;
+		Connection conn = null;
+		CellColumn cc = null;
 		try {
-			conn=PersistenceManager.getJdbcConnection();
+			conn = PersistenceManager.getJdbcConnection();
 			
 		} catch (HibernateException e) {
 			logger.error(e);
@@ -157,33 +157,33 @@ public abstract class ColumnWorker {
 		
 		try {
 			
-			ps = conn.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			ps = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
 			//add params if exist
-			ArrayList<FilterParam> params=generator.getFilter().getIndexedParams();
+			ArrayList<FilterParam> params = generator.getFilter().getIndexedParams();
 			for (int i = 0; i < params.size(); i++) {
 				ps.setObject(i+1, params.get(i).getValue(),params.get(i).getSqlType());	
 			}
 					
 			ResultSet rs = ps.executeQuery();
 			rs.setFetchSize(500);
-			rsmd=rs.getMetaData();
+			rsmd = rs.getMetaData();
 			
 			//Set parameters to query
 			//generator.getFilter().getYearFrom();
 			
-			int colsCount=rsmd.getColumnCount()+1;
+			int colsCount = rsmd.getColumnCount() + 1;
 			
 			columnsMetaData=new HashMap<String,String>();
 			
-			for (int i=1; i < colsCount;i++){
+			for (int i = 1; i < colsCount; i++){
 //				if ( viewName.equals("v_donor_funding")) 
 //					logger.info(i + " - " + rsmd.getColumnLabel(i).toLowerCase() );
 			    columnsMetaData.put(rsmd.getColumnLabel(i).toLowerCase(), rsmd.getColumnName(i).toLowerCase());
 			}
 			rs.last();
-			int rsSize=rs.getRow();			
-			cc = newColumnInstance(rsSize+1);
+			int rsSize = rs.getRow();
+			cc = newColumnInstance(rsSize + 1);
 			//rs.absolute(rsSize-500);	
 			rs.beforeFirst();
 			
@@ -196,8 +196,8 @@ public abstract class ColumnWorker {
 			
 			
 			while (crs.next()) {
-				Cell c=getCellFromRow(crs);
-				if(c!=null) cc.addCell(c);				
+				Cell c = getCellFromRow(crs);
+				if(c != null) cc.addCell(c);				
 			}
 			
 			crs.close();

@@ -75,9 +75,9 @@ public class TotalCommitmentsAmountColumn extends TotalAmountColumn {
 		return new TotalCommitmentsAmountColumn(this);
 	}
 
-	public List getTrailCells() {
-		ArrayList ar=new ArrayList();
-		Cell ac=new TotalCommitmentsAmountCell();		
+	public List<TotalCommitmentsAmountCell> getTrailCells() {
+		ArrayList<TotalCommitmentsAmountCell> ar = new ArrayList<TotalCommitmentsAmountCell>();
+		TotalCommitmentsAmountCell ac = new TotalCommitmentsAmountCell();		
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
 		    TotalCommitmentsAmountCell element = (TotalCommitmentsAmountCell) i.next();

@@ -1078,16 +1078,20 @@ public class IatiActivityWorker {
 	private void processDescriptions(AmpActivityVersion a, ArrayList<Description> iatiDescriptionList) {
 		for (Iterator it = iatiDescriptionList.iterator(); it.hasNext();) {
 			Description description = (Description) it.next();
-			if( description.getType()==null || "general".compareTo(description.getType().toLowerCase()) ==0 ){
-				String d = setEditorDescription(description , "aim-iati-desc-");
-				//if(this.getLang().compareTo(description.getLang()) == 0)
-					a.setDescription(d);
-			}
-			if(description.getType() != null && "objectives".compareTo(description.getType().toLowerCase()) ==0 ){
+
+			if(description.getType() != null && ("objectives".compareTo(description.getType().toLowerCase()) ==0 || "2".compareTo(description.getType().toLowerCase()) ==0) ){
 				String d = setEditorDescription(description , "aim-iati-obj-");
 				//if(this.getLang().compareTo(description.getLang()) == 0)
 					a.setObjective(d);
 			}
+			else 
+			//	if( description.getType()==null || "general".compareTo(description.getType().toLowerCase()) ==0 )
+				{
+					String d = setEditorDescription(description , "aim-iati-desc-");
+					//if(this.getLang().compareTo(description.getLang()) == 0)
+						a.setDescription(d);
+				}
+			
 		}
 		
 	}

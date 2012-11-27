@@ -373,6 +373,15 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           if (eaForm.getRegFundingPageCurrCode() == null) {
               eaForm.setRegFundingPageCurrCode(currCode);
           }
+      }else{
+    	  String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+          eaForm.setCurrCode(currCode);
+          if(eaForm.getFundingCurrCode()==null){
+          eaForm.setFundingCurrCode(currCode);
+          }
+      if (eaForm.getRegFundingPageCurrCode() == null) {
+          eaForm.setRegFundingPageCurrCode(currCode);
+      }
       }
 
       /*List prLst = new ArrayList();
@@ -1190,6 +1199,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           String toCurrCode=null;
           if (tm != null)
               toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+          else{
+        	  toCurrCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+          }
           calculations.setDebug(debug);
 
                     ArrayList fundingOrgs = new ArrayList();
@@ -2064,7 +2076,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 					fp.setFiscalCalId(apps.getFisCalId());
 				} else {
 					fp.setFiscalCalId(FeaturesUtil
-							.getGlobalSettingValueLong("Default Calendar"));
+							.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR));
 				}
 			}
 

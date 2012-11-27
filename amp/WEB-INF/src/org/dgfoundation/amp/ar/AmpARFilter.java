@@ -369,6 +369,10 @@ public class AmpARFilter extends PropertyListable {
 		generatedFilterQuery += " AND id IN (" + filter + ")";
 	}
 	
+	/**
+	 * TODO-Constantin: non-trivially-slow function called at least 3 times per report render
+	 * @param request
+	 */
 	public void readRequestData(HttpServletRequest request) {
 		this.generatedFilterQuery = initialFilterQuery;
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(

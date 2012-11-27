@@ -27,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettings;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -165,7 +166,7 @@ public class AMPStartupListener extends HttpServlet implements
 				currentTemplate = FeaturesUtil
 						.getTemplateVisibility(
 								FeaturesUtil
-										.getGlobalSettingValueLong("Visibility Template"),
+										.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),
 								session);
 				ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 			} finally {

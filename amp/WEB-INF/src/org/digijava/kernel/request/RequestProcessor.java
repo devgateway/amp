@@ -310,8 +310,9 @@ public class RequestProcessor
         		if (request.getQueryString() != null)
         			commonURL += "?" + request.getQueryString();
         		if (checkForIdInQuery(commonURL)){
-        			request.getSession().invalidate();
-        			response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
+
+        			throw new RuntimeException("No referrer found!");
+        			//response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
         		}
         	}
         }

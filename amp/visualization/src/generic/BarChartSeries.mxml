@@ -305,15 +305,22 @@
 				messageLoadingPanel.title = trnMessageLoadingPanel;
 				messageLoading.text = trnMessageLoading;
 
+				thumbCount = Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'sliderThumbCount')}")));
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
 				var labelArray:Array = new Array();
 				for(var year:int = startYear; year <= endYear; year++){
 					labelArray.push(year);
 				} 
-				sliderYear.labels = labelArray;
-				sliderYear.values[0] = startYear;
-				sliderYear.values[1] = endYear;
+				if (thumbCount==1){
+					showTrackHighlight = false;
+					sliderYear.labels = labelArray;
+					sliderYear.values[0] = endYear;
+				} else {
+					sliderYear.labels = labelArray;
+					sliderYear.values[0] = startYear;
+					sliderYear.values[1] = endYear;
+				}
 				
 				var strDomain:String = "";
 				var strProtocol:String = "";
@@ -393,15 +400,22 @@
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 
+				thumbCount = Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'sliderThumbCount')}")));
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
 				var labelArray:Array = new Array();
 				for(var year:int = startYear; year <= endYear; year++){
 					labelArray.push(year);
 				} 
-				sliderYear.labels = labelArray;
-				sliderYear.values[0] = startYear;
-				sliderYear.values[1] = endYear;
+				if (thumbCount==1){
+					showTrackHighlight = false;
+					sliderYear.labels = labelArray;
+					sliderYear.values[0] = endYear;
+				} else {
+					sliderYear.labels = labelArray;
+					sliderYear.values[0] = startYear;
+					sliderYear.values[1] = endYear;
+				}
 
 				var params:Object = {};
 				params["divide"] = divide;
@@ -458,13 +472,17 @@
 
 			private function getLegendY(currentIndex:Number ,y:Number):Number{
 				var ret = 0;
-				if (currentIndex < 4){
-					ret = y-5;
-				} else if (currentIndex < 8){
-					ret = y+25;
+				if (categoriesAmount <= 4){
+					ret = y+10;
 				} else {
-					ret = y+55;
-					sliderYear.y = 440;
+					if (currentIndex < 4){
+						ret = y-5;
+					} else if (currentIndex < 8){
+						ret = y+25;
+					} else {
+						ret = y+55;
+						sliderYear.y = 440;
+					}
 				}
 				return ret;
 			}
@@ -486,6 +504,7 @@
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 				
+				thumbCount = Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'sliderThumbCount')}")));
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
 				
@@ -496,8 +515,13 @@
 				if(idContainer == "AidType"){
 					params["typeofaid"] = "true";
 				}
-				params["startYear"] = sliderYear.values[0];
-				params["endYear"] = sliderYear.values[1];
+				if (thumbCount==1){
+					params["startYear"] = sliderYear.values[0];
+					params["endYear"] = sliderYear.values[0];
+				} else {
+					params["startYear"] = sliderYear.values[0];
+					params["endYear"] = sliderYear.values[1];
+				}
 				service.send(params);
 				messageLoadingPanel.visible = true;
 				sizeLoadingPanel(300, 200);
@@ -518,13 +542,15 @@
 						  useThousandsSeparator="true"/>
 	
 	<!--  GLOBAL VARIABLES -->
+	<mx:Boolean id="showTrackHighlight">true</mx:Boolean>
 	<mx:Object id="dataProvider"/>
+	<mx:Number id="thumbCount"></mx:Number>
 	<mx:Number id="startYear"></mx:Number>
 	<mx:Number id="endYear"></mx:Number>
 	<mx:Object id="categories"/>
 	<mx:Number id="categoriesAmount">10</mx:Number>
 	<mx:String id="verticalField"/>
-	<mx:String id="dataField">fundingtype</mx:String>
+	<mx:String id="dataField">dataField</mx:String>
 	<mx:String id="labelField">name</mx:String>
 	<mx:String id="childDataField">amount</mx:String>
 	<mx:String id="childLabelField">category</mx:String>
@@ -784,7 +810,7 @@
 			</axiis:HBoxLayout> 
 		</axiis:layouts>
 	</axiis:DataCanvas>
-	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="420" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
+	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="{showTrackHighlight}" thumbCount="{thumbCount}" change="sliderYear_changeHandler(event)" width="450" x="92" y="420" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
 	
 	</mx:Canvas>

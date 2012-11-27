@@ -27,7 +27,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	protected Set metaData;
 
 	@Override
-	public Cell merge(Cell c) {
+	public AmountCell merge(Cell c) {
 		AmountCell ret=(AmountCell) super.merge(c);
 		CategAmountCell realRet=new CategAmountCell(ret.getOwnerId());
 		realRet.getMergedCells().addAll(ret.getMergedCells());
@@ -55,7 +55,8 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 		return cummulativeShow;
 	}
 
-	public Cell newInstance() {
+	@Override
+	public AmountCell newInstance() {
 		return new CategAmountCell();
 	}
 	
@@ -157,104 +158,105 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	
 	
 public Cell filter(Cell metaCell,Set ids) {
-    	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);    
-		if(ret==null) return null;
+	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);    
+	if(ret==null) return null;
 		
-		if ( metaCell.getColumn().getName().equals(ArConstants.COLUMN_CAPITAL_EXPENDITRURE) ) {
-			if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.COLUMN_CAPITAL_EXPENDITRURE)))
-				return null;
+	if ( metaCell.getColumn().getName().equals(ArConstants.COLUMN_CAPITAL_EXPENDITRURE) ) {
+		if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.COLUMN_CAPITAL_EXPENDITRURE)))
+			return null;
+	}
+		
+	if(metaCell.getColumn().getName().equals(ArConstants.DONOR))  {
+		String donor=ret.getMetaValueString(ArConstants.DONOR);
+		if((donor!=null&&!metaCell.getValue().toString().equals(donor))&&(!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))){
+			return null;  
 		}
-		
-                 if(metaCell.getColumn().getName().equals(ArConstants.DONOR))  {
-                   String donor=ret.getMetaValueString(ArConstants.DONOR);
-                    if((donor!=null&&!metaCell.getValue().toString().equals(donor))&&(!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))){
-                       return null;  
-                    }
-                }
+	}
                 
-                 if(metaCell.getColumn().getName().equals(ArConstants.RELATED_PROJECTS))  {
-                     String project=ret.getMetaValueString(ArConstants.RELATED_PROJECTS);
-                      if((project!=null&&!metaCell.getValue().toString().equals(project))&&(!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))){
-                         return null;  
-                      }
-                  }
+	if(metaCell.getColumn().getName().equals(ArConstants.RELATED_PROJECTS))  {
+		String project=ret.getMetaValueString(ArConstants.RELATED_PROJECTS);
+		if((project!=null&&!metaCell.getValue().toString().equals(project))&&(!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))){
+			return null;  
+		}
+	}
                  
                  
-                if(metaCell.getColumn().getName().equals(ArConstants.DONOR_GROUP))  {
-                   String donorGrp=ret.getMetaValueString(ArConstants.DONOR_GROUP);
-                    if(donorGrp!=null&&!metaCell.getValue().toString().equals(donorGrp)){
-                       return null;  
-                    }
-                }
+	if(metaCell.getColumn().getName().equals(ArConstants.DONOR_GROUP))  {
+		String donorGrp=ret.getMetaValueString(ArConstants.DONOR_GROUP);
+		if(donorGrp!=null&&!metaCell.getValue().toString().equals(donorGrp)){
+			return null;  
+		}
+	}
                 
-                if(metaCell.getColumn().getName().equals(ArConstants.DONOR_TYPE_COL))  {
-                   String donorType=ret.getMetaValueString(ArConstants.DONOR_TYPE_COL);
-                    if(donorType!=null&&!metaCell.getValue().toString().equals(donorType)){
-                       return null;  
-                    }
-                }
+	if(metaCell.getColumn().getName().equals(ArConstants.DONOR_TYPE_COL))  {
+		String donorType=ret.getMetaValueString(ArConstants.DONOR_TYPE_COL);
+		if(donorType!=null&&!metaCell.getValue().toString().equals(donorType)){
+			return null;  
+		}
+	}
 		
-		if(metaCell.getColumn().getName().equals(ArConstants.REGION) &&
-				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE){
+	if(metaCell.getColumn().getName().equals(ArConstants.REGION) &&
+			this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE){
 				String retRegionName	= ret.getMetaValueString(ArConstants.REGION);
 				retRegionName			= (retRegionName!=null)?retRegionName.trim():retRegionName;
 				if(retRegionName!=null&& !metaCell.getValue().toString().equals( retRegionName ) )
 					return null;
-		}
+			}
 		
-		if(metaCell.getColumn().getName().equals(ArConstants.DISTRICT) &&
-				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) {
+	if(metaCell.getColumn().getName().equals(ArConstants.DISTRICT) &&
+			this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) {
 			
-				String retDistrictName	= ret.getMetaValueString(ArConstants.DISTRICT);
-				retDistrictName			= (retDistrictName!=null)?retDistrictName.trim():retDistrictName;
-				if(retDistrictName!=null&& !metaCell.getValue().toString().equals( retDistrictName ) )
-					return null;
+		String retDistrictName	= ret.getMetaValueString(ArConstants.DISTRICT);
+		retDistrictName			= (retDistrictName!=null)?retDistrictName.trim():retDistrictName;
+		if(retDistrictName!=null&& !metaCell.getValue().toString().equals( retDistrictName ) )
+		return null;
 		}
 		
-		if(metaCell.getColumn().getName().equals(ArConstants.ZONE) &&
-				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) {
+	if(metaCell.getColumn().getName().equals(ArConstants.ZONE) &&
+			this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) {
 				String retZoneName	= ret.getMetaValueString(ArConstants.ZONE);
 				retZoneName			= (retZoneName!=null)?retZoneName.trim():retZoneName;
 				if(retZoneName!=null&&!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.ZONE)))
 					return null;
+			}
+	
+	if(metaCell.getColumn().getName().equals(ArConstants.TERMS_OF_ASSISTANCE))  {
+		String termAssistance=ret.getMetaValueString(ArConstants.TERMS_OF_ASSISTANCE);
+		if(termAssistance!=null&&!metaCell.getValue().toString().equals(termAssistance)){
+			return null;  
 		}
-               if(metaCell.getColumn().getName().equals(ArConstants.TERMS_OF_ASSISTANCE))  {
-                   String termAssistance=ret.getMetaValueString(ArConstants.TERMS_OF_ASSISTANCE);
-                    if(termAssistance!=null&&!metaCell.getValue().toString().equals(termAssistance)){
-                       return null;  
-                    }
-                }
+	}
 
-               if(metaCell.getColumn().getName().equals(ArConstants.FINANCING_INSTRUMENT)) {
-                   String financingInstr=ret.getMetaValueString(ArConstants.FINANCING_INSTRUMENT);
-                    if(financingInstr!=null&&!metaCell.getValue().toString().equals(financingInstr)){
-                       return null;  
-                    }
-                }
+	if(metaCell.getColumn().getName().equals(ArConstants.FINANCING_INSTRUMENT)) {
+		String financingInstr=ret.getMetaValueString(ArConstants.FINANCING_INSTRUMENT);
+		if(financingInstr!=null&&!metaCell.getValue().toString().equals(financingInstr)){
+			return null;  
+		}
+	}
                 
-                if(metaCell.getColumn().getName().equals(ArConstants.FUNDING_STATUS)) {
-                   String fundingStatus=ret.getMetaValueString(ArConstants.FUNDING_STATUS);
-                    if(fundingStatus!=null&&!metaCell.getValue().toString().equals(fundingStatus)){
-                       return null;  
-                    }
-                }
+	if(metaCell.getColumn().getName().equals(ArConstants.FUNDING_STATUS)) {
+		String fundingStatus=ret.getMetaValueString(ArConstants.FUNDING_STATUS);
+		if(fundingStatus!=null&&!metaCell.getValue().toString().equals(fundingStatus)){
+			return null;  
+		}
+	}
                 
-                if(metaCell.getColumn().getName().equals(ArConstants.MODE_OF_PAYMENT)) {
-                   String modeOfPayment=ret.getMetaValueString(ArConstants.MODE_OF_PAYMENT);
-                    if(modeOfPayment!=null&&!metaCell.getValue().toString().equals(modeOfPayment)){
-                       return null;  
-                    }
-                }
+	if(metaCell.getColumn().getName().equals(ArConstants.MODE_OF_PAYMENT)) {
+		String modeOfPayment=ret.getMetaValueString(ArConstants.MODE_OF_PAYMENT);
+		if(modeOfPayment!=null&&!metaCell.getValue().toString().equals(modeOfPayment)){
+			return null;  
+		}
+	}
                 
-                if(metaCell.getColumn().getName().equals(ArConstants.COMPONENT)) {
-                   String component=ret.getMetaValueString(ArConstants.COMPONENT);
-                    if(component!=null&&!metaCell.getValue().toString().equals(component)){
-                       return null;  
-                    }
-                }
+	if(metaCell.getColumn().getName().equals(ArConstants.COMPONENT)) {
+		String component=ret.getMetaValueString(ArConstants.COMPONENT);
+		if(component!=null&&!metaCell.getValue().toString().equals(component)){
+			return null;  
+		}
+	}
                 
-        //apply metatext filters
-		if(metaCell instanceof MetaTextCell) {
+    //apply metatext filters
+	if(metaCell instanceof MetaTextCell) {
 			//apply metatext filters for column Sector
 //		 applyMetaFilter("Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
 //		 applyMetaFilter("Executing Agency", ArConstants.EXECUTING_AGENCY_PERCENTAGE, metaCell, ret);
@@ -265,47 +267,46 @@ public Cell filter(Cell metaCell,Set ids) {
 //		 applyMetaFilter("Primary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
 //		 applyMetaFilter("Secondary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
 			
-			for (Iterator iterator = this.getNearestReportData().getReportMetadata().getHierarchies().iterator(); iterator.hasNext();) {
-				AmpReportHierarchy col = (AmpReportHierarchy) iterator.next();
-				if(col.getColumn().getCellType().contains(MetaTextCell.class.getSimpleName()))
-					//NEVER apply this for regional reports with regional metaCell:
-					if(metaCell.getColumn().getName().equals(ArConstants.REGION) && this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE)
-						continue;
-					//column is needed to get the tokenExpression on computed fields
-					ret.setColumn(this.getColumn());
-					applyMetaFilter(col.getColumn().getColumnName(), metaCell, ret, true);
-			}
-			
-			 
-
+		for (AmpReportHierarchy col : this.getNearestReportData().getReportMetadata().getHierarchies()) {
+//			AmpReportHierarchy col = (AmpReportHierarchy) iterator.next();
+			if(col.getColumn().getCellType().contains(MetaTextCell.class.getSimpleName()))
+			//NEVER apply this for regional reports with regional metaCell:
+				if(metaCell.getColumn().getName().equals(ArConstants.REGION) && this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE)
+					continue;
+			//column is needed to get the tokenExpression on computed fields
+			ret.setColumn(this.getColumn());
+			applyMetaFilter(col.getColumn().getColumnName(), metaCell, ret, true);
 		}
+	}
 		
 		//if(ret.getMergedCells().size()>0) 
 			//logger.info(ret.getMergedCells());
-		return ret;
-	}	/*
-		 * (non-Javadoc)
-		 * 
-		 * @see org.dgfoundation.amp.ar.Categorizable#hasMeta(org.dgfoundation.amp.ar.MetaInfo)
-		 */
-	public boolean hasMetaInfo(MetaInfo m) {
-		MetaInfo internal = MetaInfo.getMetaInfo(metaData,m.getCategory());
-		if (internal == null)
-			return false;
-		if (internal.equals(m))
-			return true;
-		else
-			return false;
-	}
+	return ret;
+}	
+		
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.dgfoundation.amp.ar.Categorizable#hasMeta(org.dgfoundation.amp.ar.MetaInfo)
+	 */
+public boolean hasMetaInfo(MetaInfo m) {
+	MetaInfo internal = MetaInfo.getMetaInfo(metaData,m.getCategory());
+	if (internal == null)
+		return false;
+	if (internal.equals(m))
+		return true;
+	else
+		return false;
+}
 	
 	
-	private  boolean render;
-	public void  setRenderizable(boolean prender) {
-	    // TODO Auto-generated method stub
-	     render=prender;
-	}
-	public boolean isRenderizable() {
-	    // TODO Auto-generated method stub
-	    return render;
-	}
+private  boolean render;
+public void  setRenderizable(boolean prender) {
+    // TODO Auto-generated method stub
+     render=prender;
+}
+public boolean isRenderizable() {
+    // TODO Auto-generated method stub
+    return render;
+}
 }

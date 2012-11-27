@@ -37,6 +37,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.mondrian.query.QueryThread;
@@ -196,7 +197,7 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 								String siteId=site.getId().toString();
 								String locale=navigationLanguage.getCode();	
 							
-								if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
+								if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS).equalsIgnoreCase("true")){
 									textamount = TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
 								}
 							

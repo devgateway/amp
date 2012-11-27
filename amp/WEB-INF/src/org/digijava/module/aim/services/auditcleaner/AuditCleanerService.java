@@ -2,6 +2,7 @@ package org.digijava.module.aim.services.auditcleaner;
 
 import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -15,7 +16,7 @@ public class AuditCleanerService extends AbstractServiceImpl {
 
 	protected void processInitEvent(ServiceContext serviceContext) {
 		String cleanerEnabled = FeaturesUtil
-				.getGlobalSettingValue("Automatic Audit Logger Cleanup");
+				.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP);
 		if (cleanerEnabled != null) {
 			if (!("-1").equalsIgnoreCase(cleanerEnabled)) {
 				startCleaner(Integer.parseInt(cleanerEnabled));

@@ -168,7 +168,7 @@ public class VisibilityManagerExportHelper {
 				
 				
 				AmpTreeVisibility modeltree = new AmpTreeVisibility();
-				modeltree.buildAmpTreeVisibilityMultiLevel(FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession));
+				modeltree.buildAmpTreeVisibilityMultiLevel(FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),hbsession));
 				currenttemplate.setItems(new TreeSet());
 				currenttemplate.setFeatures(new TreeSet());
 				currenttemplate.setFields(new TreeSet());

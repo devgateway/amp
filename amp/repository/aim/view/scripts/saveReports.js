@@ -91,7 +91,7 @@ SaveReportEngine.prototype.success		= function (o) {
 		}
 			
 		this.panel.setBody( message );
-		this.doneCopyMessage	
+		this.doneCopyMessage;	
 	
 	}
 }

@@ -337,13 +337,11 @@ public final class ARUtil {
 		return false;
 	}
 
-	public static List createOrderedHierarchies(Collection columns,
-			Collection hierarchies) {
-		List orderedColumns = new ArrayList(hierarchies.size());
+	public static List<AmpReportHierarchy> createOrderedHierarchies(Collection columns,
+			Collection<AmpReportHierarchy> hierarchies) {
+		List<AmpReportHierarchy> orderedColumns = new ArrayList<AmpReportHierarchy>(hierarchies.size());
 		for (int x = 0; x < hierarchies.size() + columns.size(); x++) {
-			Iterator i = hierarchies.iterator();
-			while (i.hasNext()) {
-				AmpReportHierarchy element = (AmpReportHierarchy) i.next();
+			for(AmpReportHierarchy element:hierarchies) {
 				int order = element.getLevelId().intValue();
 				if (order - 1 == x)
 					orderedColumns.add(element);

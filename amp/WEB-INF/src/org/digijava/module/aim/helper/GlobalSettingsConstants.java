@@ -73,6 +73,8 @@ public class GlobalSettingsConstants {
     
 	public static final String VERSION_QUEUE_SIZE = "Activity Versions Queue Size";
 	
+	public static final String ACTIVITY_LIFE = "Activity version life time in days";
+	
 	public static final String REPORT_GENERATOR_ONE_PAGER = "Report Generator - One Pager";
 
     public static final String DATE_FILTER_HIDES_PROJECTS = "Filter by date hides projects";
@@ -93,4 +95,21 @@ public class GlobalSettingsConstants {
 
     public static final String REPORTS_EMPTY_VALUES_AS_ZERO_XLS= "Show empty values as zero in Reports export to XLS";
 
+	public static final String DAILY_CURRENCY_RATES_UPDATE_ENALBLED = "Daily Currency Rates Update Enabled";
+	
+	public static final String DAILY_CURRENCY_RATES_UPDATE_HOUR = "Daily Currency Rates Update Hour";
+	
+	public static final String DAILY_CURRENCY_RATES_UPDATE_TIMEOUT = "Daily Currency Rates Update Timeout";
+	
+	public static final String AUTOMATIC_AUDIT_LOGGER_CLEANUP = "Automatic Audit Logger Cleanup";
+	
+	public static final String NPD_DEFAULT_PROGRAM = "NPD Default Program";
+	
+	public static final String COMPONENT_TYPE = "Default Component Type";
+	
+	public static final String VISIBILITY_TEMPLATE = "Visibility Template";
+	
+	public static final String COMPONENTS_SORT_ORDER = "Components Sort Order";
+	
+	public static final String GIS_FUNDING_TYPE = "GIS Funding Type";
 }

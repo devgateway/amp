@@ -33,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.VisibilityManagerForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.VisibilityManagerExportHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.HibernateException;
@@ -254,7 +255,7 @@ public class VisibilityManager extends MultiAction {
 		//refreshing the amp tree visibility from amp context!
 		AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
 		Session hbsession = PersistenceManager.getRequestDBSession();
-		AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession);
+		AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),hbsession);
 		ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 		ampContext=this.getServlet().getServletContext();
 		ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
@@ -423,7 +424,7 @@ public class VisibilityManager extends MultiAction {
 			
 			((VisibilityManagerForm) form).addMessage("aim:ampfeaturemanager:visibilityTreeUpdated",  Constants.FEATURE_MANAGER_VISIBILITY_TREE_UPDATED);
 
-			AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession);
+			AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),hbsession);
 			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 
 			ampContext=this.getServlet().getServletContext();
@@ -547,7 +548,7 @@ public class VisibilityManager extends MultiAction {
 	
 	private void updateAmpContext(AmpTreeVisibility ampTreeVisibility, Session hbsession) throws HibernateException{
 		
-		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession);
+		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),hbsession);
 		ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 
 		ampContext=this.getServlet().getServletContext();

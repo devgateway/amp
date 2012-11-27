@@ -34,6 +34,7 @@ public class ReportWizardForm extends ActionForm {
 	private Long[] selectedMeasures		= null;
 
 	private Boolean duplicateName		= false;
+	private Boolean overwritingForeignReport = false;
 	
 	private Boolean publicReport 		= false;
 	private Boolean useFilters			= false;
@@ -231,4 +232,13 @@ public class ReportWizardForm extends ActionForm {
 		this.reportCategory = reportCategory;
 	}
 	
+	public Boolean getOverwritingForeignReport()
+	{
+		return overwritingForeignReport;
+	}
+	
+	public void setOverwritingForeignReport(Boolean bla)
+	{
+		this.overwritingForeignReport = bla;
+	}
 }

@@ -142,7 +142,14 @@ public class ReportWizardAction extends MultiAction {
 				e.printStackTrace();
 				return mapping.findForward("save");
 			}
-			catch (Exception e) {
+			catch (Exception e) 
+			{
+				// treat some special errors, so as not to add an Exception class for each and every type of error possible (like DuplicateReportNameException)
+				if (myForm.getOverwritingForeignReport())
+				{
+					logger.info(e.getMessage());
+					return mapping.findForward("save");
+				}
 				logger.error( e.getMessage() );
 				e.printStackTrace();
 				return mapping.findForward("save");
@@ -485,6 +492,15 @@ public class ReportWizardAction extends MultiAction {
 		return null;
 	}
 	
+	/**
+	 * saves a report based on an another one. In short, copies a report into a new one (with different filters, name and maybe owner). If the "new report" has the same name as the new one, it is overwritten - subject to ownership not changing
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception in case of an error or forbidden operation (like overwriting a different user's report)
+	 */
 	public ActionForward modeDynamicSave(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception { 
 		
@@ -506,11 +522,23 @@ public class ReportWizardAction extends MultiAction {
 		if ( ampReportTitle == null || ampReportTitle.length() == 0 )
 			throw new Exception ("No reportTitle found in request");
 		
-		AmpReports ampReport			= ReportWizardAction.duplicateReportData( reportId, request );
-		if ( ampReport == null )
+		AmpReports sourceReport = ReportWizardAction.loadAmpReport(reportId, request);
+		if ( sourceReport == null )
 			throw new Exception ("There was a problem getting access to the old report");
 		
+		AmpReports ampReport = ReportWizardAction.duplicateReportData(reportId, request); // make a detached copy
+		if ( ampReport == null )
+			throw new Exception ("There was a problem duplicating report");
+
+		
 		if ( ampReportTitle.equals(ampReport.getName()) ) { // we need to override the report
+			if (sourceReport.getOwnerId() == null)
+				throw new RuntimeException("unknown owner id of source report");
+			if (sourceReport.getOwnerId().getAmpTeamMemId() != ampTeamMember.getAmpTeamMemId())
+			{
+				myForm.setOverwritingForeignReport(true);
+				throw new Exception("you are not allowed to override someone else's report");
+			}
 			ampReport.setAmpReportId( reportId );
 			AmpFilterData.deleteOldFilterData( reportId );
 		}
@@ -575,19 +603,19 @@ public class ReportWizardAction extends MultiAction {
 			}
 	}
 	
-	private HashMap buildAmpTreeColumnSimple(Collection formColumns, Integer type, HttpSession httpSession)
+	private HashMap buildAmpTreeColumnSimple(Collection<AmpColumns> formColumns, Integer type, HttpSession httpSession)
 	{
 			
-			ArrayList ampColumnsVisibles=new ArrayList();
+			ArrayList<AmpColumnsVisibility> ampColumnsVisibles = new ArrayList<AmpColumnsVisibility>();
 			ServletContext ampContext;
-			ampContext=getServlet().getServletContext();
-			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-			Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
-			Collection allAmpColumns=formColumns;
-			Collection allAmpColumnsPrefixed=new ArrayList(); // put a "REPORTS " prefix
-			TreeSet ampThemes=new TreeSet();
-			TreeSet ampThemesOrdered=new TreeSet();
-			ArrayList ampColumnsOrder =(ArrayList) ampContext.getAttribute("ampColumnsOrder");
+			ampContext = getServlet().getServletContext();
+			AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+			Collection<AmpFieldsVisibility> ampAllFields = FeaturesUtil.getAMPFieldsVisibility();
+			Collection<AmpColumns> allAmpColumns = formColumns;
+			//Collection allAmpColumnsPrefixed = new ArrayList(); // put a "REPORTS " prefix
+			TreeSet<String> ampThemes = new TreeSet<String>();
+			TreeSet<AmpColumnsOrder> ampThemesOrdered = new TreeSet<AmpColumnsOrder>();
+			ArrayList ampColumnsOrder = (ArrayList) ampContext.getAttribute("ampColumnsOrder");
 			Map scope=PermissionUtil.getScope(httpSession);  
 			/*
 			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
@@ -600,18 +628,17 @@ public class ReportWizardAction extends MultiAction {
 			allAmpColumns.addAll(allAmpColumnsPrefixed);
 			*/			  
 			
-			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
+			for(AmpColumns ampColumn:allAmpColumns)
 			{
-				AmpColumns ampColumn=(AmpColumns) it.next();
-				for(Iterator jt=ampAllFields.iterator();jt.hasNext();)
+				for(AmpFieldsVisibility ampFieldVisibility:ampAllFields)
 				{
-					AmpFieldsVisibility ampFieldVisibility=(AmpFieldsVisibility) jt.next();
 					if(ampColumn.getColumnName().compareTo(ampFieldVisibility.getName())==0)
 					{
 						if(ampFieldVisibility.isFieldActive(ampTreeVisibility)) {
 							
 							  //skip build columns with no rights
-							  if(ampFieldVisibility.getPermission(false)!=null && !ampFieldVisibility.canDo(GatePermConst.Actions.VIEW,scope)) continue;
+							if(ampFieldVisibility.getPermission(false)!=null && !ampFieldVisibility.canDo(GatePermConst.Actions.VIEW,scope)) 
+								continue;
 						
 							AmpColumnsVisibility ampColumnVisibilityObj=new AmpColumnsVisibility();
 							ampColumnVisibilityObj.setAmpColumn(ampColumn);
@@ -641,18 +668,16 @@ public class ReportWizardAction extends MultiAction {
 					}
 				}
 			}
-			LinkedHashMap ampTreeColumn=new LinkedHashMap();
-			int jjj=0;
-			for(Iterator it=ampThemesOrdered.iterator();it.hasNext();)
+			LinkedHashMap<String, ArrayList<AmpColumns>> ampTreeColumn = new LinkedHashMap<String, ArrayList<AmpColumns>>();
+//			int jjj=0;
+			for(AmpColumnsOrder aco:ampThemesOrdered)
 			{
-				AmpColumnsOrder aco=(AmpColumnsOrder) it.next();
-				String themeName=(String) aco.getColumnName();
-				ArrayList aux=new ArrayList();
-				boolean added=false;
-				for(Iterator jt=ampColumnsVisibles.iterator();jt.hasNext();)
+				String themeName = (String) aco.getColumnName();
+				ArrayList<AmpColumns> aux = new ArrayList<AmpColumns>();
+				boolean added = false;
+				for(AmpColumnsVisibility acv:ampColumnsVisibles)
 				{
-					AmpColumnsVisibility acv=(AmpColumnsVisibility) jt.next();
-					if(themeName.compareTo(acv.getParent().getName())==0)
+					if(themeName.compareTo(acv.getParent().getName()) == 0)
 					{
 						aux.add( acv.getAmpColumn() );
 						added	= true;
@@ -697,25 +722,44 @@ public class ReportWizardAction extends MultiAction {
 				+ "'");
 	}
 	
-	public static AmpReports duplicateReportData (Long ampReportId, HttpServletRequest request) {
+	/**
+	 * loads an AmpReport by id; returns null on any error
+	 * @param ampReportId
+	 * @param request
+	 * @return
+	 */
+	public static AmpReports loadAmpReport(Long ampReportId, HttpServletRequest request)
+	{
 		AmpReports ampReport	= null;
+		Session session			= null;
+		try {
+			session				= PersistenceManager.openNewSession();
+			if (ampReportId > 0)
+				ampReport	=  (AmpReports) session.load(AmpReports.class, ampReportId );
+			else 
+				ampReport	= (AmpReports) request.getSession().getAttribute("reportMeta");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			if ( session != null )
+				session.close();
+		}
+		return ampReport;
+	}
+	
+	/**
+	 * detaches a report from the DB, effectively creating a new, identical one
+	 * @param ampReportId
+	 * @param request
+	 * @return
+	 */
+	public static AmpReports duplicateReportData (Long ampReportId, HttpServletRequest request) {
+		AmpReports ampReport = loadAmpReport(ampReportId, request);
 		try{
-			Session session			= null;
-			try {
-				session				= PersistenceManager.openNewSession();
-				if (ampReportId > 0)
-					ampReport	=  (AmpReports) session.load(AmpReports.class, ampReportId );
-				else 
-					ampReport	= (AmpReports) request.getSession().getAttribute("reportMeta");
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			finally {
-				if ( session != null )
-					session.close();
-			}
-			
+			if (ampReport == null)
+				throw new RuntimeException("report not found: " + ampReportId);
 			ampReport.setAmpReportId(null);
 			//ampReport.setAmpPage(null);
 			ampReport.setFilterDataSet(null);
@@ -728,13 +772,13 @@ public class ReportWizardAction extends MultiAction {
 			ampReport.setOwnerId(null);
 			ampReport.setDesktopTabSelections(null);
 			
-			HashSet columns		= new HashSet();
+			HashSet<AmpReportColumn> columns = new HashSet<AmpReportColumn>();
 			columns.addAll( ampReport.getColumns() );
 			
-			HashSet hierarchies	= new HashSet();
+			HashSet<AmpReportHierarchy> hierarchies	= new HashSet<AmpReportHierarchy>();
 			hierarchies.addAll( ampReport.getHierarchies() );
 			
-			HashSet measures	= new HashSet();
+			HashSet<AmpReportMeasures> measures	= new HashSet<AmpReportMeasures>();
 			measures.addAll( ampReport.getMeasures() );
 			
 			HashSet reportMeasures	= new HashSet();

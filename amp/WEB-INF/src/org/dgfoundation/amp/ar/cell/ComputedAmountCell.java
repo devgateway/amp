@@ -100,7 +100,8 @@ public class ComputedAmountCell extends CategAmountCell {
 		categ1.getMetaData().addAll(categ2.getMetaData());
 	}
 
-	public Cell merge(Cell c) {
+	@Override
+	public AmountCell merge(Cell c) {
 		AmountCell ret = (AmountCell) super.merge(c);
 		ComputedAmountCell realRet = new ComputedAmountCell(ret.getOwnerId());
 		realRet.getMergedCells().addAll(ret.getMergedCells());
@@ -112,7 +113,8 @@ public class ComputedAmountCell extends CategAmountCell {
 
 	}
 
-	public Cell newInstance() {
+	@Override
+	public AmountCell newInstance() {
 		return new ComputedAmountCell();
 	}
 

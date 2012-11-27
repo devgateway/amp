@@ -349,7 +349,7 @@ public class ViewChannelOverview extends TilesAction {
 				if (apps.getFisCalId() !=null){
 					fp.setFiscalCalId(apps.getFisCalId());
 				}else{
-					fp.setFiscalCalId(FeaturesUtil.getGlobalSettingValueLong("Default Calendar"));
+					fp.setFiscalCalId(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_CALENDAR));
 				}
 			}
 		    if (fp.getFromYear() == 0 || fp.getToYear() == 0) {

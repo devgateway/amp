@@ -57,6 +57,7 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLevel;
+import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
@@ -6470,7 +6471,24 @@ public class DbUtil {
 
     /* get amp ME indicator value of a particular activity specified by ampActId */
     public static Collection getActivityMEIndValue(Long ampActId) {
-		try {
+    	Session session = null;
+        Collection col = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select indAct from "
+                + IndicatorActivity.class.getName()
+                + " indAct "
+                + " where (indAct.activity=:ampActId)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+            col = qry.list();
+        } catch (Exception e1) {
+            logger.error("could not retrieve AmpReportSector " + e1.getMessage());
+            e1.printStackTrace(System.out);
+        }
+        return col;
+		/*try {
 
 			Collection<IndicatorActivity> activityInd = null;
 			AmpActivityVersion activity = ActivityUtil.loadActivity(ampActId);
@@ -6482,7 +6500,7 @@ public class DbUtil {
 			logger.info("Couldn't get activity to delete indicators...");
 			return null;
 		}
-
+		 */
 	}
 
     /*

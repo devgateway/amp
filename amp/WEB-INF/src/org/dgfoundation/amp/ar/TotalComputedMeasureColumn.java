@@ -84,8 +84,8 @@ public class TotalComputedMeasureColumn extends TotalAmountColumn {
 		return new TotalComputedMeasureColumn(this);
 	}
 
-	public List getTrailCells() {
-		ArrayList ar = new ArrayList();
+	public List<ComputedMeasureCell> getTrailCells() {
+		ArrayList<ComputedMeasureCell> ar = new ArrayList<ComputedMeasureCell>();
 		ComputedMeasureCell ac = new ComputedMeasureCell();
 		Iterator i = items.iterator();
 		Values groupValues=new Values();

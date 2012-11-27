@@ -1679,17 +1679,16 @@ public class TeamUtil {
 	    					queryString += " and r.drilldownTab=false ";
 	    				}
 	    			}
-	                if(keyword!=null&&keyword.trim().length()>0){
+	                if(keyword != null && keyword.trim().length() > 0){
 	                	queryString += " and lower(r.name) like lower(:keyword) ";
 	                }
 	                
 	                queryString += " order by r.name";
 	                qry = session.createQuery(queryString);
-	                if(keyword!=null&&keyword.trim().length()>0){
+	                if(keyword != null && keyword.trim().length() > 0){
 	                	 qry.setString("keyword", '%' + keyword + '%');
 	                }
-	                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
-	                                 Hibernate.LONG);
+	                qry.setLong("id", ampTeamRep.getReport().getAmpReportId());
 	                Iterator itrTemp = qry.list().iterator();
 	                AmpReports ampReport = null;
 	                if(itrTemp.hasNext()) {
@@ -1722,7 +1721,7 @@ public class TeamUtil {
         }
         return col;
     }
-    public static List getTeamReportsCollection(Long teamId,int currentPage, int recordPerPage, Boolean tabs,String keyword) {
+    public static List getTeamReportsCollection(Long teamId, int currentPage, int recordPerPage, Boolean tabs, String keyword) {
         Session session = null;
         List col = new ArrayList<ReportsCollection>();
         try {
@@ -1738,7 +1737,7 @@ public class TeamUtil {
 					queryString += " and r.drilldownTab=false ";
 				}
 			}
-            if(keyword!=null&&keyword.trim().length()>0){
+            if(keyword != null && keyword.trim().length() > 0){
             	queryString += " and (lower(tr.report.name) like lower(:keyword) or lower(tr.report.ownerId.user.firstNames) like lower(:keyword) " +
             			"or lower(tr.report.ownerId.user.lastName) like lower(:keyword))";
             }
@@ -1751,6 +1750,9 @@ public class TeamUtil {
             qry.setFirstResult(currentPage);
             qry.setMaxResults(recordPerPage);
             qry.setLong("teamId", teamId);
+            
+            if (keyword != null)
+            	qry.setString("keyword", "%" + keyword + "%");
 
             col=qry.list();
 
@@ -1779,13 +1781,13 @@ public class TeamUtil {
 					queryString += " and r.drilldownTab=false ";
 				}
 			}
-           if(keyword!=null&&keyword.trim().length()>0){
+           if(keyword != null && keyword.trim().length() > 0){
         	   queryString += " and lower(tr.report.name) like lower(:keyword) ";
            }
            queryString += " order by tr.report";
            
            Query qry = session.createQuery(queryString);
-           if(keyword!=null&&keyword.trim().length()>0){
+           if(keyword != null && keyword.trim().length() > 0){
         	   qry.setString("keyword", '%' + keyword + '%');
 	       }
 	       qry.setLong("teamId", teamId);

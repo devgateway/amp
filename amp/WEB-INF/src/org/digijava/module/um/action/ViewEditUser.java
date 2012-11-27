@@ -315,7 +315,10 @@ public class ViewEditUser extends Action {
                     }
 
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));
-                    user.setRegion(LocationUtil.getAmpCategoryValueLocationById(uForm.getSelectedRegionId()));
+                    if(uForm.getSelectedRegionId()==-1){
+                    	user.setRegion(null);
+                    }else
+                    	user.setRegion(LocationUtil.getAmpCategoryValueLocationById(uForm.getSelectedRegionId()));
                     user.setEmail(uForm.getEmail());
                     user.setFirstNames(uForm.getFirstNames());
                     user.setLastName(uForm.getLastName());

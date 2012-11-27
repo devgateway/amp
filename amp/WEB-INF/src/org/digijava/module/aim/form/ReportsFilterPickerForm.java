@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
@@ -918,10 +919,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 
 	public Integer getAmountinthousandsint() {
-		if (amountinthousands !=null && amountinthousands){ // AMP-13496
-			return 1;
+		if ((amountinmillions != null) && amountinmillions)
+			return AmpARFilter.AMOUNT_OPTION_IN_MILLIONS;
+		
+		if ((amountinthousands != null) && amountinthousands){ // AMP-13496
+			return AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS;
 		}else{
-			return 0;
+			return AmpARFilter.AMOUNT_OPTION_IN_UNITS;
 		}
 	}
 	

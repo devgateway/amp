@@ -276,8 +276,19 @@ public class AmpARFilter extends PropertyListable {
 	private Integer renderEndYear = null;
 
 	private DecimalFormat currentFormat = null;
+	
+	public final static int AMOUNT_OPTION_IN_UNITS = 0; // not sure
+	public final static int AMOUNT_OPTION_IN_THOUSANDS = 1;
+	public final static int AMOUNT_OPTION_IN_MILLIONS = 2;
+	
 	private Integer amountinthousand;
+	
+	/**
+	 * DEPRECATED, TO BE REMOVED IN NEXT BRANCH
+	 * @deprecated
+	 */
 	private Boolean amountinmillion;
+	
 	private String decimalseparator;
 	private String groupingseparator;
 	private Integer groupingsize;
@@ -315,10 +326,20 @@ public class AmpARFilter extends PropertyListable {
 		this.groupingseparator = groupingseparator;
 	}
 	
+	/**
+	 * DO NOT USE - TO BE PHYSICALLY REMOVED IN 2.4
+	 * @deprecated
+	 * @return
+	 */
 	public final Boolean getAmountinmillion() {
 		return amountinmillion;
 	}
 
+	/**
+	 * DO NOT USE - TO BE PHYSICALLY REMOVED IN 2.4
+	 * @deprecated
+	 * @return
+	 */
 	public final void setAmountinmillion(Boolean amountinmillion) {
 		this.amountinmillion = amountinmillion;
 	}

@@ -268,12 +268,11 @@ public class FilterUtil {
 		form.setSelectedDonnorAgency( FilterUtil.getObjectsIds(filter.getDonnorgAgency()) );
 		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
-		if (filter.getAmountinthousand()!=null && filter.getAmountinthousand()==1){
-			form.setAmountinthousands(true);
-		}else{
-			form.setAmountinthousands(false);
-		}
-		form.setAmountinmillions(filter.getAmountinmillion());
+		
+		form.setAmountinthousands(filter.getAmountinthousand()!=null && filter.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS);
+		form.setAmountinmillions(filter.getAmountinthousand()!=null && filter.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS);
+		
+//		form.setAmountinmillions(filter.getAmountinmillion());
 		
 		if ( filter.getGroupingseparator() != null ) {
 			form.setCustomGroupCharacter("CUSTOM");

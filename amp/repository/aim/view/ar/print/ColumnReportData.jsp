@@ -27,12 +27,19 @@
 	<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;" colspan="3">
 		<span  style="color: red;font-family: Arial;font-size: 10px;">
 			<%
-           	AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
-           	if (af.getAmountinthousand()!=null && af.getAmountinthousand()==1){%>
-          		<digi:trn key="rep:pop:AllAmount">
+				AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
+	            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){%>
+	            <digi:trn key="rep:pop:AllAmount">
 					Amounts are in thousands (000)
 				</digi:trn>
-      		<%}%>
+			<%}%>
+						
+			<%	                	
+				if (af.getAmountinthousand()!=null && af.getAmountinthousand()==AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){%>
+					<digi:trn key="rep:pop:AllAmount">
+						Amounts are in millions (000 000)
+					</digi:trn>
+			<%}%>
 						
 			<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 				<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />

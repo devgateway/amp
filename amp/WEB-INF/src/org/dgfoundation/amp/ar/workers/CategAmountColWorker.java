@@ -292,16 +292,16 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		if (filter.getAmountinthousand() == null) {
 			if (Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-				filter.setAmountinthousand(1);
+				filter.setAmountinthousand(AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS);
 			else 
-				filter.setAmountinthousand(0);
+				filter.setAmountinthousand(AmpARFilter.AMOUNT_OPTION_IN_UNITS);
 		} 
 		
-		if (filter.getAmountinthousand() == 2){
+		if (filter.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){
 			if (tr_amount != 0){
 				acc.setAmount(tr_amount * 0.001d * 0.001d);
 			}
-		} else if (filter.getAmountinthousand() == 1){
+		} else if (filter.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){
 			if (tr_amount != 0){
 				acc.setAmount(tr_amount*0.001d);
 			}

@@ -10,11 +10,9 @@
 
 <script language="JavaScript">
 
-	$(document).ready(function(){
 	    $(window).load(function() {
 		    $("#loader_background").fadeOut('fast'); 
-		    })
-	});
+		    });
 
 	function changeLevel(id) {
 		<digi:context name="urlVal" property="context/module/moduleinstance/visibilityManager.do" />			  

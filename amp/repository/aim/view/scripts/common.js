@@ -1,10 +1,6 @@
 function unload() {
 }
 
-function dandan(){
-alert("asdasd");
-}
-
 /*
 <SCRIPT LANGUAGE="javascript">
 <!--

@@ -355,7 +355,7 @@ public class AmpARFilter extends PropertyListable {
 	}
 	
 	/**
-	 * BOZO: non-trivially-slow function called at least 3 times per report render
+	 * TODO-Constantin: non-trivially-slow function called at least 3 times per report render
 	 * @param request
 	 */
 	public void readRequestData(HttpServletRequest request) {

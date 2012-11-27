@@ -484,7 +484,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		boolean totalActualCommitmentsLoaded = false;
 		boolean totalActualCommitmentsAdded = false;
 		
-		//BOZO: here building the corrupted AMP-13527 newcol starts
+		//TODO-Constantin: here building the corrupted AMP-13527 newcol starts
 		GroupColumn newcol = new GroupColumn();
 		if (categorizeByFundingType) {
 			Set<AmpReportMeasures> measures = reportMetadata.getMeasures();
@@ -540,7 +540,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 			}
 		}
-		// BOZO: AMP-13527 already manifested before getting to here (newcol.items[0/1]===column has 9 items in lieu of 12) 
+		//TODO-Constantin: AMP-13527 already manifested before getting to here (newcol.items[0/1]===column has 9 items in lieu of 12) 
 		//Calculate global totals for Computed MEasures that require it
 		TotalAmountColumn removeableColumn = null;
 		BigDecimal total = new BigDecimal(0);

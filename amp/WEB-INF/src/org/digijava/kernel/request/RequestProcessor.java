@@ -261,7 +261,6 @@ public class RequestProcessor
         String secure = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SECURE_SERVER);
         
         //AMP Security Issues - AMP-12638
-        if ((referrer != null) && (referrer.equals("BOZODISABLEME")))
         {
         	String commonURL = new String(request.getRequestURL());
         	String headCommonURL = commonURL.substring(0, commonURL.indexOf("://") + 3);
@@ -303,8 +302,9 @@ public class RequestProcessor
         		if (commonURL.indexOf('~') > -1 ||
         				commonURL.indexOf("id=") > -1 ||
         				commonURL.indexOf("Id=") > -1){
-        			request.getSession().invalidate();
-        			response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
+
+        			throw new RuntimeException("No referrer found!");
+        			//response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
         		}
         	}
         }

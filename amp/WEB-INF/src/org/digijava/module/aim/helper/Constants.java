@@ -13,6 +13,7 @@ public class Constants
 		public static final String NUMBER_OF_YEARS_IN_RANGE	= "Number of Years in Range";
 		public static final String START_YEAR_DEFAULT_VALUE	= "Change Range Default Start Value";
 		public static final String END_YEAR_DEFAULT_VALUE		= "Change Range Default End Value";
+		public static final String DECIMAL_LOCATION_PERCENTAGES_DIVIDE = "Decimals in Location percentage";
 	};
 
 	public static final int COMMITMENT = 0 ;

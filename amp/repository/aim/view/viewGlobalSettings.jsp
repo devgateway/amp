@@ -228,7 +228,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
-
+<h1 style="text-align:left;" class="admintitle">General Settings</h1>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
 		<td align=left valign="top" width=750px>
@@ -746,7 +746,7 @@ var enterBinder	= new EnterHitBinder('gsSaveAllBtn');
 				                              <td colspan="2" align="center" valign="bottom" >
 					                              	<html:hidden property="allValues"/>
 					                              	<html:hidden property="indexTab"/>
-					                              	<html:submit property="saveAll" styleId="gsSaveAllBtn">
+					                              	<html:submit property="saveAll" styleClass="buttonx" styleId="gsSaveAllBtn">
 					                                    <digi:trn key="aim:saveAll">
 					                                    	Save All                                    
 					                                    </digi:trn>

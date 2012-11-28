@@ -59,6 +59,7 @@ div.fakefile2 {
 	margin: 0;
 	z-index: 1;
 	line-height: 90%;
+	text-align:left;
 }
 div.fakefile2 input{
 	width: 83px;
@@ -215,7 +216,7 @@ function fnSubmit() {
 				<tr>
 					<td noWrap width="750" vAlign="top">
 						<table width="100%" cellspacing="2" cellPadding="2" vAlign="top" align="left" style="margin-top:10px;">
-							<tr><td><table width="100%" border="0" align="left" cellpadding="1" cellspacing="1" bgcolor="#F2F2F2">
+							<tr><td><table width="100%" border="0" align="left" cellpadding="1" cellspacing="1" bgcolor="#F2F2F2" style="padding:10px;">
 								<tr><td>
 								<table cellpadding="0" cellSpacing=2 align="left" border="0" style="font-size:12px; margin-bottom:10px;">
 									<tr>
@@ -509,7 +510,7 @@ function fnSubmit() {
 									<table align="center" cellpadding="0" cellspacing="0" width="90%"
 												border="0">
 												<tr>
-													<td style="border-bottom:1px solid #ccc;"><!-- Other Links -->
+													<td><!-- Other Links -->
 													<table cellpadding="0" cellspacing="0" width="100" style="font-size:12px; margin-top:10px;">
 														<tr>
 															<td bgColor=#c9c9c7 class=box-title><digi:trn

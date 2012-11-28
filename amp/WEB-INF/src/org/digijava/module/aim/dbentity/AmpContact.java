@@ -139,6 +139,9 @@ public class AmpContact implements Comparable, Serializable, Cloneable {
         if (this.getId() != null && a.getId() != null) {
             return this.getId().compareTo(a.getId());
         } else {
+        	if(this.getTemporaryId()!=null&&a.getTemporaryId()!=null){
+        		return this.getTemporaryId().compareTo(a.getTemporaryId());
+        	}
             return 1;
         }
     }

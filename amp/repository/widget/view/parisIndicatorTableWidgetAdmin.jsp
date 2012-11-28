@@ -12,36 +12,34 @@
     }
 
 </script>
-<h1 class="admintitle">
-                <span class="subtitle-blue"><digi:trn>Paris Indicator Table Manager</digi:trn></span>
-</h1>
+<h1 class="admintitle"><digi:trn>Paris Indicator Table Manager</digi:trn></h1>
 <digi:instance property="piTableWidgetForm" />
 <digi:form action="/piTableWidgetManager.do~actType=viewAll">
 
 <digi:errors/>
 
-    <table width="60%" border="0" cellpadding="15">
+    <table width="100%" border="0" cellpadding="0">
 
         <tr>
-            <td>
+            <td style="padding-bottom:15px;">
                 <a href="/widget/piTableWidgetManager.do~actType=create"><digi:trn>Create New Paris Indicator Table Widget</digi:trn></a>
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="background-color:#f2f2f2; padding:15px;">
 
-                <table border="0" width="60%" align="center" style="font-family:verdana;font-size:11px;">
-                    <tr bgColor="#d7eafd">
+                <table border="0" width="60%" align="center" style="font-size:12px;">
+                    <tr bgColor="#c7d4db">
 
-                        <td nowrap="nowrap" width="80%">
+                        <td nowrap="nowrap" width="80%" style="padding:5px;">
                             <strong><digi:trn>Name</digi:trn></strong>
                         </td>
-                        <td nowrap="nowrap">
+                        <td nowrap="nowrap" style="padding:5px;">
                             <strong><digi:trn>Operations</digi:trn></strong>
                         </td>
                     </tr>
                     <c:forEach var="piTable" items="${piTableWidgetForm.piTableWidgets}" varStatus="stat">
-                        <tr>
+                        <tr bgcolor="#FFFFFF">
                             <td nowrap="nowrap">
                                 <c:out value="${piTable.name}"></c:out>
                             </td>
@@ -59,7 +57,7 @@
                         </tr>
                     </c:forEach>
 
-                </table>
+              </table>
 
 
             </td>

@@ -106,7 +106,7 @@
 	</tr>-->
 	<tr>
 		<td colspan="2" style="padding-bottom:10px; padding-top:10px;">
-			<span class="subtitle-blue"><digi:trn key="gis:editTableWidget:pageTitle">Edit table widget</digi:trn></span>
+			<h1 class="admintitle"><digi:trn key="gis:editTableWidget:pageTitle">Edit table widget</digi:trn></h1>
 		</td>
 	</tr>
 	<tr>

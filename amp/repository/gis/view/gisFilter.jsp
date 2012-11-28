@@ -10,7 +10,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 <style type="text/css">
-<!--
 
 .clear,.innerTab {
 	clear: both;
@@ -175,7 +174,6 @@ li table{
 	visibility:visible; 
 }
 
--->
 </style>
 <script type="text/javascript">
 var tabView = new YAHOO.widget.TabView('demo');

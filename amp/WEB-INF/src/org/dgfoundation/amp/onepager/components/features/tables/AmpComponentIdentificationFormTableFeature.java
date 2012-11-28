@@ -23,6 +23,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.validators.AmpUniqueComponentTitleValidator;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -92,7 +93,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
 				target.add(componentNameLabel);
 			}
 		});
-		name.getTextContainer().add(new AmpUniqueComponentTitleValidator(new PropertyModel<Long>(componentModel, "ampComponentId")));
+		name.getTextContainer().add(new AmpUniqueComponentTitleValidator(new PropertyModel<AmpActivityGroup>(activityModel, "ampActivityGroup")));
 		add(name);
 
 		AmpTextAreaFieldPanel<String> description = new AmpTextAreaFieldPanel<String>("description", new PropertyModel(componentModel, "description"), "Description", false, false, false);

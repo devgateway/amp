@@ -28,7 +28,7 @@
 				<b class="ins_header"><digi:trn>Grouping Selector</digi:trn></b> 
 			</div>
 		</div>
-		<div style="border: 1px solid #CCCCCC; height: ${100-selectorHeaderSize}%; width: 100%; background: white;" class="grouping_selector_wrapper_body">		
+		<div style="border: 1px solid #CCCCCC; height: ${100-selectorHeaderSize}%; width: 100%; background: white; overflow-y:scroll;" class="grouping_selector_wrapper_body">		
 				<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 					<logic:iterate id="element" name="elements" scope="page">
 						<tr style="cursor: pointer;"

@@ -15,10 +15,9 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <h1 class="admintitle">Code Chapter Importer</h1>
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg valign="top" width=750>
+		<td align=left class=r-dotted-lg valign="top" width=1000>
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -36,7 +35,7 @@
 					<!-- End navigation -->
 				</tr>
 				
-					<tr><td>
+					<tr><td bgcolor=#f2f2f2 align=center>
 					
 					<digi:instance property="importChaptersForm" />
 
@@ -45,7 +44,7 @@
             <p/>
 			<html:file property="uploadedFile"/>
 			<p/>
-			<html:submit property="importPerform"><digi:trn>Import</digi:trn></html:submit>
+			<html:submit styleClass="buttonx" property="importPerform"><digi:trn>Import</digi:trn></html:submit>
 			
 			<logic:equal name="importChaptersForm" property="importPerform" value="true">
 			<p></p>

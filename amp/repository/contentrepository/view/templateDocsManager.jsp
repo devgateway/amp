@@ -17,7 +17,7 @@
 <digi:instance property="tempDocManagerForm" />
 <digi:context name="digiContext" property="context" />
 
-
+ <h1 class="admintitle" style="text-align:left;">Template Documents Manager</h1>
 <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" width="1000" align=center>
 	<tr>
 		<td align="left" class="r-dotted-lg" vAlign="top" width="750">

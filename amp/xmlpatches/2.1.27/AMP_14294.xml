@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-14294</jira>
+  <keyword>Amount in Thousands</keyword>
+  <author>Dolghier Constantin</author>
+  <description>AmpARFilter.amountsinthousands is now Integer, amp_filter_data needs to reflect that</description>
+  	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				UPDATE amp_filter_data SET property_class_name='java.lang.Integer', value='0' WHERE property_name='amountinthousand';
+			</lang>
+		</script>
+	</apply>
+
+</tns:patch>

@@ -69,7 +69,15 @@
 <digi:form action="/indSectRegManager.do~actType=save">
     <input type="hidden" value="${gisIndicatorSectorRegionForm.sector}" name="sectorHidden"/>
     <html:hidden name="gisIndicatorSectorRegionForm" property="indSectId"/>
-    <table width="60%" border="0" cellpadding="15">
+                <h1 class="admintitle">
+                    <c:if test="${empty gisIndicatorSectorRegionForm.indSectId}">
+                        <digi:trn key="gis:createIndicatorSector">Create Indicator Sector</digi:trn>
+                    </c:if>
+                    <c:if test="${not empty gisIndicatorSectorRegionForm.indSectId}">
+                        <digi:trn key="gis:editIndicatorSector">Edit Indicator Sector</digi:trn>
+                    </c:if>
+                </h1>
+    <table width="100%" border="0" cellpadding="0">
         <tr>
             <td>
                 <span class="crumb">
@@ -89,19 +97,7 @@
             </td>
         </tr>
         <tr>
-            <td>
-                <span class="subtitle-blue">
-                    <c:if test="${empty gisIndicatorSectorRegionForm.indSectId}">
-                        <digi:trn key="gis:createIndicatorSector">Create Indicator Sector</digi:trn>
-                    </c:if>
-                    <c:if test="${not empty gisIndicatorSectorRegionForm.indSectId}">
-                        <digi:trn key="gis:editIndicatorSector">Edit Indicator Sector</digi:trn>
-                    </c:if>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td>
+            <td align=center style="background-color:#f2f2f2; padding:15px;">
                 
                 <table>
                     <tr>
@@ -183,14 +179,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="right">
+                        <td colspan="3" align="center">
                              <input type="button" onclick="validate()" value="<digi:trn>Save</digi:trn>"/>
-                        </td>
-                        <c:set var="trnCancel"><digi:trn key="aim:btn:cancel">Cancel</digi:trn></c:set> 
-                        <td>
                             <input type="button" value="${trnCancel}" onclick="cancel()">
                         </td>
-                    </tr>
+                        <c:set var="trnCancel"><digi:trn key="aim:btn:cancel">Cancel</digi:trn></c:set>                    </tr>
                 </table>
                 
             </td>

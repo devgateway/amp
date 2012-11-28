@@ -11,7 +11,7 @@
 <h1 class="admintitle">
 			<span class="subtitle-blue"><digi:trn key="gis:widgetPlaceMan:pageHeader">Widget Place Manager</digi:trn></span>
 </h1>
-<table width="60%" border="0" cellpadding="15">
+<table width="100%" border="0" cellpadding="0">
 	<!--<tr>
 		<td>
 			<span class="crumb">
@@ -74,7 +74,7 @@
 		</td>
 	</tr>	
 	<tr>
-		<td>
+		<td style="padding-top:10px;">
 			<small>
 				<digi:trn key="gis:widgetPlacesTable:note1">Please note that place objects may reappear after deletion if pages they exists on are rendered again.</digi:trn>
 			</small>

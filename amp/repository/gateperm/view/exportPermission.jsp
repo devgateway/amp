@@ -28,13 +28,14 @@
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <digi:form action="/exchangePermission.do">
+<h1 class="admintitle" style="text-align:left;">Permission Exchange Management</h1>
 	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width="1000" align="center">
 		<tr>
 			<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
 				<tr>
 					<!-- Start Navigation -->
-					<td height=33 bgcolor=#F2F2F2><span class=crumb> <c:set
+					<!--<td height=33 bgcolor=#F2F2F2><span class=crumb> <c:set
 						var="translation">
 						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 					</c:set> <a href="/aim/admin.do" styleClass="comment"
@@ -46,7 +47,7 @@
 					</a>&nbsp;&gt;&nbsp; <digi:link href="/managePermMap.do"
 						styleClass="comment" title="${translation}">
 						<digi:trn key="aim:globalperms">Global Permission Manager</digi:trn>
-					</digi:link>&nbsp;&gt;&nbsp; <digi:trn key="aim:exchangePermission">Permission Exchange Management</digi:trn></td>
+					</digi:link>&nbsp;&gt;&nbsp; <digi:trn key="aim:exchangePermission">Permission Exchange Management</digi:trn></td>-->
 					<!-- End navigation -->
 				</tr>
 			</table>

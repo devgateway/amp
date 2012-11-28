@@ -31,7 +31,7 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>
     <tr>
         <td class=r-dotted-lg width=14>&nbsp;</td>
         <td align=left class=r-dotted-lg valign="top" width=750>
@@ -54,7 +54,7 @@
                     <!-- End navigation -->
                 <!-- </tr> -->
                 <tr>
-                    <td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:ClassificationConfigurations">Classification Configurations</digi:trn></span>
+                    <td height=16 valign="center" width=571><h1 class="admintitle"><digi:trn key="aim:ClassificationConfigurations">Classification Configurations</digi:trn></h1>
                     </td>
                 </tr>
                 <tr>
@@ -66,7 +66,7 @@
                     <td noWrap width="100%" vAlign="top">
                         <table>
                             <tr>
-                            	<td noWrap width=600 vAlign="top">
+                            	<td noWrap width=750 vAlign="top">
                             		<table width="100%" valign="top">
                                 		<tr bgColor=#ffffff>
                                     		<td vAlign="top" width="100%">

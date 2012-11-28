@@ -446,7 +446,7 @@
 	<mx:Number id="outerRadi2">1</mx:Number>
 
 	<mx:String id="itemId">-1</mx:String>
-	<mx:String id="dataField">aidtype</mx:String>
+	<mx:String id="dataField">dataField</mx:String>
 	<mx:String id="fontFamily">Arial</mx:String>
 	<mx:Number id="fontSize">12</mx:Number>
 	<mx:String id="fontWeight">bold</mx:String>

@@ -43,13 +43,15 @@ public class TotalCommitmentsAmountCell extends AmountCell {
 		return Logic.getInstance().getCommitmentCalculator().calculateAmount(mergedCells);
 	}
 
-    public Cell merge(Cell c) {
+    @Override
+    public AmountCell merge(Cell c) {
 		AmountCell ac = (AmountCell) super.merge(c);		
 		TotalCommitmentsAmountCell uac = new TotalCommitmentsAmountCell(ac);
 		return uac;
     }
 
-    public Cell newInstance() {
+    @Override
+    public AmountCell newInstance() {
     	return new TotalCommitmentsAmountCell();
     }
 

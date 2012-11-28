@@ -113,7 +113,7 @@
 										<img src= "/repository/contentrepository/view/images/make_public.gif">
 										<c:if test="${aimTeamReportsForm.showReportList == true}">
 											<digi:trn key="aim:teamReportListViewableByAllWorkspaceMembers">
-												Indicates the report is viewable by all workspace members.
+												Indicates the report is viewable by all team members.
 											</digi:trn>
 										</c:if>
 										<c:if test="${aimTeamReportsForm.showReportList == false}">
@@ -122,13 +122,13 @@
 											</digi:trn>
 										</c:if>
 										<br/>
-										<digi:trn key="aim:clicktomakethisprivate">Click here to make this private</digi:trn>	
+										<digi:trn key="aim:clicktomakethisprivate">Click here to make this team-invisible</digi:trn>	
 									</div>
 									<div id="private">
 										<img src= "/repository/contentrepository/view/images/make_private.gif">
 										<c:if test="${aimTeamReportsForm.showReportList == true}">
 											<digi:trn key="aim:teamReportListViewableByManagerdAndCreator">
-											Indicates the report is viewable by the Creator of the Report
+											Indicates the report is not viewable by the team members
 											</digi:trn>
 										</c:if>
 										<c:if test="${aimTeamReportsForm.showReportList == false}">
@@ -137,7 +137,7 @@
 											</digi:trn>
 										</c:if>
 										<br>
-										<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>
+										<digi:trn key="aim:clicktomakethispublic">Click here to make this team-visible</digi:trn>
 									</div>
 						
 									<table class="inside normal" cellpadding="0" cellspacing="0" width=970>									
@@ -322,7 +322,7 @@
 															<logic:equal name="reports" property="teamView" value="false">
 																<c:set target="${urlParams}" property="status" value="team" />
 																	<c:set var="translation">
-																		<digi:trn key="aim:clickToMakeThisPublic">Click here to make this public</digi:trn>
+																		<digi:trn key="aim:clickToMakeThisPublic">Click here to make this team-visible</digi:trn>
 																	</c:set>
 																	
 																	<c:if test="${aimTeamReportsForm.showReportList == true}">
@@ -333,7 +333,7 @@
 																	</c:if>	
 																	
 																	<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this public</digi:trn>" src= "/repository/contentrepository/view/images/make_private.gif" border="0">
+																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this team-visible</digi:trn>" src= "/repository/contentrepository/view/images/make_private.gif" border="0">
 																	</digi:link>
 															</logic:equal>
 															
@@ -351,7 +351,7 @@
 																	</c:if>	
 
 																	<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this private</digi:trn>" src= "/repository/contentrepository/view/images/make_public.gif" border="0">
+																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this team-invisible</digi:trn>" src= "/repository/contentrepository/view/images/make_public.gif" border="0">
 																	</digi:link>
 															</logic:equal>
 															

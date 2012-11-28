@@ -190,13 +190,10 @@ public class ColumnReportDataPDF extends PDFExporter {
 
 		if (metadata.getHideActivities() == null
 				|| metadata.getHideActivities().booleanValue() == false) {
-			Iterator i = columnReport.getOwnerIds().iterator();
-		while (i.hasNext()) {
-			Long element = (Long) i.next();
+
+		for (Long element:columnReport.getOwnerIds()) {
 			this.setOwnerId(element);
-			Iterator ii = columnReport.getItems().iterator();
-			while (ii.hasNext()) {
-				Viewable velement = (Viewable) ii.next();
+			for (Viewable velement:columnReport.getItems()) {
 				velement.invokeExporter(this);
 			}
 		}

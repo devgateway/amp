@@ -2310,7 +2310,7 @@ public class DEImportBuilder {
 	                
 	                 //iActs = (IatiActivities) m.unmarshal(new FileInputStream(path+"doc/dataExchange/iati.xml")) ;
 	                 iActs = (IatiActivities) m.unmarshal(this.getAmpImportItem().getInputStream()) ;
-	                 if(this.getAmpImportItem().getPreviousInputStream() !=null)
+	                 if(this.getAmpImportItem().getPreviousInputStream() !=null &&  this.getAmpImportItem().getPreviousInputStream().available()>0)
 	                	 iActsPrevious = (IatiActivities) m.unmarshal(this.getAmpImportItem().getPreviousInputStream()) ;
 	                 
 	                 this.changedIDs = checkXML(this.getAmpImportItem().getInputStream(), this.getAmpImportItem().getPreviousInputStream());

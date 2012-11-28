@@ -12,10 +12,12 @@ public class ReportsCollection implements Comparable {
 					 report = null;
 					 teamView = false;
 		  }
-                  public ReportsCollection(AmpReports report,boolean teamView) {
-                                        this.report = report;
-                                        this.teamView =teamView;
-                 }
+          
+		  public ReportsCollection(AmpReports report,boolean teamView) 
+		  {
+			  this.report = report;
+              this.teamView =teamView;
+		  }
 
 
 		  public void setReport(AmpReports report) {

@@ -39,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AuditLoggerUtil;
@@ -429,7 +430,7 @@ public class ShowCalendarEvent extends Action {
             calendarItem.setCreationIp(RequestUtils.getRemoteAddress(request));
             calendarItem.setCreationDate(new Date());
             calendarItem.setDescription(ceform.getDescription());
-            Long templId=FeaturesUtil.getGlobalSettingValueLong("Visibility Template");
+            Long templId=FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE);
 	 	 	AmpFeaturesVisibility eventApprove = FeaturesUtil.getFeatureByName("Event Approve", "Calendar", templId);
 	 	 	if (eventApprove == null || isManager){
 	 	 	 	calendarItem.setApprove(new Integer(MessageConstants.CALENDAR_EVENT_APPROVED)); // 1 - Approve by default;

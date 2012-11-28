@@ -154,7 +154,7 @@
 
 			
 
-					<div id="listContainerDiv" style='width:100%; height:300px; border: 0px; overflow-y:scroll;'>
+					<div id="listContainerDiv" style='width:100%; height:300px; border: 0px; overflow-y:scroll; overflow-x:scroll;'>
 			
 			
 					<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;" border="0">
@@ -412,14 +412,29 @@
 		function showSelActivity(activityId) {
 			//var actUrl = "/aim/selectActivityTabs.do~pageId=2~ampActivityId=" + activityId;
 			var actUrl = "/aim/viewActivityPreview.do~isPreview=1~pageId=2~activityId=" + activityId;
-			
+
+			/* 
+			Commented out. See https://jira.dgfoundation.org/browse/AMP-13512 for details
+				
 			if (window.opener.opener == null) {
 				window.open(actUrl, null, null);
 			} else {
 				window.opener.opener.location.href = actUrl;
 				window.opener.opener.focus();
-			}
-			
+			}*/
+
+			/*
+			Trick for IE. We should create and click link programmatically.
+			To pass the referrer. IE does not pass referrer if use window.open()
+			*/
+			theLink = document.createElement('a');
+            theLink.style.display = 'none';
+            theLink.id = 'redirect_link';
+            theLink.target='_blank';
+            document.body.appendChild(theLink);
+            
+            theLink.href = actUrl;
+            theLink.click();
 		}
 		
 		resizeListContainer = function(o) {

@@ -541,7 +541,7 @@ public class FeaturesUtil {
 		Query qry = null;
 
 		try {
-			String defaultCountry = getGlobalSettingValue("Default Country");
+			String defaultCountry = getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
 			session = PersistenceManager.getSession();
 			qryStr = "select c.countryId, c.countryName from " + Country.class.getName() +
 			" c where c.iso = '"+defaultCountry+"'";
@@ -1190,9 +1190,9 @@ public class FeaturesUtil {
 	 *
 	 * @return
 	 */
-	public static Collection getAMPFieldsVisibility() {
+	public static Collection<AmpFieldsVisibility> getAMPFieldsVisibility() {
 		Session session = null;
-		Collection col = new ArrayList();
+		Collection<AmpFieldsVisibility> col = new ArrayList<AmpFieldsVisibility>();
 		String qryStr = null;
 		Query qry = null;
 
@@ -3017,7 +3017,7 @@ public class FeaturesUtil {
 	}
 
 	public static AmpComponentType getDefaultComponentType() {
-		String defaultComponentTypeIdStr = getGlobalSettingValue("Default Component Type");
+		String defaultComponentTypeIdStr = getGlobalSettingValue(GlobalSettingsConstants.COMPONENT_TYPE);
 		return ComponentsUtil.getComponentTypeById(Long.parseLong(defaultComponentTypeIdStr));
 	}
 

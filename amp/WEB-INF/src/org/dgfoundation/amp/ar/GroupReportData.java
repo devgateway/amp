@@ -18,9 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
-import org.dgfoundation.amp.ar.cell.ComputedMeasureCell;
+import org.dgfoundation.amp.ar.cell.*;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.exprlogic.MathExpression;
@@ -29,12 +27,12 @@ import org.dgfoundation.amp.exprlogic.Values;
 import org.digijava.module.aim.helper.KeyValue;
 
 /**
- * 
+ * complex report (e.g. non-flat, e.g. non-ColumnReportData)
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Jun 28, 2006
  * 
  */
-public class GroupReportData extends ReportData {
+public class GroupReportData extends ReportData<ReportData> {
 
     
 	/**
@@ -45,8 +43,8 @@ public class GroupReportData extends ReportData {
 	@Override
 	public int getVisibleRows() {
     	Iterator i=items.iterator();
-    	int ret=0; //one was for the title/totals. now we are counting the title/totals only for summary report
-
+    	int ret = 0; //one was for the title/totals. now we are counting the title/totals only for summary report
+    	
     	//if the report is summary then stop the processing here and return 1;
     	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
 			return 1; // consider the subtotals/titles as rows 
@@ -179,12 +177,9 @@ public class GroupReportData extends ReportData {
 	public GroupReportData horizSplitByCateg(String columnName)
 			throws UnidentifiedItemException, IncompatibleColumnException {
 		GroupReportData dest = new GroupReportData(this);
-		Iterator i = items.iterator();
-		while (i.hasNext()) {
-			ReportData element = (ReportData) i.next();
-			
+		for (ReportData element:items) {			
 			ReportData result= element.horizSplitByCateg(columnName);
-			if(result.getItems().size()!=0)
+			if (result.getItems().size() != 0)
 			    dest.addReport(result);
 			else dest.addReport(element);
 		}
@@ -200,16 +195,20 @@ public class GroupReportData extends ReportData {
 		
 	
 		// create trail cells
-		try {
-
-			trailCells = new ArrayList();
+		try {			
+			trailCells = new ArrayList<AmountCell>();
 			if (items.size() > 0) {
-				ReportData firstRd = (ReportData) items.iterator().next();
-				for (int k = 0; k < firstRd.getTrailCells().size(); k++) {
-					Cell c=(Cell) firstRd.getTrailCells().get(k);
-					if (c!=null){
-						Cell newc=c.newInstance();
-						newc.setColumn(c.getColumn());
+				ReportData<? extends Viewable> data = items.get(0);
+				
+				//ReportData firstRd = (ReportData) items.get(0);
+				//items.get(0).getTrailCells().iterator();
+				//for (AmountCell c:firstRd.getTrailCells())
+				
+				for(AmountCell caca:data.getTrailCells())
+				{
+					if (caca != null){
+						AmountCell newc = caca.newInstance();
+						newc.setColumn(caca.getColumn());
 						trailCells.add(newc);
 					}else{
 						trailCells.add(null);
@@ -220,7 +219,7 @@ public class GroupReportData extends ReportData {
 
 				i = items.iterator();
 				while (i.hasNext()) {
-					ReportData element = (ReportData) i.next();
+					ReportData<? extends Viewable> element = (ReportData) i.next();
 					if (element.getTrailCells().size() < trailCells.size()) {
 						logger
 								.error("INVALID Report TrailCells size for report: "
@@ -231,11 +230,11 @@ public class GroupReportData extends ReportData {
 								+ element.getTrailCells().size());
 					} else
 						for (int j = 0; j < trailCells.size(); j++) {
-							Cell newc =null;
+							AmountCell newc = null;
 							
-							Cell c = (Cell) trailCells.get(j);
-							Cell c2 = (Cell) element.getTrailCells().get(j);
-							if (c!=null){
+							AmountCell c = trailCells.get(j);
+							AmountCell c2 = element.getTrailCells().get(j);
+							if (c != null){
 								newc = c.merge(c2);
 								newc.setColumn(c2.getColumn());
 							}
@@ -246,9 +245,7 @@ public class GroupReportData extends ReportData {
 				}
 			}
 			
-			Iterator iter=trailCells.iterator();
-			while (iter.hasNext()) {
-				Object cell=iter.next();
+			for(AmountCell cell:trailCells) {
 				if (cell instanceof ComputedAmountCell) {
 					String totalExpression=((ComputedAmountCell) cell).getColumn().getWorker().getRelatedColumn().getTotalExpression();
 					String rowExpression=((ComputedAmountCell) cell).getColumn().getWorker().getRelatedColumn().getTokenExpression();
@@ -315,11 +312,9 @@ public class GroupReportData extends ReportData {
 	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getOwnerIds()
 	 */
-	public Collection getOwnerIds() {
-		Set ret = new TreeSet();
-		Iterator i = items.iterator();
-		while (i.hasNext()) {
-			ReportData element = (ReportData) i.next();
+	public Collection<Long> getOwnerIds() {
+		Set<Long> ret = new TreeSet<Long>();
+		for (ReportData element:items) {
 			ret.addAll(element.getOwnerIds());
 		}
 		return ret;
@@ -428,10 +423,10 @@ public class GroupReportData extends ReportData {
 	}
 
 	public void removeEmptyChildren() {
-		Iterator i=items.iterator();
+		Iterator<ReportData> i = items.iterator();
 		while (i.hasNext()) {
-			ReportData element = (ReportData) i.next();
-			if(element.getItems().size()==0) {
+			ReportData element = i.next();
+			if(element.getItems().size() == 0) {
 				i.remove(); 
 			} else {
 				element.removeEmptyChildren();
@@ -441,8 +436,7 @@ public class GroupReportData extends ReportData {
 	
 	public List<Column> getColumns(){
 		Set<Column> retValue = new HashSet<Column>();
-		for (Iterator iterator = items.iterator(); iterator.hasNext();) {
-			ReportData reportData = (ReportData) iterator.next();
+		for (ReportData reportData : items) {
 			retValue.addAll(reportData.getColumns());
 		}
 		return new ArrayList<Column>(retValue);
@@ -464,9 +458,7 @@ public class GroupReportData extends ReportData {
 	public void computeRowSpan(int numOfPreviousRows, int startRow, int endRow) {
 		int rowspan		= 0;
 		if (items != null) {
-			Iterator<Object> iter	= items.iterator();
-			while ( iter.hasNext() ) {
-				ReportData rd		= (ReportData)iter.next();
+			for (ReportData rd:items) {
 				rd.computeRowSpan(numOfPreviousRows, startRow, endRow);
 				numOfPreviousRows	+= rd.getVisibleRows();
 				rowspan				+= rd.getRowSpan();

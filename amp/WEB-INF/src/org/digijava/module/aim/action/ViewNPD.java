@@ -25,6 +25,7 @@ import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdForm;
 import org.digijava.module.aim.helper.FilteredAmpTheme;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.LabelValueBeanComparator;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -71,7 +72,7 @@ public class ViewNPD extends Action {
 
 		npdForm.setDummyYear("-1");
 		npdForm.setDonors(getDonorsList(30,collator));
-        npdForm.setDefaultProgram(FeaturesUtil.getGlobalSettingValue("NPD Default Program"));
+        npdForm.setDefaultProgram(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NPD_DEFAULT_PROGRAM));
 		//npdForm.setStatuses(getStatuses());
 
 		Collection<AmpTheme> themes = ProgramUtil.getAllThemes(true);

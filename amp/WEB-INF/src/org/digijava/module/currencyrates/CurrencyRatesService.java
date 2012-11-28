@@ -9,6 +9,7 @@ import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceException;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -18,10 +19,10 @@ public class CurrencyRatesService extends AbstractServiceImpl {
 	protected void processInitEvent(ServiceContext serviceContext)
 			throws ServiceException {
 		String serviceEnabled = FeaturesUtil
-				.getGlobalSettingValue("Daily Currency Rates Update Enabled");
+				.getGlobalSettingValue(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_ENALBLED);
 		String ampmHour = FeaturesUtil
-				.getGlobalSettingValue("Daily Currency Rates Update Hour");
-		String timeout = FeaturesUtil.getGlobalSettingValue("Daily Currency Rates Update Timeout");
+				.getGlobalSettingValue(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_HOUR);
+		String timeout = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_TIMEOUT);
 		if (serviceEnabled != null
 				&& "On".compareToIgnoreCase(serviceEnabled) == 0
 				&& ampmHour != null) {

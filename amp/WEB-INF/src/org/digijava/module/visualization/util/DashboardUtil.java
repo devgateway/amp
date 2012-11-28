@@ -215,6 +215,7 @@ public class DashboardUtil {
 
 	public static Map<AmpSector, BigDecimal> getRankSectors (Collection<AmpSector> sectorsList, DashboardFilter filter, Integer startYear, Integer endYear) throws DgException{
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
+		List<Long> alreadySummarizedSectors = new ArrayList<Long>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
@@ -234,15 +235,18 @@ public class DashboardUtil {
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 			//filter.setSelSectorIds(tempArray);
             AmpSector topLevelSector = getTopLevelParent(sector);
-            if(map.containsKey(topLevelSector)){
-            	BigDecimal currentTotal = map.get(topLevelSector);
-            	map.put(topLevelSector, total.add(currentTotal));
+            //AMP-14262: when the sector is top level, it has already summarized all its subsectors
+            if (topLevelSector.getAmpSectorId().equals(sector.getAmpSectorId())){
+            	map.put(topLevelSector, total);
+            	alreadySummarizedSectors.add(sector.getAmpSectorId());
+            }else if (!alreadySummarizedSectors.contains(topLevelSector.getAmpSectorId())){
+            	if(map.containsKey(topLevelSector) ){
+                	BigDecimal currentTotal = map.get(topLevelSector);
+                	map.put(topLevelSector, total.add(currentTotal));
+                }else{
+        	        map.put(topLevelSector, total);
+                }
             }
-            else
-            {
-    	        map.put(topLevelSector, total);
-            }
-
 		}
 		return sortByValue (map);
 	}

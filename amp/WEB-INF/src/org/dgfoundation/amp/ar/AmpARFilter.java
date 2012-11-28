@@ -78,6 +78,8 @@ public class AmpARFilter extends PropertyListable {
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	private Long id;
 	private boolean justSearch=false;
+	private boolean workspaceonly=false;
+
 	private Long ampReportId;
 	private Set statuses = null;
 	private Set workspaces = null;
@@ -256,6 +258,7 @@ public class AmpARFilter extends PropertyListable {
 
 	private AmpCurrency currency = null;
 	private Set ampTeams = null;
+	private Set ampTeamsforpledges = null;
 	private AmpFiscalCalendar calendarType = null;
 	private boolean widget = false;
 	private boolean publicView = false;
@@ -372,6 +375,10 @@ public class AmpARFilter extends PropertyListable {
 		generatedFilterQuery += " AND id IN (" + filter + ")";
 	}
 	
+	/**
+	 * TODO-Constantin: non-trivially-slow function called at least 3 times per report render
+	 * @param request
+	 */
 	public void readRequestData(HttpServletRequest request) {
 		this.generatedFilterQuery = initialFilterQuery;
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
@@ -597,19 +604,23 @@ public class AmpARFilter extends PropertyListable {
 		if (request.getSession().getAttribute(ArConstants.PLEDGES_REPORT) != null && 
 				request.getSession().getAttribute(ArConstants.PLEDGES_REPORT).toString().equalsIgnoreCase("true")){
 			indexedParams=new ArrayList<FilterParam>();
-		
+			
+			/*String WORKSPACE_ONLY="";
+			if (this.workspaceonly){
+					WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE amp_team_id IN ("
+					+ Util.toCSString(ampTeams) + ")";
+					PledgequeryAppend(WORKSPACE_ONLY);
+			}*/
+			
 			String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
 				+ Util.toCSString(donnorgAgency) + ")";
+			
 			String DONOR_TYPE_FILTER	= "SELECT v.id FROM v_pledges_donor_type v WHERE org_type_id IN ("
 				+ Util.toCSString(donorTypes) + ")";
 
 			String DONOR_GROUP_FILTER = "SELECT v.pledge_id FROM v_pledges_donor_group v WHERE amp_org_grp_id IN ("
 					+ Util.toCSString(donorGroups) + ")";
 
-			
-//			String REGION_SELECTED_FILTER = "SELECT v.pledge_id FROM v_pledges_regions v WHERE region_id ="
-//				+ (regionSelected==null?null:regionSelected.getIdentifier());
-			
 			String FINANCING_INSTR_FILTER = "SELECT v.pledge_id FROM v_pledges_aid_modality v WHERE amp_modality_id IN ("
 				+ Util.toCSString(financingInstruments) + ")";
 			
@@ -622,30 +633,23 @@ public class AmpARFilter extends PropertyListable {
 				+ Util.toCSString(sectors) + ")";
 			
 			if (donnorgAgency != null && donnorgAgency.size() > 0){
-					PledgequeryAppend(DONNOR_AGENCY_FILTER);
+				PledgequeryAppend(DONNOR_AGENCY_FILTER);
 			}
 			
-
 			if (donorGroups != null && donorGroups.size() > 0)
 				PledgequeryAppend(DONOR_GROUP_FILTER);
 			
 			if (donorTypes != null && donorTypes.size() > 0)
 				PledgequeryAppend(DONOR_TYPE_FILTER);
 			
-//			if (regionSelected != null){
-//				PledgequeryAppend(REGION_SELECTED_FILTER);
-//			}
 			if (financingInstruments != null && financingInstruments.size() > 0){
 				PledgequeryAppend(FINANCING_INSTR_FILTER);
 			}
 			if (typeOfAssistance != null && typeOfAssistance.size() > 0){
 				PledgequeryAppend(TYPE_OF_ASSISTANCE_FILTER);
 			}
-			/*
-			if (sectors != null && sectors.size() != 0) {
-				PledgequeryAppend(SECTOR_FILTER);
-			}
-			*/
+		
+		
 			return;
 		}
 		
@@ -1295,7 +1299,7 @@ public class AmpARFilter extends PropertyListable {
 	public int getInitialQueryLength() {
 		return initialQueryLength;
 	}
-
+	
 	/**
 	 * @return Returns the ampTeams.
 	 */
@@ -1935,7 +1939,15 @@ public class AmpARFilter extends PropertyListable {
 	public void setTeamAccessType(String teamAccessType) {
 		this.teamAccessType = teamAccessType;
 	}
+	
+	public boolean isWorkspaceonly() {
+		return workspaceonly;
+	}
 
+	public void setWorkspaceonly(boolean workspaceonly) {
+		this.workspaceonly = workspaceonly;
+	}
+	
 	public boolean isJustSearch() {
 		return justSearch;
 	}
@@ -2166,6 +2178,14 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setTagSectorsAndAncestors(Set tagSectorsAndAncestors) {
 		this.tagSectorsAndAncestors = tagSectorsAndAncestors;
+	}
+
+	public Set getAmpTeamsforpledges() {
+		return ampTeamsforpledges;
+	}
+
+	public void setAmpTeamsforpledges(Set ampTeamsforpledges) {
+		this.ampTeamsforpledges = ampTeamsforpledges;
 	}
 
 	

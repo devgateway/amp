@@ -88,7 +88,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 
 	public abstract Column postProcess();
 
-	public abstract Column filterCopy(Cell filter, Set ids);
+	public abstract Column filterCopy(Cell filter, Set<Long> ids);
 	
 	public abstract boolean removeEmptyChildren(boolean checkFunding);
 
@@ -104,7 +104,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	/**
 	 * returns the identifier for this column
 	 */
-	public Object getColumnId() {
+	public String getColumnId() {
 		return name;
 	}
 
@@ -316,7 +316,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 		this.rowSpan = rowSpan;
 	}
 
-	public abstract Set getOwnerIds();
+	public abstract Set<Long> getOwnerIds();
 
 	/**
 	 * Produces a list of trail CellS. These are usually custom made cells that

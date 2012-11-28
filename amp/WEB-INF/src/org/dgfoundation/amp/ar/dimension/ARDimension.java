@@ -70,7 +70,7 @@ public abstract class ARDimension {
 	}	  
     }
     
-    
+
     public static boolean isLinkedWith(ReportData parent, Cell childCell) {
 	//we get the dimension worker    
 	// requirements for translation purposes

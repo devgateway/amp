@@ -18,6 +18,7 @@ import java.util.TreeSet;
 import java.util.Map.Entry;
 
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
@@ -26,12 +27,12 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.digijava.module.aim.helper.KeyValue;
 
 /**
- * 
+ * flat report: X x Y
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Jun 28, 2006
  * 
  */
-public class ColumnReportData extends ReportData {
+public class ColumnReportData extends ReportData<Column> {
 	
 	/**
 	 * Returns the visible rows for the column report. 
@@ -47,9 +48,7 @@ public class ColumnReportData extends ReportData {
     			return 1; // consider the subtotals/titles as rows 
 
         	//compute the max for the underlying columns
-    	    Iterator i=items.iterator();
-    	    while (i.hasNext()) {
-				Column element = (Column) i.next();
+    	    for (Column element:items) {
 				//TODO same check should be done for all related colums (sectors, programs)
 				if ( ARUtil.hasHierarchy(this.getReportMetadata().getHierarchies(), ArConstants.COLUMN_REGION) && 
 						( ArConstants.COLUMN_ZONE.equals(element.name) || ArConstants.COLUMN_DISTRICT.equals(element.name) ) ){
@@ -103,9 +102,8 @@ public class ColumnReportData extends ReportData {
 	}
 
 	public Column getColumn(Object columnId) {
-		Iterator i = items.iterator();
-		while (i.hasNext()) {
-			Column element = (Column) i.next();
+		for(Column element:items) 
+		{
 			if (element.getColumnId().equals(columnId))
 				return element;
 		}
@@ -152,7 +150,7 @@ public class ColumnReportData extends ReportData {
 		
 		/* When summing up percentages for problem 2, we need to make sure we don't sum up the percentages of the same cell twice. 
 		 * So we use this set to verify what percentages were already summed up.*/
-		HashMap<Long,List> summedCellValues					= new HashMap<Long, List>();
+		HashMap<Long, List> summedCellValues					= new HashMap<Long, List>();
 		
 		/* This will store the last MetaTextCell created manually -- for problem 2 */
 		MetaTextCell metaFakeCell					= null;
@@ -178,9 +176,9 @@ public class ColumnReportData extends ReportData {
 					"GroupColumnS cannot be used as filter keys!");
 		if (keyCol == null)
 			throw new UnidentifiedItemException(
-					"Cannot found a Column with Id " + columnName
+					"Cannot find a Column with Id " + columnName
 							+ " in this ReportData");
-		TreeSet cats = new TreeSet();
+		TreeSet<Cell> cats = new TreeSet<Cell>();
 		Iterator i = keyCol.iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
@@ -189,10 +187,7 @@ public class ColumnReportData extends ReportData {
 		}
 
 		// we iterate each category from the set and search for matching rows
-		i = cats.iterator();
-		while (i.hasNext()) {
-			Cell cat = (Cell) i.next();
-			
+		for (Cell cat:cats) {			
 			if ( cat.compareTo(fakeCell) == 0 ) {
 				existsUnallocatedCateg = true;
 			}
@@ -213,7 +208,7 @@ public class ColumnReportData extends ReportData {
 			
 			
 			// construct the Set of ids that match the filter:
-			Set ids = new TreeSet();
+			Set<Long> ids = new TreeSet<Long>();
 			// TODO: we do not allow GroupColumnS for keyColumns
 			Iterator ii = keyCol.iterator();
 			while (ii.hasNext()) {
@@ -304,9 +299,9 @@ public class ColumnReportData extends ReportData {
 		/* Now that we have everything set we can filter-copy all the columns in the new ColumnReportDatas*/
 		Iterator<ColumnReportData> cellIter			= catToIds.keySet().iterator();
 		while ( cellIter.hasNext() ) {
-			ColumnReportData crd		= cellIter.next();
-			Set ids								= catToIds.get(crd);
-			Cell cat								= crd.getSplitterCell();
+			ColumnReportData crd	= cellIter.next();
+			Set<Long> ids			= catToIds.get(crd);
+			Cell cat				= crd.getSplitterCell();
 			
 			/* If this is the Unallocated category we add all remaining activity IDs to it*/
 			if ( crd.getSplitterCell().compareTo(fakeCell) == 0 ) {
@@ -343,10 +338,8 @@ public class ColumnReportData extends ReportData {
 	 * @see org.dgfoundation.amp.ar.ReportData#postProcess()
 	 */
 	public void postProcess() {
-		Iterator i = items.iterator();
-		List destCols = new ArrayList();
-		while (i.hasNext()) {
-			Column element = (Column) i.next();
+		List<Column> destCols = new ArrayList<Column>();
+		for (Column element:items) {
 			Column res = element.postProcess();
 			//res.applyVisibility(this.getReportMetadata().getMeasures(),ArConstants.FUNDING_TYPE);
 			
@@ -361,14 +354,12 @@ public class ColumnReportData extends ReportData {
 		prepareAspect();
 
 		// create trail cells...
-		trailCells = new ArrayList();
+		trailCells = new ArrayList<AmountCell>();
 		
 		List<String> ctbr = this.getColumnsToBeRemoved();
 		
-		i = items.iterator();
-		while (i.hasNext()) {
-			Column element = (Column) i.next();
-			List l = element.getTrailCells();
+		for (Column element:items) {
+			List<AmountCell> l = element.getTrailCells();
 			if (l != null){
 				trailCells.addAll(l);
 			}else{
@@ -381,13 +372,12 @@ public class ColumnReportData extends ReportData {
 		
 		//remove columns to be removed		
 		
-		if(ctbr!=null) {
-		    i=ctbr.iterator();
-		while (i.hasNext()) {
-		    String name = (String) i.next();
-		    items.remove(this.getColumn(name));		
-		    logger.info("Removed previously added column "+name+" for filtering purposes");
-		}
+		if(ctbr!=null) 
+		{
+		    for (String name:ctbr) {
+		    	items.remove(this.getColumn(name));		
+		    	logger.info("Removed previously added column "+name+" for filtering purposes");
+		    }
 		}
 	}
 
@@ -396,23 +386,22 @@ public class ColumnReportData extends ReportData {
 	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getOwnerIds()
 	 */
-	public Collection getOwnerIds() {
-		Set allIds = new TreeSet();
+	public Collection<Long> getOwnerIds() {
+		Set<Long> allIds = new TreeSet<Long>();
 		//get the entire set of ids:
 		try {
-		Iterator i = items.iterator();
-		while (i.hasNext()) {
-			Column element = (Column) i.next();
-			allIds.addAll(element.getOwnerIds());
-		}
+			for(Column element:items) {
+				allIds.addAll(element.getOwnerIds());
+			}
 		
-		//if there is no sorter column, just return all ids
-		if(this.getSorterColumn()==null) return allIds;
+			//if there is no sorter column, just return all ids
+			if(this.getSorterColumn()==null) 
+				return allIds;
 		
 		
 		// if we have a sorter column, get all its items:
-		Iterator<Column> it = items.iterator();
-		Column theColumn = null;
+			Column theColumn = null;
+			
 //		while (it.hasNext()) {
 //			Column element = (Column) it.next();
 //			if (element instanceof CellColumn) {
@@ -429,53 +418,49 @@ public class ColumnReportData extends ReportData {
 //				}
 //			}
 //		}
-		String mySorterColPath	= this.getSorterColumn();
-		while ( it.hasNext() ) {
-			Column element	= it.next();
-			theColumn		= element.hasSorterColumn(mySorterColPath);
-			if (theColumn != null)
-				break;
-		}
+			String mySorterColPath	= this.getSorterColumn();
+				for(Column element:items) {
+					theColumn		= element.hasSorterColumn(mySorterColPath);
+					if (theColumn != null)
+						break;
+				}
 		
-		if (theColumn == null) {
-			logger.warn("Tried to sort by an invalid column:" + mySorterColPath);
-			return allIds;
-		}
+				if (theColumn == null) {
+					logger.warn("Tried to sort by an invalid column:" + mySorterColPath);
+					return allIds;
+				}
 		
-		List sorterItems = theColumn.getItems();
-		
-		
-		//remove null values
-		i=sorterItems.iterator();
-		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
-			if(element.getValue()==null) i.remove();
-		}
+				List<Cell> sorterItems = theColumn.getItems();
 		
 		
-		Collections.sort(sorterItems,new Cell.CellComparator());
+				//remove null values
+				Iterator<Cell> i=sorterItems.iterator();
+				while (i.hasNext()) {
+					Cell element = i.next();
+					if(element.getValue()==null) i.remove();
+				}
 		
-		//we read all the ownerIds from the sortedItems;
-		List sortedIds=new ArrayList();
-		HashMap referenceIds=new HashMap();
-		i=sorterItems.iterator();
-		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
-			sortedIds.add(element.getOwnerId());
-			referenceIds.put(element.getOwnerId(),element.getOwnerId());
-		}
 		
-		//we iterate allIds and see if we have more ids that are not present in the sortedIds. If yes, we add them at the top of the list:
-		i=allIds.iterator();
-		while (i.hasNext()) {
-			Long element = (Long) i.next();
-			if(!referenceIds.containsKey(element)) sortedIds.add(0,element);
-		}
+				Collections.sort(sorterItems, new Cell.CellComparator());
 		
-		if(!getSortAscending()) 
-			Collections.reverse(sortedIds);
+				//we read all the ownerIds from the sortedItems;
+				List<Long> sortedIds = new ArrayList<Long>();
+				HashMap<Long, Long> referenceIds = new HashMap<Long, Long>();
+				for(Cell element:sorterItems) {
+					sortedIds.add(element.getOwnerId());
+					referenceIds.put(element.getOwnerId(), element.getOwnerId());
+				}
 		
-		return sortedIds;
+				//we iterate allIds and see if we have more ids that are not present in the sortedIds. If yes, we add them at the top of the list:
+				for (Long element:allIds) {
+					if(!referenceIds.containsKey(element)) 
+						sortedIds.add(0,element);
+				}
+		
+				if(!getSortAscending()) 
+					Collections.reverse(sortedIds);
+		
+				return sortedIds;
 		} catch (Exception e) {
 			logger.error(e);
 			return allIds;
@@ -493,10 +478,8 @@ public class ColumnReportData extends ReportData {
 	}
 
 	public int getMaxColumnDepth() {
-		Iterator i = items.iterator();
 		int ret = 0;
-		while (i.hasNext()) {
-			Column element = (Column) i.next();
+		for(Column element:items) {
 			int c = element.getColumnSpan();
 			if (c > ret)
 				ret = c;
@@ -510,10 +493,8 @@ public class ColumnReportData extends ReportData {
 	 * @see org.dgfoundation.amp.ar.ReportData#getTotalDepth()
 	 */
 	public int getTotalDepth() {
-		Iterator i = items.iterator();
 		int ret = 0;
-		while (i.hasNext()) {
-			Column element = (Column) i.next();
+		for (Column element:items) {
 			ret += element.getColumnDepth();
 		}
 		return ret;
@@ -531,9 +512,7 @@ public class ColumnReportData extends ReportData {
 	 */
 	public void prepareAspect() {
 		int maxDepth = getMaxColumnDepth();
-		Iterator i = items.iterator();
-		while (i.hasNext()) {
-			Column element = (Column) i.next();
+		for (Column element:items) {
 			element.setRowSpan(maxDepth + 1);
 		}
 	}
@@ -599,7 +578,7 @@ public class ColumnReportData extends ReportData {
 
 	@Override
 	public List<Column> getColumns() {
-		return (List<Column>)items;
+		return items;
 	}
 	
 	@Override

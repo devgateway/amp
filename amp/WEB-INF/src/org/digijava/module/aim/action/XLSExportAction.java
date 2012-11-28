@@ -34,6 +34,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.util.IOUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -102,7 +104,8 @@ public class XLSExportAction extends Action {
 			String siteId=site.getId().toString();
 			String locale=navigationLanguage.getCode();	
 			
-			
+		int numberOfColumns = rd.getTotalDepth();
+		
 		String sortBy=(String) session.getAttribute("sortBy");
 		if(sortBy!=null){
 			rd.setSorterColumn(sortBy); 
@@ -114,6 +117,30 @@ public class XLSExportAction extends Action {
 	        
 		
 		HSSFWorkbook wb = new HSSFWorkbook();
+		
+		if (numberOfColumns > 250)
+		{
+			String sheetName = "ERROR Message";
+			HSSFSheet sheet = wb.createSheet(sheetName);
+			
+			
+			String[] errMsgs = {TranslatorWorker.translateText("The report has too many columns, please redo the report or export in an another format.", locale, siteId), 
+								TranslatorWorker.translateText("Maximum supported number of columns: ", locale, siteId) + 250,
+								TranslatorWorker.translateText("You demanded columns: ", locale, siteId) + numberOfColumns};
+			
+			for(int i = 0; i < errMsgs.length; i++)
+			{
+				HSSFRow row = sheet.createRow(i);
+				HSSFCell cell = row.createCell(0);
+				cell.setCellValue(errMsgs[i]);
+			}
+			
+			sheet.autoSizeColumn(0);
+
+			wb.write(response.getOutputStream());
+			return null;
+		}
+		
 		String sheetName=rd.getName();
 		if(sheetName.length()>31) sheetName=sheetName.substring(0,31);
 		sheetName = sheetName.replace('/', '_');
@@ -150,10 +177,10 @@ public class XLSExportAction extends Action {
 			
 		
 		//show title+desc+logo+statement
-		grdx.makeColSpan(rd.getTotalDepth(),false);	
+		grdx.makeColSpan(numberOfColumns, false);	
 		rowId.inc();
 		colId.reset();
-		row=sheet.createRow(rowId.shortValue());
+		row = sheet.createRow(rowId.shortValue());
 		
 		grdx.createHeaderLogoAndStatement(request, reportForm, getServlet().getServletContext().getRealPath("/"));
 		grdx.createHeaderNameAndDescription( request );

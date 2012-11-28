@@ -71,13 +71,15 @@ public class ComputedMeasureCell extends AmountCell {
 		}
 	}
 
-	public Cell merge(Cell c) {
+	@Override
+	public AmountCell merge(Cell c) {
 		AmountCell ac = (AmountCell) super.merge(c);
 		ComputedMeasureCell uac = new ComputedMeasureCell(ac);
 		return uac;
 	}
 
-	public Cell newInstance() {
+	@Override
+	public AmountCell newInstance() {
 		return new ComputedMeasureCell();
 	}
 

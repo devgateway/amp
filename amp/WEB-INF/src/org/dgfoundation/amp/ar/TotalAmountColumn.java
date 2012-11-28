@@ -59,20 +59,20 @@ public class TotalAmountColumn extends AmountCellColumn {
     }
 
     public void addCell(Object c) {
-	AmountCell ac = (AmountCell) c;
-	if (filterShowable && !ac.isShow())
-	    return;
+    	AmountCell ac = (AmountCell) c;
+    	if (filterShowable && !ac.isShow())
+    		return;
 
-	AmountCell byOwner = (AmountCell) this.getByOwner(ac.getOwnerId());
-	if (byOwner != null)
-	    byOwner.merge(byOwner, ac);
-	else {
-	    AmountCell newcell = (AmountCell) ac.newInstance();
-	    // AmountCell newcell = new AmountCell();
-	    newcell.merge(newcell, ac);
-	    newcell.setColumn(this);
-	    super.addCell(newcell);
-	}
+    	AmountCell byOwner = (AmountCell) this.getByOwner(ac.getOwnerId());
+    	if (byOwner != null)
+    		byOwner.merge(byOwner, ac);
+    	else {
+    		AmountCell newcell = (AmountCell) ac.newInstance();
+    		// AmountCell newcell = new AmountCell();
+    		newcell.merge(newcell, ac);
+    		newcell.setColumn(this);
+    		super.addCell(newcell);
+    	}
 
     }
 

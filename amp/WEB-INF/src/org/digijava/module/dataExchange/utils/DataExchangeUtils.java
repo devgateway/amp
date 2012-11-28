@@ -1643,7 +1643,7 @@ public class DataExchangeUtils {
 				hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
 			}
 			String foo = messageDigest.toString();
-			System.out.println("sessionid "+s+" md5 version is "+hexString.toString());
+			//System.out.println("sessionid "+s+" md5 version is "+hexString.toString());
 			result=hexString+"";
 		}catch(NoSuchAlgorithmException nsae){
 		            

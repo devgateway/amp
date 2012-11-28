@@ -63,9 +63,28 @@ public class AmountCell extends Cell {
 		this.columnPercent = columnPercent;
 	}
 
-	public int compareTo(Object o) {
+	public int compareTo(Object o) 
+	{
 		AmountCell ac = (AmountCell) o;
-		if (this.getId() == null || ac.getId() == null) return 0;
+		Long thisId = this.getId();
+		Long otherId = ac.getId();
+
+		// AMP-14246: safeguard for NULLs, treat null as INFINITY
+		if (thisId == null)
+		{
+			if (otherId == null)
+				return 0;
+			
+			return 1; 
+		}
+		
+		if (otherId == null)
+		{
+			if (thisId == null)
+				return 0;
+			return -1;
+		}
+		
 		return this.getId().compareTo(ac.getId());
 	}
 
@@ -171,12 +190,10 @@ public class AmountCell extends Cell {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dgfoundation.amp.ar.cell.Cell#merge(org.dgfoundation.amp.ar.cell.Cell)
+	/**
+	 * c HAS to be AmountCell !
 	 */
-	public Cell merge(Cell c) {
+	public AmountCell merge(Cell c) {
 		AmountCell ret = new AmountCell();
 		AmountCell ac = (AmountCell) c;
 		ret.setOwnerId(c.getOwnerId());
@@ -352,7 +369,7 @@ public class AmountCell extends Cell {
 		return realRet;
 	}
 
-	public Cell newInstance() {
+	public AmountCell newInstance() {
 		return new AmountCell();
 	}
 

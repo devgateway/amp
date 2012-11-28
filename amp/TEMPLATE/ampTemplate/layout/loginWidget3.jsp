@@ -119,20 +119,23 @@
 			  		</digi:link>	
 				 	&nbsp;|&nbsp; 
 				 	</feature:display>
+				 	<feature:display name="Change Password" module="Login - User Management">
 					<c:set var="title">
 						<digi:trn>Click here to change your password</digi:trn>
 					</c:set>
 	  				<digi:link href="/showChangePassword.do" title="${title}" module="aim">
 	    				<digi:trn> Change Password</digi:trn>
 	  				</digi:link>	 
-	  				&nbsp;|&nbsp; 
+	  				&nbsp;|&nbsp;
+	  				</feature:display> 
+	  				<feature:display name="Trouble signing in" module="Login - User Management">
 					<c:set var="trn1">
                 		<digi:trn key="aim:clickifyouForgotYourPassword">Click here if you have problem with login in</digi:trn>
                 	</c:set>
                 	<digi:link href="/showEmailForm.do" module="aim" title="${trn1}">
                    		<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn>
 					</digi:link>
-                   
+                   </feature:display>
 					</div>
 					</div>
 					<!--

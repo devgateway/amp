@@ -336,8 +336,7 @@ public class QueryUtil {
 		if (filter.getStartYear() == null) {
 			Long year = null;
 			try {
-				year = Long.parseLong(FeaturesUtil
-						.getGlobalSettingValue("Current Fiscal Year"));
+				year = Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CURRENT_SYSTEM_YEAR));
 			} catch (NumberFormatException ex) {
 				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
 			}

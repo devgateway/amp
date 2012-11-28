@@ -130,7 +130,7 @@ public class ViewNewAdvancedReport extends Action {
 		request.setAttribute("debug",debug);
 
 		
-		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");				
+		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
 		if (tm == null || tm.getTeamId() == null )
 				tm = null;
 		AmpApplicationSettings ampAppSettings = null;				
@@ -153,30 +153,30 @@ public class ViewNewAdvancedReport extends Action {
 		if(httpSession.getAttribute("reportCurrencyCode")==null) httpSession.setAttribute("reportCurrencyCode",Constants.DEFAULT_CURRENCY);
 		
 		if(httpSession.getAttribute("reportSorters")==null) httpSession.setAttribute("reportSorters",new HashMap());
-		Map sorters=(Map) httpSession.getAttribute("reportSorters");
+		Map sorters = (Map) httpSession.getAttribute("reportSorters");
 		//String ampReportId = request.getParameter("ampReportId");
 		
-		GroupReportData rd=(GroupReportData) httpSession.getAttribute("report");
-		AmpReports ar=(AmpReports) httpSession.getAttribute("reportMeta");
+		GroupReportData rd = (GroupReportData) httpSession.getAttribute("report");
+		AmpReports ar = (AmpReports) httpSession.getAttribute("reportMeta");
 		Session session = PersistenceManager.getRequestDBSession();
-		String sortBy=request.getParameter("sortBy");
-		String sortByAsc=request.getParameter("sortByAsc");
+		String sortBy = request.getParameter("sortBy");
+		String sortByAsc = request.getParameter("sortByAsc");
 		String applySorter = request.getParameter("applySorter");
-		if(ampReportId==null || ampReportId.length() == 0 ) 
-			ampReportId=ar.getAmpReportId().toString();
-		Long reportId=new Long(ampReportId);
+		if (ampReportId == null || ampReportId.length() == 0 ) 
+			ampReportId = ar.getAmpReportId().toString();
+		Long reportId = new Long(ampReportId);
 		request.setAttribute("ampReportId",ampReportId);
 		
-		String startRow=request.getParameter("startRow");
-		String endRow=request.getParameter("endRow");
-		String cachedStr=request.getParameter("cached");
+		String startRow = request.getParameter("startRow");
+		String endRow = request.getParameter("endRow");
+		String cachedStr = request.getParameter("cached");
 		
 		
 		boolean cached=false;
-		if(cachedStr!=null) cached=Boolean.parseBoolean(cachedStr);
+		if (cachedStr != null) cached=Boolean.parseBoolean(cachedStr);
 		
 		AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-		if(filter==null || !reportId.equals(filter.getAmpReportId())) {
+		if (filter == null || !reportId.equals(filter.getAmpReportId())) {
 			if(filter != null && filter.isPublicView())
 			{
 				//This is to avoid resetting the publicView status to allow the right redirection on Public Views
@@ -236,7 +236,7 @@ public class ViewNewAdvancedReport extends Action {
 			progressValue = progressValue + 20;// 20 is the weight of this process on the progress bar
 			httpSession.setAttribute("progressValue", progressValue); 
 
-			rd=ARUtil.generateReport(mapping,form,request,response);
+			rd=ARUtil.generateReport(mapping, form, request, response);
 			progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
 			httpSession.setAttribute("progressValue", progressValue); 
 	

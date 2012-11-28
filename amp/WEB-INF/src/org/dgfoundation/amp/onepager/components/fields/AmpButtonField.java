@@ -4,10 +4,14 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.CheckGroup;
@@ -36,6 +40,8 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 
 	private static final long serialVersionUID = 3042844165981373890L;
 	protected IndicatingAjaxButton button;
+	private String genKey;
+	private static final Behavior LABEL_TRANSLATOR_BEHAVIOR = new LabelTranslatorBehaviour();
 
 	public IndicatingAjaxButton getButton() {
 		return button;
@@ -131,7 +137,7 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		AmpAuthWebSession session = (AmpAuthWebSession) getSession();
 		Site site = session.getSite();
 		
-		String genKey = TranslatorWorker.generateTrnKey(buttonCaption==null?fmName:buttonCaption);
+		genKey = TranslatorWorker.generateTrnKey(buttonCaption==null?fmName:buttonCaption);
 		String translatedValue;
 		button.add(new AttributeModifier("value", new Model(buttonCaption==null?fmName:buttonCaption)));
 		try {
@@ -142,14 +148,6 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);
 		}
-		
-		if (TranslatorUtil.isTranslatorMode(getSession())){
-			button.setOutputMarkupId(true);
-			button.add(new LabelTranslatorBehaviour());
-			button.add(new AttributeAppender("style", new Model("text-decoration: underline; color: #0CAD0C;"), ""));
-			button.add(new AttributeModifier("key", genKey));
-		}
-		
 		
 		addFormComponent(button);
 	}
@@ -162,5 +160,29 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 	public AmpButtonField(String id, String fmName, AmpFMTypes fmType) {
 		this(id, fmName);
 		this.fmType = fmType;
+	}
+	
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+		if (TranslatorUtil.isTranslatorMode(getSession())){
+			button.setOutputMarkupId(true);
+			button.add(LABEL_TRANSLATOR_BEHAVIOR);
+			button.add(new AttributeAppender("style", new Model<String>("text-decoration: underline; color: #0CAD0C;"), ""));
+			button.add(new AttributeModifier("key", genKey));
+		}
+		else{
+			button.add(AttributeModifier.remove("key"));
+			button.add(AttributeModifier.remove("style"));
+			List<? extends Behavior> list = this.getBehaviors();
+			Iterator<? extends Behavior> it = list.iterator();
+			while (it.hasNext()) {
+				Behavior behavior = (Behavior) it.next();
+				if (behavior == LABEL_TRANSLATOR_BEHAVIOR)
+					this.remove(behavior);
+			}
+		}
+			
+		
 	}
 }

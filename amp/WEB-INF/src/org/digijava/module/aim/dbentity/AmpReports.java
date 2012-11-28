@@ -56,7 +56,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 
 	private Set<AmpReportColumn> columns;
 
-	private List orderedColumns;
+	private List<AmpReportColumn> orderedColumns;
 
 	private Set<AmpReportHierarchy> hierarchies;
 
@@ -225,15 +225,15 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	public Set<AmpReportColumn> getShowAblesColumns(){
 		Set<AmpReportColumn> finalColumns=new HashSet<AmpReportColumn>();
 		if (hideActivities){
-		Long order=1l;
-		for (AmpReportColumn element : columns) {
-			boolean add=ARUtil.hasHierarchy(this.getHierarchies(), element.getColumn().getColumnName()) || ARUtil.hasHeaderValue(element.getColumn());
-			if(add){
-				element.setOrderId(order);
-				finalColumns.add(element);
-				order++;
+			Long order=1l;
+			for (AmpReportColumn element : columns) {
+				boolean add=ARUtil.hasHierarchy(this.getHierarchies(), element.getColumn().getColumnName()) || ARUtil.hasHeaderValue(element.getColumn());
+				if (add){
+					element.setOrderId(order);
+					finalColumns.add(element);
+					order ++;
+				}
 			}
-		}
 		}else{
 			finalColumns	= new TreeSet<AmpReportColumn>();
 			finalColumns.addAll(columns);
@@ -280,7 +280,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	/**
 	 * @return Returns the orderedColumns.
 	 */
-	public List getOrderedColumns() {
+	public List<AmpReportColumn> getOrderedColumns() {
 		return orderedColumns;
 	}
 
@@ -288,7 +288,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	 * @param orderedColumns
 	 *            The orderedColumns to set.
 	 */
-	public void setOrderedColumns(List orderedColumns) {
+	public void setOrderedColumns(List<AmpReportColumn> orderedColumns) {
 		this.orderedColumns = orderedColumns;
 	}
 

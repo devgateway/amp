@@ -8,9 +8,12 @@ package org.digijava.module.aim.util;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -2646,6 +2649,46 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     //getComponents();
     return col;
   }
+  
+public static Collection<AmpActivityVersion> getOldActivities(Session session,int size,Date date){
+		Collection colGr = null;
+		Collection colAv = null;
+		Collection<AmpActivityVersion> colAll = new ArrayList<AmpActivityVersion>();
+		logger.info(" inside getting the old activities.....");
+		try {
+
+			List result = session.createSQLQuery("Select * from ( select amp_activity_id, amp_activity_group_id, date_updated, rank() over (PARTITION BY amp_activity_group_id order by date_updated desc) as rank from amp_activity_version order by amp_activity_group_id) as SQ where sq.rank > "+size).list();
+			Iterator iter = result.iterator();
+			List<Long> idActivities = new ArrayList<Long>();
+			while(iter.hasNext()){
+				Object[] objects = (Object[]) iter.next();
+			     BigInteger id = (BigInteger) objects[0];
+			     idActivities.add(id.longValue());
+			}
+			if(idActivities.size()>0){
+				String qryGroups = "select av from "
+						+ AmpActivityVersion.class.getName()+" av where av.ampActivityId in:list";
+				Query qry = session.createQuery(qryGroups);
+				qry.setParameterList("list", idActivities);
+				colGr = qry.list();
+				System.out.println(result.size());
+				colAv = qry.list();
+				if (colAv != null && !colAv.isEmpty()) {
+					Iterator itrAv = colAv.iterator();
+					while (itrAv.hasNext()) {
+						AmpActivityVersion act = (AmpActivityVersion) itrAv
+								.next();
+						if (act.getUpdatedDate().before(date))
+							colAll.add(act);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			logger.debug("Exception in getOldActivities() " + e.getMessage());
+		}
+		return colAll;
+  }
 
   /*
    * This function gets AmpComponentFunding of an Activity.
@@ -3749,7 +3792,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     
     public static void deleteActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
         /* delete fundings and funding details */
-        Set fundSet = ampAct.getFunding();
+        /*Set fundSet = ampAct.getFunding();
         if (fundSet != null) {
           Iterator fundSetItr = fundSet.iterator();
           while (fundSetItr.hasNext()) {
@@ -3759,67 +3802,70 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
               Iterator fundDetItr = fundDetSet.iterator();
               while (fundDetItr.hasNext()) {
                 AmpFundingDetail ampFundingDetail = (AmpFundingDetail)fundDetItr.next();
-                if(ampFundingDetail.getContract()!=null) session.delete(ampFundingDetail.getContract());
+                if(ampFundingDetail.getContract()!=null) 
+                	session.delete(ampFundingDetail.getContract());
+                //fundDet
                 session.delete(ampFundingDetail);
               }
             }
             
             session.delete(fund);
           }
-        }
+        }*/
 
-        Set contracts=ampAct.getContracts();
+        /*Set contracts=ampAct.getContracts();
         if(contracts!=null){
         	for (Iterator it = contracts.iterator(); it.hasNext();) {
 				IPAContract c = (IPAContract) it.next();
 				session.delete(c);
 			}
-        }
+        }*/
         
         /* delete regional fundings */
-        fundSet = ampAct.getRegionalFundings();
+        /*fundSet = ampAct.getRegionalFundings();
         if (fundSet != null) {
           Iterator fundSetItr = fundSet.iterator();
           while (fundSetItr.hasNext()) {
             AmpRegionalFunding regFund = (AmpRegionalFunding) fundSetItr.next();
             session.delete(regFund);
           }
-        }
-
+        }*/
         /* delete components */
-        Set comp = ampAct.getComponents();
+       /* Set comp = ampAct.getComponents();
         if (comp != null) {
           Iterator compItr = comp.iterator();
           while (compItr.hasNext()) {
             AmpComponent ampComp = (AmpComponent) compItr.next();
             ampComp.getActivities().remove(ampAct);           
-            //session.delete(ampComp);
+            session.delete(ampComp);
           }
-          ampAct.setComponents(null);
+          //Set<AmpComponent> test = new HashSet<AmpComponent>();
+          //ampAct.setComponents(null);
+          ampAct.getComponents().clear();
         }
-
+        */
 
         /* delete Component Fundings */
-        Collection<AmpComponentFunding>  componentFundingCol = ampAct.getComponentFundings();
+       /* Collection<AmpComponentFunding>  componentFundingCol = ampAct.getComponentFundings();
         if (componentFundingCol != null) {
   			Iterator<AmpComponentFunding> componentFundingColIt = componentFundingCol.iterator();
   			while (componentFundingColIt.hasNext()) {
   				session.delete(componentFundingColIt.next());
   			}
-	  	}
+	  	}*/
 
         /* delete org roles */
-        Set orgrole = ampAct.getOrgrole();
+        /*Set orgrole = ampAct.getOrgrole();
         if (orgrole != null) {
           Iterator orgroleItr = orgrole.iterator();
           while (orgroleItr.hasNext()) {
             AmpOrgRole ampOrgrole = (AmpOrgRole) orgroleItr.next();
             session.delete(ampOrgrole);
           }
-        }
+        }*/
 
 				/* delete issues,measures,actors */
-				Set issues = ampAct.getIssues();
+				/*Set issues = ampAct.getIssues();
 				if (issues != null) {
 					Iterator iItr = issues.iterator();
 					while (iItr.hasNext()) {
@@ -3842,10 +3888,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 						}
 						session.delete(issue);
 					}
-				}
+				}*/
         
         /* delete observations,measures,actors */
-				Set observations = ampAct.getRegionalObservations();
+				/*Set observations = ampAct.getRegionalObservations();
 				if (observations != null) {
 					Iterator iItr = observations.iterator();
 					while (iItr.hasNext()) {
@@ -3868,18 +3914,19 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 						}
 						session.delete(auxObservation);
 					}
-				}
-
+				}*/
         // delete all previous sectors
-        Set sectors = ampAct.getSectors();
+       /* Set sectors = ampAct.getSectors();
         if (sectors != null) {
           Iterator iItr = sectors.iterator();
           while (iItr.hasNext()) {
             AmpActivitySector sec = (AmpActivitySector) iItr.next();
+            ampAct.getSectors().remove(sec);
             session.delete(sec);
+            iItr = sectors.iterator();
           }
-        }
-
+        }*/
+       
         /* delete activity internal id
              Set internalIds = ampAct.getInternalIds();
              if(internalIds != null)
@@ -3906,10 +3953,16 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
               while (ahSurveyItr.hasNext()) {
                 AmpAhsurveyResponse surveyResp = (AmpAhsurveyResponse)
                     ahSurveyItr.next();
+                ahSurvey.getResponses().remove(surveyResp);
                 session.delete(surveyResp);
+                session.flush();
+                ahSurveyItr = ahSurvey.getResponses().iterator();
               }
             }
+            ampAct.getSurvey().remove(ahSurvey);
             session.delete(ahSurvey);
+            session.flush();
+            surveyItr = ampAct.getSurvey().iterator();
           }
         }
 
@@ -3966,6 +4019,35 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	//ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
     
     }
+    
+	public static void removeMergeSources(Long ampActivityId,Session session){
+		String queryString1 = "select act from " + AmpActivityVersion.class.getName() + " act where (act.mergeSource1=:activityId)";
+		String queryString2 = "select act from " + AmpActivityVersion.class.getName() + " act where (act.mergeSource2=:activityId)";
+		Query qry1 = session.createQuery(queryString1);
+		Query qry2 = session.createQuery(queryString2);
+		qry1.setParameter("activityId", ampActivityId, Hibernate.LONG);
+		qry2.setParameter("activityId", ampActivityId, Hibernate.LONG);
+		
+		Collection col =qry1.list();
+		if (col != null && col.size() > 0) {
+			Iterator<AmpActivityVersion> itrAmp = col.iterator();
+			while(itrAmp.hasNext()){
+				AmpActivityVersion actVersion = itrAmp.next();
+				actVersion.setMergeSource1(null);
+				session.update(actVersion);
+			}
+		}
+		col =qry2.list();
+		if (col != null && col.size() > 0) {
+			Iterator<AmpActivityVersion> itrAmp = col.iterator();
+			while(itrAmp.hasNext()){
+				AmpActivityVersion actVersion = itrAmp.next();
+				actVersion.setMergeSource2(null);
+				session.update(actVersion);
+			}
+		}
+		
+	}
 
   public static void deleteActivityAmpComments(Collection commentId, Session session) throws Exception{
      if (commentId != null) {
@@ -3979,6 +4061,24 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
      }
   }
+  
+  public static void deleteActivityPhysicalComponentReportSession(Long ampActId, Session session)throws Exception{
+	  Collection col = null;
+      Query qry = null;
+      String queryString = "select phyCompReport from "
+          + AmpPhysicalComponentReport.class.getName()
+          + " phyCompReport "
+          + " where (phyCompReport.ampActivityId=:ampActId)";
+      qry = session.createQuery(queryString);
+      qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+      col = qry.list();
+      
+      Iterator itrCompRep = col.iterator();
+      while(itrCompRep.hasNext()){
+    	  AmpPhysicalComponentReport compRep = (AmpPhysicalComponentReport)itrCompRep.next();
+    	  session.delete(compRep);
+      }
+  }
 
   public static void deleteActivityPhysicalComponentReport(Collection
       phyCompReport, Session session) throws Exception{
@@ -3991,6 +4091,23 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
       }
   }
+  
+  public static void deleteActivityAmpReportCacheSession(Long ampActId, Session session) throws Exception {
+		Collection col = null;
+		Query qry = null;
+		String queryString = "select repCache from "
+				+ AmpReportCache.class.getName() + " repCache "
+				+ " where (repCache.ampActivityId=:ampActId)";
+		qry = session.createQuery(queryString);
+		qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+		col = qry.list();
+
+		Iterator itr = col.iterator();
+		while (itr.hasNext()) {
+			AmpReportCache repCache = (AmpReportCache) itr.next();
+			session.delete(repCache);
+		}
+  }
 
   public static void deleteActivityAmpReportCache(Collection repCache, Session session) throws Exception {
       if (repCache != null) {
@@ -4002,6 +4119,23 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           session.delete(reportCache);
         }
       }
+  }
+  
+  public static void deleteActivityReportLocationSession(Long ampActId, Session session) throws Exception {
+		Collection col = null;
+		Query qry = null;
+		String queryString = "select repLoc from "
+				+ AmpReportLocation.class.getName() + " repLoc "
+				+ " where (repLoc.ampActivityId=:ampActId)";
+		qry = session.createQuery(queryString);
+		qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+		col = qry.list();
+		
+		Iterator itr = col.iterator();
+		while (itr.hasNext()) {
+			AmpReportLocation repLoc = (AmpReportLocation) itr.next();
+			session.delete(repLoc);
+		}
   }
 
   public static void deleteActivityReportLocation(Collection repLoc, Session session) throws Exception {
@@ -4016,6 +4150,23 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
   }
 
+  public static void deleteActivityReportPhyPerformanceSession(Long ampActId, Session session) throws Exception {
+		Collection col = null;
+		Query qry = null;
+		String queryString = "select phyPer from "
+				+ AmpReportPhysicalPerformance.class.getName() + " phyPer "
+				+ " where (phyPer.ampActivityId=:ampActId)";
+		qry = session.createQuery(queryString);
+		qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+		col = qry.list();
+		
+		Iterator itr = col.iterator();
+		while (itr.hasNext()) {
+			AmpReportPhysicalPerformance repPhy = (AmpReportPhysicalPerformance) itr.next();
+			session.delete(repPhy);
+		}
+  }
+  
   public static void deleteActivityReportPhyPerformance(Collection phyPerform, Session session) throws Exception {
       if (phyPerform != null) {
         Iterator phyPerformItr = phyPerform.iterator();
@@ -4029,6 +4180,23 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         }
       }
   }
+  
+  public static void deleteActivityReportSectorSession(Long ampActId, Session session) throws Exception {
+		Collection col = null;
+		Query qry = null;
+		String queryString = "select repSector from "
+				+ AmpReportSector.class.getName() + " repSector "
+				+ " where (repSector.ampActivityId=:ampActId)";
+		qry = session.createQuery(queryString);
+		qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+		col = qry.list();
+		
+		Iterator itr = col.iterator();
+		while (itr.hasNext()) {
+			AmpReportSector repSec = (AmpReportSector) itr.next();
+			session.delete(repSec);
+		}
+  }
 
   public static void deleteActivityReportSector(Collection repSector, Session session) throws Exception {
       if (repSector != null) {
@@ -4040,6 +4208,24 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           session.delete(repSecTemp);
         }
       }
+  }
+  
+  public static void deleteActivityIndicatorsSession(Long ampActivityId,Session session) throws Exception{
+		Collection col = null;
+		Query qry = null;
+		String queryString = "select indAct from "
+				+ IndicatorActivity.class.getName() + " indAct "
+				+ " where (indAct.activity=:ampActId)";
+		qry = session.createQuery(queryString);
+		qry.setParameter("ampActId", ampActivityId, Hibernate.LONG);
+		col = qry.list();
+		
+		Iterator itrIndAct = col.iterator();
+		while(itrIndAct.hasNext()){
+			IndicatorActivity indAct =(IndicatorActivity)itrIndAct.next();
+			session.delete(indAct);
+		}
+	  
   }
 
   public static void deleteActivityIndicators(Collection activityInd, AmpActivityVersion activity, Session session) throws Exception {
@@ -4412,7 +4598,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	 */
         public static List getSteps(){
             List<Step> steps=new ArrayList();
-            Long templId=FeaturesUtil.getGlobalSettingValueLong("Visibility Template");
+            Long templId=FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE);
             AmpFeaturesVisibility step1=FeaturesUtil.getFeatureByName("Identification", "Project ID and Planning", templId);// step 1
             AmpFeaturesVisibility step1_1=FeaturesUtil.getFeatureByName("Planning", "Project ID and Planning", templId); // step 1
             AmpModulesVisibility step2=FeaturesUtil.getModuleByName("References", "PROJECT MANAGEMENT", templId);
@@ -5010,7 +5196,22 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	  	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
     }
     
+    public static void  deleteAllActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
+    	ActivityUtil.deleteActivityContent(ampAct,session);
+    	Long ampActId = ampAct.getAmpActivityId();
+    	ActivityUtil.removeMergeSources(ampActId, session);
+    	ActivityUtil.deleteActivityPhysicalComponentReportSession(ampActId, session);
+    	ActivityUtil.deleteActivityAmpReportCacheSession(ampActId, session);
+    	ActivityUtil.deleteActivityReportLocationSession(ampActId, session);
+    	ActivityUtil.deleteActivityReportPhyPerformanceSession(ampActId, session);
+    	ActivityUtil.deleteActivityReportSectorSession(ampActId, session);
+    	ActivityUtil.deleteActivityIndicatorsSession(ampActId, session);
+    }
     
+    /*
+     * old delete method; not functioning properly
+     * kept for historic reference only
+    @deprecated
 	public static void deleteAmpActivity(Long ampActId) {
 			Date startDate = new Date(System.currentTimeMillis());
 		    Session session = null;
@@ -5085,7 +5286,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		    logger.warn(new Date(System.currentTimeMillis()).getTime() - startDate.getTime());
 		  
 		
-	}
+	}*/
 
 	public static void archiveAmpActivityWithVersions(Long ampActId) {
 		// TODO Auto-generated method stub
@@ -5181,6 +5382,5 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 				e.printStackTrace();
 			}
 	    }  
-	    
-	
+
 } // End

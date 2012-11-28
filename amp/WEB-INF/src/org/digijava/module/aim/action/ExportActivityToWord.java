@@ -226,27 +226,26 @@ public class ExportActivityToWord extends Action {
 	            doc.add(new Paragraph(" "));
 
 	            //References
-	            Table referencesTbl = null;
-				referencesTbl = new Table(1);
-				referencesTbl.setWidth(100);
-				RtfCell referencesTitleCell = new RtfCell(new Paragraph(
-						TranslatorWorker.translateText("References", request)
-								.toUpperCase(), HEADERFONT));
-				referencesTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				referencesTitleCell.setBackgroundColor(CELLCOLORGRAY);
-				referencesTbl.addCell(referencesTitleCell);
-				RtfCell referencesTblCell1 = new RtfCell();
-				Table referencesSubTable1 = new Table(2);
-				referencesSubTable1.setWidths(new float[] { 1f, 2f });
-				referencesSubTable1.setWidth(100);
-
-				processReferencesPart(myForm, ampContext, request,
-						referencesSubTable1);
-				referencesTblCell1.add(referencesSubTable1);
-				doc.add(referencesTbl);
-				doc.add(referencesSubTable1);
-				doc.add(new Paragraph(" "));
-
+	    		if (FeaturesUtil.isVisibleModule("References", ampContext)) {
+		            Table referencesTbl = null;
+					referencesTbl = new Table(1);
+					referencesTbl.setWidth(100);
+					RtfCell referencesTitleCell = new RtfCell(new Paragraph(
+							TranslatorWorker.translateText("References", request)
+									.toUpperCase(), HEADERFONT));
+					referencesTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					referencesTitleCell.setBackgroundColor(CELLCOLORGRAY);
+					referencesTbl.addCell(referencesTitleCell);
+					//RtfCell referencesTblCell1 = new RtfCell();
+					
+					Table referencesSubTable1 = processReferencesPart(myForm, ampContext, request);
+					//referencesTblCell1.add(referencesSubTable1);
+					doc.add(referencesTbl);
+					if (referencesSubTable1 != null){
+						doc.add(referencesSubTable1);	
+					}
+					doc.add(new Paragraph(" "));
+	    		}
 	            
 	            /**
 	             * Location Step
@@ -442,7 +441,7 @@ public class ExportActivityToWord extends Action {
 		            doc.add(new Paragraph(" "));
 				}
             
-				if (teamMember != null && FeaturesUtil.isVisibleModule("Funding", ampContext)) { 
+				if (teamMember != null && FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding", ampContext)) { 
 	                List<Table> donorFundingTables = getDonorFundingTables(request, ampContext, activity, myForm);
 					for (Table tbl : donorFundingTables) {
 	                    doc.add(tbl);
@@ -1332,18 +1331,23 @@ public class ExportActivityToWord extends Action {
 		return retVal;
 	}
 
-	private void processReferencesPart(EditActivityForm myForm,
-			ServletContext ampContext, HttpServletRequest request,
-			Table referencesSubTable1) throws WorkerException, Exception {
+	private Table processReferencesPart(EditActivityForm myForm,
+			ServletContext ampContext, HttpServletRequest request
+			/*Table referencesSubTable1*/) throws WorkerException, Exception {
+		
 		String output = "";
 		// References
-		if (FeaturesUtil.isVisibleModule("References", ampContext)) {
+		Table referencesSubTable1 = null;
 			Collection<AmpCategoryValue> catValues = CategoryManagerUtil
 					.getAmpCategoryValueCollectionByKey(
 							CategoryConstants.REFERENCE_DOCS_KEY, false,
 							request);
 
 			if (catValues != null) {
+				referencesSubTable1 = new Table(2);
+				referencesSubTable1.setWidths(new float[] { 1f, 2f });
+				referencesSubTable1.setWidth(100);
+
 				ReferenceDoc[] refDocs = myForm.getDocuments()
 						.getReferenceDocs();
 				output = "";
@@ -1359,8 +1363,8 @@ public class ExportActivityToWord extends Action {
 				generateOverAllTableRows(referencesSubTable1, columnName,
 						output, null);
 			}
-		}
-
+		
+		return referencesSubTable1;
 	}
 
 
@@ -1949,52 +1953,55 @@ public class ExportActivityToWord extends Action {
     private List<Table> getDonorFundingTables (HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act, EditActivityForm myForm) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
 
-        ExportSectionHelper eshTitle = new ExportSectionHelper("Donor Fundings", true).setWidth(100f).setAlign("left");
+        ExportSectionHelper eshTitle = new ExportSectionHelper("Donor Funding", true).setWidth(100f).setAlign("left");
 
-        if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding", ampContext)){
+        
             retVal.add(createSectionTable(eshTitle, request, ampContext));
             
         	boolean visibleModuleCommitments = FeaturesUtil.isVisibleModule(
-					"/Activity Form/Donor Funding/Funding Item/Commitments", ampContext);
+					"/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments", ampContext);
 			boolean visibleModuleDisbursement = FeaturesUtil.isVisibleModule(
-					"/Activity Form/Donor Funding/Funding Item/Disbursements", ampContext);
+					"/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements", ampContext);
 			boolean visibleModuleExpenditures = FeaturesUtil.isVisibleModule(
-					"/Activity Form/Donor Funding/Funding Item/Expenditures", ampContext);
+					"/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures", ampContext);
 			boolean visibleModuleDisbOrders = FeaturesUtil.isVisibleModule(
-							"/Activity Form/Donor Funding/Funding Item/Disbursement Orders", ampContext);
+							"/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursement Orders", ampContext);
         	
         	
             if (act.getFunding() != null && !act.getFunding().isEmpty()) {
                 for (AmpFunding fnd : (Set<AmpFunding>)act.getFunding()) {
                     ExportSectionHelper eshDonorInfo = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Funding Organization Id", ampContext)) {
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification", ampContext)){
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id", ampContext)) {
                         eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Id", null, null, true)).addRowData(fnd.getFinancingId()));
                     }
 
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Donor Organisation", ampContext)) {
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Donor Organisation", ampContext)) {
                         eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Organization Name", null, null, true)).addRowData(fnd.getAmpDonorOrgId().getName()));
                     }
 
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Type of Assistence", ampContext)) {
-                        eshDonorInfo.addRowData((new ExportSectionHelperRowData("Type of Assistance", null, null, true)).addRowData(fnd.getTypeOfAssistance().getLabel()));
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", ampContext)) {
+                        AmpCategoryValue typeOfAssistance = fnd.getTypeOfAssistance();
+						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Type of Assistance", null, null, true)).addRowData(typeOfAssistance != null ? typeOfAssistance.getLabel():""));
                     }
 
-                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Financing Instrument", ampContext)) {
-                        eshDonorInfo.addRowData((new ExportSectionHelperRowData("Financial Instrument", null, null, true)).addRowData(fnd.getFinancingInstrument().getLabel()));
+                    if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument", ampContext)) {
+                        AmpCategoryValue financingInstrument = fnd.getFinancingInstrument();
+						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Financial Instrument", null, null, true)).addRowData(financingInstrument != null ? financingInstrument.getLabel():""));
                     }
                     
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Funding Status",	ampContext)) {
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Funding Status",	ampContext)) {
 						String fndStatus = fnd.getFundingStatus() != null ? fnd.getFundingStatus().getValue() : " ";
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Funding Status", null, null, true))
 										.addRowData(fndStatus));
 					}
 
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Item/Funding Classification/Mode of Payment", ampContext)) {
-						String fndStatus = fnd.getModeOfPayment() != null ? fnd.getModeOfPayment().getValue() : " ";
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment", ampContext)) {
+						String modeOfPayment = fnd.getModeOfPayment() != null ? fnd.getModeOfPayment().getValue() : " ";
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Mode of Payment", null, null, true))
-										.addRowData(fndStatus));
+										.addRowData(modeOfPayment));
 					}
+                    }
 					if (FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Donor Objective", ampContext)) {
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Donor Objective", null, null, true))
 										.addRowData(fnd.getDonorObjective()));
@@ -2006,37 +2013,39 @@ public class ExportActivityToWord extends Action {
                     Set <AmpFundingDetail> fndDets = fnd.getFundingDetails();
 
                     Map<String, Map<String, Set<AmpFundingDetail>>> structuredFundings = getStructuredFundings(fndDets);
-
-                    ExportSectionHelper eshDonorFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-                    for (String transTypeKey : structuredFundings.keySet()) {
-                        Map<String, Set<AmpFundingDetail>> transTypeGroup = structuredFundings.get(transTypeKey);
-                        for (String adjTypeKey : transTypeGroup.keySet()) {
-                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(new StringBuilder(adjTypeKey).
-                                    append(" ").append(transTypeKey).toString(),null, null, true));
-                            Set<AmpFundingDetail> structuredFndDets = transTypeGroup.get(adjTypeKey);
-                            for (AmpFundingDetail fndDet : structuredFndDets) {
-                    			// validating module visibility
-								// Commitments
-								if ((fndDet.getTransactionType() == Constants.COMMITMENT && visibleModuleCommitments)
-									// Disbursements
-									|| (fndDet.getTransactionType() == Constants.DISBURSEMENT && visibleModuleDisbursement)
-									// Expenditures
-									|| (fndDet.getTransactionType() == Constants.EXPENDITURE && visibleModuleExpenditures)
-									// DisbOrders
-									|| (fndDet.getTransactionType() == Constants.DISBURSEMENT_ORDER && visibleModuleDisbOrders)) {
-
-	                                eshDonorFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true)).
-	                                        addRowData(fndDet.getAdjustmentType().getLabel(), true).
-	                                        addRowData(DateConversion.ConvertDateToString(fndDet.getTransactionDate())).
-	                                        addRowData(FormatHelper.formatNumber(fndDet.getTransactionAmount())).
-	                                        addRowData(fndDet.getAmpCurrencyId().getCurrencyCode()));
-								}
-                            }
-
-                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
-                        }
+                    
+                    if (structuredFundings.size() > 0){
+	                    ExportSectionHelper eshDonorFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+	                    for (String transTypeKey : structuredFundings.keySet()) {
+	                        Map<String, Set<AmpFundingDetail>> transTypeGroup = structuredFundings.get(transTypeKey);
+	                        for (String adjTypeKey : transTypeGroup.keySet()) {
+	                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(new StringBuilder(adjTypeKey).
+	                                    append(" ").append(transTypeKey).toString(),null, null, true));
+	                            Set<AmpFundingDetail> structuredFndDets = transTypeGroup.get(adjTypeKey);
+	                            for (AmpFundingDetail fndDet : structuredFndDets) {
+	                    			// validating module visibility
+									// Commitments
+									if ((fndDet.getTransactionType() == Constants.COMMITMENT && visibleModuleCommitments)
+										// Disbursements
+										|| (fndDet.getTransactionType() == Constants.DISBURSEMENT && visibleModuleDisbursement)
+										// Expenditures
+										|| (fndDet.getTransactionType() == Constants.EXPENDITURE && visibleModuleExpenditures)
+										// DisbOrders
+										|| (fndDet.getTransactionType() == Constants.DISBURSEMENT_ORDER && visibleModuleDisbOrders)) {
+	
+		                                eshDonorFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true)).
+		                                        addRowData(fndDet.getAdjustmentType().getLabel(), true).
+		                                        addRowData(DateConversion.ConvertDateToString(fndDet.getTransactionDate())).
+		                                        addRowData(FormatHelper.formatNumber(fndDet.getTransactionAmount())).
+		                                        addRowData(fndDet.getAmpCurrencyId().getCurrencyCode()));
+									}
+	                            }
+	
+	                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+	                        }
+	                    }
+	                    retVal.add(createSectionTable(eshDonorFundingDetails, request, ampContext));
                     }
-                    retVal.add(createSectionTable(eshDonorFundingDetails, request, ampContext));
                 }
             }
 			// TOTALS
@@ -2159,7 +2168,7 @@ public class ExportActivityToWord extends Action {
 
 			retVal.add(createSectionTable(fundingTotalsDetails, request,
 					ampContext));
-        }
+        
         return retVal;
     }
     

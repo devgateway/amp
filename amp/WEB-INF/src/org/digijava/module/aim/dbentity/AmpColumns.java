@@ -15,7 +15,7 @@ public class AmpColumns  implements Serializable, Comparable
 	private Set reports;
 	private String cellType;
 	private String extractorView;
-	private Set filters;
+	private Set<AmpColumnsFilters> filters;
 	private String tokenExpression;
 	
 	// header calculations
@@ -118,10 +118,10 @@ public class AmpColumns  implements Serializable, Comparable
 	public String toString(){
 		return columnName;
 	}
-	public Set getFilters() {
+	public Set<AmpColumnsFilters> getFilters() {
 		return filters;
 	}
-	public void setFilters(Set filters) {
+	public void setFilters(Set<AmpColumnsFilters> filters) {
 		this.filters = filters;
 	}
 	public String getTokenExpression() {

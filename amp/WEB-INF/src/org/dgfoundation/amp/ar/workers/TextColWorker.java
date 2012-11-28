@@ -67,9 +67,9 @@ public class TextColWorker extends ColumnWorker {
 		
 		
 		
-		Long id=null;
-		if (rsmd.getColumnCount()>2) {
-			id=new Long(rs.getLong(3));
+		Long id = null;
+		if (rsmd.getColumnCount() > 2) {
+			id = new Long(rs.getLong(3));
 		}
 		
 		TextCell ret=new TextCell(ownerId);

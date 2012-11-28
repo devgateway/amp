@@ -10,6 +10,10 @@
 
 <script language="JavaScript">
 
+	    $(window).load(function() {
+		    $("#loader_background").fadeOut('fast'); 
+		    });
+
 	function changeLevel(id) {
 		<digi:context name="urlVal" property="context/module/moduleinstance/visibilityManager.do" />			  
 		document.aimVisibilityManagerForm.action = "<%= urlVal %>?changeLevel=true&action=edit&templateId="+id;
@@ -85,6 +89,9 @@ function showDescriptionToolbox(id){
  	background-color: #FFFFFF;
 }
 	</style>
+<div id="loader_background" style="background-color:grey;position:absolute;width:100%;height:2000;top:81;left:0;opacity:0.4;z-index:2;">
+	<img style="position:relative;top:300;left:500;opacity:1;z-index:3;" src="/TEMPLATE/ampTemplate/imagesSource/loaders/ajax-loader-white.gif">
+</div>
 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align=left>	
 	<!--<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">-->
 	<!-- Table title -->

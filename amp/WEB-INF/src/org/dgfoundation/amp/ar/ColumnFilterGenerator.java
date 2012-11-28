@@ -45,7 +45,8 @@ public class ColumnFilterGenerator {
 	 */
 	public static void attachHardcodedFilters(AmpColumns c) {
 		c.setFilters(new HashSet<AmpColumnsFilters>());
-		if (ArConstants.VIEW_DONOR_FUNDING.equals(c.getExtractorView()) || c.getColumnName().toLowerCase().contains("mtef")) {
+		if (ArConstants.VIEW_DONOR_FUNDING.equals(c.getExtractorView()) || c.getColumnName().toLowerCase().contains("mtef")
+				|| ArConstants.VIEW_PLEDGES_FUNDING.equals(c.getExtractorView())) {
 			// TODO: example here of how to add hardcoded filters for hardcoded
 			// FUNDING columns
 			// AmpColumnsFilters acf=new
@@ -62,6 +63,9 @@ public class ColumnFilterGenerator {
 			AmpColumnsFilters acf5= new AmpColumnsFilters(c,"donnorgAgency","org_id");
 			c.getFilters().add(acf5);
 		}
+	 
+		
+		
 		if (ArConstants.VIEW_CONTRIBUTION_FUNDING.equals(c.getExtractorView())) {
 			//TODO: add filters here
 			AmpColumnsFilters acf = new AmpColumnsFilters(c,"donorGroups","org_grp_id");

@@ -17,16 +17,9 @@
 <c:set var="reportDataNameVar">
     <bean:write name="reportData" property="name"/>
 </c:set>
-<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title="${depthRelatVar}" style="<%=display%>;" onmouseover="this.title='${reportDataNameVar}'" onmouseout="this.title='${depthRelatVar}'">
-<td class="report_inside" width="25">
-&nbsp;
-</td>
-<% if (reportData.getLevelDepth() < 3) { %>		
-		<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
-	<% } else { %>	
-		<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
-	<% } %>			
-
+<tr id='<bean:write name="reportData" property="absoluteReportName"/>' class="row_data_header" title="${depthRelatVar}" style="<%=display%>;" onmouseover="this.title='${reportDataNameVar}'" onmouseout="this.title='${depthRelatVar}'">
+	<td class="report_inside" width="25">&nbsp;</td>
+	<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
 	<% if(reportData.getName().indexOf(':')!=-1) { %>
 	<!-- *************************************************** 
 			WARNING:
@@ -43,7 +36,7 @@
            	    
       	 </div>
 	<% } else { %>
-        <b class="desktop_project_name">
+         <b class="desktop_project_name">
             <c:choose>
             <c:when test="${fn:length(reportData.name)>25}">
             <span title='<c:out value="${reportData.name}"/>' >
@@ -61,27 +54,16 @@
 	<c:set var="firstCell" value="${true}"></c:set>
 		<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
 		<c:if test="${cell!=null}">
-		<% if (reportData.getLevelDepth() < 3) { %>
 			<td class="report_inside">
-		<% } else { %>	
-			<td class="report_inside">
-		<% } %>
-			<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-			<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />	
-			<jsp:include page="<%=viewable.getViewerPath()%>"/>
-			
+				<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
+				<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />	
+				<jsp:include page="<%=viewable.getViewerPath()%>"/>
 			</td>
 		</c:if>
 		
 		<c:if test="${cell==null}">
 			<c:if test="${firstCell==false}">
-					<% if (reportData.getLevelDepth() < 3) { %>
-						<td class="report_inside">
-					<% } else { %>	
-						<td class="report_inside">
-					<% } %>
-					
-					</td>
+				<td class="report_inside"></td>
 			</c:if>
 		</c:if>
 		<c:set var="firstCell" value="${false}"></c:set>

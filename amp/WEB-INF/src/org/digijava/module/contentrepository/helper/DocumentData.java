@@ -331,6 +331,16 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	
 	
 	public int compareTo(DocumentData o) {
+		// NULLs come first
+		if (this.getDate() == null)
+		{
+			if (o.getDate() == null)
+				return 0;
+			return -1;
+		}
+		if (o.getDate() == null)
+			return 1;
+		
 		return this.getDate().compareTo(o.date);
 	}
 	

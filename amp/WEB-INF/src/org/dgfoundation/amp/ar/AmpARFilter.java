@@ -726,7 +726,7 @@ public class AmpARFilter extends PropertyListable {
 			if(draft){
 				c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
 			}
-			else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
+			else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null) - DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 			this.setActivitiesRejectedByFilter(new Long(c));
 			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 		}

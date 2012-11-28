@@ -3,10 +3,10 @@
  */
 package org.digijava.module.aim.form.reportwizard;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 /**
@@ -18,7 +18,7 @@ public class ReportWizardForm extends ActionForm {
 	private Long reportId				= null;
 	private AmpTeamMember ampTeamMember	= null;
 	
-	private HashMap ampTreeColumns;
+	private Map<String, List<AmpColumns>> ampTreeColumns;
 	private Collection ampMeasures		= null;
 	private String reportType 			= "donor";
 	private Boolean desktopTab   		= false;
@@ -72,11 +72,11 @@ public class ReportWizardForm extends ActionForm {
 		this.ampTeamMember = ampTeamMember;
 	}
 
-	public HashMap getAmpTreeColumns() {
+	public Map<String, List<AmpColumns>> getAmpTreeColumns() {
 		return ampTreeColumns;
 	}
 
-	public void setAmpTreeColumns(HashMap ampTreeColumns) {
+	public void setAmpTreeColumns(Map<String, List<AmpColumns>> ampTreeColumns) {
 		this.ampTreeColumns = ampTreeColumns;
 	}
 

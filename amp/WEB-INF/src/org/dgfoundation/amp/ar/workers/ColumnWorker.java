@@ -80,7 +80,7 @@ public abstract class ColumnWorker {
 	public ColumnWorker(String condition,String viewName,String columnName,ReportGenerator generator) {
 		this.condition = condition;
 		this.columnName = columnName;
-		this.viewName=  viewName;
+		this.viewName = viewName;
 		this.sourceGroup = null;
 		extractor = true;
 		this.generator = generator;
@@ -95,7 +95,7 @@ public abstract class ColumnWorker {
 	
 	public Column populateCellColumn() {
 		Column c=null;
-		if (extractor) c = extractCellColumn(); 
+		if(extractor) c = extractCellColumn();
 			else c = generateCellColumn();
 		c.setWorker(this);
 		c.setDescription(this.getRelatedColumn().getDescription());
@@ -162,7 +162,7 @@ public abstract class ColumnWorker {
 			//add params if exist
 			ArrayList<FilterParam> params = generator.getFilter().getIndexedParams();
 			for (int i = 0; i < params.size(); i++) {
-				ps.setObject(i+1, params.get(i).getValue(),params.get(i).getSqlType());	
+				ps.setObject(i + 1, params.get(i).getValue(),params.get(i).getSqlType());	
 			}
 					
 			ResultSet rs = ps.executeQuery();
@@ -172,7 +172,7 @@ public abstract class ColumnWorker {
 			//Set parameters to query
 			//generator.getFilter().getYearFrom();
 			
-			int colsCount = rsmd.getColumnCount() + 1;
+			int colsCount = rsmd.getColumnCount()+1;
 			
 			columnsMetaData=new HashMap<String,String>();
 			
@@ -181,27 +181,23 @@ public abstract class ColumnWorker {
 //					logger.info(i + " - " + rsmd.getColumnLabel(i).toLowerCase() );
 			    columnsMetaData.put(rsmd.getColumnLabel(i).toLowerCase(), rsmd.getColumnName(i).toLowerCase());
 			}
-			rs.last();
-			int rsSize = rs.getRow();
-			cc = newColumnInstance(rsSize + 1);
-			//rs.absolute(rsSize-500);	
-			rs.beforeFirst();
+					
+			cc = newColumnInstance(1000); // don't waste time counting nr of rows - it is more expensive than just reallocating an ArrayList in-mem
 			
-			CachedRowSetImpl crs=new CachedRowSetImpl();
-			
-			crs.populate(rs);
-			
-			rs.close();
-			
-			
-			
-			while (crs.next()) {
-				Cell c = getCellFromRow(crs);
-				if(c != null) cc.addCell(c);				
+			/* CachedRowSet -> ResultSet change argumentation: 
+			/* results:
+			  * org.digijava.kernel.request.RequestProcessor.processActionPerform() goes down from 6900 to 5200ms
+			  * org.dgfoundation.amp.ar.AmpReportGenerator.retrieveData(): from 5200ms to 3500ms
+			  * org.dgfoundation.amp.ar.workers.ColumnWorker.extractCellColumn() 5200ms to 3500ms
+			  */
+			while (rs.next()) 
+			{
+				Cell c = getCellFromRow(rs);
+				if(c != null) 
+					cc.addCell(c);				
 			}
-			
-			crs.close();
-			
+
+			rs.close();				
 
 		} catch (SQLException e) {
 			logger.error("Unable to complete extraction for column "+columnName+". Master query was "+query);

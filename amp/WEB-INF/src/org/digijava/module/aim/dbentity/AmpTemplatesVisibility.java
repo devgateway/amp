@@ -7,7 +7,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.*;
 
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -22,7 +22,7 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	 * 
 	 */
 	private Set features;
-	private Set fields;
+	private Set<AmpFieldsVisibility> fields;
 	private String visible;
 	
 	public Set getFeatures() {
@@ -33,11 +33,13 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 		this.features = features;
 	}
 
-	public Set getFields() {
+	public Set<AmpFieldsVisibility> getFields() {
 		return fields;
 	}
 
-	public void setFields(Set fields) {
+	public void setFields(Set<AmpFieldsVisibility> fields) 
+	{
+		namesCache = null;
 		this.fields = fields;
 	}
 
@@ -81,6 +83,29 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	public Class getPermissibleCategory() {
 	    return AmpTemplatesVisibility.class;
 
+	}
+	
+	/**
+	 * fields indexed by name, for easy lookup: we don't want to iterate through 450 items for each and every of the 220 columns
+	 */
+	private transient Map<String, AmpFieldsVisibility> namesCache = null;
+	private void buildNamesCache()
+	{
+		namesCache = new HashMap<String, AmpFieldsVisibility>();
+		for(AmpFieldsVisibility vis:getFields())
+			namesCache.put(vis.getName(), vis);
+	}
+	
+	/**
+	 * returns true iff a field with a given name exists
+	 * @param name
+	 * @return
+	 */
+	public boolean fieldExists(String name)
+	{
+		if (namesCache == null)
+			buildNamesCache();
+		return namesCache.containsKey(name);
 	}
 	
 }

@@ -279,10 +279,19 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	}
 
 	/**
+	 * to speed up tables rendering - getName() called in the inner loop
+	 */
+	private String shadowName;
+	
+	/**
 	 * @return Returns the name.
 	 */
-	public String getName() {
-		return name.replaceAll("\"", "'");
+	public String getName() 
+	{
+		if (shadowName == null)
+			setName(name);
+		
+		return shadowName;
 	}
 
 	/**
@@ -290,6 +299,7 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	 */
 	public void setName(String name) {
 		this.name = name;
+		this.shadowName = name.replaceAll("\"", "'");
 	}
 
 		

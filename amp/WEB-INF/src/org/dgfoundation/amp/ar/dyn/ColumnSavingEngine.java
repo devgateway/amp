@@ -49,7 +49,6 @@ public class ColumnSavingEngine {
 	
 	private boolean existFieldinDB(AmpTreeVisibility atv)
 	{
-
 		AmpFieldsVisibility fieldByNameFromRoot = atv.getFieldByNameFromRoot( newColumn.getColumnName() );
 		if(fieldByNameFromRoot==null) return false;
 		return true;

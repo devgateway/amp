@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -5336,38 +5337,70 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		return retVal;		
 	}
 	
+	private static Connection createConnection()
+	{
+		try
+		{
+			return PersistenceManager.getJdbcConnection();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static Connection conn = createConnection();
+	private static Object lock = new Object();
+	
 	public static boolean shouldThisUserValidate (TeamMember tm, Long activityId) {
-		if (tm.getTeamHead() ) {
-			try {
-				Session session	= PersistenceManager.getRequestDBSession();
-				String queryStr	= "SELECT a.ampActivityId, a.team.ampTeamId, a.draft, a.approvalStatus from " + AmpActivityVersion.class.getName() + " a where a.ampActivityId=:aaId";
-				Query query		= session.createQuery(queryStr);
-				query.setCacheable(true);
-				query.setLong("aaId", activityId);
-				Object [] result	= (Object [])query.uniqueResult();
+		if (tm.getTeamHead() )
+		//synchronized(lock) // cheaper to synchronize than to get a new connection every time
+		{
+			try 
+			{		
+				if (conn == null)
+					conn = PersistenceManager.getJdbcConnection();
 				
-				Long teamId			= (Long)result[1];
-				Boolean draft		= (Boolean)result[2];
-				String status		= (String)result[3];
-				if ( draft == null )
-					draft	= false;
+				String query = "SELECT a.amp_activity_id, a.amp_team_id, a.draft, a.approval_status from amp_activity_version a where a.amp_activity_id = " + activityId;
+				Statement stmt = conn.createStatement();
+				ResultSet resultSet = stmt.executeQuery(query);
 				
-				if ( tm.getTeamId().equals(teamId) ) {
-					if ( !draft && ("started".equals(status)||"edited".equals(status)) )
-						return true;
+				boolean returnValue = false;
+				
+				int count = 0;
+				while (resultSet.next())
+				{
+					count ++;
+					if (count == 2)
+						return false; // 2+ results
+					
+					long actId = resultSet.getLong(1);
+					long teamId = resultSet.getLong(2);
+					Boolean draft = resultSet.getBoolean(3);
+					String status = resultSet.getString(4);
+					
+					if (draft == null)
+						draft = false;
+					
+					if ( tm.getTeamId().equals(teamId) ) {
+						if ( !draft && ("started".equals(status)||"edited".equals(status)) )
+							returnValue = true;
+					}
 				}
 				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				return returnValue;
+				
 			}
-		}
-		
-		
-		
-
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+			}			
+		}		
 		return false;
-	} 
+	}
+	
+	
 	 public static void changeActivityArchiveStatus(Collection<Long> activityIds, boolean status) {
 			try {
 				Session session 			= PersistenceManager.getRequestDBSession();

@@ -6,17 +6,7 @@ package org.digijava.module.aim.action.reportwizard;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -603,94 +593,100 @@ public class ReportWizardAction extends MultiAction {
 			}
 	}
 	
-	private HashMap buildAmpTreeColumnSimple(Collection<AmpColumns> formColumns, Integer type, HttpSession httpSession)
-	{
+	private Map<String, List<AmpColumns>> buildAmpTreeColumnSimple(Collection<AmpColumns> formColumns, Integer type, HttpSession httpSession)
+	{			
+		ArrayList<AmpColumnsVisibility> ampColumnsVisibles = new ArrayList<AmpColumnsVisibility>();
+		ServletContext ampContext;
+		ampContext = getServlet().getServletContext();
+		AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		Collection<AmpFieldsVisibility> ampAllFields = FeaturesUtil.getAMPFieldsVisibility();
+		Collection<AmpColumns> allAmpColumns = formColumns;
+
+		TreeSet<String> ampThemes = new TreeSet<String>();
+		TreeSet<AmpColumnsOrder> ampThemesOrdered = new TreeSet<AmpColumnsOrder>();
 			
-			ArrayList<AmpColumnsVisibility> ampColumnsVisibles = new ArrayList<AmpColumnsVisibility>();
-			ServletContext ampContext;
-			ampContext = getServlet().getServletContext();
-			AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-			Collection<AmpFieldsVisibility> ampAllFields = FeaturesUtil.getAMPFieldsVisibility();
-			Collection<AmpColumns> allAmpColumns = formColumns;
-			//Collection allAmpColumnsPrefixed = new ArrayList(); // put a "REPORTS " prefix
-			TreeSet<String> ampThemes = new TreeSet<String>();
-			TreeSet<AmpColumnsOrder> ampThemesOrdered = new TreeSet<AmpColumnsOrder>();
-			ArrayList ampColumnsOrder = (ArrayList) ampContext.getAttribute("ampColumnsOrder");
-			Map scope=PermissionUtil.getScope(httpSession);  
-			/*
-			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
-			{
-				AmpColumns ampColumn=(AmpColumns) it.next();
-				ampColumn.setColumnName("REPORTS "+ampColumn.getColumnName());
-				allAmpColumnsPrefixed.add(ampColumn);
-			}
-			allAmpColumns.clear();
-			allAmpColumns.addAll(allAmpColumnsPrefixed);
-			*/			  
+		ArrayList<AmpColumnsOrder> ampColumnsOrder = (ArrayList<AmpColumnsOrder>) ampContext.getAttribute("ampColumnsOrder");
+		Map<String, AmpColumnsOrder> ampColumnsOrderByName = new HashMap<String, AmpColumnsOrder>();
+		for(AmpColumnsOrder order:ampColumnsOrder)
+			ampColumnsOrderByName.put(order.getColumnName(), order);
+		
+		Map scope = PermissionUtil.getScope(httpSession); 
 			
-			for(AmpColumns ampColumn:allAmpColumns)
-			{
-				for(AmpFieldsVisibility ampFieldVisibility:ampAllFields)
-				{
-					if(ampColumn.getColumnName().compareTo(ampFieldVisibility.getName())==0)
-					{
-						if(ampFieldVisibility.isFieldActive(ampTreeVisibility)) {
+		Map<String, AmpFieldsVisibility> ampAllFieldsByName = new HashMap<String, AmpFieldsVisibility>();
+		for(AmpFieldsVisibility field:ampAllFields)
+			ampAllFieldsByName.put(field.getName(), field);
+			
+		//int iterations1 = 0, iterations2 = 0;
+		for(AmpColumns ampColumn:allAmpColumns)
+		{
+			AmpFieldsVisibility ampFieldVisibility = ampAllFieldsByName.get(ampColumn.getColumnName());
+			
+			if(ampFieldVisibility == null)
+				continue;
+			
+			if (!ampFieldVisibility.isFieldActive(ampTreeVisibility))
+				continue; // negative "continue" instead of if/else, so as to reduce the depth of blocks
+				
 							
-							  //skip build columns with no rights
-							if(ampFieldVisibility.getPermission(false)!=null && !ampFieldVisibility.canDo(GatePermConst.Actions.VIEW,scope)) 
-								continue;
-						
-							AmpColumnsVisibility ampColumnVisibilityObj=new AmpColumnsVisibility();
-							ampColumnVisibilityObj.setAmpColumn(ampColumn);
-							ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
-							ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
-							ampColumnsVisibles.add(ampColumnVisibilityObj);
-							ampThemes.add(ampFieldVisibility.getParent().getName());
-							for(Iterator kt=ampColumnsOrder.iterator();kt.hasNext();)
-							{
-								AmpColumnsOrder aco=(AmpColumnsOrder) kt.next();
-								//System.out.println("----------------"+aco.getColumnName()+":"+aco.getId()+":"+aco.getIndexOrder());
-								if (type == ArConstants.PLEDGES_TYPE){
-									if (aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS)|| 
-											aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)||aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
-										ampThemesOrdered.add(aco);
-									}
-								}else{
-									if(ampFieldVisibility.getParent().getName().compareTo(aco.getColumnName())==0 &&
-											!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)
-											&& !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
-												ampThemesOrdered.add(aco);
-										//System.out.println("	----------------ADDED!");
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			LinkedHashMap<String, ArrayList<AmpColumns>> ampTreeColumn = new LinkedHashMap<String, ArrayList<AmpColumns>>();
-//			int jjj=0;
-			for(AmpColumnsOrder aco:ampThemesOrdered)
+			//skip build columns with no rights
+			if(ampFieldVisibility.getPermission(false) != null && !ampFieldVisibility.canDo(GatePermConst.Actions.VIEW,scope)) 
+				continue;
+				
+			AmpColumnsVisibility ampColumnVisibilityObj = new AmpColumnsVisibility();
+			ampColumnVisibilityObj.setAmpColumn(ampColumn);
+			ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
+			ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
+			ampColumnsVisibles.add(ampColumnVisibilityObj);
+			ampThemes.add(ampFieldVisibility.getParent().getName());
+				
+			if (type == ArConstants.PLEDGES_TYPE)
 			{
-				String themeName = (String) aco.getColumnName();
-				ArrayList<AmpColumns> aux = new ArrayList<AmpColumns>();
-				boolean added = false;
-				for(AmpColumnsVisibility acv:ampColumnsVisibles)
-				{
-					if(themeName.compareTo(acv.getParent().getName()) == 0)
+				// BOZO: looks stupid, should be moved out of the loop completely 
+				for(AmpColumnsOrder aco:ampColumnsOrder)
+					if (aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) || 
+						aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)||aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2))
 					{
-						aux.add( acv.getAmpColumn() );
-						added	= true;
+						ampThemesOrdered.add(aco);
 					}
-					
-				}
-				if(added) {
-					
-					ampTreeColumn.put(themeName, aux);
-				}
 			}
-			
-			return ampTreeColumn;
+			else
+			{
+				AmpColumnsOrder aco = ampColumnsOrderByName.get(ampFieldVisibility.getParent().getName());
+				if (aco == null)
+					continue;
+				
+				if (!aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_COLUMNS) && !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_1)
+							&& !aco.getColumnName().equalsIgnoreCase(ArConstants.PLEDGES_CONTACTS_2)){
+								ampThemesOrdered.add(aco);
+						//System.out.println("	----------------ADDED!");
+					}
+			}
+		}
+		
+		Map<String, List<AmpColumns>> ampTreeColumn = new LinkedHashMap<String, List<AmpColumns>>();
+
+		for(AmpColumnsOrder aco:ampThemesOrdered)
+		{
+			String themeName = aco.getColumnName();
+			ArrayList<AmpColumns> aux = new ArrayList<AmpColumns>();
+			boolean added = false;
+			for (AmpColumnsVisibility acv:ampColumnsVisibles)
+			{
+				//iterations2 ++;
+				if(themeName.compareTo(acv.getParent().getName()) == 0)
+				{
+					aux.add( acv.getAmpColumn() );
+					added	= true;
+				}
+					
+			}
+			if(added) 
+			{
+				ampTreeColumn.put(themeName, aux);
+			}
+		}	
+		//System.err.println("iterations1 = " + iterations1 + ", iterations 2 = " + iterations2);
+		return ampTreeColumn;
 	}
 	
 	public static void invokeSetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {

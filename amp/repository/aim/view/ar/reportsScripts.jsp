@@ -315,7 +315,8 @@ saveReportEngine	= null;
 	
 	function submitFilters() {
 		//alert("SUBMITTING FILTERS");
-		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;	
+		if (document.getElementById("workspace_only")) 
+		  document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;	
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
 		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
 		filterForm.submit();

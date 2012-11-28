@@ -306,7 +306,7 @@ function initializeGlobalVariables(){
 						<c:forEach var="dashboard" items="${visualizationform.dashboardList}">
 							<li>
 								<a class="side_opt_sel" name="dsbd" id="${dashboard.id}" href="JavaScript:callbackGetGraphs(${dashboard.id},${dashboard.baseType});">
-								<c:out value="${dashboard.name}"/>
+								<digi:trn><c:out value="${dashboard.name}"/></digi:trn>
 								</a>
 							</li>
 						</c:forEach>

@@ -70,6 +70,7 @@ function page (page){
 
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <digi:form action="/manageSource.do" styleId="manageForm">
+<h1 class="admintitle" style="text-align:left;">Data Import Manager</h1>
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center>
 		<!-- BREADCRUMP START -->
 		<tr>

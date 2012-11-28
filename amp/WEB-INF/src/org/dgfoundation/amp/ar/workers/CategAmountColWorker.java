@@ -92,12 +92,14 @@ public class CategAmountColWorker extends ColumnWorker {
 				
 				if (filter.getFromDate()!=null  && !("".equalsIgnoreCase(filter.getFromDate()))){
 					java.util.Date sDate=FormatHelper.parseDate2(filter.getFromDate());
-					if (tDate.before(sDate)) showable=false;
+					if (tDate.before(sDate)) 
+						showable=false;
 				}
 				
 				if (filter.getToDate()!=null && !("".equalsIgnoreCase(filter.getToDate()))){
 					java.util.Date toDate=FormatHelper.parseDate2(filter.getToDate());
-					if (tDate.after(toDate)) showable=false;
+					if (tDate.after(toDate)) 
+						showable=false;
 				}
 		}
 	

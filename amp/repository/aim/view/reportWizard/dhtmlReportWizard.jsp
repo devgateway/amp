@@ -293,7 +293,7 @@ body {
 		<table width="1000" border="0" cellspacing="0" cellpadding="0" >
 			<tr>
 				<td width="768">
-					<div class="step_head">
+					<div class="step_head_lng">
 						<div id="rgTitle" class="step_head_cont">${pageTitle}</div>
 					</div>
 				</td>

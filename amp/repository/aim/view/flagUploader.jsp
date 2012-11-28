@@ -364,7 +364,7 @@ function deleteFlag(id) {
 
                     <digi:trn key="aim:uploadFlag">
 
-                      <b style="font-size:12px;">Upload Flag</b></digi:trn>
+                      <b style="font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#000000;">Upload Flag</b></digi:trn>
 
                   </td>
 

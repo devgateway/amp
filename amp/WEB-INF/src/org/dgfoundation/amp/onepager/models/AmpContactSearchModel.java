@@ -5,6 +5,7 @@ package org.dgfoundation.amp.onepager.models;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,7 @@ public class AmpContactSearchModel extends
 			AmpContact newContact = new AmpContact();
 			newContact.setName(TranslatorUtil.getTranslation("Change Name"));
 			newContact.setLastname(TranslatorUtil.getTranslation("Change Lastname"));
+			newContact.setTemporaryId("_"+new Date().getTime());
 			ret.add(newContact);
 			return ret;
 		} catch (HibernateException e) {

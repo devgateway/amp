@@ -62,7 +62,7 @@
 	</tr>-->
 	<tr>
 		<td style="padding-top:10px; padding-bottom:10px;">
-			<span class="subtitle-blue"><digi:trn key="gis:indicatorChartWidgetCreateEdit:pageHeader">Edit widget data</digi:trn></span>
+			<h1 class="admintitle"><digi:trn key="gis:indicatorChartWidgetCreateEdit:pageHeader">Edit widget data</digi:trn></h1>
 		</td>
 	</tr>
 	<tr>

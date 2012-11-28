@@ -422,7 +422,7 @@ public class DbUtil {
 	            logger.error(e);
 	            throw new DgException("Cannot load regions from db", e);
 	        }
-	        return locations;
+	        return DashboardUtil.getTopLevelLocationList(locations);
 		}
      }
     
@@ -525,7 +525,7 @@ public class DbUtil {
 	            logger.error(e);
 	            throw new DgException("Cannot load sectors from db", e);
 	        }
-	        return sectors;
+	        return DashboardUtil.getTopLevelParentList(sectors);
     	}
      }
     

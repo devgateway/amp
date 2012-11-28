@@ -12,7 +12,7 @@
 <digi:form action="/showGisSettings.do?action=update">
 	
 	
-	<table cellPadding=5 cellSpacing=0 width="1000" border=0 align=center>
+	<table cellPadding=5 cellSpacing=0 width="1000" border=0 align=center style="margin-top:20px;">
 		<!--<tr>-->
 			<!-- Start Navigation -->
 			<!--<td height=33><span class=crumb>
@@ -33,7 +33,7 @@
 		</tr>-->
 		<tr>
 			<td>
-	
+				 <h1 class="admintitle" style="text-align:left;">Result Matrix/GIS Settings</h1>
 				<%--
 				<table>
 					<tr>

@@ -77,6 +77,7 @@
 		<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column" >
         <c:set var="reportHeading">
           <%=subColumn.getName(reportMeta.getHideActivities())%>
+          <%= ("percentageOfTotalCommitments".equals (subColumn.getExpression())?"(%)":"")  %>
         </c:set>
         
         <logic:equal name="column" property="columnDepth" value="1">

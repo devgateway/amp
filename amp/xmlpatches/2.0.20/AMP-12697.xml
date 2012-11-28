@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-12697</jira>
+    <keyword>activity</keyword>
+    <keyword>divide</keyword>
+    <keyword>percentage</keyword>
+    <author>Dan</author>
+    <description>Insert new global setting for activating/deactivating decimals in Location percentage</description> 
+    <trigger type="all">
+        <condition  type="entryInTableMissing" tablename="amp_global_settings" columnname="settingsName" columnvalue="Allow decimal percentage for button Divide Percentages in Location"/>
+    </trigger> 
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+				INSERT INTO amp_global_settings (id, settingsName, settingsValue, possibleValues, description, section)
+				VALUES ((Select (max(id) + 1) from amp_global_settings), 'Decimals in Location percentage', '0', 't_Integer', 'Use 0 to deactivate decimals in Location percentage.', 'general');
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

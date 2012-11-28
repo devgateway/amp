@@ -18,6 +18,7 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpComponentType;
@@ -417,6 +418,41 @@ public class ComponentsUtil {
             return false;
         } else
             return true;
+    }
+    /*
+     * this is to check whether a component with the same name already exists in the AMP Components Table.returns true if present and false if not present for the activity group
+     */
+    public static boolean checkComponentNameExistsExcludingGroup(String title, AmpActivityGroup g) {
+    	logger.info(" in the checking for components existence through title ");
+        Collection col = null;
+        if (g == null) //If the group is null, then it's a new activity, check the old way
+    	{
+        	return checkComponentNameExists(title);
+    	}
+        else
+        {
+            String queryString = null;
+            Session session = null;
+            Query qry = null;
+            try {
+                session = PersistenceManager.getRequestDBSession();
+                queryString = "select co from " + AmpComponent.class.getName() + " as co inner join co.activities ac inner join ac.ampActivityGroup actGroup where co.title=:title and actGroup.ampActivityGroupId <> :groupId ";
+                qry = session.createQuery(queryString);
+                qry.setParameter("title", title, Hibernate.STRING);
+                qry.setParameter("groupId", g.getAmpActivityGroupId(), Hibernate.LONG);
+
+                col = qry.list();
+            } catch (Exception ex) {
+                logger.error("Unable to get Component for editing from database " + ex.getMessage());
+                ex.printStackTrace(System.out);
+            }
+            logger.info(" returning the collection");
+            if (col.isEmpty()) {
+                return false;
+            } else
+                return true;
+        }        	
+    	
     }
 
     /*

@@ -29,11 +29,11 @@ ${fn:length(aimNPDForm.selYears)*3+1}
 		</c:forEach>
 		</tr>
 
-		<tr>
+		<tr bgcolor=#f2f2f2>
 			<td class="inside normal"><digi:trn>Indicator Name</digi:trn></td>
 			<c:forEach var="year" items="${aimNPDForm.selYears}">
 				<td align="center" class="inside_inner_title"><span
-					class="desktop_project_name normal"> <digi:trn
+					class="desktop_project_name normal" style="padding-left:0px !important;"> <digi:trn
 					key="aim:indGrid:baseVal">Base</digi:trn></span></td>
 				<td align="center" class="inside_inner_title"><span
 					class="desktop_project_name normal"> <digi:trn

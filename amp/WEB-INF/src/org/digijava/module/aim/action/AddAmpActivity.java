@@ -1330,6 +1330,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	        		  }
 	        	  }
 	          }
+	          request.getParameterMap().put("viewAllRights", "true");
 	          eaForm.getDocuments().setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionForActivityPreview(request) );
 	
 	          /* END - Setting documents for preview */

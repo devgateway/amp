@@ -250,9 +250,8 @@
 
 	<input type="hidden" name="actionFlag" value="">
 
-	<table bgColor=#ffffff cellPadding=5 cellspacing="1" width=705>
+	<table bgColor=#ffffff cellPadding=5 cellspacing="1" width=1000>
 		<tr>
-			<td width=14>&nbsp;</td>
 			<td align=left valign="top" width=752>
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
@@ -293,7 +292,7 @@
                         
 					   		<tr>
 							  <td valign="top"  align="center">
-								  <table border="0" cellpadding="0" cellspacing="0" width=772 id="addUserContainer">
+								  <table border="0" cellpadding="0" cellspacing="0" width=1000 id="addUserContainer">
 	
 									<tr>
 										

@@ -90,7 +90,7 @@
 		</script>	
 		
 		<div class="tab_opt_box">
-				<div class="show_hide_setting"><img src="/TEMPLATE/ampTemplate/img_2/ico_write.png" align=left style="margin-right:5px;">
+				<div class="show_hide_setting" style="width:auto;"><img src="/TEMPLATE/ampTemplate/img_2/ico_write.png" align=left style="margin-right:5px;">
 					<digi:link href="/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels"><b><digi:trn>Create new message</digi:trn></b></digi:link>
 				</div>
 			

@@ -192,7 +192,7 @@
 </script>
 <h1 class="admintitle">
 						<digi:trn>
-								<b style="font-size:12px;">Resources Label Manager</b>
+								Resources Label Manager
 							</digi:trn>
 					</h1>
 <bean:define id="myForm" toScope="request" name="crLabelManagerForm" />

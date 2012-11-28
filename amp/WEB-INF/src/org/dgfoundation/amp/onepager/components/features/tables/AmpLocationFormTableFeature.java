@@ -44,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -243,11 +244,68 @@ public class AmpLocationFormTableFeature extends
 
 		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, list){
 			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.DECIMAL_LOCATION_PERCENTAGES_DIVIDE);
+				int factor = 1;
+				if(pattern != null && Integer.parseInt(pattern) > 0){
+					Integer numDecimals = Integer.parseInt(pattern);
+					factor = (int)(Math.pow(10, numDecimals));
+				}
+
+				Set<AmpActivityLocation> set = setModel.getObject();
+				if (set.size() == 0)
+					return;
+				
+				int size = 0;
+				Iterator<AmpActivityLocation> it = set.iterator();
+				while (it.hasNext()) {
+					AmpActivityLocation t = (AmpActivityLocation) it.next();
+					if (itemInCollection(t))
+						size++;
+				}
+				
+				if (size == 0)
+					return;
+				
+				int alloc = (100*factor)/size;
+				it = set.iterator();
+				while (it.hasNext()) {
+					AmpActivityLocation loc = (AmpActivityLocation) it.next();
+					if (!itemInCollection(loc))
+						continue;
+					setPercentageLocation(loc, alloc/(double)factor);
+				}
+				
+				int dif = (100*factor) - alloc*size;
+				int delta = 1;
+				if (dif < 0)
+					delta = -1;
+				it = set.iterator();
+				while (dif != 0 && it.hasNext()){
+					AmpActivityLocation loc = (AmpActivityLocation) it.next();
+					if (!itemInCollection(loc))
+						continue;
+					setPercentageLocation(loc, (getPercentageLocation(loc) + (delta)/(double)factor));
+					dif = dif - delta;
+				}
+				list.removeAll();
+				target.addComponent(list.getParent());
+			}
+
+			
+			
+			@Override
 			protected void onBeforeRender() {
 				super.onBeforeRender();
 				if (this.isEnabled()){
 					this.setEnabled(!disablePercentagesForInternational.getObject());
 				}
+			}
+			public void setPercentageLocation(AmpActivityLocation loc, double val) {
+				loc.setLocationPercentage((float) val);
+			}
+			public double getPercentageLocation(AmpActivityLocation loc) {
+				return (double)(loc.getLocationPercentage());
 			}
 			@Override
 			public void setPercentage(AmpActivityLocation loc, int val) {

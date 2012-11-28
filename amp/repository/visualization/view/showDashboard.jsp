@@ -256,28 +256,28 @@ function initializeGlobalVariables(){
 												<table style="width: 95%; margin-top: 15px;" align="center"
 													class="inside">
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_0">
+														<td class="side_opt_sel inside" id="general_selector_0">
 															<div class="selector_type_cont" onclick="changeTab(0)">
 																<digi:trn>General</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_1" bgcolor="#FFFFFF">
+														<td class="side_opt_sel inside" id="general_selector_1" bgcolor="#FFFFFF">
 															<div class="selector_type_cont" onclick="changeTab(1)">
 																<digi:trn>Organization Groups With Organizations</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_2" bgcolor="#FFFFFF">
+														<td class="side_opt_sel inside" id="general_selector_2" bgcolor="#FFFFFF">
 															<div class="selector_type_cont" onclick="changeTab(2)">
 																<digi:trn>Regions With Zones</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_3" bgcolor="#FFFFFF">
+														<td class="side_opt_sel inside" id="general_selector_3" bgcolor="#FFFFFF">
 															<div class="selector_type_cont" onclick="changeTab(3)">
 																<digi:trn>Sectors and Sub Sectors</digi:trn>
 															</div></td>
@@ -633,10 +633,11 @@ function initializeGlobalVariables(){
 							</div>
 			
 
-
+<center>
  <input type="button" value="<digi:trn>Apply</digi:trn>" class="buttonx" style="margin-right:10px; margin-top:10px;" id="applyButtonPopin">
 <input type="button" value="<digi:trn>Reset to defaults</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
 <input type="button" value="<digi:trn>Close</digi:trn>" class="buttonx" onclick="hidePopin()" style="margin-right:10px; margin-top:10px;">
+</center>
 
 
 </div>
@@ -830,11 +831,11 @@ function initializeGlobalVariables(){
   </tr>
 </table>
 <div class="dashboard_stat" id="divSummaryInfo" ></div>
-<div class="dashboard_stat" align="right" ><a href="javascript:" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
-<div class="dashboard_stat" style="display:none; padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+<div class="dashboard_stat"><a href="javascript:" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
+<div class="dashboard_stat" style="display:none" id="currentDisplaySettings" >
 	<table cellpadding="0" cellspacing="0" border="0" width="100%">
-	<tr style="background-color:white;" >
-	<td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+	<tr style="background-color:#FAFAFA;" >
+	<td style="font-size:11px;font-family:Arial,Helvetica,sans-serif; padding: 5px 5px 5px 0px;" valign="top">
 	<strong>
 	<digi:trn>Selected Filters</digi:trn>:</strong>
 	   <i><digi:trn>Currency type</digi:trn>: </i><label id="filterCurrency"></label> |

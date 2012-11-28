@@ -91,6 +91,9 @@ public class DataDispatcher extends DispatchAction {
 
 		ArrayList<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (tm!=null && tm.getTeamAccessType().equals("Management")) {
+			visualizationForm.getFilter().setFromPublicView(true);// sets as public view when team is management, so it shows only approved activities
+        } 
 		if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
 			visualizationForm.getFilter().setTeamMember(tm);
         } else {
@@ -485,7 +488,8 @@ public class DataDispatcher extends DispatchAction {
 		if(request.getParameter("donut") != null)
 			donut = Boolean.parseBoolean(request.getParameter("donut"));
 
-		String othersTitle = "Other";
+		String othersTitle = TranslatorWorker.translateText("Other", locale, siteId);
+        
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
 		if(divide){
@@ -864,7 +868,7 @@ public class DataDispatcher extends DispatchAction {
 		}
 
 		
-		String othersTitle = "Other";
+		String othersTitle = TranslatorWorker.translateText("Other", locale, siteId);
         
 		BigDecimal donorTotal = BigDecimal.ZERO;
 		String currCode = "USD";
@@ -1941,7 +1945,7 @@ public class DataDispatcher extends DispatchAction {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), true);
 
-		String othersTitle = "Other";
+		String othersTitle = TranslatorWorker.translateText("Other", locale, siteId);
         
         BigDecimal regionTotal = BigDecimal.ZERO;
         String currCode = "USD";
@@ -2255,7 +2259,8 @@ public class DataDispatcher extends DispatchAction {
 		String format = request.getParameter("format");
 		
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-		String othersTitle = "Other";
+		String othersTitle = TranslatorWorker.translateText("Other", locale, siteId);
+        
 		boolean ignore = request.getParameter("ignore") != null ? Boolean.parseBoolean(request.getParameter("ignore")) : (format != null && format.equals("xml"))? true : false;
 
 		if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {

@@ -184,7 +184,7 @@ public class ReportsFilterPicker extends MultiAction {
 					}
 				}
 		}
-
+		
 		Long ampTeamId = null;
 		if (teamMember != null)
 			ampTeamId = teamMember.getTeamId();
@@ -288,6 +288,15 @@ public class ReportsFilterPicker extends MultiAction {
 				}
 			}
 		}
+		
+		AmpARFilter arf = (AmpARFilter) request.getSession().getAttribute(ArConstants.REPORTS_FILTER);
+		if (arf == null)
+		{
+			arf = new AmpARFilter();		
+			arf.setPublicView(true);
+			request.getSession().setAttribute(ArConstants.REPORTS_FILTER,arf);
+		}
+
 		Session session = PersistenceManager.getSession();
 		if (filterForm.getAmpReportId()!=null){
 			AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(filterForm.getAmpReportId()));

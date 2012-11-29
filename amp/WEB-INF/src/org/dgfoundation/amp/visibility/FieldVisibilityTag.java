@@ -207,16 +207,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	{
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
 		if(currentTemplate!=null)
-			if(currentTemplate.getFeatures()!=null)
-				for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
-				{
-					AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-					if(field.getName().compareTo(this.getName())==0) 
-					{	
-						return true;
-					}
-			
-				}
+			return currentTemplate.fieldExists(this.getName()); // the "if" above was a copy-paste error, checking on features instead of fields
 		return false;
 	}
 	

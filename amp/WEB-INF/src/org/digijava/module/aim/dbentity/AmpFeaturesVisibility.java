@@ -40,11 +40,10 @@ public class AmpFeaturesVisibility extends AmpObjectVisibility implements Serial
 	} 
 	
 	public boolean isVisibleTemplateObj(AmpTemplatesVisibility aObjVis){
-		for(Iterator it=aObjVis.getFeatures().iterator();it.hasNext();)
+		for(AmpFeaturesVisibility x:aObjVis.getFeatures())
 		{
-			AmpFeaturesVisibility x=(AmpFeaturesVisibility) it.next();
-			if(x.getId().compareTo(id)==0) return true;
-			
+			if (x.getId().compareTo(id) == 0) 
+				return true;			
 		}
 		return false;
 	}

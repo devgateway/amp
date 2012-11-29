@@ -1453,19 +1453,17 @@ public class FeaturesUtil {
 //			ft.setItems(null);
 //			ft.setFeatures(null);
 //			ft.setFields(null);
-			for (Iterator it = ft.getFields().iterator(); it.hasNext();) {
-				AmpFieldsVisibility f = (AmpFieldsVisibility) it.next();
+			for (AmpFieldsVisibility f:ft.getFields()) {
 				f.getTemplates().remove(ft);
 			}
-			for (Iterator it = ft.getFeatures().iterator(); it.hasNext();) {
-				AmpFeaturesVisibility f = (AmpFeaturesVisibility) it.next();
+			for (AmpFeaturesVisibility f:ft.getFeatures()) {
 				f.getTemplates().remove(ft);
 			}
 			for (Iterator it = ft.getItems().iterator(); it.hasNext();) {
 				AmpModulesVisibility f = (AmpModulesVisibility) it.next();
 				f.getTemplates().remove(ft);
 			}
-			ft.getFields().clear();
+			ft.clearFields();
 			ft.getFeatures().clear();
 			ft.getItems().clear();
 			
@@ -1514,7 +1512,7 @@ public class FeaturesUtil {
 			Iterator i = field.getTemplates().iterator();
 			while (i.hasNext()) {
 				AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
-				element.getFields().remove(field);
+				element.removeField(field);
 			}
 			session.delete(field);
 			//tx.commit();
@@ -1548,12 +1546,12 @@ public class FeaturesUtil {
 				i = feature.getTemplates().iterator();
 				while (i.hasNext()) {
 					AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
-					element.getFields().remove(field);
+					element.removeField(field);
 				}
 				i = field.getTemplates().iterator();
 				while (i.hasNext()) {
 					AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
-					element.getFields().remove(field);
+					element.removeField(field);
 				}
 			}
 			i = feature.getTemplates().iterator();
@@ -1593,12 +1591,12 @@ public class FeaturesUtil {
 					Iterator i = feature.getTemplates().iterator();
 					while (i.hasNext()) {
 						AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
-						element.getFields().remove(field);
+						element.removeField(field);
 					}
 					i = field.getTemplates().iterator();
 					while (i.hasNext()) {
 						AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
-						element.getFields().remove(field);
+						element.removeField(field);
 					}
 				}
 				Iterator i = feature.getTemplates().iterator();
@@ -2018,9 +2016,11 @@ public class FeaturesUtil {
 		if (ampTemplate.getFields()!=null){
 			ampTemplate.getFields().retainAll(fields);
 			ampTemplate.getFields().addAll(fields);
+			ampTemplate.invalidateCache();
 		}else{
 			ampTemplate.setFields(new TreeSet<AmpFieldsVisibility>());
 			ampTemplate.getFields().addAll(fields);
+			ampTemplate.invalidateCache();
 		}
 		//tx.commit();
 		return;
@@ -2075,7 +2075,7 @@ public class FeaturesUtil {
        		if  ( makeVisible ){
 //beginTransaction();
     			template = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, templateId);
-    			template.getFields().add(field);
+    			template.addField(field);
     			//tx.commit();
        		}
 			
@@ -2551,7 +2551,7 @@ public class FeaturesUtil {
 				Iterator i = field.getTemplates().iterator();
 				while (i.hasNext()) {
 					AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
-					element.getFields().remove(field);
+					element.removeField(field);
 				}
 				session.delete(field);
 			}
@@ -2709,7 +2709,7 @@ public class FeaturesUtil {
 			Iterator i = field.getTemplates().iterator();
 			while (i.hasNext()) {
 				AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
-				element.getFields().remove(field);
+				element.removeField(field);
 			}
 			session.delete(field);
 			//	 if(session.contains(field)) //System.out.println("o daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + field.getName());

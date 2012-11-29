@@ -3317,14 +3317,12 @@ public class SaveActivity extends Action {
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 		if(currentTemplate!=null)
 			if(currentTemplate.getFeatures()!=null)
-				for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
+				for(AmpFeaturesVisibility feature:currentTemplate.getFeatures())
 				{
-					AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
 					if(feature.getName().compareTo("Sectors")==0)
 					{
 						return true;
 					}
-
 				}
 		return false;
 	}
@@ -3336,17 +3334,8 @@ public class SaveActivity extends Action {
 
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 		if(currentTemplate!=null)
-			if(currentTemplate.getFields()!=null)
-				for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
-				{
-					AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-					//System.out.println(field.getName());
-					if(field.getName().equals("Status"))
-					{
-						return true;
-					}
-
-				}
+			return currentTemplate.fieldExists("Status");
+		
 		return false;
 	}
 	
@@ -3357,16 +3346,7 @@ public class SaveActivity extends Action {
 
 			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 			if(currentTemplate!=null)
-				if(currentTemplate.getFields()!=null)
-					for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
-					{
-						AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-						if(field.getName().equals(fieldName))
-						{
-							return true;
-						}
-
-					}
+				return currentTemplate.fieldExists(fieldName);
 			return false;
 	}
 
@@ -3525,35 +3505,19 @@ public class SaveActivity extends Action {
 		    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 			if(currentTemplate!=null)
-				if(currentTemplate.getFeatures()!=null)
-					for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
-					{
-						AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-						if(field.getName().compareTo("Primary Sector")==0)
-						{
-							return true;
-						}
-
-					}
+				return currentTemplate.fieldExists("Primary Sector");
 			return false;
 	  }
+	  
 	  private boolean isSecondarySectorEnabled() {
 	 	    ServletContext ampContext = getServlet().getServletContext();
 		    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 			if(currentTemplate!=null)
-				if(currentTemplate.getFeatures()!=null)
-					for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
-					{
-						AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-						if(field.getName().compareTo("Secondary Sector")==0)
-						{
-							return true;
-						}
-
-					}
+				return currentTemplate.fieldExists("Secondary Sector");
 			return false;
 	  }
+	  
 		private boolean isInConfig(EditActivityForm eaForm, String sectorLevel) {
 			List <AmpClassificationConfiguration> classConfig = eaForm.getSectors().getClassificationConfigs();
 			for(AmpClassificationConfiguration cls : classConfig){

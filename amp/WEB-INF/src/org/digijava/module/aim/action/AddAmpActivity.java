@@ -1906,16 +1906,7 @@ private ActionForward showStep1(ActionMapping mapping,
 	    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");		
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 		if(currentTemplate!=null)
-			if(currentTemplate.getFeatures()!=null)
-				for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
-				{
-					AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-					if(field.getName().compareTo("Primary Sector")==0) 
-					{	
-						return true;
-					}
-			
-				}
+			return currentTemplate.fieldExists("Primary Sector");
 		return false;
   }
 

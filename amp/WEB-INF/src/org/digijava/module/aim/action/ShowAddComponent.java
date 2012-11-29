@@ -154,14 +154,12 @@ public class ShowAddComponent extends Action {
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 		if(currentTemplate!=null)
 			if(currentTemplate.getFeatures()!=null)
-				for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
+				for(AmpFeaturesVisibility feature:currentTemplate.getFeatures())
 				{
-					AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
 					if(feature.getName().compareTo("Admin - Component Type")==0) 
 					{
 						return true;
-					}	
-					
+					}			
 				}
 		return false;
 

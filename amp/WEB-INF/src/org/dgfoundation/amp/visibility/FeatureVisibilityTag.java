@@ -178,14 +178,12 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
 		if(currentTemplate!=null)
 			if(currentTemplate.getFeatures()!=null)
-				for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
+				for(AmpFeaturesVisibility feature:currentTemplate.getFeatures())
 				{
-					AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
 					if(feature.getName().compareTo(this.getName())==0) 
 					{
 						return true;
-					}	
-					
+					}
 				}
 		return false;
 	}

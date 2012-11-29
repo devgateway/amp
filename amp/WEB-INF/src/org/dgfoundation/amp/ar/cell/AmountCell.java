@@ -6,12 +6,7 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Column;
@@ -214,16 +209,35 @@ public class AmountCell extends Cell {
 	 * @return Returns the amount.
 	 */
 	public double getAmount() {
-		HashSet<String> summedCells	= new HashSet<String>();
+		
 		double ret = 0;
 		if (id != null){
-			return  convert() * getPercentage() / 100;
+			double res = convert() * getPercentage() / 100;
+			return res;
 		}
+		
+		/**
+		 * AMP-13848
+		 * there are 3 types of cells which get into this cycle:
+		 *  1) percentageless cells
+		 *  2) percentageful cells
+		 *  3) cells which are both percentageless and percentageful
+		 *  
+		 *  Cells at (3) are actually percentageful cells with zero-percent entries masked as percentageless ones and they end up doubly-counted (once as percentageless and once as percentageful). We need to find this situation and subtract them
+		 * 
+		 */
+		HashSet<String> summedCells	= new HashSet<String>();
+		HashMap<Long, CategAmountCell> percentageless = new HashMap<Long, CategAmountCell>();
+		HashSet<Long> percentagefulIds = new HashSet<Long>();
+		
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
+					
 			if ( element instanceof CategAmountCell && ((CategAmountCell)element).getColumnPercent() == null ) {
 				CategAmountCell caCell	= (CategAmountCell)element;
+				if (caCell.getOwnerId() != null)
+					percentageless.put(caCell.getOwnerId(), caCell);
 				String idString			= caCell.getId() + "_" + caCell.getOwnerId();
 				if ( !summedCells.contains(idString) ) {
 					ret += element.getAmount();
@@ -231,11 +245,20 @@ public class AmountCell extends Cell {
 				}
 			}
 			else
+			{
 				ret += element.getAmount();
-			// logger.info("amount++"+element.getAmount());
+				if ((element instanceof CategAmountCell) && (element.getOwnerId() != null))
+					percentagefulIds.add(element.getOwnerId());
+			}
 		}
+		
+		// now fix part (3) described above: decrease each "double element"'s cost once
+		for(Long ownerId:percentagefulIds)
+			if (percentageless.containsKey(ownerId))
+				ret -= percentageless.get(ownerId).getAmount();
+		
 		// logger.info("******total amount for owner
-		// "+this.getOwnerId()+"="+ret);
+		// "+this.getOwnerId()+"="+ret);		
 		return ret;
 	}
 

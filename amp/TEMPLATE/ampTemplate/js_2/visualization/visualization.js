@@ -601,7 +601,7 @@ function resetToDefaults(){
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
-	document.getElementById("SectorProfileItemId").value = -1;
+	//document.getElementById("SectorProfileItemId").value = -1;
 	applyFilterPopin();
 }
 
@@ -797,7 +797,7 @@ function callbackChildren(e) {
 			objectType = "Sector";
 			//try to set the SectorProfileItemId from select:
 			try {
-				document.getElementById("SectorProfileItemId").value = parentId;
+				//document.getElementById("SectorProfileItemId").value = parentId;
 			}
 			catch(e){
 					
@@ -807,7 +807,7 @@ function callbackChildren(e) {
 			objectType = "Region";
 			//try to set the SectorProfileItemId from select:
 			try {
-				document.getElementById("RegionProfileItemId").value = parentId;
+				//document.getElementById("RegionProfileItemId").value = parentId;
 			}
 			catch(e){
 					

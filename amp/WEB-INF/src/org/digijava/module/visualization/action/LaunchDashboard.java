@@ -63,7 +63,7 @@ public class LaunchDashboard extends Action {
         String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String dashId = request.getParameter("id") != null ? (String) request.getParameter("id") : null;
         String graphsList = request.getParameter("graphs") != null ? (String) request.getParameter("graphs") : null;
-		List<AmpGraph> list = new ArrayList<AmpGraph>();
+        List<AmpGraph> list = new ArrayList<AmpGraph>();
 		if(graphsList!=null){
 			String[] graphsListSplit = graphsList.split(",");
 			for (int i = 0; i < graphsListSplit.length; i++) {
@@ -217,6 +217,13 @@ public class LaunchDashboard extends Action {
 	}
 	
 	private void initializeFilter(DashboardFilter filter, HttpServletRequest request) {
+		
+		String publicView = request.getParameter("publicView") != null ? (String) request.getParameter("publicView") : "false";
+		if (publicView.equals("true")) {
+			filter.setFromPublicView(true);
+		} else {
+			filter.setFromPublicView(false);
+		}
 		filter.setDashboardType(Constants.DashboardType.DONOR);
 		
 		filter.setShowOrganizationsRanking(false);

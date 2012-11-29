@@ -105,7 +105,7 @@ public class DataDispatcher extends DispatchAction {
 		if (request.getParameter("orgGroupIds")!=null && !request.getParameter("orgGroupIds").equals("null"))
 			visualizationForm.getFilter().setOrgGroupIds(getLongArrayFromParameter(request.getParameter("orgGroupIds")));
 		if (request.getParameter("orgIds")!=null && !request.getParameter("orgIds").equals("null"))
-			visualizationForm.getFilter().setOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	
+			visualizationForm.getFilter().setSelOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	
 		if (request.getParameter("zoneIds")!=null && !request.getParameter("zoneIds").equals("null"))
 			visualizationForm.getFilter().setZoneIds(getLongArrayFromParameter(request.getParameter("zoneIds")));
 		if (request.getParameter("sectorIds")!=null && !request.getParameter("sectorIds").equals("null"))
@@ -602,7 +602,7 @@ public class DataDispatcher extends DispatchAction {
 	            	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), filter, startYear.intValue(), endYear.intValue());
 	            }
 	            else
-	            	map = DashboardUtil.getRankSectors(DbUtil.getSectors(filter), filter, startYear.intValue(), endYear.intValue());
+	            	map = DashboardUtil.getRankSectorsByKey(DbUtil.getSectors(filter), filter);
         	}
 	        
 	        if (map==null) {
@@ -964,7 +964,7 @@ public class DataDispatcher extends DispatchAction {
         	}
         	else 
         	{
-	            map = DashboardUtil.getRankPrograms(DbUtil.getPrograms(filter,NPO), filter, startYear.intValue(), endYear.intValue());
+	            map = DashboardUtil.getRankProgramsByKey(DbUtil.getPrograms(filter,NPO), filter);
         	}
 	        
 	        if (map==null) {
@@ -1313,11 +1313,17 @@ public class DataDispatcher extends DispatchAction {
         	Map map = null;
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear()))
         		map = visualizationForm.getRanksInformation().getFullOrganizations();
-        	else
-        		map = DashboardUtil.getRankAgencies(DbUtil.getAgencies(filter), filter, startYear.intValue(), endYear.intValue());
-        			
-
-        	
+        	else {
+        		HashMap<Long, AmpOrganisation> agencyList = new HashMap<Long, AmpOrganisation>();
+        		Collection agencyListRed = DbUtil.getAgencies(filter);
+                Iterator iter = agencyListRed.iterator();
+                while (iter.hasNext()) {
+                	AmpOrganisation org = (AmpOrganisation)iter.next();
+                    agencyList.put(org.getAmpOrgId(), org);
+                }
+                map = DashboardUtil.getRankAgenciesByKey(agencyList.keySet(), filter);
+        	}
+        		
         	if (map==null) {
 	        	map = new HashMap<AmpOrganisation, BigDecimal>();
 			}
@@ -1504,10 +1510,9 @@ public class DataDispatcher extends DispatchAction {
             for (Long i = startYear; i <= endYear; i++) {
                 startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                 endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-                Long[] temp = filter.getOrgIds();
-                filter.setOrgIds(idsArray);
-                DecimalWraper fundingCal = DbUtil.getFunding(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-                filter.setOrgIds(temp);
+                DashboardFilter newFilter = filter.getCopyFilterForFunding();
+    			newFilter.setSelOrgIds(idsArray);
+	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
                 BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                 if (ids.size()==0){
 	            	othersYearlyValue.put(i, BigDecimal.ZERO);
@@ -2983,7 +2988,7 @@ public class DataDispatcher extends DispatchAction {
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
 	            if(regionId != null && !regionId.equals("") && !regionId.equals("-1")){
 	            	Long id = Long.parseLong(regionId);
-	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue(),request);
+	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getSubRegions(id), filter,request);
 	            }
 	            else
 	        		map = visualizationForm.getRanksInformation().getFullRegions();
@@ -2993,10 +2998,10 @@ public class DataDispatcher extends DispatchAction {
         	{
 	            if(regionId != null && !regionId.equals("-1")){
 	            	Long id = Long.parseLong(regionId);
-	            	map = DashboardUtil.getRankRegions(DbUtil.getSubRegions(id), filter, startYear.intValue(), endYear.intValue(),request);
+	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getSubRegions(id), filter,request);
 	            }
 	            else
-	            	map = DashboardUtil.getRankRegions(DbUtil.getRegions(filter), filter, startYear.intValue(), endYear.intValue(),request);
+	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(filter), filter,request);
         	}
         	
 	        if (map==null) {
@@ -3425,7 +3430,7 @@ public class DataDispatcher extends DispatchAction {
 				AmpOrganisation ampOrganisation = (AmpOrganisation) iterator.next();
 				Long[] ids = {ampOrganisation.getAmpOrgId()};
 				DashboardFilter newFilter = filter.getCopyFilterForFunding();
-    			newFilter.setOrgIds(ids);
+    			newFilter.setSelOrgIds(ids);
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, year.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, year.intValue());
 	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);

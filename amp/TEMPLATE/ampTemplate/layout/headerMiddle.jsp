@@ -175,7 +175,7 @@ ${fn:replace(message,quote,escapedQuote)}
 		                                <logic:present name="MENU_DASHBOARDS" scope="session">
 			                                <logic:iterate id="item" name="MENU_DASHBOARDS" scope="session" type="org.digijava.module.visualization.dbentity.AmpDashboard">
 												<li class="yuiampmenuitem_drop">
-													<a class="yuiampmenuitemlabel" href='/visualization/launchDashboard.do?reset=true&id=<bean:write name="item" property="id"/>' onclick="return canExit()">
+													<a class="yuiampmenuitemlabel" href='/visualization/launchDashboard.do?reset=true&publicView=true&id=<bean:write name="item" property="id"/>' onclick="return canExit()">
 														<bean:write name="item" property="name"/>
 													</a>
 												</li>

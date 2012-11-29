@@ -18,6 +18,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -110,7 +111,7 @@ public class ShowProjectsList extends Action {
             divideByMillionDenominator = new BigDecimal(1000);
         }
         
-        List<AmpActivityVersion> activities = null;
+        HashMap<Long, AmpActivityVersion> activities = null;
         Map<String, Map<AmpActivityVersion, BigDecimal>> itemProjectsList = new TreeMap<String, Map<AmpActivityVersion, BigDecimal>>();
         if (type.equals("RegionProfile")){
 			for (int i = 0; i < ids.length; i++) {
@@ -125,11 +126,12 @@ public class ShowProjectsList extends Action {
 					}
 				}
 				Long[] id1 = {long1};
-				Long[] temp = filter.getSelLocationIds();
-				filter.setSelLocationIds(id1);
-				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-				filter.setSelLocationIds(temp);
-				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				newFilter.setSelLocationIds(id1);
+				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				BigDecimal divideByDenominator;
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 	    }
@@ -138,11 +140,12 @@ public class ShowProjectsList extends Action {
 				Long long1 = ids[i];
 				itemName = SectorUtil.getAmpSector(long1).getName();
 				Long[] id1 = {long1};
-				Long[] temp = filter.getSelSectorIds();
-				filter.setSelSectorIds(id1);
-				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-				filter.setSelSectorIds(temp);
-				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				newFilter.setSelSectorIds(id1);
+				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				BigDecimal divideByDenominator;
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -151,11 +154,12 @@ public class ShowProjectsList extends Action {
 				Long long1 = ids[i];
 				itemName = DbUtil.getOrganisation(long1).getName();
 				Long[] id1 = {long1};
-				Long[] temp = filter.getOrgIds();
-				filter.setSelOrgIds(id1);
-				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-				filter.setSelOrgIds(temp);
-				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				newFilter.setSelOrgIds(id1);
+				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				BigDecimal divideByDenominator;
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -164,10 +168,12 @@ public class ShowProjectsList extends Action {
 				Long long1 = ids[i];
 				itemName = DbUtil.getProgramById(long1).getName();
 				Long[] id1 = {long1};
-				filter.setSelProgramIds(id1);
-				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-				filter.setSelProgramIds(null);
-				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				newFilter.setSelProgramIds(id1);
+				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				BigDecimal divideByDenominator;
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -185,10 +191,12 @@ public class ShowProjectsList extends Action {
 					}
 				}
 				Long[] id1 = {long1};
-				filter.setSelCVIds(id1);
-				activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-				filter.setSelCVIds(null);
-				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				newFilter.setSelCVIds(id1);
+				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				BigDecimal divideByDenominator;
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -210,8 +218,10 @@ public class ShowProjectsList extends Action {
 			} catch (WorkerException e) {
 				itemName = "ODA Historical Trend";
 			}
-            activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-            itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+            activities = this.getActivities(filter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+            BigDecimal divideByDenominator;
+			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+			itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		if (type.equals("AidPredictability")){
@@ -224,8 +234,10 @@ public class ShowProjectsList extends Action {
     			adjustmentType = CategoryConstants.ADJUSTMENT_TYPE_PLANNED;
     			itemName = TranslatorWorker.translateText("Aid Predictability - Planned", locale, siteId);
     		}
-            activities = DbUtil.getActivityList(filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType);
-            itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+            activities = this.getActivities(filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType);
+            BigDecimal divideByDenominator;
+			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+			itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType, filter.getDecimalsToShow(),divideByDenominator));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		if (type.equals("AidPredictabilityQuarter")){
@@ -274,8 +286,10 @@ public class ShowProjectsList extends Action {
 			default:
 				break;
 			}
-            activities = DbUtil.getActivityList(filter, startDateQ, endDateQ, null, null, filter.getTransactionType(), adjustmentType);
-            itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+            activities = this.getActivities(filter, startDateQ, endDateQ, null, null, filter.getTransactionType(), adjustmentType);
+            BigDecimal divideByDenominator;
+			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+			itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), filter, startDateQ, endDateQ, null, null, filter.getTransactionType(), adjustmentType, filter.getDecimalsToShow(),divideByDenominator));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		if (type.equals("AidType")){
@@ -286,8 +300,10 @@ public class ShowProjectsList extends Action {
 					itemName = TranslatorWorker.translateText("Aid Type - " + ampCategoryValue.getValue(), locale, siteId);
 				}
 			}
-			activities = DbUtil.getActivityList(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-            itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+			activities = this.getActivities(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			BigDecimal divideByDenominator;
+			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+			itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		if (type.equals("AidModality")){
@@ -298,8 +314,10 @@ public class ShowProjectsList extends Action {
 					itemName = TranslatorWorker.translateText("Aid Type - " + ampCategoryValue.getValue(), locale, siteId);
 				}
 			}
-			activities = DbUtil.getActivityList(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-            itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, id, startYearInt, endYearInt));
+			activities = this.getActivities(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+			BigDecimal divideByDenominator;
+			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+			itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		/*if(activities.size() > 0){
@@ -433,9 +451,9 @@ public class ShowProjectsList extends Action {
 					newFilter.setSelLocationIds(null);
 	        	} else if (type.equals("DonorProfile")){
 	        		Long[] id1 = {Long.parseLong(id)};
-	        		newFilter.setOrgIds(id1);
+	        		newFilter.setSelOrgIds(id1);
 					fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-					newFilter.setOrgIds(null);
+					newFilter.setSelOrgIds(null);
 	        	} else {
 	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	        	}
@@ -449,4 +467,29 @@ public class ShowProjectsList extends Action {
 		}
 		return null;
 	}
+	
+	private HashMap<Long, AmpActivityVersion> getActivities (DashboardFilter filter, Date startDate,
+            Date endDate, Long assistanceTypeId,
+            Long financingInstrumentId,
+            int transactionType,HardCodedCategoryValue adjustmentTypeActual){
+		Collection activityListReduced;
+		try {
+			activityListReduced = DbUtil.getActivities(filter, startDate, endDate, assistanceTypeId, financingInstrumentId, transactionType, adjustmentTypeActual);
+			HashMap<Long, AmpActivityVersion> activityList = new HashMap<Long, AmpActivityVersion>();
+	        Iterator iter = activityListReduced.iterator();
+	        while (iter.hasNext()) {
+	            Object[] item = (Object[])iter.next();
+	            Long ampActivityId = (Long) item[0];
+	            String ampId = (String) item[1];
+	            String name = (String) item[2];
+	            AmpActivityVersion activity = new AmpActivityVersion(ampActivityId, name, ampId);
+	            activityList.put(ampActivityId, activity);
+	        }
+	        return activityList;
+		} catch (DgException e) {
+			return null;
+		}
+		
+	}
+	
 }

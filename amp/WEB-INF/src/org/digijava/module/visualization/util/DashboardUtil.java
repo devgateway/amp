@@ -94,7 +94,7 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        AmpCategoryValueLocations natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation();
+        AmpCategoryValueLocations natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation()!=null? getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation(): getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[1]).getParentLocation();
         AmpCategoryValueLocations tempLoc = new AmpCategoryValueLocations();
 		if (request!=null) {
 			String locale = RequestUtils.getNavigationLanguage(request).getCode();

@@ -417,7 +417,7 @@ public class DbUtil {
 	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
 	            }
 	
-	            oql += "  and (parcv.value = 'Region' ) ";// get not only regions, but any subregions that might have data
+	            //oql += "  and (parcv.value = 'Region' ) ";// get not only regions, but any subregions that might have data
 
 	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
 	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
@@ -1955,11 +1955,12 @@ public class DbUtil {
             	AmpFundingDetail currentFd = (AmpFundingDetail) item[0];
             	Long id = (Long) item[1];
             	String name = "";
-            	if (id.equals(new Long(natLoc.getId())))
+            	if (id.equals(new Long(natLoc.getId()))){
             		name = natLoc.getName();
-            	else
+            	} else {
             		name = locationParentList.get(id).getName();
-            	id = locationParentList.get(id).getId();
+            		id = locationParentList.get(id).getId();
+            	}
             	if(hm.containsKey(id)){
             		ArrayList<AmpFundingDetail> afda = hm.get(id);
             		afda.add(currentFd);

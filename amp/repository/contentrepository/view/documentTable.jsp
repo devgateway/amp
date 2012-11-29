@@ -234,7 +234,7 @@
 									<logic:equal name="documentData" property="hasVersioningRights" value="true">
 										<br />
 										<a style="cursor:pointer; text-decoration:none; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
-										onClick="setType('version'); configPanel(0,'${documentData.escapedAmpTitle}','${documentData.escapedAmpDescription}', <%=documentData.getCmDocTypeId() %> ,'<%=documentData.getUuid() %>', ${isUrl},'<%=documentData.getYearofPublication() %>' );showMyPanel(0, 'addDocumentDiv');"
+										onClick="setType('version'); configPanel(0,'${documentData.escapedAmpTitle}','${documentData.escapedAmpDescription}', <%=documentData.getCmDocTypeId() %> ,'<%=documentData.getUuid() %>', ${isUrl},'<%=documentData.getYearofPublication() %>', '${documentData.index}', '${documentData.category}' );showMyPanel(0, 'addDocumentDiv');"
 										title="<digi:trn>Click here to add a new version of this document</digi:trn>">
 											<digi:trn>Add Version</digi:trn>
 									</logic:equal>

@@ -715,12 +715,6 @@ border-right: 1px solid rgb(208, 208, 208);
 										<button id="actionsButtonIdTeam" type="button" onclick="menuPanelForTeam.toggleTeamView();teamFPanel.hide();teamListObj.getFilterPanel('teamFilterButtonId','teamFilterDivId', true);" class="buttonx"><digi:trn>Add Resource</digi:trn>
 											<img  src="/TEMPLATE/ampTemplate/images/arrow_down_black.gif">
 										</button>
-										<!-- 
-											<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
-			                            		<digi:trn>Add Resource ...</digi:trn>            
-											</button>
-										 -->
-										
 									<%}%>
 									
 									    <input type="text" id="teamSearchStr">

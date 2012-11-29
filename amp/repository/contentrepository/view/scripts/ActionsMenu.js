@@ -54,7 +54,7 @@ ActionsMenu.prototype.render=function (){
 				menuPanelForTeam.toggleTeamView();
 			}
 			setType(ownType);
-			configPanel(0,'','','', false);
+			configPanel(0, '', '', '', 0, false, null, '', '');
 			showMyPanel(0, 'addDocumentDiv');
 		};
 		createActionDiv(addResdivEl,addResLinkEl,clickActionsForAddDoc);
@@ -80,7 +80,7 @@ ActionsMenu.prototype.render=function (){
 				menuPanelForTeam.toggleTeamView();
 			}
 			setType(ownType);
-			configPanel(0,'','','', '',true);
+			configPanel(0, '', '', '', 0, true, null, '', '');
 			showMyPanel(0, 'addDocumentDiv');
 		};
 		createActionDiv(addURLdivEl,addUrlLinkEl,clickActionsForAddLink);

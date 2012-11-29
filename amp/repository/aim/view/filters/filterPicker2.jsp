@@ -172,7 +172,7 @@ StopWatch.next("Filters", true);
 	<digi:trn>Use filter as advanced search</digi:trn>
 </div>
 <%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
-<%if (arf.isPublicView()==false){%>
+<%if ((arf != null) && (arf.isPublicView()==false)){%>
 	<c:if test="${aimReportsFilterPickerForm.reporttype eq '5'}">
 		<div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
 			<html:checkbox property="workspaceonly" styleId="workspace_only"/>&nbsp;

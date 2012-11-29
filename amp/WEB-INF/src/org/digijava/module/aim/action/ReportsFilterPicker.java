@@ -289,13 +289,14 @@ public class ReportsFilterPicker extends MultiAction {
 			}
 		}
 		
-		AmpARFilter arf = (AmpARFilter) request.getSession().getAttribute(ArConstants.REPORTS_FILTER);
+/*		AmpARFilter arf = (AmpARFilter) request.getSession().getAttribute(ArConstants.REPORTS_FILTER);
 		if (arf == null)
 		{
 			arf = new AmpARFilter();		
 			arf.setPublicView(true);
 			request.getSession().setAttribute(ArConstants.REPORTS_FILTER,arf);
 		}
+*/
 
 		Session session = PersistenceManager.getSession();
 		if (filterForm.getAmpReportId()!=null){

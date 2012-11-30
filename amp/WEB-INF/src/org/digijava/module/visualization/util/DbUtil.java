@@ -277,8 +277,9 @@ public class DbUtil {
         oql += "   inner join f.ampActivityId act ";
         oql += " left join act.locations actloc  ";
         oql += "   inner join act.sectors actSec ";
-        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-        	oql += " inner join act.orgrole orole inner join orole.role role ";
+        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			oql += " inner join act.orgrole orole inner join orole.role role ";
         oql += "   inner join actSec.classificationConfig config ";
 
         oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
@@ -384,8 +385,9 @@ public class DbUtil {
 	            oql += "   inner join f.ampActivityId act ";
 	            oql += "   inner join act.sectors actSec ";
 	            oql += "   inner join actSec.classificationConfig config ";
-	            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-	            	oql += " inner join act.orgrole orole inner join orole.role role ";
+	            if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+	        		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+	        			oql += " inner join act.orgrole orole inner join orole.role role ";
 	            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            oql += " inner join loc.parentCategoryValue parcv ";
 	            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
@@ -486,8 +488,9 @@ public class DbUtil {
 	            oql += " inner join f.ampActivityId act ";
 	            oql += " inner join act.sectors actSec ";
 	            oql += " inner join actSec.sectorId sec ";
-	            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-	            	oql += " inner join act.orgrole orole inner join orole.role role ";
+	            if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+	        		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+	        			oql += " inner join act.orgrole orole inner join orole.role role ";
 	            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
 	            	oql += " inner join act.ampActivityGroupCached actGroup ";
 	            else
@@ -586,8 +589,9 @@ public class DbUtil {
             oql += " inner join actSec.sectorId sec ";
             oql += " inner join act.actPrograms actProg ";
             oql += " inner join actProg.program prog ";
-            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-            	oql += " inner join act.orgrole orole inner join orole.role role ";
+            if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+        		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        			oql += " inner join act.orgrole orole inner join orole.role role ";
             if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
             	oql += " inner join act.ampActivityGroupCached actGroup ";
             else
@@ -694,8 +698,9 @@ public class DbUtil {
                     + " as fd inner join fd.ampFundingId f ";
             oql += " inner join f.ampActivityId act ";
             oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
-            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-            	oql += " inner join act.orgrole orole inner join orole.role role ";
+            if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+        		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        			oql += " inner join act.orgrole orole inner join orole.role role ";
             oql += " inner join actsec.classificationConfig config ";
             if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
             	oql += " inner join act.ampActivityGroupCached actGroup ";
@@ -1029,8 +1034,9 @@ public class DbUtil {
         oql += AmpFundingDetail.class.getName()
                 + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
-        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-        	oql += " inner join act.orgrole orole inner join orole.role role ";
+        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			oql += " inner join act.orgrole orole inner join orole.role role ";
         
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
         	oql += " inner join act.ampActivityGroupCached actGroup ";
@@ -1241,8 +1247,9 @@ public class DbUtil {
         	oql += " inner join act.actPrograms actProg ";
             oql += " inner join actProg.program prog ";
 		}
-        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-        	oql += " inner join act.orgrole orole inner join orole.role role ";
+        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+        	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        		oql += " inner join act.orgrole orole inner join orole.role role ";
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
         	oql += " inner join act.ampActivityGroupCached actGroup ";
         else
@@ -1410,6 +1417,9 @@ public class DbUtil {
         	oql += " inner join act.ampActivityGroupCached actGroup ";
         else
         	oql += " inner join act.ampActivityGroup actGroup ";
+    	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			oql += " inner join act.orgrole orole inner join orole.role role ";
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         if (sectorCondition) {
@@ -1573,6 +1583,9 @@ public class DbUtil {
         	oql += " inner join act.ampActivityGroup actGroup ";
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			oql += " inner join act.orgrole orole inner join orole.role role ";
         if (sectorCondition) {
             oql += "  inner join act.sectors actsec ";
             oql += "  inner join actsec.classificationConfig config  ";
@@ -1720,6 +1733,9 @@ public class DbUtil {
         	oql += " inner join act.ampActivityGroupCached actGroup ";
         else
         	oql += " inner join act.ampActivityGroup actGroup ";
+    	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			oql += " inner join act.orgrole orole inner join orole.role role ";
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         //if (sectorCondition) {
@@ -1877,6 +1893,9 @@ public class DbUtil {
         	oql += " inner join act.ampActivityGroupCached actGroup ";
         else
         	oql += " inner join act.ampActivityGroup actGroup ";
+    	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			oql += " inner join act.orgrole orole inner join orole.role role ";
         //if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         if (sectorCondition) {
@@ -2051,6 +2070,9 @@ public class DbUtil {
             oql += "  inner join actsec.classificationConfig config  ";
             oql += " inner join actsec.sectorId sec ";
         }
+        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			oql += " inner join act.orgrole orole inner join orole.role role ";
         if (sectorCondition) 
         	oql += " where config.id=:config  ";
         else
@@ -2277,8 +2299,9 @@ public class DbUtil {
         oql += AmpFundingDetail.class.getName()
                 + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
-        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-        	oql += " inner join act.orgrole orole inner join orole.role role ";
+        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			oql += " inner join act.orgrole orole inner join orole.role role ";
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
         	oql += " inner join act.ampActivityGroupCached actGroup ";
         else

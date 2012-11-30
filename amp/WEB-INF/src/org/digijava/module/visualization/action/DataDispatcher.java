@@ -597,7 +597,7 @@ public class DataDispatcher extends DispatchAction {
         	}
         	else 
         	{
-	            if(sectorId != null && !sectorId.equals("-1")){
+	            if(sectorId != null && !sectorId.equals("") && !sectorId.equals("-1")){
 	            	Long id = Long.parseLong(sectorId);
 	            	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), filter, startYear.intValue(), endYear.intValue());
 	            }
@@ -1459,10 +1459,10 @@ public class DataDispatcher extends DispatchAction {
                 for (Long i = startYear; i <= endYear; i++) {
         			Long[] ids = {org.getAmpOrgId()};
         			DashboardFilter newFilter = filter.getCopyFilterForFunding();
-	    			newFilter.setOrgIds(ids);
+	    			newFilter.setSelOrgIds(ids);
                     startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
-                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+                    DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
                     //filter.setOrgIds(temp);
                     BigDecimal amount = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
                     organizationData += amount.compareTo(BigDecimal.ZERO) == 0 ? "0>" : amount.toPlainString() + ">";
@@ -2996,7 +2996,7 @@ public class DataDispatcher extends DispatchAction {
             }
         	else
         	{
-	            if(regionId != null && !regionId.equals("-1")){
+	            if(regionId != null && !regionId.equals("") && !regionId.equals("-1")){
 	            	Long id = Long.parseLong(regionId);
 	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getSubRegions(id), filter,request);
 	            }

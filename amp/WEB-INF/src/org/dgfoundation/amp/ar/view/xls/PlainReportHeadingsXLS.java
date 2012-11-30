@@ -19,6 +19,7 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 
 /**
  * @author mihai
@@ -217,25 +218,30 @@ public class PlainReportHeadingsXLS extends XLSExporter {
 		ColumnReportData columnReport = (ColumnReportData) item;
 		Integer rowSpan = columnReport.getMaxColumnDepth();
 		
-		String path				=  this.getMetadata().getHierarchiesPath();
-		String[] pathElements		= path.split("/");
-		if ( pathElements != null && pathElements.length > 0 ) {
-			for (int i = 0; i < pathElements.length; i++) {
-				
-				String elem = pathElements[i];
-				if ( elem != null && elem.trim().length() > 0 ) {
-					if (curDepth == 0) {
-						HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
-						cell1.setCellValue( elem.trim() );
-						makeRowSpan(rowSpan, true);
-					}else{
-						HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
-						cell1.setCellValue("");
+			if ( this.getMetadata().getHierarchies() != null ) {
+				for (AmpReportHierarchy arh: this.getMetadata().getHierarchies() ) {
+					String colName			= arh.getColumn().getColumnName();
+					String translColName	= null;
+					try{			
+						translColName	= TranslatorWorker.translateText(colName, this.getMetadata().getLocale(), this.getMetadata().getSiteId());
+					}catch(WorkerException e){
+						translColName = colName;
 					}
-					colId.inc();
+					
+					if ( translColName != null && translColName.trim().length() > 0 ) {
+						if (curDepth == 0) {
+							HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
+							cell1.setCellValue( translColName.trim() );
+							makeRowSpan(rowSpan, true);
+						}else{
+							HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
+							cell1.setCellValue("");
+						}
+						colId.inc();
+					}					
 				}
 			}
-		}
+
 	}
 	
 	protected void createHeadingBorders (int curDepth) {

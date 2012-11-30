@@ -18,6 +18,9 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.ReportHeadingsXLS;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 
 /**
  * @author Alex Gartner
@@ -81,18 +84,23 @@ public class BudgetReportHeadingsXLS extends ReportHeadingsXLS {
 	@Override
 	protected void createHierarchyHeaderCell (int curDepth) {
 		if (curDepth == 0) {
-			String path				=  this.getMetadata().getHierarchiesPath();
-			String[] pathElements		= path.split("/");
-			if ( pathElements != null && pathElements.length > 0 ) {
-				for (int i = 0; i < pathElements.length; i++) {
-					String elem = pathElements[i];
-					if ( elem != null && elem.trim().length() > 0 ) {
-						HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
-						cell1.setCellValue( elem.trim() );
-						colId.inc();
+			
+			if ( this.getMetadata().getHierarchies() != null ) {
+				for (AmpReportHierarchy arh: this.getMetadata().getHierarchies() ) {
+					String colName			= arh.getColumn().getColumnName();
+					String translColName	= null;
+					try{			
+						translColName	= TranslatorWorker.translateText(colName, this.getMetadata().getLocale(), this.getMetadata().getSiteId());
+					}catch(WorkerException e){
+						translColName = colName;
 					}
 					
-				}
+					if ( translColName != null && translColName.trim().length() > 0 ) {
+						HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
+						cell1.setCellValue( translColName.trim() );
+						colId.inc();
+					}
+				}			
 			}
 		}
 		else {

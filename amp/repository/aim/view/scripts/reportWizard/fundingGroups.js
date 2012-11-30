@@ -71,7 +71,8 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 ,'Joint Criteria'
                 , 'On/Off/Treasury Budget'
                 , 'Multi Donor'
-                , 'Capital - Expenditure'              
+                , 'Capital - Expenditure'  
+                , 'Contracting Agency'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(

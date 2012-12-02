@@ -158,7 +158,7 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	
 	private int rowSpan;
 	
-	private static String [] htmlClassNames 	= {"firstLevel", "secondLevel", "thirdLevel"};
+	private static String [] htmlClassNames 	= {"firstLevel", "secondLevel", "thirdLevel", "fourthLevel", "fifthLevel"};
 	
 	public abstract Collection<Long> getOwnerIds();
 

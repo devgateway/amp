@@ -30,7 +30,7 @@
 	<c:if test="${groupReport.levelDepth == 1}">
 		<c:set var="trailCellsFile">TrailCells.jsp</c:set>
 	</c:if>
-	<!-- SKIP_ROW_TAG is ${skipRowTag} || LEVEL_DEPTH is ${groupReport.levelDepth} -->
+	<%-- SKIP_ROW_TAG is ${skipRowTag} || LEVEL_DEPTH is ${groupReport.levelDepth} --%>
 	<c:choose>
 		<c:when test="${skipRowTag=='true'}">
 			<!-- skipping row tag -- ${trailCellsFile} -->
@@ -53,9 +53,9 @@
 		</c:otherwise>
 	</c:choose>
 	<!-- GRD-after trailCells!! -->
-	<!-- <tr>
+	<%-- <tr>
 		<td height="5px" colspan='<bean:write name="groupReport" property="totalDepth"/>'></td>
-	</tr>  --> 
+	</tr>  --%> 
 </logic:present>
 
 <c:if test="${groupReport.levelDepth > 1}">

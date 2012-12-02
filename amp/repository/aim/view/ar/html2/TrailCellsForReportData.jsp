@@ -23,10 +23,10 @@
 			<span>
 				<%if(reportData.getRepName().length()<40){ %>
 					<% if (!("".equals(reportData.getRepName()))){ %>
-					<!-- *************************************************** 
+					<%-- *************************************************** 
 							WARNING:
 								Do not add Translations here!
-						 ***************************************************--> 
+						 ***************************************************--%> 
 		 				${reportData.repName}
 					<% 
 					} 
@@ -40,24 +40,24 @@
 		<td rowspan="${reportData.rowSpan}" class="clsTableCellDataHtml secondLevel hierarchyCell" height="13px" >
 			<span>
 			<% if (!("".equals(reportData.getRepName()))){ %>
-			<!-- *************************************************** 
+			<%-- *************************************************** 
 					WARNING:
 						Do not add Translations here!
-				 ***************************************************--> 
+				 ***************************************************--%> 
 				${reportData.repName}
 			<% } %>
 			</span>
 		</c:if>
 	
-	<c:if test="${reportData.levelDepth == 4}">
-		<td class="clsTableCellDataHtml thirdLevel hierarchyCell" 
+	<c:if test="${reportData.levelDepth >= 4}">
+		<td class="clsTableCellDataHtml ${reportData.htmlClassName} hierarchyCell" 
 				height="13px" rowspan="${reportData.rowSpan}" >
 		<span>
 			<% if (!("".equals(reportData.getRepName()))){ %>
-			<!-- *************************************************** 
+			<%-- *************************************************** 
 					WARNING:
 						Do not add Translations here!
-				 ***************************************************--> 
+				 ***************************************************--%> 
 		 		${reportData.repName}
 			<% } %>
 		</span>

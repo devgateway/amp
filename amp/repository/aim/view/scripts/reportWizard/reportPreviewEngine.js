@@ -32,7 +32,7 @@ function ReportPreviewSettings() {
 	this.hierarchyCellClass		= "hierarchyCell";
 	this.textCellClass			= "clsTableCellDataHtml";
 	
-	this.hierarchyLevelClasses	= ["firstLevel","secondLevel","thirdLevel"];
+	this.hierarchyLevelClasses	= ["firstLevel","secondLevel","thirdLevel", "fourthLevel", "fifthLevel"];
 	
 	this.numOfActivities	= 2;
 	this.rowsPerHierarchy	= 2;

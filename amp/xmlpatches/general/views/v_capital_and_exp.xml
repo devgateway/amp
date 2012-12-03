@@ -2,11 +2,11 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-13984</jira>
+	<jira>AMP-14315</jira>
 	<keyword>Views</keyword>
-	<keyword>Agreement</keyword>
+	<keyword>Capital</keyword>
 	<author>Alex</author>
-	<description>Views for agreement ( title + code )</description>
+	<description>Views capital and expenditure-planned disbursement</description>
 	<trigger type="all">
 		<condition type="custom">
 			<script returnVar="val">

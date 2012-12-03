@@ -27,7 +27,7 @@
 		
     var myPanelHistory = new YAHOOAmp.widget.Panel("newmyHistory", {
 		width:"800px",
-        height:"600px",
+        height:"510px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
 	    underlay:"none",

@@ -1751,9 +1751,6 @@ public class TeamUtil {
             qry.setMaxResults(recordPerPage);
             qry.setLong("teamId", teamId);
             
-            if (keyword != null)
-            	qry.setString("keyword", "%" + keyword + "%");
-
             col=qry.list();
 
 

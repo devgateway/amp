@@ -47,7 +47,7 @@
     <!-- End of Logo -->
     <html:hidden name="aimSectorClassConfigForm" property="id" styleId="id"/>
     <html:hidden name="aimSectorClassConfigForm" property="sectorClassId" styleId="originalSectorId"/>
-    
+    <h1 class="admintitle" style="text-align:left;"><digi:trn key="aim:scheme:sector">Sector Manager</digi:trn></h1>
     
     <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
         <tr>
@@ -72,10 +72,6 @@
                             </digi:link>
                         </td>
                         <!-- End navigation -->
-                    </tr>
-                    <tr>
-                        <td height=16 valign="center" width=571><span class=subtitle-blue><digi:trn key="aim:scheme:sector">Sector Manager</digi:trn></span>
-                        </td>
                     </tr>
                     <tr>
                         <td height=16 valign="center" width=571>
@@ -180,7 +176,7 @@
                                             <tr>
                                                 <td>
                                                     <!-- Other Links -->
-                                                    <table cellpadding="0" cellspacing="0" width="10"0>
+                                                    <table cellpadding="0" cellspacing="0" width="100">
                                                         <tr>
                                                             <td bgColor=#c9c9c7 class=box-title>
                                                                 <digi:trn key="aim:otherLinks">
@@ -196,7 +192,7 @@
                                             </tr>
                                             <tr>
                                                 <td bgColor=#ffffff class=box-border>
-                                                    <table cellPadding=5 cellspacing="1" width="100%">
+                                                    <table cellPadding=5 cellspacing="1" width="100%" class="inside">
                                                         <tr>
                                                             <td class="inside">
                                                                 <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

@@ -112,63 +112,62 @@
 									<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx" type="org.digijava.module.aim.helper.Documents">
 										<c:if test="${relatedLink.isFile == true}">
 											<tr>	
-												
-													<td class="inside">
-														<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>
-                            <c:set target="${docParams}" property="uuid">
-															<c:out value="${relatedLink.uuid}"/>
-														</c:set>
-														<c:set target="${docParams}" property="actId">
-															<c:out value="${relatedLink.activityId}"/>
-														</c:set>
-														<c:set target="${docParams}" property="pageId" value="1"/>
-                            <c:if test="${fn:length(relatedLink.title) > 30}" >
-                            	<digi:link href="/getDocumentDetails.do" name="docParams" title="${relatedLink.title}" styleClass="l_sm">
-                              	<c:out value="${fn:substring(relatedLink.title, 0, 30)}" />...
-                              </digi:link>
-                            </c:if>
-                            <c:if test="${fn:length(relatedLink.title) <= 30}" >
-                            	<digi:link href="/getDocumentDetails.do" name="docParams" title="${relatedLink.title}" styleClass="l_sm">
-                              	<bean:write name="relatedLink" property="title" />
-                              </digi:link>
-                            </c:if>
-                          </td>
-                          <td class="inside">
-                          	<logic:notEmpty name="relatedLink" property="fileName">
-                                <bean:define name="relatedLink" property="fileName" id="fileName"/>
-                            </logic:notEmpty>
-                            <a href="<%=digiContext%>/contentrepository/downloadFile.do?uuid=<bean:write name="relatedLink" property="uuid" />" title="<c:out value='${relatedLink.fileName}' />" class="l_sm">
-                                    <c:if test="${fn:length(relatedLink.fileName) > 30}" >
-                                        <c:out value="${fn:substring(relatedLink.fileName, 0, 30)}" />...
-                                    </c:if>
-                                    <c:if test="${fn:length(relatedLink.fileName) <= 30}" >
-                                        <c:out value="${relatedLink.fileName}" />
-                                    </c:if>
-                            </a>
-                          </td>
+												<td class="inside">
+													<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>
+                            						<c:set target="${docParams}" property="uuid">
+														<c:out value="${relatedLink.uuid}"/>
+													</c:set>
+													<c:set target="${docParams}" property="actId">
+														<c:out value="${relatedLink.activityId}"/>
+													</c:set>
+													<c:set target="${docParams}" property="pageId" value="1"/>
+						                            <c:if test="${fn:length(relatedLink.title) > 30}" >
+						                            	<digi:link href="/getDocumentDetails.do" name="docParams" title="${relatedLink.title}" styleClass="l_sm">
+						                              	<c:out value="${fn:substring(relatedLink.title, 0, 30)}" />...
+						                              	</digi:link>
+						                            </c:if>
+						                            <c:if test="${fn:length(relatedLink.title) <= 30}" >
+						                            	<digi:link href="/getDocumentDetails.do" name="docParams" title="${relatedLink.title}" styleClass="l_sm">
+						                              	<bean:write name="relatedLink" property="title" />
+						                              	</digi:link>
+						                            </c:if>
+                          						</td>
+                          						<td class="inside">
+                          							<logic:notEmpty name="relatedLink" property="fileName">
+						                                <bean:define name="relatedLink" property="fileName" id="fileName"/>
+						                            </logic:notEmpty>
+						                            <a href="<%=digiContext%>/contentrepository/downloadFile.do?uuid=<bean:write name="relatedLink" property="uuid" />" title="<c:out value='${relatedLink.fileName}' />" class="l_sm">
+						                                    <c:if test="${fn:length(relatedLink.fileName) > 30}" >
+						                                        <c:out value="${fn:substring(relatedLink.fileName, 0, 30)}" />...
+						                                    </c:if>
+						                                    <c:if test="${fn:length(relatedLink.fileName) <= 30}" >
+						                                        <c:out value="${relatedLink.fileName}" />
+						                                    </c:if>
+						                            </a>
+						                        </td>
                         
-                          <td class="inside" title="<c:out value="${relatedLink.activityName}" />">
-														<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-														<c:set target="${urlParams2}" property="activityId">
-															<bean:write name="relatedLink" property="activityId" />
-														</c:set>
-														<c:set target="${urlParams2}" property="public">
-															true
-														</c:set>
-														<c:set target="${urlParams2}" property="pageId">
-															2
-														</c:set>
-														<digi:link href="/viewActivityPreview.do" name="urlParams2" title="${translation}" styleClass="l_sm">
-                              <c:if test="${fn:length(relatedLink.activityName) > 30}" >
-                                  <c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
-                              </c:if>
-                              <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
-                                  <c:out value="${relatedLink.activityName}" />
-                              </c:if>
-														</digi:link>
-                         </td>
+                         	 					<td class="inside" title="<c:out value="${relatedLink.activityName}" />">
+													<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
+													<c:set target="${urlParams2}" property="activityId">
+														<bean:write name="relatedLink" property="activityId" />
+													</c:set>
+													<c:set target="${urlParams2}" property="public">
+														true
+													</c:set>
+													<c:set target="${urlParams2}" property="pageId">
+														2
+													</c:set>
+													<digi:link href="/viewActivityPreview.do" name="urlParams2" title="${translation}" styleClass="l_sm">
+						                              <c:if test="${fn:length(relatedLink.activityName) > 30}" >
+						                                  <c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
+						                              </c:if>
+						                              <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
+						                                  <c:out value="${relatedLink.activityName}" />
+						                              </c:if>
+													</digi:link>
+                         						</td>
                          
-                       </tr>
+                       						</tr>
 										</c:if>
 									</logic:iterate>
 								</logic:notEmpty>
@@ -185,48 +184,55 @@
 									<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx" type="org.digijava.module.aim.helper.Documents">
 										<c:if test="${relatedLink.isFile == false}">
 											<tr>
-                      	<td class="inside">
-                        	<jsp:useBean id="docPars" type="java.util.Map" class="java.util.HashMap"/>
-                          <c:set target="${docPars}" property="uuid">
-                          	<c:out value="${relatedLink.uuid}"/>
-                          </c:set>
-                          <c:set target="${docPars}" property="actId">
-                          	<c:out value="${relatedLink.activityId}"/>
-                          </c:set>
-                          <c:set target="${docPars}" property="pageId" value="1"/>
-                          <c:if test="${fn:length(relatedLink.title) > 30}" >
-                          	<digi:link href="/getDocumentDetails.do" name="docPars" title="${relatedLink.title}" styleClass="l_sm">
-                            	<c:out value="${fn:substring(relatedLink.title, 0, 30)}" />...
-                            </digi:link>
-                          </c:if>
-                          <c:if test="${fn:length(relatedLink.title) <= 30}" >
-                          	<digi:link href="/getDocumentDetails.do" name="docPars" title="${relatedLink.title}" styleClass="l_sm">
-                            	<bean:write name="relatedLink" property="title" />
-                            </digi:link>
-                          </c:if>
-                        </td>
-                        <td class="inside">
-                        	<c:if test="${relatedLink.isFile == false}">
-                          	<a target="_blank" href="<bean:write name="relatedLink" property="url" />" class="l_sm">
-                            	<bean:write name="relatedLink" property="url" />
-                            </a>
-                          </c:if>
-                        </td>
-                        <td title="<c:out value="${relatedLink.activityName}" />" class="inside">
+						                      	<td class="inside">
+						                        	<jsp:useBean id="docPars" type="java.util.Map" class="java.util.HashMap"/>
+						                          <c:set target="${docPars}" property="uuid">
+						                          	<c:out value="${relatedLink.uuid}"/>
+						                          </c:set>
+						                          <c:set target="${docPars}" property="actId">
+						                          	<c:out value="${relatedLink.activityId}"/>
+						                          </c:set>
+						                          <c:set target="${docPars}" property="pageId" value="1"/>
+						                          <c:if test="${fn:length(relatedLink.title) > 30}" >
+						                          	<digi:link href="/getDocumentDetails.do" name="docPars" title="${relatedLink.title}" styleClass="l_sm">
+						                            	<c:out value="${fn:substring(relatedLink.title, 0, 30)}" />...
+						                            </digi:link>
+						                          </c:if>
+						                          <c:if test="${fn:length(relatedLink.title) <= 30}" >
+						                          	<digi:link href="/getDocumentDetails.do" name="docPars" title="${relatedLink.title}" styleClass="l_sm">
+						                            	<bean:write name="relatedLink" property="title" />
+						                            </digi:link>
+						                          </c:if>
+						                        </td>
+						                        <td class="inside">
+						                        	<c:if test="${relatedLink.isFile == false}">
+						                          	<a target="_blank" href="<bean:write name="relatedLink" property="url" />" class="l_sm">
+						                            	<bean:write name="relatedLink" property="url" />
+						                            </a>
+						                          </c:if>
+						                        </td>
+                        
+						                        <td title="<c:out value="${relatedLink.activityName}" />" class="inside">
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParams}" property="ampActivityId">
 														<bean:write name="relatedLink" property="activityId" />
 													</c:set>
-													<digi:link href="/selectActivityTabs.do" name="urlParams" title="${translation}" styleClass="l_sm">
-                          <c:if test="${fn:length(relatedLink.activityName) > 30}" >
-                          	<c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
-                          </c:if>
-                          <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
-                          	<c:out value="${relatedLink.activityName}" />
-                          </c:if>
-												</digi:link>
-											</td>
-                     </tr>
+													<c:set target="${urlParams}" property="public">
+														true
+													</c:set>
+													<c:set target="${urlParams}" property="pageId">
+														2
+													</c:set>
+													<digi:link href="/viewActivityPreview.do" name="urlParams" title="${translation}" styleClass="l_sm">
+									                    <c:if test="${fn:length(relatedLink.activityName) > 30}" >
+									                    	<c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
+									                    </c:if>
+									                    <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
+									                    	<c:out value="${relatedLink.activityName}" />
+									                    </c:if>
+													</digi:link>
+												</td>
+						                     </tr>
 										</c:if>
 									</logic:iterate>
 								</logic:notEmpty>
@@ -242,8 +248,6 @@
 					</td>
 				</tr>
 			</table>
-		</div>
-		</div>
 		</td>
 	</tr>
 </table>

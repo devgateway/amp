@@ -93,6 +93,8 @@ function onDelete() {
 	<jsp:include page="teamPagesHeader.jsp"  />
 	<!-- End of Logo -->
 	<html:hidden property="event" value="view" />
+	<h1 class="admintitle" style="text-align:left;">Budget Manager</h1>
+	<font color="red"><ul id="errors"></ul></font>
 	<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>
 		<tr>
 			<td style="font-size:12px;" align=left class=r-dotted-lg valign="top" width=750>
@@ -115,14 +117,6 @@ function onDelete() {
 						class=subtitle-blue> <digi:trn key="aim:budgetManager">Budget Manager</digi:trn></span>
 					</td>
 				</tr> -->
-				<tr>
-					<td style="font-size:12px;" height=16 valign="center" width=571>
-						<font color="red">
-							<ul id="errors"></ul>
-						</font>
-					</td>
-					<td style="font-size:12px;" height=16 valign="center" width=571><digi:errors /></td>
-				</tr>
 				<tr>
 					<td style="font-size:12px;">
 						<table width=100% style="margin-top:10px; margin-bottom:10px; padding:7px; border:1px solid #CCCCCC;" bgcolor="#f2f2f2">

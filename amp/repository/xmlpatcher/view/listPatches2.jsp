@@ -74,7 +74,7 @@
 <div id="popup">
 
 </div>
-
+        <h1 class="admintitle" style="text-align:left;">Database Patches</h1>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
 		<td align=left class=r-dotted-lg valign="top">
@@ -96,7 +96,7 @@
 		</table>
 	<table cellpadding="3" cellspacing="1" style="border-color:#999999;border-spacing:2">
 <tr><td bgcolor="#C0D6E2" align="center" style="color: #000000; font-size: 12px; font-weight:bold;" width="700px">Discovered Patches</td><td align="center" bgcolor="#C0D6E2" style="color: #000000; font-size: 12px; font-weight:bold;" width="400px">Patch Details</td></tr>
-<tr><td rowspan="3" valign="top" width="700px"><div id="dynamicdata"></div> </td><td valign="top"><div id="patchBodyParent" style="height:400px;overflow:auto;width:540px"><div id="patchBody"></div></div></td></tr>
+<tr><td rowspan="3" valign="top" width="700px"><div id="dynamicdata"></div> </td><td valign="top"><div id="patchBodyParent" style="height:400px;overflow:auto;"><div id="patchBody"></div></div></td></tr>
 <tr><td bgcolor="#C0D6E2" align="center" style="color: #000000; font-size: 12px; font-weight:bold;" width="700px">Patch Logs</td></tr>
 <tr><td><div id="patchLogs" style="height:400px;overflow:auto;"></div></td></tr>	
 </table>	

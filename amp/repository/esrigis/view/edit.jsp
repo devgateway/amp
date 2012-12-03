@@ -98,6 +98,7 @@ div.fakefile2 input {
 </style>
 <digi:instance property="structuretypeform" />
 <digi:form action="/structureTypeManager.do?action=save" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+<h1 class="admintitle" style="text-align:left;"><digi:trn>Add/Edit structure</digi:trn></h1>
 <table bgColor=#ffffff cellPadding=5 cellspacing="1" width="1000" align=center>
   <tr>
     <td align=left valign="top" width="1000"><table cellPadding=5 cellspacing="0" width="100%">
@@ -121,11 +122,6 @@ div.fakefile2 input {
             <digi:trn>Edit structure</digi:trn>
             </span> </td>
           <!-- End navigation -->
-        </tr>
-        <tr>
-          <td colspan="2" align=center><span class=subtitle-blue>
-            <digi:trn><b style="font-size:12px;">Add/Edit structure</b></digi:trn>
-            </span> </td>
         </tr>
         <tr>
           <td noWrap vAlign="top">
@@ -179,7 +175,7 @@ div.fakefile2 input {
                 </td>
               </tr>
               <tr>
-                <td align="center" style="font-size:12px;">
+                <td align="center" style="font-size:12px; padding-top:15px; padding-bottom:15px;">
                 <div style="width:50px;height:50px;background-color:#FFFFFF;">
                 <img id="imgPlaceholder" src="/esrigis/structureTypeManager.do~action=displayIcon~id=${structuretypeform.ampStructureFormId}" style="border:1px solid black;"/>
                 </div>
@@ -203,7 +199,7 @@ div.fakefile2 input {
             </table></td>
         </tr>
       </table>
-		<div align="center">
+		<div align="center" style="margin-top:10px;">
 			<table>
 				<tr>
 					<td>

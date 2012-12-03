@@ -30,7 +30,7 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
-
+<h1 class="admintitle" style="text-align:left;">Add scheme</h1>
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
@@ -81,7 +81,7 @@
 															<digi:trn key="aim:SchemeName">Scheme Name</digi:trn><font color="red">*</font>:
 														</td>
 														<td>
-															<html:textarea  name ="aimAddSectorForm" property="secSchemeName" rows="1" cols= "35"/> 
+															<html:textarea name ="aimAddSectorForm" property="secSchemeName" rows="1" cols= "35"/> 
 														</td>
 													</tr>
 													<tr>

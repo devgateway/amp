@@ -97,7 +97,9 @@ $(document).ready(function(){
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align=center>
   <tr>
     <td width=14>&nbsp;</td>
-    <td align=left valign="top" width=750><table cellPadding=5 cellspacing="0" width="1000">
+    <td align=left valign="top" width=750>
+	<h1 class="admintitle" style="text-align:left;">Structure Types Manager</h1>
+	<table cellPadding=5 cellspacing="0" width="1000">
         <tr>
           <td height=33 colspan="2">
           	<span class=crumb>

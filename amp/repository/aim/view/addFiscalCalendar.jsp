@@ -112,11 +112,10 @@
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
-
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<h1 class="admintitle" style="text-align:left;"><digi:trn key="aim:fiscalCalendarManager">Fiscal Calendar Manager</digi:trn></h1>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg valign="top" width=750>
+		<td align=left valign="top" width=1000>
 			<table cellPadding=5 cellspacing="0" width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -144,11 +143,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 valign="center" width=571><span class=subtitle-blue>
-						<digi:trn key="aim:fiscalCalendarManager">
-						Fiscal Calendar Manager
-						</digi:trn>
-						</span>
+					<td height=16 valign="center" width=571>
 						<br>
 						<digi:errors/>
 					</td>
@@ -157,8 +152,8 @@
 					<td noWrap width="100%" vAlign="top">
 					<table width="100%" cellspacing="1" cellspacing="1">
 					<tr>
-						<td noWrap width=600 vAlign="top">
-							<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
+						<td noWrap width=600 vAlign="top" align=center>
+							<table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%" align="center">
 								<tr bgColor=#f4f4f2>
 									<td vAlign="top" width="100%">&nbsp;</td>
 								</tr>
@@ -307,8 +302,6 @@
 									</td>
 								</tr>
 							</table>
-						</td>
-						<td noWrap width="100%" vAlign="top">
 						</td>
 					</tr>
 				</table>

@@ -185,7 +185,7 @@ public class ColumnReportData extends ReportData<Column> {
 			if(!element.isShow()) continue;
 			cats.add(element);
 		}
-
+		// TODO-Constantin: O(N^2) iteration in [categories x keys]
 		// we iterate each category from the set and search for matching rows
 		for (Cell cat:cats) {			
 			if ( cat.compareTo(fakeCell) == 0 ) {
@@ -235,8 +235,9 @@ public class ColumnReportData extends ReportData<Column> {
 							Double tempPerc			= percentagesMap.get(id);
 							percentagesMap.put(id, (tempPerc!=null?tempPerc:0.0) + percentage );
 						} catch (Exception e) {
-							logger.error(e);
-							e.printStackTrace();
+							// ROTTEN: swallowing exceptions thrown up by ARUtil.retrievePercentageFromCell on 0.0% cells masked as non-procented ones. See AmountCell::getAmount() for more comments of ways in which this is broken. AMP-13848
+							//logger.error(e);
+							//e.printStackTrace();
 						}
 						
 					}

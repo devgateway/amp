@@ -68,7 +68,7 @@
     					<td>
         					<table border="0" cellpadding="0" cellspacing="0" width="100%" class="inside" style="margin-top:10px;">
             					<tr bgColor=#C0D6E2>
-                					<td bgColor=#C0D6E2 align="center" class="inside_report">
+                					<td bgColor=#C0D6E2 align="center" class="inside_report" style="padding:5px;">
                     					<b>
                         					${titleColumn}
                         				</b>
@@ -308,7 +308,7 @@
 				 				
  				<table align="center" cellpadding="0" cellspacing="0" width="100%" class="inside">
 					<tr bgColor=#C0D6E2>
-                		<td bgColor=#C0D6E2 align="center" class="inside_report">
+                		<td bgColor=#C0D6E2 align="center" class="inside_report" style="padding:5px;">
                     		<b>
                         		${titleColumn}
                         	</b>
@@ -357,14 +357,14 @@
 									</a>
 	                       		</p> 		
                      		</td>
-                         	<td align="center" class="inside_report" bgColor=#C0D6E2>
+                         	<td align="center" class="inside_report">
                                 <p style="white-space: nowrap">
                                   <li>
                                   	<digi:trn>Pledge</digi:trn>
 	                        	  </li>
 	                        </td>
 	                        
-	                         <td width="150" class="inside_report" bgColor=#C0D6E2>  
+	                         <td width="150" class="inside_report">  
 	                                <div style='position:relative;display:none;' id='report-<bean:write name="report" property="id"/>'> 
 	                            	<c:set var="columns">
 	                               		<bean:write name="report" property="columns"/>
@@ -391,7 +391,7 @@
 	                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="id"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
 	                                </span>
 	                            </td>
-                                <td align="center" class="inside_report" bgColor=#C0D6E2>
+                                <td align="center" class="inside_report">
                             		<c:if test="${!empty report.ownerId}">
 	                         			<p style="white-space: nowrap">
 	                         				<a href="/mondrian/mainreports.do?id=${report.id}&action=delete" title="<digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>">
@@ -401,7 +401,7 @@
                              	</td>
                         	<logic:present name="currentMember" scope="session">
                             <c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
-								<td align="center" class="inside_report" bgColor=#C0D6E2>
+								<td align="center" class="inside_report">
 									<c:if test="${report.publicreport==false}">
 									<a href="/mondrian/mainreports.do?id=${report.id}&action=public" title="<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>">
 		                        		<img src= "/repository/contentrepository/view/images/make_public.gif" vspace="2" border="0" align="middle" />

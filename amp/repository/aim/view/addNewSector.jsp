@@ -30,8 +30,8 @@
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 
-
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<h1 class="admintitle" style="text-align:left;">Sector Manager</h1>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg valign="top" width=750>
@@ -58,19 +58,19 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
-				<tr>
+				<!--<tr>
 					<td height=16 valign="center" width=571><span class=subtitle-blue>Sector Manager</span>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
 					<td height=16 valign="center" width=571>
 						<digi:errors />
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width="100%" vAlign="top">
-					<table width="100%" cellspacing="1" cellspacing="1" border="0">
-					<tr><td noWrap width=600 vAlign="top">
+					<td noWrap width="1000" vAlign="top">
+					<table width="1000" cellspacing="1" cellspacing="1" border="0">
+					<tr><td noWrap width=750 vAlign="top">
 						<table bgColor=#d7eafd cellpadding="1" cellspacing="1" width="100%" valign="top">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
@@ -214,9 +214,9 @@
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellpadding="0" cellspacing="0" width="10"0>
+									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>
-											<td bgColor=#c9c9c7 class=box-title>
+											<td bgColor=#c9c9c7>
 												<digi:trn key="aim:otherLinks">
 												Other links
 												</digi:trn>
@@ -230,7 +230,7 @@
 							</tr>
 							<tr>
 								<td bgColor=#ffffff class=box-border>
-									<table cellPadding=5 cellspacing="1" width="100%">
+									<table cellPadding=5 cellspacing="1" width="100%"  class="inside">
 										<tr>
 											<td class="inside">
 											<%--	<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

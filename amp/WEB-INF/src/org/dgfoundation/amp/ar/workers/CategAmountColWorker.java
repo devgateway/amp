@@ -94,12 +94,14 @@ public class CategAmountColWorker extends ColumnWorker {
 				
 				if (filter.getFromDate()!=null  && !("".equalsIgnoreCase(filter.getFromDate()))){
 					java.util.Date sDate=FormatHelper.parseDate2(filter.getFromDate());
-					if (tDate.before(sDate)) showable=false;
+					if (tDate.before(sDate)) 
+						showable=false;
 				}
 				
 				if (filter.getToDate()!=null && !("".equalsIgnoreCase(filter.getToDate()))){
 					java.util.Date toDate=FormatHelper.parseDate2(filter.getToDate());
-					if (tDate.after(toDate)) showable=false;
+					if (tDate.after(toDate)) 
+						showable=false;
 				}
 		}
 	
@@ -294,16 +296,16 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		if (filter.getAmountinthousand() == null) {
 			if (Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-				filter.setAmountinthousand(1);
+				filter.setAmountinthousand(AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS);
 			else 
-				filter.setAmountinthousand(0);
+				filter.setAmountinthousand(AmpARFilter.AMOUNT_OPTION_IN_UNITS);
 		} 
 		
-		if (filter.getAmountinthousand() == 2){
+		if (filter.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){
 			if (tr_amount != 0){
 				acc.setAmount(tr_amount * 0.001d * 0.001d);
 			}
-		} else if (filter.getAmountinthousand() == 1){
+		} else if (filter.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){
 			if (tr_amount != 0){
 				acc.setAmount(tr_amount*0.001d);
 			}

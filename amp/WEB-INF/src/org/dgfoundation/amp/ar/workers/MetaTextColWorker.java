@@ -58,9 +58,9 @@ public class MetaTextColWorker extends TextColWorker {
 				(generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE || generator.getReportMetadata().getType()==ArConstants.COMPONENT_TYPE))
 		{
 			double percentage	= rs.getDouble(4);
-			if ( percentage != 0.0 )
+			if ( percentage != 0.0 ) // ROTTEN: this "if" makes "0.0%" cells impossible, masking them as unprocented cells. See AmountCell::getAmount() for more comments of ways in which this is broken. AMP-13848 
 				mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,percentage));
-		}	
+		}
 		else if(columnName.equals("Componente")){
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); 
 		}else  if((columnName.equals("Primary Program") || columnName.equals("Secondary Program"))){ 

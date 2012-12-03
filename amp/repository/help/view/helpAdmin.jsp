@@ -322,11 +322,11 @@ function IsEmpty(){
 	<!--</tr>-->
 		<tr>
 			<td colspan="2" >
-				 <span class=subtitle-blue>
+				         <h1 class="admintitle" style="text-align:left;">
                         <digi:trn key="aim:helptopicsadminHeader">
                       		 Help Topics Admin
                         </digi:trn>
-                </span>
+                </h1>
 			</td>
 		</tr>
 		<tr><td>&nbsp;</td></tr>&nbsp;

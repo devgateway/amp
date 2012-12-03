@@ -530,6 +530,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Contracting Agency Remove Button" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Agency" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Agency Department/Division"  feature="Contracting Agency"></field:display>
+<field:display name="Contracting Agency Acronym"  feature="Contracting Agency"></field:display>
 <field:display name="Contracting Cancel Saving" feature="Contracting"></field:display> 
 <field:display name="Contracting Central Amount" feature="Contracting"></field:display> 
 <field:display name="Contracting Contractor Name" feature="Contracting"></field:display> 

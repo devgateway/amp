@@ -157,14 +157,14 @@
         </tr>-->
         <tr>
             <td style="padding-top:10px; padding-bottom:10px;">
-                
+                <h1 class="admintitle">
                     <c:if test="${empty sectorTableWidgetForm.sectorTableId}">
                         <digi:trn>Create Sector Table Widget</digi:trn>
                     </c:if>
                     <c:if test="${not empty sectorTableWidgetForm.sectorTableId}">
                         <digi:trn>Edit Sector Table Widget</digi:trn>
                     </c:if>
-                
+                </h1>
             </td>
         </tr>
         <tr>

@@ -1245,7 +1245,7 @@ function collapseAll() {
 						<td colspan="2">
 							<script type="text/javascript">
 							<c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
-								coordinates.push('<c:out value="${selectedLocs.lat}"/>;<c:out value="${selectedLocs.lon}"/>');
+								coordinates.push('<c:out value="${selectedLocs.lat}"/>;<c:out value="${selectedLocs.lon}"/>;<c:out value="${selectedLocs.locationName}"/>');
 							</c:forEach>
 							</script>
 							<jsp:include page="previewmap.jsp"/>						

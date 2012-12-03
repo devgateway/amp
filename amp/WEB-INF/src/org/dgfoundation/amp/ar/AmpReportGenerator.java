@@ -21,7 +21,6 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.collections.OrderedIterator;
 import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
@@ -470,6 +469,14 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * 
 	 */
 	protected void createTotals() {
+		boolean verticalSplitByTypeOfAssistence = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true") &&
+				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
+				ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns());
+		boolean verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT)!= null && 
+				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
+			!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.MODE_OF_PAYMENT) &&
+			ARUtil.containsColumn(ArConstants.MODE_OF_PAYMENT, reportMetadata.getColumns());
+		
 		// we perform totals by categorizing only by Funding Type...
 		boolean categorizeByFundingType = false;
 		if (reportMetadata.getType().intValue() != 4)
@@ -529,7 +536,14 @@ public class AmpReportGenerator extends ReportGenerator {
 					continue;
 
 				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
-				TotalAmountColumn cc = new TotalAmountColumn(metaInfo.getValue().toString(), true);
+				AmountCellColumn cc = null;
+				
+				if(verticalSplitByModeOfPayment || verticalSplitByTypeOfAssistence){
+					cc = new AmountCellColumn(metaInfo.getValue().toString());	
+				}else{
+					cc = new TotalAmountColumn(metaInfo.getValue().toString(), true);
+				}
+				
 				newcol.getItems().add(cc);
 				cc.setParent(newcol);
 
@@ -665,9 +679,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				
 		// add subcolumns for type of assistance
 		//split column for type of assistance ONLY when TOA is added as column	
-		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true") &&
-				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
-				ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns())) {
+		if(verticalSplitByTypeOfAssistence) {
 			
 			//iterate each column in newcol
 //			for (int i=0; i< newcol.getItems().size();i++){
@@ -687,10 +699,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			this.addTotalsVerticalSplit(newcol, ArConstants.TERMS_OF_ASSISTANCE, ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
 		}
 		
-		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT)!= null && 
-					FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
-				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.MODE_OF_PAYMENT) &&
-				ARUtil.containsColumn(ArConstants.MODE_OF_PAYMENT, reportMetadata.getColumns())) {
+		if(verticalSplitByModeOfPayment) {
 			
 			this.addTotalsVerticalSplit(newcol, ArConstants.MODE_OF_PAYMENT, ArConstants.MODE_OF_PAYMENT_TOTAL);
 		}
@@ -708,9 +717,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			cat.add(splitterCol);
 			GroupColumn nestedCol2 = (GroupColumn) GroupColumn.verticalSplitByCategs((CellColumn)nestedCol, cat,
 					true, reportMetadata);
-			
-			nestedCol2.addColumn(nestedCol);
-			nestedCol.setName(totalsSplitterCol);
+
 			newcol.replaceColumn(nestedCol.getName(), nestedCol2);
 			
 		}

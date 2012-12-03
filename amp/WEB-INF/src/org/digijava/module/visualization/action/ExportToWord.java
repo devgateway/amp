@@ -476,6 +476,116 @@ public class ExportToWord extends Action {
 		            doc.add(new Paragraph(" "));
 	            }
             }
+          //Sector Profile Table.
+            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.SECTOR) {
+            	doc.newPage();
+            	subTitle = new Paragraph(sectorProfTrn + " (" + currName + ")", SUBTITLEFONT);
+                subTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(subTitle);
+                Table sectorProfTbl = null;
+	            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
+	            colspan = sectorProfRows[1].split(">").length; 
+	            sectorProfTbl = new Table(colspan);
+	            sectorProfTbl.setWidth(100);
+	            //RtfCell sectorProfTitleCell = new RtfCell(new Paragraph(sectorProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+	            //sectorProfTitleCell.setColspan(colspan);
+	            //sectorProfTitleCell.setBackgroundColor(TITLECOLOR);
+	            //sectorProfTbl.addCell(sectorProfTitleCell);
+	            cell = new RtfCell(new Paragraph(sectorTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            cell.setBackgroundColor(TITLECOLOR);
+	            sectorProfTbl.addCell(cell);
+	            singleRow = sectorProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            	cell.setBackgroundColor(TITLECOLOR);
+		            sectorProfTbl.addCell(cell);
+				}
+	            count = 0;
+	            for (int i = 2; i < sectorProfRows.length; i++) {
+	            	singleRow = sectorProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	                	cell = new RtfCell(new Paragraph(singleRow[j]));
+	                	if (count % 2 == 0)
+	    		        	cell.setBackgroundColor(CELLCOLOR);
+	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+	    			    sectorProfTbl.addCell(cell);
+	    			}
+	            	count++;
+				}
+	            doc.add(sectorProfTbl);
+	            doc.add(new Paragraph(" "));
+                SimpleTable fundingGraph = new SimpleTable();
+                SimpleCell row = new SimpleCell(SimpleCell.ROW);
+                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+                //cel.setBorder(1);
+                ByteArrayOutputStream ba = new ByteArrayOutputStream();
+	            ImageIO.write(scaleImage(vForm.getExportData().getSectorGraph(),580,410), "png", ba);
+	            img = Image.getInstance(ba.toByteArray());
+                cel.add(img);
+                row.add(cel);
+                fundingGraph.setWidthpercentage(100);
+                fundingGraph.addElement(row);
+                doc.add(fundingGraph);
+	            doc.add(new Paragraph(" "));
+            }
+            
+          //Region Profile Table.
+            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.REGION) {
+            	doc.newPage();
+            	subTitle = new Paragraph(regionProfTrn + " (" + currName + ")", SUBTITLEFONT);
+                subTitle.setAlignment(Element.ALIGN_LEFT);
+                doc.add(subTitle);
+                Table regionProfTbl = null;
+	            String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
+	            colspan = regionProfRows[1].split(">").length; 
+	            regionProfTbl = new Table(colspan);
+	            regionProfTbl.setWidth(100);
+	            //RtfCell regionProfTitleCell = new RtfCell(new Paragraph(regionProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+	            //regionProfTitleCell.setColspan(colspan);
+	            //regionProfTitleCell.setBackgroundColor(TITLECOLOR);
+	            //regionProfTbl.addCell(regionProfTitleCell);
+	            cell = new RtfCell(new Paragraph(regionTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            cell.setBackgroundColor(TITLECOLOR);
+	            regionProfTbl.addCell(cell);
+	            singleRow = regionProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            	cell.setBackgroundColor(TITLECOLOR);
+		            regionProfTbl.addCell(cell);
+				}
+	            count = 0;
+	            for (int i = 2; i < regionProfRows.length; i++) {
+	            	singleRow = regionProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	                	cell = new RtfCell(new Paragraph(singleRow[j]));
+	                	if (count % 2 == 0)
+	    		        	cell.setBackgroundColor(CELLCOLOR);
+	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+	    			    regionProfTbl.addCell(cell);
+	    			}
+	            	count++;
+				}
+	            doc.add(regionProfTbl);
+	            doc.add(new Paragraph(" "));
+	            SimpleTable fundingGraph = new SimpleTable();
+                SimpleCell row = new SimpleCell(SimpleCell.ROW);
+                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+                //cel.setBorder(1);
+                ByteArrayOutputStream ba = new ByteArrayOutputStream();
+	            ImageIO.write(scaleImage(vForm.getExportData().getRegionGraph(),580,410), "png", ba);
+	            img = Image.getInstance(ba.toByteArray());
+                cel.add(img);
+                row.add(cel);
+                fundingGraph.setWidthpercentage(100);
+                fundingGraph.addElement(row);
+                doc.add(fundingGraph);
+	            doc.add(new Paragraph(" "));
+            }
+            
             //Funding Table.
             boolean fundingVisible = false;
 	        if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR)

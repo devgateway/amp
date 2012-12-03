@@ -18,10 +18,9 @@
 <tr>
 <td>
 
-<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=772>
+<table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000>
   <tr>
-    <td class=r-dotted-lg width=14>&nbsp;</td>
-    <td align=left class=r-dotted-lg valign="top" width=750>
+    <td align=left class=r-dotted-lg valign="top" width=1000>
       <table cellPadding=5 cellspacing="0" width="100%">
         <!--<tr>
           <td valign="bottom" class="crumb" >
@@ -41,7 +40,7 @@
         <tr>
           <td height=16 align="center" vAlign="middle">
             <span class=subtitle-blue>
-              <digi:trn key="aim:parisIndcReports">Paris Indicator Reports</digi:trn>
+              <digi:trn key="aim:parisIndcReports"><b>Paris Indicator Reports</b></digi:trn>
             </span>
           </td>
         </tr>

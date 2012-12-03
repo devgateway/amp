@@ -594,7 +594,7 @@ public final class ARUtil {
 	
 	public static double retrievePercentageFromCell ( MetaTextCell mtc ) throws Exception {
 		MetaInfo<Double> mInfo	= mtc.getMetaInfo(ArConstants.PERCENTAGE);
-		if ( mInfo != null && mInfo.getValue() > 0) {
+		if ( mInfo != null && mInfo.getValue() > 0) { // ROTTEN: this "if" throws up on 0.0% cells masked as non-procented ones. See AmountCell::getAmount() for more comments of ways in which this is broken. AMP-13848
 			Double percentage 		= mInfo.getValue();
 			return percentage;
 		}

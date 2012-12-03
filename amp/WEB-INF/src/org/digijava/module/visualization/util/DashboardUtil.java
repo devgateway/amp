@@ -717,6 +717,18 @@ public class DashboardUtil {
 		return program;
 	}
 
+    public static List<AmpSector> getTopLevelParentList(List<AmpSector> list) {
+    	List<AmpSector> sectors = new ArrayList<AmpSector>();
+    	for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+			AmpSector ampSector = (AmpSector) iterator.next();
+			AmpSector ampSectorTopLevel = getTopLevelParent(ampSector);
+			if (!sectors.contains(ampSectorTopLevel)) {
+				sectors.add(ampSectorTopLevel);
+			}
+		}
+		return sectors;
+	}
+
 	public static String getYearName(String headingFY, Long fiscalCalendarId, Date startDate, Date endDate) {
 		String result = "";
 		String startYear = "";
@@ -747,6 +759,19 @@ public class DashboardUtil {
 		return location;
 	}
 
+	 public static List<AmpCategoryValueLocations> getTopLevelLocationList(List<AmpCategoryValueLocations> list) {
+	    	List<AmpCategoryValueLocations> locs = new ArrayList<AmpCategoryValueLocations>();
+	    	for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+	    		AmpCategoryValueLocations ampLoc = (AmpCategoryValueLocations) iterator.next();
+	    		AmpCategoryValueLocations ampLocTopLevel = getTopLevelLocation(ampLoc);
+				if (!locs.contains(ampLocTopLevel)) {
+					locs.add(ampLocTopLevel);
+				}
+			}
+			return locs;
+		}
+
+		
 	public static BigDecimal getDividingDenominator(Boolean divideThousands, Boolean showInThousands, Boolean isProfile) {
 		//All information by default is shown in millions, unless the property filter.showInThousands is activated.
 		//If it's activated, then the dividing denominator should be 1000 instead of 1000000

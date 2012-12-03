@@ -114,7 +114,8 @@ public class FundingCalculationsHelper {
 			}	
 			FundingDetail fundingDetail = new FundingDetail();
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
-
+			String baseCurrCode		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+			
 			if (fundDet.getFixedExchangeRate() != null && fundDet.getFixedExchangeRate().doubleValue() != 1) {
 				// We cannot use FormatHelper.formatNumber as this might roundup our number (and this would be very wrong)
 				fundingDetail.setFixedExchangeRate( (fundDet.getFixedExchangeRate()+"").replace(".", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR)) );
@@ -125,8 +126,14 @@ public class FundingCalculationsHelper {
 			fundingDetail.setContract(fundDet.getContract());
 
 			java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
-
-			double frmExRt = fundDet.getFixedExchangeRate() != null ? fundDet.getFixedExchangeRate() : Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
+			
+			double frmExRt;
+			if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(baseCurrCode)||fundDet.getFixedExchangeRate() == null){
+				frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
+			}else{
+				frmExRt = fundDet.getFixedExchangeRate();
+			}
+			
 
 			if (userCurrencyCode != null)
 				toCurrCode = userCurrencyCode;

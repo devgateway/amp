@@ -17,7 +17,7 @@
 	<digi:trn>Activity Versions</digi:trn>
 	<br />
 	 -->
-	<div style="height: 520px; overflow: auto;">
+	<div style="height: 450px; overflow: auto;">
 		<table width="100%" cellspacing="0" cellpadding="0" id="dataTable">
 			<tr bgcolor="#999999" height="20">
 				<td bgcolor="#999999">&nbsp;</td>
@@ -91,14 +91,18 @@
 				</tr>
 			</c:forEach>
 		</table>
+		
 	</div>
-<digi:form action="/compareActivityVersions.do" method="post" type="aimCompareActivityVersionsForm" >
-<input type="hidden" name="activityCurrentVersion" id="activityCurrentVersion" value="" />
-<input type="hidden" name="action" id="action" value=""/>
-<input type="hidden" name="activityOneId" id="activityOneId" />
-<input type="hidden" name="activityTwoId" id="activityTwoId" />
-<input type="hidden" name="showMergeColumn" id="showMergeColumn" />
-<input type="hidden" name="method" id="method" />
-<input type="hidden" name="ampActivityId" id="ampActivityId" />
-<input type="button" id="SubmitButton" value="<digi:trn>Compare versions</digi:trn>" onclick="submitCompare()"/>
-</digi:form>
+	
+	<div style="position:absolute; bottom:0px;">
+		<digi:form action="/compareActivityVersions.do" method="post" type="aimCompareActivityVersionsForm" >
+			<input type="hidden" name="activityCurrentVersion" id="activityCurrentVersion" value="" />
+			<input type="hidden" name="action" id="action" value=""/>
+			<input type="hidden" name="activityOneId" id="activityOneId" />
+			<input type="hidden" name="activityTwoId" id="activityTwoId" />
+			<input type="hidden" name="showMergeColumn" id="showMergeColumn" />
+			<input type="hidden" name="method" id="method" />
+			<input type="hidden" name="ampActivityId" id="ampActivityId" />
+			<input type="button" id="SubmitButton" value="<digi:trn>Compare versions</digi:trn>" onclick="submitCompare()"/>
+		</digi:form>		
+	</div>

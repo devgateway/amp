@@ -3,7 +3,12 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
 public class TotalAmountColumn extends AmountCellColumn {
@@ -59,7 +64,19 @@ public class TotalAmountColumn extends AmountCellColumn {
     }
 
     public void addCell(Object c) {
+    	try {
+	    	List<AmountCell> tobeMergedCells	= new ArrayList<AmountCell>();
+	    	if ( c instanceof ListCell ) {
+	    		Iterator<AmountCell> iter	= ((ListCell)c).iterator();
+	    		while ( iter.hasNext() ) {
+	    			tobeMergedCells.add(iter.next());
+	    		}
+	    	}
+	    	else {
     	AmountCell ac = (AmountCell) c;
+	    		tobeMergedCells.add(ac);
+	    	}
+	    	for (AmountCell ac:tobeMergedCells) {
     	if (filterShowable && !ac.isShow())
     		return;
 
@@ -73,6 +90,11 @@ public class TotalAmountColumn extends AmountCellColumn {
     		newcell.setColumn(this);
     		super.addCell(newcell);
     	}
+	    	}
+    	}
+    	catch (ClassCastException e) {
+			logger.error("Wrong class for cell in addCell(). It should be AmountCell and not " + c.getClass().getName() );
+		}
 
     }
 

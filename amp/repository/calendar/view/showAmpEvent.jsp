@@ -884,7 +884,7 @@ function removeGuest(obj) {
     <html:hidden name="calendarEventForm" property="weekDays" styleId="weekDays"/>
     <html:hidden name="calendarEventForm" property="recurrSelectedEndTime" styleId="recurrSelectedEndTime"/>
     <html:hidden name="calendarEventForm" property="recurrSelectedStartTime" styleId="recurrSelectedStartTime"/>
-	
+	<h1 class="admintitle">&nbsp;<digi:trn key="calendar:CreateAnEvent">Create An Event</digi:trn></h1>
     <table width="1000" align="center">
     	 <tr>
 			<td align=left valign="top" width=750>
@@ -905,12 +905,6 @@ function removeGuest(obj) {
 				</span>
 			</td>
 		</tr>	
-		<tr>
-			<td height="16" vAlign="middle" width="571">
-            <div class="subtitle-blue" style="border-bottom:1px dotted #8ba7c2; padding:0px 0px 5px 0px;margin:0px 0px 10px 0px;width:1000px;"><digi:trn key="calendar:CreateAnEvent">Create An Event</digi:trn></div>
-				
-			</td>
-		</tr>
 		<tr>			
 			<td noWrap vAlign="top"> 
             	<table class="contentbox_border" width="100%" cellpadding="0" cellspacing="0">

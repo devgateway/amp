@@ -53,13 +53,12 @@ function exportXSL(){
 					<!-- End navigation -->
 				<!--</tr>-->
 				<tr>
-					<td valign="center" align=center style="padding-top:10px;">
-						<span class=subtitle-blue>
-							<digi:trn key="aim:categoryManager">
-								<b style="font-size:12px;">Category Manager</b>
-							</digi:trn>
-						</span>
-						<hr />
+					<td valign="center" style="padding-top:10px;">
+					
+					<h1 style="text-align:left;" class="admintitle"><digi:trn key="aim:categoryManager">
+								Category Manager
+							</digi:trn></h1>
+					
 					</td>
 				</tr>
 				<tr>

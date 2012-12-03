@@ -157,8 +157,8 @@ th {
 		<div class="pageTitle">
 			<span class="subtitle-blue"><digi:trn>Search Translations</digi:trn></span>
 		</div>
-		<html:checkbox styleId="showOnlyEnglishCHK" name ="newAdvancedTrnForm" property="showOnlyEnglish" onclick="showOnlyEnglishTRNs();"/>
-		<digi:trn>Show translations which have value only in english</digi:trn>
+		<div style="margin-bottom:20px;"><html:checkbox styleId="showOnlyEnglishCHK" name ="newAdvancedTrnForm" property="showOnlyEnglish" onclick="showOnlyEnglishTRNs();"/>
+		<digi:trn>Show translations which have value only in english</digi:trn></div>
 		<div class="controlPanel">
 			<div class="clearfix">
 				<div style="float:left;padding: 5px">
@@ -196,9 +196,9 @@ th {
 				</div>
 			</div>
 		</div>
-		<div class="listsBorder">
+		<div class="listsBorder" style="width:100% !important;">
 			<div class="listPanels clearfix">
-				<div class="searchResults">
+				<div class="searchResults" style="width:100% !important;">
 					<c:if test="${empty newAdvancedTrnForm.resultList}"><digi:trn>Nothing found</digi:trn></c:if>
 					<c:if test="${!empty newAdvancedTrnForm.resultList}">
 						<div class="searchResulToolBar">
@@ -238,7 +238,7 @@ th {
 														</td>
 														<td>
 															<a class="deleteTranslation"><img alt="Delete translation" src="<digi:file src='images/deleteIcon.gif'/>"></a>
-															<input type="button" value="<digi:trn>apply</digi:trn>" onclick="updateTranslation(this)">		
+															<input type="button" class="delete_trans" value="<digi:trn>apply</digi:trn>" onclick="updateTranslation(this)">		
 														</td>
 													</tr>
 												</table>

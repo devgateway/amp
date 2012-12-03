@@ -179,55 +179,42 @@
 	</div>
 							
 							
-						</td>
-						<td align="right" valign="top" style="padding-left:15px;" width=20%>
+	</td>
+	<td valign="top" style="padding-left:15px;" width=20%>
 						
-							<table border="0">
-								<tr>
-									<td align="left">
-									
-	<div id="content" class="yui-skin-sam" style="width: 100%;">
-	<div id="demo" class="yui-navset" style="font-family: Arial, Helvetica, sans-serif;">
-		<ul class="yui-nav">
-			<li class="selected">
-				<a title='<digi:trn>Search Glossary</digi:trn>'>
-					<div>
-						<digi:trn>Search</digi:trn>
-					</div>
-				</a>
-			</li>
-		</ul>
-	<div class="yui-content" style="height: auto; font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;">
-	<div style="padding: 2;">
-
-							<div id="searchContainer">
-								<div>
-									<input id="edtSearchField" type="text" name="searchGlossary" style="margin-bottom:10px;" class="inputx">
-								</div>
-								<div>	
-									<c:set var="lblSearchButton"><digi:trn>Search</digi:trn></c:set>
-									<c:set var="lblResetButton"><digi:trn>Reset</digi:trn></c:set>
-									<input id="btnSearchGlossary" type="button" value="${lblSearchButton}">
-									<input id="btnResetSearch" type="button" value="${lblResetButton}">
-								</div>
-								<div id="searchResults" class="searchResults">
-								</div>
+		<div id="content" class="yui-skin-sam" style="width: 100%;">
+			<div id="demo" class="yui-navset" style="font-family: Arial, Helvetica, sans-serif;">
+				<ul class="yui-nav">
+					<li class="selected">
+						<a title='<digi:trn>Search Glossary</digi:trn>'>
+							<div>
+								<digi:trn>Search</digi:trn>
 							</div>
-
-									
-</div>
-</div>						
-</div>
-</div>						
-									
-									</td>
-								</tr>
-							</table>
-						
-						
-						
-							
-							
+						</a>
+					</li>
+				</ul>
+				<div class="yui-content" style="height: auto; font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;">
+					<div style="padding: 2;">
+			
+						<div id="searchContainer">
+							<div>
+								<input id="edtSearchField" type="text" name="searchGlossary" style="margin-bottom:10px;" class="inputx">
+							</div>
+							<div>	
+								<c:set var="lblSearchButton"><digi:trn>Search</digi:trn></c:set>
+								<c:set var="lblResetButton"><digi:trn>Reset</digi:trn></c:set>
+								<input id="btnSearchGlossary" type="button" value="${lblSearchButton}">
+								<input id="btnResetSearch" type="button" value="${lblResetButton}">
+							</div>
+							<div id="searchResults" class="searchResults">
+							</div>
+						</div>
+			
+												
+					</div>
+				</div>						
+			</div>
+		</div>						
 							
 						</td>
 					</tr>
@@ -346,8 +333,11 @@
 		}).responseText;
 	}
 
-	function doSearchReset(){
+	function doSearchReset() {
 		$('div#searchResults').html('');
+		$('div#nodeContentDiv').html('<digi:trn>Please select node in glossary tree</digi:trn>');
+		$('div#nodeTitle').html('&nbsp;&nbsp;&nbsp;&nbsp;');
+		$('input#edtSearchField').val('');
 	}
 	
 	function deleteNode(topicId){

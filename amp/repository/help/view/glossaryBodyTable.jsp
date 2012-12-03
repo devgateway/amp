@@ -335,6 +335,7 @@
 
 	function doSearchReset(){
 		$('div#searchResults').html('');
+		$('div#nodeContentDiv').html('');
 	}
 	
 	function deleteNode(topicId){

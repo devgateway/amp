@@ -140,7 +140,8 @@
 <feature:display name="Change Workspace" module="My Desktop"></feature:display>
 <feature:display module="Organizations" name="Beneficiary Agency"></feature:display> 
 <feature:display module="Organizations" name="Contracting Agency"></feature:display> 
-<feature:display module="Organizations" name="Executing Agency"></feature:display> 
+<feature:display module="Organizations" name="Executing Agency"></feature:display>
+<feature:display module="Organizations" name="Contracting Agency"></feature:display> 
 <feature:display module="Organizations" name="Implementing Agency"></feature:display> 
 <feature:display module="Organizations" name="Regional Group"></feature:display> 
 <feature:display module="Organizations" name="Responsible Organization"></feature:display> 
@@ -433,6 +434,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Beneficiary Agency Remove Button" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency  Department/Division"  feature="Beneficiary Agency"></field:display>
+<field:display name="Contracting Agency Groups" feature="Contracting Agency"></field:display>
 <field:display name="Cancel button" feature="Create Message Form"></field:display> 
 <field:display name="Channel Overview Tab" feature="Channel Overview"></field:display> 
 <field:display name="Classification Expenditure" feature="Funding Information"></field:display> 

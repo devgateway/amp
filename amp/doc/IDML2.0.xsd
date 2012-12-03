@@ -139,6 +139,7 @@
 										<xs:enumeration value="Regional Group"/>
 										<xs:enumeration value="Sector Group"/>
 										<xs:enumeration value="Executing Agency"/>
+										<xs:enumeration value="Contracting Agency"/>										
 										<xs:enumeration value="Responsible Organization"/>
 										<xs:enumeration value="Contractor"/>
 										<xs:enumeration value="Related Institutions"/>

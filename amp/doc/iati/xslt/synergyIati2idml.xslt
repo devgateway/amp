@@ -317,6 +317,11 @@
           <xsl:text>Executing Agency</xsl:text>
         </xsl:attribute> 
       </xsl:when>
+       <xsl:when test="@role='executor'">
+        <xsl:attribute name="type">
+          <xsl:text>Contracting Agency</xsl:text>
+        </xsl:attribute> 
+      </xsl:when>      
        <xsl:when test="@role='counterpart'">
         <xsl:attribute name="type">
           <xsl:text>Related Institutions</xsl:text>

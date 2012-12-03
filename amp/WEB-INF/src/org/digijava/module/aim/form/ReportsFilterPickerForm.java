@@ -84,7 +84,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long[] selectedModeOfPayment;
 	private Object[] selectedDonorTypes; // ids of AmpOrgType
 	private Object[] selectedDonorGroups; //
+	private Object[] selectedContractingAgencyGroups; //
 	private Object[] selectedExecutingAgency;
+	private Object[] selectedContractingAgency;
 	private Object[] selectedImplementingAgency;
 	private Object[] selectedBeneficiaryAgency;
 	private Object[] selectedDonnorAgency;
@@ -742,7 +744,15 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setSelectedDonorGroups(Object[] selectedDonorGroups) {
 		this.selectedDonorGroups = selectedDonorGroups;
 	}
+	
+	public Object[] getSelectedContractingAgencyGroups() {
+		return selectedContractingAgencyGroups;
+	}
 
+	public void setSelectedContractingAgencyGroups(Object[] selectedContractingAgencyGroups) {
+		this.selectedContractingAgencyGroups = selectedContractingAgencyGroups;
+	}
+		
 	public Object[] getSelectedBeneficiaryAgency() {
 		return selectedBeneficiaryAgency;
 	}
@@ -757,6 +767,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedExecutingAgency(Object[] selectedExecutingAgency) {
 		this.selectedExecutingAgency = selectedExecutingAgency;
+	}
+	
+	public Object[] getSelectedContractingAgency() {
+		return selectedContractingAgency;
+	}
+
+	public void setSelectedContractingAgency(Object[] selectedContractingAgency) {
+		this.selectedContractingAgency = selectedContractingAgency;
 	}
 
 	public Object[] getSelectedImplementingAgency() {

@@ -16,7 +16,12 @@
 
 <%-- <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
-	toScope="page" /> --%>
+	toScope="page" />
+--%>
+
+<%--
+	FILE IS PROBABLY UNUSED
+--%>
 
 <digi:instance property="aimReportsFilterPickerForm" />
 
@@ -554,7 +559,7 @@
 						</tr>
 					   </feature:display>
 					   <tr><td colspan="5">&nbsp; </td></tr>
-						<feature:display name="Beneficiary Agency" module="Organizations">
+					   <feature:display name="Beneficiary Agency" module="Organizations">
 						<tr bgcolor="#EEEEEE">
 				         	<td>
 										<digi:trn key="rep:filer:beneficiaryAgency">Beneficiary Agency</digi:trn>
@@ -574,24 +579,46 @@
 						</feature:display>
 						<tr><td colspan="5">&nbsp; </td></tr>
 						<feature:display name="Executing Agency" module="Organizations">
-				        <tr bgcolor="#EEEEEE">
+							<tr bgcolor="#EEEEEE">
 								<td>
-										<digi:trn key="rep:filer:executingAgency">Executing Agency</digi:trn>
+									<digi:trn key="rep:filer:executingAgency">Executing Agency</digi:trn>
 								</td>
-						</tr>
-				        <tr>
-				                <td>
-					                  <html:select style="width: 350px"
-									multiple="true" property="selectedExecutingAgency" size="3"
-									styleClass="inp-text">
+							</tr>
+							<tr>
+								<td>
+									<html:select style="width: 350px"
+										multiple="true" property="selectedExecutingAgency" size="3"
+										styleClass="inp-text">
 								
 											<html:optionsCollection property="executingAgency" label="acronymAndName"
 												value="ampOrgId" />
-										</html:select>
-										<br />
+									</html:select>
+									<br />
 								</td>
-						</tr>
+							</tr>
 						</feature:display>
+						
+						<tr><td colspan="5">&nbsp; </td></tr>
+						<feature:display name="Contracting Agency" module="Organizations">
+							<tr bgcolor="#EEEEEE">
+								<td>
+									<digi:trn key="rep:filer:contractingAgency">Contracting Agency</digi:trn>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<html:select style="width: 350px"
+										multiple="true" property="selectedcontractingAgency" size="3"
+										styleClass="inp-text">
+								
+											<html:optionsCollection property="contractingAgency" label="acronymAndName"
+												value="ampOrgId" />
+									</html:select>
+									<br />
+								</td>
+							</tr>
+						</feature:display>
+						
 						<tr><td colspan="5">&nbsp; </td></tr>
 						<feature:display name="Implementing Agency" module="Organizations">
 						<tr>

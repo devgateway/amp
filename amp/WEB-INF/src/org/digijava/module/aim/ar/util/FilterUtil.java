@@ -273,6 +273,7 @@ public class FilterUtil {
 
 		form.setSelectedDonorTypes( FilterUtil.getObjectsIds(filter.getDonorTypes()) );
 		form.setSelectedDonorGroups( FilterUtil.getObjectsIds(filter.getDonorGroups()) );
+		form.setSelectedContractingAgencyGroups( FilterUtil.getObjectsIds(filter.getContractingAgencyGroups()) );
 
 		form.setSelectedBudgets(FilterUtil.getObjectsIds(filter.getBudget()));
 		
@@ -284,11 +285,13 @@ public class FilterUtil {
 		form.setSelectedDonnorAgency( FilterUtil.getObjectsIds(filter.getDonnorgAgency()) );
 		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
+		form.setSelectedContractingAgency( FilterUtil.getObjectsIds(filter.getContractingAgency()) );
 		
 		form.setAmountinthousands(filter.getAmountinthousand()!=null && filter.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS);
 		form.setAmountinmillions(filter.getAmountinthousand()!=null && filter.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS);
 		
 //		form.setAmountinmillions(filter.getAmountinmillion());
+		
 		
 		if ( filter.getGroupingseparator() != null ) {
 			form.setCustomGroupCharacter("CUSTOM");

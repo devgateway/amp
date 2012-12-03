@@ -311,6 +311,104 @@ public class ReportsFilterPicker extends MultiAction {
 			return modeSelect(mapping, form, request, response);
 		}
 	
+	/**
+	 * add to the Filter Form an element regarding filtering by a certain type of agencies, if feature is enabled. 
+	 * @param filterForm - the form where to add the filtering elem
+	 * @param featureName - the feature's basic name, like "Executing" or "Contracting". <b>Should not</b> contain the word "Agency" (it is added automatically) and should be Capitalized
+	 * @param roleCode - the role code, from Constants.ROLE_CODE_XXXXX_AGENCY
+	 * @param ampContext
+	 */
+	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, ServletContext ampContext)
+	{
+		if (!Character.isUpperCase(featureName.charAt(0)))
+			throw new RuntimeException("invalid feature name: must be a single term beginning with an upper case" + featureName);
+		if (featureName.contains("Agenc"))
+			throw new RuntimeException("invalid feature name: should not contain the word 'Agency' or derivated' " + featureName);
+
+		addAgencyFilter(filterForm, featureName + " Agency", roleCode, featureName + " Agencies", "filter_" + featureName.toLowerCase() + "_agencies_div", "selected" + featureName + "Agency", ampContext);
+	}
+
+	/**
+	 * add to the Filter Form an element regarding filtering by a certain type of agencies, if feature is enabled.
+	 * @param filterForm - the form where to add the filtering elem
+	 * @param featureName - the feature name to be checked in the feature manager
+	 * @param roleCode - the role code
+	 * @param rootElementName - the root element name to be displayed on form
+	 * @param filterDivId - the id to contain the filter
+	 * @param selectId - the id of the generated select
+	 * @param ampContext
+	 */
+	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId, ServletContext ampContext)
+	{
+		
+	 	if (FeaturesUtil.isVisibleFeature(featureName, ampContext) ) {
+ 	 		Collection<AmpOrganisation> relevantAgencies = (ReportsUtil.getAllOrgByRoleOfPortfolio(roleCode));
+ 	 		HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
+ 	 		HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation();
+ 	 		rootRelevantAgencies.setLabel("All " + rootElementName);
+ 	 		rootRelevantAgencies.setUniqueId("0");
+ 	 		rootRelevantAgencies.setChildren( relevantAgencies );
+ 	 		GroupingElement<HierarchyListableImplementation> relevantAgenciesElement = new GroupingElement<HierarchyListableImplementation>(rootElementName, filterDivId, rootRelevantAgencies, selectId);
+ 	 		filterForm.getRelatedAgenciesElements().add(relevantAgenciesElement);
+		}	
+	}
+	
+	/**
+	 * TODO: write description later
+	 * @param filterForm
+	 * @param featureName
+	 * @param sectorName
+	 * @param rootLabel
+	 * @param filterDiv
+	 * @param selectId
+	 * @param ampContext
+	 */
+	private void addSectorElement(ReportsFilterPickerForm filterForm, String fieldName, String sectorName, String rootLabel, String filterDiv, String selectId, ServletContext ampContext)
+	{
+	 	if (FeaturesUtil.isVisibleField(fieldName, ampContext)){
+	 		List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(sectorName);
+	 		HierarchyListableUtil.changeTranslateable(ampSectors, false);
+	 		
+ 	 		HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
+ 	 		rootAmpSectors.setLabel(rootLabel);
+ 	 		rootAmpSectors.setUniqueId("0");
+ 	 		rootAmpSectors.setChildren(ampSectors);
+ 	 		GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>(rootLabel, filterDiv, rootAmpSectors, selectId);
+ 	 		filterForm.getSectorElements().add(sectorsElement);
+ 	 	}
+	}
+	
+	/**
+	 * add a financing location element to the FinancingLocationElements of a FilterForm
+	 * @param filterForm
+	 * @param fieldName  <i> if null, then always enabled</i>
+	 * @param rootLabel
+	 * @param financingModeKey
+	 * @param elementName
+	 * @param filterId
+	 * @param selectId
+	 * @param request
+	 * @param ampContext
+	 * @throws Exception
+	 */
+	private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
+	{
+		boolean enabled = (fieldName == null) ||
+				((fieldName != null) && (FeaturesUtil.isVisibleField(fieldName, ampContext)));
+		
+		if (enabled) { 
+			Collection<AmpCategoryValue> modeOfPaymentValues	=
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(financingModeKey, true, request);	
+			HierarchyListableImplementation rootModeOfPayment	= new HierarchyListableImplementation();
+			rootModeOfPayment.setLabel(rootLabel);
+			rootModeOfPayment.setUniqueId("0");
+			rootModeOfPayment.setChildren( modeOfPaymentValues );
+			GroupingElement<HierarchyListableImplementation> modeOfPaymentElement	=
+					new GroupingElement<HierarchyListableImplementation>(elementName, filterId,	rootModeOfPayment, selectId);
+			filterForm.getFinancingLocationElements().add(modeOfPaymentElement);
+		}
+	}
+	
 	public void modeRefreshDropdowns(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, ServletContext ampContext) throws Exception {
 		StopWatch.reset("Filters");
 		StopWatch.next("Filters", true);
@@ -332,61 +430,17 @@ public class ReportsFilterPicker extends MultiAction {
 	      
 		/**
  	 	* For filterPicker ver2
- 	 	*/
- 	 	List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);
-		
- 	 	List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME);
-        List<AmpSector> tertiaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME);
-        List<AmpSector> tagAmpSectors 	= SectorUtil.getAmpSectorsAndSubSectorsHierarchy(AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME);
-        
- 	 	HierarchyListableUtil.changeTranslateable(ampSectors, false);
- 	 	HierarchyListableUtil.changeTranslateable(secondaryAmpSectors, false);
- 	 	HierarchyListableUtil.changeTranslateable(tertiaryAmpSectors, false);
- 	 	HierarchyListableUtil.changeTranslateable(tagAmpSectors, false);
-        
+ 	 	*/ 	 	        
         
  	 	filterForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
- 	 	
- 	 	if (FeaturesUtil.isVisibleField("Sector", ampContext)){                
- 	 	HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
- 	 	rootAmpSectors.setLabel("Primary Sectors");
- 	 	rootAmpSectors.setUniqueId(0 + "");
- 	 	rootAmpSectors.setChildren(ampSectors);
- 	 	GroupingElement<HierarchyListableImplementation> sectorsElement = new GroupingElement<HierarchyListableImplementation>("Primary Sectors", "filter_sectors_div", rootAmpSectors, "selectedSectors");
- 	 	filterForm.getSectorElements().add(sectorsElement);
- 	 	}
- 	 	
- 	 	if (FeaturesUtil.isVisibleField("Secondary Sector", ampContext)){
- 	 		HierarchyListableImplementation rootSecondaryAmpSectors = new HierarchyListableImplementation();
- 	 		rootSecondaryAmpSectors.setLabel("Secondary Sectors");
- 	 		rootSecondaryAmpSectors.setUniqueId("0");
- 	 		rootSecondaryAmpSectors.setChildren(secondaryAmpSectors);
- 	 		GroupingElement<HierarchyListableImplementation> secondarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Secondary Sectors", "filter_secondary_sectors_div", rootSecondaryAmpSectors, "selectedSecondarySectors");
- 	 		filterForm.getSectorElements().add(secondarySectorsElement);
- 	 	}
 
-        if (FeaturesUtil.isVisibleField("Tertiary Sector", ampContext)){
- 	 		HierarchyListableImplementation rootTertiaryAmpSectors = new HierarchyListableImplementation();
- 	 		rootTertiaryAmpSectors.setLabel("Tertiary Sector");
- 	 		rootTertiaryAmpSectors.setUniqueId("0");
- 	 		rootTertiaryAmpSectors.setChildren(tertiaryAmpSectors);
- 	 		GroupingElement<HierarchyListableImplementation> tertiarySectorsElement = new GroupingElement<HierarchyListableImplementation>("Tertiary Sectors", "filter_tertiary_sectors_div", rootTertiaryAmpSectors, "selectedTertiarySectors");
- 	 		filterForm.getSectorElements().add(tertiarySectorsElement);
- 	 	}
-        
-        //TODO find/insert the feature that needs to be checked here
-        if (FeaturesUtil.isVisibleField("Sector Tag", ampContext)){
- 	 		HierarchyListableImplementation rootTagAmpSectors = new HierarchyListableImplementation();
- 	 		rootTagAmpSectors.setLabel("Tag Sector");
- 	 		rootTagAmpSectors.setUniqueId("0");
- 	 		rootTagAmpSectors.setChildren(tagAmpSectors);
- 	 		GroupingElement<HierarchyListableImplementation> tagSectorsElement = new GroupingElement<HierarchyListableImplementation>("Sector Tags", "filter_tag_sectors_div", rootTagAmpSectors, "selectedTagSectors");
- 	 		filterForm.getSectorElements().add(tagSectorsElement);
- 	 	}
-        
-        
- 	 		
+// 		private void addSectorElement(ReportsFilterPickerForm filterForm, String featureName, String sectorName, String rootLabel, String filterDiv, String selectId, ServletContext ampContext)
+ 	 	addSectorElement(filterForm, "Sector",           AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME,   "Primary Sectors",   "filter_sectors_div",           "selectedSectors", ampContext);
+ 	 	addSectorElement(filterForm, "Secondary Sector", AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, "Secondary Sectors", "filter_secondary_sectors_div", "selectedSecondarySectors", ampContext);
+ 	 	addSectorElement(filterForm, "Tertiary Sector",  AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,  "Tertiary Sectors",  "filter_tertiary_sectors_div",  "selectedTertiarySectors", ampContext);
+ 	 	addSectorElement(filterForm, "Sector Tag",      AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,  "Tag Sector",              "filter_tag_sectors_div",       "selectedTagSectors", ampContext);
+ 	 	        
  	 	
         StopWatch.next("Filters", true, "before programs");
         if ( FeaturesUtil.isVisibleModule("National Planning Dashboard", ampContext) ) {
@@ -496,112 +550,37 @@ public class ReportsFilterPicker extends MultiAction {
  	 	
  	 	filterForm.setRelatedAgenciesElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	
- 	 	if (FeaturesUtil.isVisibleFeature("Executing Agency", ampContext) ) {
- 	 		Collection<AmpOrganisation> execAgencies = (ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_EXECUTING_AGENCY));
- 	 		HierarchyListableUtil.changeTranslateable(execAgencies, false);
- 	 		HierarchyListableImplementation rootExecAgencies = new HierarchyListableImplementation();
- 	 		rootExecAgencies.setLabel("All Executing Agencies");
- 	 		rootExecAgencies.setUniqueId("0");
- 	 		rootExecAgencies.setChildren( execAgencies );
- 	 		GroupingElement<HierarchyListableImplementation> execAgenciesElement = new GroupingElement<HierarchyListableImplementation>("Executing Agencies", "filter_executing_agencies_div", rootExecAgencies, "selectedExecutingAgency");
- 	 		filterForm.getRelatedAgenciesElements().add(execAgenciesElement);
-		}
-
- 	 	if (FeaturesUtil.isVisibleFeature("Implementing Agency", ampContext) ) {
-			Collection<AmpOrganisation> implemAgencies			= (ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
-			HierarchyListableUtil.changeTranslateable(implemAgencies, false);
-			HierarchyListableImplementation rootImplemAgencies	= new HierarchyListableImplementation();
-			rootImplemAgencies.setLabel("All Implementing Agencies");
-			rootImplemAgencies.setUniqueId("0");
-			rootImplemAgencies.setChildren( implemAgencies );
-			GroupingElement<HierarchyListableImplementation> execAgenciesElement	=
-					new GroupingElement<HierarchyListableImplementation>("Implementing Agencies", "filter_implementing_agencies_div", 
-							rootImplemAgencies, "selectedImplementingAgency");
-			filterForm.getRelatedAgenciesElements().add(execAgenciesElement);
-			
-		}
-		if (FeaturesUtil.isVisibleFeature("Responsible Organization", ampContext) ) {
-			Collection<AmpOrganisation> respAgencies			= (ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_RESPONSIBLE_ORG));
-			HierarchyListableUtil.changeTranslateable(respAgencies, false);
-			HierarchyListableImplementation rootRespAgencies	= new HierarchyListableImplementation();
-			rootRespAgencies.setLabel("All Responsible Agencies");
-			rootRespAgencies.setUniqueId("0");
-			rootRespAgencies.setChildren( respAgencies );
-			GroupingElement<HierarchyListableImplementation> respAgenciesElement	=
-					new GroupingElement<HierarchyListableImplementation>("Responsible Agencies", "filter_responsible_agencies_div", 
-							rootRespAgencies, "selectedresponsibleorg");
-			filterForm.getRelatedAgenciesElements().add(respAgenciesElement);
-			
-		}
-		if (FeaturesUtil.isVisibleFeature("Beneficiary Agency", ampContext) ) {
-			Collection<AmpOrganisation> benAgencies			= (ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_BENEFICIARY_AGENCY));
-			HierarchyListableUtil.changeTranslateable(benAgencies, false);
-			HierarchyListableImplementation rootBenAgencies	= new HierarchyListableImplementation();
-			rootBenAgencies.setLabel("All Beneficiary Agencies");
-			rootBenAgencies.setUniqueId("0");
-			rootBenAgencies.setChildren( benAgencies );
-			GroupingElement<HierarchyListableImplementation> benAgenciesElement	=
-					new GroupingElement<HierarchyListableImplementation>("Beneficiary Agencies", "filter_beneficiary_agencies_div", 
-							rootBenAgencies, "selectedBeneficiaryAgency");
-			filterForm.getRelatedAgenciesElements().add(benAgenciesElement);
-			
-		}
+ 	 	// 	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filderDivId, String selectId, ServletContext ampContext)
+ 	 	addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY, ampContext);
+ 	 	addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY, ampContext);
+ 	 	addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY, ampContext);
+ 	 	addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg", ampContext);
+		addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY, ampContext);
 		
+
+		// Contracting Agency Groups, based off Donor Groups
+		// stimate domnule GARTNER, ce face filterDonorGroups in afara de a exclude grupurile cu "guv" si "gouv" in nume din lista? E nevoie de ei aici? 
+		Collection<AmpOrgGroup> contractingAgencyGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllContractingAgencyGroupsOfPortfolio()/*)*/;
+ 	 	HierarchyListableUtil.changeTranslateable(contractingAgencyGroups, false);
+
+ 	 	HierarchyListableImplementation rootContractingAgenciesGroup = new HierarchyListableImplementation();
+ 	 	rootContractingAgenciesGroup.setLabel("All Contracting Agency Groups");
+ 	 	rootContractingAgenciesGroup.setUniqueId("0");
+ 	 	rootContractingAgenciesGroup.setChildren( contractingAgencyGroups );
+ 	 	GroupingElement<HierarchyListableImplementation> contractingAgencyGroupElement = new GroupingElement<HierarchyListableImplementation>("Contracting Agency Groups", "filter_contracting_agency_groups_div", rootContractingAgenciesGroup, "selectedContractingAgencyGroups");
+ 	 	filterForm.getRelatedAgenciesElements().add(contractingAgencyGroupElement);
+
 		
 		filterForm.setFinancingLocationElements( new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		StopWatch.next("Filters", true, "BEFORE CATEGORY VALUES");
-		if (true) { //Here needs to be a check to see if the field/feature is enabled
-			Collection<AmpCategoryValue> finInstrValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, true, request);	
-			HierarchyListableImplementation rootFinancingInstrument	= new HierarchyListableImplementation();
-			rootFinancingInstrument.setLabel("All Financing Instrument Values");
-			rootFinancingInstrument.setUniqueId("0");
-			rootFinancingInstrument.setChildren( finInstrValues );
-			GroupingElement<HierarchyListableImplementation> finInstrElement	=
-					new GroupingElement<HierarchyListableImplementation>("Financing Instrument", "filter_financing_instr_div", 
-							rootFinancingInstrument, "selectedFinancingInstruments");
-			filterForm.getFinancingLocationElements().add(finInstrElement);
-		}
 		
-		if (true) { //Here needs to be a check to see if the field/feature is enabled
-			Collection<AmpCategoryValue> typeOfAssistValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY, true, request);	
-			HierarchyListableImplementation rootTypeOfAssistance	= new HierarchyListableImplementation();
-			rootTypeOfAssistance.setLabel("All Type of Assistance Values");
-			rootTypeOfAssistance.setUniqueId("0");
-			rootTypeOfAssistance.setChildren( typeOfAssistValues );
-			GroupingElement<HierarchyListableImplementation> typeOfAssistElement	=
-					new GroupingElement<HierarchyListableImplementation>("Type of Assistance", "filter_type_of_assistance_div", 
-							rootTypeOfAssistance, "selectedTypeOfAssistance");
-			filterForm.getFinancingLocationElements().add(typeOfAssistElement);
-		}
+		//private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
+		addFinancingLocationElement(filterForm, null, "All Financing Instrument Values", CategoryConstants.FINANCING_INSTRUMENT_KEY, "Financing Instrument", "filter_financing_instr_div", "selectedFinancingInstruments", request, ampContext);
+		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance", request, ampContext);
+		addFinancingLocationElement(filterForm, "Mode of Payment", "All Mode of Payment Values", CategoryConstants.MODE_OF_PAYMENT_KEY, "Mode of Payment", "filter_mode_of_payment_div", "selectedModeOfPayment", request, ampContext);
+		addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory", request, ampContext);
 		
-		if (FeaturesUtil.isVisibleField("Mode of Payment", ampContext)) { 
-			Collection<AmpCategoryValue> modeOfPaymentValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MODE_OF_PAYMENT_KEY, true, request);	
-			HierarchyListableImplementation rootModeOfPayment	= new HierarchyListableImplementation();
-			rootModeOfPayment.setLabel("All Mode of Payment Values");
-			rootModeOfPayment.setUniqueId("0");
-			rootModeOfPayment.setChildren( modeOfPaymentValues );
-			GroupingElement<HierarchyListableImplementation> modeOfPaymentElement	=
-					new GroupingElement<HierarchyListableImplementation>("Mode of Payment", "filter_mode_of_payment_div", 
-							rootModeOfPayment, "selectedModeOfPayment");
-			filterForm.getFinancingLocationElements().add(modeOfPaymentElement);
-		}
-		
-		if (FeaturesUtil.isVisibleField("Project Category", ampContext)) { 
-			Collection<AmpCategoryValue> projCategoryValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_CATEGORY_KEY, true, request);	
-			HierarchyListableImplementation rootProjCategory	= new HierarchyListableImplementation();
-			rootProjCategory.setLabel("All Project Category Values");
-			rootProjCategory.setUniqueId("0");
-			rootProjCategory.setChildren( projCategoryValues );
-			GroupingElement<HierarchyListableImplementation> projCategoryElement	=
-					new GroupingElement<HierarchyListableImplementation>("Project Category", "filter_project_category_div", 
-							rootProjCategory, "selectedProjectCategory");
-			filterForm.getFinancingLocationElements().add(projCategoryElement);
-		}
-		
+						
 		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> activityStatusValues	=
@@ -1548,7 +1527,7 @@ public class ReportsFilterPicker extends MultiAction {
 			boolean isJointCriteria	= false;
 			boolean isGovProcedures	= false;
 			for (int i = 0; i < filterForm.getSelectedActivitySettings().length; i++) {
-				String element = filterForm.getSelectedActivitySettings()[i] + "";
+				String element = filterForm.getSelectedActivitySettings()[i].toString();
 				if ( ONLY_JOINT_CRITERIA.equals(element) ) {
 					arf.setJointCriteria(true);
 					isJointCriteria		= true;
@@ -1569,7 +1548,7 @@ public class ReportsFilterPicker extends MultiAction {
 		if (filterForm.getSelectedDonorTypes() != null && filterForm.getSelectedDonorTypes().length > 0) {
 			arf.setDonorTypes(new HashSet());
 			for (int i = 0; i < filterForm.getSelectedDonorTypes().length; i++) {
-				Long id = Long.parseLong("" + filterForm.getSelectedDonorTypes()[i]);
+				Long id = Long.parseLong(filterForm.getSelectedDonorTypes()[i].toString());
 				AmpOrgType type = DbUtil.getAmpOrgType(id);
 				if (type != null)
 					arf.getDonorTypes().add(type);
@@ -1578,15 +1557,26 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setDonorTypes(null);
 
 		if (filterForm.getSelectedDonorGroups() != null && filterForm.getSelectedDonorGroups().length > 0) {
-			arf.setDonorGroups(new HashSet());
+			arf.setDonorGroups(new HashSet<AmpOrgGroup>());
 			for (int i = 0; i < filterForm.getSelectedDonorGroups().length; i++) {
-				Long id = Long.parseLong("" + filterForm.getSelectedDonorGroups()[i]);
+				Long id = Long.parseLong(filterForm.getSelectedDonorGroups()[i].toString());
 				AmpOrgGroup grp = DbUtil.getAmpOrgGroup(id);
 				if (grp != null)
 					arf.getDonorGroups().add(grp);
 			}
 		} else
 			arf.setDonorGroups(null);
+
+		if (filterForm.getSelectedContractingAgencyGroups() != null && filterForm.getSelectedContractingAgencyGroups().length > 0) {
+			arf.setContractingAgencyGroups(new HashSet<AmpOrgGroup>());
+			for (int i = 0; i < filterForm.getSelectedContractingAgencyGroups().length; i++) {
+				Long id = Long.parseLong(filterForm.getSelectedContractingAgencyGroups()[i].toString());
+				AmpOrgGroup grp = DbUtil.getAmpOrgGroup(id);
+				if (grp != null)
+					arf.getContractingAgencyGroups().add(grp);
+			}
+		} else
+			arf.setContractingAgencyGroups(null);
 
 		if (filterForm.getSelectedBudgets() != null && filterForm.getSelectedBudgets().length > 0) {
 			arf.setBudget(new HashSet<AmpCategoryValue>());
@@ -1666,6 +1656,7 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency(), AmpOrganisation.class));
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency(), AmpOrganisation.class));
+		arf.setContractingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedContractingAgency(), AmpOrganisation.class));
 		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpCategoryValue.class));
 		if ( filterForm.getSelectedArchivedStatus() == null || filterForm.getSelectedArchivedStatus().length != 1 ) {
 			arf.setShowArchived(null);

@@ -5087,6 +5087,24 @@ public class DbUtil {
 		}
 		return col;
 	}
+	
+	//BOZO: test this
+	public static Collection getAllContractingAgencyGroupsOfPortfolio()
+	{
+		Session session = null;
+		Collection col = new ArrayList();
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select distinct amp_org_grp_id from v_contracting_agency_groups";
+			Query qry = session.createSQLQuery(queryString).addEntity(
+					AmpOrgGroup.class);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.debug("Exception from getAllOrgGroupsOfPortfolio()");
+			logger.debug(e.toString());
+		}
+		return col;		
+	}
 
 	public static Collection getAllOrgGroupsOfPortfolio() {
 		Session session = null;

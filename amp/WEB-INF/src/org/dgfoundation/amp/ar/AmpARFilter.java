@@ -44,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
@@ -239,11 +240,14 @@ public class AmpARFilter extends PropertyListable {
 	private Set regions = null;
 	private Set risks = null;
 	private Set donorTypes = null;
-	private Set donorGroups = null;
+	private Set<AmpOrgGroup> donorGroups = null;
+	private Set<AmpOrgGroup> contractingAgencyGroups = null;
+	
 	private Set responsibleorg = null;
-	private Set executingAgency;
-	private Set implementingAgency;
-	private Set beneficiaryAgency;
+	private Set<AmpOrganisation> executingAgency;
+	private Set<AmpOrganisation> contractingAgency;
+	private Set<AmpOrganisation> implementingAgency;
+	private Set<AmpOrganisation> beneficiaryAgency;
 	private Set<AmpOrganisation> donnorgAgency;
 
 	private Set teamAssignedOrgs = null;
@@ -916,9 +920,17 @@ public class AmpARFilter extends PropertyListable {
 		String DONOR_GROUP_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE amp_org_grp_id IN ("
 				+ Util.toCSString(donorGroups) + ")";
 
+		String CONTRACTING_AGENCY_GROUP_FILTER = "SELECT amp_activity_id FROM v_contracting_agency_groups WHERE amp_org_grp_id IN ("
+				+ Util.toCSString(contractingAgencyGroups) + ")";
+				
 		String EXECUTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_executing_agency v  "
 				+ "WHERE v.amp_org_id IN ("
 				+ Util.toCSString(executingAgency) + ")";
+		
+		String CONTRACTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_contracting_agency v  "
+				+ "WHERE v.amp_org_id IN ("
+				+ Util.toCSString(contractingAgency) + ")";
+
 		
 		String BENEFICIARY_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_beneficiary_agency v  "
 				+ "WHERE v.amp_org_id IN ("
@@ -1186,13 +1198,22 @@ public class AmpARFilter extends PropertyListable {
 		
 		if (donorGroups != null && donorGroups.size() > 0)
 			queryAppend(DONOR_GROUP_FILTER);
+			
+		if ((contractingAgencyGroups != null) && (contractingAgencyGroups.size() > 0))
+			queryAppend(CONTRACTING_AGENCY_GROUP_FILTER);
+			
 		if (donorTypes != null && donorTypes.size() > 0)
 			queryAppend(DONOR_TYPE_FILTER);
 
 		if (executingAgency != null && executingAgency.size() > 0)
 			queryAppend(EXECUTING_AGENCY_FILTER);
+
+		if (contractingAgency != null && contractingAgency.size() > 0)
+			queryAppend(CONTRACTING_AGENCY_FILTER);
+
 		if (beneficiaryAgency != null && beneficiaryAgency.size() > 0)
 			queryAppend(BENEFICIARY_AGENCY_FILTER);
+		
 		if (implementingAgency != null && implementingAgency.size() > 0)
 			queryAppend(IMPLEMENTING_AGENCY_FILTER);
 
@@ -1662,35 +1683,51 @@ public class AmpARFilter extends PropertyListable {
 		this.donorTypes = donorTypes;
 	}
 
-	public Set getDonorGroups() {
+	public Set<AmpOrgGroup> getDonorGroups() {
 		return donorGroups;
 	}
 
-	public void setDonorGroups(Set donorGroups) {
+	public void setDonorGroups(Set<AmpOrgGroup> donorGroups) {
 		this.donorGroups = donorGroups;
 	}
 
-	public Set getBeneficiaryAgency() {
+	public void setContractingAgencyGroups(Set<AmpOrgGroup> contractingAgencyGroups) {
+		this.contractingAgencyGroups = contractingAgencyGroups;
+	}
+	
+	public Set<AmpOrgGroup> getContractingAgencyGroups(){
+		return this.contractingAgencyGroups;
+	}
+	
+	public Set<AmpOrganisation> getBeneficiaryAgency() {
 		return beneficiaryAgency;
 	}
 
-	public void setBeneficiaryAgency(Set beneficiaryAgency) {
+	public void setBeneficiaryAgency(Set<AmpOrganisation> beneficiaryAgency) {
 		this.beneficiaryAgency = beneficiaryAgency;
 	}
 
-	public Set getExecutingAgency() {
+	public Set<AmpOrganisation> getExecutingAgency() {
 		return executingAgency;
 	}
 
-	public void setExecutingAgency(Set executingAgency) {
+	public void setExecutingAgency(Set<AmpOrganisation> executingAgency) {
 		this.executingAgency = executingAgency;
 	}
 
-	public Set getImplementingAgency() {
+	public Set<AmpOrganisation> getContractingAgency() {
+		return contractingAgency;
+	}
+
+	public void setContractingAgency(Set<AmpOrganisation> contractingAgency) {
+		this.contractingAgency = contractingAgency;
+	}
+
+	public Set<AmpOrganisation> getImplementingAgency() {
 		return implementingAgency;
 	}
 
-	public void setImplementingAgency(Set implementingAgency) {
+	public void setImplementingAgency(Set<AmpOrganisation> implementingAgency) {
 		this.implementingAgency = implementingAgency;
 	}
 

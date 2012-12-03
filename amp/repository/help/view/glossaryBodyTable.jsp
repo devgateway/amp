@@ -333,9 +333,10 @@
 		}).responseText;
 	}
 
-	function doSearchReset(){
+	function doSearchReset() {
 		$('div#searchResults').html('');
-		$('div#nodeContentDiv').html('');
+		$('div#nodeContentDiv').html('<digi:trn>Please select node in glossary tree</digi:trn>');
+		$('div#nodeTitle').html('&nbsp;&nbsp;&nbsp;&nbsp;');
 	}
 	
 	function deleteNode(topicId){

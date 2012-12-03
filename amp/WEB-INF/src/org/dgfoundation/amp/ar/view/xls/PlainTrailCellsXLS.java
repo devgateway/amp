@@ -6,26 +6,22 @@ package org.dgfoundation.amp.ar.view.xls;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.Column;
+import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.budgetexport.util.MappingEncoder;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 
 /**
- * @author Alex
+ * @author mmoras
  *
  */
 public class PlainTrailCellsXLS extends TrailCellsXLS {
@@ -71,45 +67,87 @@ public class PlainTrailCellsXLS extends TrailCellsXLS {
 	}
 	
 	protected void createFirstCells () {
-		
-		Integer count	= this.getHierarchiesCount(((ReportData)this.item).getName(), (ReportData)this.item, 0);
-
-		HSSFCell cell=this.getCell(this.getHierarchyOtherStyle());
-		cell.setCellValue("");
-		makeColSpan(count, true);
-	}
-	
-	private Integer getHierarchiesCount(String baseReportName, ReportData rd, Integer count){
-		
-		if (rd.getItems().size() > 0 && rd.getItem(0) instanceof ReportData){
-			ReportData reportData = (ReportData)rd.getItem(0);
-			if (reportData.getName().equals(baseReportName)){
-				return getHierarchiesCount(baseReportName, (ReportData)rd.getItem(0), count);	
-			}else{
-				return getHierarchiesCount(baseReportName, (ReportData)rd.getItem(0), count+1);
+		//If report is not summary report, item will never be ColumnReportData
+		//It is being filtered in PlainColumnReportDataXLS
+		if (item instanceof ColumnReportData ){
+			List<String> hierarchies = getHierarchiesList(); 
+			for(String hierarchy : hierarchies){
+				createCell(hierarchy);
 			}
 		}else{
-			return count;
+			Integer count	= this.getHierarchiesCount();
+			HSSFCell cell=this.getCell(this.getHierarchyOtherStyle());
+			cell.setCellValue("");
+			makeColSpan(count, true);
 		}
+	}
+	
+	private GroupReportData getBaseReport(){
+		ReportData parent = ((ReportData) item).getParent();
+		while(true){
+			if (parent.getParent() != null){
+				parent = parent.getParent();
+			}else{
+				break;
+			}
+		}
+		return (GroupReportData)parent; 
+	}
+	
+	private Set<AmpReportHierarchy> getHierarchies(){
+		
+		GroupReportData baseReport = (GroupReportData)this.getBaseReport();
+		
+		return baseReport.getReportMetadata().getHierarchies();
+	}
+	
+	private Integer getHierarchiesCount(){
+		Set<AmpReportHierarchy> hierarchies = this.getHierarchies();
+		if (hierarchies != null){
+			return hierarchies.size();
+		}else{
+			return 0;
+		}
+	}
+
+	private List<String> getHierarchiesList(){
+		List<String> hierarchies = new ArrayList<String>();
+		
+		ReportData parent = (ReportData) item;
+		
+		while(parent != null){
+			if (parent.getLevelDepth() > 1){
+				hierarchies.add(0, parent.getRepName());
+				parent = parent.getParent();
+			}else{
+				break;
+			}
+		}
+		return hierarchies; 
 	}
 	
 	protected void createAmountCells () {
 		ReportData grd = (ReportData) item;
 		Iterator i = grd.getTrailCells().iterator();
+		
 		//the first column will be under the hierarchy cell
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
 			if (element!=null ){
 				element.invokeExporter(this);
 			}else {
-				HSSFCell cell2=this.getCell(this.getHierarchyOtherStyle());
-				cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
-				cell2.setCellValue("");
-				colId.inc();
+				createCell("");
 			}
 		
 		}
 		
 		colId.reset();
+	}
+	
+	private void createCell(String text){
+		HSSFCell cell2=this.getCell(this.getHierarchyOtherStyle());
+		cell2.setCellType(HSSFCell.CELL_TYPE_STRING);
+		cell2.setCellValue(text);
+		colId.inc();
 	}
 }

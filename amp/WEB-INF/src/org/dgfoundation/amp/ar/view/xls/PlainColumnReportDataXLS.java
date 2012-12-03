@@ -12,13 +12,10 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.cell.Cell;
 
 /**
  * @author mmoras
@@ -105,5 +102,10 @@ public class PlainColumnReportDataXLS extends ColumnReportDataXLS {
 	
 	@Override
 	protected void createTrailCells() {
+		ColumnReportData grd = (ColumnReportData) item;
+		if (grd.getReportMetadata().getHideActivities()){
+			PlainTrailCellsXLS trails = new PlainTrailCellsXLS(this, grd);
+			trails.generate();
+		}
 	}
 }

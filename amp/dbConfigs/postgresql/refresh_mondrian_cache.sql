@@ -278,6 +278,11 @@ CREATE TABLE cached_v_pledges_type_of_assistance AS SELECT * FROM v_pledges_type
 DROP TABLE IF EXISTS cached_v_pledges_zones;
 CREATE TABLE cached_v_pledges_zones AS SELECT * FROM v_pledges_zones;
 
+DROP TABLE IF EXISTS cached_v_sectorloc;
+CREATE TABLE cached_v_sectorloc AS SELECT * FROM v_sectorloc;
+
+
+
 
 DROP TABLE IF EXISTS cached_amp_activity;
 CREATE TABLE cached_amp_activity AS  select * from amp_activity;

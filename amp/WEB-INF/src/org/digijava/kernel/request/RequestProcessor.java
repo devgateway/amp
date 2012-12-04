@@ -303,7 +303,7 @@ public class RequestProcessor
         				commonURL.indexOf("id=") > -1 ||
         				commonURL.indexOf("Id=") > -1){
 
-        			throw new RuntimeException("No referrer found!");
+        			throw new RuntimeException("Access denied!!!!");
         			//response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
         		}
         	}

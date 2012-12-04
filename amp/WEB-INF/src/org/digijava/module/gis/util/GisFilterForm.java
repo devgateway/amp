@@ -26,6 +26,8 @@ public class GisFilterForm {
     private String filterEndYear;
     private boolean filterAllSectors;
     private boolean curWorkspaceOnly;
+/*    private boolean childWorkspacesToo;
+*/  
     private AmpTeam curWorkspace;
     private Long[] selectedTypeOfAssistance;
 
@@ -45,6 +47,14 @@ public class GisFilterForm {
         this.curWorkspaceOnly = curWorkspaceOnly;
     }
 
+/*    public boolean isChildWorkspacesToo() {
+        return childWorkspacesToo;
+    }
+
+    public void setChildWorkspacesToo(boolean childWorkspacesToo) {
+        this.childWorkspacesToo = childWorkspacesToo;
+    }
+*/
     public AmpTeam getCurWorkspace() {
         return curWorkspace;
     }

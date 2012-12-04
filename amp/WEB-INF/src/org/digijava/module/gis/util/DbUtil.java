@@ -713,11 +713,18 @@ public class DbUtil {
         return retVal;
     }
     
+    /**
+     * recursively adds all workspaces
+     * @param team
+     * @param in
+     * @param workspaceType
+     */
     public static void addAllChildWorkspaces (AmpTeam team, List <AmpTeam> in, String workspaceType) { //at all levels
         Collection<AmpTeam> children = (Collection<AmpTeam>) TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
         if (children != null && !children.isEmpty()) {
             for (AmpTeam child : children) {
-                if (child.getAccessType().equalsIgnoreCase(workspaceType)) {
+            	boolean workspaceTypeOk = (workspaceType == null) || ((workspaceType != null) && (child.getAccessType().equalsIgnoreCase(workspaceType)));
+                if (workspaceTypeOk) {
                     in.add(child);
                     addAllChildWorkspaces(child, in, workspaceType);
                 }

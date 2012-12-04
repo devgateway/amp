@@ -1112,6 +1112,7 @@ public class AmpARFilter extends PropertyListable {
 
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
+		
 		if (!workspaceFilter &&  !this.budgetExport && ampTeams != null && ampTeams.size() > 0)
 			queryAppend(TEAM_FILTER);
 		if (statuses != null && statuses.size() > 0)

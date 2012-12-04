@@ -311,7 +311,7 @@ public class RequestProcessor
         			commonURL += "?" + request.getQueryString();
         		if (checkForIdInQuery(commonURL)){
 
-        			throw new RuntimeException("No referrer found!");
+        			throw new RuntimeException("Access denied!!!!");
         			//response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
         		}
         	}

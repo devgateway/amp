@@ -395,6 +395,7 @@ public class AmpARFilter extends PropertyListable {
 	 * @param request
 	 */
 	public void readRequestData(HttpServletRequest request) {
+		
 		this.generatedFilterQuery = initialFilterQuery;
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
 				Constants.CURRENT_MEMBER);
@@ -425,6 +426,9 @@ public class AmpARFilter extends PropertyListable {
 			"reportMeta");
 			if (ar!=null){
 				ampReportId = ar.getAmpReportId().toString();
+			}
+			if (ar.getType() == ArConstants.PLEDGES_TYPE){
+				this.generatedFilterQuery = initialPledgeFilterQuery;
 			}
 		}
 		

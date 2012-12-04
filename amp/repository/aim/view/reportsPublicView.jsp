@@ -113,7 +113,11 @@ function toggleSettings(){
 	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
 	
 	startajaxtabs("PublicTabs");
-	reloadTab('PublicTabs','Tab-<bean:write name="firstReportName"/>');
+	tabName = 'Tab-<bean:write name="firstReportName"/>';
+	<logic:notEmpty name="filterCurrentReport" scope="session">
+		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="ampReportId"/>';
+	</logic:notEmpty>
+	reloadTab('PublicTabs',tabName);
 	</script>
 </logic:present>
 

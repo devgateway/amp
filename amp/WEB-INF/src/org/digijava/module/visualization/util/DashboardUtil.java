@@ -82,7 +82,8 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        map = DbUtil.getFundingBySectorList(secList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
+        if (secList!=null && secList.size()!=0)
+        	map = DbUtil.getFundingBySectorList(secList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map);
 	}
 	
@@ -129,7 +130,7 @@ public class DashboardUtil {
 		newFilter.setSelLocationIds(ids2);
 		DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 		BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-		if (!total.equals(BigDecimal.ZERO))
+		if (total.compareTo(BigDecimal.ZERO) == 1)
 			map.put(tempLoc2, total);
         return sortByValue (map);
 	}
@@ -142,7 +143,8 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        map = DbUtil.getFundingByProgramList(progList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
+        if (progList!=null && progList.size()!=0)
+        	map = DbUtil.getFundingByProgramList(progList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map);
 	}
 	
@@ -153,7 +155,8 @@ public class DashboardUtil {
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
-        map = DbUtil.getFundingByActivityList(actList, filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator);
+		if (actList!=null && actList.size()!=0)
+        	map = DbUtil.getFundingByActivityList(actList, filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator);
         return sortByValue (map);
 	}
 	
@@ -437,7 +440,7 @@ public class DashboardUtil {
 		Collection<AmpTheme> col = new ArrayList<AmpTheme>();
 		col.add(prog);
 		if ( prog.getSiblings() != null ) {
- 	 		for ( AmpTheme th: prog.getChildren() )
+ 	 		for ( AmpTheme th: prog.getSiblings() )
  	 			col.addAll(getProgramsDescendents(th));
  	 	}
  	 	return col;

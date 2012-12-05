@@ -145,6 +145,8 @@ public class DashboardFilter {
     	newFilter.setSelProgramIds(this.getSelProgramIds());
     	newFilter.setSelCVIds(this.getSelCVIds());
     	newFilter.setBudgetCVIds(this.getBudgetCVIds());
+    	newFilter.setDivideThousands(this.getDivideThousands());
+    	newFilter.setShowAmountsInThousands(this.getShowAmountsInThousands());
     	return newFilter;
     }
 	

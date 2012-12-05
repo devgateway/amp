@@ -601,12 +601,15 @@ public class DataDispatcher extends DispatchAction {
         	}
         	else 
         	{
-	            if(sectorId != null && !sectorId.equals("") && !sectorId.equals("-1")){
+        		DashboardFilter newFilter = filter.getCopyFilterForFunding();
+            	newFilter.setStartYear(startYear);
+            	newFilter.setEndYear(endYear);
+            	if(sectorId != null && !sectorId.equals("") && !sectorId.equals("-1")){
 	            	Long id = Long.parseLong(sectorId);
-	            	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), filter, startYear.intValue(), endYear.intValue());
+	            	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), newFilter, startYear.intValue(), endYear.intValue());
+	            } else {
+	            	map = DashboardUtil.getRankSectorsByKey(DbUtil.getSectors(newFilter), newFilter);
 	            }
-	            else
-	            	map = DashboardUtil.getRankSectorsByKey(DbUtil.getSectors(filter), filter);
         	}
 	        
 	        if (map==null) {
@@ -965,10 +968,11 @@ public class DataDispatcher extends DispatchAction {
 				} else {
 					map = visualizationForm.getRanksInformation().getFullPrograms();
 				}
-        	}
-        	else 
-        	{
-	            map = DashboardUtil.getRankProgramsByKey(DbUtil.getPrograms(filter,NPO), filter);
+        	} else {
+        		DashboardFilter newFilter = filter.getCopyFilterForFunding();
+            	newFilter.setStartYear(startYear);
+            	newFilter.setEndYear(endYear);
+            	map = DashboardUtil.getRankProgramsByKey(DbUtil.getPrograms(newFilter,NPO), newFilter);
         	}
 	        
 	        if (map==null) {
@@ -1319,13 +1323,16 @@ public class DataDispatcher extends DispatchAction {
         		map = visualizationForm.getRanksInformation().getFullOrganizations();
         	else {
         		HashMap<Long, AmpOrganisation> agencyList = new HashMap<Long, AmpOrganisation>();
-        		Collection agencyListRed = DbUtil.getAgencies(filter);
+        		DashboardFilter newFilter = filter.getCopyFilterForFunding();
+            	newFilter.setStartYear(startYear);
+            	newFilter.setEndYear(endYear);
+            	Collection agencyListRed = DbUtil.getAgencies(newFilter);
                 Iterator iter = agencyListRed.iterator();
                 while (iter.hasNext()) {
                 	AmpOrganisation org = (AmpOrganisation)iter.next();
                     agencyList.put(org.getAmpOrgId(), org);
                 }
-                map = DashboardUtil.getRankAgenciesByKey(agencyList.keySet(), filter);
+                map = DashboardUtil.getRankAgenciesByKey(agencyList.keySet(), newFilter);
         	}
         		
         	if (map==null) {
@@ -3000,12 +3007,15 @@ public class DataDispatcher extends DispatchAction {
             }
         	else
         	{
-	            if(regionId != null && !regionId.equals("") && !regionId.equals("-1")){
+        		DashboardFilter newFilter = filter.getCopyFilterForFunding();
+            	newFilter.setStartYear(startYear);
+            	newFilter.setEndYear(endYear);
+            	if(regionId != null && !regionId.equals("") && !regionId.equals("-1")){
 	            	Long id = Long.parseLong(regionId);
-	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getSubRegions(id), filter,request);
+	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getSubRegions(id), newFilter,request);
+	            } else {
+	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(newFilter), newFilter,request);
 	            }
-	            else
-	            	map = DashboardUtil.getRankRegionsByKey(DbUtil.getRegions(filter), filter,request);
         	}
         	
 	        if (map==null) {

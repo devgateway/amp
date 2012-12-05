@@ -196,6 +196,15 @@ function validateData(){
 					</html:select></td>
 				</tr>
 				<tr>
+					<td><digi:trn><b>Select Agency type for pivot</b></digi:trn>
+						<html:select property="pivot" styleId="pivot_dropdown" styleClass="inp-text" style="width:250px;">
+						<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
+						<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
+						<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
+						<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
+					</html:select></td>
+				</tr>
+				<tr>
 					<td><digi:trn><b>Show in AMP main menu</b></digi:trn>
 						<input type="checkbox" id="show_in_menu"/>
 						<html:hidden property="showInMenu" styleId="showInMenu2" />

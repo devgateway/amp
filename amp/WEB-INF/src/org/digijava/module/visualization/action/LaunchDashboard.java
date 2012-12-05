@@ -77,6 +77,9 @@ public class LaunchDashboard extends Action {
 			DashboardFilter filter = new DashboardFilter();
 			initializeFilter(filter, request);
 			dForm.setFilter(filter);
+			dForm.getFilter().setAgencyType(dashboard.getPivot());
+			dForm.getFilter().setAgencyTypeFilter(dashboard.getPivot());
+			dForm.getFilter().setAgencyTypeQuickFilter(dashboard.getPivot());
 			List<AmpDashboardGraph> listDG = org.digijava.module.visualization.util.DbUtil.getDashboardGraphByDashboard(dId);
 			list = new ArrayList<AmpGraph>();
 			//If a dashboard is executed from the menu, it will show all graphs in the dashboard by default

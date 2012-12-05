@@ -15,6 +15,7 @@ public class AmpDashboard implements Serializable {
 	private String name;
 	private List<AmpDashboardGraph> graphList;
 	private int baseType;
+	private int pivot;
 	private Boolean showInMenu;
 	
 	public Long getId() {
@@ -46,6 +47,12 @@ public class AmpDashboard implements Serializable {
 	}
 	public void setShowInMenu(Boolean showInMenu) {
 		this.showInMenu = showInMenu;
+	}
+	public int getPivot() {
+		return pivot;
+	}
+	public void setPivot(int pivot) {
+		this.pivot = pivot;
 	}
 	
 }

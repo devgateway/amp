@@ -267,6 +267,7 @@ public class VisualizationForm extends ActionForm {
 		private BufferedImage sectorGraph;
 		private BufferedImage regionGraph;
 		private BufferedImage ODAGrowthGraph;
+		private BufferedImage beneficiaryAgencyGraph;
 		private String fundingTableData;
 		private String budgetTableData;
 		private String NPOTableData;
@@ -279,6 +280,7 @@ public class VisualizationForm extends ActionForm {
 		private String sectorTableData;
 		private String regionTableData;
 		private String ODAGrowthTableData;
+		private String beneficiaryAgencyTableData;
 		private int exportFundingsOption = 3;
 		private int exportAidPredictabilityOption = 3;
 		private int exportAidPredictabilityQuarterOption = 3;
@@ -293,6 +295,7 @@ public class VisualizationForm extends ActionForm {
 		private int exportTypeOption = 0;
 		private int exportODAGrowthOption = 3;
 		private int exportBudgetBreakdownOption = 3;
+		private int exportBeneficiaryAgencyProfileOption = 3;
 		
 		public BufferedImage getAidPredictabilityGraph() {
 			return aidPredictabilityGraph;
@@ -599,6 +602,32 @@ public class VisualizationForm extends ActionForm {
 		public void setExportBudgetBreakdownOption(int exportBudgetBreakdownOption) {
 			this.exportBudgetBreakdownOption = exportBudgetBreakdownOption;
 		}
+
+		public BufferedImage getBeneficiaryAgencyGraph() {
+			return beneficiaryAgencyGraph;
+		}
+
+		public void setBeneficiaryAgencyGraph(BufferedImage beneficiaryAgencyGraph) {
+			this.beneficiaryAgencyGraph = beneficiaryAgencyGraph;
+		}
+
+		public String getBeneficiaryAgencyTableData() {
+			return beneficiaryAgencyTableData;
+		}
+
+		public void setBeneficiaryAgencyTableData(String beneficiaryAgencyTableData) {
+			this.beneficiaryAgencyTableData = beneficiaryAgencyTableData;
+		}
+
+		public int getExportBeneficiaryAgencyProfileOption() {
+			return exportBeneficiaryAgencyProfileOption;
+		}
+
+		public void setExportBeneficiaryAgencyProfileOption(
+				int exportBeneficiaryAgencyProfileOption) {
+			this.exportBeneficiaryAgencyProfileOption = exportBeneficiaryAgencyProfileOption;
+		}
+
 
 	}
 

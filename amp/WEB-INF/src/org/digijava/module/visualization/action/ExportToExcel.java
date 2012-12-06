@@ -64,6 +64,7 @@ public class ExportToExcel extends Action {
         String aidTypeOpt = request.getParameter("aidTypeOpt");
         String financingInstOpt = request.getParameter("financingInstOpt");
         String organizationOpt = request.getParameter("organizationOpt");
+        String beneficiaryAgencyOpt = request.getParameter("beneficiaryAgencyOpt");
         String sectorOpt = request.getParameter("sectorOpt");
         String regionOpt = request.getParameter("regionOpt");
         String NPOOpt = request.getParameter("NPOOpt");
@@ -109,6 +110,7 @@ public class ExportToExcel extends Action {
 	        String sectorProfTrn = TranslatorWorker.translateText("Sector Profile", langCode, siteId);
 	        String regionProfTrn = TranslatorWorker.translateText("Region Profile", langCode, siteId);
 	        String organizationProfTrn = TranslatorWorker.translateText("Organization Profile", langCode, siteId);
+	        String beneficiaryAgencyProfTrn = TranslatorWorker.translateText("Beneficiary Agency Profile", langCode, siteId);
 	        String NPOProfTrn = TranslatorWorker.translateText("NPO Profile", langCode, siteId);
 	        String programProfTrn = TranslatorWorker.translateText("Program Profile", langCode, siteId);
 	        String plannedTrn = TranslatorWorker.translateText("Planned", langCode, siteId);
@@ -822,8 +824,9 @@ public class ExportToExcel extends Action {
 		    }
 		    
 		  //Budget Breakdown Table.
+		    HSSFSheet sheet12 = null;
 			if (!budgetBreakdownOpt.equals("0")){
-		    	sheet11 = wb.createSheet(budgetBreakdownTrn);
+		    	sheet12 = wb.createSheet(budgetBreakdownTrn);
 		    	rowNum=1;
 		    }
 		    if (budgetBreakdownOpt.equals("1") || budgetBreakdownOpt.equals("3")){
@@ -831,7 +834,7 @@ public class ExportToExcel extends Action {
 		        cellNum = 0;
 		        
 		        headerText = null;
-	        	row = sheet11.createRow(rowNum++);
+	        	row = sheet12.createRow(rowNum++);
 	        	cell = row.createCell(cellNum++);
 	        	String[] budgetBreakdownRows = vForm.getExportData().getBudgetTableData().split("<");
 	            
@@ -841,7 +844,7 @@ public class ExportToExcel extends Action {
 	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
 	            
 	            cellNum = 0;
-	            row = sheet11.createRow(rowNum++);
+	            row = sheet12.createRow(rowNum++);
 	            cell = row.createCell(cellNum++);
 	            headerText = new HSSFRichTextString(yearTrn);
 	            cell.setCellValue(headerText);
@@ -855,7 +858,7 @@ public class ExportToExcel extends Action {
 				}
 	            for (int i = 1; i < budgetBreakdownRows.length; i++) {
 		        	cellNum = 0;
-			        row = sheet11.createRow(rowNum++);
+			        row = sheet12.createRow(rowNum++);
 			        HSSFCellStyle st = null;
 			    	if (i == budgetBreakdownRows.length-1)
 			    		st = lastCellStyle;
@@ -875,7 +878,7 @@ public class ExportToExcel extends Action {
 		    	rowNum++;
 		    	rowNum++;
 		        cellNum = 0;
-		        row = sheet11.createRow(rowNum++);
+		        row = sheet12.createRow(rowNum++);
 	            cell = row.createCell(cellNum++);
 	            headerText = new HSSFRichTextString(budgetBreakdownTrn + " Chart");
 	            cell.setCellValue(headerText);
@@ -884,7 +887,7 @@ public class ExportToExcel extends Action {
 		        ByteArrayOutputStream ba2 = new ByteArrayOutputStream();
 	            ImageIO.write(vForm.getExportData().getBudgetGraph(), "png", ba2);
 	            int pictureIndex2 = wb.addPicture(ba2.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
-	            HSSFPatriarch patriarch2 = sheet11.createDrawingPatriarch();
+	            HSSFPatriarch patriarch2 = sheet12.createDrawingPatriarch();
 	            HSSFPicture pic2 =  patriarch2.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex2);
 	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic2.getAnchor();
 	            anchor.setCol2((short)5);
@@ -1281,6 +1284,83 @@ public class ExportToExcel extends Action {
 	            //pic6.resize();
 		    }
 	        
+		  //Beneficiary Agency Profile Table.
+	        HSSFSheet sheet13 = null;
+		    if (!beneficiaryAgencyOpt.equals("0")){
+		    	sheet13 = wb.createSheet(beneficiaryAgencyProfTrn);
+		    	rowNum=1;
+		    }
+		    if (beneficiaryAgencyOpt.equals("1") || beneficiaryAgencyOpt.equals("3")){
+		    	//rowNum = rowNum + 2;
+		        cellNum = 0;
+		        
+		        headerText = null;
+	        	row = sheet13.createRow(rowNum++);
+	        	cell = row.createCell(cellNum++);
+	        	String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
+	            
+	        	headerText = new HSSFRichTextString(beneficiaryAgencyProfTrn + " (" + currName + ")");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            cellNum = 0;
+	            row = sheet13.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(organizationTrn);
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(subHeaderCS);
+	            singleRow = organizationProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	cell = row.createCell(cellNum++);
+	 	            headerText = new HSSFRichTextString(singleRow[i]);
+	 	            cell.setCellValue(headerText);
+	 	            cell.setCellStyle(subHeaderCS);
+				}
+	            for (int i = 2; i < organizationProfRows.length; i++) {
+		        	cellNum = 0;
+			        row = sheet13.createRow(rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == organizationProfRows.length-1)
+			    		st = lastCellStyle;
+		            else
+		            	st = cellStyle;
+	            	singleRow = organizationProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		cell = row.createCell(cellNum++);
+	 		            headerText = new HSSFRichTextString(singleRow[j]);
+	 		            cell.setCellValue(headerText);
+	 		            cell.setCellStyle(st);
+	    			}
+				}
+		    }
+		    
+		    if (beneficiaryAgencyOpt.equals("2") || beneficiaryAgencyOpt.equals("3")){
+		    	rowNum++;
+		    	rowNum++;
+		        cellNum = 0;
+		        row = sheet13.createRow(rowNum++);
+	            cell = row.createCell(cellNum++);
+	            headerText = new HSSFRichTextString(beneficiaryAgencyProfTrn + " Chart");
+	            cell.setCellValue(headerText);
+	            cell.setCellStyle(headerCS);
+	            
+		        ByteArrayOutputStream ba6 = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getBeneficiaryAgencyGraph(), "png", ba6);
+	            int pictureIndex6 = wb.addPicture(ba6.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+	            HSSFPatriarch patriarch6 = sheet13.createDrawingPatriarch();
+	            HSSFPicture pic6 =  patriarch6.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, rowNum, (short)5, rowNum+25), pictureIndex6);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic6.getAnchor();
+	            anchor.setCol2((short)5);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+	            //rowNum = rowNum+27;
+	            //pic6.resize();
+		    }
+		    
 	      //NPO Profile Table.
 		   HSSFSheet sheet9 = null;
 		    if (!NPOOpt.equals("0")){
@@ -1491,7 +1571,21 @@ public class ExportToExcel extends Action {
 		             sheet10.setColumnWidth(i , COLUMN_WIDTH);
 		        }
 	        }
-           
+	        if (sheet11!=null){ 
+	        	 for(short i=0;i<10;i++){
+		             sheet11.setColumnWidth(i , COLUMN_WIDTH);
+		        }
+	        }
+	        if (sheet12!=null){ 
+	        	 for(short i=0;i<10;i++){
+		             sheet12.setColumnWidth(i , COLUMN_WIDTH);
+		        }
+	        }
+	        if (sheet13!=null){ 
+	        	 for(short i=0;i<10;i++){
+		             sheet13.setColumnWidth(i , COLUMN_WIDTH);
+		        }
+	        }
 	        wb.write(response.getOutputStream());
 	        
 		} catch (Exception e) {

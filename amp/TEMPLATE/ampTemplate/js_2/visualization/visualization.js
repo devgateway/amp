@@ -515,6 +515,7 @@ function doExport(){
 	options += "&aidTypeOpt=" + getOptionChecked("export_AidType_");
 	options += "&financingInstOpt=" + getOptionChecked("export_AidModality_");
 	options += "&organizationOpt=" + getOptionChecked("export_OrganizationProfile_");
+	options += "&beneficiaryAgencyOpt=" + getOptionChecked("export_BeneficiaryAgencyProfile_");
 	options += "&sectorOpt=" + getOptionChecked("export_SectorProfile_");
 	options += "&regionOpt=" + getOptionChecked("export_RegionProfile_");
 	options += "&NPOOpt=" + getOptionChecked("export_NPOProfile_");

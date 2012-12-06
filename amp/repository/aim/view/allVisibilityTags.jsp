@@ -144,7 +144,8 @@
 <feature:display module="Project ID and Planning" name="Planning"></feature:display> 
 <feature:display module="Project ID and Planning" name="Sectors"></feature:display> 
 <feature:display module="Project ID and Planning" name="Budget"></feature:display>
-<feature:display module="Report Types" name="Contribution Report"></feature:display> 
+<feature:display module="Report Types" name="Contribution Report"></feature:display>
+<feature:display module="Report Generator" name="Reports classification"></feature:display>  
 <feature:display name="About AMP" module="HELP"></feature:display> 
 <feature:display name="Activity - Component Step" module="Components"></feature:display> 
 <feature:display name="Activity Dashboard" module="M & E"></feature:display> 

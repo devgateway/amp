@@ -348,13 +348,15 @@ body {
 					<div class="bd" id="titlePanelBody">
 						<html:text onkeyup="repManager.checkSteps();" onkeypress="return saveReportEngine.checkEnter(event);" property="reportTitle" styleClass="inp-text" 
 							style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
-						<c:if test="${aimReportWizardForm.desktopTab ==false }">
-							<br><br>
-							<c:set var="translation">
-								<digi:trn>Please select a category from below</digi:trn>
-							</c:set>
-							<category:showoptions  firstLine="${translation}" name="aimReportWizardForm" property="reportCategory"  keyName="<%= CategoryConstants.REPORT_CATEGORY_KEY %>" styleClass="dropdwn_sm" styleId="repCat"/>
-						</c:if>
+						<feature:display name="Reports classification"  module="Report Generator">
+							<c:if test="${aimReportWizardForm.desktopTab ==false }">
+								<br><br>
+								<c:set var="translation">
+									<digi:trn>Please select a category from below</digi:trn>
+								</c:set>
+								<category:showoptions  firstLine="${translation}" name="aimReportWizardForm" property="reportCategory"  keyName="<%= CategoryConstants.REPORT_CATEGORY_KEY %>" styleClass="dropdwn_sm" styleId="repCat"/>
+							</c:if>
+						</feature:display>
 					</div>
 					<div class="ft" align="right">
 						<button id="last_save_button" type="button" class="buttonx_dis" onclick="saveReportEngine.saveReport();" disabled="disabled">

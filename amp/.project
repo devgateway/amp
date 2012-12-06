@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>amp-2.3-release</name>
-	<comment></comment>
+	<name>amp-2.4-release</name>
+	<comment>amp-2.4-release</comment>
 	<projects>
+		<project>amp-2.4-release</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

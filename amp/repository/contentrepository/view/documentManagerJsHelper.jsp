@@ -1504,11 +1504,11 @@ function getCallbackForOrgs (panel) {
 			},
 			failure: function () {
 				panel.setBody("<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>");
-			}
+			},
+			cache: false
 		}
 
 	return callbackObj;
-	
 }
 
 function showOrgsPanel(uuid) {
@@ -1536,7 +1536,6 @@ function showOrgsPanel(uuid) {
 
 	YAHOO.amp.orgPanels.lastUuid	= uuid;
 	YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/docToOrg.do?orgsforuuid='+uuid, getCallbackForOrgs(organisationPanel) );
-
 }
 
 function deleteDocToOrgObj(uuid, ampOrgId) {

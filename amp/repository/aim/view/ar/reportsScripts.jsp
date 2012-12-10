@@ -805,7 +805,7 @@ function validateFormat(){
 				winH=window.innerHeight;
 			}
 			var call=function(){
-				var reporTable=new scrollableTable("reportTable",winH -320);
+				var reporTable=new scrollableTable("reportTable",winH - 320);
 				reporTable.debug=false;
 				reporTable.maxRowDepth=2;
 				reporTable.scroll();
@@ -870,7 +870,7 @@ function validateFormat(){
 			winH=window.innerHeight;
 		}
 		var call=function(){
-			var reporTable=new scrollableTableReports("reportTable",winH -100);
+			var reporTable=new scrollableTableReports("reportTable", winH - 250);
 			reporTable.debug=false;
 			reporTable.maxRowDepth=2;
 			reporTable.scroll();

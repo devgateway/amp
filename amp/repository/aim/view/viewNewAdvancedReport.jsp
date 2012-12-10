@@ -141,7 +141,7 @@ session.setAttribute("progressValue", counter);
 	</div>
 </div>
 </logic:notEqual>
-<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
+<%-- <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>  this file is already included up --%>
 <jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
 <%	
 counter++;

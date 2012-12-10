@@ -823,12 +823,11 @@
 		</dependency>
 
 		<dependency>
-			<groupId>fi.joensuu</groupId>
-			<artifactId>hvjavacal</artifactId>
-			<version>1.0.0</version>
-			<type>jar</type>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.0</version>
 		</dependency>
-
+            
 		<dependency>
 			<groupId>org.digijava</groupId>
 			<artifactId>digi-commons</artifactId>

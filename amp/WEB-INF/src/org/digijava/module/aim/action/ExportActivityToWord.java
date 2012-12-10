@@ -1730,99 +1730,99 @@ public class ExportActivityToWord extends Action {
 					.isVisibleModule(
 							"/Activity Form/Components/Component/Components Expenditures",
 							ampContext);
-
-			for (Components<FundingDetail> comp : myForm.getComponents()
-					.getSelectedComponents()) {
-				if (!GlobalSettings.getInstance()
-						.getShowComponentFundingByYear()) {
-					ExportSectionHelper eshCompFundingDetails = new ExportSectionHelper(
-							null, false).setWidth(100f).setAlign("left");
-					eshCompFundingDetails
-							.addRowData((new ExportSectionHelperRowData(comp
-									.getTitle(), null, null, false)));
-					String compDesc = comp.getDescription() != null ? comp
-							.getDescription() : "";
-					eshCompFundingDetails
-							.addRowData((new ExportSectionHelperRowData(
-									"Description", null, null, true))
-									.addRowData(compDesc));
-
-					eshCompFundingDetails
-							.addRowData((new ExportSectionHelperRowData(
-									"Component Funding", null, null, true)));
-
-					if (visibleModuleCompCommitments
-							&& comp.getCommitments() != null
-							&& comp.getCommitments().size() > 0) {
-						createComponentDetails(eshCompFundingDetails,
-								comp.getCommitments(),
-								componentCommitmentsFMfields, ampContext);
-					}
-					if (visibleModuleCompDisbursements
-							&& comp.getDisbursements() != null
-							&& comp.getDisbursements().size() > 0) {
-						createComponentDetails(eshCompFundingDetails,
-								comp.getDisbursements(),
-								componentDisbursementsFMfields, ampContext);
-					}
-
-					if (visibleModuleCompExpenditures
-							&& comp.getExpenditures() != null
-							&& comp.getExpenditures().size() > 0) {
-						createComponentDetails(eshCompFundingDetails,
-								comp.getExpenditures(),
-								componentExpendituresFMfields, ampContext);
-					}
-
-					if (org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS
-							.equals("true")) {
-						ExportSectionHelperRowData sectionHelper = new ExportSectionHelperRowData(
-								"The amount entered are in thousands (000)",
-								null, null, true);
-						eshCompFundingDetails.addRowData(sectionHelper);
-					}
-					retVal.add(createSectionTable(eshCompFundingDetails,
-							request, ampContext));
-
-					if (FeaturesUtil.isVisibleField(
-							"Components Physical Progress", ampContext)) {
-						ExportSectionHelper sectionHelper = new ExportSectionHelper(
-								"Physical progress of the component", true);
-
-						if (comp.getPhyProgress() != null
-								&& comp.getPhyProgress().size() > 0) {
-							for (PhysicalProgress phy : comp.getPhyProgress()) {
-								ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-										phy.getTitle());
-								rowData.addRowData(phy.getReportingDate())
-										.addRowData(phy.getDescription());
-
-								sectionHelper.addRowData(rowData);
-							}
-							retVal.add(createSectionTable(sectionHelper,
-									request, ampContext));
+			if (myForm.getComponents().getSelectedComponents() != null) {
+				for (Components<FundingDetail> comp : myForm.getComponents().getSelectedComponents()) {
+					if (!GlobalSettings.getInstance()
+							.getShowComponentFundingByYear()) {
+						ExportSectionHelper eshCompFundingDetails = new ExportSectionHelper(
+								null, false).setWidth(100f).setAlign("left");
+						eshCompFundingDetails
+								.addRowData((new ExportSectionHelperRowData(comp
+										.getTitle(), null, null, false)));
+						String compDesc = comp.getDescription() != null ? comp
+								.getDescription() : "";
+						eshCompFundingDetails
+								.addRowData((new ExportSectionHelperRowData(
+										"Description", null, null, true))
+										.addRowData(compDesc));
+	
+						eshCompFundingDetails
+								.addRowData((new ExportSectionHelperRowData(
+										"Component Funding", null, null, true)));
+	
+						if (visibleModuleCompCommitments
+								&& comp.getCommitments() != null
+								&& comp.getCommitments().size() > 0) {
+							createComponentDetails(eshCompFundingDetails,
+									comp.getCommitments(),
+									componentCommitmentsFMfields, ampContext);
 						}
+						if (visibleModuleCompDisbursements
+								&& comp.getDisbursements() != null
+								&& comp.getDisbursements().size() > 0) {
+							createComponentDetails(eshCompFundingDetails,
+									comp.getDisbursements(),
+									componentDisbursementsFMfields, ampContext);
+						}
+	
+						if (visibleModuleCompExpenditures
+								&& comp.getExpenditures() != null
+								&& comp.getExpenditures().size() > 0) {
+							createComponentDetails(eshCompFundingDetails,
+									comp.getExpenditures(),
+									componentExpendituresFMfields, ampContext);
+						}
+	
+						if (org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS
+								.equals("true")) {
+							ExportSectionHelperRowData sectionHelper = new ExportSectionHelperRowData(
+									"The amount entered are in thousands (000)",
+									null, null, true);
+							eshCompFundingDetails.addRowData(sectionHelper);
+						}
+						retVal.add(createSectionTable(eshCompFundingDetails,
+								request, ampContext));
+	
+						if (FeaturesUtil.isVisibleField(
+								"Components Physical Progress", ampContext)) {
+							ExportSectionHelper sectionHelper = new ExportSectionHelper(
+									"Physical progress of the component", true);
+	
+							if (comp.getPhyProgress() != null
+									&& comp.getPhyProgress().size() > 0) {
+								for (PhysicalProgress phy : comp.getPhyProgress()) {
+									ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+											phy.getTitle());
+									rowData.addRowData(phy.getReportingDate())
+											.addRowData(phy.getDescription());
+	
+									sectionHelper.addRowData(rowData);
+								}
+								retVal.add(createSectionTable(sectionHelper,
+										request, ampContext));
+							}
+						}
+	
+					} else if (GlobalSettings.getInstance()
+							.getShowComponentFundingByYear()
+							&& FeaturesUtil.isVisibleModule("Components Resume",
+									ampContext)) {
+						ExportSectionHelper fundingByYearSection = new ExportSectionHelper(
+								null, false).setWidth(100f).setAlign("left");
+						ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
+								"Component Code", null, null, true).addRowData(comp
+								.getCode());
+						fundingByYearSection.addRowData(rowData);
+						rowData = new ExportSectionHelperRowData(
+								"Finance of the component", null, null, true);
+	
+						createFinanceOfComponentSection(fundingByYearSection, comp);
+	
+						retVal.add(createSectionTable(fundingByYearSection,
+								request, ampContext));
 					}
-
-				} else if (GlobalSettings.getInstance()
-						.getShowComponentFundingByYear()
-						&& FeaturesUtil.isVisibleModule("Components Resume",
-								ampContext)) {
-					ExportSectionHelper fundingByYearSection = new ExportSectionHelper(
-							null, false).setWidth(100f).setAlign("left");
-					ExportSectionHelperRowData rowData = new ExportSectionHelperRowData(
-							"Component Code", null, null, true).addRowData(comp
-							.getCode());
-					fundingByYearSection.addRowData(rowData);
-					rowData = new ExportSectionHelperRowData(
-							"Finance of the component", null, null, true);
-
-					createFinanceOfComponentSection(fundingByYearSection, comp);
-
-					retVal.add(createSectionTable(fundingByYearSection,
-							request, ampContext));
 				}
-			}
+			}	
 		}
 
 

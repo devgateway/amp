@@ -410,15 +410,15 @@ public class ViewNewAdvancedReport extends Action {
 		
 		Integer currentPage = startRow / recordsPerPage;
 		int startPage = Math.max(0, currentPage - numberOfPagesToDisplay / 2);
-		int endPage = Math.min(totalPages, currentPage + numberOfPagesToDisplay / 2);
+		int endPage = Math.min(totalPages, currentPage + numberOfPagesToDisplay / 2 + numberOfPagesToDisplay % 2);
 		
 		if (endPage + 1 - startPage < numberOfPagesToDisplay) // if we are pegged, e.g. 10 pages allowed, showing 7...10 or 0..3
 		{
 			if (startPage == 0) // case 0...3 -> show the first numberOfPages pages
-				endPage = numberOfPagesToDisplay;
+				endPage = Math.min(numberOfPagesToDisplay, totalPages);
 			else
 				if (endPage == totalPages) // case 7..10 -> show the last numberOfPages pages
-					startPage = endPage + 1 - numberOfPagesToDisplay;
+					startPage = Math.max(0, endPage + 1 - numberOfPagesToDisplay);
 				
 		}
 		/*Integer currentPageOfPages = currentPage / numberOfPagesToDisplay;

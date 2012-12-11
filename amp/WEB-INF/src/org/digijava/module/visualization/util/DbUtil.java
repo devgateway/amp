@@ -72,7 +72,8 @@ public class DbUtil {
         if (publicView) {
             queryString.append(" inner join orgRole.activity act  inner join act.team tm ");
         }
-        queryString.append(" where  role.roleCode='DN' ");
+        queryString.append(" where  1=1 ");
+        //queryString.append(" where  role.roleCode='DN' ");
          if (orgGroupId != null&&orgGroupId !=-1) {
             queryString.append(" and org.orgGrpId=:orgGroupId ");
         }

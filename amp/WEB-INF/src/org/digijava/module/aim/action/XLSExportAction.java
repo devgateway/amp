@@ -171,19 +171,24 @@ public class XLSExportAction extends Action {
 		String plainReportParam = request.getParameter("plainReport");
 		Boolean isPlainReport = plainReportParam != null ? Boolean.valueOf(plainReportParam): false;
 		
+		String publicPortalModeParam = request.getParameter("publicPortalMode");
+		Boolean isPublicPortalMode = publicPortalModeParam != null ? Boolean.valueOf(publicPortalModeParam): false;
+
 		GroupReportDataXLS grdx	= ARUtil.instatiateGroupReportDataXLS(request.getSession(), wb, sheet, row, rowId,
 		        colId, null, rd, isPlainReport);
 		grdx.setMetadata(r);
-			
-		
-		//show title+desc+logo+statement
-		grdx.makeColSpan(numberOfColumns, false);	
-		rowId.inc();
 		colId.reset();
-		row = sheet.createRow(rowId.shortValue());
-		
-		grdx.createHeaderLogoAndStatement(request, reportForm, getServlet().getServletContext().getRealPath("/"));
-		grdx.createHeaderNameAndDescription( request );
+		if (isPublicPortalMode){
+			grdx.setMachineFriendlyColName(true);
+		}else{
+		//show title+desc+logo+statement
+			grdx.makeColSpan(numberOfColumns, false);	
+			rowId.inc();
+			
+			row = sheet.createRow(rowId.shortValue());
+			grdx.createHeaderLogoAndStatement(request, reportForm, getServlet().getServletContext().getRealPath("/"));
+			grdx.createHeaderNameAndDescription( request );
+		}
 		
 		grdx.generate();
 		

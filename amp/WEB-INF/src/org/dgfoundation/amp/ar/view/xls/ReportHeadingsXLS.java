@@ -26,7 +26,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
  *
  */
 public class ReportHeadingsXLS extends XLSExporter {
-
+	private boolean machineFriendlyColName = false;
 	/**
 	 * @param parent
 	 * @param item
@@ -146,17 +146,8 @@ public class ReportHeadingsXLS extends XLSExporter {
 
 						}
 						//this value should be translated
-						String translatedCellValue=new String();
+						String translatedCellValue = getColumnDisplayName(cellValue);
 						//String prefix="aim:reportBuilder:";
-						
-						try{
-							translatedCellValue=TranslatorWorker.translateText(cellValue,locale,siteId);
-						}catch (WorkerException e)
-						{
-							e.printStackTrace();
-						}
-						
-						
 						if(translatedCellValue.compareTo("")==0)
 							cell.setCellValue(cellValue + "III");
 						else 
@@ -216,7 +207,12 @@ public class ReportHeadingsXLS extends XLSExporter {
 	protected void createHierarchyHeaderCell (int curDepth) {
 		HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
 		if (curDepth == 0) {
-			cell1.setCellValue( this.getMetadata().getHierarchiesPath() );
+			String hierarchyPath = this.getMetadata().getHierarchiesPath();
+			if(this.machineFriendlyColName){
+				hierarchyPath = hierarchyPath.replace("/ ", "/").replace(" /", "/");
+			}
+			String colName = getColumnDisplayName(hierarchyPath);
+			cell1.setCellValue( colName );
 		}
 		else {
 			cell1.setCellValue("");
@@ -248,4 +244,24 @@ public class ReportHeadingsXLS extends XLSExporter {
 		}
 	}
 
+	public void setMachineFriendlyColName(boolean machineFriendlyColName) {
+		this.machineFriendlyColName = machineFriendlyColName;
+	}
+	
+	protected String getColumnDisplayName(String colName){
+		String translColName	= null;
+		if (this.machineFriendlyColName){
+			if (colName != null){
+				return colName.toLowerCase().trim().replace(" ", "_");
+			}
+		}else{
+			try{			
+				translColName	= TranslatorWorker.translateText(colName, this.getMetadata().getLocale(), this.getMetadata().getSiteId());
+			}catch(WorkerException e){
+				translColName = colName;
+			}
+		}
+		return translColName;
+
+	}
 }

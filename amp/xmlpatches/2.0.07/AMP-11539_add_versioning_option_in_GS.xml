@@ -19,7 +19,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				INSERT INTO amp_global_settings (id, settingsName, settingsValue, possibleValues, description, section)
-				VALUES ((Select (max(id) + 1) from amp_global_settings), 'Activity Versions Queue Size', '5', 't_Integer', 'Max. number of versions for each activity, if 0 then versioning is disabled.', 'general');
+				VALUES (nextval('amp_global_settings_seq'), 'Activity Versions Queue Size', '5', 't_Integer', 'Max. number of versions for each activity, if 0 then versioning is disabled.', 'general');
 			</lang>
 		</script>
 	</apply>

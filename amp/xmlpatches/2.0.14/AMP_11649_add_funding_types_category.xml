@@ -19,24 +19,24 @@
     <script>
       <lang delimiter=";" type="postgres">
     INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)
-    values ( (select max(id)+1 from amp_category_class) , 'Adjustment Type' , 'adjustment_type', '', 'f', 'f');
+    values ( select nextval('amp_category_class_seq') , 'Adjustment Type' , 'adjustment_type', '', 'f', 'f');
     
    
     INSERT INTO amp_category_value(
             id, category_value, amp_category_class_id, index_column)
-    VALUES ((select max(id)+1 from amp_category_value), 
+    VALUES (nextval('amp_category_value_seq'), 
             'Planned',
             (select id from amp_category_class where keyname='adjustment_type'), 0);
 
   INSERT INTO amp_category_value(
             id, category_value, amp_category_class_id, index_column)
-    VALUES ((select max(id)+1 from amp_category_value), 
+    VALUES (nextval('amp_category_value_seq'), 
             'Actual',
             (select id from amp_category_class where keyname='adjustment_type'), 1);
   
     INSERT INTO amp_category_value(
             id, category_value, amp_category_class_id, index_column)
-    VALUES ((select max(id)+1 from amp_category_value), 
+    VALUES (nextval('amp_category_value_seq'), 
             'Pipeline',
             (select id from amp_category_class where keyname='adjustment_type'), 2);
             

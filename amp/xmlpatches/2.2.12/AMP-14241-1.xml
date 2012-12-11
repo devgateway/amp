@@ -63,7 +63,7 @@
 		(52,getReportColumnId('Tertiary Sector Sub-Sub-Sector'),'tertiarySectorsAndAncestors','amp_sector_id'),
 		(53,getReportColumnId('Project Implementing Unit'),'projectImplementingUnits','proj_impl_unit_id'),
 		(54,getReportColumnId('Sector Location'),'relatedLocations','location_id'),
-		(55,getReportColumnId('Responsible Organization'),'responsibleorg','amp_org_id'); 
+		(55,getReportColumnId('Responsible Organization'),'responsibleorg','amp_org_id'), 
 		(56,getReportColumnId('Related Projects'),'ampTeamsforpledges','amp_team_id'); 
 		</lang>
     </script>

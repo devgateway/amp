@@ -14,16 +14,16 @@
             <lang  delimiter=";" type="postgres">
 
 INSERT INTO amp_category_class(id, category_name,is_multiselect,is_ordered, keyName) 
-	VALUES((select max(id)+1 from amp_category_class), 'Workspace Group', false, false, 'workspace_group');
+	VALUES(select nextval('amp_category_class_seq'), 'Workspace Group', false, false, 'workspace_group');
 
 insert into amp_category_value (id, category_value, amp_category_class_id, index_column) 
-select (select max(id)+1 from amp_category_value) as id2, 'Government', id, '0' 
+select (nextval('amp_category_value_seq')) as id2, 'Government', id, '0' 
 from amp_category_class where keyname='workspace_group';
 insert into amp_category_value (id, category_value, amp_category_class_id, index_column) 
-select (select max(id)+1 from amp_category_value) as id2, 'Line Ministries', id, '1' 
+select (nextval('amp_category_value_seq')) as id2, 'Line Ministries', id, '1' 
 from amp_category_class where keyname='workspace_group';
 insert into amp_category_value (id, category_value, amp_category_class_id, index_column) 
-select (select max(id)+1 from amp_category_value) as id2, 'Donor', id, '2' 
+select (nextval('amp_category_value_seq')) as id2, 'Donor', id, '2' 
 from amp_category_class where keyname='workspace_group';
 
 

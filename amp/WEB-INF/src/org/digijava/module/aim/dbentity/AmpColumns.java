@@ -109,9 +109,9 @@ public class AmpColumns  implements Serializable, Comparable
 	public String getColumnNameTrimmed() {
 		return columnName.replaceAll(" ", "");
 	}
-	public void setColumnNameTrimmed(String columnNameTrimmed) {
+	/*public void setColumnNameTrimmed(String columnNameTrimmed) {
 		this.columnNameTrimmed = columnNameTrimmed;
-	}
+	}*/
 	
 	public int compareTo(Object o) {
 		// TODO Auto-generated method stub

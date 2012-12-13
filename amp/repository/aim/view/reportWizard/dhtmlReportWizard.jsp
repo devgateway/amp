@@ -297,7 +297,7 @@ body {
 			<tr>
 				<td width="768">
 					<div class="step_head_lng">
-						<div id="rgTitle" class="step_head_cont">${pageTitle}</div>
+						<div id="rgTitle" class="step_head_cont">${pageTitle}: ${aimReportWizardForm.reportTitle}</div>
 					</div>
 				</td>
 				<td width="232">&nbsp;</td>

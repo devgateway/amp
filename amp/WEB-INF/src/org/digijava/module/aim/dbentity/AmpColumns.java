@@ -10,7 +10,7 @@ public class AmpColumns  implements Serializable, Comparable
 	@Identificator
 	private Long columnId ;
 	private String columnName ;
-	private String columnNameTrimmed;
+	//private String columnNameTrimmed;
 	private String aliasName;
 	private Set reports;
 	private String cellType;
@@ -67,6 +67,12 @@ public class AmpColumns  implements Serializable, Comparable
 	public String getColumnName() {
 		return columnName;
 	}
+	
+	/**
+	 * @deprecated
+	 * DO NOT CALL IT!!! For Hibernate's use only!
+	 * @param columnName
+	 */
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
 	}

@@ -316,14 +316,16 @@ ${errors}
 								</field:display>
 								<field:display name="Amount Commitment" feature="Commitments">
 								<td align="center" valign="middle">
-									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
-									<b><digi:trn key="aim:AmountFIE">Amount</digi:trn></b></a>
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="2" onTrueEvalBody="true">
+										<a title="<digi:trn key="aim:AmountCommittedMillions">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in millions</digi:trn>">
+									</gs:test>								
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="1" onTrueEvalBody="true">
+										<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									</gs:test>
-									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
-									<a title="<digi:trn key="aim:AmountCommittedNoThousand">Full amount of expected transfer, irrespective of the time required for the completion of disbursements.</digi:trn>">
-									<b><digi:trn key="aim:AmountFIE">Amount</digi:trn></b></a>
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="0" onTrueEvalBody="true">
+										<a title="<digi:trn key="aim:AmountCommittedNoThousand">Full amount of expected transfer, irrespective of the time required for the completion of disbursements.</digi:trn>">
 									</gs:test>
+									<b><digi:trn key="aim:AmountFIE">Amount</digi:trn></b></a>									
 								</td>
 								</field:display>
 								<field:display name="Currency Commitment" feature="Commitments">
@@ -434,14 +436,16 @@ ${errors}
                                 </field:display>
 								<field:display name="Amount Disbursement" feature="Disbursement">
 								<td align="center" valign="middle">
-									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
-									<b><digi:trn key="aim:AmountFIE">Amount</digi:trn></b></a>
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="2" onTrueEvalBody="true">
+										<a title="<digi:trn key="aim:AmountCommittedMillions">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in millions</digi:trn>">
+									</gs:test>								
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="1" onTrueEvalBody="true">
+										<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									</gs:test>
-									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
-									<a title="<digi:trn key="aim:AmountCommittedNoThousand">Full amount of expected transfer, irrespective of the time required for the completion of disbursements.</digi:trn>">
-									<b><digi:trn key="aim:AmountFIE">Amount</digi:trn></b></a>
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="0" onTrueEvalBody="true">
+										<a title="<digi:trn key="aim:AmountCommittedNoThousand">Full amount of expected transfer, irrespective of the time required for the completion of disbursements.</digi:trn>">
 									</gs:test>
+									<b><digi:trn key="aim:AmountFIE">Amount</digi:trn></b></a>									
 								</td>
                                 </field:display>
 								<field:display name="Currency Disbursement" feature="Disbursement">
@@ -545,14 +549,16 @@ ${errors}
 								</field:display>
 								<field:display name="Amount Expenditure" feature="Expenditures">
 								<td align="center" valign="middle">
-									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
-									<b><digi:trn key="aim:AmountFIE">Amount</digi:trn></b></a>
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="2" onTrueEvalBody="true">
+										<a title="<digi:trn key="aim:AmountCommittedMillions">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in millions</digi:trn>">
+									</gs:test>								
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="1" onTrueEvalBody="true">
+										<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									</gs:test>
-									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
-									<a title="<digi:trn key="aim:AmountCommittedNoThousand">Full amount of expected transfer, irrespective of the time required for the completion of disbursements.</digi:trn>">
-									<b><digi:trn key="aim:AmountFIE">Amount</digi:trn></b></a>
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="0" onTrueEvalBody="true">
+										<a title="<digi:trn key="aim:AmountCommittedNoThousand">Full amount of expected transfer, irrespective of the time required for the completion of disbursements.</digi:trn>">
 									</gs:test>
+									<b><digi:trn key="aim:AmountFIE">Amount</digi:trn></b></a>									
 								</td>
 								</field:display>
 								

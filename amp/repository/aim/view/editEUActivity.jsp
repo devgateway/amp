@@ -254,10 +254,12 @@ function selectOrganisation1() {
 		
 	</tr>
 	<tr>
-	<td colspan="2">
-		<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-		 <font color="red"><digi:trn>All amounts are in thousands (000)</digi:trn></font>
-		</gs:test>
+		<td colspan="2">
+			<font color="red">
+				<jsp:include page="util/amountUnitsUnformatted.jsp">
+					<jsp:param value="" name="amount_prefix"/>
+				</jsp:include>	
+			</font>
 		</td>
 	</tr>	
 

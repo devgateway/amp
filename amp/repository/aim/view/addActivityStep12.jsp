@@ -285,9 +285,10 @@
 																<logic:notEmpty name="aimEditActivityForm" property="costing.costs">
 																<bean:define id="costs" name="aimEditActivityForm" property="costing.costs" toScope="request"/>
 																<bean:define id="mode" value="form" type="java.lang.String" toScope="request"/>
-																<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-                                                      				<digi:trn key="aim:amountsinthousands">Amounts in thousands (000) -</digi:trn>
-																</gs:test>
+																<jsp:include page="util/amountUnitsUnformatted.jsp">
+																	<jsp:param value=" -" name="amount_suffix"/>
+																</jsp:include>
+
 																<c:out value="${aimEditActivityForm.currCode}"/>
 																<jsp:include page="viewCostsSummary.jsp"/>
 				                                               </logic:notEmpty>

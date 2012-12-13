@@ -92,7 +92,7 @@ public class ExportToWord extends Action {
         	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
 			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
 			String filtersAmountsInTrn = ""; 
-			if(vForm.getFilter().getShowAmountsInThousands() != null && vForm.getFilter().getShowAmountsInThousands())
+			if(vForm.getFilter().shouldShowAmountsInThousands())
 				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in thousands", langCode, siteId);
 			else
 				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions", langCode, siteId);

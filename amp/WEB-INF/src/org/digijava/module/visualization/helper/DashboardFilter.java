@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -92,7 +93,8 @@ public class DashboardFilter {
     private Boolean fromPublicView;
     private Boolean showOnlyApprovedActivities;
     private Boolean showOnlyNonDraftActivities;
-    private Boolean showAmountsInThousands;
+    
+    private Integer showAmountsInThousands;
     private Boolean showProjectsRanking;
     private Boolean showOrganizationsRanking;
     private Boolean showSectorsRanking;
@@ -805,13 +807,29 @@ public class DashboardFilter {
 		return showOnlyNonDraftActivities;
 	}
 
-	public Boolean getShowAmountsInThousands() {
+	/**
+	 * returns whether to show amounts in thousands or millins
+	 * @return
+	 */
+	public Integer getShowAmountsInThousands() {
 		return showAmountsInThousands;
 	}
 
-	public void setShowAmountsInThousands(Boolean showAmountsInThousands) {
+	/**
+	 * false = show in millions, true = show in thousands
+	 * @param showAmountsInThousands
+	 */
+	public void setShowAmountsInThousands(Integer showAmountsInThousands) {
 		this.showAmountsInThousands = showAmountsInThousands;
 	}
+	
+	public boolean shouldShowAmountsInThousands()
+	{
+		if (showAmountsInThousands == null)
+			return true;
+		return showAmountsInThousands == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS;
+	}
+	
 	public Boolean getShowProjectsRanking() {
 		return showProjectsRanking;
 	}

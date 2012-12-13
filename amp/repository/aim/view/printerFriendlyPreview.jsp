@@ -1136,13 +1136,11 @@ body {background:none;}
                                                                     <td>&nbsp;</td>
                                                                   </tr>
 																	<tr><td bgcolor="#ffffff">
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-																		<FONT color=blue>*
-																			<digi:trn key="aim:theAmountEnteredAreInThousands">
-																				The amount entered are in thousands (000)
-																			</digi:trn>
+																		<FONT color='blue'>
+																			<jsp:include page="util/amountUnitsUnformatted.jsp">
+																				<jsp:param value="* " name="amount_prefix"/>
+																			</jsp:include>	
 																		</FONT>
-</gs:test>
 																	</td></tr>
 																</table>
 																<br><br>

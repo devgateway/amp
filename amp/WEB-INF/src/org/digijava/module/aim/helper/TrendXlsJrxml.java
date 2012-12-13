@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class TrendXlsJrxml
@@ -1312,13 +1313,20 @@ public class TrendXlsJrxml
 			p2.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Times-Roman' pdfFontName='Times-Roman' size='12' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
-			boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
-			if(returnString){
-				p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) \"]]></textFieldExpression>");
-			}
-			else
+			int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+			switch(amountsUnitCode)
 			{
+			case AmpARFilter.AMOUNT_OPTION_IN_UNITS:
 				p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\"  \"]]></textFieldExpression>");
+				break;
+				
+			case AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS:
+				p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) \"]]></textFieldExpression>");
+				break;
+
+			case AmpARFilter.AMOUNT_OPTION_IN_MILLIONS:
+				p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in millions (000 000) \"]]></textFieldExpression>");
+				break;
 			}
 
 			p2.println("</textField>");

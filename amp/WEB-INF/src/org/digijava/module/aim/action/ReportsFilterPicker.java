@@ -121,12 +121,9 @@ public class ReportsFilterPicker extends MultiAction {
 		if ( "".equals(ampReportId) )
 			ampReportId		= null;
 
-		if (ampReportId!=null) {
-			if (filterForm.getAmpReportId()==null || !ampReportId.equals(String.valueOf(filterForm.getAmpReportId()))) {
-				if (Boolean.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-					filterForm.setAmountinthousands(true);
-				else 
-					filterForm.setAmountinthousands(false);
+		if (ampReportId != null) {
+			if (filterForm.getAmpReportId() == null || !ampReportId.equals(String.valueOf(filterForm.getAmpReportId()))) {
+				filterForm.setAmountinthousands(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 			}
 		}
 		
@@ -1632,7 +1629,7 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		//custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
 		custom.setDecimalFormatSymbols(ds);
-		arf.setAmountinthousand(filterForm.getAmountinthousandsint());
+		arf.setAmountinthousand(filterForm.getAmountinthousands());
 		//arf.setAmountinmillion(filterForm.getAmountinmillions()); TODO-Constantin: field not used anymore, to be removed in 2.4
 		
 		
@@ -1704,8 +1701,7 @@ public class ReportsFilterPicker extends MultiAction {
         filterForm.setSelectedTertiarySectors(null);
         filterForm.setSelectedTagSectors(null);
         filterForm.setSelectedArchivedStatus(new Object[]{"1"});
-		filterForm.setAmountinthousands(false);
-		filterForm.setAmountinmillions(false);
+		filterForm.setAmountinthousands(AmpARFilter.AMOUNT_OPTION_IN_UNITS);
 		filterForm.setSelectedMultiDonor(null);
 		HttpSession httpSession = request.getSession();
 		AmpApplicationSettings tempSettings=getAppSetting(request);
@@ -1758,8 +1754,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCustomUseGrouping(null);
 		filterForm.setCustomGroupSize(null);
 		filterForm.setResetFormat(null);
-		filterForm.setAmountinthousands(false);
-		filterForm.setAmountinmillions(null);
+		filterForm.setAmountinthousands(AmpARFilter.AMOUNT_OPTION_IN_UNITS);
 	}
 
 	private Integer getDefaultStartYear(HttpServletRequest request) {

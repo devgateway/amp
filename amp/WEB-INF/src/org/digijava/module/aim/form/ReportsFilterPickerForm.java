@@ -168,17 +168,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer customDecimalPlacesTxt;
 	private String customGroupCharacterTxt;
 	private Integer customGroupSize;
-	private Boolean amountinthousands;
-	private Boolean amountinmillions;
+	private Integer amountinthousands;
 	
-	public Boolean getAmountinmillions() {
-		return amountinmillions;
-	}
-
-	public void setAmountinmillions(Boolean amountsinmillions) {
-		this.amountinmillions = amountsinmillions;
-	}
-
 	private String resetFormat;
 	
 	private Boolean sourceIsReportWizard;
@@ -421,8 +412,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			//AMP-5249
 			if (request.getParameter("applyFormat")!=null){
 				this.customUseGrouping=false;
-				this.amountinthousands=false;
-				this.amountinmillions=false;
+				this.amountinthousands = AmpARFilter.AMOUNT_OPTION_IN_UNITS;
 			}else{
 				this.selectedDonnorAgency=null;
 				this.selectedRisks = null;
@@ -981,23 +971,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setUnallocatedLocation(Boolean unallocatedLocation) {
 		this.unallocatedLocation = unallocatedLocation;
 	}
-
-	public Integer getAmountinthousandsint() {
-		if ((amountinmillions != null) && amountinmillions)
-			return AmpARFilter.AMOUNT_OPTION_IN_MILLIONS;
-		
-		if ((amountinthousands != null) && amountinthousands){ // AMP-13496
-			return AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS;
-		}else{
-			return AmpARFilter.AMOUNT_OPTION_IN_UNITS;
-		}
-	}
 	
-	public Boolean getAmountinthousands() {
+	public Integer getAmountinthousands() {
 		return this.amountinthousands;
 	}
 	
-	public void setAmountinthousands(Boolean amountinthousands) {
+	public void setAmountinthousands(Integer amountinthousands) {
 		this.amountinthousands = amountinthousands;
 	}
 	

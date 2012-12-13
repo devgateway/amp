@@ -287,11 +287,7 @@ public class FilterUtil {
 		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
 		form.setSelectedContractingAgency( FilterUtil.getObjectsIds(filter.getContractingAgency()) );
 		
-		form.setAmountinthousands(filter.getAmountinthousand()!=null && filter.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS);
-		form.setAmountinmillions(filter.getAmountinthousand()!=null && filter.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS);
-		
-//		form.setAmountinmillions(filter.getAmountinmillion());
-		
+		form.setAmountinthousands(filter.computeEffectiveAmountInThousand());			
 		
 		if ( filter.getGroupingseparator() != null ) {
 			form.setCustomGroupCharacter("CUSTOM");

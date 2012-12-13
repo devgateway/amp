@@ -16,6 +16,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -353,7 +354,7 @@ public class LaunchDashboard extends Action {
 			filter.setDivideThousandsDecimalPlaces(0);
 		}
 		if (filter.getShowAmountsInThousands() == null) {
-			filter.setShowAmountsInThousands(false);
+			filter.setShowAmountsInThousands(AmpARFilter.AMOUNT_OPTION_IN_MILLIONS);
 		}
 		//Initialize formatting information
 		if(filter.getDecimalSeparator() == null || filter.getGroupSeparator() == null ){

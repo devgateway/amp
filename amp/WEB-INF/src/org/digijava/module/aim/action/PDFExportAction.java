@@ -304,10 +304,10 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY,locale,siteId);
 			}
 
-			if (arf.getAmountinthousand() != null && arf.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){					
+			if (arf.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){					
 				translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
 			}
-			if (arf.getAmountinthousand() != null && arf.getAmountinthousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){					
+			if (arf.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){					
 				translatedAmount=TranslatorWorker.translateText("Amounts are in millions (000 000)",locale,siteId);
 			}
 			translatedAmount=("".equalsIgnoreCase(translatedAmount))?AmpReports.getNote(session):translatedAmount;

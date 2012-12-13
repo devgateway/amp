@@ -2111,6 +2111,10 @@ public class AmpARFilter extends PropertyListable {
 		this.unallocatedLocation = unallocatedLocation;
 	}
 	
+	/**
+	 * only call this function directly if you NEED to know that the underlying value is null. In case you just want to know the value of the option, call computeEffectiveAmountInThousand 
+	 * @return
+	 */
 	public Integer getAmountinthousand() {
 		return amountinthousand;
 	}
@@ -2119,6 +2123,16 @@ public class AmpARFilter extends PropertyListable {
 		this.amountinthousand = amountinthousand;
 	}
 
+	/**
+	 * returns AMOUNT_OPTION_IN_UNITS if amountInThousand is NULL, else returns amountInThousand
+	 * @return
+	 */
+	public int computeEffectiveAmountInThousand()
+	{
+		if (getAmountinthousand() == null)
+			return AMOUNT_OPTION_IN_UNITS;
+		return getAmountinthousand();
+	}
 	/**
 	 * @return the relatedLocations
 	 */

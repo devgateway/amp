@@ -290,9 +290,11 @@ function collapseAll() {
 	    	<div class="activity_preview_name"><c:out value="${aimEditActivityForm.identification.title}"/></div>
             <div style="clear:both;"></div>
 			<div class="l_sm">
-	    	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-			 	<font color="red"><digi:trn>Amounts in thousands</digi:trn></font>
-			</gs:test>
+			 	<font color="red">
+			 		<jsp:include page="util/amountUnitsUnformatted.jsp">
+						<jsp:param value="" name="amount_prefix"/>
+					</jsp:include>
+				</font>
 	    	</div>
             <div style="clear:both;"></div>
 
@@ -1579,11 +1581,12 @@ function collapseAll() {
 				</c:forEach>
 				<tr>
 					<td class="prv_right">
-							<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>"
-							compareWith="true" onTrueEvalBody="true">
-							<FONT color=blue>* <digi:trn key="aim:theAmountEnteredAreInThousands">
-								The amount entered are in thousands (000)</digi:trn>
-							</FONT>						</gs:test>					</td>
+						<FONT color='blue'>
+							<jsp:include page="util/amountUnitsUnformatted.jsp">
+								<jsp:param value="* " name="amount_prefix"/>
+							</jsp:include>	
+						</FONT>
+					</td>
 				</tr>
 			</table>
 		</c:if> 
@@ -1770,11 +1773,12 @@ function collapseAll() {
 					</module:display>
 					<tr>
 						<td class="prv_right">
-							<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>"
-							compareWith="true" onTrueEvalBody="true">
-							<FONT color="blue">* 
-								<digi:trn>The amount entered are in thousands (000)</digi:trn>
-							</FONT>							</gs:test>						</td>
+							<FONT color='blue'>
+								<jsp:include page="util/amountUnitsUnformatted.jsp">
+									<jsp:param value="* " name="amount_prefix"/>
+								</jsp:include>	
+							</FONT>					
+						</td>
 				  </tr>
 				<!-- Field not found -->
 				<field:display name="Components Physical Progress" feature="Activity - Component Step">

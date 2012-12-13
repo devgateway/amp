@@ -106,10 +106,6 @@ public class ShowProjectsList extends Action {
     		startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
     	}
-        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
         
         HashMap<Long, AmpActivityVersion> activities = null;
         Map<String, Map<AmpActivityVersion, BigDecimal>> itemProjectsList = new TreeMap<String, Map<AmpActivityVersion, BigDecimal>>();
@@ -130,7 +126,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelLocationIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				BigDecimal divideByDenominator;
-				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 				if (!activities.isEmpty())
 					itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
 			}
@@ -145,7 +141,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelSectorIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				BigDecimal divideByDenominator;
-				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -159,7 +155,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelOrgIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				BigDecimal divideByDenominator;
-				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -173,7 +169,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelProgramIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				BigDecimal divideByDenominator;
-				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -196,7 +192,7 @@ public class ShowProjectsList extends Action {
 				newFilter.setSelCVIds(id1);
 				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				BigDecimal divideByDenominator;
-				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
@@ -221,7 +217,7 @@ public class ShowProjectsList extends Action {
 			}
             activities = this.getActivities(filter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
             BigDecimal divideByDenominator;
-			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 			itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -237,7 +233,7 @@ public class ShowProjectsList extends Action {
     		}
             activities = this.getActivities(filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType);
             BigDecimal divideByDenominator;
-			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 			itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType, filter.getDecimalsToShow(),divideByDenominator));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -289,7 +285,7 @@ public class ShowProjectsList extends Action {
 			}
             activities = this.getActivities(filter, startDateQ, endDateQ, null, null, filter.getTransactionType(), adjustmentType);
             BigDecimal divideByDenominator;
-			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 			itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), filter, startDateQ, endDateQ, null, null, filter.getTransactionType(), adjustmentType, filter.getDecimalsToShow(),divideByDenominator));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -303,7 +299,7 @@ public class ShowProjectsList extends Action {
 			}
 			activities = this.getActivities(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 			BigDecimal divideByDenominator;
-			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 			itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -317,7 +313,7 @@ public class ShowProjectsList extends Action {
 			}
 			activities = this.getActivities(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 			BigDecimal divideByDenominator;
-			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 			itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
             visualizationForm.setItemProjectsList(itemProjectsList);
 		}
@@ -358,10 +354,10 @@ public class ShowProjectsList extends Action {
     		startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
     	}
-        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
+        
+		BigDecimal divideByMillionDenominator = new BigDecimal(1000000 / 
+				Math.max(1000000, FeaturesUtil.getAmountMultiplier())); // Math.max added for the future, in case "billions" 
+		
 	    if(activities.size() > 0){
 	        Iterator<AmpActivityVersion> it = activities.iterator();
 	        Map<AmpActivityVersion, BigDecimal> itemProjectsList = new TreeMap<AmpActivityVersion, BigDecimal>();

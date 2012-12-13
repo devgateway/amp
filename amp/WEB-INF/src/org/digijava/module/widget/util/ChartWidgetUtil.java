@@ -850,14 +850,11 @@ public class ChartWidgetUtil {
      */
     @SuppressWarnings("unchecked")
     public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter,ChartOption opt) throws DgException, WorkerException {
-        BigDecimal divideByMillionDenominator = new BigDecimal(1000000);
+        BigDecimal divideByMillionDenominator = new BigDecimal(1000000 / Math.max(1000000, FeaturesUtil.getAmountMultiplier()));
         String othersTitle = TranslatorWorker.translateText("Other", opt.getLangCode(), opt.getSiteId());
         String nationalTitle = TranslatorWorker.translateText("National", opt.getLangCode(), opt.getSiteId());
         String regionalTitle = TranslatorWorker.translateText("Regional", opt.getLangCode(), opt.getSiteId());
         String unallocatedTitle = TranslatorWorker.translateText("Unallocated", opt.getLangCode(), opt.getSiteId());
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-            divideByMillionDenominator = new BigDecimal(1000);
-        }
         BigDecimal regionalTotal = BigDecimal.ZERO;
         Long currId = filter.getCurrId();
         String currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
@@ -1186,10 +1183,7 @@ public class ChartWidgetUtil {
      */
     @SuppressWarnings("unchecked")
     public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter,Long sectorClassConfigId,String othersTitle) throws DgException {
-        Double divideByMillionDenominator=new Double(1000000);
-        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-             divideByMillionDenominator=new Double(1000);
-        }
+        Double divideByMillionDenominator = new Double(1000000) / FeaturesUtil.getAmountMultiplier();
         DefaultPieDataset ds = new DefaultPieDataset();
         List<AmpSector> sectors = getSectorList(filter,sectorClassConfigId);
         // to calculate funding for all sectors

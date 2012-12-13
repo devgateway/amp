@@ -219,10 +219,13 @@ function getActivities(){
 
 		//tousands label
 		if (strThousands==null || strThousands==''){
-<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="true" onTrueEvalBody="true">
+<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="2" onTrueEvalBody="true">
+			strThousands='All amounts are in millions (000 000)';
+</gs:test>			
+<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="1" onTrueEvalBody="true">
 			strThousands='All amounts are in thousands (000)';
 </gs:test>
-<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="false" onTrueEvalBody="true">
+<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="0" onTrueEvalBody="true">
 			strThousands='';
 </gs:test>
 		}

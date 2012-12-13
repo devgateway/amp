@@ -131,6 +131,11 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	public void setYearsTo(Collection<LabelValueBean> yearsTo) {
 		this.yearsTo = yearsTo;
 	}
+	
+	/**
+	 * TODO: interface does not support millions!
+	 * @return
+	 */
 	public Boolean getAmountsInThousands() {
 		if(amountsInThousands==null){
 			amountsInThousands=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS).equals("true");

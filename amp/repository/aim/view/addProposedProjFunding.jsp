@@ -78,15 +78,12 @@
   <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
     <tr>
       <td>
-		<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-        <FONT color=blue><B><BIG>*</BIG>
-          <digi:trn key="aim:pleaseEnterTheAmountInThousands">
-          Please enter amount in thousands (000)
-          </digi:trn>
-          </B>
-          </FONT>
-		</gs:test>
-      </td>
+        <FONT color=blue><B>
+			<jsp:include page="util/amountUnitsUnformatted.jsp">
+				<jsp:param value="<BIG>* </BIG>" name="amount_prefix"/>
+			</jsp:include>																		
+		</B></FONT>
+        </td>
     </tr>
 
     <tr>

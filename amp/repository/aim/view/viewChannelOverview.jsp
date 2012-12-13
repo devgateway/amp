@@ -279,11 +279,12 @@ function commentWin(val, commentId) {
 										</c:if> ${aimChannelOverviewForm.grandTotal}
 										${aimChannelOverviewForm.currCode} 
 
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-										<FONT color="blue">
-										( <digi:trn key="aim:enteredInThousands">Entered in thousands 000</digi:trn>)
-										</FONT>
-</gs:test>
+<FONT color='blue'>
+	<jsp:include page="util/amountUnitsUnformatted.jsp">
+		<jsp:param value="(" name="amount_prefix"/>
+		<jsp:param value=")" name="amount_suffix"/>    
+	</jsp:include>	
+</FONT>	
 										</TD>
 									</TR>
 								</TABLE>

@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import javax.servlet.http.HttpSession;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -136,11 +137,23 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	}
 
 	public static String getNote(HttpSession session) {
-		boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
-		if(returnString)
-			return "Amounts are in thousands (000)";
-		else
-			return "";
+		int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+
+		switch(amountsUnitCode)
+		{
+			case AmpARFilter.AMOUNT_OPTION_IN_UNITS:
+				return "";
+
+			case AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS:
+				return "Amounts are in thousands (000)";
+
+			case AmpARFilter.AMOUNT_OPTION_IN_MILLIONS:
+				return "Amounts are in millions (000 000)";
+				
+			default:
+				new RuntimeException("(Uberbug)").printStackTrace();				
+				return "(BUG 3221321)";				
+		}
 	}
 
 	public Set<AmpReportMeasures> getMeasures() {

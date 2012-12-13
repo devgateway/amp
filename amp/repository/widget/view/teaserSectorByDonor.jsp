@@ -49,7 +49,8 @@
 
 <table width="100%" border="0">
     <tr>
-        <td colspan="3" align="left">  
+        <td colspan="3" align="left">
+        		<%-- TODO-Constantin: this uses SectorByDonorTeaserForm, they both need to be migrated! --%>
             	<c:if test="${gisSectorByDonorTeaserForm.amountsInThousands==true}">
             		<digi:trn key="widget:piechart:allAmountsin000USD">All amounts in 000s of</digi:trn>&nbsp;<span id="selectedPieChartCurrency">${gisSectorByDonorTeaserForm.selectedCurrency}</span>
             	</c:if>

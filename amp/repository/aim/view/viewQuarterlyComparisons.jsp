@@ -509,10 +509,12 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="get" styleI
             </table></td>
           </tr>
           <tr>
-            <td><gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true"> <font color="blue">*
-              <digi:trn key="aim:allTheAmountsInThousands"> All the amounts are in thousands (000)</digi:trn>
-            </font> </gs:test>
-            </td>
+            <td>
+ <FONT color='blue'>
+  <jsp:include page="util/amountUnitsUnformatted.jsp">
+    <jsp:param value="* " name="amount_prefix"/>
+  </jsp:include>	
+</FONT>	</td>
           </tr>
         </table></td>
       </tr>

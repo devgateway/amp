@@ -625,8 +625,14 @@ function initializeGlobalVariables(){
 											<html:optionsCollection property="filter.fiscalCalendars" label="name" value="ampFiscalCalId" />
 										</html:select></td>
 										<td rowspan=2 width=15>&nbsp;</td>
-										 <td class="dashboard_generator_opt"><b><digi:trn>Show amounts in thousands</digi:trn>:</b></td>
- 										<td class="dashboard_generator_opt"><html:checkbox property="filter.showAmountsInThousands" styleId="show_amounts_in_thousands"/></td>
+										<td class="dashboard_generator_opt"><b><digi:trn>Show amounts in</digi:trn>:</b></td>
+ 										<td class="dashboard_generator_opt">
+ 											<html:select property="filter.showAmountsInThousands" styleId="show_amounts_in_thousands" styleClass="dropdwn_sm" style="width:150px;">
+ 										<%--	<html:option value="0"><digi:trn>Units</digi:trn></html:option>  --%>
+ 												<html:option value="1"><digi:trn>Thousands</digi:trn></html:option>
+ 												<html:option value="2"><digi:trn>Millions</digi:trn></html:option>
+ 											</html:select>
+ 										</td>
 										
  									 </tr>
 									 <tr>

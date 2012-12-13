@@ -24,6 +24,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -62,6 +63,7 @@ import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.GlobalSettings;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
@@ -2247,15 +2249,29 @@ public class ExportActivityToPDF extends Action {
 						emptyCell.setBorder(0);
 						emptyCell.setColspan(2);
 						componentsNestedTable.addCell(emptyCell);
+						
+						int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+						
 						//amounts in thousands
-						if(org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS.equals("true")){
-							PdfPCell amountsInThousandsCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("The amount entered are in thousands (000)",locale,siteId),plainFont));
+						if(amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){
+							PdfPCell amountsInThousandsCell1 = new PdfPCell(new Paragraph(TranslatorWorker.translateText("The amount entered are in thousands (000)",locale,siteId),plainFont));
 							amountsInThousandsCell1.setBorder(0);
 							amountsInThousandsCell1.setBackgroundColor(new Color(255,255,204));
 							amountsInThousandsCell1.setColspan(2);
 							//fundingTable.addCell(amountsInThousandsCell1);
 							componentsNestedTable.addCell(amountsInThousandsCell1);
 						}
+						
+						//amounts in millions
+						if(amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){
+							PdfPCell amountsInMillionsCell1 = new PdfPCell(new Paragraph(TranslatorWorker.translateText("The amount entered are in millions (000 000)",locale,siteId),plainFont));
+							amountsInMillionsCell1.setBorder(0);
+							amountsInMillionsCell1.setBackgroundColor(new Color(255,255,204));
+							amountsInMillionsCell1.setColspan(2);
+							//fundingTable.addCell(amountsInThousandsCell1);
+							componentsNestedTable.addCell(amountsInMillionsCell1);
+						}
+						
 						//physical progress
 						if(FeaturesUtil.isVisibleField("Components Physical Progress", ampContext)){
 							PdfPCell phProgressNestedCell=new PdfPCell();
@@ -2725,13 +2741,27 @@ public class ExportActivityToPDF extends Action {
 							fundingTable.addCell(undisbursedBalanceCell1);
 						}							
 						
-						if(org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS.equals("true")){
-							PdfPCell amountsInThousandsCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("The amount entered are in thousands (000)",locale,siteId),plainFont));
+						int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+						
+						//amounts in thousands
+						if(amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){
+							PdfPCell amountsInThousandsCell1 = new PdfPCell(new Paragraph(TranslatorWorker.translateText("The amount entered are in thousands (000)",locale,siteId),plainFont));
 							amountsInThousandsCell1.setBorder(0);
 							amountsInThousandsCell1.setBackgroundColor(new Color(255,255,204));
 							amountsInThousandsCell1.setColspan(3);
+							//fundingTable.addCell(amountsInThousandsCell1);
 							fundingTable.addCell(amountsInThousandsCell1);
 						}
+						
+						//amounts in millions
+						if(amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){
+							PdfPCell amountsInMillionsCell1 = new PdfPCell(new Paragraph(TranslatorWorker.translateText("The amount entered are in millions (000 000)",locale,siteId),plainFont));
+							amountsInMillionsCell1.setBorder(0);
+							amountsInMillionsCell1.setBackgroundColor(new Color(255,255,204));
+							amountsInMillionsCell1.setColspan(3);
+							//fundingTable.addCell(amountsInThousandsCell1);
+							fundingTable.addCell(amountsInMillionsCell1);
+						}						
 						//empty cell
 						PdfPCell empty=new PdfPCell(new Paragraph("\n\n"));
 						empty.setBorder(0);

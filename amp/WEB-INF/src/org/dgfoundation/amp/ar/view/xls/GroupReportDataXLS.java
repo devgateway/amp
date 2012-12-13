@@ -223,26 +223,26 @@ public class GroupReportDataXLS extends XLSExporter {
 		this.makeColSpan(rd.getTotalDepth(),false);	
 		rowId.inc();
 		colId.reset();
-		row=sheet.createRow(rowId.shortValue());
+		row = sheet.createRow(rowId.shortValue());
 		HSSFCell cell=row.createCell(colId.shortValue());
 		
-			String translatedNotes="";
-			String translatedReportName="Report Name:";
-			String translatedReportDescription="Description:";			
-			try{	
-				if (arf.getAmountinthousand() != null && arf.getAmountinthousand()!=0)
+			String translatedNotes = "";
+			String translatedReportDescription = "Description:";			
+			try{
+				int amountUnitsCode = arf.computeEffectiveAmountInThousand();
+				if (amountUnitsCode != AmpARFilter.AMOUNT_OPTION_IN_UNITS)
 				{
-					if (arf.getAmountinthousand()==AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS)
-			    		translatedNotes=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
+					if (amountUnitsCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS)
+			    		translatedNotes = TranslatorWorker.translateText("Amounts are in thousands (000)", locale, siteId);
 					else
-						translatedNotes=TranslatorWorker.translateText("Amounts are in millions (000 000)",locale,siteId);
+						translatedNotes = TranslatorWorker.translateText("Amounts are in millions (000 000)", locale, siteId);
 				    if("".equalsIgnoreCase(translatedNotes)){
-				    	translatedNotes=AmpReports.getNote(session);    
+				    	translatedNotes = AmpReports.getNote(session);    
 				    }
 				}
 				
-			    translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
-				translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
+			    //String translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
+				//translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
 			}catch (WorkerException e){e.printStackTrace();}
 			
 			String translatedCurrency = "";

@@ -709,33 +709,20 @@
 			<TR>
 
 				<TD>
-					<FONT color=blue>*
-					<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-					<digi:trn key="aim:allTheAmountsInThousands">
-					All the amounts are in thousands (000)</digi:trn>
-					</gs:test>
-					<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
-						<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-						<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"> 
-							<%=selCurrency %>
-						</digi:trn>
-					</logic:present>
-					<digi:trn key="aim:perspectiveWarning1">
+					<FONT color=blue>
+						<jsp:include page="util/amountUnitsUnformatted.jsp">
+							<jsp:param value="<BIG>* </BIG>" name="amount_prefix"/>
+						</jsp:include>
+						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
+							<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
+							<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"> 
+								<%=selCurrency %>
+							</digi:trn>
+						</logic:present>
+						<digi:trn key="aim:perspectiveWarning1">Current workspace perspective is:</digi:trn>
 
-					Current workspace perspective is:
-
-					</digi:trn>
-
-					<bean:write name="currentPerspective" scope="session"/>
-
-					.
-
-					<digi:trn key="aim:perspectiveWarning2">
-
-					Totals column only show funding items  having the same perspective as the current workspace.
-
-					</digi:trn>
-
+						<bean:write name="currentPerspective" scope="session"/>.
+						<digi:trn key="aim:perspectiveWarning2">Totals column only show funding items  having the same perspective as the current workspace.</digi:trn>
 					</FONT>
 
 				</TD>

@@ -460,7 +460,7 @@ function callbackApplyFilter(e){
 	document.getElementById("startYear_dropdown").value = document.getElementById("startYearQuickFilter_dropdown").value;
 	document.getElementById("endYear_dropdown").value = document.getElementById("endYearQuickFilter_dropdown").value;
 	document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
-	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
+	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	var dashboardType = document.getElementById("dashboardType").value;
 	if (dashboardType==1) {
 		document.getElementById("agencyType").value = document.getElementById("agencyTypeQuickFilter_dropdown").value;

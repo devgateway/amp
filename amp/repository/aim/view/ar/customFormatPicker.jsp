@@ -84,12 +84,12 @@
 			</td>
 	    	<td width="20%" height="18" nowrap="nowrap" style="font-size: 11px">
 	    		<html:select styleClass="dropdwn_sm" property="customGroupCharacter" styleId="customGroupCharacter" onchange="initFormatPopup();">
-	    		<c:forEach var="customGroupChar" items="${aimReportsFilterPickerForm.allgroupingseparators}">
-	    		<html:option value="${customGroupChar}"><c:out value="${customGroupChar}"/></html:option>
-	    		</c:forEach>
-	    		<html:option value="CUSTOM"><digi:trn>Custom</digi:trn></html:option>
+	    			<c:forEach var="customGroupChar" items="${aimReportsFilterPickerForm.allgroupingseparators}">
+	    				<html:option value="${customGroupChar}"><c:out value="${customGroupChar}"/></html:option>
+	    			</c:forEach>
+	    			<html:option value="CUSTOM"><digi:trn>Custom</digi:trn></html:option>
             	</html:select>
-            <html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customGroupCharacterTxt" onchange="initFormatPopup()"/>
+				<html:text styleClass="inputx" disabled="true" size="5" maxlength="1" property="customGroupCharacterTxt" onchange="initFormatPopup()"/>
             </td>
       	</tr>
 		<tr>
@@ -104,7 +104,12 @@
 			<digi:trn key="aim:formatPicket:Amountinthousands">Amount in thousands</digi:trn> &nbsp;
 		</td>
 		<td height="18" colspan="2" nowrap="nowrap">
-		 	<html:checkbox property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />
+		 	<%-- <html:checkbox property="amountinthousands" styleId="customAmountinThousands"  onchange ="initFormatPopup();" />  --%>
+		 	<html:select property="amountinthousands" styleClass="dropdwn_sm" styleId="customAmountinThousands" onchange="initFormatPopup();" >
+		 		<html:option value="0"><digi:trn>Amounts in Units</digi:trn></html:option>
+		 		<html:option value="1"><digi:trn>Amounts in Thousands (000)</digi:trn></html:option>
+		 		<html:option value="2"><digi:trn>Amounts in Millions (000 000)</digi:trn></html:option>
+		 	</html:select>
 		</td>
 	  </tr>
 	<tr>

@@ -199,14 +199,14 @@ session.setAttribute("progressValue", counter);
 					<span  style="color: red;font-family: Arial;font-size: 10px;">
 						<%
 	                	AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
-	                	if (af.getAmountinthousand()!=null && af.getAmountinthousand()==AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){%>
+	                	if (af.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){%>
 	               			<digi:trn key="rep:pop:AllAmount">
 								Amounts are in thousands (000)
 							</digi:trn>
 	           			<%}%>
 						
 	           			<%	                	
-	                	if (af.getAmountinthousand()!=null && af.getAmountinthousand()==AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){%>
+	                	if (af.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){%>
 	               			<digi:trn key="rep:pop:AllAmount">
 								Amounts are in millions (000 000)
 							</digi:trn>

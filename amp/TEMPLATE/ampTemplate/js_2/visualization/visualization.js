@@ -596,7 +596,7 @@ function resetToDefaults(){
 	document.getElementById("filterSectors").innerHTML = trnAll;
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
-	document.getElementById("show_amounts_in_thousands").checked = false;
+	setSelectedValue("show_amounts_in_thousands", 2); // Show amounts in millions
 	document.getElementById("startYearQuickFilter_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYearQuickFilter_dropdown").value = document.getElementById("defaultEndYear").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
@@ -878,7 +878,7 @@ function callbackApplyFilter(e){
 	document.getElementById("startYear_dropdown").value = document.getElementById("startYearQuickFilter_dropdown").value;
 	document.getElementById("endYear_dropdown").value = document.getElementById("endYearQuickFilter_dropdown").value;
 	document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
-	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
+	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	var dashboardType = document.getElementById("dashboardType").value;
 	if (dashboardType==1) {
 		document.getElementById("agencyType").value = document.getElementById("agencyTypeQuickFilter_dropdown").value;
@@ -998,7 +998,7 @@ function applyFilterPopin(e){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 		document.getElementById("workspaceOnlyQuickFilter").checked = document.getElementById("workspace_only").checked;
 	}
-	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
+	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	
 	if (document.getElementById("transaction_type_0").checked == true) {
@@ -1383,7 +1383,8 @@ function refreshBoxes(o){
 				inner = "<b class='dashboard_total_num'>" + child.value + "</b><br />" + trnTotalCommitments;
 				var div = document.getElementById("divTotalComms");
 				div.innerHTML = inner;
-				var textAmounts = document.getElementById("show_amounts_in_thousands").checked ? trnAllAmountsInThousands:trnAllAmountsInMillions;
+				var bla = getSelectedValue("show_amounts_in_thousands");
+				var textAmounts = bla == 1 ? trnAllAmountsInThousands:trnAllAmountsInMillions;
 				
 				inner = "<i><font size='2' color='red'>" + textAmounts + " - " + child.curr + "</font></i>";
 				document.getElementById("currencyCode").value = child.curr;
@@ -2036,9 +2037,9 @@ function callbackGetGraphs(id,baseType) {
 	}
 	var typeSel1 = document.getElementById("agencyTypeSelector1");
 	var typeSel2 = document.getElementById("agencyTypeSelector2");
-	if (baseType==1||baseType=='undefined') {
-		typeSel1.style.display='block';
-		typeSel2.style.display='block';
+	if (baseType==1 || baseType=='undefined') {
+		typeSel1.style.display='';
+		typeSel2.style.display='';
 	} else {
 		typeSel1.style.display='none';
 		typeSel2.style.display='none';
@@ -2158,7 +2159,7 @@ function launchDashboard(){
 	if (document.getElementById("workspace_only")!=null){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 	}
-	document.getElementById("showAmountsInThousands").value = document.getElementById("show_amounts_in_thousands").checked;
+	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	
 	if (document.getElementById("transaction_type_0").checked == true) {
 		document.getElementById("transactionType").value = document.getElementById("transaction_type_0").value;

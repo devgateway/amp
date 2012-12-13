@@ -24,6 +24,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -66,6 +67,7 @@ import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.GlobalSettings;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
@@ -1773,14 +1775,23 @@ public class ExportActivityToWord extends Action {
 								comp.getExpenditures(),
 								componentExpendituresFMfields, ampContext);
 					}
+					
+					int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
 
-					if (org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS
-							.equals("true")) {
+					if (amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS) {
 						ExportSectionHelperRowData sectionHelper = new ExportSectionHelperRowData(
 								"The amount entered are in thousands (000)",
 								null, null, true);
 						eshCompFundingDetails.addRowData(sectionHelper);
 					}
+					
+					if (amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS) {
+						ExportSectionHelperRowData sectionHelper = new ExportSectionHelperRowData(
+								"The amount entered are in millions (000 000)",
+								null, null, true);
+						eshCompFundingDetails.addRowData(sectionHelper);
+					}
+					
 					retVal.add(createSectionTable(eshCompFundingDetails,
 							request, ampContext));
 

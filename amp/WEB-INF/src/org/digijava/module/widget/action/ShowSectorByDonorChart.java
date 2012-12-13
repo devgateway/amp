@@ -88,7 +88,7 @@ public class ShowSectorByDonorChart extends Action {
         //timestemp is generated with javascript before sending ajax request.
         ChartUtil.saveMap(map, cForm.getTimestamp(), request.getSession());
 
-		boolean amountsInThousands=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS).equals("true");
+		boolean amountsInThousands = FeaturesUtil.getAmountMultiplier() > 1; //TODO: Constantin: need to change interface to Flash, probably
 		cForm.setAmountsInThousands(amountsInThousands);
 		return null;
 	}

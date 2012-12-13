@@ -755,15 +755,11 @@ function preview(id)
 												</TD></TR>
 
 												<TR><TD>
-
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-													<FONT color=blue>*
-													<digi:trn key="aim:allTheAmountsInThousands">
-
-													All the amounts are in thousands (000)</digi:trn>
-													</FONT>
-</gs:test>
-
+<FONT color='blue'>
+  <jsp:include page="util/amountUnitsUnformatted.jsp">
+    <jsp:param value="* " name="amount_prefix"/>
+  </jsp:include>	
+</FONT>	
 												</TD></TR>
 
 											</TABLE>

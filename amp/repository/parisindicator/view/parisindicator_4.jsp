@@ -83,8 +83,8 @@
     </table>
     <br>
 	<font color="orange">&nbsp;*&nbsp;</font>
-	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-		<digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000) </digi:trn>
-	</gs:test>
+  	<jsp:include page="util/amountUnitsUnformatted.jsp">
+    	<jsp:param value="" name="amount_prefix"/>
+  	</jsp:include>
 	<digi:trn><bean:write name="parisIndicatorForm" property="selectedCurrency"/></digi:trn>
 </digi:form>

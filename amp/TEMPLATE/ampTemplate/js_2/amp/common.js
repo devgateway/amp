@@ -1,8 +1,26 @@
 function unload() {
 }
 
-function dandan(){
-alert("asdasd");
+function getSelectedValue(selectId)
+{
+	var elem = document.getElementById(selectId);
+	return elem.options[elem.options.selectedIndex].value;
+}
+
+function setSelectedValue(selectId, value)
+{
+	var elem = document.getElementById(selectId);
+	for(var i = 0; i < elem.length; i++)
+	{
+		if (elem.options[i].value == value)
+		{
+			elem.options.selectedIndex = i;
+			return;
+		}
+	}
+	// nothing found, we can either alert() an error or set the first value. we'll do both
+	alert('unexistant value ' + value + ' in selectId ' + selectId);
+	elem.options.selectedIndex = 0;
 }
 
 /*

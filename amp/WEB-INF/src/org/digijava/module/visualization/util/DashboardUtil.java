@@ -68,7 +68,7 @@ public class DashboardUtil {
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
         map = DbUtil.getFundingByAgencyList(orgList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map);
@@ -80,7 +80,7 @@ public class DashboardUtil {
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
         map = DbUtil.getFundingBySectorList(secList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map);
@@ -92,7 +92,7 @@ public class DashboardUtil {
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
         AmpCategoryValueLocations natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation()!=null? getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation(): getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[1]).getParentLocation();
         AmpCategoryValueLocations tempLoc = new AmpCategoryValueLocations();
@@ -140,7 +140,7 @@ public class DashboardUtil {
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
         map = DbUtil.getFundingByProgramList(progList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map);
@@ -152,7 +152,7 @@ public class DashboardUtil {
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         map = DbUtil.getFundingByActivityList(actList, filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator);
         return sortByValue (map);
 	}
@@ -167,7 +167,7 @@ public class DashboardUtil {
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear);
 		} 
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 		for (Iterator<AmpSector> iterator = sectorsList.iterator(); iterator.hasNext();) {
 			AmpSector sector = (AmpSector) iterator.next();
 			Long[] ids = {sector.getAmpSectorId()};
@@ -246,7 +246,7 @@ public class DashboardUtil {
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 
         request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep1);
         ArrayList<AmpSector> allSectorList = DbUtil.getAmpSectors();
@@ -784,41 +784,11 @@ public class DashboardUtil {
 		}
 		else
 		{
-	        if(divideThousands == null) divideThousands = false;
-
-	        if ("true"
-					.equals(FeaturesUtil
-							.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-				
-	        	if(showInThousands){
-		        	if (divideThousands)
-						divideByDenominator = new BigDecimal(1000);
-					else
-						divideByDenominator = new BigDecimal(1);
-	        	}
-	        	else
-	        	{
-		        	if (divideThousands)
-						divideByDenominator = new BigDecimal(1000000);
-					else
-						divideByDenominator = new BigDecimal(1000);
-	        	}
-			}
-			else {
-	        	if(showInThousands){
-			        if (divideThousands)
-			        	divideByDenominator=new BigDecimal(1000000);
-			        else
-			        	divideByDenominator=new BigDecimal(1000);
-	        	}
-	        	else
-	        	{
-			        if (divideThousands)
-			        	divideByDenominator=new BigDecimal(1000000000);
-			        else
-			        	divideByDenominator=new BigDecimal(1000000);
-	        	}
-			}
+	        if (divideThousands == null) divideThousands = false;
+	        long divideThousandsMultiplier = divideThousands ? 1000 : 1;
+	        long showInThousandsMultiplier = showInThousands ? 1 : 1000;
+	        long unitsMultiplier = 1000000 / Math.max(1000000, FeaturesUtil.getAmountMultiplier());
+			divideByDenominator = new BigDecimal(unitsMultiplier * showInThousandsMultiplier * divideThousandsMultiplier);
 		}
 		return divideByDenominator;
 	}

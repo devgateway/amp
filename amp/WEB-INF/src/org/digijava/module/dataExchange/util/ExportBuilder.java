@@ -843,10 +843,7 @@ public class ExportBuilder {
 		retValue.setType(type);
 		retValue.setDate(ExportHelper.getGregorianCalendar(date));
 		
-		boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
-		if (returnString){
-			amount = amount * 1000;
-		}
+		amount = amount * FeaturesUtil.getAmountMultiplier();
 		NumberFormat formatter = new DecimalFormat("#0.00");
 		BigDecimal d = new BigDecimal(formatter.format(amount));
 		retValue.setAmount(d);

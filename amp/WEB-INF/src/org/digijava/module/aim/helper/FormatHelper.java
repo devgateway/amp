@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.util.convert.converter.AbstractNumberConverter;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -195,13 +196,15 @@ public class FormatHelper {
 		groupSeparator=groupSeparator.replace(' ', '\u00A0');
 	}
 
-	if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {		
+	int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+
+	if(amountsUnitCode != AmpARFilter.AMOUNT_OPTION_IN_UNITS) {		
 		//use the decimal separator to learn how many decimals we have:
 		//for format definition decimal place is defined by .  
 		int groupPlace = format.indexOf(".");
-		if(groupPlace==-1) {
-			//no decimal places, we don't allow that when thousands=on, we add three
-			format+=".000";
+		if (groupPlace == -1) {
+			//no decimal places, we don't allow that when thousands or millions = on, we add three
+			format += ".000";
 		} else {
 		    
 			String[] formatBreaked = format.split("[.]");
@@ -212,7 +215,7 @@ public class FormatHelper {
 						decimal += decimal.charAt(decimal.length() - 1);
 					}
 				}
-				format=formatBreaked[0]+"."+decimal;
+				format = formatBreaked[0]+"."+decimal;
 						
 		}
 		/*

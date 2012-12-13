@@ -577,12 +577,15 @@ function initializeGlobalVariables(){
 														<html:optionsCollection property="filter.years"
 															label="key" value="value" />
 													</html:select></td>
-												<td><b><digi:trn>Show amounts in thousands</digi:trn>:</b>
+												<td><b><digi:trn>Show amounts in</digi:trn>:</b>
 												</td>
 												<td>
-														<html:checkbox property="filter.showAmountsInThousands"
-																				styleId="show_amounts_in_thousands"/>
-													</td>
+ 													<html:select property="filter.showAmountsInThousands" styleId="show_amounts_in_thousands" styleClass="dropdwn_sm" style="width:150px;">
+ 												<%--	<html:option value="0"><digi:trn>Units</digi:trn></html:option>  --%>
+ 														<html:option value="1"><digi:trn>Thousands</digi:trn></html:option>
+ 														<html:option value="2"><digi:trn>Millions</digi:trn></html:option>
+ 													</html:select>													
+ 												</td>
 											</tr>
 											<tr>
 												<td><b><digi:trn>Decimals to show</digi:trn>:</b>

@@ -87,10 +87,13 @@ background-color:#FFFFFF;
     var lastTimeStamp;
 	var strNoActivities="<digi:trn key='aim:NPD:noActivitisLabel'>No Activities</digi:trn>";
 	var strTotal="<digi:trn key='aim:NPD:totalLabels'>Totals:</digi:trn>";
-<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="true" onTrueEvalBody="true">
+<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="2" onTrueEvalBody="true">
+	var strThousands="<digi:trn key='aim:NPD:amountMillionsOfDollarsLabel'>All amounts are in millions (000 000) of</digi:trn> ${aimNPDForm.defCurrency}";
+</gs:test>	
+<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="1" onTrueEvalBody="true">
 	var strThousands="<digi:trn key='aim:NPD:amountThousandsOfDollarsLabel'>All amounts are in thousands (000) of</digi:trn> ${aimNPDForm.defCurrency}";
 </gs:test>
-<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="false" onTrueEvalBody="true">
+<gs:test name="<%=org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS%>" compareWith="0" onTrueEvalBody="true">
 	var strThousands="${aimNPDForm.defCurrency}";
 </gs:test>
 	var strPlanned="<digi:trn key='aim:NPD:sumplanedCommitments'>Planned Commitments</digi:trn>";

@@ -523,7 +523,7 @@ function ResetCustom(maxFractionDigits) {
 	aimReportsFilterPickerForm3.customGroupCharacterTxt.value = "";
 	aimReportsFilterPickerForm3.customGroupSize.value = 3;
 	//alert(aimReportsFilterPickerForm3.amountinthousands.checked);
-	aimReportsFilterPickerForm3.customAmountinThousands.checked = false;
+	aimReportsFilterPickerForm3.customAmountinThousands.options.selectedIndex = 0;
 	aimReportsFilterPickerForm3.calendar.value =aimReportsFilterPickerForm3.initialCal.value;
 	initFormatPopup();
 	if(document.aimReportsFilterPickerForm3.renderStartYear){

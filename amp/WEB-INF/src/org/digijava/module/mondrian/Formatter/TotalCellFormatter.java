@@ -26,9 +26,6 @@ public class TotalCellFormatter implements CellFormatter {
 
 	@Override
 	public String formatCell(Object value) {
-		if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS).equalsIgnoreCase("true")) {
-			return FormatHelper.formatNumber(new Double(value.toString())/1000);
-		}
-		return FormatHelper.formatNumber(new Double(value.toString()));
+		return FormatHelper.formatNumber(new Double(value.toString()) / FeaturesUtil.getAmountMultiplier());
 	}
 }

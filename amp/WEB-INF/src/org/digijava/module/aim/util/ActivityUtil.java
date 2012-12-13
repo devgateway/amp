@@ -32,6 +32,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.error.ExceptionFactory;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
@@ -4948,9 +4949,15 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                 Date date = DateConversion.getDate(helperFdet.getTransactionDate());
                 java.sql.Date dt = new java.sql.Date(date.getTime());
                 Double transAmt = new Double(FormatHelper.parseDouble(helperFdet.getTransactionAmount()));
-                if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
+                
+                int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+
+                if (amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS) {
                     transAmt *= 1000;
                 }
+                if (amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS) {
+                    transAmt *= 1000000;
+                }                
                 double exchangeRate=(helperFdet.getFixedExchangeRate()!=null)?FormatHelper.parseDouble( helperFdet.getFixedExchangeRate() ):Util.getExchange(detCurr.getCurrencyCode(), dt);
                 
                 AmpFundingDetail fundDet = new AmpFundingDetail(helperFdet.getTransactionType(), helperFdet.getAdjustmentTypeName(), transAmt, date, detCurr, exchangeRate);

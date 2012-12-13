@@ -584,10 +584,9 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										<TR>
 											<TD>
 												<FONT color=blue>*
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-													<digi:trn key="aim:allTheAmountsInThousands">
-													All the amounts are in thousands (000)</digi:trn>
-</gs:test>
+<jsp:include page="util/amountUnitsUnformatted.jsp">
+	<jsp:param value="* " name="amount_prefix"/>   
+</jsp:include>		
 													<bean:write name="aimFinancingBreakdownForm" property="selectedCurrency"/>
 												</FONT><br>
 												<FONT color=blue>*

@@ -245,9 +245,9 @@
 				<c:if test="${aimParisIndicatorReportForm.indicatorCode != '6'}">
 					<tr><td>
 					<font color="black">
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-					* All the amounts are in thousands (000)  
-</gs:test>
+						<jsp:include page="util/amountUnitsUnformatted.jsp">
+							<jsp:param value="* " name="amount_prefix"/>
+						</jsp:include>	
 					<bean:write name="aimParisIndicatorReportForm" property="currency"/></font></td></tr>
 				</c:if>
 					</td>

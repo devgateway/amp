@@ -202,7 +202,8 @@
 		var badSymbolNumberMsg = '<digi:trn key="rep:format:badSymbolNumber">Symbols can not be a number</digi:trn>';
 		var badGorupSize = '<digi:trn key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
 		var badYearRange = '<digi:trn key="rep:format:badYearRange">Year Range To should be greater than From</digi:trn>';
-		
+
+		var filterPanelNameText = '${filterPanelName}' + ': ' + '${aimReportWizardForm.reportTitle}';
 		
 		repManagerParams	= {
 									desktopTab: ${myForm.desktopTab},
@@ -212,8 +213,8 @@
 									filterProblemsMessage: "${filterProblemsMessage}",
 									failureMessage: "${failureMessage}",
 									savingDataMessage: "${savingDataMessage}",
-									filterPanelName: "${filterPanelName}",
-                                                                        settingsPanelName: "${settingsPanelName}",
+									filterPanelName: filterPanelNameText, 
+                                    settingsPanelName: "${settingsPanelName}",
 									cannotSaveFiltersMessage: "${cannotSaveFiltersMessage}",
 									savingRepTabMessage: "${savingMessage}",
 									previewFundingTrn: "${previewFundingNameTrn}",

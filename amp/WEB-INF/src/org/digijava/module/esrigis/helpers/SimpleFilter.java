@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class SimpleFilter {
 	
 	private String currency;
-	private String year;
+	private String startyear;
+	private String endyear;
 	private String fiscalcalendar;
 	private String projectstatus;
 	private String typeofassistance;
@@ -37,12 +38,20 @@ public class SimpleFilter {
 		this.currency = currency;
 	}
 
-	public String getYear() {
-		return year;
+	public String getStartyear() {
+		return startyear;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
+	public void setStartyear(String startyear) {
+		this.startyear = startyear;
+	}
+
+	public String getEndyear() {
+		return endyear;
+	}
+
+	public void setEndyear(String endyear) {
+		this.endyear = endyear;
 	}
 
 	public String getFiscalcalendar() {

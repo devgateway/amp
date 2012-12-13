@@ -12,7 +12,7 @@ public class DataDispatcherForm extends ActionForm {
 	private MapFilter filter = null;
 	private String apiurl;
 	private String structures;
-	
+
 	public String getStructures() {
 		return structures;
 	}

@@ -434,6 +434,7 @@ function initializeTranslations(){
 	<html:hidden property="filter.typeAssistanceId" styleId="typeAssistanceId" />
 	<html:hidden property="filter.projectStatusId" styleId="projectStatusId" />
 	<html:hidden property="filter.financingInstrumentId" styleId="financingInstrumentId" />
+	<html:hidden property="filter.onBudget" styleId="onBudget" />
 </digi:form>
 
 <script type="text/javascript">

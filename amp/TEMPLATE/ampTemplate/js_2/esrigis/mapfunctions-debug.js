@@ -448,9 +448,12 @@ function getSelectedFilter() {
 			$("#sfilterid").append("<i>"+translate('Currency')+"</i>: ");
 			$("#sfilterid").append(jsonData[0].currency);
 
-			$("#sfilterid").append(" <i>| "+ translate('Fiscal Year Start')+"</i> : ");
-			$("#sfilterid").append(jsonData[0].year);
-
+			$("#sfilterid").append(" <i>| "+ translate('Year Start')+"</i> : ");
+			$("#sfilterid").append(jsonData[0].startyear);
+			
+			$("#sfilterid").append(" <i>| "+ translate('End Year')+"</i> : ");
+			$("#sfilterid").append(jsonData[0].endyear);
+			
 			if (jsonData[0].projectstatus != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Status')+"</i> : ");
 				$("#sfilterid").append(jsonData[0].projectstatus);

@@ -220,10 +220,16 @@
             value = "<digi:trn>Currency</digi:trn>";
             return value;
          }
-        if(text == "Fiscal Year Start") {
-            value = "<digi:trn>Fiscal Year Start</digi:trn>";
+        if(text == "Year Start") {
+            value = "<digi:trn>Year Start</digi:trn>";
             return value;
          }
+        
+        if(text == "End Year") {
+            value = "<digi:trn>End Year</digi:trn>";
+            return value;
+         }
+        
         if(text == "Status") {
             value = "<digi:trn>Status</digi:trn>";
             return value;

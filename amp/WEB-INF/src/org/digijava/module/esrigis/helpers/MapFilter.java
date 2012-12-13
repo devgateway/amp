@@ -128,7 +128,8 @@ public class MapFilter {
 		JSONArray result = new JSONArray();
 		SimpleFilter selectedfilter = new SimpleFilter();
 		selectedfilter.setCurrency(this.getCurrencyCode());
-		selectedfilter.setYear(this.getStartYear().toString());
+		selectedfilter.setStartyear(this.getStartYear().toString());
+		selectedfilter.setEndyear(this.getEndYear().toString());
 		
 		Collection<AmpCategoryValue> categoryValues = null;
 		categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);

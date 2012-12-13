@@ -34,6 +34,7 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
@@ -70,6 +71,15 @@ public class DbHelper {
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 		boolean organizationTypeCondition = filter.getOrganizationsTypeId() != null && !filter.getOrganizationsTypeId().equals(-1l);
 		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !QueryUtil.inArray(-1l,filter.getSelStructureTypes() );
+		AmpCategoryValue budgetOn = null;
+		AmpCategoryValue budgetOff=null;
+		try {
+			budgetOn =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
+			budgetOff =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_OFF);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		/*
 		 * We are selecting sectors which are funded In selected year by the
@@ -134,13 +144,24 @@ public class DbHelper {
 			} else {
 				oql += QueryUtil.getTeamQuery(teamMember);
 			}
-			if (!zonescondition && locationCondition) {
+			
+			//locations filter
+			
+			if (locationCondition) {
             	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-				oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds) + ") ";
-			}else if (zonescondition){
-				zonesids = getAllDescendantsLocation(zonesids, DbUtil.getAmpLocations());
-				oql += " and loc.id in (" + QueryUtil.getInStatement(zonesids) + ") ";
+            	filter.setSelLocationIds(locationIds);
+            	if (zonesids.length>0){
+            		zonesids = getAllDescendantsLocation(zonesids, DbUtil.getAmpLocations());
+            		Long[] both = (Long[]) ArrayUtils.addAll(locationIds, zonesids);
+            		filter.setSelLocationIds(both);
+            		oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds)+","+ QueryUtil.getInStatement(zonesids)+ ") ";
+            	}else{
+            		oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds) + ") ";
+            	}
 			}
+			
+			
+			
 			
 			if (sectorCondition) {
 				oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
@@ -167,9 +188,9 @@ public class DbHelper {
 			// On/Off budget
 			if (filter.getOnBudget() != null && !filter.getProjectStatusId().equals(0)) {
 				if (filter.getOnBudget()==1){
-					oql += " and act.budget is not null";
-				}else{
-					oql += " and act.budget is null";
+					oql += " and categories.id in ("+budgetOn.getId()+") ";
+				}else if(filter.getOnBudget()==2){
+					oql += " and categories.id in ("+budgetOff.getId()+") ";
 				}
 	        }
 			// Type of assistance

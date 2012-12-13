@@ -351,9 +351,7 @@ public class DataDispatcher extends MultiAction {
 	}
 	
 	
-	public ActionForward modeShowActivities(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward modeShowActivities(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		DataDispatcherForm maphelperform = (DataDispatcherForm) form;
 
 		HttpSession session = request.getSession();
@@ -367,10 +365,10 @@ public class DataDispatcher extends MultiAction {
 		list = DbHelper.getActivities(maphelperform.getFilter());
 		long endTS=System.currentTimeMillis();
 		logger.info("getActivities in "+(endTS-startTS)/1000.0+" seconds. ");
-		
-		Boolean isaggregatable = true;
 		logger.info("Iteration Starts");
 		startTS=System.currentTimeMillis();
+		
+		Boolean isaggregatable = true;
 		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
 			ActivityPoint ap = new ActivityPoint();
 			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
@@ -395,9 +393,7 @@ public class DataDispatcher extends MultiAction {
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
 				boolean implocation = alocation.getLocation().getLocation().getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
 				ArrayList<Long> locationIds = new ArrayList<Long>(Arrays.asList(maphelperform.getFilter().getSelLocationIds()));
-				if (maphelperform.getFilter().getZoneIds()!= null && maphelperform.getFilter().getZoneIds().length>0){
-					locationIds.addAll(Arrays.asList(maphelperform.getFilter().getZoneIds()));
-				}
+				
 				boolean isfiltered = locationIds != null && locationIds.size() > 0 && !locationIds.get(0).equals(-1l) ;
 				if (!implocation) {
 					isaggregatable = true;

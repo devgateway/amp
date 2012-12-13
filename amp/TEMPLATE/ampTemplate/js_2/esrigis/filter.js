@@ -569,6 +569,7 @@ function applyFilterPopin(e){
 	document.getElementById("typeAssistanceId").value = document.getElementById("type_assistance_id").options[document.getElementById("type_assistance_id").selectedIndex].value;
 	document.getElementById("projectStatusId").value = document.getElementById("project_status_id").options[document.getElementById("project_status_id").selectedIndex].value;
 	document.getElementById("financingInstrumentId").value = document.getElementById("financing_instrument_id").options[document.getElementById("financing_instrument_id").selectedIndex].value;
+	document.getElementById("onBudget").value = document.getElementById("budget_dropdown").options[document.getElementById("budget_dropdown").selectedIndex].value;
 	
 	var params = "";
 	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);

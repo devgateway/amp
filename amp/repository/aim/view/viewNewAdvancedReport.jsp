@@ -207,7 +207,7 @@ session.setAttribute("progressValue", counter);
 						
 	           			<%	                	
 	                	if (af.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){%>
-	               			<digi:trn key="rep:pop:AllAmount">
+	               			<digi:trn key="rep:pop:AllAmountMillions">
 								Amounts are in millions (000 000)
 							</digi:trn>
 	           			<%}%>
@@ -535,7 +535,7 @@ session.setAttribute("progressValue", counter);
 						<td style="font-size: 11px;font-family: Arial,sans-serif">
 	           <%	                	
 	            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==2){%>
-	               			<digi:trn key="rep:pop:AllAmount">
+	               			<digi:trn key="rep:pop:AllAmountMillions">
 								Amounts are in millions (000 000)
 							</digi:trn>
    			   <%}%>				

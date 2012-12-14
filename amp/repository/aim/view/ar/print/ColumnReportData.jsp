@@ -36,7 +36,7 @@
 						
 			<%	                	
 				if (af.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){%>
-					<digi:trn key="rep:pop:AllAmount">
+					<digi:trn key="rep:pop:AllAmountMillions">
 						Amounts are in millions (000 000)
 					</digi:trn>
 			<%}%>

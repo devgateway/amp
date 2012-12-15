@@ -34,7 +34,7 @@ public final class TranslatorUtil {
 		Site site = session.getSite();
 		try {
 			translatedValue = TranslatorWorker.getInstance(genKey).
-									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
+									translateFromTree(genKey, site, session.getLocale().getLanguage(), 
 											strTrn, TranslatorWorker.TRNTYPE_LOCAL, null);
 		} catch (WorkerException e) {
 			logger.error("Can't translate:", e);

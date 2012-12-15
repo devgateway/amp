@@ -89,7 +89,7 @@ public class UpdateTeamMembers extends Action {
 
                     logger.info(" here");
                     String trnKey = "aim:teamLeadAlreadyExist";
-                    String msg = CategoryManagerUtil.translate(trnKey, request, Constants.TEAM_LEAD_ALREADY_EXISTS);
+                    String msg = CategoryManagerUtil.translate(trnKey, Constants.TEAM_LEAD_ALREADY_EXISTS);
                     errors.add(
                         ActionMessages.GLOBAL_MESSAGE,
                         new ActionMessage(

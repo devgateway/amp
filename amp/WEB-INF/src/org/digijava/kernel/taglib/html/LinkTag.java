@@ -117,7 +117,7 @@ public class LinkTag
             String requestUrl = null;
             if (!SiteConfigUtils.getLogonSiteId().equalsIgnoreCase(getSite())) {
 
-            	Site site = SiteCache.getInstance().getSite(getSite());
+            	Site site = SiteCache.lookupByName(getSite());
                 SiteDomain domain = SiteUtils.getDefaultSiteDomain(site);
 
                 siteURL = SiteUtils.getSiteURL(domain, request.getScheme(),

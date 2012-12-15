@@ -535,7 +535,7 @@ public class CategoryManager extends Action {
 		while (iter.hasNext()) {
 			AmpCategoryClass cat 	= (AmpCategoryClass) iter.next();
 			String translatedName	= CategoryManagerUtil.translate( 
-							CategoryManagerUtil.getTranslationKeyForCategoryName(cat.getKeyName()), request, cat.getName()   );
+							CategoryManagerUtil.getTranslationKeyForCategoryName(cat.getKeyName()), cat.getName()   );
 			
 			KeyValue kv				= new KeyValue(cat.getId().toString(), translatedName);
 			kvCategories.add(kv);

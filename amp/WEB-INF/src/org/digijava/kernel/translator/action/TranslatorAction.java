@@ -101,20 +101,10 @@ public class TranslatorAction extends Action {
 
 				if (flag.equalsIgnoreCase("local")) {
 
-					msg.setSiteId(
-						RequestUtils
-							.getSiteDomain(request)
-							.getSite()
-							.getId()
-							.toString());
+					msg.setSite(RequestUtils.getSiteDomain(request).getSite());
 				} else {
 
-					msg.setSiteId(
-						DgUtil
-							.getRootSite(
-								RequestUtils.getSiteDomain(request).getSite())
-							.getId()
-							.toString());
+					msg.setSite(DgUtil.getRootSite(RequestUtils.getSiteDomain(request).getSite()));
 
 				}
 
@@ -124,7 +114,7 @@ public class TranslatorAction extends Action {
 					translatorWorker.getByKey(
 						msg.getKey(),
 						msg.getLocale(),
-						msg.getSiteId());
+						Long.parseLong(msg.getSiteId()));
 
 				if (message != null) {
 

@@ -93,7 +93,7 @@ public class AddNewLocation extends Action {
                 }
                 catch (DuplicateLocationCodeException e) {
                 	errors.add("title" ,  
-                			new ActionMessage("error.aim.addLocation.duplicateCode", TranslatorWorker.translateText("Duplicate", request) + " " +  TranslatorWorker.translateText(e.getCodeType(), request)) 
+                			new ActionMessage("error.aim.addLocation.duplicateCode", TranslatorWorker.translateText("Duplicate") + " " +  TranslatorWorker.translateText(e.getCodeType())) 
                 	);
 					this.saveErrors(request, errors);
 					return mapping.findForward("addEdit");

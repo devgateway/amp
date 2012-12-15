@@ -65,7 +65,7 @@ public class AddPledge extends Action {
 
     		plForm.setAidModalityCategory(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY));
     		
-    		String yearToSpecify = TranslatorWorker.translateText("unspecified", request);
+    		String yearToSpecify = TranslatorWorker.translateText("unspecified");
             
             if (plForm.getYear() == null) {     
                plForm.setYear(yearToSpecify);

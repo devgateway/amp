@@ -210,7 +210,7 @@ public class CompareActivityVersions extends DispatchAction {
 						output.setMandatoryForSingleChangeOutput(false);
 
 						output.setDescriptionOutput(auxAnnotation.fieldTitle());
-						String site = RequestUtils.getSite(request).getSiteId();
+						Site site = RequestUtils.getSite(request);
 						String lang = RequestUtils.getNavigationLanguage(request).getCode();
 						String auxBody1 = DbUtil.getEditorBody(site, auxResult1, lang);
 						String auxBody2 = DbUtil.getEditorBody(site, auxResult2, lang);

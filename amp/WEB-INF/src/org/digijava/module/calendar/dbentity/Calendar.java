@@ -81,7 +81,7 @@ public class Calendar {
 	private Long id;
 
 	/**
-	 * site identity
+	 * site identity, siteName, e.g. 'amp'
 	 */
 	private String siteId;
 
@@ -272,10 +272,18 @@ public class Calendar {
 		this.mailTo = mailTo;
 	}
 
+	/**
+	 * siteName, e.g. 'amp'
+	 * @return
+	 */
 	public String getSiteId() {
 		return siteId;
 	}
 
+	/**
+	 * siteName, e.g. 'amp'
+	 * @param siteId
+	 */
 	public void setSiteId(String siteId) {
 		this.siteId = siteId;
 	}

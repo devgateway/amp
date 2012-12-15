@@ -23,7 +23,7 @@
 package org.digijava.kernel.translator.util;
 
 /**
- * Callback interface which must be passwd to TrnUtil.sortByTranslation() method
+ * Callback interface which must be passed to TrnUtil.sortByTranslation() method
  */
 public interface TranslationCallback {
     /**

@@ -138,7 +138,7 @@ public class UserTell
 
 
         // get SiteName
-        message = worker.getByBody(site.getName(),currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(site.getName(),currentLocale.getCode(), site.getId());
         if (message == null) {
             siteName = site.getName();
         }
@@ -149,7 +149,7 @@ public class UserTell
         // get suggestion
         suggestion = "A suggestion from";//default text
         //try from translation
-        message = worker.getByBody(suggestion,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(suggestion,currentLocale.getCode(), site.getId());
         if (message != null) {
             suggestion = message.getMessage();
         }
@@ -157,7 +157,7 @@ public class UserTell
 
         // get dear
         dear = "Dear";
-        message = worker.getByBody(dear,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(dear,currentLocale.getCode(), site.getId());
         if (message != null) {
             dear = message.getMessage();
         }
@@ -165,14 +165,14 @@ public class UserTell
 
         // get thoughtYouMight
         thoughtYouMight = "thought you might be interested in visiting the Development Gateway, a portal for knowledge sharing and resources on sustainable development and poverty reduction.";
-        message = worker.getByBody(thoughtYouMight,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(thoughtYouMight,currentLocale.getCode(), site.getId());
         if (message != null) {
             thoughtYouMight = message.getMessage();
         }
 
         // get onTheDevelopment
         onTheDevelopment = "On the Development Gateway, you can:";
-        message = worker.getByBody(onTheDevelopment,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(onTheDevelopment,currentLocale.getCode(), site.getId());
         if (message != null) {
             onTheDevelopment = message.getMessage();
         }
@@ -181,7 +181,7 @@ public class UserTell
         exchangeIdeas = "- Exchange ideas and knowledge\n" +
         "Access development knowledge by Topic (e.g., Gender and Development) and Development Focus (e.g., Afghanistan Reconstruction).\n"+
         "See the full list at";
-        message = worker.getByBody(exchangeIdeas,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(exchangeIdeas,currentLocale.getCode(), site.getId());
         if (message != null) {
             exchangeIdeas = message.getMessage();
         }
@@ -189,7 +189,7 @@ public class UserTell
         // get findDevelopmentProjects
         findDevelopmentProjects = "- Find development projects\n"+
         "Use AIDA, an extensive directory with over 330,000 programs and projects, with descriptions and funding information.";
-        message = worker.getByBody(findDevelopmentProjects,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(findDevelopmentProjects,currentLocale.getCode(), site.getId());
         if (message != null) {
             findDevelopmentProjects = message.getMessage();
         }
@@ -199,7 +199,7 @@ public class UserTell
         "On the dgMarket. 500+ new tender opportunities daily, from Afghanistan to Zimbabwe.\n" +
         "Receive free e-mail alerts when a tender notice matches your business profile.\n" +
         "Visit";
-        message = worker.getByBody(exploreBusinessOpportunities,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(exploreBusinessOpportunities,currentLocale.getCode(), site.getId());
         if (message != null) {
             exploreBusinessOpportunities = message.getMessage();
         }
@@ -207,21 +207,21 @@ public class UserTell
         // get accessCountryInitiatives
         accessCountryInitiatives = "- Access country initiatives\n" +
         "Learn what is happening in 37 countries where projects are underway to address the digital divide and various development needs. Visit";
-        message = worker.getByBody(accessCountryInitiatives,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(accessCountryInitiatives,currentLocale.getCode(), site.getId());
         if (message != null) {
             accessCountryInitiatives = message.getMessage();
         }
 
         // get visitUstoday
         visitUstoday = "Visit us today! http://www.developmentgateway.org - where worlds of knowledge meet";
-        message = worker.getByBody(visitUstoday,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(visitUstoday,currentLocale.getCode(), site.getId());
         if (message != null) {
             visitUstoday = message.getMessage();
         }
 
         // get doNotReply
         doNotReply = "Please do not reply to this email.";
-        message = worker.getByBody(doNotReply,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(doNotReply,currentLocale.getCode(), site.getId());
         if (message != null) {
             doNotReply = message.getMessage();
         }
@@ -229,7 +229,7 @@ public class UserTell
 
         // get notAMemberYet
         notAMemberYet = "Not a member yet? Register to receive email alerts in your area of interest!";
-        message = worker.getByBody(notAMemberYet,currentLocale.getCode(), site.getSiteId());
+        message = worker.getByBody(notAMemberYet,currentLocale.getCode(), site.getId());
         if (message != null) {
             notAMemberYet = message.getMessage();
         }

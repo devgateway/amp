@@ -95,15 +95,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
         public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
-		
-		//for translation purposes
-	    	Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				
-		 String siteId=site.getSiteId();
-		 String locale=navigationLanguage.getCode();
-		
-		 
+				 
 		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
 		
 		ARUtil.cleanReportOfHtmlCodes(rd);
@@ -201,7 +193,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
     		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
-    		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.",locale,siteId);
+    		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.");
     		String script = "<script>opener.close();" 
     			+ "alert('"+ alert +"');" 
     			+ "window.location=('"+ url +"');"
@@ -230,7 +222,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		String translatedCurrentFilter="";
 		String translatedAmount="";
 		String translatedReportDescription="Description:";
-		String siteId=site.getSiteId();
+
 		// HEADER/FOOTER logo/statement				
 		if ( this.request.getAttribute("logoOptions") == null ||  this.request.getAttribute("logoOptions").equals("0")) {//disabled
 			// do nothing 
@@ -262,12 +254,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		if ( this.request.getAttribute("statementOptions") == null || this.request.getAttribute("statementOptions").equals("0")) {//disabled
 			// do nothing 
 		} else if (this.request.getAttribute("statementOptions").equals("1")) {//enabled										
-			String stmt = "";
-			try {
-				//TODO TRN:this should use default text instead of this key. if there is no such default text in this case, then leaving key is jut all right.
-				stmt = TranslatorWorker.translateText("This REPORT was created by AMP", locale,siteId);
-			} catch (WorkerException e){
-				logger.error("Error translating ", e);}
+			String stmt = TranslatorWorker.translateText("This REPORT was created by AMP");
 			stmt += " " + FeaturesUtil.getCurrentCountryName();
 			if (this.request.getAttribute("dateOptions").equals("0")) {//disabled
 				// no date
@@ -287,35 +274,30 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			}				
 		}
 		//
-		try{	
+		translatedCurrentFilter=TranslatorWorker.translateText("Currently Selected Filters:");
+		translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
 
-			translatedCurrentFilter=TranslatorWorker.translateText("Currently Selected Filters:",locale,siteId);
-			translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
+		String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
+		if(currencyCode != null) {
+			//translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
+			translatedCurrency=TranslatorWorker.translateText(currencyCode);
+			translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
+		}
+		else
+		{
+			//translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
+			translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY);
+		}
 
-			String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
-			if(currencyCode != null) {
-				//translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
-				translatedCurrency=TranslatorWorker.translateText(currencyCode,locale,siteId);
-				translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
-			}
-			else
-			{
-				//translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
-				translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY,locale,siteId);
-			}
-
-			if (arf.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){					
-				translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)",locale,siteId);
-			}
-			if (arf.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){					
-				translatedAmount=TranslatorWorker.translateText("Amounts are in millions (000 000)",locale,siteId);
-			}
-			translatedAmount=("".equalsIgnoreCase(translatedAmount))?AmpReports.getNote(session):translatedAmount;
-			translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
-
-		}catch (WorkerException e){
-			logger.error("Error translating ", e);}
-
+		if (arf.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){					
+			translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)");
+		}
+		if (arf.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){					
+			translatedAmount=TranslatorWorker.translateText("Amounts are in millions (000 000)");
+		}
+		translatedAmount=("".equalsIgnoreCase(translatedAmount))?AmpReports.getNote(session):translatedAmount;
+		translatedReportDescription=TranslatorWorker.translateText("Description:");
+	
 		PdfPCell pdfc;
 			Font titleFont = new Font(Font.COURIER, 8, Font.COURIER);		
 			//Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);				
@@ -351,15 +333,15 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		Iterator<String> keys=props.keySet().iterator();
 		StringBuffer strFilters=new StringBuffer();
 
-		try {
+		
 			while (keys.hasNext()) {
 				String key = keys.next();
 
 				//String translatedName=TranslatorWorker.translate("filterproperty:" + key,locale,siteId);
-				String translatedName=TranslatorWorker.translateText(key,locale,siteId);
+				String translatedName=TranslatorWorker.translateText(key);
 				translatedName=("".equalsIgnoreCase(translatedName))?key:translatedName;
 
-				String translatedValue=TranslatorWorker.translateText(props.get(key).toString(),locale,siteId);
+				String translatedValue=TranslatorWorker.translateText(props.get(key).toString());
 				translatedValue=("".equalsIgnoreCase(translatedValue))?props.get(key).toString():translatedValue;
 
 				strFilters.append(translatedName);
@@ -367,9 +349,6 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				strFilters.append(translatedValue);
 				strFilters.append(",");
 			}
-		} catch (WorkerException e) {
-			logger.error("Error translating", e);
-		}
 
 		strFilters.delete(strFilters.length()-2,strFilters.length());
 		try {
@@ -396,7 +375,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    PdfContentByte cb = writer.getDirectContent();
 	    //cb.saveState();
 	    
-	    String siteId = site.getSiteId();
+	    	Long siteId = site.getId();
     	    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
     	    r.setSiteId(siteId);
     	    r.setLocale(locale);

@@ -52,7 +52,7 @@ public class EditorWrapperModel extends Model<String> {
 		}
 		else{
 			try {
-				Editor editor = DbUtil.getEditor(session.getSite().getSiteId(), keyModel.getObject(), wicketSession.getLocale().getLanguage());
+				Editor editor = DbUtil.getEditor(session.getSite(), keyModel.getObject(), wicketSession.getLocale().getLanguage());
 				if (editor != null){
 					this.setObject(editor.getBody());
 				}

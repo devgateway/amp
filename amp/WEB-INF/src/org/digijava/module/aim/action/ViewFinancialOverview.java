@@ -79,14 +79,9 @@ public class ViewFinancialOverview extends TilesAction {
 				if (logger.isDebugEnabled())
 					logger.debug("Modality name : "
 							+ (modality != null ? modality.getValue()
-									: "null"));
-				Site site = RequestUtils.getSite(request);
-				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				String siteId = site.getId().toString();
-				String locale = navigationLanguage.getCode();
-				
+									: "null"));			
 				if (modality != null)
-					formBean.setTypeOfAssistance(TranslatorWorker.translateText((String) modality.getValue(),locale,siteId));
+					formBean.setTypeOfAssistance(TranslatorWorker.translateText((String) modality.getValue()));
 
 				formBean.setAmpId(ampActivity.getAmpId());
 
@@ -126,7 +121,7 @@ public class ViewFinancialOverview extends TilesAction {
 //						formBean.setTermsOfAssistance(ampTermsAssist
 //								.getTermsAssistName());
 					
-						formBean.setTermsOfAssistance(TranslatorWorker.translateText((String) typeOfAssistance.getValue(),locale,siteId));
+						formBean.setTermsOfAssistance(TranslatorWorker.translateText((String) typeOfAssistance.getValue()));
 					}
 					if (logger.isDebugEnabled())
 						logger.debug("signature date : "

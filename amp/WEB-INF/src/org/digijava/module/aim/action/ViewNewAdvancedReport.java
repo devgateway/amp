@@ -378,7 +378,7 @@ public class ViewNewAdvancedReport extends Action {
 		// CHANGES FOR AMP-9649 => the siteid and locale are set for translation purposes
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		ar.setSiteId( site.getId().toString() );
+		ar.setSiteId( site.getId());
 		ar.setLocale( navigationLanguage.getCode() );
 		
 		

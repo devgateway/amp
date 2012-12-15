@@ -295,21 +295,21 @@ public class DgUtil {
         return preferences;
     }
 
-    /**
-     * Rreturns the current navigation language
-     * <br /><i><b>Implementor's Note:</b> Some code by other teams used this
-     * method to determine the current navigation language. This was not
-     * correct, but it worked. The problem appeared when tests were done on
-     * domains with assigned navigation languages. This function was
-     * re-implemented and the old logic was moved to
-     * <code>getLanguageFromRequest()</code></i>
-     * @param request HttpServletRequest
-     * @return Locale the current navigation language
-     * @deprecated use RequestUtils.getNavigationLanguage() instead
-     */
-    public static Locale determineLanguage(HttpServletRequest request) {
-        return RequestUtils.getNavigationLanguage(request);
-    }
+//    /**
+//     * Rreturns the current navigation language
+//     * <br /><i><b>Implementor's Note:</b> Some code by other teams used this
+//     * method to determine the current navigation language. This was not
+//     * correct, but it worked. The problem appeared when tests were done on
+//     * domains with assigned navigation languages. This function was
+//     * re-implemented and the old logic was moved to
+//     * <code>getLanguageFromRequest()</code></i>
+//     * @param request HttpServletRequest
+//     * @return Locale the current navigation language
+//     * @deprecated use RequestUtils.getNavigationLanguage() instead
+//     */
+//    public static Locale determineLanguage(HttpServletRequest request) {
+//        return RequestUtils.getNavigationLanguage(request);
+//    }
 
     /**
      * This method implements business logic, which determines language based
@@ -608,15 +608,15 @@ public class DgUtil {
      * @todo why do we need this method? I think, it's tame to make it
      * deprecated. Mikheil
      */
-    public static String getCurrentSiteId(HttpServletRequest request) {
-        Site site = RequestUtils.getSite(request);
-        if (site == null)
-            return null;
-
-        String siteId = site.getSiteId();
-
-        return siteId;
-    }
+//    public static String getCurrentSiteId(HttpServletRequest request) {
+//        Site site = RequestUtils.getSite(request);
+//        if (site == null)
+//            return null;
+//
+//        String siteId = site.getSiteId();
+//
+//        return siteId;
+//    }
 
     /**
      * Returns user, currently logged in into system or null, if user is not
@@ -625,11 +625,11 @@ public class DgUtil {
      * @return logged user
      * @deprecated use RequestUtils.getUser() instead
      */
-    public static User getCurrentUser(HttpServletRequest request) {
-        return RequestUtils.getUser(request);
-        //User user = (User) request.getSession(true).getAttribute(Constants.USER);
-        //return user;
-    }
+//    public static User getCurrentUser(HttpServletRequest request) {
+//        return RequestUtils.getUser(request);
+//        //User user = (User) request.getSession(true).getAttribute(Constants.USER);
+//        //return user;
+//    }
 
     /**
      * Gets current site from request and returns its user languages
@@ -637,10 +637,10 @@ public class DgUtil {
      * @return user languages for the current site
      * @deprecated use SiteUtils.getUserLanguages() instead
      */
-    public static java.util.Set getCurrSiteUserLangs(HttpServletRequest request) {
-        Site site = RequestUtils.getSite(request);
-        return SiteUtils.getUserLanguages(site);
-    }
+//    public static java.util.Set getCurrSiteUserLangs(HttpServletRequest request) {
+//        Site site = RequestUtils.getSite(request);
+//        return SiteUtils.getUserLanguages(site);
+//    }
 
     /**
      * Gets current site from request and returns its translation languages
@@ -648,28 +648,28 @@ public class DgUtil {
      * @return translation languages for the current site
      * @deprecated use SiteUtils.getTransLanguages() instead
      */
-    public static java.util.Set getCurrSiteTransLangs(HttpServletRequest
-        request) {
-        Site site = RequestUtils.getSite(request);
-        return SiteUtils.getTransLanguages(site);
-    }
+//    public static java.util.Set getCurrSiteTransLangs(HttpServletRequest
+//        request) {
+//        Site site = RequestUtils.getSite(request);
+//        return SiteUtils.getTransLanguages(site);
+//    }
 
-    public static Locale getCurrSiteDefLang(HttpServletRequest request) {
-        Site site = RequestUtils.getSite(request);
-        if (site == null)
-            return null;
-
-        Locale defLang = null;
-
-        try {
-            defLang = site.getDefaultLanguage();
-        }
-        catch (NullPointerException ex) {
-            logger.warn("Unable to get Sites Default Language", ex);
-        }
-
-        return defLang;
-    }
+//    public static Locale getCurrSiteDefLang(HttpServletRequest request) {
+//        Site site = RequestUtils.getSite(request);
+//        if (site == null)
+//            return null;
+//
+//        Locale defLang = null;
+//
+//        try {
+//            defLang = site.getDefaultLanguage();
+//        }
+//        catch (NullPointerException ex) {
+//            logger.warn("Unable to get Sites Default Language", ex);
+//        }
+//
+//        return defLang;
+//    }
 
     public static ModuleInstance getRequiredInstance(HttpServletRequest request,
         String moduleName, String moduleInstance) {
@@ -1677,7 +1677,7 @@ public class DgUtil {
      * age - 26 <small><i>It's my real age for this moment. Mikheil</i></small>
      * @return String, assembled by the replacement procedure
      */
-    public static String fillPattern(String pattern, Map parameters) {
+    public static String fillPattern(String pattern, Map<String, ? extends Object> parameters) {
         return fillPattern(pattern, parameters, true);
     }
 
@@ -1694,7 +1694,7 @@ public class DgUtil {
      * parameter name there. When false - skip
      * @return String, assembled by the replacement procedure
      */
-    public static String fillPattern(String pattern, Map parameters,
+    public static String fillPattern(String pattern, Map<String, ? extends Object> parameters,
                                      boolean useParamNames) {
         if ( (pattern == null) || (parameters == null)) {
             return null;

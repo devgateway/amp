@@ -23,6 +23,7 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -151,9 +152,7 @@ public class ShowTeamReports extends Action {
 	}
 
 	private void getAllReports(boolean appSettingSet, ReportsForm rf, TeamMember tm, HttpServletRequest request) {
-        String siteId = RequestUtils.getSite(request).getSiteId();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-        Locale currentLocale = new Locale(locale);
+        Locale currentLocale = new Locale(TLSUtils.getLangCode());
         Collator collator = Collator.getInstance(currentLocale);
         collator.setStrength(Collator.PRIMARY);
 
@@ -191,6 +190,10 @@ public class ShowTeamReports extends Action {
                         sort = new AdvancedReportUtil.AmpReportTitleComparator(AdvancedReportUtil.SortOrder.DESC, collator);
                         Collections.sort(reports, sort);
                         break;
+                        
+                       default:
+                    	   //TODO: not sorting by other fields?
+                    	   break;
                 }
                
             }
@@ -223,9 +226,9 @@ public class ShowTeamReports extends Action {
 			AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 			if (appSettingSet) {
 				if(favourites !=null && favourites){
-					teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword(),rf.getSelectedReportCategory(),favourites);
+					teamResults = TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword(),rf.getSelectedReportCategory(),favourites);
 				}else{
-					teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword(),rf.getSelectedReportCategory());
+					teamResults = TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId(), rf.getKeyword(),rf.getSelectedReportCategory());
 				}
 				
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(), rf.getShowTabs(), true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
@@ -234,9 +237,9 @@ public class ShowTeamReports extends Action {
 				//rf.setTempNumResults(100);
 			}else{
 				if(favourites !=null && favourites){
-					teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword(),rf.getSelectedReportCategory(),favourites);
+					teamResults = TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword(),rf.getSelectedReportCategory(),favourites);
 				}else{
-					teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword(),rf.getSelectedReportCategory());
+					teamResults = TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId(),rf.getKeyword(),rf.getSelectedReportCategory());
 				}
 				
 				}
@@ -273,12 +276,7 @@ public class ShowTeamReports extends Action {
 					while (iterator2.hasNext()) {
 						arh = (AmpReportHierarchy) iterator2.next();
 						text = arh.getColumn().getColumnName();
-						try {
-							//translatedText = TranslatorWorker.translate(prefix + text.toLowerCase(), locale, siteId);
-							translatedText = TranslatorWorker.translateText(text, locale, siteId);
-						} catch (WorkerException e) {
-							e.printStackTrace();
-						}
+						translatedText = TranslatorWorker.translateText(text);
 						if (translatedText.compareTo("") == 0)
 							translatedText = text;
 						arh.getColumn().setColumnName(translatedText);

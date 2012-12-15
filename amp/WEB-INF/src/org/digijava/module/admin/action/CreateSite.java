@@ -60,7 +60,7 @@ public class CreateSite extends Action {
         SiteForm siteForm = (SiteForm) form;
         String siteKey = siteForm.getSiteKey().toLowerCase();
 
-        Site someSite = SiteUtils.getSite(siteKey);
+        Site someSite = SiteCache.lookupByName(siteKey);
         if (someSite != null) {
             ActionMessages errors = new ActionMessages();
             errors.add(null,

@@ -53,22 +53,16 @@ public class EditOrgType extends DispatchAction {
 		if (null == editForm.getOrgType()){
 			return mapping.findForward("forward");
 		}else{
-			Site site = RequestUtils.getSite(request);
-			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-					
-			String siteId = site.getId()+"";
-			String locale = navigationLanguage.getCode();
-			
 			int typesAmountWithGivenName=DbUtil.getOrgTypesAmount(editForm.getOrgType(),editForm.getAmpOrgTypeId());
 			int typesAmountWithGivenCode=DbUtil.getOrgTypesByCode(editForm.getOrgTypeCode(),editForm.getAmpOrgTypeId());			
 			if(typesAmountWithGivenName>0){
 				ActionMessages errors = new ActionMessages();
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationTypeManager.saveOrgTypeError",TranslatorWorker.translateText("Please choose other name as it is currently in use by some other organization type!", locale, siteId)));
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationTypeManager.saveOrgTypeError",TranslatorWorker.translateText("Please choose other name as it is currently in use by some other organization type!")));
 	            saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}else if(typesAmountWithGivenCode>0){
 				ActionMessages errors = new ActionMessages();
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationTypeManager.saveOrgTypeCodeError",TranslatorWorker.translateText("Please choose other Type code as it is currently in use by some other organization type!", locale, siteId)));
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationTypeManager.saveOrgTypeCodeError",TranslatorWorker.translateText("Please choose other Type code as it is currently in use by some other organization type!")));
 	            saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}else{
@@ -95,14 +89,8 @@ public class EditOrgType extends DispatchAction {
 			AddOrgTypeForm editForm = (AddOrgTypeForm) form;
 			int typesAmountWithGivenName=DbUtil.getOrgTypesAmount(editForm.getOrgType(),editForm.getAmpOrgTypeId());
 			if(typesAmountWithGivenName > 0){
-				Site site = RequestUtils.getSite(request);
-				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-						
-				String siteId = site.getId()+"";
-				String locale = navigationLanguage.getCode();
-				
 				ActionMessages errors = new ActionMessages();
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationTypeManager.saveOrgTypeError",TranslatorWorker.translateText("Please choose other name as it is currently in use by some other organization type!", locale, siteId)));
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.organizationTypeManager.saveOrgTypeError",TranslatorWorker.translateText("Please choose other name as it is currently in use by some other organization type!")));
 	            saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}else{

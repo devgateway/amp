@@ -13,7 +13,9 @@ import org.apache.lucene.search.Hit;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LangSupport;
 import org.digijava.kernel.lucene.LucModule;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.text.regex.RegexBatch;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.help.helper.HelpTopicHelper;
 import org.digijava.module.help.util.HelpUtil;
 
@@ -181,7 +183,7 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 
 	@Override
 	public List<HelpTopicHelper> getItemsToIndex() throws DgException {
-		String siteId = "amp"; //null;
+		Site site = SiteCache.lookupByName("amp"); //TODO-Constantin: source of bugs if we ever move to multisite installs
 		List<HelpTopicHelper> topicHelpers = null;
 		EnumSet<LangSupport> langs = null;
 		boolean exclude = false;
@@ -197,7 +199,7 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 		}
 		
 		//do search
-		topicHelpers = HelpUtil.getHelpItems(siteId, this.MODULE_INSTANCE, langs, exclude);
+		topicHelpers = HelpUtil.getHelpItems(site, this.MODULE_INSTANCE, langs, exclude);
 
 		return topicHelpers;
 	}

@@ -104,11 +104,9 @@ public class UpdateComponentType extends Action {
 	}
 	
 	public void addErrorsToSession(HttpServletRequest request) throws java.lang.Exception{
-		String siteId = RequestUtils.getSite(request).getId().toString();
-		String locale= RequestUtils.getNavigationLanguage(request).getCode();
 		HttpSession session = request.getSession();
 		ActionMessages errors = new ActionMessages();
-		errors.add("title", new ActionMessage("error.aim.componentType.componentTypeCodeNameExist", TranslatorWorker.translateText("The component type NAME or CODE you added already exist. Please add other name or code.",locale,siteId)));
+		errors.add("title", new ActionMessage("error.aim.componentType.componentTypeCodeNameExist", TranslatorWorker.translateText("The component type NAME or CODE you added already exist. Please add other name or code.")));
 		session.setAttribute("AddComponentTypeError",errors);
 	}
 	

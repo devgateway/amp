@@ -50,8 +50,6 @@ public class ShowProjectsList extends Action {
 		String id = request.getParameter("id");
 		String startYear = request.getParameter("startYear");
 		String endYear = request.getParameter("endYear");
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String itemName = "";
 		
 		int startYearInt = 0;
@@ -115,11 +113,7 @@ public class ShowProjectsList extends Action {
 				if(!long1.equals(0l)){
 					itemName = LocationUtil.getAmpLocationByCVLocation(long1).getLocation().getName();
 				} else {
-					try {
-			        	itemName = TranslatorWorker.translateText("Unallocated", locale, siteId);
-					} catch (WorkerException e) {
-						itemName = "Unallocated";
-					}
+					itemName = TranslatorWorker.translateText("Unallocated");
 				}
 				Long[] id1 = {long1};
 				DashboardFilter newFilter = filter.getCopyFilterForFunding();
@@ -181,11 +175,7 @@ public class ShowProjectsList extends Action {
 					AmpCategoryValue categoryValue = CategoryManagerUtil.getAmpCategoryValueFromDb(long1);
 					itemName = categoryValue.getValue();
 				} else {
-					try {
-			        	itemName = TranslatorWorker.translateText("Unallocated", locale, siteId);
-					} catch (WorkerException e) {
-						itemName = "Unallocated";
-					}
+					itemName = TranslatorWorker.translateText("Unallocated");
 				}
 				Long[] id1 = {long1};
 				DashboardFilter newFilter = filter.getCopyFilterForFunding();
@@ -198,23 +188,19 @@ public class ShowProjectsList extends Action {
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 		if (type.equals("Fundings")){
-			try {
-				switch (Integer.parseInt(id)) {
+			switch (Integer.parseInt(id)) {
 				case Constants.COMMITMENT:
-					itemName = TranslatorWorker.translateText("ODA Historical Trend - Commitments", locale, siteId);		
+					itemName = TranslatorWorker.translateText("ODA Historical Trend - Commitments");		
 					break;
 				case Constants.DISBURSEMENT:
-					itemName = TranslatorWorker.translateText("ODA Historical Trend - Disbursements", locale, siteId);
+					itemName = TranslatorWorker.translateText("ODA Historical Trend - Disbursements");
 					break;
 				case Constants.EXPENDITURE:
-					itemName = TranslatorWorker.translateText("ODA Historical Trend - Expenditures", locale, siteId);
+					itemName = TranslatorWorker.translateText("ODA Historical Trend - Expenditures");
 					break;
 				default:
 					break;
 				}
-			} catch (WorkerException e) {
-				itemName = "ODA Historical Trend";
-			}
             activities = this.getActivities(filter, startDate, endDate, null, null, Integer.parseInt(id), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
             BigDecimal divideByDenominator;
 			divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
@@ -226,10 +212,10 @@ public class ShowProjectsList extends Action {
     		
     		if(id.equalsIgnoreCase(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
     			adjustmentType = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL;
-    			itemName = TranslatorWorker.translateText("Aid Predictability - Actual", locale, siteId);
+    			itemName = TranslatorWorker.translateText("Aid Predictability - Actual");
     		} else {
     			adjustmentType = CategoryConstants.ADJUSTMENT_TYPE_PLANNED;
-    			itemName = TranslatorWorker.translateText("Aid Predictability - Planned", locale, siteId);
+    			itemName = TranslatorWorker.translateText("Aid Predictability - Planned");
     		}
             activities = this.getActivities(filter, startDate, endDate, null, null, filter.getTransactionType(), adjustmentType);
             BigDecimal divideByDenominator;
@@ -242,10 +228,10 @@ public class ShowProjectsList extends Action {
     		
     		if(id.toLowerCase().contains(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().toLowerCase())){
     			adjustmentType = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL;
-    			itemName = TranslatorWorker.translateText("Aid Predictability Quarter - Actual", locale, siteId);
+    			itemName = TranslatorWorker.translateText("Aid Predictability Quarter - Actual");
     		} else {
     			adjustmentType = CategoryConstants.ADJUSTMENT_TYPE_PLANNED;
-    			itemName = TranslatorWorker.translateText("Aid Predictability Quarter - Planned", locale, siteId);
+    			itemName = TranslatorWorker.translateText("Aid Predictability Quarter - Planned");
     		}
     		Date startDateQ = null;
 			Date endDateQ = null;
@@ -294,7 +280,7 @@ public class ShowProjectsList extends Action {
 	        for (Iterator iterator = categoryValues.iterator(); iterator.hasNext();) {
 				AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
 				if (ampCategoryValue.getId()== Long.parseLong(id)) {
-					itemName = TranslatorWorker.translateText("Aid Type - " + ampCategoryValue.getValue(), locale, siteId);
+					itemName = TranslatorWorker.translateText("Aid Type - " + ampCategoryValue.getValue());
 				}
 			}
 			activities = this.getActivities(filter, startDate, endDate, Long.parseLong(id), null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
@@ -308,7 +294,7 @@ public class ShowProjectsList extends Action {
 	        for (Iterator iterator = categoryValues.iterator(); iterator.hasNext();) {
 				AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
 				if (ampCategoryValue.getId()== Long.parseLong(id)) {
-					itemName = TranslatorWorker.translateText("Aid Type - " + ampCategoryValue.getValue(), locale, siteId);
+					itemName = TranslatorWorker.translateText("Aid Type - " + ampCategoryValue.getValue());
 				}
 			}
 			activities = this.getActivities(filter, startDate, endDate, null, Long.parseLong(id), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);

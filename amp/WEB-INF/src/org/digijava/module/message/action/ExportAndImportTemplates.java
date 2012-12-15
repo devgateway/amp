@@ -107,7 +107,7 @@ public class ExportAndImportTemplates extends DispatchAction {
 			} catch (Exception ex) {			
 				ex.printStackTrace(System.out);
 				ActionMessages errors = new ActionMessages();
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTemplate", TranslatorWorker.translateText("Please choose correct file to import",request)));				
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTemplate", TranslatorWorker.translateText("Please choose correct file to import")));				
 				saveErrors(request, errors);
 				return mapping.findForward("gotoPage");
 			}			

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.help.dbentity.HelpTopic;
 
@@ -20,7 +21,7 @@ public class HelpTopicTreeNode {
 	private HelpTopic origin;
 	private List<HelpTopicTreeNode> children;
 	private HelpTopicTreeNode parentNode;
-	private String siteId;
+	private Site site;
 	private String locale;
 
 	/**
@@ -48,9 +49,9 @@ public class HelpTopicTreeNode {
 	 * @param siteId
 	 * @param locale
 	 */
-	public HelpTopicTreeNode(HelpTopic dbBean,String siteId,String locale){
+	public HelpTopicTreeNode(HelpTopic dbBean, Site site, String locale){
 		this(dbBean);
-		this.siteId = siteId;
+		this.site = site;
 		this.locale = locale;
 	}
 	
@@ -127,10 +128,10 @@ public class HelpTopicTreeNode {
 
 	private String trn(String text){
 		String result = text;
-		if (this.siteId != null && this.locale != null){
+		if (this.site != null && this.locale != null){
 			//translate if in translatable mode
 			try {
-				result = TranslatorWorker.translateText(text, this.locale, this.siteId);
+				result = TranslatorWorker.translateText(text, this.locale, this.site);
 				result = result.replaceAll("'", "\\\\'");
 			} catch (WorkerException e) {
 				e.printStackTrace();

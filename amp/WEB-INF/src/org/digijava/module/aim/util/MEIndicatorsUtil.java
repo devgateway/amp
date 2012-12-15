@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -40,12 +41,12 @@ import org.hibernate.Transaction;
 public class MEIndicatorsUtil
 {
 	private static Logger logger = Logger.getLogger(MEIndicatorsUtil.class);
-	public static Collection getAllIndicators()
+	public static List<AmpMEIndicatorList> getAllIndicators()
 	{
 		Session session = null;
 		Query qry = null;
-		Collection indicators = new ArrayList();
-		Collection col;
+		List<AmpMEIndicatorList> indicators = new ArrayList<AmpMEIndicatorList>();
+		Collection<AmpMEIndicators> col;
 		AmpMEIndicatorList indList = null;
 
 		try
@@ -54,11 +55,11 @@ public class MEIndicatorsUtil
 			String queryString = "select i from " + AmpMEIndicators.class.getName() + " i";
 			qry = session.createQuery(queryString);
 			col = qry.list();
-			Iterator itr = col.iterator();
+			Iterator<AmpMEIndicators> itr = col.iterator();
 			while(itr.hasNext())
 			{
 				indList = new AmpMEIndicatorList();
-				AmpMEIndicators meindicators = (AmpMEIndicators) itr.next();
+				AmpMEIndicators meindicators = itr.next();
 				indList.setAmpMEIndId(meindicators.getAmpMEIndId());
 				indList.setName(meindicators.getName());
 				indList.setCode(meindicators.getCode());
@@ -126,7 +127,7 @@ public class MEIndicatorsUtil
 		Session session = null;
 		Query qry = null;
 		Collection actIdCol = null;
-		Collection actInds = new ArrayList();
+		Collection<AllActivities> actInds = new ArrayList<AllActivities>();
 		try
 		{
 			session = PersistenceManager.getSession();
@@ -218,7 +219,7 @@ public class MEIndicatorsUtil
 	public static void saveIndicator(AllMEIndicators allMEInd)
 	{
 		Session session = null;
-		Transaction tx = null;
+//		Transaction tx = null;
 		try
 		{
 			session = PersistenceManager.getSession();
@@ -236,18 +237,6 @@ public class MEIndicatorsUtil
 		{
 			logger.error("Exception from saveIndicator() : " + ex.getMessage());
 			ex.printStackTrace(System.out);
-			if (tx != null)
-			{
-				try
-				{
-					tx.rollback();
-				}
-				catch (Exception trbf)
-				{
-					logger.error("Transaction roll back failed : "+trbf.getMessage());
-					trbf.printStackTrace(System.out);
-				}
-			}
 		}
 		finally
 		{
@@ -923,7 +912,7 @@ public class MEIndicatorsUtil
 
 	public static void deleteMEIndicatorValues(Long indValId) {
 		Session session = null;
-		Transaction tx = null;
+//		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
 			AmpMEIndicatorValue meIndVal = (AmpMEIndicatorValue) session.load(
@@ -945,14 +934,6 @@ public class MEIndicatorsUtil
 		} catch (Exception e) {
 			logger.error("Exception from saveMEIndicatorValues() :" + e.getMessage());
 			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception trbf) {
-					logger.error("Transaction roll back failed ");
-					e.printStackTrace(System.out);
-				}
-			}
 		} finally {
 			if (session != null) {
 				try {
@@ -1038,7 +1019,7 @@ public class MEIndicatorsUtil
 						actIndVal.setIndicatorName(key);
 						String trnKey = "aim:performance:"+(Constants.ME_IND_VAL_ACTUAL_ID).toLowerCase();
 						trnKey = trnKey.replaceAll(" ", "");
-						String msg = CategoryManagerUtil.translate(trnKey, request, Constants.ME_IND_VAL_ACTUAL_ID);
+						String msg = CategoryManagerUtil.translate(trnKey, Constants.ME_IND_VAL_ACTUAL_ID);
 						actIndVal.setType(msg);
 						if (actVal!=null&&tarVal > 0) {
 							actIndVal.setValue((actVal - baseVal)/(tarVal - baseVal));
@@ -1050,7 +1031,7 @@ public class MEIndicatorsUtil
 						actIndVal.setIndicatorName(key);
 						String trnKey = "aim:performance:"+(Constants.ME_IND_VAL_ACTUAL_ID).toLowerCase();
 						trnKey = trnKey.replaceAll(" ", "");
-						String msg = CategoryManagerUtil.translate(trnKey, request, Constants.ME_IND_VAL_ACTUAL_ID);
+						String msg = CategoryManagerUtil.translate(trnKey, Constants.ME_IND_VAL_ACTUAL_ID);
 						actIndVal.setType(msg);
 						if (actVal!=null&&tarVal > 0) {
 							actIndVal.setValue(actVal/tarVal);
@@ -1063,7 +1044,7 @@ public class MEIndicatorsUtil
 					targetIndVal.setIndicatorName(key);
 					String trnKey = "aim:performance:"+(Constants.ME_IND_VAL_TARGET_ID).toLowerCase();
 					trnKey = trnKey.replaceAll(" ", "");
-					String msg = CategoryManagerUtil.translate(trnKey, request, Constants.ME_IND_VAL_TARGET_ID);
+					String msg = CategoryManagerUtil.translate(trnKey, Constants.ME_IND_VAL_TARGET_ID);
 
 					targetIndVal.setType(msg);
 					if (tarVal > 0) {

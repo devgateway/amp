@@ -41,7 +41,7 @@ public abstract class AbstractTrnValidator<T> extends AmpSemanticValidator<T> {
 		Site site = session.getSite();
 		try {
 			String translatedValue = TranslatorWorker.getInstance(genKey)
-					.translateFromTree(genKey, site.getId().longValue(),
+					.translateFromTree(genKey, site,
 							session.getLocale().getLanguage(), errorString,
 							TranslatorWorker.TRNTYPE_LOCAL, null);
 

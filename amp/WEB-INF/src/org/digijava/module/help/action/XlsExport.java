@@ -22,6 +22,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.util.Html2TextCallback;
@@ -51,14 +53,12 @@ public class XlsExport extends Action {
     		Integer[] r = {0};
     		Integer[] c = {0};    	
     		//
-            String language = RequestUtils.getNavigationLanguage(request).getCode();
     		String moduleInstance = RequestUtils.getModuleInstance(request).getInstanceName();
-    		String siteId = RequestUtils.getSite(request).getSiteId();
             //
     		HSSFWorkbook workbook = new HSSFWorkbook();
     		HSSFSheet sheet = workbook.createSheet("Glossary");
     		//
-			List<HelpTopic> helpTopics = GlossaryUtil.getChildTopics(siteId, moduleInstance, null);
+			List<HelpTopic> helpTopics = GlossaryUtil.getChildTopics(TLSUtils.getSite(), moduleInstance, null);
 			//
 			HSSFFont font = workbook.createFont();
 			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -70,24 +70,24 @@ public class XlsExport extends Action {
 			HSSFRow row = sheet.createRow(r[0].intValue());
 			HSSFCell cell = row.createCell(c[0].intValue());			
     		// path
-    		cell.setCellValue(TranslatorWorker.translateText("PATH", language, siteId));
+    		cell.setCellValue(TranslatorWorker.translateText("PATH"));
     		cell.setCellStyle(style);
 			//
     		c[0]++;
     		cell = row.createCell(c[0].intValue());
     		// term
-    		cell.setCellValue(TranslatorWorker.translateText("TERM", language, siteId));
+    		cell.setCellValue(TranslatorWorker.translateText("TERM"));
     		cell.setCellStyle(style);
             //
     		c[0]++;
     		cell = row.createCell(c[0].intValue());
     		//
-    		cell.setCellValue(TranslatorWorker.translateText("DEFINITION", language, siteId));
+    		cell.setCellValue(TranslatorWorker.translateText("DEFINITION"));
     		cell.setCellStyle(style);
     		//
 			r[0]++;
 			c[0] = 0;
-			writechild(r, c, helpTopics, moduleInstance, siteId, language, sheet);
+			writechild(r, c, helpTopics, moduleInstance, TLSUtils.getSite(), TLSUtils.getLangCode(), sheet);
 			//
     		ServletOutputStream out = response.getOutputStream();
     		workbook.write(out);
@@ -111,7 +111,7 @@ public class XlsExport extends Action {
      * @param language
      * @param sheet
      */
-	private void writechild (Integer[] r, Integer[] c, List<HelpTopic> helpTopics, String moduleInstance, String siteId, String language, HSSFSheet sheet) {
+	private void writechild (Integer[] r, Integer[] c, List<HelpTopic> helpTopics, String moduleInstance, Site site, String language, HSSFSheet sheet) {
   		//
     	try {
     		List<HelpTopic> childs = null;
@@ -129,23 +129,23 @@ public class XlsExport extends Action {
 	    		c[0]++;
 	    		cell = row.createCell(c[0].intValue());
 	    		// term
-	    		cell.setCellValue(TranslatorWorker.translateText(helpTopic.getTopicKey(), language, siteId));
+	    		cell.setCellValue(TranslatorWorker.translateText(helpTopic.getTopicKey(), language, site));
 	            //
 	    		c[0]++;
 	    		cell = row.createCell(c[0].intValue());
 	    		// definition
-				body = DbUtil.getEditorBody(siteId, helpTopic.getBodyEditKey(), language);
+				body = DbUtil.getEditorBody(site, helpTopic.getBodyEditKey(), language);
 				if (body == null) body = "";
 				//
-				html2TextCallback.parse(new StringReader(TranslatorWorker.translateText(body, language, siteId)));
+				html2TextCallback.parse(new StringReader(TranslatorWorker.translateText(body, language, site)));
 				cell.setCellValue(html2TextCallback.getText());
 	    		//
 	    		r[0]++;
 	    		c[0] = 0;
 	    		//
-	            childs = GlossaryUtil.getChildTopics(siteId, moduleInstance, helpTopic.getHelpTopicId());
+	            childs = GlossaryUtil.getChildTopics(site, moduleInstance, helpTopic.getHelpTopicId());
 	            if ((childs != null) && (!childs.isEmpty())) {
-		            writechild(r, c, childs, moduleInstance, siteId, language, sheet);	
+		            writechild(r, c, childs, moduleInstance, site, language, sheet);	
 	            }
 			}
     	} catch (Exception ex) {

@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
@@ -1280,7 +1281,8 @@ public class DataExchangeUtils {
 			ExportBuilder eBuilder = null;
 			AmpActivity ampActivity = (AmpActivity) iterator.next();
 
-			eBuilder = new ExportBuilder(ampActivity, "3");
+			Site site = SiteCache.lookupByName("amp"); //TODO:Constantin: bugs galore
+			eBuilder = new ExportBuilder(ampActivity, site);
 			AmpColumnEntry columns = new AmpColumnEntry();
 			columns.setKey("activityTree.select");
 			columns.setName("activity");

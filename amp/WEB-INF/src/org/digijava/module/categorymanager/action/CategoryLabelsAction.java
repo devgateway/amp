@@ -53,7 +53,7 @@ public class CategoryLabelsAction extends Action {
 				if ( category.getId().equals( myForm.getDelUsedCategoryId() ) ){
 					iter.remove();
 					String translatedName	= CategoryManagerUtil.translate( 
-								CategoryManagerUtil.getTranslationKeyForCategoryName(category.getKeyName()), request, category.getName()   );
+								CategoryManagerUtil.getTranslationKeyForCategoryName(category.getKeyName()), category.getName()   );
 					KeyValue kv				= new KeyValue(category.getId().toString(), translatedName);
 					myForm.getAvailableCategories().add(kv);
 					break;

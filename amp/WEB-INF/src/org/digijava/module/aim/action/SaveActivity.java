@@ -151,9 +151,6 @@ public class SaveActivity extends Action {
 	private static Logger logger = Logger.getLogger(SaveActivity.class);
 
 	private ServletContext ampContext = null;
-
-	private String siteId;
-	private String locale;
 	
 	private void processPreStep(EditActivityForm eaForm, AmpActivityVersion activity, TeamMember tm, Boolean[] createdAsDraft) throws Exception, AMPException{
 		// if the activity is being added from a users workspace,
@@ -207,10 +204,10 @@ public class SaveActivity extends Action {
 			if (eaForm.getIdentification().getTitle() != null) {
 				if (eaForm.getIdentification().getTitle().trim().length() == 0) {
 					errors.add("title", new ActionMessage(
-					"error.aim.addActivity.titleMissing", TranslatorWorker.translateText("Please enter the title",locale,siteId)));
+					"error.aim.addActivity.titleMissing", TranslatorWorker.translateText("Please enter the title")));
 				} else if (eaForm.getIdentification().getTitle().length() > 255) {
 					errors.add("title", new ActionMessage(
-					"error.aim.addActivity.titleTooLong", TranslatorWorker.translateText("Title should be less than 255 characters",locale,siteId)));
+					"error.aim.addActivity.titleTooLong", TranslatorWorker.translateText("Title should be less than 255 characters")));
 				}
 			}
 			
@@ -220,7 +217,7 @@ public class SaveActivity extends Action {
 				if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
 					if (statId != null && statId.equals(new Long(0))) {
 						errors.add("status", new ActionMessage(
-						"error.aim.addActivity.statusMissing", TranslatorWorker.translateText("Please select the status",locale,siteId)));
+						"error.aim.addActivity.statusMissing", TranslatorWorker.translateText("Please select the status")));
 					}
 				}
 			}
@@ -231,7 +228,7 @@ public class SaveActivity extends Action {
 				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
 						&& FeaturesUtil.isVisibleField("Validate Mandatory Vote", ampContext)){
 					errors.add("budgetVoteMissing",
-							new ActionMessage("error.aim.addActivity.budgetVoteMissing", TranslatorWorker.translateText("Please enter Vote under identification section",locale,siteId)));
+							new ActionMessage("error.aim.addActivity.budgetVoteMissing", TranslatorWorker.translateText("Please enter Vote under identification section")));
 				}else{
 					activity.setVote(new String(" "));
 				}
@@ -243,7 +240,7 @@ public class SaveActivity extends Action {
 				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
 						&& FeaturesUtil.isVisibleField("Validate Mandatory Sub-Vote", ampContext)){
 					errors.add("budgetSubVoteMissing",
-							new ActionMessage("error.aim.addActivity.budgetSubVoteMissing", TranslatorWorker.translateText("Please enter Sub-Vote under identification section",locale,siteId)));
+							new ActionMessage("error.aim.addActivity.budgetSubVoteMissing", TranslatorWorker.translateText("Please enter Sub-Vote under identification section")));
 				}else{
 					activity.setSubVote(new String(" "));
 				}
@@ -255,7 +252,7 @@ public class SaveActivity extends Action {
 				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
 						&& FeaturesUtil.isVisibleField("Validate Mandatory Sub-Program", ampContext)){
 					errors.add("budgetSubProgramMissing",
-							new ActionMessage("error.aim.addActivity.budgetSubProgramMissing", TranslatorWorker.translateText("Please enter Sub Program under identification section",locale,siteId)));
+							new ActionMessage("error.aim.addActivity.budgetSubProgramMissing", TranslatorWorker.translateText("Please enter Sub Program under identification section")));
 				}else{
 					activity.setSubProgram(new String(" "));
 				}
@@ -267,7 +264,7 @@ public class SaveActivity extends Action {
 				if (Boolean.parseBoolean(eaForm.getIdentification().getBudgetCheckbox()) 
 						&& FeaturesUtil.isVisibleField("Validate Mandatory Project Code", ampContext)){
 					errors.add("budgetProjectCodeMissing",
-							new ActionMessage("error.aim.addActivity.budgetProjectCodeMissing", TranslatorWorker.translateText("Please enter Project Code under identification section",locale,siteId)));
+							new ActionMessage("error.aim.addActivity.budgetProjectCodeMissing", TranslatorWorker.translateText("Please enter Project Code under identification section")));
 				}else{
 					activity.setProjectCode(new String(" "));
 				}
@@ -624,7 +621,7 @@ public class SaveActivity extends Action {
 			if(eaForm.getIdentification().getDraft()==null || !eaForm.getIdentification().getDraft().booleanValue()){
 				if(isSectorEnabled()){
 					if (eaForm.getSectors().getActivitySectors() == null || eaForm.getSectors().getActivitySectors().size() < 1) {
-						errors.add("sector", new ActionMessage("error.aim.addActivity.sectorEmpty", TranslatorWorker.translateText("Please add a sector",locale,siteId)));
+						errors.add("sector", new ActionMessage("error.aim.addActivity.sectorEmpty", TranslatorWorker.translateText("Please add a sector")));
 					}
 					else{
 						float primaryPrc=0, secondaryPrc=0, tertiaryPrc=0;
@@ -642,7 +639,7 @@ public class SaveActivity extends Action {
 								hasTertiarySectorsAdded=true;
 							
 							if (null == actSect.getSectorPercentage() || "".equals(actSect.getSectorPercentage())) {
-								errors.add("sectorPercentageEmpty", new ActionMessage("error.aim.addActivity.sectorPercentageEmpty", TranslatorWorker.translateText("Please enter sector percentage",locale,siteId)));
+								errors.add("sectorPercentageEmpty", new ActionMessage("error.aim.addActivity.sectorPercentageEmpty", TranslatorWorker.translateText("Please enter sector percentage")));
 							}
 							// sector percentage is not a number
 							else {
@@ -652,7 +649,7 @@ public class SaveActivity extends Action {
                                     if("Tertiary".equals(config.getName())) tertiaryPrc+=actSect.getSectorPercentage().floatValue();
 								} catch (NumberFormatException nex) {
 									errors.add("sectorPercentageNonNumeric",
-											new ActionMessage("error.aim.addActivity.sectorPercentageNonNumeric", TranslatorWorker.translateText("Sector percentage must be numeric",locale,siteId)));
+											new ActionMessage("error.aim.addActivity.sectorPercentageNonNumeric", TranslatorWorker.translateText("Sector percentage must be numeric")));
 								}
 							}
 						}
@@ -661,11 +658,11 @@ public class SaveActivity extends Action {
 							if(!hasPrimarySectorsAdded){
 								if (FeaturesUtil.isVisibleField("Validate Mandatory Primary Sector", ampContext)){
 								errors.add("noPrimarySectorsAdded",
-										new ActionMessage("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors",locale,siteId)));
+										new ActionMessage("error.aim.addActivity.noPrimarySectorsAdded", TranslatorWorker.translateText("please add primary sectors")));
 							}
 							}
 							else if(primaryPrc!=100)
-								errors.add("primarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.primarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all primary sector percentage must be 100",locale,siteId)));						
+								errors.add("primarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.primarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all primary sector percentage must be 100")));						
 						}
 
 						
@@ -673,21 +670,21 @@ public class SaveActivity extends Action {
 							if(!hasSecondarySectorsAdded){
 								if (FeaturesUtil.isVisibleField("Validate Mandatory Secondary Sector", ampContext)){
 								errors.add("noSecondarySectorsAdded",
-										new ActionMessage("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors",locale,siteId)));								
+										new ActionMessage("error.aim.addActivity.noSecondarySectorsAdded", TranslatorWorker.translateText("please add secondary sectors")));								
 							}
 							}
 							else if(hasSecondarySectorsAdded && secondaryPrc!=100)
-								errors.add("secondarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100",locale,siteId)));							
+								errors.add("secondarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.secondarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all secondary sector percentage must be 100")));							
 						}
                         if (Boolean.parseBoolean(eaForm.getSectors().getTertiarySectorVisible()) && isInConfig(eaForm, "Tertiary")){
 							if(!hasTertiarySectorsAdded){
 								if (FeaturesUtil.isVisibleField("Validate Mandatory Tertiary Sector", ampContext)){
 								errors.add("noTertiarySectorsAdded",
-										new ActionMessage("error.aim.addActivity.noTertiarySectorsAdded", TranslatorWorker.translateText("please add tertiary sectors",locale,siteId)));
+										new ActionMessage("error.aim.addActivity.noTertiarySectorsAdded", TranslatorWorker.translateText("please add tertiary sectors")));
 							}
 							}
 							else if(hasTertiarySectorsAdded && tertiaryPrc!=100)
-								errors.add("tertiarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.tertiarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all tertiary sector percentage must be 100",locale,siteId)));
+								errors.add("tertiarySectorPercentageSumWrong", new ActionMessage("error.aim.addActivity.tertiarySectorPercentageSumWrong", TranslatorWorker.translateText("Sum of all tertiary sector percentage must be 100")));
 						}
 
 					}
@@ -711,7 +708,7 @@ public class SaveActivity extends Action {
 						//Checks if it's 100%
 						if (totaltocompare!=100){
 							errors.add("locationPercentageSumWrong",
-									new ActionMessage("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100",locale,siteId)));
+									new ActionMessage("error.aim.addActivity.locationPercentageSumWrong", TranslatorWorker.translateText("Sum of all location percentage must be 100")));
 						}
 					}
 				}
@@ -730,11 +727,11 @@ public class SaveActivity extends Action {
 					}
 					if (totalPercentage != 100) {
 						errors.add("nationalPlanProgramsPercentageSumWrong",
-								new ActionMessage("error.aim.addActivity.nationalPlanProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all National Planning Objective percentages must be 100",locale,siteId)));
+								new ActionMessage("error.aim.addActivity.nationalPlanProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all National Planning Objective percentages must be 100")));
 					}
 					if(failNOP == true) {
 						errors.add("nationalPlanProgramsPercentageWrong",
-								new ActionMessage("error.aim.addActivity.nationalPlanProgramsPercentageWrong", TranslatorWorker.translateText("Please enter all National Planning Objective percentages",locale,siteId)));
+								new ActionMessage("error.aim.addActivity.nationalPlanProgramsPercentageWrong", TranslatorWorker.translateText("Please enter all National Planning Objective percentages")));
 					}
 				}
 				
@@ -748,7 +745,7 @@ public class SaveActivity extends Action {
 					}
 					if (totalPercentage != 100)
 						errors.add("primaryProgramsPercentageSumWrong",
-								new ActionMessage("error.aim.addActivity.primaryProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Primary Program percentages must be 100",locale,siteId)));
+								new ActionMessage("error.aim.addActivity.primaryProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Primary Program percentages must be 100")));
 				}
 				
 				if (eaForm.getPrograms().getSecondaryPrograms()!= null
@@ -761,7 +758,7 @@ public class SaveActivity extends Action {
 					}
 					if (totalPercentage != 100)
 						errors.add("secondaryProgramsPercentageSumWrong",
-								new ActionMessage("error.aim.addActivity.secondaryProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Secondary Program percentages must be 100",locale,siteId)));
+								new ActionMessage("error.aim.addActivity.secondaryProgramsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Secondary Program percentages must be 100")));
 				}
 			}
 			
@@ -1649,7 +1646,7 @@ public class SaveActivity extends Action {
                             String benAgencyIdStr = ppIt.next();
 							String percent = eaForm.getAgencies().getBenOrgPercentage().get(benAgencyIdStr);
 							if (null == percent|| "".equals(percent)) {
-								errors.add("BenOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.BenOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter beneficiary agency  percentage",locale,siteId)));
+								errors.add("BenOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.BenOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter beneficiary agency  percentage")));
 								break;
 							}
 
@@ -1665,7 +1662,7 @@ public class SaveActivity extends Action {
 						}
 						if (totalPercentage != 100)
 							errors.add("BenOrgPercentageSumWrong",
-									new ActionMessage("error.aim.addActivity.benOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Beneficiary Agency percentages must be 100",locale,siteId)));
+									new ActionMessage("error.aim.addActivity.benOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Beneficiary Agency percentages must be 100")));
 			}
 		}
 		
@@ -1676,7 +1673,7 @@ public class SaveActivity extends Action {
 						while (ppIt.hasNext()) {
 							String percent = ppIt.next() ;
 							if (null == percent|| "".equals(percent)) {
-								errors.add("impOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.impOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Implementing Agency percentage",locale,siteId)));
+								errors.add("impOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.impOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Implementing Agency percentage")));
 								break;
 							}
 		
@@ -1685,7 +1682,7 @@ public class SaveActivity extends Action {
 						}
 						if (totalPercentage != 100)
 							errors.add("implOrgPercentageSumWrong",
-									new ActionMessage("error.aim.addActivity.implOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Implementing Agency percentages must be 100",locale,siteId)));
+									new ActionMessage("error.aim.addActivity.implOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Implementing Agency percentages must be 100")));
 					}
 				}
 				
@@ -1696,7 +1693,7 @@ public class SaveActivity extends Action {
 						while (ppIt.hasNext()) {
 							String percent = ppIt.next() ;
 							if (null == percent|| "".equals(percent)) {
-								errors.add("contOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.contOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Contracting Agency percentage",locale,siteId)));
+								errors.add("contOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.contOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Contracting Agency percentage")));
 								break;
 							}
 							
@@ -1705,7 +1702,7 @@ public class SaveActivity extends Action {
 						}
 						if (totalPercentage != 100)
 							errors.add("contOrgPercentageSumWrong",
-									new ActionMessage("error.aim.addActivity.contOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Contracting Agency percentages must be 100",locale,siteId)));
+									new ActionMessage("error.aim.addActivity.contOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Contracting Agency percentages must be 100")));
 					}
 				}
 				
@@ -1716,7 +1713,7 @@ public class SaveActivity extends Action {
 						while (ppIt.hasNext()) {
 							String percent = ppIt.next() ;
 							if (null == percent|| "".equals(percent)) {
-								errors.add("execOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.execOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Executing Agency percentage",locale,siteId)));
+								errors.add("execOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.execOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Executing Agency percentage")));
 								break;
 							}
 							
@@ -1725,7 +1722,7 @@ public class SaveActivity extends Action {
 						}
 						if (totalPercentage != 100)
 							errors.add("execOrgPercentageSumWrong",
-									new ActionMessage("error.aim.addActivity.execOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Executing Agency percentages must be 100",locale,siteId)));
+									new ActionMessage("error.aim.addActivity.execOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Executing Agency percentages must be 100")));
 					}
 				}
 				
@@ -1736,7 +1733,7 @@ public class SaveActivity extends Action {
 						while (ppIt.hasNext()) {
 							String percent = ppIt.next() ;
 							if (null == percent|| "".equals(percent)) {
-								errors.add("regOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.regOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Regional Group percentage",locale,siteId)));
+								errors.add("regOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.regOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Regional Group percentage")));
 								break;
 							}
 							
@@ -1745,7 +1742,7 @@ public class SaveActivity extends Action {
 						}
 						if (totalPercentage != 100)
 							errors.add("regOrgPercentageSumWrong",
-									new ActionMessage("error.aim.addActivity.regOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Regional Group Percentages must be 100",locale,siteId)));
+									new ActionMessage("error.aim.addActivity.regOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Regional Group Percentages must be 100")));
 					}
 				}
 				
@@ -1756,7 +1753,7 @@ public class SaveActivity extends Action {
 						while (ppIt.hasNext()) {
 							String percent = ppIt.next() ;
 							if (null == percent|| "".equals(percent)) {
-								errors.add("resOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.resOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Responsible Organization percentage",locale,siteId)));
+								errors.add("resOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.resOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Responsible Organization percentage")));
 								break;
 							}
 							
@@ -1765,7 +1762,7 @@ public class SaveActivity extends Action {
 						}
 						if (totalPercentage != 100)
 							errors.add("resOrgPercentageSumWrong",
-									new ActionMessage("error.aim.addActivity.resOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Responsible Organization Percentages must be 100",locale,siteId)));
+									new ActionMessage("error.aim.addActivity.resOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Responsible Organization Percentages must be 100")));
 					}
 				}
 				
@@ -1776,7 +1773,7 @@ public class SaveActivity extends Action {
 						while (ppIt.hasNext()) {
 							String percent = ppIt.next() ;
 							if (null == percent|| "".equals(percent)) {
-								errors.add("sectOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.sectOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Sector Group percentage",locale,siteId)));
+								errors.add("sectOrgPercentageEmpty", new ActionMessage("error.aim.addActivity.sectOrgPercentagePercentageEmpty", TranslatorWorker.translateText("Please enter Sector Group percentage")));
 								break;
 							}
 							
@@ -1785,7 +1782,7 @@ public class SaveActivity extends Action {
 						}
 						if (totalPercentage != 100)
 							errors.add("sectOrgPercentageSumWrong",
-									new ActionMessage("error.aim.addActivity.sectOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Sector Group Percentages must be 100",locale,siteId)));
+									new ActionMessage("error.aim.addActivity.sectOrgsPercentageSumWrong", TranslatorWorker.translateText("Sum of all Sector Group Percentages must be 100")));
 					}
 				}
 			}
@@ -2880,10 +2877,7 @@ public class SaveActivity extends Action {
 		try{
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				
-		siteId = site.getId()+"";
-		locale = navigationLanguage.getCode();	
-			
+							
 		Long actId = null;
 		HttpSession session = request.getSession();
 		//Set<Components<AmpComponentFunding>> tempComp = new HashSet<Components<AmpComponentFunding>>();

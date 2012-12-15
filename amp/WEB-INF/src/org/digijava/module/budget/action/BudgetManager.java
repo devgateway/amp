@@ -59,7 +59,7 @@ public class BudgetManager extends MultiAction{
 		
 		if(request.getSession().getAttribute("duplicateBudgetSect")!=null){
 			ActionMessages errors= new ActionMessages();
-			errors.add("", new ActionMessage("error.admin.budgetSectExists", TranslatorWorker.translateText("Budget Sector with given name or code already exists", request)));
+			errors.add("", new ActionMessage("error.admin.budgetSectExists", TranslatorWorker.translateText("Budget Sector with given name or code already exists")));
 			saveErrors(request, errors);
 			
 			request.getSession().removeAttribute("duplicateBudgetSect");
@@ -72,7 +72,7 @@ public class BudgetManager extends MultiAction{
 		BudgetManagerForm bfrom = (BudgetManagerForm) form;
 		if(BudgetDbUtil.existsBudgetSector(bfrom.getBudgetsectorname(), bfrom.getBudgetsectorcode(), null)){
 			ActionMessages errors= new ActionMessages();
-			errors.add("", new ActionMessage("error.admin.budgetSectExists", TranslatorWorker.translateText("Budget Sector with given name or code already exists", request)));
+			errors.add("", new ActionMessage("error.admin.budgetSectExists", TranslatorWorker.translateText("Budget Sector with given name or code already exists")));
 			saveErrors(request, errors);			
 			bfrom.setBudgetsectors(BudgetDbUtil.getBudgetSectors());
 			return mapping.findForward("forward");

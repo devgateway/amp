@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.jaxb.Activities;
@@ -22,7 +24,8 @@ public class WsHelper {
 			ExportBuilder eBuilder = null;
 			AmpActivity ampActivity = (AmpActivity) iterator.next();
 
-			eBuilder = new ExportBuilder(ampActivity, "3");
+			Site site = SiteCache.lookupByName("amp");
+			eBuilder = new ExportBuilder(ampActivity, site);
 			AmpColumnEntry columns = new AmpColumnEntry();
 			columns.setKey("activityTree.select");
 			columns.setName("activity");

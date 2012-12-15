@@ -25,6 +25,10 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.SiteCache;
+import org.digijava.module.aim.util.AmpMath;
 /**
  * @author shamanth.murthy
  *
@@ -174,10 +178,21 @@ public class Message implements Serializable{
 
 
 	/**
+	 * @deprecated - do not use directly as it subscribes you to a certain DB encoding. Use {@link #setSite(Site instead)}
 	 * @param timestamp
 	 */
-	public void setSiteId(String timestamp) {
-		siteId = timestamp;
+	public void setSiteId(String siteId) {
+		if ((siteId != null) && (!AmpMath.isLong(siteId)))
+		{
+			this.siteId = SiteCache.lookupByName(siteId).getId().toString();
+			Logger.getLogger(this.getClass()).error("wrong siteId in Message, should be number!" + siteId, new RuntimeException());
+		}
+		this.siteId = siteId;
+	}
+	
+	public void setSite(Site site)
+	{
+		setSiteId(site == null ? null : site.getId().toString());
 	}
 
     private boolean compareStrings(String first, String second) {

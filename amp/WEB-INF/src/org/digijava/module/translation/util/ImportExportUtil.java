@@ -31,6 +31,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.admin.util.DbUtil;
@@ -167,7 +168,7 @@ public class ImportExportUtil {
 			String msgSiteId 	= message.getSiteId();
 			
 			//find same record in db
-			Message existingMessage = option.getSearcher().get(msgKey,msgLang,msgSiteId);
+			Message existingMessage = option.getSearcher().get(msgKey, msgLang, Long.parseLong(msgSiteId));
 			
 			//default type in case we do not have specified types.
 			//This default type means that we will not skip any record. If this is not goo didea, change with return;
@@ -327,7 +328,7 @@ public class ImportExportUtil {
 	private static class CacheSearcher implements TranslationSearcher{
 		private TranslatorWorker worker = TranslatorWorker.getInstance("");
 		@Override
-		public Message get(String key,String locale,String siteId) throws Exception{
+		public Message get(String key,String locale, Long siteId) throws Exception{
 			return worker.getByKey(key, locale, siteId);
 		}
 	}
@@ -481,7 +482,7 @@ public class ImportExportUtil {
 	 * @return list target language 
 	 * @throws AimException
 	 */
-	public static void importExcelFile(POIFSFileSystem fsFileSystem,ImportExportOption option, String siteId)  throws AimException{
+	public static void importExcelFile(POIFSFileSystem fsFileSystem,ImportExportOption option, Site site)  throws AimException{
 		String targetLanguage=null;
 		Session session = null;
 		try {
@@ -517,7 +518,7 @@ public class ImportExportUtil {
 					message.setKey(key);
 					message.setMessage(englishText);
 					message.setLocale("en");
-					message.setSiteId(siteId);
+					message.setSite(site);
 					message.setCreated(new Timestamp(englishDate.getTime()));
 					queue.put(message);
 				}
@@ -527,7 +528,7 @@ public class ImportExportUtil {
 					targetMessage.setKey(key);
 					targetMessage.setMessage(targetText);
 					targetMessage.setLocale(targetLanguage);
-					targetMessage.setSiteId(siteId);
+					targetMessage.setSite(site);
 					targetMessage.setCreated(new Timestamp(targetDate.getTime()));
 					queue.put(targetMessage);	
 				}

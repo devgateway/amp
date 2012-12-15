@@ -28,6 +28,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -149,8 +150,6 @@ public class ExportActivityToWord extends Action {
         response.setContentType("application/msword");
         response.setHeader("content-disposition", "inline;filename=activity.doc");
         com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         
         
@@ -186,7 +185,7 @@ public class ExportActivityToWord extends Action {
 	            Table identificationTbl = null;
 	            identificationTbl = new Table(1);
 	            identificationTbl.setWidth(100);
-	            RtfCell identificationTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Identification",request).toUpperCase(), HEADERFONT));
+	            RtfCell identificationTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Identification").toUpperCase(), HEADERFONT));
 	            //identificationTitleCell.setColspan(2);
 	            identificationTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 	            identificationTitleCell.setBackgroundColor(CELLCOLORGRAY);
@@ -209,7 +208,7 @@ public class ExportActivityToWord extends Action {
 	            Table planningTbl = null;
 	            planningTbl = new Table(1);
 	            planningTbl.setWidth(100);
-	            RtfCell planningTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Planning",request).toUpperCase(), HEADERFONT));
+	            RtfCell planningTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Planning").toUpperCase(), HEADERFONT));
 	            //identificationTitleCell.setColspan(2);
 	            planningTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 	            planningTitleCell.setBackgroundColor(CELLCOLORGRAY);
@@ -233,7 +232,7 @@ public class ExportActivityToWord extends Action {
 					referencesTbl = new Table(1);
 					referencesTbl.setWidth(100);
 					RtfCell referencesTitleCell = new RtfCell(new Paragraph(
-							TranslatorWorker.translateText("References", request)
+							TranslatorWorker.translateText("References")
 									.toUpperCase(), HEADERFONT));
 					referencesTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 					referencesTitleCell.setBackgroundColor(CELLCOLORGRAY);
@@ -255,7 +254,7 @@ public class ExportActivityToWord extends Action {
 	            Table locationTbl = null;
 	            locationTbl = new Table(1);
 	            locationTbl.setWidth(100);
-	            RtfCell locationTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Location",request).toUpperCase(), HEADERFONT));
+	            RtfCell locationTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Location").toUpperCase(), HEADERFONT));
 	            locationTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 	            locationTitleCell.setBackgroundColor(CELLCOLORGRAY);
 	            locationTbl.addCell(locationTitleCell);
@@ -286,27 +285,27 @@ public class ExportActivityToWord extends Action {
 	            }
 	            
 	            if(FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Level", ampContext)){	            	
-	            	columnName=TranslatorWorker.translateText("Implementation Level",request);
+	            	columnName=TranslatorWorker.translateText("Implementation Level");
 	    			columnVal="";
 	    			catVal = null;
 	    			if(location.getLevelId()!=null && location.getLevelId() !=0){
 	    				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(location.getLevelId());
 	    			}					
 	    			if(catVal!=null){
-	    				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+	    				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 	    			}
 	    			generateOverAllTableRows(locationSubTable1,columnName,columnVal,null);
 	            }
 	            
 	            if(FeaturesUtil.isVisibleModule("/Activity Form/Location/Implementation Location", ampContext)){
-	            	columnName=TranslatorWorker.translateText("Implementation Location",request);
+	            	columnName=TranslatorWorker.translateText("Implementation Location");
 	    			columnVal="";
 	    			catVal = null;
 	    			if(location.getImplemLocationLevel()!=null && location.getImplemLocationLevel() !=0){
 	    				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(location.getImplemLocationLevel());
 	    			}					
 	    			if(catVal!=null){
-	    				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+	    				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 	    			}
 	    			generateOverAllTableRows(locationSubTable1,columnName,columnVal,null);
 	            }
@@ -324,7 +323,7 @@ public class ExportActivityToWord extends Action {
 	            	 Table sectorsTbl = null;
 	 	            sectorsTbl = new Table(1);
 	 	            sectorsTbl.setWidth(100);
-	 	            RtfCell sectTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Sector",request).toUpperCase(), HEADERFONT));
+	 	            RtfCell sectTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Sector").toUpperCase(), HEADERFONT));
 	 	            sectTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 	 	            sectTitleCell.setBackgroundColor(CELLCOLORGRAY);
 	 	            sectorsTbl.addCell(sectTitleCell);
@@ -341,7 +340,7 @@ public class ExportActivityToWord extends Action {
 	 	            			if(hasSectors){
 									cell = new RtfCell();
 									cell.setBorder(0);
-									cell.add(new Paragraph(config.getName()+TranslatorWorker.translateText(" Sector",request).toUpperCase(), PLAINFONT));						
+									cell.add(new Paragraph(config.getName()+TranslatorWorker.translateText(" Sector").toUpperCase(), PLAINFONT));						
 									sectorsTbl.addCell(cell);
 									sectorsTbl.addCell(new RtfCell());
 								}
@@ -382,7 +381,7 @@ public class ExportActivityToWord extends Action {
 		            Table programsTbl = null;
 		            programsTbl = new Table(1);
 		            programsTbl.setWidth(100);
-		            RtfCell natPlanTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("programs",request).toUpperCase(), HEADERFONT));
+		            RtfCell natPlanTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("programs").toUpperCase(), HEADERFONT));
 		            natPlanTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 		            natPlanTitleCell.setBackgroundColor(CELLCOLORGRAY);
 		            programsTbl.addCell(natPlanTitleCell);
@@ -392,7 +391,7 @@ public class ExportActivityToWord extends Action {
 			            if(programs.getNationalPlanObjectivePrograms()!=null){
 							cell = new RtfCell();
 							cell.setBorder(0);
-							cell.add(new Paragraph(TranslatorWorker.translateText("National Plan Objective",request).toUpperCase(), BOLDFONT));						
+							cell.add(new Paragraph(TranslatorWorker.translateText("National Plan Objective").toUpperCase(), BOLDFONT));						
 							programsTbl.addCell(cell);
 							 programsTbl.addCell(new RtfCell());
 							columnVal= buildProgramsOutput(programs.getNationalPlanObjectivePrograms());
@@ -409,7 +408,7 @@ public class ExportActivityToWord extends Action {
 				            if(programs.getNationalPlanObjectivePrograms()!=null){
 								cell = new RtfCell();
 								cell.setBorder(0);
-								cell.add(new Paragraph(TranslatorWorker.translateText("Primary Programs",request).toUpperCase(), BOLDFONT));						
+								cell.add(new Paragraph(TranslatorWorker.translateText("Primary Programs").toUpperCase(), BOLDFONT));						
 								programsTbl.addCell(cell);
 								 programsTbl.addCell(new RtfCell());
 								columnVal= buildProgramsOutput(programs.getPrimaryPrograms());
@@ -427,7 +426,7 @@ public class ExportActivityToWord extends Action {
 				            if(programs.getNationalPlanObjectivePrograms()!=null){
 								cell = new RtfCell();
 								cell.setBorder(0);
-								cell.add(new Paragraph(TranslatorWorker.translateText("Secondary Programs",request).toUpperCase(), BOLDFONT));						
+								cell.add(new Paragraph(TranslatorWorker.translateText("Secondary Programs").toUpperCase(), BOLDFONT));						
 								programsTbl.addCell(cell);
 								programsTbl.addCell(new RtfCell());
 								columnVal= buildProgramsOutput(programs.getSecondaryPrograms());
@@ -496,12 +495,12 @@ public class ExportActivityToWord extends Action {
 					doc.add(tbl);
 				}
 
-				List<Table> activityPerformanceTables = getActivityPerformanceTables(request, activity, Long.parseLong(siteId), langCode);
+				List<Table> activityPerformanceTables = getActivityPerformanceTables(request, activity);
 				for (Table tbl : activityPerformanceTables) {
 					doc.add(tbl);
 				}
 
-				List<Table> activityRiskTables = getActivityRiskTables(request,	activity, Long.parseLong(siteId), langCode);
+				List<Table> activityRiskTables = getActivityRiskTables(request,	activity);
 				for (Table tbl : activityRiskTables) {
 					doc.add(tbl);
 				}
@@ -523,7 +522,7 @@ public class ExportActivityToWord extends Action {
 	}
 
 	private List<Table> getActivityRiskTables(HttpServletRequest request,
-			AmpActivityVersion activity, Long siteId, String locale)
+			AmpActivityVersion activity)
 			throws Exception {
 		ServletContext ampContext = getServlet().getServletContext();
 		List<Table> retVal = new ArrayList<Table>();
@@ -551,7 +550,7 @@ public class ExportActivityToWord extends Action {
 			rcp.setData(risks);
 			rcp.setTitle("");
 			JFreeChart riskChart = ChartGenerator.generateRiskChart(rcp,
-					siteId, locale);
+					TLSUtils.getSiteId(), TLSUtils.getLangCode());
 			ChartRenderingInfo riskInfo = new ChartRenderingInfo();
 			if (riskChart != null) {
 				Plot plot = riskChart.getPlot();
@@ -575,8 +574,7 @@ public class ExportActivityToWord extends Action {
 	}
 
 	private List<Table> getActivityPerformanceTables(
-			HttpServletRequest request, AmpActivityVersion activity,
-			Long siteId, String locale) throws BadElementException, IOException {
+			HttpServletRequest request, AmpActivityVersion activity) throws BadElementException, IOException {
 		ServletContext ampContext = getServlet().getServletContext();
 		List<Table> retVal = new ArrayList<Table>();
 		/**
@@ -600,7 +598,7 @@ public class ExportActivityToWord extends Action {
 			cp.setTitle("");
 			cp.setSession(request.getSession());
 			JFreeChart chart = ChartGenerator.generatePerformanceChart(cp,
-					siteId, locale);
+					TLSUtils.getSiteId(), TLSUtils.getLangCode());
 			CategoryPlot pl = (CategoryPlot) chart.getPlot();
 			CategoryItemRenderer r1 = pl.getRenderer(); // new
 														// StackedBarRenderer();
@@ -1361,7 +1359,7 @@ public class ExportActivityToWord extends Action {
 					}
 				}
 				String columnName = TranslatorWorker.translateText(
-						"References", request);
+						"References");
 				generateOverAllTableRows(referencesSubTable1, columnName,
 						output, null);
 			}
@@ -1376,59 +1374,59 @@ public class ExportActivityToWord extends Action {
 		String columnName;
 		String columnVal;
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank", ampContext)){
-			columnName=TranslatorWorker.translateText("Line Ministry Rank",request)+": ";
+			columnName=TranslatorWorker.translateText("Line Ministry Rank")+": ";
 			columnVal = planning.getLineMinRank().equals("-1")?"":planning.getLineMinRank();
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Ministry of Planning Rank", ampContext)){
-			columnName=TranslatorWorker.translateText("Ministry of Planning Rank",request)+": ";
+			columnName=TranslatorWorker.translateText("Ministry of Planning Rank")+": ";
 			columnVal = planning.getPlanMinRank().equals("-1")?"":planning.getPlanMinRank();
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Proposed Start Date", request) + ":";
+			columnName=TranslatorWorker.translateText("Proposed Start Date") + ":";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalStartDate(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Actual Start Date",request) +": ";
+			columnName=TranslatorWorker.translateText("Actual Start Date") +": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedStartDate(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Proposed Approval Date",request) +": ";
+			columnName=TranslatorWorker.translateText("Proposed Approval Date") +": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalAppDate(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Actual Approval Date",request)+": "; 
+			columnName=TranslatorWorker.translateText("Actual Approval Date")+": "; 
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedAppDate(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext)){
-			columnName=TranslatorWorker.translateText("Final Date for Contracting",request)+": ";
+			columnName=TranslatorWorker.translateText("Final Date for Contracting")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getContractingDate(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements", ampContext)){
-			columnName=TranslatorWorker.translateText("Final Date for Disbursements",request)+": ";
+			columnName=TranslatorWorker.translateText("Final Date for Disbursements")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getDisbursementsDate(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Proposed Completion Date",request)+": ";
+			columnName=TranslatorWorker.translateText("Proposed Completion Date")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getProposedCompDate(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Actual Completion Date",request)+": ";
+			columnName=TranslatorWorker.translateText("Actual Completion Date")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getCurrentCompDate(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
-			columnName=TranslatorWorker.translateText("Duration of Project",request)+": ";
+			columnName=TranslatorWorker.translateText("Duration of Project")+": ";
 			columnVal = planning.getProjectPeriod()!=null?planning.getProjectPeriod().toString():"";
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
@@ -1453,16 +1451,12 @@ public class ExportActivityToWord extends Action {
 	//                allComponents.addAll(f.getFundingDetails());
 	//            }
 	//        }
-	        Site site = RequestUtils.getSite(request);
-	        Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-	        String siteId=site.getSiteId();
-	        String locale=navigationLanguage.getCode();
 	        String currencyCode = myForm.getFunding().getProProjCost().getCurrencyCode();
 	        if(currencyCode == null) {
 	            currencyCode = Constants.DEFAULT_CURRENCY;
 	        }
 	        
-	        String translatedCurrency = TranslatorWorker.translateText(currencyCode,locale,siteId);
+	        String translatedCurrency = TranslatorWorker.translateText(currencyCode);
 	        translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
 	
 	
@@ -2070,7 +2064,7 @@ public class ExportActivityToWord extends Action {
 			if (visibleModuleCommitments) {
 				// TOTAL PLANNED COMMITMENTS
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL PLANNED COMMITMENTS", request) + ":";
+						"TOTAL PLANNED COMMITMENTS") + ":";
 				if (myForm.getFunding().getTotalPlannedCommitments() != null
 						&& myForm.getFunding().getTotalPlannedCommitments()
 								.length() > 0) {
@@ -2082,7 +2076,7 @@ public class ExportActivityToWord extends Action {
 
 				// TOTAL ACTUAL COMMITMENTS
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL ACTUAL COMMITMENTS", request) + ":";
+						"TOTAL ACTUAL COMMITMENTS") + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalCommitments() != null
 						&& myForm.getFunding().getTotalCommitments().length() > 0) {
@@ -2096,7 +2090,7 @@ public class ExportActivityToWord extends Action {
 			if (visibleModuleDisbursement) {
 				// TOTAL PLANNED DISBURSEMENT
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL PLANNED DISBURSEMENT", request) + ":";
+						"TOTAL PLANNED DISBURSEMENT") + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalPlannedDisbursements() != null
 						&& myForm.getFunding().getTotalPlannedDisbursements()
@@ -2109,7 +2103,7 @@ public class ExportActivityToWord extends Action {
 
 				// TOTAL ACTUAL DISBURSEMENT
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL ACTUAL DISBURSEMENT", request) + ":";
+						"TOTAL ACTUAL DISBURSEMENT") + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalDisbursements() != null
 						&& myForm.getFunding().getTotalDisbursements().length() > 0) {
@@ -2123,7 +2117,7 @@ public class ExportActivityToWord extends Action {
 			if (visibleModuleExpenditures) {
 				// TOTAL PLANNED EXPENDITURES
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL PLANNED EXPENDITURES", request) + ":";
+						"TOTAL PLANNED EXPENDITURES") + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalPlannedExpenditures() != null
 						&& myForm.getFunding().getTotalPlannedExpenditures()
@@ -2136,7 +2130,7 @@ public class ExportActivityToWord extends Action {
 
 				// TOTAL ACTUAL EXPENDITURES
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL ACTUAL EXPENDITURES", request) + ":";
+						"TOTAL ACTUAL EXPENDITURES") + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalExpenditures() != null
 						&& myForm.getFunding().getTotalExpenditures().length() > 0) {
@@ -2150,7 +2144,7 @@ public class ExportActivityToWord extends Action {
 			if (visibleModuleDisbOrders) {
 				// TOTAL ACTUAL DISBURSeMENT ORDERS:
 				totalAmountType = TranslatorWorker.translateText(
-						"TOTAL ACTUAL DISBURSeMENT ORDERS", request) + ":";
+						"TOTAL ACTUAL DISBURSeMENT ORDERS") + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getTotalActualDisbursementsOrders() != null
 						&& myForm.getFunding()
@@ -2165,7 +2159,7 @@ public class ExportActivityToWord extends Action {
 			if (FeaturesUtil
 					.isVisibleFeature("Undisbursed Balance", ampContext)) {
 				totalAmountType = TranslatorWorker.translateText(
-						"UNDISBURSED BALANCE", request) + ":";
+						"UNDISBURSED BALANCE") + ":";
 				totalsOutput = "";
 				if (myForm.getFunding().getUnDisbursementsBalance() != null
 						&& myForm.getFunding().getUnDisbursementsBalance()
@@ -2190,25 +2184,25 @@ public class ExportActivityToWord extends Action {
 		RtfCell cell;
 
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Title", ampContext)) {
-			columnName = TranslatorWorker.translateText("Activity Name", request);
+			columnName = TranslatorWorker.translateText("Activity Name");
 			generateOverAllTableRows(identificationSubTable1, columnName, identification.getTitle(), null);
 		}
 
 		//AMPID cells
 		if(FeaturesUtil.isVisibleField("AMP ID", ampContext)){
-			columnName=TranslatorWorker.translateText("AMP ID",request);
+			columnName=TranslatorWorker.translateText("AMP ID");
 			generateOverAllTableRows(identificationSubTable1,columnName,identification.getAmpId(),null);					
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason", ampContext)){
-			columnName=TranslatorWorker.translateText("Status",request);
+			columnName=TranslatorWorker.translateText("Status");
 			columnVal="";
 			catVal = null;
 			if(identification.getStatusId()!=null && identification.getStatusId()!=0){
 				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getStatusId());
 			}					
 			if(catVal!=null){
-				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 			}
 			if(identification.getStatusReason() != null){
 				columnVal += processHtml(request, identification.getStatusReason());
@@ -2216,21 +2210,20 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		if (FeaturesUtil.isVisibleField("Contract Number", ampContext)) {
-			columnName = TranslatorWorker.translateText("Contract Number",
-					request);
+			columnName = TranslatorWorker.translateText("Contract Number");
 			generateOverAllTableRows(identificationSubTable1, columnName,
 					identification.getConvenioNumcont(), null);
 		}
 
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Comments", ampContext)) {
-			columnName = TranslatorWorker.translateText("Project Comments",	request);
+			columnName = TranslatorWorker.translateText("Project Comments");
 			generateOverAllTableRows(identificationSubTable1, columnName,
 					processEditTagValue(request, identification.getProjectComments()), null);
 		}
 
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective", ampContext)){
-			columnName=TranslatorWorker.translateText("Objectives",request);
+			columnName=TranslatorWorker.translateText("Objectives");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getObjectives()),null);
 		}
 		
@@ -2261,78 +2254,78 @@ public class ExportActivityToWord extends Action {
 					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
 					if(key.equalsIgnoreCase("Objective Assumption") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Assumption", ampContext)){
 						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption", request)+" :",PLAINFONT));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(),request),BOLDFONT));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption")+" :",PLAINFONT));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),BOLDFONT));
 						}					
 					}else if(key.equalsIgnoreCase("Objective Verification") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Verification", ampContext)){
 						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Verification",request)+" :",PLAINFONT));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), request),BOLDFONT));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Verification")+" :",PLAINFONT));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),BOLDFONT));
 						}					
 					}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Objectively Verifiable Indicators", ampContext)) {
 						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators",request)+" :",PLAINFONT));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(),request),BOLDFONT));						
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators")+" :",PLAINFONT));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),BOLDFONT));						
 						}
 					}
 				}			            
-	            generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Objective Comments",request), objTable,null);
+	            generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Objective Comments"), objTable,null);
 			}
 		}
 
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Description", ampContext)){
-			columnName=TranslatorWorker.translateText("Description",request);
+			columnName=TranslatorWorker.translateText("Description");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getDescription()),null);
 		}
 		
 		if(FeaturesUtil.isVisibleField("NPD Clasification", ampContext)){
-			columnName=TranslatorWorker.translateText("NPD Clasification",request);
+			columnName=TranslatorWorker.translateText("NPD Clasification");
 			generateOverAllTableRows(identificationSubTable1,columnName,identification.getClasiNPD(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Lessons Learned", ampContext)){
-			columnName=TranslatorWorker.translateText("Lessons Learned",request);
+			columnName=TranslatorWorker.translateText("Lessons Learned");
 			generateOverAllTableRows(identificationSubTable1,columnName,identification.getLessonsLearned(),null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Impact", ampContext)){
-			columnName=TranslatorWorker.translateText("Project Impact",request);
+			columnName=TranslatorWorker.translateText("Project Impact");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getProjectImpact()),null);
 		}
 		
 		if(identification.getActivitySummary() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Summary", ampContext)){
-			columnName=TranslatorWorker.translateText("Activity Summary",request);
+			columnName=TranslatorWorker.translateText("Activity Summary");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getActivitySummary()),null);
 		}
 		
 		if(identification.getContractingArrangements() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Contracting Arrangements", ampContext)){
-			columnName=TranslatorWorker.translateText("Contracting Arrangements",request);
+			columnName=TranslatorWorker.translateText("Contracting Arrangements");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getContractingArrangements()),null);
 		}
 		
 		if(identification.getCondSeq() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionality and Sequencing", ampContext)){
-			columnName=TranslatorWorker.translateText("Conditionality and Sequencing",request);
+			columnName=TranslatorWorker.translateText("Conditionality and Sequencing");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getCondSeq()),null);
 		}
 		
 		if(identification.getLinkedActivities() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Linked Activities", ampContext)){
-			columnName=TranslatorWorker.translateText("Linked Activities",request);
+			columnName=TranslatorWorker.translateText("Linked Activities");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getLinkedActivities()),null);
 		}
 		
 		if(identification.getConditionality() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Conditionalities", ampContext)){
-			columnName=TranslatorWorker.translateText("Conditionalities",request);
+			columnName=TranslatorWorker.translateText("Conditionalities");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getConditionality()),null);
 		}
 		
 		if(identification.getProjectManagement() != null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Management", ampContext)){
-			columnName=TranslatorWorker.translateText("Project Management",request);
+			columnName=TranslatorWorker.translateText("Project Management");
 			generateOverAllTableRows(identificationSubTable1,columnName,processEditTagValue(request, identification.getProjectManagement()),null);
 		}
 
 		if (FeaturesUtil.isVisibleModule(
 				"/Activity Form/Identification/Purpose", ampContext)) {
-			columnName = TranslatorWorker.translateText("Purpose", request);
+			columnName = TranslatorWorker.translateText("Purpose");
 			columnVal = processEditTagValue(request,
 					identification.getPurpose());
 			generateOverAllTableRows(identificationSubTable1, columnName,
@@ -2364,20 +2357,20 @@ public class ExportActivityToWord extends Action {
 						&& visiblePurposeAssumtion) {
 					for (AmpComments value : values) {
 						objTable.addCell(new Paragraph(TranslatorWorker
-								.translateText("Purpose Assumption", request)
+								.translateText("Purpose Assumption")
 								+ " :", PLAINFONT));
 						objTable.addCell(new Paragraph(TranslatorWorker
-								.translateText(value.getComment(), request),
+								.translateText(value.getComment()),
 								BOLDFONT));
 					}
 				} else if (key.equalsIgnoreCase("Purpose Verification")
 						&& visiblePurposeVerification) {
 					for (AmpComments value : values) {
 						objTable.addCell(new Paragraph(TranslatorWorker
-								.translateText("Purpose Verification", request)
+								.translateText("Purpose Verification")
 								+ " :", PLAINFONT));
 						objTable.addCell(new Paragraph(TranslatorWorker
-								.translateText(value.getComment(), request),
+								.translateText(value.getComment()),
 								BOLDFONT));
 					}
 				} else if (key
@@ -2386,31 +2379,25 @@ public class ExportActivityToWord extends Action {
 					for (AmpComments value : values) {
 						objTable.addCell(new Paragraph(
 								TranslatorWorker
-										.translateText(
-												"Purpose Objectively Verifiable Indicators",
-												request)
+										.translateText("Purpose Objectively Verifiable Indicators")
 										+ " :", PLAINFONT));
 						objTable.addCell(new Paragraph(TranslatorWorker
-								.translateText(value.getComment(), request),
+								.translateText(value.getComment()),
 								BOLDFONT));
 					}
 				}
 			}
 			generateOverAllTableRows(
 					identificationSubTable1,
-					TranslatorWorker.translateText("Purpose Comments", request),
+					TranslatorWorker.translateText("Purpose Comments"),
 					objTable, null);
 		}
 		
-		
-		
 		//Results
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Results", ampContext)){
 			
-			columnName=TranslatorWorker.translateText("Results",locale,siteId);
+			columnName=TranslatorWorker.translateText("Results");
 			columnVal=processEditTagValue(request, identification.getResults());
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
@@ -2433,66 +2420,66 @@ public class ExportActivityToWord extends Action {
         	   List<AmpComments> values=(List<AmpComments>)allComments.get(key);
         	   if(key.equalsIgnoreCase("Results Assumption") && visibleResultsAssumption){
         		   for (AmpComments value : values) {
-        			   objTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Assumption", locale, siteId)+" :",PLAINFONT));
-        			   objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),BOLDFONT));
+        			   objTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Assumption")+" :",PLAINFONT));
+        			   objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),BOLDFONT));
         		   }					
 				}else if(key.equalsIgnoreCase("Results Verification") && visibleResultsVerification){
 					for (AmpComments value : values) {
-						objTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Verification", locale, siteId)+" :",PLAINFONT));
-						objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),BOLDFONT));
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Verification")+" :",PLAINFONT));
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),BOLDFONT));
 					}					
 				}else if (key.equalsIgnoreCase("Results Objectively Verifiable Indicators")&& visibleResultsIndicators) {
 					for (AmpComments value : values) {
-						objTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Objectively Verifiable Indicators", locale, siteId)+" :",PLAINFONT));
-						objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),BOLDFONT));						
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Objectively Verifiable Indicators")+" :",PLAINFONT));
+						objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),BOLDFONT));						
 					}
 				}
 			}
-            generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Results Comments",request), objTable,null);
+            generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Results Comments"), objTable,null);
 		}
 				
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Accession Instrument", ampContext)){
-			columnName=TranslatorWorker.translateText("Accession Instrument",request);
+			columnName=TranslatorWorker.translateText("Accession Instrument");
 			columnVal="";
 			catVal = null;
 			if(identification.getAccessionInstrument()!=null && identification.getAccessionInstrument() !=0){
 				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getAccessionInstrument());
 			}					
 			if(catVal!=null){
-				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}	
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Implementing Unit", ampContext)){
-			columnName=TranslatorWorker.translateText("Project Implementing Unit",request);
+			columnName=TranslatorWorker.translateText("Project Implementing Unit");
 			columnVal="";
 			catVal = null;
 			if(identification.getProjectImplUnitId()!=null && identification.getProjectImplUnitId() !=0){
 				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getProjectImplUnitId());
 			}					
 			if(catVal!=null){
-				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 			}					
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 			
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/A.C. Chapter", ampContext)){
-			columnName=TranslatorWorker.translateText("A.C. Chapter",request);
+			columnName=TranslatorWorker.translateText("A.C. Chapter");
 			columnVal="";
 			catVal = null;
 			if(identification.getAcChapter()!=null && identification.getAcChapter() !=0){
 				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getAcChapter());
 			}					
 			if(catVal!=null){
-				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}	
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Cris Number", ampContext)){
-			columnName=TranslatorWorker.translateText("Cris Number",request);
+			columnName=TranslatorWorker.translateText("Cris Number");
 			columnVal="";
 			catVal = null;
 			if(identification.getCrisNumber()!=null){
@@ -2502,72 +2489,72 @@ public class ExportActivityToWord extends Action {
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Procurement System", ampContext)){
-			columnName=TranslatorWorker.translateText("Procurement System",request);
+			columnName=TranslatorWorker.translateText("Procurement System");
 			columnVal="";
 			catVal = null;
 			if(identification.getProcurementSystem()!=null && identification.getProcurementSystem() !=0){
 				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getProcurementSystem());
 			}					
 			if(catVal!=null){
-				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Reporting System", ampContext)){
-			columnName=TranslatorWorker.translateText("Reporting System",request);
+			columnName=TranslatorWorker.translateText("Reporting System");
 			columnVal="";
 			catVal = null;
 			if(identification.getReportingSystem()!=null && identification.getReportingSystem() !=0){
 				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getReportingSystem());
 			}					
 			if(catVal!=null){
-				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Audit System", ampContext)){
-			columnName=TranslatorWorker.translateText("Audit System",request);
+			columnName=TranslatorWorker.translateText("Audit System");
 			columnVal="";
 			catVal = null;
 			if(identification.getAuditSystem()!=null && identification.getAuditSystem() !=0){
 				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getAuditSystem());
 			}					
 			if(catVal!=null){
-				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Institutions", ampContext)){
-			columnName=TranslatorWorker.translateText("Institutions",request);
+			columnName=TranslatorWorker.translateText("Institutions");
 			columnVal="";
 			catVal = null;
 			if(identification.getInstitutions()!=null && identification.getInstitutions() !=0){
 				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getInstitutions());
 			}					
 			if(catVal!=null){
-				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Project Category", ampContext)){
-			columnName=TranslatorWorker.translateText("Project Category",request);
+			columnName=TranslatorWorker.translateText("Project Category");
 			columnVal="";
 			catVal = null;
 			if(identification.getProjectCategory()!=null && identification.getProjectCategory() !=0){
 				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getProjectCategory());
 			}					
 			if(catVal!=null){
-				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal, request);
+				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
 			}
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Government Agreement Number", ampContext)){
-			columnName=TranslatorWorker.translateText("Government Agreement Number",request);
+			columnName=TranslatorWorker.translateText("Government Agreement Number");
 			columnVal="";
 			catVal = null;
 			if(identification.getGovAgreementNumber()!=null){
@@ -2581,22 +2568,22 @@ public class ExportActivityToWord extends Action {
 			cell.setBorder(0);
 			if (identification.getBudgetCV()!=null) {
 				if(identification.getBudgetCV().equals(identification.getBudgetCVOn())){
-					p1=new Paragraph(TranslatorWorker.translateText("Activity is on budget",request),PLAINFONT) ;
+					p1=new Paragraph(TranslatorWorker.translateText("Activity is on budget"),PLAINFONT) ;
 				}else if (identification.getBudgetCV().equals(identification.getBudgetCVOff())){
-					p1=new Paragraph(TranslatorWorker.translateText("Activity is off budget",request),PLAINFONT) ;
+					p1=new Paragraph(TranslatorWorker.translateText("Activity is off budget"),PLAINFONT) ;
 				}else if (identification.getBudgetCV().equals(new Long(0))) {
-					p1=new Paragraph(TranslatorWorker.translateText("Budget Unallocated",request),PLAINFONT) ;
+					p1=new Paragraph(TranslatorWorker.translateText("Budget Unallocated"),PLAINFONT) ;
 				}else{
-					p1=new Paragraph(TranslatorWorker.translateText("Activity is on ",request)+identification.getBudgetCV(),PLAINFONT) ;
+					p1=new Paragraph(TranslatorWorker.translateText("Activity is on ")+identification.getBudgetCV(),PLAINFONT) ;
 				}
 			}
 			cell.add(p1);
 			
 			if (identification.getChapterForPreview() !=null){
-				cell.add(new Paragraph(TranslatorWorker.translateText("Code Chapitre",request)+": ",PLAINFONT));
+				cell.add(new Paragraph(TranslatorWorker.translateText("Code Chapitre")+": ",PLAINFONT));
 				cell.add(new Paragraph(identification.getChapterForPreview().getCode() + " - " 
 						+ identification.getChapterForPreview().getDescription(),BOLDFONT));
-				cell.add(new Paragraph(TranslatorWorker.translateText("Imputations",request)+": ",PLAINFONT));
+				cell.add(new Paragraph(TranslatorWorker.translateText("Imputations")+": ",PLAINFONT));
 				for (AmpImputation imputation : identification.getChapterForPreview().getImputations()) {
 					cell.add(new Paragraph(identification.getChapterForPreview().getYear()+" - " +
 							imputation.getCode() +" - "+ imputation.getDescription(),BOLDFONT));
@@ -2611,27 +2598,27 @@ public class ExportActivityToWord extends Action {
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras", ampContext)){
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/FY", ampContext)){
-				columnName=TranslatorWorker.translateText("FY",request);
+				columnName=TranslatorWorker.translateText("FY");
 				generateOverAllTableRows(identificationSubTable1,columnName,identification.getFY(),null);
 			}
 			if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Ministry Code", ampContext)) {
-				columnName = TranslatorWorker.translateText("Ministry Code", request);
+				columnName = TranslatorWorker.translateText("Ministry Code");
 				generateOverAllTableRows(identificationSubTable1, columnName, identification.getMinistryCode(), null);
 			}
 			if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Project Code", ampContext)) {
-				columnName = TranslatorWorker.translateText("Project Code", request);
+				columnName = TranslatorWorker.translateText("Project Code");
 				generateOverAllTableRows(identificationSubTable1, columnName, identification.getProjectCode(), null);
 			}
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Vote", ampContext)){
-				columnName=TranslatorWorker.translateText("Vote",request);
+				columnName=TranslatorWorker.translateText("Vote");
 				generateOverAllTableRows(identificationSubTable1,columnName,identification.getVote(),null);
 			}
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Vote", ampContext)){
-				columnName=TranslatorWorker.translateText("Sub-Vote",request);
+				columnName=TranslatorWorker.translateText("Sub-Vote");
 				generateOverAllTableRows(identificationSubTable1,columnName,identification.getSubVote(),null);
 			}
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Extras/Sub-Program", ampContext)){
-				columnName=TranslatorWorker.translateText("Sub-Program",request);
+				columnName=TranslatorWorker.translateText("Sub-Program");
 				generateOverAllTableRows(identificationSubTable1,columnName,identification.getSubProgram(),null);
 			}
 		}
@@ -2640,7 +2627,7 @@ public class ExportActivityToWord extends Action {
 			cell = new RtfCell();
 			cell.setColspan(2);
 			cell.setBorder(0);
-			cell.add(new Paragraph(TranslatorWorker.translateText("Budget Classification",request)+": ",PLAINFONT));
+			cell.add(new Paragraph(TranslatorWorker.translateText("Budget Classification")+": ",PLAINFONT));
 			if(identification.getSelectedbudgedsector() !=null){
 				for (AmpBudgetSector budgSect : identification.getBudgetsectors()) {
 					cell.add(new Paragraph(BULLET_SYMBOL + budgSect.getCode()+" - "+ budgSect.getSectorname(),BOLDFONT));
@@ -2670,7 +2657,7 @@ public class ExportActivityToWord extends Action {
 		if(FeaturesUtil.isVisibleField("Organizations and Project ID", ampContext)){
 			cell = new RtfCell();
 			cell.setBorder(0);
-			cell.add(new Paragraph(TranslatorWorker.translateText("Organizations and Project ID",request)+": ",PLAINFONT));
+			cell.add(new Paragraph(TranslatorWorker.translateText("Organizations and Project ID")+": ",PLAINFONT));
 			if(identification.getSelectedOrganizations()!=null){
 				for (OrgProjectId selectedOrgForPopup : identification.getSelectedOrganizations()) {
 					if(selectedOrgForPopup!=null && selectedOrgForPopup.getOrganisation()!=null){
@@ -2689,7 +2676,7 @@ public class ExportActivityToWord extends Action {
 			cell = new RtfCell();
 			cell.setColspan(2);
 			cell.setBorder(0);
-			cell.add(new Paragraph(TranslatorWorker.translateText("Humanitarian Aid",request)+": ",PLAINFONT));
+			cell.add(new Paragraph(TranslatorWorker.translateText("Humanitarian Aid")+": ",PLAINFONT));
 			
 			columnVal="";
 			if(identification.getHumanitarianAid()!=null && identification.getHumanitarianAid()){
@@ -2739,7 +2726,7 @@ public class ExportActivityToWord extends Action {
 				columnVal = "0 ";
 			}
 			columnVal += currency;
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Actual Commitment",request)+": ",columnVal,CELLCOLORGRAY );
+			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Actual Commitment")+": ",columnVal,CELLCOLORGRAY );
 			rowAmountForCell1++;
 			
 			if(myForm.getFunding().getTotalPlannedCommitments()!=null && myForm.getFunding().getTotalPlannedCommitments().length()>0){
@@ -2748,7 +2735,7 @@ public class ExportActivityToWord extends Action {
 				columnVal = "0 ";
 			}
 			columnVal += currency;
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Planned Commitment",request)+": ",columnVal,CELLCOLORGRAY );
+			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Planned Commitment")+": ",columnVal,CELLCOLORGRAY );
 			rowAmountForCell1++;	    		
 		}
 		
@@ -2759,7 +2746,7 @@ public class ExportActivityToWord extends Action {
 				columnVal = "0 ";
 			}
 			columnVal += currency;
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Actual Distributements",request)+": ",columnVal ,CELLCOLORGRAY);
+			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Actual Distributements")+": ",columnVal ,CELLCOLORGRAY);
 			rowAmountForCell1++;
 			
 			if(myForm.getFunding().getTotalPlannedDisbursements()!=null && myForm.getFunding().getTotalPlannedDisbursements().length()>0){
@@ -2768,7 +2755,7 @@ public class ExportActivityToWord extends Action {
 				columnVal = "0 ";
 			}
 			columnVal += currency;
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Planned Distributements",request)+": ",columnVal ,CELLCOLORGRAY);
+			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Planned Distributements")+": ",columnVal ,CELLCOLORGRAY);
 			rowAmountForCell1++;
 		}
 		
@@ -2779,7 +2766,7 @@ public class ExportActivityToWord extends Action {
 				columnVal = "0 ";
 			}
 			columnVal += currency;
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Actual Expenditures",request)+": ",columnVal ,CELLCOLORGRAY);
+			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Actual Expenditures")+": ",columnVal ,CELLCOLORGRAY);
 			rowAmountForCell1++;
 			
 			if(myForm.getFunding().getTotalPlannedExpenditures()!=null && myForm.getFunding().getTotalPlannedExpenditures().length()>0){
@@ -2788,7 +2775,7 @@ public class ExportActivityToWord extends Action {
 				columnVal = "0 ";
 			}
 			columnVal += currency;
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Planned Expenditures",request)+": ",columnVal ,CELLCOLORGRAY);	
+			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Total Planned Expenditures")+": ",columnVal ,CELLCOLORGRAY);	
 			rowAmountForCell1++;
 		}
 		
@@ -2798,7 +2785,7 @@ public class ExportActivityToWord extends Action {
 			}else{
 				columnVal = "";
 			}
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Duration of project",request)+": ",columnVal,CELLCOLORGRAY);
+			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Duration of project")+": ",columnVal,CELLCOLORGRAY);
 			rowAmountForCell1++;
 		}
 		
@@ -2808,7 +2795,7 @@ public class ExportActivityToWord extends Action {
 			}else{
 				columnVal = "";
 			}
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Delivery rate",request)+": ",columnVal,CELLCOLORGRAY);
+			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Delivery rate")+": ",columnVal,CELLCOLORGRAY);
 			rowAmountForCell1++;
 		}
 		
@@ -2818,7 +2805,7 @@ public class ExportActivityToWord extends Action {
 			}else{
 				columnVal = "";
 			}
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Consumption rate",request)+": ",columnVal,CELLCOLORGRAY);	
+			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Consumption rate")+": ",columnVal,CELLCOLORGRAY);	
 			rowAmountForCell1++;
 		}	            
 		overallFundingCell.add(overAllFundingSubTable);	            
@@ -2840,7 +2827,7 @@ public class ExportActivityToWord extends Action {
 		if(identification.getActAthLastName()!=null){
 			columnVal += " "+ identification.getActAthLastName();
 		}
-		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created by",request)+": ",columnVal,CELLCOLORGRAY);
+		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created by")+": ",columnVal,CELLCOLORGRAY);
 		
 		columnVal = "";
 		if(identification.getCreatedBy() != null)
@@ -2852,24 +2839,24 @@ public class ExportActivityToWord extends Action {
 				columnVal += "-"+identification.getCreatedBy().getAmpTeam().getAccessType();
 			}
 		}
-		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Workspace of creator",request)+": ",columnVal,CELLCOLORGRAY);
+		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Workspace of creator")+": ",columnVal,CELLCOLORGRAY);
 		
 		columnVal = "";
 		if(identification.getCreatedBy() != null)
 		{
 			if(identification.getCreatedBy().getAmpTeam().getComputation()){
-				columnVal += TranslatorWorker.translateText("yes",request);
+				columnVal += TranslatorWorker.translateText("yes");
 			}else{
-				columnVal += TranslatorWorker.translateText("no",request);
+				columnVal += TranslatorWorker.translateText("no");
 			}
 		}
-		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Computation",request)+": ",columnVal,CELLCOLORGRAY);
+		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Computation")+": ",columnVal,CELLCOLORGRAY);
 		
 		columnVal = "";
 		if(identification.getCreatedDate()!=null){
 			columnVal += identification.getCreatedDate();
 		}
-		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created on",request)+": ",columnVal,CELLCOLORGRAY);
+		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created on")+": ",columnVal,CELLCOLORGRAY);
 		
 		columnVal = "";
 		if(identification.getTeam().getTeamLead()!=null){
@@ -2877,7 +2864,7 @@ public class ExportActivityToWord extends Action {
 			columnVal += identification.getTeam().getTeamLead().getUser().getLastName();
 			columnVal += identification.getTeam().getTeamLead().getUser().getEmail();
 		}
-		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Data Team Leader",request)+": ",columnVal,CELLCOLORGRAY);
+		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Data Team Leader")+": ",columnVal,CELLCOLORGRAY);
 		
 		int emptyRowsAmount = rowAmountForCell1>=rowAmountForCell2?(rowAmountForCell1 - rowAmountForCell2):(rowAmountForCell2 - rowAmountForCell1);
 		for (int i=0;i<emptyRowsAmount;i++){
@@ -2892,7 +2879,7 @@ public class ExportActivityToWord extends Action {
 		currencyInfoCell.setBorder(0);
 		Table currencyInfoSubTable = new Table(1);
 		currencyInfoSubTable.setWidth(100);
-		RtfCell mycell = new RtfCell(new Paragraph(TranslatorWorker.translateText("All amounts are in ",request) + currency, PLAINFONT));
+		RtfCell mycell = new RtfCell(new Paragraph(TranslatorWorker.translateText("All amounts are in ") + currency, PLAINFONT));
 		mycell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		mycell.setVerticalAlignment(Element.ALIGN_TOP);
 		mycell.setBackgroundColor(CELLCOLORGRAY);
@@ -2941,9 +2928,9 @@ public class ExportActivityToWord extends Action {
 	
 	private String  getEditTagValue(HttpServletRequest request,String editKey) throws Exception{
 		Site site = RequestUtils.getSite(request);
-        String editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site.getSiteId(),editKey,RequestUtils.getNavigationLanguage(request).getCode());
+        String editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site,editKey,RequestUtils.getNavigationLanguage(request).getCode());
         if (editorBody == null) {
-        	editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site.getSiteId(),editKey,SiteUtils.getDefaultLanguages(site).getCode());
+        	editorBody = org.digijava.module.editor.util.DbUtil.getEditorBody(site,editKey,SiteUtils.getDefaultLanguages(site).getCode());
         }
         return editorBody;
 	}
@@ -3180,7 +3167,7 @@ public class ExportActivityToWord extends Action {
 
         if (esh.getSecTitle() != null && esh.getSecTitle().trim().length() > 0) {
             String secTitle = esh.translateTitle ?
-                                    TranslatorWorker.translateText(esh.getSecTitle(),request) : esh.getSecTitle();
+                                    TranslatorWorker.translateText(esh.getSecTitle()) : esh.getSecTitle();
             RtfCell titleCell = new RtfCell(new Paragraph(secTitle, HEADERFONT));
             titleCell.setColspan(maxCols);
             titleCell.setBackgroundColor(CELLCOLORGRAY);
@@ -3194,7 +3181,7 @@ public class ExportActivityToWord extends Action {
 
             if (!rd.isSeparator()) {
                 String title = (rd.translateTitle && rd.title != null) ?
-                        TranslatorWorker.translateText(rd.title,request) : rd.title;
+                        TranslatorWorker.translateText(rd.title) : rd.title;
 
 
                 
@@ -3225,7 +3212,7 @@ public class ExportActivityToWord extends Action {
 
                 if(visKey == null || (visKey != null && FeaturesUtil.isVisibleField(visKey, ampContext))) {
                     String trnVal = (rowData !=null && rd.getTranslateValues().containsKey(rowData)) ?
-                            TranslatorWorker.translateText(rowData,request) : rowData;
+                            TranslatorWorker.translateText(rowData) : rowData;
                     RtfCell dataValCell = new RtfCell(new Paragraph(trnVal != null ? trnVal : "-", PLAINFONT));
                     if (rd.getValues().size() < (maxCols - 1) && rowCounter == rd.getValues().size()) {
                         dataValCell.setColspan(maxCols - rowCounter);

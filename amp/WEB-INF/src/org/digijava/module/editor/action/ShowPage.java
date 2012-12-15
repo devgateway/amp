@@ -29,6 +29,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.dbentity.Editor;
@@ -49,9 +50,9 @@ public class ShowPage extends Action {
     String currentLang = RequestUtils.getNavigationLanguage(request).getCode();
     ModuleInstance moduleInstance = DgUtil.getRealModuleInstance(
         request);
-    String siteId = moduleInstance.getSite().getSiteId();
+    Site site = moduleInstance.getSite();
 
-    Editor ed = DbUtil.getEditor(siteId, edForm.getKey(), currentLang);
+    Editor ed = DbUtil.getEditor(site, edForm.getKey(), currentLang);
 
     String tagDefault = null;
     if (ed.getTitle() == null || ed.getTitle().trim().length()==0) {

@@ -60,8 +60,6 @@ public class ExportToPDF extends Action {
         response.setContentType("application/download");
         response.setHeader("content-disposition", "attachment;filename=dashboard.pdf");
         com.lowagie.text.Document doc = new com.lowagie.text.Document(PageSize.A4);
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         VisualizationForm vForm = (VisualizationForm) form;
         String fundingOpt = request.getParameter("fundingOpt");
@@ -78,83 +76,83 @@ public class ExportToPDF extends Action {
         String summaryOpt = request.getParameter("summaryOpt");
         String ODAGrowthOpt = request.getParameter("ODAGrowthOpt");
         try {
-        	String pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
-        	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
-			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
+        	String pageTrn = TranslatorWorker.translateText("Page");
+        	String filtersTrn = TranslatorWorker.translateText("Filters");
+			String filtersAllTrn = TranslatorWorker.translateText("All");
 			String filtersAmountsInTrn = "";
 			if(vForm.getFilter().shouldShowAmountsInThousands())
-				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in thousands", langCode, siteId);
+				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in thousands");
 			else
-				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions", langCode, siteId);
-			String filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type", langCode, siteId);
-			String filtersStartYearTrn = TranslatorWorker.translateText("Start Year", langCode, siteId);
-			String filtersEndYearTrn = TranslatorWorker.translateText("End Year", langCode, siteId);
-			String filtersOrgGroupTrn = TranslatorWorker.translateText("Organization Groups", langCode, siteId);
-			String filtersOrganizationsTrn = TranslatorWorker.translateText("Organizations", langCode, siteId);
-			String filtersSectorsTrn = TranslatorWorker.translateText("Sectors", langCode, siteId);
-			String filtersSubSectorsTrn = TranslatorWorker.translateText("Sub-Sectors", langCode, siteId);
-			String filtersRegionsTrn = TranslatorWorker.translateText("Regions", langCode, siteId);
-			String filtersZonesTrn = TranslatorWorker.translateText("Zones", langCode, siteId);
-			String filtersLocationsTrn = TranslatorWorker.translateText("Locations", langCode, siteId);
-        	String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
-            String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
-            String topPrjTrn = TranslatorWorker.translateText("Top Projects", langCode, siteId);
-            String topOrganizationTrn = TranslatorWorker.translateText("Top Organizations", langCode, siteId);
-            String topRegionTrn = TranslatorWorker.translateText("Top Regions", langCode, siteId);
-            String projectTrn = TranslatorWorker.translateText("Project", langCode, siteId);
-            String sectorTrn = TranslatorWorker.translateText("Sector", langCode, siteId);
-            String organizationTrn = TranslatorWorker.translateText("Organization", langCode, siteId);
-            String regionTrn = TranslatorWorker.translateText("Region", langCode, siteId);
-            String NPOTrn = TranslatorWorker.translateText("NPO", langCode, siteId);
-	        String programTrn = TranslatorWorker.translateText("Program", langCode, siteId);
-	        String aidPredTrn = TranslatorWorker.translateText("Aid Predictability", langCode, siteId);
-	        String aidPredQuarterTrn = TranslatorWorker.translateText("Aid Predictability Quarterly", langCode, siteId);
-            String aidTypeTrn = TranslatorWorker.translateText("Aid Type", langCode, siteId);
-            String budgetBreakdownTrn = TranslatorWorker.translateText("Budget Breakdown", langCode, siteId);
-            String finInstTrn = TranslatorWorker.translateText("Financing Instrument", langCode, siteId);
-            String sectorProfTrn = TranslatorWorker.translateText("Sector Profile", langCode, siteId);
-            String regionProfTrn = TranslatorWorker.translateText("Region Profile", langCode, siteId);
-            String NPOProfTrn = TranslatorWorker.translateText("NPO Profile", langCode, siteId);
-	        String programProfTrn = TranslatorWorker.translateText("Program Profile", langCode, siteId);
-	        String organizationProfTrn = TranslatorWorker.translateText("Organization Profile", langCode, siteId);
-            String plannedTrn = TranslatorWorker.translateText("Planned", langCode, siteId);
-            String actualTrn = TranslatorWorker.translateText("Actual", langCode, siteId);
-            String yearTrn = TranslatorWorker.translateText("Year", langCode, siteId);
-            String dashboardTrn = TranslatorWorker.translateText("Dashboard", langCode, siteId);
-            String summaryTrn = TranslatorWorker.translateText("Summary", langCode, siteId);
-            String totalCommsTrn = TranslatorWorker.translateText("Total Commitments", langCode, siteId);
-            String totalDisbsTrn = TranslatorWorker.translateText("Total Disbursements", langCode, siteId);
-            String numberPrjTrn = TranslatorWorker.translateText("Number of Projects", langCode, siteId);
-            String numberSecTrn = TranslatorWorker.translateText("Number of Sectors", langCode, siteId);
-            String numberDonTrn = TranslatorWorker.translateText("Number of Organizations", langCode, siteId);
-            String numberRegTrn = TranslatorWorker.translateText("Number of Regions", langCode, siteId);
-            String avgPrjZSizeTrn = TranslatorWorker.translateText("Average Project Size", langCode, siteId);
+				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions");
+			String filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type");
+			String filtersStartYearTrn = TranslatorWorker.translateText("Start Year");
+			String filtersEndYearTrn = TranslatorWorker.translateText("End Year");
+			String filtersOrgGroupTrn = TranslatorWorker.translateText("Organization Groups");
+			String filtersOrganizationsTrn = TranslatorWorker.translateText("Organizations");
+			String filtersSectorsTrn = TranslatorWorker.translateText("Sectors");
+			String filtersSubSectorsTrn = TranslatorWorker.translateText("Sub-Sectors");
+			String filtersRegionsTrn = TranslatorWorker.translateText("Regions");
+			String filtersZonesTrn = TranslatorWorker.translateText("Zones");
+			String filtersLocationsTrn = TranslatorWorker.translateText("Locations");
+        	String fundingTrn = TranslatorWorker.translateText("Funding");
+            String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth");
+            String topPrjTrn = TranslatorWorker.translateText("Top Projects");
+            String topOrganizationTrn = TranslatorWorker.translateText("Top Organizations");
+            String topRegionTrn = TranslatorWorker.translateText("Top Regions");
+            String projectTrn = TranslatorWorker.translateText("Project");
+            String sectorTrn = TranslatorWorker.translateText("Sector");
+            String organizationTrn = TranslatorWorker.translateText("Organization");
+            String regionTrn = TranslatorWorker.translateText("Region");
+            String NPOTrn = TranslatorWorker.translateText("NPO");
+	        String programTrn = TranslatorWorker.translateText("Program");
+	        String aidPredTrn = TranslatorWorker.translateText("Aid Predictability");
+	        String aidPredQuarterTrn = TranslatorWorker.translateText("Aid Predictability Quarterly");
+            String aidTypeTrn = TranslatorWorker.translateText("Aid Type");
+            String budgetBreakdownTrn = TranslatorWorker.translateText("Budget Breakdown");
+            String finInstTrn = TranslatorWorker.translateText("Financing Instrument");
+            String sectorProfTrn = TranslatorWorker.translateText("Sector Profile");
+            String regionProfTrn = TranslatorWorker.translateText("Region Profile");
+            String NPOProfTrn = TranslatorWorker.translateText("NPO Profile");
+	        String programProfTrn = TranslatorWorker.translateText("Program Profile");
+	        String organizationProfTrn = TranslatorWorker.translateText("Organization Profile");
+            String plannedTrn = TranslatorWorker.translateText("Planned");
+            String actualTrn = TranslatorWorker.translateText("Actual");
+            String yearTrn = TranslatorWorker.translateText("Year");
+            String dashboardTrn = TranslatorWorker.translateText("Dashboard");
+            String summaryTrn = TranslatorWorker.translateText("Summary");
+            String totalCommsTrn = TranslatorWorker.translateText("Total Commitments");
+            String totalDisbsTrn = TranslatorWorker.translateText("Total Disbursements");
+            String numberPrjTrn = TranslatorWorker.translateText("Number of Projects");
+            String numberSecTrn = TranslatorWorker.translateText("Number of Sectors");
+            String numberDonTrn = TranslatorWorker.translateText("Number of Organizations");
+            String numberRegTrn = TranslatorWorker.translateText("Number of Regions");
+            String avgPrjZSizeTrn = TranslatorWorker.translateText("Average Project Size");
             String currName = vForm.getFilter().getCurrencyCode();
             String fundTypeTrn = "";
             switch (vForm.getFilter().getTransactionType()) {
 				case Constants.COMMITMENT:
-					fundTypeTrn = TranslatorWorker.translateText("Commitments", langCode, siteId);
+					fundTypeTrn = TranslatorWorker.translateText("Commitments");
 					break;
 				case Constants.DISBURSEMENT:
-					fundTypeTrn = TranslatorWorker.translateText("Disbursements", langCode, siteId);
+					fundTypeTrn = TranslatorWorker.translateText("Disbursements");
 					break;
 				case Constants.EXPENDITURE:
-					fundTypeTrn = TranslatorWorker.translateText("Expenditures", langCode, siteId);
+					fundTypeTrn = TranslatorWorker.translateText("Expenditures");
 					break;
 				default:
-					fundTypeTrn = TranslatorWorker.translateText("Values", langCode, siteId);
+					fundTypeTrn = TranslatorWorker.translateText("Values");
 				break;
 			}
             String dashboardTypeTrn = "";
             switch (vForm.getFilter().getDashboardType()) {
 	            case org.digijava.module.visualization.util.Constants.DashboardType.DONOR:
-	            	dashboardTypeTrn = TranslatorWorker.translateText("Organization", langCode, siteId);
+	            	dashboardTypeTrn = TranslatorWorker.translateText("Organization");
 					break;
 				case org.digijava.module.visualization.util.Constants.DashboardType.SECTOR:
-					dashboardTypeTrn = TranslatorWorker.translateText("Sector", langCode, siteId);
+					dashboardTypeTrn = TranslatorWorker.translateText("Sector");
 					break;
 				case org.digijava.module.visualization.util.Constants.DashboardType.REGION:
-					dashboardTypeTrn = TranslatorWorker.translateText("Region", langCode, siteId);
+					dashboardTypeTrn = TranslatorWorker.translateText("Region");
 					break;
 			
 			}

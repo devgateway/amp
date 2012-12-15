@@ -152,21 +152,13 @@ public class RegisterUser extends Action {
 				
 				
 
-				TranslatorWorker transwob = new TranslatorWorker();
-				String siteId = RequestUtils.getSite(request).getId().toString();
-				String langCode= RequestUtils.getNavigationLanguage(request).getCode();
-				try { 
-				des1 = transwob.translateText(des1, null, langCode, siteId);
-				des2 = transwob.translateText(des2, null, langCode, siteId);
-				des3 = transwob.translateText(des3, null, langCode, siteId);
-				des4 = transwob.translateText(des4, null, langCode, siteId);
-				cri1 = transwob.translateText(cri1, null, langCode, siteId); 
-				pti1 = transwob.translateText(pti1, null, langCode, siteId); 
+				des1 = TranslatorWorker.translateText(des1);
+				des2 = TranslatorWorker.translateText(des2);
+				des3 = TranslatorWorker.translateText(des3);
+				des4 = TranslatorWorker.translateText(des4);
+				cri1 = TranslatorWorker.translateText(cri1); 
+				pti1 = TranslatorWorker.translateText(pti1); 
 				
-				} 
-				catch (WorkerException e1){
-				e1.printStackTrace(); 
-				}
 				
 				String des = des1+ '\n'+'\n'+des2 +'\n'+ des3 +'\n'+'\n'+'\t'+'\t'+ des4;
 				String cri = ""+'\n'+'\t'+'\t'+cri1;
@@ -205,11 +197,7 @@ public class RegisterUser extends Action {
 			return mapping.findForward("forward");
 		}
 		else{
-			Site site = RequestUtils.getSite(request);
-			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-			String siteId = site.getId()+"";
-			String locale = navigationLanguage.getCode();
-			userRegisterForm.addError("error.aim.addUser.success", TranslatorWorker.translateText("User registered successfully",locale,siteId));
+			userRegisterForm.addError("error.aim.addUser.success", TranslatorWorker.translateText("User registered successfully"));
 			userRegisterForm.reset(mapping, request);
 			return (mapping.findForward("index"));
 		}

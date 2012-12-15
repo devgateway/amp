@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.text.regex.RegexBatch;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -94,7 +95,7 @@ public class DbUtil {
      * @throws EditorException
      */
     @SuppressWarnings("unchecked")
-	public static List<Editor> getEditorList(String siteId, String editorKey, String language) throws EditorException {
+	public static List<Editor> getEditorList(Site site, String editorKey, String language) throws EditorException {
 
         Session session = null;
         List<Editor> items = new ArrayList<Editor>();
@@ -104,7 +105,7 @@ public class DbUtil {
                                           Editor.class.getName() +
                                           " e where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language!=:language)");
 
-            q.setString("siteId", siteId);
+            q.setString("siteId", site.getSiteId());
             q.setString("editorKey", editorKey);
             q.setString("language", language);
 
@@ -128,7 +129,7 @@ public class DbUtil {
      * @throws EditorException
      */
 	@SuppressWarnings("unchecked")
-	public static List<Editor> getEditorList(String editorKey,String siteId) throws EditorException {
+	public static List<Editor> getEditorList(String editorKey, Site site) throws EditorException {
 
 		Session session = null;
 		List<Editor> items = new ArrayList<Editor>();
@@ -138,7 +139,7 @@ public class DbUtil {
 							+ Editor.class.getName()
 							+ " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
 
-			q.setString("siteId", siteId);
+			q.setString("siteId", site.getSiteId());
 			q.setString("editorKey", editorKey);
 
 			items = q.list();
@@ -151,11 +152,11 @@ public class DbUtil {
 		return items;
 	}    
 	
-	public static List<Editor> getEditorList(String editorKey,String siteId,Session session) throws EditorException {
+	public static List<Editor> getEditorList(String editorKey, Site site, Session session) throws EditorException {
 		List<Editor> items = new ArrayList<Editor>();
 		try {
 			Query q = session.createQuery("from "+ Editor.class.getName()+ " e where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
-			q.setString("siteId", siteId);
+			q.setString("siteId", site.getSiteId());
 			q.setString("editorKey", editorKey);
 
 			items = q.list();
@@ -195,7 +196,7 @@ public class DbUtil {
      * @throws EditorException
      */
     
-    public static List<Editor> getSiteEditorList(String siteId) throws
+    public static List<Editor> getSiteEditorList(Site site) throws
         EditorException {
 
         Session session = null;
@@ -205,7 +206,7 @@ public class DbUtil {
             Query q = session.createQuery("from " + Editor.class.getName() +
                 " e where (e.siteId=:siteId) order by e.orderIndex");
 
-            q.setString("siteId", siteId);
+            q.setString("siteId", site.getSiteId());
 
             @SuppressWarnings("unchecked")
 			List<Editor> result = q.list();
@@ -225,7 +226,7 @@ public class DbUtil {
         return items;
     }
 
-    public static List<Editor> getSiteEditorList(String siteId,String lang,String groupName) throws EditorException {
+    public static List<Editor> getSiteEditorList(Site site, String lang,String groupName) throws EditorException {
 
         Session session = null;
         List<Editor> items = new ArrayList<Editor>();
@@ -237,7 +238,7 @@ public class DbUtil {
                 "and e.language=:language " +
                 "order by e.orderIndex");
 
-            q.setString("siteId", siteId);
+            q.setString("siteId", site.getSiteId());
             q.setString("groupName", groupName);
             q.setString("language", lang);
 
@@ -265,7 +266,7 @@ public class DbUtil {
      * @return
      * @throws EditorException
      */
-    public static Editor getEditor(String siteId, String editorKey,String language) throws EditorException {
+    public static Editor getEditor(Site site, String editorKey,String language) throws EditorException {
 
         Session session = null;
         Editor item = null;
@@ -273,7 +274,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             try {
             	Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey");
-            		q.setString("siteId", siteId);
+            		q.setString("siteId", site.getSiteId());
             		q.setString("editorKey", editorKey);
             		//q.setString("language", language);
             		@SuppressWarnings("unchecked")
@@ -300,7 +301,7 @@ public class DbUtil {
     }
 
 
-    public static Editor getEditor(String siteId, int orderIndex) throws EditorException {
+    public static Editor getEditor(Site site, int orderIndex) throws EditorException {
 
         Session session = null;
         Editor item = new Editor();
@@ -311,7 +312,7 @@ public class DbUtil {
                                           " e where (e.siteId=:siteId) and " +
                                           "(e.orderIndex=:orderIndex)");
 
-            q.setString("siteId", siteId);
+            q.setString("siteId", site.getSiteId());
             q.setInteger("orderIndex", new Integer(orderIndex));
 
             @SuppressWarnings("unchecked")
@@ -513,7 +514,7 @@ public class DbUtil {
         // get module instance
         ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(request);
 
-        editor.setSiteId(moduleInstance.getSite().getSiteId());
+        editor.setSite(moduleInstance.getSite());
         editor.setEditorKey(editorKey);
         editor.setUrl(url);
         editor.setLanguage(languageCode);
@@ -537,7 +538,7 @@ public class DbUtil {
      * @return
      * @throws EditorException
      */
-    public static String getEditorBody(String siteId, String editorKey, String language) throws EditorException {
+    public static String getEditorBody(Site site, String editorKey, String language) throws EditorException {
 
         Session session = null;
         String body = null;
@@ -550,7 +551,7 @@ public class DbUtil {
                 " where (e.siteId=:siteId) and (e.editorKey=:editorKey)");
 
           //  q.setCacheable(true);
-            q.setString("siteId", siteId);
+            q.setString("siteId", site.getSiteId());
             q.setString("editorKey", editorKey);
             //q.setString("language", language);
 
@@ -582,7 +583,7 @@ public class DbUtil {
      * @return
      * @throws EditorException
      */
-    public static String getEditorBodyEmptyInclude(String siteId, String editorKey, String language) throws EditorException {
+    public static String getEditorBodyEmptyInclude(Site site, String editorKey, String language) throws EditorException {
 
         Session session = null;
         String body = null;
@@ -593,7 +594,7 @@ public class DbUtil {
                 "select e.body from " + Editor.class.getName() + " e " +
                 " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and e.language=:language");
           //  q.setCacheable(true);
-            q.setString("siteId", siteId);
+            q.setString("siteId", site.getSiteId());
             q.setString("editorKey", editorKey);
             q.setString("language", language);
             body=(String)q.uniqueResult();
@@ -621,8 +622,8 @@ public class DbUtil {
      * @return
      * @throws EditorException
      */
-    public static String getEditorBodyFiltered(String siteId, String editorKey, String language) throws EditorException {
-    	String body = getEditorBody(siteId, editorKey, language);
+    public static String getEditorBodyFiltered(Site site, String editorKey, String language) throws EditorException {
+    	String body = getEditorBody(site, editorKey, language);
     	if (body != null){
     		RegexBatch batch = new RegexBatch(HTML_STRIP_REGEXES,REGEX_FLAGS);
     		body = batch.replaceAll(body, " "); 
@@ -639,7 +640,7 @@ public class DbUtil {
      * @return title text or null.
      * @throws EditorException
      */
-    public static String getEditorTitle(String siteId, String editorKey,String language) throws EditorException {
+    public static String getEditorTitle(Site site, String editorKey,String language) throws EditorException {
 
         Session session = null;
         String title = "";
@@ -653,7 +654,7 @@ public class DbUtil {
                 " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language=:language)");
 
             q.setCacheable(true);
-            q.setString("siteId", siteId);
+            q.setString("siteId", site.getSiteId());
             q.setString("editorKey", editorKey);
             q.setString("language", language);
 

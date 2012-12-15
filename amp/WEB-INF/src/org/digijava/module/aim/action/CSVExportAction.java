@@ -246,20 +246,13 @@ public class CSVExportAction
             response.getOutputStream().close();
         }
 
-	}else{
-		
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		
-		String siteId=site.getSiteId();
-		String locale=navigationLanguage.getCode();
-		
+	}else{				
 		session.setAttribute("sessionExpired", true);
 		response.setContentType("text/html");
 		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
 		PrintWriter out = new PrintWriter(outputStream, true);
 		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
-		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.",locale,siteId);
+		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.");
 		String script = "<script>opener.close();" 
 			+ "alert('"+ alert +"');" 
 			+ "window.location=('"+ url +"');"

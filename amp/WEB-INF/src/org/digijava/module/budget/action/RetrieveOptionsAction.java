@@ -34,9 +34,7 @@ public class RetrieveOptionsAction extends Action{
        
     	response.setContentType("text/html");
     	PrintWriter out = response.getWriter();
-    	String siteId = RequestUtils.getSite(request).getId().toString();
-		String locale= RequestUtils.getNavigationLanguage(request).getCode();
-		String select = TranslatorWorker.translateText("Select",locale, siteId);
+		String select = TranslatorWorker.translateText("Select");
     	
     	if (optionstype.equalsIgnoreCase("orgselect")){
         	 String budgetsectorid = request.getParameter("id");

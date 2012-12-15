@@ -75,10 +75,6 @@ public class AddSector extends Action {
 		{
 			if(event.equals("addSector"))
 			{
-				Site site = RequestUtils.getSite(request);
-				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				String siteId = site.getId()+"";
-				String locale = navigationLanguage.getCode();
 				if(addSectorForm.getLevelType().equals("scheme"))
 				{
 					AmpSectorScheme ampSch = SectorUtil.getAmpSectorScheme(new Long(schemeId));

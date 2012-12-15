@@ -110,7 +110,7 @@ public class TemplateDocActions extends DispatchAction {
 		TemplateDoc tempDoc=TemplateDocsUtil.getTemplateDocByName(tempName);
 		if(tempDoc!=null){
 			if(! tempDoc.getId().equals(myForm.getTemplateId())){				
-				errors.add("name not unique", new ActionMessage("cr.templateName.exists",TranslatorWorker.translateText("Template With Given Name Already Exists", request)));
+				errors.add("name not unique", new ActionMessage("cr.templateName.exists",TranslatorWorker.translateText("Template With Given Name Already Exists")));
 			}			
 		}
 		
@@ -123,7 +123,7 @@ public class TemplateDocActions extends DispatchAction {
 					TemplateField templateField=(TemplateField) clazz.newInstance();
 					if(!templateField.getHasEmptyPossibleValsRights()){
 						String fieldTypeDisplayName=getFieldDisplayName(templateField.getClass());
-						errors.add("predefined values must exist", new ActionMessage("cr.templateField.predefinedValDoesnotExist",fieldTypeDisplayName+" "+TranslatorWorker.translateText("field must have pre-defined values", request)));
+						errors.add("predefined values must exist", new ActionMessage("cr.templateField.predefinedValDoesnotExist",fieldTypeDisplayName+" "+TranslatorWorker.translateText("field must have pre-defined values")));
 					}
 				}
 			}

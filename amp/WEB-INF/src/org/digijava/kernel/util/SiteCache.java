@@ -42,6 +42,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.hibernate.Session;
@@ -89,12 +90,12 @@ public class SiteCache implements Runnable {
             return instances;
         }
 
-        public Collection getUserLanguages() {
+        public Collection<Locale> getUserLanguages() {
             return userLanguages;
         }
 
-        public void setUserLanguages(Collection userLanguages) {
-            this.userLanguages = new ArrayList(userLanguages);
+        public void setUserLanguages(Collection<Locale> userLanguages) {
+            this.userLanguages = new ArrayList<Locale>(userLanguages);
         }
 
         public Collection getTranslationLanguages() {
@@ -123,22 +124,16 @@ public class SiteCache implements Runnable {
 
     }
 
-    private static final Comparator reverseStringComparator = new Comparator() {
-        public int compare(Object o1,
-                           Object o2) {
-            String s1 = (String) o1;
-            String s2 = (String) o2;
-
-            return -s1.compareTo(s2);
+    private static final Comparator<String> reverseStringComparator = new Comparator<String>() {
+        public int compare(String s1,
+                           String s2) {
+           return -s1.compareTo(s2);
         }
     };
 
-    public static final Comparator moduleInstanceComparator = new Comparator() {
-        public int compare(Object o1,
-                           Object o2) {
-            ModuleInstance i1 = (ModuleInstance) o1;
-            ModuleInstance i2 = (ModuleInstance) o2;
-
+    public static final Comparator<ModuleInstance> moduleInstanceComparator = new Comparator<ModuleInstance>() {
+        public int compare(ModuleInstance i1,
+        					ModuleInstance i2) {
             int result;
             result = i1.getModuleName().compareTo(i2.getModuleName());
             if (result == 0) {
@@ -149,9 +144,9 @@ public class SiteCache implements Runnable {
     };
 
     private java.util.List sharedInstances;
-    private HashMap sites;
-    private HashMap sitesByStringId;
-    private HashMap siteDomains;
+    private HashMap<Long, CachedSite> sites;
+    private HashMap<String, CachedSite> sitesByStringId;
+    private HashMap<String, SortedMap<String, SiteDomain>> siteDomains;
     private static SiteCache currentInstance;
     private volatile Long cacheVersion;
     private AbstractCache appScopeCache;
@@ -193,10 +188,10 @@ public class SiteCache implements Runnable {
 
     public void load(boolean silent) throws DgException {
         logger.debug("Reloading SiteCache. silent=" + silent);
-        HashMap siteCache = new HashMap();
-        HashMap sitesByStringIdCache = new HashMap();
-        HashMap siteDomainCache = new HashMap();
-        List newSharedInstances = null;
+        HashMap<Long, CachedSite> siteCache = new HashMap<Long, CachedSite>();
+        HashMap<String, CachedSite> sitesByStringIdCache = new HashMap<String, CachedSite>();
+        HashMap<String, SortedMap<String, SiteDomain>> siteDomainCache = new HashMap<String, SortedMap<String, SiteDomain>>();
+        List<ModuleInstance> newSharedInstances = null;
 
         Session session = null;
         try {
@@ -205,7 +200,7 @@ public class SiteCache implements Runnable {
             String queryString = " from " + ModuleInstance.class.getName() +
             					 " mi where mi.site is null";
             
-            newSharedInstances = new ArrayList(session.createQuery(queryString).list());
+            newSharedInstances = new ArrayList<ModuleInstance>(session.createQuery(queryString).list());
 
             Collections.sort(newSharedInstances, moduleInstanceComparator);
 
@@ -213,16 +208,16 @@ public class SiteCache implements Runnable {
             			  " left join fetch site.translationLanguages left join fetch site.userLanguages " +
             			  " left join fetch site.countries";
             
-            Iterator iter = session.createQuery(queryString).list().iterator();
+            Iterator<SiteDomain> iter = session.createQuery(queryString).list().iterator();
             while (iter.hasNext()) {
-                SiteDomain siteDomain = (SiteDomain) iter.next();
+                SiteDomain siteDomain = iter.next();
 
                 String path = siteDomain.getSitePath() == null ? "" :
                     siteDomain.getSitePath().trim();
-                SortedMap siteDomainPathes = (SortedMap) siteDomainCache.get(
+                SortedMap<String, SiteDomain> siteDomainPathes = (SortedMap<String, SiteDomain>) siteDomainCache.get(
                     siteDomain.getSiteDomain().trim());
                 if (siteDomainPathes == null) {
-                    siteDomainPathes = new TreeMap(reverseStringComparator);
+                    siteDomainPathes = new TreeMap<String, SiteDomain>(reverseStringComparator);
                     siteDomainCache.put(siteDomain.getSiteDomain().trim(),
                                         siteDomainPathes);
                 }
@@ -354,7 +349,7 @@ public class SiteCache implements Runnable {
     }
 
     public Site getSite(Long siteId) {
-        CachedSite cachedSite = (CachedSite) getSites().get(siteId);
+        CachedSite cachedSite = getSites().get(siteId);
         if (cachedSite == null) {
             return null;
         }
@@ -369,8 +364,8 @@ public class SiteCache implements Runnable {
         return cachedSite.getSite();
     }
 
-    public Site getSite(String siteId) {
-        CachedSite cachedSite = (CachedSite) getSitesByStringId().get(siteId);
+    public Site getSiteByName(String siteName) { // siteName is actually siteId in disguise - but PLEASE don't use site.siteId as key anymore
+        CachedSite cachedSite = (CachedSite) getSitesByStringId().get(siteName);
         if (cachedSite == null) {
             return null;
         }
@@ -473,18 +468,52 @@ public class SiteCache implements Runnable {
 
         return siteDomain;
     }
+    
+    /**
+     * looks up the site by name. Handles some special cases: for siteId = 0 or siteId = null returns null
+     * for invalid siteId values (not found in the DB) also returns null, but also prints an error message
+     * @param siteId
+     * @return
+     */
+    public static Site lookupById(Long siteId)
+    {
+    	if (siteId == null)
+    		return SiteUtils.getDefaultSite();
+    	if (siteId == 0)
+    		return SiteUtils.getGlobalSite(); // global site
+    	Site result = getInstance().getSite(siteId);
+    	if (result == null)
+    	{
+    		logger.error("could not find site by id: " + siteId, new RuntimeException());
+    		return null;
+    	}
+    	return result;
+    }
 
-    private synchronized HashMap getSiteDomains() {
+    public static Site lookupByName(String siteName)
+    {
+    	if (siteName == null)
+    		return null;
+    	Site result = getInstance().getSiteByName(siteName);
+    	if (result == null)
+    	{
+    		logger.error("could not find site by name: " + siteName, new RuntimeException());
+    		return null;
+    	}
+    	return result;
+    }
+    
+    private synchronized HashMap<String, SortedMap<String, SiteDomain>> getSiteDomains() {
         handleVersioning();
         return siteDomains;
     }
 
-    private synchronized HashMap getSites() {
+    private synchronized HashMap<Long, CachedSite> getSites() {
         handleVersioning();
         return sites;
     }
 
-    private synchronized HashMap getSitesByStringId() {
+    private synchronized HashMap<String, CachedSite> getSitesByStringId() {
         handleVersioning();
         return sitesByStringId;
     }
@@ -501,7 +530,7 @@ public class SiteCache implements Runnable {
     }
 
     public String toXml() {
-        HashMap siteCache = null;
+        HashMap<Long, CachedSite> siteCache = null;
 
         synchronized (this) {
             siteCache = sites;
@@ -509,9 +538,7 @@ public class SiteCache implements Runnable {
         StringBuffer buff = new StringBuffer();
         final String newLn = "\n";
         buff.append("<site-cache>").append(newLn);
-        Iterator iter = siteCache.values().iterator();
-        while (iter.hasNext()) {
-            CachedSite cachedSite = (CachedSite) iter.next();
+        for (CachedSite cachedSite:siteCache.values()) {
             buff.append("    ").append("<site id=\"").append(cachedSite.getSite().
                 getId()).append("\" ");
             buff.append("root=\"");
@@ -538,4 +565,5 @@ public class SiteCache implements Runnable {
             throw new RuntimeException("Unabme to refresh SiteCache", ex);
         }
     }
+     
 }

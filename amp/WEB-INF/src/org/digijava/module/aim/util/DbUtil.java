@@ -5054,7 +5054,7 @@ public class DbUtil {
 
 	}
 
-	public static Collection getAllOrgGroups() {
+	public static Collection<AmpOrgGroup> getAllOrgGroups() {
 		Session session = null;
 		Collection col = new ArrayList();
 

@@ -22,6 +22,7 @@ import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -108,19 +109,18 @@ public class ShowGisDashboard extends Action {
          
        
         //currency
-        Collection currency = CurrencyUtil.getActiveAmpCurrencyByName();
+        Collection<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
 	    //Only currencies havening exchanges rates AMP-2620
 	    Collection<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
 	    gisForm.setCurrencies(validcurrencies);
-	    for (Iterator iter = currency.iterator(); iter.hasNext();) {
-	    	AmpCurrency element = (AmpCurrency) iter.next();
+	    for (AmpCurrency element:currency) {
 			if( CurrencyUtil.isRate(element.getCurrencyCode())== true){
 				gisForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
 			}
 		}
 	    
 	    //calendars 
-	    Collection allFisCalenders = org.digijava.module.aim.util.DbUtil.getAllFisCalenders();
+	    Collection<AmpFiscalCalendar> allFisCalenders = org.digijava.module.aim.util.DbUtil.getAllFisCalenders();
 	    gisForm.setCalendars(allFisCalenders);
 	    
 	    ServletContext ampContext = getServlet().getServletContext();
@@ -166,7 +166,7 @@ public class ShowGisDashboard extends Action {
  	 	
 		AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
 		AmpTheme primaryProg = null;
-		List<AmpTheme> primaryPrograms;		
+//		List<AmpTheme> primaryPrograms;		
 		if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {
 			primaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
 			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
@@ -175,7 +175,7 @@ public class ShowGisDashboard extends Action {
 		
 		AmpTheme secondaryProg = null;
  	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
- 	 	List<AmpTheme> secondaryPrograms;		
+// 	 	List<AmpTheme> secondaryPrograms;		
 		if (secondaryPrg!=null && secondaryPrg.getDefaultHierarchy() != null) {
 			secondaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
 			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
@@ -184,7 +184,7 @@ public class ShowGisDashboard extends Action {
  	 	
 		AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
  	 	
-		List<AmpTheme> nationalPlanningObjectives;
+//		List<AmpTheme> nationalPlanningObjectives;
  	 	if (natPlanSetting!=null && natPlanSetting.getDefaultHierarchy() != null) {
  	 		AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy()); 	 	 	
  	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
@@ -227,9 +227,7 @@ public class ShowGisDashboard extends Action {
 		gisForm.setSelectedFromYear(new Integer(year-1).toString());
 		gisForm.setSelectedToYear(year.toString());
 		//fill from years' drop-down
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-		String site = RequestUtils.getSite(request).getId().toString();
-		String fiscalYear = TranslatorWorker.translateText("FY", locale, site);
+		String fiscalYear = TranslatorWorker.translateText("FY");
 		gisForm.setYearsFrom(ChartWidgetUtil.getYears(true, fiscalYear));
 		//fill to years' drop-down
 		gisForm.setYearsTo(ChartWidgetUtil.getYears(false, fiscalYear));
@@ -240,11 +238,6 @@ public class ShowGisDashboard extends Action {
 			request.getSession().setAttribute("publicuser", true);
 		}
         return mapping.findForward("forward");
-    }
-
-    private void filterUsedSecData(List secData) {
-        Iterator it = secData.iterator();
-
     }
 
 }

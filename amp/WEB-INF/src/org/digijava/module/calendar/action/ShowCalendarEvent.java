@@ -84,8 +84,6 @@ public class ShowCalendarEvent extends Action {
  		CalendarThread.setSite(site);
  		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
  		CalendarThread.setLocale(navigationLanguage);
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
  		
 //        if (!RequestUtils.isLoggued(response, request.getSession(), request)) {
 //			return null;
@@ -183,7 +181,7 @@ public class ShowCalendarEvent extends Action {
                     selectedAttsCol.add(new LabelValueBean(slAtts[i].substring(slAtts[i].lastIndexOf("g:")+2), slAtts[i].substring(slAtts[i].lastIndexOf("g:"))));
                 }
                     else if (slAtts[i].startsWith("guest")) {
-                         String guest="---"+TranslatorWorker.translateText("Guest", langCode, siteId)+"---";
+                         String guest="---"+TranslatorWorker.translateText("Guest")+"---";
                          selectedAttsCol.add(new LabelValueBean(guest, "guest"));
                    }
             }
@@ -543,9 +541,7 @@ public class ShowCalendarEvent extends Action {
             Long ampCalendarId = ceform.getAmpCalendarId();
             ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(request);
             String instanceId = moduleInstance.getInstanceName();
-            String siteId = moduleInstance.getSite().getSiteId();
-            String site = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-            String langCode = RequestUtils.getNavigationLanguage(request).getCode();
+            Long siteId = moduleInstance.getSite().getId();
             AmpCalendar ampCalendar = AmpDbUtil.getAmpCalendar(ampCalendarId, instanceId, siteId);
 
             if (ampCalendar != null) {

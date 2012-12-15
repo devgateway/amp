@@ -97,12 +97,12 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		Long valueId					= null; // for single select
 		//Long [] valueIds				= null; // for multiselect
 		Object values					= null; // for multiselect
-		Collection valueIdsColl			= null;
+		Set<Long> valueIdsColl			= null;
 		
 		HttpServletRequest thisRequest	= (HttpServletRequest)pageContext.getRequest();
 		
 		try{
-			Collection ampCategoryValues;
+			Collection<AmpCategoryValue> ampCategoryValues;
 			AmpCategoryClass ampCategoryClass	= null;
 			
 			if ( categoryId != null )
@@ -214,7 +214,6 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		return EVAL_PAGE;
 	}
 	private void printListView (Collection ampCategoryValues, boolean isMultiselect, Long valueId, Collection valueIdsColl, String styleId) throws Exception {
-		HttpServletRequest request		= (HttpServletRequest)pageContext.getRequest();
 		String classProperty			= "";
 		String fLine					= firstLine;
 		
@@ -245,22 +244,9 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		if ( !isMultiselect ) {
 			if ( fLine == null ) {
 				 //String pleaseSelectBelow = "aim:pleaseSelectBelow"; not used any more because of hash keys
-				 Site site = RequestUtils.getSite(request);
 				 //
 				 //requirements for translation purposes
-				 TranslatorWorker translator = TranslatorWorker.getInstance();
-				 String siteId = site.getId()+"";
-				 String locale = RequestUtils.getNavigationLanguage(request).getCode();
-				 String translatedText = null;
-				 try {
-					 	//TODO lets use debug instead of info here.
-						logger.info("siteID : "+siteId);
-						logger.info("locale : "+locale);
-						//TODO TRN: there is no record with such key, so using this key is all right, but if we have default text, then lets replace with it.
-						translatedText = TranslatorWorker.translateText("Please select from below", locale, siteId);
-					 } catch (WorkerException e) {
-						e.printStackTrace();
-					 }
+				 String translatedText = TranslatorWorker.translateText("Please select from below");
 				fLine	= translatedText;
 			}
 			out.println("<option value='0' "+firstLineSelectedProperty+" >"+fLine+"</option>");
@@ -273,7 +259,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		while (iterator.hasNext()) {
 			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
 			if (ampCategoryValue!=null){
-				String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
+				String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue);
 				if ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() || 
 						( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) ) {
 					out.println("<option value='"+ampCategoryValue.getId()+"' selected='selected'"+innerDynamicAttributes+" >"+outputValue+"</option>");
@@ -286,26 +272,25 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		out.println("</select>");
 	}
 	
-	private void printBoxView (Collection ampCategoryValues, boolean isMultiselect, Long valueId, Collection valueIdsColl, String styleId) throws Exception {
-		HttpServletRequest request		= (HttpServletRequest)pageContext.getRequest();
-		String classProperty			= "";
+	private void printBoxView (Collection<AmpCategoryValue> ampCategoryValues, boolean isMultiselect, Long valueId, Collection valueIdsColl, String styleId) throws Exception {
+//		String classProperty			= "";
 		String typeProperty				= " type='radio'";
 		String nameProperty				= " name='"+property+"'";
-		String styleIdProperty			= "";
+//		String styleIdProperty			= "";
 
 		JspWriter out					= pageContext.getOut();
 
 		
 		
-		if (styleClass != null)
-			classProperty	= " class='"+ styleClass + "'";
+/*		if (styleClass != null)
+			classProperty	= " class='"+ styleClass + "'";*/
 		if (isMultiselect) {
 			typeProperty			= " type='checkbox'";
 		}
 		
-		if (styleId != null) {
+/*		if (styleId != null) {
 			styleIdProperty = " id='" + styleId + "'";
-		}
+		}*/
 		
 		out.println("<table " + outerDynamicAttributes + ">");
 		
@@ -323,7 +308,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		
 		while (iterator.hasNext()) {
 			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
-			String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
+			String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue);
 			out.println("<tr><td>");
 			if ( ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() ) || 
 					( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) ) {

@@ -67,7 +67,7 @@ public class EditSite
         ActionMessages errors = new ActionMessages();
 
         if (!siteForm.getSiteKey().equals(realSite.getSiteId())) {
-            Site someSite = SiteUtils.getSite(siteForm.getSiteKey());
+            Site someSite = SiteCache.lookupByName(siteForm.getSiteKey());
             if (someSite != null) {
                 errors.add(null,
                            new ActionMessage("error.admin.siteKeyExists"));

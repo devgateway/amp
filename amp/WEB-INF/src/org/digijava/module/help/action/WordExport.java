@@ -17,6 +17,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.util.DbUtil;
@@ -51,9 +53,7 @@ public class WordExport extends Action {
         response.setHeader("content-disposition", "attachment;filename=glossary.doc");
         //
         try {
-            String language = RequestUtils.getNavigationLanguage(request).getCode();
     		String moduleInstance = RequestUtils.getModuleInstance(request).getInstanceName();
-    		String siteId = RequestUtils.getSite(request).getSiteId();
             //
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Document document = new Document(PageSize.A4);    		
@@ -61,14 +61,14 @@ public class WordExport extends Action {
             //
             document.open();
             Font titleFont = FontFactory.getFont("Arial", 24, Font.BOLD);
-            Paragraph p = new Paragraph(TranslatorWorker.translateText("Glossary export", language, siteId), titleFont);
+            Paragraph p = new Paragraph(TranslatorWorker.translateText("Glossary export"), titleFont);
             p.setAlignment(Element.ALIGN_CENTER);
             document.add(p);
             document.add(new Paragraph(" "));
             //
-			List<HelpTopic> helpTopics = GlossaryUtil.getChildTopics(siteId, moduleInstance, null);
+			List<HelpTopic> helpTopics = GlossaryUtil.getChildTopics(TLSUtils.getSite(), moduleInstance, null);
 			//
-            writechild(20, helpTopics, moduleInstance, siteId, language, document);
+            writechild(20, helpTopics, moduleInstance, TLSUtils.getSite(), TLSUtils.getLangCode(), document);
         	//
     		document.close();
     		writer2.close();
@@ -95,7 +95,7 @@ public class WordExport extends Action {
      * @param document
      */
     @SuppressWarnings("unchecked")
-	private void writechild (float size, List<HelpTopic> helpTopics, String moduleInstance, String siteId, String language, Document document) {
+	private void writechild (float size, List<HelpTopic> helpTopics, String moduleInstance, Site site, String language, Document document) {
   		//
     	try {
     		List<HelpTopic> childs = null;
@@ -107,16 +107,16 @@ public class WordExport extends Action {
 			Font fontB = FontFactory.getFont("Arial", 10, Font.NORMAL);
 			for (HelpTopic helpTopic : helpTopics) {
 				//
-				pp = new Paragraph(TranslatorWorker.translateText(helpTopic.getTopicKey(), language, siteId), fontT);
+				pp = new Paragraph(TranslatorWorker.translateText(helpTopic.getTopicKey(), language, site), fontT);
             	//
             	document.add(pp);
             	document.add(new Paragraph(" "));
 	            //
 	            //
-				body = DbUtil.getEditorBody(siteId, helpTopic.getBodyEditKey(), language);
+				body = DbUtil.getEditorBody(site, helpTopic.getBodyEditKey(), language);
 				if (body == null) body = "";
 				//
-				objects = HTMLWorker.parseToList(new StringReader(TranslatorWorker.translateText(body, language, siteId)), null);
+				objects = HTMLWorker.parseToList(new StringReader(TranslatorWorker.translateText(body, language, site)), null);
 	            for (Element element : objects) {
 	            	pp = (Paragraph) element;
 	            	pp.setFont(fontB);
@@ -125,9 +125,9 @@ public class WordExport extends Action {
 	            }
 	            document.add(new Paragraph(" "));
 	            //
-	            childs = GlossaryUtil.getChildTopics(siteId, moduleInstance, helpTopic.getHelpTopicId());
+	            childs = GlossaryUtil.getChildTopics(site, moduleInstance, helpTopic.getHelpTopicId());
 	            if ((childs != null) && (!childs.isEmpty())) {
-		            writechild((size-2), childs, moduleInstance, siteId, language, document);	
+		            writechild((size-2), childs, moduleInstance, site, language, document);	
 	            }
 			}
     	} catch (Exception ex) {

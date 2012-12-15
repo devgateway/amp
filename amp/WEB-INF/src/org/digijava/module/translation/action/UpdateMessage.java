@@ -31,6 +31,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.translation.form.AdvancedTranslationForm;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.digijava.module.translation.util.DbUtil;
@@ -91,7 +92,7 @@ public class UpdateMessage
                     msg = new Message();
 
                     msg.setKey(decodedKey);
-                    msg.setSiteId(formBean.getSiteId().toString());
+                    msg.setSite(SiteCache.lookupById(formBean.getSiteId()));
                     msg.setLocale(formBean.getSelectedLangTarget().trim());
                 }
 

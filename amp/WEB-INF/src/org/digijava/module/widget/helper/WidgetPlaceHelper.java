@@ -82,48 +82,28 @@ public class WidgetPlaceHelper implements Serializable{
             @Override
             public void visit(AmpWidgetIndicatorChart chart) {
                 rendertype.add(WidgetUtil.CHART_INDICATOR);
-                try {
-					rendertypeName.add(TranslatorWorker.translateText("Indicator Chart", request));
-				} catch (WorkerException e) {
-					logger.error("TranslatorWorker error: translate text Indicator Chat",e);
-				}
+				rendertypeName.add(TranslatorWorker.translateText("Indicator Chart"));
             }
 
             @Override
             public void visit(AmpDaTable table) {
                 rendertype.add(WidgetUtil.TABLE);
-                try {
-					rendertypeName.add(TranslatorWorker.translateText("Table", request));
-				} catch (WorkerException e) {
-					logger.error("TranslatorWorker error: translate text Table",e);
-				}
+				rendertypeName.add(TranslatorWorker.translateText("Table"));
             }
             @Override
             public void visit(AmpSectorTableWidget table) {
                 rendertype.add(WidgetUtil.SECTOR_TABLE);
-                try {
-					rendertypeName.add(TranslatorWorker.translateText("Sector Table Widget", request));
-				} catch (WorkerException e) {
-					logger.error("TranslatorWorker error: translate text Sector Table Widget",e);
-				}
+				rendertypeName.add(TranslatorWorker.translateText("Sector Table Widget"));
             }
             @Override
             public void visit(AmpParisIndicatorTableWidget table) {
                 rendertype.add(WidgetUtil.PARIS_INDICAROR_TABLE);
-                try {
-					rendertypeName.add(TranslatorWorker.translateText("Paris Indicator Table Widget", request));
-				} catch (WorkerException e) {
-					logger.error("TranslatorWorker error: translate text Paris Indicator Table Widget");
-				}
+				rendertypeName.add(TranslatorWorker.translateText("Paris Indicator Table Widget"));
             }
             @Override
             public void visit(AmpWidgetTopTenDonorGroups table) {
                 rendertype.add(WidgetUtil.TOP_TEN_DONORS);
-                try {
-					rendertypeName.add(TranslatorWorker.translateText("Top Ten Donors Table Widget", request));
-				} catch (WorkerException e) {
-					logger.error("TranslatorWorker error: translate text Top Ten Donors Table Widget",e);
-				}
+				rendertypeName.add(TranslatorWorker.translateText("Top Ten Donors Table Widget"));
             }
         };
         widget.accept(adapter);

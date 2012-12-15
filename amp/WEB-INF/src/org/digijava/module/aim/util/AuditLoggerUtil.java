@@ -611,15 +611,15 @@ public class AuditLoggerUtil {
     public static class HelperAuditloggerDetailComparator implements Comparator<AmpAuditLogger> {
     	private Locale locale;
         private Collator collator;
-        private String siteId;
+        private Long siteId;
 
         public HelperAuditloggerDetailComparator(){
             this.locale=new Locale("en", "EN");
         }
 
-        public HelperAuditloggerDetailComparator(String iso,String siteId) {
+        public HelperAuditloggerDetailComparator(String iso, Long siteId) {
             this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-            this.siteId=siteId;
+            this.siteId = siteId;
         }
 
         public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {

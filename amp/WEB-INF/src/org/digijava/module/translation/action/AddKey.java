@@ -31,6 +31,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.translation.form.AdvancedTranslationForm;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.digijava.module.translation.util.DbUtil;
@@ -61,7 +62,7 @@ public class AddKey
 
             msg.setKey(formBean.getKey().trim());
             msg.setMessage(formBean.getMessageText());
-            msg.setSiteId(formBean.getSiteId().toString());
+            msg.setSite(SiteCache.lookupById(formBean.getSiteId()));
             msg.setLocale(formBean.getLocale().trim());
 
             boolean saved = false;

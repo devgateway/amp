@@ -96,7 +96,7 @@ public class UploadImage extends Action {
 			
 		}else{
 			retVal="1";
-			errorMessage=TranslatorWorker.translateText("File size exceeds limit. Max size should be 2MB", request);
+			errorMessage=TranslatorWorker.translateText("File size exceeds limit. Max size should be 2MB");
 		}
 		
 		//generate response

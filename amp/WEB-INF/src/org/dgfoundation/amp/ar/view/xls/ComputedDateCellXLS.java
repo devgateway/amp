@@ -74,7 +74,7 @@ public class ComputedDateCellXLS extends TextCellXLS {
 
 			// requirements for translation purposes
 			TranslatorWorker translator = TranslatorWorker.getInstance();
-			Long siteId = new Long(parent.getReportMetadata().getSiteId());
+			Long siteId = parent.getReportMetadata().getSiteId();
 			String locale = parent.getReportMetadata().getLocale();
 
 			String finalStatus = new String();// the actual text to be added to
@@ -83,7 +83,7 @@ public class ComputedDateCellXLS extends TextCellXLS {
 			String translatedStatus = null;
 			// String prefix="aim:";
 			try {
-				translatedStatus = TranslatorWorker.translateText(actualStatus, locale, siteId+"");
+				translatedStatus = TranslatorWorker.translateText(actualStatus, locale, siteId);
 			} catch (WorkerException e) {
 				e.printStackTrace();
 			}

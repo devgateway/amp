@@ -615,23 +615,23 @@ public class DbUtil {
 
 	}
 
-	/**
-	 * Returns site by string id
-	 * @param siteId site id
-	 * @return Site object
-	 * @throws AdminException
-	 * @deprecated Use SiteUtils.getSite() instead
-	 */
-	public static Site getSite(String siteId) throws AdminException {
-		Site site = null;
-		try {
-			site = SiteUtils.getSite(siteId);
-		}
-		catch (DgException ex) {
-			throw new AdminException(ex);
-		}
-		return site;
-	}
+//	/**
+//	 * Returns site by string id
+//	 * @param siteId site id
+//	 * @return Site object
+//	 * @throws AdminException
+//	 * @deprecated Use SiteCache.lookupByName() instead
+//	 */
+//	public static Site getSite(String siteId) throws AdminException {
+//		Site site = null;
+//		try {
+//			site = SiteCache.lookupByName(siteId);
+//		}
+//		catch (DgException ex) {
+//			throw new AdminException(ex);
+//		}
+//		return site;
+//	}
 
 	public static Site getSite(String domain, String path) throws
 	AdminException {

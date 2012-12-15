@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.NoCategoryClassException;
@@ -59,17 +60,16 @@ public class CategoryManagerUtil {
 	 * @param request
 	 * @return The translated category value or ,if any error appears, the empty string
 	 */
-	public static String translateAmpCategoryValue(AmpCategoryValue ampCategoryValue, HttpServletRequest request) {
+	public static String translateAmpCategoryValue(AmpCategoryValue ampCategoryValue) {
 		//translation key is generated from the text hashcode
 		String key=TranslatorWorker.generateTrnKey(ampCategoryValue.getValue());
-		return translate(key, request, ampCategoryValue.getValue() );
+		return translate(key, ampCategoryValue.getValue() );
 		//return translate(CategoryManagerUtil.getTranslationKeyForCategoryValue(ampCategoryValue), request, ampCategoryValue.getValue() );
 	}
-	public static String translate(String key, HttpServletRequest request, String defaultValue) {
+	public static String translate(String key, String defaultValue) {
 		Session session	= null;
 		String ret		= "";
-		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
-		Long	siteId	= RequestUtils.getSite(request).getId();
+		String lang = TLSUtils.getThreadLocalInstance().locale.getCode();
 		try{
 			session			= PersistenceManager.getSession();
 			String qryStr	= "select m from "
@@ -77,9 +77,9 @@ public class CategoryManagerUtil {
 						+ "where (m.locale=:langIso and m.key=:translationKey and m.siteId=:thisSiteId)";
 
 			Query qry		= session.createQuery(qryStr);
-			qry.setParameter("langIso", lang, Hibernate.STRING);
-			qry.setParameter("translationKey", key.toLowerCase() ,Hibernate.STRING);
-			qry.setParameter("thisSiteId", siteId+"", Hibernate.STRING);
+			qry.setString("langIso", lang);
+			qry.setString("translationKey", key.toLowerCase());
+			qry.setString("thisSiteId", TLSUtils.getThreadLocalInstance().site.getId().toString());
 
 			Message m		= (Message)qry.uniqueResult();
 			if ( m == null ) {
@@ -149,14 +149,13 @@ public class CategoryManagerUtil {
 	 * @return The AmpCategoryValue object witch belongs to the AmpCategoryClass with name=categoryName
 	 * or null if the object is not in the set.
 	 */
-	public static AmpCategoryValue getAmpCategoryValueFromList(String categoryName, Set values) {
+	public static AmpCategoryValue getAmpCategoryValueFromList(String categoryName, Set<AmpCategoryValue> values) {
 		if ( categoryName == null || values == null) {
 			logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
 			return null;
 		}
-		Iterator iterator	= values.iterator();
-		while( iterator.hasNext() ) {
-			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
+		
+		for(AmpCategoryValue ampCategoryValue:values) {
 			if ( ampCategoryValue.getAmpCategoryClass().getName().equals(categoryName) ) {
 				return ampCategoryValue;
 			}
@@ -198,14 +197,13 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 * @return The AmpCategoryValue object witch belongs to the AmpCategoryClass with key=categoryKey
 	 * or null if the object is not in the set.
 	 */
-	public static AmpCategoryValue getAmpCategoryValueFromListByKey(String categoryKey, Set values) {
+	public static AmpCategoryValue getAmpCategoryValueFromListByKey(String categoryKey, Set<AmpCategoryValue> values) {
 		if ( categoryKey == null || values == null) {
 			logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
 			return null;
 		}
-		Iterator iterator	= values.iterator();
-		while( iterator.hasNext() ) {
-			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
+
+		for(AmpCategoryValue ampCategoryValue:values){
 			if ( ampCategoryValue.getAmpCategoryClass().getKeyName().equals(categoryKey) ) {
 				return ampCategoryValue;
 			}
@@ -213,15 +211,13 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		return null;
 	}
 	
-	public static Collection getAmpCategoryValuesFromListByKey(String categoryKey, Set values) {
-		Collection<AmpCategoryValue> ret=new ArrayList<AmpCategoryValue>();
+	public static List<AmpCategoryValue> getAmpCategoryValuesFromListByKey(String categoryKey, Set<AmpCategoryValue> values) {
+		List<AmpCategoryValue> ret = new ArrayList<AmpCategoryValue>();
 		if ( categoryKey == null || values == null) {
 			logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
 			return null;
 		}
-		Iterator iterator	= values.iterator();
-		while( iterator.hasNext() ) {
-			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
+		for(AmpCategoryValue ampCategoryValue:values) {
 			if ( ampCategoryValue.getAmpCategoryClass().getKeyName().equals(categoryKey) ) {
 				ret.add(ampCategoryValue);
 			}
@@ -417,7 +413,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				+ AmpCategoryClass.class.getName()
 				+ " c where c.id=:id";
 			qry			= dbSession.createQuery(queryString);
-			qry.setParameter("id", categoryId, Hibernate.LONG);
+			qry.setLong("id", categoryId);
 
 
 
@@ -460,7 +456,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 				+ AmpCategoryClass.class.getName()
 				+ " c where c.name=:name";
 			qry			= dbSession.createQuery(queryString);
-			qry.setParameter("name", name, Hibernate.STRING);
+			qry.setString("name", name);
 
 
 
@@ -588,7 +584,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 * @return A collection of AmpCategoryValues witch belong to the AmpCategoryClass with id=categoryId
 	 * @throws Exception in case request is null and the values need to be ordered alphabetically
 	 */
-	public static Collection getAmpCategoryValueCollection(Long categoryId, Boolean ordered, HttpServletRequest request) throws Exception {
+	public static Collection<AmpCategoryValue> getAmpCategoryValueCollection(Long categoryId, Boolean ordered, HttpServletRequest request) throws Exception {
 		boolean shouldOrderAlphabetically;
 		
 		AmpCategoryClass ampCategoryClass;
@@ -607,7 +603,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		else
 			shouldOrderAlphabetically	= ordered.booleanValue();
 	
-		List ampCategoryValues		= ampCategoryClass.getPossibleValues();
+		List<AmpCategoryValue> ampCategoryValues		= ampCategoryClass.getPossibleValues();
 	
 		if ( !shouldOrderAlphabetically )
 				return ampCategoryValues;
@@ -615,7 +611,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		if ( shouldOrderAlphabetically && request == null )
 			throw new Exception("Cannot return an ordered value of AmpCategoryValue objects if request parameter is null");
 	
-		TreeSet treeSet	= new TreeSet( new CategoryManagerUtil.CategoryComparator(request) );
+		TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator(request) );
 		treeSet.addAll(ampCategoryValues);
 		return treeSet;
 		
@@ -943,17 +939,9 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			
 //			String transValue1		= catValue1!=null?CategoryManagerUtil.translateAmpCategoryValue(catValue1, request):"";
 //			String transValue2		= catValue2!=null?CategoryManagerUtil.translateAmpCategoryValue(catValue2, request):"";
-			try{
-				String transValue1		= catValue1!=null?TranslatorWorker.translateText(catValue1.getValue(), request):"";
-				String transValue2		= catValue2!=null?TranslatorWorker.translateText(catValue2.getValue(), request):"";
-				return transValue1.compareTo( transValue2 );
-			}
-			catch ( WorkerException we) {
-				we.printStackTrace();
-				return 0;
-			}
-			
-
+			String transValue1		= catValue1!=null?TranslatorWorker.translateText(catValue1.getValue()):"";
+			String transValue2		= catValue2!=null?TranslatorWorker.translateText(catValue2.getValue()):"";
+			return transValue1.compareTo( transValue2 );			
 		}
 		public boolean equals(AmpCategoryValue value1, AmpCategoryValue value2) {
 			if ( this.compare(value1, value2) == 0 )

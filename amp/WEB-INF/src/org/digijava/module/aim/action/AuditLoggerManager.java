@@ -64,7 +64,7 @@ public class AuditLoggerManager extends MultiAction {
 			vForm.setSortBy(request.getParameter("sortBy"));
 		}
 		if(vForm.getSortBy()!=null){
-                    String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+                    Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
                     String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 			  if(vForm.getSortBy().equalsIgnoreCase("nameasc")){
 	    		  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerNameComparator()) ;
@@ -124,11 +124,11 @@ public class AuditLoggerManager extends MultiAction {
 			  }
                           else {
                               if (vForm.getSortBy().equalsIgnoreCase("detaildesc")) {
-                                  Collections.sort((List<AmpAuditLogger>) logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode,siteId));
+                                  Collections.sort((List<AmpAuditLogger>) logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode, siteId));
                                   Collections.reverse((List<AmpAuditLogger>) logs);
                               } else {
                                   if (vForm.getSortBy().equalsIgnoreCase("detailasc")) {
-                                      Collections.sort((List<AmpAuditLogger>) logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode,siteId));
+                                      Collections.sort((List<AmpAuditLogger>) logs, new AuditLoggerUtil.HelperAuditloggerDetailComparator(langCode, siteId));
                                   }
 
                               }

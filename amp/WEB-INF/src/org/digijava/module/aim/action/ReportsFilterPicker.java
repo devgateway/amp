@@ -418,13 +418,9 @@ public class ReportsFilterPicker extends MultiAction {
 		//ServletContext ampContext = getServlet().getServletContext();
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
-	 	Site site = RequestUtils.getSite(request);
- 	 	String siteId = site.getId().toString();
- 	 	String locale = RequestUtils.getNavigationLanguage(request).getCode();
  	 	
 		// create filter dropdowns
-		
-	      
+		      
 		/**
  	 	* For filterPicker ver2
  	 	*/ 	 	        
@@ -732,23 +728,23 @@ public class ReportsFilterPicker extends MultiAction {
 				rootApprovalStatus.setUniqueId("-1");
 				rootApprovalStatus.setChildren( children );
 				HierarchyListableImplementation newDraftDO	= new HierarchyListableImplementation();
-				newDraftDO.setLabel( TranslatorWorker.translateText("New Draft", locale, siteId) );
+				newDraftDO.setLabel( TranslatorWorker.translateText("New Draft") );
 				newDraftDO.setUniqueId("1");
 				children.add(newDraftDO);
 				HierarchyListableImplementation newUnvalidatedDO	= new HierarchyListableImplementation();
-				newUnvalidatedDO.setLabel( TranslatorWorker.translateText("New Unvalidated", locale, siteId) );
+				newUnvalidatedDO.setLabel( TranslatorWorker.translateText("New Unvalidated") );
 				newUnvalidatedDO.setUniqueId("2");
 				children.add(newUnvalidatedDO);
 				HierarchyListableImplementation validatedActDO	= new HierarchyListableImplementation();
-				validatedActDO.setLabel( TranslatorWorker.translateText("Validated Activities", locale, siteId) );
+				validatedActDO.setLabel( TranslatorWorker.translateText("Validated Activities") );
 				validatedActDO.setUniqueId("4");
 				children.add(validatedActDO);
 				HierarchyListableImplementation existingDraftDO	= new HierarchyListableImplementation();
-				existingDraftDO.setLabel( TranslatorWorker.translateText("Existing Draft", locale, siteId) );
+				existingDraftDO.setLabel( TranslatorWorker.translateText("Existing Draft") );
 				existingDraftDO.setUniqueId("3");
 				children.add(existingDraftDO);
 				HierarchyListableImplementation existingUnvalidatedDO	= new HierarchyListableImplementation();
-				existingUnvalidatedDO.setLabel( TranslatorWorker.translateText("Existing Unvalidated", locale, siteId) );
+				existingUnvalidatedDO.setLabel( TranslatorWorker.translateText("Existing Unvalidated") );
 				existingUnvalidatedDO.setUniqueId("0");
 				children.add(existingUnvalidatedDO);
 				GroupingElement<HierarchyListableImplementation> approvalStatusElement	=
@@ -803,11 +799,11 @@ public class ReportsFilterPicker extends MultiAction {
 				rootArchivedStatus.setUniqueId("0");
 				rootArchivedStatus.setChildren( children );
 				HierarchyListableImplementation unarchivedDO	= new HierarchyListableImplementation();
-				unarchivedDO.setLabel( TranslatorWorker.translateText("Non-archived Activities", locale, siteId) );
+				unarchivedDO.setLabel( TranslatorWorker.translateText("Non-archived Activities") );
 				unarchivedDO.setUniqueId("1");
 				children.add(unarchivedDO);
 				HierarchyListableImplementation archivedDO	= new HierarchyListableImplementation();
-				archivedDO.setLabel( TranslatorWorker.translateText("Archived Activities", locale, siteId) );
+				archivedDO.setLabel( TranslatorWorker.translateText("Archived Activities") );
 				archivedDO.setUniqueId("2");
 				children.add(archivedDO);
 				GroupingElement<HierarchyListableImplementation> archivedElement	=
@@ -977,7 +973,7 @@ public class ReportsFilterPicker extends MultiAction {
 			String value = element.getRatingName();
 			String key = KEY_RISK_PREFIX + value.toLowerCase();
 			key = key.replaceAll(" ", "");
-			String msg = CategoryManagerUtil.translate(key, request, value);
+			String msg = CategoryManagerUtil.translate(key, value);
 			element.setRatingName(msg);
 		}
 		

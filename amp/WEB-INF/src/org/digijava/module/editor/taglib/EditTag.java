@@ -62,26 +62,26 @@ public class EditTag
             try {
                 Site site = RequestUtils.getSite(request);
                 if( !showOnlyTitle ) {
-                    editorBody = DbUtil.getEditorBody(site.getSiteId(),
+                    editorBody = DbUtil.getEditorBody(site,
                         getKey(),
                         RequestUtils.
                         getNavigationLanguage(request).
                         getCode());
 
                     if (editorBody == null) {
-                        editorBody = DbUtil.getEditorBody(site.getSiteId(),
+                        editorBody = DbUtil.getEditorBody(site,
                             getKey(),
                             SiteUtils.getDefaultLanguages(site).getCode());
                     }
                 } else {
-                    editorBody = DbUtil.getEditorTitle(site.getSiteId(),
+                    editorBody = DbUtil.getEditorTitle(site,
                         getKey(),
                         RequestUtils.
                         getNavigationLanguage(request).
                         getCode());
 
                     if (editorBody == null) {
-                        editorBody = DbUtil.getEditorTitle(site.getSiteId(),
+                        editorBody = DbUtil.getEditorTitle(site,
                             getKey(),
                             SiteUtils.getDefaultLanguages(site).getCode());
                     }
@@ -179,12 +179,8 @@ public class EditTag
     private String formatLongText(String text, HttpServletRequest request) {
     	String readMore = "Read More";
     	String back = "Back";
-    	try {
-    		readMore = TranslatorWorker.translateText(readMore, request);
-    		back = TranslatorWorker.translateText(back, request);
-		} catch (WorkerException e) {
-			e.printStackTrace();
-		}
+    	readMore = TranslatorWorker.translateText(readMore);
+    	back = TranslatorWorker.translateText(back);
 		//Avoids cutting HTML in half
 		String cutText = text;
 		cutText = cutText.substring(0, maxLength);

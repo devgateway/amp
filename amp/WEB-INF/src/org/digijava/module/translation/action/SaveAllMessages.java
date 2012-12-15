@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.translation.form.AdvancedTranslationForm;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.digijava.module.translation.util.DbUtil;
@@ -69,7 +70,7 @@ public class SaveAllMessages extends Action {
 					if (msg == null) {
 						saveOrUpdate = false; //save
 						msg = new Message();
-						msg.setSiteId(formBean.getSiteId().toString());
+						msg.setSite(SiteCache.lookupById(formBean.getSiteId()));
 					}
 
 					msg.setKey(currentMsg.getKey());

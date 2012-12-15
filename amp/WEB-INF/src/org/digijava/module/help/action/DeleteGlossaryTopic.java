@@ -35,11 +35,10 @@ public class DeleteGlossaryTopic extends Action {
 		HelpTopic topic = GlossaryUtil.getGlosaryTopic(hform.getHelpTopicId());
 		//save key and siteId
 		String editorKey = topic.getBodyEditKey();
-		String siteId = topic.getSiteId();
 		//delete topic
 		GlossaryUtil.deleteGlossaryTopic(topic);
 		//if no errors thrown, delete all editors for deleted topic.
-		List<Editor> editors = DbUtil.getEditorList(editorKey,siteId);
+		List<Editor> editors = DbUtil.getEditorList(editorKey, topic.getSite());
 		if (editors!=null && editors.size()>0){
 			for (Editor editor : editors) {
 				DbUtil.deleteEditor(editor);

@@ -23,7 +23,7 @@ public class RemoveIndicator extends Action {
 				 IndicatorUtil.deleteIndicator(new Long(id));
 			 } else {
 				 ActionMessages errors=new ActionMessages();
-				 errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.unableToRemoveIndicator", TranslatorWorker.translateText("Indicator is been used by activity or theme", request)));
+				 errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.unableToRemoveIndicator", TranslatorWorker.translateText("Indicator is been used by activity or theme")));
 				 saveErrors(request, errors);
 				 request.getSession().setAttribute("removeIndicatorErrors", errors);
 			 }

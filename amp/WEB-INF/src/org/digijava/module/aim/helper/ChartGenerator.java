@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion ;
@@ -60,9 +61,7 @@ public class ChartGenerator {
 	public static final String KEY_PERFORMANCE_PREFIX="aim:performance:";
 
 	public static String getPortfolioRiskChartFileName(HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight,String url, HttpServletRequest request) throws WorkerException {
-        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode= RequestUtils.getNavigationLanguage(request).getCode();
+			int chartWidth,int chartHeight,String url) throws WorkerException {
 		Collection activityIds = new ArrayList();
 		if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
 			ArrayList projects = (ArrayList) session.getAttribute(Constants.AMP_PROJECTS);
@@ -80,7 +79,7 @@ public class ChartGenerator {
             String value = item.getRisk();
             String key =  value.toLowerCase();
             key = key.replaceAll(" ", "");
-            String msg = TranslatorWorker.translateText(key, langCode, siteId);
+            String msg = TranslatorWorker.translateText(key);
             item.setRisk(msg);
         }
 
@@ -95,15 +94,12 @@ public class ChartGenerator {
 		cp.setUrl(url);
 
 
-		return generateRiskChart(cp,request);
+		return generateRiskChart(cp);
 	}
 
 	public static String getActivityRiskChartFileName(Long actId,
 			HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight,String url, HttpServletRequest request) throws Exception{
-
-        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode= RequestUtils.getNavigationLanguage(request).getCode();
+			int chartWidth,int chartHeight,String url) throws Exception{
 
 		ArrayList<AmpIndicatorRiskRatings> risks=new ArrayList<AmpIndicatorRiskRatings>();
 		if(session.getAttribute("indsRisks")!=null){
@@ -135,7 +131,7 @@ public class ChartGenerator {
         		String value = item.getRatingName();
                 String key = value.toLowerCase();
                 key = key.replaceAll(" ", "");
-                String msg = TranslatorWorker.translateText(key, langCode, siteId);
+                String msg = TranslatorWorker.translateText(key);
                 item.setTranslatedRatingName(msg);
         	}            
         }
@@ -151,7 +147,7 @@ public class ChartGenerator {
 		cp.setSession(session);
 		cp.setWriter(pw);
 		cp.setUrl(url);
-		return generateRiskChart(cp,request);
+		return generateRiskChart(cp);
 	}
 
 	public static String getPortfolioPerformanceChartFileName(Long actId,Long indId,
@@ -174,8 +170,6 @@ public class ChartGenerator {
 		Collection col = new ArrayList();
 		ArrayList temp = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorValues(
 				activityIds,indId,includeBaseline, request);
-        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode= RequestUtils.getNavigationLanguage(request).getCode();
 
 		if ((actId.longValue() > 0 && indId.longValue() <= 0) ||
 				(actId.longValue() <= 0 && indId.longValue() > 0)) {
@@ -193,7 +187,7 @@ public class ChartGenerator {
             String value = item.getType();
             String key = value.toLowerCase();
             key = key.replaceAll(" ", "");
-            String msg = TranslatorWorker.translateText(key, langCode, siteId);
+            String msg = TranslatorWorker.translateText(key);
             item.setType(msg);
         }
 
@@ -346,10 +340,8 @@ public class ChartGenerator {
 		return retVal;
 	}
 
-	public static String generateRiskChart(ChartParams cp,HttpServletRequest request) {
+	public static String generateRiskChart(ChartParams cp) {
 		String fileName = null;
-        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode= RequestUtils.getNavigationLanguage(request).getCode();
 		Collection<AmpIndicatorRiskRatings> col = cp.getData();
 		try {
 			if (col != null && col.size() > 0) {
@@ -410,7 +402,7 @@ public class ChartGenerator {
 
 						//put in datasource
 
-                        String msg = TranslatorWorker.translateText(riskName, langCode, siteId);
+                        String msg = TranslatorWorker.translateText(riskName);
 						ds.setValue(msg,count);
 
 					}
@@ -468,7 +460,7 @@ public class ChartGenerator {
 
 				String url = cp.getUrl();
 				if (url != null && url.trim().length() > 0) {
-					plot.setURLGenerator(new PieChartURLGenerator(url,"risk",langCode,siteId));
+					plot.setURLGenerator(new PieChartURLGenerator(url,"risk", TLSUtils.getLangCode(), TLSUtils.getSiteId()));
 				}
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 
@@ -486,9 +478,6 @@ public class ChartGenerator {
 	}
 
 	public static String generatePerformanceChart(ChartParams cp,HttpServletRequest request) {
-        String siteId=RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode= RequestUtils.getNavigationLanguage(request).getCode();
-
 		String fileName = null;
 		Double baseValue=null,actualValue=null,targetValue=null;
 		String baseValueType=null,targetValueType=null,actualValueType=null;
@@ -511,26 +500,26 @@ public class ChartGenerator {
 							baseValue = ampIndValue.getValue();
 							baseValueType =  "base".toLowerCase();
 							baseValueType = baseValueType.replaceAll(" ", "");
-							String msg = TranslatorWorker.translateText(baseValueType, langCode, siteId);
+							String msg = TranslatorWorker.translateText(baseValueType);
 							baseValueType=msg;
 						} else if (ampIndValue.getValueType() == AmpIndicatorValue.ACTUAL) {
 							actualValue = ampIndValue.getValue();
 							actualValueType = "actual".toLowerCase();
 							actualValueType = actualValueType.replaceAll(" ", "");
-							  String msg = TranslatorWorker.translateText(actualValueType, langCode, siteId);
+							  String msg = TranslatorWorker.translateText(actualValueType);
 							actualValueType=msg;
 						} else if (ampIndValue.getValueType() == AmpIndicatorValue.TARGET && !revisedAlreadyParsed) {
 							targetValue = ampIndValue.getValue();
 							targetValueType = "target".toLowerCase();
 							targetValueType = targetValueType.replaceAll(" ", "");
-							  String msg = TranslatorWorker.translateText(targetValueType, langCode, siteId);
+							  String msg = TranslatorWorker.translateText(targetValueType);
 							targetValueType=msg;
 
 						} else if (ampIndValue.getValueType() == AmpIndicatorValue.REVISED&&ampIndValue.getValue()!=null) {
 							targetValue = ampIndValue.getValue();
 							targetValueType =  "target".toLowerCase();
 							targetValueType = targetValueType.replaceAll(" ", "");
-							 String msg = TranslatorWorker.translateText(targetValueType, langCode, siteId);
+							 String msg = TranslatorWorker.translateText(targetValueType);
 							targetValueType=msg;
 							revisedAlreadyParsed=true;//this is used to not overwrite revised with target.
 						}
@@ -707,7 +696,7 @@ public class ChartGenerator {
 	 		return chart;
 	}
 
-    public static JFreeChart generateRiskChart(ChartParams cp,Long siteId,String langCode) {
+    public static JFreeChart generateRiskChart(ChartParams cp, Long siteId, String langCode) {
         JFreeChart chart =null;
         Collection<AmpIndicatorRiskRatings> col = cp.getData();
         try {

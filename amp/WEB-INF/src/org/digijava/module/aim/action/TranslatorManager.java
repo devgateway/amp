@@ -136,22 +136,22 @@ public class TranslatorManager extends Action {
 				trns_in = (Translations) m.unmarshal(inputStream);
 				if (trns_in.getTrn() != null) {
 					logger.info("Processing "+trns_in.getTrn().size()+" translation groups (trn tags)...");
-					Iterator<Trn> it = trns_in.getTrn().iterator();					
-					while (it.hasNext() && (it == null)) {
-						Trn trn = it.next();						
-						MessageGroup msgGroup=new MessageGroup(trn);
-						
-						Iterator<TrnHashMap> itForLang=trnHashMaps.iterator();
-						while(itForLang.hasNext())	{
-							TrnHashMap tanslationsHashMap = itForLang.next();
-							// get requested languge's translation from the
-							// msgGroup
-							Message message=msgGroup.getMessageByLocale(tanslationsHashMap.getLang());
-							if(message!=null){
-								tanslationsHashMap.getTranslations().add(message);
-							}
-						}						
-					}
+//					Iterator<Trn> it = trns_in.getTrn().iterator();					
+//					while (it.hasNext() && (it == null)) {  DEAD CODE
+//						Trn trn = it.next();						
+//						MessageGroup msgGroup=new MessageGroup(trn);
+//						
+//						Iterator<TrnHashMap> itForLang=trnHashMaps.iterator();
+//						while(itForLang.hasNext())	{
+//							TrnHashMap tanslationsHashMap = itForLang.next();
+//							// get requested languge's translation from the
+//							// msgGroup
+//							Message message=msgGroup.getMessageByLocale(tanslationsHashMap.getLang());
+//							if(message!=null){
+//								tanslationsHashMap.getTranslations().add(message);
+//							}
+//						}						
+//					}
 				}
 	        }catch (Exception ex) {
 					logger.error("Exception : " + ex.getMessage());
@@ -314,9 +314,9 @@ public class TranslatorManager extends Action {
 	
 	private void updateNonExistingTranslationMessage(Message msgLocal, String lang,HttpServletRequest request){
 		CachedTranslatorWorker trnWorker=(CachedTranslatorWorker)TranslatorWorker.getInstance("");
-		String siteId = RequestUtils.getSite(request).getId().toString();
+		Long siteId = RequestUtils.getSite(request).getId();
 		try {
-			Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId,false,null);
+			Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId, false, null);
 			if(dbMessage==null){
 				trnWorker.save(msgLocal);
 				logger.info("updated");
@@ -336,9 +336,9 @@ public class TranslatorManager extends Action {
 			) throws Exception {
 	
 		CachedTranslatorWorker trnWorker=(CachedTranslatorWorker)TranslatorWorker.getInstance("");
-		String siteId = RequestUtils.getSite(request).getId().toString();
+		Long siteId = RequestUtils.getSite(request).getId();
 		//get message from cache,if exists.
-		Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId,false,null);
+		Message dbMessage=trnWorker.getByKey(msgLocal.getKey(), lang, siteId, false, null);
 		if(dbMessage!=null){
 			boolean gotoNextCheck=false;
 			if (

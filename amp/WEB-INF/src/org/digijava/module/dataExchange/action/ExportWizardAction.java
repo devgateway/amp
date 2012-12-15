@@ -97,7 +97,7 @@ public class ExportWizardAction extends DispatchAction {
 					try{
 						AmpActivity ampActivity = (AmpActivity) iterator.next();
 
-						eBuilder = new ExportBuilder(ampActivity, RequestUtils.getSite(request).getSiteId());
+						eBuilder = new ExportBuilder(ampActivity, RequestUtils.getSite(request));
 						activities.getActivity().add(eBuilder.getActivityType(eForm.getActivityTree()));
 					} catch (AmpExportException e) {
 						if (eBuilder!= null && eBuilder.getEroor() != null){

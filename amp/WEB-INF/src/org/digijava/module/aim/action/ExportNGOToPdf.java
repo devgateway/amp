@@ -69,7 +69,7 @@ public class ExportNGOToPdf extends Action {
 		//mainLayout.setWidths(new float[]{1f,1f,1f,1f});
 		// title
 		PdfPCell titleCell=new PdfPCell();
-		p1=new Paragraph(TranslatorWorker.translateText("Organization Details",request),headerFont);
+		p1=new Paragraph(TranslatorWorker.translateText("Organization Details"),headerFont);
 		p1.setAlignment(Element.ALIGN_CENTER);
 		titleCell.addElement(p1);
 		titleCell.setColspan(4);
@@ -77,27 +77,27 @@ public class ExportNGOToPdf extends Action {
 		mainLayout.addCell(titleCell);
 		
 		//name
-		columnName= TranslatorWorker.translateText("Organization Name", request);
+		columnName= TranslatorWorker.translateText("Organization Name");
 		createGeneralInfoRow(mainLayout,columnName,editForm.getName(),null);
 		
-		columnName= TranslatorWorker.translateText("Organization Acronym", request);
+		columnName= TranslatorWorker.translateText("Organization Acronym");
 		createGeneralInfoRow(mainLayout,columnName,editForm.getAcronym(),null);
 		
-		columnName= TranslatorWorker.translateText("Organization Type", request);
+		columnName= TranslatorWorker.translateText("Organization Type");
 		createGeneralInfoRow(mainLayout,columnName,(DbUtil.getAmpOrgType(editForm.getAmpOrgTypeId())).getOrgType(),null);
 		
-		columnName= TranslatorWorker.translateText("Organization Group", request);
+		columnName= TranslatorWorker.translateText("Organization Group");
 		 if (editForm.getAmpOrgGrpId()!=null && editForm.getAmpOrgGrpId().intValue()>0){
 			 createGeneralInfoRow(mainLayout,columnName, (DbUtil.getAmpOrgGroup(editForm.getAmpOrgGrpId()).getOrgGrpName()),null);
 		 }else{
 			 createGeneralInfoRow(mainLayout,columnName,"",null);
 		 }
 		 
-		columnName= TranslatorWorker.translateText("Funding Org Id", request);
+		columnName= TranslatorWorker.translateText("Funding Org Id");
 		createGeneralInfoRow(mainLayout,columnName,editForm.getFundingorgid(),null);
 		buildEmptyCell(mainLayout, 2);
 		
-		columnName= TranslatorWorker.translateText("Organization Primary Purpose", request);
+		columnName= TranslatorWorker.translateText("Organization Primary Purpose");
 		createGeneralInfoRow(mainLayout,columnName,editForm.getOrgPrimaryPurpose(),2);
 		buildEmptyCell(mainLayout, 2);
 		
@@ -105,7 +105,7 @@ public class ExportNGOToPdf extends Action {
 		 * General Information
 		 */
 		titleCell=new PdfPCell();
-		p1=new Paragraph(TranslatorWorker.translateText("General Information",request),headingsFont);
+		p1=new Paragraph(TranslatorWorker.translateText("General Information"),headingsFont);
 		titleCell.addElement(p1);
 		titleCell.setColspan(4);
 		titleCell.setBorder(0);
@@ -118,7 +118,7 @@ public class ExportNGOToPdf extends Action {
 		 * Staff Information
 		 */
 		titleCell=new PdfPCell();
-		p1=new Paragraph(TranslatorWorker.translateText("Staff Information",request),headingsFont);
+		p1=new Paragraph(TranslatorWorker.translateText("Staff Information"),headingsFont);
 		titleCell.addElement(p1);
 		titleCell.setColspan(4);
 		titleCell.setBorder(0);
@@ -130,7 +130,7 @@ public class ExportNGOToPdf extends Action {
 		 * budget information
 		 */
 		titleCell=new PdfPCell();
-		p1=new Paragraph(TranslatorWorker.translateText("Budget Information",request),headingsFont);
+		p1=new Paragraph(TranslatorWorker.translateText("Budget Information"),headingsFont);
 		titleCell.addElement(p1);
 		titleCell.setColspan(4);
 		titleCell.setBorder(0);
@@ -142,7 +142,7 @@ public class ExportNGOToPdf extends Action {
 		 * contact information
 		 */
 		titleCell=new PdfPCell();
-		p1=new Paragraph(TranslatorWorker.translateText("Contact Information",request),headingsFont);
+		p1=new Paragraph(TranslatorWorker.translateText("Contact Information"),headingsFont);
 		titleCell.addElement(p1);
 		titleCell.setColspan(4);
 		titleCell.setBorder(0);
@@ -166,30 +166,30 @@ public class ExportNGOToPdf extends Action {
 		PdfPTable contactInfoTable = new PdfPTable(7);
 		contactInfoTable.setWidthPercentage(100);
 		
-		columnName = TranslatorWorker.translateText("LAST NAME", request);
+		columnName = TranslatorWorker.translateText("LAST NAME");
 		generateContactsTableHeader(columnName, contactInfoTable);
 		
-		columnName = TranslatorWorker.translateText("FIRST NAME", request);
+		columnName = TranslatorWorker.translateText("FIRST NAME");
 		generateContactsTableHeader(columnName, contactInfoTable);
 		
-		columnName = TranslatorWorker.translateText("EMAIL", request);
+		columnName = TranslatorWorker.translateText("EMAIL");
 		generateContactsTableHeader(columnName, contactInfoTable);
 		
-		columnName = TranslatorWorker.translateText("TELEPHONE", request);
+		columnName = TranslatorWorker.translateText("TELEPHONE");
 		generateContactsTableHeader(columnName, contactInfoTable);
 		
-		columnName = TranslatorWorker.translateText("FAX", request);
+		columnName = TranslatorWorker.translateText("FAX");
 		generateContactsTableHeader(columnName, contactInfoTable);
 		
-		columnName = TranslatorWorker.translateText("TITLE", request);
+		columnName = TranslatorWorker.translateText("TITLE");
 		generateContactsTableHeader(columnName, contactInfoTable);
 		
-		columnName = TranslatorWorker.translateText("PRIMARY", request);
+		columnName = TranslatorWorker.translateText("PRIMARY");
 		generateContactsTableHeader(columnName, contactInfoTable);
 		
 		
-		String primary= TranslatorWorker.translateText("yes", request);
-		String nonPrimary= TranslatorWorker.translateText("no", request);
+		String primary= TranslatorWorker.translateText("yes");
+		String nonPrimary= TranslatorWorker.translateText("no");
 		if(editForm.getOrgContacts() !=null){
 			Iterator<AmpOrganisationContact> contactInfoIter = editForm.getOrgContacts().iterator();
 			while (contactInfoIter.hasNext()) {
@@ -206,7 +206,7 @@ public class ExportNGOToPdf extends Action {
 						currentRecord = property.getValue(); 
 						emails+= BULLETCHAR + currentRecord + ";\n";
 					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-						currentRecord = TranslatorWorker.translateText(property.getPhoneCategory(), request)+property.getActualPhoneNumber(); 
+						currentRecord = TranslatorWorker.translateText(property.getPhoneCategory())+property.getActualPhoneNumber(); 
 						phones+= BULLETCHAR + currentRecord + ";\n";
 					}else{
 						currentRecord = property.getValue(); 
@@ -256,19 +256,19 @@ public class ExportNGOToPdf extends Action {
 		PdfPTable budgetInfoTable = new PdfPTable(5);
 		budgetInfoTable.setWidthPercentage(100);
 		
-		columnName= TranslatorWorker.translateText("Year", request);
+		columnName= TranslatorWorker.translateText("Year");
 		generateTableHeaders(columnName, budgetInfoTable);
 		
-		columnName= TranslatorWorker.translateText("Type of Organization", request);
+		columnName= TranslatorWorker.translateText("Type of Organization");
 		generateTableHeaders(columnName, budgetInfoTable);
 		
-		columnName= TranslatorWorker.translateText("Organization(s)", request);
+		columnName= TranslatorWorker.translateText("Organization(s)");
 		generateTableHeaders(columnName, budgetInfoTable);
 		
-		columnName= TranslatorWorker.translateText("Amount", request);
+		columnName= TranslatorWorker.translateText("Amount");
 		generateTableHeaders(columnName, budgetInfoTable);
 		
-		columnName= TranslatorWorker.translateText("Currency", request);
+		columnName= TranslatorWorker.translateText("Currency");
 		generateTableHeaders(columnName, budgetInfoTable);
 		
 		if(editForm.getOrgInfos()!= null ){
@@ -276,7 +276,7 @@ public class ExportNGOToPdf extends Action {
 			while (budgetInfoIter.hasNext()) {
 			    AmpOrganizationBudgetInformation budgetInfo = budgetInfoIter.next();
 			    generateTableCell(budgetInfo.getYear().toString(), budgetInfoTable);
-			    generateTableCell(TranslatorWorker.translateText(budgetInfo.getType().getValue(), request), budgetInfoTable);
+			    generateTableCell(TranslatorWorker.translateText(budgetInfo.getType().getValue()), budgetInfoTable);
 			   
 			    String organizations="";
 			    String longestOrgRecord = "";
@@ -308,20 +308,20 @@ public class ExportNGOToPdf extends Action {
 		PdfPTable StaffInfoTable = new PdfPTable(3);
 		StaffInfoTable.setWidthPercentage(100);
 		
-		columnName= TranslatorWorker.translateText("Year", request);
+		columnName= TranslatorWorker.translateText("Year");
 		generateTableHeaders(columnName, StaffInfoTable);
 		
-		columnName= TranslatorWorker.translateText("Type Of Staff", request);
+		columnName= TranslatorWorker.translateText("Type Of Staff");
 		generateTableHeaders(columnName, StaffInfoTable);
 		
-		columnName= TranslatorWorker.translateText("Number Of Staff", request);
+		columnName= TranslatorWorker.translateText("Number Of Staff");
 		generateTableHeaders(columnName, StaffInfoTable);
 		if(editForm.getStaff()!=null){
 			Iterator<AmpOrgStaffInformation> staffInfoIter = editForm.getStaff().iterator();
 			while (staffInfoIter.hasNext()) {
 			    AmpOrgStaffInformation staffInfo = staffInfoIter.next();
 			    generateTableCell(staffInfo.getYear().toString(), StaffInfoTable);
-			    generateTableCell(TranslatorWorker.translateText(staffInfo.getType().getValue(),request), StaffInfoTable);
+			    generateTableCell(TranslatorWorker.translateText(staffInfo.getType().getValue()), StaffInfoTable);
 			    generateTableCell(staffInfo.getStaffNumber().toString(), StaffInfoTable);
 			}
 		}				
@@ -358,28 +358,28 @@ public class ExportNGOToPdf extends Action {
 		generalInformationTable.setWidthPercentage(100);
 		
 		
-		columnName= TranslatorWorker.translateText("Registration Number in MinPlan", request);
+		columnName= TranslatorWorker.translateText("Registration Number in MinPlan");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getRegNumbMinPlan(),null);
 		
-		columnName= TranslatorWorker.translateText("Legal Personality Number", request);
+		columnName= TranslatorWorker.translateText("Legal Personality Number");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getLegalPersonNum(),null);
 		
-		columnName= TranslatorWorker.translateText("Registration Date in MinPlan", request);
+		columnName= TranslatorWorker.translateText("Registration Date in MinPlan");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getMinPlanRegDate(),null);
 		
-		columnName= TranslatorWorker.translateText("Legal Personality Registration Date in the country of origin", request);
+		columnName= TranslatorWorker.translateText("Legal Personality Registration Date in the country of origin");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getLegalPersonRegDate(),null);
 		
-		columnName= TranslatorWorker.translateText("Operation approval  date in the country of origin", request);
+		columnName= TranslatorWorker.translateText("Operation approval  date in the country of origin");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getOperFuncApprDate(),null);
 		
-		columnName= TranslatorWorker.translateText("Registration date of Line Ministry", request);
+		columnName= TranslatorWorker.translateText("Registration date of Line Ministry");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getLineMinRegDate(),null);
 		
-		columnName= TranslatorWorker.translateText("Receipt of legal personality act/form in DRC", request);
+		columnName= TranslatorWorker.translateText("Receipt of legal personality act/form in DRC");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getReceiptLegPersonalityAct(),null);
 		
-		columnName= TranslatorWorker.translateText("Recipients", request);		
+		columnName= TranslatorWorker.translateText("Recipients");		
 		List<AmpOrgRecipient> orgs=editForm.getRecipients();
 		String organizations="";
 		String currentRecord = null;
@@ -397,14 +397,14 @@ public class ExportNGOToPdf extends Action {
 		}		
 		createGeneralInfoRow(generalInformationTable,columnName,organizations,null);
 		
-		columnName= TranslatorWorker.translateText("Fiscal Calendar", request);
+		columnName= TranslatorWorker.translateText("Fiscal Calendar");
 		 if (editForm.getFiscalCalId() != null&&editForm.getFiscalCalId()!=-1){
 			 createGeneralInfoRow(generalInformationTable,columnName, FiscalCalendarUtil.getAmpFiscalCalendar(editForm.getFiscalCalId()).getName(),null);
 		 }else{
 			 createGeneralInfoRow(generalInformationTable,columnName,"",null);
 		 }
 		 
-		columnName= TranslatorWorker.translateText("Sector Prefernces", request);
+		columnName= TranslatorWorker.translateText("Sector Prefernces");
 		Collection<ActivitySector> activitySectors=editForm.getSectors();
 		String sectors="";
 		currentRecord = null;
@@ -420,33 +420,33 @@ public class ExportNGOToPdf extends Action {
 		
 		buildEmptyCell(generalInformationTable, 2);
 		
-		columnName= TranslatorWorker.translateText("Country of Origin", request);
+		columnName= TranslatorWorker.translateText("Country of Origin");
 		 if (editForm.getCountryId() != null&&editForm.getCountryId()!=-1){
 			 createGeneralInfoRow(generalInformationTable,columnName, DynLocationManagerUtil.getLocation(editForm.getCountryId(), false).getName(),null);
 		 }else{
 			 createGeneralInfoRow(generalInformationTable,columnName,"",null);
 		 }
 		 
-		columnName= TranslatorWorker.translateText("Organization website", request);
+		columnName= TranslatorWorker.translateText("Organization website");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getOrgUrl(),null);
 		
-		columnName= TranslatorWorker.translateText("Tax Number", request);
+		columnName= TranslatorWorker.translateText("Tax Number");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getTaxNumber(),null);
 		
-		columnName= TranslatorWorker.translateText("Organization Headquarters Address", request);
+		columnName= TranslatorWorker.translateText("Organization Headquarters Address");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getAddress(),null);
 		
-		columnName= TranslatorWorker.translateText("Organization Intervention Level", request);
+		columnName= TranslatorWorker.translateText("Organization Intervention Level");
 		if (editForm.getImplemLocationLevel() != null&&editForm.getImplemLocationLevel()!=0){
 			 createGeneralInfoRow(generalInformationTable,columnName, CategoryManagerUtil.getAmpCategoryValueFromDb(editForm.getImplemLocationLevel()).getValue(),null);
 		 }else{
 			 createGeneralInfoRow(generalInformationTable,columnName,"",null);
 		 }
 		
-		columnName= TranslatorWorker.translateText("Organization Address Abroad(Internation NGO)", request);
+		columnName= TranslatorWorker.translateText("Organization Address Abroad(Internation NGO)");
 		createGeneralInfoRow(generalInformationTable,columnName,editForm.getAddressAbroad(),null);
 		
-		columnName= TranslatorWorker.translateText("Organization Intervention Location", request);
+		columnName= TranslatorWorker.translateText("Organization Intervention Location");
 		Collection<Location> selectedLocations=editForm.getSelectedLocs();
 		String locations="";
 		currentRecord = null;	

@@ -421,7 +421,7 @@ public class AmpARFilter extends PropertyListable {
 				
 				Site site = RequestUtils.getSite(request);
 				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				String siteId = site.getId().toString();
+				Long siteId = site.getId();
 				String locale = navigationLanguage.getCode();
 				ampReport.setSiteId(siteId);
 				ampReport.setLocale(locale);

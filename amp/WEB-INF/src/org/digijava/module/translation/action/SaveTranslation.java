@@ -31,6 +31,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.translation.form.TranslatorForm;
 import org.digijava.module.translation.security.TranslateSecurityManager;
@@ -60,7 +61,7 @@ public class SaveTranslation
         backUrl = backUrl.replace("/translation/default", "/translation");
         
         if (formBean.getSiteId()!= null && formBean.getSiteId().trim().length() != 0) {
-            currentSite = SiteUtils.getSite(formBean.getSiteId());
+            currentSite = SiteCache.lookupByName(formBean.getSiteId());
         } else {
             currentSite= RequestUtils.getSite(request);;
         }
@@ -86,7 +87,7 @@ public class SaveTranslation
 
         if (permitted) {
             Message msg = TranslatorWorker.getInstance(formBean.getKey()).
-                getByKey(formBean.getKey(), langCode, siteId.toString());
+                getByKey(formBean.getKey(), langCode, siteId);
             if (msg != null) {
                 if (formBean.getDeleteTranslation() != null) {
                     TranslatorWorker.getInstance(formBean.getKey()).delete(msg);

@@ -149,8 +149,6 @@ public class Login extends Action {
 				 * The function will return null, if the user is just a site administrator or if the user is a
 				 * registered user but has not yet been assigned a team
 				 */
-				String locale = RequestUtils.getNavigationLanguage(request).getCode();
-				String siteId = RequestUtils.getSite(request).getId()+"";
 				//
 				Collection members = TeamMemberUtil.getTeamMembers(lForm.getUserId());
 				if (members == null || members.size() == 0) {
@@ -162,7 +160,7 @@ public class Login extends Action {
 						tm.setMemberName(usr.getName());
 						tm.setMemberId(usr.getId());
 						tm.setPledger(usr.getPledger());
-						tm.setTeamName(TranslatorWorker.translateText("AMP Administrator", locale, siteId));
+						tm.setTeamName(TranslatorWorker.translateText("AMP Administrator"));
 						session.setAttribute(Constants.CURRENT_MEMBER, tm);
 						// show the index page with the admin toolbar at the bottom
 

@@ -104,8 +104,6 @@ public class DigiMessageResources extends PropertyMessageResources {
     protected String getMessageFromDatabase(Locale locale, String key) {
 
         Message message = null;
-        String currentLocale = null;
-        String currentSiteId = null;
         String messageKey = null;
 
         String args[] = DgUtil.fastSplit(key.substring(1, key.length() - 1), '.');
@@ -122,8 +120,8 @@ public class DigiMessageResources extends PropertyMessageResources {
 
             TranslatorWorker worker = TranslatorWorker.getInstance(messageKey);
             try {
-                SiteCache siteCache = SiteCache.getInstance();
-                Site site = siteCache.getSite(args[1]);
+                //SiteCache siteCache = SiteCache.getInstance();
+                Site site = SiteCache.lookupByName(args[1]);
                 if (site == null) {
                     logger.warn("Site: " + args[1] + " was not found");
                     return super.getMessage(locale, messageKey);
@@ -150,7 +148,7 @@ public class DigiMessageResources extends PropertyMessageResources {
     public Message getFromGroup(TranslatorWorker worker,String key, String locale, Site site) throws
         WorkerException {
 
-        String siteId = site.getId().toString();
+        Long siteId = site.getId();
 
         Message trnMess = worker.getByKey(key, locale, siteId);
         if (trnMess != null) {
@@ -158,7 +156,7 @@ public class DigiMessageResources extends PropertyMessageResources {
             return trnMess;
         }
 
-        String rootSiteId = SiteCache.getInstance().getRootSite(site).getId().toString();
+        Long rootSiteId = SiteCache.getInstance().getRootSite(site).getId();
         if (!rootSiteId.equals(siteId)) {
             trnMess = worker.getByKey(key, locale, rootSiteId);
             if (trnMess != null) {
@@ -167,7 +165,7 @@ public class DigiMessageResources extends PropertyMessageResources {
             }
         }
 
-        trnMess = worker.getByKey(key, locale, "0");
+        trnMess = worker.getByKey(key, locale, 0L);
         if (trnMess != null) {
             log.debug("global translation exists");
             return trnMess;

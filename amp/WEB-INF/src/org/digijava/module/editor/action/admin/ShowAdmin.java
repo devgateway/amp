@@ -62,8 +62,7 @@ public class ShowAdmin
         List siteEditorList = null;
         try {
             siteEditorList = DbUtil.getSiteEditorList(
-                moduleInstance.getSite().
-                getSiteId());
+                moduleInstance.getSite());
             editorAdminForm.setSiteEditors(siteEditorList);
         }
         catch (EditorException ex) {

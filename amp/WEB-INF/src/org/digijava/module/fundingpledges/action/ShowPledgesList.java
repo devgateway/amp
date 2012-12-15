@@ -53,7 +53,7 @@ public class ShowPledgesList extends Action {
 					if (fpd.getFundingYear()!=null) {
 						pledge.getYearsList().add(fpd.getFundingYear());
 					} else {
-						String unspecified = TranslatorWorker.translateText("unspecified", request);
+						String unspecified = TranslatorWorker.translateText("unspecified");
 						pledge.getYearsList().add(unspecified);
 					}
 				

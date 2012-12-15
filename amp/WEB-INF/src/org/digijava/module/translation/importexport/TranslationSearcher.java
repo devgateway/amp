@@ -12,5 +12,5 @@ import org.digijava.module.translation.util.ImportExportUtil;
  *
  */
 public interface TranslationSearcher {
-	Message get(String key, String locale, String siteId) throws Exception;
+	Message get(String key, String locale, Long siteId) throws Exception;
 }

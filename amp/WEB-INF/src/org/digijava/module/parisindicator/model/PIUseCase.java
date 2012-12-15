@@ -480,7 +480,7 @@ public class PIUseCase {
 					if (docType != null) {
 						if (docType.getValue().equalsIgnoreCase(
 								TranslatorWorker.translateText(
-										CategoryConstants.RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY, request))) {
+										CategoryConstants.RESOURCE_TYPE_COUNTRY_ANALYTIC_REPORT_KEY))) {
 
 							// Only add documents that have at least 1 donor.
 							Collection<AmpOrganisation> auxOrganizations = DocToOrgDAO.getOrgsObjByUuid(nextWrapper

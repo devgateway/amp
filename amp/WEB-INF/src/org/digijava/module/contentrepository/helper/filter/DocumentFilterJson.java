@@ -37,7 +37,7 @@ public class DocumentFilterJson {
 		if ( df.getFilterDocTypeIds() != null ) {
 			for ( Long id: df.getFilterDocTypeIds() ) {
 				AmpCategoryValue cv		= CategoryManagerUtil.getAmpCategoryValueFromDb(id);
-				String value			= CategoryManagerUtil.translateAmpCategoryValue(cv, request);
+				String value			= CategoryManagerUtil.translateAmpCategoryValue(cv);
 				this.filterDocTypeIds.add( new KeyValue(id+"", value) );
 			}
 		}

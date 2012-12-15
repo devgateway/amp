@@ -46,7 +46,7 @@ public class DepartmentsManager extends MultiAction{
 		
 		if(request.getSession().getAttribute("duplicateDepratment")!=null){
 			ActionMessages errors= new ActionMessages();
-			errors.add("", new ActionMessage("error.admin.deparmentExists", TranslatorWorker.translateText("AmpDepartment with given name or code already exists", request)));
+			errors.add("", new ActionMessage("error.admin.deparmentExists", TranslatorWorker.translateText("AmpDepartment with given name or code already exists")));
 			saveErrors(request, errors);
 			
 			request.getSession().removeAttribute("duplicateDepratment");
@@ -60,7 +60,7 @@ public class DepartmentsManager extends MultiAction{
 		DepartmentsManagerForm dform = (DepartmentsManagerForm) form;
 		if(BudgetDbUtil.existsDepartment(dform.getDepartmentname(), dform.getDepartmentcode(), null)){
 			ActionMessages errors= new ActionMessages();
-			errors.add("", new ActionMessage("error.admin.deparmentExists", TranslatorWorker.translateText("AmpDepartment with given name or code already exists", request)));
+			errors.add("", new ActionMessage("error.admin.deparmentExists", TranslatorWorker.translateText("AmpDepartment with given name or code already exists")));
 			saveErrors(request, errors);			
 			dform.setDepartments(BudgetDbUtil.getDepartments());
 			return mapping.findForward("forward");

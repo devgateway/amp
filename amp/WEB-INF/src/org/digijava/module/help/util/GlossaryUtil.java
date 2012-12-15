@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.editor.dbentity.Editor;
@@ -41,13 +43,13 @@ public class GlossaryUtil {
 	 * @throws DgException
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<HelpTopic> getAllGlosaryTopics(String moduleInstance, String siteId) throws DgException{
+	public static List<HelpTopic> getAllGlosaryTopics(String moduleInstance, Site site) throws DgException{
 		List<HelpTopic> result = null;
 		String oql = " from " + HelpTopic.class.getName()+ " as ht where ht.topicType=:GLOSS_TYPE";
 		if (moduleInstance != null){
 			oql += " and ht.moduleInstance=:MOD_INST";
 		}
-		if (siteId != null){
+		if (site != null){
 			oql += " and ht.siteId = :SITE_ID";
 		}
 		Session session = PersistenceManager.getRequestDBSession();
@@ -56,8 +58,8 @@ public class GlossaryUtil {
 		if (moduleInstance != null){
 			query.setString("MOD_INST", moduleInstance);
 		}
-		if (siteId != null){
-			query.setString("SITE_ID", siteId);
+		if (site != null){
+			query.setString("SITE_ID", site.getSiteId());
 		}
 		result = query.list();
 		return result;
@@ -74,12 +76,12 @@ public class GlossaryUtil {
 	 * @throws DgException
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<HelpTopic> searchGlossary(List<String> keyWords, String moduleInstance, String siteId, String locale) throws DgException{
+	public static List<HelpTopic> searchGlossary(List<String> keyWords, String moduleInstance, Site site, String locale) throws DgException{
 
         StringBuffer trnTitlesWhr = new StringBuffer();
 
         if (locale != null && !locale.isEmpty() && !locale.equalsIgnoreCase("en")) {
-            List matchingTranslations = getMatchingTitles(keyWords, moduleInstance, siteId, locale);
+            List<Long> matchingTranslations = getMatchingTitles(keyWords, moduleInstance, site, locale);
             //Build translated titles whereclause
             if (matchingTranslations != null && !matchingTranslations.isEmpty()) {
                 trnTitlesWhr.append(" or ht.helpTopicId in (");
@@ -125,7 +127,7 @@ public class GlossaryUtil {
 		if (moduleInstance != null){
 			oql += " and ht.moduleInstance=:MOD_INST";
 		}
-		if (siteId != null){
+		if (site != null){
 			oql += " and ht.siteId = :SITE_ID";
 		}
 		Session session = PersistenceManager.getRequestDBSession();
@@ -144,17 +146,15 @@ public class GlossaryUtil {
 		if (moduleInstance != null){
 			query.setString("MOD_INST", moduleInstance);
 		}
-		if (siteId != null){
-			query.setString("SITE_ID", siteId);
+		if (site != null){
+			query.setString("SITE_ID", site.getSiteId());
 		}
 		result = query.list();
 		return result;
 	}
 
 
-    private static List<Long> getMatchingTitles (List<String> keyWords, String moduleInstance, String siteId, String locale) throws DgException {
-        Long siteIdLong = SiteUtils.getSite(siteId).getId();
-
+    private static List<Long> getMatchingTitles (List<String> keyWords, String moduleInstance, Site site, String locale) throws DgException {
         List retVal = null;
         StringBuffer queryStr = new StringBuffer ("select distinct ht.helpTopicId from ");
         queryStr.append(Message.class.getName());
@@ -185,9 +185,9 @@ public class GlossaryUtil {
 			queryStr.append(" and ht.moduleInstance=:MOD_INST");
 		}
 
-        if (siteId != null){
-			queryStr.append(" and trn.siteId = :SITE_ID");
-            queryStr.append(" and eng.siteId = :SITE_ID");
+        if (site != null){
+			queryStr.append(" and trn.siteId = :SITE_ID_LONG");
+            queryStr.append(" and eng.siteId = :SITE_ID_LONG");
             queryStr.append(" and ht.siteId = :SITE_ID");
 
 		}
@@ -215,9 +215,9 @@ public class GlossaryUtil {
 			query.setString("MOD_INST", moduleInstance);
 		}
 
-        if (siteId != null){
-			query.setString("SITE_ID", siteId);
-            //query.setLong("SITE_ID_LONG", siteIdLong);
+        if (site != null){
+			query.setString("SITE_ID", site.getSiteId());
+            query.setLong("SITE_ID_LONG", site.getId());
 		}
 
         if (locale!=null && locale.length()>0){
@@ -263,21 +263,13 @@ public class GlossaryUtil {
 	 */
 	public static void deleteGlossaryTopic(HelpTopic glossaryTopic) throws DgException{
 		Session dbSession = null;
-		Transaction tx = null;
+//		Transaction tx = null;
 		try {
 			dbSession = PersistenceManager.getRequestDBSession();
 //beginTransaction();						//Start transaction
 			deleteTopic(glossaryTopic, dbSession);					//delete topic, its editor and children
 			//tx.commit();											//commit changes
 		} catch (Exception e) {
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception ex) {
-					logger.error(ex);
-					throw new DgException("Cnnot roll back glossary deletion!!!", ex);
-				}
-			}
 			logger.error(e);
 			throw new DgException("Can't remove Glossary items", e);
 		}
@@ -310,7 +302,7 @@ public class GlossaryUtil {
 	 */
 	private static void deleteEditor(HelpTopic topic, Session dbSession) throws DgException{
 		if (topic.getBodyEditKey()!=null && topic.getSiteId()!=null){
-			List<Editor> editors = DbUtil.getEditorList(topic.getBodyEditKey(), topic.getSiteId());
+			List<Editor> editors = DbUtil.getEditorList(topic.getBodyEditKey(), SiteCache.lookupByName(topic.getSiteId()));
 			if (editors!=null && editors.size()>0){
 				for (Editor editor : editors) {
 					dbSession.delete(editor);
@@ -327,12 +319,12 @@ public class GlossaryUtil {
 	 * @throws DgException
 	 */
 	@SuppressWarnings("unchecked")
-	private static List<HelpTopic> getChildren(HelpTopic topic,Session dbSession) throws DgException{
+	private static List<HelpTopic> getChildren(HelpTopic topic, Session dbSession) throws DgException{
 		List<HelpTopic> helpTopics = null;
 		try {
 			String queryString = "from "+ HelpTopic.class.getName() + " topic where topic.parent.helpTopicId=:id";
 			Query query = dbSession.createQuery(queryString);
-        	query.setParameter("id", topic.getHelpTopicId());
+        	query.setLong("id", topic.getHelpTopicId());
 			helpTopics = query.list();
 		} catch (Exception e) {
 			logger.error(e);
@@ -352,7 +344,7 @@ public class GlossaryUtil {
 	 * @return direct children topics
 	 * @throws DgException
 	 */
-	public static List<HelpTopic> getChildTopics(String siteId,String moduleInstance, Long parentId) throws DgException {
+	public static List<HelpTopic> getChildTopics(Site site, String moduleInstance, Long parentId) throws DgException {
 		Session session = null;
 		Query query = null;
 		List<HelpTopic> helpTopics = null;
@@ -369,10 +361,10 @@ public class GlossaryUtil {
 			}
 			query = session.createQuery(queryString);	
 			query.setInteger("GLOSS_TYPE",TYPE_GLOSSARY);
-			query.setParameter("siteId", siteId);
-			query.setParameter("moduleInstance", moduleInstance);
+			query.setString("siteId", site.getSiteId());
+			query.setString("moduleInstance", moduleInstance);
 			if (parentId != null) {
-				query.setParameter("id", parentId);
+				query.setLong("id", parentId);
 			}
 			helpTopics = query.list();			
 

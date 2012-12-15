@@ -53,7 +53,7 @@ public class ManageClassificationConfig extends Action {
                 int calCount = SectorUtil.getClassificationConfigCount(configName, configId);
 			 	if(calCount>0){
 			 		ActionMessages errors= new ActionMessages();
-					errors.add("classification config not unique", new ActionMessage("admin.clasConfig.calExists",TranslatorWorker.translateText("Classification Config with the given email already exists", request) ));
+					errors.add("classification config not unique", new ActionMessage("admin.clasConfig.calExists",TranslatorWorker.translateText("Classification Config with the given email already exists") ));
 					saveErrors(request, errors);
 					return mapping.findForward("edit");
 			 	}

@@ -71,9 +71,11 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 
 	private String nameTrn;
 
-	// to be set in order to get information for translation purposes in pdf and
-	// excel reports
-	private String siteId;
+	/*
+	 *  to be set in order to get information for translation purposes in pdf and excel reports
+	 *  not serialized
+	 */
+	private Long siteId;
 
 	private String locale;
 
@@ -382,11 +384,11 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 		this.locale = locale;
 	}
 
-	public String getSiteId() {
+	public Long getSiteId() {
 		return siteId;
 	}
 
-	public void setSiteId(String siteId) {
+	public void setSiteId(Long siteId) {
 		this.siteId = siteId;
 	}
 

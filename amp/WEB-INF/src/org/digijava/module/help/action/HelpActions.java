@@ -43,6 +43,7 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.AimException;
@@ -97,8 +98,8 @@ public class HelpActions extends DispatchAction {
 	public ActionForward printPreviewForWholeHelp(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response)throws Exception{
 		HelpForm helpForm = (HelpForm) form;
 		String mode=request.getParameter("mode");
-		String siteId=RequestUtils.getSite(request).getSiteId();
-		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, mode));
+		Site site=RequestUtils.getSite(request);
+		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(site, mode));
         //String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 		
 		return mapping.findForward("allHelpPrintPreview");
@@ -110,7 +111,7 @@ public class HelpActions extends DispatchAction {
 		HelpForm helpForm = (HelpForm) form;
 		OutputStreamWriter os = null;
 	    PrintWriter out = null;
-         String siteId = RequestUtils.getSite(request).getSiteId();
+    //    String siteId = RequestUtils.getSite(request).getSiteId();
         
          ModuleInstance module = RequestUtils.getModuleInstance(request);
          
@@ -166,7 +167,7 @@ public class HelpActions extends DispatchAction {
 		    String loadStatus =request.getParameter("loadKey");
 		    Editor item = new Editor();
 		    String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
-		    String siteId = RequestUtils.getSite(request).getSiteId();
+		    Site site = RequestUtils.getSite(request);
 		    String moduleInstance = request.getParameter("instance");
 		    
 			 try {
@@ -178,7 +179,7 @@ public class HelpActions extends DispatchAction {
 						 for(Iterator iter = data.iterator(); iter.hasNext(); ) {
 							  item = (Editor) iter.next();
 				 			
-					          HelpTopic helptopic = HelpUtil.getHelpTopicByBodyEditKey(item.getEditorKey(), siteId, moduleInstance);
+					          HelpTopic helptopic = HelpUtil.getHelpTopicByBodyEditKey(item.getEditorKey(), site, moduleInstance);
 					          if(helptopic!=null){
 					              String title = helptopic.getTopicKey();
 					              String xs = HelpUtil.getTrn(title,request);
@@ -319,7 +320,6 @@ public class HelpActions extends DispatchAction {
 		 //String keywords = HelpUtil.getTrn(key,request);
 		 String treKey = HelpUtil.getTrn("Topic Not Found", request);
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
-		 String siteId = RequestUtils.getSite(request).getSiteId();
         String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
         String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();
 		 Object artidcle = "";
@@ -384,7 +384,7 @@ public class HelpActions extends DispatchAction {
 							   out.println("<div id=\"bodyTitle\" style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link\" onclick=\"showBody()\"><b>"+t.getLabel()+"</b></a></div>");
 							   out.println("<div id=\"bodyShort\"  style=\"display:block;\">"+t.getValue()+"</div>");
 						   }
-						  HelpTopic bodykey = HelpUtil.getHelpTopic(topicKey, siteId, moduleInstance);
+						  HelpTopic bodykey = HelpUtil.getHelpTopic(topicKey, TLSUtils.getSite(), moduleInstance);
 						  if(bodykey !=null){
 							   wholeBody = HelpUtil.getEditor(bodykey.getBodyEditKey(), locale);
 						  }else{
@@ -409,9 +409,9 @@ public class HelpActions extends DispatchAction {
 	
 	public ActionForward viewSelectedHelpTopic(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
-		String siteId = RequestUtils.getSite(request).getSiteId();
+		Site site = RequestUtils.getSite(request);
 		String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();
-        HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),siteId, moduleInstance);
+        HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(), site, moduleInstance);
 		if(helpTopic != null){
 			helpForm.setBodyEditKey(helpTopic.getBodyEditKey());
 			helpForm.setTitleTrnKey(helpTopic.getTitleTrnKey());
@@ -578,10 +578,10 @@ public class HelpActions extends DispatchAction {
 		form.setKeywordsTrnKey(topic.getKeywordsTrnKey());
 		form.setBodyEditKey(topic.getBodyEditKey());
 		form.setHelpTopicId(topic.getHelpTopicId());
-		String siteId = RequestUtils.getSite(request).getSiteId();
+		Site site = RequestUtils.getSite(request);
 		String moduleInstance = RequestUtils.getRealModuleInstance(request).getInstanceName();
-		String locale=RequestUtils.getNavigationLanguage(request).getCode();
-		List<HelpTopic> parentTopics=(List)HelpUtil.getFirstLevelTopics(siteId,moduleInstance, null);
+//		String locale=RequestUtils.getNavigationLanguage(request).getCode();
+		List<HelpTopic> parentTopics = HelpUtil.getFirstLevelTopics(site, moduleInstance, null);
 		form.setFirstLevelTopics(new ArrayList<HelpTopic>());
 		for (HelpTopic helpTopic : parentTopics) {	
 			if(!helpTopic.getHelpTopicId().equals(topic.getHelpTopicId())){
@@ -606,9 +606,6 @@ public class HelpActions extends DispatchAction {
 	 * @param topic
 	 */
 	private void editTopicStep1(HelpForm form, HttpServletRequest request,HelpTopic topic) throws AimException {
-		String siteId = RequestUtils.getSite(request).getSiteId();
-		String moduleInstance = RequestUtils.getRealModuleInstance(request)
-				.getInstanceName();
 		if (form.getParentId() != null
 				&& !form.getParentId().equals(new Long(0))) {
 			topic.setParent(HelpUtil.getHelpTopic(form.getParentId()));
@@ -643,7 +640,7 @@ public class HelpActions extends DispatchAction {
                 site = moduleInstance.getSite();
             }
             
-        	List<Editor> editors = org.digijava.module.editor.util.DbUtil.getEditorList(helpForm.getBodyEditKey(),site.getSiteId());
+        	List<Editor> editors = org.digijava.module.editor.util.DbUtil.getEditorList(helpForm.getBodyEditKey(),site);
     		if (editors!=null && editors.size()>0){
     			for (Editor editor : editors) {
     				org.digijava.module.editor.util.DbUtil.deleteEditor(editor);
@@ -693,11 +690,11 @@ public class HelpActions extends DispatchAction {
 		form.setEdit(false);
 		form.setWizardStep(1);
 		form.setHelpErrors(null);
-		String siteId = RequestUtils.getSite(request).getSiteId();
+		Site site = RequestUtils.getSite(request);
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
 				.getInstanceName();
-		String locale=RequestUtils.getNavigationLanguage(request).getCode();
-		List<HelpTopic> parentTopics=HelpUtil.getFirstLevelTopics(siteId,	moduleInstance, null);
+		//String locale=RequestUtils.getNavigationLanguage(request).getCode();
+		List<HelpTopic> parentTopics=HelpUtil.getFirstLevelTopics(site, moduleInstance, null);
 		form.setFirstLevelTopics(new ArrayList<HelpTopic>());
 		for (HelpTopic topic : parentTopics) {		
 			//topic.setTitleTrnKey(TranslatorWorker.translate(topic.getTitleTrnKey(), locale, siteId)); 
@@ -781,11 +778,11 @@ public class HelpActions extends DispatchAction {
 	
 	public ActionForward viewAdmin(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         HelpForm helpForm = (HelpForm) form;
-        String siteId=RequestUtils.getSite(request).getSiteId();
+        Site site = RequestUtils.getSite(request);
         String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
-		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
-        helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
-        helpForm.setGlossaryTree(HelpUtil.getGlossaryTopicsTree(siteId, moduleInstance));
+		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(site, moduleInstance));
+        helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(site,"admin"));
+        helpForm.setGlossaryTree(HelpUtil.getGlossaryTopicsTree(site, moduleInstance));
 	  return mapping.findForward("admin");
 	}
 	
@@ -827,16 +824,14 @@ public class HelpActions extends DispatchAction {
 	public ActionForward importing(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
 		HelpForm helpForm = (HelpForm) form;
-		String siteId=RequestUtils.getSite(request).getSiteId();
-        Long Id =RequestUtils.getSite(request).getId();
+        Site site = RequestUtils.getSite(request);
         String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
         
 		FormFile myFile = helpForm.getFileUploaded();
 		
 		if (!myFile.getFileName().endsWith(".zip")){
-			String locale = RequestUtils.getNavigationLanguage(request).getCode();
 			ActionMessages errors = new ActionMessages();
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTemplate",TranslatorWorker.translateText("The content of the imported file is not ok. Please import a .zip file exported from this menu.", locale, siteId)));
+			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.importErrorFileContentTemplate",TranslatorWorker.translateText("The content of the imported file is not ok. Please import a .zip file exported from this menu.")));
             saveErrors(request, errors);
 		}
 		
@@ -906,7 +901,7 @@ public class HelpActions extends DispatchAction {
         Unmarshaller m = jc.createUnmarshaller();
         help_in = (AmpHelpRoot) m.unmarshal(new ByteArrayInputStream(xmlContent));
         //remove all existing help topics           
-        List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId);
+        List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(site);
       
         for (HelpTopic helpTopic : firstLevelTopics) {
 				removeLastLevelTopic(helpTopic, request);
@@ -923,17 +918,15 @@ public class HelpActions extends DispatchAction {
         
         if (help_in.getAmpHelp()!= null) {
         	logger.info("Starting Help Import");
-        	Iterator it = help_in.getAmpHelp().iterator();
-        	while(it.hasNext()) {
-				AmpHelpType element  = (AmpHelpType) it.next();
-	            HelpUtil.updateNewEditHelpData(element,storeMap,Id,topicAttachmentHolder,request);
-			}
+        	for(AmpHelpType element:help_in.getAmpHelp())
+	            HelpUtil.updateNewEditHelpData(element,storeMap, site, topicAttachmentHolder,request);
 		}
 	    logger.info("Finished Help Import");
+	    //Long siteId = TLSUtils.getSiteId();
 		helpForm.getTopicTree().clear();
-		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
-		helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
-        helpForm.setGlossaryTree(HelpUtil.getGlossaryTopicsTree(siteId, moduleInstance));
+		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(site, moduleInstance));
+		helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(site,"admin"));
+        helpForm.setGlossaryTree(HelpUtil.getGlossaryTopicsTree(site, moduleInstance));
 		return mapping.findForward("admin");
 	}
 	
@@ -987,7 +980,7 @@ public class HelpActions extends DispatchAction {
 	 * @throws Exception
 	 */
 	private void removeLastLevelTopic(HelpTopic topic, HttpServletRequest request) throws Exception{
-		List<HelpTopic> childs=HelpUtil.getChildTopics(topic.getSiteId(),topic.getHelpTopicId());
+		List<HelpTopic> childs=HelpUtil.getChildTopics(topic.getSite(),topic.getHelpTopicId());
 		if(childs==null || childs.size()==0){
 			HelpUtil.deleteHelpTopic(topic, request);
 		}else{			
@@ -1000,7 +993,7 @@ public class HelpActions extends DispatchAction {
 
     private void removeLastLevelTopic(HelpTopic topic,String moduleInstance, HttpServletRequest request) throws Exception{
         
-        List<HelpTopic> childs=HelpUtil.getChildTopics(topic.getSiteId(), moduleInstance, topic.getHelpTopicId());
+        List<HelpTopic> childs=HelpUtil.getChildTopics(topic.getSite(), moduleInstance, topic.getHelpTopicId());
 		if(childs==null || childs.size()==0){
 			HelpUtil.deleteHelpTopic(topic, request);
 		}else{
@@ -1026,7 +1019,7 @@ public class HelpActions extends DispatchAction {
     public void saveTreeState(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response)
                 throws Exception{
 
-          String siteId=RequestUtils.getSite(request).getSiteId();
+          Site site = RequestUtils.getSite(request);
           
          // String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 
@@ -1034,15 +1027,7 @@ public class HelpActions extends DispatchAction {
           String replacedXmlString =  xmlString.replaceAll("&", "&amp;");
           
           String moduleInstance = request.getParameter("Request");
-          
-          
-          org.w3c.dom.Element e;
-          org.w3c.dom.NamedNodeMap nnm;
-          int i;
-          org.w3c.dom.Node n;
-          String attrname;
-          String attrval;
-
+                    
        List<HelpTopic> listOfTree = new ArrayList<HelpTopic>();
         HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
 
@@ -1068,7 +1053,7 @@ public class HelpActions extends DispatchAction {
         	helpTopick.setTitleTrnKey(topic.getTitleTrnKey());
         	helpTopick.setHelpTopicId(topic.getHelpTopicId());
         	
-        	List<Editor> editors =DbUtil.getEditorList(topic.getBodyEditKey(), topic.getSiteId());
+        	List<Editor> editors =DbUtil.getEditorList(topic.getBodyEditKey(), topic.getSite());
         	helpTopick.setHelpContent(HelpUtil.getHelpTopicContentObjects(editors));
         	
         	org.w3c.dom.Node parentNode = node.getParentNode();
@@ -1084,13 +1069,13 @@ public class HelpActions extends DispatchAction {
         	listOfTree.add(helpTopick);
         }
         	
-        	List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId,moduleInstance);
+        	List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(site, moduleInstance);
 
             for (HelpTopic helpTopic : firstLevelTopics) {
 				removeLastLevelTopic(helpTopic,moduleInstance, request);
 			}
             for (HelpTopic topic : listOfTree){
-                HelpUtil.saveNewTreeState(topic,storeMap,siteId);
+                HelpUtil.saveNewTreeState(topic, storeMap, site);
             }
          }
 

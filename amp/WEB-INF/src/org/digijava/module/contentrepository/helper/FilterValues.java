@@ -66,20 +66,13 @@ public class FilterValues {
  	 	String locale = RequestUtils.getNavigationLanguage(request).getCode();
  	 	
 		possibleFileTypes = new ArrayList<KeyValue>();
-		try {
-			possibleFileTypes.add( new KeyValue("application/pdf", TranslatorWorker.translateText("PDF Document",request)));
-			possibleFileTypes.add( new KeyValue("application/msword",TranslatorWorker.translateText("Word Document",request)));
-			possibleFileTypes.add( new KeyValue("application/vnd.ms-excel",TranslatorWorker.translateText("Excel Spreadsheet",request)));
-			possibleFileTypes.add( new KeyValue("text/plain",TranslatorWorker.translateText("Text",request)));
-			possibleFileTypes.add( new KeyValue("application/zip",TranslatorWorker.translateText("Zip file",request)));
-			possibleFileTypes.add( new KeyValue("image/",TranslatorWorker.translateText("Images",request)));
-			
-			
-		} catch (WorkerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+
+		possibleFileTypes.add( new KeyValue("application/pdf", TranslatorWorker.translateText("PDF Document")));
+		possibleFileTypes.add( new KeyValue("application/msword",TranslatorWorker.translateText("Word Document")));
+		possibleFileTypes.add( new KeyValue("application/vnd.ms-excel",TranslatorWorker.translateText("Excel Spreadsheet")));
+		possibleFileTypes.add( new KeyValue("text/plain",TranslatorWorker.translateText("Text")));
+		possibleFileTypes.add( new KeyValue("application/zip",TranslatorWorker.translateText("Zip file")));
+		possibleFileTypes.add( new KeyValue("image/",TranslatorWorker.translateText("Images")));			
 		
 	}
 

@@ -280,7 +280,7 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 		if (cmDocTypeId != null) {
 			AmpCategoryValue docTypeCv	= CategoryManagerUtil.getAmpCategoryValueFromDb(cmDocTypeId);
 			if ( docTypeCv != null ) {
-				String translation		= CategoryManagerUtil.translateAmpCategoryValue(docTypeCv, request);
+				String translation		= CategoryManagerUtil.translateAmpCategoryValue(docTypeCv);
 				cmDocType				= translation;
 			}
 		}

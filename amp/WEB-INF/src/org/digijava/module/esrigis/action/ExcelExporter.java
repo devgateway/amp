@@ -28,39 +28,33 @@ public class ExcelExporter extends Action {
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
-		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-		String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 		DataDispatcherForm dataDispatcherForm = (DataDispatcherForm) form;
 
 		JSONObject jsonobject = (JSONObject) new JSONTokener(dataDispatcherForm.getStructures()).nextValue();
 		JSONArray starray = jsonobject.getJSONArray("Structures");
 		try {
 			HSSFWorkbook wb = new HSSFWorkbook();
-			String titletrn = TranslatorWorker.translateText("Structures List",
-					langCode, siteId);
+			String titletrn = TranslatorWorker.translateText("Structures List");
 			HSSFSheet sheet = wb.createSheet(titletrn);
 			HSSFRow row = sheet.createRow(0);
 			HSSFCell cell = row.createCell(0);
 			HSSFRichTextString columtitle = new HSSFRichTextString(
-					TranslatorWorker.translateText("Name", langCode, siteId));
+					TranslatorWorker.translateText("Name"));
 			cell.setCellValue(columtitle);
 			cell.setCellStyle(getRowHeadingSt(wb));
 
 			cell = row.createCell(1);
-			columtitle = new HSSFRichTextString(TranslatorWorker.translateText(
-					"Type", langCode, siteId));
+			columtitle = new HSSFRichTextString(TranslatorWorker.translateText("Type"));
 			cell.setCellValue(columtitle);
 			cell.setCellStyle(getRowHeadingSt(wb));
 
 			cell = row.createCell(2);
-			columtitle = new HSSFRichTextString(TranslatorWorker.translateText(
-					"Activity Name", langCode, siteId));
+			columtitle = new HSSFRichTextString(TranslatorWorker.translateText("Activity Name"));
 			cell.setCellValue(columtitle);
 			cell.setCellStyle(getRowHeadingSt(wb));
 
 			cell = row.createCell(3);
-			columtitle = new HSSFRichTextString(TranslatorWorker.translateText(
-					"Coordinates", langCode, siteId));
+			columtitle = new HSSFRichTextString(TranslatorWorker.translateText("Coordinates"));
 			cell.setCellValue(columtitle);
 			cell.setCellStyle(getRowHeadingSt(wb));
 

@@ -34,7 +34,7 @@ public class WiColumnDropDownFilter extends WiColumn {
 		super(dbColumn);
 		Site site = RequestUtils.getSite(request);
 	 	org.digijava.kernel.entity.Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);        
-	 	String siteId = site.getId()+"";
+	 	Long siteId = site.getId();
 	 	String locale = navigationLanguage.getCode();
 	 	//get provider of the drop down filter items. current donors.
 	 	provider = TableWidgetUtil.getFilterItemProvider(dbColumn, siteId, locale);

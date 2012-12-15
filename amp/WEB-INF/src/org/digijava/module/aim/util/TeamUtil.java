@@ -1874,14 +1874,14 @@ public class TeamUtil {
      * @author Dare
      */
 
-    public synchronized static List getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name,Long reportCategoryId) {
+    public synchronized static List<AmpReports> getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name,Long reportCategoryId) {
 	    return getAllTeamReports(teamId, getTabs, currentPage, reportPerPage, inlcludeMemberReport, memberId, name, reportCategoryId, null);
     	
     }    
     
-    public synchronized static List getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name,Long reportCategoryId,Boolean onlyCategorized) {
+    public synchronized static List<AmpReports> getAllTeamReports(Long teamId, Boolean getTabs, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId,String name,Long reportCategoryId,Boolean onlyCategorized) {
  	   Session session 	= null;
-        List col 		= new ArrayList();
+        List<AmpReports> col 		= new ArrayList<AmpReports>();
         String tabFilter	= "";
         try {
      	   if ( getTabs!=null ) {
@@ -2003,10 +2003,6 @@ public class TeamUtil {
         return col;	
  	
  }
-    
-    
-    
-    
     
     
     public static List getLastShownReports(Long teamId, Long memberId, Boolean getTabs,Boolean onlyCategorized) {

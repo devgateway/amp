@@ -74,7 +74,7 @@ public abstract class ARDimension {
     public static boolean isLinkedWith(ReportData parent, Cell childCell) {
 	//we get the dimension worker    
 	// requirements for translation purposes
-	String siteId = parent.getReportMetadata().getSiteId();
+	Long siteId = parent.getReportMetadata().getSiteId();
 	String locale = parent.getReportMetadata().getLocale();
 	String text = ArConstants.UNALLOCATED;
 	String translatedTextUnallocated = null;

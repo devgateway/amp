@@ -116,8 +116,8 @@ public class TrnUtil {
      * @throws DgException
      * @see org.digijava.kernel.translator.util.TrnLocale
      */
-    public static Collection getLanguages(String isoLanguage) throws DgException {
-        HashSet languages = null;
+    public static Set<TrnLocale> getLanguages(String isoLanguage) throws DgException {
+        HashSet<TrnLocale> languages = null;
         Session session = null;
         try {
             session = PersistenceManager.getSession();
@@ -131,7 +131,7 @@ public class TrnUtil {
             query.setString("locale", isoLanguage);
             query.setCacheable(true);
             query.setCacheRegion(CACHE_REGION);
-            languages = new HashSet();
+            languages = new HashSet<TrnLocale>();
 
             Iterator iter = query.list().iterator();
             while (iter.hasNext()) {
@@ -246,11 +246,11 @@ public class TrnUtil {
       Collection retVal = null;
       Locale locale = new Locale(isoLanguage, "");
 
-      Collection cuntries = getCountries (isoLanguage);
+      Set<TrnCountry> cuntries = getCountries (isoLanguage);
 
       TranslationCallback countryTranslateCallback = new TranslationCallback() {
         public String getSiteId(Object o) {
-            return null;
+        	return null;
         }
 
         public String getTranslationKey(Object o) {
@@ -276,8 +276,8 @@ public class TrnUtil {
      * @throws DgException
      * @see org.digijava.kernel.translator.util.TrnCountry
      */
-    public static Collection getCountries(String isoLanguage) throws DgException {
-        HashSet countries = null;
+    public static Set<TrnCountry> getCountries(String isoLanguage) throws DgException {
+        HashSet<TrnCountry> countries = null;
         Session session = null;
         try {
             session = PersistenceManager.getSession();
@@ -291,7 +291,7 @@ public class TrnUtil {
             query.setString("locale", isoLanguage);
             query.setCacheable(true);
             query.setCacheRegion(CACHE_REGION);
-            countries = new HashSet();
+            countries = new HashSet<TrnCountry>();
 
             Iterator iter = query.list().iterator();
             while (iter.hasNext()) {
@@ -340,8 +340,8 @@ public class TrnUtil {
      * @throws DgException
      * @see org.digijava.kernel.translator.util.TrnMonth
      */
-    public static Collection getMonths(String isoLanguage) throws DgException {
-        HashSet months = null;
+    public static Set<TrnMonth> getMonths(String isoLanguage) throws DgException {
+        HashSet<TrnMonth> months = null;
 
         Session session = null;
         try {
@@ -355,7 +355,7 @@ public class TrnUtil {
             query.setString("locale", isoLanguage);
             query.setCacheable(true);
             query.setCacheRegion(CACHE_REGION);
-            months = new HashSet();
+            months = new HashSet<TrnMonth>();
 
             Iterator iter = query.list().iterator();
             while (iter.hasNext()) {
@@ -397,25 +397,21 @@ public class TrnUtil {
      * @param site
      * @return sorted languages
      */
-    public static Collection getSortedUserLanguages(HttpServletRequest request) throws
+    public static List<TrnLocale> getSortedUserLanguages(HttpServletRequest request) throws
         DgException {
-            Set languages = SiteUtils.getUserLanguages(RequestUtils.getSite(request));
-            HashMap translations = new HashMap();
-            Iterator iterator = null;
-            iterator = TrnUtil.getLanguages(RequestUtils.
+            Set<Locale> languages = SiteUtils.getUserLanguages(RequestUtils.getSite(request));
+            HashMap<String, TrnLocale> translations = new HashMap<String, TrnLocale>();
+            Set<TrnLocale> langs = TrnUtil.getLanguages(RequestUtils.
                                             getNavigationLanguage(request).
-                                            getCode()).iterator();
-            while (iterator.hasNext()) {
-                TrnLocale item = (TrnLocale) iterator.next();
+                                            getCode());
+            for(TrnLocale item:langs)
                 translations.put(item.getCode(), item);
-            }
+            
             //sort languages
-            List sortedLanguages = new ArrayList();
-            iterator = languages.iterator();
-            while (iterator.hasNext()) {
-                Locale item = (Locale) iterator.next();
+            List<TrnLocale> sortedLanguages = new ArrayList<TrnLocale>();
+            for(Locale item:languages)
                 sortedLanguages.add(translations.get(item.getCode()));
-            }
+
             Collections.sort(sortedLanguages, TrnUtil.localeNameComparator);
 
             return sortedLanguages;
@@ -461,21 +457,19 @@ public class TrnUtil {
                  */
                 Site site = null;
                 if (siteId != null) {
-                  site = SiteCache.getInstance().getSite(siteId);
+                  site = SiteCache.lookupByName(siteId);
                 }
 
                 try {
                   Message trnMess = null;
                   if (site != null) {
-                    trnMess = trnWork.getByBody(defTrans, locale.getCode(),
-                                          String.valueOf(site.getId()));
+                    trnMess = trnWork.getByBody(defTrans, locale.getCode(), site.getId());
                     if (trnMess == null && groupTranslation && site.getParentId() != null) {
                       Site root = SiteCache.getInstance().getRootSite(site);
-                      trnMess = trnWork.getByBody(defTrans, locale.getCode(),
-                                            String.valueOf(root.getId()));
+                      trnMess = trnWork.getByBody(defTrans, locale.getCode(), root.getId());
                     }
                   } else {
-                    trnMess = trnWork.getByBody(defTrans, locale.getCode(), "0");
+                    trnMess = trnWork.getByBody(defTrans, locale.getCode(), 0L);
                   }
                     if (trnMess == null) {
                         trnString = defTrans;

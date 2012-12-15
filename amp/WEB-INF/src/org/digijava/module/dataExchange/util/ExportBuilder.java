@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -68,26 +69,26 @@ public class ExportBuilder {
 
 	private ObjectFactory objectFactory = new ObjectFactory();
 
-	private String siteId =  null; //RequestUtils.getSite(request).getSiteId()
+	private Site site =  null; //RequestUtils.getSite(request).getSiteId()
 
 	private String[] exportLog = null;
 	
-	public ExportBuilder(AmpActivityVersion ampActivity, String siteId){
+	public ExportBuilder(AmpActivityVersion ampActivity, Site site){
 		this.ampActivity = ampActivity;
-		this.siteId = siteId;
+		this.site = site;
 	}
 
-	public ExportBuilder(Long ampActivityId, String siteId) throws AmpExportException{
+	public ExportBuilder(Long ampActivityId, Site site) throws AmpExportException{
 		try{
 			this.ampActivity = ActivityUtil.loadActivity(ampActivityId);
-			this.siteId = siteId;
+			this.site = site;
 		} catch (DgException ex){
 			throw new AmpExportException(ex, AmpExportException.ACTIVITY_LOAD);
 		}	
 	}
 
-	public ExportBuilder(long ampActivityId, String siteId) throws AmpExportException{
-		this(new Long(ampActivityId), siteId);
+	public ExportBuilder(long ampActivityId, Site site) throws AmpExportException{
+		this(new Long(ampActivityId), site);
 	}
 
 	public ActivityType getActivityType(AmpColumnEntry ampColumnEntry) throws AmpExportException{
@@ -133,7 +134,7 @@ public class ExportBuilder {
 				
 		} else if (path.equalsIgnoreCase("activity.objective")){
 			if (ampActivity.getObjective() != null){
-                    for (Editor editor : org.digijava.module.editor.util.DbUtil.getEditorList(ampActivity.getObjective(), siteId)) {
+                    for (Editor editor : org.digijava.module.editor.util.DbUtil.getEditorList(ampActivity.getObjective(), site)) {
                         if(editor.getBody()!=null&&!editor.getBody().trim().equals("")){
                         parent.getObjective().add(buildFreeText(editor.getLanguage(), editor.getBody()));
                         }
@@ -142,7 +143,7 @@ public class ExportBuilder {
 			}
 		} else if (path.equalsIgnoreCase("activity.description")){
 			if (ampActivity.getDescription() != null){
-				 for (Editor editor : org.digijava.module.editor.util.DbUtil.getEditorList(ampActivity.getDescription(), siteId)) {
+				 for (Editor editor : org.digijava.module.editor.util.DbUtil.getEditorList(ampActivity.getDescription(), site)) {
                         if(editor.getBody()!=null&&!editor.getBody().trim().equals("")){
                         parent.getDescription().add(buildFreeText(editor.getLanguage(), editor.getBody()));
                         }
@@ -260,7 +261,6 @@ public class ExportBuilder {
 					
 					org.setValue(ampOrgRole.getOrganisation().getName());
 					org.setCode(ampOrgRole.getOrganisation().getOrgCode());
-//TODO					org.setLang("");
 
 					if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.REPORTING_AGENCY)){
 						org.setType(DataExchangeConstants.ORG_ROLE_REPORTING_AGENCY);

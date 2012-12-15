@@ -235,7 +235,7 @@ public final class TableWidgetUtil {
 	 * @param col
 	 * @return
 	 */
-	public static FilterItemProvider getFilterItemProvider(AmpDaColumnFilter col, String siteId, String locale){
+	public static FilterItemProvider getFilterItemProvider(AmpDaColumnFilter col, Long siteId, String locale){
 		//TODO this may return different providers depending on col.filterItemProvider
               if (col.getFilterItemProvider().equals(new Long(FilterItemProvider.DONORS_FILTER))) {
             	  DonorFilter df = new DonorFilter(siteId, locale);
@@ -257,7 +257,7 @@ public final class TableWidgetUtil {
 		private List<FilterItem> items = new ArrayList<FilterItem>();
 		
 		@SuppressWarnings({ "unchecked", "deprecation" })
-		public DonorFilter(String siteId, String locale){
+		public DonorFilter(Long siteId, String locale){
 			Collection<AmpOrganisation> donors = DbUtil.getAllDonorOrgs();
 			if (donors==null){
 				donors = new ArrayList<AmpOrganisation>();
@@ -332,7 +332,7 @@ public final class TableWidgetUtil {
 		private Map<Long, FilterItem> itemsById = new HashMap<Long, FilterItem>();
 		private List<FilterItem> items = new ArrayList<FilterItem>();
 		
-		public OrgGroupFilter(String siteId, String locale){
+		public OrgGroupFilter(Long siteId, String locale){
 			Collection<AmpOrgGroup> groups = DbUtil.getAllNonGovOrgGroups();
 			if (groups==null){
 				groups = new ArrayList<AmpOrgGroup>();

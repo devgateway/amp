@@ -28,8 +28,10 @@ import org.digijava.kernel.lucene.LucModule;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
@@ -68,9 +70,9 @@ public class HelpUtil {
 	 * @returns List<HelpTopic> helpTopics
 	 * @throws AimException
 	 */
-	public static Collection<HelpTopicsTreeItem> getHelpTopicsTree(String siteId,
+	public static Collection<HelpTopicsTreeItem> getHelpTopicsTree(Site site,
 			String moduleInstance) throws AimException {
-		List<HelpTopic> helpTopics= getHelpTopics(siteId, moduleInstance,null, null);
+		List<HelpTopic> helpTopics= getHelpTopics(site, moduleInstance,null, null);
 		Collection<HelpTopicsTreeItem> themeTree = CollectionUtils.getHierarchy(
 				helpTopics,
                 new HelpTopicHierarchyDefinition(), 
@@ -78,9 +80,9 @@ public class HelpUtil {
 		return themeTree;
 	}
 	
-	public static Collection<HelpTopicsTreeItem> getGlossaryTopicsTree(String siteId,
+	public static Collection<HelpTopicsTreeItem> getGlossaryTopicsTree(Site site,
 			String moduleInstance) throws DgException {
-		List<HelpTopic> glossaryTopics= GlossaryUtil.getAllGlosaryTopics(moduleInstance, siteId);
+		List<HelpTopic> glossaryTopics= GlossaryUtil.getAllGlosaryTopics(moduleInstance, site);
 		Collection<HelpTopicsTreeItem> themeTree = CollectionUtils.getHierarchy(
 				glossaryTopics,
                 new HelpTopicHierarchyDefinition(), 
@@ -128,7 +130,7 @@ public class HelpUtil {
 	 * @returns List<HelpTopic> helpTopics
 	 * @throws AimException
 	 */
-	public static List<HelpTopic> getHelpTopics(String siteId,
+	public static List<HelpTopic> getHelpTopics(Site site,
 			String moduleInstance,String locale, String keyWords) throws AimException {
 		Session session = null;
 		Query query = null;
@@ -148,11 +150,11 @@ public class HelpUtil {
 						+ "and t.siteId=:siteId  and t.topicType=NULL and t.moduleInstance=:moduleInstance "
 						+ "and msg.locale=:locale and msg.message like '%"+ keyWords+ "%'";
 				query = session.createQuery(queryString);
-				query.setParameter("locale", locale);
+				query.setString("locale", locale);
 			}
 			
-			query.setParameter("siteId", siteId);
-			query.setParameter("moduleInstance", moduleInstance);			
+			query.setString("siteId", site.getSiteId());
+			query.setString("moduleInstance", moduleInstance);			
 			helpTopics = query.list();
 
 		} catch (Exception e) {
@@ -211,7 +213,7 @@ public class HelpUtil {
 		return helpTopic;
 	}
 
-    public static HelpTopic getHelpTopic(String key,String siteId,String moduleInstance) throws AimException {
+    public static HelpTopic getHelpTopic(String key, Site site, String moduleInstance) throws AimException {
 		Session session = null;
 		Query query = null;
 		HelpTopic helpTopic = null;
@@ -221,9 +223,9 @@ public class HelpUtil {
 				String queryString="from "+ HelpTopic.class.getName()+" topic where (topic.topicKey=:key) " +
 						" and (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) ";
 				query=session.createQuery(queryString);
-				query.setParameter("siteId", siteId);
-				query.setParameter("moduleInstance", moduleInstance);
-				query.setParameter("key", key);
+				query.setString("siteId", site.getSiteId());
+				query.setString("moduleInstance", moduleInstance);
+				query.setString("key", key);
 				helpTopic=(HelpTopic) query.uniqueResult();
 			} catch (Exception e) {
 				logger.error(e);
@@ -235,7 +237,7 @@ public class HelpUtil {
 		return helpTopic;
 	}
     
-    public static HelpTopic getHelpTopicByBodyEditKey(String bodyEditKey,String siteId,String moduleInstance) throws AimException {
+    public static HelpTopic getHelpTopicByBodyEditKey(String bodyEditKey, Site site, String moduleInstance) throws AimException {
 		Session session = null;
 		Query query = null;
 		HelpTopic helpTopic = null;
@@ -245,9 +247,9 @@ public class HelpUtil {
 				String queryString="from "+ HelpTopic.class.getName()+" topic where (topic.bodyEditKey=:bodyEditKey) " +
 						" and (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) ";
 				query=session.createQuery(queryString);
-				query.setParameter("siteId", siteId);
-				query.setParameter("moduleInstance", moduleInstance);
-				query.setParameter("bodyEditKey", bodyEditKey);
+				query.setString("siteId", site.getSiteId());
+				query.setString("moduleInstance", moduleInstance);
+				query.setString("bodyEditKey", bodyEditKey);
 				helpTopic=(HelpTopic) query.uniqueResult();
 			} catch (Exception e) {
 				logger.error(e);
@@ -266,9 +268,9 @@ public class HelpUtil {
 		if (key != null && !key.equals("")) {
 			try {
 				session = PersistenceManager.getRequestDBSession();
-				String queryString="from "+ HelpTopic.class.getName()+" topic where (topic.bodyEditKey=:key) ";
-				query=session.createQuery(queryString);
-				query.setParameter("key", key);
+				String queryString = "from " + HelpTopic.class.getName()+" topic where (topic.bodyEditKey=:key) ";
+				query = session.createQuery(queryString);
+				query.setString("key", key);
 				helpTopic=(HelpTopic) query.uniqueResult();
 			} catch (Exception e) {
 				logger.error(e);
@@ -280,7 +282,7 @@ public class HelpUtil {
 		return helpTopic;
 	}
 
-	public static boolean cheackEditKey(String key, String siteId,
+	public static boolean cheackEditKey(String key, Site site,
 			String moduleInstance) throws AimException {
 		Session session = null;
 		Query query = null;
@@ -291,9 +293,9 @@ public class HelpUtil {
 					+ " topic where (topic.topicKey=:key) and "
 					+ "(topic.siteId=:siteId) and (topic.moduleInstance=:instance)";
 			query = session.createQuery(queryString);
-			query.setParameter("key", key);
-			query.setParameter("siteId", siteId);
-			query.setParameter("instance", moduleInstance);
+			query.setString("key", key);
+			query.setString("siteId", site.getSiteId());
+			query.setString("instance", moduleInstance);
 			if (query.uniqueResult() == null) {
 				return true;
 			}
@@ -340,7 +342,7 @@ public class HelpUtil {
 			 session = PersistenceManager.openNewSession();
 	         tx = session.beginTransaction();
 			if (topic.getBodyEditKey()!=null && topic.getSiteId()!=null){
-				List<Editor> editors = DbUtil.getEditorList(topic.getBodyEditKey(), topic.getSiteId(),session);
+				List<Editor> editors = DbUtil.getEditorList(topic.getBodyEditKey(), SiteCache.lookupByName(topic.getSiteId()), session);
 				if (editors!=null && editors.size()>0){
 					for (Editor editor : editors) {
 						if(editor.getBody()!=null){
@@ -406,12 +408,8 @@ public class HelpUtil {
 		String moduleInstanceName = RequestUtils.getRealModuleInstance(request).getInstanceName();
 		ServletContext context = request.getSession().getServletContext();
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-		String title = null;
-		try {
-			title = TranslatorWorker.translateText(topic.getTopicKey(), request);
-		} catch (WorkerException ex) {
-			logger.error(ex);
-		}
+		String title = TranslatorWorker.translateText(topic.getTopicKey());
+
 		HelpTopicHelper item = new HelpTopicHelper(topic, title, locale);
 		String suffix = moduleInstanceName + "_" + locale;
 		String msg = "New help topic added to lucene index";
@@ -433,7 +431,7 @@ public class HelpUtil {
 		logger.debug("Help topic removed from lucene index");
 	}
 	
-	public static List<HelpTopic> getFirstLevelTopics(String siteId,String moduleInstance,String key)throws AimException{
+	public static List<HelpTopic> getFirstLevelTopics(Site site, String moduleInstance,String key)throws AimException{
 		Session session = null;
 		Query query = null;
 		List<HelpTopic> helpTopics = null;
@@ -443,8 +441,8 @@ public class HelpUtil {
 			queryString = "from "+ HelpTopic.class.getName()
 			+ " topic where (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) and (topic.parent is null) and (topic.topicType=NULL)";
 			query = session.createQuery(queryString);			
-			query.setParameter("siteId", siteId);
-			query.setParameter("moduleInstance", moduleInstance);
+			query.setString("siteId", site.getSiteId());
+			query.setString("moduleInstance", moduleInstance);
 			helpTopics = query.list();
 
 		} catch (Exception e) {
@@ -452,7 +450,7 @@ public class HelpUtil {
   			throw new AimException("Unable to Load Help Topics", e);
 		}
 		if (key!=null){
-			HelpTopic curTopic=getHelpTopic(key, siteId, moduleInstance);
+			HelpTopic curTopic=getHelpTopic(key, site, moduleInstance);
 			helpTopics.remove(curTopic);
 		}
 		return helpTopics;
@@ -463,7 +461,7 @@ public class HelpUtil {
 	 * @param siteId
 	 * @throws Exception
 	 */
-	public static List<HelpTopic> getFirstLevelTopics(String siteId) throws Exception{
+	public static List<HelpTopic> getFirstLevelTopics(Site site) throws Exception{
 		Session session = null;
 		Query query = null;
 		List<HelpTopic> helpTopics = null;
@@ -473,7 +471,7 @@ public class HelpUtil {
 			//queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null and topic.topicType=NULL";
 			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.parent is null ";
 			query = session.createQuery(queryString);
-			query.setParameter("siteId", siteId);
+			query.setString("siteId", site.getSiteId());
 			helpTopics = query.list();
 		} catch (Exception e) {
 			logger.error("Unable to load help topics");
@@ -482,7 +480,7 @@ public class HelpUtil {
 		return helpTopics;
 	}
 
-    public static List<HelpTopic> getFirstLevelTopics(String siteId,String moduleInstance) throws Exception{
+    public static List<HelpTopic> getFirstLevelTopics(Site site, String moduleInstance) throws Exception{
 		Session session = null;
 		Query query = null;
 		List<HelpTopic> helpTopics = null;
@@ -491,8 +489,8 @@ public class HelpUtil {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = "from "+ HelpTopic.class.getName()+ " topic where topic.siteId=:siteId and topic.moduleInstance=:moduleInstance and topic.parent is null and topic.topicType=NULL";
 			query = session.createQuery(queryString);
-			query.setParameter("siteId", siteId);
-            query.setParameter("moduleInstance", moduleInstance);
+			query.setString("siteId", site.getSiteId());
+            query.setString("moduleInstance", moduleInstance);
             helpTopics = query.list();
 		} catch (Exception e) {
 			logger.error("Unable to load help topics");
@@ -501,15 +499,15 @@ public class HelpUtil {
 		return helpTopics;
 	}
 
-    public static boolean hasChildren(String siteId,String moduleInstance,Long parentId)throws AimException{
-		List<HelpTopic> helpTopics = getChildTopics(siteId, moduleInstance,	parentId);
+    public static boolean hasChildren(Site site, String moduleInstance, Long parentId)throws AimException{
+		List<HelpTopic> helpTopics = getChildTopics(site, moduleInstance,	parentId);
 		if (helpTopics==null || helpTopics.size()==0){
 			return false;
 		}
 	return true;	
 	}
 
-	public static List<HelpTopic> getChildTopics(String siteId,String moduleInstance, Long parentId) throws AimException {
+	public static List<HelpTopic> getChildTopics(Site site, String moduleInstance, Long parentId) throws AimException {
 		Session session = null;
 		Query query = null;
 		List<HelpTopic> helpTopics = null;
@@ -519,9 +517,9 @@ public class HelpUtil {
 			queryString = "from "+ HelpTopic.class.getName()
 			+ " topic where (topic.siteId=:siteId) and (topic.moduleInstance=:moduleInstance) and (topic.parent.helpTopicId=:id) and (topic.topicType=NULL)";
 			query = session.createQuery(queryString);			
-			query.setParameter("siteId", siteId);
-			query.setParameter("moduleInstance", moduleInstance);
-			query.setParameter("id", parentId);
+			query.setString("siteId", site.getSiteId());
+			query.setString("moduleInstance", moduleInstance);
+			query.setLong("id", parentId);
 			helpTopics = query.list();			
 
 		} catch (Exception e) {
@@ -531,7 +529,7 @@ public class HelpUtil {
 		return helpTopics;
 	}
 
-    public static List<HelpTopic> getChildTopics(String siteId,Long parentId) throws AimException {
+    public static List<HelpTopic> getChildTopics(Site site, Long parentId) throws AimException {
 		Session session = null;
 		Query query = null;
 		List<HelpTopic> helpTopics = null;
@@ -541,8 +539,8 @@ public class HelpUtil {
 			queryString = "from "+ HelpTopic.class.getName()
 			+ " topic where (topic.siteId=:siteId) and (topic.parent.helpTopicId=:id) ";
 			query = session.createQuery(queryString);
-			query.setParameter("siteId", siteId);
-        	query.setParameter("id", parentId);
+			query.setString("siteId", site.getSiteId());
+        	query.setLong("id", parentId);
 			helpTopics = query.list();
 
 		} catch (Exception e) {
@@ -563,7 +561,7 @@ System.out.println("lang:"+lang);
 		session = PersistenceManager.getRequestDBSession();
 		 Query q = session.createQuery(" from e in class " +
                  Editor.class.getName() +" where e.editorKey like 'help%' and e.language=:lang order by e.lastModDate");
-			q.setParameter("lang", lang);
+			q.setString("lang", lang);
 		helpTopics = q.list();
 		
 		
@@ -628,7 +626,7 @@ System.out.println("lang:"+lang);
     	
     	String queryString = "select topic from "+ Editor.class.getName() + " topic where (topic.editorKey=:bodyKey)";
     	     query = session.createQuery(queryString);
-    	     query.setParameter("bodyKey", bodyKey);
+    	     query.setString("bodyKey", bodyKey);
     	     result = query.list();
     	     
 		} catch (Exception e) {
@@ -649,8 +647,8 @@ System.out.println("lang:"+lang);
     	
     	String queryString = "select topic from "+ Editor.class.getName() + " topic where (topic.editorKey=:bodyKey) and (topic.language=:lang)";
     	     query = session.createQuery(queryString);
-    	     query.setParameter("bodyKey", bodyKey);
-    	     query.setParameter("lang", lang);
+    	     query.setString("bodyKey", bodyKey);
+    	     query.setString("lang", lang);
     	     result = query.list();
     	     
 		} catch (Exception e) {
@@ -833,16 +831,12 @@ System.out.println("lang:"+lang);
 	}
 	
 	 public static String getTrn(String defResult, HttpServletRequest request){
-        try {
-        return TranslatorWorker.translateText(defResult, request);
-		} catch (WorkerException e) {
-			throw new RuntimeException("Cannot translate text"+defResult, e);
-	 }
+        return TranslatorWorker.translateText(defResult);
 	 }
 	 
     public static String getTrn(String defResult,String	lange, Long	siteId){
     	try {
-    	return TranslatorWorker.translateText(defResult, lange, siteId.toString());
+    	return TranslatorWorker.translateText(defResult, lange, siteId);
 		} catch (WorkerException e) {
 			throw new RuntimeException("Cannot translate text"+defResult, e);
 		}
@@ -1009,7 +1003,7 @@ System.out.println("lang:"+lang);
  	}
 
 		
-	 public static void updateNewEditHelpData(AmpHelpType help,HashMap<Long,HelpTopic> storeMap,Long siteId, HashMap<String, Long> helpDocIdHolder,HttpServletRequest request){		
+	 public static void updateNewEditHelpData(AmpHelpType help,HashMap<Long,HelpTopic> storeMap, Site site, HashMap<String, Long> helpDocIdHolder,HttpServletRequest request){		
 			
 		try {
 			
@@ -1029,13 +1023,13 @@ System.out.println("lang:"+lang);
             while(editrLang.hasNext()) {
             	HelpLang xmlLangTag = (HelpLang) editrLang.next();
                 Message newMsg = new Message();
-                newMsg.setSiteId(siteId.toString());
+                newMsg.setSite(site);
                 newMsg.setMessage(xmlLangTag.getTitle());
                 newMsg.setKey(TranslatorWorker.generateTrnKey(help.getTopicKey()));
                 newMsg.setLocale(xmlLangTag.getCode());
                                                         
                 // Message msg = TranslatorWorker.getInstance("").getByBody(xmlLangTag.getTitle().trim(), xmlLangTag.getCode(), siteId.toString());
-                Message msg = TranslatorWorker.getInstance("").getByKey(newMsg.getKey(),xmlLangTag.getCode(), siteId.toString());
+                Message msg = TranslatorWorker.getInstance("").getByKey(newMsg.getKey(), xmlLangTag.getCode(), site);
                 if(msg != null){
                 	msg.setSiteId(newMsg.getSiteId());
                 	msg.setMessage(newMsg.getMessage());
@@ -1078,8 +1072,8 @@ System.out.println("lang:"+lang);
 //beginTransaction();
 			String queryString = "select editTopic from "+ Editor.class.getName() + " editTopic where (editTopic.editorKey=:key) and  (editTopic.language=:lang)";
    	        query = session.createQuery(queryString);
-		    query.setParameter("lang", help.getCode());
-		    query.setParameter("key", key);
+		    query.setString("lang", help.getCode());
+		    query.setString("key", key);
 		    List<Editor> res =query.list();
 		    
 		    String helpBody=help.getBody();
@@ -1105,7 +1099,7 @@ System.out.println("lang:"+lang);
 				       Editor edit = (Editor) itr.next();				       
 				       edit.setBody(helpBody);
 				       edit.setLastModDate(lastModDate.getTime());
-				       edit.setSiteId("amp");
+				       edit.setSiteId("amp"); //TODO: nice bugs source if we ever move to multi-sites
 				       edit.setLanguage(help.getCode());
 	    	    	   session.saveOrUpdate(edit);
 	    	     }
@@ -1115,7 +1109,7 @@ System.out.println("lang:"+lang);
 	    		   Editor edit = new  Editor();
 			       edit.setBody(helpBody);
 			       edit.setLastModDate(lastModDate.getTime());
-			       edit.setSiteId("amp");
+			       edit.setSiteId("amp"); //TODO: nice bugs source if we ever move to multi-sites
 			       edit.setLanguage(help.getCode());
 			       edit.setEditorKey(key);
 			       insertEdit(edit);
@@ -1190,9 +1184,9 @@ System.out.println("lang:"+lang);
 	}
 
 
-    public static void saveNewTreeState(HelpTopic help,HashMap<Long,HelpTopic> storeMap,String siteId){
+    public static void saveNewTreeState(HelpTopic help,HashMap<Long,HelpTopic> storeMap, Site site){
 
-         Thread th = new Thread();
+//         Thread th = new Thread();
       try{
                    HelpTopic helptopic = new HelpTopic();
                    helptopic.setTopicKey(help.getTopicKey());
@@ -1274,10 +1268,9 @@ System.out.println("lang:"+lang);
 					}
                    }                   
                    
-                     //TODO What's that?
-                    th.sleep(500);
+                    Thread.sleep(200); //TODO: WA...DA...FA. Constantin: 60% speedup! :D
                  
-                    HelpTopic newTopic = getHelpTopic(help.getTopicKey(),siteId,help.getModuleInstance());
+                    HelpTopic newTopic = getHelpTopic(help.getTopicKey(), site, help.getModuleInstance());
         
                      HelpTopic parent = new HelpTopic();
 	    	    	 parent.setBodyEditKey(newTopic.getBodyEditKey());
@@ -1377,13 +1370,13 @@ System.out.println("lang:"+lang);
      * @throws DgException
      */
     @SuppressWarnings("unchecked")
-	public static List<HelpTopicHelper> getHelpItems(String siteId,String moduleInstance, EnumSet<LangSupport> langs, boolean exclude) throws DgException{
+	public static List<HelpTopicHelper> getHelpItems(Site site, String moduleInstance, EnumSet<LangSupport> langs, boolean exclude) throws DgException{
     	
     	String oql = "select new org.digijava.module.help.helper.HelpTopicHelper(h.helpTopicId, h.topicKey, e.body, h.siteId, h.moduleInstance, e.language, h.titleTrnKey, h.bodyEditKey) "; 
     	oql += " from "+HelpTopic.class.getName()+" as h, "+Editor.class.getName()+" as e where ";
     	oql += " h.bodyEditKey = e.editorKey ";
     	oql += " and h.topicType is null";
-    	if (siteId != null){
+    	if (site != null){
     		oql += " and (h.siteId = :siteID) ";
     	}
     	if (moduleInstance != null){
@@ -1400,8 +1393,8 @@ System.out.println("lang:"+lang);
     	Session session = PersistenceManager.getRequestDBSession();
     	Query query = session.createQuery(oql);
     	
-    	if (siteId != null){
-    		query.setString("siteID", siteId);
+    	if (site != null){
+    		query.setString("siteID", site.getSiteId());
     	}
     	if (moduleInstance != null){
     		query.setString("modInst", moduleInstance);

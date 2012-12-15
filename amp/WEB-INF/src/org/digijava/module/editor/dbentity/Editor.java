@@ -27,10 +27,14 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.Versionable;
+import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.Output;
 
 /**
@@ -77,10 +81,24 @@ public class Editor
         return siteId;
     }
 
+    /**
+     * @deprecated - use {@link #setSite(Site)} instead
+     * @param siteId
+     */
     public void setSiteId(String siteId) {
+    	if ((siteId != null) && (AmpMath.isLong(siteId)))
+    	{
+    		Logger.getLogger(this.getClass()).error("numeric siteId: " + siteId, new RuntimeException());
+    		this.siteId = SiteCache.lookupById(Long.parseLong(siteId)).getSiteId();
+    	}
         this.siteId = siteId;
     }
 
+    public void setSite(Site site)
+    {
+    	setSiteId(site == null ? null : site.getSiteId());
+    }
+    
     public String getUrl() {
         return url;
     }

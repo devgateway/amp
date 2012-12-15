@@ -748,13 +748,12 @@ public class LuceneUtil implements Serializable {
 			}
 			
 			String language = navigationLanguage.getLanguage();
-			String siteId = site.getSiteId();
 			doc = activity2Document(String.valueOf(newActivity.getAmpActivityId()), projectid, String.valueOf(newActivity.getName()),
-					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, newActivity.getDescription(), language), 
-					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, newActivity.getObjective(), language),
-					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, newActivity.getPurpose(), language),
-					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, newActivity.getResults(), language),
-					org.digijava.module.editor.util.DbUtil.getEditorBody(siteId, newActivity.getContactName(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getDescription(), language), 
+					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getObjective(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getPurpose(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getResults(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getContactName(), language),
 					componentsCode, newActivity.getCrisNumber(), newActivity.getBudgetCodeProjectID());
 
 			if (doc != null) {

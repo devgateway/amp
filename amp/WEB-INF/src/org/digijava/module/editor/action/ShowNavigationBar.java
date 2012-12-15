@@ -63,7 +63,7 @@ public class ShowNavigationBar
         String currentLang = RequestUtils.getNavigationLanguage(request).
             getCode();
 
-        List groupEditorList = DbUtil.getSiteEditorList(site.getSiteId(),
+        List groupEditorList = DbUtil.getSiteEditorList(site,
             currentLang,
             Constants.GROUP_MAIN_NAVIGATION_MENU);
 

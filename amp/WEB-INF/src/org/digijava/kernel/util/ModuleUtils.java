@@ -133,7 +133,7 @@ public class ModuleUtils {
      * @param instance Name of the instance
      * @return ModuleInstance
      */
-    public static ModuleInstance getModuleInstance(String siteId, String module,
+    public static ModuleInstance getModuleInstance(Long siteId, String module,
         String instance)  {
         SiteCache siteCache = SiteCache.getInstance();
         Site site = siteCache.getSite(siteId);

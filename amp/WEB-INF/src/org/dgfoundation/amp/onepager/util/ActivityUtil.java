@@ -435,14 +435,14 @@ public class ActivityUtil {
 			
 			Editor editor = null;
 			try {
-				editor = DbUtil.getEditor(wicketSession.getSite().getSiteId(), key, wicketSession.getLocale().getLanguage());
+				editor = DbUtil.getEditor(wicketSession.getSite(), key, wicketSession.getLocale().getLanguage());
 				if (editor != null){
 					editor.setBody(editors.get(key));
 				}
 				else{
 					editor = new Editor();
 					editor.setBody(editors.get(key));
-					editor.setSiteId(wicketSession.getSite().getSiteId());
+					editor.setSite(wicketSession.getSite());
 					editor.setLanguage(wicketSession.getLocale().getLanguage());
 					editor.setEditorKey(key);
 				}

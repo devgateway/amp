@@ -41,7 +41,7 @@ public class AdvTrnDeleteTranslation extends Action {
 			}else{
 				//if not in buffer or in buffer with UPDATE operation
 				//then put real message in buffer as DELETED
-				String siteId = RequestUtils.getSite(request).getId().toString();
+				Long siteId = RequestUtils.getSite(request).getId();
 				//get translation
 				Message message = TranslatorWorker.getInstance(key).getByKey(key, locale, siteId);
 				//add as deleted

@@ -58,8 +58,8 @@ public class GetNPDFilterSettings extends Action{
                     break;
                 }
                 AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(Long.parseLong(statusId));
-                String translatedValue=TranslatorWorker.translateText(value.getValue(),request);
-                statuses +=translatedValue + ",";
+                String translatedValue = TranslatorWorker.translateText(value.getValue());
+                statuses += translatedValue + ",";
 
             }
              if (statuses.length() > 0) {

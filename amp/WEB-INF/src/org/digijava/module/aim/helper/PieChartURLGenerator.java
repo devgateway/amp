@@ -24,11 +24,11 @@ public class PieChartURLGenerator implements PieURLGenerator, Serializable {
     private String categoryParameterName = "category";
     /** trsanslation language of the Category parameter  */
     private String languageCode = "en";
-    private String siteId = "3";
+    private Long siteId = 3L; // hey, hardcoded database keys! how cute!
     /** The pie index parameter name. */
     private String indexParameterName = "pieIndex";
 
-    public PieChartURLGenerator(String prefix, String categoryParameterName, String languageCode, String siteId) {
+    public PieChartURLGenerator(String prefix, String categoryParameterName, String languageCode, Long siteId) {
         if (prefix == null) {
             throw new IllegalArgumentException(
                     "Null 'prefix' argument.");

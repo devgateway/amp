@@ -41,8 +41,6 @@ public class ShowSectorDonorWidgetReport extends Action {
         Integer toYear = new Integer(cForm.getEndYear());
         Long[] donorIDs = null;
         Long[] sectorIDs = null;
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-        String langCode= RequestUtils.getNavigationLanguage(request).getCode();
 
         //donors
         if (cForm.getDonorId() != null) {
@@ -50,12 +48,7 @@ public class ShowSectorDonorWidgetReport extends Action {
             donorIDs[0] = cForm.getDonorId();
             cForm.setDonorName(DbUtil.getOrganisation(cForm.getDonorId()).getName());
         } else {
-            try {
-                cForm.setDonorName(TranslatorWorker.translateText("ALL", langCode, siteId));
-            } catch (WorkerException ex) {
-                new DgException(ex);
-            }
-
+            cForm.setDonorName(TranslatorWorker.translateText("ALL"));
         }
         String baseCurr = request.getParameter("selectedCurrency") != null ? request.getParameter("selectedCurrency") : FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
 
@@ -70,11 +63,7 @@ public class ShowSectorDonorWidgetReport extends Action {
             cForm.setSectorName(SectorUtil.getAmpSector(sectorIDs[0]).getName());
         }
         else{
-            try {
-                cForm.setSectorName(TranslatorWorker.translateText("Others", langCode, siteId));
-            } catch (WorkerException ex) {
-                new DgException(ex);
-            }
+            cForm.setSectorName(TranslatorWorker.translateText("Others"));
         }
 
         Long defaultCalendarId = new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));

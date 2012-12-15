@@ -68,9 +68,9 @@ public class TrailCellsPDF extends PDFExporter {
 			//requirements for translation purposes
 			//this is the translation part for the rep:pop:totalsfor and the rep:pop:($donorName} part
 			TranslatorWorker translator=TranslatorWorker.getInstance();
-			String siteId=parent.getReportMetadata().getSiteId();
-			String locale=parent.getReportMetadata().getLocale();
-			String totalsFor="Totals For";
+			Long siteId = parent.getReportMetadata().getSiteId();
+			String locale = parent.getReportMetadata().getLocale();
+			String totalsFor = "Totals For";
 			//String translatedName=grd.getName();
 			
 			//AMP-6253 grd.getName()is (field : Name) for report hierarchies simplename hold only the field name until it's translated 

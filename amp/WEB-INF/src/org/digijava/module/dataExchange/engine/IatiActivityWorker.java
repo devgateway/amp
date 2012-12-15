@@ -1100,7 +1100,7 @@ public class IatiActivityWorker {
 			String key = preKey + System.currentTimeMillis();
 			String value = printList(obj.getContent());
 			if(obj!=null && isValidString(value)){
-				Editor ed = createEditor("amp", key, obj.getLang()==null?this.getLang():obj.getLang());
+				Editor ed = createEditor("amp", key, obj.getLang()==null?this.getLang():obj.getLang()); //TODO: bugs source
 				ed.setLastModDate(new Date());
 				ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
 				ed.setBody(value);

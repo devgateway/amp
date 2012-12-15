@@ -98,7 +98,7 @@ public class DocToOrgAction extends MultiAction {
 			if(docToOrgForm.getMessages()==null){
 				docToOrgForm.setMessages(new ArrayList<String>());
 			}
-			docToOrgForm.getMessages().add(TranslatorWorker.translateText("Organisation(s) added to the document.", request));
+			docToOrgForm.getMessages().add(TranslatorWorker.translateText("Organisation(s) added to the document."));
 		}
 		
 	}
@@ -116,7 +116,7 @@ public class DocToOrgAction extends MultiAction {
 				if(docToOrgForm.getMessages()==null){
 					docToOrgForm.setMessages(new ArrayList<String>());
 				}
-				docToOrgForm.getMessages().add(TranslatorWorker.translateText("Organisation(s) removed from the Document.", request));
+				docToOrgForm.getMessages().add(TranslatorWorker.translateText("Organisation(s) removed from the Document."));
 			}
 			DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		}

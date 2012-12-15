@@ -15,6 +15,7 @@ import org.digijava.kernel.entity.UserPreferencesPK;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
@@ -101,7 +102,7 @@ public class AmpUserUtil {
 
                 session.delete(userExt);
             }
-            Site rootSite=SiteUtils.getSite("amp");
+            Site rootSite = SiteCache.lookupByName("amp");
             UserPreferencesPK key = new UserPreferencesPK(user, rootSite);
             UserLangPreferences userLang=(UserLangPreferences)session.load(UserLangPreferences.class,key);
             /*

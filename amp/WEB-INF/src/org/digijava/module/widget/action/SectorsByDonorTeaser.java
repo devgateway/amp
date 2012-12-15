@@ -43,9 +43,7 @@ public class SectorsByDonorTeaser extends TilesAction {
         tForm.setSelectedCurrency(baseCurr);
 		Collection<AmpOrganisation> donors = DbUtil.getDonors();
 		tForm.setDonors(donors);
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-		String site = RequestUtils.getSite(request).getId().toString();
-		String fiscalYear = TranslatorWorker.translateText("FY", locale, site);		
+		String fiscalYear = TranslatorWorker.translateText("FY");		
 		//fill from years' drop-down
 		tForm.setYearsFrom(ChartWidgetUtil.getYears(true, fiscalYear));
 		//fill to years' drop-down

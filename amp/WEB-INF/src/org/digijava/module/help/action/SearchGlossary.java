@@ -12,6 +12,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.help.dbentity.HelpTopic;
@@ -35,8 +36,8 @@ public class SearchGlossary extends Action {
 		
 		String term = gform.getSearchTerm();
 		String moduleInstance = RequestUtils.getModuleInstance(request).getInstanceName();
-		String siteId = RequestUtils.getSite(request).getSiteId();
-		String siteIdNo = RequestUtils.getSite(request).getId().toString();
+		Site site = RequestUtils.getSite(request);
+//		String siteIdNo = RequestUtils.getSite(request).getId().toString();
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		
 		List<String> terms = null;
@@ -45,14 +46,14 @@ public class SearchGlossary extends Action {
 			List<String> list = Arrays.asList(arr);
 			terms = list;
 		}
-		List<HelpTopic> helpTopics = GlossaryUtil.searchGlossary(terms, moduleInstance, siteId, locale);
+		List<HelpTopic> helpTopics = GlossaryUtil.searchGlossary(terms, moduleInstance, site, locale);
 		
-		String result = TranslatorWorker.translateText("Nothing found", request);
+		String result = TranslatorWorker.translateText("Nothing found");
 		
 		if (helpTopics!=null && helpTopics.size()>0){
 			StringBuffer buf = new StringBuffer();
 			for (HelpTopic helpTopic : helpTopics) {
-				HelpTopicTreeNode node = new HelpTopicTreeNode(helpTopic,siteIdNo,locale);
+				HelpTopicTreeNode node = new HelpTopicTreeNode(helpTopic, site, locale);
 				buf.append(node.getSearchResultLink());
 			}
 			result = buf.toString();

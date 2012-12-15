@@ -65,13 +65,13 @@ public class DateBreakDown {
         hour = calendar.get(calendar.HOUR_OF_DAY);
         minute = calendar.get(calendar.MINUTE);
         //
-        String siteId = "";
+        Long siteId;
         String locale = ""; 
         if (request == null){
-        	siteId = CalendarThread.getSite().getId().toString();
+        	siteId = CalendarThread.getSite().getId();
         	locale = CalendarThread.getLocale().getCode();
         }else{
-           siteId = RequestUtils.getSite(request).getId()+"";
+           siteId = RequestUtils.getSite(request).getId();
   	       locale =  RequestUtils.getNavigationLanguage(request).getCode().toLowerCase();
         }
         

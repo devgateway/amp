@@ -31,12 +31,12 @@ public class EUActivityForm extends ActionForm implements Serializable {
 	private Long[] contrFinInstrId;
 	private Long[] contrFinTypeId;
 	
-	private List contrAmountList;
-	private List contrCurrIdList;
-	private List contrDonorIdList;
-	private List contrDonorNameList;
-	private List contrFinInstrIdList;
-	private List contrFinTypeIdList;
+	private List<String> contrAmountList;
+	private List<String> contrCurrIdList;
+	private List<String> contrDonorIdList;
+	private List<String> contrDonorNameList;
+	private List<Long> contrFinInstrIdList;
+	private List<Long> contrFinTypeIdList;
 	
 	private String assumptions;
 	private String progress;
@@ -104,22 +104,22 @@ public class EUActivityForm extends ActionForm implements Serializable {
 		progress=null;
 		dueDate=null;
 		
-		contrAmountList=new ArrayList();
-		contrAmountList.add(new String(""));
+		contrAmountList=new ArrayList<String>();
+		contrAmountList.add("");
 
-		contrCurrIdList=new ArrayList();
-		contrCurrIdList.add(new String("-1"));
+		contrCurrIdList=new ArrayList<String>();
+		contrCurrIdList.add("-1");
 		
-		contrDonorIdList=new ArrayList();
-		contrDonorIdList.add(new String("-1"));
+		contrDonorIdList=new ArrayList<String>();
+		contrDonorIdList.add("-1");
 		
-		contrFinInstrIdList=new ArrayList();
+		contrFinInstrIdList=new ArrayList<Long>();
 		contrFinInstrIdList.add(new Long(-1));
 		
-		contrFinTypeIdList=new ArrayList();
+		contrFinTypeIdList=new ArrayList<Long>();
 		contrFinTypeIdList.add(new Long(-1));
 		
-		contrDonorNameList=new ArrayList();
+		contrDonorNameList=new ArrayList<String>();
 		contrDonorNameList.add("");
 	}
 	
@@ -228,12 +228,12 @@ public class EUActivityForm extends ActionForm implements Serializable {
 	 */
 	public EUActivityForm() {
 		super();
-		 contrAmountList = new ArrayList();
-		 contrCurrIdList = new ArrayList();
-		 contrDonorIdList = new ArrayList();
-		 contrFinInstrIdList = new ArrayList();
-		 contrFinTypeIdList = new ArrayList();
-		 contrDonorNameList=new ArrayList();
+		 contrAmountList = new ArrayList<String>();
+		 contrCurrIdList = new ArrayList<String>();
+		 contrDonorIdList = new ArrayList<String>();
+		 contrFinInstrIdList = new ArrayList<Long>();
+		 contrFinTypeIdList = new ArrayList<Long>();
+		 contrDonorNameList=new ArrayList<String>();
 
 	}
 
@@ -272,43 +272,43 @@ public class EUActivityForm extends ActionForm implements Serializable {
 		this.contrFinTypeId = contrFinType;
 	}
 
-	public List getContrAmountList() {
+	public List<String> getContrAmountList() {
 		return contrAmountList;
 	}
 
-	public void setContrAmountList(List contrAmountList) {
+	public void setContrAmountList(List<String> contrAmountList) {
 		this.contrAmountList = contrAmountList;
 	}
 
-	public List getContrCurrIdList() {
+	public List<String> getContrCurrIdList() {
 		return contrCurrIdList;
 	}
 
-	public void setContrCurrIdList(List contrCurrIdList) {
+	public void setContrCurrIdList(List<String> contrCurrIdList) {
 		this.contrCurrIdList = contrCurrIdList;
 	}
 
-	public List getContrDonorIdList() {
+	public List<String> getContrDonorIdList() {
 		return contrDonorIdList;
 	}
 
-	public void setContrDonorIdList(List contrDonorIdList) {
+	public void setContrDonorIdList(List<String> contrDonorIdList) {
 		this.contrDonorIdList = contrDonorIdList;
 	}
 
-	public List getContrFinInstrIdList() {
+	public List<Long> getContrFinInstrIdList() {
 		return contrFinInstrIdList;
 	}
 
-	public void setContrFinInstrIdList(List contrFinInstrIdList) {
+	public void setContrFinInstrIdList(List<Long> contrFinInstrIdList) {
 		this.contrFinInstrIdList = contrFinInstrIdList;
 	}
 
-	public List getContrFinTypeIdList() {
+	public List<Long> getContrFinTypeIdList() {
 		return contrFinTypeIdList;
 	}
 
-	public void setContrFinTypeIdList(List contrFinTypeIdList) {
+	public void setContrFinTypeIdList(List<Long> contrFinTypeIdList) {
 		this.contrFinTypeIdList = contrFinTypeIdList;
 	}
 
@@ -320,11 +320,11 @@ public class EUActivityForm extends ActionForm implements Serializable {
 		this.editingIndexId = editingIndexId;
 	}
 
-	public List getContrDonorNameList() {
+	public List<String> getContrDonorNameList() {
 		return contrDonorNameList;
 	}
 
-	public void setContrDonorNameList(List contrDonorNameList) {
+	public void setContrDonorNameList(List<String> contrDonorNameList) {
 		this.contrDonorNameList = contrDonorNameList;
 	}
 

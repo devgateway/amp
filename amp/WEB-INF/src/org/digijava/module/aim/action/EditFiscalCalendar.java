@@ -58,7 +58,7 @@ public class EditFiscalCalendar extends Action {
 			 	 	 	 	int calCount = org.digijava.module.calendar.util.DbUtil.getFiscalCalendarCount(editForm.getFiscalCalName(), editForm.getFiscalCalId());
 			 	 	 	 	if(calCount>0){
 			 	 	 	 		ActionMessages errors= new ActionMessages();
-			 	 	 	 		errors.add("calendar not unique", new ActionMessage("admin.fiscCal.calExists",TranslatorWorker.translateText("Calendar with the given email already exists", request) ));
+			 	 	 	 		errors.add("calendar not unique", new ActionMessage("admin.fiscCal.calExists",TranslatorWorker.translateText("Calendar with the given email already exists") ));
 			 	 	 	 		saveErrors(request, errors);
                                 return mapping.findForward("forward");
                             }
@@ -136,7 +136,7 @@ public class EditFiscalCalendar extends Action {
 				 	 	 	 	int calCount = org.digijava.module.calendar.util.DbUtil.getFiscalCalendarCount(editForm.getFiscalCalName(), editForm.getFiscalCalId());
 				 	 	 	 	if(calCount>0){
 				 	 	 	 		ActionMessages errors= new ActionMessages();
-				 	 	 	 		errors.add("calendar not unique", new ActionMessage("admin.fiscCal.calExists",TranslatorWorker.translateText("Calendar with the given email already exists", request) ));
+				 	 	 	 		errors.add("calendar not unique", new ActionMessage("admin.fiscCal.calExists",TranslatorWorker.translateText("Calendar with the given email already exists") ));
 				 	 	 	 		saveErrors(request, errors);
 	                                return mapping.findForward("forward");
 	                            }

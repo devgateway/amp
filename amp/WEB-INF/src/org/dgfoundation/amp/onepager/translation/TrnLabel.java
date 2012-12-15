@@ -102,7 +102,7 @@ public class TrnLabel extends Label {
 		String translatedValue;
 		try {
 			translatedValue = TranslatorWorker.getInstance(genKey).
-									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
+									translateFromTree(genKey, site, session.getLocale().getLanguage(), 
 											value, TranslatorWorker.TRNTYPE_LOCAL, null);
 			return translatedValue;
 		} catch (WorkerException e) {

@@ -155,15 +155,8 @@ public class ExportHelper {
 
 	private static String renderActivityTreeNode(AmpColumnEntry node, String parentNode,DESourceSetting setting, HttpServletRequest request) {
 	
-		String nodeName		= null;
-		try {
-			nodeName	= (request!=null)?TranslatorWorker.translateText(node.getName(), request):node.getName();
-		} catch (WorkerException e) {
-			nodeName	= node.getName();
-			e.printStackTrace();
-		}
-	
-		
+//		String nodeName		= (request!=null)?TranslatorWorker.translateText(node.getName()):node.getName();
+			
 		Pattern pattern = Pattern.compile("[\\]\\[.]");
 		Matcher matcher = pattern.matcher(node.getKey());
 		String key = matcher.replaceAll("");
@@ -238,17 +231,12 @@ public class ExportHelper {
 		int index = -1;
 		
 		for (String field : fields) {
-			boolean mandatory = false;
+	//		boolean mandatory = false;
 			
 			String newPath = path + PATH_DELIM + field.replace(' ', '_');
 			String newKey = key + ".elements["+ (++index) + "]" ;
-			AmpColumnEntry item = null;
-			try {
-				item = new AmpColumnEntry(newKey + ".select", TranslatorWorker.translateText(field,request), newPath);
-			} catch (WorkerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			AmpColumnEntry item = new AmpColumnEntry(newKey + ".select", TranslatorWorker.translateText(field), newPath);
+			
 			item.setMandatory(false);
 			item.setSelect(true);
 			retValue.getList().add(item);
@@ -266,7 +254,7 @@ public class ExportHelper {
 		String translatedValue;
 		try {
 			translatedValue = TranslatorWorker.getInstance(genKey).
-									translateFromTree(genKey, site.getId().longValue(), request.getLocale().getLanguage(), 
+									translateFromTree(genKey, site, request.getLocale().getLanguage(), 
 											value, TranslatorWorker.TRNTYPE_LOCAL, null,session.getServletContext());
 			return translatedValue;
 		} catch (WorkerException e) {
@@ -275,16 +263,15 @@ public class ExportHelper {
 		return "";
 	}
 	
-	public static List<Message> getTranslations(String key, String body, String siteId) throws AmpExportException{
+	public static List<Message> getTranslations(String key, String body, Long siteId) throws AmpExportException{
 
 		List<Message> retValue = new ArrayList<Message>();
-		TranslatorWorker tw = new TranslatorWorker();
 		try{
 			if (key != null && !key.isEmpty()){
-				retValue = (List<Message>)tw.getAllTranslationsOfKey(key, siteId);
+				retValue = (List<Message>)TranslatorWorker.getAllTranslationsOfKey(key, siteId);
 			}
 			if (body != null && !body.isEmpty()){
-				retValue = (List<Message>)tw.getAllTranslationOfBody(body, siteId);
+				retValue = (List<Message>)TranslatorWorker.getAllTranslationOfBody(body, siteId);
 			}
 		} catch (WorkerException ex){
 			throw new AmpExportException(ex, AmpExportException.ACTIVITY_TRANSLATION);

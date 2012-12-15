@@ -15,7 +15,7 @@ public class ChartOption {
 	private boolean createMap;
 	private String title;
     private String langCode;
-    private String siteId;
+    private Long siteId;
     private String url;
 	private Boolean monochrome ;
 
@@ -35,11 +35,11 @@ public class ChartOption {
         this.langCode = langCode;
     }
 
-    public String getSiteId() {
+    public Long getSiteId() {
         return siteId;
     }
 
-    public void setSiteId(String siteId) {
+    public void setSiteId(Long siteId) {
         this.siteId = siteId;
     }
 

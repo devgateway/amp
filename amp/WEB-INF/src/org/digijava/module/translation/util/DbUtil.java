@@ -140,8 +140,8 @@ public class DbUtil {
 					Message.class.getName() +
 			" msg where msg.siteId = :siteId and msg.locale = :sourceLang and msg.key like '%:%'");
 
-			q.setParameter("siteId", siteId.toString(), Hibernate.STRING);
-			q.setParameter("sourceLang", sourceLang, Hibernate.STRING);
+			q.setString("siteId", siteId.toString());
+			q.setString("sourceLang", sourceLang);
 
 			List keyList = q.list();
 
@@ -288,7 +288,7 @@ public class DbUtil {
 	DgException {
 		try {
 			return TranslatorWorker.getInstance(key).getByKey(key, langCode,
-					siteId.toString());
+					siteId);
 		} catch (WorkerException ex) {
 			throw new DgException(ex);
 		}
@@ -350,10 +350,9 @@ public class DbUtil {
 			logger.debug("Query:" + queryString);
 
 			Query q = session.createQuery(queryString);
-			q.setParameter("siteId", siteId.toString(), Hibernate.STRING);
+			q.setString("siteId", siteId.toString());
 			if (langCode != null) {
-				q.setParameter("langCode", langCode,
-						Hibernate.STRING);
+				q.setString("langCode", langCode);
 			}
 			q.setFirstResult(firstResult);
 			q.setMaxResults(maxResult);
@@ -423,10 +422,9 @@ public class DbUtil {
 			logger.debug("Query:" + queryString);
 
 			Query q = session.createQuery(queryString);
-			q.setParameter("siteId", siteId.toString(), Hibernate.STRING);
+			q.setString("siteId", siteId.toString());
 			if (langCode != null) {
-				q.setParameter("langCode", langCode,
-						Hibernate.STRING);
+				q.setString("langCode", langCode);
 			}
 			q.setFirstResult(firstResult);
 			q.setMaxResults(maxResult);
@@ -495,9 +493,9 @@ public class DbUtil {
 			logger.debug("Query:" + queryString);
 
 			Query q = session.createQuery(queryString);
-			q.setParameter("siteId", siteId.toString(), Hibernate.STRING);
+			q.setString("siteId", siteId.toString());
 			if (langCode != null) {
-				q.setParameter("langCode", langCode, Hibernate.STRING);
+				q.setString("langCode", langCode);
 			}
 			q.setFirstResult(firstResult);
 			q.setMaxResults(maxResult);

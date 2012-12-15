@@ -103,12 +103,11 @@ public class ShowEditText
 
             if ( (key != null) && (currentLang != null)) {
                 //get editor
-                editor = DbUtil.getEditor(site.getSiteId(),
+                editor = DbUtil.getEditor(site,
                         key, currentLang);
 
                 //get editor list for other languages
-                dbEditorList = DbUtil.getEditorList(moduleInstance.getSite().
-                        getSiteId(), key, currentLang);
+                dbEditorList = DbUtil.getEditorList(moduleInstance.getSite(), key, currentLang);
 /////////////////////////////////////
                 if(dbEditorList.isEmpty() )
                 	dbEditorList = null;
@@ -116,7 +115,7 @@ public class ShowEditText
                 if (editor == null) { //create editor
                     Editor editorKey = new Editor();
                     editorKey.setEditorKey(key);
-                    editorKey.setSiteId(site.getSiteId());
+                    editorKey.setSite(site);
                     editorKey.setLanguage(SiteUtils.getDefaultLanguages(site).getCode());
                     AbstractCache cache = DigiCacheManager.getInstance().getCache(Constants.TAG_BODY_CACHE);
                     editor = (Editor)cache.get(editorKey);

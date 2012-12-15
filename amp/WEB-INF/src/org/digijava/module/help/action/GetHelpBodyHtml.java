@@ -11,6 +11,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.DbUtil;
@@ -39,7 +40,7 @@ public class GetHelpBodyHtml extends Action {
 		//Load topic by ID
 		HelpTopic topic = HelpUtil.getHelpTopic(topicId);
 		//get current site
-		String siteId = RequestUtils.getSite(request).getSiteId();
+		Site site = RequestUtils.getSite(request);
 		//get current language
 		String language = RequestUtils.getNavigationLanguage(request).getCode();
 		//get editor key
@@ -51,7 +52,7 @@ public class GetHelpBodyHtml extends Action {
 			GlossaryUtil.createOrUpdateGlossaryTopic(topic, request);
 		}
 		//get body for help topic
-		String body = DbUtil.getEditorBodyEmptyInclude(siteId, editorKey, language);
+		String body = DbUtil.getEditorBodyEmptyInclude(site, editorKey, language);
 		if (body==null){
 			body="No text. Please edit and enter text.";
 			Editor editor = new Editor();
@@ -59,7 +60,7 @@ public class GetHelpBodyHtml extends Action {
 			editor.setEditorKey(editorKey);
 			editor.setLanguage(language);
 			editor.setLastModDate(new Date());
-			editor.setSiteId(siteId);
+			editor.setSite(site);
 			editor.setTitle(editorKey);
 			editor.setUser(RequestUtils.getUser(request));
 			DbUtil.saveEditor(editor);

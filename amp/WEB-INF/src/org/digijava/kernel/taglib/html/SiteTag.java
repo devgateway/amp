@@ -34,6 +34,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 
 /**
@@ -71,17 +72,12 @@ public class SiteTag
 
 
         if (getSiteId() != null && getSiteId().trim().length() > 0) {
-            try {
-                site = SiteUtils.getSite(getSiteId());
-                if( site != null ) {
-                    siteTag = DgUtil.getSiteUrl(site, request);
-                } else {
-                    siteTag = "Could not determine site";
-                }
-            }
-            catch (DgException ex) {
-                logger.warn("Could not get Site from Database",ex);
-            }
+             site = SiteCache.lookupByName(getSiteId());
+             if( site != null ) {
+                  siteTag = DgUtil.getSiteUrl(site, request);
+              } else {
+                  siteTag = "Could not determine site";
+              }
         } else {
             //-- Get current Site object from request
             site = RequestUtils.getSite(request);

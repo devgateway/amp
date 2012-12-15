@@ -955,7 +955,7 @@ public class ProjectFicheExport extends Action {
 	 * @throws EditorException 
 	 */
 	private static String getEditorBody(Site site,String key,  Locale navLang) throws EditorException{
-		String result = org.digijava.module.editor.util.DbUtil.getEditorBodyFiltered(site.getSiteId(), key, navLang.getCode());
+		String result = org.digijava.module.editor.util.DbUtil.getEditorBodyFiltered(site, key, navLang.getCode());
 		return result;
 	}
 }

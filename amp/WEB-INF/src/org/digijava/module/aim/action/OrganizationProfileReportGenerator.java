@@ -260,8 +260,7 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 				.split("&selectedColumns=");
 		orgProfileForm.setSelectedColumns(selectedColumns);
 		HashMap<String, DonorReportHelper> map = orgProfileForm.getMap();
-		String siteId = RequestUtils.getSiteDomain(request).getSite().getId()
-				.toString();
+		Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		List<AmpOrganisation> filteredOrganizations = DbUtil
 				.getAmpOrganisations(orgProfileForm.getSelectedOrgId(),
@@ -336,7 +335,7 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 		return mapping.findForward("showReport");
 	}
 
-	public void fillValues(String siteId, String locale,
+	public void fillValues(Long siteId, String locale,
 			OrgProfileReportHelper reportHelper,
 			List<ValueTranslatabePair> values) throws WorkerException {
 		if (values != null) {

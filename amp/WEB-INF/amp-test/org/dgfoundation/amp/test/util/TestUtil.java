@@ -39,7 +39,7 @@ public class TestUtil {
 	 */
 	public static void setSiteDomain(HttpServletRequest request) throws DgException {
 		// AMP usually is the site #3
-		Site s = SiteUtils.getSite(3L);
+		Site s = SiteCache.lookupByName(3L);
 		SiteDomain sd = new SiteDomain();
 		sd.setSite(s);
 		request.setAttribute(Constants.CURRENT_SITE, sd);

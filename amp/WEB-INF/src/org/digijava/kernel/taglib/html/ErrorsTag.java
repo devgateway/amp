@@ -206,17 +206,17 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 					msg.setKey(TranslatorWorker.generateTrnKey(body));
 					msg.setMessage(body);
 					String errorMsg = body;
-					msg.setSiteId(site.getId().toString());
+					msg.setSite(site);
 					msg.setLocale(currentLocale.getCode().trim());
 	                //msg.setLocale("en");
-                        Message message=TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId().toString());
+                        Message message=TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId());
                         if (!msg.getLocale().equals("en")) {
-                        Message messageEn = TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), "en", site.getId().toString());
+                        Message messageEn = TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), "en", site.getId());
                         if (messageEn == null) {
                             messageEn = new Message();
                             messageEn.setKey(msg.getKey());
                             messageEn.setMessage(body);
-                            messageEn.setSiteId(site.getId().toString());
+                            messageEn.setSite(site);
                             messageEn.setLocale("en");
                             TranslatorWorker.getInstance(msg.getKey()).save(messageEn);
                             LuceneWorker.addItemToIndex(messageEn, context, "en");

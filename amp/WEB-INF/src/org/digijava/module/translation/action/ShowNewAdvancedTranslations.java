@@ -106,7 +106,7 @@ public class ShowNewAdvancedTranslations extends Action{
 			//Search by key which is generated from input text. this will show exact match only.
 			String searchKey = TranslatorWorker.generateTrnKey(trnForm.getSearchTerm());
 			logger.debug("Searching for "+trnForm.getSearchTerm()+", key generated is "+searchKey+"...");
-			Collection<Message> results = TranslatorWorker.getAllTranslationsOfKey(searchKey, site.getId().toString());
+			Collection<Message> results = TranslatorWorker.getAllTranslationsOfKey(searchKey, site.getId());
 			Collection<MessageGroup> groups = TrnUtil.groupByKey(results);
 			List<MessageGroup> groupsList = new ArrayList<MessageGroup>(groups);
 			trnForm.setResultList(groupsList);
@@ -190,12 +190,12 @@ public class ShowNewAdvancedTranslations extends Action{
 				trnForm.setResultList(sortedGroups);
 			}
 		}else{
-				List<String> keys=TranslatorWorker.getAllTranslationsKeys(site.getId().toString());
+				List<String> keys=TranslatorWorker.getAllTranslationsKeys(site.getId());
 				stopItemNo=(keys.size()<stopItemNo)?keys.size()-1:stopItemNo;
 				List<String> currentPageKeys=keys.subList(startItemNo,stopItemNo);
 				Collection<Message> results=new ArrayList<Message>();
 				for(String key :currentPageKeys){
-					results.addAll(TranslatorWorker.getAllTranslationsOfKey(key, site.getId().toString()));
+					results.addAll(TranslatorWorker.getAllTranslationsOfKey(key, site.getId()));
 				}
 				Collection<MessageGroup> groups = TrnUtil.groupByKey(results);
 				List<MessageGroup> groupsList = new ArrayList<MessageGroup>(groups);

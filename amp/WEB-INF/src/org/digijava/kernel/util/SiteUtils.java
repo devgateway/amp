@@ -133,13 +133,33 @@ public class SiteUtils {
         return instances;
     }
 
+    public static Site getGlobalSite()
+    {
+    	return getDefaultSite();
+    }
+    
+    private static Site ampSite;
+    
+    public static Site getDefaultSite()
+    {
+    	try
+    	{
+    		if (ampSite == null)
+    			ampSite = getSiteByName("amp");    		
+    	}
+    	catch(DgException ex)
+    	{
+    		logger.error(ex);
+    	}
+		return ampSite;
+    }
     /**
      * Get <code>Site</code> object for the given saite id
      * @param siteId site identity (string type)
      * @return Site if found. null - if not
      * @throws DgException If error occurs
      */
-    public static Site getSite(String siteId) throws DgException {
+    private static Site getSiteByName(String siteName) throws DgException {
         Site site = null;
         Session session = null;
         try {
@@ -147,7 +167,7 @@ public class SiteUtils {
             Query query = session.createQuery("from " +
                                               Site.class.getName() +
                                               " s where s.siteId=?");
-            query.setParameter(0, siteId);
+            query.setParameter(0, siteName);
             query.setCacheable(true);
             query.setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION);
 
@@ -358,7 +378,7 @@ public class SiteUtils {
      * @return Long site identity
      * @throws DgException if error occurs
      */
-    public static Long getNumericSiteId(String siteId) throws DgException {
+    public static Long getNumericSiteId(String siteName) throws DgException {
         Session session = null;
         try {
             session = PersistenceManager.getSession();
@@ -367,7 +387,7 @@ public class SiteUtils {
                                           " s, where (s.siteId=:siteId)");
             q.setCacheable(true);
             q.setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION);
-            q.setParameter("siteId", siteId, Hibernate.STRING);
+            q.setString("siteId", siteName);
 
             List result = q.list();
             if (result.size() != 0) {

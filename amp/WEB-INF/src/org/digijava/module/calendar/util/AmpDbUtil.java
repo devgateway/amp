@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
@@ -164,7 +165,7 @@ public class AmpDbUtil {
       return null;
     }
   }
-  public static AmpCalendar getAmpCalendar(Long ampCalendarId,String instanceId, String siteId) {
+  public static AmpCalendar getAmpCalendar(Long ampCalendarId,String instanceId, Long siteId) {
     AmpCalendar ampCalendar = getAmpCalendar(ampCalendarId);  
     Calendar calendar = ampCalendar != null ?
         ampCalendar.getCalendarPK().getCalendar() : null;
@@ -172,8 +173,9 @@ public class AmpDbUtil {
         calendar.getSiteId() == null) {
       return null;
     }
+    String siteName = SiteCache.getInstance().getSite(siteId).getSiteId();
     if (calendar.getInstanceId().equals(instanceId) &&
-        calendar.getSiteId().equals(siteId)) {
+        calendar.getSiteId().equals(siteName)) {
       return ampCalendar;
     }
     else {

@@ -221,7 +221,7 @@ public final class ARUtil {
 		// the siteid and locale are set for translation purposes
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		String siteId = site.getId().toString();
+		Long siteId = site.getId();
 		String locale = navigationLanguage.getCode();
 
 		r.setSiteId(siteId);

@@ -936,9 +936,7 @@ public class EditOrganisation extends DispatchAction {
        String[] orgContsIds=editForm.getPrimaryOrgContIds();
 
         if(orgContsIds!=null && orgContsIds.length>1){ //more then one primary contact is not allowed
-    		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-    		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-			errors.add("invalidOrgCont",new ActionMessage("error.aim.addOrganization.invalidOrgCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact",locale,siteId)));
+			errors.add("invalidOrgCont",new ActionMessage("error.aim.addOrganization.invalidOrgCont", TranslatorWorker.translateText("Must Be One Primary Donor Contact")));
 
 		}
       

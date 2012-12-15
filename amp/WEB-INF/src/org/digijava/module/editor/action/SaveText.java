@@ -73,12 +73,12 @@ public class SaveText
         }
 
         boolean exists = true;
-        Editor editor = DbUtil.getEditor(site.getSiteId(), formBean.getKey(),
+        Editor editor = DbUtil.getEditor(site, formBean.getKey(),
                                      formBean.getLang());
         if (editor == null || !editor.getLanguage().equals(formBean.getLang())) {
             editor = new Editor();
             exists = false;
-            editor.setSiteId(site.getSiteId());
+            editor.setSite(site);
             editor.setEditorKey(formBean.getKey());
             editor.setLanguage(formBean.getLang());
         }

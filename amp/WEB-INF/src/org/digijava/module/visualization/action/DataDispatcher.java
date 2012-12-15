@@ -83,8 +83,8 @@ public class DataDispatcher extends DispatchAction {
 		String trnStep0, trnStep8;
 		trnStep0 = trnStep8 = "";
 		try{
-			trnStep0 = TranslatorWorker.translateText("Initializing Data Collection", request);
-			trnStep8 = TranslatorWorker.translateText("Step 10/10: Preparing to refresh charts", request);
+			trnStep0 = TranslatorWorker.translateText("Initializing Data Collection");
+			trnStep8 = TranslatorWorker.translateText("Step 10/10: Preparing to refresh charts");
 		}
 		catch(Exception e){
 			logger.error("Couldn't retrieve translation for progress steps");
@@ -531,9 +531,6 @@ public class DataDispatcher extends DispatchAction {
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
 
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-
         VisualizationForm visualizationForm = (VisualizationForm) form;
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -548,7 +545,7 @@ public class DataDispatcher extends DispatchAction {
 		if(request.getParameter("donut") != null)
 			donut = Boolean.parseBoolean(request.getParameter("donut"));
 
-		String othersTitle = TranslatorWorker.translateText("Other", locale, siteId);
+		String othersTitle = TranslatorWorker.translateText("Other");
         
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
@@ -622,7 +619,7 @@ public class DataDispatcher extends DispatchAction {
 	        
 	        StringBuffer xmlString = null;
 	        StringBuffer csvString = null;
-	        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+	        String headingFY = TranslatorWorker.translateText("FY");
 			if(format != null && format.equals("xml")){
 				StringBuffer yearLabels = new StringBuffer();
 				for (int i = startDate.getYear(); i <= endDate.getYear(); i++) {
@@ -688,9 +685,9 @@ public class DataDispatcher extends DispatchAction {
 	            list = new LinkedList(map.entrySet());
 				Iterator it = list.iterator();
 				int index = 0;
-	    		csvString.append("\""+TranslatorWorker.translateText("Sector Name", locale, siteId)+"\"");
+	    		csvString.append("\""+TranslatorWorker.translateText("Sector Name")+"\"");
 	    		csvString.append(",");
-	    		csvString.append("\""+TranslatorWorker.translateText("Amount", locale, siteId)+"\"");
+	    		csvString.append("\""+TranslatorWorker.translateText("Amount")+"\"");
 	    		csvString.append("\n");
 	            BigDecimal othersValue = BigDecimal.ZERO;
 	            // Take the top 5
@@ -900,9 +897,6 @@ public class DataDispatcher extends DispatchAction {
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
 
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-
         VisualizationForm visualizationForm = (VisualizationForm) form;
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -917,7 +911,7 @@ public class DataDispatcher extends DispatchAction {
 		if(request.getParameter("donut") != null)
 			donut = Boolean.parseBoolean(request.getParameter("donut"));
 
-		String othersTitle = TranslatorWorker.translateText("Other", locale, siteId);
+		String othersTitle = TranslatorWorker.translateText("Other");
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
 		if(divide){
@@ -984,7 +978,7 @@ public class DataDispatcher extends DispatchAction {
 	        
 	        StringBuffer xmlString = null;
 	        StringBuffer csvString = null;
-	        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+	        String headingFY = TranslatorWorker.translateText("FY");
 			if(format != null && format.equals("xml")){
 				StringBuffer yearLabels = new StringBuffer();
 				for (int i = startDate.getYear(); i <= endDate.getYear(); i++) {
@@ -1050,9 +1044,9 @@ public class DataDispatcher extends DispatchAction {
 	            list = new LinkedList(map.entrySet());
 				Iterator it = list.iterator();
 				int index = 0;
-	    		csvString.append("\""+TranslatorWorker.translateText("Program Name", locale, siteId)+"\"");
+	    		csvString.append("\""+TranslatorWorker.translateText("Program Name")+"\"");
 	    		csvString.append(",");
-	    		csvString.append("\""+TranslatorWorker.translateText("Amount", locale, siteId)+"\"");
+	    		csvString.append("\""+TranslatorWorker.translateText("Amount")+"\"");
 	    		csvString.append("\n");
 	            BigDecimal othersValue = BigDecimal.ZERO;
 	            // Take the top 5
@@ -1257,9 +1251,6 @@ public class DataDispatcher extends DispatchAction {
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
 
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-
 		VisualizationForm visualizationForm = (VisualizationForm) form;
 
 		DashboardFilter filter = visualizationForm.getFilter();
@@ -1340,7 +1331,7 @@ public class DataDispatcher extends DispatchAction {
             
             StringBuffer xmlString = null;
             StringBuffer csvString = null;
-	        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+	        String headingFY = TranslatorWorker.translateText("FY");
     		if(format != null && format.equals("xml")){
 				StringBuffer yearLabels = new StringBuffer();
 				for (int i = startDate.getYear(); i <= endDate.getYear(); i++) {
@@ -1411,9 +1402,9 @@ public class DataDispatcher extends DispatchAction {
                 list = new LinkedList(map.entrySet());
 				Iterator it = list.iterator();
 				int index = 0;
-        		csvString.append("\""+TranslatorWorker.translateText("Organization Name", locale, siteId)+"\"");
+        		csvString.append("\""+TranslatorWorker.translateText("Organization Name")+"\"");
         		csvString.append(",");
-        		csvString.append("\""+TranslatorWorker.translateText("Amount", locale, siteId)+"\"");
+        		csvString.append("\""+TranslatorWorker.translateText("Amount")+"\"");
         		csvString.append("\n");
                 BigDecimal othersValue = BigDecimal.ZERO;
 
@@ -1596,8 +1587,6 @@ public class DataDispatcher extends DispatchAction {
 		
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
-                String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -1644,7 +1633,7 @@ public class DataDispatcher extends DispatchAction {
         
 		startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear.intValue());
         endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
-        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+        String headingFY = TranslatorWorker.translateText("FY");
 
         
         BigDecimal amtTotal = BigDecimal.ZERO;
@@ -1688,7 +1677,7 @@ public class DataDispatcher extends DispatchAction {
 		                }
 						BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
 		                if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue()) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue()) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
 				} else {
@@ -1719,12 +1708,12 @@ public class DataDispatcher extends DispatchAction {
 			                    funding = DbUtil.getFunding(filter, startDate, endDate, null, value.getId(), filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 			                }
 			                hasValues = true;
-							xmlString.append("<dataField category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
-							aidTypeData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+							xmlString.append("<dataField category=\"" +TranslatorWorker.translateText(value.getValue()) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+							aidTypeData += ">" + TranslatorWorker.translateText(value.getValue()) + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 						}
 						else
 						{
-							aidTypeData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+							aidTypeData += ">" + TranslatorWorker.translateText(value.getValue()) + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 						}
 					}
 					if (!hasValues){
@@ -1755,14 +1744,14 @@ public class DataDispatcher extends DispatchAction {
         
         
         StringBuffer csvString = new StringBuffer();
-        String text = TranslatorWorker.translateText("Year",locale, siteId);
+        String text = TranslatorWorker.translateText("Year");
 
 		csvString.append("\"" + text + "\"");
 		csvString.append(",");
 		Iterator<AmpCategoryValue> it = categoryValues.iterator();
 		while (it.hasNext()){
 			AmpCategoryValue value = it.next();
-            String title = TranslatorWorker.translateText(value.getValue(),locale, siteId);
+            String title = TranslatorWorker.translateText(value.getValue());
 			csvString.append("\"");
 			csvString.append(title);
 			csvString.append("#");
@@ -1831,8 +1820,6 @@ public class DataDispatcher extends DispatchAction {
 		
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
-                String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -1876,7 +1863,7 @@ public class DataDispatcher extends DispatchAction {
         
 		startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear.intValue());
         endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
-        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+        String headingFY = TranslatorWorker.translateText("FY");
 
         
         BigDecimal amtTotal = BigDecimal.ZERO;
@@ -1920,12 +1907,12 @@ public class DataDispatcher extends DispatchAction {
 						newFilter.setSelCVIds(selCVIds);
 	                    funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 		                hasValues = true;
-						xmlString.append("<dataField category=\"" +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
-						budgetData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+						xmlString.append("<dataField category=\"" +TranslatorWorker.translateText(value.getValue()) + "\" id=\"" + value.getId() + "\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+						budgetData += ">" + TranslatorWorker.translateText(value.getValue()) + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 					}
 					else
 					{
-						budgetData += ">" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+						budgetData += ">" + TranslatorWorker.translateText(value.getValue()) + ">" + BigDecimal.ZERO.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 					}
 				}
 				filter.setBudgetCVIds(budgetCVIds);
@@ -1933,8 +1920,8 @@ public class DataDispatcher extends DispatchAction {
 				Long[] selCVIds = {-1l};
 				newFilter.setSelCVIds(selCVIds);
 				DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-				xmlString.append("<dataField category=\"" +TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" id=\"-1\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
-				budgetData += ">" + TranslatorWorker.translateText("Unallocated",locale, siteId) + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				xmlString.append("<dataField category=\"" +TranslatorWorker.translateText("Unallocated") + "\" id=\"-1\" amount=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				budgetData += ">" + TranslatorWorker.translateText("Unallocated") + ">" + funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				if (!hasValues){
 					xmlString.append("<dataField category=\"Category\" id=\"0\" amount=\"0.00\" year=\"" + yearName + "\"/>\n");
 				}
@@ -1968,7 +1955,7 @@ public class DataDispatcher extends DispatchAction {
 		                funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 						BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
 		                if(percentage.compareTo(new BigDecimal(1)) == 1){
-	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue(),locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue()) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue()) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
 					filter.setBudgetCVIds(budgetCVIds);
@@ -1978,7 +1965,7 @@ public class DataDispatcher extends DispatchAction {
 					DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 					BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
 	                if(percentage.compareTo(new BigDecimal(1)) == 1){
-                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" id=\"-1\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText("Unallocated") + "\" id=\"-1\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText("Unallocated") + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
                 	}
 				} else {
 					xmlString.append("<dataField name=\"\">\n");
@@ -2002,14 +1989,14 @@ public class DataDispatcher extends DispatchAction {
         
         
         StringBuffer csvString = new StringBuffer();
-        String text = TranslatorWorker.translateText("Year",locale, siteId);
+        String text = TranslatorWorker.translateText("Year");
 
 		csvString.append("\"" + text + "\"");
 		csvString.append(",");
 		Iterator<AmpCategoryValue> it = categoryValues.iterator();
 		while (it.hasNext()){
 			AmpCategoryValue value = it.next();
-            String title = TranslatorWorker.translateText(value.getValue(),locale, siteId);
+            String title = TranslatorWorker.translateText(value.getValue());
 			csvString.append("\"");
 			csvString.append(title);
 			csvString.append("#");
@@ -2017,7 +2004,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("\"");
 			csvString.append(",");
 		}
-		String title = TranslatorWorker.translateText("Unallocated",locale, siteId);
+		String title = TranslatorWorker.translateText("Unallocated");
 		csvString.append("\"");
 		csvString.append(title);
 		csvString.append("#");
@@ -2080,8 +2067,6 @@ public class DataDispatcher extends DispatchAction {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
-		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -2125,8 +2110,8 @@ public class DataDispatcher extends DispatchAction {
 
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
 
-		String plannedTitle = TranslatorWorker.translateText("Planned", locale, siteId);
-        String actualTitle = TranslatorWorker.translateText("Actual", locale, siteId); ;
+		String plannedTitle = TranslatorWorker.translateText("Planned");
+        String actualTitle = TranslatorWorker.translateText("Actual"); ;
 
 		if(format != null && format.equals("xml")){
 			StringBuffer xmlString = new StringBuffer();
@@ -2135,7 +2120,7 @@ public class DataDispatcher extends DispatchAction {
             for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-		        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+		        String headingFY = TranslatorWorker.translateText("FY");
 				String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 				xmlString.append("<year name=\"" + yearName + "\">\n");
 				aidPredData += "<" + yearName;
@@ -2166,7 +2151,7 @@ public class DataDispatcher extends DispatchAction {
         
         
         StringBuffer csvString = new StringBuffer();
-        String text = TranslatorWorker.translateText("Year",locale, siteId);
+        String text = TranslatorWorker.translateText("Year");
 
 		csvString.append("\"" + text + "\"");
 		csvString.append(",");
@@ -2184,7 +2169,7 @@ public class DataDispatcher extends DispatchAction {
             // apply calendar filter
             Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
             Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-	        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+	        String headingFY = TranslatorWorker.translateText("FY");
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			csvString.append(yearName);
 			csvString.append(",");
@@ -2228,8 +2213,6 @@ public class DataDispatcher extends DispatchAction {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
-		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -2273,8 +2256,8 @@ public class DataDispatcher extends DispatchAction {
 
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
 
-		String plannedTitle = TranslatorWorker.translateText("Planned", locale, siteId);
-        String actualTitle = TranslatorWorker.translateText("Actual", locale, siteId); ;
+		String plannedTitle = TranslatorWorker.translateText("Planned");
+        String actualTitle = TranslatorWorker.translateText("Actual"); ;
 
 		if(format != null && format.equals("xml")){
 			StringBuffer xmlString = new StringBuffer();
@@ -2284,7 +2267,7 @@ public class DataDispatcher extends DispatchAction {
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, endYear.intValue());
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
 				Calendar cal = Calendar.getInstance();  
-				String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+				String headingFY = TranslatorWorker.translateText("FY");
 				String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 				DecimalWraper fundingPlanned = null;
 				DecimalWraper fundingActual = null;
@@ -2365,7 +2348,7 @@ public class DataDispatcher extends DispatchAction {
         
         
         StringBuffer csvString = new StringBuffer();
-        String text = TranslatorWorker.translateText("Period",locale, siteId);
+        String text = TranslatorWorker.translateText("Period");
 
 		csvString.append("\"" + text + "\"");
 		csvString.append(",");
@@ -2383,7 +2366,7 @@ public class DataDispatcher extends DispatchAction {
             // apply calendar filter
             Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, endYear.intValue());
             Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
-	        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+	        String headingFY = TranslatorWorker.translateText("FY");
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			
 			Calendar cal = Calendar.getInstance();  
@@ -2482,8 +2465,6 @@ public class DataDispatcher extends DispatchAction {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
-		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -2524,10 +2505,10 @@ public class DataDispatcher extends DispatchAction {
 		}
 
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
-		String pledgesTranslatedTitle = TranslatorWorker.translateText("Pledges", locale, siteId) ;
-		String comTranslatedTitle = TranslatorWorker.translateText("Commitments", locale, siteId) ;
-		String disbTranslatedTitle = TranslatorWorker.translateText("Disbursements", locale, siteId) ;
-		String expTranslatedTitle = TranslatorWorker.translateText("Expenditures", locale, siteId) ;;
+		String pledgesTranslatedTitle = TranslatorWorker.translateText("Pledges") ;
+		String comTranslatedTitle = TranslatorWorker.translateText("Commitments") ;
+		String disbTranslatedTitle = TranslatorWorker.translateText("Disbursements") ;
+		String expTranslatedTitle = TranslatorWorker.translateText("Expenditures");
 
 		Double totalPledges;
 		BigDecimal totalCommitments, totalDisbursements, totalExpenditures;
@@ -2540,7 +2521,7 @@ public class DataDispatcher extends DispatchAction {
 		boolean pledgesVisible = FeaturesUtil.isVisibleModule("Pledges", ampContext);
 
 		StringBuffer csvString = new StringBuffer();
-        String text = TranslatorWorker.translateText("Year",locale, siteId);
+        String text = TranslatorWorker.translateText("Year");
 
 		csvString.append("\"" + text + "\"");
 		if (filter.isPledgeVisible() && pledgesVisible) {
@@ -2577,7 +2558,7 @@ public class DataDispatcher extends DispatchAction {
 				Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 				Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 				
-		        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+		        String headingFY = TranslatorWorker.translateText("FY");
 				String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 				xmlString.append("<year name=\"" + yearName + "\">\n");
 				fundingData += "<" + yearName;
@@ -2586,7 +2567,7 @@ public class DataDispatcher extends DispatchAction {
 							filter.getOrgGroupIds(), startDate, endDate,
 							currCode);
 					xmlString
-					.append("<dataField category=\""+TranslatorWorker.translateText("Pledges", locale, siteId)+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
+					.append("<dataField category=\""+TranslatorWorker.translateText("Pledges")+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + pledgesTranslatedTitle + ">"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
 				if (filter.isCommitmentsVisible()) {
@@ -2645,7 +2626,7 @@ public class DataDispatcher extends DispatchAction {
 			// apply calendar filter
 			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-	        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+	        String headingFY = TranslatorWorker.translateText("FY");
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			csvString.append(yearName);
 			//csvString.append(",");
@@ -2796,8 +2777,6 @@ public class DataDispatcher extends DispatchAction {
 			
 		} else if (parentId != null && objectType != null && (objectType.equals("FiscalCalendar"))){
 			Long calendarId = Long.parseLong(parentId);
-			String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-			String locale = RequestUtils.getNavigationLanguage(request).getCode();
 			int yearFrom = Integer.parseInt(FeaturesUtil
 					.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
 			int countYear = Integer.parseInt(FeaturesUtil
@@ -2809,12 +2788,7 @@ public class DataDispatcher extends DispatchAction {
 			for (int i = yearFrom; i <= maxYear; i++) {
 				Date startDate = DashboardUtil.getStartDate(calendarId, i);
 				Date endDate = DashboardUtil.getEndDate(calendarId, i);
-				String headingFY;
-				try {
-					headingFY = TranslatorWorker.translateText("FY", locale, siteId);
-				} catch (WorkerException e) {
-					headingFY = "FY";
-				}
+				String headingFY = TranslatorWorker.translateText("FY");
 				String yearName = DashboardUtil.getYearName(headingFY, calendarId, startDate, endDate);
 				JSONObject child = new JSONObject();
 				child.put("value", i);
@@ -2861,9 +2835,7 @@ public class DataDispatcher extends DispatchAction {
 			while(it.hasNext()){
 				AmpDashboardGraph dashboardGraph = it.next();
 				child.put("ID", dashboardGraph.getId());
-				String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-				String locale = RequestUtils.getNavigationLanguage(request).getCode();
-				String graphName = TranslatorWorker.translateText(dashboardGraph.getGraph().getName(), locale, siteId);
+				String graphName = TranslatorWorker.translateText(dashboardGraph.getGraph().getName());
 				child.put("name", graphName);
 				children.add(child);
 			}
@@ -2930,9 +2902,6 @@ public class DataDispatcher extends DispatchAction {
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
 
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-
 		VisualizationForm visualizationForm = (VisualizationForm) form;
 		DashboardFilter filter = visualizationForm.getFilter();
 		
@@ -2969,7 +2938,7 @@ public class DataDispatcher extends DispatchAction {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), true);
 
-		String othersTitle = TranslatorWorker.translateText("Other", locale, siteId);
+		String othersTitle = TranslatorWorker.translateText("Other");
         
         BigDecimal regionTotal = BigDecimal.ZERO;
         String currCode = "USD";
@@ -3020,7 +2989,7 @@ public class DataDispatcher extends DispatchAction {
 	        
 	        StringBuffer xmlString = null;
 	        StringBuffer csvString = null;
-	        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
+	        String headingFY = TranslatorWorker.translateText("FY");
 			if(format != null && format.equals("xml")){
 				StringBuffer yearLabels = new StringBuffer();
 				for (int i = startDate.getYear(); i <= endDate.getYear(); i++) {
@@ -3085,9 +3054,9 @@ public class DataDispatcher extends DispatchAction {
 	            list = new LinkedList(map.entrySet());
 				Iterator it = list.iterator();
 				int index = 0;
-	    		csvString.append("\""+TranslatorWorker.translateText("Region Name", locale, siteId)+"\"");
+	    		csvString.append("\""+TranslatorWorker.translateText("Region Name")+"\"");
 	    		csvString.append(",");
-	    		csvString.append("\""+TranslatorWorker.translateText("Amount", locale, siteId)+"\"");
+	    		csvString.append("\""+TranslatorWorker.translateText("Amount")+"\"");
 	    		csvString.append("\n");
 	            BigDecimal othersValue = BigDecimal.ZERO;
 	            
@@ -3278,14 +3247,12 @@ public class DataDispatcher extends DispatchAction {
 
 		VisualizationForm visualizationForm = (VisualizationForm) form;
 		DashboardFilter filter = visualizationForm.getFilter();
-		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 
 		String format = request.getParameter("format");
 		
 		BigDecimal divideByMillionDenominator = new BigDecimal(1000000 / 
 				Math.max(1000000, FeaturesUtil.getAmountMultiplier())); // Math.max added for the future, in case "billions" appears, as we don't want to divide by zero lower down the road
-		String othersTitle = TranslatorWorker.translateText("Other", locale, siteId);
+		String othersTitle = TranslatorWorker.translateText("Other");
         
 		boolean ignore = request.getParameter("ignore") != null ? Boolean.parseBoolean(request.getParameter("ignore")) : (format != null && format.equals("xml"))? true : false;
 
@@ -3322,19 +3289,19 @@ public class DataDispatcher extends DispatchAction {
         	StringBuffer csvString = new StringBuffer();
             String odaGrowthData = "";
             Map<String, BigDecimal> map = new LinkedHashMap<String, BigDecimal>();
-            String text = TranslatorWorker.translateText("Year",locale, siteId);
+            String text = TranslatorWorker.translateText("Year");
 			csvString.append("\"" + text + "\"");
 			csvString.append(",");
 			odaGrowthData += "<"+ text +">";
-			text = TranslatorWorker.translateText("Fundings Previous Year",locale, siteId);
+			text = TranslatorWorker.translateText("Fundings Previous Year");
 			csvString.append("\"" + text + "\"");
 			csvString.append(",");
 			odaGrowthData += text + ">";
-			text = TranslatorWorker.translateText("Fundings Year",locale, siteId);
+			text = TranslatorWorker.translateText("Fundings Year");
 			csvString.append("\"" + text + "\"");
 			csvString.append(",");
 			odaGrowthData += text + ">";
-			text = TranslatorWorker.translateText("Growth percent",locale, siteId);
+			text = TranslatorWorker.translateText("Growth percent");
 			csvString.append("\"" + text + "\"");
 			csvString.append("\n");
 			odaGrowthData += text +">";
@@ -3413,18 +3380,18 @@ public class DataDispatcher extends DispatchAction {
         	StringBuffer csvString = new StringBuffer();
             String odaGrowthData = "";
             Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
-            String text = TranslatorWorker.translateText("Organization",locale, siteId);
+            String text = TranslatorWorker.translateText("Organization");
 			csvString.append("\"" + text + "\"");
 			csvString.append(",");
 			odaGrowthData += "<"+ text +">";
-			text = TranslatorWorker.translateText("Fundings Year",locale, siteId);
+			text = TranslatorWorker.translateText("Fundings Year");
 			csvString.append("\"" + text + " " + previousYear + "\"");
 			csvString.append(",");
 			odaGrowthData += text + " " + previousYear + ">";
 			csvString.append("\"" + text + " " + year + "\"");
 			csvString.append(",");
 			odaGrowthData += text + " " + year + ">";
-			text = TranslatorWorker.translateText("Growth percent",locale, siteId);
+			text = TranslatorWorker.translateText("Growth percent");
 			csvString.append("\"" + text + "\"");
 			csvString.append("\n");
 			odaGrowthData += text +">";

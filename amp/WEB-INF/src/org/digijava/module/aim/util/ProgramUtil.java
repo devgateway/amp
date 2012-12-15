@@ -1913,22 +1913,9 @@ public class ProgramUtil {
 
     
     public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
-		 //CategoryManagerUtil cat = new CategoryManagerUtil();
-		 //String noProgPresent = "aim:noProgramsPresent"; not used any more cos hash key translation
-		 Site site = RequestUtils.getSite(request);
-		 //
 		 //requirements for translation purposes
 		 TranslatorWorker translator = TranslatorWorker.getInstance();
-		 Long siteId = site.getId();
-		 String locale = RequestUtils.getNavigationLanguage(request).getCode();
-		 String translatedText = null;
-		 try {
-//			logger.info("siteID : "+siteId);
-//			logger.info("locale : "+locale);
-			translatedText = TranslatorWorker.translateText("No Programs present", locale, siteId.toString());
-		 } catch (WorkerException e) {
-			e.printStackTrace();
-		 }
+		 String translatedText = TranslatorWorker.translateText("No Programs present");
 		 if (themes == null || themes.size() == 0)
 			return "<center><b>"+translatedText+"</b></<center>";		
 		 String retVal;
@@ -1966,10 +1953,10 @@ public class ProgramUtil {
 			retVal += "   </td>";
 			retVal += "   <td class=\"progCode inside\"  width=\"45%\" nowrap=\"nowrap\">("+ org.digijava.module.aim.util.DbUtil.filter(((AmpTheme) item.getMember()).getThemeCode()) + ")</td>";
 			retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";
-			retVal += "     <a href=\"javascript:addSubProgram('5','"+theme.getAmpThemeId() +"','"+level+"','"+org.digijava.module.aim.util.DbUtil.filter(theme.getEncodeName())+"')\">"+getTrn("aim:admin:themeTree:add_sub_prog", "Add Sub Program", request)+"</a> \n";
+			retVal += "     <a href=\"javascript:addSubProgram('5','"+theme.getAmpThemeId() +"','"+level+"','"+org.digijava.module.aim.util.DbUtil.filter(theme.getEncodeName())+"')\">"+TranslatorWorker.translateText("Add Sub Program")+"</a> \n";
 			retVal += "   </td>";
 			retVal += "   <td class=\"inside\" nowrap=\"nowrap\" width=\"10%\">";
-			retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"')\">"+getTrn("aim:admin:themeTree:manage_indicators", "Manage Indicators", request)+"</a>\n";
+			retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"')\">" + TranslatorWorker.translateText("Manage Indicators") + "</a>\n";
 			retVal += "   </td>";
 			retVal += "   <td class=\"inside\" width=\"12\">";
 			retVal += "     <a href=\"/aim/themeManager.do~event=delete~themeId="+theme.getAmpThemeId()+"\" onclick=\"return deleteProgram()\"><img src=\"/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif\" border=\"0\"></a>";
@@ -1989,23 +1976,6 @@ public class ProgramUtil {
 		retVal += "</table>\n";
 		return retVal;
     }
-
-	 public static String getTrn(String key, String defResult, HttpServletRequest request) {
-		 //CategoryManagerUtil cat = new CategoryManagerUtil();
-		 //return CategoryManagerUtil.translate(key, request, defResult);
-		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
-		Long	siteId	= RequestUtils.getSite(request).getId();
-		String text = "";
-		
-		try {
-			text = TranslatorWorker.translateText(defResult, lang, siteId+"");
-		} catch (WorkerException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return defResult;
-		}
-		return text;		 
-	 }
 	 
     public static String getLevelImage(int level){
     	switch (level) {

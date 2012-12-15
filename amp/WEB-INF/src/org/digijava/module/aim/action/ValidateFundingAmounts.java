@@ -78,25 +78,25 @@ public class ValidateFundingAmounts extends Action {
         double totalActRegionalCommitments = calReg.getTotActualComm().doubleValue();
         
         if(totalActRegionalCommitments>totalActCommitments){
-        	alertNeeded+=TranslatorWorker.translateText("Sum of actual commitments entered on Regional Fudning step is greater then total actual commitments", request);
+        	alertNeeded+=TranslatorWorker.translateText("Sum of actual commitments entered on Regional Fudning step is greater then total actual commitments");
         	alertNeeded+="\n";
         }
         double totalActDisbursements = cal.getTotActualDisb().doubleValue();
         double totalActRegionalDisbursements = calReg.getTotActualDisb().doubleValue();
         if(totalActRegionalDisbursements>totalActDisbursements){
-        	alertNeeded+=TranslatorWorker.translateText("Sum of actual disbursements entered on Regional Fudning step is greater then total actual disbursements", request);
+        	alertNeeded+=TranslatorWorker.translateText("Sum of actual disbursements entered on Regional Fudning step is greater then total actual disbursements");
         	alertNeeded+="\n";
         }
         
         double totalActExpenditures = cal.getTotActualExp().doubleValue();
         double totalActRegionalExpenditures = calReg.getTotActualExp().doubleValue();
         if(totalActRegionalExpenditures>totalActExpenditures){
-        	alertNeeded+=TranslatorWorker.translateText("Sum of actual expenditures entered on Regional Fudning step is greater then total actual expenditures", request);
+        	alertNeeded+=TranslatorWorker.translateText("Sum of actual expenditures entered on Regional Funding step is greater then total actual expenditures");
         	alertNeeded+="\n";
         }
         
         if(alertNeeded.length()>0){
-        	alertNeeded+=TranslatorWorker.translateText("Are you sure you want to save activity ?", request);;
+        	alertNeeded+=TranslatorWorker.translateText("Are you sure you want to save activity ?");
         }else{
          	alertNeeded="No_Alert_Needed";
         }

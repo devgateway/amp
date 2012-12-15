@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.GlossaryForm;
@@ -34,12 +35,12 @@ public class ShowGlossary extends Action {
 		List<HelpTopic> source = new ArrayList<HelpTopic>();
 		
 		String moduleInstnce = RequestUtils.getModuleInstance(request).getInstanceName();
-		String siteId = RequestUtils.getSite(request).getSiteId();
-		String siteIdNo = RequestUtils.getSite(request).getId().toString();
+		Site site = RequestUtils.getSite(request);
+		//String siteIdNo = RequestUtils.getSite(request).getId().toString();
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		
-		source = GlossaryUtil.getAllGlosaryTopics(moduleInstnce, siteId);				//Flat list of all glossary items.
-		HelpTopicTreeNodeWorker worker = new HelpTopicTreeNodeWorker(siteIdNo,locale);	//Node worker to build tree
+		source = GlossaryUtil.getAllGlosaryTopics(moduleInstnce, site);				//Flat list of all glossary items.
+		HelpTopicTreeNodeWorker worker = new HelpTopicTreeNodeWorker(site,locale);	//Node worker to build tree
 		List<HelpTopicTreeNode> tree = AmpCollectionUtils.createTree(source, worker);	//Build tree
 		
 		glossForm.setTree(tree);

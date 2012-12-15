@@ -48,6 +48,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.ValueBean;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 
 /**
@@ -67,7 +68,7 @@ public class CompleteTranslationAction extends DispatchAction
 	 * @param request
 	 * @return
 	 */
-	private List setupForm(List sm,HttpServletRequest request){
+	private List<ValueBean> setupForm(List<TranslatorBean> sm, HttpServletRequest request){
 
 		if (logger.isDebugEnabled()) {
 			Object[] param = { "CompleteTranslationAction", "setupForm()" };
@@ -78,12 +79,9 @@ public class CompleteTranslationAction extends DispatchAction
 				null);
 		}
 
-		List message = new ArrayList();
-		for(int i=0 ; i<sm.size();i++)
+		List<ValueBean> message = new ArrayList<ValueBean>();
+		for(TranslatorBean tb:sm)
 		{
-			TranslatorBean tb = new TranslatorBean();
-
-			tb = (TranslatorBean)sm.get(i);
 			Message source = new Message();
 			Message target = new Message();
 
@@ -163,14 +161,14 @@ public class CompleteTranslationAction extends DispatchAction
 				param,
 				null);
 		}
-		String siteId = getSiteId(request);
-		String rootSiteId = getRootSiteId(request);
+		Long siteId = getSiteId(request);
+		Long rootSiteId = getRootSiteId(request);
 
 		String search = request.getParameter("search");
 		request.setAttribute("search",search);
 
 		try{
-			java.util.Set ls = new TranslatorWorker().getPrefixesForSite(siteId,rootSiteId);
+			java.util.Set<String> ls = new TranslatorWorker().getPrefixesForSite(siteId, rootSiteId);
 			request.setAttribute("list",ls);
 		}catch(WorkerException we){
 			Object[] param = { "CompleteTranslationAction" };
@@ -194,23 +192,23 @@ public class CompleteTranslationAction extends DispatchAction
 		int startFrom = 0;
 		if(request.getParameter("startFrom") != null)
 			 startFrom = new Integer(request.getParameter("startFrom")).intValue();
-		List sm = new ArrayList();
+		List<TranslatorBean> sm = new ArrayList<TranslatorBean>();
 		try{
 			if(searchTarget){
 				//search on the target text
 
 				if(request.getParameter("expired") != null && request.getParameter("expired").equals("on")){
-					sm =(ArrayList)new TranslatorWorker().searchMessageForPattern(search,siteId,rootSiteId,request.getParameter("radio_locale1"),request.getParameter("radio_locale2"),keyword,request.getParameter("radio_locale2"),true,startFrom,50);
+					sm = new TranslatorWorker().searchMessageForPattern(search,siteId,rootSiteId,request.getParameter("radio_locale1"),request.getParameter("radio_locale2"),keyword,request.getParameter("radio_locale2"),true,startFrom,50);
 				}else{
-					sm =(ArrayList)new TranslatorWorker().searchMessageForPattern(search,siteId,rootSiteId,request.getParameter("radio_locale1"),request.getParameter("radio_locale2"),keyword,request.getParameter("radio_locale2"),false,startFrom,50);
+					sm = new TranslatorWorker().searchMessageForPattern(search,siteId,rootSiteId,request.getParameter("radio_locale1"),request.getParameter("radio_locale2"),keyword,request.getParameter("radio_locale2"),false,startFrom,50);
 				}
 
 			}else{
 				//search on the source text
 				if(request.getParameter("expired") != null && request.getParameter("expired").equals("on")){
-					sm =(ArrayList)new TranslatorWorker().searchMessageForPattern(search,siteId,rootSiteId,request.getParameter("radio_locale1"),request.getParameter("radio_locale2"),keyword,request.getParameter("radio_locale1"),true,startFrom,50);
+					sm = new TranslatorWorker().searchMessageForPattern(search,siteId,rootSiteId,request.getParameter("radio_locale1"),request.getParameter("radio_locale2"),keyword,request.getParameter("radio_locale1"),true,startFrom,50);
 				}else{
-					sm =(ArrayList)new TranslatorWorker().searchMessageForPattern(search,siteId,rootSiteId,request.getParameter("radio_locale1"),request.getParameter("radio_locale2"),keyword,request.getParameter("radio_locale1"),false,startFrom,50);
+					sm = new TranslatorWorker().searchMessageForPattern(search,siteId,rootSiteId,request.getParameter("radio_locale1"),request.getParameter("radio_locale2"),keyword,request.getParameter("radio_locale1"),false,startFrom,50);
 				}
 			}
 		}catch(WorkerException we){
@@ -269,8 +267,8 @@ public class CompleteTranslationAction extends DispatchAction
 				param,
 				null);
 		}
-		String siteId = getSiteId(request);
-		String rootSiteId = getRootSiteId(request);
+		Long siteId = getSiteId(request);
+		Long rootSiteId = getRootSiteId(request);
 
 		String search = request.getParameter("search");
 		request.setAttribute("search",search);
@@ -284,14 +282,14 @@ public class CompleteTranslationAction extends DispatchAction
 			logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
 		}
 
-		List message = new ArrayList();
+		List<ValueBean> message = new ArrayList<ValueBean>();
 		String keyword = request.getParameter("keyword");
 		request.setAttribute("keyword",keyword);
 		int startFrom = 0;
 		if(request.getParameter("startFrom") != null)
 			 startFrom = new Integer(request.getParameter("startFrom")).intValue();
 
-		List sm = new ArrayList();
+		List<TranslatorBean> sm = new ArrayList<TranslatorBean>();
 		try{
 			 if(request.getParameter("expired") != null && request.getParameter("expired").equals("on")){
 				 sm = new TranslatorWorker().searchKeysForPattern(search,siteId,rootSiteId,request.getParameter("radio_locale1"),request.getParameter("radio_locale2"),keyword,true,startFrom,50);
@@ -617,8 +615,8 @@ public class CompleteTranslationAction extends DispatchAction
 				null);
 		}
 		List message = new ArrayList();
-		String siteId = getSiteId(request);
-		String rootSiteId = getRootSiteId(request);
+		Long siteId = getSiteId(request);
+		Long rootSiteId = getRootSiteId(request);
 
 		//setup languages to be shown selected
 		if(request.getParameter("radio_locale1") == null || request.getParameter("radio_locale1").equals("")){
@@ -633,12 +631,12 @@ public class CompleteTranslationAction extends DispatchAction
 			request.setAttribute("radio_locale2",request.getParameter("radio_locale2"));
 
 		}
-		List expired = new ArrayList();
+//		List expired = new ArrayList();
 		String search = request.getParameter("search");
 		request.setAttribute("search",search);
-		java.util.Set ls = null;
+		java.util.Set<String> ls = null;
 		try{
-			 ls = new TranslatorWorker().getPrefixesForSite(siteId,rootSiteId);
+			 ls = new TranslatorWorker().getPrefixesForSite(siteId, rootSiteId);
 		}catch(WorkerException we){
 			Object[] param = { "CompleteTranslationAction" };
 			logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
@@ -649,7 +647,7 @@ public class CompleteTranslationAction extends DispatchAction
 
 		try{
 
-			List sm = new ArrayList();
+			List<TranslatorBean> sm = new ArrayList<TranslatorBean>();
 			if(request.getParameter("expired") != null && request.getParameter("expired").equals("on")){
 				System.out.println("Reached here expired");
 				 sm = new TranslatorWorker().getMessagesForPrefix(search,siteId,rootSiteId,request.getAttribute("radio_locale1").toString(),request.getAttribute("radio_locale2").toString(),true,startFrom,50);
@@ -658,7 +656,7 @@ public class CompleteTranslationAction extends DispatchAction
 				 sm = new TranslatorWorker().getMessagesForPrefix(search,siteId,rootSiteId,request.getAttribute("radio_locale1").toString(),request.getAttribute("radio_locale2").toString(),false,startFrom,50);
 			}
 			System.out.println("Count " + sm.size());
-			message = setupForm(sm,request);
+			message = setupForm(sm, request);
 			request.setAttribute("No_rows",String.valueOf(sm.size()));
 		}catch(WorkerException we){
 			Object[] param = { "CompleteTranslationAction" };
@@ -683,28 +681,28 @@ public class CompleteTranslationAction extends DispatchAction
 	}
 
 
-	private String getSiteId(HttpServletRequest request){
+	private Long getSiteId(HttpServletRequest request){
 
 		if((request.getRequestURL()).indexOf("complete")>0){
 
-			return RequestUtils.getSiteDomain(request).getSite().getId().toString();
+			return RequestUtils.getSiteDomain(request).getSite().getId();
 
 		}else{
 
-			return "0";
+			return 0L;
 			}
 
 
 	}
-	private String getRootSiteId(HttpServletRequest request){
+	private Long getRootSiteId(HttpServletRequest request){
 
 		if((request.getRequestURL()).indexOf("complete")>0){
 
-			return DgUtil.getRootSite(RequestUtils.getSiteDomain(request).getSite()).getId().toString();
+			return DgUtil.getRootSite(RequestUtils.getSiteDomain(request).getSite()).getId();
 
 		}else{
 
-			return "0";
+			return 0L;
 			}
 
 
@@ -730,8 +728,8 @@ public class CompleteTranslationAction extends DispatchAction
 				param,
 				null);
 		}
-		String siteId = getSiteId(request);
-		String rootSiteId = getRootSiteId(request);
+		Long siteId = getSiteId(request);
+		Long rootSiteId = getRootSiteId(request);
 
 		if(request.getParameter("radio_locale1") == null || request.getParameter("radio_locale1").equals("")){
 			request.setAttribute("radio_locale1","en");
@@ -746,8 +744,8 @@ public class CompleteTranslationAction extends DispatchAction
 
 		}
 
-		List message = new ArrayList();
-		java.util.Set ls = null;
+		List<ValueBean> message = new ArrayList<ValueBean>();
+		java.util.Set<String> ls = null;
 		try{
 			ls = new TranslatorWorker().getPrefixesForSite(siteId,rootSiteId);
 
@@ -755,7 +753,7 @@ public class CompleteTranslationAction extends DispatchAction
 			Object[] param = { "CompleteTranslationAction" };
 			logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
 		}
-		Iterator it = ls.iterator();
+		Iterator<String> it = ls.iterator();
 		int c=0;
 		int startFrom = 0;
 		int count = 0;
@@ -770,7 +768,7 @@ public class CompleteTranslationAction extends DispatchAction
 					 startFrom = new Integer(request.getParameter("startFrom")).intValue();
 				else
 				  startFrom = 0;
-				List sm = new ArrayList();
+				List<TranslatorBean> sm = new ArrayList<TranslatorBean>();
 				try{
 
 					if(request.getParameter("expired") != null && request.getParameter("expired").equals("on")){
@@ -859,7 +857,7 @@ public class CompleteTranslationAction extends DispatchAction
 	 * @param siteId
 	 * @throws WorkerException
 	 */
-	private void updateMsg(HttpServletRequest request, String key,String strMessage, Locale locale, String siteId)
+	private void updateMsg(HttpServletRequest request, String key,String strMessage, Locale locale, Long siteId)
 		throws WorkerException {
 
 		if (logger.isDebugEnabled()) {
@@ -878,7 +876,7 @@ public class CompleteTranslationAction extends DispatchAction
 			msg.setKey(key);
 			msg.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
 			msg.setLocale(locale.toString());
-			msg.setSiteId(siteId);
+			msg.setSite(SiteCache.lookupById(siteId));
 			translatorWorker.update(msg);
 
 		} else {
@@ -888,7 +886,7 @@ public class CompleteTranslationAction extends DispatchAction
 
 			message.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
 			message.setKey(key);
-			message.setSiteId(siteId);
+			message.setSite(SiteCache.lookupById(siteId));
 			message.setLocale(locale.toString());
 			translatorWorker.save(message);
 

@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.lucene.LuceneWorker;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
@@ -33,7 +34,7 @@ public class AdvTrnSaveChanges extends Action {
 			throws Exception {
 		ServletContext context = request.getSession().getServletContext();
 		//get current site
-		String siteId = RequestUtils.getSite(request).getId().toString();
+		Site site = RequestUtils.getSite(request);
 		//get buffer
 		ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request.getSession());
 		//get changes list from buffer
@@ -45,7 +46,7 @@ public class AdvTrnSaveChanges extends Action {
 		for (ChangedItem<String, Message> change : changes) {
 			Message message = change.getElement();
 			Operation operation = change.getOperation();
-			message.setSiteId(siteId);
+			message.setSite(site);
 			String suffix =  message.getLocale();
 			
 			if (operation.equals(Operation.ADD)){

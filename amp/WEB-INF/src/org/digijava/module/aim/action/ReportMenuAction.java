@@ -78,11 +78,11 @@ public class ReportMenuAction extends DispatchAction {
 					}
 				}
 			}
-			options.put(TranslatorWorker.translateText("Details", request), "/aim/viewActivityPreview.do~public=true~pageId=2~activityId=");
+			options.put(TranslatorWorker.translateText("Details"), "/aim/viewActivityPreview.do~public=true~pageId=2~activityId=");
 			if (needsApproval && !isDraft && isUserTeamLead) {
-				options.put(TranslatorWorker.translateText("Validate",request), "/wicket/onepager/activity/");
+				options.put(TranslatorWorker.translateText("Validate"), "/wicket/onepager/activity/");
 			} else {
-				options.put(TranslatorWorker.translateText("Edit",request),	"/wicket/onepager/activity/");
+				options.put(TranslatorWorker.translateText("Edit"),	"/wicket/onepager/activity/");
 			}
 
 			StringBuffer output = new StringBuffer();

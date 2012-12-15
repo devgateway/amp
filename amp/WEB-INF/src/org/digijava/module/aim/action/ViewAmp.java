@@ -156,8 +156,6 @@ public class ViewAmp
          */
         Collection members = TeamMemberUtil.getTeamMembers(usr.getEmail());
         if (members == null || members.size() == 0) {
-        	String locale = RequestUtils.getNavigationLanguage(request).getCode();
-			String siteId = RequestUtils.getSite(request).getId()+"";
 			//
 			if (siteAdmin == true) { // user is a site admin
                 // set the session variable 'ampAdmin' to the value 'yes'
@@ -166,12 +164,7 @@ public class ViewAmp
                 TeamMember tm = new TeamMember();
                 tm.setMemberName(usr.getName());
                 tm.setMemberId(usr.getId());
-                try {
-					tm.setTeamName(TranslatorWorker.translateText("AMP Administrator", locale, siteId));
-				} catch (WorkerException e) {
-					tm.setTeamName("AMP Administrator");
-					e.printStackTrace();
-				}
+                tm.setTeamName(TranslatorWorker.translateText("AMP Administrator"));
                 session.setAttribute("currentMember", tm);
                 PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
                 // show the index page with the admin toolbar at the bottom
@@ -199,22 +192,20 @@ public class ViewAmp
             AmpTeamMember member = (AmpTeamMember) itr.next();
 
             synchronized (ampContext) {
-                HashMap userActList = (HashMap) ampContext.getAttribute(
-                        Constants.USER_ACT_LIST);
+                HashMap<Long, Long> userActList = (HashMap<Long, Long>) ampContext.getAttribute(Constants.USER_ACT_LIST);
                 if (userActList != null &&
                         userActList.containsKey(member.getAmpTeamMemId())) {
                     // expire all other entries
 
                     //logger.info("getting the value for " + member.getAmpTeamMemId());
 
-                    Long actId = (Long) userActList.get(member.getAmpTeamMemId());
-                    HashMap editActMap = (HashMap) ampContext.getAttribute(
-                            Constants.EDIT_ACT_LIST);
+                    Long actId = userActList.get(member.getAmpTeamMemId());
+                    HashMap<String, Long> editActMap = (HashMap<String, Long>) ampContext.getAttribute(Constants.EDIT_ACT_LIST);
                     String sessId = null;
                     if (editActMap != null) {
-                        Iterator itr1 = editActMap.keySet().iterator();
+                        Iterator<String> itr1 = editActMap.keySet().iterator();
                         while (itr1.hasNext()) {
-                            sessId = (String) itr1.next();
+                        	sessId = itr1.next();
                             Long tempActId = (Long) editActMap.get(sessId);
 
                             //logger.info("tempActId = " + tempActId + " actId = " + actId);

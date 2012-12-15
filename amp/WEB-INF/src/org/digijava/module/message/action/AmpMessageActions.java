@@ -827,7 +827,7 @@ public class AmpMessageActions extends DispatchAction {
     	ActionErrors errors=null;
     	if(currentAttachmentSize+attachedFilesSize > MessageConstants.ATTACHMENTS_MAX_SIZE){     		
     		errors=new ActionErrors();
-    		errors.add("invalidSize", new ActionMessage("error.message.invalidAttachmentsSize", TranslatorWorker.translateText("You can attach max 10 Mb files",request)));
+    		errors.add("invalidSize", new ActionMessage("error.message.invalidAttachmentsSize", TranslatorWorker.translateText("You can attach max 10 Mb files")));
     		
     		if (errors.size() > 0){
 				//we have all the errors for this step saved and we must throw the amp error
@@ -1030,7 +1030,7 @@ public class AmpMessageActions extends DispatchAction {
                     if (errors == null) {
                         errors=new ActionErrors();
                     }
-                    errors.add("invalidActivity", new ActionMessage("error.message.invalidActivity", TranslatorWorker.translateText("Selected activity does not exist. Please verify the name",request)));
+                    errors.add("invalidActivity", new ActionMessage("error.message.invalidActivity", TranslatorWorker.translateText("Selected activity does not exist. Please verify the name")));
                 }
                 message.setRelatedActivityId(actId);
                 //now we must create activity URL
@@ -1041,7 +1041,7 @@ public class AmpMessageActions extends DispatchAction {
                 if (errors == null) {
                     errors=new ActionErrors();
                 }
-                errors.add("invalidActivity", new ActionMessage("error.message.invalidActivity", TranslatorWorker.translateText("Selected activity does not exist. Please verify the name",request)));
+                errors.add("invalidActivity", new ActionMessage("error.message.invalidActivity", TranslatorWorker.translateText("Selected activity does not exist. Please verify the name")));
             }
     	}
     	//should we send a message or not

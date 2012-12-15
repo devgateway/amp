@@ -60,14 +60,9 @@ public class AddFundingDetail extends Action {
 			{
 				String error = importFunding(formBean, teamMember);
 				if (error != null && !error.equals("")){
-					try {
-						ActionMessages errors = new ActionMessages();
-						errors.add("title", new ActionMessage("error.aim.addActivity.importFunding.error", TranslatorWorker.translateText("Error in the structure/data of the file. Please review.",request)));
-						saveErrors(request, errors);								
-					} catch (WorkerException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					ActionMessages errors = new ActionMessages();
+					errors.add("title", new ActionMessage("error.aim.addActivity.importFunding.error", TranslatorWorker.translateText("Error in the structure/data of the file. Please review.")));
+					saveErrors(request, errors);								
 				}
 	
 	

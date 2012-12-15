@@ -143,12 +143,7 @@ public class GroupReportDataXLS extends XLSExporter {
 		
 		HttpSession session 	=  request.getSession();
 		//for translation purposes
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				
-		String siteId=site.getId().toString();
-		String locale=navigationLanguage.getCode();
-		
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		GroupReportData rd = (GroupReportData) item;
 		
 		HSSFCell cell			= row.createCell(colId.shortValue());
@@ -187,16 +182,12 @@ public class GroupReportDataXLS extends XLSExporter {
 					cell=row.createCell(colId.shortValue());						
 				}
 				String stmt = "";
-				try {
-					//TODO TRN: key is all right but lets use default text. Or remove this todo tag.
-					stmt = TranslatorWorker.translateText("This Report was created by AMP", locale,siteId);
-				} catch (WorkerException e){
-				    e.printStackTrace();}
+				stmt = TranslatorWorker.translateText("This Report was created by AMP");
 				stmt += " " + FeaturesUtil.getCurrentCountryName();
 				if (reportForm.getDateOptions().equals("0")) {//disabled
 					// no date
 				} else if (reportForm.getDateOptions().equals("1")) {//enable		
-					stmt += " " + TranslatorWorker.translateText("on", locale,siteId)+ " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
+					stmt += " " + TranslatorWorker.translateText("on")+ " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
 				}				 	                	                
 				if (reportForm.getStatementPositionOptions().equals("0")) {//header		
 					cell.setCellValue(stmt);  
@@ -212,10 +203,7 @@ public class GroupReportDataXLS extends XLSExporter {
 		//for translation purposes
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				
-		String siteId=site.getId().toString();
-		String locale=navigationLanguage.getCode();	
-		
+						
 		GroupReportData rd = (GroupReportData) item;
 		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 		
@@ -228,32 +216,28 @@ public class GroupReportDataXLS extends XLSExporter {
 		
 			String translatedNotes = "";
 			String translatedReportDescription = "Description:";			
-			try{
-				int amountUnitsCode = arf.computeEffectiveAmountInThousand();
-				if (amountUnitsCode != AmpARFilter.AMOUNT_OPTION_IN_UNITS)
-				{
-					if (amountUnitsCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS)
-			    		translatedNotes = TranslatorWorker.translateText("Amounts are in thousands (000)", locale, siteId);
-					else
-						translatedNotes = TranslatorWorker.translateText("Amounts are in millions (000 000)", locale, siteId);
-				    if("".equalsIgnoreCase(translatedNotes)){
-				    	translatedNotes = AmpReports.getNote(session);    
-				    }
-				}
-				
-			    //String translatedReportName=TranslatorWorker.translateText("Report Name:",locale,siteId);
-				//translatedReportDescription=TranslatorWorker.translateText("Description:",locale,siteId);
-			}catch (WorkerException e){e.printStackTrace();}
-			
+
+			int amountUnitsCode = arf.computeEffectiveAmountInThousand();
+			if (amountUnitsCode != AmpARFilter.AMOUNT_OPTION_IN_UNITS)
+			{
+				if (amountUnitsCode == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS)
+			   		translatedNotes = TranslatorWorker.translateText("Amounts are in thousands (000)");
+				else
+					translatedNotes = TranslatorWorker.translateText("Amounts are in millions (000 000)");
+			    if("".equalsIgnoreCase(translatedNotes)){
+			    	translatedNotes = AmpReports.getNote(session);    
+			    }
+			}
+							
 			String translatedCurrency = "";
 			String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
             if(currencyCode != null) {
-                translatedCurrency=TranslatorWorker.translateText(currencyCode,locale,siteId);
+                translatedCurrency=TranslatorWorker.translateText(currencyCode);
 			    translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
             }
             else
             {
-                translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY,locale,siteId);
+                translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY);
             }
             translatedNotes = translatedNotes.replaceAll("\n", " ");
 			cell.setCellValue(translatedNotes+translatedCurrency/*+"\n"*/);

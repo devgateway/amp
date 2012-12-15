@@ -89,7 +89,7 @@ public class CategoryValueTagClass extends TagSupport {
 		
 		if (ampCategoryValue != null) {
 			try{
-				String translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
+				String translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue);
 				if ( this.getLowerCase() )
 					translatedValue		= translatedValue.toLowerCase();
 				if ( this.getUpperCase() )

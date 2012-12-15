@@ -200,7 +200,7 @@ public class FormTag
 
             if( !SiteConfigUtils.getLogonSiteId().equalsIgnoreCase(getSite()) ) {
 
-            	Site site = SiteCache.getInstance().getSite(getSite());
+            	Site site = SiteCache.lookupByName(getSite());
                 siteURL = SiteUtils.getSiteURL(SiteUtils.getDefaultSiteDomain(site), request.getScheme(), request.getServerPort(), request.getContextPath());
             } else {
                 StringBuffer tmpSiteURL =  new StringBuffer( HttpLoginManager.getLoginSiteURL(request) );

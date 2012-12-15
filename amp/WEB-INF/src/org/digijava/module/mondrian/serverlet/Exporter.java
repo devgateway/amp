@@ -195,19 +195,16 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							Locale navigationLanguage = QueryThread.getLocale();
 							
 							if (site != null && location !=null){
-								String siteId = site.getId().toString();
-								String locale = navigationLanguage.getCode();	
-							
 								textamount = AmpReports.getNote(request.getSession());
 							
 								if(currency!= null) {
 									AmpCurrency currobj = CurrencyUtil.getCurrencyByCode(currency);
 									if (currobj.getCountryName()!=null){
-										textcurrency=TranslatorWorker.translateText(currobj.getCountryName(),locale,siteId);
+										textcurrency=TranslatorWorker.translateText(currobj.getCountryName());
 									} else {
 										textcurrency = currobj.getCurrencyName();
 									}
-									currencytext = TranslatorWorker.translateText("Currency",locale,siteId);
+									currencytext = TranslatorWorker.translateText("Currency");
 								}
 							
 								helper.addMergenoBorder(rowslist.getLength()+1, 0, rowslist.getLength()+1, 1);

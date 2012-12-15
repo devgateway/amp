@@ -51,6 +51,7 @@ import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -96,14 +97,7 @@ public class XLSExportAction extends Action {
 	        AdvancedReportForm reportForm = (AdvancedReportForm) form;
 	        //
 			AmpReports r=(AmpReports) session.getAttribute("reportMeta");
-		
-//			for translation purposes
-			Site site = RequestUtils.getSite(request);
-			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 					
-			String siteId=site.getId().toString();
-			String locale=navigationLanguage.getCode();	
-			
 		int numberOfColumns = rd.getTotalDepth();
 		
 		String sortBy=(String) session.getAttribute("sortBy");
@@ -124,9 +118,9 @@ public class XLSExportAction extends Action {
 			HSSFSheet sheet = wb.createSheet(sheetName);
 			
 			
-			String[] errMsgs = {TranslatorWorker.translateText("The report has too many columns, please redo the report or export in an another format.", locale, siteId), 
-								TranslatorWorker.translateText("Maximum supported number of columns: ", locale, siteId) + 250,
-								TranslatorWorker.translateText("You demanded columns: ", locale, siteId) + numberOfColumns};
+			String[] errMsgs = {TranslatorWorker.translateText("The report has too many columns, please redo the report or export in an another format."), 
+								TranslatorWorker.translateText("Maximum supported number of columns: ") + 250,
+								TranslatorWorker.translateText("You demanded columns: ") + numberOfColumns};
 			
 			for(int i = 0; i < errMsgs.length; i++)
 			{
@@ -241,17 +235,12 @@ public class XLSExportAction extends Action {
 						row=sheet.createRow(rowId.shortValue());
 						cell=row.createCell(colId.shortValue());						
 					}
-					String stmt = "";
-					try {
-						//TODO TRN: key is all right but if possible replace with default text. or delete this todo tag
-						stmt = TranslatorWorker.translateText("This Report was created by AMP", locale,siteId);
-					} catch (WorkerException e) {
-					    e.printStackTrace();}
+					String stmt = TranslatorWorker.translateText("This Report was created by AMP");
 					stmt += " " + FeaturesUtil.getCurrentCountryName();
 					if (reportForm.getDateOptions().equals("0")) {//disabled
 						// no date
 					} else if (reportForm.getDateOptions().equals("1")) {//enable		
-						stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
+						stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(TLSUtils.getLangCode())).format(new Date());
 					}				 	                	                
 					if (reportForm.getStatementPositionOptions().equals("0")) {//header		
 						//
@@ -261,19 +250,13 @@ public class XLSExportAction extends Action {
 				}
 	    wb.write(response.getOutputStream());
 	    
-		}else{
-			Site site = RequestUtils.getSite(request);
-			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-			
-			String siteId=site.getSiteId();
-			String locale=navigationLanguage.getCode();
-			
+		}else{			
 			session.setAttribute("sessionExpired", true);
 			response.setContentType("text/html");
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
     		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
-    		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.",locale,siteId);
+    		String alert = TranslatorWorker.translateText("Your session has expired. Please log in again.");
     		String script = "<script>opener.close();" 
     			+ "alert('"+ alert +"');" 
     			+ "window.location=('"+ url +"');"

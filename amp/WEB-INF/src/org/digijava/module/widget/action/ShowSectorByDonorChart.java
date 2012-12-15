@@ -39,7 +39,7 @@ public class ShowSectorByDonorChart extends Action {
         Long[] donorIDs = null;
     	Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		String siteId = site.getId()+"";
+		Long siteId = site.getId();
 		String locale = navigationLanguage.getCode();
         ChartOption opt=createChartOption(cForm,request);
         //from year
@@ -76,7 +76,7 @@ public class ShowSectorByDonorChart extends Action {
         //write image in response
 		ChartUtilities.writeChartAsPNG(response.getOutputStream(),chart,opt.getWidth().intValue(),opt.getHeight().intValue(), info, true, 0);
 
-		String fiscalYear = TranslatorWorker.translateText("FY", locale, site.getId().toString());
+		String fiscalYear = TranslatorWorker.translateText("FY", locale, siteId);
 		//fill from years' drop-down
 		cForm.setYearsFrom(ChartWidgetUtil.getYears(true, fiscalYear));
 		//fill to years' drop-down
@@ -132,7 +132,7 @@ public class ShowSectorByDonorChart extends Action {
         } else {
             opt.setWidth(form.getImageWidth());
         }
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+        Long siteId = RequestUtils.getSiteDomain(request).getSite().getId();
         opt.setSiteId(siteId);
         String langCode = RequestUtils.getNavigationLanguage(request).getCode();
         opt.setLangCode(langCode);

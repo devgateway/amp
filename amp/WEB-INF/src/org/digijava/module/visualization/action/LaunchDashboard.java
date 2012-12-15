@@ -60,8 +60,6 @@ public class LaunchDashboard extends Action {
 
 		VisualizationForm dForm = (VisualizationForm) form;
 		AmpDashboard dashboard = dForm.getDashboard();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
         String dashId = request.getParameter("id") != null ? (String) request.getParameter("id") : null;
         String graphsList = request.getParameter("graphs") != null ? (String) request.getParameter("graphs") : null;
         List<AmpGraph> list = new ArrayList<AmpGraph>();
@@ -109,11 +107,7 @@ public class LaunchDashboard extends Action {
 				AmpOrgGroup grp = org.digijava.module.visualization.util.DbUtil.getOrgGroup(Long.valueOf(grpId));
 				dForm.setDashboardTitle(grp.getOrgGrpName());
 			} else {
-				try {
-		        	dForm.setDashboardTitle(TranslatorWorker.translateText("All Organization Groups", locale, siteId));
-				} catch (WorkerException e) {
-					dForm.setDashboardTitle("All Organization Groups");
-				}
+				dForm.setDashboardTitle(TranslatorWorker.translateText("All Organization Groups"));
 			}
 			String orgIds = request.getParameter("orgIds") != null ? (String) request.getParameter("orgIds") : null;
 			if (orgIds!=null && orgIds.length()>0){
@@ -122,18 +116,10 @@ public class LaunchDashboard extends Action {
 					AmpOrganisation orga = org.digijava.module.visualization.util.DbUtil.getOrganisation(Long.valueOf(id));
 					dForm.setDashboardSubTitle(orga.getName());
 				} else {
-					try {
-			        	dForm.setDashboardSubTitle(TranslatorWorker.translateText("Multiple Organizations", locale, siteId));
-					} catch (WorkerException e) {
-						dForm.setDashboardSubTitle("Multiple Organizations");
-					}
+		        	dForm.setDashboardSubTitle(TranslatorWorker.translateText("Multiple Organizations"));
 				}
 			} else {
-				try {
-		        	dForm.setDashboardSubTitle(TranslatorWorker.translateText("All Organizations", locale, siteId));
-				} catch (WorkerException e) {
-					dForm.setDashboardSubTitle("All Organizations");
-				}
+	        	dForm.setDashboardSubTitle(TranslatorWorker.translateText("All Organizations"));
 			}
 			break;
 
@@ -144,11 +130,7 @@ public class LaunchDashboard extends Action {
 				AmpCategoryValueLocations reg = org.digijava.module.visualization.util.DbUtil.getLocationById(Long.valueOf(regId));
 				dForm.setDashboardTitle(reg.getName());
 			} else {
-				try {
-		        	dForm.setDashboardTitle(TranslatorWorker.translateText("All Regions", locale, siteId));
-				} catch (WorkerException e) {
-					dForm.setDashboardTitle("All Regions");
-				}
+				dForm.setDashboardTitle(TranslatorWorker.translateText("All Regions"));
 			}
 			String zoneIds = request.getParameter("zoneIds") != null ? (String) request.getParameter("zoneIds") : null;
 			if (zoneIds!=null && zoneIds.length()>0){
@@ -157,18 +139,10 @@ public class LaunchDashboard extends Action {
 					AmpCategoryValueLocations zone = org.digijava.module.visualization.util.DbUtil.getLocationById(Long.valueOf(id));
 					dForm.setDashboardSubTitle(zone.getName());
 				} else {
-					try {
-			        	dForm.setDashboardSubTitle(TranslatorWorker.translateText("Multiple zones", locale, siteId));
-					} catch (WorkerException e) {
-						dForm.setDashboardSubTitle("Multiple zones");
-					}
+					dForm.setDashboardSubTitle(TranslatorWorker.translateText("Multiple zones"));
 				}
 			} else {
-				try {
-		        	dForm.setDashboardSubTitle(TranslatorWorker.translateText("All zones", locale, siteId));
-				} catch (WorkerException e) {
-					dForm.setDashboardSubTitle("All zones");
-				}
+				dForm.setDashboardSubTitle(TranslatorWorker.translateText("All zones"));
 			}
 			break;
 
@@ -179,11 +153,7 @@ public class LaunchDashboard extends Action {
 				AmpSector sec = SectorUtil.getAmpSector(Long.valueOf(secId));
 				dForm.setDashboardTitle(sec.getName());
 			} else {
-				try {
-		        	dForm.setDashboardTitle(TranslatorWorker.translateText("All Sectors", locale, siteId));
-				} catch (WorkerException e) {
-					dForm.setDashboardTitle("All Sectors");
-				}
+				dForm.setDashboardTitle(TranslatorWorker.translateText("All Sectors"));
 			}
 			String subSectorIds = request.getParameter("subSectorIds") != null ? (String) request.getParameter("subSectorIds") : null;
 			if (subSectorIds!=null && subSectorIds.length()>0){
@@ -192,18 +162,10 @@ public class LaunchDashboard extends Action {
 					AmpSector sec = SectorUtil.getAmpSector(Long.valueOf(id));
 					dForm.setDashboardSubTitle(sec.getName());
 				} else {
-					try {
-			        	dForm.setDashboardSubTitle(TranslatorWorker.translateText("Multiple sub sectors", locale, siteId));
-					} catch (WorkerException e) {
-						dForm.setDashboardSubTitle("Multiple sub sectors");
-					}
+					dForm.setDashboardSubTitle(TranslatorWorker.translateText("Multiple sub sectors"));
 				}
 			} else {
-				try {
-		        	dForm.setDashboardSubTitle(TranslatorWorker.translateText("All sub sectors", locale, siteId));
-				} catch (WorkerException e) {
-					dForm.setDashboardSubTitle("All sub sectors");
-				}
+				dForm.setDashboardSubTitle(TranslatorWorker.translateText("All sub sectors"));
 			}
 			break;
 
@@ -317,11 +279,7 @@ public class LaunchDashboard extends Action {
 			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 			String headingFY;
-			try {
-				headingFY = TranslatorWorker.translateText("FY", locale, siteId);
-			} catch (WorkerException e) {
-				headingFY = "FY";
-			}
+			headingFY = TranslatorWorker.translateText("FY");
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			filter.getYears().put(yearName,i);
 		}

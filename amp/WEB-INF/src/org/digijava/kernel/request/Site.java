@@ -265,4 +265,16 @@ extends Entity implements Serializable {
 		 this.defaultInstance = defaultInstance;
 	 }
 
+	 /**
+	  * returns the id a site or zero if site is null (see TranslationCall.getSiteId() comment): For global translations, this method must return '0'
+	  * @param site
+	  * @return
+	  */
+	 public static Long getIdOf(Site site)
+	 {
+		 if (site == null)
+			 return 0L;
+		 return site.getId();
+	 }
+	
 }

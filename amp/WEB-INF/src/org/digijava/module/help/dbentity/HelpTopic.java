@@ -3,6 +3,10 @@ package org.digijava.module.help.dbentity;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.SiteCache;
+import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.help.helper.HelpContent;
 
 public class HelpTopic implements Serializable{
@@ -13,7 +17,11 @@ public class HelpTopic implements Serializable{
 	private String titleTrnKey=null;
 	private HelpTopic parent=null;
 	private String bodyEditKey=null;
-	private String siteId=null;
+	
+	/**
+	 * Not a number, but "siteId" (e.g. 'amp')
+	 */
+	private String siteId = null;
 	private String moduleInstance=null;
 	private String topicKey;
 	private Integer topicType;	
@@ -58,12 +66,31 @@ public class HelpTopic implements Serializable{
 	public void setParent(HelpTopic parent) {
 		this.parent = parent;
 	}
+	
+	/**
+	 * Not a number, but "siteId" (e.g. 'amp')
+	 */
 	public String getSiteId() {
 		return siteId;
 	}
+	
+	/**
+	 * Not a number, but "siteId" (e.g. 'amp')
+	 */
 	public void setSiteId(String siteId) {
-		this.siteId = siteId;
+	 	if ((siteId != null) && AmpMath.isLong(siteId))
+    	{
+    		Logger.getLogger(this.getClass()).error("numeric siteId: " + siteId, new RuntimeException());
+    		this.siteId = SiteCache.lookupById(Long.parseLong(siteId)).getSiteId();
+    	}
+        this.siteId = siteId;
 	}
+	
+	public Site getSite()
+	{
+		return SiteCache.lookupByName(this.siteId);
+	}
+	
 	public String getTitleTrnKey() {
 		return titleTrnKey;
 	}

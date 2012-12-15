@@ -18,6 +18,8 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnUtil;
+import org.digijava.kernel.util.SiteCache;
+import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.ObjectFactory;
 import org.digijava.module.translation.jaxb.Trn;
@@ -36,7 +38,7 @@ public class MessageGroup {
 	
 	private String key = null;
 	private String keyWords = null;
-	private String siteId = null;
+	private Long siteId = null;
 	/**
 	 * default text from which key was generated.
 	 * Not mandatory!
@@ -67,7 +69,7 @@ public class MessageGroup {
 	public MessageGroup(Message message){
 		this(message.getKey());
 		this.setKeyWords(message.getKeyWords());
-		this.setSiteId(message.getSiteId());
+		this.setSiteId(Long.parseLong(message.getSiteId())); // we can be sure that message.getSiteId() is numeric, because there is a filter in the setter. If not -> it is a bug that SHOULD be fixed elsewhere in AMP
 		addMessage(message);
 	}
 
@@ -79,28 +81,28 @@ public class MessageGroup {
 		this(trn,null);
 	}
 	
+	public Site getSite(String trnSiteId)
+	{
+		if (AmpMath.isLong(trnSiteId))
+			return SiteCache.lookupById(Long.parseLong(trnSiteId));
+		return SiteCache.lookupByName(trnSiteId);
+	}
 	/**
 	 * Creates message group from XML trn tag for specified site.
 	 * @param trn tag object.
 	 * @param currentSiteId site ID in string form. can be retrieved from request.
 	 */
-	public MessageGroup(Trn trn,String currentSiteId){
+	public MessageGroup(Trn trn, Long currentSiteId){
 		this.messages = new HashMap<String, Message>();
 		
 		//KeyWords
 		this.keyWords = trn.getKeywords();
 		
 		//SiteID
-		this.siteId = (currentSiteId==null)?trn.getSiteId():currentSiteId;
+		this.siteId = (currentSiteId==null) ? Site.getIdOf(getSite(trn.getSiteId())) : currentSiteId;
 		if (this.siteId == null){
-			try {
-				Site site = TranslatorWorker.getInstance("").getDefaultSite();
-				this.siteId = site.getId().toString();//unfortunately in AMP we use PK instead of string siteID value.
-			} catch (WorkerException e) {
-				e.printStackTrace();
-				logger.warn("Using hardcoded siteId=3 because of previouse error for translation with key="+key);
-				this.siteId="3";
-			}
+			Site site = TranslatorWorker.getInstance("").getDefaultSite();
+			this.siteId = Site.getIdOf(site);//unfortunately in AMP we use PK instead of string siteID value.
 		}
 		
 		//key
@@ -119,7 +121,7 @@ public class MessageGroup {
 		for (Language lang  : trn.getLang()) {
 			Message msg = new Message();
 			
-			msg.setSiteId(this.getSiteId());
+			msg.setSiteId(this.getSiteId().toString());
 			msg.setKey(this.key);
 			msg.setLocale(lang.getCode());
 			
@@ -292,13 +294,14 @@ public class MessageGroup {
 		return keyWords;
 	}
 
-	public void setSiteId(String siteId) {
+	public void setSiteId(Long siteId) {
 		this.siteId = siteId;
 	}
 
-	public String getSiteId() {
+	public Long getSiteId() {
 		return siteId;
 	}
+	
 	public void setDefaultText(String defaultText) {
 		this.defaultText = defaultText;
 	}

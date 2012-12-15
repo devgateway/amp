@@ -49,8 +49,6 @@ public class ExportIndicators2XSLAction extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		NpdForm npdForm = (NpdForm) form;
-		String locale=RequestUtils.getNavigationLanguage(request).getCode();
-		String siteId=RequestUtils.getSite(request).getId().toString();
 		 
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-disposition", "inline; filename=AMPIndicatorsExport.xls");
@@ -112,7 +110,7 @@ public class ExportIndicators2XSLAction extends Action {
 
 		HSSFCell cell = row.createCell(cellNum);
                 String hierarchyName=ProgramUtil.getHierarchyName(mainProg);
-                String header=TranslatorWorker.translateText("Indicators for", locale, siteId);
+                String header=TranslatorWorker.translateText("Indicators for");
 
 		cell.setCellValue(header+"  "+hierarchyName);
 		cell.setCellStyle(csHeader);
@@ -144,22 +142,22 @@ public class ExportIndicators2XSLAction extends Action {
 			row = sheet.createRow(rowNum++);
 			
 			cell = row.createCell(cellNum++);
-			cell.setCellValue(TranslatorWorker.translateText("indicator Name", locale, siteId));			
+			cell.setCellValue(TranslatorWorker.translateText("indicator Name"));			
 			cell.setCellStyle(csSubHeader);			
 			
 			cell=row.createCell(cellNum++);
-			cell.setCellValue(TranslatorWorker.translateText("indicator Description", locale, siteId));			
+			cell.setCellValue(TranslatorWorker.translateText("indicator Description"));			
 			cell.setCellStyle(csSubHeader);
 
 			for (int i = 0; i < npdForm.getSelYears().length; i++) {
                                 cell = row.createCell(cellNum++);
-				cell.setCellValue(TranslatorWorker.translateText("Base", locale, siteId));
+				cell.setCellValue(TranslatorWorker.translateText("Base"));
 				cell.setCellStyle(csSubHeader);
 				cell = row.createCell(cellNum++);
-				cell.setCellValue(TranslatorWorker.translateText("Actual", locale, siteId));
+				cell.setCellValue(TranslatorWorker.translateText("Actual"));
 				cell.setCellStyle(csSubHeader);
 				cell = row.createCell(cellNum++);
-				cell.setCellValue(TranslatorWorker.translateText("Target", locale, siteId));
+				cell.setCellValue(TranslatorWorker.translateText("Target"));
 				cell.setCellStyle(csSubHeader);
 			}
 

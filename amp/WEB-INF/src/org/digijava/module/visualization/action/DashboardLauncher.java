@@ -76,8 +76,6 @@ public class DashboardLauncher extends Action {
 		filter.setShowRegionsRanking(false);
 		filter.setShowSectorsRanking(false);
 		filter.setShowProjectsRanking(false);
-		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (value != null) {
 			Long fisCalId = Long.parseLong(value);
@@ -161,12 +159,7 @@ public class DashboardLauncher extends Action {
 			Long fiscalCalendarId = filter.getFiscalCalendarId();
 			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-			String headingFY;
-			try {
-				headingFY = TranslatorWorker.translateText("FY", locale, siteId);
-			} catch (WorkerException e) {
-				headingFY = "FY";
-			}
+			String headingFY = TranslatorWorker.translateText("FY");
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			filter.getYears().put(yearName,i);
 		}

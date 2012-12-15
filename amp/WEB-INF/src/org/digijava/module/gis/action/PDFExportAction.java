@@ -2059,8 +2059,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		opt.setHeight(new Integer(660));
 		opt.setWidth(new Integer(420));
 		// Long sitId = RequestUtils.getSiteDomain(request).getSite().getId();
-		String sitId = RequestUtils.getSiteDomain(request).getSite()
-				.getSiteId();
+		Long sitId = RequestUtils.getSiteDomain(request).getSite().getId();
 		opt.setSiteId(sitId);
 		String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 		opt.setLangCode(langCode);

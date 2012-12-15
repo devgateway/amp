@@ -96,33 +96,13 @@ public class DashboardUtil {
         String currCode = filter.getCurrencyCode();
         AmpCategoryValueLocations natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation()!=null? getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation(): getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[1]).getParentLocation();
         AmpCategoryValueLocations tempLoc = new AmpCategoryValueLocations();
-		if (request!=null) {
-			String locale = RequestUtils.getNavigationLanguage(request).getCode();
-	        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-	        try {
-				tempLoc.setName(TranslatorWorker.translateText("National", locale, siteId));
-			} catch (WorkerException e) {
-				tempLoc.setName("National");
-			}
-		} else {
-			tempLoc.setName("National");
-		}
+		tempLoc.setName(TranslatorWorker.translateText("National"));
 		tempLoc.setId(natLevelLocation.getId());
 		regList.add(natLevelLocation); // add national location to list
         map = DbUtil.getFundingByRegionList(regList, tempLoc, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter, request);
       //Unallocated values   
         AmpCategoryValueLocations tempLoc2 = new AmpCategoryValueLocations();
-		if (request!=null) {
-			String locale = RequestUtils.getNavigationLanguage(request).getCode();
-	        String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-	        try {
-				tempLoc2.setName(TranslatorWorker.translateText("Unallocated", locale, siteId));
-			} catch (WorkerException e) {
-				tempLoc2.setName("Unallocated");
-			}
-		} else {
-			tempLoc2.setName("Unallocated");
-		}
+        tempLoc2.setName(TranslatorWorker.translateText("Unallocated"));
 		tempLoc2.setId(0l);
         Long[] ids2 = {0l};
         DashboardFilter newFilter = filter.getCopyFilterForFunding();
@@ -225,15 +205,15 @@ public class DashboardUtil {
 		String trnStep1, trnStep2, trnStep3, trnStep4, trnStep5, trnStep6, trnStep7, trnStep8, trnStep9;
 		trnStep1 = trnStep2 = trnStep3 = trnStep4 = trnStep5 = trnStep6 = trnStep7 = trnStep8 = trnStep9 = "";
 		try{
-			trnStep1 = TranslatorWorker.translateText("Step 1/10: Gathering initial information", request);
-			trnStep2 = TranslatorWorker.translateText("Step 2/10: Gathering aggregated information on commitments", request);
-			trnStep3 = TranslatorWorker.translateText("Step 3/10: Gathering aggregated information on disbursements", request);
-			trnStep4 = TranslatorWorker.translateText("Step 4/10: Gathering aggregated sector information", request);
-			trnStep5 = TranslatorWorker.translateText("Step 5/10: Gathering aggregated location information", request);
-			trnStep6 = TranslatorWorker.translateText("Step 6/10: Gathering full list of projects", request);
-			trnStep7 = TranslatorWorker.translateText("Step 7/10: Gathering aggregated organization information", request);
-			trnStep8 = TranslatorWorker.translateText("Step 8/10: Gathering aggregated NPO information", request);
-			trnStep9 = TranslatorWorker.translateText("Step 9/10: Gathering aggregated program information", request);
+			trnStep1 = TranslatorWorker.translateText("Step 1/10: Gathering initial information");
+			trnStep2 = TranslatorWorker.translateText("Step 2/10: Gathering aggregated information on commitments");
+			trnStep3 = TranslatorWorker.translateText("Step 3/10: Gathering aggregated information on disbursements");
+			trnStep4 = TranslatorWorker.translateText("Step 4/10: Gathering aggregated sector information");
+			trnStep5 = TranslatorWorker.translateText("Step 5/10: Gathering aggregated location information");
+			trnStep6 = TranslatorWorker.translateText("Step 6/10: Gathering full list of projects");
+			trnStep7 = TranslatorWorker.translateText("Step 7/10: Gathering aggregated organization information");
+			trnStep8 = TranslatorWorker.translateText("Step 8/10: Gathering aggregated NPO information");
+			trnStep9 = TranslatorWorker.translateText("Step 9/10: Gathering aggregated program information");
 		}
 		catch(Exception e){
 			logger.error("Couldn't retrieve translation for progress steps");

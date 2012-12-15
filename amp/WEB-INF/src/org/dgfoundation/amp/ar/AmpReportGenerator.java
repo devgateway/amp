@@ -864,7 +864,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				fakeC.setOwnerId(id);
 				//
 				// requirements for translation purposes
-				String siteId = rd.getParent().getReportMetadata().getSiteId();
+				Long siteId = rd.getParent().getReportMetadata().getSiteId();
 				String locale = rd.getParent().getReportMetadata().getLocale();
 				String text = fakeC.getValue().toString();
 				String text2 = c.getColumnName();
@@ -993,7 +993,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		fakeC.setOwnerId( activityId );
 		
 		// requirements for translation purposes
-		String siteId = rd.getParent().getReportMetadata().getSiteId();
+		Long siteId = rd.getParent().getReportMetadata().getSiteId();
 		String locale = rd.getParent().getReportMetadata().getLocale();
 		String text = fakeC.getValue().toString();
 		String translatedText = null;

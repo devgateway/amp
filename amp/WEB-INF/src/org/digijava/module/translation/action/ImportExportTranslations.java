@@ -147,7 +147,7 @@ public class ImportExportTranslations extends Action {
 					.getAttribute(SESSION_ROOT);
 
 			if (translations == null) {
-				ImportExportUtil.importExcelFile((POIFSFileSystem)session.getAttribute(SESSION_FILE),option,site.getId().toString());
+				ImportExportUtil.importExcelFile((POIFSFileSystem)session.getAttribute(SESSION_FILE), option, site);
 
 			} else {
 				/*if (translations == null) {
@@ -208,11 +208,11 @@ public class ImportExportTranslations extends Action {
 					HSSFSheet sheet = wb.createSheet();
 					int rownum=0,column=0;
 					HSSFRow row=sheet.createRow(rownum++);
-					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Key", request));
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Key"));
 					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue("en");
 					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(targetLang);
-					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Date of creation (en) ", request));
-					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Date of creation ("+targetLang+") ", request));
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Date of creation (en) "));
+					row.createCell(column++,HSSFCell.CELL_TYPE_BLANK).setCellValue(TranslatorWorker.translateText("Date of creation ("+targetLang+") "));
 					if( messageGroups!=null){
 						for(MessageGroup messageGrp:  messageGroups){
 							column=0;

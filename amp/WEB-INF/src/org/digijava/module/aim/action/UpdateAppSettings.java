@@ -265,7 +265,7 @@ public class UpdateAppSettings extends Action {
 			if(uForm.getDefRecsPerPage() == null || uForm.getDefRecsPerPage() < 2)
 				{
 					ActionMessages errors = new ActionMessages();
-	        		errors.add("title", new ActionMessage("error.aim.addActivity.wrongNrActsPerPage", TranslatorWorker.translateText("Please enter the title",request)));
+	        		errors.add("title", new ActionMessage("error.aim.addActivity.wrongNrActsPerPage", TranslatorWorker.translateText("Please enter the title")));
 	        		if (errors.size() > 0)
 	        			saveErrors(request, errors);
 	        		

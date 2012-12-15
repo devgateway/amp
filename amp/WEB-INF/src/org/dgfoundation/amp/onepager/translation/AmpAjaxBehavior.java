@@ -23,6 +23,7 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.onepager.web.pages.AmpHeaderFooter;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -71,18 +72,18 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 		
 		AmpAuthWebSession session = (AmpAuthWebSession)Session.get();
 		Locale locale = session.getLocale();
-		String siteId = String.valueOf(session.getSite().getId());
+		Site site = session.getSite();
 
 		TranslatorWorker translatorWorker = TranslatorWorker.getInstance(key);
 		Message msg;
 		try {
-			msg = translatorWorker.getByKey(key, locale.getLanguage(), siteId);
+			msg = translatorWorker.getByKey(key, locale.getLanguage(), site);
 			if (msg != null) {
 				msg.setMessage(message);
 				msg.setKey(key);
 				msg.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
 				msg.setLocale(locale.getLanguage());
-				msg.setSiteId(siteId);
+				msg.setSite(site);
 				translatorWorker.update(msg);
 				
 			} else {
@@ -90,7 +91,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 				newMsg.setMessage(message);
 				newMsg.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
 				newMsg.setKey(key);
-				newMsg.setSiteId(siteId);
+				newMsg.setSite(site);
 				newMsg.setLocale(locale.getLanguage());
 				translatorWorker.save(newMsg);
 			}

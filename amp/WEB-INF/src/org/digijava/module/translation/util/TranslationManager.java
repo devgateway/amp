@@ -382,7 +382,7 @@ public class TranslationManager {
         return result;
     }
 
-    private static TranslationType getTrn(long siteId, Long rootSiteId,
+    private static TranslationType getTrn(Long siteId, Long rootSiteId,
                                           String oneKey, String srcLocale,
                                           long emptyTimestamp) throws
         WorkerException {
@@ -390,8 +390,7 @@ public class TranslationManager {
         TranslatorWorker trnWorker = TranslatorWorker.getInstance(oneKey);
 
         Message srcMsg = null;
-        srcMsg = trnWorker.getByKey(oneKey, srcLocale,
-                               String.valueOf(siteId));
+        srcMsg = trnWorker.getByKey(oneKey, srcLocale, siteId);
         if (srcMsg != null) {
             if (siteId != 0) {
                 item.trnType = AdvancedTrnItem.LOCAL_TRN;
@@ -402,13 +401,12 @@ public class TranslationManager {
         }
         else {
             if (rootSiteId != null) {
-                srcMsg = trnWorker.getByKey(oneKey, srcLocale,
-                                       rootSiteId.toString());
+                srcMsg = trnWorker.getByKey(oneKey, srcLocale, rootSiteId);
                 if (srcMsg != null) {
                     item.trnType = AdvancedTrnItem.GROUP_TRN;
                 }
                 else {
-                    srcMsg = trnWorker.getByKey(oneKey, srcLocale, "0");
+                    srcMsg = trnWorker.getByKey(oneKey, srcLocale, 0L);
                     if (srcMsg != null) {
                         item.trnType = AdvancedTrnItem.GLOBAL_TRN;
                     }
@@ -515,7 +513,7 @@ public class TranslationManager {
         result.addAll(SiteUtils.getTransLanguages(currentSite));
 
         if (currentSite.getParentId() != null) {
-            Site parentSite = SiteUtils.getSite(currentSite.getParentId());
+            Site parentSite = SiteCache.lookupById(currentSite.getParentId());
             result.addAll(getTreeLanguages(parentSite));
         }
 

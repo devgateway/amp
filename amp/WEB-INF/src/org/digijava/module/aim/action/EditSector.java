@@ -34,10 +34,7 @@ public class EditSector extends Action {
 								HttpServletResponse response) throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		String siteId = site.getId()+"";
-		String locale = navigationLanguage.getCode();
+
 		
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
@@ -85,7 +82,7 @@ public class EditSector extends Action {
 										if(checkSectorNameCodeIsNull(editSectorForm)){								
 											request.setAttribute("event", "view");
 											ActionMessages errors = new ActionMessages();
-											errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.",locale,siteId)));
+											errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.")));
 											if (errors.size() > 0)
 											{
 												saveErrors(request, errors);
@@ -96,7 +93,7 @@ public class EditSector extends Action {
 										if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 											request.setAttribute("event", "view");
 											ActionMessages errors = new ActionMessages();
-							        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title",locale,siteId)));
+							        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title")));
 							        		if (errors.size() > 0)
 						        			{
 						        				saveErrors(request, errors);
@@ -109,7 +106,7 @@ public class EditSector extends Action {
 										if(existSectorForUpdate(editSectorForm, secId, sectors) == 2){
 											request.setAttribute("event", "view");
 											ActionMessages errors = new ActionMessages();
-							        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code",locale,siteId)));
+							        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code")));
 							        		if (errors.size() > 0)
 						        			{
 						        				saveErrors(request, errors);
@@ -145,7 +142,7 @@ public class EditSector extends Action {
 									if(checkSectorNameCodeIsNull(editSectorForm)){
 										request.setAttribute("event", "view");
 										ActionMessages errors = new ActionMessages();
-										errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.",locale,siteId)));
+										errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.")));
 										if (errors.size() > 0)
 										{
 											saveErrors(request, errors);
@@ -157,7 +154,7 @@ public class EditSector extends Action {
 									if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 										request.setAttribute("event", "view");
 										ActionMessages errors = new ActionMessages();
-						        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title",locale,siteId)));
+						        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title")));
 						        		if (errors.size() > 0)
 					        			{
 					        				saveErrors(request, errors);
@@ -170,7 +167,7 @@ public class EditSector extends Action {
 									if(existSectorForUpdate(editSectorForm, secId, sectors) == 2){
 										request.setAttribute("event", "view");
 										ActionMessages errors = new ActionMessages();
-						        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code",locale,siteId)));
+						        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code")));
 						        		if (errors.size() > 0)
 					        			{
 					        				saveErrors(request, errors);
@@ -217,7 +214,7 @@ public class EditSector extends Action {
 									if(checkSectorNameCodeIsNull(editSectorForm)){
 										request.setAttribute("event", "view");
 										ActionMessages errors = new ActionMessages();
-										errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.",locale,siteId)));
+										errors.add("title", new ActionMessage("error.aim.addScheme.emptyTitleOrCode", TranslatorWorker.translateText("The name or code of the sector is empty. Please enter a title and a code for the sector.")));
 										if (errors.size() > 0)
 										{
 											saveErrors(request, errors);
@@ -229,7 +226,7 @@ public class EditSector extends Action {
 									if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 										request.setAttribute("event", "view");
 										ActionMessages errors = new ActionMessages();
-						        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title",locale,siteId)));
+						        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongTitle", TranslatorWorker.translateText("The name of the sector already exist in database. Please enter another title")));
 						        		if (errors.size() > 0)
 					        			{
 					        				saveErrors(request, errors);
@@ -242,7 +239,7 @@ public class EditSector extends Action {
 									if(existSectorForUpdate(editSectorForm, secId, sectors) == 2){
 										request.setAttribute("event", "view");
 										ActionMessages errors = new ActionMessages();
-						        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code",locale,siteId)));
+						        		errors.add("title", new ActionMessage("error.aim.addScheme.wrongCode", TranslatorWorker.translateText("The code of the sector already exist in database. Please enter another code")));
 						        		if (errors.size() > 0)
 					        			{
 					        				saveErrors(request, errors);

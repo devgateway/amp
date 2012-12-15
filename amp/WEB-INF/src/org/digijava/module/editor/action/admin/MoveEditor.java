@@ -34,6 +34,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
@@ -54,7 +55,7 @@ public class MoveEditor extends Action {
 
         String lang = editorAdminForm.getLang();
         String key = editorAdminForm.getKey();
-        String siteId = moduleInstance.getSite().getSiteId();
+        Site site = moduleInstance.getSite();
 
         //temporary
         try {
@@ -68,7 +69,7 @@ public class MoveEditor extends Action {
 
         try {
 
-            editor = DbUtil.getEditor(siteId, key, lang);
+            editor = DbUtil.getEditor(site, key, lang);
         }
         catch (EditorException ex) {
         }
@@ -86,9 +87,9 @@ public class MoveEditor extends Action {
             }
 
             try {
-                swapEd = DbUtil.getEditor(siteId, editorIndex);
+                swapEd = DbUtil.getEditor(site, editorIndex);
                 if (swapEd == null) {
-                    swapEd = DbUtil.getEditor(siteId, 0);
+                    swapEd = DbUtil.getEditor(site, 0);
                 }
                 if (swapEd != null) {
                     swapEd.setOrderIndex(swapIndex);

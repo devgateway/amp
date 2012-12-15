@@ -142,7 +142,7 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 		button.add(new AttributeModifier("value", new Model(buttonCaption==null?fmName:buttonCaption)));
 		try {
 			translatedValue = TranslatorWorker.getInstance(genKey).
-									translateFromTree(genKey, site.getId().longValue(), session.getLocale().getLanguage(), 
+									translateFromTree(genKey, site, session.getLocale().getLanguage(), 
 											buttonCaption==null?fmName:buttonCaption, TranslatorWorker.TRNTYPE_LOCAL, null);
 			button.add(new AttributeModifier("value", new Model(translatedValue)));
 		} catch (WorkerException e) {

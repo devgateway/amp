@@ -366,10 +366,17 @@ public class RequestProcessor
 
         	}
         }
-
+        
         super.process(request, response);
     }
 
+    @Override
+    public boolean processPreprocess(HttpServletRequest request, HttpServletResponse response)
+    {
+    	TLSUtils.populate(request);
+    	return true;
+    }
+    
     /**
      * Select the mapping used to process the selection path for this request.
      * If no mapping can be identified, create an error response and return

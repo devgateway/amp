@@ -31,12 +31,13 @@ public class TrnTextCell extends TextCell{
 	public String getTrasnlatedValue(HttpServletRequest request){
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		String siteId = site.getId()+"";
+		Long siteId = site.getId();
 		String locale = navigationLanguage.getCode();
 		
 		return this.getTrasnlatedValue(siteId, locale);
 	}
-	public String getTrasnlatedValue(String siteId, String locale){
+	
+	public String getTrasnlatedValue(Long siteId, String locale){
 		
 		String text;
 		try {

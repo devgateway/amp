@@ -25,7 +25,7 @@ public class AdvTrnUpdateTranslation extends Action {
 		String key = trnForm.getUpdateKey();
 		String newText = trnForm.getUpdateMessage();
 		String locale = trnForm.getUpdateLocale();
-		String siteId = RequestUtils.getSite(request).getId().toString();
+		Long siteId = RequestUtils.getSite(request).getId();
 		ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request
 				.getSession());
 		Message original = TranslatorWorker.getInstance(key).getByKey(key,locale, siteId);

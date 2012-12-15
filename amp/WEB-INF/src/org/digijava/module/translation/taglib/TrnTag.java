@@ -47,6 +47,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 
@@ -324,12 +325,10 @@ public class TrnTag
         }
         Site site = null;
         if (siteId != null) {
-            try {
-                site = SiteUtils.getSite(siteId);
-            }
-            catch (DgException ex) {
-                logger.error("Error in trn tag", ex);
-                writeData("<b>ERROR:</b> " + ex.getMessage());
+             site = SiteCache.lookupByName(siteId);
+             if (site == null) {
+                logger.error("Error in trn tag", new RuntimeException());
+                writeData("<b>ERROR:</b> ");
                 return EVAL_PAGE;
             }
         }
@@ -383,7 +382,7 @@ public class TrnTag
 
 
         String value = TranslatorWorker.getInstance(genKey).
-            translateFromTree(genKey, site.getId().longValue(),langCode, null, trnType,keyWords,context);
+            translateFromTree(genKey, site, langCode, null, trnType,keyWords,context);
         if (value != null) {
             writeData(value, getMessageEdit());
             return;
@@ -393,7 +392,7 @@ public class TrnTag
         Locale defLang = SiteUtils.getDefaultLanguages(site);
         if (!defLang.getCode().equals(langCode)) {
             value = TranslatorWorker.getInstance(genKey).
-                translateFromTree(genKey, site.getId().longValue(),
+                translateFromTree(genKey, site,
                                   defLang.getCode(), null, trnType,keyWords,context);
             if (value != null) {
                 writeData(value, getMessageTranslate());
@@ -411,7 +410,7 @@ public class TrnTag
         }
 
         value = TranslatorWorker.getInstance(genKey).
-            translateFromTree(genKey, site.getId().longValue(),
+            translateFromTree(genKey, site,
                               "en", defaultTrn, trnType,keyWords,context);
         if (value != null) {
             writeData(value, getMessageTranslate());
@@ -431,7 +430,7 @@ public class TrnTag
                 i ++;
             }
             value = TranslatorWorker.getInstance(genKey).
-                translateFromTree(genKey, site.getId().longValue(),
+                translateFromTree(genKey, site,
                                   langs, null, null, trnType,keyWords,context);
             if (value != null) {
                 writeData(value, getMessageTranslate());

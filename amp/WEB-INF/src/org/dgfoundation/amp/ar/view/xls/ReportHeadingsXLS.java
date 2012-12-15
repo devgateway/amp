@@ -57,9 +57,9 @@ public class ReportHeadingsXLS extends XLSExporter {
 	public void generate() {
 		ColumnReportData columnReport = (ColumnReportData) item;
 //		requirements for translation purposes
-		String siteId=this.getMetadata().getSiteId();
+		Long siteId=this.getMetadata().getSiteId();
 		String locale=this.getMetadata().getLocale();
-		boolean fundingReached = false;
+//		boolean fundingReached = false;
 		
 		// column headings:
 		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) {

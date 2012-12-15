@@ -1470,7 +1470,7 @@ public class DEImportBuilder {
 			String key = preKey + System.currentTimeMillis();
 			FreeTextType obj = (FreeTextType) iterator.next();
 			if(obj!=null && isValidLanguage(obj.getLang()) && isValidString(obj.getValue())){
-				Editor ed = createEditor("amp", key, obj.getLang());
+				Editor ed = createEditor("amp", key, obj.getLang()); //TODO: bugs source
 				ed.setLastModDate(new Date());
 				ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
 				ed.setBody(obj.getValue());

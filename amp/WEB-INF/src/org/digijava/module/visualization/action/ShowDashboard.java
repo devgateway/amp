@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -138,8 +139,6 @@ public class ShowDashboard extends Action {
 
 	private void initializeFilter(DashboardFilter filter, HttpServletRequest request) {
 		filter.setDashboardType(Constants.DashboardType.DONOR);
-		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (value != null) {
 			Long fisCalId = Long.parseLong(value);
@@ -222,19 +221,14 @@ public class ShowDashboard extends Action {
 			Long fiscalCalendarId = filter.getFiscalCalendarId();
 			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
 			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
-			String headingFY;
-			try {
-				headingFY = TranslatorWorker.translateText("FY", locale, siteId);
-			} catch (WorkerException e) {
-				headingFY = "FY";
-			}
+			String headingFY = TranslatorWorker.translateText("FY");
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			filter.getYears().put(yearName,i);
 		}
 
-		Collection calendars = DbUtil.getAllFisCalenders();
+		Collection<AmpFiscalCalendar> calendars = DbUtil.getAllFisCalenders();
 		if (calendars != null) {
-			filter.setFiscalCalendars(new ArrayList(calendars));
+			filter.setFiscalCalendars(new ArrayList<AmpFiscalCalendar>(calendars));
 		}
 		// if (fromPublicView == false) {
 		// if (orgForm.getFiscalCalendarId() == null) {

@@ -298,7 +298,7 @@ public class GetActivities extends Action {
 			for(ActivityItem activity : acts) {
 //                activity.
                 //create helper bean from activity and program percent
-				ActivityItem item = new ActivityItem(activity.getAct(),currencyCode,activity.getPercent(), request);
+				ActivityItem item = new ActivityItem(activity.getAct(),currencyCode,activity.getPercent());
 				//get already calculated amounts from helper
 				ActivityUtil.ActivityAmounts amounts = item.getAmounts();
 				//calculate totals

@@ -101,7 +101,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
         HSSFRow row = sheet.createRow(rowNum++);
         HSSFCell cell = row.createCell(cellNum);
 
-        String headerPrefix = TranslatorWorker.translateText("Staff Information for", request);
+        String headerPrefix = TranslatorWorker.translateText("Staff Information for");
         HSSFRichTextString header = new HSSFRichTextString(headerPrefix + "  " + name);
         header.applyFont(fontHeader);
         cell.setCellValue(header);
@@ -170,7 +170,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
         HSSFRow row = sheet.createRow(rowNum++);
         HSSFCell cell = row.createCell(cellNum);
 
-        String headerPrefix = TranslatorWorker.translateText("Budget Information for", request);
+        String headerPrefix = TranslatorWorker.translateText("Budget Information for");
         HSSFRichTextString header = new HSSFRichTextString(headerPrefix + "  " + name);
         header.applyFont(fontHeader);
         cell.setCellValue(header);
@@ -236,7 +236,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
         
         HSSFRow row = sheet.createRow(rowNum++);
         HSSFCell cell = row.createCell(cellNum);
-        String headerPrefix = TranslatorWorker.translateText("Contact Information for", request);
+        String headerPrefix = TranslatorWorker.translateText("Contact Information for");
         HSSFRichTextString header = new HSSFRichTextString(headerPrefix + "  " + name);
         header.applyFont(fontHeader);
         cell.setCellValue(header);
@@ -306,7 +306,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
         HSSFRow row = sheet.createRow(rowNum++);
         HSSFCell cell = row.createCell(cellNum);
 
-        String headerPrefix = TranslatorWorker.translateText("General Information for", request);
+        String headerPrefix = TranslatorWorker.translateText("General Information for");
         HSSFRichTextString header = new HSSFRichTextString(headerPrefix + "  " + name);
         header.applyFont(fontHeader);
         cell.setCellValue(header);
@@ -371,13 +371,13 @@ public class ExportOrganizationToExcel extends DispatchAction {
          HSSFRow row = sheet.createRow(rowNum++);
          row.setHeightInPoints(row.getHeightInPoints()*2);
          HSSFCell cell = row.createCell(cellNum);
-         HSSFRichTextString value=new HSSFRichTextString(TranslatorWorker.translateText("Organization Data", request));
+         HSSFRichTextString value=new HSSFRichTextString(TranslatorWorker.translateText("Organization Data"));
          cell.setCellStyle(headerCS);
          cell.setCellValue(value);
          sheet.addMergedRegion(r);
          
          //Organization Name
-         text = TranslatorWorker.translateText("Organization Name", request);
+         text = TranslatorWorker.translateText("Organization Name");
          setColspan(sheet, cellNum, text);
          row = sheet.createRow(rowNum++);         
          cell = row.createCell(cellNum++);
@@ -393,7 +393,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
          cell.setCellValue(value);
          
          //Acronym
-         text = TranslatorWorker.translateText("Organization Acronym", request);
+         text = TranslatorWorker.translateText("Organization Acronym");
          setColspan(sheet, cellNum, text);
          cell = row.createCell(cellNum++);
          value=new HSSFRichTextString(text);
@@ -411,7 +411,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
          cellNum=0;
          //org. type
          row = sheet.createRow(rowNum++);
-         text = TranslatorWorker.translateText("Organization Type", request);
+         text = TranslatorWorker.translateText("Organization Type");
          setColspan(sheet, cellNum, text);
          cell = row.createCell(cellNum++);
          value=new HSSFRichTextString(text);
@@ -426,7 +426,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
          cell.setCellValue(value);
          
          //org. group         
-         text = TranslatorWorker.translateText("Organization Group", request);
+         text = TranslatorWorker.translateText("Organization Group");
          setColspan(sheet, cellNum, text);
          cell = row.createCell(cellNum++);         
          value=new HSSFRichTextString(text);
@@ -447,7 +447,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
          cellNum=0;
          //fund. org.id
          row = sheet.createRow(rowNum++);
-         text = TranslatorWorker.translateText("Funding Org Id", request);
+         text = TranslatorWorker.translateText("Funding Org Id");
          setColspan(sheet, cellNum, text);
          cell = row.createCell(cellNum++);
          value=new HSSFRichTextString(text);
@@ -466,7 +466,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
          //Organization Primary Purpose
          r=new Region(rowNum, new Integer(cellNum+1).shortValue(),rowNum, new Integer(cellNum+3).shortValue()); //colspan for primary purpose         
          row = sheet.createRow(rowNum++);
-         text = TranslatorWorker.translateText("Organization Primary Purpose ", request);
+         text = TranslatorWorker.translateText("Organization Primary Purpose ");
          setColspan(sheet, cellNum, text);
          cell = row.createCell(cellNum++);
          value=new HSSFRichTextString(text);
@@ -487,7 +487,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
          row = sheet.createRow(rowNum++);
          row.setHeightInPoints(row.getHeightInPoints()*2);
          cell = row.createCell(cellNum);
-         value=new HSSFRichTextString(TranslatorWorker.translateText("General Information", request));
+         value=new HSSFRichTextString(TranslatorWorker.translateText("General Information"));
          cell.setCellStyle(headerCS);
          cell.setCellValue(value);
          sheet.addMergedRegion(r);
@@ -500,7 +500,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
          row = sheet.createRow(rowNum++);
          row.setHeightInPoints(row.getHeightInPoints()*2);
          cell = row.createCell(cellNum);
-         value=new HSSFRichTextString(TranslatorWorker.translateText("Staff Information ", request));
+         value=new HSSFRichTextString(TranslatorWorker.translateText("Staff Information "));
          cell.setCellStyle(headerCS);
          cell.setCellValue(value);
          sheet.addMergedRegion(r);
@@ -515,7 +515,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
          row = sheet.createRow(rowNum++);
          row.setHeightInPoints(row.getHeightInPoints()*2);
          cell = row.createCell(cellNum);
-         value=new HSSFRichTextString(TranslatorWorker.translateText("Budget Information ", request));
+         value=new HSSFRichTextString(TranslatorWorker.translateText("Budget Information "));
          cell.setCellStyle(headerCS);
          cell.setCellValue(value);
          sheet.addMergedRegion(r);
@@ -530,7 +530,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
          row = sheet.createRow(rowNum++);
          row.setHeightInPoints(row.getHeightInPoints()*2);
          cell = row.createCell(cellNum);
-         value=new HSSFRichTextString(TranslatorWorker.translateText("Contact Information  ", request));
+         value=new HSSFRichTextString(TranslatorWorker.translateText("Contact Information  "));
          cell.setCellStyle(headerCS);
          cell.setCellValue(value);
          sheet.addMergedRegion(r);
@@ -545,7 +545,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
          r=new Region(rowNum, new Integer(cellNum+1).shortValue(),rowNum, new Integer(cellNum+3).shortValue()); //colspan for Other Information        
          row = sheet.createRow(rowNum++);         
          cell = row.createCell(cellNum++);
-         value=new HSSFRichTextString(TranslatorWorker.translateText("Other Information ", request));
+         value=new HSSFRichTextString(TranslatorWorker.translateText("Other Information "));
          cell.setCellStyle(subHeaderCS);
          cell.setCellValue(value);
          
@@ -610,7 +610,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		
 		//registration number		
 		row = sheet.createRow(rowNum++);
-		String text = TranslatorWorker.translateText("Registration Number in MinPlan", request);
+		String text = TranslatorWorker.translateText("Registration Number in MinPlan");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -625,7 +625,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cell.setCellStyle(regularCS);
 		
 		//legal personality number
-		text = TranslatorWorker.translateText("Legal Personality Number", request);
+		text = TranslatorWorker.translateText("Legal Personality Number");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -643,7 +643,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cellNum=0;
 		//reg. date
 		row = sheet.createRow(rowNum++);
-		text = TranslatorWorker.translateText("Registration Date in MinPlan", request);
+		text = TranslatorWorker.translateText("Registration Date in MinPlan");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -658,7 +658,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cell.setCellStyle(regularCS);
 		
 		//Legal Personality Registration Date in the country of origin
-		text = TranslatorWorker.translateText("Legal Personality Registration Date in the country of origin", request);
+		text = TranslatorWorker.translateText("Legal Personality Registration Date in the country of origin");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -675,7 +675,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		//new row 		
 		cellNum=0;
 		row = sheet.createRow(rowNum++);
-		text = TranslatorWorker.translateText("Operation approval  date in the country of origin", request);
+		text = TranslatorWorker.translateText("Operation approval  date in the country of origin");
         setColspan(sheet, cellNum, text);
 		// Operation approval  date in the country of origin
 		cell = row.createCell(cellNum++);
@@ -691,7 +691,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cell.setCellStyle(regularCS);
          
 		// Registration date of Line Ministry
-		text = TranslatorWorker.translateText("Registration date of Line Ministry", request);
+		text = TranslatorWorker.translateText("Registration date of Line Ministry");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -708,7 +708,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		//new row
 		cellNum=0;		
 		row = sheet.createRow(rowNum++);
-		text = TranslatorWorker.translateText("Receipt of legal personality act/form in DRC", request);
+		text = TranslatorWorker.translateText("Receipt of legal personality act/form in DRC");
         setColspan(sheet, cellNum, text);
 		// Receipt of legal personality act/form in DRC
 		cell = row.createCell(cellNum++);
@@ -723,7 +723,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cell.setCellValue(value);
 		cell.setCellStyle(regularCS);
 		// Recipients
-		text = TranslatorWorker.translateText("Recipients", request);
+		text = TranslatorWorker.translateText("Recipients");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -758,7 +758,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		
 		//new row		
 		cellNum=0;
-		text = TranslatorWorker.translateText("Fiscal Calendar", request);
+		text = TranslatorWorker.translateText("Fiscal Calendar");
         setColspan(sheet, cellNum, text);
 		row = sheet.createRow(rowNum++);
 		//Fiscal Calendar
@@ -781,7 +781,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cellNum=0;
 		row = sheet.createRow(rowNum++);
 		//Sector Prefernces
-		text = TranslatorWorker.translateText("Sector Prefernces", request);
+		text = TranslatorWorker.translateText("Sector Prefernces");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -810,7 +810,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cell.setCellStyle(regularCS);
 		
 		//Country of Origin
-		text = TranslatorWorker.translateText("Country of Origin", request);
+		text = TranslatorWorker.translateText("Country of Origin");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -830,7 +830,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		//new row
 		cellNum=0;		
 		row = sheet.createRow(rowNum++);
-		text = TranslatorWorker.translateText("Organization website ", request);
+		text = TranslatorWorker.translateText("Organization website ");
         setColspan(sheet, cellNum, text);
 		// Organization website 
 		cell = row.createCell(cellNum++);
@@ -845,7 +845,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cell.setCellValue(value);
 		cell.setCellStyle(regularCS);
 		// Tax Number
-		text = TranslatorWorker.translateText("Tax Number ", request);
+		text = TranslatorWorker.translateText("Tax Number ");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -862,7 +862,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		//new row
 		cellNum=0;
 		row = sheet.createRow(rowNum++);
-		text =TranslatorWorker.translateText("Organization Headquarters Address ", request);
+		text =TranslatorWorker.translateText("Organization Headquarters Address ");
         setColspan(sheet, cellNum, text);
 		// Organization Headquarters Address
 		cell = row.createCell(cellNum++);
@@ -876,7 +876,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cell.setCellValue(value);
 		cell.setCellStyle(regularCS);
 		
-		text =TranslatorWorker.translateText("Organization Intervention Level ", request);        	
+		text =TranslatorWorker.translateText("Organization Intervention Level ");        	
 		//	Organization Intervention Level	
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -897,7 +897,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cellNum=0;
 		row = sheet.createRow(rowNum++);
 		// Organization Address Abroad(Internation NGO
-		text = TranslatorWorker.translateText("Organization Address Abroad(Internation NGO) ", request);
+		text = TranslatorWorker.translateText("Organization Address Abroad(Internation NGO) ");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -911,7 +911,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		cell.setCellValue(value);
 		cell.setCellStyle(regularCS);
 		//Organization Intervention Location
-		text = TranslatorWorker.translateText("Organization Intervention Location ", request);
+		text = TranslatorWorker.translateText("Organization Intervention Location ");
         setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value=new HSSFRichTextString(text);
@@ -951,35 +951,35 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		HSSFRichTextString value = null;
 		// table header
 		row = sheet.createRow(rowNum++);
-		String text = TranslatorWorker.translateText("Year", request);
+		String text = TranslatorWorker.translateText("Year");
 		setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value= new HSSFRichTextString(text);
 		cell.setCellValue(value);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("Type of Organization", request);
+		text = TranslatorWorker.translateText("Type of Organization");
 		setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value= new HSSFRichTextString(text);
 		cell.setCellValue(value);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("Organization(s)", request);
+		text = TranslatorWorker.translateText("Organization(s)");
 		setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value= new HSSFRichTextString(text);
 		cell.setCellValue(value);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("Amount", request);
+		text = TranslatorWorker.translateText("Amount");
 		setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value= new HSSFRichTextString(text);
 		cell.setCellValue(value);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("Currency", request);
+		text = TranslatorWorker.translateText("Currency");
 		setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value= new HSSFRichTextString(text);
@@ -996,7 +996,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		    cell.setCellValue(budgetInfo.getYear().toString());
 		    cell.setCellStyle(regularCS);
 		    
-		    text = TranslatorWorker.translateText(budgetInfo.getType().getValue(), request);
+		    text = TranslatorWorker.translateText(budgetInfo.getType().getValue());
 			setColspan(sheet, cellNum, text);
 		    cell = row.createCell(cellNum++);
 		    value = new HSSFRichTextString(text);
@@ -1042,18 +1042,18 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		// table header
 		row = sheet.createRow(rowNum++);
 		cell = row.createCell(cellNum++);
-		value = new HSSFRichTextString(TranslatorWorker.translateText("Year", request));
+		value = new HSSFRichTextString(TranslatorWorker.translateText("Year"));
 		cell.setCellValue(value);
 		cell.setCellStyle(subHeaderCS);		
 		
-		String text = TranslatorWorker.translateText("Type Of Staff", request);
+		String text = TranslatorWorker.translateText("Type Of Staff");
 		setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value = new HSSFRichTextString(text);
 		cell.setCellValue(value);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("Number Of Staff", request);
+		text = TranslatorWorker.translateText("Number Of Staff");
 		setColspan(sheet, cellNum, text);
 		cell = row.createCell(cellNum++);
 		value = new HSSFRichTextString(text);
@@ -1069,7 +1069,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		    cell.setCellValue(staffInfo.getYear().toString());
 		    cell.setCellStyle(regularCS);
 		    
-		    text = TranslatorWorker.translateText(staffInfo.getType().getValue(),request);
+		    text = TranslatorWorker.translateText(staffInfo.getType().getValue());
 			setColspan(sheet, cellNum, text);
 		    cell = row.createCell(cellNum++);
 		    value = new HSSFRichTextString(text);
@@ -1094,50 +1094,50 @@ public class ExportOrganizationToExcel extends DispatchAction {
 		// table header
 		row = sheet.createRow(rowNum++);
 		
-		String text = TranslatorWorker.translateText("LAST NAME", request);
+		String text = TranslatorWorker.translateText("LAST NAME");
 		setColspan(sheet, cellNum, text);
 	    cell = row.createCell(cellNum++);
 	    cell.setCellValue(text);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("FIRST NAME", request);
+		text = TranslatorWorker.translateText("FIRST NAME");
 		setColspan(sheet, cellNum, text);
 	    cell = row.createCell(cellNum++);
 	    cell.setCellValue(text);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("EMAIL", request);
+		text = TranslatorWorker.translateText("EMAIL");
 		setColspan(sheet, cellNum, text);
 	    cell = row.createCell(cellNum++);
 	    cell.setCellValue(text);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("TELEPHONE", request);
+		text = TranslatorWorker.translateText("TELEPHONE");
 		setColspan(sheet, cellNum, text);
 	    cell = row.createCell(cellNum++);
 	    cell.setCellValue(text);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("FAX", request);
+		text = TranslatorWorker.translateText("FAX");
 		setColspan(sheet, cellNum, text);
 	    cell = row.createCell(cellNum++);
 	    cell.setCellValue(text);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("TITLE", request);
+		text = TranslatorWorker.translateText("TITLE");
 		setColspan(sheet, cellNum, text);
 	    cell = row.createCell(cellNum++);
 	    cell.setCellValue(text);
 		cell.setCellStyle(subHeaderCS);
 		
-		text = TranslatorWorker.translateText("PRIMARY CONTACT", request);
+		text = TranslatorWorker.translateText("PRIMARY CONTACT");
 		setColspan(sheet, cellNum, text);
 	    cell = row.createCell(cellNum++);
 	    cell.setCellValue(text);
 		cell.setCellStyle(subHeaderCS);
 		
-		String primary= TranslatorWorker.translateText("Primary", request);
-		String nonPrimary= TranslatorWorker.translateText("Non Primary Contact", request);
+		String primary= TranslatorWorker.translateText("Primary");
+		String nonPrimary= TranslatorWorker.translateText("Non Primary Contact");
 
 		Iterator<AmpOrganisationContact> contactInfoIter = editForm.getOrgContacts().iterator();
 		while (contactInfoIter.hasNext()) {
@@ -1172,7 +1172,7 @@ public class ExportOrganizationToExcel extends DispatchAction {
 						longestEmailRecord = currentRecord;
 			        }
 				}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)){
-					currentRecord = TranslatorWorker.translateText(property.getPhoneCategory(), request)+property.getActualPhoneNumber(); 
+					currentRecord = TranslatorWorker.translateText(property.getPhoneCategory())+property.getActualPhoneNumber(); 
 					phones+= currentRecord + ";\n";
 					if(currentRecord.length() > longestEmailRecord.length()){
 						longestPhoneRecord = currentRecord;

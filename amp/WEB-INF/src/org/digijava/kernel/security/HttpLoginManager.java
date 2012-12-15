@@ -439,7 +439,7 @@ public final class HttpLoginManager {
         }
 
         if (config.getLogonSite().getId() != null || config.getLogonSite().getId().trim().length() !=0) {
-            Site loginSiteObj = SiteCache.getInstance().getSite(config.getLogonSite().getId().trim());
+            Site loginSiteObj = SiteCache.lookupByName(config.getLogonSite().getId().trim());
             if (loginSiteObj != null) {
                 SiteDomain loginSiteDom = SiteUtils.getDefaultSiteDomain(loginSiteObj);
                 loginSite = SiteUtils.getSiteURL(loginSiteDom,

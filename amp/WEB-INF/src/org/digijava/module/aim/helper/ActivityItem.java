@@ -114,12 +114,12 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * @param entity AmpActivity bean
 	 * @see ActivityItem#ActivityItem(AmpActivity, DateFormat)
 	 */
-	public ActivityItem(AmpActivityVersion entity, HttpServletRequest request) throws Exception{
-		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),"USD",null, request);
+	public ActivityItem(AmpActivityVersion entity) throws Exception{
+		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),"USD",null);
 	}
 
-    public ActivityItem(AmpActivityVersion entity,String curenncyCode,Float percent, HttpServletRequest request) throws Exception{
-        this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),curenncyCode,percent, request);
+    public ActivityItem(AmpActivityVersion entity,String curenncyCode,Float percent) throws Exception{
+        this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),curenncyCode,percent);
 	}
 
 	/**
@@ -128,17 +128,12 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * @param entity AmpActivity db entity to construct helper from
 	 * @param frmt date formatter
 	 */
-	public ActivityItem(AmpActivityVersion entity,DateFormat frmt,String curenncyCode,Float percent, HttpServletRequest request) throws Exception {
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				
-		String siteId=site.getId().toString();
-		String locale=navigationLanguage.getCode();			
+	public ActivityItem(AmpActivityVersion entity,DateFormat frmt,String curenncyCode,Float percent) throws Exception {			
 		if (entity != null) {
 			AmpCategoryValue statusValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, entity.getCategories());
 //			statusValue.setValue("fake status");
 			if (statusValue != null){
-				String statusStr = TranslatorWorker.translateText(statusValue.getValue(), locale,siteId);
+				String statusStr = TranslatorWorker.translateText(statusValue.getValue());
 				status		= statusStr != null ? statusStr : "";
 			}else{
 				status = "";
@@ -177,7 +172,7 @@ public class ActivityItem implements Comparable<ActivityItem>{
                                 startDate="";
                             }
 			}
-			donors = getDonorsFromFundings(entity.getFunding(),request);
+			donors = getDonorsFromFundings(entity.getFunding());
 		}
 	}
 
@@ -239,16 +234,11 @@ public class ActivityItem implements Comparable<ActivityItem>{
 	 * @return list of LabelValueBean objects
 	 * @throws WorkerException 
 	 */
-	private List<LabelValueBean> getDonorsFromFundings(Set<AmpFunding> donors, HttpServletRequest request) throws WorkerException{
-		Site site = RequestUtils.getSite(request);
-		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				
-		String siteId=site.getId().toString();
-		String locale=navigationLanguage.getCode();		
+	private List<LabelValueBean> getDonorsFromFundings(Set<AmpFunding> donors) throws WorkerException{
 		List<LabelValueBean> result = new ArrayList<LabelValueBean>();
 		if (donors != null && donors.size() > 0){
 			for (AmpFunding donor: donors) {
-				String donorName = TranslatorWorker.translateText(donor.getAmpDonorOrgId().getName(), locale,siteId); 
+				String donorName = TranslatorWorker.translateText(donor.getAmpDonorOrgId().getName()); 
 				Long donorId = donor.getAmpDonorOrgId().getAmpOrgId();
 				LabelValueBean lvb = new LabelValueBean(donorName,donorId.toString());
 				result.add(lvb);

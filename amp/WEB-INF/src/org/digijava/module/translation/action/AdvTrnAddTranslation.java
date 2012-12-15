@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
@@ -33,7 +34,7 @@ public class AdvTrnAddTranslation extends Action {
 		//check mandatory data
 		if (locale != null && text != null){
 			String originalText = null;
-			String siteId = RequestUtils.getSite(request).getId().toString();
+			Site site = RequestUtils.getSite(request);
 			ListChangesBuffer<String, Message> buffer = TrnUtil.getBuffer(request.getSession());
 			
 			if (key==null){
@@ -45,7 +46,7 @@ public class AdvTrnAddTranslation extends Action {
 					originalText = text;
 				}else{
 					//get translation with same key but English - default one.
-					Message defaultMsg = TranslatorWorker.getInstance(key).getByKey(key, "en", siteId);
+					Message defaultMsg = TranslatorWorker.getInstance(key).getByKey(key, "en", site);
 					if (defaultMsg!=null){
 						//and use its original text
 						originalText = defaultMsg.getOriginalMessage();
@@ -56,7 +57,7 @@ public class AdvTrnAddTranslation extends Action {
 			Message message = new Message();
 			message.setKey(key);
 			message.setLocale(locale);
-			message.setSiteId(siteId);
+			message.setSite(site);
 			message.setMessage(text);
 			message.setOriginalMessage(originalText);
 			//Add new translation to buffer

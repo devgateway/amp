@@ -239,7 +239,7 @@ public class ActivityUtil {
 		String validation=org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(activityTeamId);
 		//setting activity status....
 		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
-		boolean teamLeadFlag    = (role.getTeamHead()!=null && role.getTeamHead())||role.isApprover() ;
+		boolean teamLeadFlag    = role.isApprover() ;
 		if(teamLeadFlag && activityTeamId.equals(teamMemberTeamId)){
 			if(draft){
 				a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);

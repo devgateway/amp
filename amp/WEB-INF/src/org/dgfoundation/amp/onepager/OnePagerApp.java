@@ -10,6 +10,8 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.resource.AbstractResource.ResourceResponse;
+import org.apache.wicket.util.file.File;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.Session;
@@ -24,6 +26,7 @@ import org.dgfoundation.amp.onepager.web.pages.AmpExceptionPage;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.springframework.security.AuthenticationManager;
+import org.apache.wicket.devutils.inspector.RenderPerformanceListener;
 
 /**
  * @author mihai
@@ -146,6 +149,9 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
 		 getMarkupSettings().setDefaultMarkupEncoding("UTF-8"); 
 		 
+		 //getStoreSettings().setFileStoreFolder(new File("/mnt/ssd/wicket"));
+		 //turn this on in order to view rendering times for wicket pages
+		 //getComponentInstantiationListeners().add(new RenderPerformanceListener());
 		 
 		 // Error handling
 		 getRequestCycleListeners().add(new AbstractRequestCycleListener() {

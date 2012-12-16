@@ -37,20 +37,18 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 
 	@Override
 	protected void onConfigure() {
-		/*
 		AmpAuthWebSession session = (AmpAuthWebSession) getSession();
 		if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
 			FundingOrganization fo = new FundingOrganization();
 			fo.setAmpOrgId(fundingOrgModel.getObject().getAmpOrgId());
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG, fo);
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE, Constants.FUNDING_AGENCY);
-		}*/
+		}
 		super.onConfigure();
-		/*
 		if (fundingOrgModel != null && fundingOrgModel.getObject() != null){
 			PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG);
 			PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_ORG_ROLE);
-		}*/
+		}
 	}
 
 	public AmpFundingGroupFeaturePanel(String id, String fmName,

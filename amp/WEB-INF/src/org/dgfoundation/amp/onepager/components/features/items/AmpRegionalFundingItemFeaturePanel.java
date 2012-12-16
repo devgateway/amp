@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpRegionalTransactionsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
@@ -16,6 +17,8 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 /**
  * Represents visually one funding item {@link AmpFunding} The model here is
@@ -25,7 +28,7 @@ import org.digijava.module.aim.helper.Constants;
  * @author mpostelnicu@dgateway.org since Nov 3, 2010
  */
 public class AmpRegionalFundingItemFeaturePanel extends AmpFeaturePanel<Set<AmpRegionalFunding>> {
-	
+	private static final long serialVersionUID = 1L;
 	private IModel<AmpCategoryValueLocations> cvLocationModel; 
 	
 	/**
@@ -60,17 +63,13 @@ public class AmpRegionalFundingItemFeaturePanel extends AmpFeaturePanel<Set<AmpR
 
 	@Override
 	protected void onConfigure() {
-		/*
 		AmpAuthWebSession session = (AmpAuthWebSession) getSession();
 		if (cvLocationModel != null && cvLocationModel.getObject() != null){
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION, cvLocationModel.getObject());
 		}
-		*/
 		super.onConfigure();
-		/*
 		if (cvLocationModel != null && cvLocationModel.getObject() != null){
 			PermissionUtil.removeFromScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_REGION);
 		}
-		*/
 	}
 }

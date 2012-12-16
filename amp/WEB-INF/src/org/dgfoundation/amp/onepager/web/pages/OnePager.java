@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.web.pages;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,7 +15,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -42,13 +42,12 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
-import edu.emory.mathcs.backport.java.util.Collections;
-
 /**
  * @author mpostelnicu@dgateway.org since Sep 22, 2010
  */
 public class OnePager extends AmpHeaderFooter {
 	
+	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(OnePager.class);
 	//for test purposes, it will be removed !!
 	private final static boolean DEBUG_ACTIVITY_LOCK = false;
@@ -161,6 +160,7 @@ public class OnePager extends AmpHeaderFooter {
 			editLockRefresher = new WebMarkupContainer("editLockRefresher");
 		if (!newActivity){
 			editLockRefresher.add(new AbstractAjaxTimerBehavior(ActivityGatekeeper.getRefreshInterval()){
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				public boolean canCallListenerInterface(Component component,
@@ -257,6 +257,7 @@ public class OnePager extends AmpHeaderFooter {
 			}
 		});
 		listModel = new AbstractReadOnlyModel<List<AmpComponentPanel>>() {
+			private static final long serialVersionUID = 1L;
 			private List<AmpComponentPanel> list = null;
 			private AmpComponentPanel initObject(OnepagerSection os, LinkedList<OnepagerSection> features, HashMap<String, AmpComponentPanel> temp){
 				AmpComponentPanel existing = temp.get(os.getClassName());

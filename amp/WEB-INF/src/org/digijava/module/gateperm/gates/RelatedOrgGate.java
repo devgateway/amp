@@ -6,17 +6,11 @@ package org.digijava.module.gateperm.gates;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
-
-import org.hibernate.Session;
-
 import org.dgfoundation.amp.ar.MetaInfo;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.Gate;
@@ -30,7 +24,7 @@ public class RelatedOrgGate extends Gate {
 
     public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER };
 
-    public static final MetaInfo[] PARAM_INFO  = new MetaInfo[] {};
+    public static final MetaInfo[] PARAM_INFO  = null;//new MetaInfo[] {};
 
     private static final String  DESCRIPTION = "Gives right if current user is assigned to an org that is related (by any role) to an object - such an activity";
 

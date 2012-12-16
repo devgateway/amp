@@ -14,37 +14,7 @@
 			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
 		</tr>
 		<tr wicket:id="listLocations">
-			<td class="inside" align="right">
-				<span wicket:id="locationLabel" />
-			</td>
-			<td class="inside">
-				<span wicket:id="percentage"/>
-			</td>
-			<wicket:fm fmNames="Latitude;Longitude">
-				<td class="inside">
-					<table>
-						<tr>
-							<td>
-								Latitude
-							</td>
-							<td>
-								<span wicket:id="latitudeid"/>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Longitude
-							</td>
-							<td>
-								<span wicket:id="longitudeid"/>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</wicket:fm>
-			<td class="inside" align="left">
-				<span wicket:id="delLocation"/>
-			</td>
+			<div wicket:id="locationItem"/>
 		</tr>
 		<tr>
 			<td class="inside" align="center" colspan="4">

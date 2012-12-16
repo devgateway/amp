@@ -47,6 +47,9 @@
    <category name="org.dgfoundation"> <!-- DEBUG default -->
       <priority value="DEBUG"/>
    </category>
+   <category name="org.apache.wicket.devutils.inspector.RenderPerformanceListener">
+   	  <priority value="DEBUG"/>   <!-- SET to DEBUG to see wicket page render times -->
+   </category>
 
    <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->
    <category name="javax.enterprise.resource.webcontainer.jsf">

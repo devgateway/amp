@@ -11,46 +11,35 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.validator.PatternValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.features.items.AmpLocationItemPanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 20, 2010
@@ -58,6 +47,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 public class AmpLocationFormTableFeature extends
 		AmpFormTableFeaturePanel<AmpActivityVersion, AmpActivityLocation> {
 
+	private static final long serialVersionUID = 1L;
 	private IModel<Set<AmpActivityLocation>> setModel;
 
 	public IModel<Set<AmpActivityLocation>> getSetModel() {
@@ -82,9 +72,11 @@ public class AmpLocationFormTableFeature extends
 		setModel = new PropertyModel<Set<AmpActivityLocation>>(
 				am, "locations");
 		if (setModel.getObject() == null)
-			setModel.setObject(new HashSet());
+			setModel.setObject(new HashSet<AmpActivityLocation>());
 
 		AbstractReadOnlyModel<List<AmpActivityLocation>> listModel = new AbstractReadOnlyModel<List<AmpActivityLocation>>() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public List<AmpActivityLocation> getObject() {
 				// remove sectors with other classification
@@ -114,6 +106,8 @@ public class AmpLocationFormTableFeature extends
 		
 		final AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField=
 			new AmpPercentageCollectionValidatorField<AmpActivityLocation>("locationPercentageTotal",listModel,"locationPercentageTotal") {
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public Number getPercentage(AmpActivityLocation item) {
 					return item.getLocationPercentage();
@@ -124,6 +118,8 @@ public class AmpLocationFormTableFeature extends
 		
 		final AmpUniqueCollectionValidatorField<AmpActivityLocation> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivityLocation>(
 				"uniqueLocationsValidator", listModel, "uniqueLocationsValidator") {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 		 	public Object getIdentifier(AmpActivityLocation t) {
 				return t.getLocation().getLocation().getAutoCompleteLabel();
@@ -138,107 +134,21 @@ public class AmpLocationFormTableFeature extends
 		add(minSizeCollectionValidationField);
 		
 		list = new ListView<AmpActivityLocation>("listLocations", listModel) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void populateItem(final ListItem<AmpActivityLocation> item) {
-					
-				final MarkupContainer listParent = this.getParent();
-				PropertyModel<Double> percModel = new PropertyModel<Double>(item.getModel(),"locationPercentage");
-				AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField){
-					@Override
-					protected void onBeforeRender() {
-						
-						if (this.isEnabled()){
-							this.setEnabled(!disablePercentagesForInternational.getObject());
-						}
-						super.onBeforeRender();
-					}
-				};				
-				item.add(percentageField);
-				item.add(new Label("locationLabel", item.getModelObject().getLocation().getLocation().getAutoCompleteLabel()));
-
-				String expressionLatitude = "(^\\+?([1-8])?\\d(\\.\\d+)?$)|(^-90$)|(^-(([1-8])?\\d(\\.\\d+)?$))";
-            	PatternValidator latitudeValidator = new PatternValidator(expressionLatitude) {
-            		
-            		@Override
-            		public void validate(IValidatable<String> validatable) {
-            			// Check value against pattern
-            			if (!getPattern().matcher(validatable.getValue()).matches()){
-            				error("CoordinatesValidator");
-            			}
-            		}
-           		};
-            	
-				AmpTextFieldPanel<String> latitude = new AmpTextFieldPanel<String> ("latitudeid", 
-						new PropertyModel<String>(item.getModel(), "latitude"), "Latitude", true, true);
-				latitude.getTextContainer().add(latitudeValidator);
-				latitude.getTextContainer().add(new AttributeModifier("style", "width: 100px"));
-				latitude.setTextContainerDefaultMaxSize();
-				item.add(latitude);
-
-				String expressionLongitude = "(^\\+?1[0-7]\\d(\\.\\d+)?$)|(^\\+?([1-9])?\\d(\\.\\d+)?$)|(^-180$)|(^-1[1-7]\\d(\\.\\d+)?$)|(^-[1-9]\\d(\\.\\d+)?$)|(^\\-\\d(\\.\\d+)?$)";
-            	PatternValidator longitudeValidator = new PatternValidator(expressionLongitude) {
-            		@Override
-            		public void validate(IValidatable<String> validatable) {
-            			if (!getPattern().matcher(validatable.getValue()).matches()){
-            				error("CoordinatesValidator");
-            			}
-            		}
-           		};
-				AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitudeid", 
-						new PropertyModel<String>(item.getModel(), "Longitude"), "Longitude", true, true);
-				longitude.getTextContainer().add(longitudeValidator);
-				longitude.setTextContainerDefaultMaxSize();
-				longitude.getTextContainer().add(new AttributeModifier("style", "width: 100px"));
-				item.add(longitude);
-				
-				
-				String translatedText = TranslatorUtil.getTranslation("Delete this location and any related funding elements, if any?");
-				AmpDeleteLinkField delLocation = new AmpDeleteLinkField("delLocation","Delete Location",new Model<String>(translatedText)) {
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						
-						// toggleHeading(target, setModel.getObject());
-
-						// remove any regional funding with this region
-						if (CategoryManagerUtil
-								.equalsCategoryValue(
-										item.getModelObject().getLocation()
-												.getLocation()
-												.getParentCategoryValue(),
-										CategoryConstants.IMPLEMENTATION_LOCATION_REGION)) {
-							final IModel<Set<AmpRegionalFunding>> regionalFundings = new PropertyModel<Set<AmpRegionalFunding>>(
-									am, "regionalFundings");
-							Iterator<AmpRegionalFunding> iterator = regionalFundings.getObject().iterator();
-							while (iterator.hasNext()) {
-								AmpRegionalFunding ampRegionalFunding = (AmpRegionalFunding) iterator
-										.next();
-								if (ampRegionalFunding.getRegionLocation().equals(
-										item.getModelObject().getLocation()
-												.getLocation()))
-									iterator.remove();
-							}
-							regionalFundingFeature.getList().removeAll();
-							target.add(regionalFundingFeature);
-							target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
-							
-							percentageValidationField.reloadValidationField(target);							
-							uniqueCollectionValidationField.reloadValidationField(target);
-						}
-						setModel.getObject().remove(item.getModelObject());
-						target.add(listParent);
-						list.removeAll();
-					}
-
-				};
-				item.add(delLocation);
-
+				AmpLocationItemPanel li = new AmpLocationItemPanel("locationItem", item.getModel(), "Location Item", 
+						disablePercentagesForInternational, am, regionalFundingFeature, percentageValidationField, 
+						uniqueCollectionValidationField, setModel, list);
+				item.add(li);
 			}
 		};
 		list.setReuseItems(true);
 		add(list);
 
-		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, new Model(list)){
+		add(new AmpDividePercentageField<AmpActivityLocation>("dividePercentage", "Divide Percentage", "Divide Percentage", setModel, new Model<ListView<AmpActivityLocation>>(list)){
+			private static final long serialVersionUID = 1L;
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.DECIMAL_LOCATION_PERCENTAGES_DIVIDE);
@@ -255,7 +165,7 @@ public class AmpLocationFormTableFeature extends
 				int size = 0;
 				Iterator<AmpActivityLocation> it = set.iterator();
 				while (it.hasNext()) {
-					AmpActivityLocation t = (AmpActivityLocation) it.next();
+					AmpActivityLocation t = it.next();
 					if (itemInCollection(t))
 						size++;
 				}
@@ -266,7 +176,7 @@ public class AmpLocationFormTableFeature extends
 				int alloc = (100*factor)/size;
 				it = set.iterator();
 				while (it.hasNext()) {
-					AmpActivityLocation loc = (AmpActivityLocation) it.next();
+					AmpActivityLocation loc = it.next();
 					if (!itemInCollection(loc))
 						continue;
 					setPercentageLocation(loc, alloc/(double)factor);
@@ -278,7 +188,7 @@ public class AmpLocationFormTableFeature extends
 					delta = -1;
 				it = set.iterator();
 				while (dif != 0 && it.hasNext()){
-					AmpActivityLocation loc = (AmpActivityLocation) it.next();
+					AmpActivityLocation loc = it.next();
 					if (!itemInCollection(loc))
 						continue;
 					setPercentageLocation(loc, (getPercentageLocation(loc) + (delta)/(double)factor));
@@ -319,6 +229,8 @@ public class AmpLocationFormTableFeature extends
 		});
 		
 		final AmpAutocompleteFieldPanel<AmpCategoryValueLocations> searchLocations=new AmpAutocompleteFieldPanel<AmpCategoryValueLocations>("searchLocations","Search Locations",AmpLocationSearchModel.class,false) {			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onSelect(AjaxRequestTarget target,
 					AmpCategoryValueLocations choice) {
@@ -383,7 +295,6 @@ public class AmpLocationFormTableFeature extends
 
 			@Override
 			public Integer getChoiceLevel(AmpCategoryValueLocations choice) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 

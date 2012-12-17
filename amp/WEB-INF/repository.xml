@@ -60,7 +60,7 @@
             <param name="autoRepair" value="true"/>
             <param name="analyzer" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
             <param name="queryClass" value="org.apache.jackrabbit.core.query.QueryImpl"/>
-            <param name="idleTime" value="-1"/>
+            <param name="maxiIdleTime" value="-1"/>
             <param name="respectDocumentOrder" value="true"/>         
         </SearchIndex>
         	

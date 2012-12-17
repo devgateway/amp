@@ -3,19 +3,14 @@
  *
  */
 package org.dgfoundation.amp.onepager.models;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
+import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -23,14 +18,11 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.*;
 
 /**
  * @author mpostelnicu@dgateway.org since Oct 13, 2010
@@ -38,7 +30,8 @@ import edu.emory.mathcs.backport.java.util.Collections;
 public class AmpLocationSearchModel extends
 		AbstractAmpAutoCompleteModel<AmpCategoryValueLocations> {
 
-	public static final String PARENT_DELIMITER="\\] \\[";
+    public static final Logger logger = Logger.getLogger(AmpLocationSearchModel.class);
+    public static final String PARENT_DELIMITER="\\] \\[";
 	
 	public enum PARAM implements AmpAutoCompleteModelParam {
 		LAYER, LEVEL
@@ -56,11 +49,21 @@ public class AmpLocationSearchModel extends
 		Collection<AmpCategoryValueLocations> ret = new TreeSet<AmpCategoryValueLocations>(new AmpAutoCompleteDisplayable.AmpAutoCompleteComparator());
 		IModel<Set<AmpCategoryValue>> layerModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LAYER);
 		IModel<Set<AmpCategoryValue>> levelModel = (IModel<Set<AmpCategoryValue>>) getParam(PARAM.LEVEL);
+        AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
+        AmpTeamMember currentMember = wicketSession.getAmpCurrentMember();
+        AmpCategoryValueLocations assignedRegion = null;
+        if (currentMember != null){
+            User user = currentMember.getUser();
+            if (user != null){
+                assignedRegion = user.getRegion();
+            }
+        }
+
 		if (layerModel == null || layerModel.getObject().size() < 1 || levelModel==null || levelModel.getObject().size()<1)
 			return ret;
 		AmpCategoryValue cvLayer = layerModel.getObject().iterator().next();
 		AmpCategoryValue cvLevel= levelModel.getObject().iterator().next();
-		
+
 		if (!CategoryManagerUtil.equalsCategoryValue(cvLevel,
 				CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL)
 				&& CategoryManagerUtil.equalsCategoryValue(cvLayer,
@@ -88,52 +91,50 @@ public class AmpLocationSearchModel extends
 		try {
 			dbSession = PersistenceManager.getRequestDBSession();
 
-			Criteria crit = dbSession
+			Criteria criteria = dbSession
 					.createCriteria(AmpCategoryValueLocations.class);
-			crit.setCacheable(true);
+			criteria.setCacheable(true);
 			Junction junction = Restrictions.conjunction().add(
 					Restrictions.eq("parentCategoryValue", cvLayer));
 			if (input.trim().length() > 0) {
 				if(isExactMatch()) {
 					String[] strings = input.split(PARENT_DELIMITER);
-					
-					if(strings.length>1) {					
+					if(strings.length>1) {
 						String locName = strings[strings.length-1].substring(0,strings[strings.length-1].length()-2);
 						junction.add( Restrictions.eq("name",locName));
-						String parentName=null;
+						String parentName = null;
 						if(strings.length==2)
 							parentName = strings[0].substring(1);
 						else
 							parentName=strings[strings.length-2];
-						crit.createCriteria("parentLocation").add(Restrictions.eq("name", parentName));
+						criteria.createCriteria("parentLocation").add(Restrictions.eq("name", parentName));
 					} else {
 						junction.add(Restrictions.eq("name", input.substring(1, input.length()-2)));
 					}
-					
-					
+
+
 				} else junction.add(getTextCriterion("name", input));
 			}
-			crit.add(junction);
-			crit.addOrder(Order.asc("name"));
+			criteria.add(junction);
+			criteria.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)
-				crit.setMaxResults(maxResults);
-			List tempList = crit.list();
+				criteria.setMaxResults(maxResults);
+			List<AmpCategoryValueLocations> tempList = criteria.list();
+
+            if (assignedRegion != null){
+                Iterator<AmpCategoryValueLocations> it = tempList.iterator();
+                while (it.hasNext()) {
+                    AmpCategoryValueLocations location = it.next();
+                    AmpCategoryValueLocations locationRegion = DynLocationManagerUtil.getAncestorByLayer(location, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                    if (!assignedRegion.getId().equals(locationRegion.getId()))
+                        it.remove();
+                }
+            }
+
 			ret.addAll(tempList);
 		} catch (DgException e) {
-			// TODO Auto-genrated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			logger.error(e);
 		}
-
 		return ret;
 	}
 

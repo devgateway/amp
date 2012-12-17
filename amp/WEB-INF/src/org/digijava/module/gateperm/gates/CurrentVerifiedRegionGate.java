@@ -39,11 +39,9 @@ public class CurrentVerifiedRegionGate extends Gate {
 		AmpCategoryValueLocations parentRegion = null;
 		if (currentLocation != null)
 			parentRegion = DynLocationManagerUtil.getAncestorByLayer(currentLocation, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-		if (currentLocation != null && user.getRegion() != null && 
+		return currentLocation != null && user.getRegion() != null &&
 				(currentLocation.getId().equals(user.getRegion().getId()) || 
-						user.getRegion().getId().equals(parentRegion.getId())))
-			return true;
-		return false;
+				(parentRegion != null && user.getRegion().getId().equals(parentRegion.getId())));
 	}
 
 	@Override

@@ -26,6 +26,7 @@ var trnAlertBadFile = "<digi:trn jsFriendly='true'>Invalid file extension</digi:
 	<html:hidden name="beMapActionsForm" property="id"/>
 	<html:hidden name="beMapActionsForm" property="ruleId"/>
 	<html:hidden name="beMapActionsForm" property="projectId"/>
+<html:hidden name="beMapActionsForm" property="additionalLabelCol"/>
 	
 	
 
@@ -39,7 +40,7 @@ var trnAlertBadFile = "<digi:trn jsFriendly='true'>Invalid file extension</digi:
     <td valign=top width=712>
 	<table class="inside" width="100%" cellpadding="0" cellspacing="0" border=1>
 <tr>
-<td colspan=4 align=center background="images/ins_header.gif" class=inside><b class="ins_header"><digi:trn>Manage Mappings</digi:trn></b></td>
+<td colspan=6 align=center background="images/ins_header.gif" class=inside><b class="ins_header"><digi:trn>Manage Mappings</digi:trn></b></td>
 </tr>
 <tr>
 		<logic:equal name="beMapActionsForm" property="additionalLabelCol" value="false">
@@ -51,6 +52,8 @@ var trnAlertBadFile = "<digi:trn jsFriendly='true'>Invalid file extension</digi:
     </logic:equal>
     <td background="images/ins_bg.gif" class=inside width=50%><b class="ins_header" style="font-size:11px;"><digi:trn>External Code/Label</digi:trn></b></td>
     <td background="images/ins_bg.gif" class=inside width=150><b class="ins_header" style="font-size:11px;">&nbsp;&nbsp;<digi:trn>Matching</digi:trn>&nbsp;&nbsp;</b></td>
+    <td background="images/ins_bg.gif" colspan="2" class=inside>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    
     </tr>
 
 <logic:present name="beMapActionsForm" property="ampEntityMappedItems">
@@ -108,7 +111,37 @@ var trnAlertBadFile = "<digi:trn jsFriendly='true'>Invalid file extension</digi:
 							<logic:notPresent name="ampEntityMappedItem" property="mapItem">
 								<td width="10" bgcolor="red">&nbsp</td>
 							</logic:notPresent>
+							
+							
+							
+							<logic:present name="ampEntityMappedItem" property="mapItem">
+								<logic:equal name="ampEntityMappedItem" property="mapItem.approved" value="true">
+									<td>&nbsp;<a id="approval_btn_<bean:write name="ampEntityMappedItem" property="ampEntity.uniqueId"/>" class="map_approved" href="javascript:toggleApproval(<bean:write name="ampEntityMappedItem" property="ampEntity.uniqueId"/>)"><img width="16" height="16" src="img_2/ico_validate.gif"></a>&nbsp;</td>
+								</logic:equal>
+								<logic:equal name="ampEntityMappedItem" property="mapItem.approved" value="false">
+									<td>&nbsp;<a id="approval_btn_<bean:write name="ampEntityMappedItem" property="ampEntity.uniqueId"/>" class="map_unapproved" href="javascript:toggleApproval(<bean:write name="ampEntityMappedItem" property="ampEntity.uniqueId"/>)"><img width="16" height="16" src="img_2/ico_validate_red.gif"></a>&nbsp;</td>
+								</logic:equal>
+							</logic:present>
+							<logic:notPresent name="ampEntityMappedItem" property="mapItem">
+								<td>&nbsp;<img width="16" height="16" src="img_2/ico_validate_gray.gif">&nbsp;</td>
+							</logic:notPresent>
+							
+
+							<logic:present name="ampEntityMappedItem" property="mapItem">
+								<logic:equal name="ampEntityMappedItem" property="mapItem.warning" value="true">
+									<td>&nbsp;<img width="16" height="16" src="img_2/not_ok_ico.gif">&nbsp;</td>
+								</logic:equal>
+								<logic:equal name="ampEntityMappedItem" property="mapItem.warning" value="false">
+									<td>&nbsp;<img width="16" height="16" src="img_2/ok_ico.gif">&nbsp;</td>
+								</logic:equal>
+							</logic:present>
+							<logic:notPresent name="ampEntityMappedItem" property="mapItem">
+								<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</logic:notPresent>
+								
+
 						</tr>
+
 					</logic:iterate>
 				</logic:present>
 
@@ -141,6 +174,53 @@ var trnAlertBadFile = "<digi:trn jsFriendly='true'>Invalid file extension</digi:
 	</div>
 	
 	</td>
+  </tr>
+  
+  <tr>
+  	<td aligh="right">
+  		<table width="300">
+  			<tr>
+  				<td colspan="2">Legend</td>
+  			</tr>
+  			<tr>
+  				<td valign="top" bgColor="red">&nbsp;</td>
+  				<td>Not mapped</td>
+  			</tr>
+  			<tr>
+  				<td valign="top" bgColor="yellow">&nbsp;</td>
+  				<td>Partial matching</td>
+  			</tr>
+  			<tr>
+  				<td valign="top" bgColor="green">&nbsp;</td>
+  				<td>Exact matching</td>
+  			</tr>
+  			<tr>
+  				<td valign="top" bgColor="blue">&nbsp;</td>
+  				<td>Manual matching</td>
+  			</tr>
+  			<tr>
+  				<td valign="top"><img width="16" height="16" src="img_2/ico_validate.gif"></td>
+  				<td>Mapping item is approved</td>
+  			</tr>
+  			<tr>
+  				<td valign="top"><img width="16" height="16" src="img_2/ico_validate_red.gif"></td>
+  				<td>Mapping item is not approved</td>
+  			</tr>
+  			<tr>
+  				<td valign="top"><img width="16" height="16" src="img_2/ico_validate_gray.gif"></td>
+  				<td>Item is not mapped</td>
+  			</tr>
+  			<tr>
+  				<td valign="top"><img width="16" height="16" src="img_2/ok_ico.gif"></td>
+  				<td>Imported data for the current mapping is still valid</td>
+  			</tr>
+  			<tr>
+  				<td valign="top"><img width="16" height="16" src="img_2/not_ok_ico.gif"></td>
+  				<td>Imported data for the current have changed.
+  					Please, validate code or value change in import source, remove approved flag from the item and reimport data.
+  					Then try to auto-match again</td>
+  			</tr>
+  	</td>
   </tr>
 </table>
 

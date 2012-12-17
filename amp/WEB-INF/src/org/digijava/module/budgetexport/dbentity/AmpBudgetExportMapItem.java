@@ -24,6 +24,11 @@ public class AmpBudgetExportMapItem {
 
     private boolean showAdditionalLabelCol;
 
+    private boolean approved;
+
+    //NonPersistent field
+    private boolean warning;
+
     public Long getId() {
         return id;
     }
@@ -94,5 +99,21 @@ public class AmpBudgetExportMapItem {
 
     public void setShowAdditionalLabelCol(boolean showAdditionalLabelCol) {
         this.showAdditionalLabelCol = showAdditionalLabelCol;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
+    public boolean isWarning() {
+        return warning;
+    }
+
+    public void setWarning(boolean warning) {
+        this.warning = warning;
     }
 }

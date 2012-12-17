@@ -127,6 +127,7 @@ public class MapActions extends DispatchAction {
                             mapDbItem.setImportedLabel(mapItem.getImportedLabel());
                             mapDbItem.setMatchLevel(mapItem.getMatchLevel());
                             mapDbItem.setAdditionalLabel(mapItem.getAdditionalLabel());
+                            mapDbItem.setApproved(mapItem.isApproved());
                         }
                     }
                 } else { //Add a new one
@@ -158,6 +159,7 @@ public class MapActions extends DispatchAction {
         BEMapActionsForm beMapActionsForm = (BEMapActionsForm) form;
         request.setCharacterEncoding("UTF-8");
         AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
+        List<AmpEntityMappedItem> ampEntityMappedItems = (List<AmpEntityMappedItem>) request.getSession().getAttribute(AMP_MAPPED_ENTITY_LIST);
 
         FormFile file = beMapActionsForm.getUpload();
 
@@ -174,7 +176,7 @@ public class MapActions extends DispatchAction {
             strBld.append((char)b);
         }
 
-        String str = new String(strBld.toString().getBytes(), "UTF-8");
+        //String str = new String(strBld.toString().getBytes(), "UTF-8");
         /*
         Map<String, String> csvMap = BudgetExportUtil.parseCSV(csvContent, rule.isHeader());
           */
@@ -183,25 +185,45 @@ public class MapActions extends DispatchAction {
         
         Set <Map.Entry<String, String>> mapEntrySet = csvMap.entrySet();
         Iterator<Map.Entry<String, String>> mapEntrySetIt = mapEntrySet.iterator();
+
+        
+        boolean containsWarnings = false;
+        List<AmpBudgetExportCSVItem> tmpList = new ArrayList<AmpBudgetExportCSVItem>();
+        while (mapEntrySetIt.hasNext()) {
+            Map.Entry<String, String> entry = mapEntrySetIt.next();
+            AmpBudgetExportCSVItem csvItem = new AmpBudgetExportCSVItem(entry.getKey(), entry.getValue(), rule);
+            tmpList.add(csvItem);
+            
+            for (AmpEntityMappedItem ampEntityMappedItem : ampEntityMappedItems) {
+                if (ampEntityMappedItem.getMapItem() != null && ampEntityMappedItem.getMapItem().isApproved() && ((ampEntityMappedItem.getMapItem().getImportedCode().equals(csvItem.getCode()) &&
+                        !ampEntityMappedItem.getMapItem().getImportedLabel().equals(csvItem.getLabel())) ||
+                        (ampEntityMappedItem.getMapItem().getImportedLabel().equals(csvItem.getLabel()) &&
+                                                !ampEntityMappedItem.getMapItem().getImportedCode().equals(csvItem.getCode())))) {
+                    ampEntityMappedItem.getMapItem().setWarning(true);
+                    containsWarnings = true;
+                }
+            }
+        }
+
+        if (!containsWarnings) {
         rule.getCsvItems().clear();
+        /*
         while (mapEntrySetIt.hasNext()) {
             Map.Entry<String, String> entry = mapEntrySetIt.next();
             AmpBudgetExportCSVItem csvItem = new AmpBudgetExportCSVItem(entry.getKey(), entry.getValue(), rule);
             rule.getCsvItems().add(csvItem);
+        }  */
+
+
+        rule.getCsvItems().addAll(tmpList);
+        DbUtil.saveOrUpdateMapRule(rule);
+        } else {
+            beMapActionsForm.setNoReload(true);
         }
 
-        DbUtil.saveOrUpdateMapRule(rule);
 
+ //       List<HierarchyListable> ampEntityList = (List<HierarchyListable>)request.getSession().getAttribute(AMP_ENTITY_LIST_SESSION_ATTR);
 
-        List<HierarchyListable> ampEntityList = (List<HierarchyListable>)request.getSession().getAttribute(AMP_ENTITY_LIST_SESSION_ATTR);
-
-
-        List<AmpBudgetExportMapItem> items = BudgetExportUtil.matchAndGetMapItems(csvMap, ampEntityList, rule);
-
-        beMapActionsForm.setMapItems(items);
-        request.getSession().setAttribute(TMP_MAP_SESSION_ATTR, items);
-
-        //beMapActionsForm.setNoReload(true);
 
         return view(mapping, beMapActionsForm, request, response);
     }
@@ -238,6 +260,24 @@ public class MapActions extends DispatchAction {
         response.getWriter().print(xmlContent);
         return null;
     }
+
+    public ActionForward toggleApprovalStatus (ActionMapping mapping, ActionForm form,
+                            HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+        boolean approved = Boolean.parseBoolean(request.getParameter("approved"));
+        String ampObjId = request.getParameter("ampObjId");
+        List<AmpEntityMappedItem> ampEntityMappedItems = (List<AmpEntityMappedItem>) request.getSession().getAttribute(AMP_MAPPED_ENTITY_LIST);
+        for (AmpEntityMappedItem item : ampEntityMappedItems) {
+            if (item.getAmpEntity().getUniqueId().trim().equals(ampObjId)) {
+                AmpBudgetExportMapItem mapItem = null;
+                if (item.getMapItem() != null) {
+                    item.getMapItem().setApproved(approved);
+                }
+                break;
+            }
+        }
+
+        return null;
+    }
     
     public ActionForward updateMappingItem (ActionMapping mapping, ActionForm form,
                         HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
@@ -257,11 +297,15 @@ public class MapActions extends DispatchAction {
                     mapItem = new AmpBudgetExportMapItem();
                     mapItem.setAmpObjectID(Long.parseLong(item.getAmpEntity().getUniqueId()));
                     mapItem.setAmpLabel(item.getAmpEntity().getLabel());
+                    if (item.getAmpEntity().getAdditionalSearchString() != null) {
+                        mapItem.setAdditionalLabel(item.getAmpEntity().getAdditionalSearchString());
+                    }
                     mapItem.setRule(rule);
                 }
                 mapItem.setImportedCode(importedCode);
                 mapItem.setImportedLabel(importedLabel);
                 mapItem.setMatchLevel(AmpBudgetExportMapItem.MAP_MATCH_LEVEL_MANUAL);
+                mapItem.setApproved(true); //Setting approved status to manually matched items
                 item.setMapItem(mapItem);
                 break;
             }

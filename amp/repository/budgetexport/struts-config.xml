@@ -53,6 +53,9 @@
 			<forward name="projectRules" path="budgetexport/showMapingRuleList.do"/>
 		</action>
 
+		<action  name="beBudgetExportForm" path="/budgetexport/exportMapping" 
+				scope="request" type="org.digijava.module.budgetexport.action.ExportMapping" validate="false"/>
+
 		
 
 

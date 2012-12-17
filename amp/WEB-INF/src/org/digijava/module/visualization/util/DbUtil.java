@@ -1039,7 +1039,19 @@ public class DbUtil {
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
         boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
+        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1)){
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY){
+    			if (locationCondition && sectorCondition) {
+    				oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
+		        } else if (locationCondition)  {
+		        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,orole.percentage,fd.fixedExchangeRate) ";
+		        } else if (sectorCondition)  {
+		        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
+		        } else {
+		            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,orole.percentage,fd.fixedExchangeRate) ";
+		        }
+    		}
+		} else if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
         	if (locationCondition && sectorCondition) {
 	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
 	        } else if (locationCondition)  {
@@ -1615,7 +1627,13 @@ public class DbUtil {
             Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
         
 		Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
-		Long[] orgIds = filter.getSelOrgIds();
+		Long[] orgIds = new Long[orgList.size()];
+		int i = 0;
+		for (Iterator iterator = orgList.iterator(); iterator.hasNext();) {
+			Long long1 = (Long) iterator.next();
+			orgIds[i++] = long1;
+		}
+		//Long[] orgIds = filter.getSelOrgIds();
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         
         TeamMember tm = filter.getTeamMember();
@@ -1626,10 +1644,12 @@ public class DbUtil {
 
     	DecimalWraper total = null;
         String oql = "";
-
-        oql = "select fd, f.ampDonorOrgId.ampOrgId, f.ampDonorOrgId.name";
-		//if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
-			//oql += ", actProg.programPercentage ";
+        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        	oql = "select fd, orole.organisation.ampOrgId, orole.organisation.name";
+        else 
+        	oql = "select fd, f.ampDonorOrgId.ampOrgId, f.ampDonorOrgId.name";
+		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+			oql += ", orole.percentage ";
 		if (locationCondition)
         	oql += ", actloc.locationPercentage ";
         if (sectorCondition)
@@ -1658,7 +1678,7 @@ public class DbUtil {
         
         oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-        oql += " and f.ampDonorOrgId in (" + DashboardUtil.getInStatement(orgList.toArray()) + ")";
+        //oql += " and f.ampDonorOrgId in (" + DashboardUtil.getInStatement(orgList.toArray()) + ")";
 
        
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {

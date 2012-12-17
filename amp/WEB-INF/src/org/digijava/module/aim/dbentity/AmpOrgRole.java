@@ -12,14 +12,14 @@ public class AmpOrgRole implements Serializable, Versionable, Cloneable
     private AmpActivityVersion activity;
 	private AmpOrganisation organisation;
 	private AmpRole role;
-	private Double 	percentage;
+	private Float 	percentage;
 	private Long budgetCode;
 	private String additionalInfo;
 	
-    public Double getPercentage() {
+    public Float getPercentage() {
 		return percentage;
 	}
-	public void setPercentage(Double percentage) {
+	public void setPercentage(Float percentage) {
 		this.percentage = percentage;
 	}
 	/**

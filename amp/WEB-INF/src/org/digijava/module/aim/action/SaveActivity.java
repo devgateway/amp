@@ -1826,13 +1826,13 @@ public class SaveActivity extends Action {
 				}
 				String percentage 		= eaForm.getAgencies().getExecutingOrgPercentage().get(tmp.getAmpOrgId().toString()); //keySet()get(tmp.getAmpOrgId());
 				if(percentage != null && percentage.length() > 0){
-					ampOrgRole.setPercentage(new Double(percentage));
+					ampOrgRole.setPercentage(new Float(percentage));
 				}else{
 					if(assignWholePercentage){
 						assignWholePercentage=false;
-						ampOrgRole.setPercentage(100d);
+						ampOrgRole.setPercentage(100f);
 					}else{
-						ampOrgRole.setPercentage(0d);
+						ampOrgRole.setPercentage(0f);
 					}
 					
 				}
@@ -1857,13 +1857,13 @@ public class SaveActivity extends Action {
 				}
 				String percentage 		= eaForm.getAgencies().getImpOrgPercentage().get(org.getAmpOrgId().toString());
 				if(percentage != null && percentage.length() > 0){
-					ampOrgRole.setPercentage(new Double(percentage));
+					ampOrgRole.setPercentage(new Float(percentage));
 				}else{
 					if(assignWholePercentage){
 						assignWholePercentage=false;
-						ampOrgRole.setPercentage(100d);
+						ampOrgRole.setPercentage(100f);
 					}else{
-						ampOrgRole.setPercentage(0d);
+						ampOrgRole.setPercentage(0f);
 					}
 				}
 				orgRole.add(ampOrgRole);
@@ -1887,13 +1887,13 @@ public class SaveActivity extends Action {
 				}
 				String percentage 		= eaForm.getAgencies().getBenOrgPercentage().get(org.getAmpOrgId().toString());
 				if(percentage != null && percentage.length() > 0){
-					ampOrgRole.setPercentage(new Double(percentage));
+					ampOrgRole.setPercentage(new Float(percentage));
 				}else{
 					if(assignWholePercentage){
 						assignWholePercentage=false;
-						ampOrgRole.setPercentage(100d);
+						ampOrgRole.setPercentage(100f);
 					}else{
-						ampOrgRole.setPercentage(0d);
+						ampOrgRole.setPercentage(0f);
 					}
 				}
 				orgRole.add(ampOrgRole);
@@ -1917,13 +1917,13 @@ public class SaveActivity extends Action {
 				}
 				String percentage 		= eaForm.getAgencies().getConOrgPercentage().get(org.getAmpOrgId().toString());
 				if(percentage != null && percentage.length() > 0){
-					ampOrgRole.setPercentage(new Double(percentage));
+					ampOrgRole.setPercentage(new Float(percentage));
 				}else{
 					if(assignWholePercentage){
 						assignWholePercentage=false;
-						ampOrgRole.setPercentage(100d);
+						ampOrgRole.setPercentage(100f);
 					}else{
-						ampOrgRole.setPercentage(0d);
+						ampOrgRole.setPercentage(0f);
 					}
 				}
 				orgRole.add(ampOrgRole);
@@ -1947,13 +1947,13 @@ public class SaveActivity extends Action {
 				}
 				String percentage 		= eaForm.getAgencies().getRegOrgPercentage().get(org.getAmpOrgId().toString());
 				if(percentage != null && percentage.length() > 0){
-					ampOrgRole.setPercentage(new Double(percentage));
+					ampOrgRole.setPercentage(new Float(percentage));
 				}else{
 					if(assignWholePercentage){
 						assignWholePercentage=false;
-						ampOrgRole.setPercentage(100d);
+						ampOrgRole.setPercentage(100f);
 					}else{
-						ampOrgRole.setPercentage(0d);
+						ampOrgRole.setPercentage(0f);
 					}
 				}
 				orgRole.add(ampOrgRole);
@@ -1977,13 +1977,13 @@ public class SaveActivity extends Action {
 				}
 				String percentage 		= eaForm.getAgencies().getSectOrgPercentage().get(org.getAmpOrgId().toString());
 				if(percentage != null && percentage.length() > 0){
-					ampOrgRole.setPercentage(new Double(percentage));
+					ampOrgRole.setPercentage(new Float(percentage));
 				}else{
 					if(assignWholePercentage){
 						assignWholePercentage=false;
-						ampOrgRole.setPercentage(100d);
+						ampOrgRole.setPercentage(100f);
 					}else{
-						ampOrgRole.setPercentage(0d);
+						ampOrgRole.setPercentage(0f);
 					}
 				}
 				orgRole.add(ampOrgRole);
@@ -2008,13 +2008,13 @@ public class SaveActivity extends Action {
 				}
 				String percentage 		= eaForm.getAgencies().getRepOrgPercentage().get(org.getAmpOrgId().toString());
 				if(percentage != null && percentage.length() > 0){
-					ampOrgRole.setPercentage(new Double(percentage));
+					ampOrgRole.setPercentage(new Float(percentage));
 				}else{
 					if(assignWholePercentage){
 						assignWholePercentage=false;
-						ampOrgRole.setPercentage(100d);
+						ampOrgRole.setPercentage(100f);
 					}else{
-						ampOrgRole.setPercentage(0d);
+						ampOrgRole.setPercentage(0f);
 					}
 				}
 				orgRole.add(ampOrgRole);
@@ -2038,13 +2038,13 @@ public class SaveActivity extends Action {
 				}
 				String percentage 		= eaForm.getAgencies().getRespOrgPercentage().get(org.getAmpOrgId().toString());
 				if(percentage != null && percentage.length() > 0){
-					ampOrgRole.setPercentage(new Double(percentage));
+					ampOrgRole.setPercentage(new Float(percentage));
 				}else{
 					if(assignWholePercentage){
 						assignWholePercentage=false;
-						ampOrgRole.setPercentage(100d);
+						ampOrgRole.setPercentage(100f);
 					}else{
-						ampOrgRole.setPercentage(0d);
+						ampOrgRole.setPercentage(0f);
 					}
 				}
 				orgRole.add(ampOrgRole);

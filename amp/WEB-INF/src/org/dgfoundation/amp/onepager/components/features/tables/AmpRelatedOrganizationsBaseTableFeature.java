@@ -143,7 +143,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 
 			@Override
 			public void setPercentage(AmpOrgRole loc, int val) {
-				loc.setPercentage((double) val);
+				loc.setPercentage((float) val);
 			}
 
 			@Override
@@ -184,9 +184,9 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 				ampOrgRole.setActivity(am.getObject());
 				ampOrgRole.setRole(specificRole);
 				if(list.getObject().size()>0)
-					ampOrgRole.setPercentage(0d);
+					ampOrgRole.setPercentage(0f);
 				else 
-					ampOrgRole.setPercentage(100d);
+					ampOrgRole.setPercentage(100f);
 				
 				if (setModel.getObject() == null)
 					setModel.setObject(new HashSet<AmpOrgRole>());

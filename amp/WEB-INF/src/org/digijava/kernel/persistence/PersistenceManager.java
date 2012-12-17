@@ -77,11 +77,11 @@ public class PersistenceManager {
 	public static  void removeClosedSessionsFromTraceMap() {
 		  //remove closed sessions
 		synchronized (sessionStackTraceMap) {
-        Iterator<Session> iterator = PersistenceManager.sessionStackTraceMap.keySet().iterator();
-        while (iterator.hasNext()) {
-			Session session = (Session) iterator.next();
-			if(!session.isOpen()) iterator.remove();
-		}
+			Iterator<Session> iterator = PersistenceManager.sessionStackTraceMap.keySet().iterator();
+			while (iterator.hasNext()) {
+				Session session = (Session) iterator.next();
+				if(!session.isOpen()) iterator.remove();
+			}
         }
 	}
 	
@@ -134,28 +134,30 @@ public class PersistenceManager {
 	 */
 	public static void closeUnclosedSessionsFromTraceMap() {
 		// print open sessions
-		boolean found=false;		
-		Iterator<Session> iterator = PersistenceManager.sessionStackTraceMap.keySet().iterator();
-		while (iterator.hasNext()) {
-			Session session = (Session) iterator.next();
-			if(session.isOpen()) {
-				found=true;
-				StackTraceElement[] stackTraceElements = sessionStackTraceMap.get(session);
-				for (int i = 3; i < stackTraceElements.length && i < 8; i++) 
-					logger.error(stackTraceElements[i].toString());					
-				logger.info("Forcing Hibernate session close...");
-				try  {
-					session.clear();
-					session.close();
-					logger.info("Hibernate Session Close succeeded");
-				} catch (Throwable t) {
-					logger.info("Error while forcing Hibernate session close:");
-					logger.error(t);
+		boolean found=false;
+		synchronized (sessionStackTraceMap) {			
+			Iterator<Session> iterator = PersistenceManager.sessionStackTraceMap.keySet().iterator();
+			while (iterator.hasNext()) {
+				Session session = (Session) iterator.next();
+				if(session.isOpen()) {
+					found=true;
+					StackTraceElement[] stackTraceElements = sessionStackTraceMap.get(session);
+					for (int i = 3; i < stackTraceElements.length && i < 8; i++) 
+						logger.error(stackTraceElements[i].toString());					
+					logger.info("Forcing Hibernate session close...");
+					try  {
+						session.clear();
+						session.close();
+						logger.info("Hibernate Session Close succeeded");
+					} catch (Throwable t) {
+						logger.info("Error while forcing Hibernate session close:");
+						logger.error(t);
+					}
+					logger.error("----------------------------------");
 				}
-				logger.error("----------------------------------");
-			}
-		}	
-		if(found) logger.info("Check the code around the above stack traces, commit transactions only if not using HTTP threads:");
+			}	
+			if(found) logger.info("Check the code around the above stack traces, commit transactions only if not using HTTP threads:");
+		}
 	}
 	
 
@@ -738,7 +740,10 @@ public class PersistenceManager {
 	 * @param sess
 	 */
 	public static void addSessionToStackTraceMap(Session sess) {
-		if(sessionStackTraceMap.get(sess)==null) sessionStackTraceMap.put(sess,Thread.currentThread().getStackTrace());
+		synchronized (sessionStackTraceMap){			
+			if(sessionStackTraceMap.get(sess)==null) 
+				sessionStackTraceMap.put(sess,Thread.currentThread().getStackTrace());
+		}
 	}
 
 	/**

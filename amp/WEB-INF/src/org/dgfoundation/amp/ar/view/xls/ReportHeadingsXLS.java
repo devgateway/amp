@@ -5,7 +5,9 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -56,13 +58,36 @@ public class ReportHeadingsXLS extends XLSExporter {
 	 */
 	public void generate() {
 		ColumnReportData columnReport = (ColumnReportData) item;
+	
+		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) {
+			
+			if(this.machineFriendlyColName){
+				machineFriendlygenerate();
+			}else{
+				generate(columnReport);
+			}
+		columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
+		}
+
+	}
+	
+	private void machineFriendlygenerate(){
+		rowId.inc();
+		colId.reset();
+		createHierarchyHeaderCell(0);
+		colId.inc();
+		createMachineFriendlyHeaderCells();
+		colId.reset();			
+	}
+	
+	private void generate(ColumnReportData columnReport){
+
 //		requirements for translation purposes
 		String siteId=this.getMetadata().getSiteId();
 		String locale=this.getMetadata().getLocale();
 		boolean fundingReached = false;
 		
 		// column headings:
-		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) {
 
 		rowId.inc();
 		colId.reset();
@@ -200,10 +225,8 @@ public class ReportHeadingsXLS extends XLSExporter {
 			rowId.inc();
 			colId.reset();
 		}
-		}
-
+		
 	}
-	
 	protected void createHierarchyHeaderCell (int curDepth) {
 		HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
 		if (curDepth == 0) {
@@ -263,5 +286,47 @@ public class ReportHeadingsXLS extends XLSExporter {
 		}
 		return translColName;
 
+	}
+	
+	
+	protected void createMachineFriendlyHeaderCells () {
+		ArrayList<String> cellValues	= new ArrayList<String>();
+		this.prepareMachineFriendlyHeaderCellsList(null, null, cellValues);
+		if ( cellValues != null ) {
+			for (String val : cellValues) {
+				HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
+				cell1.setCellValue( val );
+				colId.inc();
+			}
+		}
+	}
+	
+	protected void prepareMachineFriendlyHeaderCellsList (List columns, String parentName, List<String> cellValues) {
+		if ( columns == null ) {
+			ColumnReportData columnReport = (ColumnReportData) item;
+			columns			= columnReport.getItems();
+		}
+		
+		if ( columns != null ) {
+			Iterator iter	= columns.iterator();
+			while (iter.hasNext()) {
+				Column tempCol 		= (Column) iter.next();
+				String colName		= tempCol.getName(metadata.getHideActivities());
+
+				List items = tempCol.getItems();
+				String currentColumnDisplayName = getColumnDisplayName(colName);
+				String name = (parentName == null) ?  currentColumnDisplayName : parentName
+						+ " - " + currentColumnDisplayName;
+				if (items != null && items.size() > 0
+						&& items.get(0) instanceof Column) {
+					this.prepareMachineFriendlyHeaderCellsList(items, name, cellValues);
+				} else {
+					if (name != null && !name.trim().equals("-")){
+						cellValues.add(name);
+					}
+				}
+			}
+		}
+		
 	}
 }

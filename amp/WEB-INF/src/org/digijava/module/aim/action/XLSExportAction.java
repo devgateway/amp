@@ -179,6 +179,7 @@ public class XLSExportAction extends Action {
 		grdx.setMetadata(r);
 		colId.reset();
 		if (isPublicPortalMode){
+			rowId.reset();
 			grdx.setMachineFriendlyColName(true);
 		}else{
 		//show title+desc+logo+statement

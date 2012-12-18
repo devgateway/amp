@@ -61,9 +61,9 @@ public class FilterValues {
 			possibleOrganisations.addAll(orgs);
 		}
 		
-		Site site = RequestUtils.getSite(request);
- 	 	String siteId = site.getId().toString();
- 	 	String locale = RequestUtils.getNavigationLanguage(request).getCode();
+//		Site site = RequestUtils.getSite(request);
+// 	 	String siteId = site.getId().toString();
+// 	 	String locale = RequestUtils.getNavigationLanguage(request).getCode();
  	 	
 		possibleFileTypes = new ArrayList<KeyValue>();
 

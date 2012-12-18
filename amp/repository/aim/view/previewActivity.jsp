@@ -233,7 +233,7 @@ function collapseAll() {
 		
 	try {
 
-			actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(actId, session,new PrintWriter(out), 370, 350, url, request);
+			actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(actId, session,new PrintWriter(out), 370, 350, url);
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -291,7 +291,7 @@ function collapseAll() {
             <div style="clear:both;"></div>
 			<div class="l_sm">
 			 	<font color="red">
-			 		<jsp:include page="util/amountUnitsUnformatted.jsp">
+			 		<jsp:include page="utils/amountUnitsUnformatted.jsp">
 						<jsp:param value="" name="amount_prefix"/>
 					</jsp:include>
 				</font>
@@ -1582,7 +1582,7 @@ function collapseAll() {
 				<tr>
 					<td class="prv_right">
 						<FONT color='blue'>
-							<jsp:include page="util/amountUnitsUnformatted.jsp">
+							<jsp:include page="utils/amountUnitsUnformatted.jsp">
 								<jsp:param value="* " name="amount_prefix"/>
 							</jsp:include>	
 						</FONT>
@@ -1774,7 +1774,7 @@ function collapseAll() {
 					<tr>
 						<td class="prv_right">
 							<FONT color='blue'>
-								<jsp:include page="util/amountUnitsUnformatted.jsp">
+								<jsp:include page="utils/amountUnitsUnformatted.jsp">
 									<jsp:param value="* " name="amount_prefix"/>
 								</jsp:include>	
 							</FONT>					

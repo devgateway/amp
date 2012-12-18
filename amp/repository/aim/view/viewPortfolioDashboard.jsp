@@ -101,7 +101,7 @@
 
 	String actRiskChartFileName = ChartGenerator.getPortfolioRiskChartFileName(
 
-						 session,new PrintWriter(out),370,400,url, request);
+						 session,new PrintWriter(out),370,400,url);
 
 
 

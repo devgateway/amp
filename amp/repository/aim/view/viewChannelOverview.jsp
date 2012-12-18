@@ -280,7 +280,7 @@ function commentWin(val, commentId) {
 										${aimChannelOverviewForm.currCode} 
 
 <FONT color='blue'>
-	<jsp:include page="util/amountUnitsUnformatted.jsp">
+	<jsp:include page="utils/amountUnitsUnformatted.jsp">
 		<jsp:param value="(" name="amount_prefix"/>
 		<jsp:param value=")" name="amount_suffix"/>    
 	</jsp:include>	

@@ -79,7 +79,7 @@
     <tr>
       <td>
         <FONT color=blue><B>
-			<jsp:include page="util/amountUnitsUnformatted.jsp">
+			<jsp:include page="utils/amountUnitsUnformatted.jsp">
 				<jsp:param value="<BIG>* </BIG>" name="amount_prefix"/>
 			</jsp:include>																		
 		</B></FONT>

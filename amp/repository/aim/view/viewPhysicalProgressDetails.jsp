@@ -346,7 +346,7 @@ method="post">
 														</TR>														
 														<TR><TD>
 <FONT color='blue'>
-  <jsp:include page="util/amountUnitsUnformatted.jsp">
+  <jsp:include page="utils/amountUnitsUnformatted.jsp">
     <jsp:param value="* " name="amount_prefix"/>
   </jsp:include>	
 </FONT>															</TD></TR>

@@ -40,7 +40,7 @@
 
 
 	String actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(
-						 actId,session,new PrintWriter(out),370,350,url,request);
+						 actId,session,new PrintWriter(out),370,350,url);
 
 	String actRiskChartUrl = null;
 
@@ -1137,7 +1137,7 @@ body {background:none;}
                                                                   </tr>
 																	<tr><td bgcolor="#ffffff">
 																		<FONT color='blue'>
-																			<jsp:include page="util/amountUnitsUnformatted.jsp">
+																			<jsp:include page="utils/amountUnitsUnformatted.jsp">
 																				<jsp:param value="* " name="amount_prefix"/>
 																			</jsp:include>	
 																		</FONT>

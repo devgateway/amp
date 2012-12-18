@@ -578,7 +578,7 @@
 		</td>
 	</tr>
 	<tr><td>
-		<jsp:include page="util/enterAmountUnitsUnformatted.jsp">
+		<jsp:include page="utils/enterAmountUnitsUnformatted.jsp">
 			<jsp:param value="<FONT color='blue'><B><BIG>* </BIG></B></FONT>" name="amount_prefix"/>
 		</jsp:include>	
 	</td></tr>

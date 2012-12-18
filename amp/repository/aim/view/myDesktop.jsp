@@ -710,7 +710,7 @@
 
 				<TD>
 					<FONT color=blue>
-						<jsp:include page="util/amountUnitsUnformatted.jsp">
+						<jsp:include page="utils/amountUnitsUnformatted.jsp">
 							<jsp:param value="<BIG>* </BIG>" name="amount_prefix"/>
 						</jsp:include>
 						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">

@@ -117,7 +117,7 @@
 	<table>
 		<tr><td>
 			<font color="orange">&nbsp;*&nbsp;</font>
-	  		<jsp:include page="util/amountUnitsUnformatted.jsp">
+	  		<jsp:include page="/repository/aim/view/utils/amountUnitsUnformatted.jsp">
     			<jsp:param value="" name="amount_prefix"/>
   			</jsp:include>
 			<digi:trn><bean:write name="parisIndicatorForm" property="selectedCurrency"/></digi:trn>

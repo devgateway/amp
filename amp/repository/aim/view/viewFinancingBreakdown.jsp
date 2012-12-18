@@ -584,7 +584,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										<TR>
 											<TD>
 												<FONT color=blue>*
-<jsp:include page="util/amountUnitsUnformatted.jsp">
+<jsp:include page="utils/amountUnitsUnformatted.jsp">
 	<jsp:param value="* " name="amount_prefix"/>   
 </jsp:include>		
 													<bean:write name="aimFinancingBreakdownForm" property="selectedCurrency"/>

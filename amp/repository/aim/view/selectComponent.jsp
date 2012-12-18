@@ -118,7 +118,7 @@
 
 							<td colspan=2>
 								<FONT color='blue'>
-  									<jsp:include page="util/enterAmountUnitsUnformatted.jsp">
+  									<jsp:include page="utils/enterAmountUnitsUnformatted.jsp">
     									<jsp:param value="<BIG>* </BIG>" name="amount_prefix"/>
   									</jsp:include>
 								</FONT>

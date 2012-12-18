@@ -256,7 +256,7 @@ function selectOrganisation1() {
 	<tr>
 		<td colspan="2">
 			<font color="red">
-				<jsp:include page="util/amountUnitsUnformatted.jsp">
+				<jsp:include page="utils/amountUnitsUnformatted.jsp">
 					<jsp:param value="" name="amount_prefix"/>
 				</jsp:include>	
 			</font>

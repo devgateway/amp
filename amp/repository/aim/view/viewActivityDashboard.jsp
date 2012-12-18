@@ -246,7 +246,7 @@ function projectFiche(id)
 
 	String actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(
 
-						 actId,session,new PrintWriter(out),370,350,url,request);
+						 actId,session,new PrintWriter(out),370,350,url);
 
 
 

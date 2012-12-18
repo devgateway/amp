@@ -881,7 +881,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="get" styleId="myFo
 
 												<TR><TD>
 <FONT color='blue'>
-  <jsp:include page="util/amountUnitsUnformatted.jsp">
+  <jsp:include page="utils/amountUnitsUnformatted.jsp">
     <jsp:param value="* " name="amount_prefix"/>
   </jsp:include>	
 </FONT>	

@@ -282,7 +282,7 @@
 																		<c:if test="${!empty aimEditActivityForm.costing.costs}">
 																		<bean:define id="costs" name="aimEditActivityForm" property="costing.costs" toScope="request"/>
 																		<bean:define id="mode" value="form" type="java.lang.String" toScope="request"/>
-																		<jsp:include page="util/amountUnitsUnformatted.jsp">
+																		<jsp:include page="utils/amountUnitsUnformatted.jsp">
 																			<jsp:param value=" -" name="amount_suffix"/>
 																		</jsp:include>
 		                                                                  <c:out value="${aimEditActivityForm.currCode}"/>

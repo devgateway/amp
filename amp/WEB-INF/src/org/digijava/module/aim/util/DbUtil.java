@@ -3043,6 +3043,23 @@ public class DbUtil {
 		}
 		return ampOrgType;
 	}
+	
+	public static ArrayList<AmpOrgType> getAmpOrgTypes() {
+		Session session = null;
+		Query qry = null;
+		ArrayList<AmpOrgType> org_types = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select f from " + AmpOrgType.class.getName()+ " f ";
+			qry = session.createQuery(queryString);
+			org_types = (ArrayList<AmpOrgType>) qry.list();
+			
+		} catch (Exception e) {
+			logger.error("Unable to get Org Type", e);
+		}
+		return org_types;
+	}
 
 	public static Collection getFundingDetWithCurrId(Long currId) {
 		Session sess = null;

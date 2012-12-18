@@ -224,7 +224,18 @@
             value = "<digi:trn>Year Start</digi:trn>";
             return value;
          }
-        
+        if(text == "Locations Fitler On") {
+            value = "<digi:trn>Locations Fitler On</digi:trn>";
+            return value;
+         }
+        if(text == "True") {
+            value = "<digi:trn>True</digi:trn>";
+            return value;
+         }
+        if(text == "False") {
+            value = "<digi:trn>False</digi:trn>";
+            return value;
+         }
         if(text == "End Year") {
             value = "<digi:trn>End Year</digi:trn>";
             return value;

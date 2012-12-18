@@ -9,6 +9,7 @@ import java.util.Map;
 
 import net.sf.json.JSONArray;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -38,42 +39,47 @@ public class MapFilter {
 	private List<AmpOrgType> organizationsType;
 	private List<AmpStructureType> structureTypes;
 	private Long[] selStructureTypes;
-	private Long organizationsTypeId;
+	private Long[] selfinancingInstruments;
+	private Long[] seltypeofassistence;
+	private Long[] selprojectstatus;
+	
+	private Long [] selorganizationsTypes;
+	
 	private BigDecimal fundingLimit;
 	private Boolean fundingLimitAbove;
 	private Long onBudget;
-	private Long typeAssistanceId;
-	private Long financingInstrumentId;
+	private List<AmpCategoryValue> financingInstruments;
+	private List<AmpCategoryValue> typeofassistences;
+	private List<AmpCategoryValue> projectstatus;
+	
 	private boolean modeexport;
 	private String reportfilterquery;
 	private Long startYearFilter;
 	private Long endYearFilter;
 	private Map<Integer, Integer> years;
-    private Long startYear;
-    private Long endYear;
-    private Long defaultStartYear;
-    private Long defaultEndYear; 
-    private List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupWithOrgsList;
-    private List<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>> regionWithZones;
-    private List<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>> configWithSectorAndSubSectors;
-    private Long selSectorConfigId;
-    private List<AmpClassificationConfiguration> sectorConfigs;
-    
-	//	private List<AmpOrgType> projectStatuses;
-	private Long projectStatusId;
+	private Long startYear;
+	private Long endYear;
+	private Long defaultStartYear;
+	private Long defaultEndYear;
+	private List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> orgGroupWithOrgsList;
+	private List<EntityRelatedListHelper<AmpCategoryValueLocations, AmpCategoryValueLocations>> regionWithZones;
+	private List<EntityRelatedListHelper<AmpClassificationConfiguration, EntityRelatedListHelper<AmpSector, AmpSector>>> configWithSectorAndSubSectors;
+	private Long selSectorConfigId;
+	private List<AmpClassificationConfiguration> sectorConfigs;
+
 	private List<AmpOrgType> organizationsTypeSelected;
 	private List<AmpOrgGroup> orgGroups;
 	private List<AmpSector> sectors;
 	private List<AmpCategoryValueLocations> regions;
 	private List<AmpCategoryValueLocations> zones;
-	
+
 	private Long[] orgtypeIds;
 	private Long[] orgGroupIds;
 	private Long orgGroupId;
 
 	private Long[] implOrgGroupIds;
 	private Long[] implOrgIds;
-	
+
 	private Long[] orgIds;
 	private Long orgId;
 	private Long[] sectorIds;
@@ -105,7 +111,7 @@ public class MapFilter {
 	private Boolean expendituresVisible = true;
 	private Boolean fromPublicView;
 	private Boolean showOnlyApprovedActivities;
-	
+
 	private Long activityId;
 	private int decimalsToShow;
 
@@ -119,42 +125,37 @@ public class MapFilter {
 		newFilter.setSelLocationIds(this.getSelLocationIds());
 		newFilter.setSelSectorIds(this.getSelSectorIds());
 		newFilter.setActivityId(this.getActivityId());
-		newFilter.setShowOnlyApprovedActivities(this.getShowOnlyApprovedActivities());
+		newFilter.setShowOnlyApprovedActivities(this
+				.getShowOnlyApprovedActivities());
 		newFilter.setFromPublicView(this.getFromPublicView());
 		return newFilter;
 	}
-	
-	public JSONArray toJson(){
+
+	public JSONArray toJson() {
 		JSONArray result = new JSONArray();
 		SimpleFilter selectedfilter = new SimpleFilter();
 		selectedfilter.setCurrency(this.getCurrencyCode());
 		selectedfilter.setStartyear(this.getStartYear().toString());
 		selectedfilter.setEndyear(this.getEndYear().toString());
-		
-		Collection<AmpCategoryValue> categoryValues = null;
-		categoryValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
-		for (Iterator<AmpCategoryValue> iterator = categoryValues.iterator(); iterator.hasNext();) {
-			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
-			if (ampCategoryValue.getId() == financingInstrumentId.longValue()){
-				selectedfilter.setFinancinginstrument(ampCategoryValue.getValue());
-			}
-		}
-		
-		if (orgGroupIds!=null && orgGroupIds.length>0){
-			for (Iterator<AmpOrgGroup> iterator = orgGroups.iterator(); iterator.hasNext();) {
+
+		if (orgGroupIds != null && orgGroupIds.length > 0) {
+			for (Iterator<AmpOrgGroup> iterator = orgGroups.iterator(); iterator
+					.hasNext();) {
 				AmpOrgGroup group = (AmpOrgGroup) iterator.next();
 				for (int i = 0; i < orgGroupIds.length; i++) {
-					if (group.getIdentifier() == orgGroupIds[i]){
-						selectedfilter.setOrganizationgroup(group.getOrgGrpName());
+					if (group.getIdentifier() == orgGroupIds[i]) {
+						selectedfilter.setOrganizationgroup(group
+								.getOrgGrpName());
 					}
 				}
 			}
 		}
 		ArrayList<SimpleDonor> donorslist = new ArrayList<SimpleDonor>();
-		if (organizationsSelected != null && !organizationsSelected.isEmpty()){
-			for (Iterator<AmpOrganisation> iterator = organizationsSelected.iterator(); iterator.hasNext();) {
+		if (organizationsSelected != null && !organizationsSelected.isEmpty()) {
+			for (Iterator<AmpOrganisation> iterator = organizationsSelected
+					.iterator(); iterator.hasNext();) {
 				AmpOrganisation org = (AmpOrganisation) iterator.next();
-				if (org!=null){
+				if (org != null) {
 					SimpleDonor donor = new SimpleDonor();
 					donor.setDonorname(org.getName());
 					donorslist.add(donor);
@@ -162,113 +163,126 @@ public class MapFilter {
 			}
 			selectedfilter.setSelecteddonors(donorslist);
 		}
-		
-		if (implOrgGroupIds!=null && implOrgGroupIds.length>0 ){
-			for (Iterator<AmpOrgGroup> iterator = orgGroups.iterator(); iterator.hasNext();) {
+
+		if (implOrgGroupIds != null && implOrgGroupIds.length > 0) {
+			for (Iterator<AmpOrgGroup> iterator = orgGroups.iterator(); iterator
+					.hasNext();) {
 				AmpOrgGroup group = (AmpOrgGroup) iterator.next();
 				for (int i = 0; i < implOrgGroupIds.length; i++) {
-					if (group.getIdentifier() == implOrgGroupIds[i]){
-						selectedfilter.setImplementingagency(group.getOrgGrpName());
+					if (group.getIdentifier() == implOrgGroupIds[i]) {
+						selectedfilter.setImplementingagency(group
+								.getOrgGrpName());
 					}
 				}
 			}
 		}
-		
+
 		boolean exit = false;
 		ArrayList<SimpleDonor> impdonorslist = new ArrayList<SimpleDonor>();
-		if (organizationsSelected != null && !organizationsSelected.isEmpty()){
-			for (Iterator<AmpOrganisation> iterator = organizationsSelected.iterator(); iterator.hasNext();) {
+		if (organizationsSelected != null && !organizationsSelected.isEmpty()) {
+			for (Iterator<AmpOrganisation> iterator = organizationsSelected
+					.iterator(); iterator.hasNext();) {
 				AmpOrganisation org = (AmpOrganisation) iterator.next();
-				if (org!=null){
+				if (org != null) {
 					SimpleDonor donor = new SimpleDonor();
 					donor.setDonorname(org.getName());
 					donorslist.add(donor);
-				}else{
+				} else {
 					exit = true;
 				}
 			}
-			if (exit){
+			if (exit) {
 				selectedfilter.setImpselecteddonors(impdonorslist);
 			}
 		}
 		
-		if (projectStatusId!=null){
-			Collection<AmpCategoryValue> categoryvaluesstatus = null;
-			categoryvaluesstatus = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
+		ArrayList<String> selporjectsst = new ArrayList<String>();
+		Collection<AmpCategoryValue> categoryvaluesstatus = null;
+		categoryvaluesstatus = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
 			for (Iterator<AmpCategoryValue> iterator = categoryvaluesstatus.iterator(); iterator.hasNext();) {
 				AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
-				if (ampCategoryValue.getId() == projectStatusId.longValue()){
-					selectedfilter.setProjectstatus(ampCategoryValue.getValue());
+				if (ArrayUtils.contains(selprojectstatus, ampCategoryValue.getIdentifier())) {
+					selporjectsst.add(ampCategoryValue.getValue());
 				}
 			}
-		}
+		selectedfilter.setProjectstatus(selporjectsst);
+		
+		ArrayList<String> selfinancinginstruments = new ArrayList<String>();
 		Collection<AmpCategoryValue> categoryvaluesfinanceintrument = null;
 		categoryvaluesfinanceintrument = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
 		for (Iterator<AmpCategoryValue> iterator = categoryvaluesfinanceintrument.iterator(); iterator.hasNext();) {
 			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
-			if (ampCategoryValue.getId() == financingInstrumentId.longValue()){
-				selectedfilter.setFinancinginstrument(ampCategoryValue.getValue());
+			if (ArrayUtils.contains(selfinancingInstruments, ampCategoryValue.getIdentifier())) {
+				selfinancinginstruments.add(ampCategoryValue.getValue());
 			}
 		}
+		selectedfilter.setFinancinginstrument(selfinancinginstruments);
 		
+		ArrayList<String> seltypesofassiss = new ArrayList<String>();
 		Collection<AmpCategoryValue> categoryvaluestypeofassis = null;
 		categoryvaluestypeofassis = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
 		for (Iterator<AmpCategoryValue> iterator = categoryvaluestypeofassis.iterator(); iterator.hasNext();) {
 			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
-			if (ampCategoryValue.getId() == typeAssistanceId.longValue()){
-				selectedfilter.setTypeofassistance(ampCategoryValue.getValue());
+			if (ArrayUtils.contains(seltypeofassistence, ampCategoryValue.getIdentifier())) {
+				seltypesofassiss.add(ampCategoryValue.getValue());
 			}
 		}
+		selectedfilter.setTypeofassistance(seltypesofassiss);
 		
-		if (selStructureTypes!=null){
+		if (selStructureTypes != null) {
 			ArrayList<String> selstructurestr = new ArrayList<String>();
-			for (Iterator iterator = DbHelper.getAllStructureTypes().iterator(); iterator.hasNext();) {
+			for (Iterator iterator = DbHelper.getAllStructureTypes().iterator(); iterator
+					.hasNext();) {
 				AmpStructureType type = (AmpStructureType) iterator.next();
 				for (int i = 0; i < selStructureTypes.length; i++) {
-					if (type.getTypeId() == selStructureTypes[i].longValue()){
+					if (type.getTypeId() == selStructureTypes[i].longValue()) {
 						selstructurestr.add(type.getName());
 					}
 				}
-				
+
 			}
 			selectedfilter.setStructuretypes(selstructurestr);
 		}
-		
-		
-		if (selSectorIds!=null && selSectorIds.length>0 ){
-			for (Iterator<AmpSector> iterator = sectors.iterator(); iterator.hasNext();) {
+
+		selectedfilter.setSector(new ArrayList<String>());
+		if (selSectorIds != null && selSectorIds.length > 0) {
+			for (Iterator<AmpSector> iterator = sectors.iterator(); iterator
+					.hasNext();) {
 				AmpSector sector = (AmpSector) iterator.next();
-				for (int i = 0; i < selSectorIds.length; i++) {
-					if (sector.getAmpSectorId() == selSectorIds[i].longValue()){
-						selectedfilter.setSector(sector.getName());
-					}
+				if (ArrayUtils.contains(selSectorIds, sector.getIdentifier())) {
+					selectedfilter.getSector().add(sector.getName());
 				}
 			}
 		}
+
+		if (this.getSelLocationIds()[0] != -1) {
+			selectedfilter.setLocationfiltered("True");
+		} else {
+			selectedfilter.setLocationfiltered("False");
+		}
 		
-		ArrayList<String> selregions = new ArrayList<String>();
-		if (regionIds != null && regionIds.length>0){
-			for (Iterator<AmpCategoryValueLocations> iterator = regions.iterator(); iterator.hasNext();) {
-				AmpCategoryValueLocations region = (AmpCategoryValueLocations) iterator.next();
-				for (int i = 0; i < regionIds.length; i++) {
-					if(region.getId() == regionIds [i].longValue()){
-						selregions.add(region.getName());
-					}
-				}
+		ArrayList<String> selorgtypes = new ArrayList<String>();
+		List<AmpOrgType> orgtypes = DbUtil.getAmpOrgTypes();
+		for (Iterator iterator = orgtypes.iterator(); iterator.hasNext();) {
+			AmpOrgType ampOrgType = (AmpOrgType) iterator.next();
+			if (ArrayUtils.contains(selorganizationsTypes, ampOrgType.getIdentifier())){
+				selorgtypes.add(ampOrgType.getOrgType());
 			}
-			
-			selectedfilter.setRegions(selregions);
 		}
+		selectedfilter.setOrganizationtype(selorgtypes);
 		
-		if (organizationsTypeId !=null && organizationsTypeId!=-1){
-			AmpOrgType orgtype = (AmpOrgType) DbUtil.getAmpOrgType(organizationsTypeId);
-			selectedfilter.setOrganizationtype(orgtype.getOrgType());
-		}
 		result.add(selectedfilter);
 		return result;
 	}
-	
-	
+
+	public Long[] getSelorganizationsTypes() {
+		return selorganizationsTypes;
+	}
+
+	public void setSelorganizationsTypes(Long[] selorganizationsTypes) {
+		this.selorganizationsTypes = selorganizationsTypes;
+	}
+
 	public List<EntityRelatedListHelper<AmpClassificationConfiguration, EntityRelatedListHelper<AmpSector, AmpSector>>> getConfigWithSectorAndSubSectors() {
 		return configWithSectorAndSubSectors;
 	}
@@ -277,25 +291,24 @@ public class MapFilter {
 			List<EntityRelatedListHelper<AmpClassificationConfiguration, EntityRelatedListHelper<AmpSector, AmpSector>>> configWithSectorAndSubSectors) {
 		this.configWithSectorAndSubSectors = configWithSectorAndSubSectors;
 	}
-	
-	
+
 	public List<AmpClassificationConfiguration> getSectorConfigs() {
 		return sectorConfigs;
 	}
 
-	public void setSectorConfigs(List<AmpClassificationConfiguration> sectorConfigs) {
+	public void setSectorConfigs(
+			List<AmpClassificationConfiguration> sectorConfigs) {
 		this.sectorConfigs = sectorConfigs;
 	}
 
-	
 	public Long getSelSectorConfigId() {
 		return selSectorConfigId;
 	}
 
 	public void setSelSectorConfigId(Long selSectorConfigId) {
-		this.selSectorConfigId= selSectorConfigId;
+		this.selSectorConfigId = selSectorConfigId;
 	}
-	
+
 	public List<EntityRelatedListHelper<AmpCategoryValueLocations, AmpCategoryValueLocations>> getRegionWithZones() {
 		return regionWithZones;
 	}
@@ -305,18 +318,16 @@ public class MapFilter {
 		this.regionWithZones = regionWithZones;
 	}
 
-	
 	public List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> getOrgGroupWithOrgsList() {
 		return orgGroupWithOrgsList;
 	}
-
 
 	public void setOrgGroupWithOrgsList(
 			List<EntityRelatedListHelper<AmpOrgGroup, AmpOrganisation>> orgGroupWithOrgsList) {
 		this.orgGroupWithOrgsList = orgGroupWithOrgsList;
 	}
-	
-    public Long getDefaultStartYear() {
+
+	public Long getDefaultStartYear() {
 		return defaultStartYear;
 	}
 
@@ -331,25 +342,25 @@ public class MapFilter {
 	public void setDefaultEndYear(Long defaultEndYear) {
 		this.defaultEndYear = defaultEndYear;
 	}
-    public Long getEndYear() {
-        return endYear;
-    }
 
-    public void setEndYear(Long year) {
-    	this.endYearFilter = year;
-        this.endYear = year;
-    }
-    
-    public Long getStartYear() {
-        return startYear;
-    }
+	public Long getEndYear() {
+		return endYear;
+	}
 
-    public void setStartYear(Long year) {
-        this.startYear = year;
-        this.startYearFilter = year;
-    }
-	
-    
+	public void setEndYear(Long year) {
+		this.endYearFilter = year;
+		this.endYear = year;
+	}
+
+	public Long getStartYear() {
+		return startYear;
+	}
+
+	public void setStartYear(Long year) {
+		this.startYear = year;
+		this.startYearFilter = year;
+	}
+
 	public void setEndYearFilter(Long endYearFilter) {
 		this.endYearFilter = endYearFilter;
 	}
@@ -357,7 +368,7 @@ public class MapFilter {
 	public Long getEndYearFilter() {
 		return endYearFilter;
 	}
-    
+
 	public void setStartYearFilter(Long startYearFilter) {
 		this.startYearFilter = startYearFilter;
 	}
@@ -365,7 +376,7 @@ public class MapFilter {
 	public Long getStartYearFilter() {
 		return startYearFilter;
 	}
-	
+
 	public boolean isIsinitialized() {
 		return isinitialized;
 	}
@@ -373,7 +384,7 @@ public class MapFilter {
 	public void setIsinitialized(boolean isinitialized) {
 		this.isinitialized = isinitialized;
 	}
-	
+
 	public Boolean getCommitmentsVisible() {
 		return commitmentsVisible;
 	}
@@ -533,13 +544,13 @@ public class MapFilter {
 	}
 
 	public Map<Integer, Integer> getYears() {
-        return years;
-    }
+		return years;
+	}
 
-    public void setYears(Map<Integer, Integer> years) {
-        this.years = years;
-    }
-    
+	public void setYears(Map<Integer, Integer> years) {
+		this.years = years;
+	}
+
 	public Boolean getWorkspaceOnly() {
 		return workspaceOnly;
 	}
@@ -759,127 +770,70 @@ public class MapFilter {
 		this.decimalsToShow = decimalsToShow;
 	}
 
-
 	public List<AmpOrgType> getOrganizationsType() {
 		return organizationsType;
 	}
-
 
 	public void setOrganizationsType(List<AmpOrgType> organizationstype) {
 		this.organizationsType = organizationstype;
 	}
 
-
 	public List<AmpOrgType> getOrganizationsTypeSelected() {
 		return organizationsTypeSelected;
 	}
-
 
 	public void setOrganizationsTypeSelected(
 			List<AmpOrgType> organizationstypeselected) {
 		this.organizationsTypeSelected = organizationstypeselected;
 	}
 
-
 	public Long[] getOrgtypeIds() {
 		return orgtypeIds;
 	}
-
 
 	public void setOrgtypeIds(Long[] orgtypeIds) {
 		this.orgtypeIds = orgtypeIds;
 	}
 
-
 	public void setImplOrgGroupIds(Long[] implOrgGroupIds) {
 		this.implOrgGroupIds = implOrgGroupIds;
 	}
-
 
 	public Long[] getImplOrgGroupIds() {
 		return implOrgGroupIds;
 	}
 
-
 	public void setImplOrgIds(Long[] implOrgIds) {
 		this.implOrgIds = implOrgIds;
 	}
-
 
 	public Long[] getImplOrgIds() {
 		return implOrgIds;
 	}
 
-
-	public void setOrganizationsTypeId(Long organizationsTypeId) {
-		this.organizationsTypeId = organizationsTypeId;
-	}
-
-
-	public Long getOrganizationsTypeId() {
-		return organizationsTypeId;
-	}
-
-
-	public void setProjectStatusId(Long projectStatusId) {
-		this.projectStatusId = projectStatusId;
-	}
-
-
-	public Long getProjectStatusId() {
-		return projectStatusId;
-	}
-
-
 	public void setFundingLimit(BigDecimal fundingLimit) {
 		this.fundingLimit = fundingLimit;
 	}
-
 
 	public BigDecimal getFundingLimit() {
 		return fundingLimit;
 	}
 
-
 	public void setFundingLimitAbove(Boolean fundingLimitAbove) {
 		this.fundingLimitAbove = fundingLimitAbove;
 	}
-
 
 	public Boolean getFundingLimitAbove() {
 		return fundingLimitAbove;
 	}
 
-
 	public void setOnBudget(Long onBudget) {
 		this.onBudget = onBudget;
 	}
 
-
 	public Long getOnBudget() {
 		return onBudget;
 	}
-
-
-	public void setTypeAssistanceId(Long typeAssistanceId) {
-		this.typeAssistanceId = typeAssistanceId;
-	}
-
-
-	public Long getTypeAssistanceId() {
-		return typeAssistanceId;
-	}
-
-
-	public void setFinancingInstrumentId(Long financingInstrumentId) {
-		this.financingInstrumentId = financingInstrumentId;
-	}
-
-
-	public Long getFinancingInstrumentId() {
-		return financingInstrumentId;
-	}
-
 
 	public void setStructureTypes(List<AmpStructureType> structureTypes) {
 		this.structureTypes = structureTypes;
@@ -889,11 +843,9 @@ public class MapFilter {
 		return this.structureTypes;
 	}
 
-
 	public void setSelStructureTypes(Long[] selStructureTypes) {
 		this.selStructureTypes = selStructureTypes;
 	}
-
 
 	public Long[] getSelStructureTypes() {
 		return selStructureTypes;
@@ -915,5 +867,52 @@ public class MapFilter {
 		this.reportfilterquery = reportfilterquery;
 	}
 
+	public Long[] getSelfinancingInstruments() {
+		return selfinancingInstruments;
+	}
+
+	public void setSelfinancingInstruments(Long[] selfinancingInstruments) {
+		this.selfinancingInstruments = selfinancingInstruments;
+	}
+
+	public List<AmpCategoryValue> getFinancingInstruments() {
+		return financingInstruments;
+	}
+
+	public void setFinancingInstruments(List<AmpCategoryValue> financingInstruments) {
+		this.financingInstruments = financingInstruments;
+	}
+	
+	public Long[] getSeltypeofassistence() {
+		return seltypeofassistence;
+	}
+
+	public void setSeltypeofassistence(Long[] seltypeofassistence) {
+		this.seltypeofassistence = seltypeofassistence;
+	}
+
+	public List<AmpCategoryValue> getTypeofassistences() {
+		return typeofassistences;
+	}
+
+	public void setTypeofassistences(List<AmpCategoryValue> typeofassistences) {
+		this.typeofassistences = typeofassistences;
+	}
+	
+	public Long[] getSelprojectstatus() {
+		return selprojectstatus;
+	}
+
+	public void setSelprojectstatus(Long[] selprojectstatus) {
+		this.selprojectstatus = selprojectstatus;
+	}
+
+	public List<AmpCategoryValue> getProjectstatus() {
+		return projectstatus;
+	}
+
+	public void setProjectstatus(List<AmpCategoryValue> projectstatus) {
+		this.projectstatus = projectstatus;
+	}
 
 }

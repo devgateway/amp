@@ -38,6 +38,7 @@ var maxExtent;
 var basemap;
 var highlightson;
 var structureGraphicLayer;
+var structureVisible=false;
 /*---- Search  ----*/
 var searchactive = new Boolean();
 var searchdistance;
@@ -454,22 +455,34 @@ function getSelectedFilter() {
 			$("#sfilterid").append(" <i>| "+ translate('End Year')+"</i> : ");
 			$("#sfilterid").append(jsonData[0].endyear);
 			
+			$("#sfilterid").append(" <i>| "+ translate('Locations Fitler On')+"</i> : ");
+			$("#sfilterid").append(translate(jsonData[0].locationfiltered));
+			
 			if (jsonData[0].projectstatus != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Status')+"</i> : ");
-				$("#sfilterid").append(jsonData[0].projectstatus);
+				dojo.forEach(jsonData[0].projectstatus, function(projectstatus) {
+					$("#sfilterid").append(projectstatus + " ");
+				});
 			}
 			if (jsonData[0].sector != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Primary Sector')+"</i> : ");
-				$("#sfilterid").append(jsonData[0].sector);
+				dojo.forEach(jsonData[0].sector, function(sector) {
+					$("#sfilterid").append(sector + " ");
+				});
 			}
 
 			if (jsonData[0].financinginstrument != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Financing Instrument')+"</i> : ");
-				$("#sfilterid").append(jsonData[0].financinginstrument);
+				dojo.forEach(jsonData[0].financinginstrument, function(financinginstrument) {
+					$("#sfilterid").append(financinginstrument + " ");
+				});
+				
 			}
 			if (jsonData[0].typeofassistance != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Type of Assistance')+"</i> : ");
-				$("#sfilterid").append(jsonData[0].typeofassistance);
+				dojo.forEach(jsonData[0].typeofassistance, function(typeofassistance) {
+					$("#sfilterid").append(typeofassistance + " ");
+				});
 			}
 
 			if (jsonData[0].onbudget == true) {
@@ -479,7 +492,9 @@ function getSelectedFilter() {
 
 			if (jsonData[0].organizationtype != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Organization Type')+"</i> : ");
-				$("#sfilterid").append(jsonData[0].organizationtype);
+				dojo.forEach(jsonData[0].organizationtype, function(organizationtype) {
+					$("#sfilterid").append(organizationtype + " - ");
+				});
 			}
 
 			if (jsonData[0].organizationgroup != '') {
@@ -1082,17 +1097,19 @@ function getStructures(clear) {
 			structureGraphicLayer.hide();
 			cLs.hide();
 			$('#structuresdiv').hide('slow');
+			structureVisible=false;
 		} else {
 			structureGraphicLayer.show();
 			cLs.show();
 			map.infoWindow.resize(400, 250);
 			$('#structuresdiv').show('slow');
+			structureVisible=true;
 		}
 	} else {
 		structureGraphicLayer = esri.layers.GraphicsLayer({
 			displayOnPan : false,
 			id : "structuresMap",
-			visible : false
+			visible : structureVisible
 		});
 		
 		structureson = true;
@@ -1243,7 +1260,7 @@ function CluterStructures(){
 				type:2,
 				symbolBank : symbolBank,
 				id : "structurescluster",
-				visible : false,
+				visible : structureVisible,
 				features : structurespoint,
 				infoWindow :{
 					template :

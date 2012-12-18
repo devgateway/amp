@@ -44,6 +44,9 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.form.MainMapForm;
@@ -102,7 +105,19 @@ public class MainMap extends Action {
 			}
 
 		}
-
+		
+		List<AmpCategoryValue> categoryvaluesfinanisnt = null;
+		categoryvaluesfinanisnt = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+		filter.setFinancingInstruments(categoryvaluesfinanisnt);
+		
+		List<AmpCategoryValue> categoryvaluestypeofassis = null;
+		categoryvaluestypeofassis = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+		filter.setTypeofassistences(categoryvaluestypeofassis);
+		
+		List<AmpCategoryValue> categoryvaluesprojectstatus = null;
+		categoryvaluesprojectstatus = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
+		filter.setProjectstatus(categoryvaluesprojectstatus);
+		
 		if (request.getParameter("exportreport") != null) {
 			filter.setModeexport(true);
 			AmpARFilter reportfilter = (AmpARFilter) request.getSession()
@@ -278,7 +293,18 @@ public class MainMap extends Action {
 		List<AmpStructureType> sts = new ArrayList<AmpStructureType>();
 		sts = (List<AmpStructureType>) DbHelper.getAllStructureTypes();
 		filter.setStructureTypes(sts);
-
+		
+		List<AmpCategoryValue> categoryvaluesfinanisnt = null;
+		categoryvaluesfinanisnt = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+		filter.setFinancingInstruments(categoryvaluesfinanisnt);
+		
+		List<AmpCategoryValue> categoryvaluestypeofassis = null;
+		categoryvaluestypeofassis = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+		filter.setTypeofassistences(categoryvaluestypeofassis);
+		
+		List<AmpCategoryValue> categoryvaluesprojectstatus = null;
+		categoryvaluesprojectstatus = (List<AmpCategoryValue>) CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY);
+		filter.setProjectstatus(categoryvaluesprojectstatus);
 	}
 
 	public ActionForward displayIcon(ActionMapping mapping, ActionForm form,

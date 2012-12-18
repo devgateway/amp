@@ -73,27 +73,55 @@ function initializeTranslations(){
 														<td class="side_opt_sel" id="general_selector_1" >
 															<div class="selector_type_cont" onclick="changeTab(1)">
 																<digi:trn>Organization Groups With Organizations</digi:trn>
-															</div></td>
-
+															</div>
+														</td>
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_2">
+														<td class="side_opt_sel" id="general_selector_2" >
+															<div class="selector_type_cont" onclick="changeTab(4)">
+																<digi:trn>Organization Type</digi:trn>
+															</div>
+														</td>
+													</tr>
+													<tr style="cursor: pointer;">
+														<td class="side_opt_sel" id="general_selector_3">
 															<div class="selector_type_cont" onclick="changeTab(2)">
 																<digi:trn>Regions With Zones</digi:trn>
 															</div></td>
 
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_3">
+														<td class="side_opt_sel" id="general_selector_4">
 															<div class="selector_type_cont" onclick="changeTab(3)">
 																<digi:trn>Sectors and Sub Sectors</digi:trn>
 															</div></td>
 													</tr>
 													<tr style="cursor: pointer;">
-														<td class="side_opt_sel" id="general_selector_3">
-															<div class="selector_type_cont" onclick="changeTab(4)">
+														<td class="side_opt_sel" id="general_selector_5">
+															<div class="selector_type_cont" onclick="changeTab(5)">
+																<digi:trn>Aid Modality</digi:trn>
+															</div>
+														</td>
+													</tr>
+													<tr style="cursor: pointer;">
+														<td class="side_opt_sel" id="general_selector_6">
+															<div class="selector_type_cont" onclick="changeTab(6)">
+																<digi:trn>Aid Type</digi:trn>
+															</div>
+														</td>
+													</tr>
+													<tr style="cursor: pointer;">
+														<td class="side_opt_sel" id="general_selector_7">
+															<div class="selector_type_cont" onclick="changeTab(7)">
+																<digi:trn>Project Status</digi:trn>
+															</div>
+														</td>
+													</tr>
+													<tr style="cursor: pointer;">
+														<td class="side_opt_sel" id="general_selector_8">
+															<div class="selector_type_cont" onclick="changeTab(8)">
 																<digi:trn>Structure Types</digi:trn>
-															</div></td>
+															</div></td>	
 													</tr>
 												</table>
 											</div>
@@ -289,7 +317,7 @@ function initializeTranslations(){
 												id="structuresDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
 													<li>
-														<input type="checkbox" id="region_check_all" name="region_check" value="-1"
+														<input type="checkbox" id="st_check_all" name="st_check" value="-1"
 																onClick="allOptionChecked(this,'region_check','zone_check')" />
 														<span><digi:trn>All</digi:trn></span>
 													</li>
@@ -298,6 +326,134 @@ function initializeTranslations(){
 															<input type="checkbox" name="structures_check" title="${item.name}"
 																	value="${item.typeId}">
 															<span><c:out value="${item.name}"/></span> 
+															<br/>
+														</li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+										<div class="member_selector_wrapper" id="aidmodalityDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												<div class="inside" style="float: left">
+													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+													</b>
+
+												</div>
+												<div class="inside" style="float: right">
+													<input onkeypress="clearSearch('aidmodalityDivList')" id="aidmodalityDivList_search" type="text" class="inputx" /> 
+													<input type="button" class="buttonx" onclick="findPrev('aidmodalityDivList')" value='&lt;&lt;' /> 
+													<input type="button" onclick="findNext('aidmodalityDivList')" class="buttonx" value="&gt;&gt;" />
+												</div>
+											</div>
+											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
+												id="aidmodalityDivList">
+												<ul style="list-style-type: none;margin-left: 0px;">
+													<li>
+														<input type="checkbox" id="aid_check_all" name="aid_check" value="-1"
+																onClick="allOptionChecked(this,'region_check','zone_check')" />
+														<span><digi:trn>All</digi:trn></span>
+													</li>
+													<c:forEach items="${datadispatcherform.filter.financingInstruments}" var="item">
+														<li>
+															<input type="checkbox" name="aidmodality_check" title="${item.value}"
+																	value="${item.id}">
+															<span><c:out value="${item.value}"/></span> 
+															<br/>
+														</li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+										<div class="member_selector_wrapper" id="typeofassisDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												<div class="inside" style="float: left">
+													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+													</b>
+
+												</div>
+												<div class="inside" style="float: right">
+													<input onkeypress="clearSearch('typeofassisDivList')" id="typeofassisDivList_search" type="text" class="inputx" /> 
+													<input type="button" class="buttonx" onclick="findPrev('typeofassisDivList')" value='&lt;&lt;' /> 
+													<input type="button" onclick="findNext('typeofassisDivList')" class="buttonx" value="&gt;&gt;" />
+												</div>
+											</div>
+											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
+												id="typeofassisDivList">
+												<ul style="list-style-type: none;margin-left: 0px;">
+													<li>
+														<input type="checkbox" id="typeofassis_check_all" name="assis_check" value="-1"
+																onClick="allOptionChecked(this,'region_check','zone_check')" />
+														<span><digi:trn>All</digi:trn></span>
+													</li>
+													<c:forEach items="${datadispatcherform.filter.typeofassistences}" var="item">
+														<li>
+															<input type="checkbox" name="typeofassis_check" title="${item.value}"
+																	value="${item.id}">
+															<span><c:out value="${item.value}"/></span> 
+															<br/>
+														</li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+										<div class="member_selector_wrapper" id="projectstatusDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												<div class="inside" style="float: left">
+													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+													</b>
+
+												</div>
+												<div class="inside" style="float: right">
+													<input onkeypress="clearSearch('projectstDivList')" id="projectstDivList_search" type="text" class="inputx" /> 
+													<input type="button" class="buttonx" onclick="findPrev('projectstDivList')" value='&lt;&lt;' /> 
+													<input type="button" onclick="findNext('projectstDivList')" class="buttonx" value="&gt;&gt;" />
+												</div>
+											</div>
+											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
+												id="projectstDivList">
+												<ul style="list-style-type: none;margin-left: 0px;">
+													<li>
+														<input type="checkbox" id="typeofassis_check_all" name="assis_check" value="-1"
+																onClick="allOptionChecked(this,'region_check','zone_check')" />
+														<span><digi:trn>All</digi:trn></span>
+													</li>
+													<c:forEach items="${datadispatcherform.filter.projectstatus}" var="item">
+														<li>
+															<input type="checkbox" name="projectst_check" title="${item.value}"
+																	value="${item.id}">
+															<span><c:out value="${item.value}"/></span> 
+															<br/>
+														</li>
+													</c:forEach>
+												</ul>
+											</div>
+										</div>
+										<div class="member_selector_wrapper" id="orgtypeDivContent" style="margin-left: 40%; padding: 0px; height: 98%; display:none">
+											<div style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												<div class="inside" style="float: left">
+													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
+													</b>
+
+												</div>
+												<div class="inside" style="float: right">
+													<input onkeypress="clearSearch('orgtypeDivList')" id="org_type_search" type="text" class="inputx" /> 
+													<input type="button" class="buttonx" onclick="findPrev('orgtypeDivList')" value='&lt;&lt;' /> 
+													<input type="button" onclick="findNext('orgtypeDivList')" class="buttonx" value="&gt;&gt;" />
+												</div>
+											</div>
+											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
+												id="orgtypeDivList">
+												<ul style="list-style-type: none;margin-left: 0px;">
+													<li>
+														<input type="checkbox" id="typeofassis_check_all" name="assis_check" value="-1"
+																onClick="allOptionChecked(this,'region_check','zone_check')" />
+														<span><digi:trn>All</digi:trn></span>
+													</li>
+													<c:forEach items="${datadispatcherform.filter.organizationsType}" var="item">
+														<li>
+															<input type="checkbox" name="orgtypes_check" title="${item.orgType}"
+																	value="${item.ampOrgTypeId}">
+															<span><c:out value="${item.orgType}"/></span> 
 															<br/>
 														</li>
 													</c:forEach>
@@ -363,48 +519,6 @@ function initializeTranslations(){
 														<html:optionsCollection property="filter.years" label="key" value="value" />
 													</html:select>
 												</td>
-												<td>
-													<b><digi:trn>Organization Type</digi:trn>:</b>
-												</td>
-												<td>
-													<html:select property="filter.organizationsTypeId" styleId="organization_type_dropdown_ids"
-													styleClass="dropdwn_sm" style="width:145px;">
-													<html:option value="-1">
-														<digi:trn>All</digi:trn>
-													</html:option>
-													<html:optionsCollection property="filter.organizationsType" value="ampOrgTypeId" label="orgType" />
-													</html:select>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<b><digi:trn>Aid Type</digi:trn>:</b>
-												</td>
-												<td><category:showoptions outerstyle="width: 145px"
-													styleClass="dropdwn_sm" name="datadispatcherform"
-													property="filter.typeAssistanceId" multiselect="false"
-													styleId="type_assistance_id"
-													keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
-												</td>
-												<td>
-													<b><digi:trn>Project Status</digi:trn>:</b>
-												</td>
-												<td>
-												<category:showoptions outerstyle="width: 145px"
-													styleClass="dropdwn_sm" property="filter.projectStatusId"
-													size="3" name="datadispatcherform" multiselect="false"
-													styleId="project_status_id"
-													keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>" />
-												</td>
-												<td>
-													<b><digi:trn>Aid Modality</digi:trn>:</b>
-												</td>
-												<td><category:showoptions outerstyle="width: 145px"
-													styleClass="dropdwn_sm" name="datadispatcherform"
-													property="filter.financingInstrumentId" multiselect="false"
-													styleId="financing_instrument_id"
-													keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
-												</td>
 											</tr>
 										</table>
 									</div>
@@ -430,10 +544,6 @@ function initializeTranslations(){
 	<html:hidden property="filter.defaultStartYear" styleId="defaultStartYear"/>
 	<html:hidden property="filter.defaultEndYear" styleId="defaultEndYear" />
 	<html:hidden property="filter.transactionType" styleId="transactionType" />
-	<html:hidden property="filter.organizationsTypeId" styleId="organizationsTypeId" />
-	<html:hidden property="filter.typeAssistanceId" styleId="typeAssistanceId" />
-	<html:hidden property="filter.projectStatusId" styleId="projectStatusId" />
-	<html:hidden property="filter.financingInstrumentId" styleId="financingInstrumentId" />
 	<html:hidden property="filter.onBudget" styleId="onBudget" />
 </digi:form>
 

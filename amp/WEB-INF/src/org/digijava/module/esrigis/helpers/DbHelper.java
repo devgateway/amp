@@ -69,7 +69,6 @@ public class DbHelper {
 		boolean zonescondition = zonesids != null && zonesids.length > 1;
 		Long[] sectorIds = filter.getSelSectorIds();
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
-		boolean organizationTypeCondition = filter.getOrganizationsTypeId() != null && !filter.getOrganizationsTypeId().equals(-1l);
 		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !QueryUtil.inArray(-1l,filter.getSelStructureTypes() );
 		AmpCategoryValue budgetOn = null;
 		AmpCategoryValue budgetOff=null;
@@ -103,14 +102,14 @@ public class DbHelper {
 				oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 			}
 			//Organization Type
-			if(organizationTypeCondition){
+			if(filter.getSelorganizationsTypes()!=null){
 				oql += " inner join act.orgrole role  ";
 			}
 			if(structureTypeCondition){
 				oql += " inner join act.structures str  ";
 			}
 			//Status
-		    if (filter.getProjectStatusId()!=null){
+		    if (filter.getSelprojectstatus()!=null){
 		    	oql+=" join  act.categories as categories ";
 		    }
 		    
@@ -168,8 +167,8 @@ public class DbHelper {
 			}
 			
 			//Organization Type
-			if(organizationTypeCondition) {
-				oql += " and role.organisation.orgGrpId.orgType = " + filter.getOrganizationsTypeId();
+			if(filter.getSelorganizationsTypes()!=null) {
+				oql += " and role.organisation.orgGrpId.orgType in (" + QueryUtil.getInStatement(filter.getSelorganizationsTypes())+")";
 			}
 			
 			//Implementing Agency
@@ -182,11 +181,11 @@ public class DbHelper {
 			}
 
 			//Project Status
-			if (filter.getProjectStatusId() != null && !filter.getProjectStatusId().equals(0l)) {
-				oql += " and categories.id in ("+filter.getProjectStatusId()+") ";
+			if (filter.getSelprojectstatus() != null) {
+				oql += " and categories.id in ("+QueryUtil.getInStatement(filter.getSelprojectstatus())+") ";
 	        }
 			// On/Off budget
-			if (filter.getOnBudget() != null && !filter.getProjectStatusId().equals(0)) {
+			if (filter.getOnBudget() != null) {
 				if (filter.getOnBudget()==1){
 					oql += " and categories.id in ("+budgetOn.getId()+") ";
 				}else if(filter.getOnBudget()==2){
@@ -194,12 +193,13 @@ public class DbHelper {
 				}
 	        }
 			// Type of assistance
-			if (filter.getTypeAssistanceId() != null && !filter.getTypeAssistanceId().equals(0l)) {
-				oql += " and f.typeOfAssistance in ("+filter.getTypeAssistanceId()+") ";
+			if (filter.getSeltypeofassistence() != null) {
+				oql += " and f.typeOfAssistance in ("+QueryUtil.getInStatement(filter.getSeltypeofassistence())+") ";
 	        }
 			// Financing instrument
-			if (filter.getFinancingInstrumentId() != null && !filter.getFinancingInstrumentId().equals(0l)) {
-				oql += " and f.financingInstrument in ("+filter.getFinancingInstrumentId()+") ";
+			
+			if (filter.getSelfinancingInstruments() != null) {
+				oql += " and f.financingInstrument in ("+QueryUtil.getInStatement(filter.getSelfinancingInstruments())+") ";
 	        }
 			// Structure Types
 			if(structureTypeCondition){

@@ -8,20 +8,35 @@ public class SimpleFilter {
 	private String startyear;
 	private String endyear;
 	private String fiscalcalendar;
-	private String projectstatus;
-	private String typeofassistance;
-	private String financinginstrument;
+	private ArrayList<String> projectstatus;
+	private ArrayList<String> typeofassistance;
+	private ArrayList<String> financinginstrument;
 	private ArrayList<String> structuretypes;
 	private boolean onbudget;
 	private String organizationgroup;
 	private ArrayList<SimpleDonor> selecteddonors;
 	private ArrayList<SimpleDonor> impselecteddonors;
 	private String implementingagency; 
-	private String organizationtype;
-	private ArrayList<String> regions;
-	private ArrayList<String> zones;
-	private String sector;
+	private ArrayList<String> organizationtype;
+	private ArrayList<String> sector;
+	private String locationfiltered;
 	
+	public String getLocationfiltered() {
+		return locationfiltered;
+	}
+
+	public void setLocationfiltered(String locationfiltered) {
+		this.locationfiltered = locationfiltered;
+	}
+
+	public ArrayList<String> getSector() {
+		return sector;
+	}
+
+	public void setSector(ArrayList<String> sector) {
+		this.sector = sector;
+	}
+
 	public ArrayList<SimpleDonor> getSelecteddonors() {
 		return selecteddonors;
 	}
@@ -62,32 +77,32 @@ public class SimpleFilter {
 		this.fiscalcalendar = fiscalcalendar;
 	}
 
-	public String getProjectstatus() {
-		return projectstatus;
-	}
-
-	public void setProjectstatus(String projectstatus) {
-		this.projectstatus = projectstatus;
-	}
-
-	public String getTypeofassistance() {
+	public ArrayList<String> getTypeofassistance() {
 		return typeofassistance;
 	}
 
-	public void setTypeofassistance(String typeofassistance) {
+	public void setTypeofassistance(ArrayList<String> typeofassistance) {
 		this.typeofassistance = typeofassistance;
 	}
 
-	public String getFinancinginstrument() {
-		return financinginstrument;
+	public ArrayList<String> getProjectstatus() {
+		return projectstatus;
 	}
 
-	public void setFinancinginstrument(String financinginstrument) {
-		this.financinginstrument = financinginstrument;
+	public void setProjectstatus(ArrayList<String> projectstatus) {
+		this.projectstatus = projectstatus;
 	}
 
 	public ArrayList<String> getStructuretypes() {
 		return structuretypes;
+	}
+
+	public ArrayList<String> getFinancinginstrument() {
+		return financinginstrument;
+	}
+
+	public void setFinancinginstrument(ArrayList<String> financinginstrument) {
+		this.financinginstrument = financinginstrument;
 	}
 
 	public void setStructuretypes(ArrayList<String> structuretypes) {
@@ -102,40 +117,16 @@ public class SimpleFilter {
 		this.onbudget = onbudget;
 	}
 
-	public String getOrganizationtype() {
+	public String getOrganizationgroup() {
+		return organizationgroup;
+	}
+
+	public ArrayList<String> getOrganizationtype() {
 		return organizationtype;
 	}
 
-	public void setOrganizationtype(String organizationtype) {
+	public void setOrganizationtype(ArrayList<String> organizationtype) {
 		this.organizationtype = organizationtype;
-	}
-
-	public ArrayList<String> getRegions() {
-		return regions;
-	}
-
-	public void setRegions(ArrayList<String> regions) {
-		this.regions = regions;
-	}
-
-	public ArrayList<String> getZones() {
-		return zones;
-	}
-
-	public void setZones(ArrayList<String> zones) {
-		this.zones = zones;
-	}
-
-	public String getSector() {
-		return sector;
-	}
-
-	public void setSector(String sector) {
-		this.sector = sector;
-	}
-
-	public String getOrganizationgroup() {
-		return organizationgroup;
 	}
 
 	public void setOrganizationgroup(String organizationgroup) {

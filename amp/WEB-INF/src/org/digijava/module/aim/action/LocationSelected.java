@@ -15,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -43,18 +44,12 @@ public class LocationSelected extends Action {
 		
 		if (eaForm.getLocation().getImpLevelValue().intValue() == 1) {
 			location = new Location[1];
-			Collection col =FeaturesUtil.getGlobalSettings();
-            Iterator itr = col.iterator();
-            Country cntry =null;
-            String Iso=null;
-        //    while(itr.hasNext())
-          //  {
-            	AmpGlobalSettings ampgs = (AmpGlobalSettings) itr.next();
-            	logger.info(" this is the default country..."+ampgs.getGlobalSettingsValue());
-             	Iso = ampgs.getGlobalSettingsValue();
-             	cntry = DbUtil.getDgCountry(Iso);
-            	logger.info(" this is the ISO "+ Iso+" this is the country got ..... "+ cntry);
-            //}
+			String Iso = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY);
+            Country cntry = null;
+           	logger.info(" this is the default country..." + Iso);
+           	cntry = DbUtil.getDgCountry(Iso);
+           	logger.info(" this is the ISO "+ Iso+" this is the country got ..... "+ cntry);
+
 			//Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
 			location[0] = new Location();
 			location[0].setLocId(new Long(System.currentTimeMillis()));

@@ -4,9 +4,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
@@ -51,28 +53,29 @@ public class FeaturesUtil {
 
 	private static Logger logger = Logger.getLogger(FeaturesUtil.class);
 
-	private static Collection<AmpGlobalSettings> globalSettingsCache = null;
+	private static Map<String, AmpGlobalSettings> globalSettingsCache = null;
 
-	private ServletContext ampContext = null;
+	//private ServletContext ampContext = null;
 
 	public static String errorLog="";
 	
 	public static void logGlobalSettingsCache() {
 		String log = "";
-		for (AmpGlobalSettings ampGlobalSetting:globalSettingsCache) {
+		for (AmpGlobalSettings ampGlobalSetting:globalSettingsCache.values()) {
 			log = log + ampGlobalSetting.getGlobalSettingsName() + ":" +
 			ampGlobalSetting.getGlobalSettingsValue() + ";";
 		}
 		logger.info("GlobalSettingsCache is -> " + log);
 	}
 
-	public static synchronized Collection<AmpGlobalSettings> getGlobalSettingsCache() {
+	public static synchronized Map<String, AmpGlobalSettings> getGlobalSettingsCache() {
 		return globalSettingsCache;
 	}
 
-	public static synchronized void setGlobalSettingsCache(Collection<AmpGlobalSettings>
-			globalSettings) {
-		globalSettingsCache = globalSettings;
+	public static synchronized void buildGlobalSettingsCache(List<AmpGlobalSettings> globalSettings) {
+		globalSettingsCache = new HashMap<String, AmpGlobalSettings>();
+		for(AmpGlobalSettings sett:globalSettings)
+			globalSettingsCache.put(sett.getGlobalSettingsName(), sett);
 	}
 
 	public static boolean isDefault(Long templateId) {
@@ -909,20 +912,15 @@ public class FeaturesUtil {
 	}
 
 	public static String getGlobalSettingValue(String globalSettingName) {
-		Collection<AmpGlobalSettings> settings = null;
-		settings = getGlobalSettingsCache();
-		if (settings == null) {
-			settings = getGlobalSettings();
-			setGlobalSettingsCache(settings);
-		}
-
-		for(AmpGlobalSettings element:settings)
-		{
-			// TODO would it be better if we add 'key' field in db for this?
-			if (element.getGlobalSettingsName().equals(globalSettingName))
-				return element.getGlobalSettingsValue();
-		}
-		return null;
+		if (globalSettingsCache == null)
+			buildGlobalSettingsCache(getGlobalSettings());
+			
+		Map<String, AmpGlobalSettings> settings = globalSettingsCache;
+		
+		AmpGlobalSettings value = settings.get(globalSettingName);
+		if (value == null)
+			return null;
+		return value.getGlobalSettingsValue();
 	}
 	
 	public static boolean getGlobalSettingValueBoolean(String globalSettingName) {
@@ -954,8 +952,8 @@ public class FeaturesUtil {
 	/*
 	 * to get all the Global settings
 	 */
-	public static Collection<AmpGlobalSettings> getGlobalSettings() {
-		Collection<AmpGlobalSettings> coll = null;
+	public static List<AmpGlobalSettings> getGlobalSettings() {
+		List<AmpGlobalSettings> coll = null;
 		Session session = null;
 		Transaction tx = null;
 		String qryStr = null;

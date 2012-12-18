@@ -1,3 +1,4 @@
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -145,16 +146,12 @@
 					}
 					%>
 					<%
-					int filterByMonths=0;
-					java.util.Collection col = FeaturesUtil.getGlobalSettings();
-					java.util.Iterator itr = col.iterator();
-					while (itr.hasNext()) {
-						AmpGlobalSettings ags = (AmpGlobalSettings)itr.next();
-						if (ags.getGlobalSettingsName().equals("Filter reports by month"))
-								if (ags.getGlobalSettingsValue().equals("On")) {
-									filterByMonths=1;
-									break;
-								}
+						int filterByMonths = 0;
+						{
+							String val = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.FILTER_REPORTS_BY_MONTH);
+							if ((val != null) && val.equals("On"))
+								filterByMonths = 1;
+						}
 					}
 					%>
 				</tr>

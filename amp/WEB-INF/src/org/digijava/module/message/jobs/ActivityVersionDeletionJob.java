@@ -26,22 +26,18 @@ public class ActivityVersionDeletionJob implements StatefulJob {
 	@Override
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
-		Collection<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
-		String name;
-		String value;
-		int period = 0;
-		int quequeSize = 0;
-		for (Iterator iterator = col.iterator(); iterator.hasNext();) {
-			AmpGlobalSettings ampGls = (AmpGlobalSettings) iterator.next();
-			name = ampGls.getGlobalSettingsName();
-			value = ampGls.getGlobalSettingsValue();
-			if (name.equalsIgnoreCase(GlobalSettingsConstants.ACTIVITY_LIFE)) {
-				period = Integer.parseInt(value);
-			} else if (name
-					.equalsIgnoreCase(GlobalSettingsConstants.VERSION_QUEUE_SIZE)) {
-				quequeSize = Integer.parseInt(value);
-			}
-		}
+		
+		int period = 0;		
+		int queueSize = 0;
+		
+		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_LIFE);
+		if (value != null)
+			period = Integer.parseInt(value);
+		
+		value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.VERSION_QUEUE_SIZE);
+		if (value != null)
+			queueSize = Integer.parseInt(value);
+		
 		Session hibernateSession = null;
 
 		try {
@@ -51,7 +47,7 @@ public class ActivityVersionDeletionJob implements StatefulJob {
 			Date compareDate = AmpDateUtils.getDateBeforeDays(new Date(),
 					period);
 			Collection<AmpActivityVersion> activities = ActivityUtil
-					.getOldActivities(hibernateSession, quequeSize, compareDate);
+					.getOldActivities(hibernateSession, queueSize, compareDate);
 			if (activities != null && activities.size() > 0) {
 				for (AmpActivityVersion act : activities) {
 					ActivityUtil.deleteAllActivityContent(act, hibernateSession);

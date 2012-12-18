@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -43,6 +44,7 @@ import org.digijava.module.currencyrates.CurrencyRatesService;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.id.IdentityGenerator.GetGeneratedKeysDelegate;
 
 public class GlobalSettings extends Action {
 	private static Logger logger 				= Logger.getLogger(GlobalSettings.class);
@@ -102,9 +104,9 @@ public class GlobalSettings extends Action {
 			DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE).clear();
 		}
 		
-		Collection<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
+		List<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
 		if (refreshGlobalSettingsCache) {
-			FeaturesUtil.setGlobalSettingsCache(col);
+			FeaturesUtil.buildGlobalSettingsCache(col);
 			FeaturesUtil.logGlobalSettingsCache();
 			org.digijava.module.aim.helper.GlobalSettings globalSettings = (org.digijava.module.aim.helper.GlobalSettings) getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
 	    	globalSettings.setShowComponentFundingByYear(FeaturesUtil.isShowComponentFundingByYear());
@@ -154,26 +156,13 @@ public class GlobalSettings extends Action {
 
 	@SuppressWarnings("unchecked")
 	private void dailyCurrencyRatesChanges() {
-		Collection <AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
-		boolean update=false;
-		String name;
-		String value;
-		String hour=null;
-		String timeout=null;
-		for(AmpGlobalSettings amp: col){			
-			name =amp.getGlobalSettingsName();
-			value = amp.getGlobalSettingsValue();
-			if(name.compareToIgnoreCase(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_ENALBLED)==0
-					&& value.compareToIgnoreCase("On")==0){
-				update=true;
-			}
-			if(name.compareToIgnoreCase(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_HOUR)==0){
-				hour=amp.getGlobalSettingsValue();
-			}
-			if(name.compareToIgnoreCase(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_TIMEOUT)==0){
-				timeout=amp.getGlobalSettingsValue();
-			}
-		}
+		
+		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_ENALBLED);
+		boolean update = (value.compareToIgnoreCase("On") == 0);
+		
+		String hour = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_HOUR);
+		String timeout = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DAILY_CURRENCY_RATES_UPDATE_TIMEOUT);
+
 		if(update){
 			CurrencyRatesService.startCurrencyRatesService(hour, timeout);
 		}
@@ -186,23 +175,14 @@ public class GlobalSettings extends Action {
 	 * 
 	 */
 	private void auditTrialCleanerChanges() {
-		Collection<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
-		boolean update = false;
-		String name;
-		String value;
-		for (AmpGlobalSettings ampGls:col) {
-			name = ampGls.getGlobalSettingsName();
-			value = ampGls.getGlobalSettingsValue();
-			if (name.equalsIgnoreCase(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP)) {
-				if ("-1".equalsIgnoreCase(value)) {
-					if ( AuditCleaner.getInstance().isRunning()){
-						AuditCleaner.getInstance().stop();
-					}
-				} else {
-					if (!AuditCleaner.getInstance().isRunning()) {
-						AuditCleaner.getInstance().start();
-					}
-				}
+		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATIC_AUDIT_LOGGER_CLEANUP);
+		if ("-1".equalsIgnoreCase(value)) {
+			if ( AuditCleaner.getInstance().isRunning()){
+				AuditCleaner.getInstance().stop();
+			}
+		} else {
+			if (!AuditCleaner.getInstance().isRunning()) {
+				AuditCleaner.getInstance().start();
 			}
 		}
 	}

@@ -5089,10 +5089,10 @@ public class DbUtil {
 	}
 	
 	//BOZO: test this
-	public static Collection getAllContractingAgencyGroupsOfPortfolio()
+	public static Collection<AmpOrgGroup> getAllContractingAgencyGroupsOfPortfolio()
 	{
 		Session session = null;
-		Collection col = new ArrayList();
+		Collection<AmpOrgGroup> col = new ArrayList();
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select distinct amp_org_grp_id from v_contracting_agency_groups";
@@ -5106,9 +5106,9 @@ public class DbUtil {
 		return col;		
 	}
 
-	public static Collection getAllOrgGroupsOfPortfolio() {
+	public static Collection<AmpOrgGroup> getAllOrgGroupsOfPortfolio() {
 		Session session = null;
-		Collection col = new ArrayList();
+		Collection<AmpOrgGroup> col = new ArrayList();
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select distinct aog.* from amp_org_group aog "
@@ -5125,7 +5125,7 @@ public class DbUtil {
 		return col;
 	}
 
-	public static Collection getAllOrgTypesOfPortfolio() {
+	public static Collection<AmpOrgType> getAllOrgTypesOfPortfolio() {
 		Session session = null;
 		Collection col = new ArrayList();
 		try {

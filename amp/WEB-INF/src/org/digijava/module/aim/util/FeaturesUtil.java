@@ -909,17 +909,15 @@ public class FeaturesUtil {
 	}
 
 	public static String getGlobalSettingValue(String globalSettingName) {
-		Collection settings = null;
+		Collection<AmpGlobalSettings> settings = null;
 		settings = getGlobalSettingsCache();
 		if (settings == null) {
 			settings = getGlobalSettings();
 			setGlobalSettingsCache(settings);
 		}
 
-		Iterator i = settings.iterator();
-		AmpGlobalSettings element = null;
-		while (i.hasNext()) {
-			element = (AmpGlobalSettings) i.next();
+		for(AmpGlobalSettings element:settings)
+		{
 			// TODO would it be better if we add 'key' field in db for this?
 			if (element.getGlobalSettingsName().equals(globalSettingName))
 				return element.getGlobalSettingsValue();

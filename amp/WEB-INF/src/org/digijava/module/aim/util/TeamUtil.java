@@ -202,9 +202,9 @@ public class TeamUtil {
         return col;
     }
 
-    public static Collection getAllRelatedTeams() {
+    public static Collection<AmpTeam> getAllRelatedTeams() {
         Session session = null;
-        Collection col = new ArrayList();
+        Collection<AmpTeam> col = new ArrayList<AmpTeam>();
 
         try {
             session = PersistenceManager.getSession();
@@ -2381,7 +2381,7 @@ public class TeamUtil {
         return teams;
     }
 
-    public static Set getAmpLevel0Teams(Long ampTeamId) {
+    public static Set<AmpTeam> getAmpLevel0Teams(Long ampTeamId) {
         Session session = null;
         Set teams = new TreeSet();
 
@@ -2395,7 +2395,7 @@ public class TeamUtil {
             qry.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
             Iterator itrTemp = qry.list().iterator();
             AmpTeam ampTeam = null;
-            LinkedList list = new LinkedList();
+            LinkedList<AmpTeam> list = new LinkedList<AmpTeam>();
             list.addAll(qry.list());
             while(list.size() > 0) {
                 ampTeam = (AmpTeam) list.removeFirst();

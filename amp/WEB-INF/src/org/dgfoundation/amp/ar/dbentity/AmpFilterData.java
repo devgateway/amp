@@ -142,7 +142,7 @@ public class AmpFilterData implements Serializable {
 					continue;
 				}
 				/**
-				 * We check herer if this field's getter is annottated with PropertyListableIgnore. On true -> skip
+				 * We check here if this field's getter is annotated with PropertyListableIgnore. On true -> skip
 				 */
 				Method readMethod	= pd.getReadMethod();
 				if ( readMethod.getAnnotation(PropertyListableIgnore.class) != null || 

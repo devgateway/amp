@@ -457,5 +457,12 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 			return "/" + name;
 	}
 	
+	/**
+	 * remove all Cells whose ownerId is not among the ones in the specified set
+	 * might leave an empty column!
+	 * @param idsToRetain
+	 */
+	public abstract void filterByIds(Set<Long> idsToRetain);
+	
 }
 

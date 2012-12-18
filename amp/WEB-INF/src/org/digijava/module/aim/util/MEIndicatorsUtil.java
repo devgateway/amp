@@ -1199,11 +1199,11 @@ public class MEIndicatorsUtil
 		return col;
 	}
 
-	public static Collection getAllIndicatorRisks()
+	public static Collection<AmpIndicatorRiskRatings> getAllIndicatorRisks()
 	{
 		Session session = null;
 		Query qry = null;
-		Collection col = null;
+		Collection<AmpIndicatorRiskRatings> col = null;
 		try
 		{
 			session = PersistenceManager.getSession();

@@ -24,7 +24,9 @@ import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * flat report: X x Y
@@ -380,8 +382,34 @@ public class ColumnReportData extends ReportData<Column> {
 		    	logger.info("Removed previously added column "+name+" for filtering purposes");
 		    }
 		}
+		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+		if (dateFilterHidesProjects)
+			removeRowsWithoutFundingData(); // AMP-14382
 	}
 
+	protected Column getColumnByName(String name)
+	{
+		for(Column column:getColumns())
+			if (column.getName().equals(name))
+				return column;
+		return null;
+	}
+		
+	/**
+	 * removes all rows whose funding columns have no data
+	 */
+	protected void removeRowsWithoutFundingData()
+	{
+		Column column = getColumnByName(ArConstants.COLUMN_FUNDING);
+		if (column == null)
+			return; //nothing to do
+		
+		Set<Long> allRelevantIds = column.getOwnerIds();
+		//System.out.println("doehali cu " + allRelevantIds.size());
+		for(Column col:this.getColumns())
+			col.filterByIds(allRelevantIds);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -45,8 +45,12 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -60,6 +64,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.exceptions.UsedCategoryException;
 import org.digijava.module.mondrian.query.MoConstants;
 
 
@@ -77,19 +82,20 @@ public class AmpARFilter extends PropertyListable {
 	private static SimpleDateFormat sdfOut=new SimpleDateFormat("yyyy-MM-dd");
 	private static SimpleDateFormat sdfIn=new SimpleDateFormat("dd/MM/yyyy");
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
+	
 	private Long id;
 	private boolean justSearch=false;
 	private boolean workspaceonly=false;
 
 	private Long ampReportId;
-	private Set statuses = null;
-	private Set workspaces = null;
+	private Set<AmpCategoryValue> statuses = null;
+	private Set<AmpTeam> workspaces = null;
 	// private Set donors=null; //not used anymore
 	@PropertyListableIgnore
-	private Set sectors = null;
+	private Set<AmpSector> sectors = null;
 	@PropertyListableIgnore
-	private Set sectorsAndAncestors	= null;
-	private Set selectedSectors = null;
+	private Set<AmpSector> sectorsAndAncestors	= null;
+	private Set<AmpSector> selectedSectors = null;
 	
 	private String CRISNumber;
 	private String budgetNumber;
@@ -109,44 +115,50 @@ public class AmpARFilter extends PropertyListable {
 	private Long activitiesRejectedByFilter;
 	
 	@PropertyListableIgnore
-	private Set secondarySectors = null;
-	private Set selectedSecondarySectors = null;
+	private Set<AmpSector> secondarySectors = null;
+	private Set<AmpSector> selectedSecondarySectors = null;
 	@PropertyListableIgnore
-	private Set secondarySectorsAndAncestors = null;
+	private Set<AmpSector> secondarySectorsAndAncestors = null;
     @PropertyListableIgnore
-	private Set tertiarySectors = null;
-	private Set selectedTertiarySectors = null;
+	private Set<AmpSector> tertiarySectors = null;
+	private Set<AmpSector> selectedTertiarySectors = null;
     @PropertyListableIgnore
-    private Set tertiarySectorsAndAncestors = null;
+    private Set<AmpSector> tertiarySectorsAndAncestors = null;
     
     @PropertyListableIgnore
-	private Set tagSectors = null;
-	private Set selectedTagSectors = null;
+	private Set<AmpSector> tagSectors = null;
+	private Set<AmpSector> selectedTagSectors = null;
     @PropertyListableIgnore
-    private Set tagSectorsAndAncestors = null;
+    private Set<AmpSector> tagSectorsAndAncestors = null;
 
 
 	@PropertyListableIgnore
-	private Set relatedSecondaryProgs;
+	private Set<AmpTheme> relatedSecondaryProgs;
 
 	@PropertyListableIgnore
-	private List nationalPlanningObjectives;
-	private Set selectedNatPlanObj;
+	private List<AmpTheme> nationalPlanningObjectives;
+	private Set<AmpTheme> selectedNatPlanObj;
 	@PropertyListableIgnore
-	private Set relatedNatPlanObjs;
+	private Set<AmpTheme> relatedNatPlanObjs;
 
 	@PropertyListableIgnore
 	private String teamAccessType;
 	
 	@PropertyListableIgnore
-	private List primaryPrograms;
-	private Set selectedPrimaryPrograms;
+	private List<AmpTheme> primaryPrograms;
+	private Set<AmpTheme> selectedPrimaryPrograms;
 	@PropertyListableIgnore
-	private Set relatedPrimaryProgs;
+	private Set<AmpTheme> relatedPrimaryProgs;
 
 	@PropertyListableIgnore
-	private List secondaryPrograms;
-	private Set selectedSecondaryPrograms;
+	private List<AmpTheme> secondaryPrograms;
+	private Set<AmpTheme> selectedSecondaryPrograms;
+	
+	/**
+	 * see getter for description
+	 */
+	@PropertyListableIgnore
+	private boolean dateFilterUsed;
 	
 	private String multiDonor = null;
 
@@ -159,91 +171,89 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	@PropertyListableIgnore
-	public List getNationalPlanningObjectives() {
+	public List<AmpTheme> getNationalPlanningObjectives() {
 		return nationalPlanningObjectives;
 	}
 
-	public void setNationalPlanningObjectives(List nationalPlanningObjectives) {
+	public void setNationalPlanningObjectives(List<AmpTheme> nationalPlanningObjectives) {
 		this.nationalPlanningObjectives = nationalPlanningObjectives;
-	}
-	
-	
+	}	
 
 	@PropertyListableIgnore
-	public Set getRelatedNatPlanObjs() {
+	public Set<AmpTheme> getRelatedNatPlanObjs() {
 		return relatedNatPlanObjs;
 	}
 
-	public void setRelatedNatPlanObjs(Set relatedNatPlanObjs) {
+	public void setRelatedNatPlanObjs(Set<AmpTheme> relatedNatPlanObjs) {
 		this.relatedNatPlanObjs = relatedNatPlanObjs;
 	}
 	@PropertyListableIgnore
-	public Set getRelatedSecondaryProgs() {
+	public Set<AmpTheme> getRelatedSecondaryProgs() {
 		return relatedSecondaryProgs;
 	}
 
-	public void setRelatedSecondaryProgs(Set relatedSecondaryProgs) {
+	public void setRelatedSecondaryProgs(Set<AmpTheme> relatedSecondaryProgs) {
 		this.relatedSecondaryProgs = relatedSecondaryProgs;
 	}
 
 	@PropertyListableIgnore
-	public Set getRelatedPrimaryProgs() {
+	public Set<AmpTheme> getRelatedPrimaryProgs() {
 		return relatedPrimaryProgs;
 	}
 
-	public void setRelatedPrimaryProgs(Set relatedPrimaryProgs) {
+	public void setRelatedPrimaryProgs(Set<AmpTheme> relatedPrimaryProgs) {
 		this.relatedPrimaryProgs = relatedPrimaryProgs;
 	}
 
 	@PropertyListableIgnore
-	public List getPrimaryPrograms() {
+	public List<AmpTheme> getPrimaryPrograms() {
 		return primaryPrograms;
 	}
 
-	public void setPrimaryPrograms(List primaryPrograms) {
+	public void setPrimaryPrograms(List<AmpTheme> primaryPrograms) {
 		this.primaryPrograms = primaryPrograms;
 	}
 
 	@PropertyListableIgnore
-	public List getSecondaryPrograms() {
+	public List<AmpTheme> getSecondaryPrograms() {
 		return secondaryPrograms;
 	}
 
-	public void setSecondaryPrograms(List secondaryPrograms) {
+	public void setSecondaryPrograms(List<AmpTheme> secondaryPrograms) {
 		this.secondaryPrograms = secondaryPrograms;
 	}
 
-	public Set getSelectedNatPlanObj() {
+	public Set<AmpTheme> getSelectedNatPlanObj() {
 		return selectedNatPlanObj;
 	}
 
-	public void setSelectedNatPlanObj(Set selectedNatPlanObj) {
+	public void setSelectedNatPlanObj(Set<AmpTheme> selectedNatPlanObj) {
 		this.selectedNatPlanObj = selectedNatPlanObj;
 	}
 
-	public Set getSelectedPrimaryPrograms() {
+	public Set<AmpTheme> getSelectedPrimaryPrograms() {
 		return selectedPrimaryPrograms;
 	}
 
-	public void setSelectedPrimaryPrograms(Set selectedPrimaryPrograms) {
+	public void setSelectedPrimaryPrograms(Set<AmpTheme> selectedPrimaryPrograms) {
 		this.selectedPrimaryPrograms = selectedPrimaryPrograms;
 	}
 
-	public Set getSelectedSecondaryPrograms() {
+	public Set<AmpTheme> getSelectedSecondaryPrograms() {
 		return selectedSecondaryPrograms;
 	}
 
-	public void setSelectedSecondaryPrograms(Set selectedSecondaryPrograms) {
+	public void setSelectedSecondaryPrograms(Set<AmpTheme> selectedSecondaryPrograms) {
 		this.selectedSecondaryPrograms = selectedSecondaryPrograms;
 	}
 
 	private Set regions = null;
 	private Set risks = null;
-	private Set donorTypes = null;
+	private Set<AmpOrgType> donorTypes = null;
 	private Set<AmpOrgGroup> donorGroups = null;
 	private Set<AmpOrgGroup> contractingAgencyGroups = null;
 	
-	private Set responsibleorg = null;
+	private Set<AmpOrganisation> responsibleorg = null;
 	private Set<AmpOrganisation> executingAgency;
 	private Set<AmpOrganisation> contractingAgency;
 	private Set<AmpOrganisation> implementingAgency;
@@ -252,7 +262,7 @@ public class AmpARFilter extends PropertyListable {
 
 	private Set teamAssignedOrgs = null;
 
-	private Set financingInstruments = null;
+	private Set<AmpCategoryValue> financingInstruments = null;
 	private Set<AmpCategoryValue> projectCategory = null;
 
 	
@@ -261,8 +271,8 @@ public class AmpARFilter extends PropertyListable {
 	// private Long ampModalityId=null;
 
 	private AmpCurrency currency = null;
-	private Set ampTeams = null;
-	private Set ampTeamsforpledges = null;
+	private Set<AmpTeam> ampTeams = null;
+	private Set<AmpTeam> ampTeamsforpledges = null;
 	private AmpFiscalCalendar calendarType = null;
 	private boolean widget = false;
 	private boolean publicView = false;
@@ -408,7 +418,7 @@ public class AmpARFilter extends PropertyListable {
 		this.generatedFilterQuery = initialFilterQuery;
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
 				Constants.CURRENT_MEMBER);
-		this.setAmpTeams(new TreeSet());
+		this.setAmpTeams(new TreeSet<AmpTeam>());
 		
 		String ampReportId = null ;
 		//Check if the reportid is not nut for public mondrian reports
@@ -465,11 +475,11 @@ public class AmpARFilter extends PropertyListable {
 		}
 		else {
 			//Check if the reportid is not nut for public mondrian reports
-			if (ampReportId !=null){
+			if (ampReportId != null){
 				AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
 			
 				//TreeSet allManagementTeams=(TreeSet) TeamUtil.getAllRelatedTeamsByAccessType("Management");
-				TreeSet teams=new TreeSet();
+				TreeSet<AmpTeam> teams=new TreeSet<AmpTeam>();
 				this.setAccessType("team");
 				if (ampReport.getOwnerId()!=null){
 					teams.add(ampReport.getOwnerId().getAmpTeam());
@@ -480,7 +490,7 @@ public class AmpARFilter extends PropertyListable {
 						this.setTeamAssignedOrgs(teamAO);
 					}
 				}else{
-					teams.add(-1);
+					((Set)teams).add(-1); //TODO:Constantin - waddafa?
 					this.setAmpTeams(teams);
 					logger.error("Error getOwnerId() is null setting team to -1");
 				}
@@ -963,7 +973,7 @@ public class AmpARFilter extends PropertyListable {
 				logger.error(e);
 				e.printStackTrace();
 			}
-			
+			dateFilterUsed = true;
 			queryAppend(FROM_DATE_FILTER);
 		}
 		if(dateFilterHidesProjects && toDate!=null && toDate.length()>0) {
@@ -974,7 +984,8 @@ public class AmpARFilter extends PropertyListable {
 			} catch (ParseException e) {
 				logger.error(e);
 				e.printStackTrace();
-			}		
+			}
+			dateFilterUsed = true;
 			queryAppend(TO_DATE_FILTER);
 		}
 		
@@ -1099,8 +1110,8 @@ public class AmpARFilter extends PropertyListable {
 				String LUCENE_ID_LIST = "";
 				HttpSession session = request.getSession();
 				ServletContext ampContext = session.getServletContext();
-				Directory idx = (Directory) ampContext
-						.getAttribute(Constants.LUCENE_INDEX);
+//				Directory idx = (Directory) ampContext
+//						.getAttribute(Constants.LUCENE_INDEX);
 				if(request.getParameter("searchMode") != null)
 					searchMode = request.getParameter("searchMode");
 				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
@@ -1277,11 +1288,11 @@ public class AmpARFilter extends PropertyListable {
 		this.currency = ampCurrencyCode;
 	}
 
-	public Set getFinancingInstruments() {
+	public Set<AmpCategoryValue> getFinancingInstruments() {
 		return financingInstruments;
 	}
 
-	public void setFinancingInstruments(Set financingInstruments) {
+	public void setFinancingInstruments(Set<AmpCategoryValue> financingInstruments) {
 		this.financingInstruments = financingInstruments;
 	}
 
@@ -1297,7 +1308,7 @@ public class AmpARFilter extends PropertyListable {
 	 * @return Returns the sectors.
 	 */
 	@PropertyListableIgnore
-	public Set getSectors() {
+	public Set<AmpSector> getSectors() {
 		return sectors;
 	}
 
@@ -1305,24 +1316,22 @@ public class AmpARFilter extends PropertyListable {
 	 * @param sectors
 	 *            The sectors to set.
 	 */
-	public void setSectors(Set sectors )  {
+	public void setSectors(Set<AmpSector> sectors )  {
 		this.sectors = sectors;
-	}
-	
-	
+	}	
 
 	/**
 	 * @return the sectorsAndAncestors
 	 */
 	@PropertyListableIgnore
-	public Set getSectorsAndAncestors() {
+	public Set<AmpSector> getSectorsAndAncestors() {
 		return sectorsAndAncestors;
 	}
 
 	/**
 	 * @param sectorsAndAncestors the sectorsAndAncestors to set
 	 */
-	public void setSectorsAndAncestors(Set sectorsAndAncestors) {
+	public void setSectorsAndAncestors(Set<AmpSector> sectorsAndAncestors) {
 		this.sectorsAndAncestors = sectorsAndAncestors;
 	}
 
@@ -1346,7 +1355,7 @@ public class AmpARFilter extends PropertyListable {
 	 * @return Returns the ampTeams.
 	 */
 	@PropertyListableIgnore
-	public Set getAmpTeams() {
+	public Set<AmpTeam> getAmpTeams() {
 		return ampTeams;
 	}
 
@@ -1354,7 +1363,7 @@ public class AmpARFilter extends PropertyListable {
 	 * @param ampTeams
 	 *            The ampTeams to set.
 	 */
-	public void setAmpTeams(Set ampTeams) {
+	public void setAmpTeams(Set<AmpTeam> ampTeams) {
 		this.ampTeams = ampTeams;
 	}
 
@@ -1404,6 +1413,7 @@ public class AmpARFilter extends PropertyListable {
 	/**
 	 * @return Returns the regions.
 	 */
+	
 	public Set getRegions() {
 		return regions;
 	}
@@ -1419,7 +1429,7 @@ public class AmpARFilter extends PropertyListable {
 	/**
 	 * @return Returns the statuses.
 	 */
-	public Set getStatuses() {
+	public Set<AmpCategoryValue> getStatuses() {
 		return statuses;
 	}
 
@@ -1427,14 +1437,14 @@ public class AmpARFilter extends PropertyListable {
 	 * @param statuses
 	 *            The statuses to set.
 	 */
-	public void setStatuses(Set statuses) {
+	public void setStatuses(Set<AmpCategoryValue> statuses) {
 		this.statuses = statuses;
 	}
 
 	/**
 	 * @return Returns the workspaces.
 	 */
-	public Set getWorkspaces() {
+	public Set<AmpTeam> getWorkspaces() {
 		return workspaces;
 	}
 
@@ -1442,7 +1452,7 @@ public class AmpARFilter extends PropertyListable {
 	 * @param workspaces
 	 *            The workspaces to set.
 	 */
-	public void setWorkspaces(Set workspaces) {
+	public void setWorkspaces(Set<AmpTeam> workspaces) {
 		this.workspaces = workspaces;
 	}
 
@@ -1460,15 +1470,26 @@ public class AmpARFilter extends PropertyListable {
 		return widget;
 	}
 
+	/**
+	 * returns true IFF this filter has a date filter
+	 * only valid after the filter has been constructed (e.g. generateFilterQuery called) 
+	 * @return
+	 */
+	@PropertyListableIgnore
+	public boolean hasDateFilter()
+	{
+		return this.dateFilterUsed;
+	}
+	
 	public void setWidget(boolean widget) {
 		this.widget = widget;
 	}
 
-	public Set getBudget() {
+	public Set<AmpCategoryValue> getBudget() {
 		return budget;
 	}
 
-	public void setBudget(Set budget) {
+	public void setBudget(Set<AmpCategoryValue> budget) {
 		this.budget = budget;
 	}
 
@@ -1667,6 +1688,7 @@ public class AmpARFilter extends PropertyListable {
 	public boolean isDraft() {
 		return draft;
 	}
+	
 	/**
 	 * TODO draft parameter needs to be renamed to hideDraft 
 	 * @param draft
@@ -1675,11 +1697,11 @@ public class AmpARFilter extends PropertyListable {
 		this.draft = draft;
 	}
 
-	public Set getDonorTypes() {
+	public Set<AmpOrgType> getDonorTypes() {
 		return donorTypes;
 	}
 
-	public void setDonorTypes(Set donorTypes) {
+	public void setDonorTypes(Set<AmpOrgType> donorTypes) {
 		this.donorTypes = donorTypes;
 	}
 
@@ -1731,20 +1753,20 @@ public class AmpARFilter extends PropertyListable {
 		this.implementingAgency = implementingAgency;
 	}
 
-	public Set getSelectedSectors() {
+	public Set<AmpSector> getSelectedSectors() {
 		return selectedSectors;
 	}
 
-	public void setSelectedSectors(Set selectedSectors) {
+	public void setSelectedSectors(Set<AmpSector> selectedSectors) {
 		this.selectedSectors = selectedSectors;
 	}
 
 	@PropertyListableIgnore
-	public Set getSecondarySectors() {
+	public Set<AmpSector> getSecondarySectors() {
 		return secondarySectors;
 	}
 
-	public void setSecondarySectors(Set secondarySectors) {
+	public void setSecondarySectors(Set<AmpSector> secondarySectors) {
 		this.secondarySectors = secondarySectors;
 	}
 	
@@ -1752,47 +1774,47 @@ public class AmpARFilter extends PropertyListable {
 	 * @return the secondarySectorsAndAncestors
 	 */
 	@PropertyListableIgnore
-	public Set getSecondarySectorsAndAncestors() {
+	public Set<AmpSector> getSecondarySectorsAndAncestors() {
 		return secondarySectorsAndAncestors;
 	}
 
 	/**
 	 * @param secondarySectorsAndAncestors the secondarySectorsAndAncestors to set
 	 */
-	public void setSecondarySectorsAndAncestors(Set secondarySectorsAndAncestors) {
+	public void setSecondarySectorsAndAncestors(Set<AmpSector> secondarySectorsAndAncestors) {
 		this.secondarySectorsAndAncestors = secondarySectorsAndAncestors;
 	}
 
-	public Set getSelectedSecondarySectors() {
+	public Set<AmpSector> getSelectedSecondarySectors() {
 		return selectedSecondarySectors;
 	}
 
-	public void setSelectedSecondarySectors(Set selectedSecondarySectors) {
+	public void setSelectedSecondarySectors(Set<AmpSector> selectedSecondarySectors) {
 		this.selectedSecondarySectors = selectedSecondarySectors;
 	}
 
-       public Set getSelectedTertiarySectors() {
+    public Set<AmpSector> getSelectedTertiarySectors() {
         return selectedTertiarySectors;
     }
 
-    public void setSelectedTertiarySectors(Set selectedTertiarySectors) {
+    public void setSelectedTertiarySectors(Set<AmpSector> selectedTertiarySectors) {
         this.selectedTertiarySectors = selectedTertiarySectors;
     }
     
     @PropertyListableIgnore
-    public Set getTertiarySectors() {
+    public Set<AmpSector> getTertiarySectors() {
         return tertiarySectors;
     }
 
-    public void setTertiarySectors(Set tertiarySectors) {
+    public void setTertiarySectors(Set<AmpSector> tertiarySectors) {
         this.tertiarySectors = tertiarySectors;
     }
     @PropertyListableIgnore
-    public Set getTertiarySectorsAndAncestors() {
+    public Set<AmpSector> getTertiarySectorsAndAncestors() {
         return tertiarySectorsAndAncestors;
     }
 
-    public void setTertiarySectorsAndAncestors(Set tertiarySectorsAndAncestors) {
+    public void setTertiarySectorsAndAncestors(Set<AmpSector> tertiarySectorsAndAncestors) {
         this.tertiarySectorsAndAncestors = tertiarySectorsAndAncestors;
     }
 
@@ -2018,11 +2040,11 @@ public class AmpARFilter extends PropertyListable {
 		return indexedParams;
 	}
 
-	public Set getResponsibleorg() {
+	public Set<AmpOrganisation> getResponsibleorg() {
 		return responsibleorg;
 	}
 
-	public void setResponsibleorg(Set responsibleorg) {
+	public void setResponsibleorg(Set<AmpOrganisation> responsibleorg) {
 		this.responsibleorg = responsibleorg;
 	}
 
@@ -2228,35 +2250,35 @@ public class AmpARFilter extends PropertyListable {
 		this.customusegroupings = customusegroupings;
 	}
 	@PropertyListableIgnore
-	public Set getTagSectors() {
+	public Set<AmpSector> getTagSectors() {
 		return tagSectors;
 	}
 
-	public void setTagSectors(Set tagSectors) {
+	public void setTagSectors(Set<AmpSector> tagSectors) {
 		this.tagSectors = tagSectors;
 	}
 
-	public Set getSelectedTagSectors() {
+	public Set<AmpSector> getSelectedTagSectors() {
 		return selectedTagSectors;
 	}
 
-	public void setSelectedTagSectors(Set selectedTagSectors) {
+	public void setSelectedTagSectors(Set<AmpSector> selectedTagSectors) {
 		this.selectedTagSectors = selectedTagSectors;
 	}
 	@PropertyListableIgnore
-	public Set getTagSectorsAndAncestors() {
+	public Set<AmpSector> getTagSectorsAndAncestors() {
 		return tagSectorsAndAncestors;
 	}
 
-	public void setTagSectorsAndAncestors(Set tagSectorsAndAncestors) {
+	public void setTagSectorsAndAncestors(Set<AmpSector> tagSectorsAndAncestors) {
 		this.tagSectorsAndAncestors = tagSectorsAndAncestors;
 	}
 
-	public Set getAmpTeamsforpledges() {
+	public Set<AmpTeam> getAmpTeamsforpledges() {
 		return ampTeamsforpledges;
 	}
 
-	public void setAmpTeamsforpledges(Set ampTeamsforpledges) {
+	public void setAmpTeamsforpledges(Set<AmpTeam> ampTeamsforpledges) {
 		this.ampTeamsforpledges = ampTeamsforpledges;
 	}
 

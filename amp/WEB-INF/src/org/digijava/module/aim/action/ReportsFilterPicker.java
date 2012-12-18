@@ -113,7 +113,7 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.setSourceIsReportWizard(false);
 		
 		//ServletContext ampContext = getServlet().getServletContext();
- 	 	Site site = RequestUtils.getSite(request);
+ //	 	Site site = RequestUtils.getSite(request);
  	 	//String siteId = site.getId().toString();
  	 	//String locale = RequestUtils.getNavigationLanguage(request).getCode();
  	 	
@@ -218,19 +218,18 @@ public class ReportsFilterPicker extends MultiAction {
 		}
                }
 		
-		Collection currency = CurrencyUtil.getActiveAmpCurrencyByName();
-	     //Only currencies having exchanges rates AMP-2620
-	      Collection<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-	      filterForm.setCurrencies(validcurrencies);
-	      for (Iterator iter = currency.iterator(); iter.hasNext();) {
-			AmpCurrency element = (AmpCurrency) iter.next();
-			 if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
-					{
-				 filterForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-					}
+		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
+	    //Only currencies having exchanges rates AMP-2620
+		List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
+	    filterForm.setCurrencies(validcurrencies);
+	    for (AmpCurrency element:currency) {
+	    	if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
+			{
+	    		filterForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
 			}
+		}
 		
-	     Collection allFisCalenders = DbUtil.getAllFisCalenders();
+	     Collection<AmpFiscalCalendar> allFisCalenders = DbUtil.getAllFisCalenders();
 		 filterForm.setCalendars(allFisCalenders);
 		 
 		 ArrayList<String> decimalseparators = new ArrayList<String>();
@@ -465,7 +464,7 @@ public class ReportsFilterPicker extends MultiAction {
 			
 			AmpTheme secondaryProg = null;
 	 	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
-	 	 	List<AmpTheme> secondaryPrograms;		
+//	 	 	List<AmpTheme> secondaryPrograms;		
 			if (secondaryPrg!=null && secondaryPrg.getDefaultHierarchy() != null) {
 				//secondaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
 				secondaryProg	= progMap.get(secondaryPrg.getDefaultHierarchyId() );
@@ -510,7 +509,7 @@ public class ReportsFilterPicker extends MultiAction {
 			}*/
         }
  	 	StopWatch.next("Filters", true, "After Programs");
- 	 	Collection donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
+ 	 	Collection<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
  	 	
  	 	HierarchyListableUtil.changeTranslateable(donorTypes, false);
@@ -606,10 +605,10 @@ public class ReportsFilterPicker extends MultiAction {
 			}
 
             //sort workspace list
-            Collections.sort(children, new Comparator() {
+            Collections.sort(children, new Comparator<HierarchyListableImplementation>() {
                 @Override
-                public int compare(Object o1, Object o2) {
-                    return ((HierarchyListableImplementation) o1).getLabel().compareTo(((HierarchyListableImplementation) o2).getLabel());
+                public int compare(HierarchyListableImplementation o1, HierarchyListableImplementation o2) {
+                    return o1.getLabel().compareTo(o2.getLabel());
                 }
             });
             
@@ -967,9 +966,8 @@ public class ReportsFilterPicker extends MultiAction {
 		// create the pageSizes Collection for the dropdown
 		Collection pageSizes = new ArrayList();
 
-		Collection meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
-		for (Iterator iter = meRisks.iterator(); iter.hasNext();) {
-			AmpIndicatorRiskRatings element = (AmpIndicatorRiskRatings) iter.next();
+		Collection<AmpIndicatorRiskRatings> meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
+		for (AmpIndicatorRiskRatings element:meRisks) {
 			String value = element.getRatingName();
 			String key = KEY_RISK_PREFIX + value.toLowerCase();
 			key = key.replaceAll(" ", "");
@@ -977,7 +975,7 @@ public class ReportsFilterPicker extends MultiAction {
 			element.setRatingName(msg);
 		}
 		
-		Collection allIndicatorRisks = meRisks;
+		Collection<AmpIndicatorRiskRatings> allIndicatorRisks = meRisks;
 		// Collection regions=LocationUtil.getAllVRegions();
 		//filterForm.setCurrencies(currency);
 		// filterForm.setDonors(donors);
@@ -1190,13 +1188,13 @@ public class ReportsFilterPicker extends MultiAction {
 
 		// for each sector we have also to add the subsectors
 
-		Set selectedSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSectors());
-		Set selectedSecondarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSecondarySectors());
-        Set selectedTertiarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTertiarySectors());
-        Set selectedTagSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTagSectors() );
+		Set<AmpSector> selectedSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSectors());
+		Set<AmpSector> selectedSecondarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedSecondarySectors());
+        Set<AmpSector> selectedTertiarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTertiarySectors());
+        Set<AmpSector> selectedTagSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTagSectors() );
 
 		if (selectedSectors != null && selectedSectors.size() > 0) {
-			arf.setSelectedSectors(new HashSet());
+			arf.setSelectedSectors(new HashSet<AmpSector>());
 			arf.getSelectedSectors().addAll(selectedSectors);
 
 			arf.setSectors(SectorUtil.getSectorDescendents(selectedSectors));
@@ -1210,7 +1208,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 
 		if (selectedSecondarySectors != null && selectedSecondarySectors.size() > 0) {
-			arf.setSelectedSecondarySectors(new HashSet());
+			arf.setSelectedSecondarySectors(new HashSet<AmpSector>());
 			arf.getSelectedSecondarySectors().addAll(selectedSecondarySectors);
 
 			arf.setSecondarySectors(SectorUtil.getSectorDescendents(selectedSecondarySectors));
@@ -1224,7 +1222,7 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setSecondarySectorsAndAncestors(null);
 		}
         if (selectedTertiarySectors != null && selectedTertiarySectors.size() > 0) {
-            arf.setSelectedTertiarySectors(new HashSet());
+            arf.setSelectedTertiarySectors(new HashSet<AmpSector>());
             arf.getSelectedTertiarySectors().addAll(selectedTertiarySectors);
             arf.setTertiarySectors(SectorUtil.getSectorDescendents(selectedTertiarySectors));
             arf.setTertiarySectorsAndAncestors(new HashSet<AmpSector>());
@@ -1237,7 +1235,7 @@ public class ReportsFilterPicker extends MultiAction {
         }
         	
     	if (selectedTagSectors != null && selectedTagSectors.size() > 0) {
-			arf.setSelectedTagSectors(new HashSet());
+			arf.setSelectedTagSectors(new HashSet<AmpSector>());
 			arf.getSelectedTagSectors().addAll(selectedTagSectors);
 
 			arf.setTagSectors(SectorUtil.getSectorDescendents(selectedTagSectors));
@@ -1250,14 +1248,14 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setTagSectorsAndAncestors(null);
 		}
 
-		Set selectedNatPlanObj = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedNatPlanObj());
-		Set selectedPrimaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedPrimaryPrograms());
-		Set selectedSecondaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedSecondaryPrograms());
+		Set<AmpTheme> selectedNatPlanObj = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedNatPlanObj());
+		Set<AmpTheme> selectedPrimaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedPrimaryPrograms());
+		Set<AmpTheme> selectedSecondaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedSecondaryPrograms());
 
 		if (selectedNatPlanObj != null && selectedNatPlanObj.size() > 0) {
-			arf.setSelectedNatPlanObj(new HashSet());
+			arf.setSelectedNatPlanObj(new HashSet<AmpTheme>());
 			arf.getSelectedNatPlanObj().addAll(selectedNatPlanObj);
-			arf.setNationalPlanningObjectives( new ArrayList(selectedNatPlanObj) );
+			arf.setNationalPlanningObjectives( new ArrayList<AmpTheme>(selectedNatPlanObj) );
 			
 			arf.setRelatedNatPlanObjs(new HashSet<AmpTheme>() );
 			ProgramUtil.collectFilteringInformation(selectedNatPlanObj, arf.getNationalPlanningObjectives(), arf.getRelatedNatPlanObjs() );
@@ -1269,9 +1267,9 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 
 		if (selectedPrimaryPrograms != null && selectedPrimaryPrograms.size() > 0) {
-			arf.setSelectedPrimaryPrograms(new HashSet());
+			arf.setSelectedPrimaryPrograms(new HashSet<AmpTheme>());
 			arf.getSelectedPrimaryPrograms().addAll(selectedPrimaryPrograms);
-			arf.setPrimaryPrograms(new ArrayList(selectedPrimaryPrograms));
+			arf.setPrimaryPrograms(new ArrayList<AmpTheme>(selectedPrimaryPrograms));
 			
 			arf.setRelatedPrimaryProgs(new HashSet<AmpTheme>() );
 			ProgramUtil.collectFilteringInformation(selectedPrimaryPrograms, arf.getPrimaryPrograms(), arf.getRelatedPrimaryProgs() );
@@ -1283,9 +1281,9 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 
 		if (selectedSecondaryPrograms != null && selectedSecondaryPrograms.size() > 0) {
-			arf.setSelectedSecondaryPrograms(new HashSet());
+			arf.setSelectedSecondaryPrograms(new HashSet<AmpTheme>());
 			arf.getSelectedSecondaryPrograms().addAll(selectedSecondaryPrograms);
-			arf.setSecondaryPrograms(new ArrayList(selectedSecondaryPrograms));
+			arf.setSecondaryPrograms(new ArrayList<AmpTheme>(selectedSecondaryPrograms));
 			
 			arf.setRelatedSecondaryProgs( new HashSet<AmpTheme>() );
 			ProgramUtil.collectFilteringInformation(selectedSecondaryPrograms, arf.getSecondaryPrograms(), arf.getRelatedSecondaryProgs() );
@@ -1398,7 +1396,7 @@ public class ReportsFilterPicker extends MultiAction {
 		//	arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? 
 		//					null : DynLocationManagerUtil.getLocation(filterForm.getRegionSelected(),false) );
 		
-		Set selectedRegions = null;
+		Set<AmpCategoryValueLocations> selectedRegions = null;
 		if (filterForm.getRegionSelected() != null){
 			if (!filterForm.getRegionSelected()[0].toString().equals("-1")) {
 				selectedRegions = Util.getSelectedObjects(AmpCategoryValueLocations.class, filterForm.getRegionSelected());
@@ -1406,7 +1404,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		
 		if (selectedRegions != null && selectedRegions.size() > 0) {
-			arf.setLocationSelected(new HashSet());
+			arf.setLocationSelected(new HashSet<AmpCategoryValueLocations>());
 			arf.getLocationSelected().addAll(selectedRegions);
 		} else {
 			arf.setLocationSelected(null);
@@ -1430,7 +1428,7 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setApprovalStatusSelected(null);
 		
 		if (filterForm.getSelectedStatuses() != null && filterForm.getSelectedStatuses().length > 0)
-			arf.setStatuses(new HashSet());
+			arf.setStatuses(new HashSet<AmpCategoryValue>());
 		else
 			arf.setStatuses(null);
 
@@ -1441,7 +1439,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		
 		if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
-			arf.setWorkspaces(new HashSet());
+			arf.setWorkspaces(new HashSet<AmpTeam>());
 		else
 			arf.setWorkspaces(null);
 
@@ -1452,7 +1450,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 
 		if (filterForm.getSelectedProjectCategory() != null && filterForm.getSelectedProjectCategory().length > 0)
-			arf.setProjectCategory(new HashSet());
+			arf.setProjectCategory(new HashSet<AmpCategoryValue>());
 		else
 			arf.setProjectCategory(null);
 		
@@ -1463,7 +1461,7 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 
 		if (filterForm.getSelectedFinancingInstruments() != null && filterForm.getSelectedFinancingInstruments().length > 0)
-			arf.setFinancingInstruments(new HashSet());
+			arf.setFinancingInstruments(new HashSet<AmpCategoryValue>());
 		else
 			arf.setFinancingInstruments(null);
 		
@@ -1539,7 +1537,7 @@ public class ReportsFilterPicker extends MultiAction {
 //		arf.setJointCriteria(filterForm.getJointCriteria());
 
 		if (filterForm.getSelectedDonorTypes() != null && filterForm.getSelectedDonorTypes().length > 0) {
-			arf.setDonorTypes(new HashSet());
+			arf.setDonorTypes(new HashSet<AmpOrgType>());
 			for (int i = 0; i < filterForm.getSelectedDonorTypes().length; i++) {
 				Long id = Long.parseLong(filterForm.getSelectedDonorTypes()[i].toString());
 				AmpOrgType type = DbUtil.getAmpOrgType(id);

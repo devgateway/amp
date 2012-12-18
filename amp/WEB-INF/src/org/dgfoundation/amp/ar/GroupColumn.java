@@ -547,6 +547,16 @@ public class GroupColumn extends Column {
 
     }
 
+    @Override
+    public void filterByIds(Set<Long> idsToRetain)
+    {
+    	for(Object obj:items)
+    	{
+    		Column column = (Column) obj;
+    		column.filterByIds(idsToRetain);
+    	}
+    }
+    
     /*
      * (non-Javadoc)
      * 

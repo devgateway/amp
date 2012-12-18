@@ -45,21 +45,21 @@ public class CellColumn extends Column {
 		return items.iterator();
 	}
 
-	protected HashMap itemsMap;
+	protected HashMap<Long, Cell> itemsMap;
 
 	public CellColumn(ColumnWorker worker) {
 		super(worker);
-		itemsMap = new HashMap();
+		itemsMap = new HashMap<Long, Cell>();
 	}
 
 	public CellColumn(String name) {
 		super(name);
-		itemsMap = new HashMap();
+		itemsMap = new HashMap<Long, Cell>();
 	}
 
 	public CellColumn(String name, int initialCapacity) {
 		super(name, initialCapacity);
-		itemsMap = new HashMap(initialCapacity);
+		itemsMap = new HashMap<Long, Cell>(initialCapacity);
 	}
 
 	public CellColumn(Column source) {
@@ -74,17 +74,17 @@ public class CellColumn extends Column {
 		this.setExpression(source.getExpression());
 		this.setTotalExpression(source.getTotalExpression());	
 		
-		itemsMap = new HashMap();
+		itemsMap = new HashMap<Long, Cell>();
 	}
 
 	public CellColumn(Column parent, String name) {
 		super(parent, name);
 		this.contentCategory = parent.getContentCategory();
-		itemsMap = new HashMap();
+		itemsMap = new HashMap<Long, Cell>();
 	}
 
 	public Cell getByOwner(Long ownerId) {
-		return (Cell) itemsMap.get(ownerId);
+		return itemsMap.get(ownerId);
 	}
 
 	public Cell getByOwnerAndValue(Long ownerId, Object value) {
@@ -367,5 +367,17 @@ public class CellColumn extends Column {
 		}
 		else
 			return null;
+	}
+	
+	@Override
+	public void filterByIds(Set<Long> idsToRetain)
+	{
+		Iterator<Cell> cells = this.iterator();
+		while(cells.hasNext())
+		{
+			Cell cell = cells.next();
+			if (!idsToRetain.contains(cell.getOwnerId()))
+				cells.remove();
+		}
 	}
 }

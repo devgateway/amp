@@ -382,8 +382,11 @@ public class ColumnReportData extends ReportData<Column> {
 		    	logger.info("Removed previously added column "+name+" for filtering purposes");
 		    }
 		}
+		
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
-		if (dateFilterHidesProjects)
+		boolean dateFilterUsed = (getReportMetadata() != null) && (getReportMetadata().getReportGenerator() != null) && (getReportMetadata().getReportGenerator().getFilter() != null) && (getReportMetadata().getReportGenerator().getFilter().hasDateFilter());
+		
+		if (dateFilterHidesProjects && dateFilterUsed)
 			removeRowsWithoutFundingData(); // AMP-14382
 	}
 

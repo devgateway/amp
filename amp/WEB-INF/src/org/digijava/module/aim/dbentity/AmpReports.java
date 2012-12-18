@@ -15,6 +15,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpSession;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -32,6 +33,8 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	private Long id; // for logging
 
 	//private AmpARFilter defaultFilter;
+	
+	private transient ReportGenerator reportGenerator;
 
 	private String name;
 	
@@ -577,4 +580,14 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 		public void setReportCategory(AmpCategoryValue reportCategory) {
 			this.reportCategory = reportCategory;
 		}
+		
+	public ReportGenerator getReportGenerator()
+	{
+		return this.reportGenerator;
+	}
+	
+	public void setReportGenerator(ReportGenerator generator)
+	{
+		this.reportGenerator = generator;
+	}
 }

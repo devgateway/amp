@@ -24,18 +24,10 @@ $(document).ready(function(){
 		}
 	}
 
-	
+	myOldEventOnBeforeUnload = window.onbeforeunload; 
 	window.onbeforeunload = function (e) {
-		  e = e || window.event;
-		  
-		  // For IE and Firefox prior to version 4
-		  if (e) {
-			  if (navigator.appName == 'Microsoft Internet Explorer') {
-				  return 'Are you sure you want to navigate away from this page?';
-			  }else{
-				  e.returnValue = ' ';
-			  }
-		  }
+	  e = e || window.event;
+	  e.returnValue = ' ';
 	};
 
 	

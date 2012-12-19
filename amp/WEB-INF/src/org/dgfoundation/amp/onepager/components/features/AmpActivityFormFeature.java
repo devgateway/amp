@@ -187,6 +187,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				target.appendJavascript("window.onbeforeunload = null;");
 				am.setObject(am.getObject());
 				toggleSemanticValidation(true, form,target);
 				
@@ -203,7 +204,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 			
 		};
-		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model("window.onbeforeunload = null; for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), "");
+		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model("window.onbeforeunload = myOldEventOnBeforeUnload; for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement(); "), "");
 		
 		saveAndSubmit.getButton().add(new AttributeModifier("class", true, new Model("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);

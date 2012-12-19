@@ -2,10 +2,12 @@ package org.digijava.module.esrigis.action;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -27,23 +29,26 @@ public class StructuresImporter extends Action {
 			CSVReader reader = new CSVReader(isr);
 			String [] nextLine;
 			Boolean firstLine = true;
+			ArrayList<String> errors = new ArrayList<String>();
 			while ((nextLine = reader.readNext()) != null) {
 				if(firstLine){
 					firstLine = false;
-				}
-				else
-				{
+				}else if(nextLine.length>1){
+					sform.setErrors(errors);
 					AmpStructure st = new AmpStructure();
 					st.setTitle(nextLine[1]);
 					st.setLatitude(nextLine[2]);
 					st.setLongitude(nextLine[3]);
-					st.setType(DbHelper.getStructureTypesByName(nextLine[4]));
-					st.setActivities(DbHelper.getActivityByAmpId(nextLine[0]));
-					st.setDescription(nextLine[5]);
+					st.setType(DbHelper.getStructureTypesByName(nextLine[4].trim()));
+					st.setActivities(DbHelper.getActivityByAmpId(nextLine[0].trim()));
+					st.setDescription(nextLine[5].trim());
 					if (!"".equalsIgnoreCase(st.getTitle()) && st.getType()!=null && st.getActivities().size()!=0){
 						DbHelper.saveStructure(st);
+					}else{
+						String errorline = ArrayUtils.toString(nextLine).replace("{", "");
+						errorline = errorline.replace("}","");
+						sform.getErrors().add(ArrayUtils.toString(errorline));
 					}
-					
 				}
 			}		
 			

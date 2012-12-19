@@ -683,13 +683,17 @@ public class DbHelper {
         Session session = null;
         Query q = null;
         AmpStructureType stt = null;
+        ArrayList result;
         StringBuilder queryString = new StringBuilder("select st from " + AmpStructureType.class.getName() + " st ");
         queryString.append("where st.name=:name");
         try {
             session = PersistenceManager.getRequestDBSession();
             q = session.createQuery(queryString.toString());
             q.setString("name", name);
-            stt = (AmpStructureType) q.list().get(0);
+            result = (ArrayList) q.list();
+            if (result.size()>0){
+            	stt = (AmpStructureType) result.get(0);
+            }
         } catch (Exception ex) {
             logger.error("Unable to get Amp Structure Type from database ", ex);
         }

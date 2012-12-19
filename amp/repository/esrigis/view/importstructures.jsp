@@ -70,6 +70,25 @@
 				</td>
 			</tr>
 		</table>
+		<c:if test="${!empty structuresimporterform.errors}" >
+			<c:set var="display">
+				block
+			</c:set>
+		</c:if>
+		<c:if test="${empty structuresimporterform.errors}" >
+			<c:set var="display">
+				none
+			</c:set>
+		</c:if>
+		<div id="erros" style="font-style: italic;color: red;display: ${display};">
+			<p style="font-size: 12px;font-weight: bold;"> 
+			<digi:trn>We could not import the following structures</digi:trn>
+			</p>
+			<br>
+			<c:forEach items="${structuresimporterform.errors}" var="item">
+				<c:out value="${item}"/><br>
+			</c:forEach>
+		</div>
 		</td>
 	</tr>
 </table>

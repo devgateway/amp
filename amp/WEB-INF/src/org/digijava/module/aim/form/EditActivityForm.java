@@ -76,6 +76,8 @@ import org.springframework.beans.BeanWrapperImpl;
 
 public class EditActivityForm extends ActionForm implements Serializable {
 
+	private static final long serialVersionUID = -2405474513633165920L;
+	
 	private HashMap<String, String> errors = new HashMap<String, String>();
 	private HashMap<String, String> messages = new HashMap<String, String>();
 	
@@ -99,7 +101,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private String step = null;
 	private int pageId;
 	private FormFile fileImport = null;
-	
+	private boolean popupView = false;
+
 	private String currCode;
 	private Collection currencies;
 	private boolean serializeFlag;
@@ -5426,6 +5429,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public void setActivityExists(String activityExists) {
 		this.activityExists = activityExists;
 	}
+
+	public boolean isPopupView() {
+		return popupView;
+	}
+
+	public void setPopupView(boolean popupView) {
+		this.popupView = popupView;
+	}	
 	
 }
 

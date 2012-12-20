@@ -5,6 +5,9 @@ function initializePage(){
 	YAHOO.util.Event.onAvailable("sector_config_dropdown_id", callbackChildren);
 	myTabs = new YAHOO.widget.TabView("demo");
 	myTabs.selectTab(0);
+	initializeLoadingPanel();
+}
+function initializeLoadingPanel(){
 	yuiLoadingPanel = function(conf){
 	    conf = conf == undefined ? new Array() : conf;
 	    conf.id = conf.id == undefined ? 'yuiLoadingPanel':confi.id;
@@ -1066,7 +1069,7 @@ function refreshGraphs(){
 		nonRefreshedMovies.push(allGraphs[idx].children[0]);
 	}
 	//hardcode for hidden ODA growth chart when beneficiary agency is selected
-	var agencyType = document.getElementById("agencyType").value;
+	var agencyType = document.getElementById("agencyType") ? document.getElementById("agencyType").value : null;
 	var odaElement = document.getElementById("ODAGrowthTitleLegend");
 
 	if (odaElement!=null){
@@ -1626,29 +1629,8 @@ function refreshBoxes(o){
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";
 	}
 	
-	var type = document.getElementById("transactionType").value;
-	var fundType = "";
-	if (type==0) {
-		fundType = trnCommitments;
-	}
-	if (type==1) {
-		fundType = trnDisbursements;
-	}
-	if (type==2) {
-		fundType = trnExpenditures;
-	}
+	updateTitles();
 	
-	var titlesObj = getTitlesObjects();
-	for ( var i = 0; i < titlesObj.length; i++) {
-		var id = titlesObj[i].getAttribute("id");
-		if(id!=null && id.indexOf("Legend")!=-1){
-			var input = document.getElementById(id.substr(0,id.indexOf("Legend")));
-			var trnTitle = document.getElementById(id+"Trn").value + " - " + fundType;
-			titlesObj[i].innerHTML = trnTitle;
-			if (input != null)
-				input.value = trnTitle;
-		}
-	}
 	var startYear = document.getElementById("startYear").value;
 	var endYear = document.getElementById("endYear").value;
 
@@ -1708,6 +1690,32 @@ function refreshBoxes(o){
 	
 }
 
+function updateTitles(){
+	var type = document.getElementById("transactionType").value;
+	var fundType = "";
+	if (type==0) {
+		fundType = trnCommitments;
+	}
+	if (type==1) {
+		fundType = trnDisbursements;
+	}
+	if (type==2) {
+		fundType = trnExpenditures;
+	}
+	
+	var titlesObj = getTitlesObjects();
+	for ( var i = 0; i < titlesObj.length; i++) {
+		var id = titlesObj[i].getAttribute("id");
+		if(id!=null && id.indexOf("Legend")!=-1){
+			var input = document.getElementById(id.substr(0,id.indexOf("Legend")));
+			var trnTitle = document.getElementById(id+"Trn").value + " - " + fundType;
+			titlesObj[i].innerHTML = trnTitle;
+			if (input != null)
+				input.value = trnTitle;
+		}
+	}
+}
+
 function getTitlesObjects(){
 	var objs = document.getElementsByTagName("span");
 	var arrReturnElements = new Array();
@@ -1723,41 +1731,68 @@ function getTitlesObjects(){
 	return (arrReturnElements);
 }
 
-YAHOO.util.Event.onDOMReady(initializeTranslations);
-YAHOO.util.Event.onDOMReady(initializeGlobalVariables);
-YAHOO.util.Event.onDOMReady(initializePage);
-YAHOO.util.Event.onDOMReady(initDashboard);
-YAHOO.util.Event.onDOMReady(initPanel);
-YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
-YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
-YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
-YAHOO.util.Event.addListener("sector_config_dropdown_id", "change", callbackChildren);
-YAHOO.util.Event.addListener("fiscalCalendar_dropdown_Id", "change", callbackChildren);
-YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
-YAHOO.util.Event.addListener("applyButtonPopin", "click", applyFilterPopin);
-YAHOO.util.Event.addListener("visualizationDiv", "click", refreshGraphs);
+if(typeof graphId === 'undefined'){//showing the whole dashboard
+	YAHOO.util.Event.onDOMReady(initializeTranslations);
+	YAHOO.util.Event.onDOMReady(initializeGlobalVariables);
+	YAHOO.util.Event.onDOMReady(initializePage);
+	YAHOO.util.Event.onDOMReady(initDashboard);
+	YAHOO.util.Event.onDOMReady(initPanel);
+	YAHOO.util.Event.addListener("region_dropdown_id", "change", callbackChildren);
+	YAHOO.util.Event.addListener("org_group_dropdown_id", "change", callbackChildren);
+	YAHOO.util.Event.addListener("sector_dropdown_id", "change", callbackChildren);
+	YAHOO.util.Event.addListener("sector_config_dropdown_id", "change", callbackChildren);
+	YAHOO.util.Event.addListener("fiscalCalendar_dropdown_Id", "change", callbackChildren);
+	YAHOO.util.Event.addListener("applyButton", "click", callbackApplyFilter);
+	YAHOO.util.Event.addListener("applyButtonPopin", "click", applyFilterPopin);
+	YAHOO.util.Event.addListener("visualizationDiv", "click", refreshGraphs);
+}else{//showing only a graph
+	YAHOO.util.Event.onDOMReady(initializeLoadingPanel);
+	YAHOO.util.Event.onDOMReady(initGraph);
+}
 
 var initialized = false;
 function initDashboard(){
-	var dashboardType = document.getElementById("dashboardType").value;
+
 	var allGraphs = getElementsByName_iefix("div", "flashContent");
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		var id = allGraphs[idx].children[0].getAttribute("id");
-		if (id.indexOf("Sector")!=-1)
-			changeChart(null, 'donut', id, true);
-		else if (id.indexOf("Region")!=-1)
-			changeChart(null, 'line', id, true);
-		else if (id.indexOf("Budget")!=-1)
-			changeChart('start', 'donut', id, true);
-		else if (id.indexOf("Profile")!=-1)
-			changeChart(null, 'bar_profile', id, true);
-		else if (id.indexOf("Growth")!=-1)
-			changeChart(null, 'bar_growth', id, true);
-		else
-			changeChart(null, 'bar', id, true);
+		drawGraph(id);
 	}
 	
 	callbackApplyFilter();
+}
+
+function initGraph(){
+	drawGraph(graphId);
+
+	var callbackApplyFilterCall = {
+			  success: function(o) {
+				  refreshGraphs();
+				  updateTitles();
+			  },
+			  failure: function(o) {
+			  }
+			};
+
+	YAHOO.util.Connect.setForm('visualizationform');
+	var sUrl="/visualization/dataDispatcher.do?action=applyFilter";
+	var cObj = YAHOO.util.Connect.asyncRequest('POST', sUrl, callbackApplyFilterCall);
+}
+
+function drawGraph(id){
+
+	if (id.indexOf("Sector")!=-1)
+		changeChart(null, 'donut', id, true);
+	else if (id.indexOf("Region")!=-1)
+		changeChart(null, 'line', id, true);
+	else if (id.indexOf("Budget")!=-1)
+		changeChart('start', 'donut', id, true);
+	else if (id.indexOf("Profile")!=-1)
+		changeChart(null, 'bar_profile', id, true);
+	else if (id.indexOf("Growth")!=-1)
+		changeChart(null, 'bar_growth', id, true);
+	else
+		changeChart(null, 'bar', id, true);
 }
 
 function  saveAdditionalInfo(orgId){
@@ -1843,10 +1878,10 @@ function changeChart(e, chartType, container, useGeneric){
 	}
 
 	var palette = "0xFF6600,0x7EAE58,0x88BFF5,0xBE0035,0x8B007E,0x99431C,0xFF6666,0x94FF29,0x2929FF,0xFF29FF";
-	if (document.getElementById("show_monochrome").checked){
+	if (document.getElementById("show_monochrome") && document.getElementById("show_monochrome").checked){
 		palette = "0x000000,0x969696,0x191919,0xAFAFAF,0x323232,0xC8C8C8,0x4B4B4B,0xE1E1E1,0x646464,0xFAFAFA,0x7D7D7D";
 	}
-	 
+
 	var decimalSeparator = document.getElementById("decimalSeparator").value;
 	var groupSeparator = document.getElementById("groupSeparator").value;
 	var decimalsToShow = document.getElementById("decimalsToShow").value;

@@ -131,8 +131,10 @@ public class DataDispatcher extends DispatchAction {
 		Long[] orgsIds = visualizationForm.getFilter().getOrgIds();
 		Long orgsId = visualizationForm.getFilter().getOrgId();
 		if (orgsIds == null || orgsIds.length == 0 || orgsIds[0] == -1) {
-			Long[] temp = {orgsId};
-			visualizationForm.getFilter().setSelOrgIds(temp);
+			if (orgsId != null){
+				Long[] temp = {orgsId};
+				visualizationForm.getFilter().setSelOrgIds(temp);
+			}
 			//visualizationForm.getFilter().setOrgIds(temp);
 		} else {
 			visualizationForm.getFilter().setOrgId(-1l);//unset orgId
@@ -174,7 +176,7 @@ public class DataDispatcher extends DispatchAction {
 			if (subSecsId!=null && subSecsId!=-1){
 				Long[] temp = {subSecsId};
 				visualizationForm.getFilter().setSelSectorIds(temp);
-			} else {
+			} else if(secsId != null){
 				Long[] temp = {secsId};
 				visualizationForm.getFilter().setSelSectorIds(temp);
 			}
@@ -208,7 +210,7 @@ public class DataDispatcher extends DispatchAction {
 			if (zonesId!=null && zonesId!=-1){
 				Long[] temp = {zonesId};
 				visualizationForm.getFilter().setSelLocationIds(temp);
-			} else {
+			} else if(regsId != null){
 				Long[] temp = {regsId};
 				visualizationForm.getFilter().setSelLocationIds(temp);
 			}
@@ -283,7 +285,7 @@ public class DataDispatcher extends DispatchAction {
 		if(visualizationForm.getFilter().getDashboardType()==1){
 			Long currentOrgId=null;
 			if (orgsIds == null || orgsIds.length == 0 || orgsIds[0] == -1) {
-				if(orgsId!=-1){
+				if(orgsId != null && orgsId!=-1){
 					currentOrgId=orgsId;
 				}
 			}

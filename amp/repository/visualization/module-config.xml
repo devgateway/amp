@@ -3,6 +3,7 @@
 	<name>visualization</name>
 	<security login-required="true" default="READ">
 		<action login-required="false" pattern="/launchDashboard" />
+		<action login-required="false" pattern="/launchGraph" />
 		<action login-required="false" pattern="/dashboardLauncher" />
 		<action login-required="false" pattern="/showDashboard" />
 		<action login-required="false" pattern="/dataDispatcher" />

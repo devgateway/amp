@@ -106,7 +106,11 @@ public class RequestProcessor
     static {
         bypassRefererCheckActions = new HashSet<String>();
         bypassRefererCheckActions.add("/aim/confirmRegisteration.do");
+        bypassRefererCheckActions.add("/visualization/dataDispatcher.do");
+        bypassRefererCheckActions.add("/visualization/launchDashboard.do");
+        bypassRefererCheckActions.add("/visualization/launchGraph.do");
     }
+    
 
     public static class ModuleSecurityException
         extends RuntimeException {};
@@ -293,7 +297,7 @@ public class RequestProcessor
         			commonREF = commonREF.substring(0, idx);
         		}
         		
-        		if (commonREF.compareTo(commonURL) != 0 || bypassRefererCheck){
+        		if (commonREF.compareTo(commonURL) != 0 ){
         			commonURL = new String(request.getRequestURL());
             		if (request.getQueryString() != null)
             			commonURL += "?" + request.getQueryString();

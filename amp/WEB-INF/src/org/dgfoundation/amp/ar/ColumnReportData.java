@@ -267,7 +267,7 @@ public class ColumnReportData extends ReportData<Column> {
 					try {
 						parentPercentage	= ARUtil.retrieveParentPercetage(e.getKey(), this.getSplitterCell() );
 					} catch (Exception e1) {
-						e1.printStackTrace();
+						logger.warn (e1.getMessage() );
 					}
 				}
 				if ( e.getValue() < 100.0 ) {

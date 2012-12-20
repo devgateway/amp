@@ -43,7 +43,7 @@ function addGraph() {
 		while (itr.hasNext()) {
 			AmpGraph graph = (AmpGraph) itr.next();	
 			if (graph != null){ %>
-				s += "<option value='<%=graph.getId()%>'><%=graph.getName()%></option>";				  			
+				s += "<option value='<%=graph.getId()%>'><digi:trn><%=graph.getName()%></digi:trn></option>";				  			
 			<% }
 		 }
 	 }%>

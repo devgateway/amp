@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.struts.action.Action;
@@ -24,6 +26,9 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -79,6 +84,17 @@ public class ExportToPDF extends Action {
         String summaryOpt = request.getParameter("summaryOpt");
         String ODAGrowthOpt = request.getParameter("ODAGrowthOpt");
         try {
+        	String orgInfoTrn = TranslatorWorker.translateText("Organization Information", langCode, siteId);
+        	String contactInfoTrn = TranslatorWorker.translateText("Contact Information", langCode, siteId);
+        	String addNotesTrn = TranslatorWorker.translateText("Additional Notes", langCode, siteId);
+        	String nameTrn = TranslatorWorker.translateText("Name", langCode, siteId);
+        	String titleTrn = TranslatorWorker.translateText("Title", langCode, siteId);
+        	String emailsTrn = TranslatorWorker.translateText("Emails", langCode, siteId);
+        	String phonesTrn = TranslatorWorker.translateText("Phones", langCode, siteId);
+        	String faxesTrn = TranslatorWorker.translateText("Faxes", langCode, siteId);
+        	String backOrgTrn = TranslatorWorker.translateText("Background of organization", langCode, siteId);
+        	String descriptionTrn = TranslatorWorker.translateText("Description", langCode, siteId);
+			
         	String pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
         	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
 			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
@@ -278,6 +294,69 @@ public class ExportToPDF extends Action {
             int colspan = 0;
             Image img = null;
             String[] singleRow = null;
+            
+            //Org. Information
+            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+            	if (vForm.getFilter().getSelOrgIds().length==1){
+            		long orgId = vForm.getFilter().getSelOrgIds()[0];
+            		PdfPTable orgInfoTbl = null;
+            		orgInfoTbl = new PdfPTable(2);
+            		orgInfoTbl.setWidthPercentage(100);
+                    PdfPCell orgInfoTitleCell = new PdfPCell(new Paragraph(orgInfoTrn, HEADERFONT));
+                    orgInfoTitleCell.setColspan(2);
+                    orgInfoTbl.addCell(orgInfoTitleCell);
+            		AmpContact contact=DbUtil.getPrimaryContactForOrganization(orgId);
+        			if(contact!=null){
+        				PdfPCell contInfoTitleCell = new PdfPCell(new Paragraph(contactInfoTrn, HEADERFONT));
+        				contInfoTitleCell.setColspan(2);
+                        orgInfoTbl.addCell(contInfoTitleCell);
+                        cell = new PdfPCell(new Paragraph(titleTrn));
+                        orgInfoTbl.addCell(cell);
+                        cell = new PdfPCell(new Paragraph(contact.getTitle()!=null?contact.getTitle().getValue():""));
+                        orgInfoTbl.addCell(cell);
+                        cell = new PdfPCell(new Paragraph(nameTrn));
+                        orgInfoTbl.addCell(cell);
+                        cell = new PdfPCell(new Paragraph(contact.getName()+" "+contact.getLastname()));
+                        orgInfoTbl.addCell(cell);
+                        if(contact.getProperties()!=null){
+            				for (AmpContactProperty property : contact.getProperties()) {
+            					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
+            						cell = new PdfPCell(new Paragraph(emailsTrn));
+                                    orgInfoTbl.addCell(cell);
+                                    cell = new PdfPCell(new Paragraph(property.getValue()));
+                                    orgInfoTbl.addCell(cell);
+            					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
+            						cell = new PdfPCell(new Paragraph(phonesTrn));
+                                    orgInfoTbl.addCell(cell);
+                                    cell = new PdfPCell(new Paragraph(property.getValueAsFormatedPhoneNum()));
+                                    orgInfoTbl.addCell(cell);
+            					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
+            						cell = new PdfPCell(new Paragraph(faxesTrn));
+                                    orgInfoTbl.addCell(cell);
+                                    cell = new PdfPCell(new Paragraph(property.getValue()));
+                                    orgInfoTbl.addCell(cell);
+            					}
+            				}
+            			}
+        			}
+        			AmpOrganisation organization=DbUtil.getOrganisation(orgId);
+        			if(organization!=null){
+        				PdfPCell addNotesTitleCell = new PdfPCell(new Paragraph(addNotesTrn, HEADERFONT));
+        				addNotesTitleCell.setColspan(2);
+                        orgInfoTbl.addCell(addNotesTitleCell);
+                        cell = new PdfPCell(new Paragraph(backOrgTrn));
+                        orgInfoTbl.addCell(cell);
+                        cell = new PdfPCell(new Paragraph(organization.getOrgBackground()));
+                        orgInfoTbl.addCell(cell);
+                        cell = new PdfPCell(new Paragraph(descriptionTrn));
+                        orgInfoTbl.addCell(cell);
+                        cell = new PdfPCell(new Paragraph(organization.getOrgDescription()));
+                        orgInfoTbl.addCell(cell);
+        			}
+        		    doc.add(orgInfoTbl);
+                    doc.add(new Paragraph(" "));
+            	}
+            }
             
             //Filters.
             PdfPTable filtersTbl = null;

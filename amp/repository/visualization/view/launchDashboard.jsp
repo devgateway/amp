@@ -115,6 +115,7 @@ var trnBackgroundOrganization = "";
 var trnNoAdditionalInfo = "";
 var trnAllOrgGroups = "";
 var trnMultipleOrgs = "";
+var trnOrgInfo="";
 var trnAllSectors = "";
 var trnMultipleSubSector = "";
 var trnAllSubSector = "";
@@ -212,6 +213,7 @@ function initializeTranslations(){
 	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
 	alertBadDate="<digi:trn>Start year can't be greater than end year</digi:trn>";
 	trnNoDataToShow="<digi:trn>No data to show</digi:trn>";
+	trnOrgInfo="<digi:trn>Organization Info</digi:trn>";
 }
 function initializeGlobalVariables(){
 	//Other global variables
@@ -241,6 +243,28 @@ function initializeGlobalVariables(){
 <!--
 -->
 </script>
+<div id="myOrgInfo" style="display: none;" >
+	<div id="divOrgInfo" style="display: none;height: 372px;width: auto;">
+	<div id="demo" class="yui-navset">
+		<ul class="yui-nav">
+		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+		<li><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
+		<c:if test="${!visualizationform.filter.fromPublicView}">
+		<li><a href="#tab3"><div><digi:trn>Additional Notes</digi:trn></div></a></li>
+		</c:if>
+		</c:if>
+		</ul>
+		<div class="yui-content">
+			<div id="tab2">
+				<digi:trn>No Contact Information available for current filter selection</digi:trn>
+			</div>
+			<div id="tab3">
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+
 <table>
 <tr>
 <td>
@@ -1254,15 +1278,6 @@ function initializeGlobalVariables(){
 <td valign="top">
 
 <div id="demo" class="yui-navset">
-	<ul class="yui-nav">
-		<li><a href="#tab1"><div id="visualizationDiv"><digi:trn>Visualization</digi:trn></div></a></li>
-		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-		<li><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
-		<c:if test="${!visualizationform.filter.fromPublicView}">
-		<li><a href="#tab3"><div><digi:trn>Additional Notes</digi:trn></div></a></li>
-		</c:if>
-		</c:if>
-	</ul>
 	<div class="yui-content">
 	<div id="tab1">
 			<c:forEach items="${visualizationform.graphList}" var="graph">
@@ -1365,6 +1380,7 @@ function initializeTranslations(){
 	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
 	alertBadDate="<digi:trn>Start year can't be greater than end year</digi:trn>";
 	trnNoDataToShow="<digi:trn>No data to show</digi:trn>";
+	trnOrgInfo="<digi:trn>Organization Info</digi:trn>";
 }
 function initializeGlobalVariables(){
 	//Other global variables

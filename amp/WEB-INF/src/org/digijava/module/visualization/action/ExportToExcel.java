@@ -30,6 +30,9 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
@@ -39,6 +42,8 @@ import javax.servlet.ServletContext;
 import org.digijava.module.aim.util.SectorUtil;
 
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 
 public class ExportToExcel extends Action {
 
@@ -72,6 +77,16 @@ public class ExportToExcel extends Action {
         String summaryOpt = request.getParameter("summaryOpt");
     
     	try {
+    		String orgInfoTrn = TranslatorWorker.translateText("Organization Information", langCode, siteId);
+        	String contactInfoTrn = TranslatorWorker.translateText("Contact Information", langCode, siteId);
+        	String addNotesTrn = TranslatorWorker.translateText("Additional Notes", langCode, siteId);
+        	String nameTrn = TranslatorWorker.translateText("Name", langCode, siteId);
+        	String titleTrn = TranslatorWorker.translateText("Title", langCode, siteId);
+        	String emailsTrn = TranslatorWorker.translateText("Emails", langCode, siteId);
+        	String phonesTrn = TranslatorWorker.translateText("Phones", langCode, siteId);
+        	String faxesTrn = TranslatorWorker.translateText("Faxes", langCode, siteId);
+        	String backOrgTrn = TranslatorWorker.translateText("Background of organization", langCode, siteId);
+        	String descriptionTrn = TranslatorWorker.translateText("Description", langCode, siteId);
 			String notAvailable = TranslatorWorker.translateText("Not Available", langCode, siteId);
 			String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
 			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
@@ -276,6 +291,119 @@ public class ExportToExcel extends Action {
             }
 	        cell.setCellValue(header);
 	        cell.setCellStyle(titleCS);
+	        
+	      //Org. Information
+            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+            	if (vForm.getFilter().getSelOrgIds().length==1){
+            		long orgId = vForm.getFilter().getSelOrgIds()[0];
+            		HSSFRichTextString headerText = null;
+                	row = sheet.createRow(rowNum++);
+                	cell = row.createCell(0);
+                    headerText = new HSSFRichTextString(orgInfoTrn);
+                    cell.setCellValue(headerText);
+                    cell.setCellStyle(subHeaderCS);
+                    cellNum = 0;
+            		AmpContact contact=DbUtil.getPrimaryContactForOrganization(orgId);
+        			if(contact!=null){
+        				HSSFRichTextString headerText2 = null;
+                    	row = sheet.createRow(rowNum++);
+                    	cell = row.createCell(0);
+                        headerText2 = new HSSFRichTextString(contactInfoTrn);
+                        cell.setCellValue(headerText2);
+                        cell.setCellStyle(subHeaderCS);
+                        cell = row.createCell(1);
+                        cell.setCellStyle(subHeaderCS);
+
+                        row = sheet.createRow(rowNum++);
+                        cell = row.createCell(0);
+                        headerText = new HSSFRichTextString(titleTrn);
+                        cell.setCellValue(headerText);
+                        cell.setCellStyle(cellStyleLeft);
+                        cell = row.createCell(1);
+                        headerText = new HSSFRichTextString(contact.getTitle()!=null?contact.getTitle().getValue():"");
+                        cell.setCellValue(headerText);
+                        cell.setCellStyle(cellStyleLeft);
+                        
+                        row = sheet.createRow(rowNum++);
+                        cell = row.createCell(0);
+                        headerText = new HSSFRichTextString(nameTrn);
+                        cell.setCellValue(headerText);
+                        cell.setCellStyle(cellStyleLeft);
+                        cell = row.createCell(1);
+                        headerText = new HSSFRichTextString(contact.getName()+" "+contact.getLastname());
+                        cell.setCellValue(headerText);
+                        cell.setCellStyle(cellStyleLeft);
+                        
+                        if(contact.getProperties()!=null){
+            				for (AmpContactProperty property : contact.getProperties()) {
+            					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
+            						row = sheet.createRow(rowNum++);
+                                    cell = row.createCell(0);
+                                    headerText = new HSSFRichTextString(emailsTrn);
+                                    cell.setCellValue(headerText);
+                                    cell.setCellStyle(cellStyleLeft);
+                                    cell = row.createCell(1);
+                                    headerText = new HSSFRichTextString(property.getValue());
+                                    cell.setCellValue(headerText);
+                                    cell.setCellStyle(cellStyleLeft);
+            					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
+            						row = sheet.createRow(rowNum++);
+                                    cell = row.createCell(0);
+                                    headerText = new HSSFRichTextString(phonesTrn);
+                                    cell.setCellValue(headerText);
+                                    cell.setCellStyle(cellStyleLeft);
+                                    cell = row.createCell(1);
+                                    headerText = new HSSFRichTextString(property.getValueAsFormatedPhoneNum());
+                                    cell.setCellValue(headerText);
+                                    cell.setCellStyle(cellStyleLeft);
+            					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
+            						row = sheet.createRow(rowNum++);
+                                    cell = row.createCell(0);
+                                    headerText = new HSSFRichTextString(faxesTrn);
+                                    cell.setCellValue(headerText);
+                                    cell.setCellStyle(cellStyleLeft);
+                                    cell = row.createCell(1);
+                                    headerText = new HSSFRichTextString(property.getValue());
+                                    cell.setCellValue(headerText);
+                                    cell.setCellStyle(cellStyleLeft);
+            					}
+            				}
+            			}
+        			}
+        			AmpOrganisation organization=DbUtil.getOrganisation(orgId);
+        			if(organization!=null){
+        				HSSFRichTextString headerText2 = null;
+                    	row = sheet.createRow(rowNum++);
+                    	cell = row.createCell(0);
+                        headerText2 = new HSSFRichTextString(addNotesTrn);
+                        cell.setCellValue(headerText2);
+                        cell.setCellStyle(subHeaderCS);
+                        cell = row.createCell(1);
+                        cell.setCellStyle(subHeaderCS);
+                        
+                        row = sheet.createRow(rowNum++);
+                        cell = row.createCell(0);
+                        headerText = new HSSFRichTextString(backOrgTrn);
+                        cell.setCellValue(headerText);
+                        cell.setCellStyle(cellStyleLeft);
+                        cell = row.createCell(1);
+                        headerText = new HSSFRichTextString(organization.getOrgBackground());
+                        cell.setCellValue(headerText);
+                        cell.setCellStyle(cellStyleLeft);
+                        row = sheet.createRow(rowNum++);
+                        cell = row.createCell(0);
+                        headerText = new HSSFRichTextString(descriptionTrn);
+                        cell.setCellValue(headerText);
+                        cell.setCellStyle(cellStyleLeft);
+                        cell = row.createCell(1);
+                        headerText = new HSSFRichTextString(organization.getOrgDescription());
+                        cell.setCellValue(headerText);
+                        cell.setCellStyle(lastCellStyleLeft);
+        			}
+        			rowNum++;
+            	}
+            }
+            
 	        
 	        //Filters
 	        HSSFRichTextString headerText = null;

@@ -5,6 +5,7 @@ function initializePage(){
 	YAHOO.util.Event.onAvailable("sector_config_dropdown_id", callbackChildren);
 	myTabs = new YAHOO.widget.TabView("demo");
 	myTabs.selectTab(0);
+	initPopin();
 	initializeLoadingPanel();
 }
 function initializeLoadingPanel(){
@@ -1552,12 +1553,14 @@ function refreshBoxes(o){
 		if (getSelectionsFromElement("organization_check",true)==""){
 			if (document.getElementById("org_dropdown_id").selectedIndex != 0) {
 				name2 = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+				name2 = name2+ "  <img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' title='"+trnOrgInfo+"'/>";
 			}
 		} else {
 			if (getSelectionsFromElement("organization_check",false).indexOf(',') !=-1) {
 				name2 = trnMultipleOrgs;
 			} else {
 				name2 = getSelectionsFromElement("organization_check",true);
+				name2 = name2 + "  <img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' title='"+trnOrgInfo+"'/>";
 			}
 		}
 		if (name1 == "") {
@@ -2262,4 +2265,33 @@ function checkOptionByNameAndValue (checkName, value) {
 function scrollToGraph(graph) {
 	document.getElementById('visualizationTab').click();
 	document.getElementById(graph).scrollIntoView(true);
+}
+
+function showOrgInfo(){
+	YAHOO.amptab.init();
+	var element = document.getElementById("divOrgInfo");
+	element.style.display = "inline";
+	myPanel.setBody(element);
+	myPanel.center();
+	myPanel.show();
+}
+
+var myPanel = new YAHOO.widget.Panel("new", {
+	width:"450px",
+    fixedcenter: true,
+    constraintoviewport: true,
+    underlay:"none",
+    close:true,
+    visible:false,
+    modal:true,
+    effect:{effect:YAHOO.widget.ContainerEffect.FADE, duration: 0.5},
+    draggable:true} );
+
+function initPopin() {
+	
+	var msg='\n<digi:trn jsFriendly="true">Organization Info</digi:trn>';
+	myPanel.setHeader(msg);
+	myPanel.setBody("");
+	myPanel.render(document.body);
+	
 }

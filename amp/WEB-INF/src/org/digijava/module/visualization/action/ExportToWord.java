@@ -26,6 +26,9 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -45,6 +48,7 @@ import com.lowagie.text.SimpleCell;
 import com.lowagie.text.SimpleTable;
 import com.lowagie.text.Table;
 import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
 import com.sun.media.jai.codec.PNGEncodeParam;
@@ -89,7 +93,17 @@ public class ExportToWord extends Action {
         String summaryOpt = request.getParameter("summaryOpt");
         String ODAGrowthOpt = request.getParameter("ODAGrowthOpt");
         try {
-        	String pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
+        	String orgInfoTrn = TranslatorWorker.translateText("Organization Information", langCode, siteId);
+        	String contactInfoTrn = TranslatorWorker.translateText("Contact Information", langCode, siteId);
+        	String addNotesTrn = TranslatorWorker.translateText("Additional Notes", langCode, siteId);
+        	String nameTrn = TranslatorWorker.translateText("Name", langCode, siteId);
+        	String titleTrn = TranslatorWorker.translateText("Title", langCode, siteId);
+        	String emailsTrn = TranslatorWorker.translateText("Emails", langCode, siteId);
+        	String phonesTrn = TranslatorWorker.translateText("Phones", langCode, siteId);
+        	String faxesTrn = TranslatorWorker.translateText("Faxes", langCode, siteId);
+        	String backOrgTrn = TranslatorWorker.translateText("Background of organization", langCode, siteId);
+        	String descriptionTrn = TranslatorWorker.translateText("Description", langCode, siteId);
+			String pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
         	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
 			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
 			String filtersAmountsInTrn = ""; 
@@ -291,6 +305,80 @@ public class ExportToWord extends Action {
             Image img = null;
             String[] singleRow = null;
             int count = 0;
+            
+          //Org. Information
+            if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
+            	if (vForm.getFilter().getSelOrgIds().length==1){
+            		long orgId = vForm.getFilter().getSelOrgIds()[0];
+            		Table orgInfoTbl = null;
+            		orgInfoTbl = new Table(2);
+            		orgInfoTbl.setWidth(100);
+            		RtfCell orgInfoTitleCell = new RtfCell(new Paragraph(orgInfoTrn, HEADERFONT));
+                    orgInfoTitleCell.setColspan(2);
+                    orgInfoTitleCell.setBackgroundColor(TITLECOLOR);
+                    orgInfoTbl.addCell(orgInfoTitleCell);
+            		AmpContact contact=DbUtil.getPrimaryContactForOrganization(orgId);
+        			if(contact!=null){
+        				RtfCell contInfoTitleCell = new RtfCell(new Paragraph(contactInfoTrn, HEADERFONT));
+        				contInfoTitleCell.setColspan(2);
+        				contInfoTitleCell.setBackgroundColor(TITLECOLOR);
+                        orgInfoTbl.addCell(contInfoTitleCell);
+                        cell = new RtfCell(new Paragraph(titleTrn));
+                        cell.setBackgroundColor(CELLCOLOR);
+                        orgInfoTbl.addCell(cell);
+                        cell = new RtfCell(new Paragraph(contact.getTitle()!=null?contact.getTitle().getValue():""));
+                        cell.setBackgroundColor(CELLCOLOR);
+                        orgInfoTbl.addCell(cell);
+                        cell = new RtfCell(new Paragraph(nameTrn));
+                        orgInfoTbl.addCell(cell);
+                        cell = new RtfCell(new Paragraph(contact.getName()+" "+contact.getLastname()));
+                        orgInfoTbl.addCell(cell);
+                        if(contact.getProperties()!=null){
+            				for (AmpContactProperty property : contact.getProperties()) {
+            					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
+            						cell = new RtfCell(new Paragraph(emailsTrn));
+            						cell.setBackgroundColor(CELLCOLOR);
+            			            orgInfoTbl.addCell(cell);
+                                    cell = new RtfCell(new Paragraph(property.getValue()));
+                                    cell.setBackgroundColor(CELLCOLOR);
+                                    orgInfoTbl.addCell(cell);
+            					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
+            						cell = new RtfCell(new Paragraph(phonesTrn));
+                                    orgInfoTbl.addCell(cell);
+                                    cell = new RtfCell(new Paragraph(property.getValueAsFormatedPhoneNum()));
+                                    orgInfoTbl.addCell(cell);
+            					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
+            						cell = new RtfCell(new Paragraph(faxesTrn));
+            						cell.setBackgroundColor(CELLCOLOR);
+            			            orgInfoTbl.addCell(cell);
+                                    cell = new RtfCell(new Paragraph(property.getValue()));
+                                    cell.setBackgroundColor(CELLCOLOR);
+                                    orgInfoTbl.addCell(cell);
+            					}
+            				}
+            			}
+        			}
+        			AmpOrganisation organization=DbUtil.getOrganisation(orgId);
+        			if(organization!=null){
+        				RtfCell addNotesTitleCell = new RtfCell(new Paragraph(addNotesTrn, HEADERFONT));
+        				addNotesTitleCell.setColspan(2);
+        				addNotesTitleCell.setBackgroundColor(TITLECOLOR);
+                        orgInfoTbl.addCell(addNotesTitleCell);
+                        cell = new RtfCell(new Paragraph(backOrgTrn));
+                        cell.setBackgroundColor(CELLCOLOR);
+                        orgInfoTbl.addCell(cell);
+                        cell = new RtfCell(new Paragraph(organization.getOrgBackground()));
+                        cell.setBackgroundColor(CELLCOLOR);
+                        orgInfoTbl.addCell(cell);
+                        cell = new RtfCell(new Paragraph(descriptionTrn));
+                        orgInfoTbl.addCell(cell);
+                        cell = new RtfCell(new Paragraph(organization.getOrgDescription()));
+                        orgInfoTbl.addCell(cell);
+        			}
+        			doc.add(orgInfoTbl);
+                    doc.add(new Paragraph(" "));
+            	}
+            }
             
           //Filters.
             Table filtersTbl = null;

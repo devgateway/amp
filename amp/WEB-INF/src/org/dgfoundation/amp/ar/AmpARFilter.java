@@ -517,7 +517,11 @@ public class AmpARFilter extends PropertyListable {
 		///Set the range depending of workspase setup / global setting and selected calendar
 		ICalendarWorker worker = null;
 		Date checkDate = null;
-		if (renderStartYear == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
+		//If the years filter data has just be taken from the filter data from the db, it must not be overridden
+		Boolean overrideYears = (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0) 
+				&& (request.getAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB) == null || !"true".equals(request.getAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB)));
+
+		if (renderStartYear == null || overrideYears) {
 			// Check if there is value on workspace setting
 			if (tempSettings != null
 					&& tempSettings.getReportStartYear() != null
@@ -548,7 +552,7 @@ public class AmpARFilter extends PropertyListable {
 		
 		renderStartYear=(renderStartYear==null)?-1:renderStartYear;
 		
-		if (renderEndYear == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
+		if (renderEndYear == null || overrideYears) {
 			// Check if there is value on workspace setting
 			if (tempSettings != null && tempSettings.getReportEndYear() != null
 					&& tempSettings.getReportEndYear().intValue() != 0) {

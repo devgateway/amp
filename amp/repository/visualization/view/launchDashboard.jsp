@@ -1286,15 +1286,6 @@ function initializeGlobalVariables(){
 			
 			</c:forEach>
 		</div>
-	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-	<div id="tab2">
-		<digi:trn>No Contact Information available for current filter selection</digi:trn>
-	</div>
-	<c:if test="${!visualizationform.filter.fromPublicView}">
-	<div id="tab3">
-	</div>
-	</c:if>
-	</c:if>
 	</div>
 </div>
 

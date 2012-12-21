@@ -25,8 +25,8 @@ public class AmpContactsFormSectionFeature extends AmpFormSectionFeaturePanel {
 		//add(donors);
 		add(new AmpContactsFromTableFeature("donorContactInformation", "Donor Contact Information", am, org.digijava.module.aim.helper.Constants.DONOR_CONTACT));
 		add(new AmpContactsFromTableFeature("mofedContactInformation", "Mofed Contact Information", am, org.digijava.module.aim.helper.Constants.MOFED_CONTACT));
-		add(new AmpContactsFromTableFeature("projectCoordinatorContactInformation", "Project Coordinator Contact Information", am, org.digijava.module.aim.helper.Constants.SECTOR_MINISTRY_CONTACT));
-		add(new AmpContactsFromTableFeature("sectorMinistryContactInformation", "Sector Ministry Contact Information", am, org.digijava.module.aim.helper.Constants.PROJECT_COORDINATOR_CONTACT));
+		add(new AmpContactsFromTableFeature("projectCoordinatorContactInformation", "Project Coordinator Contact Information", am, org.digijava.module.aim.helper.Constants.PROJECT_COORDINATOR_CONTACT));
+		add(new AmpContactsFromTableFeature("sectorMinistryContactInformation", "Sector Ministry Contact Information", am, org.digijava.module.aim.helper.Constants.SECTOR_MINISTRY_CONTACT));
 		add(new AmpContactsFromTableFeature("implExecAgencyContactInformation", "Implementing/Executing Agency Contact Information", am, org.digijava.module.aim.helper.Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT));
  
 				

@@ -1212,9 +1212,13 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.getSelectedSectors().addAll(selectedSectors);
 
 			arf.setSectors(SectorUtil.getSectorDescendents(selectedSectors));
-			arf.setSectorsAndAncestors( new HashSet<AmpSector>() );
-			arf.getSectorsAndAncestors().addAll( arf.getSectors() );
-			arf.getSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(selectedSectors) );
+			if (!(filterForm.getReporttype()==ArConstants.PLEDGES_TYPE)){
+				arf.setSectorsAndAncestors( new HashSet<AmpSector>() );
+				arf.getSectorsAndAncestors().addAll( arf.getSectors() );
+				arf.getSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(selectedSectors) );
+			}else{
+				arf.setSectorsAndAncestors(null);
+			}
 		} else {
 			arf.setSectors(null);
 			arf.setSelectedSectors(null);

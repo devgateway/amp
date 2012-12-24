@@ -26,7 +26,7 @@
     
     
     <!-- Workspace configuration template. This is used to create the initial workspace. -->
-    <Workspace name="${wsp.name}">
+    <Workspace name="${wsp.name}"  maxIdleTime="-1">
     
         <!-- Virtual file system for the workspace -->
         <FileSystem class="org.apache.jackrabbit.core.fs.db.JNDIDatabaseFileSystem">
@@ -60,7 +60,7 @@
             <param name="autoRepair" value="true"/>
             <param name="analyzer" value="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
             <param name="queryClass" value="org.apache.jackrabbit.core.query.QueryImpl"/>
-            <param name="maxiIdleTime" value="-1"/>
+<!--         <param name="maxIdleTime" value="-1"/>  -->
             <param name="respectDocumentOrder" value="true"/>         
         </SearchIndex>
         	

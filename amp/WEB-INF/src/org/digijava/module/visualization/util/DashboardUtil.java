@@ -378,7 +378,7 @@ public class DashboardUtil {
 		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep8);
 				if (filter.getShowNPORanking()==null || filter.getShowNPORanking() || isInGraphInList(form.getGraphList(),"NPOProfile")) {
-					if (activityList==null || activityList.size()==0) {
+					if (NPOListReduced==null || NPOListReduced.size()==0) {
 		        		form.getRanksInformation().setFullNPOs(null);
 			        	form.getRanksInformation().setTopNPOs(null);
 					} else {
@@ -388,7 +388,7 @@ public class DashboardUtil {
 				} 
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep9);
 				if (filter.getShowProgramsRanking()==null || filter.getShowProgramsRanking() || isInGraphInList(form.getGraphList(),"ProgramProfile")) {
-					if (activityList==null || activityList.size()==0) {
+					if (programListReduced==null || programListReduced.size()==0) {
 		        		form.getRanksInformation().setFullPrograms(null);
 			        	form.getRanksInformation().setTopPrograms(null);
 					} else {
@@ -414,10 +414,14 @@ public class DashboardUtil {
 			form.getRanksInformation().setFullSectors(null);
 			form.getRanksInformation().setFullRegions(null);
 			form.getRanksInformation().setFullProjects(null);
+			form.getRanksInformation().setFullNPOs(null);
+			form.getRanksInformation().setFullPrograms(null);
 			form.getRanksInformation().setTopOrganizations(null);
 			form.getRanksInformation().setTopSectors(null);
 			form.getRanksInformation().setTopRegions(null);
 			form.getRanksInformation().setTopProjects(null);
+			form.getRanksInformation().setTopNPOs(null);
+			form.getRanksInformation().setTopPrograms(null);
 		}
 	}
     

@@ -588,6 +588,7 @@ public class DbUtil {
             oql += " inner join f.ampActivityId act ";
             oql += " inner join act.sectors actSec ";
             oql += " inner join actSec.sectorId sec ";
+            oql += " inner join actSec.classificationConfig config ";
             oql += " inner join act.actPrograms actProg ";
             oql += " inner join actProg.program prog ";
             if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
@@ -600,7 +601,7 @@ public class DbUtil {
             if (locationCondition) {
                 oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
             }
-            oql += "  where fd.adjustmentType.value =:adjustmentType";
+            oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
             oql += " and fd.transactionType =:transactionType  ";
             
             if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
@@ -631,9 +632,6 @@ public class DbUtil {
                 oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
             }
 
-            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
-            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.id =:configId) "; 
-            
             if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
     			oql += ActivityUtil.getNonDraftActivityQueryString("act");
     		}
@@ -648,7 +646,7 @@ public class DbUtil {
             //    query.setLong("orgGroupId", orgGroupId);
             //}
             query.setLong("transactionType", transactionType);
-            query.setLong("configId", filter.getSelSectorConfigId());
+            query.setLong("config", filter.getSelSectorConfigId());
             query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 
             programs = query.list();
@@ -1644,7 +1642,7 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
         if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-        	oql = "select fd, orole.organisation.ampOrgId, orole.organisation.name";
+        	oql = "select fd, roleOrg.ampOrgId, roleOrg.name";
         else 
         	oql = "select fd, f.ampDonorOrgId.ampOrgId, f.ampDonorOrgId.name";
 		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
@@ -1662,9 +1660,9 @@ public class DbUtil {
         	oql += " inner join act.ampActivityGroup actGroup ";
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+        //if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-    			oql += " inner join act.orgrole orole inner join orole.role role ";
+    			oql += " inner join act.orgrole orole inner join orole.role role inner join orole.organisation roleOrg ";
         if (sectorCondition) {
             oql += "  inner join act.sectors actsec ";
             oql += "  inner join actsec.classificationConfig config  ";

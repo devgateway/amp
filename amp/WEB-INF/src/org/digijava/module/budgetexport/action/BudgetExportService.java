@@ -32,7 +32,7 @@ public class BudgetExportService extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
     			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
     	{
-            Configuration conf = ConfigurationUtil.initConfig();
+            Configuration conf = ConfigurationUtil.initConfig(request.getSession().getServletContext());
             String configName = request.getParameter("configName");
             response.setContentType("text/xml");
             

@@ -2,13 +2,16 @@ package org.digijava.module.aim.services.publicview;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.services.publicview.conf.Configuration;
 import org.digijava.module.aim.services.publicview.conf.ConfigurationUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.SchedulerException;
 import org.xml.sax.InputSource;
 
+import javax.servlet.ServletContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -46,8 +49,8 @@ public class PublicViewReportCreator implements Job {
         try {
 
 
-
-            Configuration conf = ConfigurationUtil.initConfig();
+            ServletContext ctx = (ServletContext) jec.getScheduler().getContext().get(Constants.AMP_SERVLET_CONTEXT);
+            Configuration conf = ConfigurationUtil.initConfig(ctx);
 
             if (conf != null && conf.getTables() != null) {
                 for (Configuration.Table tbl : conf.getTables()) {
@@ -80,43 +83,9 @@ public class PublicViewReportCreator implements Job {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-    }
-
-    private static synchronized Properties getTransformationConfig() {
-        Properties retVal = null;
-        String propertyFileResourcePath = "reportcreator.properties";
-
-        InputStream is = PublicViewReportCreator.class.getResourceAsStream(propertyFileResourcePath);
-        Properties props = new Properties();
-        try {
-            props.load(is);
-            retVal = props;
-        } catch (Exception e) {
-            logger.warn("Error parsing property file", e);
-        }
-        return retVal;
-    }
-
-    public static String getTransformationConfigProperty (String property) {
-        Configuration conf = null;
-        try {
-            conf = ConfigurationUtil.getConfiguration();
-        } catch (JAXBException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (FileNotFoundException e) {
+        } catch (SchedulerException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-
-        String retVal = null;
-        if (transformationConfig == null) {
-            transformationConfig = getTransformationConfig();
-        }
-
-        if (transformationConfig != null) {
-            retVal = transformationConfig.getProperty(property);
-        }
-        return retVal;
     }
 
 

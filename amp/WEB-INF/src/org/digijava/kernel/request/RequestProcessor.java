@@ -110,6 +110,7 @@ public class RequestProcessor
         bypassRefererCheckActions.add("/visualization/launchDashboard.do");
         bypassRefererCheckActions.add("/visualization/launchGraph.do");
         bypassRefererCheckActions.add("/aim/csvExport.do");
+        bypassRefererCheckActions.add("/aim/xlsExport.do");
     }
     
 

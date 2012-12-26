@@ -753,6 +753,16 @@
 
 		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>
 		<antcall target="copyForAnySQL"/>
+		<antcall target="createDeployConfigCommon"/>
+		
+	</target>
+	
+	<target name="createDeployConfigCommon" description="Creates file with description of the selected config">
+		<echo message="Creating Deploy config common" />
+		<delete file="${deployConfigs}/selected.properties"/>
+		<propertyfile  file="${deployConfigs}/selected.properties"  comment="Description of the selected config">
+		  <entry  key="serverName" value="${serverName}"/>
+		</propertyfile>
 	</target>
 	
 	<target name="copyForAnySQL">

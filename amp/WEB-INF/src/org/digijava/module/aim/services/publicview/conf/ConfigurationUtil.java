@@ -38,7 +38,7 @@ public class ConfigurationUtil {
 
     public static Configuration initConfig (ServletContext ctx) throws JAXBException, IOException {
         //Get config name
-        String digijavaPropertiesPath  = ctx.getRealPath("/digijava.properties");
+        String digijavaPropertiesPath  = ctx.getRealPath("/deployConfigs/selected.properties");
 
         Properties dgProps = new Properties();
         dgProps.load(new FileReader(digijavaPropertiesPath));

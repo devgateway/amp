@@ -2163,9 +2163,8 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
 
-        oql = "select fd, prog.ampThemeId, prog.name, actProg.programPercentage ";
-        //if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
-        	oql += ", actProg.programPercentage ";
+        oql = "select fd, prog.ampThemeId, prog.name ";
+        oql += ", actProg.programPercentage ";
         if (locationCondition)
         	oql += ", actloc.locationPercentage ";
         if (sectorCondition)

@@ -1373,12 +1373,12 @@ public class DataDispatcher extends DispatchAction {
      	               //if(percentage.compareTo(new BigDecimal(0.01)) == 1) //if this is more than 0.01
      	                if (donut){
      	                	if(percentage.compareTo(new BigDecimal(1)) == 1){
-     	                		xmlString.append("<dataField name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
+     	                		xmlString.append("<dataField name=\"" + org.getName().replace("\"", "") + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + org.getName().replace("\"", "") + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
      	                		index++;
      	                	}
      	                } else {
      	                	if(percentage.compareTo(new BigDecimal(0.01)) == 1){
-     	                		xmlString.append("<dataField name=\"" + org.getName() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + entry.getKey() + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
+     	                		xmlString.append("<dataField name=\"" + org.getName().replace("\"", "") + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ value.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" label=\"" + org.getName().replace("\"", "") + "\" percentage=\"" + percentage.toPlainString() + "\" id=\"" + org.getAmpOrgId() + "\" yearLabels=\"" + yearLabels + "\"/>\n");
      	                		index++;
  	     	                }
      	                }

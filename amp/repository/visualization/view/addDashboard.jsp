@@ -97,16 +97,29 @@ function removeGraph()
 }
 
 function saveDashboard() {
-
+	<c:set var="duplicatedGraph">
+	  <digi:trn>
+	  	Is not possible to save a dashboard with a duplicated graph.
+	  </digi:trn>
+	</c:set>
 	document.getElementById("showInMenu2").value = document.getElementById("show_in_menu").checked;
 	if (validateData()){
 		var i = 0;
 		var param = "";
+		var duplicated = false;
 		while (i<=numGraphs){
 			if(document.getElementById('graphDiv_'+i)!=null){
-				param += document.getElementsByName('graphDrDw_'+i)[0].value + "_";
+				var idxStr = document.getElementsByName('graphDrDw_'+i)[0].value + "_"
+				if (param.indexOf(idxStr)!=-1)
+					duplicated = true;
+				param += idxStr;
 			}
 			i++;
+		}
+
+		if (duplicated){
+			alert ("${duplicatedGraph}")
+			return false;
 		}
 		
 		<digi:context name="save" property="/visualization/saveDashboard.do" />

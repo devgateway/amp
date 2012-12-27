@@ -2226,17 +2226,25 @@ public class DataDispatcher extends DispatchAction {
         BigDecimal amtTotal = BigDecimal.ZERO;
         HashMap<AmpCategoryValue, BigDecimal> hm = new HashMap<AmpCategoryValue, BigDecimal>();
         
-        for (Iterator iterator = categoryValues.iterator(); iterator.hasNext();) {
+        Long[] budgetCVIds = new Long[categoryValues.size()];
+		int cnt = 0;
+		for (Iterator iterator = categoryValues.iterator(); iterator.hasNext();) {
 			AmpCategoryValue ampCategoryValue = (AmpCategoryValue) iterator.next();
 			DecimalWraper funding = null;
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
+			budgetCVIds[cnt++] = ampCategoryValue.getId();
 			Long[] selCVIds = {ampCategoryValue.getId()};
 			newFilter.setSelCVIds(selCVIds);
             funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
             amtTotal = amtTotal.add(funding.getValue());
             hm.put(ampCategoryValue, funding.getValue());
 		}
-       
+		filter.setBudgetCVIds(budgetCVIds);
+        DashboardFilter newFilter1 = filter.getCopyFilterForFunding();
+		Long[] selCVIds1 = {-1l};
+		newFilter1.setSelCVIds(selCVIds1);
+		DecimalWraper fund = DbUtil.getFunding(newFilter1, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+		amtTotal = amtTotal.add(fund.getValue());
         
        if(format != null && format.equals("xml")){
 			
@@ -2250,7 +2258,7 @@ public class DataDispatcher extends DispatchAction {
 				xmlString.append("<year name=\"" + yearName + "\">\n");
 				budgetData += "<" + yearName;
 				Iterator<AmpCategoryValue> it = categoryValues.iterator();
-				Long[] budgetCVIds = new Long[categoryValues.size()];
+				budgetCVIds = new Long[categoryValues.size()];
 				int j = 0;
 				boolean hasValues = false;
 				while (it.hasNext()){
@@ -2300,7 +2308,7 @@ public class DataDispatcher extends DispatchAction {
 				}
 				if(amtTotal.compareTo(BigDecimal.ZERO) == 1){
 					Iterator<AmpCategoryValue> it = categoryValues.iterator();
-					Long[] budgetCVIds = new Long[categoryValues.size()];
+					budgetCVIds = new Long[categoryValues.size()];
 					int i = 0;
 					while (it.hasNext()){
 						AmpCategoryValue value = it.next();
@@ -2377,7 +2385,7 @@ public class DataDispatcher extends DispatchAction {
     		csvString.append(yearName);
     		csvString.append(",");
     		it = categoryValues.iterator();
-    		Long[] budgetCVIds = new Long[categoryValues.size()];
+    		budgetCVIds = new Long[categoryValues.size()];
 			int j = 0;
 			while (it.hasNext()){
     			AmpCategoryValue value = it.next();

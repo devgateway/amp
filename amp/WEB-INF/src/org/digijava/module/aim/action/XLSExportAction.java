@@ -182,7 +182,9 @@ public class XLSExportAction extends Action {
 		grdx.createHeaderNameAndDescription( request );
 		
 		grdx.generate();
-		
+		//AMP-14423
+		setColumnsWidth(sheet, numberOfColumns);
+
 		/*
 		 * 
 		 * Commented until Apache POI fixes the following bug: 
@@ -255,6 +257,7 @@ public class XLSExportAction extends Action {
 						cell.setCellValue(stmt);  
 					}				
 				}
+		
 	    wb.write(response.getOutputStream());
 	    
 		}else{
@@ -282,5 +285,15 @@ public class XLSExportAction extends Action {
 
 		return null;
 	}
+	
+	private void setColumnsWidth(HSSFSheet sheet, int numberOfColumns){
+		int maxWidth = 55;
+		for(int i = 0; i <= numberOfColumns; i++){
+			sheet.autoSizeColumn(i);
+			if(sheet.getColumnWidth(i) > maxWidth * 256){
+				sheet.setColumnWidth(i, maxWidth * 256);
+			}
+		}
 
+	}
 }

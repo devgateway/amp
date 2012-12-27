@@ -364,7 +364,11 @@
 							<li id="shownational" onclick="getNationalActivities();" style="cursor: pointer;"><digi:trn>Show National</digi:trn></li>
 						</feature:display>
 						<!-- li id="print_button" style="cursor: pointer;"></li-->
-						
+						<li id="shownational" style="cursor: pointer;">
+							<digi:link href="/datadispatcher.do?exporttocsv=true" style="text-decoration: none;color: white;">
+								<digi:trn>Export to csv</digi:trn>
+							</digi:link>
+						</li>
 				     </ul>
 			     </div>
 		    </div>

@@ -49,7 +49,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
 
         //holds all the features for this cluster layer
         this._features = [];
-
+        this.onClusterExpand=options.onClusterExpand;
         //set incoming features
         //this will throw an error if the features WKID is not in below list.  
         //projected: 102100, 102113
@@ -333,7 +333,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
 				
 				var ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin(graphic.attributes[i], { baseGraphic: graphic }), this._infoTemplate);   
 					
-				var ptNumber=this._features.indexOf(pt)
+				var ptNumber=this._features.indexOf(pt);
 				
 				this.expandedPointsLayers.add(ptGraphic);
 				for(var j in this._features){
@@ -342,7 +342,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
     		        break;
             	}
 		    }
-				
+				this.onClusterExpand();
 				console.log(this._features.length);
 			      i++;	
 				
@@ -355,10 +355,13 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
         }
     },
 	
-	reset:function(){
-		dojo.forEach(this.expandedPointsLayers.graphics.length,function(item){
-			this._features.push(item.geometry)
-		});
+    resetCluster:function(){
+    	dojo.forEach(this.expandedPointsLayers.graphics,function(item){
+			this._features.push(item.geometry);
+		},this);
+    	
+    	this.expandedPointsLayers.clear();
+    	this.clusterFeatures(true);
 		},
     
     //removes the flare graphics from the map when a cluster graphic is moused out
@@ -390,7 +393,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
 
         var df = dojox.lang.functional,
             map = this._map,
-            level = this._map.getLevel() + 2,
+            level = this._map.getLevel(),
             extent = this._map.extent;
 
         var tileInfo = map.getLayer(map.layerIds[0]).tileInfo;  //get current tiling scheme.  This restriction can be removed.  the only thing required is origin, array of grid pixel resolution, & grid pixel size
@@ -469,13 +472,15 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
                                 //it should work fine for IE7, FF, Chrome
 								var clusterLabel=new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length).setOffset(0, -5),
 								{baseGraphic:clusterGraphic})
-							clusterGraphic.attributes=dojo.mixin(clusterGraphic.attributes,{textSymbol:clusterLabel})
-                            this.add(clusterGraphic)   
-							this.add(clusterLabel);
+								clusterGraphic.attributes=dojo.mixin(clusterGraphic.attributes,{textSymbol:clusterLabel})
+								this.add(clusterGraphic)   
+								this.add(clusterLabel);
 
                             } else { //single graphic
                                 dojo.forEach(col, function(point) {
-                                    this.add(new esri.Graphic(point, this.symbolBank.single, dojo.mixin(point.attributes, { isCluster: false }), this._infoTemplate));
+                                	var currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ point.attributes.Type_id, 21, 25);
+                                    
+                                    this.add(new esri.Graphic(point, currentSymbol, dojo.mixin(point.attributes, { isCluster: false }), this._infoTemplate));
                                 }, this);
                             }
                         }

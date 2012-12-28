@@ -276,6 +276,8 @@
 		document.datadispatcherform[1].submit();
 	}
 	
+	
+	
 </script>
 
  	<!-- Filter Styles -->
@@ -342,6 +344,10 @@
 		            	<feature:display name="Search  Structures" module="Map Module">
 		              		<li class="mapMenuItem"  id="search" style="cursor: pointer;"><digi:trn>Search  Structures</digi:trn></li>
 		              	</feature:display>
+		              	<feature:display name="Structures" module="Map Module">
+							<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
+							<li id="clusterStructures" onclick="resetStructureCluster(false);" style="cursor: pointer;"><digi:trn>Reset Expanded Structures</digi:trn></li>
+						</feature:display>
 		              	<feature:display name="Highlight regions" module="Map Module">
 							<li id="hlight" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></li>
 						</feature:display>
@@ -354,10 +360,7 @@
 						<!-- 
 						<li onclick="getActivities(true);" style="cursor: pointer;"><digi:trn>Activities</digi:trn></li>
 						-->
-						<feature:display name="Structures" module="Map Module">
-							<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
-							<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Reset Structure</digi:trn></li>
-						</feature:display>
+						
 						<feature:display name="Use Indicators Maps" module="Map Module">
 							<li id="povmap" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></li>
 							<li id="censusmap" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></li>

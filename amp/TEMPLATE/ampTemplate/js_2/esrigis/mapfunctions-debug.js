@@ -1201,32 +1201,32 @@ function CluterStructures(){
 	var pointSymbolBank = new Array();
 	// Add standard symbols
 	pointSymbolBank["single"] = new esri.symbol.SimpleMarkerSymbol(
-			esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 10,
+			esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 20,
 			new esri.symbol.SimpleLineSymbol(
 					esri.symbol.SimpleLineSymbol.STYLE_SOLID,
 					new dojo.Color([ 0, 0, 0, 1 ]), 1), new dojo.Color([
-					255, 215, 0, 1 ]));
+					204,102,102, 1 ]));
 
 	pointSymbolBank["less16"] = new esri.symbol.SimpleMarkerSymbol(
-			esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 20,
+			esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 25,
 			new esri.symbol.SimpleLineSymbol(
 					esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-					new dojo.Color([ 0, 0, 0, 1 ]), 1), new dojo.Color([147, 112, 219, 1 ]));
+					new dojo.Color([ 0, 0, 0, 1 ]), .5), new dojo.Color([204,102,102,  1 ]));
 	pointSymbolBank["less30"] = new esri.symbol.SimpleMarkerSymbol(
-			esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 30,
+			esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 30,
 			new esri.symbol.SimpleLineSymbol(
 					esri.symbol.SimpleLineSymbol.STYLE_NULL,
-					new dojo.Color([ 0, 0, 0, 0 ]), 1), new dojo.Color([216,191,216, .85 ]));
+					new dojo.Color([ 0, 0, 0, 0 ]), 1), new dojo.Color([204,102,102,  .85 ]));
 	pointSymbolBank["less50"] = new esri.symbol.SimpleMarkerSymbol(
-			esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 30,
+			esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 35,
 			new esri.symbol.SimpleLineSymbol(
 					esri.symbol.SimpleLineSymbol.STYLE_NULL,
-					new dojo.Color([ 0, 0, 0, 0 ]), 1), new dojo.Color([216,191,216, .70 ]));
+					new dojo.Color([ 0, 0, 0, 0 ]), 1), new dojo.Color([204,102,102,  .80 ]));
 	pointSymbolBank["over50"] = new esri.symbol.SimpleMarkerSymbol(
-			esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 45,
+			esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 40,
 			new esri.symbol.SimpleLineSymbol(
 					esri.symbol.SimpleLineSymbol.STYLE_NULL,
-					new dojo.Color([ 0, 0, 0 ]), 0), new dojo.Color([ 216,191,216, 1 ]));
+					new dojo.Color([ 0, 0, 0 ]), 0), new dojo.Color([ 204,102,102, .70  ]));
 	var symbolBank = pointSymbolBank;
 	
 	if (map.getLayer('structurescluster')){
@@ -1243,6 +1243,9 @@ function CluterStructures(){
 				id : "structurescluster",
 				visible : false,
 				features : structurespoint,
+				onClusterExpand:function(){
+					$("#clusterStructures").show()
+				},
 				infoWindow :{
 					template :
 						 new esri.InfoTemplate(
@@ -1252,8 +1255,7 @@ function CluterStructures(){
 								+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
 								+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
 								+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
-								+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>"
-								+ "<tr><td nowrap style='padding-right:20px;'><b>X,Y<b></td><td>${x},${y}</td></tr></table>"),
+								+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>"),
 					width : 250,
 					height : 250
 				},
@@ -1262,6 +1264,15 @@ function CluterStructures(){
 			});
 	map.addLayer(cLs);
 }
+
+function resetStructureCluster(){
+	cLs.resetCluster();
+	$("#clusterStructures").hide()
+}
+
+
+
+
 
 function structurestorequest() {
 	var stjson = "{\"Structures\":[";

@@ -398,7 +398,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
         var toTileSpaceF = df.lambda("point, tileWidth,tileHeight,oPoint " 
         		+ "-> [Math.floor((oPoint.y - point.y)/tileHeight),Math.floor((point.x-oPoint.x)/tileWidth), point]");  //lambda function to map points to tile space
 
-        var levelResolution = tileInfo.lods[level].resolution;
+        var levelResolution = customLods[level].resolution;
         var width = levelResolution * tileInfo.width;
         var height = levelResolution * tileInfo.height;
 

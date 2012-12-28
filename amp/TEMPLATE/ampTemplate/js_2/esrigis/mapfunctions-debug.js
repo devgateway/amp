@@ -1128,7 +1128,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 					+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
 					+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
 					+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>");
-
+	var structureID=1;
 	dojo.forEach(activity.structures,function(structure) {
 			var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ structure.typeId, 21, 25);
 			var pgraphic;
@@ -1148,7 +1148,8 @@ function MapFindStructure(activity, structureGraphicLayer) {
 						"Structure Type" : structure.type,
 						"Structure Description" : structure.description,
 						"Coordinates" : pt.x + " , " + pt.y,
-						"Type_id" : structure.typeId
+						"Type_id" : structure.typeId,
+						"Id":structureID++
 					});
 				structurespoint.push(pgraphic);
 				//structures.push(pgraphic);
@@ -1233,7 +1234,7 @@ function CluterStructures(){
 		cLs=null;
 	}
 	
-	cLs = new esri.ux.layers.ClusterLayer(
+	cLs = new esri.ux.layers.AmpCluster(
 			{
 				displayOnPan : false,
 				map : map,
@@ -1251,7 +1252,8 @@ function CluterStructures(){
 								+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
 								+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
 								+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
-								+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>"),
+								+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>"
+								+ "<tr><td nowrap style='padding-right:20px;'><b>X,Y<b></td><td>${x},${y}</td></tr></table>"),
 					width : 250,
 					height : 250
 				},

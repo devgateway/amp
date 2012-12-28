@@ -2,30 +2,38 @@ dojo.require("dojox.lang.functional");
 dojo.require("dojox.lang.functional.lambda");
 dojo.require("dojox.lang.functional.curry");
 dojo.require("dojox.lang.functional.fold");
+dojo.require("dijit.TooltipDialog");
+/*
+ * Adding array IndexOf method on IE explorer 
+ * */
+if (!('indexOf' in Array.prototype)) {
+    Array.prototype.indexOf= function(find, i /*opt*/) {
+        if (i===undefined) i= 0;
+        if (i<0) i+= this.length;
+        if (i<0) i= 0;
+        for (var n= this.length; i<n; i++)
+            if (i in this && this[i]===find)
+                return i;
+        return -1;
+    };
+}
 
 
-dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
+dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
+	
+	constructor: function(options) {
 
-    constructor: function(options) {
-    	//Object.create is not supported on old browsers
-    	if (typeof Object.create === 'undefined') {
-    	    Object.create = function (o) { 
-    	        function F() {} 
-    	        F.prototype = o; 
-    	        return new F(); 
-    	    };
-    	}
+		this.expandedPointsLayers=new esri.layers.GraphicsLayer(options);
+		options.map.addLayer(this.expandedPointsLayers);
 
-    	
+		
         //basic esri.layers.GraphicsLayer option(s)
         this.displayOnPan = options.displayOnPan || false;
 
         //set the map
         //TODO: find a way to not pass in the map as a config option.
         this._map = options.map;
-        
-        //Layer type 1-Activity points - 2-Structures
-        this._type = options.type;
+
         //base connections to update clusters during user/map interaction
         dojo.connect(this._map, 'onZoomStart', dojo.hitch(this, this.handleMapZoomStart));
         dojo.connect(this._map, 'onExtentChange', dojo.hitch(this, this.handleMapExtentChange));
@@ -51,18 +59,23 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
         try {
             this.setFeatures(options.features);
         } catch (ex) {
-            //alert(ex);
+            alert(ex);
         }
 
         //connects for cluster layer itself that handles the loading and mouse events on the graphics
         dojo.connect(this, 'onLoad', this.handleLayerLoaded);
         dojo.connect(this, 'onMouseOver', this.handleMouseOver);
         dojo.connect(this, 'onMouseOut', this.handleMouseOut);
-        dojo.connect(this, 'onMouseClick', this.handleMouseClick);
-        
+		dojo.connect(this, 'onClick', this.handleMouseClick);
+		dojo.connect(this, "onVisibilityChange", function(visible){
+			if(visible){
+				this.expandedPointsLayers.show();
+			}else{
+				this.expandedPointsLayers.hide();
+			}
+			});
         //default symbol bank for clusters and single graphics
         //TODO: allow for user supplied symbol bank to override.  just use an ESRI renderer somehow?
-        
         this.symbolBank = options.symbolBank;
 
         //how far away the flare will be from the center of the cluster in pixels - Number
@@ -93,18 +106,19 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
     //re-cluster on extent change
     //TODO: maybe only use features that fall within current extent?  Add that as an option?
     handleMapExtentChange: function(extent, delta, leveChange, lod) {
-        this.clusterFeatures();
+        this.clusterFeatures(true);
     },
 
     //this function may not be needed exactly as is below.  somehow, the attributes need to be mapped to the points.
     setFeatures: function(features) {
+	var i=0;
         this._features = [];
         var wkid = features[0].geometry.spatialReference.wkid;
         if (wkid != 102100) {
             if (wkid == 4326 || wkid == 4269 || wkid == 4267) {
                 dojo.forEach(features, function(feature) {
                     point = esri.geometry.geographicToWebMercator(feature.geometry);
-                    point.attributes = feature.attributes;
+                    point.attributes =dojo.mixin(feature.attributes,{point:point,index:i++}) ;
                     this._features.push(point);
                 }, this);
             } else {
@@ -114,7 +128,7 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
         } else {
             dojo.forEach(features, function(feature) {
                 point = feature.geometry;
-                point.attributes = feature.attributes;
+                point.attributes =dojo.mixin(feature.attributes,{point:point,index:i++}) ;
                 this._features.push(point);
             }, this);
         }
@@ -122,12 +136,13 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
 
     //fires when cluster layer is loaded, but not added to map yet.
     handleLayerLoaded: function(lyr) {
-        this.clusterFeatures();
+        this.clusterFeatures(true);
     },
 
     //fires when any graphic (clustered or single) is moused over
     handleMouseOver: function(evt) {
-        var graphic = evt.graphic;
+	    var graphic = evt.graphic;
+
         if (graphic.symbol.type == 'textsymbol' || graphic.symbol.type == 'simplelinesymbol') {
             if (graphic.attributes) {
                 if (graphic.attributes.baseGraphic && graphic.attributes.baseGraphic.task) {
@@ -145,23 +160,13 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
             }
         } else { //single marker or cluster flare mouse over
             if (graphic.attributes.baseGraphic) { //cluster flare
-                if (graphic.attributes.id) {
-                    baseGraphic = graphic.attributes.baseGraphic;
-                    var attr = getContent(graphic.attributes, baseGraphic);
-                    graphic.setAttributes(attr);
-                    graphic.attributes.baseGraphic.task.cancel();
-                }
-            } else {
-                if (graphic.attributes.id) {
-                    var attr = getContent(graphic.attributes, null);
-                    graphic.setAttributes(attr);
-                }
+                graphic.attributes.baseGraphic.task.cancel();
             }
-
-            this.showInfoWindow(graphic);
+		    this.showInfoWindow(graphic);
             return;
         }
-
+		
+		this.showTooltip(evt);
         graphic.clusterGraphics = [];
 
         var cSize = graphic.attributes.clusterSize;
@@ -197,26 +202,14 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 y = centerPoint.y + bufferDistance * dblSinus;
 
                 //constructing the flare graphic point
-                pt = new esri.geometry.Point(x, y, this._map.spatialReference);
-                var currentSymbol;
-                //Get donor code and draw
-                if (this.symbolBank[graphic.attributes[i].Code] != null && this._type==1){
-                	currentSymbol = this.symbolBank[graphic.attributes[i].Code];
-                }
-                else if(this._type==1){
-                	currentSymbol = this.symbolBank.single;
-                }
-                else{
-                	var currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ graphic.attributes[i].Type_id, 21, 25);
-                }
+                pt = new esri.geometry.Point(x, y, this._map.spatialReference)
+				var currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ graphic.attributes[i].Type_id, 21, 25);
+              
                 ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin(graphic.attributes[i], { baseGraphic: graphic }), this._infoTemplate);
-               // alert(ptGraphic.attributes["Code"]);
 
                 //try to always bring flare graphic to front of everything else
                 p = this.add(ptGraphic);
                 p.getDojoShape().moveToFront();
-                //p holds the attribute information. Construct a symbol based on the id for coloring donors
-                
 
                 //reset our 0,0 placeholder point in line to the actual point of the recently created flare graphic
                 line.setPoint(0, 1, pt);
@@ -233,9 +226,32 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
             
             //set "clustered" flag
             graphic.attributes.clustered = true;
+			
         }
     },
     
+	
+	 showTooltip:function(evt){
+        
+        var tipContent = "Click to spread out flares";
+        var dialog = new dijit.TooltipDialog({
+          id: "tooltipDialog",
+          content: tipContent,
+          style: "position: absolute; width: 160px; font: normal normal 11px Arial;z-index:100;background-color:#000"
+        });
+        dialog.startup();
+
+        dijit.placeOnScreen(dialog.domNode, {x: evt.pageX, y: evt.pageY}, ["TL", "BL"], {x: 5, y: 5});
+      },
+	  
+	  
+	  closeDialog:function() {
+        var widget = dijit.byId("tooltipDialog");
+        if (widget) {
+          widget.destroy();
+        }
+      },
+	
     //helper method to figure out the distance in real world coordinates starting from a center pt and using a pixel distance
     getPixelDistanceFromCenter: function(centerGeom) {
         var distance = this._flareDistanceFromCenter;  //pixel distance from center
@@ -250,45 +266,100 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
     //fires when any cluster graphic (flare or individual) is moused out of
     //this utilizes the DelayedTask from ExtJS's library.  If anyone wants to re-write using Dojo, by all means...
     handleMouseOut: function(evt) {
+		
         var graphic = evt.graphic,
             task;
 
         if (graphic.symbol.type == 'textsymbol') {
+			if (graphic.attributes.baseGraphic){
+				graphic=graphic.attributes.baseGraphic;
+			}else{
             return;
+			}
         }
-
+		
         if (graphic.attributes.isCluster) {
             task = new DelayedTask(function(g) {
                 this.removeFlareGraphics(g.clusterGraphics);
                 delete g.clusterGraphics;
                 g.attributes.clustered = false;
+				this.closeDialog();
             }, this, [graphic]);
-            task.delay(900);
+            task.delay(500);
             graphic.task = task;
         } else {
-            if (graphic.attributes.baseGraphic) { //cluster flare
+            if (graphic.attributes.baseGraphic) { 
+			this.closeDialog();
+			//cluster flare
                 task = new DelayedTask(function(g) {
                     this.removeFlareGraphics(g.attributes.baseGraphic.clusterGraphics);
                     delete g.attributes.baseGraphic.clusterGraphics;
                     g.attributes.baseGraphic.attributes.clustered = false;
+					
                 }, this, [graphic]);
-                task.delay(900);
+                task.delay(500);
                 graphic.attributes.baseGraphic.task = task;
             }
-            //if (map.infoWindow.isShowing & !this.keepinfowindow) {
-            //    map.infoWindow.hide();
-            //}
+            if (map.infoWindow.isShowing) {
+                map.infoWindow.hide();
+            }
         }
     },
-    
-    
-    handleMouseClick: function(evt) {
+	
+	handleMouseClick: function(evt) {
         var graphic = evt.graphic;
-        //this.showInfoWindow(graphic);
-        this.keepinfowindow=true;
-        alert('click');
+		var textSymbol;
+		if (graphic.symbol.type == 'textsymbol') {
+			if (graphic.attributes.baseGraphic){
+				textSymbol=graphic
+				graphic=graphic.attributes.baseGraphic;
+			}else{
+            	return;
+			}
+        }
+		
+        var i=0;
+        if (graphic.attributes.isCluster){
+			
+			graphic.hide()
+				if(!textSymbol){
+					textSymbol=graphic.attributes.textSymbol;
+				}
+			textSymbol.hide();
+        	dojo.forEach(graphic.attributes,function(item){
+				var pt=graphic.attributes[i].point;
+
+				var currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ graphic.attributes[i].Type_id, 21, 25);
+				
+				var ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin(graphic.attributes[i], { baseGraphic: graphic }), this._infoTemplate);   
+					
+				var ptNumber=this._features.indexOf(pt)
+				
+				this.expandedPointsLayers.add(ptGraphic);
+				for(var j in this._features){
+        			if(this._features[j].attributes.index==pt.attributes.index){
+	     	      		 this._features.splice(j,1);
+    		        break;
+            	}
+		    }
+				
+				console.log(this._features.length);
+			      i++;	
+				
+        		
+        	},this);
+        	
+        }else{
+        this.showInfoWindow(graphic);
+       
+        }
     },
-    
+	
+	reset:function(){
+		dojo.forEach(this.expandedPointsLayers.graphics.length,function(item){
+			this._features.push(item.geometry)
+		});
+		},
     
     //removes the flare graphics from the map when a cluster graphic is moused out
     removeFlareGraphics: function(graphics) {
@@ -318,18 +389,16 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
         this.clear();
 
         var df = dojox.lang.functional,
-            //map = this._map,
-            level = map.getLevel(),
-            extent =map.extent;
+            map = this._map,
+            level = this._map.getLevel() + 2,
+            extent = this._map.extent;
 
         var tileInfo = map.getLayer(map.layerIds[0]).tileInfo;  //get current tiling scheme.  This restriction can be removed.  the only thing required is origin, array of grid pixel resolution, & grid pixel size
 
-        var toTileSpaceF = df.lambda("point, tileWidth,tileHeight,oPoint "
-            + "-> [Math.floor((oPoint.y - point.y)/tileHeight),Math.floor((point.x-oPoint.x)/tileWidth), point]");  //lambda function to map points to tile space
+        var toTileSpaceF = df.lambda("point, tileWidth,tileHeight,oPoint " 
+        		+ "-> [Math.floor((oPoint.y - point.y)/tileHeight),Math.floor((point.x-oPoint.x)/tileWidth), point]");  //lambda function to map points to tile space
 
-        //var levelResolution = tileInfo.lods[level].resolution;
-        var levelResolution = customLods[level].resolution;
-        
+        var levelResolution = tileInfo.lods[level].resolution;
         var width = levelResolution * tileInfo.width;
         var height = levelResolution * tileInfo.height;
 
@@ -369,19 +438,20 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                     if (col) {
                         if ((colIndex >= minColIdx) & (colIndex <= maxColIdx)) {
                             var pointsToBeAdded = [];
-                            if (col.length > 1) { //clustered graphic
+                            if (col.length > 2) { //clustered graphic
 
                                 var tileCenterPoint = df.reduce(col, tileCenterPointF);
                                 var sym;
-                                if (col.length <= 20) {
+                                if (col.length <= 15) {
                                     sym = this.symbolBank.less16;
-                                } else if (col.length > 20 && col.length <= 30) {
+                                } else if (col.length > 15 && col.length <= 30) {
                                     sym = this.symbolBank.less30;
                                 } else if (col.length > 30 && col.length <= 50) {
                                     sym = this.symbolBank.less50;
                                 } else {
                                     sym = this.symbolBank.over50;
                                 }
+                                
                                 //get attributes for info window
                                 var atts = dojo.map(col, function(item) {
                                     return item.attributes;
@@ -391,40 +461,21 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                                 var graphicAtts = dojo.mixin(atts, { isCluster: true, clusterSize: col.length });
 
                                 //add cluster to map
-                                if (col.length <= 4 && this._type==1) {
-                                	var growth = 12;
-                                    dojo.forEach(col, function(point) {
-                                    	var currentSymbol;
-                                    	if(point.attributes.Code){
-                                        	currentSymbol = Object.create(this.symbolBank[point.attributes.Code]);
-                                        	currentSymbol.size = currentSymbol.size+growth;
-                                        	growth = growth - 4;
-                                    	}
-                                        this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), currentSymbol, graphicAtts));
-                                    }, this);
-                                }
-                                else
-                                {
-                                    this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), sym, graphicAtts));
-                                }
-
+								var clusterGraphic=new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), sym, graphicAtts)
+                            	
+								
                                 //initial testing w/ IE8 shows that TextSymbols are not displayed for some reason
                                 //this may be an isolated issue.  more testing needed.
                                 //it should work fine for IE7, FF, Chrome
-                                var font = new esri.symbol.Font("10pt", esri.symbol.Font.STYLE_NORMAL, esri.symbol.Font.VARIANT_NORMAL, esri.symbol.Font.WEIGHT_NORMAL, "Trebuchet MS");
-                                this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length,font,new dojo.Color("#000000")).setOffset(0, -5)));
+								var clusterLabel=new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length).setOffset(0, -5),
+								{baseGraphic:clusterGraphic})
+							clusterGraphic.attributes=dojo.mixin(clusterGraphic.attributes,{textSymbol:clusterLabel})
+                            this.add(clusterGraphic)   
+							this.add(clusterLabel);
 
                             } else { //single graphic
                                 dojo.forEach(col, function(point) {
-                                	var currentSymbol;
-                                	if(point.attributes.Code && this._type==1){
-                                    	currentSymbol = this.symbolBank[point.attributes.Code];
-                                	}else if (this._type==2) {
-                                		currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ point.attributes.Type_id, 22, 25);
-                                	}else{
-                                		currentSymbol = this.symbolBank.single;
-                                	}
-                                    this.add(new esri.Graphic(point, currentSymbol, dojo.mixin(point.attributes, { isCluster: false }), this._infoTemplate));
+                                    this.add(new esri.Graphic(point, this.symbolBank.single, dojo.mixin(point.attributes, { isCluster: false }), this._infoTemplate));
                                 }, this);
                             }
                         }
@@ -432,8 +483,5 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                 }, this);
             }
         }, this);
-        if(this._type==1)
-        	hideLoading();
     }
 });
-

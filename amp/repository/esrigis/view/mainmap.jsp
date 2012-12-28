@@ -37,14 +37,19 @@
       };
     </script>
     <!-- Map Scripts -->
+    <script type="text/javascript"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
     <script type="text/javascript" src="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/?v=3.0"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/DecimalFormat.js"/>"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-debug.js"/>"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
-   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+   	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/DecimalFormat.js"/>"></script>
+   	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
+   	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-debug.js"/>"></script>
+   	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
+   	
+   	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
+   	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.AMPCluster.js"/>"></script>
+   	
+   	
+   	<script type="text/javascript" defer="defer"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
+   	
 
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
@@ -351,6 +356,7 @@
 						-->
 						<feature:display name="Structures" module="Map Module">
 							<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
+							<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Reset Structure</digi:trn></li>
 						</feature:display>
 						<feature:display name="Use Indicators Maps" module="Map Module">
 							<li id="povmap" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></li>

@@ -64,6 +64,12 @@
       .zoomnextIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_next.png); width:16px; height:16px; }
       .panIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_pan.png); width:16px; height:16px; }
       .deactivateIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_decline.png); width:16px; height:16px; }
+      
+     
+      #structurescluster_layer text , #structurescluster_layer path {
+    	  cursor: pointer;
+      }
+      
     </style>
     
    <script type="text/javascript">

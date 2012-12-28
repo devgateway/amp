@@ -233,11 +233,12 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
 	
 	 showTooltip:function(evt){
         
+		 
         var tipContent = "Click to spread out flares";
         var dialog = new dijit.TooltipDialog({
           id: "tooltipDialog",
           content: tipContent,
-          style: "position: absolute; width: 160px; font: normal normal 11px Arial;z-index:100;background-color:#000"
+          style: "position: absolute; width: 160px; font-size:9px;z-index:100;background-image:none;"
         });
         dialog.startup();
 

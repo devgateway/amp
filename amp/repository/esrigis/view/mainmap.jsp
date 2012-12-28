@@ -346,7 +346,7 @@
 		              	</feature:display>
 		              	<feature:display name="Structures" module="Map Module">
 							<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
-							<li id="clusterStructures" onclick="resetStructureCluster(false);" style="cursor: pointer;"><digi:trn>Reset Expanded Structures</digi:trn></li>
+							<li id="clusterStructures" onclick="resetStructureCluster(false);" style="display:none; cursor: pointer;"><digi:trn>Reset Expanded Structures</digi:trn></li>
 						</feature:display>
 		              	<feature:display name="Highlight regions" module="Map Module">
 							<li id="hlight" align="left" onclick="getHighlights(0);" style="cursor: pointer;"><digi:trn>Highlight regions</digi:trn></li>

@@ -3076,7 +3076,7 @@ public class DataDispatcher extends DispatchAction {
 	        List<AmpOrganisation> orgs=new ArrayList<AmpOrganisation>();
 	        try {
 	        	if(orgGroupId!=null&&orgGroupId!=-1){
-	        		orgs = DbUtil.getDonorOrganisationByGroupId(orgGroupId, visualizationForm.getFilter().getFromPublicView());
+	        		orgs = DbUtil.getDonorOrganisationByGroupId(orgGroupId, visualizationForm.getFilter().getFromPublicView(),visualizationForm.getFilter());
 	        	}
 				JSONObject child = new JSONObject();
 				Iterator<AmpOrganisation> it = orgs.iterator();

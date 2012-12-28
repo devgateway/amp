@@ -64,7 +64,7 @@ public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
 	
 	public static List<AmpOrganisation> getDonorOrganisationByGroupId(
-			Long orgGroupId, boolean publicView) {
+			Long orgGroupId, boolean publicView, DashboardFilter filter) {
         Session session = null;
         Query q = null;
         List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
@@ -72,8 +72,12 @@ public class DbUtil {
         if (publicView) {
             queryString.append(" inner join orgRole.activity act  inner join act.team tm ");
         }
-        queryString.append(" where  1=1 ");
-        //queryString.append(" where  role.roleCode='DN' ");
+        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY)
+        	queryString.append(" where  role.roleCode='EA' ");
+        else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        	queryString.append(" where  role.roleCode='BA' ");
+        else
+			queryString.append(" where  role.roleCode='DN' ");
          if (orgGroupId != null&&orgGroupId !=-1) {
             queryString.append(" and org.orgGrpId=:orgGroupId ");
         }

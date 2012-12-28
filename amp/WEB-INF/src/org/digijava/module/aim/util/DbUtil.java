@@ -2897,7 +2897,7 @@ public class DbUtil {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = " select org from "
 					+ AmpOrganisation.class.getName()
-					+ " org where org.orgGrpId=:orgGroupId and (org.deleted is null or org.deleted = false) ";
+					+ " org where org.orgGrpId=:orgGroupId and (org.deleted is null or org.deleted = false) order by org.name ";
 			q = session.createQuery(queryString);
 			q.setLong("orgGroupId", orgGroupId);
 			organizations = q.list();

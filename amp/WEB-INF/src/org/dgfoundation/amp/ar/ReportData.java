@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.KeyValue;
 
@@ -196,7 +197,8 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 		if (this.name.indexOf(':') < 0)
 			return "";
 		
-		String id = this.name.substring(this.name.indexOf(':') + 1, name.length());
+		String id 	= this.name.substring(this.name.indexOf(':') + 1, name.length());
+		id			= this.encodeUnallocatedName(id);
 		return id;
 	}
 	
@@ -425,5 +427,19 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	public abstract List<KeyValue> getLevelSorterPaths();
 	
 	public abstract void computeRowSpan(int numOfPreviousRows, int startRow, int endRow) ;
+	
+	/**
+	 * encodes the name of this reportdata if it is unallocated
+	 */
+	String encodeUnallocatedName(String name) {
+		if ( this.splitterCell != null 
+				&& this.splitterCell.getColumn() != null && this.splitterCell.getColumn().getWorker() != null) {
+			ColumnWorker cw		= this.splitterCell.getColumn().getWorker();
+			String ret			= cw.encodeUnallocatedString(name);
+			return ret;
+		}
+		else
+			return name;
+	}
 	
 }

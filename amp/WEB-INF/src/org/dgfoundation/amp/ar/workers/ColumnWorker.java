@@ -231,6 +231,10 @@ public abstract class ColumnWorker {
 	public MappingEncoder getEncoder () {
 		return null;
 	} 
+	
+	public String encodeUnallocatedString(String originalString) {
+		return originalString;
+	}
 
 	/**
 	 * @return Returns the logger.

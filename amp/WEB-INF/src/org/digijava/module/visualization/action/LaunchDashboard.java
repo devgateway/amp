@@ -78,6 +78,7 @@ public class LaunchDashboard extends Action {
 			dashboard = org.digijava.module.visualization.util.DbUtil.getDashboardById(dId);
 			DashboardFilter filter = new DashboardFilter();
 			initializeFilter(filter, request);
+			dForm.setDashboard(dashboard);
 			dForm.setFilter(filter);
 			dForm.getFilter().setAgencyType(dashboard.getPivot());
 			dForm.getFilter().setAgencyTypeFilter(dashboard.getPivot());

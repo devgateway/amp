@@ -7,5 +7,6 @@
 		<page name="list" page="list" title="Admin Structure Types" />
 		<page name="edit" page="edit" title="Admin Structure Types" />
 		<page name="importstructures" title="Admin Structure Importer"/>
+		<page name="mapconfiguration" title="Admin Map Configuration	"/>
 	</secondary-pages>
 </config>

@@ -145,7 +145,7 @@ public class DataDispatcher extends MultiAction {
         line.append(TranslatorWorker.translateText("Time Stamp")+",");
         line.append(TranslatorWorker.translateText("Activity Id")+",");
         line.append(TranslatorWorker.translateText("Project Title")+",");
-        line.append(TranslatorWorker.translateText("Aproval Date")+",");
+        line.append(TranslatorWorker.translateText("Approval Date")+",");
         line.append(TranslatorWorker.translateText("GEOID")+",");
         line.append(TranslatorWorker.translateText("Location Name")+",");
         line.append(TranslatorWorker.translateText("Latitude")+",");

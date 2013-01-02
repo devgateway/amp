@@ -808,6 +808,18 @@ public class DbHelper {
 		
 	}
 	
+	public static void saveMapConfig(AmpMapConfig map) {
+		Session session = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			session.save(map);
+				
+		} catch (Exception e) {
+			logger.error("Unable to save structure type", e);
+		}
+		
+	}
+	
     private static Long[] getAllDescendants(Long[] sectorIds,
 			ArrayList<AmpSector> allSectorList) {
     	//Go through the list to determine the children

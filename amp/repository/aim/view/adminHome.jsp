@@ -272,6 +272,21 @@
     	</td>
     </tr>
     </module:display>
+    
+    <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION">
+  	<tr>
+		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+    	<td class="admin_box_label">
+        	<c:set var="trnDataExchangeExportTitle">
+				<digi:trn invisibleLinks="true">Click here to view the map configuration section</digi:trn>
+			</c:set>
+			<digi:link module="esrigis"  href="/MapsConfiguration.do" >
+				<digi:trn>Map Configuration</digi:trn>
+			</digi:link>
+       </td>
+   </tr>
+  
+  </module:display>
     <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION">
    	<tr>
   		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
@@ -390,9 +405,6 @@
        </td>
    </tr>
  </module:display> 
-  
-  
-
 </table>
 
 	</div></td>

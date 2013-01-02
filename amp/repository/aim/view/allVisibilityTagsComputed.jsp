@@ -112,7 +112,7 @@
 <feature:display name="Media Search" module="Map Module"></feature:display>
 <feature:display name="Show map in public view" module="Map Module"></feature:display>
 <field:display feature="Structures" name="Structures Column"></field:display>
-
+<module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <feature:display name="Activity" module="M & E"></feature:display> 
 <feature:display name="Actual Commitments" module="Measures"></feature:display> 

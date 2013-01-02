@@ -1134,6 +1134,7 @@ function refreshBoxes(o){
 	var valNumOfRegs="";
 	var valAvgProjSize="";
 	var fromGenerator = document.getElementById("fromGenerator").value;
+	document.getElementById("info_link").style.display = "none";
 
 	for(var j = 0; j < results.children.length; j++){
 		var child = results.children[j];
@@ -1553,14 +1554,16 @@ function refreshBoxes(o){
 		if (getSelectionsFromElement("organization_check",true)==""){
 			if (document.getElementById("org_dropdown_id").selectedIndex != 0) {
 				name2 = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
-				name2 = name2+ "  <img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' title='"+trnOrgInfo+"'/>";
+				document.getElementById("info_link").style.display = "block";
+//				name2 = name2+ "  <img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' title='"+trnOrgInfo+"'/>";
 			}
 		} else {
 			if (getSelectionsFromElement("organization_check",false).indexOf(',') !=-1) {
 				name2 = trnMultipleOrgs;
 			} else {
 				name2 = getSelectionsFromElement("organization_check",true);
-				name2 = name2 + "  <img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' title='"+trnOrgInfo+"'/>";
+				document.getElementById("info_link").style.display = "block";
+//				name2 = name2 + "  <img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' title='"+trnOrgInfo+"'/>";
 			}
 		}
 		if (name1 == "") {

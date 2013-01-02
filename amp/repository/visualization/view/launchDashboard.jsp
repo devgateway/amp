@@ -248,17 +248,17 @@ function initializeGlobalVariables(){
 	<div id="demo" class="yui-navset">
 		<ul class="yui-nav">
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-		<li><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
 		<c:if test="${!visualizationform.filter.fromPublicView}">
 		<li><a href="#tab3"><div><digi:trn>Additional Notes</digi:trn></div></a></li>
 		</c:if>
+		<li><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
 		</c:if>
 		</ul>
 		<div class="yui-content">
+			<div id="tab3">
+			</div>
 			<div id="tab2">
 				<digi:trn>No Contact Information available for current filter selection</digi:trn>
-			</div>
-			<div id="tab3">
 			</div>
 		</div>
 	</div>
@@ -778,10 +778,11 @@ function initializeGlobalVariables(){
     <td>
     	<table>
     		<tr>
-    			<td><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"> <div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm"><digi:trn>Export Options</digi:trn></a></div></div></td>
+    			<td style="width:110px;"><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"><div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm"><digi:trn>Export Options</digi:trn></a></div></div></td>
+    			<td><div id="info_link"><img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' align=left style="margin-right:5px;margin-top:5px;"/><div class="dash_ico_link"><a href="javascript:showOrgInfo()" class="l_sm"><digi:trn>Organization Info</digi:trn></a></div></div></td>
     		</tr>
     		<tr>
-    			<td><div id="currencyInfo"></div></td>
+    			<td colspan="2"><div id="currencyInfo"></div></td>
     		</tr>
     	</table>
    	</td>

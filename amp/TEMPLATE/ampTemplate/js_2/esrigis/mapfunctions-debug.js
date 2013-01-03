@@ -17,7 +17,7 @@ dojo.require("esri.dijit.Legend");
 dojo.require("esri.layers.FeatureLayer");
 dojo.require("dojo.dnd.Moveable");
 dojo.require("dojo.io.script");
-//dojo.require("esri.dijit.Print");
+dojo.require("esri.dijit.Print");
 
 /*----variables---------*/
 var map, navToolbar, geometryService, findTask, findParams;
@@ -56,6 +56,25 @@ var GEO_ID;
 var basemapsarray = new Array();
 var povertyratesurl;
 var population;
+
+function print(){
+	 var template = new esri.tasks.PrintTemplate();
+	  template.exportOptions = {
+	    width: 500,
+	    height: 400,
+	    dpi: 96
+	  };
+	  template.format = "SVG";
+	  template.layout = "MAP_ONLY";
+	  template.preserveScale = true;
+	  
+	  
+	  var params = new esri.tasks.PrintParameters();
+	  params.map = map;
+	  params.template = template;
+	  var printTask = new esri.tasks.CustomPrintTask("http://gis.devgateway.org/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task", {async:false});
+	  printTask.execute(params, function(){alert("ok")},function(){alert("ERROR")});
+}
 
 function init() {
 	var xhrArgs = {
@@ -1233,7 +1252,7 @@ function CluterStructures(){
 		map.removeLayer(cLs);
 		cLs=null;
 	}
-	
+if (structurespoint.length > 0){	
 	cLs = new esri.ux.layers.AmpCluster(
 			{
 				displayOnPan : false,
@@ -1263,6 +1282,7 @@ function CluterStructures(){
 				flareDistanceFromCenter : 30
 			});
 	map.addLayer(cLs);
+}
 }
 
 function resetStructureCluster(){

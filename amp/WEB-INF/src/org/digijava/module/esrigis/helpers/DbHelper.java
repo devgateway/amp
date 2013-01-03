@@ -450,11 +450,9 @@ public class DbHelper {
 
     @SuppressWarnings("unchecked")
     //TODO: Remove this and make a common function for Visualization/GIS
-    public static DecimalWraper getFunding(MapFilter filter, Date startDate,
-            Date endDate, Long assistanceTypeId,
-            Long financingInstrumentId,
-            int transactionType,Long adjustmentType) throws DgException {
-        DecimalWraper total = null;
+    public static ArrayList<DecimalWraper> getFunding(MapFilter filter, Date startDate,Date endDate, String teamquery,Long assistanceTypeId,Long financingInstrumentId,
+            Long adjustmentType) throws DgException {
+    	ArrayList<DecimalWraper> totals = new ArrayList<DecimalWraper>();
         String oql = "";
         String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -464,7 +462,7 @@ public class DbHelper {
         Long[] orgIds = filter.getOrgIds();
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         
-        TeamMember tm = filter.getTeamMember();
+        //TeamMember tm = filter.getTeamMember();
         Long[] locationIds = filter.getSelLocationIds();
         Long[] sectorIds = filter.getSelSectorIds();
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
@@ -496,7 +494,7 @@ public class DbHelper {
             oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
         }
 
-        oql += " where  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        oql += " where fd.adjustmentType =:adjustmentType ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
                 oql += QueryUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -532,7 +530,7 @@ public class DbHelper {
         }
         else
         {
-            oql += QueryUtil.getTeamQuery(tm);
+            oql += teamquery;
         }
         
         if (ActivityVersionUtil.isVersioningEnabled()){
@@ -555,7 +553,7 @@ public class DbHelper {
             if (financingInstrumentId != null) {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
-            query.setLong("transactionType", transactionType);
+            //query.setLong("transactionType", transactionType);
             query.setLong("adjustmentType",adjustmentType);
             
             if (filter.getActivityId()!=null) {
@@ -567,31 +565,23 @@ public class DbHelper {
             are passed doCalculations  method*/
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
             cal.doCalculations(fundingDets, currCode);
-            /*Depending on what is selected in the filter
-            we should return either actual commitments
-            or actual Disbursement or  */
-            switch (transactionType) {
-                case Constants.EXPENDITURE:
-                    if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PLANNED).getId().compareTo(adjustmentType)==0) {
-                        total = cal.getTotPlannedExp();
-                    } else {
-                        total = cal.getTotActualExp();
-                    }
-                    break;
-                case Constants.DISBURSEMENT:
-                    if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId().compareTo(adjustmentType)==0) {
-                        total = cal.getTotActualDisb();
-                    } else {
-                        total = cal.getTotPlanDisb();
-                    }
-                    break;
-                default:
-                    if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId().compareTo(adjustmentType)==0) {
-                        total = cal.getTotActualComm();
-                    } else {
-                        total = cal.getTotPlannedComm();
-                    }
-            }
+            
+                if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PLANNED).getId().compareTo(adjustmentType)==0) {
+                    totals.add(cal.getTotPlannedExp());
+                } else {
+                	totals.add(cal.getTotActualExp());
+                }
+                if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId().compareTo(adjustmentType)==0) {
+                    totals.add(cal.getTotActualDisb());
+                } else {
+                    totals.add(cal.getTotPlanDisb());
+                }
+                if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId().compareTo(adjustmentType)==0) {
+                    totals.add(cal.getTotActualComm());
+                } else {
+                    totals.add(cal.getTotPlannedComm());
+                }
+            
 
         } catch (Exception e) {
             logger.error(e);
@@ -600,7 +590,7 @@ public class DbHelper {
         }
 
 
-        return total;
+        return totals;
 	}
     
     public static List<AmpOrganisation> getDonorOrganisationByGroupId(Long orgGroupId, boolean publicView) {

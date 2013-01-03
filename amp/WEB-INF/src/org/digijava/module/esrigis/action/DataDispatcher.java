@@ -52,6 +52,7 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -609,10 +610,9 @@ public class DataDispatcher extends MultiAction {
 
 		// List<AmpCategoryValueLocations> locations =
 		// DbHelper.getRegions(filter);
-		List<AmpCategoryValueLocations> locations = DbHelper.getLocations(
-				filter, implementationLevel);
+		List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel);
 		Iterator<AmpCategoryValueLocations> locationsIt = locations.iterator();
-
+		String tq = QueryUtil.getTeamQuery(tm);
 		while (locationsIt.hasNext()) {
 			AmpCategoryValueLocations location = locationsIt.next();
 			Long[] ids = { location.getId() };
@@ -621,18 +621,16 @@ public class DataDispatcher extends MultiAction {
 			MapFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelLocationIds(allids);
 			
-			BigDecimal amountCommitments = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.COMMITMENT, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId()).getValue()
-					.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			BigDecimal amountDisbursements = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.DISBURSEMENT, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId())
-					.getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			BigDecimal amountExpenditures = DbHelper.getFunding(newFilter, startDate, endDate, null, null,Constants.EXPENDITURE, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId()).getValue()
-					.setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+			ArrayList<DecimalWraper> amounts;
+			amounts = DbHelper.getFunding(newFilter, startDate, endDate,tq, null, null, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId());
+			BigDecimal amountCommitments = amounts.get(2).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+			BigDecimal amountDisbursements = amounts.get(1).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+			BigDecimal amountExpenditures = amounts.get(0).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 			
 			String keyName = "";
 			String geocode = "";
 			
-			String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY
-					.getValueKey();
+			String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
 			if (location.getParentCategoryValue().getValue().equals(implLocation)) {
 				keyName = "National";
 			} else {

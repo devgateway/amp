@@ -14,6 +14,10 @@
 
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -713,12 +717,10 @@
 						<jsp:include page="utils/amountUnitsUnformatted.jsp">
 							<jsp:param value="<BIG>* </BIG>" name="amount_prefix"/>
 						</jsp:include>
-						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
-							<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-							<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"> 
-								<%=selCurrency %>
-							</digi:trn>
-						</logic:present>
+						<bean:define id="selCurrency" name="reportCD" property="selectedCurrency" />
+						<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"> 
+							<%=selCurrency %>
+						</digi:trn>
 						<digi:trn key="aim:perspectiveWarning1">Current workspace perspective is:</digi:trn>
 
 						<bean:write name="currentPerspective" scope="session"/>.

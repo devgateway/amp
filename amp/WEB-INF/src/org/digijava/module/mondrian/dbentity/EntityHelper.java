@@ -53,8 +53,6 @@ public class EntityHelper {
 //session.flush();
 		} catch (HibernateException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -72,8 +70,6 @@ public class EntityHelper {
 			return report;
 		} catch (HibernateException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return null;
 		
@@ -90,9 +86,6 @@ public class EntityHelper {
 			session.delete(report);
 //session.flush();
 		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -114,8 +107,6 @@ public class EntityHelper {
 			qry.setParameter("powner",tm);
 			result = qry.list();
 		} catch (HibernateException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
@@ -141,10 +132,7 @@ public class EntityHelper {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 
 		return result;
 	}
@@ -162,8 +150,6 @@ public class EntityHelper {
 				return false;
 			}
 		} catch (HibernateException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 

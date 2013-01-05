@@ -6,8 +6,11 @@ import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.hibernate.Session;
 import java.text.SimpleDateFormat;
 
@@ -155,4 +158,47 @@ public class FiscalCalendarUtil {
 		return fiscalYr;
 	}
 	
+	private static Integer getYearOnCalendar(AmpFiscalCalendar calendar, Integer pyear, AmpFiscalCalendar defCalendar) {
+		if (pyear == null) 
+			return 0;
+		
+		Integer year = null;
+		try {
+			Date testDate = new SimpleDateFormat("dd/MM/yyyy").parse("11/09/"+pyear);
+			ICalendarWorker work1 = defCalendar.getworker();
+			work1.setTime(testDate);
+			ICalendarWorker work2 = calendar.getworker();
+			work2.setTime(testDate);
+			int diff = work2.getYearDiff(work1);
+			pyear = pyear + diff;
+			return pyear;
+		} catch (Exception e) {
+			logger.error("Can't get year on calendar",e);
+		}
+		return year;
+	
+	}
+	
+	public static Integer getYearOnCalendar(Long calendarId, Integer pyear, AmpApplicationSettings 	tempSettings ) {
+		if (pyear == null)
+			return 0;
+		
+		
+		AmpFiscalCalendar cal = FiscalCalendarUtil.getAmpFiscalCalendar(calendarId);
+		
+		AmpFiscalCalendar defauCalendar = null;
+		if  (tempSettings != null)
+			defauCalendar = tempSettings.getFiscalCalendar();
+			
+		if (defauCalendar == null){
+			String calValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+			defauCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calValue));
+		}
+			
+		if (defauCalendar == null) 
+			return pyear; //BOZO: was zero here
+		
+		Integer year = getYearOnCalendar(cal, pyear, defauCalendar);
+		return year;
+	}
 }

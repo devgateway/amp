@@ -2830,9 +2830,6 @@ public class DbUtil {
 				}
 				throw new DgException("Cannot save dashboard!",e);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
@@ -2882,9 +2879,6 @@ public class DbUtil {
 				}
 				throw new DgException("Cannot save dashboard!",e);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
@@ -2910,9 +2904,6 @@ public class DbUtil {
 				}
 				throw new DgException("Cannot delete dashboard!",e);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	

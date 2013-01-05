@@ -10,7 +10,7 @@
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
-
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
   
 <!-- Individual YUI CSS files --> 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css">
@@ -125,6 +125,7 @@ function validateSubmitQuery () {
 	}
 	
 	function submitQuery () {
+		//debugger;
 		var formName	= "aimReportsFilterPickerForm";
 		var filterForm		= document.getElementsByName(formName)[0];
 		var divObj		= document.getElementById("results");
@@ -132,7 +133,7 @@ function validateSubmitQuery () {
 		"<div style='text-align: center'>" + "Please wait..." + 
 		"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>";
 		YAHOO.util.Connect.setForm(filterForm);
-		var additionalParams	= "&doreset=true&queryEngine=true";
+		var additionalParams	= "&doreset=true&queryEngine=true&reportContextId=" + '<%=ReportContextData.getCurrentReportContextId(request, true)%>';
 		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + additionalParams, queryCbObj);
 		animToResult();
 	}

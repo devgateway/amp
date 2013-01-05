@@ -1,5 +1,4 @@
 
-<%-- THIS FILE SHOULD BE DELETED --%>
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -11,11 +10,12 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
-
-<bean:define id="reportMeta" name="reportMeta"
-	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
-	toScope="page" />
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
 
 
 <digi:instance property="aimReportsFilterPickerForm" />
@@ -58,8 +58,13 @@
 	
 	<table width="100%">
 		<tr>
-			<td height="40" colspan="5" align="center"><html:hidden
-				property="ampReportId" /> 
+			<td height="40" colspan="5" align="center">
+			<%-- <html:hidden property="ampReportId" /> --%>
+			
+			<input type="hidden" name="ampReportId" value="${reportCD.ampReportId}" />
+			<input type="hidden" name="reportContextId" value="${reportCD.contextId}" />
+
+			
 			<html:submit styleClass="dr-menu" onclick="return checkRangeValues()"
 				property="apply">
 				<digi:trn key="rep:filer:ApplyRanges">Apply Ranges</digi:trn>

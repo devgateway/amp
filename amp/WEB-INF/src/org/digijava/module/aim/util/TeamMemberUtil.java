@@ -1342,15 +1342,7 @@ public class TeamMemberUtil {
 			logger.error("Unable to get Member links" + e.getMessage());
 			e.printStackTrace(System.out);
 		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			PersistenceManager.releaseSession(session);
 		}
 		return col;
 	}

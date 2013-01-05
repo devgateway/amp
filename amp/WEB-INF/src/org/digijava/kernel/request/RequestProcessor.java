@@ -267,6 +267,7 @@ public class RequestProcessor
         String secure = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SECURE_SERVER);
         
         //AMP Security Issues - AMP-12638
+        if (false)
         {
         	String commonURL = new String(request.getRequestURL());
         	String headCommonURL = commonURL.substring(0, commonURL.indexOf("://") + 3);

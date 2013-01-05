@@ -70,18 +70,46 @@ public class TagUtil {
      * @return
      * @throws JspException
      */
-    public static Object getForm( HttpServletRequest request, String name ) throws JspException {
+    public static Object getForm( HttpServletRequest request, String name ) throws JspException 
+    {
+    	String formName = getCanonicalFormName(request, name, null);
+    	
+        Object objectForm = request.getAttribute(formName);
+        if (objectForm != null)
+        	return objectForm;
+        objectForm = request.getSession().getAttribute(formName);
+        if (objectForm != null)
+        	return objectForm;
 
-        ComponentContext context = ComponentContext.getContext(request);
+        logger.debug("Action form not found in any scope (request,session)  " + formName);
+        formName = getCanonicalFormName(request, name, name);
+        objectForm = request.getAttribute(formName);
+        if (objectForm != null)
+        	return objectForm;
+        objectForm = request.getSession().getAttribute(formName);
+        if (objectForm != null)
+        	return objectForm;
+        
+        return objectForm; // e.g. null
+    }
 
-        /**
-         * Get Teaser(module) name from tiles context
-         */
-        String moduleInstanceName = context!=null? (String) context.getAttribute(Constants.MODULE_INSTANCE) : null;
-
-        /**
-         * If Teaser(module) name not set in tiles context then throw exception
-         */
+    /**
+     * builds an unique name for a form
+     * @param request
+     * @param name
+     * @return
+     * @throws JspException
+     */
+    public static String getCanonicalFormName(HttpServletRequest request, String name, String forcedModuleInstanceName) throws JspException
+    {
+    	ComponentContext context = ComponentContext.getContext(request);
+    	      
+        // Get Teaser(module) name from tiles context
+        String moduleInstanceName = context != null ? (String) context.getAttribute(Constants.MODULE_INSTANCE) : null;
+        if (forcedModuleInstanceName != null)
+        	moduleInstanceName = forcedModuleInstanceName;
+        
+        // If Teaser(module) name not set in tiles context then throw exception
         if (moduleInstanceName == null) {
 
             moduleInstanceName = (String) request.getAttribute(
@@ -92,51 +120,18 @@ public class TagUtil {
                                        " not found in tiles context");
             }
         }
-
-        /* Get current site information from request
-         */
-        SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.
-            CURRENT_SITE);
-
+        
+        //Get current site information from request
+    	SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
         if (siteDomain == null) {
             throw new JspException("TagUtil: unknown site");
         }
-
-        Object objectForm = null;
-
-        while( true ) {
-            /**
-             * Generate full form name from teaser and form
-             */
-            String formName = new String("site" +
-                                         siteDomain.getSite().getSiteId() +
-                                         moduleInstanceName + name);
-
-            logger.debug("Action form name is: " + formName);
-
-            /**
-             * Get form object from request scope
-             * if is null then try to get from session
-             */
-            objectForm = request.getAttribute(formName);
-            if (objectForm == null) {
-                objectForm = request.getSession().getAttribute(formName);
-                if( objectForm == null ) {
-                    logger.debug("Action form not found in any scope (request,session)  " + formName );
-                    if( !moduleInstanceName.equalsIgnoreCase(name) ) {
-                        moduleInstanceName = name;
-                        continue;
-                    }
-                }
-
-            }
-
-            break;
-        }
-
-        return objectForm;
+        
+        // Generate full form name from teaser and form
+    	String formName = "site" + siteDomain.getSite().getSiteId() + moduleInstanceName + name;
+    	return formName;
     }
-
+    
     /**
      * 
      * @param request
@@ -145,55 +140,15 @@ public class TagUtil {
      * @param inSession
      * @throws JspException
      */
-    public static void setForm( HttpServletRequest request, String name , ActionForm formObj, boolean inSession) throws JspException {
-
-        ComponentContext context = ComponentContext.getContext(request);
-
-        /**
-         * Get Teaser(module) name from tiles context
-         */
-        String moduleInstanceName = context!=null? (String) context.getAttribute(Constants.MODULE_INSTANCE) : null;
-
-        /**
-         * If Teaser(module) name not set in tiles context then throw exception
-         */
-        if (moduleInstanceName == null) {
-
-            moduleInstanceName = (String) request.getAttribute(
-                Constants.MODULE_INSTANCE);
-            if (moduleInstanceName == null) {
-                throw new JspException("TagUtil: Teaser name " +
-                                       moduleInstanceName +
-                                       " not found in tiles context");
-            }
-        }
-
-        /* Get current site information from request
-         */
-        SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.
-            CURRENT_SITE);
-
-        if (siteDomain == null) {
-            throw new JspException("TagUtil: unknown site");
-        }
-
-
-       
-            /**
-             * Generate full form name from teaser and form
-             */
-        String formName = new String("site" +
-        		siteDomain.getSite().getSiteId() +
-        		moduleInstanceName + name);
-
-        logger.debug("Action form name is: " + formName);
-
-        if ( inSession ) {
-        	request.getSession().setAttribute(formName, formObj);
-        }
-        else
-        	request.setAttribute(formName, formObj);
-            
+    public static void setForm( HttpServletRequest request, String name , ActionForm formObj, boolean inSession) throws JspException
+    {
+    	String formName = getCanonicalFormName(request, name, null);
+    	logger.debug("Action form name is: " + formName);
+    	if ( inSession ) {
+    		request.getSession().setAttribute(formName, formObj);
+    	}
+    	else
+    		request.setAttribute(formName, formObj);            
     }
 
     

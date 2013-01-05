@@ -34,6 +34,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -528,8 +529,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         else {
             String showOnlyAct=request.getParameter("showOnlyAct"); // to show activity preview without next, previous links
             boolean withoutNextPrevLink=Boolean.parseBoolean(showOnlyAct);
-        	   if (session.getAttribute("report") != null && !withoutNextPrevLink) {
-                GroupReportData r = (GroupReportData) session.getAttribute("report");
+        	   if (ReportContextData.getFromRequest().getGeneratedReport() != null && !withoutNextPrevLink) {
+                GroupReportData r = ReportContextData.getFromRequest().getGeneratedReport();
                 TreeSet l = (TreeSet) r.getOwnerIds();
                 Iterator i = l.iterator();
                 Long prev = null, next = null;
@@ -1997,8 +1998,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
       // Initally set the modality as "Project Support"
       Collection financingInstrValues = CategoryManagerUtil.
-          getAmpCategoryValueCollectionByKey(CategoryConstants.
-                                             FINANCING_INSTRUMENT_KEY, null, request);
+          getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
       if (financingInstrValues != null && financingInstrValues.size() > 0) {
         Iterator itr = financingInstrValues.iterator();
         while (itr.hasNext()) {
@@ -2038,7 +2038,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
 
       //load the possible projection values
-      eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false, request));
+      eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 
     }
     catch (Exception e) {

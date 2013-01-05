@@ -1,3 +1,6 @@
+//form3 = aimReportsFilterPickerForm3;// document.getElementsByName('aimReportsFilterPickerForm3')[0];
+// is this file ever used?
+
 function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage, 
 				savingDataMessage, cannotSaveFiltersMessage, doReset,settingsPanelName, validationMsgs) {
 	this.connectionFailureMessage	= connectionFailureMessage;
@@ -73,7 +76,7 @@ Filters.prototype.failure	= function (o) {
 	this.filterPanel.setBody( "<font color='red'>" + this.connectionFailureMessage + "</font>");
 };
 
-Filters.prototype.showFilters	= function() {
+Filters.prototype.showFilters	= function(reportContextId) {
 	var avoidIECacheParam 	=	"&time=" + new Date().getTime(); 
 	this.filterPanel.setBody( "<div style='text-align: center'>" + this.loadingDataMessage + 
 			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
@@ -83,7 +86,7 @@ Filters.prototype.showFilters	= function() {
         this.settingsPanel.setHeader(this.filterPanelName);
 	this.filterPanel.center();
 	this.filterPanel.show();
-	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true"+ avoidIECacheParam +this.resetString, this);
+	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true&reportContextId=" + reportContextId + avoidIECacheParam +this.resetString, this);
 	this.resetString		= "";
 };
 
@@ -172,7 +175,7 @@ SaveFilters.prototype.saveFilters	= function (e, obj) {
 	var formName	= "aimReportsFilterPickerForm" + (this.showSettings?"3":"");
 	YAHOO.util.Connect.setForm( document.getElementsByName(formName)[0] );
 	var additionalParams	= this.showSettings?"&sourceIsReportWizard=true":"";
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true&applyFormat=Apply%20Format" + avoidIECacheParam + additionalParams, obj);
+	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + avoidIECacheParam + additionalParams, obj);
 	
 	if ( this.showSettings ) {
 		
@@ -288,4 +291,6 @@ function ResetCustom(maxFractionDigits) {
 	if (aimReportsFilterPickerForm3.currency)
 		aimReportsFilterPickerForm3.currency.value=aimReportsFilterPickerForm3.defaultCurrency.value;
 }
+
+
 

@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
@@ -51,8 +52,13 @@ public class GlobalSettings extends Action {
 	private ActionMessages errors					= new ActionMessages();
 
 	private void flushSessionObjects(HttpSession session) {
-		session.removeAttribute(ArConstants.REPORTS_FILTER);
-	
+		// probably should flush all RCD from all sessions
+		//session.removeAttribute(ArConstants.REPORTS_Z_FILTER);
+		//TODO:CONSTANTIN BOZO: should we:
+		// 1) clean data for ALL sessions? (correct but disruptive) 
+		// 2) clean data for current session? (kinda useless for an admin)
+		// 3) do nothing?
+		ReportContextData.clearSession();
 	}
 	
 	@SuppressWarnings("unchecked")

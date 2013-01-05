@@ -372,7 +372,7 @@ public class GetFoundingDetails extends Action {
             			}
             		}
             		
-            		Set donorAgencies = ReportsUtil.processSelectedFilters(selectedDonnorAgency, AmpOrganisation.class);
+            		//Set donorAgencies = ReportsUtil.processSelectedFilters(selectedDonnorAgency, AmpOrganisation.class);
             		
             		Collection<AmpSector> sectors = null; // with current GIS filter sectors are not differentiated, I think they should be re-made
                     if(primarySectors!=null || secondarySectors!=null || tertiarySectors !=null){

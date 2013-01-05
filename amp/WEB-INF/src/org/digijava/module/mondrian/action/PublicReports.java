@@ -18,11 +18,12 @@ import org.dgfoundation.amp.ar.ArConstants;
 
 			HttpSession session = request.getSession();
 			
-			session.setAttribute("publicReports",ARUtil.getAllPublicReports(null,null,null));
-			AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
-			if(arf==null) arf=new AmpARFilter();		
-			arf.setPublicView(true);
-			session.setAttribute(ArConstants.REPORTS_FILTER,arf);
+			session.setAttribute("publicReports", ARUtil.getAllPublicReports(null,null,null));
+//			this code makes no sense as report publicness is saved on a report-by-report basis			
+//			AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_Z_FILTER);
+//			if(arf==null) arf=new AmpARFilter();		
+//			arf.setPublicView(true);
+//			session.setAttribute(ArConstants.REPORTS_Z_FILTER, arf);
 			return mapping.findForward("forward");
 			
 		}

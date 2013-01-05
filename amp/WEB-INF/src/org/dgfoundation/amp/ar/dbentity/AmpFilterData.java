@@ -121,7 +121,12 @@ public class AmpFilterData implements Serializable {
 		throw new Exception ( myClass + " is neither Identifiable nor of a supported primitive type");
 	}
 	
-	
+	/**
+	 * reads properties from an object and pumps them into a destination FilterDataSetInterface
+	 * @param fds
+	 * @param srcObj
+	 * @return
+	 */
 	public static Set<AmpFilterData> createFilterDataSet (FilterDataSetInterface fds, Object srcObj) {
 		Field[] fields					= srcObj.getClass().getDeclaredFields();
 		HashSet<AmpFilterData> fdSet		= new HashSet<AmpFilterData>();

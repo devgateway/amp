@@ -509,18 +509,18 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 		return 0;
 	}
 	
-	  public static Comparator UpdatedDateComparator = new Comparator() {
-		    public int compare(Object report, Object anotherReport) {
-		      Date firstDate = ((AmpReports)report).getUpdatedDate();
-		      Date secondDate = ((AmpReports)anotherReport).getUpdatedDate();
+	  public static Comparator<AmpReports> UpdatedDateComparator = new Comparator<AmpReports>() {
+		    public int compare(AmpReports report, AmpReports anotherReport) {
+		      Date firstDate = report.getUpdatedDate();
+		      Date secondDate = anotherReport.getUpdatedDate();
 		      return firstDate.compareTo(secondDate);
 		    }
 		  };
 	
-	  public static Comparator lexicographicComparator = new Comparator() {
-		    public int compare(Object report, Object anotherReport) {
+	  public static Comparator<AmpReports> lexicographicComparator = new Comparator<AmpReports>() {
+		    public int compare(AmpReports report, AmpReports anotherReport) {
 		      return
-		      	((AmpReports)report).getName().compareToIgnoreCase( ((AmpReports)anotherReport).getName() );
+		      	report.getName().compareToIgnoreCase(anotherReport.getName());
 		    }
 		  };
 

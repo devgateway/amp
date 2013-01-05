@@ -277,7 +277,7 @@
       <forward name="view" path="/aim/viewMyDesktop.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimReportsFilterPickerForm" path="/aim/reportsFilterPicker" scope="session" type="org.digijava.module.aim.action.ReportsFilterPicker" validate="false">
+    <action name="aimReportsFilterPickerForm" path="/aim/reportsFilterPicker" scope="request" type="org.digijava.module.aim.action.ReportsFilterPicker" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_filterPicker2" />
       <forward name="mydesktop" path="/aim/showDesktop.do" redirect="true" />
       <forward name="publicView" path="/aim/reportsPublicView.do" redirect="true" />
@@ -286,11 +286,11 @@
       <forward name="reportWizard" path="/showLayout.do?layout=aim_showSelectedFilters" />
     </action>
     
- 	<action name="aimReportsFilterPickerForm" path="/aim/validateReportsFilterPicker" scope="session" type="org.digijava.module.aim.action.ReportFilterPickerValidator" validate="false"/>
+ 	<action name="aimReportsFilterPickerForm" path="/aim/validateReportsFilterPicker" scope="request" type="org.digijava.module.aim.action.ReportFilterPickerValidator" validate="false"/>
 	<action name="aimReportsFilterPickerForm" path="/aim/queryEngine" scope="session" type="org.digijava.module.aim.action.query.QueryEngine" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=aim_queryEngine" />	
 	</action>
-    <action  path="/aim/reportMenuAction" scope="session" type="org.digijava.module.aim.action.ReportMenuAction" validate="false" parameter="action"/>
+    <action  path="/aim/reportMenuAction" scope="request" type="org.digijava.module.aim.action.ReportMenuAction" validate="false" parameter="action"/>
 	
   <action name="aimFieldPermissionsForm"
     path="/aim/assignFieldPermissions" scope="request"

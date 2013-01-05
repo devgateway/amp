@@ -29,6 +29,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.WorkerException;
@@ -205,8 +206,7 @@ public class GroupReportDataXLS extends XLSExporter {
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 						
 		GroupReportData rd = (GroupReportData) item;
-		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
-		
+		AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
 		
 		this.makeColSpan(rd.getTotalDepth(),false);	
 		rowId.inc();
@@ -229,16 +229,7 @@ public class GroupReportDataXLS extends XLSExporter {
 			    }
 			}
 							
-			String translatedCurrency = "";
-			String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
-            if(currencyCode != null) {
-                translatedCurrency=TranslatorWorker.translateText(currencyCode);
-			    translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
-            }
-            else
-            {
-                translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY);
-            }
+			String translatedCurrency = TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrency());
             translatedNotes = translatedNotes.replaceAll("\n", " ");
 			cell.setCellValue(translatedNotes+translatedCurrency/*+"\n"*/);
 			

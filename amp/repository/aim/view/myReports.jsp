@@ -64,25 +64,25 @@ function popup(mylink, windowname)
 				</logic:empty>
 			</logic:notPresent>
 			<logic:notEmpty name="myReports" scope="session">
-			<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
-				<li class="tri">
-					<digi:link  title="${report.name}" href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
-	                    <c:if test="${fn:length(report.name) > 50}" >
-	                    	<c:out value="${fn:substring(report.name, 0, 50)}"/>...
-	                    </c:if>
-	                    <c:if test="${fn:length(report.name) <= 50}">
-	                    	<c:out value="${report.name}"/>
-	                    </c:if>
-					</digi:link>
-				</li>
-			</logic:iterate>
-			<bean:size id="repCount" name="myReports" scope="session" />
-                   <div style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom: 7px" title="<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>">
-                  
-                    	 <digi:link href="/viewTeamReports.do?tabs=false&reset=true&onlyFavourites=true">
-                            <digi:trn key="aim:moreReports">More Reports...</digi:trn>
-                        </digi:link>
-                    </div>
+				<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
+					<li class="tri">
+						<digi:link  title="${report.name}" href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
+		                    <c:if test="${fn:length(report.name) > 50}" >
+		                    	<c:out value="${fn:substring(report.name, 0, 50)}"/>...
+		                    </c:if>
+		                    <c:if test="${fn:length(report.name) <= 50}">
+		                    	<c:out value="${report.name}"/>
+		                    </c:if>
+						</digi:link>
+					</li>
+				</logic:iterate>
+				<bean:size id="repCount" name="myReports" scope="session" />
+                <div style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom: 7px" title="<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>">
+               
+                 	 <digi:link href="/viewTeamReports.do?tabs=false&reset=true&onlyFavourites=true">
+                         <digi:trn key="aim:moreReports">More Reports...</digi:trn>
+                     </digi:link>
+                 </div>
            	</logic:notEmpty>
 			<logic:present name="currentMember" scope="session">
             	<logic:empty name="myReports" scope="session">

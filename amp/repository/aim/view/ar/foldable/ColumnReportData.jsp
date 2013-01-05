@@ -1,3 +1,4 @@
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%@ page import="org.dgfoundation.amp.ar.cell.MetaTextCell"%>
 <%@ page import="org.dgfoundation.amp.ar.cell.Cell" %>
 <%@ page import="org.digijava.module.aim.util.ActivityUtil" %>
@@ -11,8 +12,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
+
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
-<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
 <bean:define id="bckColor" value="true" toScope="page"/>
 
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
@@ -35,9 +40,7 @@
 
 
 <%
-	Integer counter = (Integer)session.getAttribute("progressValue");
-	counter++;
-	session.setAttribute("progressValue", counter);
+	ReportContextData.getFromRequest().increaseProgressValue(1);
 %>
 
 <%

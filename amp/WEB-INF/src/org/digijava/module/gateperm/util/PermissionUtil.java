@@ -264,16 +264,7 @@ public final class PermissionUtil {
     	    logger.error(e);
     	    throw new RuntimeException("DgException Exception encountered", e);
     	} finally { 
-    	    try {
-    	    	PersistenceManager.releaseSession(session);
-    	    } catch (HibernateException e) {
-    		// TODO Auto-generated catch block
-    		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-    	    } catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+    		PersistenceManager.releaseSession(session);
     	}
 
         }
@@ -294,15 +285,7 @@ public final class PermissionUtil {
 	    logger.error(e);
 	    throw new RuntimeException("DgException Exception encountered", e);
 	} finally { 
-	    try {
-	    	PersistenceManager.releaseSession(session);
-	    } catch (HibernateException e) {
-		// TODO Auto-generated catch block
-		throw new RuntimeException( "HibernateException Exception encountered", e);
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		PersistenceManager.releaseSession(session);
 	}
 
     }
@@ -324,16 +307,7 @@ public final class PermissionUtil {
     	    logger.error(e);
     	    throw new RuntimeException("DgException Exception encountered", e);
     	} finally { 
-    	    try {
-    	    	PersistenceManager.releaseSession(session);
-    	    } catch (HibernateException e) {
-    		// TODO Auto-generated catch block
-    		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-    	    } catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+    		PersistenceManager.releaseSession(session);
     	}
 
         }
@@ -365,16 +339,7 @@ public final class PermissionUtil {
 	    // TODO Auto-generated catch block
 	    throw new RuntimeException("DgException Exception encountered", e);
 	} finally { 
-	    try {
-	    	PersistenceManager.releaseSession(session);
-	    } catch (HibernateException e) {
-		// TODO Auto-generated catch block
-		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		PersistenceManager.releaseSession(session);
 		}
 
     }
@@ -403,16 +368,7 @@ public final class PermissionUtil {
 	    // TODO Auto-generated catch block
 	    throw new RuntimeException("DgException Exception encountered", e);
 	} finally { 
-	    try {
-	    	PersistenceManager.releaseSession(session);
-	    } catch (HibernateException e) {
-		// TODO Auto-generated catch block
-		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		PersistenceManager.releaseSession(session);
 		}
 
     }
@@ -434,16 +390,7 @@ public final class PermissionUtil {
   		  logger.error(e);
   		   throw new RuntimeException( "DgException Exception encountered", e);
   	} finally { 
-  	    try {
-  	    	PersistenceManager.releaseSession(session);
-  	    } catch (HibernateException e) {
-  		// TODO Auto-generated catch block
-  		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-  	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+  		PersistenceManager.releaseSession(session);
   	}
     }
 	    
@@ -467,16 +414,7 @@ public final class PermissionUtil {
 		  logger.error(e);
 		   throw new RuntimeException( "DgException Exception encountered", e);
 	} finally { 
-	    try {
 		PersistenceManager.releaseSession(session);
-	    } catch (HibernateException e) {
-		// TODO Auto-generated catch block
-		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	   }
 	  
     }
@@ -502,19 +440,9 @@ public final class PermissionUtil {
     		  logger.error(e);
     		   throw new RuntimeException( "DgException Exception encountered", e);
     	} finally { 
-    	    try {
-    	    	PersistenceManager.releaseSession(sessionAux);
-    	    } catch (HibernateException e) {
-    		// TODO Auto-generated catch block
-    		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-    	    } catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	   }
-    	  
+    		PersistenceManager.releaseSession(sessionAux);    	  
         }
+    	}
     
     
     public static Permission getGlobalPermissionForPermissibleClass(Class permClass) {
@@ -535,16 +463,7 @@ public final class PermissionUtil {
   	    logger.error(e);
   	    throw new RuntimeException( "DgException Exception encountered", e);
   	} finally { 
-  	    try {
-  	    	PersistenceManager.releaseSession(session);
-	    } catch (HibernateException e) {
-		// TODO Auto-generated catch block
-		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+  		PersistenceManager.releaseSession(session);
   	    
   	}
   	  
@@ -580,16 +499,7 @@ public final class PermissionUtil {
 	    logger.error(e);
 	    throw new RuntimeException("DgException Exception encountered", e);
 	} finally {
-	    try {
-	    	PersistenceManager.releaseSession(session);
-	    } catch (HibernateException e) {
-		// TODO Auto-generated catch block
-		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		PersistenceManager.releaseSession(session);
 	}
 
     }
@@ -635,16 +545,7 @@ public final class PermissionUtil {
 	    logger.error(e);
 	    throw new RuntimeException("SQLException Exception encountered", e);
 	} finally { 
-	    try {
-	    	PersistenceManager.releaseSession(session);
-	    } catch (HibernateException e) {
-		// TODO Auto-generated catch block
-		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		PersistenceManager.releaseSession(session);
 	}
 
     }
@@ -685,16 +586,7 @@ public final class PermissionUtil {
 	    logger.error(e);
 	    throw new RuntimeException("SQLException Exception encountered", e);
 	} finally  {
-	    try {
-	    	PersistenceManager.releaseSession(session);
-	    } catch (HibernateException e) {
-		// TODO Auto-generated catch block
-		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		PersistenceManager.releaseSession(session);
 	}
 
     }
@@ -742,15 +634,7 @@ public final class PermissionUtil {
     	    logger.error(e);
     	    throw new RuntimeException("DgException Exception encountered", e);
     	} finally  {
-    	    try {
-    	    	PersistenceManager.releaseSession(session);
-    	    } catch (HibernateException e) {
-    		// TODO Auto-generated catch block
-    		throw new RuntimeException( "HibernateException Exception encountered", e);
-    	    } catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+    		PersistenceManager.releaseSession(session);
     	}
 
         }
@@ -792,15 +676,7 @@ public final class PermissionUtil {
 	    logger.error(e);
 	    throw new RuntimeException("DgException Exception encountered", e);
 	} finally {
-	    try {
-	    	PersistenceManager.releaseSession(session);
-	    } catch (HibernateException e) {
-		logger.error(e);
-		throw new RuntimeException("HibernateException Exception encountered", e);
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		PersistenceManager.releaseSession(session);
 
 	}
 

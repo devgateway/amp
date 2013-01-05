@@ -114,18 +114,7 @@ public class UpdateAppSettings extends Action {
 				uForm.setMemberName(tm.getMemberName());
 				ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 			}
-			// added by mouhamad for burkina on 21/02/08
-			session = request.getSession();
-			String name = "- " + ampAppSettings.getCurrency().getCurrencyName();
-			session.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 
-			// AMP-3168 Currency conversion in team workspace setup
-			session.setAttribute("reportCurrencyCode", ampAppSettings.getCurrency().getCurrencyCode());
-			AmpARFilter filter = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
-			if (filter != null) {
-				filter.setCurrency(ampAppSettings.getCurrency());
-				session.setAttribute(ArConstants.REPORTS_FILTER, filter);
-			}
 			if (ampAppSettings != null && loadValues) {
 				uForm.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 				uForm.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
@@ -314,11 +303,12 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setDefaultTeamReport(ampReport);
 				//
 				session.setAttribute(Constants.DEFAULT_TEAM_REPORT, ampAppSettings.getDefaultTeamReport());
-				session.setAttribute("filterCurrentReport", ampAppSettings.getDefaultTeamReport());
+				session.setAttribute(Constants.CURRENT_TAB_REPORT, ampAppSettings.getDefaultTeamReport());
 				// this.updateAllTeamMembersDefaultReport( tm.getTeamId(), ampReport);
 				// added by mouhamad for burkina on 21/02/08
-				String name = "- "+ ampAppSettings.getCurrency().getCurrencyName();
-				session.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+				//BOZO: should update all currencies in all sessions?
+//				String name = "- "+ ampAppSettings.getCurrency().getCurrencyName();
+//				session.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 				// end
 				if (uForm.getType().equals("userSpecific")) {
 					ampAppSettings.setMember(TeamMemberUtil.getAmpTeamMember(tm.getMemberId()));

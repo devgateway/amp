@@ -41,7 +41,7 @@ public abstract class MultiAction extends Action {
 	 * @param form the form (if available) to be passed to other modes
 	 * @param request
 	 * @param response
-	 * @return the forward to be passwd to execute() method.
+	 * @return the forward to be passed to execute() method.
 	 * This overrides execute() and implements exception catching and some global properties
 	 * @throws Exception this will be caught in the main execute method
 	 */

@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
@@ -32,13 +33,16 @@ public class QueryEngine extends Action{
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
+		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_QUERY_ENGINE);
+		request.getSession().setAttribute("report_wizard_current_id", ReportContextData.REPORT_ID_QUERY_ENGINE);
+		ReportContextData.createWithId(ReportContextData.REPORT_ID_QUERY_ENGINE, true); // forget everything about previous filter
 		
-		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm) form;
-		HttpSession httpSession = request.getSession();
-		httpSession.removeAttribute(ArConstants.REPORTS_FILTER);
+		//ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm) form;
+		//HttpSession httpSession = request.getSession();
+		//httpSession.removeAttribute(ArConstants.REPORTS_Z_FILTER);
 		
-		rfpForm.setIsnewreport(true);
-		rfpForm.setAmpReportId(null);
+		//rfpForm.setIsnewreport(true);
+		//rfpForm.setAmpReportId(null);
 		
 		
 		AmpReports reportMeta	= new AmpReports();
@@ -85,8 +89,6 @@ public class QueryEngine extends Action{
 			}
 		}
 		
-		
-		
 		reportMeta.setType( new Long(ArConstants.DONOR_TYPE) );
 		reportMeta.setUpdatedDate( new Date(System.currentTimeMillis()) );
 		reportMeta.setHideActivities( false );
@@ -95,15 +97,13 @@ public class QueryEngine extends Action{
 		reportMeta.setName( "Query result tab" );
 		reportMeta.setDrilldownTab( true );
 		reportMeta.setPublicReport( false );
-		reportMeta.setAllowEmptyFundingColumns( false );
-		
+		reportMeta.setAllowEmptyFundingColumns( false );		
 		
 		reportMeta.getColumns().add(arc);
 		
+		reportMeta.setAmpReportId(ReportContextData.QUERY_ENGINE_REPORT_ID);
 		
-		reportMeta.setAmpReportId(-7L);
-		
-		request.getSession().setAttribute("reportMeta", reportMeta);
+		ReportContextData.getFromRequest().setReportMeta(reportMeta);
 		
 		return mapping.findForward("forward");
 	}

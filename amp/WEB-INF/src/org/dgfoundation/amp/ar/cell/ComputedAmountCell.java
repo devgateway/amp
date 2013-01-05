@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
@@ -170,6 +171,6 @@ public class ComputedAmountCell extends CategAmountCell {
 			return "";
 		}
 
-		return FormatHelper.formatNumberUsingCustomFormat(getAmount());
+		return ReportContextData.formatNumberUsingCustomFormat(getAmount());
 	}
 }

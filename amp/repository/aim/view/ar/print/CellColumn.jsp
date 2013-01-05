@@ -6,9 +6,15 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@page import="org.dgfoundation.amp.ar.CellColumn"%>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
+
 <bean:define id="cellColumn" name="viewable" type="org.dgfoundation.amp.ar.CellColumn" scope="request" toScope="page"/>
 <bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="request" toScope="page"/>
-<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
+
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
 <bean:define id="isGroup" name="isGroup" type="java.lang.String" scope="request" toScope="page"/>
 
 <% if (isGroup.equalsIgnoreCase("false")){%>

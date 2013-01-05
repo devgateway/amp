@@ -293,15 +293,7 @@ public class LocationUtil {
 		} catch (Exception e) {
 			logger.error("Uanble to get location :" + e);
 		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			PersistenceManager.releaseSession(session);
 		}
 		return loc;
 		

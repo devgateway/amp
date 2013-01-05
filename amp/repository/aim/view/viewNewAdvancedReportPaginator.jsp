@@ -4,14 +4,20 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
+<bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
 
 			<div class="paging">
-	   			<c:if test="${report.visibleRows/recordsPerPage>1}">
+	   			<c:if test="${generatedReport.visibleRows/recordsPerPage>1}">
 				<c:set var="max_value"><%=Integer.MAX_VALUE%></c:set>
 				<c:if test="${recordsPerPage ne max_value}">
 	           	<logic:notEqual name="viewFormat" value="print">
 		               	<logic:equal name="viewFormat" value="foldable">
-						<c:if test="${report.startRow != 0}">
+						<c:if test="${generatedReport.startRow != 0}">
 		                  		<!-- Go to FIRST PAGE -->
 		                  	<c:choose>
 			                  	<c:when test="${param.queryEngine!='true' }">
@@ -55,7 +61,7 @@
 		                    </c:choose>	
 		                  </logic:equal>
 		                  <c:choose>							
-		                      <c:when  test="${i eq report.startRow}">
+		                      <c:when  test="${i eq generatedReport.startRow}">
 		                          <b class="paging_sel">
 		                          	<fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/>
 		                          </b>
@@ -68,7 +74,7 @@
 		                  &nbsp;|&nbsp;
 					</c:forEach>
 					<logic:equal name="viewFormat" value="foldable">
-						<c:if test="${(report.startRow+recordsPerPage+1) <= report.visibleRows}">
+						<c:if test="${(generatedReport.startRow+recordsPerPage+1) <= generatedReport.visibleRows}">
 							<c:choose>
 			                  	<c:when test="${param.queryEngine!='true' }">
 									<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	

@@ -1,3 +1,4 @@
+<%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -8,11 +9,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
   <!-- Dependencies --> 
 
-       
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
+
+<bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
  
   
 <!-- Individual YUI CSS files --> 
@@ -122,9 +129,9 @@ function toggleSettings(){
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 </div>
 <%
-Integer counter = (Integer)session.getAttribute("progressValue");
-counter++;
-session.setAttribute("progressValue", counter);
+	int counter = ReportContextData.getFromRequest().getProgressValue();
+	counter ++;
+	ReportContextData.getFromRequest().setProgressValue(counter);
 %>
 
 <logic:notEqual name="viewFormat" scope="request" value="print">
@@ -145,8 +152,8 @@ session.setAttribute("progressValue", counter);
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
 <%	
-counter++;
-session.setAttribute("progressValue", counter);
+	counter ++;
+	ReportContextData.getFromRequest().setProgressValue(counter);
 %>
 
 <table width="100%">
@@ -157,24 +164,10 @@ session.setAttribute("progressValue", counter);
 		<jsp:include page="/repository/aim/view/ar/toolBar.jsp" />
 		
 		<c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
-		<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
 		
 		<logic:notEqual name="widget" scope="request" value="true">
 			<div class="reportname" style="font-size:18px; padding-left:5px; font-family:Arial, Helvetica, sans-serif; margin-bottom:10px; font-weight:bold; color:#000000;">
-			<bean:write scope="session" name="reportMeta" property="name" />
-				<!--<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		  			<tr>
-		    			<td align="left">
-		    				<img src="images/tableftcorner.gif"/>
-		    			</td>
-		    			<td align="center" nowrap="nowrap" style="background:#222E5D; font-family: Arial;color:white;font-weight: bold;">
-		    				<bean:write scope="session" name="reportMeta" property="name" />
-		    			</td>
-		    			<td align="right">
-		    				<img src="images/tabrightcorner.gif" />
-		    			</td>
-		  			</tr>
-				</table>-->
+				<bean:write name="reportMeta" property="name" />
 			</div>
 		</logic:notEqual>
 		
@@ -184,21 +177,16 @@ session.setAttribute("progressValue", counter);
 				<td style="padding-left: 5px;padding-left: 5px;">
 					<digi:trn key="rep:pop:Description">Description:</digi:trn><br>
 						<span style="font-weight: bold;font-size: 13px;margin-left: 5px;margin-top: 3px; font-family: Arial">
-							<bean:write scope="session" name="reportMeta" property="reportDescription" />
+							<bean:write name="reportMeta" property="reportDescription" />
 						</span>
 				</td>
 			</tr>
 			</logic:notEmpty>
-			<logic:empty property="reportDescription" name="reportMeta">
-				<tr>
-			</logic:empty>
-			<logic:notEmpty property="reportDescription" name="reportMeta">
 			<tr>
-			</logic:notEmpty> 
 				<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;">
 					<span  style="color: red;font-family: Arial;font-size: 10px;">
 						<%
-	                	AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
+						AmpARFilter af = ReportContextData.getFromRequest().getFilter();
 	                	if (af.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){%>
 	               			<digi:trn key="rep:pop:AllAmount">
 								Amounts are in thousands (000)
@@ -212,10 +200,8 @@ session.setAttribute("progressValue", counter);
 							</digi:trn>
 	           			<%}%>
 						
-						<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
-							<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-							<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
-						</logic:present>
+						<bean:define id="selCurrency" name="reportCD" property="selectedCurrency" />
+						<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
 					</span>
 				</td>
 			</tr>
@@ -250,11 +236,11 @@ session.setAttribute("progressValue", counter);
 	                </a> | 
 	            </c:if>
             </logic:notEmpty> 
-                <a class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="showFilter(); " >
+                <a class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="showFilter('<%=ReportContextData.getCurrentReportContextId(request, true)%>'); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
                 </a>
                 <%
-               	 	AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
+                	AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
                 	if (arf.isPublicView()==false){%>
                 <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 	          	 	|
@@ -267,7 +253,7 @@ session.setAttribute("progressValue", counter);
            	  <logic:notEqual name="viewFormat" value="foldable">
            	  	<%if (arf.isPublicView()==false){%>
            	  	|
-				<a  id="frezzlinkreport" class="settingsLinkDisable" style="cursor: pointer;color:#376091; " onclick="javascript:frezzreport()">
+				<a  id="frezzlinkreport" reportContextId='<%=ReportContextData.getCurrentReportContextId(request, true) %>' class="settingsLinkDisable" style="cursor: pointer;color:#376091; " onclick="javascript:frezzreport(<%=ReportContextData.getCurrentReportContextId(request, true) %>)">
                		<script language="javascript">
 						document.write(msg1);
 					</script>
@@ -286,25 +272,26 @@ session.setAttribute("progressValue", counter);
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 			<strong>
-			<digi:trn key="rep:pop:WorkspaceFilters">Workspace Filters:</digi:trn></strong>
-                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" scope="session">
+				<digi:trn key="rep:pop:WorkspaceFilters">Workspace Filters:</digi:trn>
+			</strong>
+            <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" scope="session">
                 <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.TEAM_FILTER%>" toScope="request"/>
                 <bean:define id="listableStyle" value="settingsList" toScope="request"/>
                 <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
                     <jsp:include page="${listable.jspFile}" />
-                </logic:present>
+             </logic:present>
              </td>
              </tr>
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 			<strong>
 			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
-                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
-                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
-                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
-                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+                <c:if test="${reportCD.filter != null}">
+                	<bean:define id="listable" name="reportCD" property="filter" toScope="request" />
+                	<bean:define id="listableStyle" value="settingsList" toScope="request"/>
+                	<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
                     <jsp:include page="${listable.jspFile}" />
-                </logic:present>
+                </c:if>
              </td>
              </tr>
              <tr>
@@ -348,11 +335,11 @@ session.setAttribute("progressValue", counter);
 	                		</a> 
 	                		&nbsp;|&nbsp; 
 	            		</logic:notEmpty> 
-	                	<a class="l_sm" onClick="showFilter();" style="cursor: pointer;text-decoration: underline;" >
+	                	<a class="l_sm" onClick="showFilter('<%=ReportContextData.getCurrentReportContextId(request, true)%>');" style="cursor: pointer;text-decoration: underline;" >
 	                		<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
 	                	</a>
 		                <%
-		                AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
+		                AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
 		                if (arf.isPublicView()==false){%>
 		                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 			                &nbsp;|&nbsp;
@@ -363,11 +350,11 @@ session.setAttribute("progressValue", counter);
 		           		<%}%>
 		           	  <logic:notEqual name="viewFormat" value="foldable">
 		           	 	 &nbsp;|&nbsp;
-		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlink" class="l_sm">
-		               		<script language="	">
-						document.write((scrolling)?msg2:msg1);
-					</script>
-                </a>
+		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlink" reportContextId='<%=ReportContextData.getCurrentReportContextId(request, true) %>' class="l_sm">
+		               		<script language="javascript">
+								document.write((scrolling)?msg2:msg1);
+							</script>
+                		</a>
            	  
               </logic:notEqual>
                  &nbsp;|&nbsp;
@@ -395,12 +382,12 @@ session.setAttribute("progressValue", counter);
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 			<strong>
 			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
-                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
-                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
-                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
-                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-		                    <jsp:include page="${listable.jspFile}" />
-                </logic:present>
+                 <c:if test="${reportCD.filter != null}">
+                	<bean:define id="listable" name="reportCD" property="filter" toScope="request" />
+                	<bean:define id="listableStyle" value="settingsList" toScope="request"/>
+                	<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+		             <jsp:include page="${listable.jspFile}" />
+                </c:if>
              </td>
              </tr>
              <tr>
@@ -436,12 +423,12 @@ session.setAttribute("progressValue", counter);
 	                		&nbsp;|&nbsp; 
 	            		</logic:notEmpty> 
 	            		<c:if test="${param.queryEngine!='true' }">
-		                	<a class="l_sm" onClick="showFilter();" style="cursor: pointer;text-decoration: underline;" >
+		                	<a class="l_sm" onClick="showFilter('<%=ReportContextData.getCurrentReportContextId(request, true)%>');" style="cursor: pointer;text-decoration: underline;" >
 		                		<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
 		                	</a>
 	                	</c:if>
 		                <%
-		                AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
+		                AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
 		                if (arf.isPublicView()==false){%>
 		                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 			                &nbsp;|&nbsp;
@@ -452,12 +439,11 @@ session.setAttribute("progressValue", counter);
 		           		<%}%>
 		           	  <logic:notEqual name="viewFormat" value="foldable">
 		           	 	 &nbsp;|&nbsp;
-		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlink" class="l_sm">
-		               		<script language="	">
-						document.write((scrolling)?msg2:msg1);
-					</script>
-                </a>
-           	  
+		           	  	<a style="cursor: pointer;text-decoration: underline;" id="frezzlink" reportContextId='<%=ReportContextData.getCurrentReportContextId(request, true) %>' class="l_sm">
+		               		<script language="javascript">
+								document.write((scrolling)?msg2:msg1);
+							</script>
+                		</a>           	 
               </logic:notEqual>
               <c:if test="${param.queryEngine!='true' }">
                  &nbsp;|&nbsp;
@@ -486,12 +472,12 @@ session.setAttribute("progressValue", counter);
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
 			<strong>
 			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
-                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
-                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
-                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
-                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" />
-                </logic:present>
+               <c:if test="${reportCD.filter != null}">
+                	<bean:define id="listable" name="reportCD" property="filter" toScope="request" />
+					<bean:define id="listableStyle" value="settingsList" toScope="request"/>
+					<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+					<jsp:include page="${listable.jspFile}" />
+                </c:if>
              </td>
              </tr>
              <tr>
@@ -525,12 +511,12 @@ session.setAttribute("progressValue", counter);
 					<tr>
 						<td style="font-size: 11px;font-family: Arial,sans-serif">
 						<%
-				            AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
-	            if (af.getAmountinthousand()!=null && af.getAmountinthousand()==1){%>
-				            <digi:trn key="rep:pop:AllAmount">
-								Amounts are in thousands (000)
-							</digi:trn>&nbsp;
-		           		<%}%>
+							AmpARFilter af = ReportContextData.getFromRequest().getFilter();
+	            			if (af.getAmountinthousand()!=null && af.getAmountinthousand()==1){%>
+				            	<digi:trn key="rep:pop:AllAmount">
+									Amounts are in thousands (000)
+								</digi:trn>&nbsp;
+		           			<%}%>
 						</td>
 						<td style="font-size: 11px;font-family: Arial,sans-serif">
 	           <%	                	
@@ -540,10 +526,8 @@ session.setAttribute("progressValue", counter);
 							</digi:trn>
    			   <%}%>				
 				
-							<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
-								<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-								<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
-							</logic:present>
+							<bean:define id="selCurrency" name="reportCD" property="selectedCurrency" />
+							<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
 							&nbsp;|&nbsp;
 						</td>
 						<td style="font-size: 11px;font-family: Arial,sans-serif">
@@ -566,10 +550,10 @@ session.setAttribute("progressValue", counter);
 	</logic:equal>
 <!--<span>Level Sorters</span>-->
 	<logic:notEmpty name="reportMeta" property="hierarchies">
-		<logic:notEmpty name="report" property="levelSorters">
+		<logic:notEmpty name="generatedReport" property="levelSorters">
 			<tr>
 				<td align="left">
-				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
+				<logic:iterate name="generatedReport" property="levelSorters" id="sorter" indexId="levelId">
 					<span style="font-style: italic;font-size: 9px;font-family: Arial;margin-left: 3px; margin-top: 3px;margin-left: 3px">
 					<logic:present name="sorter">
 						<digi:trn key="rep:pop:Level">Level</digi:trn> 
@@ -585,7 +569,7 @@ session.setAttribute("progressValue", counter);
 				</logic:notEmpty>
 	</logic:notEmpty>
 <!--<span>Total Unique Rows</span>	-->
-	<logic:notEqual name="report" property="totalUniqueRows" value="0">
+	<logic:notEqual name="generatedReport" property="totalUniqueRows" value="0">
 	<tr>
 		<td  style="padding-left: 5px;padding-left: 5px;">
 		<table style="width: 100%">
@@ -599,13 +583,13 @@ session.setAttribute("progressValue", counter);
 			</c:if>
 		<logic:equal name="viewFormat" value="print">
 			<table id='reportTable' cellSpacing="0" width="900px" style="overflow:hidden">
-				<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
+				<bean:define id="viewable" name="generatedReport" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			</table>
 		</logic:equal>
 		<logic:notEqual name="viewFormat" value="print">
 		<table id='reportTable' class="html2ReportTable inside" width="100%" cellpadding="0" cellspacing="0">
-			<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
+			<bean:define id="viewable" name="generatedReport" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			</tr>
 			</tbody>
@@ -623,12 +607,12 @@ session.setAttribute("progressValue", counter);
 				<u><digi:trn key="rep:print:lastupdate">Last Update :</digi:trn></u>
 				&nbsp;
 				<c:if test="${reportMeta.updatedDate != null}">
-					<bean:write scope="session" name="reportMeta" property="updatedDate"/>
+					<bean:write name="reportMeta" property="updatedDate"/>
 				</c:if>
 				&nbsp;
 				<u><digi:trn key="rep:print:user">User :</digi:trn></u>
 				<c:if test="${reportMeta.user != null}">
-					<bean:write scope="session" name="reportMeta" property="user"/>
+					<bean:write name="reportMeta" property="user"/>
 				</c:if>
 				<BR>
 			</td>
@@ -640,7 +624,7 @@ session.setAttribute("progressValue", counter);
 		</td>
 	</tr>
 		</logic:notEqual>
-	<logic:equal name="report" property="totalUniqueRows" value="0">
+	<logic:equal name="generatedReport" property="totalUniqueRows" value="0">
 		<tr>
 			<td style="font-family: Arial;font-style: italic;font-size: 10x">
 				<c:choose>
@@ -667,6 +651,6 @@ session.setAttribute("progressValue", counter);
 	loadingreport.hide();
 </script>
 <%
-	session.setAttribute(" ", null);
-	session.setAttribute("progressValue", -1);
+	//session.setAttribute(" ", null); to be deleted later
+	ReportContextData.getFromRequest().setProgressValue(-1);
 %>

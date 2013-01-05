@@ -120,7 +120,8 @@ SaveReportEngine.prototype.checkEnter		= function (e) {
 		}
 	}
 	return true;
-}
+};
+
 SaveReportEngine.prototype.success		= function (o) {
 	if ( o.responseText.length > 2 ) {
 		this.divEl.innerHTML	= o.responseText;
@@ -134,17 +135,18 @@ SaveReportEngine.prototype.success		= function (o) {
 		else
 			window.location.replace("/aim/viewTeamReports.do?tabs=false");
 		
-}
+};
+
 SaveReportEngine.prototype.failure			= function(o) {
 	this.divEl.innerHTML			= this.failureMessage;
-}
+};
 
 SaveReportEngine.prototype.decideToShowTitlePanel	= function () {
 	if ( getReportTitle() == "" )
 			this.showTitlePanel();
 	else
-			this.saveReport( aimReportWizardForm );
-}
+			this.saveReport( aimReportWizardForm);
+};
 
 SaveReportEngine.prototype.showTitlePanel	= function () {
 	if ( this.titlePanel == null ) {
@@ -163,7 +165,7 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 	}
 	this.titlePanel.show();
 	getReportTitleEl().focus();
-}
+};
 
 SaveReportEngine.prototype.saveReport	= function () {	
 	var title = getReportTitle();
@@ -184,10 +186,11 @@ SaveReportEngine.prototype.saveReport	= function () {
 						"&publicReport="+getPublicReport() +
 						"&hideActivities="+getHideActivities() +
 						"&useFilters="+getUseFilters()+
+						"&reportContextId="+getReportContextId()+
 						"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
 						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
 	
 	//alert(postString);
 	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
 	
-}
+};

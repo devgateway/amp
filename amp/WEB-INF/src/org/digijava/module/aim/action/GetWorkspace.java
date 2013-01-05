@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.digijava.kernel.taglib.util.TagUtil;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
@@ -65,29 +66,32 @@ public class GetWorkspace extends Action {
 		String dest = request.getParameter("dest");
 		String id	= request.getParameter("tId");
 		String action = request.getParameter("event");
-		if(updated==null||!Boolean.parseBoolean(updated)){
+		if (updated == null || !Boolean.parseBoolean(updated)){
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 		uwForm.setUpdateFlag(false);
 		//uwForm.setOrganizations(DbUtil.getAll(AmpOrganisation.class));
 		
-		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
-		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
-		request.getSession().setAttribute( ArConstants.REPORTS_FILTER, null );
+		//ReportContextData.clearSession(); - cleaning session is done in SelectTeam
+		// nothing to clean here, as filters etc. are stored on a per-tab basis
+		// request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
+		// request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
+		// request.getSession().setAttribute( ArConstants.REPORTS_Z_FILTER, null );
 
-		/**
-		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard
-		 */
-		ReportsFilterPicker rfp		= new ReportsFilterPicker();
-		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
-		if (rfpForm == null ) {
-			rfpForm		= new ReportsFilterPickerForm();
-			request.setAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS, "true");
-			rfp.modePrepare(mapping, rfpForm, request, response);
-			TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, true);
-		}
-		rfpForm.setIsnewreport(true);
-		rfp.reset(rfpForm, request, mapping);
-		rfpForm.setIsnewreport(false);
+//		/**
+//		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard
+//		 */
+//		ReportsFilterPicker rfp		= new ReportsFilterPicker();
+//		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
+//		if (rfpForm == null ) {
+//			rfpForm		= new ReportsFilterPickerForm();
+////			AmpARFilter arf = createOrFillFilter(filterForm, subsection);
+////			request.setAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS, "true");
+////			rfp.modePrepare(mapping, rfpForm, request, response);
+//			TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, false);
+//		}
+//		rfpForm.setIsnewreport(true);
+//		rfp.reset(rfpForm, request, mapping);
+//		rfpForm.setIsnewreport(false);
 		
 		if(action!=null && "reset".compareTo(action)==0){
 			uwForm.setReset(true);
@@ -127,13 +131,10 @@ public class GetWorkspace extends Action {
 		if (ampTeam != null){
 			Set<AmpTeamFilterData> fdSet	= ampTeam.getFilterDataSet();
 			if ( fdSet != null && fdSet.size() > 0 ) {
-				AmpARFilter filter		= new AmpARFilter();
-				FilterUtil.populateFilter(ampTeam, filter);
-				FilterUtil.prepare(request, filter);
-				request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER , filter);
-				ReportsFilterPickerForm rfpForm2	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
-				new ReportsFilterPicker().modeRefreshDropdowns(mapping, rfpForm2, request, response, getServlet().getServletContext() );
-				FilterUtil.populateForm(rfpForm2, filter);
+				ReportContextData.getFromRequest().initFilters(ampTeam);
+//				ReportsFilterPickerForm rfpForm2	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
+//				ReportsFilterPicker.modeRefreshDropdowns(mapping, rfpForm2, request, response, getServlet().getServletContext() );
+//				FilterUtil.populateForm(rfpForm2, filter, null);
 				//myForm.setUseFilters(true);
 			}
 		}

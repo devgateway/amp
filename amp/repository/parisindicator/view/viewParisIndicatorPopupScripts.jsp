@@ -374,9 +374,9 @@
 	}
 
 	function resetFormat() {
-		document.aimReportsFilterPickerForm3.action = document.aimReportsFilterPickerForm3.action + '&resetFormat=true';
-		alert(document.aimReportsFilterPickerForm3.action);
-		document.aimReportsFilterPickerForm3.submit();
+		form3.action = form3.action + '&resetFormat=true';
+		alert(form3.action);
+		form3.submit();
 	}
 
 	addLoadEvent(initScripts);

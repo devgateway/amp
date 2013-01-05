@@ -13,8 +13,10 @@ import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
@@ -25,12 +27,17 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class FilterUtil {
+	
+	/**
+	 * pumps data from the form to the filter
+	 * @param report
+	 * @param filter
+	 */
 	public static void populateFilter(FilterDataSetInterface report, AmpARFilter filter) {
 		if ( report.getFilterDataSet()!=null && report.getFilterDataSet().size()>0 ) {
-			Iterator<AmpFilterData> iter	= (Iterator<AmpFilterData>) report.getFilterDataSet().iterator();
-			while ( iter.hasNext() ) {
+			for(AmpFilterData item:report.getFilterDataSet()){
 				try {
-					iter.next().populateField(filter);
+					item.populateField(filter);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -38,141 +45,41 @@ public class FilterUtil {
 		}
 	}
 	
-	public static void prepare(HttpServletRequest request, AmpARFilter arf) throws Exception {
-		HttpSession httpSession = request.getSession();
+	/**
+	 * 
+	 * @param filterForm
+	 * @return
+	 */
+	public static AmpARFilter getOrCreateFilter(Long forcedAmpReportId)
+	{		
+		AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
 
-		request.setAttribute("apply", "apply");
-		//AmpARFilter arf = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-		
-		arf.readRequestData(request);
-
-		// for each sector we have also to add the subsectors
-
-		if (arf.getSelectedSectors() != null && arf.getSelectedSectors().size() > 0) {
-
-			arf.setSectors(SectorUtil.getSectorDescendents( arf.getSelectedSectors() ));
-			
-			arf.setSectorsAndAncestors( new HashSet<AmpSector>() );
-			arf.getSectorsAndAncestors().addAll( arf.getSectors() );
-			arf.getSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors( arf.getSelectedSectors() ) );
-		} else {
-			arf.setSectors(null);
-			arf.setSectorsAndAncestors(null);
-		}
-
-		if (arf.getSelectedSecondarySectors() != null && arf.getSelectedSecondarySectors().size() > 0) {
-			arf.setSecondarySectors(SectorUtil.getSectorDescendents( arf.getSelectedSecondarySectors() ));
-			
-			arf.setSecondarySectorsAndAncestors( new HashSet<AmpSector>() );
-			arf.getSecondarySectorsAndAncestors().addAll( arf.getSecondarySectors() );
-			arf.getSecondarySectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(arf.getSelectedSecondarySectors()) );
-		} else {
-			arf.setSecondarySectors(null);
-			arf.setSecondarySectorsAndAncestors(null);
-		}
-        if (arf.getSelectedTertiarySectors() != null && arf.getSelectedTertiarySectors().size() > 0) {
-			arf.setTertiarySectors(SectorUtil.getSectorDescendents( arf.getSelectedTertiarySectors() ));
-
-			arf.setTertiarySectorsAndAncestors( new HashSet<AmpSector>() );
-			arf.getTertiarySectorsAndAncestors().addAll( arf.getTertiarySectors() );
-			arf.getTertiarySectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(arf.getSelectedTertiarySectors()) );
-		} else {
-			arf.setTertiarySectors(null);
-			arf.setTertiarySectorsAndAncestors(null);
-		}
-        
-    	if (arf.getSelectedTagSectors() != null && arf.getSelectedTagSectors().size() > 0) {
-			arf.setTagSectors(SectorUtil.getSectorDescendents( arf.getSelectedTagSectors() ));
-			arf.setTagSectorsAndAncestors( new HashSet<AmpSector>() );
-			arf.getTagSectorsAndAncestors().addAll( arf.getTagSectors() );
-			arf.getTagSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors( arf.getSelectedTagSectors() ) );
-		} else {
-			arf.setTagSectors(null);
-			arf.setTagSectorsAndAncestors(null);
-		}
-
-		if ( arf.getSelectedNatPlanObj() != null && arf.getSelectedNatPlanObj().size() > 0) {
-			arf.setNationalPlanningObjectives(new ArrayList( arf.getSelectedNatPlanObj() ));
-			
-			arf.setRelatedNatPlanObjs(new HashSet<AmpTheme>() );
-			ProgramUtil.collectFilteringInformation(arf.getSelectedNatPlanObj(), arf.getNationalPlanningObjectives(), arf.getRelatedNatPlanObjs() );
-			
-		} else {
-			arf.setSelectedNatPlanObj(null);
-			arf.setNationalPlanningObjectives(null);
-			arf.setRelatedNatPlanObjs(null);
+		if (arf == null)
+		{			
+			ReportContextData.getFromRequest().setSerializedFilter(buildFilter(null, forcedAmpReportId));
+			ReportContextData.getFromRequest().setFilter(buildFilter(null, forcedAmpReportId));
 		}
 		
-		Set selectedPrimaryPrograms	= arf.getSelectedPrimaryPrograms();
-		
-		if (selectedPrimaryPrograms != null && selectedPrimaryPrograms.size() > 0) {
-			arf.setPrimaryPrograms(new ArrayList(selectedPrimaryPrograms));
-			
-			arf.setRelatedPrimaryProgs(new HashSet<AmpTheme>() );
-			ProgramUtil.collectFilteringInformation(selectedPrimaryPrograms, arf.getPrimaryPrograms(), arf.getRelatedPrimaryProgs() );
-			
-		} else {
-			arf.setPrimaryPrograms(null);
-			arf.setSelectedPrimaryPrograms(null);
-			arf.setRelatedPrimaryProgs(null);
-		}
-
-		Set selectedSecondaryPrograms	= arf.getSelectedSecondaryPrograms();
-		if (selectedSecondaryPrograms != null && selectedSecondaryPrograms.size() > 0) {
-			arf.setSecondaryPrograms(new ArrayList(selectedSecondaryPrograms));
-			
-			arf.setRelatedSecondaryProgs( new HashSet<AmpTheme>() );
-			ProgramUtil.collectFilteringInformation(selectedSecondaryPrograms, arf.getSecondaryPrograms(), arf.getRelatedSecondaryProgs() );
-			
-		} else {
-			arf.setSecondaryPrograms(null);
-			arf.setSelectedSecondaryPrograms(null);
-			arf.setRelatedSecondaryProgs(null);
-		}
-		
-		String name=null;
-		if (arf.getCurrency()!=null){
-			name = "- " + arf.getCurrency().getCurrencyName();
-		}else{
-			name = "- " + Constants.DEFAULT_CURRENCY; 
-		}
-		
-		
-		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
-
-		String customDecimalSymbol	= String.valueOf((FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator()));
-		Integer customDecimalPlaces	= FormatHelper.getDecimalFormat().getMaximumFractionDigits();
-		String customGroupCharacter	= String.valueOf(FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getGroupingSeparator());
-		Boolean customUseGrouping	= FormatHelper.getDecimalFormat().isGroupingUsed();
-		Integer customGroupSize		= FormatHelper.getDecimalFormat().getGroupingSize();
-		String customDecimalSymbolTxt 	= "";
-		String customGroupCharacterTxt	= "";;
-
-		DecimalFormat custom = new DecimalFormat();
-		DecimalFormatSymbols ds = new DecimalFormatSymbols();
-		if (arf.getDecimalseparator()!=null){
-			ds.setDecimalSeparator(arf.getDecimalseparator().charAt(0));
-		}else{
-			ds.setDecimalSeparator((!"CUSTOM".equalsIgnoreCase(customDecimalSymbol) ? customDecimalSymbol.charAt(0) : customDecimalSymbolTxt.charAt(0)));
-		}
-		if (arf.getGroupingseparator()!=null){
-			ds.setGroupingSeparator(arf.getGroupingseparator().charAt(0));
-		}else{
-		ds.setGroupingSeparator((!"CUSTOM".equalsIgnoreCase(customGroupCharacter) ? customGroupCharacter.charAt(0) : customGroupCharacterTxt
-						.charAt(0)));
-		}
-		
-		if (arf.getMaximumFractionDigits() != null && arf.getMaximumFractionDigits() > -1)
-			custom.setMaximumFractionDigits(arf.getMaximumFractionDigits());
-		else
-			custom.setMaximumFractionDigits((customDecimalPlaces != -1) ?customDecimalPlaces : 99);
-		custom.setGroupingUsed(customUseGrouping);
-		custom.setGroupingSize(customGroupSize);
-		custom.setDecimalFormatSymbols(ds);
-		arf.setCurrentFormat(custom);
-		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
+		return ReportContextData.getFromRequest().getFilter();
 	}
 	
+	/**
+	 * <b>the birthplace of filters in AMP</b>
+	 * builds an AmpARFilter instance from scratch off a source or just initializes it, if source is null
+	 * @param source: the source to copy the data off or null if just init needed
+	 * @return
+	 */
+	public static AmpARFilter buildFilter(FilterDataSetInterface source, Long forcedAmpReportId)
+	{
+		AmpARFilter arf = new AmpARFilter();
+		arf.readRequestData(TLSUtils.getRequest(), AmpARFilter.FILTER_SECTION_ALL, forcedAmpReportId);
+		if (source != null)
+			FilterUtil.populateFilter(source, arf);		
+		/* The prepare function needs to have the filter (af) already populated */
+		arf.postprocess();
+		return arf;
+	}
+
 	public static Long[] getObjectsIds (Collection<? extends Identifiable> col) {
 		if ( col == null )
 			return null;
@@ -194,7 +101,22 @@ public class FilterUtil {
 		return ret;
 	}
 	
-	public static void populateForm ( ReportsFilterPickerForm form, AmpARFilter filter ) {
+	/**
+	 * pumps data from the filter to the form
+	 * @param form
+	 * @param filter
+	 * @param ampReportId - the ampReportId to be used on the newly-generated ampReportId, if filter is null. Can be null if filter != null
+	 * @return the used filter (#filter if not null, the generated default value else)
+	 */
+	public static AmpARFilter populateForm(ReportsFilterPickerForm form, AmpARFilter filter, Long ampReportId) 
+	{
+		
+//		if (filter == null)
+//		{
+//			filter = new AmpARFilter();
+//			filter.fillWithDefaultsFilter(ampReportId);
+//			filter.fillWithDefaultsSettings();
+//		}
 		
 		// for each sector we have also to add the subsectors
 		form.setSelectedSectors( FilterUtil.getObjectsIds(filter.getSelectedSectors()) );
@@ -226,6 +148,10 @@ public class FilterUtil {
 
 		if (filter.getCurrency() != null)
 			form.setCurrency( filter.getCurrency().getAmpCurrencyId() );
+		else
+			form.setCurrency(null);
+		
+		form.setCalendar(filter.getCalendarType().getAmpFiscalCalId());
 		
 		if ( filter.getLineMinRank() != null && filter.getLineMinRank().size() > 0) {
 	 		int i = 0;
@@ -291,11 +217,11 @@ public class FilterUtil {
 		
 		if ( filter.getGroupingseparator() != null ) {
 			form.setCustomGroupCharacter("CUSTOM");
-			form.setCustomGroupCharacterTxt(filter.getGroupingseparator() );
+			form.setCustomGroupCharacterTxt(filter.getGroupingseparator().toString() );
 		}
 		if ( filter.getDecimalseparator() != null ) {
 			form.setCustomDecimalSymbol("CUSTOM");
-			form.setCustomDecimalSymbolTxt(filter.getDecimalseparator() );
+			form.setCustomDecimalSymbolTxt(filter.getDecimalseparator().toString() );
 		}
 		if (filter.getMaximumFractionDigits() != null  ) {
 			if ( filter.getMaximumFractionDigits() > 5 ) {
@@ -311,7 +237,111 @@ public class FilterUtil {
 		if ( filter.getGroupingsize() != null ){
 			form.setCustomGroupSize(filter.getGroupingsize());
 		}
-
+		
+		return filter;
 	}
 	
+	/**
+	 * make union of two sets
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static Set<AmpSector> makeUnion(Set<AmpSector> a, Set<AmpSector> b)
+	{
+		HashSet<AmpSector> res = new HashSet<AmpSector>(a);
+		res.addAll(b);
+		return res;
+	}
+	
+	/**
+	 * add subsectors for each selected sector
+	 * @param arf
+	 */
+	public static void postprocessFilterSectors(AmpARFilter arf)
+	{
+		Set<AmpSector> selectedSectors = arf.getSelectedSectors();
+		Set<AmpSector> selectedSecondarySectors = arf.getSelectedSecondarySectors();
+		Set<AmpSector> selectedTertiarySectors = arf.getSelectedTertiarySectors();
+		Set<AmpSector> selectedTagSectors = arf.getSelectedTagSectors();
+		
+		// for each sector we have also to add the subsectors
+		if (selectedSectors != null && selectedSectors.size() > 0) {
+			arf.setSectors(SectorUtil.getSectorDescendents(selectedSectors));
+			
+			arf.setSectorsAndAncestors(makeUnion(arf.getSectors(), SectorUtil.getAmpParentSectors(selectedSectors)));
+		} else {
+			arf.setSectors(null);
+			arf.setSelectedSectors(null);
+			arf.setSectorsAndAncestors(null);
+		}
+
+		if (selectedSecondarySectors != null && selectedSecondarySectors.size() > 0) {
+			arf.setSecondarySectors(SectorUtil.getSectorDescendents(selectedSecondarySectors));
+			
+			arf.setSecondarySectorsAndAncestors(makeUnion(arf.getSecondarySectors(), SectorUtil.getAmpParentSectors(selectedSecondarySectors)));
+		} else {
+			arf.setSecondarySectors(null);
+			arf.setSelectedSecondarySectors(null);
+			arf.setSecondarySectorsAndAncestors(null);
+		}
+        if (selectedTertiarySectors != null && selectedTertiarySectors.size() > 0) {
+            arf.setTertiarySectors(SectorUtil.getSectorDescendents(selectedTertiarySectors));
+            
+            arf.setTertiarySectorsAndAncestors(makeUnion(arf.getTertiarySectors(), SectorUtil.getAmpParentSectors(selectedTertiarySectors)));
+        } else {
+            arf.setTertiarySectors(null);
+            arf.setSelectedTertiarySectors(null);
+            arf.setTertiarySectorsAndAncestors(null);
+        }
+        	
+    	if (selectedTagSectors != null && selectedTagSectors.size() > 0) {
+			arf.setTagSectors(SectorUtil.getSectorDescendents(selectedTagSectors));
+			
+			arf.setTagSectorsAndAncestors(makeUnion(arf.getTagSectors(), SectorUtil.getAmpParentSectors(selectedTagSectors)));
+		} else {
+			arf.setTagSectors(null);
+			arf.setSelectedTagSectors(null);
+			arf.setTagSectorsAndAncestors(null);
+		}
+	}
+	
+	public static void postprocessFilterPrograms(AmpARFilter arf)
+	{
+		Set<AmpTheme> selectedNatPlanObj = arf.getSelectedNatPlanObj();
+		Set<AmpTheme> selectedPrimaryPrograms = arf.getSelectedPrimaryPrograms();
+		Set<AmpTheme> selectedSecondaryPrograms = arf.getSelectedSecondaryPrograms();
+		
+		if (selectedNatPlanObj != null && selectedNatPlanObj.size() > 0) {
+			arf.setNationalPlanningObjectives( new ArrayList<AmpTheme>(selectedNatPlanObj) );			
+			arf.setRelatedNatPlanObjs(new HashSet<AmpTheme>() );
+			ProgramUtil.collectFilteringInformation(selectedNatPlanObj, arf.getNationalPlanningObjectives(), arf.getRelatedNatPlanObjs() );			
+		} else {
+			arf.setSelectedNatPlanObj(null);
+			arf.setNationalPlanningObjectives(null);
+			arf.setRelatedNatPlanObjs(null);
+		}
+
+		if (selectedPrimaryPrograms != null && selectedPrimaryPrograms.size() > 0) {
+			arf.setPrimaryPrograms(new ArrayList<AmpTheme>(selectedPrimaryPrograms));			
+			arf.setRelatedPrimaryProgs(new HashSet<AmpTheme>() );
+			ProgramUtil.collectFilteringInformation(selectedPrimaryPrograms, arf.getPrimaryPrograms(), arf.getRelatedPrimaryProgs() );
+			
+		} else {
+			arf.setPrimaryPrograms(null);
+			arf.setSelectedPrimaryPrograms(null);
+			arf.setRelatedPrimaryProgs(null);
+		}
+
+		if (selectedSecondaryPrograms != null && selectedSecondaryPrograms.size() > 0) {
+			arf.setSecondaryPrograms(new ArrayList<AmpTheme>(selectedSecondaryPrograms));			
+			arf.setRelatedSecondaryProgs( new HashSet<AmpTheme>() );
+			ProgramUtil.collectFilteringInformation(selectedSecondaryPrograms, arf.getSecondaryPrograms(), arf.getRelatedSecondaryProgs() );		
+		} else {
+			arf.setSecondaryPrograms(null);
+			arf.setSelectedSecondaryPrograms(null);
+			arf.setRelatedSecondaryProgs(null);
+		}
+	}
 }
+

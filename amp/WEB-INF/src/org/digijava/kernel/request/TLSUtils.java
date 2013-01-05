@@ -40,6 +40,12 @@ public class TLSUtils {
 		return instance.site;
 	}
 	
+	public static HttpServletRequest getRequest()
+	{
+		TLSUtils instance = getThreadLocalInstance();
+		return instance.request;
+	}
+	
 	public static TLSUtils getThreadLocalInstance()
 	{
 		TLSUtils res = threadLocalInstance.get();

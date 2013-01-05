@@ -7,11 +7,17 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
-
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%@page import="java.util.HashMap"%>
+
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
+
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
-<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
-<bean:define id="filterBean" scope="session" type="org.dgfoundation.amp.ar.AmpARFilter" name="ReportsFilter"  />
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
+<bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
+<bean:define id="filterBean" name="reportCD" type="org.dgfoundation.amp.ar.AmpARFilter" property="filter" />
 
 <c:set var="categoryYear"><%=ArConstants.YEAR%></c:set>
 <c:set var="categoryQuarter"><%=ArConstants.QUARTER%></c:set>
@@ -22,9 +28,12 @@
 <!-- generate report headings -->
 <logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
  <thead class="fixedHeader"> 
-  <%int maxDepth = columnReport.getMaxColumnDepth();
-  	columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
-  	pageContext.setAttribute("linkMap", new HashMap());
+  <%
+	int maxDepth = columnReport.getMaxColumnDepth();
+	columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
+	HashMap linkMap = new HashMap();
+	linkMap.put("reportContextId", ReportContextData.getCurrentReportContextId(request, true));
+	pageContext.setAttribute("linkMap", linkMap);
   %>
   <%for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr class="reportHeader" title='<digi:trn key="reports.ReportHeadings">Report Headings</digi:trn>'>
@@ -35,8 +44,8 @@
   						indexId="hIdx" id="repHierarchy" scope="page">
   		<c:set var="hSortOrder">descending</c:set>
   		<c:set var="sortIconPath"></c:set>
-  		<logic:notEmpty name="report" property="levelSorters">
-				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
+  		<logic:notEmpty name="generatedReport" property="levelSorters">
+				<logic:iterate name="generatedReport" property="levelSorters" id="sorter" indexId="levelId">
 					<c:if test="${levelId==hIdx}">
 						<c:set var="hSortOrder">${sorter.value}</c:set>
 						<c:set var="sortIconPath">/TEMPLATE/ampTemplate/imagesSource/common/up_red${levelId}.gif</c:set>

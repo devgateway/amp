@@ -2100,16 +2100,23 @@ public class ProgramUtil {
      *  
      * @throws DgException
      */
-    public static void collectFilteringInformation(Collection<AmpTheme> userSelection, Collection<AmpTheme> activityFilterCol, 
-    																					Set<AmpTheme> columnDataCol) throws DgException {
-    	Iterator<AmpTheme> progIter	= userSelection.iterator();
-		while ( progIter.hasNext()  ) {
-			AmpTheme program		= progIter.next();
-			Collection<AmpTheme> descendentPrograms	= ProgramUtil.getRelatedThemes( program.getAmpThemeId() );
-			activityFilterCol.addAll( descendentPrograms );
-			columnDataCol.addAll(  descendentPrograms );
-			columnDataCol.addAll( ProgramUtil.getAncestorThemes(program) );
-		}
+    public static void collectFilteringInformation(Collection<AmpTheme> userSelection, Collection<AmpTheme> activityFilterCol, Set<AmpTheme> columnDataCol)
+    {
+    	try
+    	{
+    		Iterator<AmpTheme> progIter	= userSelection.iterator();
+    		while ( progIter.hasNext()  ) {
+    			AmpTheme program		= progIter.next();
+    			Collection<AmpTheme> descendentPrograms	= ProgramUtil.getRelatedThemes( program.getAmpThemeId() );
+    			activityFilterCol.addAll( descendentPrograms );
+    			columnDataCol.addAll(  descendentPrograms );
+    			columnDataCol.addAll( ProgramUtil.getAncestorThemes(program) );
+    		}
+    	}
+    	catch(DgException e)
+    	{
+    		throw new RuntimeException(e);
+    	}
     }
         /**
          * Hierarchy member factory.

@@ -401,9 +401,6 @@ public class PledgesEntityHelper {
 				}
 				throw new DgException("Cannot save Pledge!",e);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
@@ -450,9 +447,6 @@ public class PledgesEntityHelper {
 				}
 				throw new DgException("Cannot delete Pledge!",e);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
@@ -593,10 +587,7 @@ public class PledgesEntityHelper {
 				}
 				throw new DgException("Cannot save Pledge!",e);
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 	}
 	
 	public static AmpOrganisation getOrganizationById(Long id) {

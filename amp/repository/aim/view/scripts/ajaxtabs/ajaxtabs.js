@@ -132,6 +132,7 @@ function loadobjs(revattribute)
 
 //added by SRK@DGF
 function changeTabUrl(tabcontentid,tabid,url) {
+	//debugger;
 	var thetab=document.getElementById(tabid);
 	if(thetab)
 		{

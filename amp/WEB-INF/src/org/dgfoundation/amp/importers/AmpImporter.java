@@ -58,9 +58,6 @@ public abstract class AmpImporter {
 		} catch (HibernateException e) {
 			logger.error(e);
 			e.printStackTrace();
-		} catch (SQLException e) {
-			logger.error(e);
-			e.printStackTrace();
 		}
 		
 		Map<String, String> o = null;
@@ -86,15 +83,7 @@ public abstract class AmpImporter {
 			e.printStackTrace();
 		}
 		
-		try {
-			PersistenceManager.releaseSession(session);
-		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (SQLException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
+		PersistenceManager.releaseSession(session);
 	}
 
 	protected abstract String getFileType();

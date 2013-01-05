@@ -7,6 +7,7 @@
 package org.digijava.module.aim.action;
 
 
+import java.awt.image.renderable.RenderContext;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -78,67 +80,47 @@ public class ViewNewAdvancedReport extends Action {
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
-			{
-		AdvancedReportForm arf=(AdvancedReportForm) form;
-		HttpSession httpSession = request.getSession();
+	{
+		
+		String loadStatus = request.getParameter("loadstatus");
 
-		
-		ReportsFilterPicker rfp		= new ReportsFilterPicker();
-		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
-		
-		boolean resetSettings = request.getParameter("resetSettings")==null? false : ("true".equals(request.getParameter("resetSettings"))? true : false);
-		String lastReportId	= (String)request.getSession().getAttribute("LAST_REPORT_ID") ; 
-		String ampReportId 	= request.getParameter("ampReportId");
-		if ( request.getParameter("queryEngine") == null || "false".equals(request.getParameter("queryEngine")) ){
-			if ( ampReportId != null && lastReportId != null && !ampReportId.equals(lastReportId) )
-				 request.getSession().setAttribute(ArConstants.REPORTS_FILTER, null);
-		}
-		
-		if ( ampReportId != null )
-			request.getSession().setAttribute("LAST_REPORT_ID", ampReportId);
-		
-		if ( lastReportId == null || !lastReportId.equals(ampReportId) ) { 
-			// if it's the first time we load a report/tab OR if we are loading another report we should reset
-			if (rfpForm == null || "reset".equals(request.getParameter("view")) ) {
-				// if ampReportId parameter is in the request we need to reset the settings cause a new report was opened
-				rfpForm		= new ReportsFilterPickerForm();
-				request.setAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS, "true");
-				rfp.modePrepare(mapping, rfpForm, request, response);
-				TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, true);
-			}	
-		}
-		
-
-		String loadStatus=request.getParameter("loadstatus");
-		Integer progressValue = (httpSession.getAttribute("progressValue") != null) ? (Integer)httpSession.getAttribute("progressValue") :null;
-		if(progressValue == null)
-			progressValue = 0;
-
-		if(loadStatus != null){
+		if (loadStatus != null){
+			// if AJAX query to get progress -> fast exit
+			int progressValue = ReportContextData.getFromRequest().getProgressValue();
 			ServletOutputStream os = response.getOutputStream();
-			os.println(progressValue + ","+httpSession.getAttribute("progressTotalRows"));
+			os.println(progressValue + "," + ReportContextData.getFromRequest().getProgressTotalRows());
 			os.flush();
 			return null;
 		}
+		
+		AdvancedReportForm arf=(AdvancedReportForm) form;
+		
+		String ampReportId 	= request.getParameter("ampReportId");
+		String cachedStr = request.getParameter("cached");
+		String sortBy = request.getParameter("sortBy");
+		String sortByAsc = request.getParameter("sortByAsc");
+		String applySorter = request.getParameter("applySorter");
 
-		progressValue = 0;
+		boolean cached = false;
+		if (cachedStr != null)
+			cached = Boolean.parseBoolean(cachedStr);		
 
-		String widget=request.getParameter("widget");
-		request.setAttribute("widget",widget);
+		boolean shouldRegenerateReport = (!cached && (applySorter == null && sortBy == null || ReportContextData.getFromRequest().getReportMeta() == null));
+			
+		if (shouldRegenerateReport)
+		{
+			//ReportContextData.cleanContextData();
+			ReportContextData.cleanCurrentReportCaches();
+		}
 
-		String debug=request.getParameter("debug");
-		request.setAttribute("debug",debug);
-
+		request.setAttribute("widget", request.getParameter("widget"));
+		request.setAttribute("debug", request.getParameter("debug"));
 		
 		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
 		if (tm == null || tm.getTeamId() == null )
 				tm = null;
-		AmpApplicationSettings ampAppSettings = null;				
-		if(tm!=null)				
-		ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
-		if(ampAppSettings==null)
-			if(tm!=null)
-			ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+		
+		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings();				
 		
 		Integer recordsPerPage = new Integer(100);
 		
@@ -150,51 +132,24 @@ public class ViewNewAdvancedReport extends Action {
 			}
 		}
 		//check currency code:
-		if(httpSession.getAttribute("reportCurrencyCode")==null) httpSession.setAttribute("reportCurrencyCode",Constants.DEFAULT_CURRENCY);
 		
-		if(httpSession.getAttribute("reportSorters")==null) httpSession.setAttribute("reportSorters",new HashMap());
-		Map sorters = (Map) httpSession.getAttribute("reportSorters");
+		Map<Long, MetaInfo<String>> sorters = ReportContextData.getFromRequest(true).getReportSorters(true);
 		//String ampReportId = request.getParameter("ampReportId");
 		
-		GroupReportData rd = (GroupReportData) httpSession.getAttribute("report");
-		AmpReports ar = (AmpReports) httpSession.getAttribute("reportMeta");
+		GroupReportData rd = ReportContextData.getFromRequest().getGeneratedReport();
+		AmpReports ar;// =  ReportContextData.getFromRequest().getReportMeta();
 		Session session = PersistenceManager.getRequestDBSession();
-		String sortBy = request.getParameter("sortBy");
-		String sortByAsc = request.getParameter("sortByAsc");
-		String applySorter = request.getParameter("applySorter");
-		if (ampReportId == null || ampReportId.length() == 0 ) 
-			ampReportId = ar.getAmpReportId().toString();
-		Long reportId = new Long(ampReportId);
-		request.setAttribute("ampReportId",ampReportId);
+		
+		request.setAttribute("ampReportId", ampReportId);
 		
 		String startRow = request.getParameter("startRow");
 		String endRow = request.getParameter("endRow");
-		String cachedStr = request.getParameter("cached");
+						
+		AmpReports report = ARUtil.getReferenceToReport();
 		
-		
-		boolean cached=false;
-		if (cachedStr != null) cached=Boolean.parseBoolean(cachedStr);
-		
-		AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-		if (filter == null || !reportId.equals(filter.getAmpReportId())) {
-			if(filter != null && filter.isPublicView())
-			{
-				//This is to avoid resetting the publicView status to allow the right redirection on Public Views
-				filter=new AmpARFilter();
-				httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
-				filter.readRequestData(request);
-				String globalCurrency = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-				filter.setCurrency(CurrencyUtil.getAmpcurrency(globalCurrency));
-				filter.setPublicView(true);
-			}
-			else
-			{
-				filter=new AmpARFilter();
-				httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
-				filter.readRequestData(request);
-			}
-			request.setAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB, "true");
-		}
+		// should we reload filters from the DB?
+		boolean resetSettings = "true".equals(request.getParameter("resetSettings"));// || (!"true".equals(request.getParameter("cached")));
+		AmpARFilter filter = ReportContextData.getFromRequest().loadOrCreateFilter(resetSettings, report);
 
 		if (tm !=null && (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
 				"Donor".equalsIgnoreCase(tm.getTeamType()))){
@@ -221,28 +176,29 @@ public class ViewNewAdvancedReport extends Action {
 			}
 		}
 		
-		httpSession.setAttribute("progressValue", ++progressValue); 
-		httpSession.setAttribute("progressTotalRows", recordsPerPage);
+		int progressValue = 0;
 		
-		if (resetSettings && (ampReportId==null || !ampReportId.equals(lastReportId) )){
+		ReportContextData.getFromRequest().setProgressValue(++progressValue);
+		ReportContextData.getFromRequest().setProgressTotalRows(recordsPerPage);
+		
+		if (resetSettings && (ampReportId==null/* || !ampReportId.equals(lastReportId) */)){
+			//BOZO: isn't this "reset done wrong"?
 			filter.setCalendarType(null); //reset the calendar type to take the type from ws settings by default.
 			filter.setCurrency(null);
 		}
 		
-		if( (!cached && (applySorter == null && sortBy == null || ar==null)) || 
-			(ampReportId != null && ar != null && !ampReportId.equals(ar.getAmpReportId().toString()) )) 
-		{
-			
+		if (shouldRegenerateReport) 
+		{			
 			progressValue = progressValue + 20;// 20 is the weight of this process on the progress bar
-			httpSession.setAttribute("progressValue", progressValue); 
+			ReportContextData.getFromRequest().setProgressValue(progressValue);
 
-			rd=ARUtil.generateReport(mapping, form, request, response);
+			rd = ARUtil.generateReport(request, report, filter);
 			progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
-			httpSession.setAttribute("progressValue", progressValue); 
+			ReportContextData.getFromRequest().setProgressValue(progressValue);
 	
 			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
 			if (ar == null) {
-				ar = (AmpReports) request.getSession().getAttribute("reportMeta");
+				ar = ReportContextData.getFromRequest().getReportMeta();
 			}
 			validateColumnsAndHierarchies(ar);
 			//This is for public views to avoid nullPointerException due to there is no logged user.
@@ -251,8 +207,8 @@ public class ViewNewAdvancedReport extends Action {
 			}
 			
 			progressValue = progressValue + 3;// 3 is the weight of this process on the progress bar
-			httpSession.setAttribute("progressValue", progressValue); 
-		}
+			ReportContextData.getFromRequest().setProgressValue(progressValue);
+		} else ar = ReportContextData.getFromRequest().getReportMeta();
 		
 		/* In case NO sorting info comes in request check to see if sorting has been saved */
 		if ( sortBy == null && !cached ) {
@@ -274,7 +230,7 @@ public class ViewNewAdvancedReport extends Action {
 			if ( filter.getHierarchySorters() != null && filter.getHierarchySorters().size() > 0 ) {
 				for(String str : filter.getHierarchySorters() ) {
 					String [] sortingInfo		= str.split("_");
-					sorters.put(Long.parseLong(sortingInfo[0]), new MetaInfo(sortingInfo[1], sortingInfo[2]) );
+					sorters.put(Long.parseLong(sortingInfo[0]), new MetaInfo<String>(sortingInfo[1], sortingInfo[2]) );
 				}
 				rd.importLevelSorters(sorters,ar.getHierarchies().size());
 				rd.applyLevelSorter();
@@ -301,11 +257,13 @@ public class ViewNewAdvancedReport extends Action {
 		
 		// test if the request was for column sorting purposes:
 		if (sortBy != null) {
-			httpSession.setAttribute("sortBy", sortBy);
+			Boolean sortAscending = Boolean.parseBoolean(sortByAsc);
+			
 			rd.setSorterColumn(sortBy);
-			Boolean sortAscending		= Boolean.parseBoolean(sortByAsc);
 			rd.setSortAscending(sortAscending);
-			httpSession.setAttribute(ArConstants.SORT_ASCENDING, sortAscending);
+			
+			ReportContextData.getFromRequest().setSortBy(sortBy);
+			ReportContextData.getFromRequest().setSortAscending(sortAscending);
 			//if ( sortByAsc != null  && !sortByAsc.equals( rd.getSortAscending()+"" ) )
 			//	rd.setSorterColumn(sortBy);
 			
@@ -331,7 +289,7 @@ public class ViewNewAdvancedReport extends Action {
 			}
 		}
 		
-		if (rd==null) return mapping.findForward("index");
+		if (rd==null) return mapping.findForward("index"); //BOZO: why would rd = null here?
 		rd.setGlobalHeadingsDisplayed(new Boolean(false));
 		
 		String viewFormat=request.getParameter("viewFormat");
@@ -356,8 +314,8 @@ public class ViewNewAdvancedReport extends Action {
 			}
 		}
 		if (!pagination){
-			startRow="0";
-			endRow=Integer.MAX_VALUE+"";
+			startRow = "0";
+			endRow = Integer.toString(Integer.MAX_VALUE);
 			recordsPerPage = Integer.MAX_VALUE;
 		}
 		request.setAttribute("recordsPerPage", recordsPerPage);
@@ -383,17 +341,14 @@ public class ViewNewAdvancedReport extends Action {
 		
 		
 		
-		httpSession.setAttribute("report",rd);
-		httpSession.setAttribute("reportMeta",ar);
+		ReportContextData.getFromRequest().setGeneratedReport(rd);
+		ReportContextData.getFromRequest().setReportMeta(ar);
 
-		progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
-		httpSession.setAttribute("progressValue", progressValue);
+		progressValue = progressValue + 10;// 10 is the weight of this process on the progress bar
+		ReportContextData.getFromRequest().setProgressValue(progressValue);
 		
-		httpSession.setAttribute("progressTotalRows", endRow);
-		
-		httpSession.setAttribute("progressValue", progressValue);
-
-		
+		ReportContextData.getFromRequest().setProgressTotalRows(endRow == null ? null : Integer.parseInt(endRow));
+				
 		return mapping.findForward("forward");
 	}
 

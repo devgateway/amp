@@ -52,7 +52,7 @@ public class ShowMasterLayout
 
     private static Logger logger = Logger.getLogger(ShowMasterLayout.class);
 
-    FilterConfig filterConfig;
+    //FilterConfig filterConfig;
 
     //Initialize global variables
     public void init() throws ServletException {
@@ -63,7 +63,7 @@ public class ShowMasterLayout
     }
 
     public void init(FilterConfig config) throws ServletException {
-        this.filterConfig = filterConfig;
+        //this.filterConfig = filterConfig;
     }
 
     public void doFilter(ServletRequest request, ServletResponse response,

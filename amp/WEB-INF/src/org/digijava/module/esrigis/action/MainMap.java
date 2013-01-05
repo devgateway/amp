@@ -24,6 +24,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -105,10 +107,9 @@ public class MainMap extends Action {
 
 		if (request.getParameter("exportreport") != null) {
 			filter.setModeexport(true);
-			AmpARFilter reportfilter = (AmpARFilter) request.getSession()
-					.getAttribute("ReportsFilter");
+			AmpARFilter reportfilter = ReportContextData.getFromRequest().getFilter();
 			filter.setReportfilterquery(reportfilter.getGeneratedFilterQuery());
-			filter.setCurrencyId(reportfilter.getCurrency().getAmpCurrencyId());
+			filter.setCurrencyId(reportfilter.getCurrency() == null ? null : reportfilter.getCurrency().getAmpCurrencyId());
 		} else {
 			filter.setModeexport(false);
 		}
@@ -198,19 +199,17 @@ public class MainMap extends Action {
 			filter.setDefaultEndYear(year);
 		}
 		
-		Collection<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
+		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
         List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
         filter.setCurrencies(validcurrencies);
         
         //Only currencies which have exchanges rates
-        for (Iterator<AmpCurrency> iter = currency.iterator(); iter.hasNext();) {
-            AmpCurrency element = (AmpCurrency) iter.next();
+        for (AmpCurrency element:currency) {
             try {
 				if (CurrencyUtil.isRate(element.getCurrencyCode()) == true) {
 					filter.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
 				}
-			} catch (AimException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
         }

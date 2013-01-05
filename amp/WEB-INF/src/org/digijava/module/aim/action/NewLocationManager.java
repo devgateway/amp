@@ -31,7 +31,7 @@ public class NewLocationManager extends Action {
             HttpServletResponse response) throws java.lang.Exception {
 
         NewAddLocationForm addRegForm = (NewAddLocationForm) form;
-        Collection<AmpCategoryValue> values = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, null,request);
+        Collection<AmpCategoryValue> values = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, null);
         addRegForm.setCategoryValues(new ArrayList(values));
         addRegForm.setLocations(LocationUtil.getAllLocations(addRegForm.getIds()));
         return mapping.findForward("forward");

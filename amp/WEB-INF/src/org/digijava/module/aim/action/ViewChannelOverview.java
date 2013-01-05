@@ -125,7 +125,7 @@ public class ViewChannelOverview extends TilesAction {
 			
 			Collection<AmpCategoryValue> implLocationLevels	= null;
 			try {
-				implLocationLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, null, request);
+				implLocationLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, null);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

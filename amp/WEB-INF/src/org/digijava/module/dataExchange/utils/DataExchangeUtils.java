@@ -1514,13 +1514,7 @@ public class DataExchangeUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
-				e.printStackTrace();
-			}
+        	PersistenceManager.releaseSession(session);
         }
         return result;
     }
@@ -1543,13 +1537,7 @@ public class DataExchangeUtils {
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        } finally {
-	            try {
-	                PersistenceManager.releaseSession(session);
-	            } catch (HibernateException e) {
-	                e.printStackTrace();
-	            } catch (SQLException e) {
-					e.printStackTrace();
-				}
+	        	PersistenceManager.releaseSession(session);
 	        }
 	        return result;
 	}
@@ -1597,13 +1585,7 @@ public class DataExchangeUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
-				e.printStackTrace();
-			}
+        	PersistenceManager.releaseSession(session);
         }
         return ;
 		

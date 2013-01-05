@@ -7,33 +7,37 @@ import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.util.caching.AmpCaching;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 public class ReportsUtil {
 	private static Logger logger	= Logger.getLogger(ReportsUtil.class);
 	
-	@SuppressWarnings("unchecked")
-	public static Collection<AmpOrganisation> getAllOrgByRole(String roleCode ){
-        Session session = null;
-        Collection<AmpOrganisation> col 	= null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select distinct aor.organisation from " + AmpOrgRole.class.getName() + " as aor  "
-                + " inner join aor.role as rol where rol.roleCode=:roleCode order by aor.organisation.name";
-            Query qry = session.createQuery(queryString);
-            qry.setString("roleCode", roleCode);
-            col = qry.list();
-        } catch (Exception e) {
-            logger.debug("Exception from getAllOrgByRole()");
-            e.printStackTrace();
-        }
-        return col;
-    }
+//	@SuppressWarnings("unchecked")
+//	public static Collection<AmpOrganisation> getAllOrgByRole(String roleCode ){
+//        Session session = null;
+//        Collection<AmpOrganisation> col 	= null;
+//
+//        try {
+//            session = PersistenceManager.getRequestDBSession();
+//            String queryString = "select distinct aor.organisation from " + AmpOrgRole.class.getName() + " as aor  "
+//                + " inner join aor.role as rol where rol.roleCode=:roleCode order by aor.organisation.name";
+//            Query qry = session.createQuery(queryString);
+//            qry.setString("roleCode", roleCode);
+//            col = qry.list();
+//        } catch (Exception e) {
+//            logger.debug("Exception from getAllOrgByRole()");
+//            e.printStackTrace();
+//        }
+//        return col;
+//    }
 	
 	@SuppressWarnings("unchecked")
 	public static Collection<AmpOrganisation> getAllOrgByRoleOfPortfolio(String roleCode) {
+		if (AmpCaching.getInstance().allOrgByRoleOfPortfolio.containsKey(roleCode))
+			return new ArrayList<AmpOrganisation>(AmpCaching.getInstance().allOrgByRoleOfPortfolio.get(roleCode));
+		
         Session session = null;
         List<AmpOrganisation> col = null;
         try {
@@ -57,29 +61,38 @@ public class ReportsUtil {
             logger.debug(e.toString());
         }
 
-
+        AmpCaching.getInstance().allOrgByRoleOfPortfolio.put(roleCode, new ArrayList<AmpOrganisation>(col));
         return col;
 
     }
 	
+	public static Set<AmpOrganisation> processSelectedFilters(Object[] src)
+	{
+		return (Set<AmpOrganisation>) processSelectedFilters(src, AmpOrganisation.class);
+	}
 	
-	public static Set processSelectedFilters(Object [] src, Class colObjClass) {
+	/**
+	 * returns a Set of objects of a given class whose ids are given in the input array
+	 * @param src
+	 * @param colObjClass
+	 * @return
+	 */
+	public static Set processSelectedFilters(Object [] src, Class clazz) {
 		try{
-			HashSet set	= null;
 			if (src != null && src.length > 0) {
-				set		= new HashSet();
+				HashSet set = new HashSet();
 				for (int i=0; i<src.length; i++) {
-					Long id 		= Long.parseLong("" + src[i]);
-					Object ampObj	= Util.getSelectedObject(colObjClass, id);
+					Long id 		= Long.parseLong(src[i].toString());
+					Object ampObj	= Util.getSelectedObject(clazz, id);
 					if (ampObj != null)
 						set.add(ampObj);
 				}
+				return set;
 			}
-			return set;
 		}
 		catch(Exception E) {
 			E.printStackTrace();
-			return null;
 		}
-	}
+		return null;
+	}	
 }

@@ -302,11 +302,7 @@ public final class XmlPatcherUtil {
 			} catch (HibernateException e) {
 				logger.error(e);
 				throw new RuntimeException(e);
-			} catch (SQLException e) {
-				;
-				logger.error(e);
-				throw new RuntimeException(e);
-			}
+			} 
 		}
 	}
 
@@ -461,19 +457,11 @@ public final class XmlPatcherUtil {
 		} catch (HibernateException e1) {
 			logger.error(e1);
 			throw new RuntimeException(e1);
-		} catch (SQLException e1) {
-			logger.error(e1);
-			throw new RuntimeException(e1);
 		}
 	}
 
 	public static void closeHibernateSession(Session session) {
-		try {
-			PersistenceManager.releaseSession(session);
-		} catch (SQLException e1) {
-			logger.error(e1);
-			throw new RuntimeException(e1);
-		}
+		PersistenceManager.releaseSession(session);
 	}
 
 	/**

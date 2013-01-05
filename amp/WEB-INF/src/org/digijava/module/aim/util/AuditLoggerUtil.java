@@ -348,9 +348,7 @@ public class AuditLoggerUtil {
 			}
 		} catch (HibernateException e) {
 			logger.error("HibernateException", e);
-		} catch (SQLException e) {
-			logger.error("SQLException", e);
-		} finally {
+		}finally {
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);
@@ -426,9 +424,7 @@ public class AuditLoggerUtil {
 		
 		} catch (HibernateException e) {
 			logger.error("HibernateException", e);
-		} catch (SQLException e) {
-			logger.error("SQLException", e);
-	}
+		}
 }
 	/**
      * This class is used for sorting by name.

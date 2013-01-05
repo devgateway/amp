@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
@@ -27,6 +28,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
@@ -39,15 +41,10 @@ public class SelectTeam extends Action {
             throws java.lang.Exception {
 
         HttpSession session = request.getSession();
+        
         //Removing attributes from previous session (East Timor. Aug.2011)
-        session.removeAttribute("reportMeta");
-        session.removeAttribute("report");
-        session.removeAttribute("reportSorters");
-        session.removeAttribute("ampReportId");
-        session.removeAttribute(ArConstants.REPORTS_FILTER);
-
-
-
+        ReportContextData.clearSession();
+        AmpCaching.clearInstance();
 
         LoginForm lForm = (LoginForm) form;
         
@@ -167,7 +164,7 @@ public class SelectTeam extends Action {
             lForm.setLogin(true);
 
             //AMP-4256 - Removing all settings that might come from the other workspace
-            session.removeAttribute(Constants.FILTER_CURRENT_REPORT);
+            session.removeAttribute(Constants.CURRENT_TAB_REPORT);
             session.removeAttribute(Constants.DEFAULT_TEAM_REPORT);
 			session.removeAttribute(Constants.MY_REPORTS);
 			session.removeAttribute(Constants.MY_ACTIVE_TABS);

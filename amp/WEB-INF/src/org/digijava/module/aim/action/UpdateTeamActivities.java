@@ -17,6 +17,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -129,17 +130,19 @@ public class UpdateTeamActivities extends Action {
 				session.removeAttribute("unassignedActivityList");
 			}
 			
-			if (session.getAttribute("ampProjects") != null) {
+			if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
 				logger.info("removing ampProjects from session..");
-				session.removeAttribute("ampProjects");
+				session.removeAttribute(Constants.AMP_PROJECTS);
 			}
-			if (session.getAttribute("teamActivityList") != null) {
-				session.removeAttribute("teamActivityList");
-			}
+//			these attributes are never written to -> so we can safely delete the deletions			
+//			if (session.getAttribute("teamActivityList") != null) {
+//				session.removeAttribute("teamActivityList");
+//			}
 			taForm.setRemoveActivity(null);
 			taForm.setSelActivities(null);
-			session.removeAttribute("report"); // so that the activity list gets refreshed
-			session.removeAttribute("reportMeta"); // so that the activity list gets refreshed
+			
+			ReportContextData.getFromRequest().setGeneratedReport(null);
+			ReportContextData.getFromRequest().setReportMeta(null);
 			return mapping.findForward("forward");
 		} else if (taForm.getSelActivities() != null && taForm.getRemoveActivity().equals("assign")) {
 			/* add the selected activities to the team list */
@@ -196,12 +199,13 @@ public class UpdateTeamActivities extends Action {
 			if (session.getAttribute("unassignedActivityList") != null) {
 				session.removeAttribute("unassignedActivityList");
 			}
-			if (session.getAttribute("ampProjects") != null) {
-				session.removeAttribute("ampProjects");
+			if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
+				session.removeAttribute(Constants.AMP_PROJECTS);
 			}
-			if (session.getAttribute("teamActivityList") != null) {
-				session.removeAttribute("teamActivityList");
-			}
+//			these attributes are never written to -> so we can safely delete the deletions			
+//			if (session.getAttribute("teamActivityList") != null) {
+//				session.removeAttribute("teamActivityList");
+//			}
 			taForm.setAssignActivity(null);
 			return mapping.findForward("forward");
 		} else {
@@ -224,7 +228,7 @@ public class UpdateTeamActivities extends Action {
 				session.setAttribute("unassignedActivityList", col);
 			}
 			
-			Collection actList = (Collection) session.getAttribute("unassignedActivityList");
+			List actList = (List) session.getAttribute("unassignedActivityList");
 
 			
 			Comparator acronymComp = new Comparator() {
@@ -242,27 +246,27 @@ public class UpdateTeamActivities extends Action {
 				}
 			};
 			
-			List temp = (List)actList;
+//			List temp = (List)actList;
 			String sort = (taForm.getSort() == null) ? null : taForm.getSort().trim();
 			String sortOrder = (taForm.getSortOrder() == null) ? null : taForm.getSortOrder().trim();
 			
 			if ( sort == null || "".equals(sort) || sortOrder == null || "".equals(sortOrder)) {
-				Collections.sort(temp);
+				Collections.sort(actList);
 				taForm.setSort("activity");
 				taForm.setSortOrder("asc");
 			}
 			else {
 				if ("activity".equals(sort)) {
 					if ("asc".equals(sortOrder))
-						Collections.sort(temp);
+						Collections.sort(actList);
 					else
-						Collections.sort(temp,Collections.reverseOrder());
+						Collections.sort(actList,Collections.reverseOrder());
 				}
 				else if ("donor".equals(sort)) {
 					if ("asc".equals(sortOrder))
-						Collections.sort(temp, acronymComp);
+						Collections.sort(actList, acronymComp);
 					else
-						Collections.sort(temp, racronymComp);
+						Collections.sort(actList, racronymComp);
 				}
 			}			
 			
@@ -270,20 +274,20 @@ public class UpdateTeamActivities extends Action {
 			if (stIndex < 0)
 				stIndex = 1;
 			int edIndex = page * numRecords;
-			if (edIndex > temp.size()) {
-				edIndex = temp.size();
+			if (edIndex > actList.size()) {
+				edIndex = actList.size();
 			}
 
 			Vector vect = new Vector();
-			vect.addAll(temp);
+			vect.addAll(actList);
 
 			col = new ArrayList();
 			for (int i = (stIndex - 1); i < edIndex; i++) {
 				col.add(vect.get(i));
 			}
 
-			int numPages = temp.size() / numRecords;
-			numPages += (temp.size() % numRecords != 0) ? 1 : 0;
+			int numPages = actList.size() / numRecords;
+			numPages += (actList.size() % numRecords != 0) ? 1 : 0;
 
 			Collection pages = null;
 

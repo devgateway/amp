@@ -9,20 +9,23 @@ function SaveReportEngine (isTab) {
 
 SaveReportEngine.prototype.getOriginalReportName	= function () {
 	return document.getElementById("saveOriginalReportName").value;
-}
+};
+
 SaveReportEngine.prototype.getReportName	= function () {
 	var reportName = document.getElementById("saveReportName").value; 
 	if(reportName){
 		reportName = trim(reportName);
 	}
 	return reportName;	
-}
+};
+
 SaveReportEngine.prototype.getReportId		= function () {
 	return document.getElementById("saveReportId").value;
-}
+};
+
 SaveReportEngine.prototype.getOverwrite		= function () {
 	return document.getElementById("overwriteReport").checked;
-}
+};
 
 SaveReportEngine.prototype.checkTyping		= function (e) {
 	if ( SaveReportEngine.enterPressed(e) )
@@ -33,7 +36,7 @@ SaveReportEngine.prototype.checkTyping		= function (e) {
 	else {
 		this.saveButton.enable();
 	}
-}
+};
 
 SaveReportEngine.prototype.checkEnter		= function (e) {
 	if ( SaveReportEngine.enterPressed(e) && this.getReportName() != "" ) {
@@ -41,7 +44,7 @@ SaveReportEngine.prototype.checkEnter		= function (e) {
 			return false;
 	}
 	return true;	
-}
+};
 
 SaveReportEngine.prototype.showPanel		= function () {
 	if (this.panel == null) {
@@ -66,7 +69,7 @@ SaveReportEngine.prototype.showPanel		= function () {
 	this.panel.setFooter("");
 	this.panel.show();
 	document.getElementById("saveReportName").focus();
-}
+};
 
 SaveReportEngine.prototype.success		= function (o) {
 	this.panel.setFooter("");
@@ -94,12 +97,13 @@ SaveReportEngine.prototype.success		= function (o) {
 		this.doneCopyMessage;	
 	
 	}
-}
+};
 
 SaveReportEngine.prototype.failure		= function (o) {
 	this.panel.setFooter("");
 	this.panel.setBody(SaveReportEngine.connectionErrorMessage);
-}
+};
+
 SaveReportEngine.prototype.saveReport		= function () {
 	if ( this.getReportName() == this.getOriginalReportName() ) {
 		this.overwritingReport	= true;
@@ -115,7 +119,7 @@ SaveReportEngine.prototype.saveReport		= function () {
 						"&reportId="+this.getReportId();
 	//alert (postString);
 	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
-}
+};
 
 SaveReportEngine.enterPressed		= function (e) {
 	if (e != null) {
@@ -126,11 +130,11 @@ SaveReportEngine.enterPressed		= function (e) {
 			keyCode	= e.keyCode;
 			
 		if ( keyCode == 13 ) {
-			return true
+			return true;
 		}
 	}
 	return false;
-}
+};
 
 function ExtendedButton( buttonId ) {
 	this.buttonId	= buttonId;
@@ -141,13 +145,15 @@ ExtendedButton.prototype.enable				= function () {
 	
 	btn.disabled		= false;
 	btnY.setStyle("color", "black");
-}
+};
+
 ExtendedButton.prototype.disable			= function () {
 	var btn 	= document.getElementById( this.buttonId );
 	var btnY	= new YAHOO.util.Element(btn);
 	btn.disabled		= true;
 	btnY.setStyle("color", "lightgrey");
-}
+};
+
 
 
 function initSaveReportEngine( isTab) {

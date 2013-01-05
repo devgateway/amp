@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -1110,7 +1111,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	Collection<AmpCategoryValue> catValues	= null;
 	try {
-		catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false,request);
+		catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -1199,8 +1200,9 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	        Long prev = new Long( -1);
 	        Long next = new Long( -1);
+	        // What does this cycle do?
 	        if (eaForm.getActivityId() != null) {
-	          ReportData rep = (ReportData) session.getAttribute("report");
+	          ReportData rep = ReportContextData.getFromRequest().getGeneratedReport();
 	          if (rep != null) {
 	            Iterator<Long> it = rep.getOwnerIds().iterator();
 	
@@ -1798,7 +1800,7 @@ private ActionForward showStep1(ActionMapping mapping,
 	//get all possible refdoc names from categories
 	Collection<AmpCategoryValue> catValues	= null;
 	try {
-		catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false, request);
+		catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
 	} catch (Exception e1) {
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
@@ -1862,7 +1864,7 @@ private ActionForward showStep1(ActionMapping mapping,
 	Collection financingInstrValues		= null;
 	try {
 		financingInstrValues = CategoryManagerUtil.
-		    getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, null, request);
+		    getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
 	} catch (Exception e1) {
 		// TODO Auto-generated catch block
 		e1.printStackTrace();
@@ -1881,7 +1883,7 @@ private ActionForward showStep1(ActionMapping mapping,
 	eaForm.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
 
 	try {
-		eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false, request));
+		eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

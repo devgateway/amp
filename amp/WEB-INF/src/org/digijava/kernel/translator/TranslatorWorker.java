@@ -472,12 +472,6 @@ public class TranslatorWorker {
                          ",locale=" + locale, he);
             throw new WorkerException(he);
         }
-        catch (SQLException sqle) {
-            logger.error("Error reading translation. siteId="
-                         + siteId + ", key = " + key +
-                         ",locale=" + locale, sqle);
-            throw new WorkerException(sqle);
-        }
         
     }
 
@@ -512,13 +506,6 @@ public class TranslatorWorker {
                 he.getMessage()};
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
-        }
-        catch (SQLException sqle) {
-            String errKey = "TranslatorWorker.SqlExLoadingMessage.err";
-            Object[] params = {
-                sqle.getMessage()};
-            logger.l7dlog(Level.ERROR, errKey, params, sqle);
-            throw new WorkerException(sqle.getMessage(), sqle);
         }
         finally {
             try {
@@ -572,13 +559,6 @@ public class TranslatorWorker {
                 he.getMessage()};
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
-        }
-        catch (SQLException sqle) {
-            String errKey = "TranslatorWorker.SqlExLoadingMessage.err";
-            Object[] params = {
-                sqle.getMessage()};
-            logger.l7dlog(Level.ERROR, errKey, params, sqle);
-            throw new WorkerException(sqle.getMessage(), sqle);
         }
         finally {
             try {
@@ -709,13 +689,6 @@ public class TranslatorWorker {
                 he.getMessage()};
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
-        }
-        catch (SQLException sqle) {
-            String errKey = "TranslatorWorker.SqlExLoadingMessage.err";
-            Object[] params = {
-                sqle.getMessage()};
-            logger.l7dlog(Level.ERROR, errKey, params, sqle);
-            throw new WorkerException(sqle.getMessage(), sqle);
         }
 
         finally {
@@ -905,13 +878,6 @@ public class TranslatorWorker {
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
         }
-        catch (SQLException sqle) {
-            String errKey = "TranslatorWorker.SqlExLoadingMessage.err";
-            Object[] params = {
-                sqle.getMessage()};
-            logger.l7dlog(Level.ERROR, errKey, params, sqle);
-            throw new WorkerException(sqle.getMessage(), sqle);
-        }
         finally {
             try {
                 if (session != null) {
@@ -1004,13 +970,6 @@ public class TranslatorWorker {
                 he.getMessage()};
             logger.l7dlog(Level.ERROR, errKey, params, he);
             throw new WorkerException(he.getMessage(), he);
-        }
-        catch (SQLException sqle) {
-            String errKey = "TranslatorWorker.SqlExLoadingMessage.err";
-            Object[] params = {
-                sqle.getMessage()};
-            logger.l7dlog(Level.ERROR, errKey, params, sqle);
-            throw new WorkerException(sqle.getMessage(), sqle);
         }
         finally {
             try {
@@ -1186,13 +1145,6 @@ public class TranslatorWorker {
             //tx.commit();
             
         } 
-        catch (SQLException se) {
-            logger.error("Error saving translation. siteId="
-                         + message.getSiteId() + ", key = " + message.getKey() +
-                         ",locale=" + message.getLocale(), se);           
-            throw new WorkerException("TranslatorWorker.SqlExSaveMessage.err", se);
-
-        }
         catch (HibernateException e) {
         	logger.warn("saveOrUpdate() failed for Message with siteId=" + message.getSiteId() + ", key = " + message.getKey() + ",locale=" + message.getLocale(), e);
         	try {
@@ -1261,10 +1213,6 @@ public class TranslatorWorker {
             ses.update(message);
             //tx.commit();
         }
-        catch (SQLException se) {
-            logger.error("Error updating translation. siteId="+ message.getSiteId() + ", key = " + message.getKey() +",locale=" + message.getLocale(), se);
-            throw new WorkerException("TranslatorWorker.SqlExUpdateMessage.err", se);
-        }
         catch (HibernateException e) {
             logger.error("Error updating translation. siteId="
                          + message.getSiteId() + ", key = " + message.getKey() +
@@ -1318,10 +1266,6 @@ public class TranslatorWorker {
            // ses.delete(message);
             //tx.commit();
 
-        }
-        catch (SQLException se) {
-            logger.error("Error updating translation. siteId="+ message.getSiteId() + ", key = " + message.getKey() +",locale=" + message.getLocale(), se);
-            throw new WorkerException("TranslatorWorker.SqlExUpdateMessage.err", se);
         }
         catch (HibernateException e) {
             logger.error("Error updating translation. siteId="
@@ -1394,10 +1338,6 @@ public class TranslatorWorker {
             //tx.commit();
 
         }
-        catch (SQLException se) {
-            logger.error("Error updating translations. key=" + key, se);
-            throw new WorkerException("Error updating translations. key=" + key, se);
-        }
         catch (HibernateException e) {
             logger.error("Error updating translations. key=" + key, e);
             throw new WorkerException("Error updating translations. key=" + key, e);
@@ -1439,10 +1379,6 @@ public class TranslatorWorker {
             Integer count = (Integer)q.uniqueResult();
             result = count.intValue() > 0;
 
-        }
-        catch (SQLException se) {
-            logger.error("Error updating translations. key=" + key, se);
-            throw new WorkerException("Error updating translations. key=" + key, se);
         }
         catch (HibernateException e) {
             logger.error("Error updating translations. key=" + key, e);

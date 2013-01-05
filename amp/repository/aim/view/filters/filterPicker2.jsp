@@ -16,6 +16,11 @@
 <%@page import="java.util.Collections"%>
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
 
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/css/yui/tabview.css" />
 <link type="text/css" href="css_2/tabs.css" rel="stylesheet" />
@@ -30,7 +35,7 @@
 <bean:define id="reqBeanSetterObject" toScope="request" name="aimReportsFilterPickerForm"/>
 
 <% 
-StopWatch.next("Filters", true);
+	StopWatch.next("Filters", true, "begin rendering filterPicker2");
 %>
 
 <html:hidden property="text"/>
@@ -47,6 +52,9 @@ StopWatch.next("Filters", true);
 		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
 	</ul>
 	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;background: white;" >
+	<% 
+		StopWatch.next("Filters", true, "donor tab begin");
+	%>
 		<div id="donorsTab" style="height: 91%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />
@@ -55,6 +63,9 @@ StopWatch.next("Filters", true);
 				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
+	<% 
+		StopWatch.next("Filters", true, "related agencies tab begin");
+	%>		
 		<div id="relAgenciesTab" class="yui-hidden" style="height: 91%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
@@ -63,6 +74,9 @@ StopWatch.next("Filters", true);
 				<%@include file="bigFilterTable.jsp" %>
 			</div>
 		</div>
+	<% 
+		StopWatch.next("Filters", true, "sectors tab begin");
+	%>		
 		<div id="sectorsTab" class="yui-hidden"  style="height: 91%;">
 			<div class="grayBorder">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="sectorElements" />
@@ -72,6 +86,9 @@ StopWatch.next("Filters", true);
 			</div>
 		</div>
 		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+		<% 
+			StopWatch.next("Filters", true, "programs tab begin");
+		%>
 			<div id="programsTab" class="yui-hidden"  style="height: 91%;" >
 				<div class="grayBorder">
 					<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
@@ -80,7 +97,13 @@ StopWatch.next("Filters", true);
 					<%@include file="bigFilterTable.jsp" %>
 				</div>
 			</div>
+		<% 
+			StopWatch.next("Filters", true, "programs tab end");
+		%>			
 		</module:display>
+		<% 
+			StopWatch.next("Filters", true, "financing location tab begin");
+		%>		
 		<div id="financingLocTab" class="yui-hidden"  style="height: 91%;" >
 			<div class="grayBorder" style="width: 95%; float: left;">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />
@@ -91,15 +114,24 @@ StopWatch.next("Filters", true);
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="" />
 			</div>
 		</div>
+		<% 
+			StopWatch.next("Filters", true, "financing location tab end");
+		%>				
 		<div id="otherCriteriaTab" class="yui-hidden"  style="height: 91%;">
 			<div class="grayBorder">
 				<c:set var="reqSelectorHeaderSize" scope="request" value="13" />
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="otherCriteriaElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="otherCriteriaPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="otherCriteriaTab_search" />
+		<% 
+			StopWatch.next("Filters", true, "other criteria tab begin");
+		%>						
 				<div class="otherCriteriaBigTable">
 					<%@include file="bigFilterTable.jsp" %>
 				</div>
+		<% 
+			StopWatch.next("Filters", true, "other criteria tab end");
+		%>						
 				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
 				<div style="width: 55%; height:30%; padding: 10px; float: left;">
 					<b><digi:trn>Date Filter</digi:trn> </b>
@@ -171,7 +203,7 @@ StopWatch.next("Filters", true);
 	<html:checkbox property="justSearch" value="true" />&nbsp;
 	<digi:trn>Use filter as advanced search</digi:trn>
 </div>
-<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
+<%AmpARFilter arf = ReportContextData.getFromRequest().getFilter();%>
 <%if ((arf != null) && (arf.isPublicView()==false)){%>
 	<c:if test="${aimReportsFilterPickerForm.reporttype eq '5'}">
 		<div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
@@ -182,18 +214,22 @@ StopWatch.next("Filters", true);
 <%} %>
 
 <div style="clear:both;text-align:center;padding:2px 0px 0px 0px;margin-top: 20px;height: 15%;">
-				<html:hidden property="ampReportId" />
+				<input type="hidden" name="ampReportId" value="${reportCD.ampReportId}" />
+				<input type="hidden" name="reportContextId" value="${reportCD.contextId}" />
 
 				<html:hidden property="defaultCurrency" />
-				<input class="buttonx_sm" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters()"
-				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 
-				<html:button onclick="resetFilter();" styleClass="buttonx_sm" property="reset" styleId="filterPickerResetButton">
+				<!-- notice that in case of queryEngine filters, this file (included by queryEngine.jsp) has its submit button action overrided by submitQuery() -->
+				<input class="buttonx_sm" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>');"
+					value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" />
+				
+				<html:button onclick="resetFilter('${reportCD.contextId}')" styleClass="buttonx_sm" property="reset" styleId="filterPickerResetButton">
 					<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
-				</html:button> </div>
+				</html:button>
+</div>
 
 <html:hidden property="workspaceonly" styleId="workspaceOnly"/>
 </digi:form>
 
 <% 
-StopWatch.next("Filters", true);
+StopWatch.next("Filters", true, "end rendering filter picker2");
 %>

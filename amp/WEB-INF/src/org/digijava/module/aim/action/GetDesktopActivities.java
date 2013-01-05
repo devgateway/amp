@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.form.DesktopForm;
 import org.digijava.module.aim.helper.Constants;
@@ -35,41 +36,30 @@ public class GetDesktopActivities extends Action {
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		DesktopForm dForm = (DesktopForm) form;
-		
+			
 		/*
 		 * Do not uncomment ---- FIX for bug AMP-2030
 		 * if(session.getAttribute(Constants.DEFAULT_TEAM_REPORT)==null){
-                  session.setAttribute("filterCurrentReport",null);
+                  session.setAttribute(Constants.CURRENT_TAB_REPORT, null);
                 }
         */
 
 		session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
-		String risk=(String) request.getParameter("risk");
-		AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+		
+/*		BOZO: DON'T KNOW WHAT THIS CODE IS SUPPOSED TO DO. In case of bug, set up parameter forwarding to the relevant action and take care of it there.
+ * 		impossible to do this here, as here we don't know what report & filter this parameter should apply to 
+ *  
+ 		String risk=(String) request.getParameter("risk");
+		AmpARFilter arf = ReportContextData.getFromRequest(true).getFilter();
 		if(risk!=null)
 		{
-			if(arf!=null)
-				if(arf.getRisks()!=null)
-				{
-					arf.getRisks().clear();
-					AmpIndicatorRiskRatings airr=FeaturesUtil.getFilter(risk);
-					arf.getRisks().add(airr);
-					session.setAttribute(ArConstants.REPORTS_FILTER, arf);
-				}
-				else{
-					arf.setRisks(new HashSet());
-					AmpIndicatorRiskRatings airr=FeaturesUtil.getFilter(risk);
-					arf.getRisks().add(airr);
-					session.setAttribute(ArConstants.REPORTS_FILTER, arf);
-				}
-			else{
-				arf=new AmpARFilter();
-				arf.setRisks(new HashSet());
-				AmpIndicatorRiskRatings airr=FeaturesUtil.getFilter(risk);
-				arf.getRisks().add(airr);
-				session.setAttribute(ArConstants.REPORTS_FILTER, arf);
-			}
-		}
+			if (arf == null)
+				arf = new AmpARFilter();
+			
+			final AmpIndicatorRiskRatings airr = FeaturesUtil.getFilter(risk);
+			arf.setRisks(new HashSet(){{add(airr);}});
+			ReportContextData.getFromRequest().setFilter(arf);			
+		}*/
 
 		if (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
 				"Donor".equalsIgnoreCase(tm.getTeamType())) {

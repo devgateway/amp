@@ -269,7 +269,11 @@ public class Constants
 	public static final String TYPE_TEAM = "Team";
 
 	public static final String DEFAULT_TEAM_REPORT		= "defaultTeamReport";
-	public static final String FILTER_CURRENT_REPORT	= "filterCurrentReport";
+	
+	/**
+	 * the AmpReport instance linked to the currently-opened tab
+	 */
+	public static final String CURRENT_TAB_REPORT	= "current_tab_report";
 	
 	public static final String MY_REPORTS 		= "myReports";
 	public static final String MY_ACTIVE_TABS 	= "myActiveTabs";

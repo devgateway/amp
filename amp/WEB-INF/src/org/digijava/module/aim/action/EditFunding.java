@@ -173,7 +173,7 @@ public class EditFunding extends Action {
 		formBean.getFunding().setNumDisb(numDisb);
 		formBean.getFunding().setNumExp(numExp);
         formBean.getFunding().setNumDisbOrder(numDisbOrder);
-		formBean.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false, request));
+		formBean.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 		formBean.getFunding().setOrganizations(DbUtil.getAllOrganisation());
 		formBean.getFunding().setEditFunding(true);
 		formBean.getFunding().setDupFunding(true);
@@ -183,7 +183,7 @@ public class EditFunding extends Action {
 		formBean.getOldFunding().setNumDisb(numDisb);
 		formBean.getOldFunding().setNumExp(numExp);
         formBean.getOldFunding().setNumDisbOrder(numDisbOrder);
-		formBean.getOldFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false, request));
+		formBean.getOldFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 		formBean.getOldFunding().setOrganizations(DbUtil.getAllOrganisation());
 		formBean.getOldFunding().setEditFunding(true);
 		formBean.getOldFunding().setDupFunding(true);

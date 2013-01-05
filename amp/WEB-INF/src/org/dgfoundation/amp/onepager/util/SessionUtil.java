@@ -20,8 +20,6 @@ public class SessionUtil {
 			m = (AmpTeamMember) session.load(AmpTeamMember.class, (long)61);
 		} catch (HibernateException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return m;
 	}

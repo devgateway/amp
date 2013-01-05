@@ -12,6 +12,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.PercentageHelperMap;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.workers.AmountColWorker;
 import org.digijava.module.aim.helper.FormatHelper;
 
@@ -153,7 +154,7 @@ public class AmountCell extends Cell {
 		if (am == 0)
 			return "0";
 		else
-			return FormatHelper.formatNumberUsingCustomFormat(getAmount());
+			return ReportContextData.formatNumberUsingCustomFormat(getAmount());
 	}
 
 	/*
@@ -264,7 +265,7 @@ public class AmountCell extends Cell {
 
 	public String getWrappedAmount() {
 		if (id != null)
-			return FormatHelper.formatNumberUsingCustomFormat(convert()
+			return ReportContextData.formatNumberUsingCustomFormat(convert()
 					* getPercentage() / 100);
 		else
 			return "";

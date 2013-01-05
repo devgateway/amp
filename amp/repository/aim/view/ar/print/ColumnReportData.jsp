@@ -1,3 +1,4 @@
+<%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -8,9 +9,13 @@
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 <%@page import="org.dgfoundation.amp.ar.Column"%>
 <%@page import="org.dgfoundation.amp.ar.cell.Cell"%>
-<bean:define id="metadata" name="reportMeta"
-	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
-	toScope="page" />
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
+
 <bean:define id="columnReport" name="viewable"
 	type="org.dgfoundation.amp.ar.ColumnReportData" scope="request"
 	toScope="page" />
@@ -27,7 +32,7 @@
 	<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;" colspan="3">
 		<span  style="color: red;font-family: Arial;font-size: 10px;">
 			<%
-				AmpARFilter af = (AmpARFilter) session.getAttribute("ReportsFilter");
+				AmpARFilter af = ReportContextData.getFromRequest().getFilter();
 	            if (af.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){%>
 	            <digi:trn key="rep:pop:AllAmount">
 					Amounts are in thousands (000)
@@ -41,10 +46,8 @@
 					</digi:trn>
 			<%}%>
 						
-			<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
-				<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-				<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
-			</logic:present>
+			<bean:define id="selCurrency" name="reportCD" property="selectedCurrency" />
+			<digi:trn key="<%=\"aim:currency:\" + ((String)selCurrency).toLowerCase().replaceAll(\" \", \"\") %>"><%=selCurrency %></digi:trn>
 		</span>
 	</td>
 </tr>

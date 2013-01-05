@@ -5,14 +5,18 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
 <c:set var="markerColor" target="page">#E7E7FF</c:set>
 <c:set var="skippedClass" target="page">hierarchyCell</c:set>
 <c:set var="baseId" target="page">report_row_</c:set>
 
-<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
-<bean:define id="groupReport" name="viewable" type="org.dgfoundation.amp.ar.GroupReportData" scope="request" toScope="page"/>
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
 
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
+<bean:define id="groupReport" name="viewable" type="org.dgfoundation.amp.ar.GroupReportData" scope="request" toScope="page"/>
 
 <!-- generate report headings -->
 <bean:define id="viewable" name="groupReport" property="firstColumnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

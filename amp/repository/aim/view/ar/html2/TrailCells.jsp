@@ -7,9 +7,13 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <%@page import="org.digijava.kernel.translator.TranslatorWorker"%>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
-<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
 
 <!-- generate total row -->
 
@@ -18,7 +22,7 @@
 		<span style="font-family: Arial;color:black; font-weight: bold;font-size: 12px;margin-left: 2px">
 			<digi:trn key="rep:popup:reporttotals">Report Totals:</digi:trn>
 		</span>
-		<logic:iterate name="reportMeta" property="hierarchies" type="org.digijava.module.aim.dbentity.AmpReportHierarchy" id="repHierarchy" scope="session" indexId="hierIdx">
+		<logic:iterate name="reportMeta" property="hierarchies" type="org.digijava.module.aim.dbentity.AmpReportHierarchy" id="repHierarchy" scope="page" indexId="hierIdx">
 			<c:if test="${ hierIdx > 0}">
 	  			<td style="border-bottom:black 1px solid;border-right:#E2E2E2 1px solid;" height="18px">&nbsp;</td>
 	  		</c:if>

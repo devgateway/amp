@@ -315,131 +315,103 @@ public class TeamUtil {
      * @param childTeams
      *            The collection of child teams which is to be associated with
      *            the parent team
-     * @return true if the team is successfully created else returns false
+     * @return false if the team is successfully created else returns true
      */
-    public static boolean createTeam(AmpTeam team, Collection childTeams) {
-        boolean teamExist = false;
-        Session session = null;
-        Transaction tx = null;
+    public static boolean createTeam(AmpTeam team, Collection<AmpTeam> childTeams) {
+    	boolean teamExist = false;
+    	Session session = null;
 
-        try {
-            session = PersistenceManager.getSession();
+    	try {
+    		session = PersistenceManager.getSession();
 //beginTransaction();
 
-            // check whether a team with the same name already exist
-            String qryStr = "select t from " + AmpTeam.class.getName() + " t "
-                + "where (t.name=:name)";
-            Query qry = session.createQuery(qryStr);
-            qry.setParameter("name", team.getName(), Hibernate.STRING);
-            Collection col = qry.list();
-            if(col.size() > 0) {
+            //check whether a team with the same name already exist
+    		String qryStr = "select t from " + AmpTeam.class.getName() + " t "
+    				+ "where (t.name=:name)";
+    		Query qry = session.createQuery(qryStr);
+    		qry.setString("name", team.getName());
+    		if(qry.list().size() > 0) {
                 // throw new AimException("Cannot create team: The team name " +
                 // team.getName() + " already exist");
-                teamExist = true;
-                return teamExist;
-            } else {
-                // save the new team
-                session.save(team);
+    			teamExist = true;
+    			return teamExist;
+    		} 
+            
+    		// save the new team
+    		//session.save(team);
 
-                qryStr = "select fiscal from "
-                    + AmpFiscalCalendar.class.getName() + " fiscal "
-                    + "where (fiscal.name=:cal) or (fiscal.yearOffset=:yearOffset)";
-                qry = session.createQuery(qryStr);
-                qry.setParameter("cal", "Gregorian Calendar", Hibernate.STRING);
-                qry.setParameter("yearOffset", new Integer(0), Hibernate.INTEGER);
-                col = qry.list();
-                AmpFiscalCalendar fiscal = null;
-                if(col.size() > 0) {
-                    for(Iterator itr = col.iterator(); itr.hasNext(); ) {
-                        fiscal = (AmpFiscalCalendar) itr.next();
-                        logger.debug("[createTeam(-)] fiscal calendar - " + fiscal.getName());
-                        if(fiscal != null)
-                            break;
-                    }
-                } else
-                    logger.error("[createTeam(-)] fiscal calendar collection is empty");
-                qryStr = "select curr from " + AmpCurrency.class.getName()
-                    + " curr " + "where (curr.currencyCode=:code)";
-                qry = session.createQuery(qryStr);
-                qry.setParameter("code", "USD", Hibernate.STRING);
-                col = qry.list();
-                AmpCurrency curr = null;
-                if(col.size() > 0) {
-                    Iterator itr = col.iterator();
-                    if(itr.hasNext()) {
-                        curr = (AmpCurrency) itr.next();
-                    }
-                }
+    		qryStr = "select fiscal from "
+    				+ AmpFiscalCalendar.class.getName() + " fiscal "
+    				+ "where (fiscal.name=:cal) or (fiscal.yearOffset=:yearOffset)";
+    		qry = session.createQuery(qryStr);
+    		qry.setString("cal", "Gregorian Calendar");
+    		qry.setInteger("yearOffset", 0);
+    		List<AmpFiscalCalendar> calendars = qry.list();
+    		AmpFiscalCalendar fiscal = null;
+    		if(calendars.size() > 0) {
+    			for(Iterator<AmpFiscalCalendar> itr = calendars.iterator(); itr.hasNext(); ) {
+    				fiscal = (AmpFiscalCalendar) itr.next();
+    				logger.debug("[createTeam(-)] fiscal calendar - " + fiscal.getName());
+    				if(fiscal != null)
+    					break;
+    			}
+    		} 
+    		else
+    			logger.error("[createTeam(-)] fiscal calendar collection is empty");
+                
+    		qryStr = "select curr from " + AmpCurrency.class.getName()
+    				+ " curr " + "where (curr.currencyCode=:code)";
+    		qry = session.createQuery(qryStr);
+    		qry.setString("code", "USD");
+    		List<AmpCurrency> currencies = qry.list();
+    		AmpCurrency curr = null;
+    		if(currencies.size() > 0)
+    			curr = currencies.get(0);
 
-                // create application settings for the team and save
-                AmpApplicationSettings ampAppSettings = new AmpApplicationSettings();
-                ampAppSettings.setTeam(team);
-                ampAppSettings.setMember(null);
-                ampAppSettings.setDefaultRecordsPerPage(new Integer(10));
-                ampAppSettings.setCurrency(curr);
-                ampAppSettings.setFiscalCalendar(fiscal);
-                ampAppSettings.setLanguage("English");
-                ampAppSettings.setValidation("validationOff");
-                session.save(ampAppSettings);
 
-                // update all child workspaces parent team
-                if(childTeams != null && childTeams.size() > 0) {
-                    Iterator itr = childTeams.iterator();
-                    while(itr.hasNext()) {
-                        AmpTeam childTeam = (AmpTeam) itr.next();
-                        childTeam.setParentTeamId(team);
-                        session.update(childTeam);
-                    }
-                }
+    		// create application settings for the team and save
+    		AmpApplicationSettings ampAppSettings = new AmpApplicationSettings();
+    		ampAppSettings.setTeam(team);
+    		ampAppSettings.setMember(null);
+    		ampAppSettings.setDefaultRecordsPerPage(new Integer(10));
+    		ampAppSettings.setCurrency(curr);
+    		ampAppSettings.setFiscalCalendar(fiscal);
+    		ampAppSettings.setLanguage("English");
+    		ampAppSettings.setValidation("validationOff");
+    		session.save(ampAppSettings);
+
+    		// update all child workspaces parent team
+    		if(childTeams != null && childTeams.size() > 0) {    			
+    			for(AmpTeam childTeam:childTeams)
+    			{
+    				childTeam.setParentTeamId(team);
+    				session.update(childTeam);
+    			}
+    		}
                 
                 //link shared resources with team
-                List sharedDocs=null;
-                String qstr="select c.nodeUUID,c.sharedNodeVersionUUID from " +CrSharedDoc.class.getName()  +" c where " +
-                		" c.state="+CrConstants.SHARED_AMONG_WORKSPACES +  " group by c.nodeUUID,c.sharedNodeVersionUUID";
-                qry = session.createQuery(qstr);
-                sharedDocs = qry.list();
-                if(sharedDocs!=null && sharedDocs.size()>0){
-                	for (Object rawRow : sharedDocs) {
-    					Object[] row = (Object[])rawRow; //:)
-    					String nodeUUID=(String)row[0];
-    					String versionUUID=(String)row[1];
-    					CrSharedDoc sharedDoc=new CrSharedDoc(nodeUUID, team, CrConstants.SHARED_AMONG_WORKSPACES);
-    					sharedDoc.setSharedNodeVersionUUID(versionUUID);
-    					session.save(sharedDoc);
+    		List<Object[]> sharedDocs = null;
+    		String qstr="select c.nodeUUID,c.sharedNodeVersionUUID from " +CrSharedDoc.class.getName()  +" c where " +
+    				" c.state="+CrConstants.SHARED_AMONG_WORKSPACES +  " group by c.nodeUUID,c.sharedNodeVersionUUID";
+    		qry = session.createQuery(qstr);
+    		sharedDocs = qry.list();
+    		if(sharedDocs!=null && sharedDocs.size()>0){
+    			for (Object[] row : sharedDocs) {
+    				String nodeUUID = (String) row[0];
+    				String versionUUID = (String) row[1];
+    				CrSharedDoc sharedDoc = new CrSharedDoc(nodeUUID, team, CrConstants.SHARED_AMONG_WORKSPACES);
+    				sharedDoc.setSharedNodeVersionUUID(versionUUID);
+    				session.save(sharedDoc);
     				}
-                }
+    		}
                 // commit the changes
                 //tx.commit();
-            }
         } catch(Exception e) {
             /*
              * teamExist = true; logger.error(ae.getMessage());
              */
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(Exception rbf) {
-                    logger.error("Rollback failed");
-                }
-            }
             throw new RuntimeException(e);
-
         }
-        /*
-        * catch (Exception e) { logger.error("Execption from
-        * createTeam()"); logger.error(e.getMessage()); if (tx != null) {
-        * try { tx.rollback(); } catch (Exception rbf) {
-        * logger.error("Rollback failed"); } } }
-        finally
-        */ {
-           if(session != null) {
-               try {
-                   PersistenceManager.releaseSession(session);
-               } catch(Exception rsf) {
-                   logger.error("Release session failed");
-               }
-           }
-       }
         return teamExist;
     }
 
@@ -759,9 +731,6 @@ public class TeamUtil {
 			//transaction.commit();
 			PersistenceManager.releaseSession(session);
 		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (SQLException e) {
 			logger.error(e);
 			e.printStackTrace();
 		} catch (DgException e) {
@@ -2005,18 +1974,18 @@ public class TeamUtil {
  }
     
     
-    public static List getLastShownReports(Long teamId, Long memberId, Boolean getTabs,Boolean onlyCategorized) {
-        
- 	   Session session 	= null;
-       List col 		= new ArrayList();
-       String tabFilter	= "";
-	   if ( getTabs!=null ) {
-		   tabFilter	= "r.drilldownTab=:getTabs AND ";
-       }
-	   String favourites ="";
-	   if(onlyCategorized!=null && onlyCategorized){
-		   favourites = " r.reportCategory is not null AND ";
-	   }
+    public static ArrayList<AmpReports> getLastShownReports(Long teamId, Long memberId, Boolean getTabs,Boolean onlyCategorized) 
+    {       
+    	Session session 	= null;
+    	ArrayList<AmpReports> col = new ArrayList<AmpReports>();
+    	String tabFilter	= "";
+    	if ( getTabs!=null ) {
+    		tabFilter	= "r.drilldownTab=:getTabs AND ";
+    	}
+    	String favourites ="";
+    	if(onlyCategorized!=null && onlyCategorized){
+    		favourites = " r.reportCategory is not null AND ";
+    	}
 
        try {
             session = PersistenceManager.getRequestDBSession();
@@ -2044,7 +2013,7 @@ public class TeamUtil {
             	queryString="select distinct r from " + AmpReports.class.getName()+ " r where r.drilldownTab=false AND "+favourites+"  r.ownerId is not null and r.ownerId=:ampTeamMemId";
             	qry = session.createQuery(queryString); 
              	qry.setLong("ampTeamMemId", memberId);
-             	col = qry.list();
+             	col = new ArrayList<AmpReports>(qry.list());
             }
 	       	//transaction.commit();
         } catch(Exception e) {

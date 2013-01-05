@@ -153,18 +153,8 @@ public class HashKeyPatch {
 			return gs.getGlobalSettingsValue();
 		} catch (HibernateException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}finally{
-			if (null != session){
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (HibernateException e) {
-					e.printStackTrace();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			PersistenceManager.releaseSession(session);
 		}
 		return null;
 	}

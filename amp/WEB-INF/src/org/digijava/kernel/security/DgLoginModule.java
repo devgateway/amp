@@ -461,17 +461,6 @@ public class DgLoginModule
             UserUtils.fillUserSubject(subject, user);
 
         }
-        catch (SQLException ex) {
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (Throwable cause) {
-                    logger.warn("rollback() failed ", cause);
-                }
-            }
-            throw ex;
-        }
         catch (HibernateException ex) {
             if (tx != null) {
                 try {

@@ -163,16 +163,14 @@ public class CategoryManager extends Action {
 		/* Ordering the values alphabetically if necessary */
 		if (myForm.getCategories() != null) {
 			myForm.setAllCategoryValues( new HashSet<AmpCategoryValue>() );
-			Iterator iterator	= myForm.getCategories().iterator();
-			while(iterator.hasNext()) {
-				AmpCategoryClass ampCategoryClass	= (AmpCategoryClass) iterator.next();
+			for(AmpCategoryClass ampCategoryClass:myForm.getCategories()) {
 				myForm.getAllCategoryValues().addAll( ampCategoryClass.getPossibleValues() );
 				myForm.getAllCategoryValues().remove(null);
 				
 				if ( ampCategoryClass.getIsOrdered() && ampCategoryClass.getPossibleValues() != null ) {
-					TreeSet treeSet	= new TreeSet( new CategoryManagerUtil.CategoryComparator(request) );
+					TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator() );
 					treeSet.addAll( ampCategoryClass.getPossibleValues() );
-					ampCategoryClass.setPossibleValues( new ArrayList(treeSet) );
+					ampCategoryClass.setPossibleValues( new ArrayList<AmpCategoryValue>(treeSet) );
 				}
 			}
 		}
@@ -252,11 +250,11 @@ public class CategoryManager extends Action {
 	 * @param categoryId set to null if you want to load all categories
 	 * @return all the categories from the database or just one if categoryId is not null
 	 */
-	private Collection loadCategories(Long categoryId) {
+	private Collection<AmpCategoryClass> loadCategories(Long categoryId) {
 		logger.info("Getting category with id " + categoryId);
 		
 		Session dbSession			= null;
-		Collection returnCollection	= null;
+		Collection<AmpCategoryClass> returnCollection	= null;
 		try {
 			dbSession			= PersistenceManager.openNewSession();
 			String queryString;

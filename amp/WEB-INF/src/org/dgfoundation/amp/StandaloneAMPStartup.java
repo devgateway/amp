@@ -108,12 +108,7 @@ public class StandaloneAMPStartup {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.error(e);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				logger.error(e);
-			}
-			
+			} 
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

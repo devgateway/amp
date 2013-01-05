@@ -67,9 +67,6 @@ public class ChapterUtil {
 					+ AmpChapter.class.getName());
 			ret = query.list();
 			PersistenceManager.releaseSession(hs);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error(e);
 		} catch (DgException e) {
 			e.printStackTrace();
 			logger.error(e);
@@ -88,9 +85,6 @@ public class ChapterUtil {
 			query.setInteger("year", year);
 			ret = query.list();
 			PersistenceManager.releaseSession(hs);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error(e);
 		} catch (DgException e) {
 			e.printStackTrace();
 			logger.error(e);

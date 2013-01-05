@@ -22,6 +22,7 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibilityAlphaTreeOrderComparator
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumnsOrder;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpFeature;
@@ -2466,9 +2467,6 @@ public class FeaturesUtil {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		finally {
 			if (session != null) {
@@ -2503,9 +2501,6 @@ public class FeaturesUtil {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		finally {
 			if (session != null) {
@@ -2538,9 +2533,6 @@ public class FeaturesUtil {
 				result.add(f.getId());
 			}
 		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -2829,7 +2821,7 @@ public class FeaturesUtil {
 		return col;
 	}
 
-	public static String getDefaultCountryIso() throws Exception {
+	public static String getDefaultCountryIso() throws DgException {
 		String defaultCountryIso = null;
 		Session session = null;
 		Query qry = null;
@@ -2846,7 +2838,7 @@ public class FeaturesUtil {
 				defaultCountryIso = (String) defIso;
 			}
 		}
-		catch (Exception ex) {
+		catch (DgException ex) {
 			logger.error("Exception : " + ex.getMessage());
 			throw ex;
 		}
@@ -3055,12 +3047,21 @@ public class FeaturesUtil {
 		return false;
 	}
 
+	public static boolean isVisibleField(String fieldName){
+		return isVisibleField(fieldName, TLSUtils.getRequest().getSession().getServletContext());
+	}
+	
 	public static boolean isVisibleField(String fieldName, ServletContext ampContext){
 		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 		AmpFieldsVisibility fieldToTest=ampTreeVisibility.getFieldByNameFromRoot(fieldName);
 		if(fieldToTest!=null)
 			return fieldToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;
+	}
+	
+	public static boolean isVisibleFeature(String featureName)
+	{
+		return isVisibleFeature(featureName, TLSUtils.getRequest().getSession().getServletContext());
 	}
 	
 	public static boolean isVisibleFeature(String featureName, ServletContext ampContext){
@@ -3077,5 +3078,9 @@ public class FeaturesUtil {
 		if(moduleToTest!=null)
 			return moduleToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;
+	}
+	
+	public static boolean isVisibleModule(String moduleName){
+		return isVisibleModule(moduleName, TLSUtils.getRequest().getSession().getServletContext());
 	}
 }

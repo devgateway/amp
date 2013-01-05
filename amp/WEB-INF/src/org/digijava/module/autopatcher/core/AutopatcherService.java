@@ -144,9 +144,6 @@ public class AutopatcherService extends AbstractServiceImpl {
 		} catch (HibernateException e1) {
 			// TODO Auto-generated catch block
 			throw new RuntimeException("HibernateException Exception encountered", e1);
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			throw new RuntimeException("SQLException Exception encountered", e1);
 		} catch (InvalidPatchRepositoryException e) {
 			// TODO Auto-generated catch block
 			throw new RuntimeException("InvalidPatchRepositoryException Exception encountered", e);

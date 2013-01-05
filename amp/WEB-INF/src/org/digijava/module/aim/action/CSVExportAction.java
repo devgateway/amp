@@ -29,6 +29,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.digijava.kernel.entity.Locale;
@@ -66,30 +67,27 @@ public class CSVExportAction
         request.getSession().setAttribute(BudgetExportConstants.BUDGET_EXPORT_PROJECT_ID, request.getParameter("projectId"));
     }
 
+	AmpReports r = ARUtil.getReferenceToReport();
 
-    AmpARFilter arf= (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
-    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-	if(tm == null){
+    boolean initFiltersFromDB = false;
+    TeamMember tm = (TeamMember) session.getAttribute("currentMember");    
+	if (tm == null){
+		initFiltersFromDB = "true".equals(request.getParameter("resetFilter"));
+	}	
+	
+    AmpARFilter arf = ReportContextData.getFromRequest().loadOrCreateFilter(initFiltersFromDB, r);
+    if (tm == null)
+    {
 		//Prepare filter for Public View export
-		if(arf==null) arf=new AmpARFilter();		
-		arf.setPublicView(true);
-		session.setAttribute(ArConstants.REPORTS_FILTER,arf);
-		if ("true".equals(request.getParameter("resetFilter"))){
-			request.setAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB, "true");
-		}
-	}
+    	arf.setPublicView(true);
+    }
 
-
-
-    GroupReportData rd = ARUtil.generateReport(mapping, form, request,
-                                               response);
+    GroupReportData rd = ARUtil.generateReport(request, r, arf);
 
     rd.setCurrentView(GenericViews.XLS);
 	
     //To return data, we need to check whether there's a logged user or if the report is public
 	if (session.getAttribute("currentMember")!=null || rd.getReportMetadata().getPublicReport()){
-	    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
-	
         if (!asXml) {
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-Disposition",
@@ -118,10 +116,10 @@ public class CSVExportAction
 	
 	    grdx.setMetadata(r);
 	
-	    String sortBy = (String) session.getAttribute("sortBy");
+	    String sortBy = ReportContextData.getFromRequest().getSortBy();
 	    if (sortBy != null) {
 	      rd.setSorterColumn(sortBy);
-	      rd.setSortAscending( (Boolean)session.getAttribute(ArConstants.SORT_ASCENDING) );
+	      rd.setSortAscending( ReportContextData.getFromRequest().getSortAscending());
 	    }
 	
 //	    //show title+desc

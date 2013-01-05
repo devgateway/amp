@@ -18,6 +18,8 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
@@ -158,9 +160,7 @@ public class UpdateWorkspace extends Action {
 					return mapping.getInputForward();
 				}
 				
-				Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
-				if ( filter == null )
-					filter		= request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );
+				AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
 				if ( filter != null) {
 					if ( newTeam.getAmpTeamId()!=null )
 						AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
@@ -230,9 +230,7 @@ public class UpdateWorkspace extends Action {
 	                	newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
 	                }
 	            
-                Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
-				if ( filter == null )
-					filter		= request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );
+                AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
 				if ( filter != null) {
 					if ( newTeam.getAmpTeamId()!=null )
 						AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());

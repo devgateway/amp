@@ -225,53 +225,41 @@ public final class AdvancedReportUtil {
 
     
     
-	public static Collection getColumnList()
+	public static Collection<AmpColumns> getColumnList()
 	{
 		if ( CACHED_COLUMNS_LIST.size() > 0 )
 			return CACHED_COLUMNS_LIST;
 		Session session = null;
-		String sqlQuery = "";
-		boolean flag =false;
-		Iterator iter = null;
-		Collection coll = new ArrayList();
 		Query query = null;
-		AmpColumns ampColumns = new AmpColumns();
 		try
 		{
 			session = PersistenceManager.getSession();
-			sqlQuery = "select c from "+ AmpColumns.class.getName() + " c order by columnName asc";
+			String sqlQuery = "select c from "+ AmpColumns.class.getName() + " c order by columnName asc";
 			query = session.createQuery(sqlQuery);
 			if (query != null) 
 			{
-				iter = query.list().iterator();
-				while (iter.hasNext()) 
+				for(Object obj:query.list())
 				{
-					ampColumns = (AmpColumns) iter.next();
-					CACHED_COLUMNS_LIST.add(ampColumns);
+					CACHED_COLUMNS_LIST.add((AmpColumns) obj);
 				}
-				flag = true;
 			}
 			return CACHED_COLUMNS_LIST;
 		}
 		catch(Exception e)
 		{
 			logger.error(e);
+			throw new RuntimeException("cound not fetch columns list", e);
 			////System.out.println(" Error in getColumnList()  :  " + e);
 		} finally {
 			try {
 				PersistenceManager.releaseSession(session);
-			} catch (HibernateException e) {
+			} catch (Exception e) {
 				logger.error(e);
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
-
-		return coll;
-			
+		
 	}
+	
 	public static Collection getColumnListWithDbSession()
 	{
 		Session session = null;
@@ -338,15 +326,7 @@ public final class AdvancedReportUtil {
 			logger.error(e);
 			////System.out.println(" Error in getMeasureList()  :  " + e);
 		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (HibernateException e) {
-				logger.error(e);
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			PersistenceManager.releaseSession(session);			
 		}
 		return coll;
 	}
@@ -384,15 +364,7 @@ public final class AdvancedReportUtil {
 			logger.error(e);
 			////System.out.println(" Error in getMeasureList()  :  " + e);
 		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (HibernateException e) {
-				logger.error(e);
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			PersistenceManager.releaseSession(session);
 		}
 		return coll;
 	}

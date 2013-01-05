@@ -29,6 +29,8 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
 import org.dgfoundation.amp.ar.view.pdf.PDFExporter;
@@ -40,6 +42,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 import com.lowagie.text.BadElementException;
@@ -95,16 +98,33 @@ public class PDFExportAction extends Action implements PdfPageEvent{
         public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
-				 
-		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
+		
+		AmpReports report = ARUtil.getReferenceToReport();
+
+	    boolean initFiltersFromDB = false;
+	    //BOZO: no support for reload filters in PDF, but present in XLS and CSV?
+	    
+	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");    
+//		if (tm == null){
+//			initFiltersFromDB = "true".equals(request.getParameter("resetFilter"));
+//		}	
+		
+	    AmpARFilter filter = ReportContextData.getFromRequest().loadOrCreateFilter(initFiltersFromDB, report);
+	    if (tm == null)
+	    {
+			//Prepare filter for Public View export
+	    	arf.setPublicView(true);
+	    }
+	 
+		GroupReportData rd = ARUtil.generateReport(request, report, filter);
 		
 		ARUtil.cleanReportOfHtmlCodes(rd);
 		
 		rd.setCurrentView(GenericViews.PDF);
 		HttpSession session = request.getSession();
 		
-		AmpReports r=(AmpReports) session.getAttribute("reportMeta");
-		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+		AmpReports r =  ReportContextData.getFromRequest().getReportMeta();
+		AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
 		/*
 		 * this should not be used anymore as the page size has been included in the ARFilters.
 		 * String pageSize=formBean.getPdfPageSize();
@@ -112,7 +132,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		//use the session to get the existing filters
 		if (session.getAttribute("currentMember")!=null || arf.isPublicView()){
 			String pageSize=null;
-			if(arf!=null)
+			if ( arf != null )
 				pageSize=arf.getPageSize();//use the page size set in the filters 
 
 		
@@ -149,13 +169,13 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());										                                
                 //
                 writer.setPageEvent(new PDFExportAction(session,locale,site,rd,arf,r,response,request));
-				//noteFromSession=AmpReports.getNote(request.getSession());                
-				String sortBy=(String) session.getAttribute("sortBy");
-				Map sorters=(Map) session.getAttribute("reportSorters");
-		
-				if(sortBy!=null) {
+				//noteFromSession=AmpReports.getNote(request.getSession());    
+				Map<Long, MetaInfo<String>> sorters = ReportContextData.getFromRequest().getReportSorters();
+				
+				String sortBy = ReportContextData.getFromRequest().getSortBy();		
+				if(sortBy != null) {
 					rd.setSorterColumn(sortBy);
-					rd.setSortAscending( (Boolean)session.getAttribute(ArConstants.SORT_ASCENDING) );
+					rd.setSortAscending(ReportContextData.getFromRequest().getSortAscending());
 				}
 				
 				PDFExporter.widths=new float[rd.getTotalDepth()];		
@@ -172,7 +192,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				contenTable.setWidthPercentage(100);
 				
 				if ( sorters != null && sorters.size() > 0 ) {
-					rd.importLevelSorters(sorters,r.getHierarchies().size());
+					rd.importLevelSorters(sorters, r.getHierarchies().size());
 					rd.applyLevelSorter();
 				}
                 GroupReportDataPDF grdp=new GroupReportDataPDF(contenTable,(Viewable) rd,null);
@@ -277,17 +297,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		translatedCurrentFilter=TranslatorWorker.translateText("Currently Selected Filters:");
 		translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
 
-		String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
-		if(currencyCode != null) {
-			//translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
-			translatedCurrency=TranslatorWorker.translateText(currencyCode);
-			translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
-		}
-		else
-		{
-			//translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
-			translatedCurrency=TranslatorWorker.translateText(Constants.DEFAULT_CURRENCY);
-		}
+		translatedCurrency=TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrency());
 
 		if (arf.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){					
 			translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)");
@@ -376,7 +386,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    //cb.saveState();
 	    
 	    	Long siteId = site.getId();
-    	    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
+    	    AmpReports r =  ReportContextData.getFromRequest().getReportMeta();;
     	    r.setSiteId(siteId);
     	    r.setLocale(locale);
     	    BaseFont font = BaseFont.createFont(BaseFont.COURIER,BaseFont.CP1250,false);

@@ -262,7 +262,8 @@ public abstract class TestReportBase extends BasicActionTestCaseAdapter implemen
 		request.setupAddParameter("debugMode", "debugMode");
 		request.setupAddParameter("ampCurrencyId", "USD");
 		filters.setCurrency(CurrencyUtil.getAmpcurrency("USD"));
-		session.setAttribute(ArConstants.REPORTS_FILTER, filters);
+		throw new RuntimeException("filter subsystem refactored - push this filter instance into ReportContextData!");
+		// push "filters" into RCD
 		generatedReport = ARUtil.generateReport(null, form, request, response);
 
 	}

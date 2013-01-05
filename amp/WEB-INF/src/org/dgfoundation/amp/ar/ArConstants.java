@@ -247,7 +247,7 @@ public final class ArConstants {
 //	public final static String NPO_PERCENTAGE="National Planning Objectives Percentage";
 	//hierarchysorter
 	public final static String HIERARCHY_SORTER_TITLE="Title";
-	public final static String SORT_ASCENDING="sortAscending";
+	//public final static String SORT_ASCENDING="sortAscending";
 	
 	public static final String VIEW_PROPOSED_COST="v_proposed_cost";	
 	public static final String VIEW_COST="v_costs";	
@@ -267,13 +267,13 @@ public final class ArConstants {
 	
 	//reportsFilter
 	
-	public final static String REPORTS_FILTER="ReportsFilter";
+	//public final static String REPORTS_Z_FILTER="ReportsFilter";
 	public final static String TEAM_FILTER="TeamFilter";
 
 	public final static String COMPUTE_ON_YEAR="ComputeOnYear";
 
 	//the currency in use
-	public final static String SELECTED_CURRENCY="SelectedCurrency";
+	// public final static String SELECTED_CURRENCY="SelectedCurrency";
 
 	public static final String DISBURSEMENT_ORDERS = "Disbursement Orders";
 	

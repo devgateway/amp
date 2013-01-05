@@ -46,6 +46,8 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.digijava.kernel.entity.Locale;
@@ -71,21 +73,22 @@ public class XLSExportAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
+		
 	    HttpSession session = request.getSession();
-	    AmpARFilter arf= (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+	    
+	    boolean initFromDB = false;
 	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if(tm == null){
-			//Prepare filter for Public View export
-			if(arf==null) arf=new AmpARFilter();		
+	    if (tm == null)
+	    	initFromDB = "true".equals(request.getParameter("resetFilter"));
+	    
+	    AmpReports report = ARUtil.getReferenceToReport();
+	    AmpARFilter arf = ReportContextData.getFromRequest().loadOrCreateFilter(initFromDB, report);
+	    
+		if (tm == null){
 			arf.setPublicView(true);
-			session.setAttribute(ArConstants.REPORTS_FILTER,arf);
-			if ("true".equals(request.getParameter("resetFilter"))){
-				request.setAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB, "true");
 			}
-		}
 
-		GroupReportData rd = ARUtil.generateReport(mapping, form, request,
-				response);
+		GroupReportData rd = ARUtil.generateReport(request, report, arf);
 
 		ARUtil.cleanReportOfHtmlCodes(rd);
 		
@@ -96,17 +99,17 @@ public class XLSExportAction extends Action {
 	     	response.setHeader("Content-Disposition","attachment; filename="+ rd.getName().replace(" ","_") +".xls");
 	        AdvancedReportForm reportForm = (AdvancedReportForm) form;
 	        //
-			AmpReports r=(AmpReports) session.getAttribute("reportMeta");
+			AmpReports r = ReportContextData.getFromRequest().getReportMeta();
 					
 		int numberOfColumns = rd.getTotalDepth();
 		
-		String sortBy=(String) session.getAttribute("sortBy");
-		if(sortBy!=null){
+		String sortBy = ReportContextData.getFromRequest().getSortBy();
+		if (sortBy != null){
 			rd.setSorterColumn(sortBy); 
-			rd.setSortAscending( (Boolean)session.getAttribute(ArConstants.SORT_ASCENDING) );
+			rd.setSortAscending(ReportContextData.getFromRequest().getSortAscending());
 		}
 			
-		Map sorters=(Map) session.getAttribute("reportSorters");
+		Map<Long, MetaInfo<String>> sorters = ReportContextData.getFromRequest().getReportSorters();
 		//XLSExporter.resetStyles();
 	        
 		
@@ -158,7 +161,7 @@ public class XLSExportAction extends Action {
 			 
 
 		if ( sorters != null && sorters.size() > 0 ) {
-			rd.importLevelSorters(sorters,r.getHierarchies().size());
+			rd.importLevelSorters(sorters, r.getHierarchies().size());
 			rd.applyLevelSorter();
 		}
 		

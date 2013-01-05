@@ -5,10 +5,14 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
 
-<logic:notEmpty name="reportMeta" scope="session">
+<logic:notEmpty name="reportCD" property="reportMeta">
 
-<bean:define id="reportObject" name="reportMeta" scope="session" toScope="page" />
+<bean:define id="reportObject" name="reportCD" property="reportMeta" toScope="page" />
 
 <c:set var="failureMessage">
 	<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>

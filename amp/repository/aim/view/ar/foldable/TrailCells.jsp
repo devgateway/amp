@@ -6,10 +6,16 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
 
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
-<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
 <% String display=reportData.getLevelDepth()>2?"display:none":"";%>
+
 <!-- generate total row -->
 <c:set var="depthRelatVar">
 	<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>

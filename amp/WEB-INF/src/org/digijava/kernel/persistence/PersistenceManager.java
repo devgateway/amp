@@ -392,7 +392,7 @@ public class PersistenceManager {
 	}
 	
 
-	public static Session getSession() throws SQLException, HibernateException {
+	public static Session getSession(){
 			try {
 				return getRequestDBSession();
 			} catch (DgException e) {
@@ -436,8 +436,7 @@ public class PersistenceManager {
 	 * @throws java.sql.SQLException
 	 * @deprecated
 	 */
-	public static void releaseSession(Session session) throws SQLException,
-	HibernateException {
+	public static void releaseSession(Session session){
 
 //		if(session.isOpen())
 //		session.beginTransaction().commit();

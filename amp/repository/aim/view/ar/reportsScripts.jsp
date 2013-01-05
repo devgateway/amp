@@ -5,6 +5,14 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+<%
+	if (ReportContextData.contextIdExists())
+	{
+		pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+	}	
+%>
+
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTableReports.js"/>"></script>
@@ -15,9 +23,10 @@
 	<!-- Jquery Base Library -->
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 
-
-<logic:present name="reportMeta" scope="session">
-	<bean:define id="reportObject" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
+<logic:present name="reportCD">
+	<logic:notEmpty name="reportCD" property="reportMeta">
+		<bean:define id="reportObject" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page" />
+	</logic:notEmpty>
 </logic:present>
 
 <!-- this is for the nice tooltip widgets -->
@@ -45,8 +54,6 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
 <link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css"/>
-
-
 
 <script type="text/javascript">
 messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
@@ -183,7 +190,7 @@ saveReportEngine	= null;
 
 <script type="text/javascript">
 		var currentReportId	= -1;
-		<logic:present name="reportMeta" scope="session">
+		<logic:present name="reportObject">
 			currentReportId	= ${reportObject.ampReportId};
 		</logic:present>	
 		
@@ -313,23 +320,25 @@ saveReportEngine	= null;
 		myPanel5.render(document.body);				
 	}
 	
-	function submitFilters() {
+	function submitFilters(reportContextId) {
 		//alert("SUBMITTING FILTERS");
+		//debugger;
 		if(document.getElementById("workspace_only")!=null)
 			document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
-		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
-		filterForm.submit();
-	}
-	function submitSettings() {
-		//This is needed for unfreezing the report. applyFormat parameter needs to be set so that the function
-		// ReportsFilterPickerForm.reset doesn't reset the currently applied filters
-		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm3")[0];
-		filterForm.action	= "/aim/reportsFilterPicker.do?applyFormat=true";
+		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true&reportContextId=" + reportContextId;
 		filterForm.submit();
 	}
 	
-	function showFilter() {
+	function submitSettings(reportContextId) {
+		//This is needed for unfreezing the report. applyFormat parameter needs to be set so that the function
+		// ReportsFilterPickerForm.reset doesn't reset the currently applied filters
+		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm3")[0];
+		filterForm.action	= "/aim/reportsFilterPicker.do?applyFormat=true&reportContextId=" + reportContextId;
+		filterForm.submit();
+	}
+	
+	function showFilter(reportContextId) {
 		document.getElementById("myFilter").innerHTML = '<div align="center" style="font-size: 11px;margin-top:190px;"><img src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif"/></div>';
 		
 		var element = document.getElementById("myFilter");
@@ -345,7 +354,7 @@ saveReportEngine	= null;
 		
 		var timestamp = new Date().getTime();
 		
-		YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?timestamp="+timestamp, {
+		YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?timestamp=" + timestamp + "&reportContextId=" + reportContextId , {
 			success: function(o) {
 				document.getElementById("myFilter").innerHTML	= o.responseText;
 				YAHOO.amptab.afterFiltersLoad();
@@ -423,24 +432,24 @@ saveReportEngine	= null;
       	var masterFrom=document.aimReportsFilterPickerForm2.fromYear;
       	var masterTo=document.aimReportsFilterPickerForm2.toYear;
       	masterFrom.options[0]=new Option("All", "-1", false, true);
-		for (i=1; i<=cant; i++){
+		for (var i = 1; i <= cant; i++){
 		    var year  = parseInt(initialYear)+ i;
 		    if(year == actualFrom){
 				masterFrom.options[i]=new Option(year, year, false, true);
 			}
 			else{
 				masterFrom.options[i]=new Option(year, year, false, false);
-			}	
+			};
 		}
 		masterTo.options[0]=new Option("All", "-1", false, true);
-		for (i=1; i<=cant; i++){
+		for (var i = 1; i <= cant; i++){
 			var year  = parseInt(initialYear)+ i;
 		    if(year == actualTo){
 				masterTo.options[i]=new Option(year, year, false, true);
 			}
 			else{
 				masterTo.options[i]=new Option(year, year, false, false);
-			}	
+			};
 		}
 	}
 	function hideFilter() {
@@ -459,7 +468,7 @@ saveReportEngine	= null;
 		myPanel2.hide();
 	}
 	function resetSorter(button) {
-		debugger;
+		//debugger;
 		var form1		= button.form;
 		for (var i=0; i<form1.elements.length; i++) {
 				var selEl	= form1.elements[i];
@@ -537,8 +546,8 @@ function ResetCustom(maxFractionDigits) {
 }
 
 function initFormatPopup(){
-		
-		
+			
+			
 		var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
 		
 		if (decimalSymbol.toLowerCase()=="custom"){
@@ -686,11 +695,11 @@ function validateFormat(){
 		
 	// For some reason freezeLink.removeListener doesn't work correctly so we need an ugly hack
 	var canMakeScroll	= false;
-	function scrollCallback () {
+	function scrollCallback (reportContextId) {
 		if ( canMakeScroll ) 
 				makeScroll();
 		else
-				hiddeScroll();
+				hiddeScroll(reportContextId);
 	}
 	//END	
 	
@@ -699,10 +708,10 @@ function validateFormat(){
 		location.reload();
 	}
 	
-	function sendCookieAndReload (){
+	function sendCookieAndReload (reportContextId){
 		showWaitPanel(msg3);
 		createCookie('report_scrolling',currentReportId,1);
-		submitScroll();
+		submitScroll(reportContextId);
 	}
 	
 	
@@ -718,15 +727,16 @@ function validateFormat(){
 		canMakeScroll	= false;
 		//document.getElementById("frezzlink").innerHTML=msg2;
 	}
-	function hiddeScroll(){
+	
+	function hiddeScroll(reportContextId){
 		showWaitPanel(msg4);
 		eraseCookie('report_scrolling');
-		submitScroll();
+		submitScroll(reportContextId);
 	}
 
-	function submitScroll() {
+	function submitScroll(reportContextId) {
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm3")[0];
-		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
+		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true&reportContextId=" + reportContextId;
 		filterForm.submit();
 	}
 	
@@ -752,13 +762,14 @@ function validateFormat(){
 	var enableLink=function(){
 	if (document.getElementById("frezzlink")){
 		var freezeLink	= new YAHOO.util.Element( "frezzlink" );
+		var reportContextId = freezeLink.getAttribute('reportContextId');
 		if (scrolling){
 			//document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
 			//document.getElementById("frezzlink").setAttribute("class","settingsLink");
 			if ( freezeLink.hasClass("settingsLinkDisable") )
 				freezeLink.removeClass("settingsLinkDisable");
 			freezeLink.addClass( "settingsLink" );
-			freezeLink.on("click", scrollCallback);
+			freezeLink.on("click", function() {scrollCallback(reportContextId);});
 			freezeLink.setStyle("cursor", "pointer");
 			canMakeScroll	= false;
 			//document.getElementById("frezzlink").setAttribute("style","cursor: hand;");
@@ -768,9 +779,9 @@ function validateFormat(){
 			//document.getElementById("frezzlink").setAttribute("onClick","makeScroll()");
 			//document.getElementById("frezzlink").setAttribute("class","settingsLink");
 			if ( freezeLink.hasClass("settingsLinkDisable") )
-				freezeLink.removeClass("settingsLinkDisable");
+				freezeLink.removeClass("settingsLinkDisable");			
 			freezeLink.addClass( "settingsLink" );
-			freezeLink.on("click", sendCookieAndReload);
+			freezeLink.on("click", function() {sendCookieAndReload(reportContextId);});
 			freezeLink.setStyle("cursor", "pointer");
 			canMakeScroll	= true;
 			//document.getElementById("frezzlink").setAttribute("style","cursor: hand;");
@@ -817,7 +828,8 @@ function validateFormat(){
 		
 	//----------------------------------------------------------------
 	var isscrolling=false;
-	  	function frezzreport(){ 
+	  	function frezzreport(reportContextId){ 
+	  		//debugger;
   	  		if (isscrolling==false){
   				if ( $('#frezzlinkreport').hasClass("settingsLinkDisable") )
   				$('#frezzlinkreport').removeClass("settingsLinkDisable");
@@ -838,7 +850,7 @@ function validateFormat(){
   					$('#frezzlinkreport').text(msg1);
   					isscrolling=false;
   					loadingreport.show();
-  					submitSettings();
+  					submitSettings(reportContextId);
   					
   				}
   	  	}
@@ -881,6 +893,7 @@ function validateFormat(){
 		}
 	
 	
+
 
 	function cleanformat() {
 		aimReportsFilterPickerForm3.customDecimalSymbol.value = ",";

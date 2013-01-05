@@ -23,10 +23,12 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.FundingTypeSortedString;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
@@ -42,15 +44,15 @@ public class CategAmountColWorker extends ColumnWorker {
 
 	private static Logger logger	= Logger.getLogger(CategAmountColWorker.class);
 	
-	protected Map metaInfoCache;
+	protected Map<String, Map<Comparable, MetaInfo>> metaInfoCache;
 
-	protected MetaInfo getCachedMetaInfo(String category, Comparable value) {
-		Map valuesMap = (Map) metaInfoCache.get(category);
+	protected MetaInfo<?> getCachedMetaInfo(String category, Comparable<?> value) {
+		Map<Comparable, MetaInfo> valuesMap = metaInfoCache.get(category);
 		if (valuesMap == null) {
 			valuesMap = new HashMap();
 			metaInfoCache.put(category, valuesMap);
 		}
-		MetaInfo mi = (MetaInfo) valuesMap.get(value);
+		MetaInfo mi = valuesMap.get(value);
 		if (mi != null)
 			return mi;
 		mi = new MetaInfo(category, value);
@@ -66,8 +68,7 @@ public class CategAmountColWorker extends ColumnWorker {
 	public CategAmountColWorker(String condition, String viewName,
 			String columnName,ReportGenerator generator) {
 		super(condition, viewName, columnName,generator);
-		this.metaInfoCache=new HashMap();
-		
+		this.metaInfoCache = new HashMap<String, Map<Comparable, MetaInfo>>();	
 	}
 
 	/**filter.getFromYear()!=null
@@ -156,9 +157,9 @@ public class CategAmountColWorker extends ColumnWorker {
 	 */
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
 		
-		String baseCurrCode		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-		if ( baseCurrCode == null ) 
-			baseCurrCode	= "USD";
+		String baseCurrency	= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
+		if ( baseCurrency == null )
+			baseCurrency = Constants.DEFAULT_CURRENCY;
 		
 		Long ownerId = rs.getLong(1);
 		Long id = rs.getLong(3);
@@ -294,9 +295,9 @@ public class CategAmountColWorker extends ColumnWorker {
 			headMeta = this.getCachedMetaInfo(ArConstants.DONOR, (donorName != null) ? donorName.trim() : donorName);			
 		}
 
-		if (filter.getAmountinthousand() == null) {
-			filter.setAmountinthousand(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
-		} 
+//		if (filter.getAmountinthousand() == null) {
+//			filter.setAmountinthousand(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
+//		} 
 		
 		if (filter.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){
 			if (tr_amount != 0){
@@ -462,13 +463,14 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		
 		//UGLY get exchage rate if cross-rates are needed (if we need to convert from X to base currency and then to Y)
-		if(filter.getCurrency()!=null ) {
+		String usedCurrency = ReportContextData.getFromRequest().getSelectedCurrency();
+		if(usedCurrency != null ) {
 			/* If source and destination currency are the same we need to set exactly the same exchange rate for 'toExchangeRate' and 'fromExchangeRate.
 			 * That way, AmountCell.convert won't do any computation' */
-			if (currencyCode !=null && currencyCode.equals(filter.getCurrency().getCurrencyCode())   ) 
+			if (currencyCode !=null && currencyCode.equals(usedCurrency)) 
 				acc.setToExchangeRate( acc.getFromExchangeRate() );
-			else if ( !baseCurrCode.equals(filter.getCurrency().getCurrencyCode()))  
-				acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
+			else if ( !baseCurrency.equals(usedCurrency))  
+				acc.setToExchangeRate(Util.getExchange(usedCurrency, td));
 		}
 		else 
 			logger.error("The filter.currency property should not be null !");

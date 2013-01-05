@@ -2899,8 +2899,8 @@ public class SaveActivity extends Action {
 		}
 
 		//Some session cleanup
-		session.removeAttribute("report");
-		session.removeAttribute("reportMeta");
+		//session.removeAttribute("report");
+		//session.removeAttribute("reportMeta");
 		session.removeAttribute("forStep9");
 		session.removeAttribute("commentColInSession");
 

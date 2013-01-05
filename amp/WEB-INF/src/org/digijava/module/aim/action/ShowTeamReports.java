@@ -97,10 +97,11 @@ public class ShowTeamReports extends Action {
 		
 		if(tm == null){
 			//Prepare filter for Public View export
-			AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
-			if(arf==null) arf=new AmpARFilter();		
-			arf.setPublicView(true);
-			session.setAttribute(ArConstants.REPORTS_FILTER,arf);
+//			this code makes no sense as report publicness is saved on report-by-report basis			
+//			AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_Z_FILTER);
+//			if(arf==null) arf=new AmpARFilter();		
+//			arf.setPublicView(true);
+//			session.setAttribute(ArConstants.REPORTS_Z_FILTER, arf);
 			return mapping.findForward("forwardPublic");
 		}
 		else
@@ -279,7 +280,7 @@ public class ShowTeamReports extends Action {
 						translatedText = TranslatorWorker.translateText(text);
 						if (translatedText.compareTo("") == 0)
 							translatedText = text;
-						arh.getColumn().setColumnName(translatedText);
+						//arh.getColumn().setColumnName(translatedText); - temporary in-place fix for the data corruption bug. On merge, take the version off 2.2 and ignore this changeset
 						//
 						h.add(arh);
 					}

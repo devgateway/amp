@@ -23,6 +23,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -775,7 +776,7 @@ public class DynLocationManagerUtil {
 		
 	}
 	
-	public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws Exception  {
+	public static Collection<AmpCategoryValueLocations> getRegionsOfDefCountryHierarchy() throws DgException  {
 		
 		List<AmpCategoryValueLocations> ret	= null;
 		synchronized (DynLocationManagerUtil.regionsOfDefaultCountry) {

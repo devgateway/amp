@@ -19,12 +19,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.management.RuntimeErrorException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -32,13 +34,17 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.utils.MultiAction;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.ar.util.ReportFilterFormUtil;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -60,6 +66,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
+import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -71,6 +78,7 @@ import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.aim.util.filters.DateListableImplementation;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
@@ -80,6 +88,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.LazyInitializationException;
 import org.hibernate.Session;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
 import com.sun.media.jai.util.RWLock;
@@ -88,224 +97,111 @@ import com.sun.media.jai.util.RWLock;
  * @author mihai
  * 
  */
-public class ReportsFilterPicker extends MultiAction {
+public class ReportsFilterPicker extends Action {
 	private static Logger logger = Logger.getLogger(ReportsFilterPicker.class);
 	
-	final String KEY_RISK_PREFIX = "aim:risk:";
+	final static String KEY_RISK_PREFIX = "aim:risk:";
 	public final static String ONLY_JOINT_CRITERIA	= "0";
 	public final static String ONLY_GOV_PROCEDURES	= "1";
-	
-	
-	int curYear=new GregorianCalendar().get(Calendar.YEAR);
-	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+			
+	@Override
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception{
+			
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
+		//filterForm.setAmpReportId(ReportContextData.getFromRequest().getAmp);
+					
+ 	 	String ampReportId 	= request.getParameter("ampReportId");
+		if ( "".equals(ampReportId) )
+			ampReportId		= null;
+		
+		Long longAmpReportId = ampReportId == null ? null : Long.parseLong(ampReportId);
+		
 		String sourceIsReportWizard			= request.getParameter("sourceIsReportWizard");
+		
 		if ("true".equals(sourceIsReportWizard) ) {
 			filterForm.setSourceIsReportWizard(true);
 			if ( request.getParameter("doreset") != null ) {
-				filterForm.setIsnewreport(true);
-				reset(form, request, mapping);
-				filterForm.setIsnewreport(false);
+				FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId), longAmpReportId);
+				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+				return mapping.findForward("forward");
 			}
 		}
 		else
 			filterForm.setSourceIsReportWizard(false);
 		
-		//ServletContext ampContext = getServlet().getServletContext();
- //	 	Site site = RequestUtils.getSite(request);
- 	 	//String siteId = site.getId().toString();
- 	 	//String locale = RequestUtils.getNavigationLanguage(request).getCode();
- 	 	
- 	 	String ampReportId 	= request.getParameter("ampReportId");
-		if ( "".equals(ampReportId) )
-			ampReportId		= null;
-
-		if (ampReportId != null) {
-			if (filterForm.getAmpReportId() == null || !ampReportId.equals(String.valueOf(filterForm.getAmpReportId()))) {
-				filterForm.setAmountinthousands(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
-			}
-		}
+		filterForm.setAmpReportId(ampReportId);
+//		this code makes no sense		
+// 		AmpARFilter arf = (AmpARFilter) request.getSession().getAttribute(ArConstants.REPORTS_Z_FILTER);
+//		if (arf == null)
+//		{
+//			arf = new AmpARFilter();		
+//			arf.setPublicView(true);
+//			request.getSession().setAttribute(ArConstants.REPORTS_Z_FILTER,arf);
+//		}
 		
-		if (ampReportId != null && filterForm.getAmpReportId() != null) {
-			if (!filterForm.getAmpReportId().toString().equalsIgnoreCase(ampReportId)) {
-				filterForm.setIsnewreport(true);
-				reset(form, request, mapping);
-				filterForm.setAmpReportId(new Long(ampReportId));
-				filterForm.setIsnewreport(false);
-			}
-		} 
-		else if( ampReportId != null ){
-			filterForm.setIsnewreport(true);
-			filterForm.setAmpReportId(new Long(ampReportId));
-			filterForm.setIsnewreport(false);
-		}
-
-		if (("true").equalsIgnoreCase(filterForm.getResetFormat())) {
-			resetFormat(form, request, mapping);
-		}
-
-		HttpSession httpSession = request.getSession();
-		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
-		
-		if (teamMember != null && teamMember.getTeamId() == null )
-			teamMember = null;
-		
-		if ( teamMember != null ) {
-			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
-			if (tempSettings == null)
-				if (teamMember != null)
-					tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
-			
-			String applyFormat				= request.getParameter("applyFormat");
-			String applyStr					= request.getParameter("apply");
-			AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
-			if ( existingFilter != null ) {
-				if ( !"true".equals(applyStr) ) {
-					FilterUtil.populateForm(filterForm, existingFilter);
-					request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
-				}
-				if (filterForm.getCalendar() == null){
-					filterForm.setCalendar(existingFilter.getCalendarType()==null ? tempSettings.getFiscalCalendar().getAmpFiscalCalId() : existingFilter.getCalendarType().getAmpFiscalCalId());
-				}
-				if (filterForm.getCurrency() == null){
-					filterForm.setCurrency(existingFilter.getCurrency()==null ? tempSettings.getCurrency().getAmpCurrencyId() : existingFilter.getCurrency().getAmpCurrencyId());
-				}
-			} else 
-				if ( !"Apply Format".equals(applyFormat) ) {
-					if (filterForm.getCalendar() == null){
-						filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
-					}
-					if (filterForm.getCurrency() == null){
-						filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
-					}
-				}
-		}
-		
-		Long ampTeamId = null;
-		if (teamMember != null)
-			ampTeamId = teamMember.getTeamId();
-		if (teamMember != null)
-			filterForm.setTeamAccessType(teamMember.getTeamAccessType());
-
-		filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
-		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
-
-
-		Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
-		Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
-	
-		if (filterForm.getCountYear() == null) {
-			filterForm.setCountYear(countYear);
-		}
-
-		if (filterForm.getCountYearFrom() == null) {
-			filterForm.setCountYearFrom(yearFrom);
-		}
-
-		
-		for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
-			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
-			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
-		}
-		if(filterForm.getCurrency()==null){
-		AmpApplicationSettings tempSettings = getAppSetting(request);
-		if (tempSettings != null) {
-			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
-			String name = "- " + tempSettings.getCurrency().getCurrencyName();
-			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
-			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
-		}
-               }
-		
-		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
-	    //Only currencies having exchanges rates AMP-2620
-		List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
-	    filterForm.setCurrencies(validcurrencies);
-	    for (AmpCurrency element:currency) {
-	    	if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
-			{
-	    		filterForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-			}
-		}
-		
-	     Collection<AmpFiscalCalendar> allFisCalenders = DbUtil.getAllFisCalenders();
-		 filterForm.setCalendars(allFisCalenders);
-		 
-		 ArrayList<String> decimalseparators = new ArrayList<String>();
-		 DecimalFormat defaultDecimalFormat = FormatHelper.getDecimalFormat();
-		String selecteddecimalseparator  = String.valueOf((defaultDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator()));
-		 
-		 if (!selecteddecimalseparator.equalsIgnoreCase(".") && !selecteddecimalseparator.equalsIgnoreCase(",") ){
-			 decimalseparators.add(selecteddecimalseparator);
-		 }
-		 
-		 decimalseparators.add(".");
-		 decimalseparators.add(",");
-		 //decimalseparators.add(TranslatorWorker.translateText("CUSTOM",request));
-		 filterForm.setAlldecimalSymbols(decimalseparators);
-		 
-		 ArrayList<String> groupseparators = new ArrayList<String>();
-		 String selectedgroupingseparator  = String.valueOf(defaultDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator());
-		 
-		 if (!selectedgroupingseparator.equalsIgnoreCase(".") && !selectedgroupingseparator.equalsIgnoreCase(",") ){
-			 groupseparators.add(selectedgroupingseparator);
-		 }
-		 
-		 groupseparators.add(".");
-		 groupseparators.add(",");
-		 //groupseparators.add(TranslatorWorker.translateText("CUSTOM",request));
-		 filterForm.setAllgroupingseparators(groupseparators);
-		 
-		 if (filterForm.getCustomDecimalSymbol() == null) {
-			 filterForm.setCustomDecimalSymbol(selecteddecimalseparator);
-			 filterForm.setCustomDecimalPlaces(defaultDecimalFormat.getMaximumFractionDigits());
-			 filterForm.setCustomGroupCharacter(selectedgroupingseparator);
-			 filterForm.setCustomUseGrouping(defaultDecimalFormat.isGroupingUsed());
-			 filterForm.setCustomGroupSize(defaultDecimalFormat.getGroupingSize());
-		 }
-		
-		AmpApplicationSettings tempSettings = getAppSetting(request);
-		if (tempSettings != null) {
-			filterForm.setDefaultCurrency(tempSettings.getCurrency().getAmpCurrencyId());
-
-			if (filterForm.getCurrency() == null) {
-				filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
-			}
-			if (tempSettings.getFiscalCalendar()!=null && filterForm.getCalendar() == null) {
-				filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
-			}
-		} else {
-			filterForm.setDefaultCurrency(CurrencyUtil.getCurrencyByCode(Constants.DEFAULT_CURRENCY).getAmpCurrencyId());
-			if (filterForm.getCalendar() == null) {
-				String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-				if (value != null) {
-					filterForm.setCalendar(Long.parseLong(value));
-				}
-			}
-		}
-		
-/*		AmpARFilter arf = (AmpARFilter) request.getSession().getAttribute(ArConstants.REPORTS_FILTER);
-		if (arf == null)
+		if (ampReportId != null)
 		{
-			arf = new AmpARFilter();		
-			arf.setPublicView(true);
-			request.getSession().setAttribute(ArConstants.REPORTS_FILTER,arf);
-		}
-*/
-
-		Session session = PersistenceManager.getSession();
-		if (filterForm.getAmpReportId()!=null){
-			AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(filterForm.getAmpReportId()));
-			filterForm.setReporttype(r.getType());
+			Session session = PersistenceManager.getSession();
+			AmpReports report = (AmpReports) session.get(AmpReports.class, longAmpReportId);
+			if (report != null &&  report.getType() != null )
+				filterForm.setReporttype(report.getType());
+			
+			if (ampReportId.length() > 0 && report != null && report.getDrilldownTab())
+				request.getSession().setAttribute(Constants.CURRENT_TAB_REPORT, report);
 		}
 		
-		if(request.getParameter("init")!=null || "true".equals( request.getAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS)) ) 
-				return null; 
-		else 
-			modeRefreshDropdowns(mapping, form, request, response, getServlet().getServletContext());
-			return modeSelect(mapping, form, request, response);
+		// init form
+		if (request.getParameter("init") != null)
+		{
+			FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId), longAmpReportId);
+			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
+			return null;
 		}
+
+		String applyFormatValue = request.getParameter("applyFormat");
+		if (applyFormatValue != null)
+		{
+			if (applyFormatValue.equals("Apply Format"))
+			{
+				// apply tab/report settings
+				AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
+				return decideNextForward(mapping, filterForm, request, arf);
+			}
+			else if (applyFormatValue.equals("Reset"))
+			{
+				// reset tab/report settings
+				AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
+				return decideNextForward(mapping, filterForm, request, arf);
+				//return modeReset(mapping, form, request, response);
+			} else if (applyFormatValue.equals("true"))
+			{
+				AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
+				return decideNextForward(mapping, filterForm, request, arf); // an AMP-y-hacky way of saying "please redraw the report without changing anything"
+			}
+			else
+				throw new RuntimeException("unknown applyformat setting: " + applyFormatValue);
+		}
+		
+		// gone till here -> Apply or Reset Filters form
+		if (request.getParameter("reset") != null)
+		{
+			AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+			return decideNextForward(mapping, filterForm, request, arf);
+		}
+
+		if (request.getParameter("apply") != null)
+		{
+			// apply Filters form
+			AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+			return decideNextForward(mapping, filterForm, request, arf);
+		}
+
+		FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId), longAmpReportId);
+		modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL);
+		return mapping.findForward("forward");
+		/*AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
+		return decideNextForward(mapping, filterForm, request, arf);*/
+	}
 	
 	/**
 	 * add to the Filter Form an element regarding filtering by a certain type of agencies, if feature is enabled. 
@@ -314,14 +210,14 @@ public class ReportsFilterPicker extends MultiAction {
 	 * @param roleCode - the role code, from Constants.ROLE_CODE_XXXXX_AGENCY
 	 * @param ampContext
 	 */
-	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, ServletContext ampContext)
+	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode)
 	{
 		if (!Character.isUpperCase(featureName.charAt(0)))
 			throw new RuntimeException("invalid feature name: must be a single term beginning with an upper case" + featureName);
 		if (featureName.contains("Agenc"))
 			throw new RuntimeException("invalid feature name: should not contain the word 'Agency' or derivated' " + featureName);
 
-		addAgencyFilter(filterForm, featureName + " Agency", roleCode, featureName + " Agencies", "filter_" + featureName.toLowerCase() + "_agencies_div", "selected" + featureName + "Agency", ampContext);
+		addAgencyFilter(filterForm, featureName + " Agency", roleCode, featureName + " Agencies", "filter_" + featureName.toLowerCase() + "_agencies_div", "selected" + featureName + "Agency");
 	}
 
 	/**
@@ -334,10 +230,9 @@ public class ReportsFilterPicker extends MultiAction {
 	 * @param selectId - the id of the generated select
 	 * @param ampContext
 	 */
-	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId, ServletContext ampContext)
-	{
-		
-	 	if (FeaturesUtil.isVisibleFeature(featureName, ampContext) ) {
+	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId)
+	{		
+	 	if (FeaturesUtil.isVisibleFeature(featureName) ) {
  	 		Collection<AmpOrganisation> relevantAgencies = (ReportsUtil.getAllOrgByRoleOfPortfolio(roleCode));
  	 		HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
  	 		HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation();
@@ -359,9 +254,9 @@ public class ReportsFilterPicker extends MultiAction {
 	 * @param selectId
 	 * @param ampContext
 	 */
-	private void addSectorElement(ReportsFilterPickerForm filterForm, String fieldName, String sectorName, String rootLabel, String filterDiv, String selectId, ServletContext ampContext)
+	private static void addSectorElement(ReportsFilterPickerForm filterForm, String fieldName, String sectorName, String rootLabel, String filterDiv, String selectId)
 	{
-	 	if (FeaturesUtil.isVisibleField(fieldName, ampContext)){
+	 	if (FeaturesUtil.isVisibleField(fieldName)){
 	 		List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(sectorName);
 	 		HierarchyListableUtil.changeTranslateable(ampSectors, false);
 	 		
@@ -387,14 +282,14 @@ public class ReportsFilterPicker extends MultiAction {
 	 * @param ampContext
 	 * @throws Exception
 	 */
-	private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
+	private static void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId)
 	{
 		boolean enabled = (fieldName == null) ||
-				((fieldName != null) && (FeaturesUtil.isVisibleField(fieldName, ampContext)));
+				((fieldName != null) && (FeaturesUtil.isVisibleField(fieldName)));
 		
 		if (enabled) { 
 			Collection<AmpCategoryValue> modeOfPaymentValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(financingModeKey, true, request);	
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(financingModeKey, true);	
 			HierarchyListableImplementation rootModeOfPayment	= new HierarchyListableImplementation();
 			rootModeOfPayment.setLabel(rootLabel);
 			rootModeOfPayment.setUniqueId("0");
@@ -405,62 +300,145 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 	}
 	
-	public void modeRefreshDropdowns(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, ServletContext ampContext) throws Exception {
+	/**
+	 * fills the dropdowns part of ReportsFilterPickerForm pertaining to "settings"
+	 * @param filterForm
+	 */
+	private static void fillSettingsFormDropdowns(ReportsFilterPickerForm filterForm)
+	{
+		StopWatch.reset("Filters-Settings");
+		StopWatch.next("Filters-Settings", true, "Settings part dropdowns START");
+	
+		filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
+		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
+
+
+		Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
+		Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+	
+		if (filterForm.getCountYear() == null) {
+			filterForm.setCountYear(countYear);
+		}
+
+		if (filterForm.getCountYearFrom() == null) {
+			filterForm.setCountYearFrom(yearFrom);
+		}
+		
+		for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
+			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
+			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
+		}
+		
+		ArrayList<String> decimalseparators = new ArrayList<String>();
+		DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
+		String selecteddecimalseparator  = String.valueOf((usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator()));
+			 
+		 if (!selecteddecimalseparator.equalsIgnoreCase(".") && !selecteddecimalseparator.equalsIgnoreCase(",") ){
+			 decimalseparators.add(selecteddecimalseparator);
+		 }
+			 
+		 decimalseparators.add(".");
+		 decimalseparators.add(",");
+		 //decimalseparators.add(TranslatorWorker.translateText("CUSTOM",request));
+		 filterForm.setAlldecimalSymbols(decimalseparators);
+		 
+		 ArrayList<String> groupseparators = new ArrayList<String>();
+		 String selectedgroupingseparator  = String.valueOf(usedDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator());
+		 
+		 if (!selectedgroupingseparator.equalsIgnoreCase(".") && !selectedgroupingseparator.equalsIgnoreCase(",") ){
+			 groupseparators.add(selectedgroupingseparator);
+		 }
+			 
+		 groupseparators.add(".");
+		 groupseparators.add(",");
+		 //groupseparators.add(TranslatorWorker.translateText("CUSTOM",request));
+		 filterForm.setAllgroupingseparators(groupseparators);
+			 
+			 
+		 if (filterForm.getCustomDecimalSymbol() == null) {
+			 filterForm.setCustomDecimalSymbol(selecteddecimalseparator);
+			 filterForm.setCustomDecimalPlaces(usedDecimalFormat.getMaximumFractionDigits());
+			 filterForm.setCustomGroupCharacter(selectedgroupingseparator);
+			 filterForm.setCustomUseGrouping(usedDecimalFormat.isGroupingUsed());
+			 filterForm.setCustomGroupSize(usedDecimalFormat.getGroupingSize());
+		 }
+		 
+		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
+		//Only currencies having exchanges rates AMP-2620
+		List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
+		filterForm.setCurrencies(validcurrencies);
+		for (AmpCurrency element:currency) {
+			if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
+			{
+		    	filterForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+			}
+		}
+			
+		AmpApplicationSettings tempSettings = ReportFilterFormUtil.getAppSetting();
+		AmpCurrency defaultCurrency = tempSettings == null ? CurrencyUtil.getCurrencyByCode(Constants.DEFAULT_CURRENCY) : tempSettings.getCurrency();
+		filterForm.setDefaultCurrency(defaultCurrency.getAmpCurrencyId());
+		
+		if (AmpCaching.getInstance().allFisCalendars == null)
+			AmpCaching.getInstance().allFisCalendars = DbUtil.getAllFisCalenders();
+		    
+		filterForm.setCalendars(AmpCaching.getInstance().allFisCalendars);
+		StopWatch.next("Filters-Settings", true, "Settings part dropdowns END");
+	}
+	
+	/**
+	 * populate all the non-setting fields in a form, like drop-down lists, checkbox lists etc etc etc
+	 * <b>Always</b> call this function after populateForm, because it corrects some fields spoiled by it (fromYear, for example)
+	 * @param filterForm the form to populate
+	 * @throws Exception
+	 */
+	public static void modeRefreshDropdowns(ReportsFilterPickerForm filterForm, int subsection) throws DgException {
+		 	 	
+		if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0)
+		{
+			fillSettingsFormDropdowns(filterForm);
+		}
+		
+		if ((subsection & AmpARFilter.FILTER_SECTION_FILTERS) == 0)
+			return; // the part below is too big to enclose in braces, so negating the condition and the action (return)
+		// create filter dropdowns
+
 		StopWatch.reset("Filters");
 		StopWatch.next("Filters", true);
-		String ampReportId 	= request.getParameter("ampReportId");
-		
-		if (ampReportId!=null && ampReportId.equalsIgnoreCase("")){
-			ampReportId = null;
-		}
-		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
-		//ServletContext ampContext = getServlet().getServletContext();
-		HttpSession httpSession = request.getSession();
-		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
- 	 	
-		// create filter dropdowns
-		      
+
+		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
 		/**
  	 	* For filterPicker ver2
  	 	*/ 	 	        
-        
+			
+		StopWatch.next("Filters", true, "various fast stuff");
+	    StopWatch.next("Filters", true, "calendars end");	    
+		 		
  	 	filterForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
 
+ 	 	StopWatch.next("Filters", true, "before sectors");
 // 		private void addSectorElement(ReportsFilterPickerForm filterForm, String featureName, String sectorName, String rootLabel, String filterDiv, String selectId, ServletContext ampContext)
- 	 	addSectorElement(filterForm, "Sector",           AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME,   "Primary Sectors",   "filter_sectors_div",           "selectedSectors", ampContext);
- 	 	addSectorElement(filterForm, "Secondary Sector", AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, "Secondary Sectors", "filter_secondary_sectors_div", "selectedSecondarySectors", ampContext);
- 	 	addSectorElement(filterForm, "Tertiary Sector",  AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,  "Tertiary Sectors",  "filter_tertiary_sectors_div",  "selectedTertiarySectors", ampContext);
- 	 	addSectorElement(filterForm, "Sector Tag",      AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,  "Tag Sector",              "filter_tag_sectors_div",       "selectedTagSectors", ampContext);
+ 	 	addSectorElement(filterForm, "Sector",           AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME,   "Primary Sectors",   "filter_sectors_div",           "selectedSectors");
+ 	 	addSectorElement(filterForm, "Secondary Sector", AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, "Secondary Sectors", "filter_secondary_sectors_div", "selectedSecondarySectors");
+ 	 	addSectorElement(filterForm, "Tertiary Sector",  AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,  "Tertiary Sectors",  "filter_tertiary_sectors_div",  "selectedTertiarySectors");
+ 	 	addSectorElement(filterForm, "Sector Tag",      AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,  "Tag Sector",              "filter_tag_sectors_div",       "selectedTagSectors");
  	 	        
  	 	
         StopWatch.next("Filters", true, "before programs");
-        if ( FeaturesUtil.isVisibleModule("National Planning Dashboard", ampContext) ) {
+        if ( FeaturesUtil.isVisibleModule("National Planning Dashboard") ) {
 	        Collection<AmpTheme> allPrograms	= ProgramUtil.getAllThemes(true);
 	        HashMap<Long, AmpTheme> progMap		= ProgramUtil.prepareStructure(allPrograms);
 	        
 			AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
 			AmpTheme primaryProg = null;
-			List<AmpTheme> primaryPrograms;		
+			//List<AmpTheme> primaryPrograms;		
 			if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {
 				//primaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
 				primaryProg = progMap.get(primaryPrgSetting.getDefaultHierarchyId() );
 				HierarchyListableUtil.changeTranslateable(primaryProg, false);
 				GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
 				filterForm.getProgramElements().add(primaryProgElement);
-			} /*else {
-				primaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
-				for (AmpTheme ampTheme : primaryPrograms) {
-					GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", ampTheme, "selectedPrimaryPrograms");
-					filterForm.getProgramElements().add(primaryProgElement);
-				}
-			}	*/
-			
-	//		if (primaryPrgSetting!=null) {
-	//			primaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
-	//			GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
-	//			filterForm.getProgramElements().add(primaryProgElement);
-	//	 	}
+			}
 			
 			AmpTheme secondaryProg = null;
 	 	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
@@ -471,44 +449,21 @@ public class ReportsFilterPicker extends MultiAction {
 				HierarchyListableUtil.changeTranslateable(secondaryProg, false);
 				GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
 				filterForm.getProgramElements().add(secondaryProgElement);
-			}/* else {
-				secondaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
-				for (AmpTheme ampTheme : secondaryPrograms) {
-					GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", ampTheme, "selectedSecondaryPrograms");
-					filterForm.getProgramElements().add(secondaryProgElement);
-				}
-			}*/
-	// 	 	if (secondaryPrg!=null) {
-	//			secondaryProg = ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
-	//			GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
-	//			filterForm.getProgramElements().add(secondaryProgElement);
-	//		}
-	 	 	
-	 	 	
-	 	 	
+			}	 	
 	 	 	
 			AmpActivityProgramSettings natPlanSetting       = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
-	// 	 	AmpTheme nationalPlanningProg                           = ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
-	// 	 	
-	// 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
-	// 	 	filterForm.getProgramElements().add(natPlanProgElement);
 	 	 	
-			List<AmpTheme> nationalPlanningObjectives;
-	 	 	if (natPlanSetting!=null && natPlanSetting.getDefaultHierarchy() != null) {
+			//List<AmpTheme> nationalPlanningObjectives;
+	 	 	if (natPlanSetting != null && natPlanSetting.getDefaultHierarchy() != null) {
 	 	 		//AmpTheme nationalPlanningProg	= ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
 	 	 		AmpTheme nationalPlanningProg	= progMap.get(natPlanSetting.getDefaultHierarchyId() );
 	 	 		HierarchyListableUtil.changeTranslateable(nationalPlanningProg, false);
 	 	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
 	 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
-			}/* else {
-				nationalPlanningObjectives = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
-				for (AmpTheme ampTheme : nationalPlanningObjectives) {
-					GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", ampTheme, "selectedNatPlanObj"); 	 	
-		 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
-				}
-			}*/
+			}
         }
  	 	StopWatch.next("Filters", true, "After Programs");
+ 	 	//long a = System.currentTimeMillis();
  	 	Collection<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
  	 	Collection<AmpOrgGroup> donorGroups = ARUtil.filterDonorGroups(DbUtil.getAllOrgGroupsOfPortfolio());
  	 	
@@ -542,12 +497,13 @@ public class ReportsFilterPicker extends MultiAction {
  	 	
  	 	filterForm.setRelatedAgenciesElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	
+		StopWatch.next("Filters", true, "Donor stuff");
  	 	// 	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filderDivId, String selectId, ServletContext ampContext)
- 	 	addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY, ampContext);
- 	 	addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY, ampContext);
- 	 	addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY, ampContext);
- 	 	addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg", ampContext);
-		addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY, ampContext);
+ 	 	addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY);
+ 	 	addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY);
+ 	 	addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY);
+ 	 	addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg");
+		addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY);
 		
 
 		// Contracting Agency Groups, based off Donor Groups
@@ -564,19 +520,18 @@ public class ReportsFilterPicker extends MultiAction {
 
 		
 		filterForm.setFinancingLocationElements( new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
-		StopWatch.next("Filters", true, "BEFORE CATEGORY VALUES");
+		StopWatch.next("Filters", true, "Agency stuff");
 		
 		//private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
-		addFinancingLocationElement(filterForm, null, "All Financing Instrument Values", CategoryConstants.FINANCING_INSTRUMENT_KEY, "Financing Instrument", "filter_financing_instr_div", "selectedFinancingInstruments", request, ampContext);
-		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance", request, ampContext);
-		addFinancingLocationElement(filterForm, "Mode of Payment", "All Mode of Payment Values", CategoryConstants.MODE_OF_PAYMENT_KEY, "Mode of Payment", "filter_mode_of_payment_div", "selectedModeOfPayment", request, ampContext);
-		addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory", request, ampContext);
+		addFinancingLocationElement(filterForm, null, "All Financing Instrument Values", CategoryConstants.FINANCING_INSTRUMENT_KEY, "Financing Instrument", "filter_financing_instr_div", "selectedFinancingInstruments");
+		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance");
+		addFinancingLocationElement(filterForm, "Mode of Payment", "All Mode of Payment Values", CategoryConstants.MODE_OF_PAYMENT_KEY, "Mode of Payment", "filter_mode_of_payment_div", "selectedModeOfPayment");
+		addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory");
 		
 						
 		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
-			Collection<AmpCategoryValue> activityStatusValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true, request);	
+			Collection<AmpCategoryValue> activityStatusValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true);	
 			HierarchyListableImplementation rootActivityStatus	= new HierarchyListableImplementation();
 			rootActivityStatus.setLabel("All");
 			rootActivityStatus.setUniqueId("0");
@@ -617,8 +572,8 @@ public class ReportsFilterPicker extends MultiAction {
 							rootCreators, "selectedWorkspaces");
 			filterForm.getOtherCriteriaElements().add(activityStatusElement);
 		}
-		if(FeaturesUtil.isVisibleField("Project Implementing Unit", ampContext)){			
-			Collection<AmpCategoryValue> projectImplementingUnits	=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, true, request);
+		if(FeaturesUtil.isVisibleField("Project Implementing Unit")){			
+			Collection<AmpCategoryValue> projectImplementingUnits	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_IMPLEMENTING_UNIT_KEY, true);
 			HierarchyListableImplementation rootProjectImplementingUnit	= new HierarchyListableImplementation();
 			rootProjectImplementingUnit.setLabel("All Project Implementing Units");
 			rootProjectImplementingUnit.setUniqueId("0");
@@ -630,9 +585,8 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		StopWatch.next("Filters", true, "AFTER CATEGORY VALUES");
 		
-		if (FeaturesUtil.isVisibleFeature("Disbursement Orders", ampContext)) { 
-			Collection<HierarchyListableImplementation> children	= 
-				new ArrayList<HierarchyListableImplementation>();
+		if (FeaturesUtil.isVisibleFeature("Disbursement Orders")) { 
+			Collection<HierarchyListableImplementation> children	= new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation rootDisbursementOrders	= new HierarchyListableImplementation();
 			rootDisbursementOrders.setLabel("All");
 			rootDisbursementOrders.setUniqueId("-1");
@@ -651,8 +605,7 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
-			Collection<AmpCategoryValue> budgetCategoryValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY, true, request);	
+			Collection<AmpCategoryValue> budgetCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY, true);	
 			HierarchyListableImplementation rootBudgetCategory	= new HierarchyListableImplementation();
 			rootBudgetCategory.setLabel("All");
 			rootBudgetCategory.setUniqueId("0");
@@ -663,6 +616,7 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
 		if (true) { 
+			StopWatch.next("Filters", true, "start rendering regions");
 			Collection<AmpCategoryValueLocations> regions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
 			try {
 				HierarchyListableUtil.changeTranslateable(regions, false);
@@ -690,22 +644,23 @@ public class ReportsFilterPicker extends MultiAction {
 					new GroupingElement<HierarchyListableImplementation>("Regions", "filter_regions_div", 
 							rootRegions, "regionSelected");
 			filterForm.getFinancingLocationElements().add(regionsElement);
+			StopWatch.next("Filters", true, "end rendering regions");
 		}
-		if( FeaturesUtil.isVisibleField("Joint Criteria", ampContext) && 
-				FeaturesUtil.isVisibleField("Government Approval Procedures", ampContext) ) { 
+		if( FeaturesUtil.isVisibleField("Joint Criteria") && 
+				FeaturesUtil.isVisibleField("Government Approval Procedures") ) { 
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation activitySettings	= new HierarchyListableImplementation();
 			activitySettings.setLabel("Both Settings");
 			activitySettings.setUniqueId("-1");
 			activitySettings.setChildren( children );
-			if ( FeaturesUtil.isVisibleField("Joint Criteria", ampContext) ) {
+			if ( FeaturesUtil.isVisibleField("Joint Criteria") ) {
 				HierarchyListableImplementation jointCriteriaDO	= new HierarchyListableImplementation();
 				jointCriteriaDO.setLabel("Only Projects Under Joint Criteria");
 				jointCriteriaDO.setUniqueId(ONLY_JOINT_CRITERIA);
 				children.add(jointCriteriaDO);
 			}
-			if ( FeaturesUtil.isVisibleField("Government Approval Procedures", ampContext) ) {
+			if ( FeaturesUtil.isVisibleField("Government Approval Procedures") ) {
 				HierarchyListableImplementation govProceduresDO	= new HierarchyListableImplementation();
 				govProceduresDO.setLabel("Only Projects Having Government Approval Procedures");
 				govProceduresDO.setUniqueId(ONLY_GOV_PROCEDURES);
@@ -719,7 +674,7 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
-			if(teamMember!=null){
+			if (teamMember != null){
 				Collection<HierarchyListableImplementation> children	= 
 					new ArrayList<HierarchyListableImplementation>();
 				HierarchyListableImplementation rootApprovalStatus	= new HierarchyListableImplementation();
@@ -753,7 +708,7 @@ public class ReportsFilterPicker extends MultiAction {
 			}
 		}
 		
-		if ( FeaturesUtil.isVisibleField("Line Ministry Rank", ampContext)) {
+		if ( FeaturesUtil.isVisibleField("Line Ministry Rank")) {
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation rootLineMinRank	= new HierarchyListableImplementation();
@@ -771,7 +726,7 @@ public class ReportsFilterPicker extends MultiAction {
 							rootLineMinRank, "lineMinRanks");
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
-		if ( FeaturesUtil.isVisibleField("Ministry of Planning Rank", ampContext)) {
+		if ( FeaturesUtil.isVisibleField("Ministry of Planning Rank")) {
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation rootplanMinRank	= new HierarchyListableImplementation();
@@ -789,7 +744,7 @@ public class ReportsFilterPicker extends MultiAction {
 							rootplanMinRank, "planMinRanks");
 			filterForm.getOtherCriteriaElements().add(planMinRankElement);
 		}
-		if (FeaturesUtil.isVisibleFeature("Archived", ampContext)) { //Here needs to be a check to see if the field/feature is enabled
+		if (FeaturesUtil.isVisibleFeature("Archived")) {
 			if(teamMember!=null){
 				Collection<HierarchyListableImplementation> children	= 
 					new ArrayList<HierarchyListableImplementation>();
@@ -811,7 +766,7 @@ public class ReportsFilterPicker extends MultiAction {
 				filterForm.getOtherCriteriaElements().add(archivedElement);
 			}
 		}
-		if ( FeaturesUtil.isVisibleFeature("Multi Donor", ampContext)) {
+		if ( FeaturesUtil.isVisibleFeature("Multi Donor")) {
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation rootMultiDonor	= new HierarchyListableImplementation();
@@ -834,7 +789,7 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
 		
-		if (FeaturesUtil.isVisibleField("Actual Start Date", ampContext) ) {
+		if (FeaturesUtil.isVisibleField("Actual Start Date") ) {
 			
 			Collection<DateListableImplementation> children		= 
 					new ArrayList<DateListableImplementation>();
@@ -862,7 +817,7 @@ public class ReportsFilterPicker extends MultiAction {
 			
 			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
 		}
-		if (FeaturesUtil.isVisibleField("Current Completion Date", ampContext) ) {
+		if (FeaturesUtil.isVisibleField("Current Completion Date") ) {
 			
 			Collection<DateListableImplementation> children		= 
 					new ArrayList<DateListableImplementation>();
@@ -890,7 +845,7 @@ public class ReportsFilterPicker extends MultiAction {
 			
 			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
 		}
-		if (FeaturesUtil.isVisibleField("Final Date for Contracting", ampContext) ) {
+		if (FeaturesUtil.isVisibleField("Final Date for Contracting") ) {
 			Collection<DateListableImplementation> children		= 
 					new ArrayList<DateListableImplementation>();
 			DateListableImplementation fromDate			= new DateListableImplementation();	
@@ -918,54 +873,6 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
 		}
 		
-
-		/**
-		 * This has been moved in SectorUtil.getAmpSectorsAndSubSectors();
-		 * 
-		 * Long
-		 * primaryConfigClassId=SectorUtil.getPrimaryConfigClassificationId();
-		 * ampSectors =
-		 * (List)SectorUtil.getAllParentSectors(primaryConfigClassId);
-		 */
-
-		// ampSectors =
-		// SectorUtil.getAllSectorsFromScheme(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_SECTOR_SCHEME));
-		/*
-		 * TreeSet<AmpSector> alphaOrderedSectors = new TreeSet<AmpSector>(
-		 * new Comparator<AmpSector>() {
-		 * 
-		 * public int compare(AmpSector as1, AmpSector as2) { if ( as1.getName() !=
-		 * null && as2.getName() != null ) return
-		 * as1.getName().compareToIgnoreCase(as2.getName() );
-		 * 
-		 * return -1; } } ); Iterator<AmpSector> sectIter = (Iterator<AmpSector>)ampSectors.iterator();
-		 * while ( sectIter.hasNext() ) { alphaOrderedSectors.add(
-		 * sectIter.next() ); }
-		 */
-
-		AmpApplicationSettings tempSettings = getAppSetting(request);
-		if (tempSettings != null) {
-			filterForm.setDefaultCurrency(tempSettings.getCurrency().getAmpCurrencyId());
-
-			if (filterForm.getCurrency() == null) {
-				filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
-			}
-			if (tempSettings.getFiscalCalendar()!=null && filterForm.getCalendar() == null) {
-				filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
-			}
-		} else {
-			filterForm.setDefaultCurrency(CurrencyUtil.getCurrencyByCode(Constants.DEFAULT_CURRENCY).getAmpCurrencyId());
-			if (filterForm.getCalendar() == null) {
-				String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-				if (value != null) {
-					filterForm.setCalendar(Long.parseLong(value));
-				}
-			}
-		}
-
-		// create the pageSizes Collection for the dropdown
-		Collection pageSizes = new ArrayList();
-
 		Collection<AmpIndicatorRiskRatings> meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
 		for (AmpIndicatorRiskRatings element:meRisks) {
 			String value = element.getRatingName();
@@ -988,16 +895,9 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCountYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setComputedYearsRange(new ArrayList<BeanWrapperImpl>());
 		filterForm.setActualAppYearsRange(new ArrayList<BeanWrapperImpl>());
-		filterForm.setPageSizes(pageSizes);
-		filterForm.setApprovalStatusSelectedCollection(new ArrayList());
+		filterForm.setApprovalStatusSelectedCollection(new ArrayList());			
 		
-		String calValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		if (filterForm.getCalendar() == null && calValue != null) {
-			filterForm.setCalendar(Long.parseLong(calValue));
-		}
-		
-		
-		
+		int curYear = new GregorianCalendar().get(Calendar.YEAR);
 		
 		for (long i = curYear-10; i < curYear; i ++) {
 			filterForm.getComputedYearsRange().add(new BeanWrapperImpl(new Long(i)));
@@ -1033,128 +933,22 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.setToMonth(-1);
 
 		/*--------------------------*/
-		Integer rStart = getDefaultStartYear(request);
+		// create the pageSizes Collection for the dropdown
+		List<BeanWrapper> pageSizes = new ArrayList<BeanWrapper>();
 		
-		Integer rEnd = getDefaultEndYear(request);
+		pageSizes.add(new BeanWrapperImpl(new String("A0")));
+		pageSizes.add(new BeanWrapperImpl(new String("A1")));
+		pageSizes.add(new BeanWrapperImpl(new String("A2")));
+		pageSizes.add(new BeanWrapperImpl(new String("A3")));
+		pageSizes.add(new BeanWrapperImpl(new String("A4")));
 		
-		
-		 if (filterForm.getCalendar() != null) {
-			rStart = getYearOnCalendar(filterForm.getCalendar(), rStart,tempSettings);
-			rEnd = getYearOnCalendar(filterForm.getCalendar(), rEnd,tempSettings);
-		}
-
-		if (filterForm.getRenderStartYear() == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
-			filterForm.setRenderStartYear(rStart);
-			tempSettings = null;
-		}
-
-		if (filterForm.getRenderEndYear() == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
-			filterForm.setRenderEndYear(rEnd);
-			tempSettings = null;
-		}
-		
-		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A0")));
-		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A1")));
-		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A2")));
-		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A3")));
-		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A4")));
-
-		if (ampReportId != null && ampReportId.length() > 0 ) {
-			AmpReports rep = (AmpReports) DbUtil.getAmpReports(new Long(ampReportId));
-			httpSession.setAttribute("filterCurrentReport", rep);
-		}
-		
-		
-		StopWatch.next("Filters", true);
-	}
-	
-
-	public ActionForward modeReset(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
-		request.setAttribute("reset", "reset");
-		// filterForm.setSelectedDonors(null);
-		filterForm.setSelectedRisks(null);
-		filterForm.setSelectedSectors(null);
-		filterForm.setSelectedStatuses(null);
-		filterForm.setSelectedWorkspaces(null);
-		filterForm.setSelectedSecondaryPrograms(null);
-		filterForm.setSelectedPrimaryPrograms(null);
-		filterForm.setSelectedNatPlanObj(null);
-		filterForm.setSelectedArchivedStatus(new Object[]{"1"});
-		filterForm.setSelectedActivitySettings(null);
-		HttpSession httpSession = request.getSession();
-		
-		AmpApplicationSettings tempSettings = getAppSetting(request);
-		if (tempSettings != null) {
-			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
-			String name = "- " + tempSettings.getCurrency().getCurrencyName();
-			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
-			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
-		}
-
-		// Long
-		// fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
-		filterForm.setFromYear(-1l);
-
-		// Long
-		// toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
-
-		if (tempSettings != null) {
-			filterForm.setRenderStartYear(tempSettings.getReportStartYear());
-			filterForm.setRenderEndYear(tempSettings.getReportEndYear());
-		} else {
-			filterForm.setRenderStartYear(-1);
-			filterForm.setRenderEndYear(-1);
-		}
-		filterForm.setToYear(-1l);
-		filterForm.setFromMonth(-1);
-		filterForm.setToMonth(-1);
-		filterForm.setFromDate(null);
-		filterForm.setToDate(null);
-
-		filterForm.setLineMinRanks(null);
-		filterForm.setPlanMinRanks(null);
-		filterForm.setText(null);
-		filterForm.setPageSize(null);
-		filterForm.setGovernmentApprovalProcedures(null);
-		filterForm.setJointCriteria(null);
-		filterForm.setJustSearch(null);
-		filterForm.setRegionSelected(null);
-		filterForm.setApprovalStatusSelected(null);
-		filterForm.setSelectedProjectImplUnit(null);
-		// filterForm.setRegions(null);
-		if (tempSettings != null) {
-			filterForm.setRenderStartYear(tempSettings.getReportStartYear());
-			filterForm.setRenderEndYear(tempSettings.getReportEndYear());
-		} else {
-			filterForm.setRenderStartYear(-1);
-			filterForm.setRenderEndYear(-1);
-		}
-
-		return modeApply(mapping, form, request, response);
-	}
-
-	public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {	
-		if (request.getParameter("apply") != null && request.getAttribute("apply") == null)
-			return modeApply(mapping, form, request, response);
-		if (request.getParameter("reset") != null && request.getAttribute("reset") == null)
-			return modeReset(mapping, form, request, response);
-
-		HttpSession httpSession = request.getSession();
-
-		if (httpSession.getAttribute(ArConstants.SELECTED_CURRENCY) == null) {
-		
-			AmpApplicationSettings tempSettings=getAppSetting(request);
-			if (tempSettings != null) {
-				String name = "- " + tempSettings.getCurrency().getCurrencyName();
-				httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
-			}
-		}
-		return mapping.findForward("forward");
+		filterForm.setPageSizes(pageSizes);
+				
+		StopWatch.next("Filters", true, "end refreshDropDowns");
 	}
 
 	/**
-	 * generate a session based AmpARFilter object based on the form selections
+	 * generate a session based AmpARFilter object based on the form selections and forward to different actions (depending on the request source)
 	 * 
 	 * @param mapping
 	 * @param form
@@ -1168,23 +962,201 @@ public class ReportsFilterPicker extends MultiAction {
 	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward modeApply(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ActionForward decideNextForward(ActionMapping mapping, ActionForm form, HttpServletRequest request, AmpARFilter arf) throws Exception {
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
-		HttpSession httpSession = request.getSession();
-
-		Session session = PersistenceManager.getSession();
-				
-		request.setAttribute("apply", "apply");
-		AmpARFilter arf;
+		
+		/* when applying settings / filters to a report, it goes into infinite recursion, because:
+		- decideNextForward forwards to viewNewAdvancedReport
+		- viewNewAdvancedReport has a jsp:include ReportsFilterPicker
+		- we come here again		
+		 */
+		if (request.getAttribute("NO_RECURSION") != null)
+			return mapping.findForward("forward");
+		
+		request.setAttribute("NO_RECURSION", true);
+	
 		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
-			arf	= new AmpARFilter();
+			return mapping.findForward("reportWizard");
 		}
-		else {
-			arf 	= (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-			if (arf == null)
-				arf = new AmpARFilter();
+		if ( request.getParameter("queryEngine") != null && "true".equals(request.getParameter("queryEngine")) ) {
+			return mapping.findForward("queryView");
 		}
-		arf.readRequestData(request);
+			
+		if (arf.isPublicView()){
+			return mapping.findForward(arf.isWidget() ? "publicView" : "reportView");
+		}
+		
+		if (arf.isWidget()){
+			return mapping.findForward("mydesktop");
+		}else{
+			return mapping.findForward("reportView");
+		}
+	}
+
+	/**
+	 * utility proxy for FilterUtil.getOrCreateFilter
+	 * @param filterForm
+	 * @return
+	 */
+	public static AmpARFilter getOrCreateFilter(ReportsFilterPickerForm filterForm)
+	{
+		
+//		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
+//		arf	= new AmpARFilter();
+//	}
+
+		Long ampReportId = null;
+		if (filterForm.getAmpReportId() != null && AmpMath.isLong(filterForm.getAmpReportId()))
+			ampReportId = Long.parseLong(filterForm.getAmpReportId());
+		if (ampReportId == null && ReportContextData.getFromRequest().getReportMeta() != null)
+			ampReportId = ReportContextData.getFromRequest().getReportMeta().getAmpReportId();
+		
+		return FilterUtil.getOrCreateFilter(ampReportId);
+	}
+	
+	/**
+	 * creates or updates the report's filter with a ReportFilterPickerForm's data, adds the result to session
+	 * @param filterForm the form
+	 * @return reference to either the created or edited AmpARFilter instance. (it can be found in RCD.getFilter() anyway)
+	 * @throws DgException - exceptions from deep inside AMP's bowels
+	 */
+	public static AmpARFilter createOrFillFilter(ReportsFilterPickerForm filterForm, int subsection) throws DgException
+	{
+		AmpARFilter arf = getOrCreateFilter(filterForm);
+
+		if ((subsection & AmpARFilter.FILTER_SECTION_FILTERS) > 0)			
+			fillFilterFromFilterForm(arf, filterForm);
+		
+		if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0)
+			fillFilterFromSettingsForm(arf, filterForm);
+
+		return arf;
+	}
+	
+	public static AmpARFilter createOrResetFilter(ReportsFilterPickerForm filterForm, int subsection) throws DgException
+	{
+		AmpARFilter arf = getOrCreateFilter(filterForm);
+		
+		if ((subsection & AmpARFilter.FILTER_SECTION_FILTERS) > 0)			
+			arf.fillWithDefaultsFilter(arf.getAmpReportId());
+		
+		if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0)
+			arf.fillWithDefaultsSettings();
+		
+		return arf;
+	}
+	/**
+	 * pumps the "Tab / Report Settings" part from the form to the filter
+	 * @param arf
+	 * @param filterForm
+	 * @see #fillFilterFromFilterForm(AmpARFilter, ReportsFilterPickerForm) for copying the settings part
+	 */
+	public static void fillFilterFromSettingsForm(AmpARFilter arf, ReportsFilterPickerForm filterForm)
+	{
+		//DecimalFormat custom = new DecimalFormat();
+		//DecimalFormatSymbols ds = new DecimalFormatSymbols();
+		Character decimalSeparator	= !"CUSTOM".equalsIgnoreCase(filterForm.getCustomDecimalSymbol()) ? 
+				filterForm.getCustomDecimalSymbol().charAt(0) : filterForm.getCustomDecimalSymbolTxt().charAt(0);		
+		arf.setDecimalseparator(decimalSeparator.toString());
+
+		boolean useGroupings = filterForm.getCustomUseGrouping() != null && filterForm.getCustomUseGrouping().booleanValue() == true;
+		arf.setCustomusegroupings(useGroupings);
+		
+		if (useGroupings)
+		{
+			Character groupingSeparator = !"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? 
+				filterForm.getCustomGroupCharacter().charAt(0) : filterForm.getCustomGroupCharacterTxt().charAt(0);		
+			arf.setGroupingseparator( groupingSeparator.toString() );
+			arf.setGroupingsize(filterForm.getCustomGroupSize());
+		}
+		
+		//custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
+
+		arf.setAmountinthousand(filterForm.getAmountinthousands());
+		//arf.setAmountinmillion(filterForm.getAmountinmillions()); TODO-Constantin: field not used anymore, to be removed in 2.4
+		
+		
+		Integer maximumDecimalPlaces	= filterForm.getCustomDecimalPlaces();
+		if ( maximumDecimalPlaces == -2 ) {//CUSTOM
+			arf.setMaximumFractionDigits(filterForm.getCustomDecimalPlacesTxt());
+		}
+		else if (maximumDecimalPlaces > -1)
+			arf.setMaximumFractionDigits(maximumDecimalPlaces );
+		else{
+			DecimalFormat defaultDecimalFormat = FormatHelper.getDecimalFormat();
+			arf.setMaximumFractionDigits(defaultDecimalFormat.getMaximumFractionDigits());
+		}
+				
+		AmpCurrency currency;
+		if (filterForm.getCurrency() != null){
+			currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, filterForm.getCurrency());
+		}else{
+			currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, filterForm.getDefaultCurrency());
+		}
+			
+		arf.setCurrency(currency);
+		
+		//BOZO: these fields are absent from the form (not rendered in html), so they are always NULL here
+		if (filterForm.getRenderStartYear() != null)
+			arf.setRenderStartYear(filterForm.getRenderStartYear());
+		
+		if (filterForm.getRenderEndYear() != null)
+			arf.setRenderEndYear(filterForm.getRenderEndYear());
+		
+		AmpFiscalCalendar selcal = (AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class, filterForm.getCalendar());
+		arf.setCalendarType(selcal);
+		arf.buildCustomFormat();
+	}
+	
+	// the following 2 functions are copy paste... damn Java generics
+	public static HashSet<AmpSector> nullOrCopy_s(Set<AmpSector> in)
+	{
+		if (in == null)
+			return null;
+		
+		if (in.isEmpty())
+			return null;
+		
+		return new HashSet<AmpSector>(in);
+	}
+	
+	// the following 2 functions are copy paste... damn Java generics
+	public static HashSet<AmpTheme> nullOrCopy_t(Set<AmpTheme> in)
+	{
+		if (in == null)
+			return null;
+		
+		if (in.isEmpty())
+			return null;
+		
+		return new HashSet<AmpTheme>(in);
+	}
+	
+	public static Set<AmpCategoryValue> pumpCategoryValueSetFromForm(Object[] ids)
+	{
+		if (ids == null || ids.length == 0)
+			return null;
+		
+		Set<AmpCategoryValue> result = new HashSet<AmpCategoryValue>();
+		for (int i = 0; i < ids.length; i++) {
+			Long id = (ids[i] instanceof Long) ? (Long) ids[i] : Long.parseLong(ids[i].toString());
+			AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(id);
+			if (value != null)
+				result.add(value);				
+		}
+		return result;
+	}
+	
+	/**
+	 * fills an AmpARFilter instance with Filters data from a ReportsFilterPickerForm
+	 * @param arf
+	 * @param filterForm
+	 * @see #fillFilterFromSettingsForm(AmpARFilter, ReportsFilterPickerForm) for copying the settings part
+	 */
+	public static void fillFilterFromFilterForm(AmpARFilter arf, ReportsFilterPickerForm filterForm) throws DgException
+	{
+		Session session = PersistenceManager.getSession();
+		arf.readRequestData(TLSUtils.getRequest(), AmpARFilter.FILTER_SECTION_FILTERS, null);
 
 		// for each sector we have also to add the subsectors
 
@@ -1193,125 +1165,21 @@ public class ReportsFilterPicker extends MultiAction {
         Set<AmpSector> selectedTertiarySectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTertiarySectors());
         Set<AmpSector> selectedTagSectors = Util.getSelectedObjects(AmpSector.class, filterForm.getSelectedTagSectors() );
 
-		if (selectedSectors != null && selectedSectors.size() > 0) {
-			arf.setSelectedSectors(new HashSet<AmpSector>());
-			arf.getSelectedSectors().addAll(selectedSectors);
-
-			arf.setSectors(SectorUtil.getSectorDescendents(selectedSectors));
-			arf.setSectorsAndAncestors( new HashSet<AmpSector>() );
-			arf.getSectorsAndAncestors().addAll( arf.getSectors() );
-			arf.getSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(selectedSectors) );
-		} else {
-			arf.setSectors(null);
-			arf.setSelectedSectors(null);
-			arf.setSectorsAndAncestors(null);
-		}
-
-		if (selectedSecondarySectors != null && selectedSecondarySectors.size() > 0) {
-			arf.setSelectedSecondarySectors(new HashSet<AmpSector>());
-			arf.getSelectedSecondarySectors().addAll(selectedSecondarySectors);
-
-			arf.setSecondarySectors(SectorUtil.getSectorDescendents(selectedSecondarySectors));
-			
-			arf.setSecondarySectorsAndAncestors( new HashSet<AmpSector>() );
-			arf.getSecondarySectorsAndAncestors().addAll( arf.getSecondarySectors() );
-			arf.getSecondarySectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(selectedSecondarySectors) );
-		} else {
-			arf.setSecondarySectors(null);
-			arf.setSelectedSecondarySectors(null);
-			arf.setSecondarySectorsAndAncestors(null);
-		}
-        if (selectedTertiarySectors != null && selectedTertiarySectors.size() > 0) {
-            arf.setSelectedTertiarySectors(new HashSet<AmpSector>());
-            arf.getSelectedTertiarySectors().addAll(selectedTertiarySectors);
-            arf.setTertiarySectors(SectorUtil.getSectorDescendents(selectedTertiarySectors));
-            arf.setTertiarySectorsAndAncestors(new HashSet<AmpSector>());
-            arf.getTertiarySectorsAndAncestors().addAll(arf.getTertiarySectors());
-            arf.getTertiarySectorsAndAncestors().addAll(SectorUtil.getAmpParentSectors(selectedTertiarySectors));
-        } else {
-            arf.setTertiarySectors(null);
-            arf.setSelectedTertiarySectors(null);
-            arf.setTertiarySectorsAndAncestors(null);
-        }
-        	
-    	if (selectedTagSectors != null && selectedTagSectors.size() > 0) {
-			arf.setSelectedTagSectors(new HashSet<AmpSector>());
-			arf.getSelectedTagSectors().addAll(selectedTagSectors);
-
-			arf.setTagSectors(SectorUtil.getSectorDescendents(selectedTagSectors));
-			arf.setTagSectorsAndAncestors( new HashSet<AmpSector>() );
-			arf.getTagSectorsAndAncestors().addAll( arf.getTagSectors() );
-			arf.getTagSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(selectedTagSectors) );
-		} else {
-			arf.setTagSectors(null);
-			arf.setSelectedTagSectors(null);
-			arf.setTagSectorsAndAncestors(null);
-		}
+		arf.setSelectedSectors(nullOrCopy_s(selectedSectors));
+		arf.setSelectedSecondarySectors(nullOrCopy_s(selectedSecondarySectors));
+		arf.setSelectedTertiarySectors(nullOrCopy_s(selectedTertiarySectors));
+		arf.setSelectedTagSectors(nullOrCopy_s(selectedTagSectors));
+		
 
 		Set<AmpTheme> selectedNatPlanObj = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedNatPlanObj());
 		Set<AmpTheme> selectedPrimaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedPrimaryPrograms());
 		Set<AmpTheme> selectedSecondaryPrograms = Util.getSelectedObjects(AmpTheme.class, filterForm.getSelectedSecondaryPrograms());
 
-		if (selectedNatPlanObj != null && selectedNatPlanObj.size() > 0) {
-			arf.setSelectedNatPlanObj(new HashSet<AmpTheme>());
-			arf.getSelectedNatPlanObj().addAll(selectedNatPlanObj);
-			arf.setNationalPlanningObjectives( new ArrayList<AmpTheme>(selectedNatPlanObj) );
-			
-			arf.setRelatedNatPlanObjs(new HashSet<AmpTheme>() );
-			ProgramUtil.collectFilteringInformation(selectedNatPlanObj, arf.getNationalPlanningObjectives(), arf.getRelatedNatPlanObjs() );
-			
-		} else {
-			arf.setSelectedNatPlanObj(null);
-			arf.setNationalPlanningObjectives(null);
-			arf.setRelatedNatPlanObjs(null);
-		}
-
-		if (selectedPrimaryPrograms != null && selectedPrimaryPrograms.size() > 0) {
-			arf.setSelectedPrimaryPrograms(new HashSet<AmpTheme>());
-			arf.getSelectedPrimaryPrograms().addAll(selectedPrimaryPrograms);
-			arf.setPrimaryPrograms(new ArrayList<AmpTheme>(selectedPrimaryPrograms));
-			
-			arf.setRelatedPrimaryProgs(new HashSet<AmpTheme>() );
-			ProgramUtil.collectFilteringInformation(selectedPrimaryPrograms, arf.getPrimaryPrograms(), arf.getRelatedPrimaryProgs() );
-			
-		} else {
-			arf.setPrimaryPrograms(null);
-			arf.setSelectedPrimaryPrograms(null);
-			arf.setRelatedPrimaryProgs(null);
-		}
-
-		if (selectedSecondaryPrograms != null && selectedSecondaryPrograms.size() > 0) {
-			arf.setSelectedSecondaryPrograms(new HashSet<AmpTheme>());
-			arf.getSelectedSecondaryPrograms().addAll(selectedSecondaryPrograms);
-			arf.setSecondaryPrograms(new ArrayList<AmpTheme>(selectedSecondaryPrograms));
-			
-			arf.setRelatedSecondaryProgs( new HashSet<AmpTheme>() );
-			ProgramUtil.collectFilteringInformation(selectedSecondaryPrograms, arf.getSecondaryPrograms(), arf.getRelatedSecondaryProgs() );
-			
-		} else {
-			arf.setSecondaryPrograms(null);
-			arf.setSelectedSecondaryPrograms(null);
-			arf.setRelatedSecondaryProgs(null);
-
-		}
-		AmpApplicationSettings tempSettings = getAppSetting(request);
-		AmpFiscalCalendar selcal = (AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class, filterForm.getCalendar());
-		if (!selcal.equals(arf.getCalendarType())) {
-			arf.setCalendarType(selcal);
-			if (filterForm.getRenderEndYear().intValue() == arf.getRenderEndYear().intValue() && filterForm.getRenderStartYear().intValue() == arf.getRenderStartYear().intValue()) {
-				Integer defaultStart = getDefaultStartYear(request);
-				Integer defaultEnd = getDefaultEndYear(request);
-				if (filterForm.getCalendar() != null) {
-					if (filterForm.getRenderStartYear() < 0)
-					filterForm.setRenderStartYear(getYearOnCalendar(filterForm.getCalendar(), defaultStart,tempSettings));
-				
-					if (filterForm.getRenderEndYear()< 0)
-					filterForm.setRenderEndYear(getYearOnCalendar(filterForm.getCalendar(), defaultEnd,tempSettings));
-
-				}
-
-			}
-		}
+		arf.setSelectedNatPlanObj(nullOrCopy_t(selectedNatPlanObj));
+		arf.setSelectedPrimaryPrograms(nullOrCopy_t(selectedPrimaryPrograms));
+		arf.setSelectedSecondaryPrograms(nullOrCopy_t(selectedSecondaryPrograms));
+		
+//		AmpApplicationSettings tempSettings = ReportFilterFormUtil.getAppSetting();
 
 		if (filterForm.getText() != null) {
 			arf.setText(filterForm.getText());
@@ -1322,10 +1190,10 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setSearchMode(filterForm.getSearchMode());
 		}
 
-		arf.setYearFrom(filterForm.getFromYear() == null || filterForm.getFromYear().longValue() == -1 ? null : new Integer(filterForm.getFromYear().intValue()));
-		arf.setYearTo(filterForm.getToYear() == null || filterForm.getToYear().longValue() == -1 ? null : new Integer(filterForm.getToYear().intValue()));
-		arf.setFromMonth(filterForm.getFromMonth() == null || filterForm.getFromMonth().intValue() == -1 ? null : new Integer(filterForm.getFromMonth().intValue()));
-		arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1 ? null : new Integer(filterForm.getToMonth().intValue()));
+		arf.setYearFrom(filterForm.getFromYear() == null || filterForm.getFromYear().longValue() == -1 ? null : filterForm.getFromYear().intValue());
+		arf.setYearTo(filterForm.getToYear() == null || filterForm.getToYear().longValue() == -1 ? null : filterForm.getToYear().intValue());
+		arf.setFromMonth(filterForm.getFromMonth() == null || filterForm.getFromMonth().intValue() == -1 ? null : filterForm.getFromMonth().intValue());
+		arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1 ? null : filterForm.getToMonth().intValue());
 		arf.setFromDate(filterForm.getFromDate() == null ? null : new String(filterForm.getFromDate()));
 		arf.setToDate(filterForm.getToDate() == null ? null : new String(filterForm.getToDate()));
 		
@@ -1338,10 +1206,12 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setToActivityFinalContractingDate(filterForm.getToActivityFinalContractingDate() );
 		arf.setFromActivityFinalContractingDate(filterForm.getFromActivityFinalContractingDate());
 
+		int curYear = new GregorianCalendar().get(Calendar.YEAR);
+		
 		if (filterForm.getComputedYear()!=-1){
 			arf.setComputedYear(filterForm.getComputedYear());
 		}else{
-			if (FeaturesUtil.isVisibleFeature("Computed Columns Filters", this.getServlet().getServletContext() ) )
+			if (FeaturesUtil.isVisibleFeature("Computed Columns Filters"))
 				arf.setComputedYear(curYear);
 			else
 				arf.setComputedYear(null);
@@ -1353,19 +1223,9 @@ public class ReportsFilterPicker extends MultiAction {
 		else 
 			arf.setActualAppYear(null);
 		// arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
-		AmpCurrency currency;
-		if (filterForm.getCurrency()!=null){
-			currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, filterForm.getCurrency());
-		}else{
-			currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class, filterForm.getDefaultCurrency());
-		}
-			
-		arf.setCurrency(currency);
-		String name = "- " + currency.getCurrencyName();
-		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+
 		Integer all = new Integer(-1);
-		
-		
+				
 		if ( filterForm.getLineMinRanks() != null && filterForm.getLineMinRanks().length > 0 ) {
 	 	 	ArrayList<Integer> ranks        = new ArrayList<Integer>();
 	 	 	for (int i=0; i< filterForm.getLineMinRanks().length;  i++) {
@@ -1415,7 +1275,7 @@ public class ReportsFilterPicker extends MultiAction {
 			if(filterForm.getApprovalStatusSelected() != null){
 				ArrayList<String> appvals = new ArrayList<String>();
 				for (int i = 0; i < filterForm.getApprovalStatusSelected().length; i++) {
-					String id = String.valueOf("" + filterForm.getApprovalStatusSelected()[i]);
+					String id = filterForm.getApprovalStatusSelected()[i].toString();
 					appvals.add(id);
 				}
 			    arf.setApprovalStatusSelected(appvals);
@@ -1427,16 +1287,7 @@ public class ReportsFilterPicker extends MultiAction {
 		else 
 			arf.setApprovalStatusSelected(null);
 		
-		if (filterForm.getSelectedStatuses() != null && filterForm.getSelectedStatuses().length > 0)
-			arf.setStatuses(new HashSet<AmpCategoryValue>());
-		else
-			arf.setStatuses(null);
-
-		for (int i = 0; filterForm.getSelectedStatuses() != null && i < filterForm.getSelectedStatuses().length; i++) {
-			Long statusId						= Long.parseLong( filterForm.getSelectedStatuses()[i].toString() );
-			AmpCategoryValue value 	= (AmpCategoryValue) session.load(AmpCategoryValue.class, statusId);
-			arf.getStatuses().add(value);
-		}
+		arf.setStatuses(pumpCategoryValueSetFromForm(filterForm.getSelectedStatuses()));
 		
 		if (filterForm.getSelectedWorkspaces() != null && filterForm.getSelectedWorkspaces().length > 0)
 			arf.setWorkspaces(new HashSet<AmpTeam>());
@@ -1449,67 +1300,14 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.getWorkspaces().add(value);
 		}
 
-		if (filterForm.getSelectedProjectCategory() != null && filterForm.getSelectedProjectCategory().length > 0)
-			arf.setProjectCategory(new HashSet<AmpCategoryValue>());
-		else
-			arf.setProjectCategory(null);
+		arf.setProjectCategory(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectCategory()));
+		arf.setFinancingInstruments(pumpCategoryValueSetFromForm(filterForm.getSelectedFinancingInstruments()));
+		arf.setTypeOfAssistance(pumpCategoryValueSetFromForm(filterForm.getSelectedTypeOfAssistance()));
+		arf.setModeOfPayment(pumpCategoryValueSetFromForm(filterForm.getSelectedModeOfPayment()));
+		arf.setProjectImplementingUnits(pumpCategoryValueSetFromForm(filterForm.getSelectedProjectImplUnit()));
 		
-		for (int i = 0; filterForm.getSelectedProjectCategory() != null && i < filterForm.getSelectedProjectCategory().length; i++) {
-			Long id = Long.parseLong(filterForm.getSelectedProjectCategory()[i] + "");
-			AmpCategoryValue value = (AmpCategoryValue) CategoryManagerUtil.getAmpCategoryValueFromDb(id);
-			arf.getProjectCategory().add(value);
-		}
-
-		if (filterForm.getSelectedFinancingInstruments() != null && filterForm.getSelectedFinancingInstruments().length > 0)
-			arf.setFinancingInstruments(new HashSet<AmpCategoryValue>());
-		else
-			arf.setFinancingInstruments(null);
-		
-		for (int i = 0; filterForm.getSelectedFinancingInstruments() != null && i < filterForm.getSelectedFinancingInstruments().length; i++) {
-			Long id = Long.parseLong(filterForm.getSelectedFinancingInstruments()[i] + "");
-			AmpCategoryValue value = (AmpCategoryValue) CategoryManagerUtil.getAmpCategoryValueFromDb(id);
-			arf.getFinancingInstruments().add(value);
-		}
-
-		if (filterForm.getSelectedTypeOfAssistance() != null && filterForm.getSelectedTypeOfAssistance().length > 0) {
-			arf.setTypeOfAssistance(new HashSet<AmpCategoryValue>());
-			for (int i = 0; i < filterForm.getSelectedTypeOfAssistance().length; i++) {
-				Long id = filterForm.getSelectedTypeOfAssistance()[i];
-				AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(id);
-				if (value != null)
-					arf.getTypeOfAssistance().add(value);
-			}
-		} else {
-			arf.setTypeOfAssistance(null);
-		}
-			
-		if (filterForm.getSelectedModeOfPayment() != null && filterForm.getSelectedModeOfPayment().length > 0) {
-			arf.setModeOfPayment(new HashSet<AmpCategoryValue>());
-			for (int i = 0; i < filterForm.getSelectedModeOfPayment().length; i++) {
-				Long id = filterForm.getSelectedModeOfPayment()[i];
-				AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(id);
-				if (value != null)
-					arf.getModeOfPayment().add(value);
-			}
-		} else {
-			arf.setModeOfPayment(null);
-		}
-		
-		if(filterForm.getSelectedProjectImplUnit()!=null && filterForm.getSelectedProjectImplUnit().length>0){
-			arf.setProjectImplementingUnits(new HashSet<AmpCategoryValue>());
-			for (int i = 0; i < filterForm.getSelectedProjectImplUnit().length; i++) {
-				Long id = filterForm.getSelectedProjectImplUnit()[i];
-				AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(id);
-				if (value != null)
-					arf.getProjectImplementingUnits().add(value);
-			}
-		}else{
-			arf.setProjectImplementingUnits(null);
-		}
-
 		if (filterForm.getPageSize() != null) {
-			arf.setPageSize(filterForm.getPageSize()); // set page size in the
-			// ARF filter
+			arf.setPageSize(filterForm.getPageSize()); // set page size in the ARF filter
 		}
 
 		arf.setRisks(Util.getSelectedObjects(AmpIndicatorRiskRatings.class, filterForm.getSelectedRisks()));
@@ -1569,17 +1367,7 @@ public class ReportsFilterPicker extends MultiAction {
 		} else
 			arf.setContractingAgencyGroups(null);
 
-		if (filterForm.getSelectedBudgets() != null && filterForm.getSelectedBudgets().length > 0) {
-			arf.setBudget(new HashSet<AmpCategoryValue>());
-			for (int i = 0; i < filterForm.getSelectedBudgets().length; i++) {
-				Long id = filterForm.getSelectedBudgets()[i];
-				AmpCategoryValue value = CategoryManagerUtil.getAmpCategoryValueFromDb(id);
-				if (value != null)
-					arf.getBudget().add(value);
-			}
-		} else {
-			arf.setBudget(null);
-		}
+		arf.setBudget(pumpCategoryValueSetFromForm(filterForm.getSelectedBudgets()));
 		
 		if ( filterForm.getSelectedMultiDonor() != null && filterForm.getSelectedMultiDonor().length == 1 ) {
 			arf.setMultiDonor( (String) filterForm.getSelectedMultiDonor()[0] );
@@ -1597,58 +1385,15 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setAmpTeamsforpledges(null);
 		}
 		
-		arf.setRenderStartYear((filterForm.getRenderStartYear() != -1) ? filterForm.getRenderStartYear() : 0);
-		arf.setRenderEndYear((filterForm.getRenderEndYear() != -1) ? filterForm.getRenderEndYear() : 0);
-
-		DecimalFormat custom = new DecimalFormat();
-		DecimalFormatSymbols ds = new DecimalFormatSymbols();
-		String decimalSeparator	= !"CUSTOM".equalsIgnoreCase(filterForm.getCustomDecimalSymbol()) ? 
-				filterForm.getCustomDecimalSymbol().substring(0, 1) : filterForm.getCustomDecimalSymbolTxt().substring(0, 1);
-		ds.setDecimalSeparator(  decimalSeparator.charAt(0) );
+		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency()));
+		arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency()));
+		arf.setResponsibleorg(ReportsUtil.processSelectedFilters(filterForm.getSelectedresponsibleorg()));
 		
-		arf.setDecimalseparator(decimalSeparator);
-		
-		
-		if (filterForm.getCustomUseGrouping().booleanValue() == true) {
-			String groupingSeparator = !"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? 
-					filterForm.getCustomGroupCharacter().substring(0, 1) : filterForm.getCustomGroupCharacterTxt().substring(0, 1);
-			ds.setGroupingSeparator( groupingSeparator.charAt(0) );			
-			arf.setGroupingseparator( groupingSeparator );
-			custom.setGroupingUsed(filterForm.getCustomUseGrouping());
-			custom.setGroupingSize(filterForm.getCustomGroupSize());	
-			
-			arf.setGroupingsize(filterForm.getCustomGroupSize());
-			arf.setCustomusegroupings(filterForm.getCustomUseGrouping());
-		}
-		
-		//custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
-		custom.setDecimalFormatSymbols(ds);
-		arf.setAmountinthousand(filterForm.getAmountinthousands());
-		//arf.setAmountinmillion(filterForm.getAmountinmillions()); TODO-Constantin: field not used anymore, to be removed in 2.4
-		
-		
-		Integer maximumDecimalPlaces	= filterForm.getCustomDecimalPlaces();
-		if ( maximumDecimalPlaces == -2 ) {//CUSTOM
-			arf.setMaximumFractionDigits(filterForm.getCustomDecimalPlacesTxt());
-		}
-		else if (maximumDecimalPlaces > -1)
-			arf.setMaximumFractionDigits(maximumDecimalPlaces );
-		else{
-			DecimalFormat defaultDecimalFormat = FormatHelper.getDecimalFormat();
-			arf.setMaximumFractionDigits(defaultDecimalFormat.getMaximumFractionDigits());
-		}
-		custom.setMaximumFractionDigits( arf.getMaximumFractionDigits() );
-		
-		arf.setCurrentFormat(custom);
-
-		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency(), AmpOrganisation.class));
-		arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency(), AmpOrganisation.class));
-		arf.setResponsibleorg(ReportsUtil.processSelectedFilters(filterForm.getSelectedresponsibleorg(), AmpOrganisation.class));
-		
-		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency(), AmpOrganisation.class));
-		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency(), AmpOrganisation.class));
-		arf.setContractingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedContractingAgency(), AmpOrganisation.class));
+		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency()));
+		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency()));
+		arf.setContractingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedContractingAgency()));
 		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpCategoryValue.class));
+		
 		if ( filterForm.getSelectedArchivedStatus() == null || filterForm.getSelectedArchivedStatus().length != 1 ) {
 			arf.setShowArchived(null);
 		}
@@ -1658,177 +1403,7 @@ public class ReportsFilterPicker extends MultiAction {
 				arf.setShowArchived(false);
 			else
 				arf.setShowArchived(true);
-		} 
-
-		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
-			httpSession.setAttribute(ReportWizardAction.SESSION_FILTER, arf);
-			return mapping.findForward("reportWizard");
-		}
-		if ( request.getParameter("queryEngine") != null && "true".equals(request.getParameter("queryEngine")) ) {
-			httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
-			return mapping.findForward("queryView");
-		}
-			
-		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
-		if (arf.isPublicView()){
-			return mapping.findForward(arf.isWidget() ? "publicView" : "reportView");
-		}
-		
-		if (arf.isWidget()){
-			return mapping.findForward("mydesktop");
-		}else{
-			return mapping.findForward("reportView");
-		}
+		}	
 	}
-
-	public void reset(ActionForm form, HttpServletRequest request, ActionMapping mapping) {
-		request.setAttribute("apply", null);
-		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
-		filterForm.setSelectedRisks(null);
-		filterForm.setSelectedSectors(null);
-		filterForm.setSelectedStatuses(null);
-		filterForm.setSelectedWorkspaces(null);
-		filterForm.setSelectedNatPlanObj(null);
-		filterForm.setJustSearch(null);
-		filterForm.setSelectedPrimaryPrograms(null);
-		filterForm.setSelectedSecondarySectors(null);
-        filterForm.setSelectedTertiarySectors(null);
-        filterForm.setSelectedTagSectors(null);
-        filterForm.setSelectedArchivedStatus(new Object[]{"1"});
-		filterForm.setAmountinthousands(AmpARFilter.AMOUNT_OPTION_IN_UNITS);
-		filterForm.setSelectedMultiDonor(null);
-		HttpSession httpSession = request.getSession();
-		AmpApplicationSettings tempSettings=getAppSetting(request);
-		if (tempSettings != null) {
-			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
-			String name = "- " + tempSettings.getCurrency().getCurrencyName();
-			if (httpSession.getAttribute(ArConstants.SELECTED_CURRENCY) == null)
-				httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
-			if(tempSettings.getFiscalCalendar() != null && tempSettings.getFiscalCalendar().getAmpFiscalCalId() != null) {
-				filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
-			}
-		}
-
-		// Long
-		// fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
-		filterForm.setFromYear(-1l);
-		filterForm.setComputedYear(-1);
-		// Long
-		// toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
-		filterForm.setToYear(-1l);
-		filterForm.setFromMonth(-1);
-		filterForm.setToMonth(-1);
-		filterForm.setFromDate(null);
-		filterForm.setToDate(null);
-		
-		filterForm.setAmpReportId(null);
-
-		filterForm.setLineMinRanks(null);
-		filterForm.setPlanMinRanks(null);
-		filterForm.setText(null);
-		filterForm.setPageSize(null);
-		filterForm.setGovernmentApprovalProcedures(null);
-		filterForm.setJointCriteria(null);
-		filterForm.setRegionSelected(null);
-		filterForm.setApprovalStatusSelected(null);
-		filterForm.reset(mapping, request);
-	}
-
-	public void resetFormat(ActionForm form, HttpServletRequest request, ActionMapping mapping) {
-		HttpSession httpSession = request.getSession();
-		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
-		AmpARFilter arf = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-		if (arf != null){
-			arf.setCurrentFormat(null);
-		}
-		filterForm.setDecimalSymbol(null);
-		filterForm.setCustomDecimalSymbol(null);
-		filterForm.setCustomDecimalPlaces(null);
-		filterForm.setCustomGroupCharacter(null);
-		filterForm.setCustomUseGrouping(null);
-		filterForm.setCustomGroupSize(null);
-		filterForm.setResetFormat(null);
-		filterForm.setAmountinthousands(AmpARFilter.AMOUNT_OPTION_IN_UNITS);
-	}
-
-	private Integer getDefaultStartYear(HttpServletRequest request) {
-		AmpApplicationSettings tempSettings = getAppSetting(request);
-		Integer rStart = -1;
-		if (tempSettings != null && tempSettings.getReportStartYear() != null && tempSettings.getReportStartYear().intValue() != 0) {
-			rStart = tempSettings.getReportStartYear();
-		} else {
-			String gvalue = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
-			if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
-				rStart = Integer.parseInt(gvalue);
-			}
-		}
-
-		return rStart;
-	}
-
-	private Integer getDefaultEndYear(HttpServletRequest request) {
-		AmpApplicationSettings tempSettings = getAppSetting(request);
-		Integer rEnd = -1;
-		if (tempSettings != null && tempSettings.getReportEndYear() != null && tempSettings.getReportEndYear().intValue() != 0) {
-			rEnd = tempSettings.getReportEndYear();
-		} else {
-			String gvalue = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
-			if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
-				rEnd = Integer.parseInt(gvalue);
-			}
-		}
-		return rEnd;
-	}
-
-	
-	private Integer getYearOnCalendar(AmpFiscalCalendar calendar, Integer pyear, AmpFiscalCalendar defCalendar) {
-		if (pyear==null) return 0;
-		
-		Integer year=null;
-		try {
-			Date testDate=new SimpleDateFormat("dd/MM/yyyy").parse("11/09/"+pyear);
-			ICalendarWorker work1=defCalendar.getworker();
-			work1.setTime(testDate);
-			ICalendarWorker work2=calendar.getworker();
-			work2.setTime(testDate);
-			int diff=work2.getYearDiff(work1);
-			pyear=pyear+diff;
-			return pyear;
-		} catch (Exception e) {
-			logger.error("Can't get year on calendar",e);
-		}
-		return year;
-	
-	}
-	private Integer getYearOnCalendar(Long calendarId, Integer pyear,AmpApplicationSettings 	tempSettings ) {
-		if (pyear==null) return 0;
-		AmpFiscalCalendar	cal = FiscalCalendarUtil.getAmpFiscalCalendar(calendarId);
-	
-		AmpFiscalCalendar defauCalendar=null;
-		if  (tempSettings!=null)
-			defauCalendar=tempSettings.getFiscalCalendar();
-		
-		if (defauCalendar==null){
-			String calValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-			defauCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calValue));
-		}
-		
-		if(defauCalendar==null) return 0;
-		
-		Integer year=getYearOnCalendar(cal, pyear,defauCalendar);
-		cal=null;
-		return year;
-	}
-	
-	public static AmpApplicationSettings getAppSetting(HttpServletRequest request) {
-		HttpSession httpSession = request.getSession();
-		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
-		AmpApplicationSettings tempSettings = null;
-		if (teamMember != null) {
-			tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
-		}
-		return tempSettings;
-	}
-
 	
 }

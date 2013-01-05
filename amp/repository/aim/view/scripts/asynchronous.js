@@ -12,11 +12,13 @@ function Asynchronous_call(url){
          //changed POST by get for AMP-6044
           this._xmlhttp.open('GET',url,true);
               
-            if (url.indexOf("?") > 0){
+          	// this line is not functional on modern browsers - test if it is still relevant? 
+            // disabling it because it pollutes the browser's error logs, masking legitimate ones
+            /*if (url.indexOf("?") > 0){
 	         	this._xmlhttp.setRequestHeader("Content-length",url.substr(url.indexOf("?")+1,url.length).length);
 			 }else{
 				this._xmlhttp.setRequestHeader("Content-length",0);
-			 }
+			 }*/
 		
 		 this._xmlhttp.onreadystatechange=function(){
             try{

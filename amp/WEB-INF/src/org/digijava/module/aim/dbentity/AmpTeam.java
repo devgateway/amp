@@ -66,15 +66,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 		AmpTeam ampTeam = member.getAmpTeam();
 		AmpARFilter af = null;
 		if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
-			af = new AmpARFilter();
-			af.readRequestData(request);
-			FilterUtil.populateFilter(ampTeam, af);
-			/* The prepare function needs to have the filter (af) already populated */
-			try {
-				FilterUtil.prepare(request, af);
-			} catch (Exception e) {
-				logger.error("Error while preparing filter:", e);
-			}
+			af = FilterUtil.buildFilter(ampTeam, null);
 			af.generateFilterQuery(request, true);
 		}
 		session.setAttribute(ArConstants.TEAM_FILTER, af);

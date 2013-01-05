@@ -795,7 +795,7 @@ public class ExportActivityToPDF extends Action {
 			
 			//References
 			if(FeaturesUtil.isVisibleModule("References", ampContext)){
-				Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false, request);
+				Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
 
 	        	if (catValues!=null){	        		
 	            	ReferenceDoc[] refDocs=myForm.getDocuments().getReferenceDocs();

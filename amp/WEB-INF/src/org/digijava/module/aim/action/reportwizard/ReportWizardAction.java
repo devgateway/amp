@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -66,9 +67,9 @@ import org.hibernate.Session;
  */
 public class ReportWizardAction extends MultiAction {
 	
-	public static final String SESSION_FILTER					= "reportWizardFilter";
-	public static final String EXISTING_SESSION_FILTER			= "existingReportWizardFilter";
-	public static final String REPORT_WIZARD_INIT_ON_FILTERS	= "rep_wiz_init";
+	//public static final String SESSION_FILTER					= "reportWizardFilter";
+	//public static final String EXISTING_SESSION_FILTER			= "existingReportWizardFilter";
+	//public static final String REPORT_WIZARD_INIT_ON_FILTERS	= "rep_wiz_init";
 	
 	private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 	
@@ -100,13 +101,37 @@ public class ReportWizardAction extends MultiAction {
 		
 		/* This gets called for new reports/tabs */
 		if ( request.getParameter("reset")!=null && "true".equals(request.getParameter("reset")) )
+		{
+			request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_REPORT_WIZARD);
+			ReportContextData.createWithId(ReportContextData.REPORT_ID_REPORT_WIZARD, true);
 			modeReset(mapping, form, request, response);
+		}
 		
 		if (request.getParameter("editReportId") != null ) {
+			request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, request.getParameter("editReportId"));
+			request.getSession().setAttribute("report_wizard_current_id", request.getAttribute(ReportContextData.BACKUP_REPORT_ID_KEY));
 			modeReset(mapping, form, request, response);
 			return modeEdit(mapping, form, request, response);
 		}
 		
+		/**
+		 * a little ugly hack, but saves lots of development time: ReportWizardAction only supports running a single 
+		 * instance of it at the same time, else they will get mixed up at saving!
+		 * because the client-side saving code is a huge mess of copy-pasted JavaScript (at least 3 copies of save() 
+		 * and saveReport() instances - probably some of them unused, but don't know which and under 
+		 * which conditions - we save the "current ReportContextId" in the session when firstly opening the wizard (see 
+		 * the two if's above). After that, this value will be used throughout the wizard
+		 * SIDE-EFFECT: ONLY ONE REPORTWIZARDACTION CAN BE RUN AT A MOMENT BY A USER, ELSE THE FILTERS WILL GET MIXED UP (just like in pre-2.4 AMP)
+		 */
+		if (request.getAttribute(ReportContextData.BACKUP_REPORT_ID_KEY) != null)
+			request.getSession().setAttribute("report_wizard_current_id", request.getAttribute(ReportContextData.BACKUP_REPORT_ID_KEY));
+		else
+		{
+			Object reportWizardId = request.getSession().getAttribute("report_wizard_current_id");
+			if (reportWizardId == null)
+				throw new RuntimeException("HUGE bug: ReportWizard lost its reportContextId!");
+			request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, reportWizardId);
+		}
 		
 		/* If there's no report title in the request then we decide to show the wizard */
 		if (request.getParameter("reportTitle") == null){ 
@@ -172,26 +197,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setBudgetExporter(false);
 		myForm.setReportCategory(new Long(0));
 		
-		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
-		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
-		request.getSession().setAttribute( ArConstants.REPORTS_FILTER, null );
-
-		/**
-		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard
-		 */
-		ReportsFilterPicker rfp		= new ReportsFilterPicker();
-		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
-		if (rfpForm == null ) {
-			rfpForm		= new ReportsFilterPickerForm();
-			request.setAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS, "true");
-			rfp.modePrepare(mapping, rfpForm, request, response);
-			TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, true);
-		}
-		rfpForm.setIsnewreport(true);
-		rfp.reset(rfpForm, request, mapping);
-		rfp.resetFormat(rfpForm, request, mapping);
-		rfpForm.setIsnewreport(false);
-		
+		ReportContextData.getFromRequest(true).resetFilters();
 	}
 	
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form, 
@@ -247,6 +253,7 @@ public class ReportWizardAction extends MultiAction {
 		else
 			return mapping.findForward("showReport" + onePager);
 	}
+	
 	public ActionForward modeEdit(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		
@@ -312,24 +319,34 @@ public class ReportWizardAction extends MultiAction {
 		this.getFieldIds(myForm.getSelectedColumns(), cols);
 		this.getFieldIds(myForm.getSelectedHierarchies(), hiers);
 		this.getFieldIds(myForm.getSelectedMeasures(), meas);
-		
+
+		AmpARFilter filter = ReportContextData.getFromRequest().loadOrCreateFilter(true, ampReport);
+		logger.info("loaded filters: " + filter.toString());			
+
 		Set<AmpFilterData> fdSet	= ampReport.getFilterDataSet();
 		if ( fdSet != null && fdSet.size() > 0 ) {
-			AmpARFilter filter		= new AmpARFilter();
-			FilterUtil.populateFilter(ampReport, filter);
-			FilterUtil.prepare(request, filter);
-			request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER , filter);
-			ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
-			new ReportsFilterPicker().modeRefreshDropdowns(mapping, rfpForm, request, response, getServlet().getServletContext() );
-			FilterUtil.populateForm(rfpForm, filter);
+//			AmpARFilter filter		= new AmpARFilter();
+//			FilterUtil.populateFilter(ampReport, filter);
+//			FilterUtil.prepare(request, filter);
+//			ReportContextData.getFromRequest().setSerializedFilter(filter);
+//			ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
+//			ReportsFilterPicker.modeRefreshDropdowns(mapping, rfpForm, request, response, getServlet().getServletContext() );
+//			FilterUtil.populateForm(rfpForm, filter, null);
 			myForm.setUseFilters(true);
-			
-		}
-				
+		}			
 		
 		return this.modeShow(mapping, form, request, response);
 	}
 	
+	/**
+	 * save a brand new report
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws java.lang.Exception
+	 */
 	public ActionForward modeSave(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
@@ -456,9 +473,7 @@ public class ReportWizardAction extends MultiAction {
 			}
 		}
 		
-		Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
-		if ( filter == null )
-			filter		= request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );
+		AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
 		if ( filter != null && myForm.getUseFilters()) {
 			if ( ampReport.getAmpReportId()!=null )
 				AmpFilterData.deleteOldFilterData( ampReport.getAmpReportId() );
@@ -496,15 +511,19 @@ public class ReportWizardAction extends MultiAction {
 		
 		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
-		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
-		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
-		
-		AmpARFilter	filter		= (AmpARFilter)request.getSession().getAttribute(ArConstants.REPORTS_FILTER);
-		if (filter == null)
-			throw new Exception ("No filter object found in http Session");
 		String ampReportId			= request.getParameter("reportId");
 		if ( ampReportId == null ||ampReportId.length() == 0 )
 			throw new Exception ("No reportId found in request");
+		
+		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ampReportId);		
+		
+		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
+		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
+		
+		AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
+		
+		if (filter == null)
+			throw new Exception ("No filter object found in http Session");
 		
 		Long reportId				= Long.parseLong(ampReportId);
 		
@@ -720,6 +739,7 @@ public class ReportWizardAction extends MultiAction {
 	
 	/**
 	 * loads an AmpReport by id; returns null on any error
+	 * returns the in-memory report if ampReportId < 0
 	 * @param ampReportId
 	 * @param request
 	 * @return
@@ -733,7 +753,7 @@ public class ReportWizardAction extends MultiAction {
 			if (ampReportId > 0)
 				ampReport	=  (AmpReports) session.load(AmpReports.class, ampReportId );
 			else 
-				ampReport	= (AmpReports) request.getSession().getAttribute("reportMeta");
+				ampReport	= ReportContextData.getFromRequest().getReportMeta();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

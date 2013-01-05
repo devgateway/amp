@@ -234,20 +234,21 @@ public class DashboardLauncher extends Action {
 
 		}
 		filter.setZones(zones);
-		Collection currency = CurrencyUtil.getActiveAmpCurrencyByName();
+		List<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
         List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
         filter.setCurrencies(validcurrencies);
         //Only currencies which have exchanges rates
-        for (Iterator iter = currency.iterator(); iter.hasNext();) {
-            AmpCurrency element = (AmpCurrency) iter.next();
-            try {
-				if (CurrencyUtil.isRate(element.getCurrencyCode()) == true) {
-					filter.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-				}
-			} catch (AimException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        for (AmpCurrency element:currency) {
+        	try
+        	{
+        		if (CurrencyUtil.isRate(element.getCurrencyCode()) == true) {
+        			filter.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+        		}
+        	}
+        	catch(Exception e)
+        	{
+        		e.printStackTrace();
+        	}
         }
         HttpSession httpSession = request.getSession();
         TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");

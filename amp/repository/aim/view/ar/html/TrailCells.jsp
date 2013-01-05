@@ -8,6 +8,13 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <%@page import="org.digijava.kernel.translator.TranslatorWorker"%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
 
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
@@ -32,6 +39,12 @@
 						 ***************************************************--> 
 			</span>
 		</c:if>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
 	
 	<c:if test="${reportData.levelDepth == 3}">
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid" height="13px" >
@@ -63,6 +76,12 @@
 	<c:if test="${reportMeta.hideActivities != null && reportMeta.hideActivities }">
 		<c:set var="firstCell" value="${false}"></c:set>
 	</c:if>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
 	
 	<logic:iterate name="reportData" property="trailCells"  id="cell" type="org.dgfoundation.amp.ar.cell.Cell" scope="page">
 			<c:if test="${cell!=null}">
@@ -88,6 +107,12 @@
 				<c:if test="${reportData.levelDepth > 2}">
 					<td style="border-bottom: #E2E2E2 1px solid;border-right: #E2E2E2 1px solid">
 				</c:if>  
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
+<%-- UNUSED FILE, TO BE REMOVED --%>
 			
 					<c:if test="${cell!=null}">
 						<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

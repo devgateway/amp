@@ -49,8 +49,6 @@ public class XmlPatcherHQLLangWorker extends XmlPatcherLangWorker {
 			return true;
 		} catch (HibernateException e) {
 			throw new XmlPatcherLangWorkerException(e);
-		} catch (SQLException e) {
-			throw new XmlPatcherLangWorkerException(e);
 		}
 	}
 

@@ -12,10 +12,15 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
-<%-- <bean:define id="reportMeta" name="reportMeta"
-	type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" /> --%>
-<digi:instance property="aimReportsFilterPickerForm" />
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
+
+<jsp:include page="/aim/reportsFilterPicker.do">
+	<jsp:param name="init" value=""/>
+</jsp:include> 
 
 <digi:form action="/reportsFilterPicker.do" name="aimReportsFilterPickerForm3" type="aimReportsFilterPickerForm"  onsubmit="return validateFormat()">
 <input type="hidden" name="initialCal" id="initialCal" value="${aimReportsFilterPickerForm.calendar}"/>
@@ -178,7 +183,9 @@
 <br>
 <div>
 	<div style="margin-right: auto; margin-left: auto; text-align: center;">
-			<html:hidden property="ampReportId" /> 
+			<%-- <html:hidden property="ampReportId" />  --%> 
+			<input type="hidden" name="ampReportId" value="${reportCD.ampReportId}" />
+			<input type="hidden" name="reportContextId" value="${reportCD.contextId}" />
 			<html:hidden property="defaultCurrency" />
 			<html:submit styleClass="buttonx"  property="applyFormat" styleId="applyFormatBtn">
 				<digi:trn key="rep:filer:ApplyFormat">Apply Format</digi:trn>

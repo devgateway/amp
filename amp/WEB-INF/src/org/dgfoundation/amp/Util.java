@@ -30,6 +30,7 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
@@ -132,11 +133,20 @@ public final class Util {
 	 * @throws HibernateException
 	 * @throws SQLException
 	 */
-	public static Object getSelectedObject(Class type, Object selected) throws HibernateException, SQLException {
-		if(selected==null || "-1".equals(selected.toString())) return null;
-		Set ret=getSelectedObjects(type, new Object[] {selected});
-		if(ret.size()==0) return null;
-		return ret.iterator().next();
+	public static Object getSelectedObject(Class type, Object selected) throws HibernateException{
+		if (selected == null || "-1".equals(selected.toString())) 
+			return null;
+		try
+		{
+			Set ret = getSelectedObjects(type, new Object[] {selected});
+			if (ret.size() == 0)
+				return null;
+			return ret.iterator().next();
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException("error getting object of class " + type, e);
+		}
 	}
 	
 	/**
@@ -147,12 +157,13 @@ public final class Util {
 	 * @throws HibernateException
 	 * @throws SQLException
 	 */
-	public static Set getSelectedObjects(Class type, Object[] selected) throws HibernateException, SQLException {
-		if(selected==null) return null;
-		HashSet set=new HashSet();		
+	public static Set getSelectedObjects(Class type, Object[] selected) throws HibernateException{
+		if (selected == null)
+			return null;
+		HashSet set = new HashSet();		
 		Session session = PersistenceManager.getSession();
 		for (int i = 0; i < selected.length; i++) {
-			set.add(session.load(type,new Long(selected[i].toString())));
+			set.add(session.load(type, new Long(selected[i].toString())));
 		}
 		PersistenceManager.releaseSession(session);
 		return set;
@@ -346,12 +357,16 @@ public final class Util {
 	 * @see AmountCell
 	 */
 	public static double getExchange(String currency, java.sql.Date currencyDate) {
-		Connection conn = null;
-		double ret = 1;
+		
 		String baseCurrency	= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
 		if ( baseCurrency == null )
-			baseCurrency = "USD";
+			baseCurrency = Constants.DEFAULT_CURRENCY;
+		
 		if( baseCurrency.equals(currency)) return 1;
+
+		Connection conn = null;
+		double ret = 1;
+		
 		// we try the digi cache:
 		AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
 
@@ -364,9 +379,6 @@ public final class Util {
 			sess = PersistenceManager.getSession();
 			conn = sess.connection();
 		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (SQLException e) {
 			logger.error(e);
 			e.printStackTrace();
 		}
@@ -397,7 +409,7 @@ public final class Util {
 		} catch (HibernateException e) {
 			logger.error(e);
 			e.printStackTrace();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

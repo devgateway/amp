@@ -3,6 +3,7 @@ package org.dgfoundation.amp.ar.cell;
 import java.math.BigDecimal;
 import java.util.Iterator;
 
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.dgfoundation.amp.exprlogic.Values;
@@ -84,7 +85,7 @@ public class ComputedMeasureCell extends AmountCell {
 	}
 
 	public String toString() {
-		return FormatHelper.formatNumberUsingCustomFormat(getAmount());
+		return ReportContextData.formatNumberUsingCustomFormat(getAmount());
 	}
 
 	public Values getValues() {

@@ -21,11 +21,15 @@ import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.TotalComputedAmountColumn;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ComputedAmountColWorker extends ColumnWorker {
 
@@ -131,11 +135,16 @@ public class ComputedAmountColWorker extends ColumnWorker {
 					donorGroupName );
 			ret.getMetaData().add(donorGroupMeta);
 		}
-
+		
+		String baseCurrency	= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
+		if ( baseCurrency == null )
+			baseCurrency = Constants.DEFAULT_CURRENCY;
+		
 		// UGLY get exchage rate if cross-rates are needed (if we need to
 		// convert from X to USD and then to Y)
-		if (filter.getCurrency() != null && !"USD".equals(filter.getCurrency().getCurrencyCode()))
-			ret.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(), currencyDate));
+		String usedCurrency = ReportContextData.getFromRequest().getSelectedCurrency();
+		if (usedCurrency != null && !baseCurrency.equals(usedCurrency))
+			ret.setToExchangeRate(Util.getExchange(usedCurrency, currencyDate));
 
 		return ret;
 	}

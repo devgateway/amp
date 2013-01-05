@@ -22,11 +22,11 @@ public class FormatHelper {
     private static Logger logger = Logger.getLogger(FormatHelper.class);
 
     
-    public static ThreadLocal<DecimalFormat> tlocal = new ThreadLocal<DecimalFormat>();
+   // public static ThreadLocal<DecimalFormat> tlocal = new ThreadLocal<DecimalFormat>();
     	
     public FormatHelper() {
     	super();
-    	tlocal.set(null);
+    	//tlocal.set(null);
     }
     
     	
@@ -113,17 +113,17 @@ public class FormatHelper {
     }
 
    
-   public static String formatNumberUsingCustomFormat(double number){
-	   DecimalFormat formater = null;     
-	   String result;  
-	   if (tlocal.get()!=null){
-		   formater=tlocal.get();
-		   result = formater.format(number);  
-		   return result;
-	   }else{
-		   return formatNumber(number);
-	   }
-  }
+//   public static String formatNumberUsingCustomFormat(double number){
+//	   DecimalFormat formater = null;     
+//	   String result;  
+//	   if (tlocal.get()!=null){
+//		   formater=tlocal.get();
+//		   result = formater.format(number);  
+//		   return result;
+//	   }else{
+//		   return formatNumber(number);
+//	   }
+//  }
    
    /**
     * Return a string based on Global Setting Number Format, not rounded. 

@@ -53,7 +53,7 @@ public class Search extends Action {
 				if (ampReportId != null) {
 
 					AmpReports rep = (AmpReports) DbUtil.getAmpReports(new Long(ampReportId));
-					session.setAttribute("filterCurrentReport", rep);
+					session.setAttribute(Constants.CURRENT_TAB_REPORT, rep);
 					if (rep.getDrilldownTab())
 					{
 						return mapping.findForward("redirectTab");

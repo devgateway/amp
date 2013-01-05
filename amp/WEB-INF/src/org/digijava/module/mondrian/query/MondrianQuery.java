@@ -43,9 +43,10 @@ public class MondrianQuery {
 	private void queryAppend(String filter) {
 		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
+	
 	public void createQuery(HttpServletRequest request){
 		AmpARFilter filter = new AmpARFilter();
-		filter.readRequestData(request);
+		filter.readRequestData(request, AmpARFilter.FILTER_SECTION_ALL, null);
 	
 		filter.generateFilterQuery(request, false);
 		generatedFilterQuery = filter.getGeneratedFilterQuery();

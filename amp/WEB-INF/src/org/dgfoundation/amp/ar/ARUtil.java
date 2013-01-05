@@ -47,6 +47,7 @@ import org.dgfoundation.amp.ar.workers.TrnTextColWorker;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -199,63 +200,62 @@ public final class ARUtil {
 		return null;
 	}
 
-	public static GroupReportData generateReport(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws java.lang.Exception {
-
-		String ampReportId = request.getParameter("ampReportId");
-		AmpReports r		= null;
-		if (ampReportId == null || ampReportId.length() == 0 )
-			ampReportId = (String) request.getAttribute("ampReportId");
-		if ( ampReportId == null || ampReportId.length() == 0 || Long.parseLong(ampReportId) <= 0) {
-			r		= (AmpReports) request.getSession().getAttribute("reportMeta");
-		}
-		HttpSession httpSession = request.getSession();
-		Session session = PersistenceManager.getSession();
-
-		TeamMember teamMember = (TeamMember) httpSession
-				.getAttribute(Constants.CURRENT_MEMBER);
-		if ( r == null) {
-			r = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
-		}
-		// the siteid and locale are set for translation purposes
+	/**
+	 * returns a reference to the currently used report, based on ampReportId parameter, attribute or RCD (in this order)<br />
+	 * also adds the instance to the RCD and sets the locales on it<br />
+	 * throws RuntimeException in case it is not possible to identify one
+	 * @return
+	 */
+	public static AmpReports getReferenceToReport()
+	{
+		HttpServletRequest request = TLSUtils.getRequest();
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		Long siteId = site.getId();
-		String locale = navigationLanguage.getCode();
-
+		String locale = navigationLanguage.getCode();	
+		
+		String ampReportId = request.getParameter("ampReportId");
+		AmpReports r = null;
+		if (ampReportId == null || ampReportId.length() == 0 )
+			ampReportId = (String) request.getAttribute("ampReportId");
+		
+		if ( ampReportId == null || ampReportId.length() == 0 || Long.parseLong(ampReportId) <= 0) {
+			r = ReportContextData.getFromRequest().getReportMeta();
+		}
+		
+		if (r == null) {
+			Session session = PersistenceManager.getSession();
+			r = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+		}
+		
 		r.setSiteId(siteId);
 		r.setLocale(locale);
+		ReportContextData.getFromRequest().setReportMeta(r);
+		
+		return r;
+	}
+	
+	/**
+	 * generates a report given the data from an AmpReports instance and some filters
+	 * @param request - legacy, will be removed in the future
+	 * @param r - the report configuration data
+	 * @param filter - the filter to be used
+	 * @return
+	 */
+	public static GroupReportData generateReport(HttpServletRequest request, AmpReports r, AmpARFilter filter)  {
 
-		httpSession.setAttribute("reportMeta", r);
+		HttpSession httpSession = request.getSession();
+
+		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
 
 		if (teamMember != null)
 			logger.info("Report '" + r.getName() + "' requested by user "
 					+ teamMember.getEmail() + " from team "
 					+ teamMember.getTeamName());
 
-		AmpARFilter af = (AmpARFilter) httpSession
-				.getAttribute(ArConstants.REPORTS_FILTER);
-		if (af == null)
-			af = new AmpARFilter();
-		af.readRequestData(request);
-		Object initFilter	= request.getAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB);
-		if ( initFilter!=null && "true".equals(initFilter) ) {
-			FilterUtil.populateFilter(r, af);
-			/* The prepare function needs to have the filter (af) already populated */
-			FilterUtil.prepare(request, af);
-			httpSession.setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, af);
-		}
-		httpSession.setAttribute(ArConstants.REPORTS_FILTER, af);
-
-		AmpReportGenerator arg = new AmpReportGenerator(r, af, request);
-
+		AmpReportGenerator arg = new AmpReportGenerator(r, filter, request);
 		arg.generate();
-
-		PersistenceManager.releaseSession(session);
-
 		return arg.getReport();
-
 	}
 
 	public static Collection getFilterDonors(AmpTeam ampTeam) {
@@ -281,8 +281,7 @@ public final class ARUtil {
 	public static Collection<AmpOrgGroup> filterDonorGroups(Collection donorGroups) {
 		Collection<AmpOrgGroup> ret = new ArrayList<AmpOrgGroup>();
 		if (donorGroups == null) {
-			logger
-					.error("Collection of AmpOrgGroup should NOT be null in filterDonorGroups");
+			logger.error("Collection of AmpOrgGroup should NOT be null in filterDonorGroups");
 			return ret;
 		}
 		Iterator iter = donorGroups.iterator();

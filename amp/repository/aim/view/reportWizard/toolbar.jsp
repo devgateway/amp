@@ -1,6 +1,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 	
 <c:set var="className" value="buttonx"/>
 <c:set var="disabledString" value=" "/>
@@ -22,7 +23,7 @@
 	</div>
 	<div style="float:right; z-index: 3000; margin-top:10px; margin-right:10px;" id="toolbarDivStep${stepNum}">
 		<feature:display  name="Filter Button" module="Report and Tab Options">
-			<button type="button" value="Filetrs" class="buttonx" id="step${stepNum}_add_filters_button" style="margin-right:2px;" onclick="repFilters.showFilters()"/>
+			<button type="button" value="Filetrs" class="buttonx" id="step${stepNum}_add_filters_button" style="margin-right:2px;" onclick="repFilters.showFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>')"/>
 				<digi:trn key="btn:repFilters">Filters</digi:trn>
 			</button>
 		</feature:display>

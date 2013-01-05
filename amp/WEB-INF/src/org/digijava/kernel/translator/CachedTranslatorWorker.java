@@ -245,18 +245,6 @@ public class CachedTranslatorWorker extends TranslatorWorker {
             //tx.commit();
 
         }
-        catch (SQLException se) {
-            logger.error("Error updating translations. key=" + key, se);
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (HibernateException ex1) {
-                    logger.warn("rollback() failed", ex1);
-                }
-            }
-            throw new WorkerException("Error updating translations. key=" + key, se);
-        }
         catch (HibernateException e) {
             logger.error("Error updating translations. key=" + key, e);
             if (tx != null) {

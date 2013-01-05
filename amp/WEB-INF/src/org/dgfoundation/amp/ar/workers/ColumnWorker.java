@@ -142,7 +142,6 @@ public abstract class ColumnWorker {
 			e.printStackTrace();
 		}
 		
-		
 		String query = "SELECT * FROM " + viewName + " WHERE amp_activity_id IN ("
 				+ condition + " ) "+(internalCondition!=null?internalCondition:"");
 		PreparedStatement ps;

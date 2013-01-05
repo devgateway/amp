@@ -111,7 +111,7 @@ public class DeleteAllReports extends Action {
 	  
 	  public void removeFromSession(HttpSession session, Long reportId) {
 		 AmpReports defaultReport		= (AmpReports)session.getAttribute(Constants.DEFAULT_TEAM_REPORT);
-		 AmpReports	filterCurrentRep	= (AmpReports)session.getAttribute(Constants.FILTER_CURRENT_REPORT);
+		 AmpReports	filterCurrentRep	= (AmpReports)session.getAttribute(Constants.CURRENT_TAB_REPORT);
 		 List myReports					= (List)session.getAttribute(Constants.MY_REPORTS);
 		 TeamMember tm					= (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		 
@@ -121,7 +121,7 @@ public class DeleteAllReports extends Action {
 		 }
 		 
 		 if ( filterCurrentRep != null && filterCurrentRep.getAmpReportId().equals(reportId) ) {
-			 session.setAttribute(Constants.FILTER_CURRENT_REPORT, null);
+			 session.setAttribute(Constants.CURRENT_TAB_REPORT, null);
 		 }
 		 if ( tm!=null && tm.getAppSettings() != null) {
 			 AmpReports defTmReport	= tm.getAppSettings().getDefaultAmpReport();

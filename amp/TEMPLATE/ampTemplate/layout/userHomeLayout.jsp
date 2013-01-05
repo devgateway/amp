@@ -8,7 +8,6 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 <html>
 	<digi:base />
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
@@ -62,8 +61,7 @@
    
 	<div class="breadcrump_1">
 	</div></center>
-	<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
-	<!-- BREADCRUMP START -->
+	<!-- BREADCRUMB START -->
 	<div class="breadcrump">
 		<div class="centering">
 			<div class="breadcrump_cont">
@@ -124,7 +122,7 @@
     
 			
             </center>
-	<!-- BREADCRUMP END -->
+	<!-- BREADCRUMB END -->
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tbody>
 			<tr>

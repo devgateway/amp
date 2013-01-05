@@ -132,12 +132,6 @@ public class ViewAmp
             session.removeAttribute(Constants.TEAM_ID);
         }
 
-        //Reset public filter just in case the user comes from Public View
-        AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
-		if(arf==null) arf=new AmpARFilter();		
-		arf.setPublicView(false);
-		session.setAttribute(ArConstants.REPORTS_FILTER,arf);
-
         ServletContext ampContext = session.getServletContext();
 
         Subject subject = RequestUtils.getSubject(request);

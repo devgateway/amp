@@ -1,4 +1,5 @@
-function resetFilter(){
+function resetFilter(reportContextId){
+		//debugger;
 		resetRootCheckboxes();
 		if (aimReportsFilterPickerForm.text)
 			aimReportsFilterPickerForm.text.value="";

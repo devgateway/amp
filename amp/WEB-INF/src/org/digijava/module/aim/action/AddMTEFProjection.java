@@ -39,7 +39,7 @@ public class AddMTEFProjection extends Action{
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		
 		try {
-			formBean.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false, request));
+			formBean.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

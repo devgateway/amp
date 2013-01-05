@@ -5128,13 +5128,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                PersistenceManager.releaseSession(session);
-            } catch (HibernateException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
-				e.printStackTrace();
-			}
+           PersistenceManager.releaseSession(session);            
         }
         return result;
     }

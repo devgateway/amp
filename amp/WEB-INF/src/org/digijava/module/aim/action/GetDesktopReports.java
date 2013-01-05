@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +37,7 @@ public class GetDesktopReports extends TilesAction {
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		
 		if (tm != null) {
-				Collection reports = new ArrayList();
+				List<AmpReports> reports = new ArrayList<AmpReports>();
 				//Adding the default team report
 				AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 				
@@ -45,14 +46,12 @@ public class GetDesktopReports extends TilesAction {
 				
 				// The userReports are shown in the upper left corner widget on My Desktop. 
 				// It has nothing to do with the tabs
-				ArrayList userReports = (ArrayList) TeamUtil.getLastShownReports(tm.getTeamId(),tm.getMemberId(), false,true);
+				List<AmpReports> userReports = TeamUtil.getLastShownReports(tm.getTeamId(),tm.getMemberId(), false, true);
 				
-				ArrayList userActiveTabs = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(), true, null, null,true,tm.getMemberId(),null,null);
+				List<AmpReports> userActiveTabs = TeamUtil.getAllTeamReports(tm.getTeamId(), true, null, null, true, tm.getMemberId(),null,null);
 				if (defaultTeamReport != null){
-					Iterator iter = userActiveTabs.iterator();
 					boolean found = false;
-					while (iter.hasNext()) {
-						AmpReports el = (AmpReports) iter.next();
+					for(AmpReports el:userActiveTabs) {
 						if (el.compareTo(defaultTeamReport) == 0){
 							found = true;
 							break;
@@ -116,26 +115,26 @@ public class GetDesktopReports extends TilesAction {
 							session.setAttribute(Constants.DEFAULT_TEAM_REPORT, default_report);
 						}
 						if (reports == null)
-							reports	= new ArrayList();
+							reports	= new ArrayList<AmpReports>();
 						this.addReportToCollection(default_report, reports);
 					}
 					else
 						if(session.getAttribute(Constants.DEFAULT_TEAM_REPORT)!=null)
 						{
-							AmpReports default_report=(AmpReports) session.getAttribute(Constants.DEFAULT_TEAM_REPORT);
+							AmpReports default_report = (AmpReports) session.getAttribute(Constants.DEFAULT_TEAM_REPORT);
 							if (reports == null)
-								reports	= new ArrayList();
+								reports	= new ArrayList<AmpReports>();
 							this.addReportToCollection(default_report, reports);
 						}
 						else{
 							
 						
 //						logger.info("!!!!!!!!!!!! The default team report is null");
-                                              reportsPerPage=appSettings.getDefReportsPerPage();
-                                              if(reportsPerPage==null){
-                                                reportsPerPage=0;
-                                              }
-                                              session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);
+							reportsPerPage = appSettings.getDefReportsPerPage();
+							if (reportsPerPage == null){
+								reportsPerPage=0;
+							}
+							session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);
 						}
 				}
 				else
@@ -145,17 +144,15 @@ public class GetDesktopReports extends TilesAction {
 				if(tm.getTeamHead()) session.setAttribute(Constants.TEAM_Head,"yes");
 					else session.setAttribute(Constants.TEAM_Head,"no");
 		} else {
-			Collection reports=ARUtil.getAllPublicReports(null,null,null);
+			Collection<AmpReports> reports = ARUtil.getAllPublicReports(null, null, null);
 			session.setAttribute(Constants.MY_REPORTS,reports);
 		}
 		return null;
 	}
 
-	private void addReportToCollection(AmpReports report, Collection col) {
-		Iterator iterator	= col.iterator();
-		while (iterator.hasNext()) {
-			AmpReports colReport	= (AmpReports) iterator.next();
-			if ( colReport.getAmpReportId().longValue() == report.getAmpReportId().longValue() )
+	private void addReportToCollection(AmpReports report, Collection<AmpReports> col) {
+		for(AmpReports colReport:col) {
+			if ( colReport.getAmpReportId() == report.getAmpReportId() )
 				return;
 		}
 

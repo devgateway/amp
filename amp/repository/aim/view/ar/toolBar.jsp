@@ -6,7 +6,7 @@
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 
 
 <c:set var="reportStatement">
@@ -147,9 +147,22 @@ addLoadEvent(addpanel);
 }
 -->
 </style>
-<% String ampReportId=request.getParameter("ampReportId");
-	if(ampReportId==null) ampReportId=(String)request.getAttribute("ampReportId");
-	 request.setAttribute("ampReportId",ampReportId);
+<%
+	// ugly copy-paste from RangePicker.jsp
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+	if (request.getParameter("ampReportId") == null)
+	{
+		// try to save the day, else we are screwed: some actions do not keep ampReportId
+		if (ReportContextData.getFromRequest().getReportMeta() != null && ReportContextData.getFromRequest().getReportMeta().getAmpReportId() != null)
+			request.setAttribute("ampReportId", ReportContextData.getFromRequest().getReportMeta().getAmpReportId());
+		else
+			request.setAttribute("ampReportId", ReportContextData.getFromRequest().getContextId()); // last resort
+	}
+	else
+		request.setAttribute("ampReportId", request.getParameter("ampReportId"));
+	
+	String ampReportId = request.getAttribute("ampReportId").toString();
+				
    String viewParam="";
    if("reset".equals(request.getParameter("view"))) viewParam="?view=reset";
    String viewParamXLS="/xlsExport.do";
@@ -302,7 +315,7 @@ function openPrinter(){
 	<div align="center">
 			<digi:form action="<%=viewParamPDF%>" method="post" styleId="exportSettingsForm">			
 				<input type="hidden" name="viewParam" value="<%=viewParam%>" />
-				<input type="hidden" name="ampReportId" value="<%=ampReportId%>" />
+				<input type="hidden" name="ampReportId" value="${ampReportId}" />
 				<table cellpadding="5" cellspacing="5" border="0" width="100%">
 					<tr>
 						<td> 

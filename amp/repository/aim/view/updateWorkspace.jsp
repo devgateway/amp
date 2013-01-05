@@ -8,7 +8,6 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/aim"prefix="aim"%>
 
-
 <html:javascript formName="aimUpdateWorkspaceForm"/>
 
 
@@ -813,7 +812,7 @@ function cancel()
 																	<div id="listFiltersDiv" style="height:85px; overflow-y:auto; overflow-x:hidden; margin-bottom: 5px;" class="inputx">
 																		<jsp:include page="reportWizard/showSelectedFilters.jsp" />				
 																	</div>
-																	<button type="button" value="Filters" class="buttonx_sm btn_save" id="add_filters_button" style="margin-right:2px;" onclick="repFilters.showFilters()"/>
+																	<button type="button" value="Filters" class="buttonx_sm btn_save" id="add_filters_button" style="margin-right:2px;" onclick="repFilters.showFilters('<%=ReportContextData.getCurrentReportContextId(request, true)%>')"/>
 																		<digi:trn key="btn:repFilters">Filters</digi:trn>
 																	</button>
 																</fieldset>

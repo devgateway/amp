@@ -110,6 +110,7 @@ import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -490,67 +491,64 @@ public class DbUtil {
 		return funding;
 	}
 
-	public static int countActivitiesByQuery(String sQuery,
-			ArrayList<FilterParam> params) {
-
-		Session sess = null;
-		Connection conn = null;
-		CellColumn cc = null;
-		try {
-			sess = PersistenceManager.getSession();
-
-			conn = sess.connection();
-		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (SQLException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-
-		int ii = 0;
-
-		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
-				+ sQuery + " ) ";
-		// System.out.println("MASTER query count activities::: " + query);
-		PreparedStatement ps;
-
-		try {
-			ps = conn.prepareStatement(query);
-			if (params != null) {
-
-				// add params if exist
-				for (int i = 0; i < params.size(); i++) {
-					ps.setObject(i + 1, params.get(i).getValue(), params.get(i)
-							.getSqlType());
-				}
-
-			}
-			ResultSet rs = ps.executeQuery();
-			ResultSetMetaData rsmd;
-			rsmd = rs.getMetaData();
-			rs.next();
-			ii = rs.getInt(1);
-			rs.close();
-
-		} catch (SQLException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if (sess != null) {
-					PersistenceManager.releaseSession(sess);
-				}
-			} catch (Exception e) {
-				logger.error("Error parsing date filters");
-			}
-		}
-		// System.out.println("--------------------- "+ii);
-		return ii;
-	}
+//	public static int countActivitiesByQuery(String sQuery,
+//			ArrayList<FilterParam> params) {
+//
+//		Session sess = null;
+//		Connection conn = null;
+//		CellColumn cc = null;
+//		try {
+//			sess = PersistenceManager.getSession();
+//
+//			conn = sess.connection();
+//		} catch (HibernateException e) {
+//			logger.error(e);
+//			e.printStackTrace();
+//		}
+//
+//		int ii = 0;
+//
+//		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
+//				+ sQuery + " ) ";
+//		// System.out.println("MASTER query count activities::: " + query);
+//		PreparedStatement ps;
+//
+//		try {
+//			ps = conn.prepareStatement(query);
+//			if (params != null) {
+//
+//				// add params if exist
+//				for (int i = 0; i < params.size(); i++) {
+//					ps.setObject(i + 1, params.get(i).getValue(), params.get(i)
+//							.getSqlType());
+//				}
+//
+//			}
+//			ResultSet rs = ps.executeQuery();
+//			ResultSetMetaData rsmd;
+//			rsmd = rs.getMetaData();
+//			rs.next();
+//			ii = rs.getInt(1);
+//			rs.close();
+//
+//		} catch (SQLException e) {
+//			logger.error(e);
+//			e.printStackTrace();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				if (sess != null) {
+//					PersistenceManager.releaseSession(sess);
+//				}
+//			} catch (Exception e) {
+//				logger.error("Error parsing date filters");
+//			}
+//		}
+//		// System.out.println("--------------------- "+ii);
+//		return ii;
+//	}
 
 	public static String getTrnMessage(String keyTrn) {
 		Session session = null;
@@ -1639,10 +1637,10 @@ public class DbUtil {
 		return organisation;
 	}
 
-	public static Collection<AmpFiscalCalendar> getAllFisCalenders() {
+	public static List<AmpFiscalCalendar> getAllFisCalenders() {
 		Session session = null;
 		Query qry = null;
-		Collection fisCals = new ArrayList();
+		List<AmpFiscalCalendar> fisCals = new ArrayList<AmpFiscalCalendar>();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
@@ -1716,15 +1714,7 @@ public class DbUtil {
 			logger.error("Unable to get all activities");
 			logger.debug("Exceptiion " + e);
 		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			PersistenceManager.releaseSession(session);
 		}
 		return activities;
 	}
@@ -1749,15 +1739,7 @@ public class DbUtil {
 			logger.error("Unable to get all activities");
 			logger.debug("Exceptiion " + e);
 		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			PersistenceManager.releaseSession(session);
 		}
 		return activities;
 	}
@@ -2497,9 +2479,7 @@ public class DbUtil {
 		ArrayList<AmpCategoryValue> result = null;
 		try {
 			result = new ArrayList<AmpCategoryValue>(
-					CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
-							CategoryConstants.ACTIVITY_STATUS_KEY, true,
-							request));
+					CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -3156,17 +3136,7 @@ public class DbUtil {
 		} catch (Exception e) {
 			logger.error(e);
 		} finally {
-			try {
-				PersistenceManager.releaseSession(sess);
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				logger.error(e);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				logger.error(e);
-			}
+			PersistenceManager.releaseSession(sess);
 		}
 	}
 
@@ -5088,7 +5058,6 @@ public class DbUtil {
 		return col;
 	}
 	
-	//BOZO: test this
 	public static Collection<AmpOrgGroup> getAllContractingAgencyGroupsOfPortfolio()
 	{
 		Session session = null;
@@ -5107,6 +5076,9 @@ public class DbUtil {
 	}
 
 	public static Collection<AmpOrgGroup> getAllOrgGroupsOfPortfolio() {
+		if (AmpCaching.getInstance().allOrgGroupsOfPortfolio != null)
+			return new ArrayList<AmpOrgGroup>(AmpCaching.getInstance().allOrgGroupsOfPortfolio);
+
 		Session session = null;
 		Collection<AmpOrgGroup> col = new ArrayList();
 		try {
@@ -5122,12 +5094,16 @@ public class DbUtil {
 			logger.debug("Exception from getAllOrgGroupsOfPortfolio()");
 			logger.debug(e.toString());
 		}
+		AmpCaching.getInstance().allOrgGroupsOfPortfolio = new ArrayList<AmpOrgGroup>(col);
 		return col;
 	}
 
-	public static Collection<AmpOrgType> getAllOrgTypesOfPortfolio() {
+	public static List<AmpOrgType> getAllOrgTypesOfPortfolio() {
+		if (AmpCaching.getInstance().allOrgTypesOfPortfolio != null)
+			return new ArrayList<AmpOrgType>(AmpCaching.getInstance().allOrgTypesOfPortfolio);
+		
 		Session session = null;
-		Collection col = new ArrayList();
+		List<AmpOrgType> col = new ArrayList<AmpOrgType>();
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select distinct aot.* from amp_org_type aot "
@@ -5142,6 +5118,7 @@ public class DbUtil {
 			logger.debug("Exception from getAllOrgTypesOfPortfolio()");
 			logger.debug(e.toString());
 		}
+		AmpCaching.getInstance().allOrgTypesOfPortfolio = new ArrayList<AmpOrgType>(col);
 		return col;
 	}
 
@@ -6936,11 +6913,13 @@ public class DbUtil {
 		}
 
 		public int compare(AmpOrgGroup o1, AmpOrgGroup o2) {
-			collator = Collator.getInstance(locale);
-			collator.setStrength(Collator.TERTIARY);
+			if (collator == null)
+			{
+				collator = Collator.getInstance(locale);
+				collator.setStrength(Collator.TERTIARY);
+			}
 
-			int result = collator.compare(o1.getOrgGrpName(),
-					o2.getOrgGrpName());
+			int result = collator.compare(o1.getOrgGrpName(), o2.getOrgGrpName());
 			return result;
 		}
 	}

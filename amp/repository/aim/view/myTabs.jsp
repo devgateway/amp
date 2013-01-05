@@ -7,11 +7,18 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
-<logic:notEmpty name="filterCurrentReport" scope="session">
-    <logic:equal name="filterCurrentReport" property="drilldownTab" value="false">
-    	<c:remove var="filterCurrentReport" scope="session" />
-	</logic:equal>
-</logic:notEmpty>
+<%
+	{
+		org.digijava.module.aim.dbentity.AmpReports report = (org.digijava.module.aim.dbentity.AmpReports) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_TAB_REPORT);
+		if (report != null)
+			{
+				if (report.getDrilldownTab())
+					pageContext.setAttribute("currentTabReport", report);							
+				else
+					new RuntimeException("Current tab report is not a drill-down tab!").printStackTrace();
+			}
+	}
+%>
 
 <script language="JavaScript">
     var continueExecution = true;
@@ -140,9 +147,9 @@ var myTabsObject;
 		var divAllTabs = document.getElementById("allTabs");
 		divAllTabs.style.display 	= "block";
 		allTabsPanel.setBody(divAllTabs);
-		<logic:notEmpty name="filterCurrentReport" scope="session">
-		if(!tabExists('Tab-<c:out value="${filterCurrentReport.ampReportId}"/>'))
-			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="filterCurrentReport" property="ampReportId"/>~widget=true", "<c:out value="${filterCurrentReport.name}" />", "<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}" />", "Tab-<c:out value="${filterCurrentReport.ampReportId}" />");
+		<logic:notEmpty name="currentTabReport" scope="page">
+		if(!tabExists('Tab-<c:out value="${currentTabReport.ampReportId}"/>'))
+			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="currentTabReport" property="ampReportId"/>~widget=true", "<c:out value="${currentTabReport.name}" />", "<c:out value="${fn:substring(currentTabReport.name, 0, 25)}" />", "Tab-<c:out value="${currentTabReport.ampReportId}" />");
 		</logic:notEmpty>	
 	}
 	function tabExists(tabCheckName){
@@ -275,7 +282,7 @@ function toggleSettings(){
 	}
 	
 	var tabName	= "Tab-By Project";
-	<logic:empty name="filterCurrentReport" scope="session">
+	<logic:empty name="currentTabReport" scope="page">
 		<logic:notEmpty name="defaultTeamReport" scope="session">
 				tabName	= 'Tab-${defaultTeamReport.ampReportId}';
 		</logic:notEmpty>
@@ -286,8 +293,8 @@ function toggleSettings(){
 			</logic:notEmpty>
 		</logic:empty>
 	</logic:empty>
-	<logic:notEmpty name="filterCurrentReport" scope="session">
-		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="ampReportId"/>';
+	<logic:notEmpty name="currentTabReport" scope="page">
+		tabName	= 'Tab-<bean:write name="currentTabReport" scope="page" property="ampReportId"/>';
 	</logic:notEmpty>	
 </script>
 	

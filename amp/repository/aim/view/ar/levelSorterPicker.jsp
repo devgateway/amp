@@ -5,11 +5,14 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
 
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
+<bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
 
-<bean:define id="reportMeta" name="reportMeta"
-	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
-	toScope="page" />
 <digi:form action="/viewNewAdvancedReport.do" module="aim">
 	<table width="400px" style="font-size: 11px;" cellpadding="2" cellspacing="2" align="center">
 		<tr>
@@ -36,7 +39,7 @@
 					<html:option value="Title">
 						<digi:trn key="aim:popsort:hierarchy:title">Hierarchy Title</digi:trn>
 					</html:option>
-					<logic:iterate name="report" property="trailCells"  id="iter1">
+					<logic:iterate name="generatedReport" property="trailCells"  id="iter1">
 						<c:if test="${not empty iter1.column.absoluteColumnName}">
 						<html:option value="${iter1.column.absoluteColumnName}">
 							<c:set var="key1" value="aim:popsort:hierarchy:${iter1.column.absoluteColumnName}"/>
@@ -61,6 +64,7 @@
 		<tr>
 			<logic:notEqual name="widget" scope="request" value="true">
 				<td colspan="2" style="text-align: center;">
+					<input type="hidden" name="reportContextId" value="${reportCD.contextId}" />
 					<html:submit property="applySorter" styleClass="buttonx">
 						<digi:trn key="aim:popsort:apply">Apply Sorting</digi:trn>
 					</html:submit>

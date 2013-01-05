@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Sector;
+import org.digijava.module.aim.util.caching.AmpCaching;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -126,6 +127,11 @@ public class SectorUtil {
 		return col;
 	}// End Search Sector.
 
+	/**
+	 * gets all the sectors attached to an activity
+	 * @param id
+	 * @return
+	 */
 	public static List getAmpSectors(Long id) {
 		ArrayList ampSectors = new ArrayList();
 		AmpSector ampSector = null;
@@ -170,36 +176,36 @@ public class SectorUtil {
 		return ampSectors;
 	}
 
-	public static Collection getSectorActivities(Long sectorId) {
-
-		Session sess = null;
-		Collection col = null;
-
-		try {
-			sess = PersistenceManager.getSession();
-			AmpSector sector = (AmpSector) sess.load(AmpSector.class, sectorId);
-
-			Iterator itr = sector.getAidlist().iterator();
-			col = new ArrayList();
-			while (itr.hasNext()) {
-				col.add(itr.next());
-			}
-		} catch (Exception e) {
-			logger.debug("Exception from getSectorActivities()");
-			logger.debug(e.toString());
-		} finally {
-			try {
-				if (sess != null) {
-					PersistenceManager.releaseSession(sess);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
-		}
-		return col;
-
-	}
+//	public static Collection getSectorActivities(Long sectorId) {
+//
+//		Session sess = null;
+//		Collection col = null;
+//
+//		try {
+//			sess = PersistenceManager.getSession();
+//			AmpSector sector = (AmpSector) sess.load(AmpSector.class, sectorId);
+//
+//			Iterator itr = sector.getAidlist().iterator();
+//			col = new ArrayList();
+//			while (itr.hasNext()) {
+//				col.add(itr.next());
+//			}
+//		} catch (Exception e) {
+//			logger.debug("Exception from getSectorActivities()");
+//			logger.debug(e.toString());
+//		} finally {
+//			try {
+//				if (sess != null) {
+//					PersistenceManager.releaseSession(sess);
+//				}
+//			} catch (Exception ex) {
+//				logger.debug("releaseSession() failed");
+//				logger.debug(ex.toString());
+//			}
+//		}
+//		return col;
+//
+//	}
 
 	public static Collection<AmpSectorScheme> getAllSectorSchemes() {
 		Session session = null;
@@ -229,6 +235,7 @@ public class SectorUtil {
 	public static Collection<AmpSector> getAllParentSectors(Long secSchemeId) {
 		Session session = null;
 		Collection<AmpSector> col = null;
+		
 
 		try {
 			session = PersistenceManager.getSession();// TODO why not use thread
@@ -316,46 +323,28 @@ public class SectorUtil {
 	}
 
 	public static Collection<AmpSector> getAllSectors() {
-		Session session = null;
-		Collection<AmpSector> col = null;
+		if (AmpCaching.getInstance().sectorsCache == null)
+		{
+			Session session = null;			
 
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select sc from " + AmpSector.class.getName()
-					+ "sc where (sc.deleted is null or sc.deleted = false) order by sc.name";
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-
-		} catch (Exception e) {
-			logger.error("Cannot get sectors, " + e);
+			try {
+				session = PersistenceManager.getRequestDBSession();
+				String queryString = "select sc from " + AmpSector.class.getName()
+					+ " sc where (sc.deleted is null or sc.deleted = false) order by sc.name";
+				Query qry = session.createQuery(queryString);
+				AmpCaching.getInstance().initSectorsCache(qry.list());
+			} catch (Exception e) {
+				throw new RuntimeException("Cannot get sectors, ", e);
+			}
 		}
-		return col;
+		return AmpCaching.getInstance().sectorsCache.getAllSectors();
 	}
 
 	public static Collection<AmpSector> getAllChildSectors(Long parSecId) {
-		Session session = null;
-		Collection col = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = "select s from " + AmpSector.class.getName()
-					+ " s " + "where parent_sector_id = " + parSecId
-					+ " and (s.deleted is null or s.deleted = false) order by s.name";
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-
-		} catch (Exception e) {
-			logger.error("Cannot get child sectors, " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
-		return col;
+		if (AmpCaching.getInstance().sectorsCache == null)
+			getAllSectors(); // force initialization of cache
+		
+		return AmpCaching.getInstance().sectorsCache.getChildSectors(parSecId);
 	}
 
 	public static void updateSectorOrganisation(Long sectorId,
@@ -363,6 +352,7 @@ public class SectorUtil {
 		AmpSector sector = getAmpSector(sectorId);
 		sector.setAmpOrgId(organisation);
 		DbUtil.update(sector);
+		AmpCaching.getInstance().sectorsCache = null; //invalidate
 	}
 
 	public static void updateSubSectors(AmpSector sector,
@@ -780,10 +770,10 @@ public class SectorUtil {
 		return ampSector;
 	}
 
-	public static Collection<AmpSector> getAmpParentSectors(
+	public static Set<AmpSector> getAmpParentSectors(
 			Collection<AmpSector> sectors) {
 		if (sectors != null) {
-			ArrayList<AmpSector> retList = new ArrayList<AmpSector>();
+			Set<AmpSector> retList = new HashSet<AmpSector>();
 			for (AmpSector sector : sectors) {
 				retList.addAll(SectorUtil.getAmpParentSectors(sector
 						.getAmpSectorId()));
@@ -1042,8 +1032,18 @@ public class SectorUtil {
 		return ret;
 	}
 
+	/**
+	 * TODO: this is poor man's recursion
+	 * @param configurationName
+	 * @return
+	 */
 	public static List<AmpSector> getAmpSectorsAndSubSectorsHierarchy(
 			String configurationName) {
+		if (AmpCaching.getInstance().sectorsCache == null)
+			getAllSectors(); //force rebuilding cache
+		if (AmpCaching.getInstance().sectorsCache.sectorsHierarchy.containsKey(configurationName))
+			return new ArrayList<AmpSector>(AmpCaching.getInstance().sectorsCache.sectorsHierarchy.get(configurationName));
+		
 		List<AmpSector> ret = new ArrayList<AmpSector>();
 		Long id = null;
 		try {
@@ -1087,7 +1087,8 @@ public class SectorUtil {
 		} catch (DgException e) {
 			e.printStackTrace();
 		}
-		return ret;
+		AmpCaching.getInstance().sectorsCache.sectorsHierarchy.put(configurationName, ret);
+		return new ArrayList<AmpSector>(ret);
 	}
 
 	// Govind's Starts from here!!

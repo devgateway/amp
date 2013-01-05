@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,12 +39,15 @@ import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -61,7 +65,10 @@ import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.exceptions.UsedCategoryException;
@@ -79,13 +86,18 @@ import org.digijava.module.mondrian.query.MoConstants;
  */
 
 public class AmpARFilter extends PropertyListable {
+	
+	public final static int FILTER_SECTION_FILTERS = 1;
+	public final static int FILTER_SECTION_SETTINGS = 2;
+	public final static int FILTER_SECTION_ALL = FILTER_SECTION_FILTERS | FILTER_SECTION_SETTINGS;
+	
 	private static SimpleDateFormat sdfOut=new SimpleDateFormat("yyyy-MM-dd");
 	private static SimpleDateFormat sdfIn=new SimpleDateFormat("dd/MM/yyyy");
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	
 	private Long id;
-	private boolean justSearch=false;
-	private boolean workspaceonly=false;
+	private boolean justSearch;
+	private boolean workspaceonly;
 
 	private Long ampReportId;
 	private Set<AmpCategoryValue> statuses = null;
@@ -99,7 +111,7 @@ public class AmpARFilter extends PropertyListable {
 	
 	private String CRISNumber;
 	private String budgetNumber;
-	private Boolean showArchived    = false;
+	private Boolean showArchived;
 	
 	@PropertyListableIgnore
 	private Integer computedYear;
@@ -111,8 +123,8 @@ public class AmpARFilter extends PropertyListable {
 	private ArrayList<FilterParam> indexedParams=null;
 
 	
-	@PropertyListableIgnore
-	private Long activitiesRejectedByFilter;
+//	@PropertyListableIgnore
+//	private Long activitiesRejectedByFilter;
 	
 	@PropertyListableIgnore
 	private Set<AmpSector> secondarySectors = null;
@@ -248,7 +260,7 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	private Set regions = null;
-	private Set risks = null;
+	private Set<AmpIndicatorRiskRatings> risks = null;
 	private Set<AmpOrgType> donorTypes = null;
 	private Set<AmpOrgGroup> donorGroups = null;
 	private Set<AmpOrgGroup> contractingAgencyGroups = null;
@@ -295,19 +307,19 @@ public class AmpARFilter extends PropertyListable {
 	private Integer yearFrom;
 	private Integer toMonth;
 	private Integer yearTo;
-	private Collection<AmpCategoryValueLocations> locationSelected = null;
+	private Collection<AmpCategoryValueLocations> locationSelected;
 	@PropertyListableIgnore
 	private Collection<AmpCategoryValueLocations> relatedLocations;
 	private Boolean unallocatedLocation = null;
 	//private AmpCategoryValueLocations regionSelected = null;
-	private Collection<String> approvalStatusSelected=null;
+	private Collection<String> approvalStatusSelected;
 	private boolean approved = false;
 	private boolean draft = false;
 
 	private Integer renderStartYear = null; // the range of dates columns that
 											// has to be render, years not in
 											// range will be computables for
-											// totals but wont be rederisables
+											// totals but wont be renderable
 	private Integer renderEndYear = null;
 
 	private DecimalFormat currentFormat = null;
@@ -324,8 +336,8 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	private Boolean amountinmillion;
 	
-	private String decimalseparator;
-	private String groupingseparator;
+	private String decimalseparator; //always of length 1: cannot switch to Character now, because it would be incompatible with all the serialized filters around the world
+	private String groupingseparator; //always of length 1: cannot switch to Character now, because it would be incompatible with all the serialized filters around the world
 	private Integer groupingsize;
 	private Boolean customusegroupings;
 	private Integer maximumFractionDigits;
@@ -345,19 +357,43 @@ public class AmpARFilter extends PropertyListable {
 		this.maximumFractionDigits = maximumFractionDigits;
 	}
 
+	/**
+	 * returns null or 1-long String
+	 * @return
+	 */
 	public String getDecimalseparator() {
 		return decimalseparator;
 	}
 
+	/**
+	 * only push 1-long Strings here!
+	 * @param decimalseparator
+	 */
 	public void setDecimalseparator(String decimalseparator) {
+		if (decimalseparator != null && decimalseparator.length() != 1)
+		{
+			new RuntimeException("invalid decimalseparator value: " + decimalseparator).printStackTrace();			
+		}
 		this.decimalseparator = decimalseparator;
 	}
 
+	/**
+	 * returns null or 1-long String
+	 * @return
+	 */
 	public String getGroupingseparator() {
 		return groupingseparator;
 	}
 
+	/**
+	 * only push 1-long Strings here!
+	 * @param decimalseparator
+	 */
 	public void setGroupingseparator(String groupingseparator) {
+		if (groupingseparator != null && groupingseparator.length() != 1)
+		{
+			new RuntimeException("invalid groupingseparator value: " + groupingseparator).printStackTrace();			
+		}
 		this.groupingseparator = groupingseparator;
 	}
 	
@@ -395,12 +431,15 @@ public class AmpARFilter extends PropertyListable {
 	private int initialQueryLength = initialFilterQuery.length();
 	
 	private String sortBy;
-	private Boolean sortByAsc						= true;
-	private Collection<String> hierarchySorters		= new ArrayList<String>();
+	private Boolean sortByAsc;
+	private Collection<String> hierarchySorters;
 	
-	private Set<AmpCategoryValue> projectImplementingUnits = null; 
+	private Set<AmpCategoryValue> projectImplementingUnits; 
 	
-	private boolean budgetExport		= false;
+	/**
+	 * why doesn't it have a setter like all normal fields do?
+	 */
+	private boolean budgetExport;
 	
 	private void queryAppend(String filter) {
 		generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
@@ -411,48 +450,124 @@ public class AmpARFilter extends PropertyListable {
 	}
 	
 	/**
-	 * TODO-Constantin: non-trivially-slow function called at least 3 times per report render
-	 * @param request
+	 * fills the "grouping" subpart of the settings part of filters with defaults
+	 * @return
 	 */
-	public void readRequestData(HttpServletRequest request) {
+	private void fillWithDefaultGroupingSettings()
+	{
+		DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
+		
+		Character customDecimalSymbol	= usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator();
+		Integer customDecimalPlaces	= usedDecimalFormat.getMaximumFractionDigits();
+		Character customGroupSeparator	= usedDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator();
+		Boolean customUseGrouping	= usedDecimalFormat.isGroupingUsed();
+		Integer customGroupSize		= usedDecimalFormat.getGroupingSize();
+		
+		this.setGroupingseparator(customGroupSeparator.toString());
+		this.setGroupingsize(customGroupSize);
+		this.setCustomusegroupings(customUseGrouping);
+		this.setMaximumFractionDigits(customDecimalPlaces);
+		this.setDecimalseparator(customDecimalSymbol.toString());
+		
+		buildCustomFormat();
+	}
+	
+	/**
+	 * fills the "Report / Tab Settings" part of the instance with the default values
+	 */
+	public void fillWithDefaultsSettings()
+	{
+		fillWithDefaultGroupingSettings();
+		this.setAmountinthousand(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
+		
+		calendarType = null;
+		AmpApplicationSettings settings = getEffectiveSettings();
+		if (settings != null)
+		{
+			this.setCalendarType(settings.getFiscalCalendar());
+			this.setCurrency(settings.getCurrency());
+		}
+		
+		if (calendarType == null) // still no calendar source -> use Global Setting
+		{
+			String gvalue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+			if (gvalue != null){
+				Long fiscalCalId = Long.parseLong(gvalue);
+				setCalendarType(DbUtil.getFiscalCalendar(fiscalCalId));
+			}
+		}
+		initRenderStartEndYears(settings);
+	}
+	
+	/**
+	 * computes the current user's effective AmpApplicationSettings, searching through the hierarchy
+	 * returns null if there is no current user
+	 * @return
+	 */
+	public static AmpApplicationSettings getEffectiveSettings()
+	{
+		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+		if (tm == null)
+			return null;
+		
+		AmpApplicationSettings settings = null;
+		if (tm.getMemberId() != null)
+			settings = DbUtil.getMemberAppSettings(tm.getMemberId()); // member settings take precedence
+
+		if (settings == null && tm.getTeamId() != null)
+			settings = DbUtil.getTeamAppSettings(tm.getTeamId()); // use workspace settings if no member settings present
+		
+		return settings;
+	}
+	
+	/**
+	 * fills the AmpARFilter instance with defaults taken from all the appropiate sources: hardcoded defaults, AmpGlobalSettings, Workspace settings
+	 * only "filter" settings altered, the "settings" one are left untouched
+	 */
+	public void fillWithDefaultsFilter(Long ampReportId)
+	{
+		this.setShowArchived(false);
+		this.setYearFrom(null);
+		this.setYearTo(null);
+		this.setFromMonth(null);
+		this.setToMonth(null);
+		this.setFromDate(null);
+		this.setToDate(null);
+		this.setLineMinRank(null);
+		this.setPlanMinRank(null);
+		this.setText(null);
+		this.setPageSize(null);
+		this.setGovernmentApprovalProcedures(null);
+		this.setJointCriteria(null);
+		this.setJustSearch(false);
+		this.setWorkspaceonly(false);
+		this.setLocationSelected(null);
+		this.setApprovalStatusSelected(null);
+		this.setProjectImplementingUnits(null);
+		this.setSortByAsc(true);
+		this.setHierarchySorters(new ArrayList<String>());
+		this.budgetExport = false;
+		
+		HttpServletRequest request = TLSUtils.getRequest();
 		this.generatedFilterQuery = initialFilterQuery;
-		TeamMember tm = (TeamMember) request.getSession().getAttribute(
-				Constants.CURRENT_MEMBER);
-		this.setAmpTeams(new TreeSet<AmpTeam>());
+		this.setAmpReportId(ampReportId);
 		
-		String ampReportId = null ;
-		//Check if the reportid is not nut for public mondrian reports
-		if (request.getParameter("ampReportId")!=null && !request.getParameter("ampReportId").equals("")){
-			ampReportId = request.getParameter("ampReportId");
-			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
-			if (ampReport != null)
-			{
-				this.budgetExport	= ampReport.getBudgetExporter()==null ? false:ampReport.getBudgetExporter();
-				
-				Site site = RequestUtils.getSite(request);
-				Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-				Long siteId = site.getId();
-				String locale = navigationLanguage.getCode();
-				ampReport.setSiteId(siteId);
-				ampReport.setLocale(locale);
-				if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
-						this.generatedFilterQuery = initialPledgeFilterQuery;
-				}
+		AmpReports ampReport = ampReportId == null ? null : DbUtil.getAmpReport(ampReportId);
+		if (ampReport != null)
+		{			
+			this.budgetExport	= ampReport.getBudgetExporter()==null ? false:ampReport.getBudgetExporter();				
+			if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
+					this.generatedFilterQuery = initialPledgeFilterQuery;
 			}
 		}
-		if (ampReportId == null) {
-			AmpReports ar = (AmpReports) request.getSession().getAttribute(
-			"reportMeta");
-			if (ar!=null){
-				ampReportId = ar.getAmpReportId().toString();
-			}
-		}
+
+		AmpApplicationSettings settings = getEffectiveSettings();
 		
-		AmpApplicationSettings tempSettings = null;
-		
-		if (tm == null || tm.getTeamId() == null ) {
+		TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+		this.setAmpTeams(new TreeSet<AmpTeam>());		
+		if (tm == null || tm.getTeamId() == null )
 			tm	= null;
-		}
+
 		if (tm != null) {
 			this.setAccessType(tm.getTeamAccessType());
 			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
@@ -462,22 +577,11 @@ public class AmpARFilter extends PropertyListable {
 
 			if (teamAO != null && teamAO.size() > 0)
 				this.setTeamAssignedOrgs(teamAO);
-
-			tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
-
-			if (tempSettings == null)
-				if (tm != null)
-					tempSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
-
-			if (this.getCurrency() == null)
-				this.setCurrency(tempSettings.getCurrency());
-
 		}
 		else {
 			//Check if the reportid is not nut for public mondrian reports
-			if (ampReportId != null){
-				AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
-			
+			if (ampReport != null)
+			{
 				//TreeSet allManagementTeams=(TreeSet) TeamUtil.getAllRelatedTeamsByAccessType("Management");
 				TreeSet<AmpTeam> teams=new TreeSet<AmpTeam>();
 				this.setAccessType("team");
@@ -490,123 +594,168 @@ public class AmpARFilter extends PropertyListable {
 						this.setTeamAssignedOrgs(teamAO);
 					}
 				}else{
-					((Set)teams).add(-1); //TODO:Constantin - waddafa?
+					((Set) teams).add(-1); //TODO:Constantin - waddafa?
 					this.setAmpTeams(teams);
 					logger.error("Error getOwnerId() is null setting team to -1");
 				}
 			}
 		}
 		
-		 if (calendarType==null){
-			if (tempSettings!=null){
-				calendarType=tempSettings.getFiscalCalendar();
-			}
-		}
-			
-		if (tempSettings!=null){
-			calendarType=tempSettings.getFiscalCalendar();
-		}
-		String gvalue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		if (calendarType==null){
-			if (gvalue!=null){
-				Long fiscalCalId=Long.parseLong(gvalue);
-				calendarType=DbUtil.getFiscalCalendar(fiscalCalId);
-			}
-		}
+		//FormatHelper.tlocal.set(null); // somewhat ugly hack, as this shouldn't belong in here
+	}
+	
+	private int getCalendarYear(AmpApplicationSettings settings, Integer settingsYear, String globalSettingsKey)
+	{
+		Long defaultCalendarId = null;
 		
-		
-		Long defaultCalendarId=null;
-		
-		if (tempSettings!=null){
-			if (tempSettings.getFiscalCalendar()!=null){
-				defaultCalendarId=tempSettings.getFiscalCalendar().getAmpFiscalCalId();
+		if (settings != null){
+			if (settings.getFiscalCalendar() != null){
+				defaultCalendarId = settings.getFiscalCalendar().getAmpFiscalCalId();
 			}else{
-				defaultCalendarId=Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));	
+				defaultCalendarId = Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));	
 			}
 		}	
-		///Set the range depending of workspase setup / global setting and selected calendar
-		ICalendarWorker worker = null;
-		Date checkDate = null;
-		if (renderStartYear == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
-			// Check if there is value on workspace setting
-			if (tempSettings != null
-					&& tempSettings.getReportStartYear() != null
-					&& tempSettings.getReportStartYear().intValue() != 0) {
-				this.setRenderStartYear(tempSettings.getReportStartYear());
-			} else { // if not check if the value exist on
-				// global setting
-				 gvalue = FeaturesUtil
-						.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
-				if (gvalue != null && !"".equalsIgnoreCase(gvalue)
-						&& Integer.parseInt(gvalue) > 0) {
-					renderStartYear = Integer.parseInt(gvalue);
-				}
 
-			}
-			
-			if (renderStartYear!=null && renderStartYear>0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
-				worker = calendarType.getworker();
-				try {
-					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
-					worker.setTime(checkDate);
-					renderStartYear=worker.getYear();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		Integer result = null;
+		// Check if there is value on workspace or member setting
+		if (settingsYear != null && settingsYear.intValue() != 0) {
+			result = settingsYear;
+		} else 
+		{
+			// global setting
+			String gvalue = FeaturesUtil.getGlobalSettingValue(globalSettingsKey);
+			if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
+				result = Integer.parseInt(gvalue);
 			}
 		}
 		
-		renderStartYear=(renderStartYear==null)?-1:renderStartYear;
+		//BOZO: strange conversion between calendars
+		if (result == null)
+			return -1;
 		
-		if (renderEndYear == null || (request.getParameter("view") != null && "reset".compareTo(request.getParameter("view")) == 0)) {
-			// Check if there is value on workspace setting
-			if (tempSettings != null && tempSettings.getReportEndYear() != null
-					&& tempSettings.getReportEndYear().intValue() != 0) {
-				this.setRenderEndYear(tempSettings.getReportEndYear());
-			} else {
-				 gvalue=null;
-				 gvalue = FeaturesUtil
-						.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
-				if (gvalue != null && !"".equalsIgnoreCase(gvalue)
-						&& Integer.parseInt(gvalue) > 0) {
-					renderEndYear = Integer.parseInt(gvalue);
-				}
-			}
-			
-			 if (renderEndYear!=null && renderEndYear>0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
-				worker = calendarType.getworker();
-				try {
-					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderEndYear);
-					worker.setTime(checkDate);
-					renderEndYear=worker.getYear();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		renderEndYear=(renderEndYear==null)?-1:renderEndYear;
+		result = FiscalCalendarUtil.getYearOnCalendar(calendarType.getAmpFiscalCalId(), result, settings);
+		//TODO:Constantin: used the ReportsFilterPickerForm-ported between-calendars conversion utilities (migrated by me to FiscalCalendarUtils) as the code looks more maintained. In case it is faulty, we could try our luck with the commented code below
 		
+//		if (result != null && result > 0 && calendarType != null && calendarType.getAmpFiscalCalId().equals(defaultCalendarId) ){
+//			ICalendarWorker worker = calendarType.getworker();
+//			try {
+//				Date checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + result);
+//				worker.setTime(checkDate);
+//				result = worker.getYear();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+		
+		return result == null ? -1 : result;
+	}
+	
+	/**
+	 * sets renderStartYear and renderEndYear according to Global, Workspace and User settings, translated by calendar
+	 * @param settings
+	 */
+	private void initRenderStartEndYears(AmpApplicationSettings settings)
+	{
+		///Set the range depending of workspace setup / global setting and selected calendar
+		Integer renderStartSettingsYear = (settings == null) ? null : settings.getReportStartYear();
+		Integer renderendSettingsYear = (settings == null) ? null : settings.getReportEndYear();
+		setRenderStartYear(getCalendarYear(settings, renderStartSettingsYear, org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
+		setRenderEndYear(getCalendarYear(settings, renderendSettingsYear, org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));	
+	}
+	
+	/**
+	 * tries to guess an ampReportId from the request or session data
+	 */
+	private Long getAttachedAmpReportId(HttpServletRequest request)
+	{
+		String ampReportId = null ;
+		//Check if the reportid is not nut for public mondrian reports
+		if (request.getParameter("ampReportId") != null && request.getParameter("ampReportId").length() > 0)
+			ampReportId = request.getParameter("ampReportId");
 
-		if (currentFormat == null) {
-			currentFormat = FormatHelper.getDefaultFormat();
-			FormatHelper.tlocal.set(null);
-		} else {
-			FormatHelper.tlocal.set(currentFormat);
+		if (ampReportId == null) {
+			AmpReports ar = ReportContextData.getFromRequest().getReportMeta();
+			if (ar != null){
+				ampReportId = ar.getAmpReportId().toString();
+			}
+		}		
+		Long ampReportIdLong = ampReportId == null ? null : Long.parseLong(ampReportId);
+		return ampReportIdLong;
+	}
+	
+	/**
+	 * TODO-Constantin: non-trivially-slow function called at least 3 times per report render
+	 * loads some default values on the filter based on request parameters, app defaults, workspace defaults etc
+	 * @param request
+	 * @param subsection: one of the FILTER_SECTION_ZZZZ constants
+	 * @param ampReportId: a forced ampReportId or null if you want one to be deducted automatically (usually works)
+	 */
+	public void readRequestData(HttpServletRequest request, int subsection, Long forcedAmpReportId) 
+	{
+		if ((subsection & FILTER_SECTION_SETTINGS) > 0)
+			fillWithDefaultsSettings();
+
+		if ((subsection & FILTER_SECTION_FILTERS) > 0)
+		{
+			Long ampReportIdLong = forcedAmpReportId == null ? getAttachedAmpReportId(request) : forcedAmpReportId;
+			fillWithDefaultsFilter(ampReportIdLong);
 		}
 
 		String widget = (String) request.getAttribute("widget");
 		if (widget != null)
-			this.setWidget(new Boolean(widget).booleanValue());
-
-		try {
-			this.setAmpReportId(new Long(ampReportId));
-		}
-		catch (NumberFormatException e) {
-			logger.info("NumberFormatException:" + e.getMessage());
-		}
-
+			this.setWidget(new Boolean(widget));
 	}
 
+	/**
+	 * builds the customFormat field based on the other fields in the instance
+	 * contains some copy-paste from {@link #fillWithDefaultGroupingSettings()}, but too tired to abstractize somehow away
+	 */
+	public void buildCustomFormat()
+	{
+		DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
+		
+		Character defaultDecimalSymbol	= usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator();
+		Integer defaultDecimalPlaces	= usedDecimalFormat.getMaximumFractionDigits();
+		Character defaultGroupSeparator	= usedDecimalFormat.getDecimalFormatSymbols().getGroupingSeparator();
+		Boolean defaultUseGrouping	= usedDecimalFormat.isGroupingUsed();
+		Integer defaultGroupSize		= usedDecimalFormat.getGroupingSize();
+		
+		DecimalFormat custom = new DecimalFormat();
+		DecimalFormatSymbols ds = new DecimalFormatSymbols();
+		if (this.getDecimalseparator() != null){
+			ds.setDecimalSeparator(getDecimalseparator().charAt(0));
+		}else{
+			ds.setDecimalSeparator(defaultDecimalSymbol);
+		}
+		
+		if (this.getGroupingseparator() != null){
+			ds.setGroupingSeparator(this.getGroupingseparator().charAt(0));
+		}else{
+			ds.setGroupingSeparator(defaultGroupSeparator);
+		}
+		
+		if (this.getMaximumFractionDigits() != null && this.getMaximumFractionDigits() > -1)
+			custom.setMaximumFractionDigits(this.getMaximumFractionDigits());
+		else
+			custom.setMaximumFractionDigits((defaultDecimalPlaces != -1) ? defaultDecimalPlaces : 99);
+		
+		custom.setGroupingUsed(this.getCustomusegroupings() == null ? defaultUseGrouping : this.getCustomusegroupings());
+		custom.setGroupingSize(this.getGroupingsize() == null ? defaultGroupSize : this.getGroupingsize());
+		custom.setDecimalFormatSymbols(ds);
+		this.setCurrentFormat(custom);
+	}
+	
+	/**
+	 * postprocesses list after being populated from form
+	 */
+	public void postprocess()
+	{
+		FilterUtil.postprocessFilterSectors(this);
+		FilterUtil.postprocessFilterPrograms(this);
+		
+		buildCustomFormat();
+	}
+	
 	public AmpARFilter() {
 		super();
 		this.generatedFilterQuery = initialFilterQuery;
@@ -756,15 +905,15 @@ public class AmpARFilter extends PropertyListable {
 					TEAM_FILTER += " OR " + teamFilter.getFilterConditionOnly();
 				}
 			}
-		int c;
-		if (!workspaceFilter){
-			if(draft){
-				c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
-			}
-			else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null) - DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
-			this.setActivitiesRejectedByFilter(new Long(c));
-			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
-		}
+//		int c;
+//		if (!workspaceFilter){
+//			if(draft){
+//				c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
+//			}
+//			else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null) - DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
+//			this.setActivitiesRejectedByFilter(new Long(c));
+//			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
+//		}
 
 		String STATUS_FILTER = "SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("
 				+ Util.toCSString(statuses) + ")";
@@ -1260,17 +1409,17 @@ public class AmpARFilter extends PropertyListable {
 			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
 		}
 
-		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
+//		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams); //BOZO: why is this query run, if its output is ignored?
 		logger.info(this.generatedFilterQuery);
 		
-		if (!workspaceFilter){
-			if(draft){
-				c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
-			}
-			else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
-			this.setActivitiesRejectedByFilter(new Long(c));
-			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
-		}
+//		if (!workspaceFilter){
+//			if(draft){
+//				c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
+//			}
+//			else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
+//			this.setActivitiesRejectedByFilter(new Long(c));
+//			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
+//		}
 	}
 
 	/**
@@ -1493,11 +1642,11 @@ public class AmpARFilter extends PropertyListable {
 		this.budget = budget;
 	}
 
-	public Set getRisks() {
+	public Set<AmpIndicatorRiskRatings> getRisks() {
 		return risks;
 	}
 
-	public void setRisks(Set risks) {
+	public void setRisks(Set<AmpIndicatorRiskRatings> risks) {
 		this.risks = risks;
 	}
 
@@ -1585,9 +1734,10 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	public void setText(String text) {
-		if (text.trim().length() == 0)
-			this.text = null;
-		this.text = text;
+		if (text == null)
+			this.text = text;
+		else
+			this.text = text.trim();
 
 	}
 
@@ -1848,7 +1998,9 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	public void setRenderStartYear(Integer renderStartYear) {
-		this.renderStartYear = renderStartYear;
+		if (renderStartYear == null)
+			new RuntimeException("null not allowed here!").printStackTrace();
+		this.renderStartYear = renderStartYear;		
 	}
 
 	public Integer getRenderEndYear() {
@@ -1856,6 +2008,8 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	public void setRenderEndYear(Integer renderEndYear) {
+		if (renderEndYear == null)
+			new RuntimeException("null not allowed here!").printStackTrace();
 		this.renderEndYear = renderEndYear;
 	}
 
@@ -1866,9 +2020,6 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setCurrentFormat(DecimalFormat currentFormat) {
 		this.currentFormat = currentFormat;
-		if ( this.currentFormat != null ) {
-			FormatHelper.tlocal.set(currentFormat);
-		}
 	}
 
 	public String getFromDate() {
@@ -2003,14 +2154,14 @@ public class AmpARFilter extends PropertyListable {
 		this.accessType = accessType;
 	}
 
-	@IgnorePersistence
-	public Long getActivitiesRejectedByFilter() {
-		return activitiesRejectedByFilter;
-	}
-
-	public void setActivitiesRejectedByFilter(Long activitiesRejectedByFilter) {
-		this.activitiesRejectedByFilter = activitiesRejectedByFilter;
-	}
+//	@IgnorePersistence
+//	public Long getActivitiesRejectedByFilter() {
+//		return activitiesRejectedByFilter;
+//	}
+//
+//	public void setActivitiesRejectedByFilter(Long activitiesRejectedByFilter) {
+//		this.activitiesRejectedByFilter = activitiesRejectedByFilter;
+//	}
 
 	public String getTeamAccessType() {
 		return teamAccessType;
@@ -2209,7 +2360,8 @@ public class AmpARFilter extends PropertyListable {
 		int pos = genFilter.indexOf(initialFilterQuery);
 		genFilter = genFilter.substring(pos + initialFilterQuery.length());
 		pos = genFilter.indexOf("AND");
-		genFilter = genFilter.substring(pos + 3);
+		if (pos > 0)
+			genFilter = genFilter.substring(pos + 3); //don't crash on empty filters
 		return genFilter;
 	}
 	
@@ -2249,6 +2401,7 @@ public class AmpARFilter extends PropertyListable {
 	public void setCustomusegroupings(Boolean customusegroupings) {
 		this.customusegroupings = customusegroupings;
 	}
+	
 	@PropertyListableIgnore
 	public Set<AmpSector> getTagSectors() {
 		return tagSectors;

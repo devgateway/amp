@@ -92,7 +92,7 @@ public class GroupReportData extends ReportData<ReportData> {
 		}
 	}
 	
-	protected List levelSorters;
+	protected List<MetaInfo<String>> levelSorters;
 		
 	protected String currentView;
 	
@@ -402,23 +402,19 @@ public class GroupReportData extends ReportData<ReportData> {
 		return ret;
 	}
 
-	public void importLevelSorters(Map sorterMap, int levels) {
-		levelSorters=new ArrayList(levels);
-		for(int k=0;k<levels;k++) levelSorters.add(null);
-		Iterator i=sorterMap.keySet().iterator();
+	public void importLevelSorters(Map<Long, MetaInfo<String>> sorterMap, int levels) {
+		levelSorters = new ArrayList<MetaInfo<String>>(levels);
+		for (int k = 0; k < levels; k ++)
+			levelSorters.add(null);
+		
+		Iterator<Long> i = sorterMap.keySet().iterator();
 		while (i.hasNext()) {
-			Long element;
-			Object obj=i.next();
-			if (obj instanceof String) {
-				String src = (String) i.next();
-				element=Long.parseLong(src);
-			}else{
-				element=(Long) obj;
-			}
+			Long element =i.next();
 			
-			if(element==null || element -1>=levels) i.remove(); else
-			levelSorters.set(element.intValue() -1,sorterMap.get(element));
-			
+			if (element==null || element - 1 >= levels) 
+				i.remove(); 
+			else
+				levelSorters.set(element.intValue() - 1, sorterMap.get(element));			
 		}
 	}
 

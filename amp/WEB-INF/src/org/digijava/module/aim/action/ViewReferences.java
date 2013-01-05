@@ -48,8 +48,7 @@ public class ViewReferences extends TilesAction {
 		Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=null;
 		Collection<AmpCategoryValue> catValues		= null;
 		try {
-			catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,
-													false, request);
+			catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY, false);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

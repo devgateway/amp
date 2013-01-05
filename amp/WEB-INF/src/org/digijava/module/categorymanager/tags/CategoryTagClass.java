@@ -99,19 +99,19 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		Object values					= null; // for multiselect
 		Set<Long> valueIdsColl			= null;
 		
-		HttpServletRequest thisRequest	= (HttpServletRequest)pageContext.getRequest();
+//		HttpServletRequest thisRequest	= (HttpServletRequest)pageContext.getRequest();
 		
 		try{
 			Collection<AmpCategoryValue> ampCategoryValues;
 			AmpCategoryClass ampCategoryClass	= null;
 			
 			if ( categoryId != null )
-				ampCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollection(categoryId, ordered, thisRequest);
+				ampCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollection(categoryId, ordered);
 			else {
 				if (keyName!=null) 
-					ampCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(keyName, ordered, thisRequest);
+					ampCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(keyName, ordered);
 				else
-					ampCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollection(categoryName, ordered, thisRequest);
+					ampCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollection(categoryName, ordered);
 			}
 			
 			if (ampCategoryValues != null && getTag() != null) {

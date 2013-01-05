@@ -84,27 +84,12 @@ public final class PMUtil {
 		Session hs=null;
 		try {
 			hs = PermissionUtil.saveGlobalPermission(globalPermissionMapForPermissibleClass, permission.getId(), simpleName);
-		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		if(hs!=null){
 			//pf.setPermissionId(new Long(0));
-			try {
-				PersistenceManager.releaseSession(hs);
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			PersistenceManager.releaseSession(hs);
 		}
 
 	}
@@ -118,9 +103,6 @@ public final class PMUtil {
 		try {
 			session = PersistenceManager.getSession();
 		} catch (HibernateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

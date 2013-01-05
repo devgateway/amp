@@ -1340,8 +1340,7 @@ public class ExportActivityToWord extends Action {
 		Table referencesSubTable1 = null;
 			Collection<AmpCategoryValue> catValues = CategoryManagerUtil
 					.getAmpCategoryValueCollectionByKey(
-							CategoryConstants.REFERENCE_DOCS_KEY, false,
-							request);
+							CategoryConstants.REFERENCE_DOCS_KEY, false);
 
 			if (catValues != null) {
 				referencesSubTable1 = new Table(2);

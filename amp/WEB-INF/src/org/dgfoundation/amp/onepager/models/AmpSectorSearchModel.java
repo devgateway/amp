@@ -71,15 +71,7 @@ public class AmpSectorSearchModel extends
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			PersistenceManager.releaseSession(session);
 		}
 		return ret;
 	}

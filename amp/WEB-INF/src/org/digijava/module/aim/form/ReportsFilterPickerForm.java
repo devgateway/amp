@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
@@ -23,7 +26,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	 * 
 	 */
 	private static final long serialVersionUID = -8336313984510706274L;
-	private Collection currencies;
+	private Collection<AmpCurrency> currencies;
 	private Collection calendars;
 	
 	private Collection<GroupingElement<HierarchyListableImplementation>> sectorElements;
@@ -69,7 +72,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] regionSelected;
 	private Object[] approvalStatusSelected;
 
-	private String teamAccessType;
+//	private String teamAccessType; unused
 	
 	private Object[] selectedSectors;
 	private Object[] selectedSecondarySectors;
@@ -117,7 +120,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long countYear;
 	private Long currency;
 	private Long calendar;
-	private Long ampReportId;
+	private String ampReportId;
 	private Object[] lineMinRanks;
 	private Object[] planMinRanks;
 	private Object[] selectedMultiDonor;
@@ -135,7 +138,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	// to keep the default currency after user changues
 	private Long defaultCurrency;
-	private boolean isnewreport;
+	//private boolean isnewreport;
 	private Long countYearFrom;
 
 //	private List nationalPlanningObjectives;
@@ -387,82 +390,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.planMinRanks = planMinRanks;
 	}
 
-	public Long getAmpReportId() {
+	public String getAmpReportId() {
 		return ampReportId;
 	}
 
-	public void setAmpReportId(Long ampReportId) {
-		if (isnewreport) {
-			this.ampReportId = ampReportId;
-		}
+	public void setAmpReportId(String ampReportId) {
+		this.ampReportId = ampReportId;
 	}
-
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
-		/**
-		 * Do not reset the filter when changing the range
-		 * 
-		 * [this fix seems old. if still needed check that the checkboxes in the filter still work after]
-		 * 
-		 *if ( request.getParameter("renderStartYear") != null && !request.getParameter("renderStartYear").equals("-1"))  
-		 *	return;
-		 */
-		if (request.getParameter("apply") != null && request.getAttribute("apply") == null || isnewreport) {
-			// this.selectedDonors = null;
-			// if applyFormat is clicked, the content of the filter was deleting not only the sectors...
-			//AMP-5249
-			if (request.getParameter("applyFormat")!=null){
-				this.customUseGrouping=false;
-				this.amountinthousands = AmpARFilter.AMOUNT_OPTION_IN_UNITS;
-			}else{
-				this.selectedDonnorAgency=null;
-				this.selectedRisks = null;
-				this.selectedSectors = null;
-				this.selectedSecondarySectors = null;
-                this.selectedTertiarySectors=null;
-                this.selectedTagSectors=null;
-				this.selectedStatuses = null;
-				this.selectedWorkspaces = null;
-				this.selectedFinancingInstruments = null;
-				this.selectedTypeOfAssistance = null;
-				this.selectedModeOfPayment = null;
-				this.selectedDonorTypes = null;
-				this.regionSelected = null;
-				this.selectedDonorGroups = null;
-				this.selectedExecutingAgency = null;
-				this.selectedBeneficiaryAgency = null;
-				this.selectedImplementingAgency = null;
-				this.selectedProjectCategory = null;
-				this.selectedActivitySettings	= null;
-				this.selectedBudgets = null;
-				this.governmentApprovalProcedures = null;
-				this.unallocatedLocation = null;
-				this.justSearch=false;
-				this.selectedNatPlanObj = null;
-				this.selectedPrimaryPrograms = null;
-				this.selectedSecondaryPrograms = null;
-				this.selectedresponsibleorg=null;
-				this.approvalStatusSelected = null;
-				this.lineMinRanks=null;
-				this.planMinRanks=null;
-				this.CRISNumber=null;
-				this.budgetNumber=null;
-				this.selectedArchivedStatus=new Object[]{"1"};
-				this.selectedProjectImplUnit=null;
-				this.selectedMultiDonor	= null;
-				this.fromActivityStartDate = null;
-				this.toActivityStartDate = null;
-				this.fromActivityActualCompletionDate = null;
-				this.toActivityActualCompletionDate = null;
-				this.fromActivityFinalContractingDate = null;
-				this.toActivityFinalContractingDate = null;
-			}
-		}
-		
-			
-		
-	
-	}
-
 	
 	public Collection<BeanWrapperImpl> getComputedYearsRange() {
 		return computedYearsRange;
@@ -550,11 +484,11 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.calendars = calendars;
 	}
 
-	public Collection getCurrencies() {
+	public Collection<AmpCurrency> getCurrencies() {
 		return currencies;
 	}
 
-	public void setCurrencies(Collection currecies) {
+	public void setCurrencies(Collection<AmpCurrency> currecies) {
 		this.currencies = currecies;
 	}
 
@@ -775,13 +709,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.selectedImplementingAgency = selectedImplementingAgency;
 	}
 
-	public boolean isIsnewreport() {
-		return isnewreport;
-	}
-
-	public void setIsnewreport(boolean isnewreport) {
-		this.isnewreport = isnewreport;
-	}
+//	public boolean isIsnewreport() {
+//		return isnewreport;
+//	}
+//
+//	public void setIsnewreport(boolean isnewreport) {
+//		this.isnewreport = isnewreport;
+//	}
 
 	public Long[] getSelectedTypeOfAssistance() {
 		return selectedTypeOfAssistance;
@@ -882,13 +816,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.approvalStatusSelectedCollection = approvalStatusSelectedCollection;
 	}
 
-	public String getTeamAccessType() {
-		return teamAccessType;
-	}
-
-	public void setTeamAccessType(String teamAccessType) {
-		this.teamAccessType = teamAccessType;
-	}
+// unused
+//	public String getTeamAccessType() {
+//		return teamAccessType;
+//	}
+//
+//	public void setTeamAccessType(String teamAccessType) {
+//		this.teamAccessType = teamAccessType;
+//	}
 
 	
 

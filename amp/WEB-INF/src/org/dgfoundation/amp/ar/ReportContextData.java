@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 import bsh.org.objectweb.asm.Constants;
 
@@ -64,6 +65,11 @@ public class ReportContextData
 	private Boolean sortAscending;							// session[ArConstants.SORT_ASCENDING]
 	private String contextId;
 	
+	/**
+	 * BOZO: why is this done, if "report" has this same field?
+	 */
+	private boolean pledgeReport;
+	
 	public ReportContextData(String reportContextId)
 	{
 		this.contextId = reportContextId;
@@ -73,33 +79,56 @@ public class ReportContextData
 	{
 		return contextId;
 	}
+		
+	public boolean isPledgeReport()
+	{
+		return pledgeReport;
+	}
+	
+	public void setPledgeReport(boolean pledgeReport)
+	{
+		this.pledgeReport = pledgeReport;
+	}
+	
+	public AmpCurrency getSelectedAmpCurrency()
+	{
+		if (getFilter() != null)
+			return getFilter().getCurrency();
+		else
+			return AmpARFilter.getDefaultCurrency();
+	}
+	
+	public String getSelectedCurrencyCode()
+	{
+		return getSelectedAmpCurrency().getCurrencyCode();
+	}
+	
+	/**
+	 * computes the name of the currently-to-be-used currency
+	 * @return
+	 */
+	public String getSelectedCurrencyName()
+	{
+		return getSelectedAmpCurrency().getCurrencyName();
+	}
 	
 	/**
 	 * this function replaces the pre-AMP2.4 session.getAttribute(ArConstants.SELECTED_CURRENCY) which was sort of a hack - not a data store per se
 	 * @return
 	 */
+	public String getSelectedCurrencyText()
+	{		
+		return "- " + getSelectedCurrencyName();
+	}		
+	
+	/**
+	 * @deprecated - kept here just for the JSP's
+	 * reason: undescriptive name. Use {@link #getSelectedCurrencyText()} instead
+	 * @return
+	 */
 	public String getSelectedCurrency()
 	{
-		String usedCurrency = null;
-		if (getFilter() != null && getFilter().getCurrency() != null)
-			usedCurrency = getFilter().getCurrency().getCurrencyName();
-		else
-			usedCurrency = getDefaultCurrency();
-				
-		return "- " + usedCurrency;
-	}
-		
-	/**
-	 * returns the default currency name
-	 * default is taken from either user settings, workspace settings or hardcoded global setting, whichever has the value first
-	 */
-	public String getDefaultCurrency()
-	{
-		AmpApplicationSettings tempSettings = ReportFilterFormUtil.getAppSetting();
-		if (tempSettings != null)
-			return tempSettings.getCurrency().getCurrencyName();
-		else
-			return org.digijava.module.aim.helper.Constants.DEFAULT_CURRENCY;
+		return getSelectedCurrencyText();
 	}
 	
 	public int getProgressValue()
@@ -319,8 +348,6 @@ public class ReportContextData
 	
 	/**
 	 * gets a ReportContextData associated with a request.
-	 * <b>Warning</b> the request should have a "ampReportId" parameter which should be a valid (preexisting) id
-	 * <b>Positive ampReportId values equal DB AmpReports id's, while negative values are hardcoded (virtual) values </b>
 	 * @param request
 	 * @return
 	 */
@@ -399,7 +426,7 @@ public class ReportContextData
 	}
 	
 	/**
-	 * see {@link #createWithId(HttpSession, long, boolean)}'s description and limitations
+	 * see {@link #createWithId(HttpSession, String, boolean)}'s description and limitations
 	 * @param id
 	 * @param overwriteIfExists
 	 * @return

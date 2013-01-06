@@ -141,7 +141,7 @@ SaveReportEngine.prototype.failure			= function(o) {
 	this.divEl.innerHTML			= this.failureMessage;
 };
 
-SaveReportEngine.prototype.decideToShowTitlePanel	= function () {
+SaveReportEngine.prototype.decideToShowTitlePanel	= function () {	
 	if ( getReportTitle() == "" )
 			this.showTitlePanel();
 	else
@@ -168,6 +168,7 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 };
 
 SaveReportEngine.prototype.saveReport	= function () {	
+	debugger;
 	var title = getReportTitle();
 	if (title.indexOf('<')!=-1 && title.indexOf('>')!=-1 && title.indexOf('<')<title.indexOf('>')){
         alert("Tags are not allowed on name.");
@@ -186,7 +187,7 @@ SaveReportEngine.prototype.saveReport	= function () {
 						"&publicReport="+getPublicReport() +
 						"&hideActivities="+getHideActivities() +
 						"&useFilters="+getUseFilters()+
-						"&reportContextId="+getReportContextId()+
+						//"&reportContextId="+getReportContextId()+
 						"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
 						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
 	

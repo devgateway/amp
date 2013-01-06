@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -25,7 +26,7 @@ public final class ReportFilterFormUtil {
 	private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 
 	public static Integer getDefaultStartYear() {
-		AmpApplicationSettings tempSettings = getAppSetting();
+		AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
 		Integer rStart = -1;
 		if (tempSettings != null && tempSettings.getReportStartYear() != null && tempSettings.getReportStartYear().intValue() != 0) {
 			rStart = tempSettings.getReportStartYear();
@@ -40,7 +41,7 @@ public final class ReportFilterFormUtil {
 	}
 	
 	public static Integer getDefaultEndYear() {
-		AmpApplicationSettings tempSettings = getAppSetting();
+		AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
 		Integer rEnd = -1;
 		if (tempSettings != null && tempSettings.getReportEndYear() != null && tempSettings.getReportEndYear().intValue() != 0) {
 			rEnd = tempSettings.getReportEndYear();
@@ -53,14 +54,18 @@ public final class ReportFilterFormUtil {
 		return rEnd;
 	}	
 	
-	public static AmpApplicationSettings getAppSetting() {
-		HttpSession httpSession = TLSUtils.getRequest().getSession();
-		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
-		AmpApplicationSettings tempSettings = null;
-		if (teamMember != null) {
-			tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
-		}
-		return tempSettings;
-	}
+//	public static AmpApplicationSettings getAppSetting() {
+//		//retu
+//		HttpSession httpSession = TLSUtils.getRequest().getSession();
+//		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
+//		AmpApplicationSettings tempSettings = null;
+//		if (teamMember != null) {
+//			tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+//			
+//			if (tempSettings == null) //team member has no settings, try to get team settings
+//				tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
+//		}
+//		return tempSettings;
+//	}
 	
 }

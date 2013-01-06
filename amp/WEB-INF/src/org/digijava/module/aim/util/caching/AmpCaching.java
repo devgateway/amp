@@ -24,6 +24,11 @@ public class AmpCaching {
 	public List<AmpOrgType> allOrgTypesOfPortfolio;
 	public List<AmpOrgGroup> allOrgGroupsOfPortfolio;
 	
+	
+	public AmpApplicationSettings applicationSettings;
+	public boolean applicationSettingsRetrieved;
+	
+	
 	/**
 	 * list of all fiscal calendars at moment of login
 	 */
@@ -55,3 +60,4 @@ public class AmpCaching {
 	}
 	 
 }
+

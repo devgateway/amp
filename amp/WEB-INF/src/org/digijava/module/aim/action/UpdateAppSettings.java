@@ -44,6 +44,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -59,6 +60,7 @@ public class UpdateAppSettings extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws java.lang.Exception {
 
 		UpdateAppSettingsForm uForm = (UpdateAppSettingsForm) form;
+		AmpCaching.getInstance().applicationSettingsRetrieved = false; //invalidate app settings cache
 		
 		String shareResAction=request.getParameter("shareResAction");
 		

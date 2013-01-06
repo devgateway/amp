@@ -297,7 +297,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		translatedCurrentFilter=TranslatorWorker.translateText("Currently Selected Filters:");
 		translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
 
-		translatedCurrency=TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrency());
+		translatedCurrency=TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrencyText());
 
 		if (arf.computeEffectiveAmountInThousand() == AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS){					
 			translatedAmount=TranslatorWorker.translateText("Amounts are in thousands (000)");

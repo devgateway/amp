@@ -943,10 +943,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		extractableCount = 0;
 		
 		if (!(reportMetadata.getType()==ArConstants.PLEDGES_TYPE)){
-			request.getSession().removeAttribute(ArConstants.PLEDGES_REPORT);
+			ReportContextData.getFromRequest().setPledgeReport(false);
 		}else {
 			pledgereport = true;
-			request.getSession().setAttribute(ArConstants.PLEDGES_REPORT, "true");
+			ReportContextData.getFromRequest().setPledgeReport(true);
 		}
 		
 		filter.generateFilterQuery(request, false);

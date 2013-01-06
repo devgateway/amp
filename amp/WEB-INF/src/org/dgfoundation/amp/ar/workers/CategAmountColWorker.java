@@ -218,7 +218,7 @@ public class CategAmountColWorker extends ColumnWorker {
 			capitalPercent	= rs.getDouble("capital_spend_percent");
 		}
 		
-		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
+//		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
 /*		boolean skpyCategorize = ("false".equalsIgnoreCase(value));
         //if (generator.getReportMetadata().getHierarchies().contains()
 		//check if the column is a into Hierarchies //Ned to talk with mihai to find a better solution
@@ -463,7 +463,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		
 		//UGLY get exchage rate if cross-rates are needed (if we need to convert from X to base currency and then to Y)
-		String usedCurrency = ReportContextData.getFromRequest().getSelectedCurrency();
+		String usedCurrency = ReportContextData.getFromRequest().getSelectedCurrencyCode();
 		if(usedCurrency != null ) {
 			/* If source and destination currency are the same we need to set exactly the same exchange rate for 'toExchangeRate' and 'fromExchangeRate.
 			 * That way, AmountCell.convert won't do any computation' */

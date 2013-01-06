@@ -43,6 +43,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.ar.util.ReportFilterFormUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -62,6 +63,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -70,6 +72,7 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.exceptions.UsedCategoryException;
 import org.digijava.module.mondrian.query.MoConstants;
@@ -510,6 +513,9 @@ public class AmpARFilter extends PropertyListable {
 		if (tm == null)
 			return null;
 		
+		if (AmpCaching.getInstance().applicationSettingsRetrieved)
+			return AmpCaching.getInstance().applicationSettings;
+		
 		AmpApplicationSettings settings = null;
 		if (tm.getMemberId() != null)
 			settings = DbUtil.getMemberAppSettings(tm.getMemberId()); // member settings take precedence
@@ -517,6 +523,8 @@ public class AmpARFilter extends PropertyListable {
 		if (settings == null && tm.getTeamId() != null)
 			settings = DbUtil.getTeamAppSettings(tm.getTeamId()); // use workspace settings if no member settings present
 		
+		AmpCaching.getInstance().applicationSettingsRetrieved = true;
+		AmpCaching.getInstance().applicationSettings = settings;
 		return settings;
 	}
 	
@@ -684,8 +692,7 @@ public class AmpARFilter extends PropertyListable {
 	}
 	
 	/**
-	 * TODO-Constantin: non-trivially-slow function called at least 3 times per report render
-	 * loads some default values on the filter based on request parameters, app defaults, workspace defaults etc
+	 * initializes the given part(s) of the filter
 	 * @param request
 	 * @param subsection: one of the FILTER_SECTION_ZZZZ constants
 	 * @param ampReportId: a forced ampReportId or null if you want one to be deducted automatically (usually works)
@@ -785,8 +792,7 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter) {
-		if (request.getSession().getAttribute(ArConstants.PLEDGES_REPORT) != null && 
-				request.getSession().getAttribute(ArConstants.PLEDGES_REPORT).toString().equalsIgnoreCase("true")){
+		if (ReportContextData.getFromRequest().isPledgeReport()){
 			indexedParams=new ArrayList<FilterParam>();
 			
 			/*String WORKSPACE_ONLY="";
@@ -1422,6 +1428,31 @@ public class AmpARFilter extends PropertyListable {
 //		}
 	}
 
+	/**
+	 * returns the default currency name
+	 * default is taken from either user settings, workspace settings or hardcoded global setting, whichever has the value first
+	 */
+	public static AmpCurrency getDefaultCurrency()
+	{
+		AmpApplicationSettings tempSettings = AmpARFilter.getEffectiveSettings();
+		AmpCurrency result = CurrencyUtil.getDefaultCurrency();
+		if (tempSettings != null)
+			result = tempSettings.getCurrency();
+		return result; 
+	}
+	
+	/**
+	 * computes the name of the effectively-used currency name: if one is set, then its name is returned, else the user/workspace/system default
+	 * @return
+	 */
+	public String getUsedCurrencyName()
+	{
+		if (getCurrency() != null)
+			return getCurrency().getCurrencyName();
+		else
+			return getDefaultCurrency().getCurrencyName();
+	}
+	
 	/**
 	 * @return Returns the ampCurrencyCode.
 	 */

@@ -81,7 +81,7 @@ public class AmountColWorker extends ColumnWorker {
 		if ( baseCurrency == null )
 			baseCurrency = Constants.DEFAULT_CURRENCY;
 
-		String usedCurrency = ReportContextData.getFromRequest().getSelectedCurrency();
+		String usedCurrency = ReportContextData.getFromRequest().getSelectedCurrencyCode();
 		if (usedCurrency != null ) {
 			/* If source and destination currency are the same we need to set exactly the same exchange rate for 'toExchangeRate' and 'fromExchangeRate.
 			 * That way, AmountCell.convert won't do any computation' */

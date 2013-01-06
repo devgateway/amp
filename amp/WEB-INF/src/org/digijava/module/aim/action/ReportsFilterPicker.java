@@ -374,8 +374,7 @@ public class ReportsFilterPicker extends Action {
 			}
 		}
 			
-		AmpApplicationSettings tempSettings = ReportFilterFormUtil.getAppSetting();
-		AmpCurrency defaultCurrency = tempSettings == null ? CurrencyUtil.getCurrencyByCode(Constants.DEFAULT_CURRENCY) : tempSettings.getCurrency();
+		AmpCurrency defaultCurrency = AmpARFilter.getDefaultCurrency();
 		filterForm.setDefaultCurrency(defaultCurrency.getAmpCurrencyId());
 		
 		if (AmpCaching.getInstance().allFisCalendars == null)

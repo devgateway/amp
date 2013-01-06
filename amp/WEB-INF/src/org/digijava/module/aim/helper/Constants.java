@@ -394,5 +394,5 @@ public class Constants
     public static final int PAGES_TO_SHOW=5;
     //Pagination for Reports and Tabs
      public static final int DRAFRT_GO_TO_DESKTOP=1;
-     public static final int DRAFRT_STAY_TO_ACTIVITY_PAGE=2;
+     public static final int DRAFRT_STAY_TO_ACTIVITY_PAGE=2;     
 }

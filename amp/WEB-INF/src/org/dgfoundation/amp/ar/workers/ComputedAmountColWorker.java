@@ -142,7 +142,7 @@ public class ComputedAmountColWorker extends ColumnWorker {
 		
 		// UGLY get exchage rate if cross-rates are needed (if we need to
 		// convert from X to USD and then to Y)
-		String usedCurrency = ReportContextData.getFromRequest().getSelectedCurrency();
+		String usedCurrency = ReportContextData.getFromRequest().getSelectedCurrencyCode();
 		if (usedCurrency != null && !baseCurrency.equals(usedCurrency))
 			ret.setToExchangeRate(Util.getExchange(usedCurrency, currencyDate));
 

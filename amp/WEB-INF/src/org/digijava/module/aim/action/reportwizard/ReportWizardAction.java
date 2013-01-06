@@ -107,6 +107,9 @@ public class ReportWizardAction extends MultiAction {
 			modeReset(mapping, form, request, response);
 		}
 		
+		if (myForm.getReportId() != null && myForm.getReportId() != 0)
+			request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, myForm.getReportId().toString());
+		
 		if (request.getParameter("editReportId") != null ) {
 			request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, request.getParameter("editReportId"));
 			request.getSession().setAttribute("report_wizard_current_id", request.getAttribute(ReportContextData.BACKUP_REPORT_ID_KEY));
@@ -129,7 +132,10 @@ public class ReportWizardAction extends MultiAction {
 		{
 			Object reportWizardId = request.getSession().getAttribute("report_wizard_current_id");
 			if (reportWizardId == null)
-				throw new RuntimeException("HUGE bug: ReportWizard lost its reportContextId!");
+			{
+				if (!ReportContextData.contextIdExists())
+					throw new RuntimeException("HUGE bug: ReportWizard lost its reportContextId!");
+			}
 			request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, reportWizardId);
 		}
 		

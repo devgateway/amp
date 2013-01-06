@@ -229,7 +229,7 @@ public class GroupReportDataXLS extends XLSExporter {
 			    }
 			}
 							
-			String translatedCurrency = TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrency());
+			String translatedCurrency = TranslatorWorker.translateText(ReportContextData.getFromRequest().getSelectedCurrencyText());
             translatedNotes = translatedNotes.replaceAll("\n", " ");
 			cell.setCellValue(translatedNotes+translatedCurrency/*+"\n"*/);
 			

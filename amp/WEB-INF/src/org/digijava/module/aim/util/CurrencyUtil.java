@@ -29,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
@@ -1379,4 +1380,14 @@ public class CurrencyUtil {
 		return getWorkspaceCurrency(tm);		
 	}
 	
+	/**
+	 * not initialized on static constructor, because Hibernate & stuff are not initialized at that point
+	 */
+	private static AmpCurrency defaultCurrency;
+	public static AmpCurrency getDefaultCurrency()
+	{
+		if (defaultCurrency == null)
+			defaultCurrency = getCurrencyByCode(Constants.DEFAULT_CURRENCY);
+		return defaultCurrency;
+	}
 }

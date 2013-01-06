@@ -356,13 +356,13 @@ public final class Util {
 	 * @see CategAmountColWorker
 	 * @see AmountCell
 	 */
-	public static double getExchange(String currency, java.sql.Date currencyDate) {
+	public static double getExchange(String currencyCode, java.sql.Date currencyDate) {
 		
 		String baseCurrency	= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
 		if ( baseCurrency == null )
 			baseCurrency = Constants.DEFAULT_CURRENCY;
 		
-		if( baseCurrency.equals(currency)) return 1;
+		if( baseCurrency.equals(currencyCode)) return 1;
 
 		Connection conn = null;
 		double ret = 1;
@@ -370,8 +370,7 @@ public final class Util {
 		// we try the digi cache:
 		AbstractCache ratesCache = DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE);
 
-		Double cacheRet = (Double) ratesCache.get(new String(currency
-				+ currencyDate));
+		Double cacheRet = (Double) ratesCache.get(new String(currencyCode + currencyDate));
 		if (cacheRet != null)
 			return cacheRet.doubleValue();
 		Session sess = null;
@@ -387,19 +386,21 @@ public final class Util {
 		PreparedStatement ps;
 		try {
 			ps = conn.prepareStatement(query);
-			ps.setString(1, currency);
+			ps.setString(1, currencyCode);
 			ps.setDate(2, currencyDate);
 
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next())
 				ret = rs.getDouble(1);
+			else
+				new RuntimeException("cannot get exchange rate for " + currencyCode).printStackTrace();
 
 			rs.close();
 
 		} catch (SQLException e) {
 			logger.error("Unable to get exchange rate for currencty "
-					+ currency + " for the date " + currencyDate);
+					+ currencyCode + " for the date " + currencyDate);
 			logger.error(e);
 			e.printStackTrace();
 		}
@@ -417,7 +418,7 @@ public final class Util {
 //		logger.debug("rate for " + currency + " to " + baseCurrency + " on " + currencyDate
 //				+ " is " + ret);
 			ratesCache
-					.put(new String(currency + currencyDate), new Double(ret));
+					.put(new String(currencyCode + currencyDate), new Double(ret));
 
 		return ret;
 

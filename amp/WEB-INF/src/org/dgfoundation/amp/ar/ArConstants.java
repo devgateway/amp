@@ -258,7 +258,7 @@ public final class ArConstants {
 	public static final String VIEW_PLEDGES_FUNDING="v_pledges_funding_st";
 	
 	
-	public static final String PLEDGES_REPORT="pledgereport";
+	//public static final String PLEDGES_REPORT="pledgereport";
 	
 	//Columns order names
 	public static final String PLEDGES_COLUMNS="Pledges Columns";

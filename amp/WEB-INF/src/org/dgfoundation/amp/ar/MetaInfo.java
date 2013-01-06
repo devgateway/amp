@@ -63,9 +63,15 @@ public class MetaInfo<T extends Comparable<? super T>> implements Comparable<Met
 		return category+": "+value;
 	}
 	
+	//BOZO: remove	
+	static long calls = 0;
+	static long iterations = 0;
+	
 	public static <V extends Comparable<? super V>> MetaInfo<V> getMetaInfo(Collection<MetaInfo<V>> metaData, String category) {
 		Iterator<MetaInfo<V>> i = metaData.iterator();
+		calls ++;
 		while (i.hasNext()) {
+			iterations ++;
 			MetaInfo<V> element =  i.next();
 			if (element == null)
 				continue;

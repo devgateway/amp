@@ -87,14 +87,25 @@ public class CellColumn extends Column {
 		return itemsMap.get(ownerId);
 	}
 
+	//BOZO: delete
+	static long calls = 0;
+	static long iterations = 0;
+	
 	public Cell getByOwnerAndValue(Long ownerId, Object value) {
-		Iterator i = items.iterator();
-		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
-			if (element.getOwnerId().equals(ownerId)
-					&& value.equals(element.getValue()))
-				return element;
-		}
+		calls ++;
+		Cell res = getByOwner(ownerId);
+		if (res == null)
+			return null;
+		if (value.equals(res.getValue()))
+			return res;
+//		Iterator i = items.iterator();
+//		while (i.hasNext()) {
+//			iterations ++;
+//			Cell element = (Cell) i.next();
+//			if (element.getOwnerId().equals(ownerId)
+//					&& value.equals(element.getValue()))
+//				return element;
+//		}
 		return null;
 	}
 

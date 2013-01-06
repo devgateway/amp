@@ -246,6 +246,8 @@ public final class ARUtil {
 
 		HttpSession httpSession = request.getSession();
 
+		CellColumn.calls = CellColumn.iterations = MetaInfo.calls = MetaInfo.iterations = 0;
+		
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
 
 		if (teamMember != null)
@@ -255,6 +257,8 @@ public final class ARUtil {
 
 		AmpReportGenerator arg = new AmpReportGenerator(r, filter, request);
 		arg.generate();
+		
+		logger.info(String.format("while generating report, had %d / %d CellColumn calls and %d / %d MetaInfo calls", CellColumn.iterations, CellColumn.calls, MetaInfo.iterations, MetaInfo.calls));
 		return arg.getReport();
 	}
 

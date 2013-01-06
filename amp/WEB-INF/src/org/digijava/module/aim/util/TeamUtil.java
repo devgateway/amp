@@ -15,12 +15,16 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import net.sf.jasperreports.engine.util.Pair;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -29,6 +33,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -1475,7 +1480,104 @@ public class TeamUtil {
         return team;
     }
  
+    /**
+     * gets list of documents attached any of the AmpActivityId's in the given list 
+     * @return
+     */
+    public static Map<Long, List<AmpActivityDocument>> getDocumentsByActivityIds(Collection<Long> activityIds)
+    {
+    	try
+    	{
+    		Map<Long, List<AmpActivityDocument>> result = new java.util.TreeMap<Long, List<AmpActivityDocument>>();
+    		
+    		String queryString = "select doc, doc.ampActivity.ampActivityId FROM " + AmpActivityDocument.class.getName() + " doc WHERE doc.ampActivity.ampActivityId IN (" + getCommaSeparatedList(activityIds) + ")";
+    		
+            Session session = PersistenceManager.getRequestDBSession();
+            Query qry = session.createQuery(queryString.toString());
+            for(Object[] rs:(List<Object[]>) qry.list())
+            {
+            	Long actId = (Long) rs[1];
+            	if (result.get(actId) == null)
+            		result.put(actId, new ArrayList<AmpActivityDocument>());
+            	result.get(actId).add((AmpActivityDocument) rs[0]);
+            }
+            return result;
+    	}
+    	catch(DgException e)
+    	{
+    		throw new RuntimeException(e);
+    	}
+    }
+    
+    /**
+     * to avoid loading huge datasets from the DB, because AmpActivityVersions has huge rows
+     * DO NOT ADD collections as names here, as they (mostly) don't work but lead to Hibernate crashing
+     * @param teamId
+     * @param includedraft
+     * @param keyword
+     * @param fieldsList
+     * @return
+     */
+    public static Map<Long, Object[]> getAllTeamAmpActivitiesResume(Long teamId, boolean includedraft, String keyword, String...fieldsList) {
+    	Session session = null;
+    	
+        StringBuilder fieldsQuery = new StringBuilder();
+        for(String field:fieldsList)
+        {
+        	if (fieldsQuery.length() > 0)
+        		fieldsQuery.append(", ");
+        	fieldsQuery.append("g.ampActivityLastVersion." + field);
+        }
+        
+        List<Object[]> col = new ArrayList<Object[]>();
 
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            StringBuilder queryString = new StringBuilder("select " + fieldsQuery.toString() + " from "+ AmpActivityGroup.class.getName()+" g where");
+            Query qry = null;
+            queryString.append(" (g.ampActivityLastVersion.deleted is null or g.ampActivityLastVersion.deleted=false) and ") ;
+            if(teamId == null) {
+            	queryString.append(" g.ampActivityLastVersion.team is null") ;
+            }else{
+            	queryString.append(" (g.ampActivityLastVersion.team=:teamId)") ;
+            }
+            if(!includedraft){
+            	queryString.append("  and   (g.ampActivityLastVersion.draft is null or g.ampActivityLastVersion.draft=false)) ");
+            }
+            if(keyword!=null && keyword.length()>0){
+            	queryString.append(" and lower(g.ampActivityLastVersion.name) like lower(:name)") ;
+            }
+            
+            qry = session.createQuery(queryString.toString());
+          	if(keyword!=null && keyword.length()>0){
+              	qry.setString("name", "%" + keyword + "%");
+            }
+          	if(teamId!=null){
+          		qry.setLong("teamId", teamId);
+          	}          
+   
+            col  = qry.list();
+            
+            Map<Long, Object[]> res = new TreeMap<Long, Object[]>();
+            for(Object[] obj:col)
+            	res.put((Long) obj[0], obj);
+            return res;
+                
+        } catch(Exception e) {
+            logger.debug("Exception from getAllTeamAmpActivitiesResume()");
+            logger.debug(e.toString());
+            throw new RuntimeException(e);
+        } 
+    }
+
+    /**
+     * @deprecated
+     * ONLY USE THIS IF YOU NEED THE FULL DATASET - EXTREMELY SLOW. Use {@link #getAllTeamAmpActivitiesResume(Long, boolean, String, String...)} instead
+     * @param teamId
+     * @param includedraft
+     * @param keyword
+     * @return
+     */
     public static Collection getAllTeamAmpActivities(Long teamId, boolean includedraft, String keyword) {
         Session session = null;
         Collection<AmpActivity> col = new ArrayList();
@@ -1617,62 +1719,71 @@ public class TeamUtil {
 		return col;		
 	}
 
-    /*
-     * return ReportsCollection Object
-     */
-    public static Collection getTeamReportsCollection(Long teamId, Boolean tabs,String keyword) {
+    public static String getCommaSeparatedList(Collection objs)
+    {
+    	StringBuilder buf = new StringBuilder();
+    	buf.append("");
+		for(Object obj:objs)
+		{
+			if (buf.length() > 0)
+				buf.append(", ");
+			buf.append(obj.toString());
+		}
+		buf.append("");
+		return buf.toString();
+    }
+    
+    public static List<ReportsCollection> getTeamReportsCollection(Long teamId, Boolean tabs,String keyword) {
         Session session = null;
-        ArrayList col = null;
+        ArrayList<ReportsCollection> col = null;
         try {
             session = PersistenceManager.getSession();
-            String queryString = "select tr from "
-                + AmpTeamReports.class.getName()
-                + " tr where (tr.team=:teamId) order by tr.report ";
+            String queryString = "select tr.report.ampReportId, tr.teamView from "
+                + AmpTeamReports.class.getName() + " tr where (tr.team=:teamId) ";
             Query qry = session.createQuery(queryString);
             qry.setParameter("teamId", teamId, Hibernate.LONG);
-            Iterator itr = qry.list().iterator();
+            List<Object[]> rs = qry.list();
+            Map<Long, Boolean> map = new TreeMap<Long, Boolean>(); // we want them ordered by id
+            for(Object[] item:rs)
+            	map.put((Long) item[0], (Boolean) item[1]);
+            
+            String idsList = getCommaSeparatedList(map.keySet());
+            
             col = new ArrayList();
-            while(itr.hasNext()) {
-                AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
-                
-                if(ampTeamRep.getReport()!=null){
-	                // modified by Priyajith
-	                // desc:used select query instead of session.load
-	                // start
-	                queryString = "select r from " + AmpReports.class.getName()
-	                    + " r " + "where (r.ampReportId=:id) "; 	                
-	                if (tabs != null) {
-	    				if (tabs) {
-	    					queryString += " and r.drilldownTab=true ";
-	    				} else {
-	    					queryString += " and r.drilldownTab=false ";
-	    				}
-	    			}
-	                if(keyword != null && keyword.trim().length() > 0){
-	                	queryString += " and lower(r.name) like lower(:keyword) ";
-	                }
+            queryString = String.format("select r from " + AmpReports.class.getName()
+	                    + " r " + "where (r.ampReportId in (%s)) ", idsList);
+            
+            if (tabs != null) {
+            	if (tabs) {
+            		queryString += " and r.drilldownTab=true ";
+            	} else {
+            		queryString += " and r.drilldownTab=false ";
+            		}
+            }
+            
+            if(keyword != null && keyword.trim().length() > 0){
+            	queryString += " and lower(r.name) like lower(:keyword) ";
+            }
 	                
-	                queryString += " order by r.name";
-	                qry = session.createQuery(queryString);
-	                if(keyword != null && keyword.trim().length() > 0){
-	                	 qry.setString("keyword", '%' + keyword + '%');
-	                }
-	                qry.setLong("id", ampTeamRep.getReport().getAmpReportId());
-	                Iterator itrTemp = qry.list().iterator();
-	                AmpReports ampReport = null;
-	                if(itrTemp.hasNext()) {
-	                    ampReport = (AmpReports) itrTemp.next();
-		                ReportsCollection rc = new ReportsCollection();
-		                rc.setReport(ampReport);
-		                if(ampTeamRep.getTeamView() == false) {
-		                    rc.setTeamView(false);
-		                } else {
-		                    rc.setTeamView(true);
-		                }		
-		                col.add(rc);
-	                }
-                }
-
+            queryString += " order by r.name";
+            qry = session.createQuery(queryString);
+            if(keyword != null && keyword.trim().length() > 0){
+            	qry.setString("keyword", '%' + keyword + '%');
+            }
+            
+            //qry.setLong("id", ampTeamRep.getReport().getAmpReportId());
+            Iterator<AmpReports> itrTemp = qry.list().iterator();
+            while(itrTemp.hasNext()) {
+            	AmpReports ampReport = itrTemp.next();
+            	ReportsCollection rc = new ReportsCollection();
+            	rc.setReport(ampReport);
+            	rc.setTeamView(map.get(ampReport.getAmpReportId()));
+//            	if(ampTeamRep.getTeamView() == false) {
+//		                    rc.setTeamView(false);
+//		                } else {
+//		                    rc.setTeamView(true);
+//		                }		
+                col.add(rc);
             }
             Collections.sort(col);
         } catch(Exception e) {
@@ -2178,6 +2289,12 @@ public class TeamUtil {
     	return getAllTeamAmpActivities(null,true,null);
     }
 
+    /**
+     * returns list of all team reports which are not assigned to the team
+     * @param id
+     * @param tabs
+     * @return
+     */
     public static Collection getAllUnassignedTeamReports(Long id, Boolean tabs) {
         Session session = null;
         Collection col = null;
@@ -2185,7 +2302,7 @@ public class TeamUtil {
 
         try {
 
-        	col = DbUtil.getAllReports(tabs);        		
+/*        	col = DbUtil.getAllReports(tabs);        		
             session = PersistenceManager.getRequestDBSession();
 
             String queryString = "select tr from "+ AmpTeamReports.class.getName()+ " tr where (tr.team=:teamId) ";            
@@ -2240,7 +2357,30 @@ public class TeamUtil {
             throw new RuntimeException(e);
         } 
 
-        return col;
+        return col;*/
+        	session = PersistenceManager.getRequestDBSession();
+        	String queryString = "select tr.report.ampReportId from "+ AmpTeamReports.class.getName()+ " tr where (tr.team=:teamId) ";            
+        	Query qry = session.createQuery(queryString);
+        	qry.setLong("teamId", id);
+        	String excludedIds = getCommaSeparatedList(qry.list());
+        
+        	queryString = String.format("select r from " + AmpReports.class.getName() + " r where r.ampReportId NOT IN (%s) ", excludedIds);
+        	if (tabs != null) {
+        		if (tabs) {
+        			queryString += " and r.drilldownTab=true ";
+        		} else {
+        			queryString += " and r.drilldownTab=false ";
+        		}
+        	};
+        	qry = session.createQuery(queryString);
+        	List<AmpReports> ret = qry.list();
+        	return ret;
+        }
+
+        catch(Exception e)
+        {
+        	throw new RuntimeException(e);
+        }        
     }
 
     public static Collection<AmpTeam> getAllTeams() {

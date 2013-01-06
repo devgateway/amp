@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 
@@ -32,6 +33,7 @@ public abstract class ReportGenerator {
 	protected AmpARFilter filter;
 	
 	protected AmpReports reportMetadata;
+	protected FilterCacher filterCacher;
 	
 	protected static Logger logger = Logger.getLogger(ReportGenerator.class);
 	
@@ -54,12 +56,19 @@ public abstract class ReportGenerator {
 	 */
 	protected abstract List getColumnSubCategories(String columnName);
 	
+	public ReportGenerator(FilterCacher filterCacher)
+	{
+		rawColumnsByName=new HashMap<String,CellColumn>();
+		this.filterCacher = filterCacher;
+	}
+	
 	/**
 	 * the main method of this class. it generates a displayable report object
 	 */
 	public void generate() {
 		long startTS = System.currentTimeMillis();
 		retrieveData();
+		filterCacher.closeConnection();
 		long retrTS = System.currentTimeMillis();
 		
 		
@@ -68,11 +77,6 @@ public abstract class ReportGenerator {
 		logger.info("Report "+getReport().getName()+" generated in "+(endTS-startTS)/1000.0+" seconds. Data retrieval completed in "+(retrTS-startTS)/1000.0+" seconds");
 	}
 	
-	
-	public ReportGenerator() {
-		super();
-		rawColumnsByName=new HashMap<String,CellColumn>();
-	}
 
 	/**
 	 * @return Returns the report.
@@ -116,4 +120,8 @@ public abstract class ReportGenerator {
 		this.reportMetadata = reportMetadata;
 	}
 
+	public FilterCacher getFilterCacher()
+	{
+		return this.filterCacher;
+	}
 }

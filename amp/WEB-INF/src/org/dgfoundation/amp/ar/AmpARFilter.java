@@ -170,6 +170,12 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpTheme> selectedSecondaryPrograms;
 	
 	/**
+	 * only valid after the query has been generated
+	 */
+	@PropertyListableIgnore
+	private boolean pledgeFilter;
+	
+	/**
 	 * see getter for description
 	 */
 	@PropertyListableIgnore
@@ -528,6 +534,14 @@ public class AmpARFilter extends PropertyListable {
 		return settings;
 	}
 	
+	public void initFilterQuery()
+	{
+		if (this.pledgeFilter)
+			this.generatedFilterQuery = initialPledgeFilterQuery;
+		else			
+			this.generatedFilterQuery = initialFilterQuery;
+	}
+	
 	/**
 	 * fills the AmpARFilter instance with defaults taken from all the appropiate sources: hardcoded defaults, AmpGlobalSettings, Workspace settings
 	 * only "filter" settings altered, the "settings" one are left untouched
@@ -792,7 +806,9 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter) {
+		initFilterQuery(); //reinit filters or else they will grow indefinitely
 		if (ReportContextData.getFromRequest().isPledgeReport()){
+			this.pledgeFilter = true;
 			indexedParams=new ArrayList<FilterParam>();
 			
 			/*String WORKSPACE_ONLY="";
@@ -843,6 +859,7 @@ public class AmpARFilter extends PropertyListable {
 			return;
 		}
 		
+		this.pledgeFilter = false;
 		indexedParams=new ArrayList<FilterParam>();
 		
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM v_on_off_budget WHERE budget_id IN ("
@@ -1237,7 +1254,7 @@ public class AmpARFilter extends PropertyListable {
 				
 			}
 			*/
-		
+		// BOZO - ALREADY DAMN SLOW HERE
 		/*
 		 * if (fromYear==null) fromYear = 0;
 		 * 
@@ -2466,6 +2483,14 @@ public class AmpARFilter extends PropertyListable {
 		this.ampTeamsforpledges = ampTeamsforpledges;
 	}
 
-	
+	/**
+	 * only valid after the query has been generated!
+	 * @return
+	 */
+	@PropertyListableIgnore
+	public boolean isPledgeFilter()
+	{
+		return pledgeFilter;
+	}
 
 }

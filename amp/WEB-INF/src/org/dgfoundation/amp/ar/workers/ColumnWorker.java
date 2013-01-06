@@ -25,6 +25,7 @@ import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.budgetexport.util.MappingEncoder;
@@ -77,7 +78,7 @@ public abstract class ColumnWorker {
 	protected static Logger logger = Logger.getLogger(ColumnWorker.class);
 
 	
-	public ColumnWorker(String condition,String viewName,String columnName,ReportGenerator generator) {
+	public ColumnWorker(String condition, String viewName,String columnName, ReportGenerator generator) {
 		this.condition = condition;
 		this.columnName = columnName;
 		this.viewName = viewName;
@@ -86,7 +87,7 @@ public abstract class ColumnWorker {
 		this.generator = generator;
 	}	
 	
-	public ColumnWorker(String destName,GroupColumn source,ReportGenerator generator) {
+	public ColumnWorker(String destName, GroupColumn source,ReportGenerator generator) {
 		this.columnName = destName;
 		this.sourceGroup = source;
 		extractor = false;
@@ -128,22 +129,14 @@ public abstract class ColumnWorker {
 	
 	protected Column extractCellColumn() {
 		
-		Session sess = null;
-		Connection conn = null;
+		FilterCacher filterCacher = generator.getFilterCacher();
+		
+		Connection conn = filterCacher.getConnection();
+		
 		CellColumn cc = null;
-		try {
-			conn = PersistenceManager.getJdbcConnection();
-			
-		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (SQLException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
 		
 		String query = "SELECT * FROM " + viewName + " WHERE amp_activity_id IN ("
-				+ condition + " ) "+(internalCondition!=null?internalCondition:"");
+				+ filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition!=null ? internalCondition:"");
 		PreparedStatement ps;
 	
 		if (debugMode){
@@ -151,7 +144,7 @@ public abstract class ColumnWorker {
 			 query = "SELECT * FROM TEST_"+viewName;
 		}else if (pledgereport){
 			query = "SELECT * FROM " + viewName + " WHERE pledge_id IN ("
-			+ condition + " ) "+(internalCondition!=null?internalCondition:"");
+			+ filterCacher.rewriteFilterQuery(condition) + " ) "+(internalCondition!=null?internalCondition:"");
 		}
 		
 		try {
@@ -206,16 +199,6 @@ public abstract class ColumnWorker {
 			e.printStackTrace();
 			logger.error("Error parsing date filters");
 		} 
-		finally {
-			try {
-				if (conn != null && !conn.isClosed()) {
-					conn.close();
-				}
-			} catch (Exception e) {
-				logger.error(e);
-				e.printStackTrace();
-			}
-		}
 		return cc;
 	}
 

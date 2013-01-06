@@ -31,6 +31,8 @@ import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.dgfoundation.amp.ar.filtercacher.FastFilterCacher;
+import org.dgfoundation.amp.ar.filtercacher.NopFilterCacher;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -52,6 +54,11 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class AmpReportGenerator extends ReportGenerator {
 
+	/**
+	 * true = use FastFilterCachier, false = use NopFilterCacher
+	 */
+	public final static boolean USE_FILTER_CACHING = true;
+	
 	List<AmpReportColumn> extractable; // columns extractable while building the report
 	protected int extractableCount; // looks like extractable.size() [need to check!]
 	private List<String> columnsToBeRemoved;
@@ -257,12 +264,12 @@ public class AmpReportGenerator extends ReportGenerator {
 
 				if (extractorView != null) {
 
-					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 4, this.request);
+					Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 4, this.request);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							filter.getGeneratedFilterQuery(), extractorView,
 							columnName, this });
 				} else {
-					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 3, this.request);
+					Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 3, this.request);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							columnName, rawColumns, this });
 				}
@@ -933,7 +940,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter,
 			HttpServletRequest request) {
-		super();
+		super(USE_FILTER_CACHING ? new FastFilterCacher(filter) : new NopFilterCacher(filter));
 		this.request		= request;
 		this.reportMetadata = reportMetadata;
 		this.reportMetadata.setReportGenerator(this);

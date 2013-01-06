@@ -133,9 +133,7 @@ public class ColumnFilterGenerator {
 		StringBuffer sb = new StringBuffer("");
 		Set<AmpColumnsFilters> filters = c.getFilters();
 		if (filters != null) {
-			Iterator<AmpColumnsFilters> i = filters.iterator();
-			while (i.hasNext()) {
-				AmpColumnsFilters cf = (AmpColumnsFilters) i.next();
+			for(AmpColumnsFilters cf:filters) {
 				try {
 					Object property = PropertyUtils.getSimpleProperty(f, cf
 							.getBeanFieldName());

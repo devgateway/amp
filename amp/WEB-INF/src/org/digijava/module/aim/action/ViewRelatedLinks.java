@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityVersion ;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.RelatedLinksForm;
@@ -29,6 +32,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class ViewRelatedLinks extends Action {
@@ -79,25 +83,29 @@ public class ViewRelatedLinks extends Action {
 			page = 1;
 		}
 		
-		Collection pagedCol = null;
+		Collection<Documents> pagedCol = null;
 
 		if (pagedCol == null || pagedCol.size() == 0) {
-			pagedCol = new ArrayList();
+			pagedCol = new ArrayList<Documents>();
 			
-			Collection collectionActivities = TeamUtil.getAllTeamAmpActivities(teamId,true,null);
-			Iterator activitiesIterator = collectionActivities.iterator();
-			while(activitiesIterator.hasNext())
+			//TeamUtil.getAllTeamAmpActivitiesResume(teamId,true,null, "ampActivityId", "name");
+			Map<Long, Object[]> collectionActivities = TeamUtil.getAllTeamAmpActivitiesResume(teamId,true,null, "ampActivityId", "name");
+			Map<Long, List<AmpActivityDocument>> documentsByAmpActivityId = TeamUtil.getDocumentsByActivityIds(collectionActivities.keySet());
+			
+			for(Long ampActivityId:documentsByAmpActivityId.keySet())
 			{
-				AmpActivityVersion  currentActivity = (AmpActivityVersion )activitiesIterator.next();
+				String activityName = (String) collectionActivities.get(ampActivityId)[1];
+				List<AmpActivityDocument> activityDocuments = documentsByAmpActivityId.get(ampActivityId);
+				
 		        /* Injecting documents into session */
 		        SelectDocumentDM.clearContentRepositoryHashMap(request);
-		        if (currentActivity.getActivityDocuments() != null && currentActivity.getActivityDocuments().size() > 0 )
-		        		ActivityDocumentsUtil.injectActivityDocuments(request, currentActivity.getActivityDocuments());
+		        if (activityDocuments != null && activityDocuments.size() > 0 )
+		        		ActivityDocumentsUtil.injectActivityDocuments(request, new HashSet<AmpActivityDocument>(activityDocuments));
 
-		        Collection docCollection = DocumentManagerUtil.createDocumentDataCollectionFromSession(request);
+		        Collection<DocumentData> docCollection = DocumentManagerUtil.createDocumentDataCollectionFromSession(request);
 		        if(docCollection != null )
 		        {
-		        	Iterator docIterator = docCollection.iterator();
+		        	Iterator<DocumentData> docIterator = docCollection.iterator();
 			        while(docIterator.hasNext()){
 			        	 org.digijava.module.contentrepository.helper.DocumentData documentData = (org.digijava.module.contentrepository.helper.DocumentData)docIterator.next();
 			        	 Documents document = new Documents();
@@ -105,8 +113,8 @@ public class ViewRelatedLinks extends Action {
 			        	 document.setUuid(documentData.getUuid());
 			        	 document.setFile((documentData.getWebLink() == null)?true:false);
 			        	 document.setFileName(documentData.getName());
-			        	 document.setActivityName(currentActivity.getName());
-			        	 document.setActivityId(currentActivity.getAmpActivityId());
+			        	 document.setActivityName(activityName);
+			        	 document.setActivityId(ampActivityId);
 			        	 document.setUrl(documentData.getWebLink());
 			        	 pagedCol.add(document);
 			        }

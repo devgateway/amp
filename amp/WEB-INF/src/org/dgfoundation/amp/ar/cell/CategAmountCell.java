@@ -140,8 +140,8 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	
 	if(metaCell.getColumn().getName().equals(columnName) ) {
 		//we need to get the percentage, it is stored in the MetaText of related to the owner of the current cell
-		CellColumn c=(CellColumn) metaCell.getColumn();
-		Cell temp	= c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
+		CellColumn c = (CellColumn) metaCell.getColumn();
+		Cell temp	= c.getByOwnerAndValue(this.getOwnerId(), metaCell.getValue());
 		if ( temp instanceof MetaTextCell) {
 			MetaTextCell relatedHierarchyCell=(MetaTextCell) temp;
 			if(relatedHierarchyCell!=null) { 

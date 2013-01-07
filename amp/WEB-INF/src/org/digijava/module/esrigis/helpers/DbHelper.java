@@ -709,10 +709,10 @@ public class DbHelper {
         try {
             session = PersistenceManager.getRequestDBSession();
             q = session.createQuery(queryString.toString());
-            q.setString("name", name);
+            q.setString("name", name.trim());
             stt = (AmpStructureType) q.list().get(0);
         } catch (Exception ex) {
-            logger.error("Unable to get Amp Structure Type from database ", ex);
+            logger.error("Unable to get Amp Structure Type from database "+name+" ", ex);
         }
         return stt;
 	}

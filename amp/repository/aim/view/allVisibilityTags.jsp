@@ -151,7 +151,8 @@
 <feature:display module="Project ID and Planning" name="Planning"></feature:display> 
 <feature:display module="Project ID and Planning" name="Sectors"></feature:display> 
 <feature:display module="Project ID and Planning" name="Budget"></feature:display>
-<feature:display module="Report Types" name="Contribution Report"></feature:display> 
+<feature:display module="Report Types" name="Contribution Report"></feature:display>
+<feature:display module="Report Generator" name="Reports classification"></feature:display>  
 <feature:display name="About AMP" module="HELP"></feature:display> 
 <feature:display name="Activity - Component Step" module="Components"></feature:display> 
 <feature:display name="Activity Dashboard" module="M & E"></feature:display> 
@@ -1002,6 +1003,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Pledges Columns" name="Related Projects"></field:display>
 <field:display feature="Pledges Columns" name="Alternate Contact"></field:display>
 <field:display feature="Pledges Columns" name="Point of Contact"></field:display>
+<field:display feature="Pledges Columns" name="Pledges sectors"></field:display>
 
 <field:display name="Who Authorized Pledge" feature="Pledge Donor Information"></field:display>
 <field:display name="Further Approval Needed" feature="Pledge Donor Information"></field:display>

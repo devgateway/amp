@@ -993,7 +993,7 @@ public class TeamMemberUtil {
 			String queryString = "select r from "
 					+ AmpTeamMemberRoles.class.getName() + " r ";
 			if(!includeApprover){
-				queryString+="where r.approver=false";
+				queryString+="where r.approver=false or r.teamHead=true";
 			}
 			qry = session.createQuery(queryString);
 			roles = qry.list();

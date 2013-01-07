@@ -4,10 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -37,18 +35,19 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 
 	private static final long serialVersionUID = 0L;
 	
-	public AmpIssueTreePanel(String id, final List<Class> tree, final Map<Class, String> setName, final Map<Class, String> labelName, final IModel objModel, final IModel parentSet, final Class parentClass, final int level, final String fmName) throws Exception{
+	public AmpIssueTreePanel(String id, final List<Class> tree, final Map<Class, String> setName,
+                             final Map<Class, String> labelName, final IModel objModel, final IModel parentSet,
+                             final Class parentClass, final int level, final String fmName) throws Exception{
 		super(id,fmName, true);
 		this.fmType = AmpFMTypes.MODULE;
 		
 		final Class levelClass = tree.get(level);
-		final String levelLabel = TranslatorUtil.getTranslation(labelName.get(levelClass));
 		String levelChildrenName = setName.get(levelClass);
-		final PropertyModel<Set<?>> levelChildren = new PropertyModel<Set<?>>(objModel, levelChildrenName);
+		final PropertyModel<Set<Object>> levelChildren = new PropertyModel<Set<Object>>(objModel, levelChildrenName);
 	
-		final TextArea name =new TextArea("name", new PropertyModel(objModel,"name"));
+		final TextArea name =new TextArea<String>("name", new PropertyModel<String>(objModel,"name"));
 		addFormComponent(name);
-		Label label = new Label("label", levelLabel);
+		Label label = new TrnLabel("label", labelName.get(levelClass));
 		add(label);
 		
 		if (levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpIssues") == 0 || 
@@ -57,9 +56,9 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 			final AmpDatePickerFieldPanel date;
 			
 			if (levelClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpIssues") == 0)
-				date = new AmpDatePickerFieldPanel("date", new PropertyModel(objModel,"issueDate"), "Date", true);
+				date = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(objModel,"issueDate"), "Date", true);
 			else 
-				date = new AmpDatePickerFieldPanel("date", new PropertyModel(objModel,"observationDate"), "Date", true);
+				date = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(objModel,"observationDate"), "Date", true);
 					
 			date.setOutputMarkupId(true);
 			add(date);
@@ -73,13 +72,12 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 		add(deleteLink);
 
 		if (tree.size() > level + 1){
-			final ListEditor list = new ListEditor("list", levelChildren) {
+			final ListEditor list = new ListEditor<Object>("list", levelChildren) {
 				private static final long serialVersionUID = 7218457979728871528L;
 				@Override
 				protected void onPopulateItem(
 						org.dgfoundation.amp.onepager.components.ListItem item) {
 					try {
-						Class childClass = tree.get(level + 1);
 						AmpIssueTreePanel aitp = new AmpIssueTreePanel("item", tree, setName, labelName, item.getModel(), levelChildren, levelClass, level + 1, fmName);
 						aitp.setOutputMarkupId(true);
 						item.add(aitp);
@@ -99,41 +97,39 @@ public class AmpIssueTreePanel extends AmpFieldPanel{
 						AmpMeasure m = new AmpMeasure();
 						m.setActors(new HashSet());
 						m.setIssue((AmpIssues) objModel.getObject());
-						m.setName(new String(""));
+						m.setName("");
 						list.addItem(m);
 					}
 					if (childClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpActor") == 0){
 						AmpActor a = new AmpActor();
 						a.setMeasure((AmpMeasure) objModel.getObject());
-						a.setName(new String(""));
+						a.setName("");
 						list.addItem(a);
 					}
 					if (childClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure") == 0){
 						AmpRegionalObservationMeasure a = new AmpRegionalObservationMeasure();
 						a.setActors(new HashSet());
-						a.setName(new String(""));
-						a.setRegionalObservation((AmpRegionalObservation)objModel.getObject());
-						a.setName(new String(""));
+						a.setName("");
+						a.setRegionalObservation((AmpRegionalObservation) objModel.getObject());
 						list.addItem(a);
 					}
 					if (childClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpRegionalObservationActor") == 0){
 						AmpRegionalObservationActor a = new AmpRegionalObservationActor();
 						a.setMeasure((AmpRegionalObservationMeasure) objModel.getObject());
-						a.setName(new String(""));
+						a.setName("");
 						list.addItem(a);
 					}
 					if (childClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpLineMinistryObservationMeasure") == 0){
 						AmpLineMinistryObservationMeasure a = new AmpLineMinistryObservationMeasure();
-						a.setActors(new HashSet());
-						a.setName(new String(""));
-						a.setLineMinistryObservation((AmpLineMinistryObservation)objModel.getObject());
-						a.setName(new String(""));
+						a.setActors(new HashSet<AmpLineMinistryObservationActor>());
+						a.setName("");
+						a.setLineMinistryObservation((AmpLineMinistryObservation) objModel.getObject());
 						list.addItem(a);
 					}
 					if (childClass.getCanonicalName().compareTo("org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor") == 0){
 						AmpLineMinistryObservationActor a = new AmpLineMinistryObservationActor();
 						a.setMeasure((AmpLineMinistryObservationMeasure) objModel.getObject());
-						a.setName(new String(""));
+						a.setName("");
 						list.addItem(a);
 					}
 					target.add(this.getParent());

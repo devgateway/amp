@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE page [
-<!ENTITY ampVersion "2.3.1"> 
+<!ENTITY ampVersion "2.3.1">
 <!ENTITY buildDate "04.12.2012">
 ]>
 <site-config>
@@ -206,6 +206,9 @@
 		<layout name="popup" file="aimPopupLayout.jsp">
 			<put name="title">Popup</put>
 		</layout>
+		<layout name="popupActivityPreview" extends="popup">
+			<put-item name="body" module="aim" page="previewActivity"/>
+		</layout>		
 		<layout name="noLayout" file="noLayout.jsp">
 			<put name="title">none</put>
 		</layout>

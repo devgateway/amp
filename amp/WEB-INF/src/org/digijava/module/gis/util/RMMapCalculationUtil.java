@@ -1,5 +1,6 @@
 package org.digijava.module.gis.util;
 
+import org.dgfoundation.amp.harvest.DBUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -22,6 +23,18 @@ import java.util.*;
  */
 public class RMMapCalculationUtil {
 
+	public static List<AmpTeam> getWorkspacesForRequest(GisFilterForm filter)
+	{
+		List <AmpTeam> workspaces = null;
+
+	    if (filter.isCurWorkspaceOnly() && filter.getCurWorkspace() != null) {
+	        workspaces = new ArrayList<AmpTeam>();
+	        workspaces.add(filter.getCurWorkspace());
+	      	DbUtil.addAllChildWorkspaces(filter.getCurWorkspace(), workspaces, null);
+	    }
+	    return workspaces;
+	}
+	
     public static Object[] getAllFundingsFiltered (GisFilterForm filter, boolean isRegional, boolean isPublic) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
@@ -64,16 +77,7 @@ public class RMMapCalculationUtil {
         String currencyCode = filter.getSelectedCurrency();
 
 
-        List <AmpTeam> workspaces = null;
-
-        if (filter.isCurWorkspaceOnly() && filter.getCurWorkspace() != null) {
-           workspaces = new ArrayList();
-           workspaces.add(filter.getCurWorkspace());
-           Collection childWorkspaces = TeamUtil.getAllChildrenWorkspaces(filter.getCurWorkspace().getAmpTeamId());
-            if (childWorkspaces != null && !childWorkspaces.isEmpty()) {
-                workspaces.addAll(childWorkspaces);
-            }
-        }
+        List <AmpTeam> workspaces = getWorkspacesForRequest(filter);
 
         //boolean includeCildLocations = filter.getMapLevel() == 3;
         boolean includeCildLocations = true;
@@ -191,6 +195,8 @@ public class RMMapCalculationUtil {
 
         String currencyCode = filter.getSelectedCurrency();
 
+        List <AmpTeam> workspaces = getWorkspacesForRequest(filter);
+
         //boolean includeCildLocations = filter.getMapLevel() == 3;
         boolean includeCildLocations = true;
 
@@ -204,7 +210,7 @@ public class RMMapCalculationUtil {
                                                                donorTypeIds,
                                                                includeCildLocations,
                                                                locations,
-                                                               null, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), isPublic);
+                                                               workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), isPublic);
         } else {
             activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
@@ -213,7 +219,7 @@ public class RMMapCalculationUtil {
                                                                                donorTypeIds,
                                                                                includeCildLocations,
                                                                                locations,
-                                                                               null, fStartDate.getTime(), fEndDate.getTime(), isPublic);
+                                                                               workspaces, fStartDate.getTime(), fEndDate.getTime(), isPublic);
         }
         Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, includeCildLocations, locations, currencyCode, true);
 

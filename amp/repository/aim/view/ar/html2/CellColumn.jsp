@@ -15,5 +15,15 @@
 	<bean:define id="caller" name="cellColumn" type="org.dgfoundation.amp.ar.CellColumn" scope="page" toScope="request" />	
 
 	<jsp:include page="<%=viewable.getViewerPath()%>"/>	
-	<% } else { %> &nbsp; <% } %>
+	<% } 
+	else
+		if ((request.getParameter("inTotalColumn") != null) && request.getParameter("inTotalColumn").equals("true"))
+		{
+			out.print("<div align='right'>0&nbsp;</div>");
+		}
+		else
+		{
+			out.println("&nbsp;");
+		} 
+	%>
 </td>

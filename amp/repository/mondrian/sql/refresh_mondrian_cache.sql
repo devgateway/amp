@@ -12,7 +12,6 @@ DROP TABLE IF EXISTS cached_v_implementation_level;
 CREATE TABLE cached_v_implementation_level AS SELECT * FROM v_implementation_level;
 DROP TABLE IF EXISTS cached_v_actual_completion_date;
 CREATE TABLE cached_v_actual_completion_date AS SELECT * FROM v_actual_completion_date;
-
 DROP TABLE IF EXISTS cached_v_sectors CASCADE;
 CREATE TABLE cached_v_sectors AS SELECT * FROM v_sectors;
 
@@ -286,6 +285,11 @@ DROP TABLE IF EXISTS cached_v_pledges_type_of_assistance;
 CREATE TABLE cached_v_pledges_type_of_assistance AS SELECT * FROM v_pledges_type_of_assistance;
 DROP TABLE IF EXISTS cached_v_pledges_zones;
 CREATE TABLE cached_v_pledges_zones AS SELECT * FROM v_pledges_zones;
+
+DROP TABLE IF EXISTS cached_v_sectorloc;
+CREATE TABLE cached_v_sectorloc AS SELECT * FROM v_sectorloc;
+
+
 
 
 DROP TABLE IF EXISTS cached_amp_activity;

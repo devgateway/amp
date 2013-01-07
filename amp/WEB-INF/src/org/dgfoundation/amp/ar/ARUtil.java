@@ -567,7 +567,7 @@ public final class ARUtil {
 
 	private static void cleanCell(Object cell) {
 		if(cell instanceof TextCell) ARUtil.cleanTextCell((TextCell)cell);
-		if(cell instanceof MetaTextCell) ARUtil.cleanTextCell((TextCell)cell);
+		//if(cell instanceof MetaTextCell) ARUtil.cleanTextCell((TextCell)cell); // MetaTextCell extends TextCell
 		if(cell instanceof ListCell) ARUtil.cleanListCell((ListCell)cell);
 	}
 
@@ -589,7 +589,7 @@ public final class ARUtil {
 	}
 
 	private static void cleanTextCell(TextCell cell) {
-		cell.setValue(DataExchangeUtils.convertHTMLtoChar((String)cell.getValue()));
+		cell.setValue(DataExchangeUtils.convertHTMLtoChar(cell.getFullTextVersion()));
 	}
 	
 	public static double retrievePercentageFromCell ( MetaTextCell mtc ) throws Exception {

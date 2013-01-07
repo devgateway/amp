@@ -129,7 +129,7 @@ public class UpdateAppSettings extends Action {
 			if (ampAppSettings != null && loadValues) {
 				uForm.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 				uForm.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
-				uForm.setNumberOfPagesToDisplay(ampAppSettings.getNumberOfPagesToDisplay());
+				uForm.setNumberOfPagesToDisplay(String.valueOf(ampAppSettings.getNumberOfPagesToDisplay()));
 
 				Integer reportsPerPage = ampAppSettings.getDefaultReportsPerPage();
 				if (reportsPerPage == null) {
@@ -296,7 +296,15 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings = new AmpApplicationSettings();
 				ampAppSettings.setAmpAppSettingsId(uForm.getAppSettingsId());
 				ampAppSettings.setDefaultRecordsPerPage(new Integer(uForm.getDefRecsPerPage()));
-				ampAppSettings.setNumberOfPagesToDisplay(new Integer(uForm.getNumberOfPagesToDisplay()));
+				
+				Integer numberOfPagesToDisplay = null;
+				try {
+					numberOfPagesToDisplay = Integer.parseInt(uForm.getNumberOfPagesToDisplay());
+				} catch (NumberFormatException e) {
+					
+				}
+				ampAppSettings.setNumberOfPagesToDisplay(numberOfPagesToDisplay);
+				
 				ampAppSettings.setReportStartYear((new Integer(uForm.getReportStartYear())));
 				ampAppSettings.setReportEndYear((new Integer(uForm.getReportEndYear())));
 				ampAppSettings.setDefaultReportsPerPage(uForm.getDefReportsPerPage());

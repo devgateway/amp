@@ -713,11 +713,18 @@ public class DbUtil {
         return retVal;
     }
     
+    /**
+     * recursively adds all workspaces
+     * @param team
+     * @param in
+     * @param workspaceType
+     */
     public static void addAllChildWorkspaces (AmpTeam team, List <AmpTeam> in, String workspaceType) { //at all levels
         Collection<AmpTeam> children = (Collection<AmpTeam>) TeamUtil.getAllChildrenWorkspaces(team.getAmpTeamId());
         if (children != null && !children.isEmpty()) {
             for (AmpTeam child : children) {
-                if (child.getAccessType().equalsIgnoreCase(workspaceType)) {
+            	boolean workspaceTypeOk = (workspaceType == null) || ((workspaceType != null) && (child.getAccessType().equalsIgnoreCase(workspaceType)));
+                if (workspaceTypeOk) {
                     in.add(child);
                     addAllChildWorkspaces(child, in, workspaceType);
                 }
@@ -1937,9 +1944,9 @@ public class DbUtil {
         List queryResults = null;
         Object[] retVal = null;
 
-        Map <Long, Map> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
-        Map <Long, Map> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
-        Map <Long, Map> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations, includeCildLocations) : null;
+        Map<Long, Map<Long, Float>> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
+        Map<Long, Map<Long, Float>> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
+        Map<Long, Map<Long, Float>> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations, includeCildLocations) : null;
 
         String donorIdsWhereclause = generateWhereclause(donorIds, new GenericIdGetter());
         String donorGroupIdsWhereclause = generateWhereclause(donorGroupIds, new GenericIdGetter());
@@ -2086,7 +2093,7 @@ public class DbUtil {
 
 
     //Remove act. IDs that didn't match filter criteria
-    private static void cleanUpMap (Map<Long, Map> dataMap, Set<Long> allActivityIdsSet) {
+    private static void cleanUpMap (Map<Long, Map<Long, Float>> dataMap, Set<Long> allActivityIdsSet) {
         if (dataMap != null) {
             Set<Long> keySet = dataMap.keySet();
             Iterator <Long> it = keySet.iterator();
@@ -2119,8 +2126,8 @@ public class DbUtil {
         List queryResults = null;
         Object[] retVal = null;
 
-        Map <Long, Map> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
-        Map <Long, Map> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
+        Map<Long, Map<Long, Float>> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
+        Map<Long, Map<Long, Float>> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
 
         String donorIdsWhereclause = generateWhereclause(donorIds, new GenericIdGetter());
         String donorGroupIdsWhereclause = generateWhereclause(donorGroupIds, new GenericIdGetter());
@@ -2203,9 +2210,8 @@ public class DbUtil {
         return retVal;
     }
 
-    private static Map <Long, Map> getActivitySectorPercentages (Collection<Long> sectorsIds) {
+    private static Map<Long, Map<Long, Float>> getActivitySectorPercentages (Collection<Long> sectorsIds) {
         String sectorWhereclause = generateWhereclause(sectorsIds, new GenericIdGetter());
-        Map <Long, Map> retVal = null;
         Session sess = null;
         try {
             sess = PersistenceManager.getRequestDBSession();
@@ -2222,36 +2228,50 @@ public class DbUtil {
                 queryStr.append(sectorWhereclause);
                 */
             }
-            Query q = sess.createQuery(queryStr.toString());
-            List results = q.list();
-
-            if (results != null) {
-                retVal = new HashMap <Long, Map>();
-                for (Object resultObj: results) {
-                    Object[] resArray = (Object[]) resultObj;
-                    Long actId = (Long)resArray[0];
-                    Long secId = (Long)resArray[1];
-                    Float secPercentage = (Float)resArray[2];
-
-                    if (retVal.containsKey(actId)) {
-                        ((Map<Long, Float>) retVal.get(actId)).put(secId, secPercentage);
-                    } else {
-                        Map <Long, Float> secPercentMap = new HashMap <Long, Float>();
-                        secPercentMap.put(secId, secPercentage);
-                        retVal.put(actId, secPercentMap);
-                    }
-                }
-            }
+            
+            return fetchListAsPercentageMap(sess, queryStr.toString());
         } catch (DgException ex) {
           logger.error("Error getting activity sectors from database " + ex);
+          return null;
         }
-        return retVal;
     }
 
-    private static Map <Long, Map> getActivityProgramPercentages (Collection<Long> programIds) {
+    private static void addPercentageToSubdivision(Map<Long, Map<Long, Float>> retVal, Long actId, Long subId, Float percentage)
+    {
+        if (!retVal.containsKey(actId))
+        	retVal.put(actId, new HashMap<Long, Float>());
+        
+        float newValue = percentage;
+        if (retVal.get(actId).containsKey(subId))
+        	newValue = percentage + retVal.get(actId).get(subId);
+        
+        retVal.get(actId).put(subId, newValue);
+    }
+    
+    private static Map<Long, Map<Long, Float>> fetchListAsPercentageMap(Session sess, String queryStr)
+    {
+    	Map<Long, Map<Long, Float>> retVal = null;
+    	Query q = sess.createQuery(queryStr);
+    	List results = q.list();
+
+    	if (results != null) {
+    		retVal = new HashMap<Long, Map<Long, Float>>();
+    		for (Object resultObj: results) 
+    		{
+    			Object[] resArray = (Object[]) resultObj;
+    			Long pldId = (Long)resArray[0];
+    			Long secId = (Long)resArray[1];
+    			Float secPercentage = (Float)resArray[2];
+
+    			addPercentageToSubdivision(retVal, pldId, secId, secPercentage);
+    		}
+    	}
+    	return retVal;
+    }
+    
+    private static Map<Long, Map<Long, Float>> getActivityProgramPercentages (Collection<Long> programIds) {
         String programWhereclause = generateWhereclause(programIds, new GenericIdGetter());
 
-        Map <Long, Map> retVal = null;
         Session sess = null;
         try {
             sess = PersistenceManager.getRequestDBSession();
@@ -2262,30 +2282,11 @@ public class DbUtil {
                 queryStr.append(" and actPrg.program.ampThemeId in ");
                 queryStr.append(programWhereclause);
             }
-            Query q = sess.createQuery(queryStr.toString());
-            List results = q.list();
-
-            if (results != null) {
-                retVal = new HashMap <Long, Map>();
-                for (Object resultObj: results) {
-                    Object[] resArray = (Object[]) resultObj;
-                    Long actId = (Long)resArray[0];
-                    Long prgId = (Long)resArray[1];
-                    Float prgPercentage = new Float((Float) resArray[2]);
-
-                    if (retVal.containsKey(actId)) {
-                        ((Map<Long, Float>) retVal.get(actId)).put(prgId, prgPercentage);
-                    } else {
-                        Map <Long, Float> secPercentMap = new HashMap <Long, Float>();
-                        secPercentMap.put(prgId, prgPercentage);
-                        retVal.put(actId, secPercentMap);
-                    }
-                }
-            }
+            return fetchListAsPercentageMap(sess, queryStr.toString());
         } catch (DgException ex) {
           logger.error("Error getting activity programs from database " + ex);
+          return null;
         }
-        return retVal;
     }
 
     private static Collection<AmpCategoryValueLocations> appenChildLocations (Collection<AmpCategoryValueLocations> locations) {
@@ -2308,14 +2309,14 @@ public class DbUtil {
     }
 
 
-    private static Map <Long, Map> getActivityLocationPercentages (Collection<AmpCategoryValueLocations> locations, boolean inculedChildLocations) {
+    private static Map<Long, Map<Long, Float>> getActivityLocationPercentages (Collection<AmpCategoryValueLocations> locations, boolean inculedChildLocations) {
 
         if (inculedChildLocations) {
             locations = appenChildLocations(locations);
         }
 
         String locationWhereclause = generateWhereclause(locations, new LocationIdGetter());
-        Map <Long, Map> retVal = null;
+        Map <Long, Map<Long, Float>> retVal = null;
         Session sess = null;
 
         try {
@@ -2328,7 +2329,7 @@ public class DbUtil {
             List lastVersions = actGrpupQuery.list();
             String lasVersionsWhereclause = generateWhereclause(lastVersions, new GenericIdGetter());
 
-            StringBuilder queryStr = new StringBuilder("select actLoc.activity.ampActivityId, actLoc.location.location.id, actLoc.locationPercentage from ");
+            StringBuilder queryStr = new StringBuilder("select actLoc.activity.ampActivityId, actLoc.location.regionLocation.id, actLoc.locationPercentage from ");
             queryStr.append(AmpActivityLocation.class.getName());
             queryStr.append(" as actLoc where actLoc.locationPercentage is not null and actLoc.locationPercentage > 0");
             queryStr.append(" and actLoc.activity.ampActivityId in ");
@@ -2336,33 +2337,14 @@ public class DbUtil {
             queryStr.append(" and (actLoc.activity.deleted IS NULL OR actLoc.activity.deleted = false)");
 
             if (locationWhereclause != null) {
-                queryStr.append(" and actLoc.location.location.id in ");
+                queryStr.append(" and actLoc.location.regionLocation.id in ");
                 queryStr.append(locationWhereclause);
             }
-            Query q = sess.createQuery(queryStr.toString());
-            List results = q.list();
-
-            if (results != null) {
-                retVal = new HashMap <Long, Map>();
-                for (Object resultObj: results) {
-                    Object[] resArray = (Object[]) resultObj;
-                    Long actId = (Long)resArray[0];
-                    Long locId = (Long)resArray[1];
-                    Float locPercentage = (Float)resArray[2];
-
-                    if (retVal.containsKey(actId)) {
-                        ((Map<Long, Float>) retVal.get(actId)).put(locId, locPercentage);
-                    } else {
-                        Map <Long, Float> locPercentMap = new HashMap <Long, Float>();
-                        locPercentMap.put(locId, locPercentage);
-                        retVal.put(actId, locPercentMap);
-                    }
-                }
-            }
+            return fetchListAsPercentageMap(sess, queryStr.toString());
         } catch (DgException ex) {
-          logger.error("Error getting activity locations from database " + ex);
+          logger.error("Error getting activity programs from database " + ex);
+          return null;
         }
-        return retVal;
     }
 
 
@@ -2385,9 +2367,9 @@ public class DbUtil {
         List queryResults = null;
         Object[] retVal = null;
 
-        Map <Long, Map> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getPledgeSectorPercentages(sectorIds) : null;
-        Map <Long, Map> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getPledgeProgramPercentages(programIds) : null;
-        Map <Long, Map> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getPledgeLocationPercentages(locations) : null;
+        Map<Long, Map<Long, Float>> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getPledgeSectorPercentages(sectorIds) : null;
+        Map<Long, Map<Long, Float>> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getPledgeProgramPercentages(programIds) : null;
+        Map<Long, Map<Long, Float>> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getPledgeLocationPercentages(locations) : null;
 
         Set allPledgeIdsSet = new HashSet<Long>();
 
@@ -2446,9 +2428,9 @@ public class DbUtil {
         return retVal;
     }
 
-    private static Map <Long, Map> getPledgeSectorPercentages (Collection<Long> sectorIds) {
+    private static Map<Long, Map<Long, Float>> getPledgeSectorPercentages (Collection<Long> sectorIds) {
         String sectorWhereclause = generateWhereclause(sectorIds, new GenericIdGetter());
-        Map <Long, Map> retVal = null;
+        Map<Long, Map<Long, Float>> retVal = null;
         Session sess = null;
         try {
             sess = PersistenceManager.getRequestDBSession();
@@ -2459,36 +2441,17 @@ public class DbUtil {
                 queryStr.append(" and pldSec.sector.ampSectorId in ");
                 queryStr.append(sectorWhereclause);
             }
-            Query q = sess.createQuery(queryStr.toString());
-            List results = q.list();
-
-            if (results != null) {
-                retVal = new HashMap <Long, Map>();
-                for (Object resultObj: results) {
-                    Object[] resArray = (Object[]) resultObj;
-                    Long pldId = (Long)resArray[0];
-                    Long secId = (Long)resArray[1];
-                    Float secPercentage = (Float)resArray[2];
-
-                    if (retVal.containsKey(pldId)) {
-                        ((Map<Long, Float>) retVal.get(pldId)).put(secId, secPercentage);
-                    } else {
-                        Map <Long, Float> secPercentMap = new HashMap <Long, Float>();
-                        secPercentMap.put(secId, secPercentage);
-                        retVal.put(pldId, secPercentMap);
-                    }
-                }
-            }
-        } catch (Exception ex) {
-          logger.error("Error getting pledge sectors from database " + ex);
+            return fetchListAsPercentageMap(sess, queryStr.toString());
+        } catch (DgException ex) {
+          logger.error("Error getting activity programs from database " + ex);
+          return null;
         }
-        return retVal;
     }
 
-    private static Map <Long, Map> getPledgeProgramPercentages (Collection<Long> programIds) {
+    private static Map<Long, Map<Long, Float>> getPledgeProgramPercentages (Collection<Long> programIds) {
         String programWhereclause = generateWhereclause(programIds, new GenericIdGetter());
 
-        Map <Long, Map> retVal = null;
+        Map<Long, Map<Long, Float>> retVal = null;
         Session sess = null;
         try {
             sess = PersistenceManager.getRequestDBSession();
@@ -2499,71 +2462,35 @@ public class DbUtil {
                 queryStr.append(" and pldSec.program.ampThemeId in ");
                 queryStr.append(programWhereclause);
             }
-            Query q = sess.createQuery(queryStr.toString());
-            List results = q.list();
-
-            if (results != null) {
-                retVal = new HashMap <Long, Map>();
-                for (Object resultObj: results) {
-                    Object[] resArray = (Object[]) resultObj;
-                    Long pldId = (Long)resArray[0];
-                    Long prgId = (Long)resArray[1];
-                    Float prgPercentage = new Float(((Long)resArray[2]).floatValue());
-
-                    if (retVal.containsKey(pldId)) {
-                        ((Map<Long, Float>) retVal.get(pldId)).put(prgId, prgPercentage);
-                    } else {
-                        Map <Long, Float> secPercentMap = new HashMap <Long, Float>();
-                        secPercentMap.put(prgId, prgPercentage);
-                        retVal.put(pldId, secPercentMap);
-                    }
-                }
-            }
+            return fetchListAsPercentageMap(sess, queryStr.toString());
         } catch (DgException ex) {
-          logger.error("Error getting pledge programs from database " + ex);
+          logger.error("Error getting activity programs from database " + ex);
+          return null;
         }
-        return retVal;
+
     }
 
 
 
-    private static Map <Long, Map> getPledgeLocationPercentages (Collection<AmpCategoryValueLocations> locations) {
+    private static Map<Long, Map<Long, Float>> getPledgeLocationPercentages (Collection<AmpCategoryValueLocations> locations) {
         String locationWhereclause = generateWhereclause(locations, new LocationIdGetter());
-        Map <Long, Map> retVal = null;
+        Map<Long, Map<Long, Float>> retVal = null;
         Session sess = null;
         try {
             sess = PersistenceManager.getRequestDBSession();
-            StringBuilder queryStr = new StringBuilder("select pldLoc.pledgeid.id, pldLoc.location.id, pldLoc.locationpercentage from ");
+            StringBuilder queryStr = new StringBuilder("select pldLoc.pledgeid.id, pldLoc.location.regionLocation.id, pldLoc.locationpercentage from ");
             queryStr.append(FundingPledgesLocation.class.getName());
             queryStr.append(" as pldLoc where pldLoc.locationpercentage is not null and pldLoc.locationpercentage > 0");
             if (locationWhereclause != null) {
-                queryStr.append(" and pldLoc.location.id in ");
+                queryStr.append(" and pldLoc.location.regionLocation.id in ");
                 queryStr.append(locationWhereclause);
             }
-            Query q = sess.createQuery(queryStr.toString());
-            List results = q.list();
-
-            if (results != null) {
-                retVal = new HashMap <Long, Map>();
-                for (Object resultObj: results) {
-                    Object[] resArray = (Object[]) resultObj;
-                    Long pldId = (Long)resArray[0];
-                    Long locId = (Long)resArray[1];
-                    Float locPercentage = (Float)resArray[2];
-
-                    if (retVal.containsKey(pldId)) {
-                        ((Map<Long, Float>) retVal.get(pldId)).put(locId, locPercentage);
-                    } else {
-                        Map <Long, Float> locPercentMap = new HashMap <Long, Float>();
-                        locPercentMap.put(locId, locPercentage);
-                        retVal.put(pldId, locPercentMap);
-                    }
-                }
-            }
+            return fetchListAsPercentageMap(sess, queryStr.toString());
         } catch (DgException ex) {
-          logger.error("Error getting activity locations from database " + ex);
+          logger.error("Error getting activity programs from database " + ex);
+          return null;
         }
-        return retVal;
+
     }
 
 

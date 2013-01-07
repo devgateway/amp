@@ -476,7 +476,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             		if(role.getTeamHead()!=null&&role.getTeamHead()){
             			isTeamHead=true;
             		}
-            		if(!isTeamHead&&!role.isApprover()){
+            		if(!role.isApprover()){
             			if(oldId==null||("allEdits".equals(validation))){
             				new ApprovedActivityTrigger(newActivity,modifiedBy); //if TL or approver created activity, then no Trigger is needed
             			}

@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.Cookie;
@@ -1789,5 +1790,70 @@ public class DgUtil {
         }
         return retVal;
     }
+    
+	/**
+	 * precompile these patterns (a slow process) for some speedup and for copy-paste avoidance
+	 */
+	private static Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
+	private static Pattern ptr2	= Pattern.compile("<[^<]*>", Pattern.DOTALL);
+	private static Pattern[] monotonousPatterns = new Pattern[]{
+									Pattern.compile("Version:[1-9]\\.[0-9]+"), // no DOTALL needed
+									Pattern.compile("StartHTML:[0-9]+"), // no DOTALL needed
+									Pattern.compile("EndHTML:[0-9]+"), // no DOTALL needed
+									Pattern.compile("StartFragment:[0-9]+"), // no DOTALL needed
+									Pattern.compile("EndFragment:[0-9]+") // no DOTALL needed
+	};
+	
+	
+	private static Set<Character> trimmableChars = new HashSet<Character>() {{add(' '); add('\n'); add('\t');}};
+
+	/**
+	 * trims any chars appearing at the right or left of a string. the set of the trimmable chars is in trimmableChars
+	 * @param src
+	 * @return
+	 */
+	public static String trimChars(String src)
+	{
+		if (src == null)
+			return src;
+		src = src.replace("\r\n", "\n");
+		int begPos = 0, len = src.length(), endPos = len - 1;
+		while(begPos < len)
+			if (trimmableChars.contains(src.charAt(begPos)))
+				begPos ++;
+			else
+				break;
+		while (endPos > begPos)
+			if (trimmableChars.contains(src.charAt(endPos)))
+				endPos --;
+			else
+				break;
+		if (begPos == len)
+			return "";
+		return src.substring(begPos, endPos + 1);
+	}
+	
+	/**
+	 * cleans a text copy-pasted from Word from all of its tags and returns the plain text
+	 * also does sanity cleanups, like replacing tabs with spaces and multiple spaces with a single one
+	 * @param src
+	 * @return
+	 */
+	public static String cleanWordTags(String src)
+	{
+		if (src == null)
+			return src;
+		src	= ptr.matcher(src).replaceAll("").trim();
+		src	= src.replaceAll("<style.*</style>", "");
+		src	= src.replaceAll("\\<.*?>", "");
+		src	= ptr2.matcher(src).replaceAll("");
+		for(Pattern pattern:monotonousPatterns)
+			src = pattern.matcher(src).replaceFirst(" "); // replaceFirst is enough, as there is one or none matches
+		src = src.replace('\t', ' ').replace("&nbsp;", " ").trim();
+		src = trimChars(src);
+		while (src.indexOf("  ") >= 0)
+			src = src.replace("  ", " ");
+		return src;
+	}
 
 }

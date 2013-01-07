@@ -22,6 +22,7 @@ import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -108,7 +109,7 @@ public class ShowGisDashboard extends Action {
          
        
         //currency
-        Collection currency = CurrencyUtil.getActiveAmpCurrencyByName();
+        Collection<AmpCurrency> currency = CurrencyUtil.getActiveAmpCurrencyByName();
 	    //Only currencies havening exchanges rates AMP-2620
 	    Collection<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
 	    gisForm.setCurrencies(validcurrencies);
@@ -117,10 +118,9 @@ public class ShowGisDashboard extends Action {
 			if( CurrencyUtil.isRate(element.getCurrencyCode())== true){
 				gisForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
 			}
-		}
-	    
+	    }	    	    
 	    //calendars 
-	    Collection allFisCalenders = org.digijava.module.aim.util.DbUtil.getAllFisCalenders();
+	    Collection<AmpFiscalCalendar> allFisCalenders = org.digijava.module.aim.util.DbUtil.getAllFisCalenders();
 	    gisForm.setCalendars(allFisCalenders);
 	    
 	    ServletContext ampContext = getServlet().getServletContext();

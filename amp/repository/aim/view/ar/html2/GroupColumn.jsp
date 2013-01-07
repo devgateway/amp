@@ -1,3 +1,4 @@
+<%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -9,5 +10,7 @@
 
 <logic:iterate name="groupColumn" property="items" id="column" scope="page">
 	<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-	<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+	<jsp:include page="<%=viewable.getViewerPath()%>">
+		<jsp:param name="inTotalColumn" value="<%=groupColumn.getName().equals(ArConstants.COLUMN_TOTAL) || groupColumn.getName().equals(ArConstants.COLUMN_CONTRIBUTION_TOTAL)%>"/>
+	</jsp:include>	
 </logic:iterate>

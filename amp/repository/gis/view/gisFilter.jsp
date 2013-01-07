@@ -53,7 +53,18 @@ div.groupingSelector {
 	height: 155px;
 }
 
+.grouped-paragraphs {
+	background-color: F5F5F5;
+	border: 1px dotted black;
+	margin-bottom: 1.1em;
+	margin-right: 1.5em;
+}
 
+.grouped-paragraphs p{
+	margin-bottom: 0.4em !important;
+	padding-bottom: 5px !important;
+	font-weight: bold;
+}
 
 div.membersSelector {
 	width: 425px;
@@ -176,7 +187,29 @@ li table{
 
 </style>
 <script type="text/javascript">
-var tabView = new YAHOO.widget.TabView('demo');
+	var tabView = new YAHOO.widget.TabView('demo');
+</script>
+
+<script type="text/javascript">
+
+/*	function showOnlyWorkspaceClicked()
+	{
+		var checked = $("#curWorkspaceOnlyCB").attr('checked');
+		if (checked)
+			$('#child_workspaces_input').show();
+		else
+			$('#child_workspaces_input').hide();
+	}
+	
+	$(document).ready(function()
+	{
+		$("#curWorkspaceOnlyCB").change(function()
+		{
+			showOnlyWorkspaceClicked();
+		});
+		
+		showOnlyWorkspaceClicked(); //set visibility of the "also show children" checkbox
+	}); */
 </script>
 
 
@@ -524,10 +557,17 @@ var tabView = new YAHOO.widget.TabView('demo');
 								</field:display>
 								
 								<c:if test="${empty param.public}">
-									<p>
-										<label style="width:230px"><digi:trn>Show data for sel. workspace only</digi:trn></label>
-										&nbsp;&nbsp;<input type="checkbox" name="curWorkspaceOnly">
-									</p>
+									<div class="grouped-paragraphs">
+										<p>
+											<label style="width:230px"><digi:trn>Show data for selected workspace and children only</digi:trn></label>
+											&nbsp;&nbsp;<input id="curWorkspaceOnlyCB" type="checkbox" name="curWorkspaceOnly">
+										</p>
+										<!-- <p id="child_workspaces_input">
+											<label style="width:200px; padding-left: 30px;"><digi:trn>Also include child workspaces</digi:trn></label>
+											&nbsp;&nbsp;<input type="checkbox" name="childWorkspacesToo">
+										</p>
+										-->
+									</div>
 								</c:if>
 							</div>				 
 							

@@ -3186,7 +3186,7 @@ public class SaveActivity extends Action {
             		if(role.getTeamHead()!=null&&role.getTeamHead()){
             			isTeamHead=true;
             		}
-					if(!isTeamHead&&!role.isApprover() ){
+					if(!role.isApprover() ){
             			new ApprovedActivityTrigger(aAct,previouslyUpdatedBy); //if TL or approver created activity, then no Trigger is needed
             		}
             	}else{

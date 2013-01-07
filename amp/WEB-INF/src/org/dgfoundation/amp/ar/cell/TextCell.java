@@ -7,9 +7,10 @@
 package org.dgfoundation.amp.ar.cell;
 
 import java.util.regex.Pattern;
-
+import java.util.*;
 import org.dgfoundation.amp.ar.workers.TextColWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.DgUtil;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -87,41 +88,32 @@ public class TextCell extends Cell {
 		return result;
 	}
 	
+	/**
+	 * gets a cleanedup version of the value (without the Word tags) pegged to at most shortLength chars
+	 * @return
+	 */
 	public String getShortTextVersion() {
 		if ( this.shortText == null ) {
-			Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
-			Pattern ptr2	= Pattern.compile("<[^<]*>", Pattern.DOTALL);
-			if (!getHasLongVersion()) {
-				this.shortText	= ptr.matcher(value).replaceAll("").trim(); 
-				this.shortText	= ptr2.matcher(this.shortText).replaceAll("");
-				return this.shortText;
-			}
-			this.shortText	= ptr.matcher(value).replaceAll("").trim();
-			this.shortText 	= this.shortText.replaceAll("<style.*</style>", "");
-			this.shortText 	= this.shortText.replaceAll("\\<.*?>","");
-			this.shortText	= ptr2.matcher(this.shortText).replaceAll("");
-			if(this.shortText.length()<shortLength)
-				return this.shortText;
-			
-			this.shortText	= this.shortText.substring(0, shortLength-1);
-			return this.shortText;
+			String z = getFullTextVersion();
+			if (z == null)
+				return null;
+			if (z.length() > shortLength)
+				z = z.substring(0,  shortLength - 3) + "...";
+			this.shortText = z;
 		}
 		return this.shortText;
 		
 	}
 	
-	
+	/**
+	 * gets a cleanedup version of the value (without the Word tags)
+	 * @return
+	 */
 	public String getFullTextVersion() {
 		//if (!getHasLongVersion())
 		//	return value;
 		if ( this.fullText == null ) {
-			Pattern ptr	= Pattern.compile("<!--.*-->", Pattern.DOTALL);
-			Pattern ptr2	= Pattern.compile("<[^<]*>", Pattern.DOTALL);
-			this.fullText	= ptr.matcher(value).replaceAll("").trim();
-			this.fullText	= this.fullText.replaceAll("<style.*</style>", "");
-			this.fullText	= this.fullText.replaceAll("\\<.*?>", "");
-			this.fullText	= ptr2.matcher(this.fullText).replaceAll("");
-			return this.fullText;
+			this.fullText = DgUtil.cleanWordTags(value);
 		}
 		return this.fullText;
 

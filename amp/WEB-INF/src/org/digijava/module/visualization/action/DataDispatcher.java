@@ -610,7 +610,7 @@ public class DataDispatcher extends DispatchAction {
 	            	Long id = Long.parseLong(sectorId);
 	            	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), newFilter, startYear.intValue(), endYear.intValue());
 	            } else {
-	            	map = DashboardUtil.getRankSectorsByKey(DbUtil.getSectors(newFilter), newFilter);
+	            	map = DashboardUtil.getRankSectorsByKey(DbUtil.getSectors(newFilter), DbUtil.getSectors(newFilter), newFilter);
 	            }
         	}
 	        

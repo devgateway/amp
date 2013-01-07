@@ -556,7 +556,7 @@ public class DbUtil {
 	            logger.error(e);
 	            throw new DgException("Cannot load sectors from db", e);
 	        }
-	        return DashboardUtil.getTopLevelParentList(sectors);
+	        return sectors;
     	}
      }
     
@@ -835,31 +835,6 @@ public class DbUtil {
 
      }
       
-    public static Long[] getAllDescendants(Long[] sectorIds) {
-        // Make it recursive carefully
-    	List<Long> tempSectorIds = new ArrayList<Long>();
-        List<AmpSector> sectors = new ArrayList<AmpSector>();
-    	for(Long sectorId : sectorIds){
-            sectors.add(getAmpSector(sectorId));
-            List<AmpSector> childrenSectors = getAmpSubSectors(sectorId);
-            if(childrenSectors!=null){
-                sectors.addAll(childrenSectors);
-                 for (AmpSector sector : childrenSectors) {
-                    List<AmpSector> grandChildren = getAmpSubSectors(sector.getAmpSectorId());
-                    if( grandChildren!=null){
-                         sectors.addAll(grandChildren);
-                    }
-                }
-            }
-    	}
-        Iterator<AmpSector> it = sectors.iterator();
-        while(it.hasNext()){
-        	AmpSector currentSector = it.next();
-        	tempSectorIds.add(currentSector.getAmpSectorId());
-        }
-		return (Long[]) tempSectorIds.toArray(new Long[0]);
-	}
-
 	public static List<AmpOrganisation> getAgencies(DashboardFilter filter) throws DgException {
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         List<AmpOrganisation> agencies = new ArrayList<AmpOrganisation>();
@@ -1733,7 +1708,7 @@ public class DbUtil {
             	
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
             	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-            	if (item.length==4) 
+            	if (item.length==4 && item[3] != null) 
             		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
             		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
@@ -1799,7 +1774,7 @@ public class DbUtil {
         return map;
     }
 	
-	public static Map<AmpSector, BigDecimal> getFundingBySectorList(Collection<AmpSector> secList, String currCode,  Date startDate,
+	public static Map<AmpSector, BigDecimal> getFundingBySectorList(Collection<AmpSector> secListChildren, Collection<AmpSector> secListParent, String currCode,  Date startDate,
             Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
         
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
@@ -1846,7 +1821,13 @@ public class DbUtil {
         
         oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-        oql += " and sec.ampSectorId in (" + DashboardUtil.getInStatement(secList) + ")";
+        oql += " and sec.ampSectorId in (" + DashboardUtil.getInStatement(secListChildren) + ")";
+        
+        //Mapping the subsectors with their parents
+        HashMap<Long, Long> sectorMap = new HashMap<Long, Long>();
+        for(AmpSector currentSector : secListChildren ){
+        	sectorMap.put(currentSector.getAmpSectorId(), DashboardUtil.getTopLevelParent(currentSector).getAmpSectorId());
+        }
 
        
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
@@ -1892,7 +1873,7 @@ public class DbUtil {
             fundingDets = query.list();
 
             HashMap<Long, AmpSector> sectorParentList = new HashMap<Long, AmpSector>();
-            Iterator iter = secList.iterator();
+            Iterator iter = secListParent.iterator();
             while (iter.hasNext()) {
             	AmpSector sec = (AmpSector)iter.next();
             	AmpSector sec2 = DashboardUtil.getTopLevelParent(sec);
@@ -1916,6 +1897,9 @@ public class DbUtil {
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if (!sectorCondition) {
+            		if(sectorParentList.get(id) == null){
+            			id = sectorMap.get(id);
+            		}
             		name = sectorParentList.get(id).getName();
                 	id = sectorParentList.get(id).getAmpSectorId();
             	}
@@ -2087,7 +2071,7 @@ public class DbUtil {
             	AmpFundingDetail currentFd = (AmpFundingDetail) item[0];
             	Long id = (Long) item[1];
             	String name = (String) item[2];
-            	if (id.equals(new Long(natLoc.getId()))){
+            	if (natLoc != null && id.equals(new Long(natLoc.getId()))){
             		name = natLoc.getName();
             	} else if (!locationCondition) {
             		name = locationParentList.get(id).getName();

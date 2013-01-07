@@ -74,7 +74,7 @@ public class DashboardUtil {
 		return sortByValue (map);
 	}
 	
-	public static Map<AmpSector, BigDecimal> getRankSectorsByKey(Collection<AmpSector> secList,  DashboardFilter filter) throws DgException{
+	public static Map<AmpSector, BigDecimal> getRankSectorsByKey(Collection<AmpSector> secListChildren, Collection<AmpSector> secListParent,  DashboardFilter filter) throws DgException{
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
@@ -82,8 +82,8 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        if (secList!=null && secList.size()!=0)
-        	map = DbUtil.getFundingBySectorList(secList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
+        if (secListChildren!=null && secListChildren.size()!=0)
+        	map = DbUtil.getFundingBySectorList(secListChildren, secListParent, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map);
 	}
 	
@@ -95,7 +95,13 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        AmpCategoryValueLocations natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation()!=null? getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation(): getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[1]).getParentLocation();
+        AmpCategoryValueLocations tempLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation();
+        AmpCategoryValueLocations natLevelLocation = new AmpCategoryValueLocations();
+        if (tempLocation != null)
+        	natLevelLocation = tempLocation;
+        else if(regList.size() > 1)
+        	natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[1]).getParentLocation();
+
         AmpCategoryValueLocations tempLoc = new AmpCategoryValueLocations();
 		if (request!=null) {
 			String locale = RequestUtils.getNavigationLanguage(request).getCode();
@@ -272,14 +278,15 @@ public class DashboardUtil {
             AmpActivityVersion activity = new AmpActivityVersion(ampActivityId, name, ampId);
             activityList.put(ampActivityId, activity);
         }
-        Collection<AmpSector> sectorListReduced = DbUtil.getSectors(filter);
+        List<AmpSector> sectorListChildren = DbUtil.getSectors(filter);
+        Collection<AmpSector> sectorListParent = DashboardUtil.getTopLevelParentList(sectorListChildren);
         Collection<AmpTheme> NPOListReduced = DbUtil.getPrograms(filter, true);
         Collection<AmpTheme> programListReduced = DbUtil.getPrograms(filter, false);
 		Collection<AmpCategoryValueLocations> regionListReduced = DbUtil.getRegions(filter);
 		Collection<AmpOrganisation> agencyListReduced = DbUtil.getAgencies(filter);
 		
 		HashMap<Long, AmpSector> sectorList = new HashMap<Long, AmpSector>();
-        iter = sectorListReduced.iterator();
+        iter = sectorListParent.iterator();
         while (iter.hasNext()) {
         	AmpSector sec = (AmpSector)iter.next();
             sectorList.put(sec.getAmpSectorId(), sec);
@@ -341,7 +348,7 @@ public class DashboardUtil {
 		        		form.getRanksInformation().setFullSectors(null);
 				        form.getRanksInformation().setTopSectors(null);
 					} else {
-						form.getRanksInformation().setFullSectors(getRankSectorsByKey(sectorListReduced, form.getFilter()));
+						form.getRanksInformation().setFullSectors(getRankSectorsByKey(sectorListChildren, sectorListParent, form.getFilter()));
 						form.getRanksInformation().setTopSectors(getTop(form.getRanksInformation().getFullSectors(),form.getFilter().getTopLists()));
 					}
 				} 

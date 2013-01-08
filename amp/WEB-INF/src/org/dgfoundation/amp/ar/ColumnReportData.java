@@ -49,19 +49,7 @@ public class ColumnReportData extends ReportData<Column> {
         	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
     			return 1; // consider the subtotals/titles as rows 
 
-        	//compute the max for the underlying columns
-    	    for (Column element:items) {
-				//TODO same check should be done for all related colums (sectors, programs)
-				if ( ARUtil.hasHierarchy(this.getReportMetadata().getHierarchies(), ArConstants.COLUMN_REGION) && 
-						( ArConstants.COLUMN_ZONE.equals(element.name) || ArConstants.COLUMN_DISTRICT.equals(element.name) ) ){
-					continue;
-				}else if(checkProgramsHierarchy(ArConstants.PROGRAMS_COLUMNS,element)){
-					continue;
-				}
-				int visCol=element.getVisibleRows();
-				if(visCol>ret) ret=visCol;
-		    }
-    	    return ret; 
+        	return getOwnerIds().size(); // ColumnReportData.jsp creates a row for each getOwnerId element, so we should return the same number anyway, else AMP-12515 will come back to haunt us
 	}
     
     	
@@ -269,7 +257,7 @@ public class ColumnReportData extends ReportData<Column> {
 					try {
 						parentPercentage	= ARUtil.retrieveParentPercetage(e.getKey(), this.getSplitterCell() );
 					} catch (Exception e1) {
-						e1.printStackTrace();
+						logger.warn (e1.getMessage() );
 					}
 				}
 				if ( e.getValue() < 100.0 ) {

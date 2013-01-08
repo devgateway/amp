@@ -34,6 +34,7 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
@@ -68,8 +69,16 @@ public class DbHelper {
 		boolean zonescondition = zonesids != null && zonesids.length > 1;
 		Long[] sectorIds = filter.getSelSectorIds();
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
-		boolean organizationTypeCondition = filter.getOrganizationsTypeId() != null && !filter.getOrganizationsTypeId().equals(-1l);
 		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !QueryUtil.inArray(-1l,filter.getSelStructureTypes() );
+		AmpCategoryValue budgetOn = null;
+		AmpCategoryValue budgetOff=null;
+		try {
+			budgetOn =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_ON);
+			budgetOff =  CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ACTIVITY_BUDGET_OFF);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		/*
 		 * We are selecting sectors which are funded In selected year by the
@@ -93,14 +102,14 @@ public class DbHelper {
 				oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 			}
 			//Organization Type
-			if(organizationTypeCondition){
+			if(filter.getSelorganizationsTypes()!=null){
 				oql += " inner join act.orgrole role  ";
 			}
 			if(structureTypeCondition){
 				oql += " inner join act.structures str  ";
 			}
 			//Status
-		    if (filter.getProjectStatusId()!=null){
+		    if (filter.getSelprojectstatus()!=null){
 		    	oql+=" join  act.categories as categories ";
 		    }
 		    
@@ -134,21 +143,32 @@ public class DbHelper {
 			} else {
 				oql += QueryUtil.getTeamQuery(teamMember);
 			}
-			if (!zonescondition && locationCondition) {
+			
+			//locations filter
+			
+			if (locationCondition) {
             	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-				oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds) + ") ";
-			}else if (zonescondition){
-				zonesids = getAllDescendantsLocation(zonesids, DbUtil.getAmpLocations());
-				oql += " and loc.id in (" + QueryUtil.getInStatement(zonesids) + ") ";
+            	filter.setSelLocationIds(locationIds);
+            	if (zonesids.length>0){
+            		zonesids = getAllDescendantsLocation(zonesids, DbUtil.getAmpLocations());
+            		Long[] both = (Long[]) ArrayUtils.addAll(locationIds, zonesids);
+            		filter.setSelLocationIds(both);
+            		oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds)+","+ QueryUtil.getInStatement(zonesids)+ ") ";
+            	}else{
+            		oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds) + ") ";
+            	}
 			}
+			
+			
+			
 			
 			if (sectorCondition) {
 				oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
 			}
 			
 			//Organization Type
-			if(organizationTypeCondition) {
-				oql += " and role.organisation.orgGrpId.orgType = " + filter.getOrganizationsTypeId();
+			if(filter.getSelorganizationsTypes()!=null) {
+				oql += " and role.organisation.orgGrpId.orgType in (" + QueryUtil.getInStatement(filter.getSelorganizationsTypes())+")";
 			}
 			
 			//Implementing Agency
@@ -161,24 +181,25 @@ public class DbHelper {
 			}
 
 			//Project Status
-			if (filter.getProjectStatusId() != null && !filter.getProjectStatusId().equals(0l)) {
-				oql += " and categories.id in ("+filter.getProjectStatusId()+") ";
+			if (filter.getSelprojectstatus() != null) {
+				oql += " and categories.id in ("+QueryUtil.getInStatement(filter.getSelprojectstatus())+") ";
 	        }
 			// On/Off budget
-			if (filter.getOnBudget() != null && !filter.getProjectStatusId().equals(0)) {
+			if (filter.getOnBudget() != null) {
 				if (filter.getOnBudget()==1){
-					oql += " and act.budget is not null";
-				}else{
-					oql += " and act.budget is null";
+					oql += " and categories.id in ("+budgetOn.getId()+") ";
+				}else if(filter.getOnBudget()==2){
+					oql += " and categories.id in ("+budgetOff.getId()+") ";
 				}
 	        }
 			// Type of assistance
-			if (filter.getTypeAssistanceId() != null && !filter.getTypeAssistanceId().equals(0l)) {
-				oql += " and f.typeOfAssistance in ("+filter.getTypeAssistanceId()+") ";
+			if (filter.getSeltypeofassistence() != null) {
+				oql += " and f.typeOfAssistance in ("+QueryUtil.getInStatement(filter.getSeltypeofassistence())+") ";
 	        }
 			// Financing instrument
-			if (filter.getFinancingInstrumentId() != null && !filter.getFinancingInstrumentId().equals(0l)) {
-				oql += " and f.financingInstrument in ("+filter.getFinancingInstrumentId()+") ";
+			
+			if (filter.getSelfinancingInstruments() != null) {
+				oql += " and f.financingInstrument in ("+QueryUtil.getInStatement(filter.getSelfinancingInstruments())+") ";
 	        }
 			// Structure Types
 			if(structureTypeCondition){
@@ -679,13 +700,13 @@ public class DbHelper {
         try {
             session = PersistenceManager.getRequestDBSession();
             q = session.createQuery(queryString.toString());
-            q.setString("name", name);
+            q.setString("name", name.trim());
             result = (ArrayList) q.list();
             if (result.size()>0){
             	stt = (AmpStructureType) result.get(0);
             }
         } catch (Exception ex) {
-            logger.error("Unable to get Amp Structure Type from database ", ex);
+            logger.error("Unable to get Amp Structure Type from database "+name+" ", ex);
         }
         return stt;
 	}

@@ -71,17 +71,32 @@ public class LaunchDashboard extends Action {
 			dForm.setGraphList(list);
 		}
 		if (dashId!=null){
+			Long graphId = request.getParameter("graphId") != null ? Long.parseLong(request.getParameter("graphId")) : null;
+			
 			Long dId = Long.parseLong(dashId);
 			dashboard = org.digijava.module.visualization.util.DbUtil.getDashboardById(dId);
 			DashboardFilter filter = new DashboardFilter();
 			initializeFilter(filter, request);
+			dForm.setDashboard(dashboard);
 			dForm.setFilter(filter);
+			dForm.getFilter().setAgencyType(dashboard.getPivot());
+			dForm.getFilter().setAgencyTypeFilter(dashboard.getPivot());
+			dForm.getFilter().setAgencyTypeQuickFilter(dashboard.getPivot());
 			List<AmpDashboardGraph> listDG = org.digijava.module.visualization.util.DbUtil.getDashboardGraphByDashboard(dId);
 			list = new ArrayList<AmpGraph>();
 			//If a dashboard is executed from the menu, it will show all graphs in the dashboard by default
 			for (Iterator iterator = listDG.iterator(); iterator.hasNext();) {
 				AmpDashboardGraph ampDashboardGraph = (AmpDashboardGraph) iterator.next();
-				list.add(ampDashboardGraph.getGraph());
+
+				AmpGraph graph = ampDashboardGraph.getGraph();
+				if (graphId != null){//Only a graph must be shown
+					if (graphId.equals(graph.getId())){
+						list.add(graph);
+						break;
+					}
+				}else{
+					list.add(graph);
+				}
 			}
 			dForm.setGraphList(list);
 			//If a dashboard is executed from the menu, it will show all rank lists available by default
@@ -175,6 +190,9 @@ public class LaunchDashboard extends Action {
 		
 		dForm.getFilter().setFromGenerator(true);
 		
+		if (request.getParameter("graphId") != null){
+			return mapping.findForward("showGraph");
+		}
 		return mapping.findForward("forward");
 
 	}

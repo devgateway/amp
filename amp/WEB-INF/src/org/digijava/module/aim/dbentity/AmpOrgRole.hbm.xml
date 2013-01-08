@@ -8,7 +8,7 @@
 				<param name="sequence">AMP_ORG_ROLE_seq</param>
 			</generator>
 		</id>
-		<property name="percentage" column="percentage" type="java.lang.Double"></property>
+		<property name="percentage" column="percentage" type="java.lang.Float"></property>
 		<property name="additionalInfo" column="additional_info" type="java.lang.String" />
 		<property name="budgetCode" column="budget_code" type="java.lang.Long" />
 		<many-to-one name="activity" class="org.digijava.module.aim.dbentity.AmpActivityVersion"

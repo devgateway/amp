@@ -640,10 +640,10 @@ public class AddAmpActivity extends Action {
           return mapping.findForward("addActivityStep13");
       }
       else if (eaForm.getStep().equals("9")) { // show the preview page.
-    	  if(eaForm.getActivityExists().equalsIgnoreCase("yes")){
+    	  if (eaForm.getActivityExists().equalsIgnoreCase("yes")) {
     		  return showStep9(mapping, request, session, teamMember, eaForm, logframepr,action);
-    	  }else{
-    		  return mapping.findForward("preview");
+    	  } else {
+    		  return eaForm.isPopupView() ? mapping.findForward("popupPreview") : mapping.findForward("preview");
     	  }
 		 
       }
@@ -1341,7 +1341,7 @@ private ActionForward showStep9(ActionMapping mapping,
 	          if (request.getParameter("previewPopin") != null || logframepr.compareTo("true") == 0) {
 	        	  return mapping.findForward("previewPopin");
 	          } else {
-	          	return mapping.findForward("preview");
+	        	  return eaForm.isPopupView() ? mapping.findForward("popupPreview") : mapping.findForward("preview");
 	          }
 	        }
 }

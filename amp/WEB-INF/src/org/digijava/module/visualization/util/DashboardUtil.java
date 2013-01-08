@@ -74,7 +74,7 @@ public class DashboardUtil {
 		return sortByValue (map);
 	}
 	
-	public static Map<AmpSector, BigDecimal> getRankSectorsByKey(Collection<AmpSector> secList,  DashboardFilter filter) throws DgException{
+	public static Map<AmpSector, BigDecimal> getRankSectorsByKey(Collection<AmpSector> secListChildren, Collection<AmpSector> secListParent,  DashboardFilter filter) throws DgException{
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
@@ -82,7 +82,8 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        map = DbUtil.getFundingBySectorList(secList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
+        if (secListChildren!=null && secListChildren.size()!=0)
+        	map = DbUtil.getFundingBySectorList(secListChildren, secListParent, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map);
 	}
 	
@@ -94,7 +95,13 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        AmpCategoryValueLocations natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation()!=null? getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation(): getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[1]).getParentLocation();
+        AmpCategoryValueLocations tempLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation();
+        AmpCategoryValueLocations natLevelLocation = new AmpCategoryValueLocations();
+        if (tempLocation != null)
+        	natLevelLocation = tempLocation;
+        else if(regList.size() > 1)
+        	natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[1]).getParentLocation();
+
         AmpCategoryValueLocations tempLoc = new AmpCategoryValueLocations();
 		tempLoc.setName(TranslatorWorker.translateText("National"));
 		tempLoc.setId(natLevelLocation.getId());
@@ -109,7 +116,7 @@ public class DashboardUtil {
 		newFilter.setSelLocationIds(ids2);
 		DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 		BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-		if (!total.equals(BigDecimal.ZERO))
+		if (total.compareTo(BigDecimal.ZERO) == 1)
 			map.put(tempLoc2, total);
         return sortByValue (map);
 	}
@@ -122,7 +129,8 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        map = DbUtil.getFundingByProgramList(progList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
+        if (progList!=null && progList.size()!=0)
+        	map = DbUtil.getFundingByProgramList(progList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map);
 	}
 	
@@ -133,7 +141,8 @@ public class DashboardUtil {
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
-        map = DbUtil.getFundingByActivityList(actList, filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator);
+		if (actList!=null && actList.size()!=0)
+        	map = DbUtil.getFundingByActivityList(actList, filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator);
         return sortByValue (map);
 	}
 	
@@ -249,14 +258,15 @@ public class DashboardUtil {
             AmpActivityVersion activity = new AmpActivityVersion(ampActivityId, name, ampId);
             activityList.put(ampActivityId, activity);
         }
-        Collection<AmpSector> sectorListReduced = DbUtil.getSectors(filter);
+        List<AmpSector> sectorListChildren = DbUtil.getSectors(filter);
+        Collection<AmpSector> sectorListParent = DashboardUtil.getTopLevelParentList(sectorListChildren);
         Collection<AmpTheme> NPOListReduced = DbUtil.getPrograms(filter, true);
         Collection<AmpTheme> programListReduced = DbUtil.getPrograms(filter, false);
 		Collection<AmpCategoryValueLocations> regionListReduced = DbUtil.getRegions(filter);
 		Collection<AmpOrganisation> agencyListReduced = DbUtil.getAgencies(filter);
 		
 		HashMap<Long, AmpSector> sectorList = new HashMap<Long, AmpSector>();
-        iter = sectorListReduced.iterator();
+        iter = sectorListParent.iterator();
         while (iter.hasNext()) {
         	AmpSector sec = (AmpSector)iter.next();
             sectorList.put(sec.getAmpSectorId(), sec);
@@ -318,7 +328,7 @@ public class DashboardUtil {
 		        		form.getRanksInformation().setFullSectors(null);
 				        form.getRanksInformation().setTopSectors(null);
 					} else {
-						form.getRanksInformation().setFullSectors(getRankSectorsByKey(sectorListReduced, form.getFilter()));
+						form.getRanksInformation().setFullSectors(getRankSectorsByKey(sectorListChildren, sectorListParent, form.getFilter()));
 						form.getRanksInformation().setTopSectors(getTop(form.getRanksInformation().getFullSectors(),form.getFilter().getTopLists()));
 					}
 				} 
@@ -355,7 +365,7 @@ public class DashboardUtil {
 		        }
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep8);
 				if (filter.getShowNPORanking()==null || filter.getShowNPORanking() || isInGraphInList(form.getGraphList(),"NPOProfile")) {
-					if (activityList==null || activityList.size()==0) {
+					if (NPOListReduced==null || NPOListReduced.size()==0) {
 		        		form.getRanksInformation().setFullNPOs(null);
 			        	form.getRanksInformation().setTopNPOs(null);
 					} else {
@@ -365,7 +375,7 @@ public class DashboardUtil {
 				} 
 		        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep9);
 				if (filter.getShowProgramsRanking()==null || filter.getShowProgramsRanking() || isInGraphInList(form.getGraphList(),"ProgramProfile")) {
-					if (activityList==null || activityList.size()==0) {
+					if (programListReduced==null || programListReduced.size()==0) {
 		        		form.getRanksInformation().setFullPrograms(null);
 			        	form.getRanksInformation().setTopPrograms(null);
 					} else {
@@ -391,10 +401,14 @@ public class DashboardUtil {
 			form.getRanksInformation().setFullSectors(null);
 			form.getRanksInformation().setFullRegions(null);
 			form.getRanksInformation().setFullProjects(null);
+			form.getRanksInformation().setFullNPOs(null);
+			form.getRanksInformation().setFullPrograms(null);
 			form.getRanksInformation().setTopOrganizations(null);
 			form.getRanksInformation().setTopSectors(null);
 			form.getRanksInformation().setTopRegions(null);
 			form.getRanksInformation().setTopProjects(null);
+			form.getRanksInformation().setTopNPOs(null);
+			form.getRanksInformation().setTopPrograms(null);
 		}
 	}
     
@@ -417,7 +431,7 @@ public class DashboardUtil {
 		Collection<AmpTheme> col = new ArrayList<AmpTheme>();
 		col.add(prog);
 		if ( prog.getSiblings() != null ) {
- 	 		for ( AmpTheme th: prog.getChildren() )
+ 	 		for ( AmpTheme th: prog.getSiblings() )
  	 			col.addAll(getProgramsDescendents(th));
  	 	}
  	 	return col;

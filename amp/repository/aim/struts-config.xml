@@ -1196,6 +1196,7 @@
     <action name="aimEditActivityForm" path="/aim/previewActivity" scope="session" type="org.digijava.module.aim.action.AddAmpActivity">
       <forward name="previewPopin" path="/showLayout.do?layout=previewActivityPopin" />
       <forward name="preview" path="/showLayout.do?layout=previewActivity" />
+      <forward name="popupPreview" path="/showLayout.do?layout=popupActivityPreview" />
       <forward name="previewLogframe" path="/showLayout.do?layout=previewLogframe" />
       <forward name="publicPreview" path="/showLayout.do?layout=aim_publicActivityPreview" />
       <forward name="index" path="/aim/index.do" redirect="true" />

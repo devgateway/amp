@@ -162,6 +162,11 @@ function resetToDefaults(){
 	unCheckOptions("zone_check");
 	unCheckOptions("sub_sector_check");
 	unCheckOptions("structures_check");
+	unCheckOptions("aidmodality_check");
+	unCheckOptions("typeofassis_check");
+	unCheckOptions("projectst_check");
+	unCheckOptions("orgtypes_check");
+	
 	
 	if (document.getElementById("workspace_only")!=null){
 		document.getElementById("workspace_only").checked = false;
@@ -176,10 +181,6 @@ function resetToDefaults(){
 	
 	document.getElementById("startYear_dropdown").value = document.getElementById("defaultStartYear").value;
 	document.getElementById("endYear_dropdown").value = document.getElementById("defaultEndYear").value;
-	document.getElementById("project_status_id").selectedIndex = 0;
-	document.getElementById("type_assistance_id").selectedIndex = 0;
-	document.getElementById("financing_instrument_id").selectedIndex = 0;
-	document.getElementById("organization_type_dropdown_ids").selectedIndex = 0;
 	document.getElementById("budget_dropdown").selectedIndex = 0;
 	applyFilterPopin();
 }
@@ -205,7 +206,7 @@ function unCheckOptions (obj){
 }
 
 function changeTab (selected){
-	for(var i=0;i<4;i++){
+	for(var i=0;i<8;i++){
 		if(i!=selected){
 			$("#general_selector_"+i).removeClass("side_opt_sel");	
 		}
@@ -218,6 +219,11 @@ function changeTab (selected){
 	$("#regionDivContent").css("display","none");
 	$("#sectorDivContent").css("display","none");
 	$("#structuresDivContent").css("display","none");
+	$("#aidmodalityDivContent").css("display","none");
+	$("#typeofassisDivContent").css("display","none");
+	$("#projectstatusDivContent").css("display","none");
+	$("#orgtypeDivContent").css("display","none");
+	
 	if(selected!=0){
 		clearAllLocalSearchResults();
 	}
@@ -237,7 +243,19 @@ function changeTab (selected){
 		$("#sectorDivContent").css("display","block");
 		break;
 	case 4:
+		$("#orgtypeDivContent").css("display","block");
+		break;
+	case 8:
 		$("#structuresDivContent").css("display","block");
+		break;
+	case 5:
+		$("#aidmodalityDivContent").css("display","block");
+		break;
+	case 6:
+		$("#typeofassisDivContent").css("display","block");
+		break;
+	case 7:
+		$("#projectstatusDivContent").css("display","block");
 		break;
 	default:
 		break;
@@ -428,9 +446,9 @@ var callbackApplyFilterCall = {
 				  if(map.getLayer("highlightMap") !== undefined && map.getLayer("highlightMap").visible){
 					  refreshHighlight = true;
 					}
+				  getStructures(true);
 				  getSelectedFilter();
 				  getActivities(true);
-				  getStructures(true);
 				}
 				catch (e) {
 				    alert("Invalid response.");
@@ -565,10 +583,7 @@ function applyFilterPopin(e){
 			document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
 		}
 	}
-	document.getElementById("organizationsTypeId").value = document.getElementById("organization_type_dropdown_ids").options[document.getElementById("organization_type_dropdown_ids").selectedIndex].value;
-	document.getElementById("typeAssistanceId").value = document.getElementById("type_assistance_id").options[document.getElementById("type_assistance_id").selectedIndex].value;
-	document.getElementById("projectStatusId").value = document.getElementById("project_status_id").options[document.getElementById("project_status_id").selectedIndex].value;
-	document.getElementById("financingInstrumentId").value = document.getElementById("financing_instrument_id").options[document.getElementById("financing_instrument_id").selectedIndex].value;
+	document.getElementById("onBudget").value = document.getElementById("budget_dropdown").options[document.getElementById("budget_dropdown").selectedIndex].value;
 	
 	var params = "";
 	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
@@ -579,7 +594,10 @@ function applyFilterPopin(e){
 	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
 	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);
 	params = params + "&structuresIds=" + getSelectionsFromElement("structures_check",false);
-
+	params = params + "&aidmodalityIds=" + getSelectionsFromElement("aidmodality_check",false);
+	params = params + "&typeofassissIds=" + getSelectionsFromElement("typeofassis_check",false);
+	params = params + "&projectstIds=" + getSelectionsFromElement("projectst_check",false);
+	params = params + "&orgtypesIds=" + getSelectionsFromElement("orgtypes_check",false);
 	
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	

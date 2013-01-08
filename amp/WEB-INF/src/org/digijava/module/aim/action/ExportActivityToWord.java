@@ -1725,9 +1725,8 @@ public class ExportActivityToWord extends Action {
 					.isVisibleModule(
 							"/Activity Form/Components/Component/Components Expenditures",
 							ampContext);
-
-			for (Components<FundingDetail> comp : myForm.getComponents()
-					.getSelectedComponents()) {
+			if (myForm.getComponents().getSelectedComponents() != null) {
+				for (Components<FundingDetail> comp : myForm.getComponents().getSelectedComponents()) {
 				if (!GlobalSettings.getInstance()
 						.getShowComponentFundingByYear()) {
 					ExportSectionHelper eshCompFundingDetails = new ExportSectionHelper(
@@ -1827,6 +1826,7 @@ public class ExportActivityToWord extends Action {
 							request, ampContext));
 				}
 			}
+		}
 		}
 
 

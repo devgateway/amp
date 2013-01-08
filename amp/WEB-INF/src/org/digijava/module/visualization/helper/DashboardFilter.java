@@ -130,7 +130,8 @@ public class DashboardFilter {
     	DashboardFilter newFilter = new DashboardFilter();
     	
     	newFilter.setCurrencyId(this.getCurrencyId());
-    	newFilter.setSelOrgIds(this.getOrgIds());
+    	newFilter.setSelOrgIds(this.getSelOrgIds());
+    	newFilter.setSelOrgGroupIds(this.getSelOrgGroupIds());
     	newFilter.setOrgGroupIds(this.getOrgGroupIds());
     	newFilter.setOrgGroupId(this.getOrgGroupId());
     	newFilter.setTeamMember(this.getTeamMember());
@@ -147,6 +148,8 @@ public class DashboardFilter {
     	newFilter.setSelProgramIds(this.getSelProgramIds());
     	newFilter.setSelCVIds(this.getSelCVIds());
     	newFilter.setBudgetCVIds(this.getBudgetCVIds());
+    	newFilter.setDivideThousands(this.getDivideThousands());
+    	newFilter.setShowAmountsInThousands(this.getShowAmountsInThousands());
     	return newFilter;
     }
 	

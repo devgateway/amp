@@ -26,7 +26,8 @@ import java.io.FileInputStream;
 public class ReportTableProxy extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         String configName = request.getParameter("configName");
-        FileInputStream htmlFileIS = new FileInputStream(ConfigurationUtil.getHTMLPathForConfig(configName));
+        FileInputStream htmlFileIS = new FileInputStream(ConfigurationUtil.getHTMLPathForConfig(request.getSession().getServletContext(),
+                configName));
         response.setContentType("text/html");
         ServletOutputStream sos = response.getOutputStream();
         IOUtils.copy(htmlFileIS, sos);

@@ -3,7 +3,6 @@
  */
 package org.digijava.module.budgetexport.reports.implementation;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -71,7 +70,7 @@ public class BudgetReportHeadingsXLS extends ReportHeadingsXLS {
 				
 			//	this.createHeadingBorders(0);
 				
-				this.createHeaderCells();
+				this.createMachineFriendlyHeaderCells();
 				
 				rowId.inc();
 				colId.reset();
@@ -109,19 +108,8 @@ public class BudgetReportHeadingsXLS extends ReportHeadingsXLS {
 		}
 	}
 	
-	protected void createHeaderCells () {
-		ArrayList<String> cellValues	= new ArrayList<String>();
-		this.prepareHeaderCellsList(null, null, cellValues);
-		if ( cellValues != null ) {
-			for (String val : cellValues) {
-				HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
-				cell1.setCellValue( val );
-				colId.inc();
-			}
-		}
-	}
-	
-	protected void prepareHeaderCellsList (List columns, String parentName, List<String> cellValues) {
+	@Override
+	protected void prepareMachineFriendlyHeaderCellsList (List columns, String parentName, List<String> cellValues) {
 		if ( columns == null ) {
 			ColumnReportData columnReport = (ColumnReportData) item;
 			columns			= columnReport.getItems();
@@ -136,7 +124,7 @@ public class BudgetReportHeadingsXLS extends ReportHeadingsXLS {
 					List items 	= tempCol.getItems();
 					String name	 = (parentName == null)?colName:parentName + " - " + colName;
 					if ( items != null && items.size() > 0 && items.get(0) instanceof Column ) {
-						this.prepareHeaderCellsList(items, name, cellValues);
+						this.prepareMachineFriendlyHeaderCellsList(items, name, cellValues);
 					}
 					else {
 						cellValues.add(name);

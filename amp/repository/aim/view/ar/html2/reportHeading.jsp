@@ -57,7 +57,7 @@
 		</logic:notEmpty>
   		<td nowrap="nowrap" class="reportHeader" onclick="sortHierarchy( '${repHierarchy.column.columnName}', '${hSortOrder}' )"
   		rowspan="${columnReport.maxColumnDepth+1}">
-  			${repHierarchy.column.columnName} 
+  			<digi:trn>${repHierarchy.column.columnName}</digi:trn> 
   			<c:if test="${sortIconPath!=''}">
   				<img src= "${sortIconPath}" align="absmiddle" border="0"/>
   			</c:if>

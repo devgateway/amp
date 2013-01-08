@@ -64,7 +64,7 @@ public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
 	
 	public static List<AmpOrganisation> getDonorOrganisationByGroupId(
-			Long orgGroupId, boolean publicView) {
+			Long orgGroupId, boolean publicView, DashboardFilter filter) {
         Session session = null;
         Query q = null;
         List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
@@ -72,7 +72,12 @@ public class DbUtil {
         if (publicView) {
             queryString.append(" inner join orgRole.activity act  inner join act.team tm ");
         }
-        queryString.append(" where  role.roleCode='DN' ");
+        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY)
+        	queryString.append(" where  role.roleCode='EA' ");
+        else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        	queryString.append(" where  role.roleCode='BA' ");
+        else
+			queryString.append(" where  role.roleCode='DN' ");
          if (orgGroupId != null&&orgGroupId !=-1) {
             queryString.append(" and org.orgGrpId=:orgGroupId ");
         }
@@ -551,7 +556,7 @@ public class DbUtil {
 	            logger.error(e);
 	            throw new DgException("Cannot load sectors from db", e);
 	        }
-	        return DashboardUtil.getTopLevelParentList(sectors);
+	        return sectors;
     	}
      }
     
@@ -587,6 +592,7 @@ public class DbUtil {
             oql += " inner join f.ampActivityId act ";
             oql += " inner join act.sectors actSec ";
             oql += " inner join actSec.sectorId sec ";
+            oql += " inner join actSec.classificationConfig config ";
             oql += " inner join act.actPrograms actProg ";
             oql += " inner join actProg.program prog ";
             if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
@@ -599,13 +605,9 @@ public class DbUtil {
             if (locationCondition) {
                 oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
             }
-            oql += "  where fd.adjustmentType.value =:adjustmentType";
+            oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
             oql += " and fd.transactionType =:transactionType  ";
-            if (NPO) {
-            	oql += "  and prog.parentThemeId in (select aaps.defaultHierarchy from " + AmpActivityProgramSettings.class.getName() + " aaps where aaps.name='National Plan Objective') "; 
-			} else {
-				oql += "  and prog.parentThemeId in (select aaps.defaultHierarchy from " + AmpActivityProgramSettings.class.getName() + " aaps where aaps.name='Primary Program') "; 
-			}
+            
             if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
                 if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
                     oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
@@ -634,9 +636,6 @@ public class DbUtil {
                 oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
             }
 
-            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
-            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.id =:configId) "; 
-            
             if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
     			oql += ActivityUtil.getNonDraftActivityQueryString("act");
     		}
@@ -651,7 +650,7 @@ public class DbUtil {
             //    query.setLong("orgGroupId", orgGroupId);
             //}
             query.setLong("transactionType", transactionType);
-            query.setLong("configId", filter.getSelSectorConfigId());
+            query.setLong("config", filter.getSelSectorConfigId());
             query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 
             programs = query.list();
@@ -660,8 +659,41 @@ public class DbUtil {
             logger.error(e);
             throw new DgException("Cannot load sectors from db", e);
         }
-        return programs;
+        AmpActivityProgramSettings sett = null;
+        if (NPO) {
+        	sett = getProgramSettingByName("National Plan Objective");
+		} else {
+			sett = getProgramSettingByName("Primary Program");
+		}
+        List<AmpTheme> programs2 = new ArrayList<AmpTheme>();
+        for (Iterator iterator = programs.iterator(); iterator.hasNext();) {
+			AmpTheme ampTheme = (AmpTheme) iterator.next();
+			if (sett.getDefaultHierarchyId()== DashboardUtil.getTopLevelProgram(ampTheme).getParentThemeId().getAmpThemeId())
+				programs2.add(ampTheme);
+		}
+        return programs2;
 	}
+    
+    public static AmpActivityProgramSettings getProgramSettingByName(String name) {
+        Session session = null;
+        AmpActivityProgramSettings sett = null;
+        Iterator itr = null;
+		
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select aaps from " + AmpActivityProgramSettings.class.getName() 
+            + " aaps where aaps.name='"+name+"'";
+            Query qry = session.createQuery(queryString);
+            qry = session.createQuery(queryString);
+			itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				sett = (AmpActivityProgramSettings) itr.next();
+			}
+        } catch (Exception ex) {
+            logger.error("Unable to get Program Setting from database", ex);
+        }
+        return sett;
+    }
     
     public static List getActivities(DashboardFilter filter, Date startDate,
             Date endDate, Long assistanceTypeId,
@@ -803,31 +835,6 @@ public class DbUtil {
 
      }
       
-    public static Long[] getAllDescendants(Long[] sectorIds) {
-        // Make it recursive carefully
-    	List<Long> tempSectorIds = new ArrayList<Long>();
-        List<AmpSector> sectors = new ArrayList<AmpSector>();
-    	for(Long sectorId : sectorIds){
-            sectors.add(getAmpSector(sectorId));
-            List<AmpSector> childrenSectors = getAmpSubSectors(sectorId);
-            if(childrenSectors!=null){
-                sectors.addAll(childrenSectors);
-                 for (AmpSector sector : childrenSectors) {
-                    List<AmpSector> grandChildren = getAmpSubSectors(sector.getAmpSectorId());
-                    if( grandChildren!=null){
-                         sectors.addAll(grandChildren);
-                    }
-                }
-            }
-    	}
-        Iterator<AmpSector> it = sectors.iterator();
-        while(it.hasNext()){
-        	AmpSector currentSector = it.next();
-        	tempSectorIds.add(currentSector.getAmpSectorId());
-        }
-		return (Long[]) tempSectorIds.toArray(new Long[0]);
-	}
-
 	public static List<AmpOrganisation> getAgencies(DashboardFilter filter) throws DgException {
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         List<AmpOrganisation> agencies = new ArrayList<AmpOrganisation>();
@@ -1009,7 +1016,18 @@ public class DbUtil {
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
         boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
+        if (((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1)) 
+        	&& ((filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY))){
+			if (locationCondition && sectorCondition) {
+				oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
+	        } else if (locationCondition)  {
+	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,orole.percentage,fd.fixedExchangeRate) ";
+	        } else if (sectorCondition)  {
+	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
+	        } else {
+	            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,orole.percentage,fd.fixedExchangeRate) ";
+	        }
+		} else if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
         	if (locationCondition && sectorCondition) {
 	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
 	        } else if (locationCondition)  {
@@ -1411,7 +1429,15 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
 
-        oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
+        oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name";
+        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
+        	oql += ", actProg.programPercentage ";
+        if (locationCondition)
+        	oql += ", actloc.locationPercentage ";
+        if (sectorCondition)
+        	oql += ", actsec.sectorPercentage ";
+        
+        oql += " from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
     	
     	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
         	oql += " inner join act.ampActivityGroupCached actGroup ";
@@ -1420,6 +1446,10 @@ public class DbUtil {
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
+    	 if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
+         	oql += " inner join act.actPrograms actProg ";
+            oql += " inner join actProg.program prog ";
+ 		}
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         if (sectorCondition) {
@@ -1442,7 +1472,10 @@ public class DbUtil {
         if (financingInstrumentId != null) {
             oql += "   and f.financingInstrument=:financingInstrumentId  ";
         }
-
+        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
+        	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
+		}
+        
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) 
                 oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType());
@@ -1498,7 +1531,14 @@ public class DbUtil {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	
-            	AmpFundingDetail currentFd = (AmpFundingDetail) item[0];
+            	AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	if (item.length==4) 
+            		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
+            	if (item.length==5) 
+            		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            	if (item.length==6) 
+            		currentFd.setTransactionAmount(((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if(hm.containsKey(id)){
@@ -1563,7 +1603,13 @@ public class DbUtil {
             Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
         
 		Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
-		Long[] orgIds = filter.getSelOrgIds();
+		Long[] orgIds = new Long[orgList.size()];
+		int i = 0;
+		for (Iterator iterator = orgList.iterator(); iterator.hasNext();) {
+			Long long1 = (Long) iterator.next();
+			orgIds[i++] = long1;
+		}
+		//Long[] orgIds = filter.getSelOrgIds();
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         
         TeamMember tm = filter.getTeamMember();
@@ -1574,8 +1620,18 @@ public class DbUtil {
 
     	DecimalWraper total = null;
         String oql = "";
-
-        oql = "select fd, f.ampDonorOrgId.ampOrgId, f.ampDonorOrgId.name from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
+        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        	oql = "select fd, roleOrg.ampOrgId, roleOrg.name";
+        else 
+        	oql = "select fd, f.ampDonorOrgId.ampOrgId, f.ampDonorOrgId.name";
+		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+			oql += ", orole.percentage ";
+		if (locationCondition)
+        	oql += ", actloc.locationPercentage ";
+        if (sectorCondition)
+        	oql += ", actsec.sectorPercentage ";
+        
+        oql += " from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
     	
     	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
         	oql += " inner join act.ampActivityGroupCached actGroup ";
@@ -1583,9 +1639,9 @@ public class DbUtil {
         	oql += " inner join act.ampActivityGroup actGroup ";
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+        //if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-    			oql += " inner join act.orgrole orole inner join orole.role role ";
+    			oql += " inner join act.orgrole orole inner join orole.role role inner join orole.organisation roleOrg ";
         if (sectorCondition) {
             oql += "  inner join act.sectors actsec ";
             oql += "  inner join actsec.classificationConfig config  ";
@@ -1598,7 +1654,7 @@ public class DbUtil {
         
         oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-        oql += " and f.ampDonorOrgId in (" + DashboardUtil.getInStatement(orgList.toArray()) + ")";
+        //oql += " and f.ampDonorOrgId in (" + DashboardUtil.getInStatement(orgList.toArray()) + ")";
 
        
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
@@ -1650,7 +1706,14 @@ public class DbUtil {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	
-            	AmpFundingDetail currentFd = (AmpFundingDetail) item[0];
+            	AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	if (item.length==4 && item[3] != null) 
+            		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
+            	if (item.length==5) 
+            		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            	if (item.length==6) 
+            		currentFd.setTransactionAmount(((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if(hm.containsKey(id)){
@@ -1711,7 +1774,7 @@ public class DbUtil {
         return map;
     }
 	
-	public static Map<AmpSector, BigDecimal> getFundingBySectorList(Collection<AmpSector> secList, String currCode,  Date startDate,
+	public static Map<AmpSector, BigDecimal> getFundingBySectorList(Collection<AmpSector> secListChildren, Collection<AmpSector> secListParent, String currCode,  Date startDate,
             Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
         
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
@@ -1727,7 +1790,15 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
 
-        oql = "select fd, sec.ampSectorId, sec.name from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
+        oql = "select fd, sec.ampSectorId, sec.name ";
+        //if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
+        	//oql += ", actProg.programPercentage ";
+        if (locationCondition)
+        	oql += ", actloc.locationPercentage ";
+        //if (sectorCondition)
+        	oql += ", actsec.sectorPercentage ";
+
+        oql += "from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
     	
     	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
         	oql += " inner join act.ampActivityGroupCached actGroup ";
@@ -1750,7 +1821,13 @@ public class DbUtil {
         
         oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-        oql += " and sec.ampSectorId in (" + DashboardUtil.getInStatement(secList) + ")";
+        oql += " and sec.ampSectorId in (" + DashboardUtil.getInStatement(secListChildren) + ")";
+        
+        //Mapping the subsectors with their parents
+        HashMap<Long, Long> sectorMap = new HashMap<Long, Long>();
+        for(AmpSector currentSector : secListChildren ){
+        	sectorMap.put(currentSector.getAmpSectorId(), DashboardUtil.getTopLevelParent(currentSector).getAmpSectorId());
+        }
 
        
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
@@ -1796,7 +1873,7 @@ public class DbUtil {
             fundingDets = query.list();
 
             HashMap<Long, AmpSector> sectorParentList = new HashMap<Long, AmpSector>();
-            Iterator iter = secList.iterator();
+            Iterator iter = secListParent.iterator();
             while (iter.hasNext()) {
             	AmpSector sec = (AmpSector)iter.next();
             	AmpSector sec2 = DashboardUtil.getTopLevelParent(sec);
@@ -1809,10 +1886,23 @@ public class DbUtil {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	
-            	AmpFundingDetail currentFd = (AmpFundingDetail) item[0];
+            	AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	if (item.length==4) 
+            		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
+            	if (item.length==5) 
+            		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            	if (item.length==6) 
+            		currentFd.setTransactionAmount(((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
-            	String name = sectorParentList.get(id).getName();
-            	id = sectorParentList.get(id).getAmpSectorId();
+            	String name = (String) item[2];
+            	if (!sectorCondition) {
+            		if(sectorParentList.get(id) == null){
+            			id = sectorMap.get(id);
+            		}
+            		name = sectorParentList.get(id).getName();
+                	id = sectorParentList.get(id).getAmpSectorId();
+            	}
             	if(hm.containsKey(id)){
             		ArrayList<AmpFundingDetail> afda = hm.get(id);
             		afda.add(currentFd);
@@ -1887,7 +1977,14 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
 
-        oql = "select fd, loc.id, loc.name from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
+        oql = "select fd, loc.id, loc.name ";
+        //if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
+        //	oql += ", actProg.programPercentage ";
+        //if (locationCondition)
+        	oql += ", actloc.locationPercentage ";
+        if (sectorCondition)
+        	oql += ", actsec.sectorPercentage ";
+        oql += "from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
     	
     	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
         	oql += " inner join act.ampActivityGroupCached actGroup ";
@@ -1973,10 +2070,10 @@ public class DbUtil {
             	
             	AmpFundingDetail currentFd = (AmpFundingDetail) item[0];
             	Long id = (Long) item[1];
-            	String name = "";
-            	if (id.equals(new Long(natLoc.getId()))){
+            	String name = (String) item[2];
+            	if (natLoc != null && id.equals(new Long(natLoc.getId()))){
             		name = natLoc.getName();
-            	} else {
+            	} else if (!locationCondition) {
             		name = locationParentList.get(id).getName();
             		id = locationParentList.get(id).getId();
             	}
@@ -2054,7 +2151,14 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
 
-        oql = "select fd, prog.ampThemeId, prog.name from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
+        oql = "select fd, prog.ampThemeId, prog.name ";
+        oql += ", actProg.programPercentage ";
+        if (locationCondition)
+        	oql += ", actloc.locationPercentage ";
+        if (sectorCondition)
+        	oql += ", actsec.sectorPercentage ";
+        
+        oql += " from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
     	
         oql += " inner join act.actPrograms actProg ";
         oql += " inner join actProg.program prog ";
@@ -2141,11 +2245,17 @@ public class DbUtil {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	
-            	AmpFundingDetail currentFd = (AmpFundingDetail) item[0];
+            	AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	if (item.length==4) 
+            		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
+            	if (item.length==5) 
+            		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            	if (item.length==6) 
+            		currentFd.setTransactionAmount(((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
-            	String name = (String) item[2];
-            	//String name = programParentList.get(id).getName();
-            	//id = programParentList.get(id).getAmpThemeId();
+            	String name = programParentList.get(id).getName();
+            	id = programParentList.get(id).getAmpThemeId();
             	if(hm.containsKey(id)){
             		ArrayList<AmpFundingDetail> afda = hm.get(id);
             		afda.add(currentFd);

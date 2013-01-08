@@ -117,8 +117,7 @@ public class ShowGisDashboard extends Action {
 			if( CurrencyUtil.isRate(element.getCurrencyCode())== true){
 				gisForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
 			}
-		}
-	    
+	    }	    	    
 	    //calendars 
 	    Collection<AmpFiscalCalendar> allFisCalenders = org.digijava.module.aim.util.DbUtil.getAllFisCalenders();
 	    gisForm.setCalendars(allFisCalenders);

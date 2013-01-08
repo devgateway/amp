@@ -61,7 +61,7 @@
 
 	 <service id="XmlPatcherService" class="org.digijava.module.xmlpatcher.core.XmlPatcherService">
             <description>XML Patcher Module</description>
-            
+            <property name="schedulerName">NaturalLocationOrderXmlPatcherScheduler</property>
             <!--
 			By adding those two properties, the patcher will read first any patch from any folder that contains
 			..AMP113a.. first and then ... AMP113b... etc...

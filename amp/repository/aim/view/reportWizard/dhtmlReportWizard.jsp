@@ -202,7 +202,8 @@
 		var badSymbolNumberMsg = '<digi:trn key="rep:format:badSymbolNumber">Symbols can not be a number</digi:trn>';
 		var badGorupSize = '<digi:trn key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
 		var badYearRange = '<digi:trn key="rep:format:badYearRange">Year Range To should be greater than From</digi:trn>';
-		
+
+		var filterPanelNameText = '${filterPanelName}' + ': ' + '${aimReportWizardForm.reportTitle}';
 		
 		repManagerParams	= {
 									desktopTab: ${myForm.desktopTab},
@@ -212,8 +213,8 @@
 									filterProblemsMessage: "${filterProblemsMessage}",
 									failureMessage: "${failureMessage}",
 									savingDataMessage: "${savingDataMessage}",
-									filterPanelName: "${filterPanelName}",
-                                                                        settingsPanelName: "${settingsPanelName}",
+									filterPanelName: filterPanelNameText, 
+                                    settingsPanelName: "${settingsPanelName}",
 									cannotSaveFiltersMessage: "${cannotSaveFiltersMessage}",
 									savingRepTabMessage: "${savingMessage}",
 									previewFundingTrn: "${previewFundingNameTrn}",
@@ -297,7 +298,7 @@ body {
 			<tr>
 				<td width="768">
 					<div class="step_head_lng">
-						<div id="rgTitle" class="step_head_cont">${pageTitle}</div>
+						<div id="rgTitle" class="step_head_cont">${pageTitle}: ${aimReportWizardForm.reportTitle}</div>
 					</div>
 				</td>
 				<td width="232">&nbsp;</td>
@@ -348,13 +349,15 @@ body {
 					<div class="bd" id="titlePanelBody">
 						<html:text onkeyup="repManager.checkSteps();" onkeypress="return saveReportEngine.checkEnter(event);" property="reportTitle" styleClass="inp-text" 
 							style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
-						<c:if test="${aimReportWizardForm.desktopTab ==false }">
-							<br><br>
-							<c:set var="translation">
-								<digi:trn>Please select a category from below</digi:trn>
-							</c:set>
-							<category:showoptions  firstLine="${translation}" name="aimReportWizardForm" property="reportCategory"  keyName="<%= CategoryConstants.REPORT_CATEGORY_KEY %>" styleClass="dropdwn_sm" styleId="repCat"/>
-						</c:if>
+						<feature:display name="Reports classification"  module="Report Generator">
+							<c:if test="${aimReportWizardForm.desktopTab ==false }">
+								<br><br>
+								<c:set var="translation">
+									<digi:trn>Please select a category from below</digi:trn>
+								</c:set>
+								<category:showoptions  firstLine="${translation}" name="aimReportWizardForm" property="reportCategory"  keyName="<%= CategoryConstants.REPORT_CATEGORY_KEY %>" styleClass="dropdwn_sm" styleId="repCat"/>
+							</c:if>
+						</feature:display>
 					</div>
 					<div class="ft" align="right">
 						<button id="last_save_button" type="button" class="buttonx_dis" onclick="saveReportEngine.saveReport();" disabled="disabled">

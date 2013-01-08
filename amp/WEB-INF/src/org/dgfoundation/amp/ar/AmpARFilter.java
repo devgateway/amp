@@ -833,10 +833,9 @@ public class AmpARFilter extends PropertyListable {
 			String TYPE_OF_ASSISTANCE_FILTER = "SELECT v.pledge_id FROM v_pledges_type_of_assistance v WHERE terms_assist_code IN ("
 				+ Util.toCSString(typeOfAssistance) + ")";
 			
-			String SECTOR_FILTER = "SELECT pledge_id FROM amp_funding_pledges_sector ps, amp_sector s, amp_classification_config c "
-				+ "WHERE ps.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
-				+ "AND c.name='Primary' AND ps.amp_sector_id in ("
-				+ Util.toCSString(sectors) + ")";
+			String SECTOR_FILTER = "SELECT pledge_id FROM v_pledges_sectors ps, amp_sector s"
+				+ " WHERE ps.amp_sector_id=s.amp_sector_id"
+				+ " AND ps.amp_sector_id in ("+ Util.toCSString(sectors) + ")";
 			
 			if (donnorgAgency != null && donnorgAgency.size() > 0){
 				PledgequeryAppend(DONNOR_AGENCY_FILTER);
@@ -854,7 +853,9 @@ public class AmpARFilter extends PropertyListable {
 			if (typeOfAssistance != null && typeOfAssistance.size() > 0){
 				PledgequeryAppend(TYPE_OF_ASSISTANCE_FILTER);
 			}
-		
+			if (sectors != null && sectors.size() > 0){
+				PledgequeryAppend(SECTOR_FILTER);
+			}
 		
 			return;
 		}
@@ -1318,6 +1319,7 @@ public class AmpARFilter extends PropertyListable {
 
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
+		
 		if (!workspaceFilter &&  !this.budgetExport && ampTeams != null && ampTeams.size() > 0)
 			queryAppend(TEAM_FILTER);
 		if (statuses != null && statuses.size() > 0)

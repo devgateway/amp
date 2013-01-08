@@ -10,7 +10,7 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				DELETE FROM amp_modules_templates where module in (select id from amp_modules_visibility where name like '%/Donor Funding/Funding Item/%');
-				DELETE FROM amp_modules_visibility where name like'%/Donor Funding/Funding Item%';
+				DELETE FROM amp_modules_visibility where name like'%/Donor Funding/Funding Item/%';
 			</lang>
 		</script>
 	</apply>

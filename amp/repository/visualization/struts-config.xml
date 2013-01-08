@@ -58,6 +58,8 @@
     	<action name="visualizationform" path="/visualization/launchDashboard" scope="session" type="org.digijava.module.visualization.action.LaunchDashboard">
       		<forward name="forward" path="/showLayout.do?layout=launchDashboard"/>
     	</action>
-    
+    	<action name="visualizationform" path="/visualization/launchGraph" scope="session" type="org.digijava.module.visualization.action.LaunchDashboard">
+      		<forward name="showGraph" path="/repository/visualization/view/graphContainer.jsp"/>
+		</action>    
 	</action-mappings>
 </struts-config>

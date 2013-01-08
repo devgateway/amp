@@ -19,7 +19,9 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	private Integer defRecsPerPage;
 	
-	private Integer numberOfPagesToDisplay;
+    // The type is String because Struts1 does not support
+    // empty(null) values for Integers
+	private String numberOfPagesToDisplay;
 
 	private String language = null;
 	
@@ -355,11 +357,11 @@ public class UpdateAppSettingsForm extends ActionForm {
 		this.workspaceType = workspaceType;
 	}
 
-	public Integer getNumberOfPagesToDisplay() {
-		return numberOfPagesToDisplay;
+	public String getNumberOfPagesToDisplay() {
+		return "null".equals(numberOfPagesToDisplay) ? "" : numberOfPagesToDisplay;
 	}
 
-	public void setNumberOfPagesToDisplay(Integer numberOfPagesToDisplay) {
+	public void setNumberOfPagesToDisplay(String numberOfPagesToDisplay) {
 		this.numberOfPagesToDisplay = numberOfPagesToDisplay;
 	}
 	

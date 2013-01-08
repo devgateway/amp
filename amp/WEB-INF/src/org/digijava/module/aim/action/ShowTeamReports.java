@@ -259,37 +259,9 @@ public class ShowTeamReports extends Action {
 				teamResults.add(defaultTeamReport);
 			}
 			
-			//
-			// requirements for translation purposes of hierarchies
-			AmpReports el = null;
-
-			String text = null;
-			String translatedText = null;
-			//String prefix = "aim:reportbuilder:"; not used any more cos hash key translation.
-			Iterator iterator = teamResults.iterator();
-			List<AmpReports> sortedReports=new ArrayList<AmpReports>();
-			while (iterator.hasNext()) {
-				el = (AmpReports) iterator.next(); 
-				if (el.getHierarchies() != null) {
-					AmpReportHierarchy arh = null;
-					Set h = new TreeSet<AmpReportHierarchy>();
-					Iterator iterator2 = el.getHierarchies().iterator();					
-					while (iterator2.hasNext()) {
-						arh = (AmpReportHierarchy) iterator2.next();
-						text = arh.getColumn().getColumnName();
-						translatedText = TranslatorWorker.translateText(text);
-						if (translatedText.compareTo("") == 0)
-							translatedText = text;
-						//arh.getColumn().setColumnName(translatedText); - temporary in-place fix for the data corruption bug. On merge, take the version off 2.2 and ignore this changeset
-						//
-						h.add(arh);
-					}
-					el.setHierarchies(h);					
-				}
-				sortedReports.add(el);
-			}					
-			//
+			List<AmpReports> sortedReports = new ArrayList<AmpReports>(teamResults);
 			
+			//			
 			//do not add this in ArrayList constructor.
 			Collections.sort(sortedReports,sort);
 			rf.setReports(sortedReports);

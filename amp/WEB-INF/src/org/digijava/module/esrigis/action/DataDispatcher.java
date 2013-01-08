@@ -31,6 +31,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -481,9 +482,7 @@ public class DataDispatcher extends MultiAction {
 	}
 	
 	
-	public ActionForward modeShowActivities(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public ActionForward modeShowActivities(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		
 		DataDispatcherForm maphelperform = (DataDispatcherForm) form;
 
@@ -498,10 +497,10 @@ public class DataDispatcher extends MultiAction {
 		list = DbHelper.getActivities(maphelperform.getFilter());
 		long endTS=System.currentTimeMillis();
 		logger.info("getActivities in "+(endTS-startTS)/1000.0+" seconds. ");
-		
-		Boolean isaggregatable = true;
 		logger.info("Iteration Starts");
 		startTS=System.currentTimeMillis();
+		
+		Boolean isaggregatable = true;
 		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
 			ActivityPoint ap = new ActivityPoint();
 			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
@@ -526,9 +525,7 @@ public class DataDispatcher extends MultiAction {
 				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
 				boolean implocation = alocation.getLocation().getLocation().getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
 				ArrayList<Long> locationIds = new ArrayList<Long>(Arrays.asList(maphelperform.getFilter().getSelLocationIds()));
-				if (maphelperform.getFilter().getZoneIds()!= null && maphelperform.getFilter().getZoneIds().length>0){
-					locationIds.addAll(Arrays.asList(maphelperform.getFilter().getZoneIds()));
-				}
+				
 				boolean isfiltered = locationIds != null && locationIds.size() > 0 && !locationIds.get(0).equals(-1l) ;
 				if (!implocation) {
 					isaggregatable = true;
@@ -884,6 +881,12 @@ public class DataDispatcher extends MultiAction {
 		datadispatcherform.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
 		datadispatcherform.getFilter().setZoneIds(getLongArrayFromParameter(request.getParameter("zoneIds")));
 		datadispatcherform.getFilter().setSelStructureTypes(getLongArrayFromParameter(request.getParameter("structuresIds")));
+		datadispatcherform.getFilter().setSelfinancingInstruments(getLongArrayFromParameter(request.getParameter("aidmodalityIds")));
+		datadispatcherform.getFilter().setSeltypeofassistence(getLongArrayFromParameter(request.getParameter("typeofassissIds")));
+		datadispatcherform.getFilter().setSelprojectstatus(getLongArrayFromParameter(request.getParameter("projectstIds")));
+		datadispatcherform.getFilter().setSelorganizationsTypes(getLongArrayFromParameter(request.getParameter("orgtypesIds")));
+		
+		
 		
 		Long[] orgsGrpIds =  datadispatcherform.getFilter().getOrgGroupIds();
 		Long orgsGrpId =  datadispatcherform.getFilter().getOrgGroupId();
@@ -916,61 +919,24 @@ public class DataDispatcher extends MultiAction {
 		}
 		datadispatcherform.getFilter().setOrganizationsSelected(orgs);
 
-		Long secsId =  datadispatcherform.getFilter().getSectorId();
-		Long subSecsId =  datadispatcherform.getFilter().getSubSectorId();
 		Long[] secsIds =  datadispatcherform.getFilter().getSectorIds();
 		Long[] subSecsIds =  datadispatcherform.getFilter().getSubSectorIds();
 		
-		
-		if ((subSecsIds == null || subSecsIds.length == 0 || subSecsIds[0] == -1) && (subSecsId == null || subSecsId == -1)) {
-			if (secsIds == null || secsIds.length == 0 || secsIds[0] == -1) {
-				if (secsId!=null){
-					Long[] temp = {secsId};
-					datadispatcherform.getFilter().setSelSectorIds(temp);
-				}else{
-					Long[] temp = {-1l};
-					datadispatcherform.getFilter().setSelSectorIds(temp);
-				}
-			} else {
-				datadispatcherform.getFilter().setSectorId(-1l);//unset sectorId
-				datadispatcherform.getFilter().setSelSectorIds(secsIds);
-			}	
-		} else {
-			if (subSecsIds == null || subSecsIds.length == 0 || subSecsIds[0] == -1) {
-				Long[] temp = {subSecsId};
-				datadispatcherform.getFilter().setSelSectorIds(temp);
-			} else {
-				datadispatcherform.getFilter().setSubSectorId(-1l);//unset subSectorId
-				 datadispatcherform.getFilter().setSelSectorIds(subSecsIds);
-			}
+		if (subSecsIds == null && subSecsIds == null){
+			Long[] temp = {-1l};
+			datadispatcherform.getFilter().setSelSectorIds(temp);
+		}else{
+			datadispatcherform.getFilter().setSelSectorIds((Long[]) ArrayUtils.addAll(secsIds, subSecsIds));
 		}
 		
-		Long regsId =  datadispatcherform.getFilter().getRegionId();
-		Long zonesId =  datadispatcherform.getFilter().getZoneId();
 		Long[] regsIds =  datadispatcherform.getFilter().getRegionIds();
 		Long[] zonesIds =  datadispatcherform.getFilter().getZoneIds();
 		
-		if ((zonesIds == null || zonesIds.length == 0 || zonesIds[0] == -1) && (zonesId == null || zonesId == -1)) {
-			if (regsIds == null || regsIds.length == 0 || regsIds[0] == -1) {
-				if (regsId!=null){
-					Long[] temp = {regsId};
-					datadispatcherform.getFilter().setSelLocationIds(temp);
-				}else{
-					Long[] temp = {-1l};
-					datadispatcherform.getFilter().setSelLocationIds(temp);
-				}
-			} else {
-				datadispatcherform.getFilter().setRegionId(-1l);//unset regionId
-				datadispatcherform.getFilter().setSelLocationIds(regsIds);
-			}
-		} else {
-			if (zonesIds == null || zonesIds.length == 0 || zonesIds[0] == -1) {
-				Long[] temp = {zonesId};
-				datadispatcherform.getFilter().setSelLocationIds(temp);
-			} else {
-				datadispatcherform.getFilter().setZoneId(-1l);//unset zoneId
-				datadispatcherform.getFilter().setSelLocationIds(zonesIds);
-			}
+		if (zonesIds == null && regsIds == null){
+			Long[] temp = {-1l};
+			datadispatcherform.getFilter().setSelLocationIds(temp);
+		}else{
+			datadispatcherform.getFilter().setSelLocationIds((Long[]) ArrayUtils.addAll(regsIds, zonesIds));
 		}
 		
 		return null;

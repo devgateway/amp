@@ -44,6 +44,9 @@ String currentDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.F
 <c:set var="logo">
 	<digi:trn key="aim:report:logo">Logo</digi:trn>
 </c:set>
+<c:set var="publicPortalModeHelp">
+	<digi:trn key="aim:report:publicportalmodehelp">No header is exported and column names are machine friendly </digi:trn>
+</c:set>
 
 <script type="text/javascript">
 
@@ -189,6 +192,7 @@ addLoadEvent(addpanel);
 		</feature:display>
 		
 		if (options){
+			showPublicPortalModeOption(type == "xls");
 			showMyPanel(0, 'logoStatement');
 			return false;
 		}else{
@@ -196,6 +200,14 @@ addLoadEvent(addpanel);
 		}
 		
 		form.submit();
+	}
+	
+	function showPublicPortalModeOption(visible){
+		if (visible){
+			$("#publicPortalModeOptionRow").css("visibility","visible");
+		}else{
+			$("#publicPortalModeOptionRow").css("visibility","hidden");
+		}
 	}
 </script>
 <div class="toolbar" align="center">
@@ -377,6 +389,18 @@ function openPrinter(){
 							</html:select>
 						</td>
 					</tr>
+					<tr id="publicPortalModeOptionRow">
+						<td>
+							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" title="${publicPortalModeHelp}" />
+							<digi:trn key="rep:pop:publicPortalMode">Public Portal Mode</digi:trn>
+						</td>
+						<td>
+							<select name="publicPortalMode">
+								<option value="false">${disable}</option>
+								<option value="true">${enable}</option>
+							</select>
+						</td>
+					</tr>
 					<tr>
 						<td align="center" colspan="2">&nbsp;</td>
 					</tr>
@@ -386,11 +410,11 @@ function openPrinter(){
 					<tr>
 						<td align="center" colspan="2">
 							<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" 
-								onclick="javascript:hidePanel(0);">
+								onclick="javascript:showPublicPortalModeOption(false);hidePanel(0);">
 								<digi:trn key="rep:pop:ApplyLogoStatement">Apply</digi:trn>
 							</html:submit>
 							<html:reset styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" 
-								onclick="javascript:hidePanel(0);">
+								onclick="javascript:showPublicPortalModeOption(false);hidePanel(0);">
 								<digi:trn key="rep:pop:CancelLogoStatement">Cancel</digi:trn>
 							</html:reset>
 						</td>

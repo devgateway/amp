@@ -34,6 +34,7 @@ public class SaveDashboard extends Action {
 		dashboard.setId(dForm.getDashboardId());
 		dashboard.setName(dForm.getDashboardName());
 		dashboard.setBaseType(dForm.getBaseType());
+		dashboard.setPivot(dForm.getPivot());
 		dashboard.setShowInMenu(dForm.getShowInMenu());
 		String graphs = request.getParameter("graphs");
 		String grs[] = graphs.split("_");

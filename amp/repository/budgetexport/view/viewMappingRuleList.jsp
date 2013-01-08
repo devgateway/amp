@@ -24,15 +24,16 @@
     <td valign=top width=712>
 	<table class="inside" width=712 cellpadding="0" cellspacing="0" border=1>
 <tr>
-<td colspan=6 align=center background="/TEMPLATE/ampTemplate/images/ins_header.gif" class=inside><b class="ins_header"><digi:trn>Mapping Rules</digi:trn></b></td>
+<td colspan=7 align=center background="/TEMPLATE/ampTemplate/images/ins_header.gif" class=inside><b class="ins_header"><digi:trn>Mapping Rules</digi:trn></b></td>
 </tr>
 <tr>
-    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Name</digi:trn></b></td>
-    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>AMP Column</digi:trn></b></td>
-    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Header</digi:trn></b></td>
-	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Options</digi:trn></b></td>
-	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>Total</digi:trn>/<digi:trn>Mapped</digi:trn></b></td>
-	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><digi:trn>CSV items</digi:trn></b></td>
+    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><b><digi:trn>Name</digi:trn></b></td>
+    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><b><digi:trn>AMP Column</digi:trn></b></td>
+    <td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><b><digi:trn>Header</digi:trn></b></td>
+	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><b><digi:trn>Options</digi:trn></b></td>
+	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><b><digi:trn>Total</digi:trn>/<digi:trn>Mapped</digi:trn></b></td>
+	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;"><b><digi:trn>CSV items</digi:trn></b></td>
+	<td background="/TEMPLATE/ampTemplate/images/ins_bg.gif" class=inside><b class="ins_header" style="font-size:11px;">&nbsp;</td>
     </tr>
     <logic:present name="beMapingForm" property="rules">
 			<logic:notEmpty name="beMapingForm" property="rules">
@@ -48,6 +49,7 @@
 				    </td>
 				    <td class=inside><bean:write name="rule" property="totalAmpEntityCount"/>/<bean:write name="rule" property="mappedAmpEntityCount"/></td>
 				    <td class=inside><bean:write name="rule" property="csvItemCount"/></td>
+				    <td class=inside><a href="/budgetexport/exportMapping.do?ruleId=<bean:write name="rule" property="id"/>"><img src="images/icons/xls.gif"></a></td>
 				</tr>
 			</logic:iterate>
 		</logic:notEmpty>
@@ -108,7 +110,10 @@
 	
 	</td>
   </tr>
+
 </table>
+
+
 
 <!-- MAIN CONTENT PART END -->
 

@@ -49,7 +49,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * 
  */
 public class GroupReportDataXLS extends XLSExporter {
-
+	private boolean machineFriendlyColName = false;
 	/**
 	 * @param parent
 	 * @param item
@@ -120,6 +120,7 @@ public class GroupReportDataXLS extends XLSExporter {
 		//show Headings:		
 		ReportHeadingsXLS headings=new ReportHeadingsXLS(this,grd.getFirstColumnReport());
 		headings.setAutoSize(this.isAutoSize());
+		headings.setMachineFriendlyColName(this.machineFriendlyColName);
 		headings.generate();
 	}
 	
@@ -265,6 +266,10 @@ public class GroupReportDataXLS extends XLSExporter {
 				rowId.inc();
 				colId.reset();
 			}
+	}
+
+	public void setMachineFriendlyColName(boolean machineFriendlyColName) {
+		this.machineFriendlyColName = machineFriendlyColName;
 	}
 
 }

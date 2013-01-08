@@ -14,6 +14,8 @@
         <property name="ampLabel" column="amp_label" type="java.lang.String"/>
         <property name="additionalLabel" column="additional_label" type="java.lang.String"/>
         <property name="matchLevel" column="match_level" type="int"/>
+        <property name="approved" column="approved" type="boolean"/>
+
 
 
         <many-to-one name="rule" column="rule" class="org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule" cascade="none"/>

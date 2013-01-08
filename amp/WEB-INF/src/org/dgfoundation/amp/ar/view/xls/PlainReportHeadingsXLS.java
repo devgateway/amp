@@ -57,12 +57,8 @@ public class PlainReportHeadingsXLS extends ReportHeadingsXLS {
 				boolean first = true;
 				for (AmpReportHierarchy arh: this.getMetadata().getHierarchies() ) {
 					String colName			= arh.getColumn().getColumnName();
-					String translColName	= null;
-					try{			
-						translColName	= TranslatorWorker.translateText(colName, this.getMetadata().getLocale(), this.getMetadata().getSiteId());
-					}catch(WorkerException e){
-						translColName = colName;
-					}
+					
+					String translColName	= getColumnDisplayName(colName);
 					
 					if ( translColName != null && translColName.trim().length() > 0 ) {
 						if(first){

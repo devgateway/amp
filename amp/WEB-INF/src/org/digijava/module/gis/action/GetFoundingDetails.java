@@ -404,19 +404,9 @@ public class GetFoundingDetails extends Action {
                     }
             		
             		TeamMember tm = null;
-                    Long teamId = null;
 
-                    boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
                     boolean includeNatProjects = request.getParameter("natProjects") != null &&
                             request.getParameter("natProjects").equalsIgnoreCase("true") ? true : false;
-
-                    if (curWorkspaceOnly) {
-                        tm = (TeamMember)request.getSession().getAttribute("currentMember");
-                        if (tm != null) {
-                            AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
-                            teamId = team.getAmpTeamId();
-                        }
-                    }
                     
                     int mapMode =  (request.getParameter("mapMode") != null && request.getParameter("mapMode").
                             equalsIgnoreCase("pledgesData")) ? DbUtil.MAP_MODE_PLEDGES : DbUtil.MAP_MODE_ACTIVITIES;

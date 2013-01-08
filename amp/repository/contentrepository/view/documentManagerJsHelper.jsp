@@ -495,7 +495,7 @@ myTable.enhanceMarkup = function(markupName) {
     		 // Create the Paginator	       
 	         paginator:myPaginator,        
 	         MSG_EMPTY: "<digi:trn>No records found</digi:trn>",
-	         MSG_LOADING: "<digi:trn>Loading</digi:trn>",
+	         MSG_LOADING: "<digi:trn>Loading</digi:trn>"
 	        }; 
 
     var tableEl						= markup.getElementsByTagName("table")[0];
@@ -1211,8 +1211,6 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 	myForm.webLink.value		= '';
 	myForm.docType.disabled		= false;
 	myForm.yearOfPublication.disabled		= false;
-	myForm.docIndex.value = index ? index : '';
-	myForm.docCategory.value = category ? category : '';
 	if (isAUrl == null) 
 		isAUrl	= false;
 		
@@ -1234,14 +1232,7 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 		myForm.yearOfPublication.style.backgroundColor	= "#eeeeee";
 		myForm.yearOfPublication.style.color			= "darkgray";
 
-		myForm.docIndex.readOnly				= true;
-		myForm.docIndex.style.backgroundColor	= "#eeeeee";
-		myForm.docIndex.style.color			= "darkgray";
-
-		myForm.docCategory.readOnly				= true;
-		myForm.docCategory.style.backgroundColor	= "#eeeeee";
-		myForm.docCategory.style.color			= "darkgray";		
-		
+	
 		setPanelHeader(0, "${translation_add_new_version}");
 		
 		var opts									= myForm.docType.options;
@@ -1283,13 +1274,6 @@ function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOf
 		myForm.yearOfPublication.style.backgroundColor	= "";
 		myForm.yearOfPublication.style.color			= "";
 
-		myForm.docIndex.readOnly				= false;
-		myForm.docIndex.style.backgroundColor	= "";
-		myForm.docIndex.style.color			= "";
-
-		myForm.docCategory.readOnly				= false;
-		myForm.docCategory.style.backgroundColor	= "";
-		myForm.docCategory.style.color			= "";			
 		
 		setPanelHeader(0, "${translation_add_new_content}");
 	}
@@ -1504,11 +1488,11 @@ function getCallbackForOrgs (panel) {
 			},
 			failure: function () {
 				panel.setBody("<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>");
-			}
+			},
+			cache: false
 		}
 
 	return callbackObj;
-	
 }
 
 function showOrgsPanel(uuid) {
@@ -1536,7 +1520,6 @@ function showOrgsPanel(uuid) {
 
 	YAHOO.amp.orgPanels.lastUuid	= uuid;
 	YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/docToOrg.do?orgsforuuid='+uuid, getCallbackForOrgs(organisationPanel) );
-
 }
 
 function deleteDocToOrgObj(uuid, ampOrgId) {

@@ -5,7 +5,9 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -26,7 +28,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
  *
  */
 public class ReportHeadingsXLS extends XLSExporter {
-
+	private boolean machineFriendlyColName = false;
 	/**
 	 * @param parent
 	 * @param item
@@ -56,13 +58,36 @@ public class ReportHeadingsXLS extends XLSExporter {
 	 */
 	public void generate() {
 		ColumnReportData columnReport = (ColumnReportData) item;
+	
+		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) {
+			
+			if(this.machineFriendlyColName){
+				machineFriendlygenerate();
+			}else{
+				generate(columnReport);
+			}
+		columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
+		}
+
+	}
+	
+	private void machineFriendlygenerate(){
+		rowId.inc();
+		colId.reset();
+		createHierarchyHeaderCell(0);
+		colId.inc();
+		createMachineFriendlyHeaderCells();
+		colId.reset();			
+	}
+	
+	private void generate(ColumnReportData columnReport){
+
 //		requirements for translation purposes
 		Long siteId=this.getMetadata().getSiteId();
 		String locale=this.getMetadata().getLocale();
 //		boolean fundingReached = false;
 		
 		// column headings:
-		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) {
 
 		rowId.inc();
 		colId.reset();
@@ -146,17 +171,8 @@ public class ReportHeadingsXLS extends XLSExporter {
 
 						}
 						//this value should be translated
-						String translatedCellValue=new String();
+						String translatedCellValue = getColumnDisplayName(cellValue);
 						//String prefix="aim:reportBuilder:";
-						
-						try{
-							translatedCellValue=TranslatorWorker.translateText(cellValue,locale,siteId);
-						}catch (WorkerException e)
-						{
-							e.printStackTrace();
-						}
-						
-						
 						if(translatedCellValue.compareTo("")==0)
 							cell.setCellValue(cellValue + "III");
 						else 
@@ -209,14 +225,17 @@ public class ReportHeadingsXLS extends XLSExporter {
 			rowId.inc();
 			colId.reset();
 		}
-		}
-
+		
 	}
-	
 	protected void createHierarchyHeaderCell (int curDepth) {
 		HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
 		if (curDepth == 0) {
-			cell1.setCellValue( this.getMetadata().getHierarchiesPath() );
+			String hierarchyPath = this.getMetadata().getHierarchiesPath();
+			if(this.machineFriendlyColName){
+				hierarchyPath = hierarchyPath.replace("/ ", "/").replace(" /", "/");
+			}
+			String colName = getColumnDisplayName(hierarchyPath);
+			cell1.setCellValue( colName );
 		}
 		else {
 			cell1.setCellValue("");
@@ -248,4 +267,66 @@ public class ReportHeadingsXLS extends XLSExporter {
 		}
 	}
 
+	public void setMachineFriendlyColName(boolean machineFriendlyColName) {
+		this.machineFriendlyColName = machineFriendlyColName;
+	}
+	
+	protected String getColumnDisplayName(String colName){
+		String translColName	= null;
+		if (this.machineFriendlyColName){
+			if (colName != null){
+				return colName.toLowerCase().trim().replace(" ", "_");
+			}
+		}else{
+			try{			
+				translColName	= TranslatorWorker.translateText(colName, this.getMetadata().getLocale(), this.getMetadata().getSiteId());
+			}catch(WorkerException e){
+				translColName = colName;
+			}
+		}
+		return translColName;
+
+	}
+	
+	
+	protected void createMachineFriendlyHeaderCells () {
+		ArrayList<String> cellValues	= new ArrayList<String>();
+		this.prepareMachineFriendlyHeaderCellsList(null, null, cellValues);
+		if ( cellValues != null ) {
+			for (String val : cellValues) {
+				HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());
+				cell1.setCellValue( val );
+				colId.inc();
+			}
+		}
+	}
+	
+	protected void prepareMachineFriendlyHeaderCellsList (List columns, String parentName, List<String> cellValues) {
+		if ( columns == null ) {
+			ColumnReportData columnReport = (ColumnReportData) item;
+			columns			= columnReport.getItems();
+		}
+		
+		if ( columns != null ) {
+			Iterator iter	= columns.iterator();
+			while (iter.hasNext()) {
+				Column tempCol 		= (Column) iter.next();
+				String colName		= tempCol.getName(metadata.getHideActivities());
+
+				List items = tempCol.getItems();
+				String currentColumnDisplayName = getColumnDisplayName(colName);
+				String name = (parentName == null) ?  currentColumnDisplayName : parentName
+						+ " - " + currentColumnDisplayName;
+				if (items != null && items.size() > 0
+						&& items.get(0) instanceof Column) {
+					this.prepareMachineFriendlyHeaderCellsList(items, name, cellValues);
+				} else {
+					if (name != null && !name.trim().equals("-")){
+						cellValues.add(name);
+					}
+				}
+			}
+		}
+		
+	}
 }

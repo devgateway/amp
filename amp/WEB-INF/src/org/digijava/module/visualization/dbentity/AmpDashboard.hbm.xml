@@ -10,6 +10,7 @@
 	
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="baseType" column="base_type" type="java.lang.Integer" />
+		<property name="pivot" column="pivot" type="java.lang.Integer" />
 		<property name="showInMenu" column="show_in_menu" type="java.lang.Boolean" />
 		
  	 </class>

@@ -24,6 +24,7 @@ public class DashboardForm extends ActionForm {
 	private Long dashboardId;
 	private DashboardFilter filter; 
 	private int baseType;
+	private int pivot;
 	private Boolean showInMenu;
 	
 	public String getDashboardName() {
@@ -79,6 +80,12 @@ public class DashboardForm extends ActionForm {
 	}
 	public void setShowInMenu(Boolean showInMenu) {
 		this.showInMenu = showInMenu;
+	}
+	public int getPivot() {
+		return pivot;
+	}
+	public void setPivot(int pivot) {
+		this.pivot = pivot;
 	}
 	
 }

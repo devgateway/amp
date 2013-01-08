@@ -177,16 +177,6 @@ public class ShowRegionReport extends Action {
                 gisRegReportForm.setPlannedDisbursementsStr(FormatHelper.formatNumber(fndDat.getPlannedDisbursement().doubleValue()));
             }
 
-
-            Long teamId = null;
-            boolean curWorkspaceOnly = request.getParameter("curWorkspaceOnly") != null && request.getParameter("curWorkspaceOnly").equalsIgnoreCase("true");
-            if (curWorkspaceOnly) {
-                if (tm != null) {
-                    AmpTeam team = TeamUtil.getTeamByName(tm.getTeamName());
-                    teamId = team.getAmpTeamId();
-                }
-            }
-
             gisRegReportForm.setSelectedCurrency(gisFilterForm.getSelectedCurrency());
             String regionName = DbUtil.getLocationNameById(regLocId);
             gisRegReportForm.setRegName(regionName);

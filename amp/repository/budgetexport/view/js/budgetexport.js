@@ -166,6 +166,30 @@ function uploadFile(obj) {
 		});
 	}
 	
+	var curentApprovalToggleItem = null;
+	
+	function toggleApproval(rowAmpId) {
+		curentApprovalToggleItem = $("#approval_btn_" + rowAmpId);
+		var approved = curentApprovalToggleItem.hasClass("map_approved") ? false:true;
+		var url = "../../budgetexport/mapActions.do?action=toggleApprovalStatus";
+		$.ajax({
+		  type: 'POST',
+		  url: url,
+		  data:{approved:approved, ampObjId:rowAmpId},
+		  success: toggleApprovalSuccess		 
+		});
+	}
+	
+	var toggleApprovalSuccess = function (data, textStatus, jqXHR) {
+		curentApprovalToggleItem.toggleClass("map_approved").toggleClass("map_unapproved");
+		if (curentApprovalToggleItem.hasClass("map_approved")) {
+			curentApprovalToggleItem.find("img").attr("src", "img_2/ico_validate.gif");
+		} else {
+			curentApprovalToggleItem.find("img").attr("src", "img_2/ico_validate_red.gif");
+		}
+		
+	}
+	
 	function setManualMapping(obj, code, label) {
 		var rowAmpId = activeAutocompleteCell.parent().parent().find(".amp_id_holder").val();
 		activeAutocompleteInput.val(obj.innerHTML);
@@ -188,8 +212,10 @@ function uploadFile(obj) {
 	
 	
 	var manualMappingSuccess = function (data, textStatus, jqXHR) {
-		var matchLevelCell = activeAutocompleteCell.parent().parent().parent().parent().parent().next();
-		matchLevelCell.attr("bgcolor", "blue");
+		activeAutocompleteCell.parent().parent().parent().parent().parent().next().attr("bgcolor", "blue");
+		activeAutocompleteCell.parent().parent().parent().parent().parent().next().next().find("img").attr("src", "img_2/ico_validate.gif");
+		activeAutocompleteCell.parent().parent().parent().parent().parent().next().next().find("a").toggleClass("map_approved").toggleClass("map_unapproved");
+		
 	}
 	
 	var activeAutocompleteInput = null;

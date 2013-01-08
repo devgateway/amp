@@ -168,22 +168,30 @@ public class XLSExportAction extends Action {
 		String plainReportParam = request.getParameter("plainReport");
 		Boolean isPlainReport = plainReportParam != null ? Boolean.valueOf(plainReportParam): false;
 		
+		String publicPortalModeParam = request.getParameter("publicPortalMode");
+		Boolean isPublicPortalMode = publicPortalModeParam != null ? Boolean.valueOf(publicPortalModeParam): false;
+
 		GroupReportDataXLS grdx	= ARUtil.instatiateGroupReportDataXLS(request.getSession(), wb, sheet, row, rowId,
 		        colId, null, rd, isPlainReport);
 		grdx.setMetadata(r);
-			
-		
-		//show title+desc+logo+statement
-		grdx.makeColSpan(numberOfColumns, false);	
-		rowId.inc();
 		colId.reset();
-		row = sheet.createRow(rowId.shortValue());
-		
-		grdx.createHeaderLogoAndStatement(request, reportForm, getServlet().getServletContext().getRealPath("/"));
-		grdx.createHeaderNameAndDescription( request );
+		if (isPublicPortalMode){
+			rowId.reset();
+			grdx.setMachineFriendlyColName(true);
+		}else{
+		//show title+desc+logo+statement
+			grdx.makeColSpan(numberOfColumns, false);	
+			rowId.inc();
+			
+			row = sheet.createRow(rowId.shortValue());
+			grdx.createHeaderLogoAndStatement(request, reportForm, getServlet().getServletContext().getRealPath("/"));
+			grdx.createHeaderNameAndDescription( request );
+		}
 		
 		grdx.generate();
-		
+		//AMP-14423
+		setColumnsWidth(sheet, numberOfColumns);
+
 		/*
 		 * 
 		 * Commented until Apache POI fixes the following bug: 
@@ -251,6 +259,7 @@ public class XLSExportAction extends Action {
 						cell.setCellValue(stmt);  
 					}				
 				}
+		
 	    wb.write(response.getOutputStream());
 	    
 		}else{			
@@ -272,5 +281,15 @@ public class XLSExportAction extends Action {
 
 		return null;
 	}
+	
+	private void setColumnsWidth(HSSFSheet sheet, int numberOfColumns){
+		int maxWidth = 55;
+		for(int i = 0; i <= numberOfColumns; i++){
+			sheet.autoSizeColumn(i);
+			if(sheet.getColumnWidth(i) > maxWidth * 256){
+				sheet.setColumnWidth(i, maxWidth * 256);
+			}
+		}
 
+	}
 }

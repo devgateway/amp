@@ -15,10 +15,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.taglibs.standard.tag.rt.fmt.FormatNumberTag;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -43,11 +40,9 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 import org.digijava.module.visualization.util.Constants;
-import org.digijava.module.visualization.util.DashboardUtil;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.GregorianChronology;
-import org.springframework.beans.BeanWrapperImpl;
 
 public class QueryUtil {
 	 public static final BigDecimal ONEHUNDERT = new BigDecimal(100);
@@ -418,8 +413,6 @@ public class QueryUtil {
 				e.printStackTrace();
 			}
         }
-        filter.setFinancingInstrumentId(0L);
-        filter.setTypeAssistanceId(0L);
         filter.setIsinitialized(true);
 		return filter;
     	

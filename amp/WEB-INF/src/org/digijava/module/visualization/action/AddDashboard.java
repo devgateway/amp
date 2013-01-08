@@ -30,6 +30,7 @@ public class AddDashboard extends Action {
 			dForm.setDashboardName(dashboard.getName());
 			dForm.setDashGraphList(DbUtil.getDashboardGraphByDashboard(dashboard.getId()));
 			dForm.setBaseType(dashboard.getBaseType());
+			dForm.setPivot(dashboard.getPivot());
 			dForm.setShowInMenu(dashboard.getShowInMenu());
 		}
 		dForm.setGraphList(DbUtil.getAllGraphs());
@@ -44,5 +45,6 @@ public class AddDashboard extends Action {
 		dForm.setDashGraphList(null);
 		dForm.setGraphList(null);
 		dForm.setBaseType(0);
+		dForm.setPivot(0);
 	}
 }

@@ -166,7 +166,7 @@ public class UpdateTeamActivities extends Action {
 //						AmpTeamMemberRoles headRole = TeamMemberUtil.getAmpTeamHeadRole();
 						//AMP-3937 - the activities assigned to an user, if that user is team lead then the 
 						//activities are approved!
-						if(ampTeam.getTeamLead().getAmpTeamMemId().equals(atm.getAmpTeamMemId())||atm.getAmpMemberRole().isApprover()){
+						if(atm.getAmpMemberRole().isApprover()){
 						//if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
 							activity.setApprovalStatus(Constants.APPROVED_STATUS);
 						}

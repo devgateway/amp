@@ -43,7 +43,7 @@ function addGraph() {
 		while (itr.hasNext()) {
 			AmpGraph graph = (AmpGraph) itr.next();	
 			if (graph != null){ %>
-				s += "<option value='<%=graph.getId()%>'><%=graph.getName()%></option>";				  			
+				s += "<option value='<%=graph.getId()%>'><digi:trn><%=graph.getName()%></digi:trn></option>";				  			
 			<% }
 		 }
 	 }%>
@@ -97,16 +97,29 @@ function removeGraph()
 }
 
 function saveDashboard() {
-
+	<c:set var="duplicatedGraph">
+	  <digi:trn>
+	  	Is not possible to save a dashboard with a duplicated graph.
+	  </digi:trn>
+	</c:set>
 	document.getElementById("showInMenu2").value = document.getElementById("show_in_menu").checked;
 	if (validateData()){
 		var i = 0;
 		var param = "";
+		var duplicated = false;
 		while (i<=numGraphs){
 			if(document.getElementById('graphDiv_'+i)!=null){
-				param += document.getElementsByName('graphDrDw_'+i)[0].value + "_";
+				var idxStr = document.getElementsByName('graphDrDw_'+i)[0].value + "_"
+				if (param.indexOf(idxStr)!=-1)
+					duplicated = true;
+				param += idxStr;
 			}
 			i++;
+		}
+
+		if (duplicated){
+			alert ("${duplicatedGraph}")
+			return false;
 		}
 		
 		<digi:context name="save" property="/visualization/saveDashboard.do" />
@@ -193,6 +206,15 @@ function validateData(){
 						<html:option value="1"><digi:trn>Organization based</digi:trn></html:option>
 						<html:option value="2"><digi:trn>Region based</digi:trn></html:option>
 						<html:option value="3"><digi:trn>Sector based</digi:trn></html:option>
+					</html:select></td>
+				</tr>
+				<tr>
+					<td><digi:trn><b>Select Agency type for pivot</b></digi:trn>
+						<html:select property="pivot" styleId="pivot_dropdown" styleClass="inp-text" style="width:250px;">
+						<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
+						<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
+						<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
+						<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
 					</html:select></td>
 				</tr>
 				<tr>

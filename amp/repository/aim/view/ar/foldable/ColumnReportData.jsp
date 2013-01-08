@@ -32,7 +32,22 @@
 
 <!-- generate report data -->
 
-<%int rowIdx = 2;%>
+<%!
+	java.util.Set<Long> validatedActivities;
+%>
+<%
+	int rowIdx = 2;
+	Boolean showColumn = false;
+	TeamMember currentMember = (TeamMember) request.getSession().getAttribute("currentMember");
+	if(currentMember != null && "Management".toLowerCase().compareTo(currentMember.getTeamAccessType().toLowerCase()) != 0) {
+		showColumn = true;
+	validatedActivities = showColumn ? ActivityUtil.getActivitiesWhichShouldBeValidated(currentMember, columnReport.getOwnerIds()) : null;	
+}
+%>
+
+<c:set var="translatedEdit" value="<digi:trn>Edit</digi:trn>" />
+<c:set var="translatedActivate" value="<digi:trn>Activate</digi:trn>" />
+
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
 
@@ -45,13 +60,8 @@
 
 <%
 //This scriptlet searchs for rows marked green (for validation) and later, sets the "action" attribute to "validate" to change the icon. 
-Boolean showColumn = false;
 Boolean validateItem = false;
 
-TeamMember currentMember = (TeamMember)request.getSession().getAttribute("currentMember");
-if(currentMember != null && "Management".toLowerCase().compareTo(currentMember.getTeamAccessType().toLowerCase()) != 0) {
-	showColumn = true;
-}
 
 /* if(showColumn && columnReport.getItem(0) instanceof org.dgfoundation.amp.ar.CellColumn)
 {
@@ -65,16 +75,16 @@ if(currentMember != null && "Management".toLowerCase().compareTo(currentMember.g
 	
 } */
 
-if ( showColumn && ActivityUtil.shouldThisUserValidate(currentMember, (Long)ownerId) )
+if ( showColumn && validatedActivities.contains(ownerId) )
 	validateItem = true;
 %>
 <c:set var="action" value="edit"/>
-<c:set var="actionString" value="Edit"/>
+<c:set var="actionString" value="{$translatedEdit}"/>
 <%
 if(validateItem){
 	%>
 	<c:set var="action" value="validate"/>
-	<c:set var="actionString" value="Validate"/>
+	<c:set var="actionString" value="{$translatedValidate}"/>
 	<%
 }
 %>

@@ -6,17 +6,38 @@
 	type="org.dgfoundation.amp.ar.cell.MetaTextCell" scope="request"
 	toScope="page" />
 
- <c:set var="starFlag" value="false" target="request" scope="request" />
 
+<%
+	boolean zStarFlag = false;
+	String colour = metaTextCell.getColour();
+	String statusFlag = metaTextCell.getStatusFlag();
+	
+	if (colour.equals("GREEN"))
+	{
+		if (statusFlag.equals("started"))
+			zStarFlag = true;
+	}
+	
+	if (colour.equals("RED"))
+	{
+		zStarFlag = statusFlag.equals("started") || statusFlag.equals("startedapproved");
+	}
+	request.setAttribute("starFlag", zStarFlag);
+//<c:set var="starFlag" value="false" target="request" scope="request" />
+
+//<font color="${metaTextCell.colour}">
+//		<c:if test="${metaTextCell.colour == 'GREEN' && metaTextCell.statusFlag == 'started'}">
+//	 		<c:set var="starFlag" value="true" target="request" scope="request" />
+//		</c:if>
+//		<c:if test="${metaTextCell.colour == 'RED' && metaTextCell.statusFlag == 'started'}">
+//	 		<c:set var="starFlag" value="true" target="request" scope="request" />
+//		</c:if>
+//		<c:if test="${metaTextCell.colour == 'RED' && metaTextCell.statusFlag == 'startedapproved'}">
+//	 		<c:set var="starFlag" value="true" target="request" scope="request" />
+//		</c:if>
+
+%> 		
 <font color="${metaTextCell.colour}">
- 		<c:if test="${metaTextCell.colour == 'GREEN' && metaTextCell.statusFlag == 'started'}">
-	 		<c:set var="starFlag" value="true" target="request" scope="request" />
- 		</c:if>
- 		<c:if test="${metaTextCell.colour == 'RED' && metaTextCell.statusFlag == 'started'}">
-	 		<c:set var="starFlag" value="true" target="request" scope="request" />
- 		</c:if>
-		<c:if test="${metaTextCell.colour == 'RED' && metaTextCell.statusFlag == 'startedapproved'}">
-	 		<c:set var="starFlag" value="true" target="request" scope="request" />
- 		</c:if>
- <%@ include file="TextCell.jsp"%>
+	<%@ include file="TextCell.jsp"%>
  </font>
+ 

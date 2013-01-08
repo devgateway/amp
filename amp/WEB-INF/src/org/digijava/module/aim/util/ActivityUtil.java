@@ -5354,6 +5354,35 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	private static Connection conn = createConnection();
 	private static Object lock = new Object();
 	
+	/**
+	 * returns a subset of activities which can/should be validated by a team member
+	 * @param tm
+	 * @param activityIds
+	 * @return
+	 */
+	public static Set<Long> getActivitiesWhichShouldBeValidated(TeamMember tm, Collection<Long> activityIds)
+	{
+		try
+		{
+			if (conn == null)
+				conn = PersistenceManager.getJdbcConnection();
+			
+			String query = "SELECT a.amp_activity_id FROM amp_activity_version a WHERE a.amp_activity_id IN (" + TeamUtil.getCommaSeparatedList(activityIds) + ") " +
+				"AND (a.approval_status = 'started' OR a.approval_status='edited') AND (a.draft IS NULL OR a.draft IS FALSE) AND (a.amp_team_id = " + tm.getTeamId() + ")";
+			
+			Set<Long> result = new HashSet<Long>();
+			ResultSet resultSet = conn.createStatement().executeQuery(query);
+			while (resultSet.next())
+				result.add(resultSet.getLong(1));
+			
+			return result;
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+	
 	public static boolean shouldThisUserValidate (TeamMember tm, Long activityId) {
 		if (tm.getTeamHead() )
 		//synchronized(lock) // cheaper to synchronize than to get a new connection every time

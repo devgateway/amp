@@ -87,57 +87,67 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	protected int endRow;
 	
 	public int getStartRow() {
-		if(this.getParent()!=null) return this.getParent().getStartRow();
-		return this.startRow;
+		//if (this.getParent()!=null) return this.getParent().getStartRow();
+		return this.getArchParent().startRow;
 	}
 	
 	public int getEndRow() {
-		if(this.getParent()!=null) return this.getParent().getEndRow();
-		return this.endRow;
+		//if(this.getParent()!=null) return this.getParent().getEndRow();
+		return this.getArchParent().endRow;
 	}
 	
 	protected Boolean globalHeadingsDisplayed;
 	
 	protected List<String> columnsToBeRemoved; 
 	
+	/**
+	 * the root of the hierarchy
+	 */
+	private GroupReportData archParent = null;
+	
+	/**
+	 * compute archparent once instead of iterating the tree over and over
+	 * @return
+	 */
+	public GroupReportData getArchParent()
+	{
+		if (this.archParent != null)
+			return this.archParent;
+		
+		if (this.getParent() == null)
+			return (GroupReportData) this;
+		
+		this.archParent = this.getParent().getArchParent();
+		return this.archParent;
+	}
+	
 	public List<String> getColumnsToBeRemoved() {
-		if(this.getParent()!=null) return this.getParent().getColumnsToBeRemoved();
-		return this.columnsToBeRemoved;
+		return this.getArchParent().columnsToBeRemoved;
 	}
 	
 	public int getCurrentRowNumber() {
-		if(this.getParent()!=null) return this.getParent().getCurrentRowNumber();
-		return this.currentRowNumber;
+		return this.getArchParent().currentRowNumber;
 	}
 
 	public void setCurrentRowNumber(int rowNumber) {
-		if(this.getParent()!=null) this.getParent().setCurrentRowNumber(rowNumber);
-		this.currentRowNumber=rowNumber;
+		this.getArchParent().currentRowNumber = rowNumber;
 	}
 
-	public void setStartRow(int rowNumber) {
-		if(this.getParent()!=null) this.getParent().setStartRow(rowNumber);
-		this.startRow=rowNumber;
+	public void setStartRow(int startRow) {
+		this.getArchParent().startRow = startRow;
 	}
 
-	public void setEndRow(int rowNumber) {
-		if(this.getParent()!=null) this.getParent().setEndRow(rowNumber);
-		this.endRow=rowNumber;
-	}
-
-	
+	public void setEndRow(int rowNumber) {		
+		this.getArchParent().endRow = rowNumber;
+	}	
 	
 	public void incCurrentRowNumberBy(int amount) {
-		if(this.getParent()!=null) this.getParent().incCurrentRowNumberBy(amount);
-		this.currentRowNumber+=amount;
+		this.getArchParent().currentRowNumber += amount;
 	}
 
 	public void incCurrentRowNumberBy(Viewable object) {
-		if(this.getParent()!=null) this.getParent().incCurrentRowNumberBy(object.getVisibleRows());
-		this.currentRowNumber+=object.getVisibleRows();
+		this.getArchParent().currentRowNumber += object.getVisibleRows();
 	}
-
-	
 	
 	protected int currentRowNumber;
 	
@@ -337,8 +347,9 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	 * @return Returns the reportMetadata.
 	 */
 	public AmpReports getReportMetadata() {
-		if(reportMetadata==null) return parent.getReportMetadata();else
-			return reportMetadata;
+		if(reportMetadata==null)
+			reportMetadata = parent.getReportMetadata();
+		return reportMetadata;
 	}
 
 	/**
@@ -352,18 +363,14 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	 * @return Returns the globalHeadingsDisplayed.
 	 */
 	public Boolean getGlobalHeadingsDisplayed() {
-		if(this.getParent()!=null) return this.getParent().getGlobalHeadingsDisplayed();
-		return this.globalHeadingsDisplayed;
+		return this.getArchParent().globalHeadingsDisplayed;
 	}
 
 	/**
 	 * @param globalHeadingsDisplayed The globalHeadingsDisplayed to set.
 	 */
 	public void setGlobalHeadingsDisplayed(Boolean globalHeadingsDisplayed) {
-		if (this.getParent() != null) 
-			this.getParent().setGlobalHeadingsDisplayed(globalHeadingsDisplayed);
-		else
-			this.globalHeadingsDisplayed=globalHeadingsDisplayed;
+		this.getArchParent().globalHeadingsDisplayed = globalHeadingsDisplayed;
 	}
 
 

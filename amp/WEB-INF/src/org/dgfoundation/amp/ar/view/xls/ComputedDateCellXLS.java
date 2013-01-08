@@ -73,7 +73,7 @@ public class ComputedDateCellXLS extends TextCellXLS {
 			// AmpReports
 
 			// requirements for translation purposes
-			TranslatorWorker translator = TranslatorWorker.getInstance();
+//			TranslatorWorker translator = TranslatorWorker.getInstance();
 			Long siteId = parent.getReportMetadata().getSiteId();
 			String locale = parent.getReportMetadata().getLocale();
 

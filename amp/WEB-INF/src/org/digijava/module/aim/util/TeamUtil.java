@@ -2301,63 +2301,6 @@ public class TeamUtil {
         Collection col1 = null;
 
         try {
-
-/*        	col = DbUtil.getAllReports(tabs);        		
-            session = PersistenceManager.getRequestDBSession();
-
-            String queryString = "select tr from "+ AmpTeamReports.class.getName()+ " tr where (tr.team=:teamId) ";            
-            Query qry = session.createQuery(queryString);
-            qry.setParameter("teamId", id, Hibernate.LONG);
-            Iterator itr = qry.list().iterator();
-            col1 = new ArrayList();
-            while(itr.hasNext()) {
-                AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
-                if(ampTeamRep.getReport()!=null){
-	                // modified by Priyajith
-	                // desc:used select query instead of session.load
-	                // start
-	                queryString = "select r from " + AmpReports.class.getName()
-	                    + " r " + "where (r.ampReportId=:id)";	                
-	                if (tabs != null) {
-	    				if (tabs) {
-	    					queryString += " and r.drilldownTab=true ";
-	    				} else {
-	    					queryString += " and r.drilldownTab=false ";
-	    				}
-	    			}	                
-	                qry = session.createQuery(queryString);	                
-	                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
-	                                 Hibernate.LONG);
-	                Iterator itrTemp = qry.list().iterator();
-	                AmpReports ampReport = null;
-	                while(itrTemp.hasNext()) {
-	                    ampReport = (AmpReports) itrTemp.next();
-		                col1.add(ampReport);
-	                }
-            	}
-            }
-
-            Iterator itr2 = col1.iterator();
-
-            while(itr2.hasNext()) {
-                AmpReports rep = (AmpReports) itr2.next();
-                Iterator itr1 = col.iterator();
-                while(itr1.hasNext()) {
-                    AmpReports tempRep = (AmpReports) itr1.next();
-                    if(tempRep.getAmpReportId().equals(rep.getAmpReportId())) {
-                        col.remove(tempRep);
-                        break;
-                    }
-                }
-            }
-
-        } catch(Exception e) {
-            logger.debug("Exceptiion from getAllUnassignedTeamReports()");
-            logger.debug("Exceptiion " + e);
-            throw new RuntimeException(e);
-        } 
-
-        return col;*/
         	session = PersistenceManager.getRequestDBSession();
         	String queryString = "select tr.report.ampReportId from "+ AmpTeamReports.class.getName()+ " tr where (tr.team=:teamId) ";            
         	Query qry = session.createQuery(queryString);

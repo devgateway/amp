@@ -156,7 +156,6 @@ public class CategAmountColWorker extends ColumnWorker {
 	 *      java.lang.String)
 	 */
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
-		
 		String baseCurrency	= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY );
 		if ( baseCurrency == null )
 			baseCurrency = Constants.DEFAULT_CURRENCY;

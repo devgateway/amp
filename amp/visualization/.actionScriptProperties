@@ -1,42 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="donor_profile/BarChartSeries_DonorProfile.mxml" projectUUID="b8cb5eaf-66a0-4df1-b556-a9df2fc1dd04" version="6">
-  <compiler additionalCompilerArguments="-locale en_US -link-report=report.xml -use-network=false -optimize=true" autoRSLOrdering="false" copyDependentFiles="true" flexSDK="Flex 3.5" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+<actionScriptProperties analytics="false" mainApplicationPath="ODA_growth/BarChartSeries_ODAGrowth.mxml" projectUUID="b8cb5eaf-66a0-4df1-b556-a9df2fc1dd04" version="10">
+  <compiler additionalCompilerArguments="-locale en_US -link-report=report.xml -use-network=false -optimize=true" autoRSLOrdering="false" copyDependentFiles="true" flexSDK="Flex 3.5" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="3">
       <libraryPathEntry kind="4" path="">
-        <modifiedEntries>
-          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/automation.swc" rslUrl="automation.swf" useDefaultLinkType="false"/>
-          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" rslUrl="automation_agent.swf" useDefaultLinkType="false"/>
-          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/automation_dmv.swc" rslUrl="automation_dmv.swf" useDefaultLinkType="false"/>
-          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/automation_flashflexkit.swc" rslUrl="automation_flashflexkit.swf" useDefaultLinkType="false"/>
-          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/datavisualization.swc" rslUrl="datavisualization.swf" sourcepath="${PROJECT_FRAMEWORKS}/projects/datavisualization/src" useDefaultLinkType="false"/>
-          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/qtp.swc" rslUrl="qtp.swf" useDefaultLinkType="false"/>
-          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/rpc.swc" rslUrl="rpc.swf" useDefaultLinkType="false"/>
-          <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/utilities.swc" rslUrl="utilities.swf" useDefaultLinkType="false"/>
-        </modifiedEntries>
         <excludedEntries>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="1" linkType="2" path="${DCD_LIB_LOCATION}"/>
       <libraryPathEntry kind="1" linkType="2" path="${DCD_LOCALE_LOCATION}"/>
-      <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="libs/DegrafaLibrary.swc" rslUrl="DegrafaLibrary.swf" useDefaultLinkType="false"/>
-      <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${DCD_FIBER_LOCATION}/fiber.swc" rslUrl="fiber.swf" useDefaultLinkType="false"/>
-      <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${DCD_FIBER_LOCALE_LOCATION}/fiber_rb.swc" rslUrl="fiber_rb.swf" useDefaultLinkType="false"/>
-      <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="${DCD_FIBER_LOCATION}/playerfds.swc" rslUrl="playerfds.swf" useDefaultLinkType="false"/>
-      <libraryPathEntry autoExtract="true" kind="3" linkType="3" path="D:/workspaces/liberia/amp-2-pg/axiis/bin/AxiisLibrary.swc" rslUrl="AxiisLibrary.swf" useDefaultLinkType="false"/>
+      <libraryPathEntry applicationDomain="default" forceLoad="false" kind="3" linkType="4" path="libs/DegrafaLibrary.swc" useDefaultLinkType="false">
+        <crossDomainRsls>
+          <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="DegrafaLibrary.swf"/>
+        </crossDomainRsls>
+      </libraryPathEntry>
+      <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCATION}/fiber.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCALE_LOCATION}/fiber_rb.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry applicationDomain="default" forceLoad="false" kind="3" linkType="4" path="${DCD_FIBER_LOCATION}/playerfds.swc" useDefaultLinkType="false">
+        <crossDomainRsls>
+          <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="playerfds.swf"/>
+        </crossDomainRsls>
+      </libraryPathEntry>
+      <libraryPathEntry applicationDomain="default" forceLoad="false" kind="3" linkType="4" path="/AxiisLibrary/bin/AxiisLibrary.swc" useDefaultLinkType="false">
+        <crossDomainRsls>
+          <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="AxiisLibrary.swf"/>
+        </crossDomainRsls>
+      </libraryPathEntry>
     </libraryPath>
-    <sourceAttachmentPath>
-      <sourceAttachmentPathEntry autoExtract="true" kind="3" linkType="3" path="${PROJECT_FRAMEWORKS}/libs/datavisualization.swc" rslUrl="datavisualization.swf" sourcepath="${PROJECT_FRAMEWORKS}/projects/datavisualization/src" useDefaultLinkType="false"/>
-    </sourceAttachmentPath>
+    <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="generic/PieChartSeries.mxml"/>
     <application path="ODA_growth/BarChartSeries_ODAGrowth.mxml"/>
-    <application path="generic/BarChartSeries.mxml"/>
-    <application path="generic/DataViewSeries.mxml"/>
-    <application path="generic/BarChartSeries_Profile.mxml"/>
+    <application path="generic/PieChartSeries.mxml"/>
     <application path="generic/LineAreaSeries.mxml"/>
+    <application path="generic/DataViewSeries.mxml"/>
+    <application path="generic/BarChartSeries.mxml"/>
+    <application path="generic/BarChartSeries_Growth.mxml"/>
+    <application path="generic/BarChartSeries_Profile.mxml"/>
   </applications>
   <modules/>
   <buildCSSFiles/>
@@ -46,4 +47,5 @@
       <exclude path="services"/>
     </sourceExcludes>
   </publishSource>
+  <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>

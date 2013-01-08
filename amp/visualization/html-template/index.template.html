@@ -27,6 +27,16 @@ Learn more about Flex at http://flex.org
 
 <style>
 body { margin: 0px; overflow:hidden }
+.flashcontent {
+    background-color: #FFFFFF;
+    border: 1px solid #000000;
+    clear: both;
+    height: 460px;
+    margin: 5px 0 0;
+    padding: 0;
+    vertical-align: top;
+    width: 634px;
+}
 </style>
 <script type="text/javascript" src="swfobject.js"></script>
 <script language="JavaScript" type="text/javascript">
@@ -47,27 +57,27 @@ var requiredRevision = ${version_revision};
 <body scroll="no">
 <script language="JavaScript" type="text/javascript">
 <!--
-	var palette = "0xff0000,0x7eae58,0x88bff5,0xbe0035,0x8b007e,0x99431c";
-	var params = {};
+	var palette = "0xFF6600,0x7EAE58,0x88BFF5,0xBE0035,0x8B007E,0x99431C,0xFF6666,0x94FF29,0x2929FF,0xFF29FF";
+	var params = {wmode: "transparent"};
 	var attributes = {};
-	var flashvars = { 
-			decimalSeparator: ",", 
-			groupSeparator: " ",
+	var flashvars = {
+			currCode : "USD",
+			decimalSeparator: ".", 
+			groupSeparator: ",",
 			decimalsToShow: "2", 
 			palette: palette, 
 			title: "Titulo", 
-			showLegend: "on", 
-			showDataLabel: "on",
-			fontFamily: "Verdana",
-			fontSize: "15",
-			id: "FundingChart"
+			id: "OrganizationProfile",
+			start: true
 		};
 	attributes.id = "${application}";
-	
-	swfobject.embedSWF("${swf}.swf", "${application}", "${width}", "${height}", "10.0.0", false, flashvars, params, attributes);
+
+	swfobject.embedSWF("${swf}.swf", "${application}", "634", "460", "10.0.0", false, flashvars, params, attributes);
 
 function getValueToFlash(idContainer, field){
 	var inputObject = document.getElementById(idContainer + field);
+//	alert(inputObject.value);
+//	alert(idContainer + field);
 	var returnValue;
 	
 	if(inputObject != undefined && inputObject.type == "checkbox"){
@@ -82,42 +92,58 @@ function getValueToFlash(idContainer, field){
 
 
 function updateGraph(e, chartName){
-
 	//Get array of graphs
-	var allGraphs = document.getElementsByName("flashContent");
-	
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
 	//Iterate and refresh the graph
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		// Get flash object and refresh it by calling internal
-//		if(allGraphs[idx].children[0].id.split("_")[1].toLowerCase() == chartName.toLowerCase()){
-			allGraphs[idx].children[0].refreshGraphNoData();
-//			break;
-//		}
+		if(allGraphs[idx].children[0].id.toLowerCase() == chartName.toLowerCase()){
+			document.getElementById(chartName + "TitleLegend").innerHTML = document.getElementById(chartName + "Title").value;
+			allGraphs[idx].children[0].refreshGraph();
+			break;
+		}
 	}
+} 
+function getElementsByName_iefix(tag, name) {
+var elem = document.getElementsByTagName(tag);
+var arr = new Array();
+for(i = 0,iarr = 0; i < elem.length; i++) {
+att = elem[i].getAttribute("name");
+if(att == name) {
+arr[iarr] = elem[i];
+iarr++;
 }
-
+}
+return arr;
+} 
 // -->
 </script>
-			Title <input type="text" id="FundingChartTitle" value="ODA Title BLABLABLA">
-			Size
-			<select id="FundingChartFontSize">
-				<option value="10">10</option>
-				<option value="11">11</option>
-				<option value="12">12</option>
-				<option value="13">13</option>
-				<option value="14">14</option>
-			</select>
-			<input type="checkbox" id="FundingChartDivide">Divide by thousands
-			<input type="checkbox" id="FundingChartBold">Bold<br/>
-			<input type="checkbox" id="FundingChartShowLegend" checked="checked">Show legend
-			<input type="checkbox" id="FundingChartShowDataLabel" checked="checked">Show data label
-			<input type="checkbox" id="FundingChartRotateDataLabel">Rotate data label</br>
-			<input type="hidden" id="GlobalFontSize" value="11" />
-			<input type="hidden" id="GlobalFontFamily" value="Verdana" />
-			<input type="hidden" id="GlobalFontWeight" value="bold" />
-			<input type="hidden" id="FundingChartDataField" value="fundingtype" />
-			<input type="text" id="FundingChartDataAction" value="getFundingsGraphData" />
-			<input type="button" value="Update chart" onclick="updateGraph(event, 'FundingChart')">
+<input id="OrganizationProfileTitle" value="" size="50" type="text">
+<input id="OrganizationProfileShowFontFamily" value="Verdana" type="hidden">
+<select id="OrganizationProfileFontSize">
+
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+
+</select>
+<input id="startYear" type="text" value="2009">
+<input id="endYear" type="text" value="2012">
+<input id="OrganizationProfileBold" type="checkbox">
+<input id="OrganizationProfileShowLegend" checked="checked" type="checkbox">
+<input id="OrganizationProfileDivide" type="checkbox">
+<input id="OrganizationProfileShowDataLabel" type="checkbox">
+<input id="OrganizationProfileRotateDataLabel" type="checkbox">
+<input id="OrganizationProfileIgnore" style="display: none;" checked="checked" type="checkbox">
+<input id="OrganizationProfileDataAction" value="getOrganizationProfileGraphData" type="hidden">
+<input id="OrganizationProfileItemId" type="hidden">
+<input type="hidden" id="OrganizationProfileDataField" value="dataField" />
+<input id="OrganizationProfileTitleLegendTrn" value="OrganizationProfileTitleLegendTrn" type="hidden">
+<input class="buttonx" value="Update chart" onclick="updateGraph(event, 'OrganizationProfile')" type="button">
+						
+
 
 <div class="flashcontent" name="flashContent">
 <div id="${application}" name="flashChart">

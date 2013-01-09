@@ -21,8 +21,19 @@ public class SimpleLocation {
 	private String exactlocation_lat;
 	private String exactlocation_lon;
 	private String amountsCurrencyCode;
+	private Long[] ids;
 	
-    //This field is used only in the view to mark the location. 
+
+
+	public Long[] getIds() {
+		return ids;
+	}
+
+	public void setIds(Long[] ids) {
+		this.ids = ids;
+	}
+
+	//This field is used only in the view to mark the location. 
     private String isdisplayed;
 
 	public String getName() {

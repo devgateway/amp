@@ -610,6 +610,7 @@ public class DataDispatcher extends MultiAction {
 		List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel);
 		Iterator<AmpCategoryValueLocations> locationsIt = locations.iterator();
 		String tq = QueryUtil.getTeamQuery(tm);
+		ArrayList<SimpleLocation> locationsarray = new ArrayList<SimpleLocation>();
 		while (locationsIt.hasNext()) {
 			AmpCategoryValueLocations location = locationsIt.next();
 			Long[] ids = { location.getId() };
@@ -626,29 +627,29 @@ public class DataDispatcher extends MultiAction {
 			
 			String keyName = "";
 			String geocode = "";
-			
+			AmpCategoryValueLocations parent = null;
 			String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
 			if (location.getParentCategoryValue().getValue().equals(implLocation)) {
 				keyName = "National";
-			} else {
+			}else{
 				Long zoneIds[] = filter.getZoneIds();
 				if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
 					implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
 					if (location.getParentCategoryValue().getValue().equals(implLocation)) {
 						keyName = "Regional";
 					} else {
-						AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
+						parent = LocationUtil.getTopAncestor(location, implLocation);
 						keyName = parent.getName();
 					}
 				} else {
 					if (implementationLevel.equalsIgnoreCase("Region")){
-						AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
+						parent = LocationUtil.getTopAncestor(location, implLocation);
 						keyName = parent.getName();
 						geocode= parent.getGeoCode();
 					}else{
 						implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.getValueKey();
 						if (!location.getParentCategoryValue().getValue().equalsIgnoreCase(implLocation)){
-							AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
+							parent = LocationUtil.getTopAncestor(location, implLocation);
 							keyName = parent.getName();
 							geocode= parent.getGeoCode();
 						}else{
@@ -661,15 +662,37 @@ public class DataDispatcher extends MultiAction {
 
 			}
 			SimpleLocation locationJSON = new SimpleLocation();
-			locationJSON.setName(keyName);
-			locationJSON.setGeoId(geocode);
-			locationJSON.setCommitments(amountCommitments.toPlainString());
-			locationJSON.setDisbursements(amountDisbursements.toPlainString());
-			locationJSON.setExpenditures(amountExpenditures.toPlainString());
-			locationJSON.setAmountsCurrencyCode(filter.getCurrencyCode());
-			jsonArray.add(locationJSON);
+			Boolean exist = false;
+			
+			if (!implLocation.equalsIgnoreCase("zone")){
+				for (Iterator iterator = locationsarray.iterator(); iterator.hasNext();) {
+					SimpleLocation slj = (SimpleLocation) iterator.next();
+					if (slj.getName().equalsIgnoreCase(parent.getName())){
+						exist=true;
+						if (!ArrayUtils.contains(slj.getIds(), location.getIdentifier()) ){
+							BigDecimal existCommitments = new BigDecimal(slj.getCommitments());
+							BigDecimal existDisbursements = new BigDecimal(slj.getDisbursements()); 
+							BigDecimal existExpenditures = new BigDecimal(slj.getExpenditures());
+							slj.setCommitments((existCommitments.add(amountCommitments).toPlainString()));
+							slj.setDisbursements((existDisbursements.add(amountDisbursements).toPlainString()));
+							slj.setExpenditures((existExpenditures.add(amountExpenditures).toPlainString()));
+							break;
+						}
+					}
+				}
+			}
+			if (!exist){
+				locationJSON.setName(keyName);
+				locationJSON.setGeoId(geocode);
+				locationJSON.setCommitments(amountCommitments.toPlainString());
+				locationJSON.setDisbursements(amountDisbursements.toPlainString());
+				locationJSON.setExpenditures(amountExpenditures.toPlainString());
+				locationJSON.setAmountsCurrencyCode(filter.getCurrencyCode());
+				locationJSON.setIds(allids);
+				locationsarray.add(locationJSON);
+			}
 		}
-
+		jsonArray.addAll(locationsarray);
 		PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());
 		pw.flush();

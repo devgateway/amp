@@ -157,15 +157,16 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		if (teamMember != null && teamMember.getTeamId() == null )
 			teamMember = null;
-		
+
+		String applyFormat				= request.getParameter("applyFormat");
+		String applyStr					= request.getParameter("apply");
+
 		if ( teamMember != null ) {
 			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 			if (tempSettings == null)
 				if (teamMember != null)
 					tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
 			
-			String applyFormat				= request.getParameter("applyFormat");
-			String applyStr					= request.getParameter("apply");
 			AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
 			if ( existingFilter != null ) {
 				if ( !"true".equals(applyStr) ) {
@@ -187,6 +188,12 @@ public class ReportsFilterPicker extends MultiAction {
 						filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
 					}
 				}
+		} else
+		{
+			// teamMember == null, show the filter as-is. NOTE TO THE UNFORTUNATE SOUL DOING MERGE WITH 2.4: NOTHING SHOULD BE DONE HERE, AS 2.4 IS SANE IN THIS REGARD.
+			AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
+			if (existingFilter != null && (!"true".equals(applyStr)))
+				FilterUtil.populateForm(filterForm, existingFilter);
 		}
 		
 		Long ampTeamId = null;

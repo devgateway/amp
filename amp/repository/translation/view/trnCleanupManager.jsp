@@ -30,6 +30,8 @@
 						<td align="right"><digi:trn>Delete Messages Older then</digi:trn>:&nbsp;&nbsp;</td>
 						<td align="left" height="30px"><html:select
 								property="deleteBeforeDate" styleClass="inp-text">
+								<html:option value="1">1 <digi:trn>Day</digi:trn>
+								</html:option>
 								<html:option value="30">30 <digi:trn>Days</digi:trn>
 								</html:option>
 								<html:option value="60">60 <digi:trn>Days</digi:trn>

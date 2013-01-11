@@ -1670,8 +1670,7 @@ public class DataDispatcher extends DispatchAction {
 				xmlString.append("<year name=\"" + yearName + "\">\n");
 				fundingData += "<" + yearName;
 				if (filter.isPledgeVisible() && pledgesVisible) {
-					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter.getSelOrgIds(),
-							filter.getOrgGroupIds(), startDate, endDate,
+					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter, startDate, endDate,
 							currCode);
 					xmlString
 					.append("<dataField category=\""+TranslatorWorker.translateText("Pledges", locale, siteId)+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
@@ -1740,7 +1739,7 @@ public class DataDispatcher extends DispatchAction {
 
 			DecimalWraper fundingPledge =  new DecimalWraper();
 			if (filter.isPledgeVisible() && pledgesVisible) {
-				fundingPledge = DbUtil.getPledgesFunding(filter.getSelOrgIds(),filter.getSelOrgGroupIds(), startDate, endDate,currCode);
+				fundingPledge = DbUtil.getPledgesFunding(filter, startDate, endDate,currCode);
 				csvString.append(",");
 				csvString.append(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 				total = total.add(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));

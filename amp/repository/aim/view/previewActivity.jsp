@@ -1364,6 +1364,51 @@ function collapseAll() {
 </module:display>
 <!-- END PROGRAM SECTION -->
 
+<!-- STRUCTURES SECTION -->
+<fieldset>
+	<legend>
+		<span class=legend_label id="structureslink" style="cursor: pointer;">
+			<digi:trn>Structures</digi:trn>
+		</span>	
+	</legend>
+	<div id="structuresdiv" >
+		<c:if test="${not empty aimEditActivityForm.structures.actStructures}">
+		
+			
+			<c:forEach var="compo" items="${aimEditActivityForm.structures.actStructures}">
+			<table width="100%" style="font-size:10px;">
+				<tr>
+					<td align="left" width="15%"><b><digi:trn>Type</digi:trn></b></td>
+					<td align="left">${compo.type.name}</td>
+				</tr>
+				<tr>
+					<td align="left" width="15%"><b><digi:trn>Title</digi:trn></b></td>
+					<td align="left">${compo.title}</td>
+				</tr>
+				<tr>
+					<td align="left" width="15%"><b><digi:trn>Description</digi:trn></b></td>
+					<td align="left">${compo.description}</td>
+				</tr>
+				<tr>
+					<td align="left" width="15%"><b><digi:trn>Latitude</digi:trn></b></td>
+					<td align="left">${compo.latitude}</td>
+				</tr>
+				<tr>
+					<td align="left" width="15%"><b><digi:trn>Longitude</digi:trn></b></td>
+					<td align="left">${compo.longitude}</td>
+				</tr>
+			</table>
+			
+			<hr>
+			
+			</c:forEach>
+		
+	</c:if>
+	</div>
+</fieldset>
+
+<!-- END STURCTURES SECTION -->
+
 <!-- SECTORS SECTION -->
 <module:display name="/Activity Form/Sectors" parentModule="/Activity Form">
 <fieldset>

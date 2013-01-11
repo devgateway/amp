@@ -42,6 +42,7 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -2313,6 +2314,19 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.deletedActors = deletedActors;
 		}
 
+	}
+	
+	public class Structures{
+		private Set<AmpStructure> actStructures;
+
+		public Set<AmpStructure> getActStructures() {
+			return actStructures;
+		}
+
+		public void setActStructures(Set<AmpStructure> actStructures) {
+			this.actStructures = actStructures;
+		}
+		
 	}
 
 	public class Programs { 
@@ -4773,6 +4787,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Funding oldFunding;
 	private Documents documents = null;
 	private Agencies agencies;
+	private Structures structures;
 	
 	/**
 	 * This is the survey helper object for the actual or last edited survey.
@@ -5158,6 +5173,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.issues = new Issues();
 		}
 		return issues;
+	}
+	
+	public Structures getStructures(){
+		if	(this.structures == null){
+			this.structures = new Structures();
+		}
+		return structures;
 	}
 	
 	public Issues getObservations() {

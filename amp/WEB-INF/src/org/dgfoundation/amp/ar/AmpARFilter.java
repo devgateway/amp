@@ -427,7 +427,7 @@ public class AmpARFilter extends PropertyListable {
 			if (ar!=null){
 				ampReportId = ar.getAmpReportId().toString();
 			}
-			if (ar.getType() == ArConstants.PLEDGES_TYPE){
+			if (ar !=null && ar.getType() == ArConstants.PLEDGES_TYPE){
 				this.generatedFilterQuery = initialPledgeFilterQuery;
 			}
 		}

@@ -1645,7 +1645,7 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setDecimalseparator(decimalSeparator);
 		
 		
-		if (filterForm.getCustomUseGrouping().booleanValue() == true) {
+		if (filterForm.getCustomUseGrouping()!=null && filterForm.getCustomUseGrouping().booleanValue() == true) {
 			String groupingSeparator = !"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? 
 					filterForm.getCustomGroupCharacter().substring(0, 1) : filterForm.getCustomGroupCharacterTxt().substring(0, 1);
 			ds.setGroupingSeparator( groupingSeparator.charAt(0) );			

@@ -284,7 +284,7 @@ public class ReportContextData
 			return getFilter();
 		}
 		
-		return FilterUtil.getOrCreateFilter(null);
+		return FilterUtil.getOrCreateFilter(null, source);
 	}
 	
 	/**
@@ -489,10 +489,10 @@ public class ReportContextData
 		{
 			return FormatHelper.formatNumber(number);
 		}
-}
+	}
   
 	/**
-	 * returns a decorated name, safe to be inserted in a session. basically concatenates given "name" with the contextId taken frmo the Request
+	 * returns a decorated name, safe to be inserted in a session. basically concatenates given "name" with the contextId taken from the Request
 	 * @param name
 	 * @return
 	 */

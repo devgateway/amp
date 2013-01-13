@@ -121,7 +121,7 @@ public class ReportsFilterPicker extends Action {
 		if ("true".equals(sourceIsReportWizard) ) {
 			filterForm.setSourceIsReportWizard(true);
 			if ( request.getParameter("doreset") != null ) {
-				FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId), longAmpReportId);
+				FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);
 				modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
 				return mapping.findForward("forward");
 			}
@@ -153,7 +153,7 @@ public class ReportsFilterPicker extends Action {
 		// init form
 		if (request.getParameter("init") != null)
 		{
-			FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId), longAmpReportId);
+			FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);
 			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
 			return null;
 		}
@@ -196,7 +196,7 @@ public class ReportsFilterPicker extends Action {
 			return decideNextForward(mapping, filterForm, request, arf);
 		}
 
-		FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId), longAmpReportId);
+		FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);
 		modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL);
 		return mapping.findForward("forward");
 		/*AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
@@ -1010,7 +1010,7 @@ public class ReportsFilterPicker extends Action {
 		if (ampReportId == null && ReportContextData.getFromRequest().getReportMeta() != null)
 			ampReportId = ReportContextData.getFromRequest().getReportMeta().getAmpReportId();
 		
-		return FilterUtil.getOrCreateFilter(ampReportId);
+		return FilterUtil.getOrCreateFilter(ampReportId, null);
 	}
 	
 	/**

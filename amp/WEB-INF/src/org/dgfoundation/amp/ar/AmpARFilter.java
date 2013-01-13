@@ -181,6 +181,12 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private boolean dateFilterUsed;
 	
+	/**
+	 * the toString() of the filter filled with default values (a poor man's "default value") - a hack to know when to display the "filters have been applied" warning on reports / tabs"
+	 */
+	@PropertyListableIgnore
+	private String defaultValues;
+	
 	private String multiDonor = null;
 
 	public String getMultiDonor() {
@@ -724,7 +730,27 @@ public class AmpARFilter extends PropertyListable {
 
 		String widget = (String) request.getAttribute("widget");
 		if (widget != null)
-			this.setWidget(new Boolean(widget));
+			this.setWidget(new Boolean(widget));		
+	}
+	
+	/**
+	 * returns true iff the filter has been changed compared to its "default" value. The default value is the one which the filter had when {@link #rememberDefaultValues()} has been called last 
+	 * @return
+	 */
+	@PropertyListableIgnore
+	public boolean getChanged()
+	{
+		if (defaultValues == null)
+			return true;
+		return !defaultValues.equals(this.getStringRepresentation());
+	}
+	
+	/**
+	 * remember, somewhere, the current values in the filter as being "default". See {@link #getChanged()} for uses
+	 */
+	public void rememberDefaultValues()
+	{
+		this.defaultValues = this.getStringRepresentation();
 	}
 
 	/**
@@ -1716,22 +1742,24 @@ public class AmpARFilter extends PropertyListable {
 		BeanInfo beanInfo = null;
 		try {
 			beanInfo = Introspector.getBeanInfo(AmpARFilter.class);
-			PropertyDescriptor[] propertyDescriptors = beanInfo
-					.getPropertyDescriptors();
+			PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
 			for (int i = 0; i < propertyDescriptors.length; i++) {
+				if (IGNORED_PROPERTIES.contains(propertyDescriptors[i].getName()))
+					continue;
 				Method m = propertyDescriptors[i].getReadMethod();
 				Object object = m.invoke(this, new Object[] {});
-				if (object == null
-						|| IGNORED_PROPERTIES.contains(propertyDescriptors[i]
-								.getName()))
+				if (object == null)
 					continue;
 				ret.append("<b>").append(propertyDescriptors[i].getName())
 						.append(": ").append("</b>");
 				if (object instanceof Collection)
+				{
 					ret.append(Util.toCSString((Collection) object));
-
+				}
 				else
+				{
 					ret.append(object);
+				}
 				if (i < propertyDescriptors.length)
 					ret.append("; ");
 			}
@@ -1749,10 +1777,9 @@ public class AmpARFilter extends PropertyListable {
 			e.printStackTrace();
 		}
 		return ret.toString();
-
 	}
 
-	private static final String IGNORED_PROPERTIES = "class#generatedFilterQuery#initialQueryLength#widget#publicView#ampReportId";
+	private static final String IGNORED_PROPERTIES = "class#changed#generatedFilterQuery#initialQueryLength#widget#publicView#ampReportId";
 
 	public Collection<Integer> getLineMinRank() {
 		return lineMinRank;

@@ -58,15 +58,27 @@ public abstract class PropertyListable implements Cloneable {
     	annotations.add( IgnorePersistence.class );
     	return this.generatePropertiesMap( annotations );
     }
+    
+    @PropertyListableIgnore
+    public String getStringRepresentation()
+    {
+    	Map<String, Object> map = getPropertiesMap();
+    	StringBuilder bld = new StringBuilder();
+    	for(String key: map.keySet())
+    		bld.append(String.format("key: %s has value: %s\n", key, map.get(key)));
+    	return bld.toString();
+    }
+    
     /**
      * provides a way to display this bean in HTML. 
      */
     @PropertyListableIgnore
-    public Map getPropertiesMap() {
+    public Map<String, Object> getPropertiesMap() {
     	ArrayList<Class> annotations	= new ArrayList<Class>();
     	annotations.add( PropertyListableIgnore.class );
     	return this.generatePropertiesMap( annotations );
     }
+    
     /**
          * Properties are automatically returned along with their values.
          * CollectionS are unfolded and excluded properties (internally used) are not shown. You may provide a collection of annotations  
@@ -74,7 +86,7 @@ public abstract class PropertyListable implements Cloneable {
          */
     
     @PropertyListableIgnore
-    private Map generatePropertiesMap(Collection<Class> annonations) {
+    private Map<String, Object> generatePropertiesMap(Collection<Class> annonations) {
 	Map<String, Object> ret = new TreeMap<String, Object>();
 	BeanInfo beanInfo = null;
 	try {

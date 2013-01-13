@@ -16,6 +16,7 @@
 
 <%
 	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+	pageContext.setAttribute("currentFilter", ReportContextData.getFromRequest().getFilter());
 %>
 
 <bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
@@ -500,11 +501,11 @@ function toggleSettings(){
 	<tr>
 		<td>
 			<div style="font-family: Arial,sans-serif;font-size: 11px">
-				<logic:notEmpty name="reportMeta" property="filterDataSet">
-				<span style="cursor:pointer;cursor:pointer;font-style: italic;">
-		        	<digi:trn>Please note: Filter(s) have been applied. Click on "Show current settings" to see list of applied filters</digi:trn>
-				</span>
-				</logic:notEmpty>
+				<logic:equal name="currentFilter" property="changed" value="true">
+					<span style="cursor:pointer;cursor:pointer;font-style: italic;">
+		        		<digi:trn>Please note: Filter(s) have been applied. Click on "Show current settings" to see list of applied filters</digi:trn>
+					</span>
+				</logic:equal>
 			</div>
 			<div class="show_legend">
 				<table border="0" cellspacing="0" cellpadding="0">

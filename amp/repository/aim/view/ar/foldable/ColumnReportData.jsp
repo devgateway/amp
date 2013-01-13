@@ -45,8 +45,12 @@
 }
 %>
 
-<c:set var="translatedEdit" value="<digi:trn>Edit</digi:trn>" />
-<c:set var="translatedActivate" value="<digi:trn>Activate</digi:trn>" />
+<c:set var="translatedEdit"> 
+	<digi:trn>Edit</digi:trn>
+</c:set>
+<c:set var="translatedActivate">
+	<digi:trn>Activate</digi:trn>
+</c:set>
 
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
@@ -79,12 +83,12 @@ if ( showColumn && validatedActivities.contains(ownerId) )
 	validateItem = true;
 %>
 <c:set var="action" value="edit"/>
-<c:set var="actionString" value="{$translatedEdit}"/>
+<c:set var="actionString" value="${translatedEdit}"/>
 <%
 if(validateItem){
 	%>
 	<c:set var="action" value="validate"/>
-	<c:set var="actionString" value="{$translatedValidate}"/>
+	<c:set var="actionString" value="${translatedValidate}"/>
 	<%
 }
 %>

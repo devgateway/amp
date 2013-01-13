@@ -50,14 +50,14 @@ public class FilterUtil {
 	 * @param filterForm
 	 * @return
 	 */
-	public static AmpARFilter getOrCreateFilter(Long forcedAmpReportId)
+	public static AmpARFilter getOrCreateFilter(Long forcedAmpReportId, FilterDataSetInterface dataSource)
 	{		
 		AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
 
 		if (arf == null)
 		{			
-			ReportContextData.getFromRequest().setSerializedFilter(buildFilter(null, forcedAmpReportId));
-			ReportContextData.getFromRequest().setFilter(buildFilter(null, forcedAmpReportId));
+			ReportContextData.getFromRequest().setSerializedFilter(buildFilter(dataSource, forcedAmpReportId));
+			ReportContextData.getFromRequest().setFilter(buildFilter(dataSource, forcedAmpReportId));
 		}
 		
 		return ReportContextData.getFromRequest().getFilter();
@@ -73,6 +73,7 @@ public class FilterUtil {
 	{
 		AmpARFilter arf = new AmpARFilter();
 		arf.readRequestData(TLSUtils.getRequest(), AmpARFilter.FILTER_SECTION_ALL, forcedAmpReportId);
+		arf.rememberDefaultValues();
 		if (source != null)
 			FilterUtil.populateFilter(source, arf);		
 		/* The prepare function needs to have the filter (af) already populated */

@@ -36,7 +36,7 @@
 				String key=(title.replaceAll(" ",""));
 			%>
 	<TITLE>
-		
+
 		<logic:present name="extraTitle" scope="request">
 				<bean:define id="extTitle" name="extraTitle" scope="request" type="java.lang.String" />
 				<c:set var="key">aim:pagetitle:<%=key%><%=extTitle%></c:set>

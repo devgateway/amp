@@ -85,6 +85,9 @@
 			    <button class="buttonx_sm" onclick="tb.deactivate()"><digi:trn>Deactivate</digi:trn></button> 
 			    <input type="text" id="address" size="30"/>
 			    <button id="localebtn" class="buttonx_sm" onclick="locate()"><digi:trn>Locale</digi:trn></button>
+			    <select id="fclList" style="width:150px;" onchange="filter(this.value)">
+			    	<option><digi:trn>All</digi:trn></option>
+			    </select>
 			    <button class="buttonx_sm" id="basemaps"><digi:trn>Base Maps</digi:trn></button>
 			    
 	    	</div>

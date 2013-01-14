@@ -21,6 +21,7 @@ var basemapurl;
 var mapurl;
 var locatorurl;
 var rooturl;
+var stpoints = new Array();
 function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
@@ -447,7 +448,7 @@ function locate() {
     locator.outSpatialReference= map.spatialReference;
     var options = {
       address:address,
-      outFields:["Name"]
+      outFields:["Name","type"]
     }
     locator.addressToLocations(options);
   }
@@ -469,21 +470,58 @@ function locate() {
 		symbol.setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE);
 		symbol.setColor(new dojo.Color([255,0,0,0.75]));
 	}
-    var infoTemplate = new esri.InfoTemplate("Location", "Location: ${address}<br />Score: ${score}");
-
+    var infoTemplate = new esri.InfoTemplate("Location", "Location: ${address}<br/>Score: ${score}<br/>FCL:${Type}");
+    
 
     var points =  new esri.geometry.Multipoint(map.spatialReference);
-
+    stpoints = [];
+    clearOptions("fclList");
     for (var i=0, il=candidates.length; i<il; i++) {
       candidate = candidates[i];
-      if (candidate.score > 90) {
-        var attributes = { address: candidate.address, score:candidate.score, locatorName:candidate.attributes.Loc_name };
+      if (candidate.score > 80) {
+        var attributes = { address: candidate.attributes.Name, score:candidate.score,Type:candidate.attributes.type, locatorName:candidate.attributes.Loc_name };
         var graphic = new esri.Graphic(candidate.location, symbol, attributes, infoTemplate);
         map.graphics.add(graphic);
-        map.graphics.add(new esri.Graphic(candidate.location, new esri.symbol.TextSymbol(attributes.address).setOffset(0, 8)));
+       // map.graphics.add(new esri.Graphic(candidate.location, new esri.symbol.TextSymbol(candidate.attributes.Name).setOffset(0, 8)));
+        stpoints.push(graphic);
         points.addPoint(candidate.location);
+        if (!isInList(candidate.attributes.type)){
+        	var select = document.getElementById("fclList");
+        	select.options[select.options.length] = new Option(candidate.attributes.type, candidate.attributes.type);
+        }
       }
     }
-    map.setExtent(points.getExtent().expand(3));
+    if (points.getExtent()){
+    	map.setExtent(points.getExtent().expand(3));
+    }
     hideLoading();
   }
+
+  function filter(type){
+	  map.graphics.clear();
+	  for ( var int = 0; int < stpoints.length; int++) {
+		if (stpoints[int].attributes.Type==type){
+			map.graphics.add(stpoints[int]);
+		}
+	}
+  }
+   
+  function clearOptions(id)
+  {
+  	var selectObj = document.getElementById(id);
+  	var selectParentNode = selectObj.parentNode;
+  	var newSelectObj = selectObj.cloneNode(false); 
+  	selectParentNode.replaceChild(newSelectObj, selectObj);
+  	return newSelectObj;
+  }
+  
+  function isInList(seachtext) {
+	for ( var i = 0; i < document.getElementById('fclList').options.length; i++) {
+		if (document.getElementById('fclList').options[i].text == seachtext) {
+			return true;
+			break;
+		}
+	}
+}
+
+  

@@ -39,9 +39,9 @@ import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -122,12 +122,22 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private List<AmpActivityContact> projCoordinatorContacts;
 	private List<AmpActivityContact> implExecutingAgencyContacts;
 	
+	private List<AmpStructure> structures;
+	
 	private Issues lineMinistryObservations;
 	/**
 	 * Map Api url for locations map
 	 */
 	private String esriapiurl;
 	
+	public List<AmpStructure> getStructures() {
+		return structures;
+	}
+
+	public void setStructures(List<AmpStructure> structures) {
+		this.structures = structures;
+	}
+
 	public String getEsriapiurl() {
 		return esriapiurl;
 	}

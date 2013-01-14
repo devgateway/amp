@@ -1205,6 +1205,7 @@
       <forward name="forward" path="/aim/previewActivity.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+	<action name="aimDisplayStructureImage" path="/aim/displayStructureImage" scope="request" type="org.digijava.module.aim.action.DisplayStructureImage" validate="false" />
     <action name="aimEditActivityForm" path="/aim/viewActivityPreviewPopin" scope="session" type="org.digijava.module.aim.action.EditActivity">
       <forward name="forward" path="/aim/previewActivity.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />

@@ -13,8 +13,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -27,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -88,6 +86,7 @@ import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -5445,5 +5444,11 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 				e.printStackTrace();
 			}
 	    }  
-
+	 
+	 public static AmpStructureImg getStructureImage(Long structureId, Long imgId) {
+		 return DbUtil.getStructureImage(structureId, imgId);
+	 }
+	 public static AmpStructureImg getMostRecentlyUploadedStructureImage(Long structureId) {
+		 return DbUtil.getMostRecentlyUploadedStructureImage(structureId);
+	 }
 } // End

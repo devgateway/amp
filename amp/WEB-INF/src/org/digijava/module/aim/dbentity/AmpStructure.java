@@ -8,9 +8,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.Output;
 
-import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-
 /**
  * Persister class for Structures
  * @author fferreyra
@@ -26,6 +23,7 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 	private java.sql.Timestamp creationdate;
 	private AmpStructureType type;
 	private Set activities;
+	private Set<AmpStructureImg> images;
 	
 	public Set getActivities() {
 		return activities;
@@ -166,6 +164,15 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
 		AmpStructure aux = (AmpStructure) clone();
 		aux.activities = new HashSet();
+		aux.images = new HashSet();
+		if (this.images != null){
+			for(AmpStructureImg img : this.images){
+				AmpStructureImg auxImg =(AmpStructureImg) img.clone();
+				auxImg.setId(null);
+				auxImg.setStructure(aux);
+				aux.images.add(auxImg);
+			}
+		}
 		//aux.activities.add(newActivity);
 		aux.ampStructureId = null;
 		return aux;
@@ -193,5 +200,11 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 	}
 	public String getShape() {
 		return shape;
+	}
+	public Set<AmpStructureImg> getImages() {
+		return images;
+	}
+	public void setImages(Set<AmpStructureImg> images) {
+		this.images = images;
 	}
 }

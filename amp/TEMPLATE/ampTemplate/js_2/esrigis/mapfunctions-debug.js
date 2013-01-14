@@ -1152,6 +1152,23 @@ function getStructures(clear) {
 		var deferred = dojo.xhrGet(xhrArgs);
 	}
 }
+function changeTabStructureInfo(info){
+	if(info){
+		$("#strImage").css("display", "none");
+		$("#strInfo").css("display", "block");
+		$("#aStrImage").removeAttr('disable');
+		$("#aStrInfo").attr('disable', 'disable');
+		$("#aStrInfo").addClass("selected");
+		$("#aStrImage").removeClass("selected");
+	}else{
+		$("#strInfo").css("display", "none");
+		$("#strImage").css("display", "block");
+		$("#aStrImage").attr('disable', 'disable');
+		$("#aStrInfo").removeAttr('disable');
+		$("#aStrImage").addClass("selected");
+		$("#aStrInfo").removeClass("selected");
+	}
+}
 
 /**
  * 
@@ -1159,19 +1176,33 @@ function getStructures(clear) {
  * @param structureGraphicLayer
  */
 function MapFindStructure(activity, structureGraphicLayer) {
+	
+	
+	var infoTemplate =	"<table style='font-size: 11px;'>"
+		+ "<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>";
+
+	var tabTemplate = "<div id='infotabs' class='infotab'>"
+		+ " <ul><li><a id='aStrInfo' class='selected' href='#' onclick='changeTabStructureInfo(true);'>Details</a></li>"
+		+ "<li><a id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Image</a></li></ul>"
+		+ "<div id='strInfo' ><br /><br />"+ infoTemplate +"</div>"
+		+ "<div id='strImage' align='center' style='display:none;' >${Structure Image}</div>"
+		+ "</div>";
+		
 	var stinfoTemplate = new esri.InfoTemplate(
 			"Structure Details",
-			"<table style='font-size: 11px;'>"
-					+ "<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>"
-					+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
-					+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
-					+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
-					+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>");
-	var structureID=1;
+tabTemplate);
+	
+var structureID=1;
 	dojo.forEach(activity.structures,function(structure) {
 			var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ structure.typeId, 21, 25);
 			var pgraphic;
-	
+			
+			var previewActivityUrl ="/aim/viewActivityPreview.do~pageId=2~isPreview=1~activityId=" + activity.ampactivityid;
+			
 			if (structure.shape == "") {
 				var pt = new esri.geometry.Point(structure.lon,structure.lat, map.spatialReference);
 				var transpt = esri.geometry.geographicToWebMercator(pt);
@@ -1188,7 +1219,11 @@ function MapFindStructure(activity, structureGraphicLayer) {
 						"Structure Description" : structure.description,
 						"Coordinates" : pt.x + " , " + pt.y,
 						"Type_id" : structure.typeId,
-						"Id":structureID++
+						"Id":structureID++,
+						"Structure Image" : '<a target="_blank" href="'+previewActivityUrl+'">' 
+						+ '<img style="cursor:pointer;" src="/aim/displayStructureImage.do?structureId=' 
+							+ structure.id + '" border="0"></a>'
+						
 					});
 				structurespoint.push(pgraphic);
 				//structures.push(pgraphic);
@@ -1204,7 +1239,10 @@ function MapFindStructure(activity, structureGraphicLayer) {
 						"Structure Type" : structure.type,
 						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+ activity.ampactivityid
 								+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
-						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y
+						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y,
+						"Structure Image" : '<a target="_blank" href="'+previewActivityUrl+'">' 
+						+ '<img style="cursor:pointer;" src="/aim/displayStructureImage.do?structureId=' 
+							+ structure.id + '" border="0"></a>'
 					});
 					pgraphic.setInfoTemplate(stinfoTemplate);
 					// If it's a point, put the  appropriate  icon
@@ -1225,7 +1263,10 @@ function MapFindStructure(activity, structureGraphicLayer) {
 						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
 							+ activity.ampactivityid+ '~isPreview=1" target="_blank">'
 							+ activity.activityname+ '</a>',
-						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y
+						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y,
+						"Structure Image" : '<a target="_blank" href="'+previewActivityUrl+'">' 
+						+ '<img style="cursor:pointer;" src="/aim/displayStructureImage.do?structureId=' 
+							+ structure.id + '" border="0"></a>'
 					});
 	
 				}
@@ -1272,7 +1313,21 @@ function CluterStructures(){
 		map.removeLayer(cLs);
 		cLs=null;
 	}
-if (structurespoint.length > 0){	
+	var infoTemplate =	"<table style='font-size: 11px;'>"
+		+ "<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
+		+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>";
+
+	var tabTemplate = "<div id='infotabs'>"
+		+ " <ul><li><a href='#strInfo'>Details</a></li>"
+		+ "<li><a href='#strImage'>Image</a></li></ul>"
+		+ "<div id='strInfo'>"+ infoTemplate +"</div>"
+		+ "<div id='strImage'>${Structure Image}</div>"
+		+ "</div>";
+		
+	if (structurespoint.length > 0){
 	cLs = new esri.ux.layers.AmpCluster(
 			{
 				displayOnPan : false,
@@ -1289,12 +1344,7 @@ if (structurespoint.length > 0){
 					template :
 						 new esri.InfoTemplate(
 						"Structure Details",
-						"<table style='font-size: 11px;'>"
-								+ "<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>"
-								+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
-								+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
-								+ "<tr><td nowrap style='padding-right:20px;'><b>Description<b></td><td>${Structure Description}</td></tr>"
-								+ "<tr><td nowrap style='padding-right:20px;'><b>Coordinates<b></td><td>${Coordinates}</td></tr></table>"),
+						tabTemplate),
 					width : 250,
 					height : 250
 				},
@@ -1307,7 +1357,7 @@ if (structurespoint.length > 0){
 
 function resetStructureCluster(){
 	cLs.resetCluster();
-	$("#clusterStructures").hide()
+	$("#clusterStructures").hide();
 }
 
 

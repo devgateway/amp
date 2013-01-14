@@ -50,6 +50,8 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -142,7 +144,9 @@ public class ActivityUtil {
 			
 			saveContacts(a, session,(draft != draftChange));
 			saveIndicators(a, session);
-
+			
+			setCreationTimeOnStructureImages(a);
+			
 			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
 				//a.setAmpActivityId(null); //hibernate will save as a new version
 				session.save(a);
@@ -205,7 +209,20 @@ public class ActivityUtil {
 			AmpActivityModel.endConversation();
 		}
 	}
-
+	
+	private static void setCreationTimeOnStructureImages(AmpActivityVersion activity){
+		if (activity.getStructures() != null){
+			for(AmpStructure str :  activity.getStructures()){
+				if (str.getImages() != null){
+					for(AmpStructureImg img : str.getImages()){
+						img.setStructure(str);
+						img.setCreationTime(System.currentTimeMillis());
+					}
+				}
+			}
+		}
+	}
+	
 	private static void saveFundingOrganizationRole(AmpActivityVersion activity) {
 		//Added for AMP-11544, taken from SaveActivity.java, line 1046-1064. 
 		if(activity.getOrgrole() != null) {

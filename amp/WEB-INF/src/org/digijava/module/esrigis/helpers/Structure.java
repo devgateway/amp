@@ -7,6 +7,7 @@ package org.digijava.module.esrigis.helpers;
  */
 
 public class Structure {
+	private Long id;
 	private String name;
 	private String description;
 	private String lat;
@@ -15,6 +16,13 @@ public class Structure {
 	private String type;
 	private Long typeId;
 	
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public void setName(String name) {
 		this.name = name;
 	}

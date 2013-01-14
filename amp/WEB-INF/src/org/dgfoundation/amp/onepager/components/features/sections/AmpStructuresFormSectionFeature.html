@@ -6,7 +6,7 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<table class="inside">
+				<table class="inside" wicket:id="list">
 					<tr>
 						<td background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" align="left" class="inside" colspan="7">
 							<b class="ins_header"><wicket:trn>Structure</wicket:trn></b>
@@ -21,15 +21,21 @@
 						<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="left"><b class="ins_title"><wicket:trn key="trn:shape">Shape</wicket:trn></b></td>	
 						<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="left"><b class="ins_title">&nbsp;</b></td>	
 					</tr>
-					<tr wicket:id="list">
+					<tr>
 						<td class="inside" align="right"><span wicket:id="structureTypes" /></td>
 						<td class="inside add_form_title"><span  wicket:id="name" /></td>
 						<td class="inside add_form_description"><span wicket:id="description" /></td>
 						<td class="inside add_form_latitude"><span wicket:id="latitude" /></td>
 						<td class="inside add_form_longtitude"><span wicket:id="longitude" /></td>
 						<td class="inside"><input type="button" onClick="callGisPopup(this)" size="3" value="Map"><span style="display:none" wicket:id="shape" /></td>
+						
 						<td class="inside" align="left"><span wicket:id="deleteStructure"/></td>
 					</tr>
+					<tr>
+						<td colspan="7"><span wicket:id="structureImgList" /></td>
+					</tr>
+					<tr style="background-color: white;"><td colspan="7">&nbsp;</td></tr>
+
 				</table>
 			</td>
 		</tr>

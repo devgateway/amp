@@ -1201,8 +1201,9 @@ private ActionForward showStep9(ActionMapping mapping,
 	        Long prev = new Long( -1);
 	        Long next = new Long( -1);
 	        // What does this cycle do?
+	        try{
 	        if (eaForm.getActivityId() != null) {
-	          ReportData rep = ReportContextData.getFromRequest().getGeneratedReport();
+	        	ReportData rep = ReportContextData.getFromRequest().getGeneratedReport();
 	          if (rep != null) {
 	            Iterator<Long> it = rep.getOwnerIds().iterator();
 	
@@ -1219,7 +1220,11 @@ private ActionForward showStep9(ActionMapping mapping,
 	          request.setAttribute("nextId", next);
 	          request.setAttribute("prevId", prev);
 	        }
-	
+	        }	        catch(Exception e){
+	        	logger.error("zaraza");
+	        }
+
+
 	        if (eaForm.getIdentification().getLevelCollection() == null) {
 	          eaForm.getIdentification().setLevelCollection(DbUtil.getAmpLevels());
 	        }

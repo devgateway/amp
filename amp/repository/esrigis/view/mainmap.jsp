@@ -69,7 +69,52 @@
       #structurescluster_layer text , #structurescluster_layer path {
     	  cursor: pointer;
       }
-      
+            
+		.infotab ul{
+			position:relative;
+			padding:0 0 1.75em 1em;
+			list-style: none;
+			padding:0;
+			margin:0;
+		}
+		.infotab li{
+			display: inline;
+			border-top: #C0C0C0 1px solid;
+			border-right: #C0C0C0 1px solid;
+			border-width: 1px 1px 0 1px;
+			margin: 0 0.5em 0 0;
+		}
+		
+		.infotab a.selected {
+			text-decoration:none;
+			font-weight: bold;
+			color: black;
+			border-bottom: none;
+			position:relative;
+			z-index:102;			
+		}
+
+		.infotab li a {
+			padding: 0 1em;
+		}
+		
+		.infotab div {
+			border-top: #C0C0C0 1px solid;
+			position: absolute;
+			left:1em;
+			top:4.5em;
+			width: 100%;
+			vertical-align:middle;
+		}
+
+		.infotab img {
+			position: relative;
+			top: 10px;
+			width: 150px;
+			height: 150px;
+			border: none;
+		}
+		      
     </style>
     
    <script type="text/javascript">

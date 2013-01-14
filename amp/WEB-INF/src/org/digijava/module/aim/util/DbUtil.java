@@ -3,10 +3,6 @@ package org.digijava.module.aim.util;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -14,18 +10,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
+import org.bouncycastle.cms.CMSException;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.CellColumn;
-import org.dgfoundation.amp.ar.FilterParam;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -43,7 +39,6 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -58,16 +53,12 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLevel;
-import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRecipient;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrgStaffInformation;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
-import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
@@ -81,6 +72,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.dbentity.AmpStatus;
+import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
@@ -111,8 +103,6 @@ import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
-import org.digijava.module.budget.dbentity.AmpBudgetSector;
-import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -7428,5 +7418,53 @@ public class DbUtil {
 			logger.error("Unable to get TeamAppSettings", e);
 		}
 		return ampAppSettings != null ? ampAppSettings.getValidation() : null;
+	}
+	
+	public static AmpStructureImg getStructureImage(Long structureId, Long imgId) {
+		Session session = null;
+		Query qry = null;
+		AmpStructureImg image = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select o from " + AmpStructureImg.class.getName()
+					+ " o " + "where (o.structure.ampStructureId=:structureId and o.id=:imgId)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("structureId", structureId, Hibernate.LONG);
+			qry.setParameter("imgId", imgId, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				image = (AmpStructureImg) itr.next();
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get structure image");
+			logger.debug("Exceptiion " + e);
+		}
+		return image;
+	}
+	
+	public static AmpStructureImg getMostRecentlyUploadedStructureImage(Long structureId) {
+		Session session = null;
+		Query qry = null;
+		AmpStructureImg image = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select o from " + AmpStructureImg.class.getName()
+					+ " o " + "where o.structure.ampStructureId=:structureId and o.creationTime=" + 
+					"(select max(o1.creationTime) from  "
+					+ AmpStructureImg.class.getName()+ " o1 " + 
+					" where o1.structure.ampStructureId=:structureId)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("structureId", structureId, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				image = (AmpStructureImg) itr.next();
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get structure image");
+			logger.debug("Exceptiion " + e);
+		}
+		return image;
 	}
 }

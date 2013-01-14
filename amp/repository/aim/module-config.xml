@@ -173,6 +173,7 @@
 		<!--  GIS Structures Classes -->
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureType</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructure</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureImg</hibernate-class>
 		
 	</hibernate-classes>
 	<!-- AIM classes End-->

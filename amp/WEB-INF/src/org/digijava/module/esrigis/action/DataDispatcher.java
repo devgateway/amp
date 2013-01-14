@@ -737,6 +737,7 @@ public class DataDispatcher extends MultiAction {
 				}
 					
 				if(structureMatch || selectedStructures == null || selectedStructures.length == 0 ){
+					structureJSON.setId(structure.getAmpStructureId());
 					structureJSON.setDescription(structure.getDescription());
 					structureJSON.setLat(structure.getLatitude());
 					structureJSON.setLon(structure.getLongitude());

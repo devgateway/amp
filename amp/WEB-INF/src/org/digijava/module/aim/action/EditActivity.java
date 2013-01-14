@@ -68,6 +68,8 @@ import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.CMSContentItem;
@@ -2187,7 +2189,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     }
     setLineMinistryObservationsToForm(activity, eaForm);
 	
-	
+	//structures
+    
+    ArrayList<AmpStructure> structures = new ArrayList<AmpStructure>(activity.getStructures());
+    Collections.sort(structures);
+	eaForm.setStructures(structures);
 	
    
     } finally {

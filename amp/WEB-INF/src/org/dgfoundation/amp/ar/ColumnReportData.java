@@ -82,6 +82,12 @@ public class ColumnReportData extends ReportData<Column> {
 
 	}
 
+	@Override
+	public void removeChildrenWithoutActivities()
+	{
+		// do nothing - the children are columns and we never remove columns 
+	}
+	
 	public void addColumns(Collection col) {
 		Iterator i = col.iterator();
 		while (i.hasNext()) {

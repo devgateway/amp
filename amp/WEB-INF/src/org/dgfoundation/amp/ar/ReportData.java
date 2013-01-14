@@ -96,6 +96,8 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 		return this.getArchParent().endRow;
 	}
 	
+	public abstract void removeChildrenWithoutActivities();
+	
 	protected Boolean globalHeadingsDisplayed;
 	
 	protected List<String> columnsToBeRemoved; 

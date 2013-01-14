@@ -430,6 +430,20 @@ public class GroupReportData extends ReportData<ReportData> {
 		}
 	}
 	
+	@Override
+	public void removeChildrenWithoutActivities()
+	{
+		Iterator<ReportData> i = items.iterator();
+		while (i.hasNext())
+		{
+			ReportData element = i.next();
+			if (element.getOwnerIds().size() == 0)
+				i.remove();
+			else
+				element.removeChildrenWithoutActivities();
+		}
+	}
+	
 	public List<Column> getColumns(){
 		Set<Column> retValue = new HashSet<Column>();
 		for (ReportData reportData : items) {

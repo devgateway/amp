@@ -42,13 +42,15 @@ public class GroupColumn extends Column {
 	 */
     	@Override
 	public int getVisibleRows() {
-    	 Iterator i=items.iterator();
- 	    int ret=0;
- 	    while (i.hasNext()) {
-			Column element = (Column) i.next();
-			int visCol=element.getVisibleRows();
-			if(visCol>ret) ret=visCol;
-	    }
+    	//BOZO: is it sure that we don't have to return getOwnerIds().size() here (if reportMetaData.getHideActivities is not true)
+    	Iterator i=items.iterator();
+    	int ret=0;
+    	while (i.hasNext()) {
+    		Column element = (Column) i.next();
+    		int visCol=element.getVisibleRows();
+    		if(visCol>ret) ret=visCol;
+    	}
+    	//return getOwnerIds().size();
  	    return ret;
 	}
     	
@@ -745,6 +747,7 @@ public class GroupColumn extends Column {
 		}
 		return allEmpty;
 	}
+	
 	@Override
 	public Column hasSorterColumn(String namePath) {
 		if (items != null && items.size() > 0) {

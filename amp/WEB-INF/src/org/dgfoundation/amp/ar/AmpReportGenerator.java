@@ -192,7 +192,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param extractable
 	 */
 	protected void createDataForColumns(Collection<AmpReportColumn> extractable) {
-
+		
 		List <SyntheticColumnsMeta> possibleSyntColMeta	= ArConstants.syntheticColumns;
 		if ( this.request != null ) {
 			possibleSyntColMeta	= ARUtil.getSyntheticGeneratorList(this.request.getSession() );
@@ -214,6 +214,9 @@ public class AmpReportGenerator extends ReportGenerator {
 		try {
 
 			while (i.hasNext()) {
+				
+				long extractStartTime = System.currentTimeMillis();
+				
 				AmpReportColumn rcol = i.next();
 				AmpColumns col = rcol.getColumn();
 				String cellTypeName = col.getCellType();
@@ -317,6 +320,9 @@ public class AmpReportGenerator extends ReportGenerator {
 					rawColumns.addColumn(rcol.getOrderId().intValue(), column);
 				    rawColumnsByName.put(column.getName(), (CellColumn) column);
 				}
+				
+				long extractEndTime = System.currentTimeMillis();
+				System.out.format("extracting column %s took %d milliseconds\n", column.getName(), extractEndTime - extractStartTime);				
 			}
 
 		} catch (Exception e) {
@@ -829,8 +835,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.setTotalActualCommitments(this.getTotalActualCommitments());
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
-		report.removeEmptyChildren(); //postProcess might have created some more empty children
-
+		report.removeChildrenWithoutActivities(); //postProcess might have created some more empty children
 	}
 
 	/**

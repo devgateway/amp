@@ -68,7 +68,6 @@ import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.CMSContentItem;
@@ -351,15 +350,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getFunding().setProProjCost(null);
         }
       }
-      
-      Set<AmpStructure> currentStructures = activity.getStructures();
-      currentStructures.size();
-      /*Iterator<AmpStructure> it = currentStructures.iterator();
-      List<AmpStructure> list1 = new ArrayList<AmpStructure>();
-      while(it.hasNext()){
-    	  list1.add(it.next());
-      }*/
-      eaForm.getStructures().setActStructures(currentStructures);
       List nationalPlanObjectivePrograms=new ArrayList();
       List primaryPrograms=new ArrayList();
       List secondaryPrograms=new ArrayList();

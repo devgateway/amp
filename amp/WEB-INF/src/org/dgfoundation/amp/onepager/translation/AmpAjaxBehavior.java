@@ -51,6 +51,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 		
 		Request request = RequestCycle.get().getRequest();
 		String method = request.getRequestParameters().getParameterValue("method").toString();
+        String activityId = request.getRequestParameters().getParameterValue("actId").toString();
 		if ("translate".compareTo(method.toLowerCase()) == 0){
 			translate(request, target);
 		}
@@ -61,7 +62,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 			else
 				if ("switchfmmode".compareTo(method.toLowerCase()) == 0){
 					switchFMMode(request, target);
-				}	
+				}
 		
 	}
 	
@@ -108,10 +109,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 		
 		String id = request.getRequestParameters().getParameterValue("activity").toString();
 		ActivityGatekeeper.pageModeChange(id);
-		Component comp = getComponent();
-		target.add(comp);
-		
-		//target.appendJavaScript("window.location.reload()");
+        target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 	}
 
 	private void switchFMMode(Request request, AjaxRequestTarget target){
@@ -119,9 +117,7 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 		
 		String id = request.getRequestParameters().getParameterValue("activity").toString();
 		ActivityGatekeeper.pageModeChange(id);
-		Component comp = getComponent();
-		target.add(comp);
-		//target.appendJavaScript("window.location.reload()");
+        target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 	}
 	
 	@Override

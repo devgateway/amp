@@ -38,16 +38,23 @@
 function 
 SwitchLanguageMenu(value) {
         if(typeof quitRnot1 != 'function'||quitRnot1('${msg}')!=false){
+                var referrer = document.location.href;
+                if (referrer.indexOf("wicket") > -1){
+                    //In Wicket we must erase the pageId
+                    referrer = referrer.substring(0, referrer.indexOf("?"));
+                }
+                var newLoc = value + referrer;
+
                 if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ //Workaround to allow HTTP REFERER to be sent in IE (AMP-12638)
             		var referLink = document.createElement('a');
-            		referLink.href = value + document.location.href;
+            		referLink.href = newLoc;
             		referLink.target = "_self";
             		document.body.appendChild(referLink);
             		referLink.click();
             		
             	}
             	else{
-            		 document.location.href = value + document.location.href;
+            		 document.location.href = newLoc;
             	}
             	
             }

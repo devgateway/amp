@@ -15,7 +15,7 @@
 
 		<property name="firstNames" column="FIRST_NAMES" type="java.lang.String" />
 		<property name="lastName" column="LAST_NAME" type="java.lang.String" />
-		<property name="email" column="EMAIL" type="java.lang.String" />
+		<property name="email" column="EMAIL" type="java.lang.String" unique="true" />
 		<property name="emailVerified" column="EMAIL_VERIFIED" type="boolean" />
 		<property name="emailBouncing" column="EMAIL_BOUNCING" type="boolean" />
 		<property name="noAlertsUntil" column="NO_ALERTS_UNTIL" type="java.util.Date" />

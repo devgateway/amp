@@ -84,7 +84,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 
 	public String getMetaValueString(String category) {
 		MetaInfo mi = MetaInfo.getMetaInfo(metaData,category);
-		if (mi == null)
+		if (mi == null || mi.getValue()==null)
 			return null;
 		return  mi.getValue().toString();
 	}

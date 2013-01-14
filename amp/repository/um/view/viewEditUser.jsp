@@ -208,7 +208,7 @@ function isInvalid(field){
 					        <logic:equal name="umViewEditUserForm" property="emailerror" value="true" >
 					          <b style="color: red;">
 					            <digi:trn>
-					            	The	email already exist in the database.
+					            	The	email already exists in the database.
 					            </digi:trn>
 					          </b>
 					        </logic:equal>

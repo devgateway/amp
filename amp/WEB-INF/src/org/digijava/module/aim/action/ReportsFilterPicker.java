@@ -65,6 +65,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.HierarchyListableUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
@@ -95,12 +96,15 @@ public class ReportsFilterPicker extends MultiAction {
 	public final static String ONLY_JOINT_CRITERIA	= "0";
 	public final static String ONLY_GOV_PROCEDURES	= "1";
 	
+	public final static String PLEDGE_REPORT_REQUEST_ATTRIBUTE = "is_pledge_report";
+	
 	
 	int curYear=new GregorianCalendar().get(Calendar.YEAR);
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		String sourceIsReportWizard			= request.getParameter("sourceIsReportWizard");
+
 		if ("true".equals(sourceIsReportWizard) ) {
 			filterForm.setSourceIsReportWizard(true);
 			if ( request.getParameter("doreset") != null ) {
@@ -153,15 +157,16 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		if (teamMember != null && teamMember.getTeamId() == null )
 			teamMember = null;
-		
+
+		String applyFormat				= request.getParameter("applyFormat");
+		String applyStr					= request.getParameter("apply");
+
 		if ( teamMember != null ) {
 			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 			if (tempSettings == null)
 				if (teamMember != null)
 					tempSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
 			
-			String applyFormat				= request.getParameter("applyFormat");
-			String applyStr					= request.getParameter("apply");
 			AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
 			if ( existingFilter != null ) {
 				if ( !"true".equals(applyStr) ) {
@@ -183,6 +188,12 @@ public class ReportsFilterPicker extends MultiAction {
 						filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
 					}
 				}
+		} else
+		{
+			// teamMember == null, show the filter as-is. NOTE TO THE UNFORTUNATE SOUL DOING MERGE WITH 2.4: NOTHING SHOULD BE DONE HERE, AS 2.4 IS SANE IN THIS REGARD.
+			AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
+			if (existingFilter != null && (!"true".equals(applyStr)))
+				FilterUtil.populateForm(filterForm, existingFilter);
 		}
 		
 		Long ampTeamId = null;
@@ -307,10 +318,23 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		if(request.getParameter("init")!=null || "true".equals( request.getAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS)) ) 
 				return null; 
-		else 
+		else
+		{
+			// note when porting to 2.4: this should be checked if it still works on 2.4: creating new donor/pledge report in wizard, editing an existing report in report wizard, viewing a report			
+			AmpReports repo = (AmpReports) request.getSession().getAttribute("reportMeta");
+			
+			if ((repo == null) || filterForm.getSourceIsReportWizard())
+			{
+				request.setAttribute(PLEDGE_REPORT_REQUEST_ATTRIBUTE, request.getSession().getAttribute(PLEDGE_REPORT_REQUEST_ATTRIBUTE));
+			}
+			else
+			{
+				request.setAttribute(PLEDGE_REPORT_REQUEST_ATTRIBUTE, String.valueOf(repo.getType() != null && repo.getType() == ArConstants.PLEDGES_TYPE));
+			}
 			modeRefreshDropdowns(mapping, form, request, response, getServlet().getServletContext());
-			return modeSelect(mapping, form, request, response);
 		}
+		return modeSelect(mapping, form, request, response);
+	}
 	
 	/**
 	 * add to the Filter Form an element regarding filtering by a certain type of agencies, if feature is enabled. 
@@ -410,6 +434,19 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 	}
 	
+	/**
+	 * removes an element with the given name, if exists. Noop if it doesn't exist
+	 * @param hier
+	 * @param name
+	 */
+	public void removeElementByName(Collection<GroupingElement<HierarchyListableImplementation>> hier, String name)
+	{
+		Iterator<GroupingElement<HierarchyListableImplementation>> iter = hier.iterator();
+		while (iter.hasNext())
+			if (iter.next().getName().equals(name))
+				iter.remove();
+	}
+	
 	public void modeRefreshDropdowns(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response, ServletContext ampContext) throws Exception {
 		StopWatch.reset("Filters");
 		StopWatch.next("Filters", true);
@@ -419,6 +456,7 @@ public class ReportsFilterPicker extends MultiAction {
 			ampReportId = null;
 		}
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
+				
 		//ServletContext ampContext = getServlet().getServletContext();
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
@@ -582,6 +620,34 @@ public class ReportsFilterPicker extends MultiAction {
 		addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory", request, ampContext);
 		
 						
+		// do NOT add nullguards in the request.getAttribute - it should always be set and if it is null, then it is a bug elsewhere
+		if (FeaturesUtil.isVisibleField("Mode of Payment", ampContext) && "false".equals(request.getAttribute(PLEDGE_REPORT_REQUEST_ATTRIBUTE))) { 
+			Collection<AmpCategoryValue> modeOfPaymentValues	=
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MODE_OF_PAYMENT_KEY, true, request);	
+			HierarchyListableImplementation rootModeOfPayment	= new HierarchyListableImplementation();
+			rootModeOfPayment.setLabel("All Mode of Payment Values");
+			rootModeOfPayment.setUniqueId("0");
+			rootModeOfPayment.setChildren( modeOfPaymentValues );
+			GroupingElement<HierarchyListableImplementation> modeOfPaymentElement	=
+					new GroupingElement<HierarchyListableImplementation>("Mode of Payment", "filter_mode_of_payment_div", 
+							rootModeOfPayment, "selectedModeOfPayment");
+			filterForm.getFinancingLocationElements().add(modeOfPaymentElement);
+		} else
+			removeElementByName(filterForm.getFinancingLocationElements(), "Mode of Payment"); 
+		
+		if (FeaturesUtil.isVisibleField("Project Category", ampContext)) { 
+			Collection<AmpCategoryValue> projCategoryValues	=
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_CATEGORY_KEY, true, request);	
+			HierarchyListableImplementation rootProjCategory	= new HierarchyListableImplementation();
+			rootProjCategory.setLabel("All Project Category Values");
+			rootProjCategory.setUniqueId("0");
+			rootProjCategory.setChildren( projCategoryValues );
+			GroupingElement<HierarchyListableImplementation> projCategoryElement	=
+					new GroupingElement<HierarchyListableImplementation>("Project Category", "filter_project_category_div", 
+							rootProjCategory, "selectedProjectCategory");
+			filterForm.getFinancingLocationElements().add(projCategoryElement);
+		}
+		
 		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> activityStatusValues	=
@@ -659,7 +725,7 @@ public class ReportsFilterPicker extends MultiAction {
 							rootDisbursementOrders, "disbursementOrders");
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
-		if (true) { //Here needs to be a check to see if the field/feature is enabled
+		if (true && "false".equals(request.getAttribute(PLEDGE_REPORT_REQUEST_ATTRIBUTE))) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> budgetCategoryValues	=
 				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY, true, request);	
 			HierarchyListableImplementation rootBudgetCategory	= new HierarchyListableImplementation();
@@ -671,6 +737,9 @@ public class ReportsFilterPicker extends MultiAction {
 						rootBudgetCategory, "selectedBudgets");
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
+		else 
+			removeElementByName(filterForm.getFinancingLocationElements(), "Activity Budget");
+		
 		if (true) { 
 			Collection<AmpCategoryValueLocations> regions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
 			try {
@@ -1623,7 +1692,7 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setDecimalseparator(decimalSeparator);
 		
 		
-		if (filterForm.getCustomUseGrouping().booleanValue() == true) {
+		if (filterForm.getCustomUseGrouping()!=null && filterForm.getCustomUseGrouping().booleanValue() == true) {
 			String groupingSeparator = !"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? 
 					filterForm.getCustomGroupCharacter().substring(0, 1) : filterForm.getCustomGroupCharacterTxt().substring(0, 1);
 			ds.setGroupingSeparator( groupingSeparator.charAt(0) );			

@@ -175,6 +175,7 @@ public class ReportWizardAction extends MultiAction {
 		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
 		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
 		request.getSession().setAttribute( ArConstants.REPORTS_FILTER, null );
+		request.getSession().setAttribute("reportMeta", null); //VERY important for pledge reports recognisation. For porting to AMP 2.4: put null in RCD.reportMeta
 
 		/**
 		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard
@@ -222,6 +223,8 @@ public class ReportWizardAction extends MultiAction {
 			typereport = ArConstants.PLEDGES_TYPE;
 			request.getParameterMap().put("type", "5");
 		}
+		
+		request.getSession().setAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE, Boolean.toString(typereport == ArConstants.PLEDGES_TYPE)); //WARNING: When merging with 2.4, using ReportContextData attribute instead of storing in the session		
 		
 		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(),typereport,request.getSession()));
 		if (typereport==ArConstants.PLEDGES_TYPE || myForm.getReportType().equalsIgnoreCase("pledge")){

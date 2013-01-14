@@ -205,10 +205,20 @@ public class DbUtil {
      * @throws org.digijava.kernel.exception.DgException
      */
     @SuppressWarnings("unchecked")
-    public static DecimalWraper getPledgesFunding(Long[] orgIds, Long[] orgGroupIds,
+    public static DecimalWraper getPledgesFunding(DashboardFilter filter,
             Date startDate, Date endDate,
             String currCode) throws DgException {
     	DecimalWraper totalPlannedPldges = new DecimalWraper();
+        Long[] orgsGrpIds = filter.getOrgGroupIds();
+		Long orgsGrpId = filter.getOrgGroupId();
+		Long[] orgIds = filter.getSelOrgIds();
+		Long[] orgGroupIds;
+		if (orgsGrpIds == null || orgsGrpIds.length == 0 || orgsGrpIds[0] == -1) {
+			Long[] temp = {orgsGrpId};
+	        orgGroupIds = temp;
+		} else {
+	        orgGroupIds = orgsGrpIds;
+		}	
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         Integer startYear = Integer.valueOf(sdf.format(startDate));
         Integer endYear = Integer.valueOf(sdf.format(endDate));
@@ -223,15 +233,19 @@ public class DbUtil {
         oql += " from ";
         oql += FundingPledgesDetails.class.getName()
                 + " fd inner join fd.pledgeid plg ";
-        oql += " inner join  plg.organization org  ";
-        oql += " where  fd.fundingYear in (" + years + ")";
+        String where = " where  fd.fundingYear in (" + years + ")";
         if (orgIds == null || orgIds.length==0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-                oql += " and  org.orgGrpId.ampOrgGrpId in (" + DashboardUtil.getInStatement(orgGroupIds) + ") ";
+                oql += " left outer join  plg.organization org  ";
+            	oql += " inner join plg.organizationGroup orgGrp ";
+            	where += " and (org.orgGrpId.ampOrgGrpId in (" + DashboardUtil.getInStatement(orgGroupIds) + ") ";
+            	where += " or  orgGrp.ampOrgGrpId in (" + DashboardUtil.getInStatement(orgGroupIds) + ")) ";
             }
         } else {
-            oql += " and org.ampOrgId in (" + DashboardUtil.getInStatement(orgIds) + ") ";
+            oql += " inner join  plg.organization org  ";
+        	where += " and org.ampOrgId in (" + DashboardUtil.getInStatement(orgIds) + ") ";
         }
+        oql += where;
         Session session = PersistenceManager.getRequestDBSession();
         List<FundingPledgesDetails> fundingDets = null;
         try {

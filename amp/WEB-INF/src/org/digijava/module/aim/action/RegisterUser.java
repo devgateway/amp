@@ -120,7 +120,7 @@ public class RegisterUser extends Action {
 			// if email register get error message
 
 			if (DbUtil.isRegisteredEmail(user.getEmail())) {
-				userRegisterForm.addError("error.registration.emailexits", "Email already exits");
+				userRegisterForm.addError("error.registration.emailexits", "Email already exists");
 				//return (new ActionForward(mapping.getInput()));
 				return (mapping.getInputForward());
 			} else {

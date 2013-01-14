@@ -19,8 +19,7 @@
 				String title=(String)((org.apache.struts.tiles.ComponentContext) request.getAttribute("org.apache.struts.taglib.tiles.CompContext")).getAttribute("title");
 				String key=(title.replaceAll(" ",""));
 			%>
-	<TITLE>
-		
+
 		<TITLE>
 			<logic:present name="extraTitle" scope="request">
 					<bean:define id="extTitle" name="extraTitle" scope="request" type="java.lang.String" />

@@ -269,7 +269,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{
@@ -326,7 +326,7 @@
 				var strProtocol:String = "";
 				if(curUrl.indexOf("file://") > -1){
 					strProtocol = "http:";
-					strDomain = "localhost:8081";
+					strDomain = "localhost:8080";
 				}
 				else
 				{

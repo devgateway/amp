@@ -67,7 +67,7 @@ var requiredRevision = ${version_revision};
 			decimalsToShow: "2", 
 			palette: palette, 
 			title: "Titulo", 
-			id: "OrganizationProfile",
+			id: "RegionProfile",
 			start: true
 		};
 	attributes.id = "${application}";
@@ -118,9 +118,12 @@ return arr;
 } 
 // -->
 </script>
-<input id="OrganizationProfileTitle" value="" size="50" type="text">
-<input id="OrganizationProfileShowFontFamily" value="Verdana" type="hidden">
-<select id="OrganizationProfileFontSize">
+<input type="hidden" id="GlobalFontSize" value="11" />
+<input type="hidden" id="GlobalFontFamily" value="Arial" />
+<input type="hidden" id="GlobalFontWeight" value="bold" />
+<input id="RegionProfileTitle" value="" size="50" type="text">
+<input id="RegionProfileShowFontFamily" value="Verdana" type="hidden">
+<select id="RegionProfileFontSize">
 
 <option value="12">12</option>
 <option value="13">13</option>
@@ -131,17 +134,17 @@ return arr;
 </select>
 <input id="startYear" type="text" value="2009">
 <input id="endYear" type="text" value="2012">
-<input id="OrganizationProfileBold" type="checkbox">
-<input id="OrganizationProfileShowLegend" checked="checked" type="checkbox">
-<input id="OrganizationProfileDivide" type="checkbox">
-<input id="OrganizationProfileShowDataLabel" type="checkbox">
-<input id="OrganizationProfileRotateDataLabel" type="checkbox">
-<input id="OrganizationProfileIgnore" style="display: none;" checked="checked" type="checkbox">
-<input id="OrganizationProfileDataAction" value="getOrganizationProfileGraphData" type="hidden">
-<input id="OrganizationProfileItemId" type="hidden">
-<input type="hidden" id="OrganizationProfileDataField" value="dataField" />
-<input id="OrganizationProfileTitleLegendTrn" value="OrganizationProfileTitleLegendTrn" type="hidden">
-<input class="buttonx" value="Update chart" onclick="updateGraph(event, 'OrganizationProfile')" type="button">
+<input id="RegionProfileBold" type="checkbox">
+<input id="RegionProfileShowLegend" checked="checked" type="checkbox">
+<input id="RegionProfileDivide" type="checkbox">
+<input id="RegionProfileShowDataLabel" type="checkbox">
+<input id="RegionProfileRotateDataLabel" type="checkbox">
+<input id="RegionProfileIgnore" style="display: none;" checked="checked" type="checkbox">
+<input id="RegionProfileDataAction" value="getRegionProfileGraphData" type="hidden">
+<input id="RegionProfileItemId" type="hidden">
+<input type="hidden" id="RegionProfileDataField" value="dataField" />
+<input id="RegionProfileTitleLegendTrn" value="RegionProfileTitleLegendTrn" type="hidden">
+<input class="buttonx" value="Update chart" onclick="updateGraph(event, 'RegionProfile')" type="button">
 						
 
 

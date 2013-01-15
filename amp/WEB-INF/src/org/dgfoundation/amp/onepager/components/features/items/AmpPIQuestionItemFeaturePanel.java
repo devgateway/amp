@@ -19,6 +19,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.PIYesNoAnswerModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
@@ -92,6 +93,9 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 				
 				Label indName = new TrnLabel("qtext", new PropertyModel<String>(item.getModelObject(), "questionText"));
 				item.add(indName);
+
+                AmpTextFieldPanel<String> references = new AmpTextFieldPanel<String>("references", new PropertyModel<String>(responseModel, "references"), "References", false, true);
+                item.add(references);
 				
 				String qtype = item.getModelObject().getAmpTypeId().getName();
 				if (qtype.compareTo("yes-no") == 0){

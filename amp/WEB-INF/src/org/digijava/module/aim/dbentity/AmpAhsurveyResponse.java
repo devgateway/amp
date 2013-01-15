@@ -7,6 +7,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.digijava.module.aim.util.Output;
 
@@ -21,8 +22,18 @@ public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable
 	private AmpAhsurvey ampAHSurveyId;
 	private AmpAhsurveyQuestion ampQuestionId;
 	private String response;
-	
-	/**
+    private String references;
+
+
+    public String getReferences() {
+        return references;
+    }
+
+    public void setReferences(String references) {
+        this.references = references;
+    }
+
+    /**
 	 * @return Returns the questionId.
 	 */
 	public AmpAhsurveyQuestion getAmpQuestionId() {
@@ -92,9 +103,13 @@ public class AmpAhsurveyResponse implements Versionable, Cloneable, Serializable
 	public Output getOutput() {
 		Output out = new Output();
 		out.setTitle(new String[] { " Q", this.ampQuestionId.getQuestionNumber().toString(), ": " });
+        out.setOutputs(new ArrayList<Output>());
 		if (this.response != null && !this.response.equals("nil")) {
-			out.setValue(new Object[] { this.response });
+            out.getOutputs().add(new Output(null, new String[] {"Response:&nbsp;" }, new Object[] { this.getResponse()}));
 		}
+        if (this.references != null){
+            out.getOutputs().add(new Output(null, new String[] {"References:&nbsp;" }, new Object[] { this.getReferences()}));
+        }
 		return out;
 	}
 	@Override

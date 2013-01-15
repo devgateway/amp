@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	 Copyright (c) 2009 Team Axiis
+
+	 Permission is hereby granted, free of charge, to any person
+	 obtaining a copy of this software and associated documentation
+	 files (the "Software"), to deal in the Software without
+	 restriction, including without limitation the rights to use,
+	 copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 copies of the Software, and to permit persons to whom the
+	 Software is furnished to do so, subject to the following
+	 conditions:
+
+	 The above copyright notice and this permission notice shall be
+	 included in all copies or substantial portions of the Software.
+
+	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+	 OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+	 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+	 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+	 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+	 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+	 OTHER DEALINGS IN THE SOFTWARE.
+-->
+<!---
+	 ColumnCluster groups a series of vertical columns horizontally
+	 and labels them. This class is intended to be used to produce
+	 multi-series column charts.
+-->
+<groupings:GroupingBase xmlns:mx="http://www.adobe.com/2006/mxml"
+						xmlns:degrafa="http://www.degrafa.com/2007"
+						name="outerlayout"
+						xmlns:layouts="org.axiis.layouts.*"
+						xmlns:scale="org.axiis.layouts.scale.*"
+						xmlns:groupings="org.axiis.charts.groupings.*"
+						xmlns:utils="org.axiis.utils.*"
+						xmlns:utils1="org.axiis.layouts.utils.*"
+						xmlns:states="org.axiis.states.*"
+						dataTipAnchorPoint="{dataTipPoint}"
+						xmlns:geom="flash.geom.*">
+
+	<!-- public variables -->
+	<mx:Script>
+		<![CDATA[
+			import com.degrafa.IGeometryComposition;
+			import com.degrafa.core.IGraphicsFill;
+			import com.degrafa.core.IGraphicsStroke;
+			import com.degrafa.paint.SolidStroke;
+			
+			import mx.events.PropertyChangeEvent;
+
+			[Bindable]
+			/**
+			 * A function that is used to determine how each item in the
+			 * dataProvider should be labeled.
+			 *
+			 * <p>
+			 * The function takes a single parameter, the Object to be plotted,
+			 * and should return the String that should be placed on the axis.
+			 * The default implementation assumes that each Object in the
+			 * dataProvider is numeric, rounds that number, and returns the
+			 * that value as a String.
+			 * </p>
+			 */
+			public var labelFunction:Function;
+
+			private var selected_stroke:SolidStroke=new SolidStroke(0, 1, 3);
+
+			[Bindable(event="showValueLabelChange")]
+			/**
+			 * Whether or not the labels indicating the the value each bar
+			 * represents are shown.
+			 */
+			public function get showValueLabel():Boolean
+			{
+				return _showValueLabel;
+			}
+
+			public function set showValueLabel(value:Boolean):void
+			{
+				if (value != _showValueLabel)
+				{
+					_showValueLabel=value;
+					dispatchEvent(new Event("showValueLabelChange"));
+					invalidate();
+				}
+			}
+
+			public function set additionalGeometries(value:IGeometryComposition)
+			{
+				_additionalGeometries=value;
+				geomPlaceholder.geometry=[_additionalGeometries];
+			}
+
+			public function get additionalGeometries():IGeometryComposition
+			{
+				return _additionalGeometries;
+			}
+
+			[Bindable]
+			private var _additionalGeometries:IGeometryComposition;
+
+			private var _showValueLabel:Boolean=true;
+
+			[Bindable(event="dataLabelRotateAngleChange")]
+			/**
+			 * 
+			 * 
+			 */
+			public function get dataLabelRotateAngle():int
+			{
+				return _dataLabelRotateAngle;
+			}
+			
+			public function set dataLabelRotateAngle(value:int):void
+			{
+				if (value != _dataLabelRotateAngle)
+				{
+					_dataLabelRotateAngle=value;
+					dispatchEvent(new Event("dataLabelRotateAngleChange"));
+					invalidate();
+				}
+			}
+
+			private var _dataLabelRotateAngle:int=0;
+			[Bindable(event="dataLabelRegistrationPoint")]
+			/**
+			 * 
+			 * 
+			 */
+			public function get dataLabelRegistrationPoint():String
+			{
+				return _dataLabelRegistrationPoint;
+			}
+			
+			public function set dataLabelRegistrationPoint(value:String):void
+			{
+				if (value != _dataLabelRegistrationPoint)
+				{
+					_dataLabelRegistrationPoint=value;
+					dispatchEvent(new Event("dataLabelRegistrationPoint"));
+					invalidate();
+				}
+			}
+			
+			private var _dataLabelRegistrationPoint:String="";
+		]]>
+	</mx:Script>
+
+	<!--- @private -->
+	<mx:Number id="percentGap">.05</mx:Number>
+
+	<!---
+		 The minimum width of each column
+	-->
+	<mx:Number id="minColumnWidth">15</mx:Number>
+
+	<!---
+		 The scale used to determine the height of each column.
+	-->
+	<scale:LinearScale id="verticalScale"/>
+
+	<!--- @private -->
+	<utils:NumericExpression id="labelLayout"
+							 value="{column.y+column.height+label.width+5+(currentValue >=0 ? 0:-column.height-label.width-10)}"/>
+
+	<!--- @private -->
+	<utils:NumericExpression id="valueLabelLayout"
+							 value="{column.y-valueLabel.height-3 + (currentValue >= 0 ? 0:column.height+valueLabel.height+3)}"/>
+
+	<!--- @private -->
+	<geom:Point id="dataTipPoint"
+				x="{column.x+column.width/2}"
+				y="{column.y}"/>
+
+	<groupings:referenceRepeater>
+		<utils1:GeometryRepeater>
+			<utils1:geometry>
+				<degrafa:RegularRectangle x="0"
+										  y="0"
+										  width="{(width / itemCount) - (width * percentGap/2)}"
+										  height="{height}"
+										  enableEvents="false"/>
+			</utils1:geometry>
+			<utils1:modifiers>
+				<utils1:PropertyModifier property="x"
+										 modifier="{width/itemCount}"
+										 modifierOperator="add"/>
+			</utils1:modifiers>
+		</utils1:GeometryRepeater>
+	</groupings:referenceRepeater>
+
+	<groupings:drawingGeometries>
+
+
+
+		<!--- @private -->
+		<degrafa:RegularRectangle id="column"
+								  x="{currentReference.x}"
+								  y="{((currentValue >= 0) ? currentReference.height-Number(this.verticalScale.valueToLayout(currentValue)) : currentReference.height-Number(this.verticalScale.valueToLayout(0)))}"
+								  width="{Math.max(minColumnWidth,currentReference.width)}"
+								  height="{(currentValue >= 0 ? Number(this.verticalScale.valueToLayout(currentValue))-Number(this.verticalScale.valueToLayout(0)) : Number(this.verticalScale.valueToLayout(0))-Number(this.verticalScale.valueToLayout(currentValue))) }"
+								  fill="{fill}"
+								  stroke="{stroke}">
+		</degrafa:RegularRectangle>
+
+
+		<!--- @private -->
+		<degrafa:RasterText htmlText="{(currentLabel) ? currentLabel : ' '}"
+							textColor="{fontColor}"
+							visible="{showLabel}"
+							id="label"
+							x="{currentReference.x+(currentReference.width-label.height)/2}"
+							height="20"
+							y="{labelLayout.value}"
+							width="100"
+							fontSize="{fontSize}"
+							align="{(currentValue &lt; 0) ? 'left' : 'right'}"
+							fontFamily="{fontFamily}"
+							fontWeight="{fontWeight}">
+			<degrafa:transform>
+				<degrafa:RotateTransform angle="-90"
+										 registrationPoint="topLeft"/>
+			</degrafa:transform>
+		</degrafa:RasterText>
+		<!--- @private -->
+		<degrafa:RasterText htmlText="{(labelFunction != null) ? labelFunction.call(this,currentDatum) : (currentValue ? currentValue:' ')}"
+							textColor="{dataFontColor}"
+							visible="{showDataLabel}"
+							id="valueLabel"
+							x="{currentReference.x+(currentReference.width-((dataLabelRotateAngle == 0) ? valueLabel.textWidth : valueLabel.height))/2}"
+							height="20"
+							y="{valueLabelLayout.value + ((dataLabelRotateAngle == 0) ? 0 : 20)}"
+							fontSize="{dataFontSize}"
+							autoSizeField="true"
+							align="right"
+							fontFamily="{dataFontFamily}"
+							fontWeight="{dataFontWeight}">
+			<degrafa:transform>
+				<degrafa:RotateTransform angle="{dataLabelRotateAngle}"
+										 registrationPoint="{dataLabelRegistrationPoint}"/>
+			</degrafa:transform>
+		</degrafa:RasterText>
+
+		<!--- @private -->
+		<degrafa:RegularRectangle id="geomPlaceholder"
+								  width="{this.width}"
+								  height="{this.height}"/>
+
+	</groupings:drawingGeometries>
+	<groupings:fills>
+		<!--- @private -->
+		<degrafa:SolidFill id="rollOverFill"
+						   color="0xDDDD00"
+						   alpha=".6"/>
+	</groupings:fills>
+
+	<groupings:states>
+		<!--states:State enterStateEvent="mouseOver"
+			 exitStateEvent="mouseOut"
+			 targets="{[column,label]}"
+			 properties="{['fill','textColor']}"
+			 values="{[rollOverFill,0xFFFFFF]}"/-->
+
+		<states:State enterStateEvent="selected"
+					  exitStateEvent="unselected"
+					  targets="{[column]}"
+					  properties="{['stroke']}"
+					  values="{[selected_stroke]}"/>
+	</groupings:states>
+</groupings:GroupingBase>

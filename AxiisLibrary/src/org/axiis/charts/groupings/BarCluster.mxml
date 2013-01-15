@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	 Copyright (c) 2009 Team Axiis
+
+	 Permission is hereby granted, free of charge, to any person
+	 obtaining a copy of this software and associated documentation
+	 files (the "Software"), to deal in the Software without
+	 restriction, including without limitation the rights to use,
+	 copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 copies of the Software, and to permit persons to whom the
+	 Software is furnished to do so, subject to the following
+	 conditions:
+
+	 The above copyright notice and this permission notice shall be
+	 included in all copies or substantial portions of the Software.
+
+	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+	 OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+	 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+	 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+	 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+	 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+	 OTHER DEALINGS IN THE SOFTWARE.
+-->
+<!---
+	 BarCluster groups a series of bars together vertically
+	 and labels them. This class is intended to be used to produce multi-series
+	 bar charts.
+-->
+<groupings:GroupingBase xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:degrafa="http://www.degrafa.com/2007"
+	xmlns:layouts="org.axiis.layouts.*"
+	xmlns:scale="org.axiis.layouts.scale.*"
+	xmlns:states="org.axiis.states.*"
+	dataTipAnchorPoint="{dataTipPoint}"
+	xmlns:geom="flash.geom.*"
+	xmlns:utils="org.axiis.utils.*"
+	xmlns:groupings="org.axiis.charts.groupings.*"
+	xmlns:utils1="org.axiis.layouts.utils.*"
+	xmlns:core="org.axiis.core.*">
+	
+
+	<!-- public variables -->
+	<mx:Script> 
+		<![CDATA[
+
+			[Bindable]
+			/**
+			 * A function that is used to determine how each item in the
+			 * dataProvider should be labeled.
+			 *
+			 * <p>
+			 * The function takes a single parameter, the Object to be plotted,
+			 * and should return the String that should be placed on the axis.
+			 * The default implementation assumes that each Object in the
+			 * dataProvider is numeric, rounds that number, and returns the
+			 * that value as a String.
+			 * </p>
+			 */
+			public var labelFunction:Function;
+			
+			[Bindable(event="showValueLabelChange")]
+			/**
+			 * Whether or not the labels indicating the the value each bar
+			 * represents are shown.
+			 */ 
+			public function get showValueLabel():Boolean
+			{
+				return _showValueLabel;
+			}
+			public function set showValueLabel(value:Boolean):void
+			{
+				if(value != _showValueLabel)
+				{
+					_showValueLabel = value;
+					dispatchEvent(new Event("showValueLabelChange"));
+					invalidate();
+				}
+			}
+			private var _showValueLabel:Boolean = true;
+			
+			[Bindable(event="dataLabelRotateAngleChange")]
+			/**
+			 * 
+			 * 
+			 */
+			public function get dataLabelRotateAngle():int
+			{
+				return _dataLabelRotateAngle;
+			}
+			
+			public function set dataLabelRotateAngle(value:int):void
+			{
+				if (value != _dataLabelRotateAngle)
+				{
+					_dataLabelRotateAngle=value;
+					dispatchEvent(new Event("dataLabelRotateAngleChange"));
+					invalidate();
+				}
+			}
+			
+			private var _dataLabelRotateAngle:int=0;
+			
+			[Bindable(event="dataLabelRegistrationPoint")]
+			/**
+			 * 
+			 * 
+			 */
+			public function get dataLabelRegistrationPoint():String
+			{
+				return _dataLabelRegistrationPoint;
+			}
+			
+			public function set dataLabelRegistrationPoint(value:String):void
+			{
+				if (value != _dataLabelRegistrationPoint)
+				{
+					_dataLabelRegistrationPoint=value;
+					dispatchEvent(new Event("dataLabelRegistrationPoint"));
+					invalidate();
+				}
+			}
+			
+			private var _dataLabelRegistrationPoint:String="";
+		]]>
+	</mx:Script>
+
+	<!--- @private -->
+	<mx:Number id="percentGap">.05</mx:Number>
+
+	<!---
+		 The scale used to determine the width of each bar.
+	-->
+	<scale:LinearScale id="horizontalScale"/>
+
+	<!--- @private -->
+	<utils:NumericExpression id="labelLayout" value="{(currentValue > 0) ? -label.width-5 : bar.x + bar.width+5}"/>
+
+	<!--- @private -->
+	<utils:NumericExpression id="valueLabelLayout" value="{(currentValue > 0) ? bar.x+bar.width+5 : bar.x-70}"/>
+
+	<!--- @private -->
+	<geom:Point id="dataTipPoint"
+				x="{(currentValue > 0) ? bar.x+bar.width : bar.x}"
+				y="{bar.y+bar.height/2}"
+				/>
+	
+	<groupings:referenceRepeater>
+		<utils1:GeometryRepeater>
+			<utils1:geometry>
+				<degrafa:RegularRectangle x="0" y="0" height="{height / itemCount - (height*percentGap/2)}" width="{width}"/>
+			</utils1:geometry>
+			<utils1:modifiers>
+				<utils1:PropertyModifier property="y" modifier="{height/itemCount}" modifierOperator="add"/>
+			</utils1:modifiers>
+		</utils1:GeometryRepeater>
+	</groupings:referenceRepeater>
+
+	<groupings:drawingGeometries>
+
+		<!--- @private -->
+		<degrafa:RegularRectangle id="bar"
+			x="{(currentValue >= 0) ? this.horizontalScale.valueToLayout(0) : this.horizontalScale.valueToLayout(currentValue)}"
+			y="{currentReference.y}"
+			width="{(currentValue > 0 ? Number(this.horizontalScale.valueToLayout(currentValue))-Number(this.horizontalScale.valueToLayout(0)) : Number(this.horizontalScale.valueToLayout(0))-Number(this.horizontalScale.valueToLayout(currentValue))) }"
+			height="{Math.max(15,currentReference.height)}"
+			fill="{fill}"
+			stroke="{stroke}">
+		</degrafa:RegularRectangle>
+
+
+		<!--- @private -->
+		<degrafa:RasterText id="label"
+			htmlText="{currentLabel ? currentLabel:' '}"
+			textColor="{fontColor + currentReference.x}"
+			visible="{showLabel}"
+			x="{labelLayout.value}"
+			height="15"
+			width="100"
+			y="{currentReference.y + (currentReference.height-label.height)*.5}"
+			fontSize="{fontSize}"
+			align="{(currentValue > 0) ? 'right' : 'left'}"
+			fontFamily="{fontFamily}"
+			fontWeight="{fontWeight}">
+			
+		</degrafa:RasterText>
+		
+		<!--- @private -->
+		<degrafa:RasterText id="valueLabel"
+			htmlText="{(labelFunction != null) ? labelFunction.call(this,currentDatum) : (currentValue ? currentValue:' ')}"
+			textColor="0x000000"
+			visible="{showValueLabel}"
+			y="{currentReference.y+(currentReference.height-valueLabel.height)*.5}"
+			height="20"
+			x="{(currentValue > 0) ? valueLabelLayout.value : valueLabelLayout.value-30}"
+			fontSize="{fontSize}"
+			align="{(currentValue > 0) ? 'left' : 'right'}"
+			fontFamily="{dataFontFamily}"
+			fontWeight="{dataFontWeight}">
+			
+		</degrafa:RasterText>		
+	</groupings:drawingGeometries>
+
+	<!--- FIXME Uncommenting this will and running VClusterStackExample will reveal a states bug -->
+	<!--
+	<layouts:fills>
+		<degrafa:SolidFill id="rollOverFill" color="0xDDDD00" alpha=".6"/>
+	</layouts:fills>
+	<layouts:strokes>
+		<degrafa:SolidStroke id="rollOverStroke" weight="1" color="white"/>
+
+	<layouts:states>
+		<states:State id="rollOverState"
+			enterStateEvent="mouseOver"
+			exitStateEvent="mouseOut"
+			targets="{[bar,bar]}"
+			properties="{['fill','stroke']}"
+			values="{[rollOverFill,rollOverStroke]}"
+			propagateToDescendents="true"/>
+	</layouts:states>
+	-->
+</groupings:GroupingBase>

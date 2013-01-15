@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2009 Team Axiis
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<!---
+	The ConcentricWedgeLayout is a layout with a referenceRepeater that produces
+	concentric Wedges for each item in its dataProvider. The Wedges' inner and outer
+	radii are set such that the all the Wedges will be sized and spaced evenly
+	across the radius of the layout. This behavior can be used to create radial
+	visualizations.
+-->
+<core:BaseLayout xmlns="*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:axiis="http://www.axiis.org/2009"
+	xmlns:geometry="com.degrafa.geometry.*"
+	xmlns:core="org.axiis.core.*"
+	xmlns:utils="org.axiis.layouts.utils.*"
+	xmlns:utils2="org.axiis.utils.*">
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			/**
+			 * The distance from the center of the layout where the first wedge should be created
+			 */
+			public var innerRadius:Number = 0;
+
+			[Bindable]
+			/**
+			 * The distance in pixels between successive wedges
+			 */
+			public var radialGap:Number = 0;
+			
+			[Bindable]
+			[Inspectable(defaultValue='outward',enumeration='outward,inward')]
+			/**
+			 * 
+			 */
+			public var direction:String = "outward"
+		]]>
+	</mx:Script>
+
+	<!--- @private -->
+	<utils2:NumericExpression id="radiusStep"
+		value="{(centerExpression.value - innerRadius - itemCount * radialGap)/(itemCount) + radialGap}"/>
+
+	<!--- @private -->
+	<utils2:NumericExpression id="centerExpression"
+		value="{Math.min(width,height)/2}"/>
+
+	<core:referenceRepeater>
+		<utils:GeometryRepeater>
+			<utils:geometry>
+				<!--- @private -->
+				<geometry:Wedge id="referenceWedge"
+					centerX="{width/2}"
+					centerY="{height/2}"
+					innerRadius="{direction == 'inward' ? centerExpression.value - 5 : innerRadius}"
+					outerRadius="{direction == 'inward' ? centerExpression.value : innerRadius + radiusStep.value - radialGap}"
+					startAngle="270"
+					arc="359.99"/>
+			</utils:geometry>
+			<utils:modifiers>
+				<utils:PropertyModifier modifier="{radiusStep.value}"
+					modifierOperator="{direction == 'inward' ? 'subtract' : 'add'}"
+					property="innerRadius"/>
+				<utils:PropertyModifier modifier="{radiusStep.value}"
+					modifierOperator="{direction == 'inward' ? 'subtract' : 'add'}"
+					property="outerRadius"/>
+			</utils:modifiers>
+		</utils:GeometryRepeater>
+	</core:referenceRepeater>
+</core:BaseLayout>

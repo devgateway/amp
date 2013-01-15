@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2009 Team Axiis
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<!---
+	The default background used on data tips. Renders a styled CalloutBalloon.
+-->
+<degrafa:GeometryGroup xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:degrafa="http://www.degrafa.com/2007" xmlns:geometry="com.degrafa.geometry.*">
+	<mx:Script>
+		<![CDATA[
+			/**
+			* How wide the base of the callout triangle is where it intersects with the side of the callout
+			**/
+			public var calloutWidthRatio:Number;
+			
+			/**
+			* The X position of the callout relative to its 0,0 location
+			**/
+			public var calloutX:Number = 0;
+			
+			/**
+			* The Y position of the callout relative to its 0,0 location
+			**/
+			public var calloutY:Number = 0; 
+		]]>
+	</mx:Script>
+	<!--- @private -->
+	<geometry:CalloutBalloon id="ballon"
+		width="{width}"
+		height="{height}"
+	 	topLeftRadius="8" topRightRadius="8" bottomLeftRadius="8" bottomRightRadius="8"
+	 	calloutX="{calloutX}" calloutY="{height-calloutY}"  calloutWidthRatio="{calloutWidthRatio}">
+		<geometry:fill> 
+			<degrafa:LinearGradientFill angle="90">
+				<degrafa:GradientStop color="0xEEEEEE"/>
+				<degrafa:GradientStop color="0xAAAAAA"/> 
+			</degrafa:LinearGradientFill>
+		</geometry:fill> 
+		<geometry:stroke>
+			<degrafa:SolidStroke color="0x999999"/>
+		</geometry:stroke>
+	</geometry:CalloutBalloon>	
+</degrafa:GeometryGroup>

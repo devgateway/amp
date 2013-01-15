@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	 Copyright (c) 2009 Team Axiis
+
+	 Permission is hereby granted, free of charge, to any person
+	 obtaining a copy of this software and associated documentation
+	 files (the "Software"), to deal in the Software without
+	 restriction, including without limitation the rights to use,
+	 copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 copies of the Software, and to permit persons to whom the
+	 Software is furnished to do so, subject to the following
+	 conditions:
+
+	 The above copyright notice and this permission notice shall be
+	 included in all copies or substantial portions of the Software.
+
+	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+	 OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+	 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+	 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+	 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+	 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+	 OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<!-- TODO this class needs to be updated to invalidate when the public properties are changed -->
+
+<!---
+	 PlotGroup renders circles of varying radii into a cartesian grid without
+	 the use of reference geometries. The circles can be styled with a fill and
+	 stroke and an optional highlight. Each circle can have a marker rendered at
+	 its center.
+-->
+<layouts:RepeaterLayout xmlns="*"
+						xmlns:mx="http://www.adobe.com/2006/mxml"
+						xmlns:degrafa="http://www.degrafa.com/2007"
+						xmlns:geometry="com.degrafa.geometry.*"
+						xmlns:layouts="org.axiis.layouts.*"
+						xmlns:axiis="http://www.axiis.org/2009"
+						xmlns:scale="org.axiis.layouts.scale.*"
+						dataTipAnchorPoint="{marker}"
+						xmlns:states="org.axiis.states.*">
+
+	<mx:Script>
+		<![CDATA[
+			import org.axiis.utils.ObjectUtils;
+			import com.degrafa.paint.SolidStroke;
+			import com.degrafa.core.IGraphicsStroke;
+			import com.degrafa.paint.SolidFill;
+			import com.degrafa.core.IGraphicsFill;
+			import com.degrafa.geometry.Geometry;
+
+			[Bindable]
+			/**
+			 * The fill applied to the circles.
+			 */
+			public var plotFill:com.degrafa.core.IGraphicsFill=new SolidFill(0xFFFFFF, .7);
+
+			[Bindable]
+			/**
+			 * The stroke applied to the circles.
+			 */
+			public var plotStroke:com.degrafa.core.IGraphicsStroke=new SolidStroke(0, 0);
+
+			[Bindable]
+			/**
+			 * The geometry rendered at the center of each circle.
+			 */
+			public var markerGeometry:Geometry;
+		]]>
+	</mx:Script>
+
+	<!-- TODO these don't need to be linear -->
+	<!---
+		 The scale used to translate data values to the layout's coordinate space
+		 in the vertical direction.
+	-->
+	<scale:LinearScale id="verticalScale"/>
+
+	<!---
+		 The scale used to translate data values to the layout's coordinate space
+		 in the horizontal direction.
+	-->
+	<scale:LinearScale id="horizontalScale"/>
+
+	<!---
+		 The scale used to convert data values to radii.
+	-->
+	<scale:LogScale id="radiusScale"
+					base="2"
+					minLayout="{Number.NEGATIVE_INFINITY}"/>
+
+	<!---
+		 The name of the property on the items in the dataProvider that contains
+		 the value that should be rendered along the horizontal axis.
+	-->
+	<mx:String id="horizontalField"/>
+
+	<!---
+		 The name of the property on the items in the dataProvider that contains
+		 the value that should be rendered along the vertical axis.
+	-->
+	<mx:String id="verticalField"/>
+
+	<!---
+		 The name of the property on the items in the dataProvider that contains
+		 the value that should used to determine the radius of each circle.
+	-->
+	<mx:String id="radiusField"/>
+
+	<!-- TODO we need to watch for invalidate when this changes -->
+	<!---
+		 The stroke applied to the highlight at the center of each circle.
+	-->
+	<degrafa:SolidStroke id="highlightStroke"
+						 color="0xDDDD00"
+						 weight="2"/>
+
+	<!---
+		 The default radius to use when radiusField is not specified
+	-->
+	<mx:Number id="defaultRadius">6</mx:Number>
+
+	<!---
+		 Whether or not markers should be displayed at each data point
+	-->
+	<mx:Boolean id="showMarker">true</mx:Boolean>
+
+	<mx:String id="fontFamily">Arial</mx:String>
+	<mx:String id="fontWeight">normal</mx:String>
+	<mx:Number id="fontSize">12</mx:Number>
+	<mx:Number id="fontColor">0</mx:Number>
+	<mx:Boolean id="showLabel">false</mx:Boolean>
+
+	<layouts:drawingGeometries>
+
+		<!--- @private -->
+		<degrafa:Circle id="plotCircle"
+						radius="{((radiusField !='' &amp;&amp; radiusField != null)  &amp;&amp; radiusScale.minLayout > Number.NEGATIVE_INFINITY) ? Number(radiusScale.valueToLayout(ObjectUtils.getProperty(this,currentDatum,radiusField))) : defaultRadius }"
+						centerX="{Number(horizontalScale.valueToLayout(ObjectUtils.getProperty(this,currentDatum,horizontalField)))}"
+						centerY="{Number(verticalScale.valueToLayout(ObjectUtils.getProperty(this,currentDatum,verticalField),true))}"
+						fill="{plotFill}"
+						stroke="{plotStroke}"
+						filters="{[new DropShadowFilter(5,45,0,.4,5,plotCircle.radius*.2)]}"/>
+
+		<!--- @private -->
+		<degrafa:Circle id="highlightCircle"
+						radius="{((radiusField !='' &amp;&amp; radiusField != null) &amp;&amp; radiusScale.minLayout > Number.NEGATIVE_INFINITY) ? Number(radiusScale.valueToLayout(ObjectUtils.getProperty(this,currentDatum,radiusField))) + 1 : defaultRadius }"
+						centerX="{Number(horizontalScale.valueToLayout(ObjectUtils.getProperty(this,currentDatum,horizontalField)))}"
+						centerY="{Number(verticalScale.valueToLayout(ObjectUtils.getProperty(this,currentDatum,verticalField),true))}"
+						stroke="{highlightStroke}"
+						visible="false"/>
+
+		<!--- @private -->
+		<degrafa:Ellipse id="highlightEllipse"
+						 x="{plotCircle.centerX-plotCircle.radius*(1.48/2)}"
+						 y="{plotCircle.centerY-plotCircle.radius*.9}"
+						 width="{plotCircle.radius*1.48}"
+						 height="{plotCircle.radius}">
+			<degrafa:fill>
+				<degrafa:LinearGradientFill angle="90">
+					<!--- @private -->
+					<degrafa:GradientStop color="0xFFFFFF"
+										  alpha=".4"
+										  id="highlightStop1"/>
+					<degrafa:GradientStop color="0xFFFFFF"
+										  alpha="0"/>
+				</degrafa:LinearGradientFill>
+			</degrafa:fill>
+		</degrafa:Ellipse>
+
+		<degrafa:RasterText id="label"
+							text="{currentLabel}" antiAliasType="advanced"
+							fontFamily="{fontFamily}"
+							fontSize="{fontSize}" textColor="{fontColor}"
+							fontWeight="{fontWeight}"
+							visible="{showLabel}"
+							x="{plotCircle.centerX-currentLabel.length*fontSize/4}"
+							y="{plotCircle.centerY+plotCircle.radius+5}"
+							/>
+
+		<!--- @private -->
+		<degrafa:RegularRectangle id="marker"
+								  width="{markerGeometry.width}"
+								  height="{markerGeometry.height}"
+								  visible="{showMarker}"
+								  x="{Number(horizontalScale.valueToLayout(ObjectUtils.getProperty(this,currentDatum,horizontalField)))-markerGeometry.width/2}"
+								  y="{Number(verticalScale.valueToLayout(ObjectUtils.getProperty(this,currentDatum,verticalField),true))-markerGeometry.height/2}"
+								  geometry="{[markerGeometry]}"/>
+
+	</layouts:drawingGeometries>
+
+	<layouts:states>
+		<states:State enterStateEvent="mouseOver"
+					  exitStateEvent="mouseOut"
+					  targets="{[highlightStop1,highlightCircle]}"
+					  properties="{['alpha','visible']}"
+					  values="{[.5,true]}"/>
+	</layouts:states>
+
+</layouts:RepeaterLayout>

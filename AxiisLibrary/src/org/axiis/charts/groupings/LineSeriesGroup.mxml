@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	 Copyright (c) 2009 Team Axiis
+
+	 Permission is hereby granted, free of charge, to any person
+	 obtaining a copy of this software and associated documentation
+	 files (the "Software"), to deal in the Software without
+	 restriction, including without limitation the rights to use,
+	 copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 copies of the Software, and to permit persons to whom the
+	 Software is furnished to do so, subject to the following
+	 conditions:
+
+	 The above copyright notice and this permission notice shall be
+	 included in all copies or substantial portions of the Software.
+
+	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+	 OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+	 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+	 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+	 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+	 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+	 OTHER DEALINGS IN THE SOFTWARE.
+-->
+<!---
+	 Line series group renders multiple lines for a series of data points. This
+	 can be used to create visualizations that use curved surfaces such as
+	 stream graphs and line charts.
+-->
+<layouts:RepeaterLayout xmlns:mx="http://www.adobe.com/2006/mxml"
+						xmlns:degrafa="http://www.degrafa.com/2007"
+						name="outerlayout"
+						xmlns:core="org.axiis.core.*"
+						xmlns:layouts="org.axiis.layouts.*"
+						xmlns:scale="org.axiis.layouts.scale.*"
+						xmlns:states="org.axiis.states.*"
+						xmlns:geom="flash.geom.*"
+						xmlns:utils="org.axiis.utils.*"
+						dataTipLabelFunction="{internalDataTipFunction}"
+						dataTipManager="{new FreeDataTipManager()}"
+						showDataTips="true"
+						itemPreDraw="onItemPreDraw()"
+						itemMouseMove="onItemMouseMove(event)"
+						preRender="onPreRender()">
+
+	<!-- public variables -->
+	<mx:Script>
+		<![CDATA[
+			import com.degrafa.paint.SolidStroke;
+			import org.axiis.events.LayoutItemEvent;
+			import com.degrafa.geometry.command.CommandStackItem;
+			import com.degrafa.geometry.command.CommandStack;
+			import org.axiis.managers.FreeDataTipManager;
+			import org.axiis.utils.ObjectUtils;
+			import org.axiis.layouts.scale.IScale;
+			import com.degrafa.paint.LinearGradientFill;
+			import org.axiis.core.AxiisSprite;
+			import flash.utils.getTimer;
+			import mx.collections.ArrayCollection;
+			import com.degrafa.paint.SolidFill;
+			import com.degrafa.decorators.axiis.AreaLineDecorator;
+			import com.degrafa.geometry.segment.QuadraticBezierTo;
+			import com.degrafa.geometry.segment.ClosePath;
+			import com.degrafa.geometry.segment.LineTo;
+			import com.degrafa.geometry.segment.MoveTo;
+			import com.degrafa.GraphicPoint;
+			import com.degrafa.core.IGraphicsStroke;
+			import com.degrafa.core.IGraphicsFill;
+			import org.axiis.utils.GraphicUtils;
+
+			[Inspectable]
+			[Bindable]
+			// TODO this needs to invalidate
+			/**
+			 * The stroke used to render the lines.
+			 */
+			public var stroke:com.degrafa.core.IGraphicsStroke;
+
+			[Inspectable]
+			[Bindable]
+			/**
+			 * The default stroke to use for mouse over state.
+			 */
+			public var mouseOverStroke:com.degrafa.core.IGraphicsStroke=new SolidStroke(0xFFFF00, .5, 2);
+
+			[Inspectable]
+			[Bindable]
+			/**
+			 * The fill used to render the area beneath the lines if area rendering is enabled.
+			 */
+			public var fill:com.degrafa.core.IGraphicsFill;
+
+
+			[Inspectable]
+			[Bindable]
+			/**
+			 * The default fill to use for mouse over state.
+			 */
+			public var mouseOverFill:com.degrafa.core.IGraphicsFill=new SolidFill(0xFFFF00, .5);
+
+			/**
+			 * A filter function that will be used to determine whether a given data point should be included in the rendering.
+			 * This filter function applies to the HORIZONTAL plots that are associated with a datum.   LineSeries Group expects
+			 * that each datum in the collection has its own child collection of series plots - referred to as the "plotCollection"
+			 */
+			public var plotFilterFunction:Function;
+			
+			[Bindable]
+			/**
+			 * Label function that can be used for the plot labels
+			 */
+			public var plotLabelFunction:Function;
+
+			[Bindable]
+			/**
+			 * Vertical scale that is used by the LineSeriesGroup
+			 */
+			public var verticalScale:IScale;
+
+			[Bindable]
+			/**
+			 * Turns on/off the default roll-over state
+			 */
+			public var enableRollOver:Boolean=false;
+
+
+			private var _seriesCollection:Object;
+			[Bindable]
+			private var _plotCollection:Object;
+
+			private var _prevCurvePath:Array;
+			private var _maxY:Array;
+			private var _minY:Array;
+
+			private var t:Number;
+
+			private var _xDataField:String;
+			private var _horizontalScale:IScale;
+
+			[Bindable]
+			/**
+			 * Shows the current horizontal plot index on LayoutItemEvents
+			 */
+			public var currentPlotIndex:int;
+
+			
+			[Bindable]
+			/**
+			 * Used by external plot filter functions
+			 */
+			 public var plotFilterIndex:int;
+
+			/**
+			 * The property within each item in the dataProvider that contains the
+			 * field used to determine the value of the item on the horizontal axis.
+			 */
+			public function get xDataField():String
+			{
+				return _xDataField;
+			}
+
+			public function set xDataField(value:String):void
+			{
+				if (value != _xDataField)
+				{
+					_xDataField=value;
+				}
+			}
+
+			/**
+			 * The scale used to map values onto the horizontal axis.
+			 */
+			public function get horizontalScale():IScale
+			{
+				return _horizontalScale;
+			}
+
+			public function set horizontalScale(value:IScale):void
+			{
+				if (value != _horizontalScale)
+				{
+					_horizontalScale=value;
+				}
+			}
+
+
+			/**
+			 * @private
+			 */
+			override public function render(sprite:AxiisSprite=null):void
+			{
+				t=flash.utils.getTimer();
+				super.render(sprite);
+			}
+
+			private function onPreRender():void
+			{
+				this.calculateMax();
+				this.calculateCurves();
+			}
+
+			private function onItemMouseMove(e:LayoutItemEvent):void
+			{
+				var value:int=Math.floor(e.item.mouseX / (this.width / this._plotIndexes.length));
+				if (value != currentPlotIndex && this.showDataTips)
+				{
+					currentPlotIndex=_plotIndexes[value];
+					this.dispatchEvent(new LayoutItemEvent("itemDataTip", e.item, e));
+				}
+				else
+					currentPlotIndex=value;
+			}
+
+			private function onItemPreDraw():void
+			{
+				if(_curvePathsTop.length == 0)
+					return;
+
+				var ci:int=currentIndex;
+
+				var segs=new Array();
+
+				//Grab all of our top segments (need to clone)
+				segs.push(new MoveTo(_curvePathsTop[ci][0].x - .01, _curvePathsTop[ci][0].y));
+				for (var i:int=0; i < _curvePathsTop[ci].length; i++)
+				{
+					segs.push(cloneItem(_curvePathsTop[ci][i]));
+				}
+				//Connect down to our bottom segments
+				segs.push(new LineTo(_curvePathsBottom[ci][_curvePathsBottom[ci].length - 1].x, _curvePathsBottom[ci][_curvePathsBottom[ci].length - 1].y));
+
+				//Add our bottom segments
+				for (i=_curvePathsBottom[ci].length - 1; i > 0; i--)
+				{
+					// NEED TO CLONE THIS IN REVERSE CX/CY !!!!!
+					segs.push(cloneItem(_curvePathsBottom[ci][i], _curvePathsBottom[ci][i - 1]));
+				}
+				//Close the path
+				segs.push(new LineTo(_curvePathsTop[ci][0].x, _curvePathsTop[ci][0].y));
+				segs.push(new ClosePath());
+
+				//Check to see if we need to fill
+				if (!showArea)
+				{
+					myPath.fill=null;
+				}
+				else
+				{
+					myPath.fill=fill;
+				}
+				myPath.segments=segs;
+				markerRepeater.count=_plotIndexes.length;
+			}
+
+			private function cloneItem(item:QuadraticBezierTo, prevItem:QuadraticBezierTo=null):QuadraticBezierTo
+			{
+				var newItem:QuadraticBezierTo=new QuadraticBezierTo(item.cx, item.cy, item.x, item.y);
+
+				if (prevItem)
+				{ //When cloning the bottom curves we need to reverse the direction of control points.
+					newItem.x=prevItem.x;
+					newItem.y=prevItem.y;
+				}
+				return newItem;
+			}
+
+
+			[Bindable]
+			private var _plotIndexes:Array = [];
+
+			/**
+			 * @private
+			 */
+			override public function invalidateDataProvider():void
+			{
+				super.invalidateDataProvider();
+
+				if (_dataItems.length == 0)
+					return;
+
+				var firstItem:Object=(_dataProvider is Array) ? _dataProvider[0] : _dataProvider.getItemAt(0);
+
+				var tempItems:Array=new Array();
+
+				_plotIndexes=new Array();
+				//We assume all plot collections are structured identically - which may not be a valid assumption
+
+				for (var i:int=0; i < firstItem[plotCollection].length; i++)
+				{
+					var obj:Object=(firstItem[plotCollection] is Array) ? firstItem[plotCollection][i] : firstItem[plotCollection].getItemAt(i);
+					if (plotFilterFunction != null)
+					{
+						plotFilterIndex=i;
+						if (plotFilterFunction.call(this, obj))
+						{
+							tempItems.push(obj);
+							_plotIndexes.push(i);
+						}
+					}
+					else
+					{
+						tempItems.push(obj);
+						_plotIndexes.push(i);
+					}
+				}
+
+				_seriesCollection=_dataItems;
+
+				_itemCount=_dataItems.length;
+
+				_plotCollection=firstItem;
+
+				plotCount=_plotIndexes.length;
+
+				calculateMax();
+
+				this.invalidate();
+
+			}
+
+			private function calculateMax():void
+			{
+
+				//For each plotCollection object we total up their y values to determine max
+				//Apply logic for stacks
+				if (this.autoAdjustScale == false)
+					return;
+
+				verticalScale.minValue=Number.POSITIVE_INFINITY;
+				var maxY:Number=Number.NEGATIVE_INFINITY;
+				var minY:Number=Number.POSITIVE_INFINITY;
+
+				if(_plotIndexes == null)
+					return;
+					
+				for (var i:int; i < _plotIndexes.length; i++)
+				{
+					var y:int=0;
+					var plotMax:Number;
+					var plotMin:Number;
+					for each (var series:Object in _seriesCollection)
+					{
+						if (mode == LineSeriesGroup.MODE_BASELINE)
+						{
+							maxY=Math.max(ObjectUtils.getProperty(this, series[plotCollection][_plotIndexes[i]], dataField), maxY);
+							minY=Math.min(ObjectUtils.getProperty(this, series[plotCollection][_plotIndexes[i]], dataField), minY);
+						}
+						else
+						{
+							if (y == 0)
+								plotMax=0;
+
+							if (mode == LineSeriesGroup.MODE_STACK_ZERO)
+							{
+								plotMax+=ObjectUtils.getProperty(this, series[plotCollection][_plotIndexes[i]], dataField);
+								minY=Math.min(ObjectUtils.getProperty(this, series[plotCollection][_plotIndexes[i]], dataField), minY);
+							}
+							else if (mode == LineSeriesGroup.MODE_STACK_FLOW)
+							{
+								if (y == 0)
+								{
+									plotMax=ObjectUtils.getProperty(this, series[plotCollection][_plotIndexes[i]], dataField) / 2;
+									plotMin=-ObjectUtils.getProperty(this, series[plotCollection][_plotIndexes[i]], dataField) / 2;
+								}
+								else if (y % 2 == 1)
+								{
+									plotMax+=ObjectUtils.getProperty(this, series[plotCollection][_plotIndexes[i]], dataField);
+								}
+								else
+								{
+									plotMin-=ObjectUtils.getProperty(this, series[plotCollection][_plotIndexes[i]], dataField);
+								}
+							}
+						}
+						y++;
+					}
+					if (mode == LineSeriesGroup.MODE_STACK_FLOW)
+					{
+						maxY=Math.max(plotMax, maxY);
+						minY=Math.min(plotMin, minY);
+					}
+					else if (mode == LineSeriesGroup.MODE_STACK_ZERO)
+					{
+						maxY=Math.max(plotMax, maxY);
+						minY=0;
+					}
+				}
+
+				this.verticalScale.maxValue=maxY;
+				this.verticalScale.minValue=minY;
+
+				this.verticalScale.invalidate();
+
+				//	trace("Max Value is " + maxY);
+
+			}
+
+			/**
+			 * This routine pre-calculates all the curves for a series
+			 * While we could calculate on each iteration, it would degrade performance because each curve is depdendent on the previous and next point along its path
+			 * Thus we cache all the curve segments up front, and then just takes slices off them to render
+			 * Curves are stored in multi-dimensional array
+			 *
+			 * segmentGroups[currentIndex][parentLayout.currentIndex]  where currentIndex==the current "series", and parentLayout.currentIndex==the plot point along the curve
+			 */
+			private function calculateCurves():void
+			{
+
+				_minY=new Array();
+				_maxY=new Array();
+				var t:Number=flash.utils.getTimer();
+				if (!plotCollection)
+					return;
+				//var segmentWidth:Number=width/itemCount;
+
+				_curvePathsTop=new Array();
+
+				//Two dimension array used to store each series fields, one row at a time  Array[hField,vField]
+				_seriesPoints=new Array();
+				_repeatWidth=(width) / (_plotIndexes.length - 1);
+
+				var y:int=0;
+				var stackedValues:Object=new Object(); //Represents positive values for STACK layouts
+				var stackedValues2:Object=new Object();
+
+				//This stores all the plotCollection for one series
+				var ta:Array=new Array();
+				var flowTa:Array;
+
+				var xo:Number=0;
+
+
+				for each (var series:Object in _seriesCollection)
+				{ //loop through all series to build our plot locations (to be used to generate curves)
+
+					//Gather the data values for our plots
+					var seriesPlots:Array=new Array();
+					for (var n:int=0; n < _plotIndexes.length; n++)
+					{
+						var vObj:Object;
+						if (series[plotCollection] is ArrayCollection)
+							vObj=series[plotCollection].getItemAt(_plotIndexes[n]);
+						else
+							vObj=series[plotCollection][_plotIndexes[n]];
+						seriesPlots.push(vObj);
+					}
+
+					//Create temp array to store points
+					ta=new Array();
+					xo=0;
+					
+
+					var seriesValues:Array=new Array();
+
+					for (var i:int=0; i < seriesPlots.length; i++)
+					{ //each series field
+						var stackedValue:Number=0;
+						var obj:Object=seriesPlots[i];
+						
+						if (xDataField && horizontalScale)
+						{
+							xo=horizontalScale.valueToLayout(ObjectUtils.getProperty(this, seriesPlots[i], xDataField), false);
+						}
+						
+						if (ta.length == 0)
+						{ //adds a new node if it is the first time
+							ta.push(new GraphicPoint(xo-.01, verticalScale.valueToLayout(ObjectUtils.getProperty(this, seriesPlots[0], dataField), true))); //The first marker
+						}
+
+						/* Check if xDataField and horizontalScale are set, and if they are, the x value for the current point
+						   is determined by the horizontalScale. If not, the default method is used (xo += repeatedWidth)
+						 */
+						
+
+						var gp:GraphicPoint=new GraphicPoint;
+						gp.x=xo;
+
+
+						if (mode == LineSeriesGroup.MODE_STACK_ZERO)
+						{ //looping through to make stacked values
+
+							if (!stackedValues[i])
+								stackedValues[i]=0;
+							stackedValues[i]+=ObjectUtils.getProperty(this, obj, dataField);
+							stackedValue=stackedValues[i];
+
+							gp.y=verticalScale.valueToLayout(stackedValue, true);
+						}
+						else if (mode == LineSeriesGroup.MODE_STACK_FLOW)
+						{ //First item gets split across the zero line
+							//Then we alternate positions
+							if (y == 0)
+							{
+								if (!flowTa)
+									flowTa=new Array();
+								//For now make two gp's that are bisected at zero
+								var gp2:GraphicPoint=new GraphicPoint;
+								gp2.x=gp.x;
+								if (!stackedValues2[i])
+									stackedValues2[i]=0;
+								stackedValues2[i]-=ObjectUtils.getProperty(this, obj, dataField) / 2;
+								gp2.y=verticalScale.valueToLayout(stackedValues2[i], true);
+								if (flowTa.length == 0)
+									flowTa.push(new GraphicPoint(-1, gp2.y)); //First point in series
+								flowTa.push(gp2);
+								if (!stackedValues[i])
+									stackedValues[i]=0;
+								stackedValues[i]+=ObjectUtils.getProperty(this, obj, dataField) / 2;
+								gp.y=verticalScale.valueToLayout(stackedValues[i], true);
+
+							}
+							else if (y % 2 == 1)
+							{
+								if (!stackedValues[i])
+									stackedValues[i]=0;
+								stackedValues[i]+=ObjectUtils.getProperty(this, obj, dataField);
+								stackedValue=stackedValues[i];
+								gp.y=verticalScale.valueToLayout(stackedValue, true);
+							}
+							else
+							{
+								if (!stackedValues2[i])
+									stackedValues2[i]=0;
+								stackedValues2[i]-=ObjectUtils.getProperty(this, obj, dataField);
+								stackedValue=stackedValues2[i];
+								gp.y=verticalScale.valueToLayout(stackedValue, true);
+							}
+						}
+						else
+						{
+							gp.y=verticalScale.valueToLayout(ObjectUtils.getProperty(this, obj, dataField), true);
+						}
+
+						ta.push(gp);
+						//    if (i=seriesPlots.length-1) ta.push(gp);
+
+						if (y > _minY.length - 1)
+							_minY.push(height);
+						if (y > _maxY.length - 1)
+							_maxY.push(0);
+						_minY[y]=Math.min(_minY[y], gp.y);
+						_maxY[y]=Math.max(_maxY[y], gp.y);
+						xo+=_repeatWidth;
+					}
+					//We have a STACK_FLOW and are at first series we add a series for the bisection
+					if (mode == LineSeriesGroup.MODE_STACK_FLOW && y == 0)
+					{
+						_seriesPoints.push(flowTa);
+					}
+					_seriesPoints.push(ta);
+
+					y++;
+				}
+
+				//Turn the series plotCollection, into curveTo commands
+
+				for each (var ar:Array in _seriesPoints)
+				{
+					_curvePathsTop.push(GraphicUtils.buildSegmentsFromCurvePoints(ar, tension));
+				}
+
+				//Create a set of paths we can connect as bottom curves
+				_curvePathsBottom=new Array();
+				i=0;
+				for (obj in _curvePathsTop)
+				{
+					if (mode == LineSeriesGroup.MODE_STACK_FLOW)
+					{ //Our series alternate with the first one being split into two, then going positive/negative
+						if (i == 1)
+						{
+							_curvePathsBottom.push(_curvePathsTop[0]);
+						}
+						else if (i == 3)
+						{
+							_curvePathsBottom.push(_curvePathsTop[0]);
+						}
+						else if (i > 0)
+						{ //We should be a positive value here, so our "bottom" was the last positive value
+							_curvePathsBottom.push(_curvePathsTop[i - 2]);
+						}
+					}
+					else
+					{ //When we have a baseline axis we will create a straight line for the bottom by adding a new path and ignoring the last one
+						if (i == 0 || mode == LineSeriesGroup.MODE_BASELINE)
+						{ //First bottom curve is a straight line;                                                   
+							var path:Array=new Array();
+							for (n=0; n < _curvePathsTop[0].length; n++)
+							{
+								var q:QuadraticBezierTo=new QuadraticBezierTo(_curvePathsTop[0][n].cx, verticalScale.valueToLayout(0, true), _curvePathsTop[0][n].x, verticalScale.valueToLayout(0, true));
+								path.push(q);
+							}
+							_curvePathsBottom.push(path);
+						}
+						else
+						{
+							_curvePathsBottom.push(_curvePathsTop[i - 1]);
+						}
+					}
+					i++;
+				}
+				if (mode == LineSeriesGroup.MODE_STACK_FLOW)
+				{ //Remove the first one as it was the result of splitting the first series by bisecting the zero line
+					_curvePathsTop.splice(0, 1);
+				}
+			}
+
+
+			[Bindable]
+			/**
+			 * The axiisSprite that the mouse is currently over within the layout
+			 * this is helpful when keying mouseOver events to external components
+			 */
+			public var currentAxiisSprite:AxiisSprite;
+
+			private function internalDataTipFunction(axiisSprite:AxiisSprite):String
+			{
+				if (this.currentPlotIndex < 0)
+					return "";
+				var data:Object=axiisSprite.data[plotCollection][this.currentPlotIndex];
+				return "<b>" + ObjectUtils.getProperty(this, axiisSprite["data"], this.labelField) + "</b><br/>" + ObjectUtils.getProperty(this, data, this.plotLabelField) + "<br/>" + ObjectUtils.getProperty(this, data, this.dataField);
+			}
+
+			private function getMarkerCX(iteration:int, obj:Object):Number
+			{
+				if (iteration == plotCount - 1)
+					return _curvePathsTop[currentIndex][iteration * 2 - 1].x;
+				return _curvePathsTop[currentIndex][iteration * 2].x;
+			}
+
+			private function getMarkerCY(iteration:int, obj:Object):Number
+			{
+				if (iteration == plotCount - 1)
+					return _curvePathsTop[currentIndex][iteration * 2 - 1].y;
+				return _curvePathsTop[currentIndex][iteration * 2].y;
+			}
+
+			//Stores all the data points (accounts for stacking and alternate layouts
+			public function get seriesPoints():Array
+			{
+				return _seriesPoints
+			}
+
+			[Bindable]
+			private var _seriesPoints:Array;
+
+			//Used to help calculate common fill bounds for myPath
+			private var _maxHeight:Number;
+
+			//Our repeat width depends on the hPadding 
+			[Bindable]
+			private var _repeatWidth:Number;
+
+			//Stores all the precomputed curve segments
+			private var _curvePathsTop:Array;
+
+			//Stores all the precomputed curve segments
+			private var _curvePathsBottom:Array;
+
+			//The segments used to render the series by myPath
+			[Bindable]
+			private var _currentSegments:Array;
+
+
+			//Used to remove strokes off the sides and bottom of the path
+			[Bindable]
+			private var _decorator:AreaLineDecorator=new AreaLineDecorator();
+
+			//private var _seriesCollection:Object;
+			/**
+			 * A flag indicating that lines should be rendered in the traditional line chart manner.
+			 */
+			public static const MODE_BASELINE:int=0;
+			/**
+			 * A flag indicating that lines should be rendered stacked on top of one another.
+			 */
+			public static const MODE_STACK_ZERO:int=1;
+			/**
+			 * A flag indicating that lines should be rendered using a flow layout.
+			 */
+			public static const MODE_STACK_FLOW:int=2;
+		]]>
+	</mx:Script>
+
+	<!--- 
+		number of plots being mapped on x axis
+	-->
+	<mx:Number id="plotCount"/>
+
+	<!---
+		 Adjust min/max of vertical scale to fit data (does this destructively to the scale)
+	-->
+	<mx:Boolean id="autoAdjustScale">true</mx:Boolean>
+
+	<!---
+		 The layout mode used to render the lines. One of {MODE_BASELINE,MODE_STACK_ZERO,MODE_STACK_FLOW}.
+	-->
+	<mx:int id="mode">0</mx:int>
+	<!---
+		 Whether the area beneath the lines should be filled.
+	-->
+	<mx:Boolean id="showArea">false</mx:Boolean>
+	<!---
+		 The name of the property on the objects in the dataProvider that contains the data to plot
+		 It is expected that the plot collection is a collection of objects - like Array or ArrayCollection and contains
+		 the series of data to be plotted.  i.e.
+		 
+		 dataProvider=myObjects is Array || ArrayCollection
+		 myObjects[0].myPlotCollection is Array || ArrayCollection
+		 
+	-->
+	<mx:String id="plotCollection"/>
+
+
+	<!---
+		 The tension used to render the curves in this chart. A value of 0 results in straight lines while
+		 a value of 1 results in exaggerated Bezier curves.
+	-->
+	<mx:Number id="tension">.25</mx:Number>
+
+	<!---
+		 The diameter in pixels of the markers shown at each data point.
+	-->
+	<mx:int id="markerSize">8</mx:int>
+
+	<!---
+		 The color at the center of the markers.
+	-->
+	<mx:Number id="markerColor">0xfa8514</mx:Number>
+
+	<!---
+		 Whether or not markers should be displayed at each data point
+	-->
+	<mx:Boolean id="showMarker">true</mx:Boolean>
+
+	<!---
+		 The property on the items in the dataProvider that contains the label field for each series.
+	-->
+	<mx:String id="seriesLabelField"></mx:String>
+
+	<!---
+		 The property on the items in the dataProvider that contains the label field for the entire plot.
+	-->
+	<mx:String id="plotLabelField"></mx:String>
+
+	<!--- @private -->
+	<utils:NumericExpression id="yPoint"/>
+	<!--- @private -->
+
+
+
+	<!-- decorators="{[_decorator]}" -->
+
+	<layouts:drawingGeometries>
+		<degrafa:RegularRectangle width="{width}"
+								  height="{height}"
+								  x="0"
+								  y="0">
+								<!--- @private -->
+			<degrafa:Path id="myPath"
+						  scaleOnLayout="false"
+						  decorators="{[_decorator]}"
+						  enableEvents="false"
+						  stroke="{stroke}"
+						  fill="{fill}">
+			</degrafa:Path>
+		</degrafa:RegularRectangle>
+		<!--- @private -->
+		<degrafa:GeometryRepeater id="markerRepeater"
+								  width="{width}"
+								  height="{height}"
+								  visible="{this.showMarker}"
+								  count="{_plotIndexes.length}">
+			<!--- @private -->								  
+			<degrafa:Circle id="marker"
+							radius="{this.markerSize/2}">
+				<degrafa:fill>
+					<degrafa:SolidFill color="{this.markerColor}"/>
+				</degrafa:fill>
+			</degrafa:Circle>
+			<degrafa:modifiers>
+				<degrafa:PropertyModifier targets="{[marker]}"
+										  property="centerX"
+										  modifier="{getMarkerCX}"
+										  modifierOperator="none"/>
+				<degrafa:PropertyModifier targets="{[marker]}"
+										  property="centerY"
+										  modifier="{getMarkerCY}"
+										  modifierOperator="none"/>
+			</degrafa:modifiers>
+		</degrafa:GeometryRepeater>
+	</layouts:drawingGeometries>
+
+	<layouts:states>
+	<!--- @private -->
+		<states:State id="rollOverState"
+					  enterStateEvent="mouseOver"
+					  exitStateEvent="mouseOut"
+					  enabled="{enableRollOver}"
+					  targets="{[myPath]}"
+					  properties="{['fill']}"
+					  values="{[mouseOverFill]}"/>
+	</layouts:states>
+
+</layouts:RepeaterLayout>

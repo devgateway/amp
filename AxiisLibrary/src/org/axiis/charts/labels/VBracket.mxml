@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2009 Team Axiis
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<!---
+	A bracket that can be used to denote a group and label items that are laid
+	out vertically.
+-->
+<degrafa:RegularRectangle xmlns="*" xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:degrafa="http://www.degrafa.com/2007">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.degrafa.paint.SolidStroke;
+			import org.axiis.core.AxiisSprite;
+			
+			[Bindable]
+			/**
+			 * The text of the label placed to the left of the bracket.
+			 */
+			public var labelValue:String="";
+	
+			[Bindable]
+			/**
+			 * The stroke used to draw lines of the bracket.
+			 */
+			public var markerStroke:SolidStroke=new SolidStroke(0xFFFFFF,.5,1);
+			
+		]]>
+	</mx:Script>
+	 
+	<!--- The fontFamily of the label -->
+	<mx:String id="fontFamily">Arial</mx:String>
+	<!--- The font size of the label -->
+	<mx:Number id="fontSize">12</mx:Number>
+	<!--- The color of the label -->
+	<mx:Number id="fontColor">0</mx:Number>
+	<!--- The weight of the label -->
+	<mx:String id="fontWeight">normal</mx:String>
+
+	<degrafa:geometry>
+		<!-- left line -->
+		<degrafa:Line y="{this.y}" y1="{this.y+height}" x="{this.x+width*.2}" x1="{this.x+width*.2}" stroke="{markerStroke}"/>
+		<!-- top line -->
+		<degrafa:Line y="{this.y}" y1="{this.y}" x="{this.x+width*.2}" x1="{this.x+width}" stroke="{markerStroke}"/>
+		<!-- bottom line -->
+		<degrafa:Line y="{this.y+height}" y1="{this.y+height}" x="{this.x+width*.2}" x1="{this.x+width}" stroke="{markerStroke}"/>
+		<!-- center line -->
+		<degrafa:Line y="{this.y+height/2}" y1="{this.y+height/2}" x="{this.x+width*.2}" x1="{this.x}" stroke="{markerStroke}"/>		
+		<degrafa:RasterText text="{labelValue}" y="{this.y+width+10}"  x="{this.x-width*.2-5}" width="{width+10}" height="20" align="center"
+			fontSize="{fontSize}" textColor="{fontColor}" fontWeight="{fontWeight}"  fontFamily="{fontFamily}">
+			<degrafa:transform>
+				<degrafa:RotateTransform registrationPoint="topLeft" angle="-90"/>
+			</degrafa:transform>
+		</degrafa:RasterText>
+	</degrafa:geometry>	
+
+</degrafa:RegularRectangle>

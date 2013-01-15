@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2009 Team Axiis
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<!---
+	The default data tip content renderer. Simply renders the label property for the AxiisSprite
+	this user is interacting with, as it was set during the layout's render cycle via the currentLabel
+	property.
+-->
+<mx:Text xmlns:mx="http://www.adobe.com/2006/mxml" htmlText="{label}" implements="org.axiis.core.IAxiisRenderer">
+	<mx:Script>
+		<![CDATA[
+			[Bindable]
+			/**
+			 * @inheritDoc IAxiisRenderer#label
+			 */
+			public function get label():String
+			{
+				return _label;
+			}
+			public function set label(value:String):void
+			{
+				_label = value;
+			}
+			private var _label:String;
+			
+			[Bindable]
+			/**
+			 * @inheritDoc IAxiisRenderer#value
+			 */
+			public function get value():Object
+			{
+				return _value;
+			}
+			public function set value(value:Object):void
+			{
+				_value = value;
+			}
+			private var _value:Object;
+			
+			[Bindable]
+			/**
+			 * @inheritDoc IAxiisRenderer#index
+			 */
+			public function get index():int
+			{
+				return _index;
+			}
+			public function set index(value:int):void
+			{
+				_index = value;
+			}
+			private var _index:int;
+		]]>
+	</mx:Script>
+</mx:Text>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	 Copyright (c) 2009 Team Axiis
+
+	 Permission is hereby granted, free of charge, to any person
+	 obtaining a copy of this software and associated documentation
+	 files (the "Software"), to deal in the Software without
+	 restriction, including without limitation the rights to use,
+	 copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 copies of the Software, and to permit persons to whom the
+	 Software is furnished to do so, subject to the following
+	 conditions:
+
+	 The above copyright notice and this permission notice shall be
+	 included in all copies or substantial portions of the Software.
+
+	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+	 OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+	 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+	 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+	 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+	 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+	 OTHER DEALINGS IN THE SOFTWARE.
+-->
+<!---
+	 WedgeStackGroup renders a series of wedges along an arc. This is useful for creating radial visualizations, such pie charts.  
+-->
+<groupings:GroupingBase xmlns:mx="http://www.adobe.com/2006/mxml"
+						xmlns:degrafa="http://www.degrafa.com/2007"
+						name="outerlayout"
+						xmlns:layouts="org.axiis.layouts.*"
+						xmlns:scale="org.axiis.layouts.scale.*"
+						xmlns:states="org.axiis.states.*"
+						xmlns:core="org.axiis.core.*"
+						xmlns:utils="org.axiis.utils.*"
+						xmlns:layoutUtils="org.axiis.layouts.utils.*"
+						xmlns:groupings="org.axiis.charts.groupings.*"
+						xmlns:geometry="com.degrafa.geometry.*"
+						dataTipAnchorPoint="{anchorPoint}"
+						itemPreDraw="onPreDraw()"
+						preRender="onPreRender()"
+						xmlns:geom="flash.geom.*">
+
+	<!-- NOTE: Currently only tested for positive values -->
+
+	<mx:Script>
+		<![CDATA[
+			import com.degrafa.core.IGraphicsStroke;
+			import com.degrafa.core.IGraphicsFill;
+
+
+			[Bindable]
+			private var maxValue:Number;
+			[Bindable]
+			private var chord:Number
+
+			private function onPreDraw():void
+			{
+				var angle:Number=arc.value;
+				chord=Math.abs((outerRadius.value * labelRadiusRatio) * 2 * Math.sin(arc.value * Math.PI / 180 / 2));
+				//		trace("Chord " + currentLabel + " " + currentValue + " angle=" + arc.value + " chord = " + chord);
+			}
+
+			private function onPreRender():void
+			{
+
+				maxValue=0;
+
+				for (var i:int=0; i < dataItems.length; i++)
+				{
+					maxValue+=getProperty(dataItems[i], dataField);
+				}
+			}
+
+			/**
+			 * A function that is used to determine how each item in the
+			 * dataProvider should be labeled.
+			 *
+			 * <p>
+			 * The function takes a single parameter, the Object to be plotted,
+			 * and should return the String that should be placed on the axis.
+			 * The default implementation assumes that each Object is a String
+			 * and simply returns the argument.
+			 * </p>
+			 */
+			public var labelFunction:Function=internalLabelFunction;
+
+			public function internalLabelFunction(value:String):String
+			{
+				return value;
+			}
+		]]>
+	</mx:Script>
+
+	<!-- Preference Settings -->
+
+	<!---
+		 The gap between elements in degrees.
+	-->
+	<mx:Number id="angleGap">.7</mx:Number>
+
+	<!---
+		 The inner radius of the wedge as a ratio of the radius.
+	-->
+	<mx:Number id="innerRadiusRatio">.4</mx:Number>
+
+	<!---
+		 The outer radius of the wedge as a ratio of the radius.
+	-->
+	<mx:Number id="outerRadiusRatio">1</mx:Number>
+
+	<!---
+		 The radius of the label rendering as a ratio of the radius.
+	-->
+	<mx:Number id="labelRadiusRatio">.97</mx:Number>
+
+	<!---
+		 The maximum arc expressed by the whole WedgeStackGroup.
+	-->
+	<mx:Number id="maxArc">360</mx:Number>
+
+	<!---
+		 The starting angle to render the first item in degrees.
+	-->
+	<mx:Number id="startAngle">0</mx:Number>
+
+	<!---
+		 true = text gets aligned outside of the labelRadiusRatio
+		 false = text gets aligned inside of the labelRadiusRatio
+	-->
+	<mx:Boolean id="alignTextOuter">false</mx:Boolean>
+
+
+	<!-- Common calculations used by geometries -->
+	<!--- @private -->
+	<utils:NumericExpression id="outerRadius"
+							 value="{(width/2)*outerRadiusRatio}"/>
+	<!--- @private -->
+	<utils:NumericExpression id="innerRadius"
+							 value="{(width/2)*innerRadiusRatio}"/>
+	<!--- @private -->
+	<utils:NumericExpression id="center"
+							 value="{boundsRadius.value/2}"/>
+	<!--- @private -->
+	<utils:NumericExpression id="boundsRadius"
+							 value="{Math.min(this.height,this.width)}"/>
+	<!--- @private -->
+	<utils:NumericExpression id="arc"
+							 value="{Number(currentValue)/maxValue*(maxArc-angleGap*itemCount)}"/>
+	<!--- @private -->
+	<utils:BooleanExpression id="transposeLabel"
+							 value="{!((wedge.startAngle + wedge.arc * .5) &gt; 90 &amp;&amp; (wedge.startAngle + wedge.arc *.5) &lt; 270)}"/>
+
+	<!--- @private -->
+	<geom:Point id="anchorPoint"
+				x="{width/2 + (innerRadius.value + (outerRadius.value-innerRadius.value)/2) * Math.cos((wedge.startAngle + wedge.arc / 2) * Math.PI / 180)}"
+				y="{width/2 + (innerRadius.value + (outerRadius.value-innerRadius.value)/2) * Math.sin((wedge.startAngle + wedge.arc / 2) * Math.PI / 180)}"/>
+
+	<!--- @private -->
+	<groupings:referenceRepeater>
+		<!-- innerRepeater: the reference repeater wedge for the inner ring of wedges -->
+		<!--- @private -->
+		<layoutUtils:GeometryRepeater id="innerRepeater">
+			<layoutUtils:geometry>
+				<!--- @private -->
+				<geometry:Wedge id="wedge"
+								centerX="{width/2}"
+								centerY="{width/2}"
+								innerRadius="{innerRadius.value}"
+								outerRadius="{outerRadius.value}"
+								startAngle="{startAngle}"
+								arc="0"/>
+			</layoutUtils:geometry>
+			<layoutUtils:modifiers>
+				<layoutUtils:PropertyModifier property="startAngle"
+											  modifier="{wedge.arc+angleGap}"
+											  modifierOperator="add"/>
+				<layoutUtils:PropertyModifier property="arc"
+											  modifier="{arc.value}"
+											  modifierOperator="none"/>
+			</layoutUtils:modifiers>
+		</layoutUtils:GeometryRepeater>
+	</groupings:referenceRepeater>
+	<!--- @private -->
+	<groupings:drawingGeometries>
+		<!-- wedgeRenderer: the drawing geometry for the inner ring of wedges -->
+		<!--- @private -->
+		<geometry:Wedge x="0"
+						y="0"
+						id="wedgeRenderer"
+						innerRadius="{wedge.innerRadius}"
+						outerRadius="{wedge.outerRadius}"
+						startAngle="{wedge.startAngle}"
+						arc="{wedge.arc}"
+						centerX="{wedge.centerX}"
+						centerY="{wedge.centerY}"
+						fill="{fill}"
+						stroke="{stroke}"/>
+		<!--- @private -->
+		<degrafa:RasterText id="label"
+							visible="{showDataLabel &amp;&amp; (chord > fontSize)}"
+							x="{center.value}"
+							y="{center.value-10}"
+							fontFamily="{fontFamily}"
+							fontSize="{fontSize}"
+							fontWeight="{fontWeight}"
+							text="{labelFunction.call(this,currentLabel)}"
+							autoSizeField="true"
+							autoSize="left"
+							textColor="{fontColor}"
+							antiAliasType="advanced">
+			<degrafa:transform>
+				<degrafa:TransformGroup>
+				<!--- @private -->
+					<degrafa:TranslateTransform id="labelTransform"
+												x="{wedge.outerRadius * labelRadiusRatio + ((alignTextOuter) ? label.textWidth:0) + ((transposeLabel.value) ? -label.textWidth-wedge.outerRadius*.02:0)) * Math.cos((wedgeRenderer.startAngle + wedge.arc / 2) * Math.PI / 180}"
+												y="{wedge.outerRadius * labelRadiusRatio + ((alignTextOuter) ? label.textWidth:0) + ((transposeLabel.value) ? -label.textWidth-wedge.outerRadius*.02:0)) * Math.sin((wedgeRenderer.startAngle + wedge.arc / 2) * Math.PI / 180}"/>
+				<!--- @private -->
+					<degrafa:RotateTransform id="innerTextRotate"
+											 registrationPoint="centerLeft"
+											 angle="{wedgeRenderer.startAngle + wedge.arc / 2 + ((transposeLabel.value) ? 0:180)}"/>
+				</degrafa:TransformGroup>
+			</degrafa:transform>
+		</degrafa:RasterText>
+
+	</groupings:drawingGeometries>
+	
+</groupings:GroupingBase>

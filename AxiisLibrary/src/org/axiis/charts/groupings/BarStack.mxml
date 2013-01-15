@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	 Copyright (c) 2009 Team Axiis
+
+	 Permission is hereby granted, free of charge, to any person
+	 obtaining a copy of this software and associated documentation
+	 files (the "Software"), to deal in the Software without
+	 restriction, including without limitation the rights to use,
+	 copy, modify, merge, publish, distribute, sublicense, and/or sell
+	 copies of the Software, and to permit persons to whom the
+	 Software is furnished to do so, subject to the following
+	 conditions:
+
+	 The above copyright notice and this permission notice shall be
+	 included in all copies or substantial portions of the Software.
+
+	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+	 OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+	 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+	 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+	 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+	 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+	 OTHER DEALINGS IN THE SOFTWARE.
+-->
+<!---
+	 BarStack groups a series of horizontal bars together horizontally
+	 and labels them. This class is intended to be used to produce multi-series
+	 bar charts.
+-->
+<groupings:GroupingBase xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:degrafa="http://www.degrafa.com/2007"
+	name="outerlayout"
+	xmlns:layouts="org.axiis.layouts.*"
+	xmlns:scale="org.axiis.layouts.scale.*"
+	xmlns:states="org.axiis.states.*"
+	xmlns:core="org.axiis.core.*"
+	xmlns:utils="org.axiis.layouts.utils.*"
+	xmlns:groupings="org.axiis.charts.groupings.*"
+	fontSize="10">
+
+	<mx:Script>
+		<![CDATA[
+			import org.axiis.utils.ObjectUtils;
+			import com.degrafa.IGeometryComposition;
+			
+			public function set additionalGeometries(value:IGeometryComposition)
+			{
+				_additionalGeometries=value;
+				geomPlaceholder.geometry=[_additionalGeometries];
+			}
+			
+			public function get additionalGeometries():IGeometryComposition
+			{
+				return _additionalGeometries;
+			}
+			
+			[Bindable]
+			private var _additionalGeometries:IGeometryComposition;
+
+
+		]]>
+	</mx:Script>
+	<!---
+		 The scale used to map data values to the BarStack's coordinate space.
+	-->
+	<scale:LinearScale id="horizontalScale"/>
+
+	<groupings:referenceRepeater>
+		<utils:GeometryRepeater>
+			<utils:geometry>
+				<!--- @private -->
+				<degrafa:RegularRectangle id="refRect"
+					width="{0}"
+					height="{height}"
+					enableEvents="false"
+					x="0"
+					y="0"/>
+			</utils:geometry>
+			<utils:modifiers>
+				<!--- @private -->
+				<utils:PropertyModifier id="widthModifier" property="width" modifier="{Number(this.horizontalScale.valueToLayout(currentValue))}" modifierOperator="none"/>
+				<!--- @private -->
+				<utils:PropertyModifier id="xModifier" property="x" modifier="{(currentIndex == 0) ? 0 : Number(this.horizontalScale.valueToLayout(ObjectUtils.getProperty(this,dataItems[currentIndex-1],dataField)))}" modifierOperator="add"/>
+			</utils:modifiers>
+		</utils:GeometryRepeater>
+	</groupings:referenceRepeater>
+
+	<groupings:drawingGeometries>
+		<!---
+			 main column rectangle that gets repeated vertically
+			 @private
+		-->
+		<degrafa:RegularRectangle id="myBar"
+			y="0"
+			enableEvents="false"
+			x="{currentReference.x}"
+			width="{currentReference.width}"
+			height="{currentReference.height}"
+			fill="{fill}"
+			stroke="{stroke}">
+		</degrafa:RegularRectangle>
+
+		<!---
+			smaller label for each column
+			@private
+		-->
+		<degrafa:RasterText id="label"
+			text="{(currentLabel ? currentLabel:' ')}"
+			visible="{showLabel}"
+			enableEvents="false"
+			x="{myBar.x+myBar.width-label.width}"
+			height="15"
+			width="70"
+			y="{myBar.y+(myBar.height-label.height)/2}"
+			fontSize="{fontSize}"
+			align="right"
+			fontFamily="{fontFamily}"
+			fontWeight="{fontWeight}"
+			textColor="{fontColor}">
+		</degrafa:RasterText>
+		
+			<!--- @private -->
+		<degrafa:RegularRectangle id="geomPlaceholder"
+								  width="{this.width}"
+								  height="{this.height}"/>
+	</groupings:drawingGeometries>
+	
+	<!--
+	<groupings:fills>
+		<degrafa:SolidFill id="rollOverFill" color="0xDDDD00" alpha=".6"/>
+	</groupings:fills>
+	<groupings:strokes>
+		<degrafa:SolidStroke id="rollOverStroke" weight="1" color="white"/>
+	</groupings:strokes>
+	
+	<groupings:states>
+		<states:State id="rollOverState"
+			enterStateEvent="mouseOver"
+			exitStateEvent="mouseOut"
+			targets="{[myBar,myBar]}"
+			properties="{['fill','stroke']}"
+			values="{[rollOverFill,rollOverStroke]}"
+			propagateToDescendents="true"/>
+	</groupings:states>
+	-->
+
+</groupings:GroupingBase>

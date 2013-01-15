@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2009 Team Axiis
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions: 
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<!---
+	HAxis renders values from left to right between a minimum and maximum value,
+	and is intended to be rendered beneath other layouts to provide a
+	point of reference for those visualizations.
+	
+	<p>
+	HAxis can optionally label each major tick, render gridlines
+	aligned to the axis itself.
+	</p>
+	
+	<p>
+	The majority of the functionality of HAxis is contained within its super
+	class, AxisBase.
+	</p>
+	@see AxiisBase
+-->
+<axis:AxisBase xmlns="*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:layouts="org.axiis.layouts.*" 
+	xmlns:degrafa="http://www.degrafa.com/2007" 
+	xmlns:scale="org.axiis.layouts.scale.*"
+	xmlns:utils="org.axiis.utils.*" 
+	itemPreDraw="onItemPreDraw();"
+	showDataTips="false"
+	xmlns:core="org.axiis.core.*"
+	xmlns:axis="org.axiis.charts.axis.*"
+	xmlns:utils1="org.axiis.layouts.utils.*">
+	<mx:Script>
+		<![CDATA[
+			import com.degrafa.core.IGraphicsStroke;
+			import org.axiis.layouts.scale.IScale;
+			
+			[Bindable]
+			private var _totalMajorTicks:int;
+			
+			[Bindable] 
+			private var _gapStep:Number;
+			
+			[Bindable]
+			private var _majorTickInterval:Number;
+			
+			[Bindable]
+			private var _labelInterval:Number;
+			
+			[Bindable]
+			/**
+			 * The scale used to determine the text of each label.
+			 */
+			public var horizontalScale:IScale;
+			
+			[Bindable]
+			/**
+			 * The rotation, in degress, of the labels.
+			 */
+			public var labelAngle:Number=0;
+			
+			private function onValueChanged():void
+			{
+				if (this.width==0 || isNaN(this.width))
+					return;
+					
+				//First determine the minor tick interval	
+				var tempArray:Array=new Array();
+				
+				_totalMajorTicks=Math.floor(this.width/majorTickSpacing);
+		
+				var totalMinorTicks:int=Math.floor((this.width/_totalMajorTicks)/tickGap)*_totalMajorTicks;
+			
+				_majorTickInterval=totalMinorTicks/_totalMajorTicks;
+				 
+				_gapStep=this.width/totalMinorTicks;
+				
+				for (var i:int=0;i<totalMinorTicks+1;i++)
+				{
+					tempArray.push(i);
+				}
+				dataProvider=tempArray;
+				
+				gridRect.width=width/_totalMajorTicks;
+				
+				
+			}
+			
+			private function onItemPreDraw():void 
+			{
+				label.fontFamily=fontFamily;
+				label.x=currentReference.x-(labelAngle == 0 ? label.textWidth/2 : 0);
+				label.y=this.height;
+				zeroLine.x=(maxScale == 0) ? width : (minScale == 0) ? 0 : Math.round(width/(Math.abs(maxScale) + Math.abs(minScale))*Math.abs(minScale));
+				zeroLine.x1=(maxScale == 0) ? width : (minScale == 0) ? 0 : Math.round(width/(Math.abs(maxScale) + Math.abs(minScale))*Math.abs(minScale));
+			}
+
+		]]>
+	</mx:Script>
+
+	
+	<!--- @private -->
+	<utils:BooleanExpression id="showLabelExpression" value="{ (showLabels &amp;&amp; (showMajorTickExpression.value==true))}"/>
+	
+	<!--- @private -->
+	<utils:BooleanExpression id="showMinorTickExpression" value="{ !(showMajorTickExpression.value==true)}"/>
+	
+	<!--- @private -->
+	<utils:BooleanExpression id="showMajorTickExpression" value="{(majorTickSpacing > 0 &amp;&amp; (this.currentIndex % _majorTickInterval) == 0)}"/>
+	
+	<!--- @private -->
+	<utils:BooleanExpression id="showGridExpression" value="{(((this.currentIndex+_majorTickInterval*2) % (_majorTickInterval*2))==0 &amp;&amp; currentIndex &lt; itemCount)}"/>
+	
+	<!--- @private -->
+	<utils:NumericExpression id="repeaterCountExpression" value="{Math.floor(this.width)}" valueChanged="onValueChanged();" />
+	
+	<!--- @private -->
+	<utils:NumericExpression id="tickGapExpression" value="{tickGap + majorTickSpacing}" valueChanged="onValueChanged();" />
+	
+	<axis:referenceRepeater>
+		<utils1:GeometryRepeater> 
+			<utils1:geometry>
+				<degrafa:Line y="0" y1="0" height="{this.height}" x="0" x1="0" width="{this.width}"/>
+			</utils1:geometry>
+			<utils1:modifiers>
+				<utils1:PropertyModifier property="x" modifier="{_gapStep}" modifierOperator="add"/>
+			</utils1:modifiers>
+		</utils1:GeometryRepeater>
+	</axis:referenceRepeater>
+	<axis:drawingGeometries>
+	
+		<!--- @private -->
+		<degrafa:RegularRectangle id="gridRect"
+			x="{currentReference.x}"
+			y="0"
+			height="{height}" 
+			visible="{showGridExpression.value &amp;&amp; showGridArea}" fill="{gridFill}"/>				  
+
+		<!--- @private -->
+		<degrafa:Line id="gridLine" 
+					  x="{int(currentReference.x+gridStroke.weight/2)}"
+					  x1="{int(currentReference.x+gridStroke.weight/2)}" 
+					  y="0"
+					  y1="{height}"
+					  visible="{showGridExpression.value &amp;&amp; showGridLine}"
+					  stroke="{gridStroke}"/>				  
+		
+		<!--- @private -->
+		<degrafa:Line id="zeroLine" 
+					  x="{(maxScale == 0) ? width : (minScale == 0) ? 0 : Math.round(width/(Math.abs(maxScale) + Math.abs(minScale))*Math.abs(minScale))}"
+					  x1="{(maxScale == 0) ? width : (minScale == 0) ? 0 : Math.round(width/(Math.abs(maxScale) + Math.abs(minScale))*Math.abs(minScale))}"
+					  y="0"
+					  y1="{height}"
+					  visible="{showZeroLine}"
+					  stroke="{gridStroke}"/>				  
+		
+		<!--- @private -->
+		<degrafa:Line id="minorTick" stroke="{tickStroke}"
+			y="{height}" y1="{height-minorTickLength}"  visible="{showMinorTickExpression.value}"
+			x="{currentReference.x}" x1="{currentReference.x}"/>
+			
+		<!--- @private -->
+		<degrafa:Line id="majorTick" stroke="{tickStroke}" 
+			y="{height}" y1="{height-majorTickLength}" visible="{showMajorTickExpression.value}"
+			x="{currentReference.x}" x1="{currentReference.x}"/>
+			
+		<!--- @private -->
+		<degrafa:RasterText id="label" align="{(labelAngle ==0 ? 'center':'left')}" autoSizeField="true"
+			fontFamily="fontFamily" fontSize="{fontSize}" fontWeight="{fontWeight}" textColor="{fontColor}"
+			text="{labelFunction(horizontalScale.layoutToValue(horizontalScale.minLayout+currentReference.x))}" visible="{showLabelExpression.value}">
+			<degrafa:transform>
+				<degrafa:RotateTransform angle="{labelAngle}" registrationPoint="centerLeft"/>
+			</degrafa:transform>
+		</degrafa:RasterText>
+	</axis:drawingGeometries>
+
+</axis:AxisBase>

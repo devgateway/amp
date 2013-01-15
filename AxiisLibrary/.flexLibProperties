@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="false" version="3">
+  <includeClasses>
+    <classEntry path="com.degrafa.decorators.axiis.AreaLineDecorator"/>
+    <classEntry path="com.degrafa.decorators.axiis.BaseLineAreaLineDecorator"/>
+    <classEntry path="com.degrafa.geometry.CalloutBalloon"/>
+    <classEntry path="com.degrafa.geometry.Geometry"/>
+    <classEntry path="com.degrafa.geometry.Wedge"/>
+    <classEntry path="org.axiis.DataCanvas"/>
+    <classEntry path="org.axiis.charts.axis.AxisBase"/>
+    <classEntry path="org.axiis.charts.axis.HAxis"/>
+    <classEntry path="org.axiis.charts.axis.HCategoryAxis"/>
+    <classEntry path="org.axiis.charts.axis.VAxis"/>
+    <classEntry path="org.axiis.charts.groupings.BarCluster"/>
+    <classEntry path="org.axiis.charts.groupings.BarStack"/>
+    <classEntry path="org.axiis.charts.groupings.ColumnCluster"/>
+    <classEntry path="org.axiis.charts.groupings.ColumnStack"/>
+    <classEntry path="org.axiis.charts.groupings.GroupingBase"/>
+    <classEntry path="org.axiis.charts.groupings.LineSeriesGroup"/>
+    <classEntry path="org.axiis.charts.groupings.PlotGroup"/>
+    <classEntry path="org.axiis.charts.groupings.WedgeStackGroup"/>
+    <classEntry path="org.axiis.charts.labels.HBracket"/>
+    <classEntry path="org.axiis.charts.labels.VBracket"/>
+    <classEntry path="org.axiis.core.AbstractLayout"/>
+    <classEntry path="org.axiis.core.AxiisSprite"/>
+    <classEntry path="org.axiis.core.BaseLayout"/>
+    <classEntry path="org.axiis.core.IAxiisRenderer"/>
+    <classEntry path="org.axiis.core.PropertySetter"/>
+    <classEntry path="org.axiis.data.DataGroup"/>
+    <classEntry path="org.axiis.data.DataSet"/>
+    <classEntry path="org.axiis.events.LayoutItemEvent"/>
+    <classEntry path="org.axiis.layouts.ConcentricWedgeLayout"/>
+    <classEntry path="org.axiis.layouts.HBoxLayout"/>
+    <classEntry path="org.axiis.layouts.RepeaterLayout"/>
+    <classEntry path="org.axiis.layouts.VBoxLayout"/>
+    <classEntry path="org.axiis.layouts.scale.AbstractScale"/>
+    <classEntry path="org.axiis.layouts.scale.CategoricalScale"/>
+    <classEntry path="org.axiis.layouts.scale.ContinuousScale"/>
+    <classEntry path="org.axiis.layouts.scale.DateTimeScale"/>
+    <classEntry path="org.axiis.layouts.scale.IScale"/>
+    <classEntry path="org.axiis.layouts.scale.LinearScale"/>
+    <classEntry path="org.axiis.layouts.scale.LogScale"/>
+    <classEntry path="org.axiis.layouts.scale.ScaleUtils"/>
+    <classEntry path="org.axiis.layouts.utils.GeometryRepeater"/>
+    <classEntry path="org.axiis.layouts.utils.PropertyModifier"/>
+    <classEntry path="org.axiis.managers.AnchoredDataTipManager"/>
+    <classEntry path="org.axiis.managers.FreeDataTipManager"/>
+    <classEntry path="org.axiis.managers.IDataTipManager"/>
+    <classEntry path="org.axiis.paint.LayoutAutoPalette"/>
+    <classEntry path="org.axiis.paint.LayoutPalette"/>
+    <classEntry path="org.axiis.states.State"/>
+    <classEntry path="org.axiis.ui.DataTip"/>
+    <classEntry path="org.axiis.ui.DataTipBackground"/>
+    <classEntry path="org.axiis.ui.TextDataTipContent"/>
+    <classEntry path="org.axiis.utils.BooleanExpression"/>
+    <classEntry path="org.axiis.utils.GraphicUtils"/>
+    <classEntry path="org.axiis.utils.NumericExpression"/>
+    <classEntry path="org.axiis.utils.ObjectUtils"/>
+    <classEntry path="org.axiis.utils.UntypedExpression"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests>
+    <namespaceManifestEntry manifest="manifest.xml" namespace="http://www.axiis.org/2009"/>
+  </namespaceManifests>
+</flexLibProperties>

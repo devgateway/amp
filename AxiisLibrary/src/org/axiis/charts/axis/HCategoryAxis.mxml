@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2009 Team Axiis
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions: 
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<!---
+	HCategoryAxis renders values from left to right between a indexed collection of string values
+	and is intended to be rendered beneath other layouts to provide a
+	point of reference for those visualizations.
+	
+	<p>
+	HCategory Axis trys to optmize its layout based on the maximum widht/length of all labels in collection
+	</p>
+	
+-->
+<core:BaseLayout xmlns="*" xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:degrafa="http://www.degrafa.com/2007"
+	xmlns:core="org.axiis.core.*" xmlns:utils="org.axiis.layouts.utils.*"
+	 preRender="onPreRender();"
+	 itemPreDraw="onItemPreDraw();">
+<mx:Script>
+	<![CDATA[
+		import flash.utils.getTimer;
+		import mx.controls.Label;
+		import org.axiis.utils.ObjectUtils;
+		import com.degrafa.core.IGraphicsStroke;
+		import com.degrafa.paint.SolidStroke;
+		import org.axiis.layouts.scale.CategoricalScale;
+		
+		[Bindable]
+		/**
+		 * The scale used to plot out the labels.  We are tied to the scale spacing and HCategoryAxis attempts
+		 * to space things evenly along these plots.  But currently the second and second to last plots may be asymetric.
+		 */ 
+		public var categoryScale:CategoricalScale;
+		
+		[Bindable] 
+		/**
+		 * Stroke used for tick marks.
+		 */ 
+		public var stroke:com.degrafa.core.IGraphicsStroke=new SolidStroke();
+		
+		private function onPreRender():void {
+			var totalChars:String=""; 
+			counter=0;
+			var tempChars:String;
+			var t:Number=flash.utils.getTimer();
+			
+			
+			//Get biggest string (assumes some type of universal spacing
+			//Dont want to use textField in loop as it slows things down
+			for (var i:int=0; i < dataItems.length; i++) {
+				tempChars=String(ObjectUtils.getProperty(this,dataItems[i],labelField));
+				totalChars=(tempChars.length>totalChars.length) ? tempChars:totalChars;
+			}
+			
+			var tf:TextField=new TextField();
+			tf.text=totalChars+"XX";
+			var tff:TextFormat = new TextFormat(fontFamily,fontSize,0,(fontWeight=="bold"));
+			maxWidth=tf.textWidth+this.labelPadding;
+			
+			if (labelRotation!=0) {
+				maxWidth=(Math.cos(labelRotation*Math.PI/180)*tf.textWidth)+Math.cos((labelRotation-90)*Math.PI/180)*tf.textHeight;
+			}
+			
+		
+			
+			//Now figure out our spacing
+			
+			markerSpacing=this.width/(dataItems.length-1)
+			
+			var maxItems:int=Math.floor((this.width-maxWidth)/maxWidth);
+			
+			var maxMarkerWidth:int=Math.floor(markerSpacing*dataItems.length-2);
+
+			lastX=0;
+
+		}
+		
+		private var markerSpacing:Number;
+		
+		private var startRepeat:Number;
+		private var maxWidth:Number;
+		private var itemWidth:Number;
+		private var repeatModulo:Number;
+		private var counter:int=1;
+		private var lastX:int=0;
+		
+		private function onItemPreDraw():void {
+			label.x=line.x-(labelRotation == 0 ? label.textWidth/2 : maxWidth/2);
+			label.y=line.y1+5;
+			
+			if (currentIndex==0 || currentIndex==itemCount-1) {
+				line.visible=true;
+				label.visible=true;
+			}
+			else if (line.x-lastX >=maxWidth && line.x+maxWidth/2 < this.width) {
+				lastX=line.x;
+				line.visible=true;
+				label.visible=true;
+			}
+			else {
+				line.visible=false;
+				label.visible=false;
+			}
+			
+			
+			
+			
+		}
+		
+		[Bindable]
+		/**
+		 * A function used to determine the text of each label.
+		 * 
+		 * The method should take one argument, a value from the dataProvider, and return a String to use as the label.
+		 * The default method applies toString() to the argument.
+		 */
+		public var axisLabelFunction:Function=internalLabelFunction;
+		
+		private function internalLabelFunction(value:Object):String {
+			return String(value);
+		}	
+	]]>
+</mx:Script>
+	<!---
+		 The length in pixels of the label marker (line)
+	-->
+	<mx:Number id="markerLength">5</mx:Number>
+	<!---
+		 Minimum padding between labels.
+	-->
+	<mx:Number id="labelPadding">3</mx:Number>
+	<!---
+		 font family of labels.
+	-->
+	<mx:String id="fontFamily">Arial</mx:String>
+	<!---
+		 font weight of labels.
+	-->
+	<mx:String id="fontWeight">normal</mx:String>
+	
+	<!---
+		 font color of labels.
+	-->
+	<mx:Number id="fontColor">0</mx:Number>
+	
+	<!---
+		 font size of labels.
+	-->
+	<mx:Number id="fontSize">12</mx:Number>
+	<!---
+		 rotation of text for labels - should keep between 0-90.
+	-->
+	<mx:Number id="labelRotation">0</mx:Number>
+	
+	<core:referenceRepeater>
+		<utils:GeometryRepeater>
+			<utils:geometry>
+				<degrafa:RegularRectangle x="0" y="0" width="{this.width/dataItems.count}" height="{height}" enableEvents="false"/>
+			</utils:geometry>
+			<utils:modifiers>
+				<utils:PropertyModifier property="x" modifier="{categoryScale.valueToLayout(currentValue)}" modifierOperator="none"/>
+			</utils:modifiers>
+		</utils:GeometryRepeater>
+	</core:referenceRepeater>
+	<core:drawingGeometries>
+		<degrafa:Line id="line"
+			x="{currentReference.x+currentReference.width/2}" 
+			x1="{currentReference.x+currentReference.width/2}" 
+			y="0" 
+			y1="{markerLength}"
+			stroke="{stroke}"
+			/>
+			
+		<degrafa:RasterText id="label"
+			text="{axisLabelFunction(currentLabel)}"
+			align="left" autoSizeField="true"
+			autoSize="left" textColor="{fontColor}"
+			fontFamily="{fontFamily}"
+			fontWeight="{fontWeight}"
+			fontSize="{fontSize}"
+			>
+			<degrafa:transform>
+				<degrafa:RotateTransform angle="{labelRotation}" registrationPoint="bottomLeft"/>
+			</degrafa:transform>
+		</degrafa:RasterText>
+	</core:drawingGeometries>
+
+</core:BaseLayout>

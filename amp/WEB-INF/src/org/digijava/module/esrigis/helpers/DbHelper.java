@@ -824,7 +824,7 @@ public class DbHelper {
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			session.merge(map);
+			session.save(map);
 			session.close();
 		} catch (Exception e) {
 			logger.error("Unable to save structure type", e);

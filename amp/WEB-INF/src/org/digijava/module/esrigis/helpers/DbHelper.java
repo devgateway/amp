@@ -754,8 +754,9 @@ public class DbHelper {
         } catch (Exception ex) {
             logger.error("Unable to get maps from database ", ex);
         }
+        session.close();
         return maps;
-	}
+    }
 	
 	
 	public static AmpStructureType getStructureType(Long structureTypeId) {
@@ -823,8 +824,8 @@ public class DbHelper {
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			session.save(map);
-				
+			session.merge(map);
+			session.close();
 		} catch (Exception e) {
 			logger.error("Unable to save structure type", e);
 		}

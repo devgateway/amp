@@ -56,7 +56,23 @@ public class ShowProjectsList extends Action {
 		
 		int startYearInt = 0;
 		if (startYear.contains("-")) {
-			startYearInt = Integer.parseInt(startYear.substring(startYear.lastIndexOf("-")+1,startYear.lastIndexOf("-")+3))+2000-1;
+			String startYearStr = startYear.substring(startYear.lastIndexOf("-")+1,startYear.lastIndexOf("-")+3);
+			
+			if(type.equals("AidPredictabilityQuarter") && startYearStr.trim().startsWith("Q")){
+				//Fix for AMP-14389, line area graph is not sending the same data format as the bar graph
+				//Example: Line graph -> startYear = FY 11-12 - Q1 
+				//                       id = Actual
+				//         Bar chart -> startYear = FY 11-12 
+				//                      id = Actual-1
+
+				//Extracting the quarter and adding it to the id, used forward
+				String quarterStr = startYear.substring(startYear.lastIndexOf("-")+1,startYear.lastIndexOf("-")+4);
+				id = id +"-"+ quarterStr.trim().substring(1,2);
+				//Calculating startYear after removing the quarter
+				startYearStr = startYear.substring(0, startYear.lastIndexOf("-"));
+				startYearStr = startYearStr.substring(startYearStr.lastIndexOf("-")+1,startYearStr.lastIndexOf("-")+3);
+			}
+			startYearInt = Integer.parseInt(startYearStr)+2000-1;
 		} else {
 			startYearInt = Integer.parseInt(startYear);
 		}

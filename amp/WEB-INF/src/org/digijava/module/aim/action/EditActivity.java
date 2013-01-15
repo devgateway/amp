@@ -1256,6 +1256,16 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            fund.setConditions(ampFunding.getConditions());
 			            fund.setDonorObjective(ampFunding.getDonorObjective());
                         fund.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());
+                        if(ampFunding.getAgreement()!=null){
+                        	fund.setTitle(ampFunding.getAgreement().getTitle());
+                        	fund.setCode(ampFunding.getAgreement().getCode());
+                        }
+                        else{
+                        	fund.setCode("");
+                        	fund.setTitle("");
+                        }
+                        	
+                        
 
 			            /* Get MTEF Projections */
 			            ArrayList<MTEFProjection> MTEFProjections	= new ArrayList<MTEFProjection>();

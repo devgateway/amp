@@ -21,7 +21,7 @@
 			style="text-transform: uppercase"><a
 			title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
 	
-		<digi:trn key="aim:planneddisbursements">PLANNED DISBURSEMENT</digi:trn>
+		<digi:trn key="aim:planneddisbursements">Planned Disbursement</digi:trn>
 		</a></td>
 	</tr>
 	
@@ -75,7 +75,7 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase">
-			<digi:trn key='aim:subtotalplanneddisbursement'>SUBTOTAL PLANNED DISBURSEMENT:</digi:trn>
+			<digi:trn key='aim:subtotalplanneddisbursement'>Subtotal Planned Disbursement</digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
@@ -95,7 +95,7 @@
 	<tr bgcolor="#ffffff">
 		<td colspan="4" bgcolor="#FFFFCC" 
 			style="text-transform: uppercase; text-transform: uppercase"><digi:trn
-			key="aim:actualisbursements">ACTUAL DISBURSEMENT</digi:trn>:</td>
+			key="aim:actualisbursements">Actual Disbursement</digi:trn>:</td>
 	</tr>
 
 	<!-- Start Actual Disbursements -->
@@ -147,7 +147,7 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000"><digi:trn
-			key='aim:subtotalActualdisbursement'>SUBTOTAL ACTUAL DISBURSEMENT </digi:trn>:
+			key='aim:subtotalActualdisbursement'>Subtotal Actual Disbursement </digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">

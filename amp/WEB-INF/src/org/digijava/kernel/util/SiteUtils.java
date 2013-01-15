@@ -154,7 +154,7 @@ public class SiteUtils {
 		return ampSite;
     }
     /**
-     * Get <code>Site</code> object for the given saite id
+     * Get <code>Site</code> object for the given site id
      * @param siteId site identity (string type)
      * @return Site if found. null - if not
      * @throws DgException If error occurs

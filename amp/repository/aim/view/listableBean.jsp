@@ -33,17 +33,8 @@
 		</TR>
 		<logic:iterate id="prop" name="pMap">
 			<TR>
-				<TD align="right"><B><digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn>
-				:</B></TD>
-				<TD><logic:equal name="prop" property="value.class.simpleName"
-					value="Boolean">
-					<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
-				</logic:equal> <logic:notEqual name="prop"
-					property="value.class.simpleName" value="Boolean">
-					<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
-				</logic:notEqual></TD>
-
-
+				<TD align="right"><B>${prop.key}:</B></TD>
+				<TD>${prop.value}</TD>
 			</TR>
 		</logic:iterate>
 	</TABLE>
@@ -53,16 +44,7 @@
 <logic:equal name="style" value="list">
 	<I>${listable.beanName}</I>
 	<logic:iterate id="prop" name="bean" property="	">
-		<B> <digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn> :</B>
-		<logic:equal name="prop" property="value.class.simpleName"
-			value="Boolean">
-			<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
-		</logic:equal>
-		<logic:notEqual name="prop" property="value.class.simpleName"
-			value="Boolean">
-			<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
-		</logic:notEqual>
-
+		<B>${prop.key}: </B>${prop.value}
 	</logic:iterate>
 </logic:equal>
 
@@ -70,14 +52,7 @@
 	<I>${listable.beanName}</I>
 	<logic:iterate id="prop" name="pMap">
     	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
-            <digi:trn key="${prefix}:${prop.key}"><i>${prop.key}</i></digi:trn>:
-            <c:if test="${prop.key == 'teamAssignedOrgs'}">
-            	${prop.value}
-            </c:if>
-            <c:if test="${prop.key != 'teamAssignedOrgs'}">
-            <digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
-            </c:if>
-            |
-        </c:if>
+            <i>${prop.key}</i>: ${prop.value}
+		</c:if> |
 	</logic:iterate>
 </logic:equal>

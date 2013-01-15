@@ -514,11 +514,11 @@ function collapseAll() {
 			<feature:display name="Edit Activity" module="Previews">
 				<field:display feature="Edit Activity" name="Edit Activity Button">
 					<logic:equal name="aimEditActivityForm" property="buttonText" value="edit">
-						<c:set var="trn"><digi:trn>EDIT</digi:trn></c:set>
+						<c:set var="trn"><digi:trn>Edit</digi:trn></c:set>
 						<input type="button" class="buttonx_sm" onclick="javascript:editActivity()" value="${trn}"/>
 					</logic:equal>
 					<logic:equal name="aimEditActivityForm" property="buttonText" value="validate">
-						<c:set var="trn"><digi:trn>VALIDATE</digi:trn></c:set>							
+						<c:set var="trn"><digi:trn>Validate</digi:trn></c:set>							
 						<input type="button" class="buttonx_sm" onclick="javascript:editActivity()" value="${trn}"/>
 					</logic:equal>
 				</field:display>
@@ -530,9 +530,7 @@ function collapseAll() {
   <tr>
       <td colspan="2" style="color:red;text-align: center">
           <c:forEach var="element" items="${aimEditActivityForm.warningMessges}">
-              <digi:trn>
-                 ${element}
-              </digi:trn>
+              <digi:trn>${element}</digi:trn>
           </c:forEach>
       </td>
   </tr>
@@ -2991,11 +2989,11 @@ function collapseAll() {
 			<feature:display name="Edit Activity" module="Previews">
 				<field:display feature="Edit Activity" name="Edit Activity Button">
 					<logic:equal name="aimEditActivityForm" property="buttonText" value="edit">
-						<c:set var="trn"><digi:trn>EDIT</digi:trn></c:set>
+						<c:set var="trn"><digi:trn>Edit</digi:trn></c:set>
 						<input type="button" class="buttonx_sm" onclick="javascript:editActivity()" value="${trn}"/>
 					</logic:equal>
 					<logic:equal name="aimEditActivityForm" property="buttonText" value="validate">
-						<c:set var="trn"><digi:trn>VALIDATE</digi:trn></c:set>							
+						<c:set var="trn"><digi:trn>Validate</digi:trn></c:set>							
 						<input type="button" class="buttonx_sm" onclick="javascript:editActivity()" value="${trn}"/>
 					</logic:equal>
 				</field:display>

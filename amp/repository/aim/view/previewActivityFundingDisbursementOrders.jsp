@@ -82,7 +82,7 @@
 	<tr bgcolor="#ffffff">
 		<td colspan="5" bgcolor="#FFFFCC" style="text-transform: uppercase"><a
 			title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
-		<digi:trn key="aim:actualdisbursementOrders">ACTUAL DISBURSMENT ORDERS</digi:trn>
+		<digi:trn key="aim:actualdisbursementOrders">Actual Disbursment Orders</digi:trn>
 
 		</a></td>
 	</tr>
@@ -129,15 +129,13 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">
-	<digi:trn
-			key='aim:subtotalActualDisbursementOrder'>
             	<a
 			title='<digi:trn key="aim:FundRelease"> Release of funds to,
 			or the purchase of goods or services for a recipient; by
 			extension, the amount thus spent. Disbursements record the actual
 			international transfer of financial resources, or of goods or
 			services valued at the cost to the donor</digi:trn>'>
-	  SUBTOTAL ACTUAL DISBURSMENT ORDERS </a></digi:trn>
+	  <digi:trn>Subtotal Actual Disbursment Orders</digi:trn> </a>
 	</td>
 	  <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">

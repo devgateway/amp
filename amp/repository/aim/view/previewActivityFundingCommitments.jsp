@@ -28,7 +28,7 @@
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC"
 			style="text-transform: uppercase;"><a
 			title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
-		<digi:trn key="aim:plannedcommitments">PLANNED COMMITMENTS </digi:trn>
+		<digi:trn key="aim:plannedcommitments">Planned Commitments </digi:trn>
 		</a></td>
 		<td bgcolor="#FFFFCC">
 			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
@@ -79,7 +79,7 @@
 	</c:if>
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
-			<digi:trn key='aim:subtotalplannedcommittment'> SUBTOTAL PLANNED COMMITMENTS</digi:trn>:
+			<digi:trn key='aim:subtotalplannedcommittment'> Subtotal Planned Commitments</digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
@@ -99,7 +99,7 @@
 	<tr>
 		<td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase">
 			<a title='<digi:trn key="aim:PlannedCommitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>'>
-			<digi:trn key="aim:actualcommitments">ACTUAL COMMITMENTS </digi:trn> </a>
+			<digi:trn key="aim:actualcommitments">Actual Commitments </digi:trn> </a>
 		</td>
 		<td height="20" bgcolor="#FFFFCC">
 			<c:if test="${aimEditActivityForm.funding.fixerate == true}">
@@ -152,7 +152,7 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-			key='aim:subtotalactualcommittment'> SUBTOTAL ACTUAL COMMITMENTS </digi:trn>:
+			key='aim:subtotalactualcommittment'>Subtotal Actual Commitments </digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
 			<c:if test="${not empty funding.subtotalActualCommitments}">
@@ -174,7 +174,7 @@
         </tr>
         <tr>
             <td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase"><a>
-                <digi:trn>PIPELINE COMMITMENTS </digi:trn> </a>
+                <digi:trn>Pipeline Commitments </digi:trn> </a>
                 </td>
                 <td height="20" bgcolor="#FFFFCC">
                 	<c:if test="${aimEditActivityForm.funding.fixerate == true}">
@@ -227,7 +227,7 @@
         </c:if>
         <tr>
                 <td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
-                        <digi:trn> SUBTOTAL PIPELINE COMMITMENTS: </digi:trn>
+                        <digi:trn> Subtotal Pipeline Commitments</digi:trn>: 
                 </td>
                 <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
                 	<c:if test="${not empty funding.subtotalPipelineCommitments}">

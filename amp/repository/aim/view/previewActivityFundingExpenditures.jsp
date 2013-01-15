@@ -23,7 +23,7 @@
 	<td colspan="4" style="text-transform: uppercase"><a
 		title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
 
-	<digi:trn key="aim:plannedexpenditures"> PLANNED EXPENDITURES</digi:trn>
+	<digi:trn key="aim:plannedexpenditures">Planned Expenditures</digi:trn>
 	</a></td>
 </tr>
 
@@ -37,9 +37,11 @@
 							<td align="right" bgcolor="#FFFFFF">
 							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Adjustment Type"
 								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures/Expenditures Table">
-								<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value"/></b>
-								</digi:trn>
+								<b>
+									<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+										<bean:write name="fundingDetail" property="adjustmentTypeName.value"/>
+									</digi:trn>
+								</b>
 							</module:display>
 							</td>
 							<td align="right">
@@ -72,7 +74,7 @@
 
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
-			<digi:trn key="aim:subtotalActualExpenditures">SUBTOTAL PLANNED EXPENDITURES</digi:trn>:
+			<digi:trn key="aim:subtotalActualExpenditures">Subtotal Planned Expenditures</digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.subtotalPlannedExpenditures}">
@@ -91,7 +93,7 @@
 	<tr bgcolor="#FFFFCC">
 		<td colspan="4" style="text-transform: uppercase">
 			<a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
-				<digi:trn key="aim:actualexpenditures">ACTUAL EXPENDITURES</digi:trn>:
+				<digi:trn key="aim:actualexpenditures">Actual Expenditures</digi:trn>:
 			</a>
 		</td>
 	</tr>
@@ -143,7 +145,7 @@
 	</c:if>
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
-			<digi:trn key="aim:subtotalplannedExpenditures">SUBTOTAL ACTUAL EXPENDITURES</digi:trn>:
+			<digi:trn key="aim:subtotalplannedExpenditures">Subtotal Actual Expenditures</digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 			<c:if test="${not empty funding.subtotalExpenditures}">

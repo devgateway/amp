@@ -320,7 +320,7 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 			Iterator<AmpCategoryValue> tempItr = c.iterator();
 			while (tempItr.hasNext()) {
 				AmpCategoryValue categoryValue = (AmpCategoryValue) tempItr.next();
-				if (categoryValue.getValue().equalsIgnoreCase( hcValue.getValueKey() )) {
+				if (categoryValue!=null && categoryValue.getValue().equalsIgnoreCase( hcValue.getValueKey() )) {
 					return categoryValue;
 				}
 			}

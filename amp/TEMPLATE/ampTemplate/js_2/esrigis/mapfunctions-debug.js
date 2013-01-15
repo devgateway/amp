@@ -1152,7 +1152,8 @@ function MapFindStructure(activity, structureGraphicLayer) {
 	dojo.forEach(activity.structures,function(structure) {
 			var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ structure.typeId, 21, 25);
 			var pgraphic;
-	
+			description =  structure.description.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+			name =  structure.name.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 			if (structure.shape == "") {
 				var pt = new esri.geometry.Point(structure.lon,structure.lat, map.spatialReference);
 				var transpt = esri.geometry.geographicToWebMercator(pt);
@@ -1160,13 +1161,12 @@ function MapFindStructure(activity, structureGraphicLayer) {
 					"Temp" : "Temporal Attribute"
 				};
 				pgraphic = new esri.Graphic(transpt, sms, attr,stinfoTemplate);
-	
 				pgraphic.setAttributes({
 						"Structure Name" : structure.name,
 						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+ activity.ampactivityid
 									+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
 						"Structure Type" : structure.type,
-						"Structure Description" : structure.description,
+						"Structure Description" : description,
 						"Coordinates" : pt.x + " , " + pt.y,
 						"Type_id" : structure.typeId
 					});
@@ -1180,11 +1180,12 @@ function MapFindStructure(activity, structureGraphicLayer) {
 					// If it's a complete Graphic object
 					pgraphic = new esri.Graphic(jsonObject);
 					pgraphic.setAttributes({
-						"Structure Name" : structure.name,
+						"Structure Name" : name,
 						"Structure Type" : structure.type,
 						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+ activity.ampactivityid
 								+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
-						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y
+						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y,
+						"Structure Description" : description
 					});
 					pgraphic.setInfoTemplate(stinfoTemplate);
 					// If it's a point, put the  appropriate  icon
@@ -1200,7 +1201,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 					};
 					pgraphic = new esri.Graphic(pt, sms, attr,infoTemplate);
 					pgraphic.setAttributes({
-						"Structure Name" : structure.name,
+						"Structure Name" : name,
 						"Structure Type" : structure.type,
 						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
 							+ activity.ampactivityid+ '~isPreview=1" target="_blank">'

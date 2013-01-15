@@ -298,7 +298,7 @@ LoggerIdentifiable, Cloneable {
 
 	// Aid Harmonization Survey Set
 	@VersionableCollection(fieldTitle = "Surveys")
-	protected Set survey;
+	protected Set<AmpAhsurvey> survey;
 
 	@VersionableFieldSimple(fieldTitle = "Line Ministry Rank")
 	protected Integer lineMinRank;
@@ -1179,7 +1179,7 @@ contactName = string;
 	/**
 	 * @return Returns the survey.
 	 */
-	public Set getSurvey() {
+	public Set<AmpAhsurvey> getSurvey() {
 		return survey;
 	}
 
@@ -1203,7 +1203,7 @@ contactName = string;
 	 * @param survey
 	 *            The survey to set.
 	 */
-	public void setSurvey(Set survey) {
+	public void setSurvey(Set<AmpAhsurvey> survey) {
 		this.survey = survey;
 	}
 

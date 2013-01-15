@@ -6463,7 +6463,7 @@ public class DbUtil {
 		}
 	}
 
-	public static Collection getAllAhSurveyIndicators() {
+	public static Collection<AmpAhsurveyIndicator> getAllAhSurveyIndicators() {
 		Collection responses = new ArrayList();
 		Session session = null;
 

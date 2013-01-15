@@ -3,6 +3,10 @@ import java.util.Calendar;
 import java.util.Date;
 import org.apache.wicket.model.IModel;
 
+/**
+ *
+ * @author aartimon@developmentgateway.org
+ */
 public class MTEFYearsModel implements IModel<String> {
 	private static final long serialVersionUID = 1L;
 	private IModel<Date> sourceModel;

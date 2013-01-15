@@ -17,26 +17,26 @@ import org.apache.wicket.util.string.Strings;
  * @author aartimon@dginternational.org
  * @since Mar 31, 2011
  */
-public class PIYesNoAnswerModel extends Model {
-	private IModel sourceModel;
+public class PIYesNoAnswerModel extends Model<String> {
+	private IModel<String> sourceModel;
 	
-	public PIYesNoAnswerModel(IModel sourceModel) {
+	public PIYesNoAnswerModel(IModel<String> sourceModel) {
 		this.sourceModel = sourceModel;
 	}
 	
 	@Override
-	public void setObject(Serializable object) {
+	public void setObject(String object) {
 		if (object == null){
 			sourceModel.setObject(null);
 		}
 		else
-			sourceModel.setObject(((String)object).toLowerCase());
+			sourceModel.setObject((object).toLowerCase());
 	}
 	
 	@Override
-	public Serializable getObject() {
+	public String getObject() {
 		
-		String val = (String) sourceModel.getObject();
+		String val = sourceModel.getObject();
 		
 		if (val == null)
 			return null;

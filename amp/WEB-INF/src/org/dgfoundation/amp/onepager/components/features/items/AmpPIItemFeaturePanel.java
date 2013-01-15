@@ -3,54 +3,28 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.AbstractSingleSelectChoice;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpIndicatorGroupField;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpPIFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
+import org.dgfoundation.amp.onepager.models.DateToYearModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
-import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.translation.util.TranslationManager;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
@@ -59,14 +33,19 @@ import edu.emory.mathcs.backport.java.util.Collections;
  * @since Mar 30, 2011
  */
 public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
-	
+    private static final List<String> CHOICE_LIST = new ArrayList<String>();
+    private static final int YEAR_RANGE = 5;
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @throws Exception
-	 */
-	public AmpPIItemFeaturePanel(String id, String fmName, final IModel<AmpAhsurvey> survey, IModel<AmpOrganisation> surveyOrg){
+    static {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        for (int i = year-YEAR_RANGE; i<=year+YEAR_RANGE; i++){
+            CHOICE_LIST.add(String.valueOf(i));
+        }
+    }
+
+	public AmpPIItemFeaturePanel(String id, String fmName, final IModel<AmpAhsurvey> survey,
+                                 final IModel<AmpOrganisation> surveyOrg, final IModel<AmpActivityVersion> am){
 		super(id, survey, fmName, true);
 		if (survey.getObject().getResponses() == null)
 			survey.getObject().setResponses(new HashSet<AmpAhsurveyResponse>());
@@ -75,8 +54,49 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 			survey.getObject().setPointOfDeliveryDonor(survey.getObject().getAmpDonorOrgId());
 		Label indicatorNameLabel = new Label("orgName", surveyOrg);
 		add(indicatorNameLabel);
-	
-		final Label pod = new Label("PoD", PersistentObjectModel.getModel(survey.getObject().getPointOfDeliveryDonor()));
+
+        PropertyModel<Date> surveyPropertyModel = new PropertyModel<Date>(survey, "surveyDate");
+        AmpSelectFieldPanel<String> yearSelector = new AmpSelectFieldPanel<String>("yearSelect",
+                new DateToYearModel(surveyPropertyModel), CHOICE_LIST, "Year Select", true, true);
+        if (surveyPropertyModel.getObject() != null){
+            yearSelector.setIgnorePermissions(true);
+            yearSelector.setEnabled(false);
+        }
+        add(yearSelector);
+
+        AmpLinkField newItem = new AmpAddLinkField("addNewItem", "Add new item") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                AmpAhsurvey as = new AmpAhsurvey();
+                as.setAmpActivityId(am.getObject());
+                as.setAmpDonorOrgId(surveyOrg.getObject());
+                am.getObject().getSurvey().add(as);
+                AmpPIFormSectionFeature parent = this.findParent(AmpPIFormSectionFeature.class);
+                target.add(parent);
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
+            }
+        };
+        add(newItem);
+
+        AmpLinkField deleteItem = new AmpDeleteLinkField("deleteItem", "Delete Item") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                Set<AmpAhsurvey> surveySet = am.getObject().getSurvey();
+                for (Iterator<AmpAhsurvey> iterator = surveySet.iterator(); iterator.hasNext(); ) {
+                    AmpAhsurvey ahsurvey = iterator.next();
+                    if (ahsurvey.equals(survey.getObject())){
+                        iterator.remove();
+                        break;
+                    }
+                }
+                AmpPIFormSectionFeature parent = this.findParent(AmpPIFormSectionFeature.class);
+                target.add(parent);
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
+            }
+        };
+        add(deleteItem);
+
+		final Label pod = new Label("PoD", new PropertyModel<String>(survey, "pointOfDeliveryDonor.name"));
 		pod.setOutputMarkupId(true);
 		add(pod);
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,AmpOrganisationSearchModel.class) {			
@@ -106,7 +126,7 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 				return null;
 			}
 		};
-		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("orgSearch", new Model<String> (),
+		AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>("orgSearch", new Model<String> (),
 				"Search Organizations",   searchOrgs );
 		add(searchOrganization);
 
@@ -130,26 +150,26 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 				item.add(indCode);
 				Label indName = new TrnLabel("indName", new PropertyModel<String>(sv, "name"));
 				item.add(indName);
-				
+
 				String code = sv.getIndicatorCode();
 				if (code.compareTo("7") == 0){
 					String msg = "No question here. This indicator is calculated by the system based on information entered for disbursements for this project/programme";
-					Label l = new TrnLabel("qList", new Model(msg));
+					Label l = new TrnLabel("qList", new Model<String>(msg));
 					item.add(l);
 				} else 
 					if (code.compareTo("10a") == 0){
 						String msg = "No question at the activity level; this indicator is calculated using the Calendar Module";
-						Label l = new TrnLabel("qList", new Model(msg));
+						Label l = new TrnLabel("qList", new Model<String>(msg));
 						item.add(l);
 					} else 
 						if (code.compareTo("10b") == 0){
 							String msg = "No question at the activity level; this indicator is calculated using the Document Management Module";
-							Label l = new TrnLabel("qList", new Model(msg));
+							Label l = new TrnLabel("qList", new Model<String>(msg));
 							item.add(l);
 						} else 
 							if (code.compareTo("10b") == 0){
 								String msg = "No question at the activity level; this indicator is calculated using the Document Management Module";
-								Label l = new TrnLabel("qList", new Model(msg));
+								Label l = new TrnLabel("qList", new Model<String>(msg));
 								item.add(l);
 							} else {
 								AmpPIQuestionItemFeaturePanel q = new AmpPIQuestionItemFeaturePanel("qList", "PI Questions List", PersistentObjectModel.getModel(sv), survey);

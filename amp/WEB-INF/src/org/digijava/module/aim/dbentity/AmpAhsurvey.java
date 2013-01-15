@@ -7,13 +7,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.digijava.module.aim.util.Output;
 
@@ -29,20 +23,29 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
 	private AmpOrganisation ampDonorOrgId;
     private AmpOrganisation pointOfDeliveryDonor;
 	private Set<AmpAhsurveyResponse> responses;
+    private Date surveyDate;
 
-	/**
+    public Date getSurveyDate() {
+        return surveyDate;
+    }
+
+    public void setSurveyDate(Date surveyDate) {
+        this.surveyDate = surveyDate;
+    }
+
+    /**
 	 * @return Returns the ampAHSurveyId.
 	 */
 	public Long getAmpAHSurveyId() {
 		return ampAHSurveyId;
 	}
-	/**
+    /**
 	 * @param ampAHSurveyId The ampAHSurveyId to set.
 	 */
 	public void setAmpAHSurveyId(Long ampAHSurveyId) {
 		this.ampAHSurveyId = ampAHSurveyId;
 	}
-	/**
+    /**
 	 * @return Returns the responses.
 	 */
 	public Set<AmpAhsurveyResponse> getResponses() {

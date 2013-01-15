@@ -30,6 +30,7 @@
 			<key column="amp_ahsurvey_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurveyResponse" />
 		</set>
+        <property name="surveyDate" column="survey_date" type="java.util.Date" />
 
 	</class>
 </hibernate-mapping>

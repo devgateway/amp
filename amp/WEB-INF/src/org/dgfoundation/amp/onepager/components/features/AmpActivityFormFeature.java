@@ -260,20 +260,18 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		myDraftOpts.setRenderBodyOnly(false);
 		radioDesktop.add(new AjaxEventBehavior("onclick") {
 			private static final long serialVersionUID = 1L;
-
 			protected void onEvent(final AjaxRequestTarget target) {
 				myDraftOpts.setModelObject(GO_TO_DESKTOP);
-				target.add(myDraftOpts);
+                target.add(myDraftOpts);
 			}
 		});
 		myDraftOpts.add(radioDesktop);
 		Radio<Integer> radioStay=new Radio<Integer>("draftStayOnPage", new Model<Integer>(STAY_ON_PAGE));
 		radioStay.add(new AjaxEventBehavior("onclick") {
 			private static final long serialVersionUID = 1L;
-			
 			protected void onEvent(final AjaxRequestTarget target) {
 				myDraftOpts.setModelObject(STAY_ON_PAGE);
-				target.add(myDraftOpts);
+                target.add(myDraftOpts);
 			}
 		});
 		myDraftOpts.add(radioStay);
@@ -287,9 +285,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				target.appendJavaScript("hideDraftPanel();");
 				am.setObject(am.getObject());
 				
-				redirected= new Integer(myDraftOpts.getModelObject());
+				redirected= myDraftOpts.getModelObject();
 				toggleSemanticValidation(false, form,target);
-
 
 				// process the form for this request
 				form.process(this.getButton());

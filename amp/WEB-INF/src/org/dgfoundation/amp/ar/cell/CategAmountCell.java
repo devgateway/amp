@@ -17,6 +17,8 @@ import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -156,48 +158,40 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	
 }
 	
+
+	protected boolean passesFilter(String columnName, Cell metaCell, CategAmountCell ret)
+	{
+		if ( metaCell.getColumn().getName().equals(columnName) )
+			return metaCell.getValue().toString().equals(ret.getMetaValueString(columnName));
+
+		return true; // not filtering on this column - so filter is "passed"
+	}
+	
+	/**
+	 * column names by which to filter funding data
+	 */
+	public final static String[] fundingFilteringColumnsArr = 
+		{
+			ArConstants.COLUMN_CAPITAL_EXPENDITRURE, ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT, ArConstants.DONOR,
+			ArConstants.DONOR_GROUP, ArConstants.DONOR_TYPE_COL, ArConstants.TERMS_OF_ASSISTANCE, ArConstants.FINANCING_INSTRUMENT,
+			ArConstants.FUNDING_STATUS, ArConstants.MODE_OF_PAYMENT, ArConstants.COMPONENT, ArConstants.AGREEMENT_CODE, ArConstants.AGREEMENT_TITLE_CODE
+		};
+	public final static Set<String> fundingFilteringColumns = new HashSet<String>(Arrays.asList(fundingFilteringColumnsArr));
 	
 public Cell filter(Cell metaCell,Set ids) {
 	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);    
 	if(ret==null) return null;
 		
-	if ( metaCell.getColumn().getName().equals(ArConstants.COLUMN_CAPITAL_EXPENDITRURE) ) {
-		if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.COLUMN_CAPITAL_EXPENDITRURE)))
+	if (fundingFilteringColumns.contains(metaCell.getColumn().getName()))
+	{
+		if (!passesFilter(metaCell.getColumn().getName(), metaCell, ret))
 			return null;
 	}
-		if ( metaCell.getColumn().getName().equals(ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT) ) {
-			if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT)))
-				return null;
-		}
-		
-	if(metaCell.getColumn().getName().equals(ArConstants.DONOR))  {
-		String donor=ret.getMetaValueString(ArConstants.DONOR);
-		if((donor!=null&&!metaCell.getValue().toString().equals(donor))&&(!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))){
-			return null;  
-		}
-	}
-                
-	if(metaCell.getColumn().getName().equals(ArConstants.RELATED_PROJECTS))  {
-		String project=ret.getMetaValueString(ArConstants.RELATED_PROJECTS);
-		if((project!=null&&!metaCell.getValue().toString().equals(project))&&(!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))){
-			return null;  
-		}
-	}
-                 
-                 
-	if(metaCell.getColumn().getName().equals(ArConstants.DONOR_GROUP))  {
-		String donorGrp=ret.getMetaValueString(ArConstants.DONOR_GROUP);
-		if(donorGrp!=null&&!metaCell.getValue().toString().equals(donorGrp)){
-			return null;  
-		}
-	}
-                
-	if(metaCell.getColumn().getName().equals(ArConstants.DONOR_TYPE_COL))  {
-		String donorType=ret.getMetaValueString(ArConstants.DONOR_TYPE_COL);
-		if(donorType!=null&&!metaCell.getValue().toString().equals(donorType)){
-			return null;  
-		}
-	}
+	
+	if (!passesFilter(ArConstants.RELATED_PROJECTS, metaCell, ret))
+		if (!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))
+			return null;
+                 	
 		
 	if(metaCell.getColumn().getName().equals(ArConstants.REGION) &&
 			this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE){
@@ -223,42 +217,7 @@ public Cell filter(Cell metaCell,Set ids) {
 				if(retZoneName!=null&&!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.ZONE)))
 					return null;
 			}
-	
-	if(metaCell.getColumn().getName().equals(ArConstants.TERMS_OF_ASSISTANCE))  {
-		String termAssistance=ret.getMetaValueString(ArConstants.TERMS_OF_ASSISTANCE);
-		if(termAssistance!=null&&!metaCell.getValue().toString().equals(termAssistance)){
-			return null;  
-		}
-	}
-
-	if(metaCell.getColumn().getName().equals(ArConstants.FINANCING_INSTRUMENT)) {
-		String financingInstr=ret.getMetaValueString(ArConstants.FINANCING_INSTRUMENT);
-		if(financingInstr!=null&&!metaCell.getValue().toString().equals(financingInstr)){
-			return null;  
-		}
-	}
-                
-	if(metaCell.getColumn().getName().equals(ArConstants.FUNDING_STATUS)) {
-		String fundingStatus=ret.getMetaValueString(ArConstants.FUNDING_STATUS);
-		if(fundingStatus!=null&&!metaCell.getValue().toString().equals(fundingStatus)){
-			return null;  
-		}
-	}
-                
-	if(metaCell.getColumn().getName().equals(ArConstants.MODE_OF_PAYMENT)) {
-		String modeOfPayment=ret.getMetaValueString(ArConstants.MODE_OF_PAYMENT);
-		if(modeOfPayment!=null&&!metaCell.getValue().toString().equals(modeOfPayment)){
-			return null;  
-		}
-	}
-                
-	if(metaCell.getColumn().getName().equals(ArConstants.COMPONENT)) {
-		String component=ret.getMetaValueString(ArConstants.COMPONENT);
-		if(component!=null&&!metaCell.getValue().toString().equals(component)){
-			return null;  
-		}
-	}
-                
+            
     //apply metatext filters
 	if(metaCell instanceof MetaTextCell) {
 			//apply metatext filters for column Sector

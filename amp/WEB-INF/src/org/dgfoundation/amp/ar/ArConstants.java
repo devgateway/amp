@@ -70,6 +70,9 @@ public final class ArConstants {
 	public final static String DONOR_TYPE_COL="Donor Type";
 	public final static String CAPITAL_PERCENT="Capital Percent";
 	
+	public final static String AGREEMENT_CODE = "Agreement Code";
+	public final static String AGREEMENT_TITLE_CODE = "Agreement Title + Code";
+	
 	/**
 	 * @deprecated use COLUMN_COUNTRY if it's related to the column
 	 */

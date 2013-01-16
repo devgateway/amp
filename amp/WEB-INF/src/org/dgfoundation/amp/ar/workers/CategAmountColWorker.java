@@ -148,6 +148,22 @@ public class CategAmountColWorker extends ColumnWorker {
 		return rs.getString(columnName);
 	}
 	
+	protected void addMetaIfExists(ResultSet rs, CategAmountCell acc, String columnName, String metaKeyName, String defaultValue) throws SQLException
+	{
+		if (columnsMetaData.containsKey(columnName)) {
+			String fundingStatus = rs.getString(columnsMetaData.get(columnName) );
+			
+			if (fundingStatus == null && defaultValue != null)
+				fundingStatus = defaultValue;
+			
+			if (fundingStatus != null) {
+				MetaInfo termsAssistMeta = this.getCachedMetaInfo(metaKeyName, fundingStatus);
+				acc.getMetaData().add(termsAssistMeta);
+			}
+				
+		}	
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -230,53 +246,14 @@ public class CategAmountColWorker extends ColumnWorker {
 			}
 		} -- not used anymore */
 		
-			if (columnsMetaData.containsKey("terms_assist_name")){
-				String termsAssist = retrieveValueFromRS(rs,columnsMetaData.get(  "terms_assist_name") );
-				MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.TERMS_OF_ASSISTANCE,
-						termsAssist);
-				acc.getMetaData().add(termsAssistMeta);
-			}
-			
-		if (columnsMetaData.containsKey("financing_instrument_name")){			
-		    String financingInstrument = retrieveValueFromRS(rs,columnsMetaData.get(  "financing_instrument_name") );
-			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.FINANCING_INSTRUMENT,
-					financingInstrument);
-			acc.getMetaData().add(termsAssistMeta);
-		}
-
-		if (columnsMetaData.containsKey("mode_of_payment_name")) {
-			String modeOfPayment = retrieveValueFromRS(rs, columnsMetaData.get(  "mode_of_payment_name") );
-			if (modeOfPayment != null) {
-				MetaInfo termsAssistMeta = this.getCachedMetaInfo(
-						ArConstants.MODE_OF_PAYMENT, modeOfPayment);
-				acc.getMetaData().add(termsAssistMeta);
-			}
-			else {
-				MetaInfo modeOfPayMeta = this.getCachedMetaInfo(
-						ArConstants.MODE_OF_PAYMENT, ArConstants.MODE_OF_PAYMENT_UNALLOCATED);
-				acc.getMetaData().add(modeOfPayMeta);
-			}
-		}
-
-		if (columnsMetaData.containsKey("funding_status_name")) {
-			String fundingStatus = retrieveValueFromRS(rs,columnsMetaData.get(  "funding_status_name") );
-			if (fundingStatus != null) {
-				MetaInfo termsAssistMeta = this.getCachedMetaInfo(
-						ArConstants.FUNDING_STATUS, fundingStatus);
-				acc.getMetaData().add(termsAssistMeta);
-			}
-		}
-		
-		if (columnsMetaData.containsKey("related_project")) {
-			String relatedproject = retrieveValueFromRS(rs,columnsMetaData.get(  "related_project") );
-			if (relatedproject != null) {
-				MetaInfo relatedprojectmeta = this.getCachedMetaInfo(
-						ArConstants.RELATED_PROJECTS, relatedproject);
-				acc.getMetaData().add(relatedprojectmeta);
-			}
-		}
-		
-		
+		addMetaIfExists(rs, acc, "terms_assist_name", ArConstants.TERMS_OF_ASSISTANCE, null);
+		addMetaIfExists(rs, acc, "financing_instrument_name", ArConstants.FINANCING_INSTRUMENT, null);
+		addMetaIfExists(rs, acc, "mode_of_payment_name", ArConstants.MODE_OF_PAYMENT, ArConstants.MODE_OF_PAYMENT_UNALLOCATED);
+		addMetaIfExists(rs, acc, "funding_status_name", ArConstants.FUNDING_STATUS, null);
+		addMetaIfExists(rs, acc, "related_project", ArConstants.RELATED_PROJECTS, null);
+		addMetaIfExists(rs, acc, "agreement_code", ArConstants.AGREEMENT_CODE, null);
+		addMetaIfExists(rs, acc, "agreement_title_code", ArConstants.AGREEMENT_TITLE_CODE, null);
+	
 		MetaInfo headMeta=null;
 		
 		if("region_name".equals(headMetaName)){

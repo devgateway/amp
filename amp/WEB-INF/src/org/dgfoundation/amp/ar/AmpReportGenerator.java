@@ -823,7 +823,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.setTotalActualCommitments(this.getTotalActualCommitments());
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
-
+		
+		 report.removeChildrenWithoutActivities(); //postProcess might have created some more empty children
 	}
 
 	/**

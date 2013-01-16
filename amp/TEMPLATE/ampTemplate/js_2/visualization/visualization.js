@@ -2180,7 +2180,6 @@ function launchDashboard(){
 		alert(selectOneGraph);
 		return;
 	}
-	
 	document.getElementById("topLists").value = document.getElementById("topLists_dropdown").options[document.getElementById("topLists_dropdown").selectedIndex].value;
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
 	document.getElementById("startYear").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
@@ -2221,8 +2220,10 @@ function launchDashboard(){
 	document.getElementById("showProgramsRanking").value = document.getElementById("show_programs_ranking").checked;
 	
 	var params = "";
-	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
-	params = params + "&orgIds=" + getSelectionsFromElement("organization_check",false);
+	if (document.getElementById("org_grp_check_all").checked!=true){
+		params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
+		params = params + "&orgIds=" + getSelectionsFromElement("organization_check",false);
+	}
 	params = params + "&regionIds=" + getSelectionsFromElement("region_check",false);
 	params = params + "&zoneIds=" + getSelectionsFromElement("zone_check",false);
 	params = params + "&selSectorConfigId=" + getSelectionsFromElement("sector_config_check",false);

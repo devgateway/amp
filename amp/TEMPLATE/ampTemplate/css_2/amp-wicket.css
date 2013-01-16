@@ -393,5 +393,6 @@ div.tabpanel div.tab-row a:hover {
 .feedbackPanelERROR{color: red;}
 .feedbackPanelINFO{color: green;}
 .wicketFloatLeft{float: left;}
+.wicketFloatRight{float: right;}
 .wicketPaddingRight10{padding-right: 10px;}
 /* -- ONE PAGER END -- */

@@ -37,6 +37,15 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 		agreementTextLabel.setOutputMarkupId(true);
 		add(agreementTextLabel);
 
+        AmpDeleteLinkField deleteAgreement = new AmpDeleteLinkField("deleteAgreement", "Delete Agreement") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                model.getObject().setAgreement(null);
+                target.add(this.getParent());
+            }
+        };
+        add(deleteAgreement);
+
 		final Form<AmpAgreement> newAgreementForm = new Form<AmpAgreement>("newAgreement", newAgModel);
 		newAgreementForm.setVisibilityAllowed(false);
 		final AmpAutocompleteFieldPanel<AmpAgreement> search = new AmpAutocompleteFieldPanel<AmpAgreement>(

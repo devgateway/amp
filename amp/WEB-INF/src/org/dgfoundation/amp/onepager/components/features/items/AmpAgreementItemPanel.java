@@ -11,10 +11,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
-import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpAgreementSearchModel;
 import org.dgfoundation.amp.onepager.models.AutocompleteAcronymTitleModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -91,7 +88,7 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgEfDate", new PropertyModel<Date>(newAgModel, "effectiveDate"), "Effective Date"));
 		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgSgDate", new PropertyModel<Date>(newAgModel, "signatureDate"), "Signature Date"));
 		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgClDate", new PropertyModel<Date>(newAgModel, "closeDate"), "Close Date"));
-		AmpButtonField submit = new AmpButtonField("submit", "Add Agreement", true) {
+		AmpButtonField submit = new AmpButtonField("submit", "Add Agreement", true, true) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -114,6 +111,15 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 			}
 		};
 		newAgreementForm.add(submit);
+
+        AmpAjaxLinkField cancel = new AmpAjaxLinkField("cancel", "Cancel", "Cancel") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                newAgreementForm.setVisibilityAllowed(false);
+                target.add(newAgreementForm.getParent());
+            }
+        };
+        newAgreementForm.add(cancel);
 		newAgreementForm.setOutputMarkupId(true);
 		add(newAgreementForm);
 

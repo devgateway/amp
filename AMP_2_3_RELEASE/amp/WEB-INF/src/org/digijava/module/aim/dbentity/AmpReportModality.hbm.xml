@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpReportModality" table="AMP_REPORT_MODALITY">
+		<cache usage="read-write" />
+		<id name="ampReportId" column="amp_report_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_REPORTS_seq</param>
+			</generator>
+		</id>
+		<property name="ampActivityId" column="amp_activity_id" type="java.lang.Long" />
+		<property name="activityName" column="activity_name" type="java.lang.String" />
+		<property name="modalityName" column="modality_name" type="java.lang.String" />
+		<property name="sectorName" column="sector_name" type="java.lang.String" />
+		<property name="termAssistName" column="term_assist_name" type="java.lang.String" />
+		<property name="donorName" column="donor_name" type="java.lang.String" />
+		<property name="donorCode" column="donor_code" type="java.lang.String" />
+		<property name="ampFundingId" column="amp_funding_id" type="java.lang.Long" />
+
+	</class>
+</hibernate-mapping>

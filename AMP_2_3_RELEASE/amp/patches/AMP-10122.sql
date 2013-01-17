@@ -1,0 +1,1 @@
+update amp_filter_data set element_class_name="org.digijava.module.aim.dbentity.AmpCategoryValueLocations", property_class_name="java.util.HashSet", property_name="locationSelected" where property_name="regionSelected";

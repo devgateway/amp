@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-11447</jira>
+    <keyword>Insert Validation Project and create v_g_settings_projects_validation</keyword>
+    <author>Medea</author>
+    <description>A little bit Modified version of AMP_10788 patch by dan</description> 
+    <trigger type="all">
+        <condition  type="tableOrViewExists">util_global_settings_possible_</condition>
+        <condition  type="entryInTableMissing" tablename="amp_global_settings" columnname="settingsName" columnvalue="Projects Validation"/>
+    </trigger> 
+    <apply>
+        <script>
+            <lang delimiter=";" type="postgres">
+                create sequence util_global_settings_possible__seq;
+                ALTER TABLE util_global_settings_possible_ ALTER COLUMN id SET DEFAULT nextval('util_global_settings_possible__seq');
+                update amp_field set amp_field_id=amp_field_id WHERE setval('util_global_settings_possible__seq', (SELECT MAX(id) FROM util_global_settings_possible_)) is not null;
+                INSERT INTO util_global_settings_possible_(id,setting_name,value_id,value_shown) VALUES(nextval('util_global_settings_possible__seq'),'Projects Validation','On','On');
+                INSERT INTO util_global_settings_possible_(id,setting_name,value_id,value_shown) VALUES(nextval('util_global_settings_possible__seq'),'Projects Validation','Off','Off'); 
+                CREATE OR REPLACE VIEW v_g_settings_projects_validation AS 
+                SELECT util_global_settings_possible_.value_id AS id, util_global_settings_possible_.value_shown AS value
+                FROM util_global_settings_possible_
+                WHERE util_global_settings_possible_.setting_name::text = 'Projects Validation'::text;
+                insert into amp_global_settings(id,settingsName,settingsValue,possibleValues, description,section) values(nextval('amp_global_settings_seq'),'Projects Validation','On','v_g_settings_projects_validation','Enable or disable the global validation of the projects over the AMP site','general'); 
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

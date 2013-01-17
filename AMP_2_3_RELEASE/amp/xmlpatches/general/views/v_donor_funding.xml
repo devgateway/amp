@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-14167</jira>
+	<keyword>Views</keyword>
+	<author>Alexandru Artimon patched by Dolghier Constantin (AMP-14440)</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+					CREATE OR REPLACE VIEW v_donor_funding AS 
+			    	SELECT f.amp_activity_id, f.amp_funding_id, fd.amp_fund_detail_id, d.name AS donor_name, fd.transaction_type, fd.adjustment_type, 
+			    	cval5.category_value AS adjustment_type_name, fd.transaction_date, fd.transaction_amount, fd.pledge_id, c.currency_code, cval.id AS terms_assist_id, cval.category_value AS terms_assist_name, fd.fixed_exchange_rate, b.org_grp_name, ot.org_type AS donor_type_name, 
+			    	cval2.category_value AS financing_instrument_name, cval2.id AS financing_instrument_id, d.amp_org_id AS org_id, d.org_grp_id, ot.amp_org_type_id AS org_type_id, cval3.category_value AS mode_of_payment_name, cval3.id AS mode_of_payment_id, 
+			    	cval4.category_value AS funding_status_name, cval4.id AS funding_status_id, fd.capital_spend_percent,
+			    	agr.code AS agreement_code, (agr.title::text || ' - '::text) || agr.code::text AS agreement_title_code
+   					FROM amp_funding f
+						LEFT JOIN amp_category_value cval2 ON f.financing_instr_category_value = cval2.id   
+						LEFT JOIN amp_category_value cval3 ON f.mode_of_payment_category_va = cval3.id
+						LEFT JOIN amp_category_value cval4 ON f.funding_status_category_va = cval4.id
+						LEFT JOIN amp_agreement agr ON f.agreement = agr.id,
+						amp_funding_detail fd
+						LEFT JOIN amp_category_value cval5 ON fd.adjustment_type = cval5.id, 
+						amp_category_value cval, amp_currency c, amp_organisation d, amp_org_group b, amp_org_type ot
+  					WHERE c.amp_currency_id = fd.amp_currency_id AND f.amp_funding_id = fd.amp_funding_id AND cval.id = f.type_of_assistance_category_va AND d.amp_org_id = f.amp_donor_org_id AND d.org_grp_id = b.amp_org_grp_id AND ot.amp_org_type_id = b.org_type
+					ORDER BY f.amp_activity_id;;;
+        		</lang>
+		</script>
+	</apply>
+</tns:patch>

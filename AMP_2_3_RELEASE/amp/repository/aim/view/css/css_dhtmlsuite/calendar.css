@@ -1,0 +1,328 @@
+.DHTMLSuite_calendar{	/* Main div for the calendar */
+	border:1px solid #8eb9f3;
+	background-color:#FFF;
+	width:245px;
+	position:relative;	
+	overflow:hidden;
+	z-index: 20000;
+}
+.DHTMLSuite_calendarContent{	/* Sub div inside DHTMLSuite_calendar - this is the div where content is added */
+	position:relative;	/* IMPORTANT - This must always be like this in order to make it possible to position sub elements correctly, especially the iframe */
+	z-index:10;	/* IMPORTANT - This must always be like this in order to make it possible to position sub elements correctly, especially the iframe */
+	background-color:#FFF;
+	font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+}
+
+
+/*******************
+
+ START CSS FOR THE HEADER ROW - WHERE YOU SEE MONTH AND YEAR
+ 
+********************/
+.DHTMLSuite_calendar .DHTMLSuite_calendarHeading{	/* Heading of calendar, where you see the month and year */
+	background-image:url(../../images/images_dhtmlsuite/calendar/calendar_heading.png);
+	background-repeat:repeat-x;
+	height:21px;
+	border-bottom:1px solid #8eb9f3;
+}
+.DHTMLSuite_calendarHeadingTxt{	/* Inner div in the heading  */
+	padding:1px;
+	text-align:center;
+	font-size:13px;
+}
+
+.DHTMLSuite_calendarCloseButton{	/* Close button at the top right corner of the calendar */
+	background-image:url(../../images/images_dhtmlsuite/calendar/calendar-close.gif);
+	background-repeat:no-repeat;
+	width:13px;
+	height:13px;
+	position:absolute;
+	right:3px;
+	top:3px;
+	padding:1px;
+	background-position:center center;
+	cursor:pointer;
+}
+
+.DHTMLSuite_calendarHeaderMonthAndYear{	/* Div elements for year and month in the heading */
+	padding:1px;
+	padding-right:2px;
+	padding-left:2px;
+	cursor:pointer;
+	line-height:17px;
+	font-size:12px
+}
+.DHTMLSuite_calendarHeaderMonthAndYearOver{	/* Mouse over effect - month and year in the heading */
+	background-color:#FFF;
+	border:1px solid #8eb9f3;
+	padding:0px;
+	padding-left:1px;
+	padding-right:1px;	
+}
+
+
+/*******************
+
+ START CSS FOR THE TIME BAR - THE DIV WHERE YOU SEE "Time: " and the hour and minute
+ 
+********************/
+
+.DHTMLSuite_calendar_timeBar{	/* Time bar - where users can select hour and minutes */
+	background-color:#C3DAF9;
+	height:21px;
+	border-top:1px solid #8eb9f3;
+	text-align:center;
+	position:relative;
+}
+.DHTMLSuite_calendar_timeBarHourAndMinute{	/* General rules for the displayed hours and minutes - the ones you can click on the bring out the drop down boxes */
+	padding:1px;
+	padding-left:2px;
+	padding-right:2px;
+	margin-right:2px;
+	cursor:pointer;
+}
+.DHTMLSuite_calendarTimeBarHourAndMinuteOver{	/* Mouse over effect for the hour and minute displayed in the time bar */
+	background-color:#FFF;
+	border:1px solid #8eb9f3;
+	padding:0px;
+	padding-left:1px;
+	padding-right:1px;
+}
+.DHTMLSuite_calendarTimeBarTimeString{	/* String "Time:" */
+	position:absolute;
+	left:2px;
+	top:2px;
+}
+
+/*******************
+
+ START CSS FOR THE NAVIGATION BAR - THE DIV WITH THE LEFT AND RIGHT ARROWS
+ 
+********************/
+
+.DHTMLSuite_calendar_navigationBar{	/* Navigation bar below the heading */
+	background-color:#C3DAF9;
+	height:17px;
+	border-bottom:1px solid #8eb9f3;
+	position:relative;
+}
+.DHTMLSuite_calendar_navigationBarToday{	/* Div for the string "Today" in the navigation bar */
+	text-align:center;
+}
+.DHTMLSuite_calendar_navigationBarToday span{	/* The "Today" string inside the navigation bar */
+	cursor:pointer;	
+}
+.DHTMLSuite_calendar_btnNextYear,.DHTMLSuite_calendar_btnPreviousYear,.DHTMLSuite_calendar_btnNextMonth,.DHTMLSuite_calendar_btnPreviousMonth{	/* Buttons - previous/next month and year */
+	position:absolute;
+	background-repeat:no-repeat;
+	background-position:center center;
+	width:13px;
+	height:13px;
+	padding:1px;
+	top:1px;
+}
+
+.DHTMLSuite_calendar_btnNextYear{	/* Next year button */
+	background-image:url(../../images/images_dhtmlsuite/calendar/calendar-next-year.gif);
+	right:2px;	
+}
+.DHTMLSuite_calendar_btnPreviousYear{	/* Previous year button */
+	background-image:url(../../images/images_dhtmlsuite/calendar/calendar-previous-year.gif);
+	left:2px;
+}
+.DHTMLSuite_calendar_btnNextMonth{	/* Next month button */
+	background-image:url(../../images/images_dhtmlsuite/calendar/calendar-next-month.gif);
+	right:18px;	
+}
+.DHTMLSuite_calendar_btnPreviousMonth{	/* Previous month button */
+	background-image:url(../../images/images_dhtmlsuite/calendar/calendar-previous-month.gif);
+	left:18px;
+}
+
+/*******************
+
+ START CSS FOR THE MAIN DIV CONTAINING ALL THE DAYS WITHIN A MONTH AND HEADINGS (weeks, days(Mon-Sun) etc.)
+ 
+********************/
+
+
+.DHTMLSuite_calendar_monthView{	/* Main div element for the days in a month */
+
+
+}
+
+.DHTMLSuite_calendar_monthView_headerCell{	/* Main div element for the days in a month */
+	background-color:#FFF;
+	border-bottom:1px solid #8eb9f3; 
+	font-size:12px
+}
+
+.DHTMLSuite_calendar_monthView_firstColumn{	/* First column - the week column */
+	background-color:#C3DAF9;
+	border-right:1px solid #8eb9f3; 
+	text-align:left;
+	font-size:12px
+}
+
+.DHTMLSuite_calendar_monthView td{	/* Default css for all the cells inside the calendar, i.e. week heading, label for the days, and the days */
+	text-align:center;
+	cursor:default;
+}
+.DHTMLSuite_calendar_monthView_headerSunday{	/* Sunday in the header */
+	color:red;
+	border-bottom:1px solid #8eb9f3;
+	font-size:12px 
+}
+.DHTMLSuite_calendar_monthView_daysInOtherMonths{	/* Days in previous or next month, i.e. before start of current displayed month or after days in the currently displayed month */
+	color:#999;
+	font-size:12px
+}
+.DHTMLSuite_calendar_monthView_daysInThisMonth{	/* Layout - ordinary days(mon-sat) in this month */
+	font-size:12px
+}
+.DHTMLSuite_calendar_monthView_sundayInThisMonth{	/* Layout - sundays in current displayed month */
+	color:red;
+	font-size:12px
+}
+.DHTMLSuite_calendar_monthView_initialDate{	/* Inital set date, example: the date in an input field which you are populating with the calendar */
+	background-color:#8eb9f3;
+	color:white;
+}
+.DHTMLSuite_calendar_monthView_invalidDate{	/* Inital set date, example: the date in an input field which you are populating with the calendar */
+	color:#AAA;
+}
+.DHTMLSuite_calendar_monthView_currentDate{	/* Date of today */
+	background-color:#E2E2E2;
+	font-size:12px
+}
+/***************************************************
+*
+* START CSS -  DROP DOWN BOXES 
+*
+*
+***************************************************/
+
+/*** MINUTES ***/
+.DHTMLSuite_calendar_minuteDropDown{	/* Drop down box for minutes */
+	background-color:#C3DAF9;
+	border:1px solid #8eb9f3;
+	width:23px;
+	padding:1px;
+	font-size:12px;	
+	text-align:center;
+	/* You shouldn't change these 3 options */	
+	position:absolute;	
+	z-index:152000;
+	cursor:pointer;
+	
+}
+.DHTMLSuite_calendar_minuteDropDownCurrentMinute{	/* Minute in drop down when it's equal to current minute of the display, i.e. the minute you see where you click on the drop down */
+	color:red;
+}
+.DHTMLSuite_calendar_dropdownAMinuteOver{
+	background-color:#E2E2E2;
+}
+
+/*** HOURS ***/
+.DHTMLSuite_calendar_hourDropDown{	/* Drop down box for hours */
+	background-color:#C3DAF9;
+	border:1px solid #8eb9f3;
+	width:23px;
+	position:absolute;	
+	z-index:152000;
+	padding:1px;
+	cursor:pointer;
+	font-size:12px;	
+	text-align:center;
+}
+.DHTMLSuite_calendar_dropdownAnHourOver{
+	background-color:#E2E2E2;
+}
+.DHTMLSuite_calendar_hourDropDownCurrentHour{
+	color:red;
+}
+
+/*** MONTHS ***/
+.DHTMLSuite_calendar_monthDropDown{
+	background-color:#C3DAF9;
+	border:1px solid #8eb9f3;
+	width:70px;
+	position:absolute;	
+	z-index:152000;
+	cursor:pointer;
+	padding:1px;
+	font-size:12px;	
+}
+.DHTMLSuite_calendar_dropDownAMonth{
+
+}
+.DHTMLSuite_calendar_dropdownAMonthOver{
+	background-color:#E2E2E2;
+}
+.DHTMLSuite_calendar_yearDropDownCurrentMonth{
+	color:red;
+	
+}
+
+/***** YEAR ****/
+.DHTMLSuite_calendar_yearDropDown{
+	background-color:#C3DAF9;
+	border:1px solid #8eb9f3;
+	width:30px;
+	position:absolute;	
+	z-index:152000;
+	cursor:pointer;
+	padding:1px;
+	font-size:12px;	
+	text-align:center;
+}
+.DHTMLSuite_calendar_dropDownAYear{
+
+}
+.DHTMLSuite_calendar_dropdownAYearOver{
+	background-color:#E2E2E2;
+}
+.DHTMLSuite_calendar_yearDropDownCurrentYear{	/* Current year */
+	color:red;
+}
+
+
+
+/* UP AND DOWN ARROWS INSIDE DROP DOWNS **/
+.DHTMLSuite_calendar_dropDown_arrowUp{	/* Drop down - moving to previous year */
+	background-image:url(../../images/images_dhtmlsuite/calendar/calendar-dropdown-up.gif);
+	background-repeat:no-repeat;
+	background-position:center center;
+	height:8px;
+}
+
+.DHTMLSuite_calendar_dropDown_arrowDown{	/* Drop down - moving to previous year */
+	background-image:url(../../images/images_dhtmlsuite/calendar/calendar-dropdown-down.gif);
+	background-repeat:no-repeat;
+	background-position:center center;
+	height:8px;
+}
+.DHTMLSuite_calendarDropDown_dropDownArrowOver{
+	background-color:#E2E2E2;
+}
+
+
+
+
+/* IT'S IMPORTANT TO HAVE THIS CSS RULE AT THE BOTTOM IN ORDER TO MAKE THE PADDING OVERRIDE PADDING OF OTHER ELEMENTS */
+.DHTMLSuite_calendarButtonOver{	/* Mouse over effect for the close button */
+	background-color:#FFF;	/* White background color */
+	border:1px solid #8eb9f3;	/* Blue border */
+	padding:0px;	/* The sum border+padding of this element should be the same as border+padding of .DHTMLSuite_calendarCloseButton */
+}
+.DHTMLSuite_calendarDayOver{	/* Mouse over effect - days in the calendar, i.e. days in current displayed month */
+	background-color:#E2E2E2;
+}
+
+/* YOU SHOULD NEVER MODIFY THIS ONE */
+.DHTMLSuite_calendar_iframe{	/* Iframe used to cover select boxes below in older IE browsers(version 6 and prior) */
+	position:absolute;
+	top:1px;
+	left:1px;
+	z-index:1;
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpRegion" table="AMP_REGION">
+		<cache usage="read-write" />
+		<id name="ampRegionId" column="amp_region_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_REGION_seq</param>
+			</generator>
+		</id>
+
+		<property name="name" column="name" type="java.lang.String" />
+		<!--		<property name="description" column="description" type="java.lang.String"/> -->
+		<property name="description" column="description" type="text" />
+		<!--		<property name="gsLat" column="gs_lat" type="java.lang.Double"/> -->
+		<!--		<property name="gsLong" column="gs_long" type="java.lang.Double"/> -->
+		<property name="gsLat" column="gs_lat" type="java.lang.String" />
+		<property name="gsLong" column="gs_long" type="java.lang.String" />
+		<property name="geoCode" column="geo_code" type="java.lang.String" />
+		<property name="regionCode" column="region_code" type="java.lang.String" />
+
+		<many-to-one name="country" column="country_id" class="org.digijava.kernel.dbentity.Country"
+			cascade="none" />
+		<set name="zones" cascade="all-delete-orphan">
+			<key column="region_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpZone" />
+		</set>
+		<set name="locations" cascade="all">
+			<key column="region_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpLocation" />
+		</set>
+
+	</class>
+</hibernate-mapping>

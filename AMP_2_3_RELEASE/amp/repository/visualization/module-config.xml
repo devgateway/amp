@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>visualization</name>
+	<security login-required="true" default="READ">
+		<action login-required="false" pattern="/launchDashboard" />
+		<action login-required="false" pattern="/launchGraph" />
+		<action login-required="false" pattern="/dashboardLauncher" />
+		<action login-required="false" pattern="/showDashboard" />
+		<action login-required="false" pattern="/dataDispatcher" />
+		<action login-required="false" pattern="/pdfExport" />
+		<action login-required="false" pattern="/wordExport" />
+		<action login-required="false" pattern="/excelExport" />
+		<action login-required="false" pattern="/showProjectsList" />
+	</security>
+	
+	<!-- dashboard classes Begin -->
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.visualization.dbentity.AmpDashboardGraph</hibernate-class>
+		<hibernate-class>org.digijava.module.visualization.dbentity.AmpDashboard</hibernate-class>
+		<hibernate-class>org.digijava.module.visualization.dbentity.AmpGraph</hibernate-class>
+	</hibernate-classes>
+	<!-- dashboard classes End -->
+	
+</module-config>

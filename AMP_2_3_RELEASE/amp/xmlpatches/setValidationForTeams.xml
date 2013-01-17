@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-10530</jira>
+	<keyword>Workspace</keyword>
+	<keyword>Validation</keyword>
+	<author>Medea Gugushvili</author>
+	<description>set to teams validation as validationOff</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				update amp_application_settings set validation='validationOff' where validation is null;
+            </lang>
+		</script>
+	</apply>
+</tns:patch>

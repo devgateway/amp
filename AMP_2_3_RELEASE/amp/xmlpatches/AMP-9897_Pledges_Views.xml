@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-9856</jira>
+  <keyword>Pledges Views</keyword>
+  <author>Diego</author> 
+  <trigger type="all">
+      <condition  type="columnExists" tablename="amp_funding_pledges_details" columnname="funding_date"  />
+  </trigger> 
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+      	DROP VIEW IF EXISTS "public"."v_pledges_funding_st";
+		CREATE OR REPLACE VIEW "public"."v_pledges_funding_st" (
+		    pledge_id,
+		    donor_name,
+		    amp_fund_detail_id,
+		    transaction_type,
+		    adjustment_type,
+		    transaction_date,
+		    transaction_amount,
+		    currency_code,
+		    terms_assist_id,
+		    terms_assist_name,
+		    org_grp_name,
+		    donor_type_name,
+		    financing_instrument_name,
+		    financing_instrument_id,
+		    org_id,
+		    org_grp_id,
+		    org_type_id)
+		AS
+		SELECT f.id AS pledge_id,
+		       d.name AS donor_name,
+		       fd.pledge_id AS amp_fund_detail_id,
+		       afd.transaction_type,
+		       afd.adjustment_type,
+		       afd.transaction_date,
+		       afd.transaction_amount,
+		       c.currency_code,
+		       cval.id AS terms_assist_id,
+		       cval.category_value AS terms_assist_name,
+		       b.org_grp_name,
+		       ot.org_type AS donor_type_name,
+		       cval2.category_value AS financing_instrument_name,
+		       cval2.id AS financing_instrument_id,
+		       d.amp_org_id AS org_id,
+		       d.org_grp_id,
+		       ot.amp_org_type_id AS org_type_id
+		FROM amp_funding_pledges f,
+		     amp_funding_pledges_details fd,
+		     amp_category_value cval,
+		     amp_currency c,
+		     amp_organisation d,
+		     amp_org_group b,
+		     amp_org_type ot,
+		     amp_category_value cval2,
+		     amp_funding_detail afd
+		WHERE ((afd.pledge_id = f.id) AND
+		      (((((((cval2.id = fd.aid_modality) AND
+		      (c.amp_currency_id = fd.currency)) AND
+		      (f.id = fd.pledge_id)) AND
+		      (cval.id = fd.type_of_assistance)) AND
+		      (d.amp_org_id = f.amp_org_id)) AND
+		      (d.org_grp_id = b.amp_org_grp_id)) AND
+		      (ot.amp_org_type_id = b.org_type)))
+		UNION ALL
+		SELECT f.id AS pledge_id,
+		       d.name AS donor_name,
+		       fd.pledge_id AS amp_fund_detail_id,
+		       7 AS transaction_type,
+		       1 AS adjustment_type,
+		       to_date('02 Jan '||fd.year::text,'DD Mon YYYY') AS transaction_date,
+		       fd.amount AS transaction_amount,
+		       c.currency_code,
+		       cval.id AS terms_assist_id,
+		       cval.category_value AS terms_assist_name,
+		       b.org_grp_name,
+		       ot.org_type AS donor_type_name,
+		       cval2.category_value AS financing_instrument_name,
+		       cval2.id AS financing_instrument_id,
+		       d.amp_org_id AS org_id,
+		       d.org_grp_id,
+		       ot.amp_org_type_id AS org_type_id
+		FROM amp_funding_pledges f,
+		     amp_funding_pledges_details fd,
+		     amp_category_value cval,
+		     amp_currency c,
+		     amp_organisation d,
+		     amp_org_group b,
+		     amp_org_type ot,
+		     amp_category_value cval2
+		WHERE (((((((cval2.id = fd.aid_modality) AND
+		      (c.amp_currency_id = fd.currency)) AND
+		      (f.id = fd.pledge_id)) AND
+		      (cval.id = fd.type_of_assistance)) AND
+		      (d.amp_org_id = f.amp_org_id)) AND
+		      (d.org_grp_id = b.amp_org_grp_id)) AND
+		      (ot.amp_org_type_id = b.org_type))
+		ORDER BY 1;
+		
+		DROP VIEW IF EXISTS "public"."v_pledges_date_hierarchy";
+		CREATE OR REPLACE VIEW "public"."v_pledges_date_hierarchy" (
+		    "year",
+		    pledgeid,
+		    amp_fund_detail_id)
+		AS
+		SELECT fd.year AS year, pl.id AS pledgeid,
+		    fd.id AS amp_fund_detail_id
+		FROM (amp_funding_pledges_details fd JOIN amp_funding_pledges pl ON
+		    ((fd.pledge_id = pl.id)))
+		WHERE (pl.id = fd.pledge_id);
+		
+		
+		DROP VIEW IF EXISTS "public"."v_pledges_funding";
+		CREATE OR REPLACE VIEW "public"."v_pledges_funding" (
+		    pledgeid,
+		    title,
+		    contact_name,
+		    contact_email,
+		    amount,
+		    amp_fund_detail_id,
+		    transaction_date,
+		    currency_code,
+		    org_name,
+		    aid_modality_name,
+		    type_of_assistance_name,
+		    pledge_type,
+		    p_sectorname,
+		    spercenatage,
+		    region)
+		AS
+		SELECT ap.id AS pledgeid,
+		       ap.title,
+		       COALESCE(ap.contactname, '' ::character varying) AS contact_name,
+		       COALESCE(ap.contactemail, '' ::character varying) AS contact_email,
+		       ((((apd.amount * COALESCE(fps.sector_percentage, (100) ::double precision
+		       )) /(100) ::double precision) * COALESCE(fpl.location_percentage, (100)
+		        ::double precision)) /(100) ::double precision) AS amount,
+		       apd.id AS amp_fund_detail_id,
+			   to_date('02 Jan '||apd.year::text,'DD Mon YYYY') AS transaction_date,
+		       ac.currency_code,
+		       aorg.name AS org_name,
+		       catv.category_value AS aid_modality_name,
+		       catv1.category_value AS type_of_assistance_name,
+		       catv2.category_value AS pledge_type,
+		       s.name AS p_sectorname,
+		       fps.sector_percentage AS spercenatage,
+		       l.location_name AS region
+		FROM ((((((((((amp_funding_pledges ap
+		     JOIN amp_funding_pledges_details apd ON ((ap.id = apd.pledge_id)))
+		     JOIN amp_category_value catv ON ((apd.aid_modality = catv.id)))
+		     JOIN amp_category_value catv1 ON ((apd.type_of_assistance = catv1.id)))
+		     JOIN amp_category_value catv2 ON ((apd.pledge_type = catv2.id)))
+		     JOIN amp_currency ac ON ((apd.currency = ac.amp_currency_id)))
+		     JOIN amp_organisation aorg ON ((ap.amp_org_id = aorg.amp_org_id)))
+		     JOIN amp_funding_pledges_sector fps ON ((ap.id = fps.pledge_id)))
+		     JOIN amp_sector s ON ((fps.amp_sector_id = s.amp_sector_id)))
+		     JOIN amp_funding_pledges_location fpl ON ((ap.id = fpl.pledge_id)))
+		     LEFT JOIN amp_category_value_location l ON ((fpl.location_id = l.id)))
+		GROUP BY ap.id,
+		         apd.id,
+		         aorg.amp_org_id,
+		         s.amp_sector_id,
+		         l.id,
+		         ap.title,
+		         COALESCE(ap.contactname, '' ::character varying),
+		         ap.contactemail,
+		         apd.amount,
+		         fps.sector_percentage,
+		         fpl.location_percentage,
+		         apd.year,
+		         ac.currency_code,
+		         aorg.name,
+		         catv.category_value,
+		         catv1.category_value,
+		         catv2.category_value,
+		         s.name,
+		         l.location_name;
+		         
+		
+		DROP TABLE IF EXISTS amp_funding_pledges_details_temp;
+		CREATE TABLE amp_funding_pledges_details_temp AS SELECT * FROM amp_funding_pledges_details;
+		UPDATE amp_funding_pledges_details SET year = (select date_part(year,funding_date) from amp_funding_pledges_details_temp WHERE amp_funding_pledges_details.id = amp_funding_pledges_details_temp.id);
+		DROP TABLE IF EXISTS amp_funding_pledges_details_temp;
+		ALTER TABLE amp_funding_pledges_details DROP COLUMN funding_date; 
+      </lang>
+    </script>
+  </apply>
+
+</tns:patch>

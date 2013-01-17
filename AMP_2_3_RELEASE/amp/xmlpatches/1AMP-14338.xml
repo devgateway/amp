@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-14338</jira>
+    <keyword>sequences</keyword>
+    <author>apopescu</author>
+    <description>Setting sequences for some tables</description>
+       <apply>
+        <script>
+            <lang  delimiter=";" type="postgres">
+            	update amp_field set amp_field_id=amp_field_id WHERE setval('amp_global_settings_seq',(select max(id) from amp_global_settings)) is not null;
+				update amp_field set amp_field_id=amp_field_id WHERE setval('amp_category_value_seq',(select max(id) from amp_category_value)) is not null;
+				update amp_field set amp_field_id=amp_field_id WHERE setval('amp_category_class_seq',(select max(id) from amp_category_class)) is not null;
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

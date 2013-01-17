@@ -1,0 +1,158 @@
+<!-- saved from url=(0014)about:internet -->
+<html lang="en">
+
+<!-- 
+Smart developers always View Source. 
+
+This application was built using Adobe Flex, an open source framework
+for building rich Internet applications that get delivered via the
+Flash Player or to desktops via Adobe AIR. 
+
+Learn more about Flex at http://flex.org 
+// -->
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<!--  BEGIN Browser History required section -->
+<link rel="stylesheet" type="text/css" href="history/history.css" />
+<!--  END Browser History required section -->
+
+<title>${title}</title>
+<script src="AC_OETags.js" language="javascript"></script>
+
+<!--  BEGIN Browser History required section -->
+<script src="history/history.js" language="javascript"></script>
+<!--  END Browser History required section -->
+
+<style>
+body { margin: 0px; overflow:hidden }
+.flashcontent {
+    background-color: #FFFFFF;
+    border: 1px solid #000000;
+    clear: both;
+    height: 460px;
+    margin: 5px 0 0;
+    padding: 0;
+    vertical-align: top;
+    width: 634px;
+}
+</style>
+<script type="text/javascript" src="swfobject.js"></script>
+<script language="JavaScript" type="text/javascript">
+<!--
+// -----------------------------------------------------------------------------
+// Globals
+// Major version of Flash required
+var requiredMajorVersion = ${version_major};
+// Minor version of Flash required
+var requiredMinorVersion = ${version_minor};
+// Minor version of Flash required
+var requiredRevision = ${version_revision};
+// -----------------------------------------------------------------------------
+// -->
+</script>
+</head>
+
+<body scroll="no">
+<script language="JavaScript" type="text/javascript">
+<!--
+	var palette = "0xFF6600,0x7EAE58,0x88BFF5,0xBE0035,0x8B007E,0x99431C,0xFF6666,0x94FF29,0x2929FF,0xFF29FF";
+	var params = {wmode: "transparent"};
+	var attributes = {};
+	var flashvars = {
+			currCode : "USD",
+			decimalSeparator: ".", 
+			groupSeparator: ",",
+			decimalsToShow: "2", 
+			palette: palette, 
+			title: "Titulo", 
+			id: "RegionProfile",
+			start: true
+		};
+	attributes.id = "${application}";
+
+	swfobject.embedSWF("${swf}.swf", "${application}", "634", "460", "10.0.0", false, flashvars, params, attributes);
+
+function getValueToFlash(idContainer, field){
+	var inputObject = document.getElementById(idContainer + field);
+//	alert(inputObject.value);
+//	alert(idContainer + field);
+	var returnValue;
+	
+	if(inputObject != undefined && inputObject.type == "checkbox"){
+		returnValue = (inputObject == undefined) ? "" : inputObject.checked;
+	}
+	else
+	{
+		returnValue = (inputObject == undefined) ? "" : inputObject.value;
+	}
+	return returnValue;
+}
+
+
+function updateGraph(e, chartName){
+	//Get array of graphs
+	var allGraphs = getElementsByName_iefix("div", "flashContent");
+	//Iterate and refresh the graph
+	for(var idx = 0; idx < allGraphs.length; idx++){
+		// Get flash object and refresh it by calling internal
+		if(allGraphs[idx].children[0].id.toLowerCase() == chartName.toLowerCase()){
+			document.getElementById(chartName + "TitleLegend").innerHTML = document.getElementById(chartName + "Title").value;
+			allGraphs[idx].children[0].refreshGraph();
+			break;
+		}
+	}
+} 
+function getElementsByName_iefix(tag, name) {
+var elem = document.getElementsByTagName(tag);
+var arr = new Array();
+for(i = 0,iarr = 0; i < elem.length; i++) {
+att = elem[i].getAttribute("name");
+if(att == name) {
+arr[iarr] = elem[i];
+iarr++;
+}
+}
+return arr;
+} 
+// -->
+</script>
+<input type="hidden" id="GlobalFontSize" value="11" />
+<input type="hidden" id="GlobalFontFamily" value="Arial" />
+<input type="hidden" id="GlobalFontWeight" value="bold" />
+<input id="RegionProfileTitle" value="" size="50" type="text">
+<input id="RegionProfileShowFontFamily" value="Verdana" type="hidden">
+<select id="RegionProfileFontSize">
+
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+
+</select>
+<input id="startYear" type="text" value="2009">
+<input id="endYear" type="text" value="2012">
+<input id="RegionProfileBold" type="checkbox">
+<input id="RegionProfileShowLegend" checked="checked" type="checkbox">
+<input id="RegionProfileDivide" type="checkbox">
+<input id="RegionProfileShowDataLabel" type="checkbox">
+<input id="RegionProfileRotateDataLabel" type="checkbox">
+<input id="RegionProfileIgnore" style="display: none;" checked="checked" type="checkbox">
+<input id="RegionProfileDataAction" value="getRegionProfileGraphData" type="hidden">
+<input id="RegionProfileItemId" type="hidden">
+<input type="hidden" id="RegionProfileDataField" value="dataField" />
+<input id="RegionProfileTitleLegendTrn" value="RegionProfileTitleLegendTrn" type="hidden">
+<input class="buttonx" value="Update chart" onclick="updateGraph(event, 'RegionProfile')" type="button">
+						
+
+
+<div class="flashcontent" name="flashContent">
+<div id="${application}" name="flashChart">
+</div>
+</div>
+
+
+</body>
+</html>

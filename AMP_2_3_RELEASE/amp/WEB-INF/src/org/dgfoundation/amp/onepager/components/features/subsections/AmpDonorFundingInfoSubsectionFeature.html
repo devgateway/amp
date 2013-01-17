@@ -1,0 +1,30 @@
+<wicket:extend>
+	<table width="100%" border="0" cellspacing="2" cellpadding="2">
+        <wicket:fm fmNames="Agreement">
+            <tr align="left">
+                <td	colspan="3">
+                    <div wicket:id="agreement"/>
+                </td>
+            </tr>
+        </wicket:fm>
+
+        <wicket:fm fmNames="Financing Instrument;Type of Assistence;Funding Organization Id">
+            <tr align="left">
+                <td><span wicket:id="typeOfAssistance"/></td>
+                <td><span wicket:id="financingInstrument"/></td>
+                <td><span wicket:id="financingId"/></td>
+            </tr>
+        </wicket:fm>
+        <wicket:fm fmNames="Funding Status;Mode of Payment;Loan Terms">
+            <tr align="left">
+                <wicket:fm fmNames="Funding Status">
+                    <td><span wicket:id="fundingStatus"/></td>
+                </wicket:fm>
+                <wicket:fm fmNames="Mode of Payment">
+                    <td><span wicket:id="modeOfPayment"/></td>
+                </wicket:fm>
+                <td><span wicket:id="loanTerms"/></td>
+            </tr>
+        </wicket:fm>
+	</table>
+</wicket:extend>

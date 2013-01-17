@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="false" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+  <jira>AMP-13011</jira>
+  <keyword>Structure</keyword>
+  <author>Armen</author> 
+
+  <apply>
+    <script>
+      <lang delimiter=";" type="postgres">
+      update amp_structure set title='title' where title is null;
+      
+      UPDATE amp_structure set type = (SELECT typeid
+        FROM amp_structure_type limit 1) where type is null; 
+        
+      ALTER TABLE amp_structure ALTER COLUMN title SET  not null;
+      ALTER TABLE amp_structure ALTER COLUMN type SET not null;
+       
+      </lang>
+    </script>
+  </apply>
+</tns:patch>

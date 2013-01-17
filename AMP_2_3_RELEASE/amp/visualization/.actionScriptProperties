@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<actionScriptProperties analytics="false" mainApplicationPath="ODA_growth/BarChartSeries_ODAGrowth.mxml" projectUUID="b8cb5eaf-66a0-4df1-b556-a9df2fc1dd04" version="10">
+  <compiler additionalCompilerArguments="-locale en_US -link-report=report.xml -use-network=false -optimize=true" autoRSLOrdering="false" copyDependentFiles="true" flexSDK="Flex 3.5" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="false" warn="true">
+    <compilerSourcePath/>
+    <libraryPath defaultLinkType="3">
+      <libraryPathEntry kind="4" path="">
+        <excludedEntries>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" useDefaultLinkType="false"/>
+        </excludedEntries>
+      </libraryPathEntry>
+      <libraryPathEntry kind="1" linkType="2" path="${DCD_LIB_LOCATION}"/>
+      <libraryPathEntry kind="1" linkType="2" path="${DCD_LOCALE_LOCATION}"/>
+      <libraryPathEntry applicationDomain="default" forceLoad="false" kind="3" linkType="4" path="libs/DegrafaLibrary.swc" useDefaultLinkType="false">
+        <crossDomainRsls>
+          <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="DegrafaLibrary.swf"/>
+        </crossDomainRsls>
+      </libraryPathEntry>
+      <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCATION}/fiber.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="${DCD_FIBER_LOCALE_LOCATION}/fiber_rb.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry applicationDomain="default" forceLoad="false" kind="3" linkType="4" path="${DCD_FIBER_LOCATION}/playerfds.swc" useDefaultLinkType="false">
+        <crossDomainRsls>
+          <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="playerfds.swf"/>
+        </crossDomainRsls>
+      </libraryPathEntry>
+      <libraryPathEntry applicationDomain="default" forceLoad="false" kind="3" linkType="4" path="/AxiisLibrary/bin/AxiisLibrary.swc" useDefaultLinkType="false">
+        <crossDomainRsls>
+          <crossDomainRslEntry autoExtract="true" policyFileUrl="" rslUrl="AxiisLibrary.swf"/>
+        </crossDomainRsls>
+      </libraryPathEntry>
+    </libraryPath>
+    <sourceAttachmentPath/>
+  </compiler>
+  <applications>
+    <application path="ODA_growth/BarChartSeries_ODAGrowth.mxml"/>
+    <application path="generic/PieChartSeries.mxml"/>
+    <application path="generic/LineAreaSeries.mxml"/>
+    <application path="generic/DataViewSeries.mxml"/>
+    <application path="generic/BarChartSeries.mxml"/>
+    <application path="generic/BarChartSeries_Growth.mxml"/>
+    <application path="generic/BarChartSeries_Profile.mxml"/>
+  </applications>
+  <modules/>
+  <buildCSSFiles/>
+  <publishSource>
+    <sourcePathIncludes/>
+    <sourceExcludes>
+      <exclude path="services"/>
+    </sourceExcludes>
+  </publishSource>
+  <flashCatalyst validateFlashCatalystCompatibility="false"/>
+</actionScriptProperties>

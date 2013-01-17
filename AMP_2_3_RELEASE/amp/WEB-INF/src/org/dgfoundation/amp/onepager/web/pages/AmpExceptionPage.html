@@ -1,0 +1,140 @@
+<wicket:extend>
+
+<center>
+<table width="474" border="0">
+	<tr>
+		<td width="257">
+		<p align="center" style="font-family: Arial, Helvetica, sans-serif; font-size: 16px;"><strong>Aid Management Platform (AMP)</strong></p>
+		<p align="center"> </p>
+		</td>
+		<td width="220"><img width="220" height="100"
+			src="/TEMPLATE/ampTemplate/img_2/logo-development-gateway.png"></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+		<p style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;">Aid Management Platform (AMP)
+		 
+		Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.
+		</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+		<p style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;">The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation.
+		All Rights Reserved.</p>
+		</td>
+	</tr>
+</table>
+</center>
+  
+<center>
+<div class="breadcrump_1">&nbsp;</div>	
+			<div style="width:1000px;margin:0 auto;">
+	<table width="100%" id="homelayout">
+		<tr>
+			<td >
+  <table width="100%">
+    <tr>
+      <td align="center">
+        	<table width="85%" cellpadding="5">
+        		<tr>
+        			<td width="120px" valign="top" >
+        				<img alt="AMP Error Image" src="/TEMPLATE/ampTemplate/images/exceptionImg.jpg" />
+        			</td>
+        			<td align="left" valign="middle" style="background-color: #F0F0F0">
+        				<br/>
+        				<span style="font-size:14px">
+				        	<b>The Aid Management Platform has temporarily encountered an issue. We apologize for any inconvenience.</b><br/>
+				        	
+				        	<br/>
+				        	<hr/><br/>
+				        	To resume normal operation of the Aid Management Platform please choose one of the following actions:<br />
+				        		<li style="list-style-type: none;">Go Back to the
+				        			<a href="">
+					        			previous page
+				        			</a>
+				        		</li> 
+				        		<li style="list-style-type: none;">Go to the 
+					        		
+				                              <a href="/showDesktop.do" >
+				                                 Desktop
+				                              </a>
+								</li>
+							<br/>
+							View the	
+				        		<a wicket:id="developerNotesLink" > Developer notes</a> for this issue 
+				        </span>
+        			</td>
+        		</tr>
+        		<tr>
+        			<td width="120px">&nbsp;
+        				
+        			</td>
+        			<td style="background-color: #F0F0F0">
+       					<div wicket:id="devInfo"   >
+       						<div style="display: none;">
+					       		<a href="'docDiv'" style="color:#FFFFFF;">
+				            		Suggested Documentation
+						        </a>
+					          <div id="docDiv" style="display: block;">
+						          <p align="center">
+						          	  <img src="/TEMPLATE/ampTemplate/images/ajax-loader.gif" alt="loading..."/>
+						          </p>
+							  </div>
+							</div>
+							
+					          	<a wicket:id="exceptionDetailsLink" style="color:#FFFFFF;">
+				            		Exception details
+					            </a>
+					          <div wicket:id="errMsgDiv" style="display: block;">
+						          <table width="100%" border="0">
+						            <tr>
+						              <td>Error Message:</td>
+						              <td>
+						                <b>
+						                  <font color="red">
+						                    <span wicket:id="errorMessage"></span>
+						                  </font>
+						                </b>
+						              </td>
+						            </tr>
+						            <tr>
+							              <td>Status code:</td>
+							              <td></td>
+									    </tr>				    
+								    <tr>
+								      <td>Site:</td>
+								      <td>
+								       <span wicket:id="site"></span>
+								      </td>
+								    </tr>
+								    <tr>
+								      <td>Module instance:</td>
+								      <td>:</td>
+								    </tr>
+								    <tr>
+								      <td width="100%" colspan="2">&nbsp;</td>
+								    </tr>
+								</table>
+							</div>
+							<br/>
+                             <a wicket:id="stackDivLink"  style="color:#FFFFFF;">Stack trace</a>
+						     <div wicket:id="stackDiv" >			             
+                                  <textarea wicket:id="messageDetails" style="width:100%;height:350px" rows="20" cols="100" readonly="readonly"></textarea>
+			                  </div>
+						</div>
+        			</td>
+        		</tr>
+        	</table>
+      		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+      </td>
+      </tr>
+</table>
+			</td>
+		</tr>
+	
+	</table>
+    </div>
+   
+    </center>
+</wicket:extend>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page page="showPublicGis" name="showPublicGis" title="GIS dashboard"/>
+		<page page="gisDashboard" name="gis_dashboard" title="GIS dashboard"/>
+		<page page="gisRegionReport" name="gisRegionReport" title="GIS region report"/>
+		<page page="showGisSettings" name="showGisSettings" title="Gis Settings"/>
+
+
+		<page page="mapLoader" name="mapLoader" title="AMP GIS map loader"/>
+
+		<page page="gisDemo" name="gisDemo" title="AMP GIS demo page"/>
+		
+	</secondary-pages>
+	<module>
+		<teaser name="gisMap" action="dashboardMapTeaser.do">showVerticalNavigation.jsp</teaser>			
+	</module>
+	
+</config>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpFilters" table="AMP_FILTERS">
+		<cache usage="read-write" />
+		<id name="ampFilterId" column="amp_filter_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_FILTERS_seq</param>
+			</generator>
+		</id>
+
+		<property name="filterName" column="filter_name" type="java.lang.String" />
+
+		<set name="pages" table="AMP_PAGE_FILTERS" lazy="true">
+			<cache usage="read-write" />
+			<key column="amp_filter_id" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpPages" column="amp_page_id" />
+		</set>
+
+	</class>
+</hibernate-mapping>
+

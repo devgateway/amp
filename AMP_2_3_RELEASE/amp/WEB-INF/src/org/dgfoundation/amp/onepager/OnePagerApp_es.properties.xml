@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="nullValid">Seleccione</entry>
+	<entry key="null">Seleccione</entry>
+	<entry key="ContactEmailValidator">Formato incorrecto de correo electrónico</entry>
+	<entry key="not_unique">El correo electrónico debería ser único</entry>
+	<entry key="AmpMinSizeCollectionValidator">Agregue al menos ${minimum} item(s) aqui.</entry>
+	<entry key="AmpPercentageCollectionValidator">La suma de todos los porcentajes es ${label}, debería ser 100.</entry>
+	<entry key="AmpUniqueCollectionValidator">Los siguientes items se repiten al menos una vez: ${label}</entry>
+	<entry key="AmpTreeCollectionValidator">Ambos ítems padre e hijo se encuentran presentes: ${label}</entry>
+	<entry key="AmpUniqueActivityTitleValidator">Una actividad con este titulo ya existe en es espacio de trabajo ${workspace}.</entry>
+	<entry key="AmpUniqueComponentTitleValidator">Un componente con este titulo ya existe.</entry>
+	<entry key="CoordinatesValidator">Las coordenadas ingresadas no están en el formato correcto.</entry>
+	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Los desembolsos son más grandes que la suma de los compromisos</entry>
+	<entry key="AmpExpemdituresCollectionsSumComparatorValidator">Los gastos son mayores que la suma de los desembolsos</entry>
+</properties>

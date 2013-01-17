@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-11488</jira>
+	<keyword>amp_activity_location</keyword>
+	<keyword>invalid</keyword>
+	<keyword>percentages</keyword>
+	<author>Fernando Ferreyra</author>
+	<description>This fixed the invalid percentages for locations in Nepal. Check comments in JIRA for details.</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="db">
+				<lang type="postgres">SELECT current_database()</lang>
+			</script>
+			<test>db.equalsIgnoreCase("amp_nepal") || db.equalsIgnoreCase("amp_nepal_staging")</test>
+		</condition>
+	</trigger>
+	<apply>
+		<script>
+			<lang type="bsh">
+				import java.util.Collection;
+				import org.hibernate.Session;
+				import org.hibernate.Query;
+				import java.util.ArrayList;
+				import org.digijava.module.aim.dbentity.AmpActivityVersion;
+				import org.digijava.module.aim.dbentity.AmpActivityLocation;
+				import org.digijava.kernel.persistence.PersistenceManager;
+
+		        Session session = null;
+		        Query qry = null;
+		        Collection activities = new ArrayList();
+		        try {
+		            session = PersistenceManager.getSession();
+		            String queryString = "select f from " + AmpActivityVersion.class.getName()
+		                + " f";
+		            qry = session.createQuery(queryString);
+		            activities = qry.list();
+		        } catch (Exception e) {
+		            logger.error("Unable to get all activities");
+		            logger.debug("Exception " + e);
+		        } finally {
+		            try {
+		                PersistenceManager.releaseSession(session);
+		            } catch (Exception e) {
+		                e.printStackTrace();
+					}
+		        }
+				Collection activitiesToCorrect = new ArrayList();
+				//Load it
+				for(AmpActivityVersion activity : activities)
+				{
+					Collection locations = activity.getLocations();
+					for(AmpActivityLocation location : locations){
+						if(location.getLocationPercentage() == null || location.getLocationPercentage() == 0)
+						{
+						    System.out.println("Activity with 0 in location for activity #: " +  activity.getAmpActivityId());
+						    activitiesToCorrect.add(activity);
+						}
+					}
+				}
+				//Correct it
+				for(AmpActivityVersion activity : activitiesToCorrect)
+				{
+					
+					Set set = activity.getLocations();
+					if (set.size() == 0)
+						return;
+					
+					int size = set.size();
+					int alloc = 100/size;
+					it = set.iterator();
+					while (it.hasNext()) {
+						AmpActivityLocation loc = (AmpActivityLocation) it.next();
+						loc.setLocationPercentage(alloc);
+					}
+					int dif = 100 - alloc*size;
+					int delta = 1;
+					if (dif &lt; 0)
+						delta = -1;
+					it = set.iterator();
+					while (dif != 0 &amp;&amp; it.hasNext()){
+						AmpActivityLocation loc = (AmpActivityLocation) it.next();
+						loc.setLocationPercentage(loc.getLocationPercentage() + delta);
+						dif = dif - delta;
+					}
+				}
+				//save it
+				for(AmpActivityVersion activity : activitiesToCorrect)
+				{
+			    	Session session = null;
+					try {
+						session=PersistenceManager.getRequestDBSession();
+						session.saveOrUpdate(activity);
+					}catch(Exception ex) {
+						throw new Exception("Patch correcting percentages for location failed", ex);
+					}
+				}
+            </lang>
+		</script>
+	</apply>
+</tns:patch>

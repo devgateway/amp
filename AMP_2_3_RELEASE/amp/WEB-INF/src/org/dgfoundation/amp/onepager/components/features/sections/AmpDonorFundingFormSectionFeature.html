@@ -1,0 +1,15 @@
+<wicket:extend>
+	<div style="position: relative; top: -30px; float: right;">
+		<a id="expandDonorItems" onclick="$(this).parents('div:eq(2)').find('.collapsable').show();$('#expandDonorItems').hide();$('#collapseDonorItems').show();"><wicket:trn>Expand all</wicket:trn></a>
+		<a style="display: none;" id="collapseDonorItems" onclick="$(this).parents('div:eq(2)').find('.collapsable').hide();$('#expandDonorItems').show();$('#collapseDonorItems').hide();"><wicket:trn>Collapse all</wicket:trn></a>
+	</div>
+	<div wicket:id="propProjCost" />
+	<tr><td colspan="2" align="left"><p/>
+		<div wicket:id="listFunding" class="funding_group_feature_box">
+			<div wicket:id="fundingItem" />		
+		</div>
+		<p/>
+		<div style="clear:both;">&nbsp;</div>
+		<span wicket:id="searchFundingOrgs"/>
+	</td></tr>
+</wicket:extend>

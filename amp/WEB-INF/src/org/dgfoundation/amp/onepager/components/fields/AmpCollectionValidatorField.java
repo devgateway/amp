@@ -37,7 +37,7 @@ public abstract class AmpCollectionValidatorField<T,H> extends
 		if (this.isVisible()){
 			target.add(this);
 			this.getHiddenContainer().clearInput();
-			target.appendJavaScript(String.format("$('#%s').blur();", this.getHiddenContainer().getMarkupId()));
+			target.prependJavaScript(String.format("$('#%s').blur();", this.getHiddenContainer().getMarkupId()));
 		}
 	}
 	

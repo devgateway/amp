@@ -22,10 +22,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpThemeSearchModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -38,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -109,7 +107,16 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		};
 		uniqueCollectionValidationField.setIndicatorAppender(iValidator);
 		add(uniqueCollectionValidationField);
-		
+
+        final AmpTreeCollectionValidatorField<AmpActivityProgram> treeCollectionValidatorField = new AmpTreeCollectionValidatorField<AmpActivityProgram>("treeValidator", listModel, "Tree Validator") {
+            @Override
+            public AmpAutoCompleteDisplayable getItem(AmpActivityProgram t) {
+                return t.getProgram();
+            }
+        };
+        treeCollectionValidatorField.setIndicatorAppender(iValidator);
+        add(treeCollectionValidatorField);
+
 		list = new ListView<AmpActivityProgram>("listProgs", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
@@ -133,6 +140,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 						list.removeAll();
 						percentageValidationField.reloadValidationField(target);
 						uniqueCollectionValidationField.reloadValidationField(target);
+                        treeCollectionValidatorField.reloadValidationField(target);
 					}
 				};
 				item.add(delProgram);
@@ -208,6 +216,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				target.add(list.getParent());
 				percentageValidationField.reloadValidationField(target);
 				uniqueCollectionValidationField.reloadValidationField(target);
+                treeCollectionValidatorField.reloadValidationField(target);
 			}
 
 			@Override

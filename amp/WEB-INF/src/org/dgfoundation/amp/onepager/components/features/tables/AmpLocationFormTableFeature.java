@@ -27,13 +27,7 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
@@ -45,10 +39,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
@@ -136,7 +127,17 @@ public class AmpLocationFormTableFeature extends
 				"minSizeValidator", listModel, "Location required validator");
 		minSizeCollectionValidationField.setIndicatorAppender(iValidator);
 		add(minSizeCollectionValidationField);
-		
+
+
+        final AmpTreeCollectionValidatorField<AmpActivityLocation> treeCollectionValidatorField = new AmpTreeCollectionValidatorField<AmpActivityLocation>("treeValidator", listModel, "Tree Validator") {
+            @Override
+            public AmpAutoCompleteDisplayable getItem(AmpActivityLocation l) {
+                return l.getLocation().getLocation();
+            }
+        };
+        treeCollectionValidatorField.setIndicatorAppender(iValidator);
+        add(treeCollectionValidatorField);
+
 		list = new ListView<AmpActivityLocation>("listLocations", listModel) {
 
 			@Override
@@ -221,9 +222,11 @@ public class AmpLocationFormTableFeature extends
 							regionalFundingFeature.getList().removeAll();
 							target.add(regionalFundingFeature);
 							target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
-							
-							percentageValidationField.reloadValidationField(target);							
-							uniqueCollectionValidationField.reloadValidationField(target);
+
+                            percentageValidationField.reloadValidationField(target);
+                            uniqueCollectionValidationField.reloadValidationField(target);
+                            minSizeCollectionValidationField.reloadValidationField(target);
+                            treeCollectionValidatorField.reloadValidationField(target);
 						}
 						setModel.getObject().remove(item.getModelObject());
 						target.add(listParent);
@@ -375,9 +378,11 @@ public class AmpLocationFormTableFeature extends
 				regionalFundingFeature.getList().removeAll();
 				target.add(regionalFundingFeature);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
-				percentageValidationField.reloadValidationField(target);		
+
+                percentageValidationField.reloadValidationField(target);
 				uniqueCollectionValidationField.reloadValidationField(target);
 				minSizeCollectionValidationField.reloadValidationField(target);
+                treeCollectionValidatorField.reloadValidationField(target);
 				list.removeAll();
 			}
 

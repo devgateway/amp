@@ -21,8 +21,8 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 			    	CREATE OR REPLACE VIEW v_agreement_signature_date AS 
-			    	SELECT f.amp_activity_id, ag.signature_date as signature_date, ag.id from amp_agreement ag, amp_funding f 
- 						WHERE f.agreement=ag.id;
+			    	SELECT DISTINCT f.amp_activity_id, ag.signature_date as signature_date, ag.id from amp_agreement ag, amp_funding f 
+ 						WHERE f.agreement=ag.id AND ag.signature_date IS NOT NULL;
         		</lang>
 		</script>
 	</apply>

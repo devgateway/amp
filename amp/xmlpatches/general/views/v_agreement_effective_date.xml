@@ -21,8 +21,8 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 			    	CREATE OR REPLACE VIEW v_agreement_effective_date AS 
-			    	SELECT f.amp_activity_id, ag.effective_date as effective_date, ag.id from amp_agreement ag, amp_funding f 
- 						WHERE f.agreement=ag.id;
+			    	SELECT DISTINCT f.amp_activity_id, ag.effective_date as effective_date, ag.id from amp_agreement ag, amp_funding f 
+ 						WHERE f.agreement=ag.id AND ag.effective_date IS NOT NULL;
         		</lang>
 		</script>
 	</apply>

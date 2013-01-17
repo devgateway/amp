@@ -82,7 +82,6 @@ public class DashboardLauncher extends Action {
 			Long fisCalId = Long.parseLong(value);
 			filter.setFiscalCalendarId(fisCalId);
 		}
-
 		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(DbUtil.getAllOrgGroups());
 		filter.setOrgGroups(orgGroups);
 		List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupsWithOrgsList = new ArrayList<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>>();
@@ -174,20 +173,6 @@ public class DashboardLauncher extends Action {
 		if (calendars != null) {
 			filter.setFiscalCalendars(new ArrayList(calendars));
 		}
-		// if (fromPublicView == false) {
-		// if (orgForm.getFiscalCalendarId() == null) {
-		// Long fisCalId = tm.getAppSettings().getFisCalId();
-		// if (fisCalId == null) {
-		// String value = FeaturesUtil
-		// .getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-		// if (value != null) {
-		// fisCalId = Long.parseLong(value);
-		// }
-		// }
-		// orgForm.setFiscalCalendarId(fisCalId);
-		// }
-		// } else {
-		// }
 		if (filter.getLargestProjectNumber() == null) {
 			filter.setLargestProjectNumber(10);
 		}

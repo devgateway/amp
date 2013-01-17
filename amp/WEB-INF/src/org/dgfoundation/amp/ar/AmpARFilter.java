@@ -288,6 +288,7 @@ public class AmpARFilter extends PropertyListable {
 	private Collection<AmpCategoryValueLocations> locationSelected = null;
 	@PropertyListableIgnore
 	private Collection<AmpCategoryValueLocations> relatedLocations;
+	private Collection<AmpCategoryValueLocations> pledgesLocations;
 	private Boolean unallocatedLocation = null;
 	//private AmpCategoryValueLocations regionSelected = null;
 	private Collection<String> approvalStatusSelected=null;
@@ -664,6 +665,28 @@ public class AmpARFilter extends PropertyListable {
 				+ " WHERE ps.amp_sector_id=s.amp_sector_id"
 				+ " AND ps.amp_sector_id in ("+ Util.toCSString(sectors) + ")";
 			
+			String REGION_SELECTED_FILTER = "";
+			if (locationSelected!=null) {
+				Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
+				allSelectedLocations.addAll(locationSelected);
+				
+				DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected);
+				this.pledgesLocations = new ArrayList<AmpCategoryValueLocations>();
+				this.pledgesLocations.addAll(allSelectedLocations);
+				DynLocationManagerUtil.populateWithAscendants(this.pledgesLocations, locationSelected);
+				
+				String allSelectedLocationString = Util.toCSString(allSelectedLocations);
+				String subSelect = "SELECT aal.pledge_id FROM amp_funding_pledges_location aal, amp_location al " +
+						"WHERE ( aal.location_id=al.location_id AND " +
+						"al.location_id IN (" + allSelectedLocationString + ") )";
+				
+				if (REGION_SELECTED_FILTER.equals("")) {
+					REGION_SELECTED_FILTER	= subSelect;
+				} else {
+					REGION_SELECTED_FILTER += " OR amp_activity_id IN (" + subSelect + ")"; 
+				}			
+			}
+			
 			if (donnorgAgency != null && donnorgAgency.size() > 0){
 				PledgequeryAppend(DONNOR_AGENCY_FILTER);
 			}
@@ -682,6 +705,9 @@ public class AmpARFilter extends PropertyListable {
 			}
 			if (sectors != null && sectors.size() > 0){
 				PledgequeryAppend(SECTOR_FILTER);
+			}
+			if (!REGION_SELECTED_FILTER.equals("")) {
+				PledgequeryAppend(REGION_SELECTED_FILTER);
 			}
 		
 			return;
@@ -838,7 +864,7 @@ public class AmpARFilter extends PropertyListable {
 	 	String MULTI_DONOR		= "SELECT amp_activity_id FROM v_multi_donor WHERE value = '" + multiDonor + "'";
 	 	
 	 	String REGION_SELECTED_FILTER = "";
-		if (unallocatedLocation != null) {
+ 		if (unallocatedLocation != null) {
 			if (unallocatedLocation == true) {
 				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id NOT IN(SELECT amp_activity_id FROM amp_activity_location)";
 			}
@@ -2144,11 +2170,22 @@ public class AmpARFilter extends PropertyListable {
 			Collection<AmpCategoryValueLocations> relatedLocations) {
 		this.relatedLocations = relatedLocations;
 	}
+	
+	public Collection<AmpCategoryValueLocations> getPledgesLocations() {
+		return pledgesLocations;
+	}
+
+	public void setPledgesLocations(
+			Collection<AmpCategoryValueLocations> pledgesLocations) {
+		this.pledgesLocations = pledgesLocations;
+	}
 
 	public Set<AmpCategoryValue> getProjectImplementingUnits() {
 		return projectImplementingUnits;
 	}
-
+	
+	
+	
 	public void setProjectImplementingUnits(
 			Set<AmpCategoryValue> projectImplementingUnits) {
 		this.projectImplementingUnits = projectImplementingUnits;

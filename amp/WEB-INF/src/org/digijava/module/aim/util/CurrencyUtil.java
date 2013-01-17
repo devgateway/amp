@@ -300,7 +300,7 @@ public class CurrencyUtil {
 		}
 	}
 
-	public static Collection getAllCurrencies(int active) {
+	public static Collection getAllCurrencies(int active,String sortOrder) {
 		Collection col = new ArrayList();
 		Session session = null;
 		Query qry = null;
@@ -308,17 +308,17 @@ public class CurrencyUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			if (active == CurrencyUtil.ORDER_BY_CURRENCY_CODE) {
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyCode";
+				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyCode "+sortOrder;
 				qry = session.createQuery(qryStr);
 			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_NAME){
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyName";
+				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyName "+sortOrder;
 			qry = session.createQuery(qryStr);
 			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME){
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left outer join curr.countryLocation dg order by dg.name";
+				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left outer join curr.countryLocation dg order by dg.name "+sortOrder;
 			qry = session.createQuery(qryStr);
 			}else {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
-					"where (curr.activeFlag=:flag) order by curr.currencyCode";
+					"where (curr.activeFlag=:flag) order by curr.currencyCode "+sortOrder;
 				qry = session.createQuery(qryStr);
 				qry.setParameter("flag",new Integer(active),Hibernate.INTEGER);
 			}

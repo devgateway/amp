@@ -21,7 +21,7 @@ import com.rc.retroweaver.runtime.Arrays;
  * 
  * @author medea
  */
-public class AmpCategoryValueLocations implements Identifiable,
+public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCategoryValueLocations>, 
 		HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable,OrgProfileValue {
 
 	private Long id;
@@ -220,7 +220,7 @@ public class AmpCategoryValueLocations implements Identifiable,
 	@Override
 	public AmpAutoCompleteDisplayable getParent() {
 		// TODO Auto-generated method stub
-		return null;
+		return parentLocation;
 	}
 
 	@Override
@@ -250,5 +250,10 @@ public class AmpCategoryValueLocations implements Identifiable,
 	public String[] getSubHeaders() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int compareTo(AmpCategoryValueLocations o) {
+		return id.compareTo(o.getId());
 	}
 }

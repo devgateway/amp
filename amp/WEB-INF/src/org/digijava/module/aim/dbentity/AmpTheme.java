@@ -15,7 +15,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import edu.emory.mathcs.backport.java.util.TreeSet;
 
-public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable
+public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable
 {
 	private static final long serialVersionUID = 1L;
 	private AmpActivityVersion activityId;
@@ -452,8 +452,8 @@ public class AmpTheme implements Serializable, Comparable, Identifiable, ARDimen
 		}
 
 		@Override
-		public int compareTo(Object arg0) {
-			return ampThemeId.compareTo(((AmpTheme)arg0).getAmpThemeId()); 
+		public int compareTo(AmpTheme arg0) {
+			return ampThemeId.compareTo((arg0).getAmpThemeId()); 
 		}
 
 		public boolean isTransientBoolean() {

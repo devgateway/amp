@@ -162,7 +162,10 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	protected boolean passesFilter(String columnName, Cell metaCell, CategAmountCell ret)
 	{
 		if ( metaCell.getColumn().getName().equals(columnName) )
-			return metaCell.getValue().toString().equals(ret.getMetaValueString(columnName));
+		{
+			String meta = ret.getMetaValueString(columnName);
+			return meta == null || metaCell.getValue().toString().equals(meta);
+		}
 
 		return true; // not filtering on this column - so filter is "passed"
 	}
@@ -172,7 +175,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	 */
 	public final static String[] fundingFilteringColumnsArr = 
 		{
-			ArConstants.COLUMN_CAPITAL_EXPENDITRURE, ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT, ArConstants.DONOR,
+			ArConstants.COLUMN_CAPITAL_EXPENDITRURE, ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT,
 			ArConstants.DONOR_GROUP, ArConstants.DONOR_TYPE_COL, ArConstants.TERMS_OF_ASSISTANCE, ArConstants.FINANCING_INSTRUMENT,
 			ArConstants.FUNDING_STATUS, ArConstants.MODE_OF_PAYMENT, ArConstants.COMPONENT, ArConstants.AGREEMENT_CODE, ArConstants.AGREEMENT_TITLE_CODE
 		};
@@ -191,7 +194,13 @@ public Cell filter(Cell metaCell,Set ids) {
 	if (!passesFilter(ArConstants.RELATED_PROJECTS, metaCell, ret))
 		if (!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))
 			return null;
-                 	
+    
+	if (metaCell.getColumn().getName().equals(ArConstants.DONOR) || metaCell.getColumn().getName().equals(ArConstants.RELATED_PROJECTS))
+	{
+ 	 	if (!passesFilter(metaCell.getColumn().getName(), metaCell, ret))
+ 	 		if (!ret.existsMetaString(ArConstants.COSTING_GRAND_TOTAL))
+ 	 			return null;  
+	}
 		
 	if(metaCell.getColumn().getName().equals(ArConstants.REGION) &&
 			this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE){

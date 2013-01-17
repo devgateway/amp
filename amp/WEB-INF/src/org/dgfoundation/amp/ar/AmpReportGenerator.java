@@ -824,7 +824,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
 		
-		 report.removeChildrenWithoutActivities(); //postProcess might have created some more empty children
+		report.removeEmptyChildren();
+		report.removeChildrenWithoutActivities(); //postProcess might have created some more empty children
 	}
 
 	/**

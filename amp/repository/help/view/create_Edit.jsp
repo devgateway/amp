@@ -40,7 +40,17 @@ function edit(){
     }
 }
 function printPreview (){
-	window.open("/help/helpActions.do?actionType=printPreview&helpTopicId="+selectedTopicId);
+	
+	if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ 
+	  var targetWndName = "_blank";  
+	   var wnd = window.open("",targetWndName);  
+	   var link = document.getElementById("linkPrint");  
+	   link.target = targetWndName;  
+	   link.href = "/help/helpActions.do?actionType=printPreview&helpTopicId="+selectedTopicId;  
+	   link.click();  
+	}else{
+		window.open("/help/helpActions.do?actionType=printPreview&helpTopicId="+selectedTopicId);
+	}
 }
 
 function printAllPreview (){
@@ -177,7 +187,7 @@ function GetXmlHttpObj()	{
                                 </c:set>
                                 	<a class="link" onclick="printAllPreview();" title="${topicEdit}" ><digi:trn>Print All</digi:trn></a> |
 									
-									<a class="link" onclick="printPreview();" title="${topicEdit}" ><digi:trn>Print</digi:trn></a>
+									<a class="link" id="linkPrint" onclick="printPreview();" title="${topicEdit}" ><digi:trn>Print</digi:trn></a>
 									
 									<digi:secure group="Help Administrators"> |
 										

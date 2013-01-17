@@ -34,6 +34,8 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.visualization.dbentity.AmpDashboardGraph;
+import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.util.DbUtil;
 
@@ -68,6 +70,70 @@ public class ExportToWord extends Action {
     public static final Font SUBTITLEFONT = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
     public static final Font HEADERFONTWHITE = new Font(Font.TIMES_ROMAN, 12, Font.BOLD, Color.WHITE);
 
+    String orgInfoTrn = "";
+	String contactInfoTrn = "";
+	String addNotesTrn = "";
+	String nameTrn = "";
+	String titleTrn = "";
+	String emailsTrn = "";
+	String phonesTrn = "";
+	String faxesTrn = "";
+	String backOrgTrn = "";
+	String descriptionTrn = "";
+	String pageTrn = "";
+	String filtersTrn = "";
+	String filtersAllTrn = "";
+	String filtersAmountsInTrn = "";
+	String filtersCurrencyTypeTrn = "";
+	String filtersStartYearTrn = "";
+	String filtersEndYearTrn = "";
+	String filtersOrgGroupTrn = "";
+	String filtersOrganizationsTrn = "";
+	String filtersSectorsTrn = "";
+	String filtersSubSectorsTrn = "";
+	String filtersRegionsTrn = "";
+	String filtersZonesTrn = "";
+	String filtersLocationsTrn = "";
+	String fundingTrn = "";
+    String ODAGrowthTrn = "";
+    String topPrjTrn = "";
+    String topOrganizationTrn = "";
+    String topRegionTrn = "";
+    String projectTrn = "";
+    String sectorTrn = "";
+    String organizationTrn = "";
+    String regionTrn = "";
+    String NPOTrn = "";
+    String programTrn = "";
+    String aidPredTrn = "";
+    String aidPredQuarterTrn = "";
+    String aidTypeTrn = "";
+    String budgetBreakdownTrn = "";
+    String finInstTrn = "";
+    String sectorProfTrn = "";
+    String regionProfTrn = "";
+    String NPOProfTrn = "";
+    String programProfTrn = "";
+    String organizationProfTrn = "";
+    String beneficiaryAgencyProfTrn = "";
+    String plannedTrn = "";
+    String actualTrn = "";
+    String yearTrn = "";
+    String dashboardTrn = "";
+    String summaryTrn = "";
+    String totalCommsTrn = "";
+    String totalDisbsTrn = "";
+    String numberPrjTrn = "";
+    String numberSecTrn = "";
+    String numberDonTrn = "";
+    String numberRegTrn = "";
+    String avgPrjZSizeTrn = "";
+    String currName = "";
+    String fundTypeTrn = "";
+    String dashboardTypeTrn = "";
+    String topSectorTrn = "";
+    String quarterTrn = "";
+    
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
         ServletContext ampContext = getServlet().getServletContext();
@@ -93,72 +159,72 @@ public class ExportToWord extends Action {
         String summaryOpt = request.getParameter("summaryOpt");
         String ODAGrowthOpt = request.getParameter("ODAGrowthOpt");
         try {
-        	String orgInfoTrn = TranslatorWorker.translateText("Organization Information", langCode, siteId);
-        	String contactInfoTrn = TranslatorWorker.translateText("Contact Information", langCode, siteId);
-        	String addNotesTrn = TranslatorWorker.translateText("Additional Notes", langCode, siteId);
-        	String nameTrn = TranslatorWorker.translateText("Name", langCode, siteId);
-        	String titleTrn = TranslatorWorker.translateText("Title", langCode, siteId);
-        	String emailsTrn = TranslatorWorker.translateText("Emails", langCode, siteId);
-        	String phonesTrn = TranslatorWorker.translateText("Phones", langCode, siteId);
-        	String faxesTrn = TranslatorWorker.translateText("Faxes", langCode, siteId);
-        	String backOrgTrn = TranslatorWorker.translateText("Background of organization", langCode, siteId);
-        	String descriptionTrn = TranslatorWorker.translateText("Description", langCode, siteId);
-			String pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
-        	String filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
-			String filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
-			String filtersAmountsInTrn = ""; 
+        	orgInfoTrn = TranslatorWorker.translateText("Organization Information", langCode, siteId);
+        	contactInfoTrn = TranslatorWorker.translateText("Contact Information", langCode, siteId);
+        	addNotesTrn = TranslatorWorker.translateText("Additional Notes", langCode, siteId);
+        	nameTrn = TranslatorWorker.translateText("Name", langCode, siteId);
+        	titleTrn = TranslatorWorker.translateText("Title", langCode, siteId);
+        	emailsTrn = TranslatorWorker.translateText("Emails", langCode, siteId);
+        	phonesTrn = TranslatorWorker.translateText("Phones", langCode, siteId);
+        	faxesTrn = TranslatorWorker.translateText("Faxes", langCode, siteId);
+        	backOrgTrn = TranslatorWorker.translateText("Background of organization", langCode, siteId);
+        	descriptionTrn = TranslatorWorker.translateText("Description", langCode, siteId);
+			pageTrn = TranslatorWorker.translateText("Page", langCode, siteId);
+        	filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
+			filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
+			filtersAmountsInTrn = ""; 
 			if(vForm.getFilter().getShowAmountsInThousands() != null && vForm.getFilter().getShowAmountsInThousands())
 				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in thousands", langCode, siteId);
 			else
 				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions", langCode, siteId);
-			String filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type", langCode, siteId);
-			String filtersStartYearTrn = TranslatorWorker.translateText("Start Year", langCode, siteId);
-			String filtersEndYearTrn = TranslatorWorker.translateText("End Year", langCode, siteId);
-			String filtersOrgGroupTrn = TranslatorWorker.translateText("Organization Groups", langCode, siteId);
-			String filtersOrganizationsTrn = TranslatorWorker.translateText("Organizations", langCode, siteId);
-			String filtersSectorsTrn = TranslatorWorker.translateText("Sectors", langCode, siteId);
-			String filtersLocationsTrn = TranslatorWorker.translateText("Locations", langCode, siteId);
-			String filtersSubSectorsTrn = TranslatorWorker.translateText("Sub-Sectors", langCode, siteId);
-			String filtersRegionsTrn = TranslatorWorker.translateText("Regions", langCode, siteId);
-			String filtersZonesTrn = TranslatorWorker.translateText("Zones", langCode, siteId);
-			String fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
-            String topPrjTrn = TranslatorWorker.translateText("Top Projects", langCode, siteId);
-            String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
-            String topSectorTrn = TranslatorWorker.translateText("Top Sectors", langCode, siteId);
-            String topOrganizationTrn = TranslatorWorker.translateText("Top Organizations", langCode, siteId);
-            String topRegionTrn = TranslatorWorker.translateText("Top Regions", langCode, siteId);
-            String projectTrn = TranslatorWorker.translateText("Project", langCode, siteId);
-            String sectorTrn = TranslatorWorker.translateText("Sector", langCode, siteId);
-            String organizationTrn = TranslatorWorker.translateText("Organization", langCode, siteId);
-            String regionTrn = TranslatorWorker.translateText("Region", langCode, siteId);
-            String NPOTrn = TranslatorWorker.translateText("NPO", langCode, siteId);
-	        String programTrn = TranslatorWorker.translateText("Program", langCode, siteId);
-	        String aidPredTrn = TranslatorWorker.translateText("Aid Predictability", langCode, siteId);
-	        String aidPredQuarterTrn = TranslatorWorker.translateText("Aid Predictability Quarterly", langCode, siteId);
-            String aidTypeTrn = TranslatorWorker.translateText("Aid Type", langCode, siteId);
-            String budgetBreakdownTrn = TranslatorWorker.translateText("Budget Breakdown", langCode, siteId);
-            String finInstTrn = TranslatorWorker.translateText("Financing Instrument", langCode, siteId);
-            String sectorProfTrn = TranslatorWorker.translateText("Sector Profile", langCode, siteId);
-            String regionProfTrn = TranslatorWorker.translateText("Region Profile", langCode, siteId);
-            String NPOProfTrn = TranslatorWorker.translateText("NPO Profile", langCode, siteId);
-	        String programProfTrn = TranslatorWorker.translateText("Program Profile", langCode, siteId);
-	        String organizationProfTrn = TranslatorWorker.translateText("Organization Profile", langCode, siteId);
-	        String beneficiaryAgencyProfTrn = TranslatorWorker.translateText("Beneficiary Agency Profile", langCode, siteId);
-	        String plannedTrn = TranslatorWorker.translateText("Planned", langCode, siteId);
-            String actualTrn = TranslatorWorker.translateText("Actual", langCode, siteId);
-            String yearTrn = TranslatorWorker.translateText("Year", langCode, siteId);
-            String quarterTrn = TranslatorWorker.translateText("Year", langCode, siteId);
-            String dashboardTrn = TranslatorWorker.translateText("Dashboard", langCode, siteId);
-            String summaryTrn = TranslatorWorker.translateText("Summary", langCode, siteId);
-            String totalCommsTrn = TranslatorWorker.translateText("Total Commitments", langCode, siteId);
-            String totalDisbsTrn = TranslatorWorker.translateText("Total Disbursements", langCode, siteId);
-            String numberPrjTrn = TranslatorWorker.translateText("Number of Projects", langCode, siteId);
-            String numberSecTrn = TranslatorWorker.translateText("Number of Sectors", langCode, siteId);
-            String numberDonTrn = TranslatorWorker.translateText("Number of Organizations", langCode, siteId);
-            String numberRegTrn = TranslatorWorker.translateText("Number of Regions", langCode, siteId);
-            String avgPrjZSizeTrn = TranslatorWorker.translateText("Average Project Size", langCode, siteId);
-            String currName = vForm.getFilter().getCurrencyCode();
-            String fundTypeTrn = "";
+			filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type", langCode, siteId);
+			filtersStartYearTrn = TranslatorWorker.translateText("Start Year", langCode, siteId);
+			filtersEndYearTrn = TranslatorWorker.translateText("End Year", langCode, siteId);
+			filtersOrgGroupTrn = TranslatorWorker.translateText("Organization Groups", langCode, siteId);
+			filtersOrganizationsTrn = TranslatorWorker.translateText("Organizations", langCode, siteId);
+			filtersSectorsTrn = TranslatorWorker.translateText("Sectors", langCode, siteId);
+			filtersLocationsTrn = TranslatorWorker.translateText("Locations", langCode, siteId);
+			filtersSubSectorsTrn = TranslatorWorker.translateText("Sub-Sectors", langCode, siteId);
+			filtersRegionsTrn = TranslatorWorker.translateText("Regions", langCode, siteId);
+			filtersZonesTrn = TranslatorWorker.translateText("Zones", langCode, siteId);
+			fundingTrn = TranslatorWorker.translateText("Funding", langCode, siteId);
+            topPrjTrn = TranslatorWorker.translateText("Top Projects", langCode, siteId);
+            ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth", langCode, siteId);
+            topSectorTrn = TranslatorWorker.translateText("Top Sectors", langCode, siteId);
+            topOrganizationTrn = TranslatorWorker.translateText("Top Organizations", langCode, siteId);
+            topRegionTrn = TranslatorWorker.translateText("Top Regions", langCode, siteId);
+            projectTrn = TranslatorWorker.translateText("Project", langCode, siteId);
+            sectorTrn = TranslatorWorker.translateText("Sector", langCode, siteId);
+            organizationTrn = TranslatorWorker.translateText("Organization", langCode, siteId);
+            regionTrn = TranslatorWorker.translateText("Region", langCode, siteId);
+            NPOTrn = TranslatorWorker.translateText("NPO", langCode, siteId);
+	        programTrn = TranslatorWorker.translateText("Program", langCode, siteId);
+	        aidPredTrn = TranslatorWorker.translateText("Aid Predictability", langCode, siteId);
+	        aidPredQuarterTrn = TranslatorWorker.translateText("Aid Predictability Quarterly", langCode, siteId);
+            aidTypeTrn = TranslatorWorker.translateText("Aid Type", langCode, siteId);
+            budgetBreakdownTrn = TranslatorWorker.translateText("Budget Breakdown", langCode, siteId);
+            finInstTrn = TranslatorWorker.translateText("Financing Instrument", langCode, siteId);
+            sectorProfTrn = TranslatorWorker.translateText("Sector Profile", langCode, siteId);
+            regionProfTrn = TranslatorWorker.translateText("Region Profile", langCode, siteId);
+            NPOProfTrn = TranslatorWorker.translateText("NPO Profile", langCode, siteId);
+	        programProfTrn = TranslatorWorker.translateText("Program Profile", langCode, siteId);
+	        organizationProfTrn = TranslatorWorker.translateText("Organization Profile", langCode, siteId);
+	        beneficiaryAgencyProfTrn = TranslatorWorker.translateText("Beneficiary Agency Profile", langCode, siteId);
+	        plannedTrn = TranslatorWorker.translateText("Planned", langCode, siteId);
+            actualTrn = TranslatorWorker.translateText("Actual", langCode, siteId);
+            yearTrn = TranslatorWorker.translateText("Year", langCode, siteId);
+            quarterTrn = TranslatorWorker.translateText("Year", langCode, siteId);
+            dashboardTrn = TranslatorWorker.translateText("Dashboard", langCode, siteId);
+            summaryTrn = TranslatorWorker.translateText("Summary", langCode, siteId);
+            totalCommsTrn = TranslatorWorker.translateText("Total Commitments", langCode, siteId);
+            totalDisbsTrn = TranslatorWorker.translateText("Total Disbursements", langCode, siteId);
+            numberPrjTrn = TranslatorWorker.translateText("Number of Projects", langCode, siteId);
+            numberSecTrn = TranslatorWorker.translateText("Number of Sectors", langCode, siteId);
+            numberDonTrn = TranslatorWorker.translateText("Number of Organizations", langCode, siteId);
+            numberRegTrn = TranslatorWorker.translateText("Number of Regions", langCode, siteId);
+            avgPrjZSizeTrn = TranslatorWorker.translateText("Average Project Size", langCode, siteId);
+            currName = vForm.getFilter().getCurrencyCode();
+            fundTypeTrn = "";
             switch (vForm.getFilter().getTransactionType()) {
 				case Constants.COMMITMENT:
 					fundTypeTrn = TranslatorWorker.translateText("Commitments", langCode, siteId);
@@ -173,7 +239,7 @@ public class ExportToWord extends Action {
 					fundTypeTrn = TranslatorWorker.translateText("Values", langCode, siteId);
 				break;
 			}
-            String dashboardTypeTrn = "";
+            dashboardTypeTrn = "";
             switch (vForm.getFilter().getDashboardType()) {
 	            case org.digijava.module.visualization.util.Constants.DashboardType.DONOR:
 	            	dashboardTypeTrn = TranslatorWorker.translateText("Organization", langCode, siteId);
@@ -566,825 +632,38 @@ public class ExportToWord extends Action {
 		            doc.add(new Paragraph(" "));
 	            }
             }
-            //Funding Table.
-	        if (!fundingOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(fundingTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (fundingOpt.equals("1") || fundingOpt.equals("3")){
-	            Table fundingTbl = null;
-	            String[] fundingRows = vForm.getExportData().getFundingTableData().split("<");
-	            colspan = (fundingRows[1].split(">").length + 1)/2; 
-	            fundingTbl = new Table(colspan);
-	            fundingTbl.setWidth(100);
-	            //RtfCell fundingTitleCell = new RtfCell(new Paragraph(fundingTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //fundingTitleCell.setColspan(colspan);
-	            //fundingTitleCell.setBackgroundColor(TITLECOLOR);
-	            //fundingTbl.addCell(fundingTitleCell);
-	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setBackgroundColor(TITLECOLOR);
-	            fundingTbl.addCell(cell);
-	            singleRow = fundingRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            fundingTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 1; i < fundingRows.length; i++) {
-	            	singleRow = fundingRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	            		if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			    fundingTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(fundingTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (fundingOpt.equals("2") || fundingOpt.equals("3")){
-	            SimpleTable fundingGraph = new SimpleTable(); //col,row 
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getFundingGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                fundingGraph.setWidthpercentage(100);
-                fundingGraph.addElement(row);
-                doc.add(fundingGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
-          //ODA Growth 
-        	if (!ODAGrowthOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(ODAGrowthTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-                doc.add(new Paragraph(" "));
-            }
-        	if (ODAGrowthOpt.equals("1") || ODAGrowthOpt.equals("3")){
-	            Table ODAGrowthTbl = null;
-	            String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
-	            colspan = (ODAGrowthRows[1].split(">").length); 
-	            ODAGrowthTbl = new Table(colspan);
-	            ODAGrowthTbl.setWidth(100);
-	            singleRow = ODAGrowthRows[1].split(">");
-	            for (int i = 0; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	ODAGrowthTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 2; i < ODAGrowthRows.length; i++) {
-	            	singleRow = ODAGrowthRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	ODAGrowthTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(ODAGrowthTbl);
-	            doc.add(new Paragraph(" "));
-            }
-        	if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
-            	SimpleTable ODAGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getODAGrowthGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                ODAGraph.setWidthpercentage(100);
-                ODAGraph.addElement(row);
-                doc.add(ODAGraph);
-	            doc.add(new Paragraph(" "));
-            }
+            List<AmpDashboardGraph> graphs = DbUtil.getDashboardGraphByDashboard(vForm.getDashboard().getId());
+            for (Iterator iterator = graphs.iterator(); iterator.hasNext();) {
+				AmpDashboardGraph ampDashboardGraph = (AmpDashboardGraph) iterator.next();
+				AmpGraph ampGraph = ampDashboardGraph.getGraph();
+				if (ampGraph.getContainerId().equals("Fundings"))
+					getFundingTable(fundingOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("AidPredictability"))
+					getAidPredictabilityTable(aidPredicOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("AidType"))
+					getAidTypeTable(aidTypeOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("AidModality"))
+					getAidModalityTable(financingInstOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("SectorProfile"))
+					getSectorProfileTable(sectorOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("RegionProfile"))
+					getRegionProfileTable(regionOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("OrganizationProfile"))
+					getOrganizationProfileTable(organizationOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("ODAGrowth"))
+					getODAGrowthTable(ODAGrowthOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("NPOProfile"))
+					getNPOProfileTable(NPOOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("ProgramProfile"))
+					getProgramProfileTable(programOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("AidPredictabilityQuarter"))
+					getAidPredictabilityQuarterTable(aidPredicQuarterOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("BudgetBreakdown"))
+					getBudgetBreakdownTable(budgetBreakdownOpt, doc, vForm, request);
+				if (ampGraph.getContainerId().equals("BeneficiaryAgencyProfile"))
+					getBeneficiaryAgencyProfileTable(beneficiaryAgencyOpt, doc, vForm, request);
 				
-            //Aid Predictability Table.
-			if (!aidPredicOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(aidPredTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (aidPredicOpt.equals("1") || aidPredicOpt.equals("3")){
-	            Table aidPredTbl = null;
-	            String[] aidPredRows = vForm.getExportData().getAidPredicTableData().split("<");
-	            colspan = (aidPredRows[1].split(">").length + 1)/2; 
-	            aidPredTbl = new Table(colspan);
-	            aidPredTbl.setWidth(100);
-	            //RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //aidPredTitleCell.setColspan(colspan);
-	            //aidPredTitleCell.setBackgroundColor(TITLECOLOR);
-	            //aidPredTbl.addCell(aidPredTitleCell);
-	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidPredTbl.addCell(cell);
-	            cell = new RtfCell(new Paragraph(plannedTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidPredTbl.addCell(cell);
-	            cell = new RtfCell(new Paragraph(actualTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidPredTbl.addCell(cell);
-	            count = 0;
-	            for (int i = 1; i < aidPredRows.length; i++) {
-	            	singleRow = aidPredRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	            		if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			    aidPredTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(aidPredTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (aidPredicOpt.equals("2") || aidPredicOpt.equals("3")){
-	            SimpleTable fundingGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getAidPredictabilityGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                fundingGraph.setWidthpercentage(100);
-                fundingGraph.addElement(row);
-                doc.add(fundingGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
-		    //Aid Predictability Quarterly Table.
-	       if (!aidPredicQuarterOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(aidPredQuarterTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (aidPredicQuarterOpt.equals("1") || aidPredicQuarterOpt.equals("3")){
-	            Table aidPredQuarterTbl = null;
-	            String[] aidPredQuarterRows = vForm.getExportData().getAidPredicQuarterTableData().split("<");
-	            colspan = (aidPredQuarterRows[1].split(">").length + 1)/2; 
-	            aidPredQuarterTbl = new Table(colspan);
-	            aidPredQuarterTbl.setWidth(100);
-	            //RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //aidPredTitleCell.setColspan(colspan);
-	            //aidPredTitleCell.setBackgroundColor(TITLECOLOR);
-	            //aidPredTbl.addCell(aidPredTitleCell);
-	            cell = new RtfCell(new Paragraph(quarterTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidPredQuarterTbl.addCell(cell);
-	            cell = new RtfCell(new Paragraph(plannedTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidPredQuarterTbl.addCell(cell);
-	            cell = new RtfCell(new Paragraph(actualTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidPredQuarterTbl.addCell(cell);
-	            count = 0;
-	            for (int i = 1; i < aidPredQuarterRows.length; i++) {
-	            	singleRow = aidPredQuarterRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	            		if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	            		aidPredQuarterTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(aidPredQuarterTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (aidPredicQuarterOpt.equals("2") || aidPredicQuarterOpt.equals("3")){
-	            SimpleTable fundingGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getAidPredictabilityQuarterGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                fundingGraph.setWidthpercentage(100);
-                fundingGraph.addElement(row);
-                doc.add(fundingGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
-          //Budget Breakdown Table.
-			if (!budgetBreakdownOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(budgetBreakdownTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (budgetBreakdownOpt.equals("1") || budgetBreakdownOpt.equals("3")){
-	            Table budgetBreakdownTbl = null;
-	            String[] budgetBreakdownRows = vForm.getExportData().getBudgetTableData().split("<");
-	            colspan = (budgetBreakdownRows[1].split(">").length + 1)/2; 
-	            budgetBreakdownTbl = new Table(colspan);
-	            budgetBreakdownTbl.setWidth(100);
-	            //RtfCell aidTypeTitleCell = new RtfCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //aidTypeTitleCell.setColspan(colspan);
-	            //aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
-	            //aidTypeTbl.addCell(aidTypeTitleCell);
-	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            budgetBreakdownTbl.addCell(cell);
-	            singleRow = budgetBreakdownRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	budgetBreakdownTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 1; i < budgetBreakdownRows.length; i++) {
-	            	singleRow = budgetBreakdownRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	budgetBreakdownTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(budgetBreakdownTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (budgetBreakdownOpt.equals("2") || budgetBreakdownOpt.equals("3")){
-	            SimpleTable budgetBreakdownGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getBudgetGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                budgetBreakdownGraph.setWidthpercentage(100);
-                budgetBreakdownGraph.addElement(row);
-                doc.add(budgetBreakdownGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
-          //Aid Type Table.
-			if (!aidTypeOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(aidTypeTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (aidTypeOpt.equals("1") || aidTypeOpt.equals("3")){
-	            Table aidTypeTbl = null;
-	            String[] aidTypeRows = vForm.getExportData().getAidTypeTableData().split("<");
-	            colspan = (aidTypeRows[1].split(">").length + 1)/2; 
-	            aidTypeTbl = new Table(colspan);
-	            aidTypeTbl.setWidth(100);
-	            //RtfCell aidTypeTitleCell = new RtfCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //aidTypeTitleCell.setColspan(colspan);
-	            //aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
-	            //aidTypeTbl.addCell(aidTypeTitleCell);
-	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            aidTypeTbl.addCell(cell);
-	            singleRow = aidTypeRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-		            aidTypeTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 1; i < aidTypeRows.length; i++) {
-	            	singleRow = aidTypeRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			    aidTypeTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(aidTypeTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (aidTypeOpt.equals("2") || aidTypeOpt.equals("3")){
-	            SimpleTable fundingGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getAidTypeGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                fundingGraph.setWidthpercentage(100);
-                fundingGraph.addElement(row);
-                doc.add(fundingGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
-          //Financing Instrument Table.
-		    if (!financingInstOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(finInstTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (financingInstOpt.equals("1") || financingInstOpt.equals("3")){
-                Table finInstTbl = null;
-	            String[] finInstRows = vForm.getExportData().getFinancingInstTableData().split("<");
-	            colspan = (finInstRows[1].split(">").length + 1)/2; 
-	            finInstTbl = new Table(colspan);
-	            finInstTbl.setWidth(100);
-	            //RtfCell finInstTitleCell = new RtfCell(new Paragraph(finInstTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //finInstTitleCell.setColspan(colspan);
-	            //finInstTitleCell.setBackgroundColor(TITLECOLOR);
-	            //finInstTbl.addCell(finInstTitleCell);
-	            cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            finInstTbl.addCell(cell);
-	            singleRow = finInstRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i=i+2) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-		            finInstTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 1; i < finInstRows.length; i++) {
-	            	singleRow = finInstRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j=j+2) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			    finInstTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(finInstTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (financingInstOpt.equals("2") || financingInstOpt.equals("3")){
-                SimpleTable fundingGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getFinancingInstGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                fundingGraph.setWidthpercentage(100);
-                fundingGraph.addElement(row);
-                doc.add(fundingGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
-          //Sector Profile Table.
-            if (!sectorOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(sectorProfTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (sectorOpt.equals("1") || sectorOpt.equals("3")){
-                Table sectorProfTbl = null;
-	            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
-	            colspan = sectorProfRows[1].split(">").length; 
-	            sectorProfTbl = new Table(colspan);
-	            sectorProfTbl.setWidth(100);
-	            //RtfCell sectorProfTitleCell = new RtfCell(new Paragraph(sectorProfTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //sectorProfTitleCell.setColspan(colspan);
-	            //sectorProfTitleCell.setBackgroundColor(TITLECOLOR);
-	            //sectorProfTbl.addCell(sectorProfTitleCell);
-	            cell = new RtfCell(new Paragraph(sectorTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            sectorProfTbl.addCell(cell);
-	            singleRow = sectorProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-		            sectorProfTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 2; i < sectorProfRows.length; i++) {
-	            	singleRow = sectorProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			    sectorProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(sectorProfTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (sectorOpt.equals("2") || sectorOpt.equals("3")){
-                SimpleTable fundingGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getSectorGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                fundingGraph.setWidthpercentage(100);
-                fundingGraph.addElement(row);
-                doc.add(fundingGraph);
-	            doc.add(new Paragraph(" "));
-            }
-		    
-          //Region Profile Table.
-            if (!regionOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(regionProfTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (regionOpt.equals("1") || regionOpt.equals("3")){
-                Table regionProfTbl = null;
-	            String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
-	            colspan = regionProfRows[1].split(">").length; 
-	            regionProfTbl = new Table(colspan);
-	            regionProfTbl.setWidth(100);
-	            //RtfCell regionProfTitleCell = new RtfCell(new Paragraph(regionProfTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //regionProfTitleCell.setColspan(colspan);
-	            //regionProfTitleCell.setBackgroundColor(TITLECOLOR);
-	            //regionProfTbl.addCell(regionProfTitleCell);
-	            cell = new RtfCell(new Paragraph(regionTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            regionProfTbl.addCell(cell);
-	            singleRow = regionProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-		            regionProfTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 2; i < regionProfRows.length; i++) {
-	            	singleRow = regionProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	    			    regionProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(regionProfTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (regionOpt.equals("2") || regionOpt.equals("3")){
-	            SimpleTable fundingGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getRegionGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                fundingGraph.setWidthpercentage(100);
-                fundingGraph.addElement(row);
-                doc.add(fundingGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
-          //Organization Profile Table.
-            if (!organizationOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(organizationProfTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (organizationOpt.equals("1") || organizationOpt.equals("3")){
-                Table organizationProfTbl = null;
-	            String[] organizationProfRows = vForm.getExportData().getOrganizationTableData().split("<");
-	            colspan = organizationProfRows[1].split(">").length; 
-	            organizationProfTbl = new Table(colspan);
-	            organizationProfTbl.setWidth(100);
-	            //RtfCell organizationProfTitleCell = new RtfCell(new Paragraph(organizationProfTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //organizationProfTitleCell.setColspan(colspan);
-	            //organizationProfTitleCell.setBackgroundColor(TITLECOLOR);
-	            //organizationProfTbl.addCell(organizationProfTitleCell);
-	            cell = new RtfCell(new Paragraph(organizationTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            organizationProfTbl.addCell(cell);
-	            singleRow = organizationProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	organizationProfTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 2; i < organizationProfRows.length; i++) {
-	            	singleRow = organizationProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	organizationProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(organizationProfTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (organizationOpt.equals("2") || organizationOpt.equals("3")){
-	            SimpleTable organizationGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getOrganizationGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                organizationGraph.setWidthpercentage(100);
-                organizationGraph.addElement(row);
-                doc.add(organizationGraph);
-	            doc.add(new Paragraph(" "));
-            }
-	        
-          //Beneficiary Agency Profile Table.
-            if (!beneficiaryAgencyOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(beneficiaryAgencyProfTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (beneficiaryAgencyOpt.equals("1") || beneficiaryAgencyOpt.equals("3")){
-                Table organizationProfTbl = null;
-	            String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
-	            colspan = organizationProfRows[1].split(">").length; 
-	            organizationProfTbl = new Table(colspan);
-	            organizationProfTbl.setWidth(100);
-	            //RtfCell organizationProfTitleCell = new RtfCell(new Paragraph(organizationProfTrn + " (" + currName + ")", HEADERFONTWHITE));
-	            //organizationProfTitleCell.setColspan(colspan);
-	            //organizationProfTitleCell.setBackgroundColor(TITLECOLOR);
-	            //organizationProfTbl.addCell(organizationProfTitleCell);
-	            cell = new RtfCell(new Paragraph(organizationTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            organizationProfTbl.addCell(cell);
-	            singleRow = organizationProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	organizationProfTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 2; i < organizationProfRows.length; i++) {
-	            	singleRow = organizationProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	organizationProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(organizationProfTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (beneficiaryAgencyOpt.equals("2") || beneficiaryAgencyOpt.equals("3")){
-	            SimpleTable organizationGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getBeneficiaryAgencyGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                organizationGraph.setWidthpercentage(100);
-                organizationGraph.addElement(row);
-                doc.add(organizationGraph);
-	            doc.add(new Paragraph(" "));
-            }
-            
-	      //NPO Profile Table.
-            if (!NPOOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(NPOProfTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (NPOOpt.equals("1") || NPOOpt.equals("3")){
-                Table NPOProfTbl = null;
-	            String[] NPOProfRows = vForm.getExportData().getNPOTableData().split("<");
-	            colspan = NPOProfRows[1].split(">").length; 
-	            NPOProfTbl = new Table(colspan);
-	            NPOProfTbl.setWidth(100);
-	            cell = new RtfCell(new Paragraph(NPOTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            NPOProfTbl.addCell(cell);
-	            singleRow = NPOProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	NPOProfTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 2; i < NPOProfRows.length; i++) {
-	            	singleRow = NPOProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	NPOProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(NPOProfTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (NPOOpt.equals("2") || NPOOpt.equals("3")){
-	            SimpleTable NPOGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getNPOGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                NPOGraph.setWidthpercentage(100);
-                NPOGraph.addElement(row);
-                doc.add(NPOGraph);
-	            doc.add(new Paragraph(" "));
-            }
-	         
-          //Program Profile Table.
-            if (!programOpt.equals("0")){
-            	doc.newPage();
-            	subTitle = new Paragraph(programProfTrn + " (" + currName + ")", SUBTITLEFONT);
-                subTitle.setAlignment(Element.ALIGN_LEFT);
-                doc.add(subTitle);
-            }
-            if (programOpt.equals("1") || programOpt.equals("3")){
-                Table programProfTbl = null;
-	            String[] programProfRows = vForm.getExportData().getProgramTableData().split("<");
-	            colspan = programProfRows[1].split(">").length; 
-	            programProfTbl = new Table(colspan);
-	            programProfTbl.setWidth(100);
-	            cell = new RtfCell(new Paragraph(programTrn, HEADERFONTWHITE));
-	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(TITLECOLOR);
-	            programProfTbl.addCell(cell);
-	            singleRow = programProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
-	            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            	cell.setBackgroundColor(TITLECOLOR);
-	            	programProfTbl.addCell(cell);
-				}
-	            count = 0;
-	            for (int i = 2; i < programProfRows.length; i++) {
-	            	singleRow = programProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	                	if(j > 0) {
-		                	BigDecimal bd = new BigDecimal(singleRow[j]);
-	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
-	                	}
-	                	else
-	                		cell = new RtfCell(new Paragraph(singleRow[j]));
-	                	if (count % 2 == 0)
-	    		        	cell.setBackgroundColor(CELLCOLOR);
-	                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	                	programProfTbl.addCell(cell);
-	    			}
-	            	count++;
-				}
-	            doc.add(programProfTbl);
-	            doc.add(new Paragraph(" "));
-            }
-            if (programOpt.equals("2") || programOpt.equals("3")){
-	            SimpleTable programGraph = new SimpleTable();
-                SimpleCell row = new SimpleCell(SimpleCell.ROW);
-                SimpleCell cel = new SimpleCell(SimpleCell.CELL);
-                //cel.setBorder(1);
-                ByteArrayOutputStream ba = new ByteArrayOutputStream();
-	            ImageIO.write(scaleImage(vForm.getExportData().getProgramGraph(),580,410), "png", ba);
-	            img = Image.getInstance(ba.toByteArray());
-                cel.add(img);
-                row.add(cel);
-                programGraph.setWidthpercentage(100);
-                programGraph.addElement(row);
-                doc.add(programGraph);
-	            doc.add(new Paragraph(" "));
-            }
-	         
-	        
+			}
             //close document
             doc.close();
             response.setContentLength(baos.size());
@@ -1436,6 +715,848 @@ public class ExportToWord extends Action {
            return thumbImage;        
        }
     public String getFormattedNumber(BigDecimal number){
-   	 return FormatHelper.formatNumberNotRounded(number.doubleValue());
-   }
+   	 	return FormatHelper.formatNumberNotRounded(number.doubleValue());
+    }
+    
+    private void getFundingTable(String fundingOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Funding Table.
+        if (!fundingOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(fundingTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (fundingOpt.equals("1") || fundingOpt.equals("3")){
+            Table fundingTbl = null;
+            String[] fundingRows = vForm.getExportData().getFundingTableData().split("<");
+            int colspan = (fundingRows[1].split(">").length + 1)/2; 
+            fundingTbl = new Table(colspan);
+            fundingTbl.setWidth(100);
+            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+            cell.setBackgroundColor(TITLECOLOR);
+            fundingTbl.addCell(cell);
+            String[] singleRow = fundingRows[1].split(">");
+            for (int i = 1; i < singleRow.length; i=i+2) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setBackgroundColor(TITLECOLOR);
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            fundingTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 1; i < fundingRows.length; i++) {
+            	singleRow = fundingRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j=j+2) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+            		if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    			    fundingTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(fundingTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (fundingOpt.equals("2") || fundingOpt.equals("3")){
+            SimpleTable fundingGraph = new SimpleTable(); //col,row 
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getFundingGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            fundingGraph.setWidthpercentage(100);
+            fundingGraph.addElement(row);
+            doc.add(fundingGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getAidPredictabilityTable(String aidPredicOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Aid Predictability Table.
+		if (!aidPredicOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(aidPredTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (aidPredicOpt.equals("1") || aidPredicOpt.equals("3")){
+            Table aidPredTbl = null;
+            String[] aidPredRows = vForm.getExportData().getAidPredicTableData().split("<");
+            int colspan = (aidPredRows[1].split(">").length + 1)/2; 
+            aidPredTbl = new Table(colspan);
+            aidPredTbl.setWidth(100);
+            //RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONTWHITE));
+            //aidPredTitleCell.setColspan(colspan);
+            //aidPredTitleCell.setBackgroundColor(TITLECOLOR);
+            //aidPredTbl.addCell(aidPredTitleCell);
+            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            aidPredTbl.addCell(cell);
+            cell = new RtfCell(new Paragraph(plannedTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            aidPredTbl.addCell(cell);
+            cell = new RtfCell(new Paragraph(actualTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            aidPredTbl.addCell(cell);
+            int count = 0;
+            for (int i = 1; i < aidPredRows.length; i++) {
+            	String[] singleRow = aidPredRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j=j+2) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+            		if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    			    aidPredTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(aidPredTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (aidPredicOpt.equals("2") || aidPredicOpt.equals("3")){
+            SimpleTable fundingGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getAidPredictabilityGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            fundingGraph.setWidthpercentage(100);
+            fundingGraph.addElement(row);
+            doc.add(fundingGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getAidTypeTable(String aidTypeOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Aid Type Table.
+		if (!aidTypeOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(aidTypeTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (aidTypeOpt.equals("1") || aidTypeOpt.equals("3")){
+            Table aidTypeTbl = null;
+            String[] aidTypeRows = vForm.getExportData().getAidTypeTableData().split("<");
+            int colspan = (aidTypeRows[1].split(">").length + 1)/2; 
+            aidTypeTbl = new Table(colspan);
+            aidTypeTbl.setWidth(100);
+            //RtfCell aidTypeTitleCell = new RtfCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONTWHITE));
+            //aidTypeTitleCell.setColspan(colspan);
+            //aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
+            //aidTypeTbl.addCell(aidTypeTitleCell);
+            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            aidTypeTbl.addCell(cell);
+            String[] singleRow = aidTypeRows[1].split(">");
+            for (int i = 1; i < singleRow.length; i=i+2) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	cell.setBackgroundColor(TITLECOLOR);
+	            aidTypeTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 1; i < aidTypeRows.length; i++) {
+            	singleRow = aidTypeRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j=j+2) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+                	if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    			    aidTypeTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(aidTypeTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (aidTypeOpt.equals("2") || aidTypeOpt.equals("3")){
+            SimpleTable fundingGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getAidTypeGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            fundingGraph.setWidthpercentage(100);
+            fundingGraph.addElement(row);
+            doc.add(fundingGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getAidModalityTable(String financingInstOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Financing Instrument Table.
+	    if (!financingInstOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(finInstTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (financingInstOpt.equals("1") || financingInstOpt.equals("3")){
+            Table finInstTbl = null;
+            String[] finInstRows = vForm.getExportData().getFinancingInstTableData().split("<");
+            int colspan = (finInstRows[1].split(">").length + 1)/2; 
+            finInstTbl = new Table(colspan);
+            finInstTbl.setWidth(100);
+            //RtfCell finInstTitleCell = new RtfCell(new Paragraph(finInstTrn + " (" + currName + ")", HEADERFONTWHITE));
+            //finInstTitleCell.setColspan(colspan);
+            //finInstTitleCell.setBackgroundColor(TITLECOLOR);
+            //finInstTbl.addCell(finInstTitleCell);
+            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            finInstTbl.addCell(cell);
+            String[] singleRow = finInstRows[1].split(">");
+            for (int i = 1; i < singleRow.length; i=i+2) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	cell.setBackgroundColor(TITLECOLOR);
+	            finInstTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 1; i < finInstRows.length; i++) {
+            	singleRow = finInstRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j=j+2) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+                	if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    			    finInstTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(finInstTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (financingInstOpt.equals("2") || financingInstOpt.equals("3")){
+            SimpleTable fundingGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getFinancingInstGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            fundingGraph.setWidthpercentage(100);
+            fundingGraph.addElement(row);
+            doc.add(fundingGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getSectorProfileTable(String sectorOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Sector Profile Table.
+        if (!sectorOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(sectorProfTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (sectorOpt.equals("1") || sectorOpt.equals("3")){
+            Table sectorProfTbl = null;
+            String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
+            int colspan = sectorProfRows[1].split(">").length; 
+            sectorProfTbl = new Table(colspan);
+            sectorProfTbl.setWidth(100);
+            //RtfCell sectorProfTitleCell = new RtfCell(new Paragraph(sectorProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+            //sectorProfTitleCell.setColspan(colspan);
+            //sectorProfTitleCell.setBackgroundColor(TITLECOLOR);
+            //sectorProfTbl.addCell(sectorProfTitleCell);
+            RtfCell cell = new RtfCell(new Paragraph(sectorTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            sectorProfTbl.addCell(cell);
+            String[] singleRow = sectorProfRows[1].split(">");
+            for (int i = 1; i < singleRow.length; i++) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	cell.setBackgroundColor(TITLECOLOR);
+	            sectorProfTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 2; i < sectorProfRows.length; i++) {
+            	singleRow = sectorProfRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j++) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+                	if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    			    sectorProfTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(sectorProfTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (sectorOpt.equals("2") || sectorOpt.equals("3")){
+            SimpleTable fundingGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getSectorGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            fundingGraph.setWidthpercentage(100);
+            fundingGraph.addElement(row);
+            doc.add(fundingGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getRegionProfileTable(String regionOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Region Profile Table.
+        if (!regionOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(regionProfTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (regionOpt.equals("1") || regionOpt.equals("3")){
+            Table regionProfTbl = null;
+            String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
+            int colspan = regionProfRows[1].split(">").length; 
+            regionProfTbl = new Table(colspan);
+            regionProfTbl.setWidth(100);
+            //RtfCell regionProfTitleCell = new RtfCell(new Paragraph(regionProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+            //regionProfTitleCell.setColspan(colspan);
+            //regionProfTitleCell.setBackgroundColor(TITLECOLOR);
+            //regionProfTbl.addCell(regionProfTitleCell);
+            RtfCell cell = new RtfCell(new Paragraph(regionTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            regionProfTbl.addCell(cell);
+            String[] singleRow = regionProfRows[1].split(">");
+            for (int i = 1; i < singleRow.length; i++) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	cell.setBackgroundColor(TITLECOLOR);
+	            regionProfTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 2; i < regionProfRows.length; i++) {
+            	singleRow = regionProfRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j++) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+                	if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    			    regionProfTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(regionProfTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (regionOpt.equals("2") || regionOpt.equals("3")){
+            SimpleTable fundingGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getRegionGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            fundingGraph.setWidthpercentage(100);
+            fundingGraph.addElement(row);
+            doc.add(fundingGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getOrganizationProfileTable(String organizationOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Organization Profile Table.
+        if (!organizationOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(organizationProfTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (organizationOpt.equals("1") || organizationOpt.equals("3")){
+            Table organizationProfTbl = null;
+            String[] organizationProfRows = vForm.getExportData().getOrganizationTableData().split("<");
+            int colspan = organizationProfRows[1].split(">").length; 
+            organizationProfTbl = new Table(colspan);
+            organizationProfTbl.setWidth(100);
+            //RtfCell organizationProfTitleCell = new RtfCell(new Paragraph(organizationProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+            //organizationProfTitleCell.setColspan(colspan);
+            //organizationProfTitleCell.setBackgroundColor(TITLECOLOR);
+            //organizationProfTbl.addCell(organizationProfTitleCell);
+            RtfCell cell = new RtfCell(new Paragraph(organizationTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            organizationProfTbl.addCell(cell);
+            String[] singleRow = organizationProfRows[1].split(">");
+            for (int i = 1; i < singleRow.length; i++) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	cell.setBackgroundColor(TITLECOLOR);
+            	organizationProfTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 2; i < organizationProfRows.length; i++) {
+            	singleRow = organizationProfRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j++) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+                	if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                	organizationProfTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(organizationProfTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (organizationOpt.equals("2") || organizationOpt.equals("3")){
+            SimpleTable organizationGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getOrganizationGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            organizationGraph.setWidthpercentage(100);
+            organizationGraph.addElement(row);
+            doc.add(organizationGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getODAGrowthTable(String ODAGrowthOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//ODA Growth 
+    	RtfCell cell=null;
+    	if (!ODAGrowthOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(ODAGrowthTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+            doc.add(new Paragraph(" "));
+        }
+    	if (ODAGrowthOpt.equals("1") || ODAGrowthOpt.equals("3")){
+            Table ODAGrowthTbl = null;
+            String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
+            int colspan = (ODAGrowthRows[1].split(">").length); 
+            ODAGrowthTbl = new Table(colspan);
+            ODAGrowthTbl.setWidth(100);
+            String[] singleRow = ODAGrowthRows[1].split(">");
+            for (int i = 0; i < singleRow.length; i++) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setBackgroundColor(TITLECOLOR);
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	ODAGrowthTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 2; i < ODAGrowthRows.length; i++) {
+            	singleRow = ODAGrowthRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j++) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+                	if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                	ODAGrowthTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(ODAGrowthTbl);
+            doc.add(new Paragraph(" "));
+        }
+    	if (ODAGrowthOpt.equals("2") || ODAGrowthOpt.equals("3")) {
+        	SimpleTable ODAGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getODAGrowthGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            ODAGraph.setWidthpercentage(100);
+            ODAGraph.addElement(row);
+            doc.add(ODAGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getNPOProfileTable(String NPOOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//NPO Profile Table.
+        if (!NPOOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(NPOProfTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (NPOOpt.equals("1") || NPOOpt.equals("3")){
+            Table NPOProfTbl = null;
+            String[] NPOProfRows = vForm.getExportData().getNPOTableData().split("<");
+            int colspan = NPOProfRows[1].split(">").length; 
+            NPOProfTbl = new Table(colspan);
+            NPOProfTbl.setWidth(100);
+            RtfCell cell = new RtfCell(new Paragraph(NPOTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            NPOProfTbl.addCell(cell);
+            String[] singleRow = NPOProfRows[1].split(">");
+            for (int i = 1; i < singleRow.length; i++) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	cell.setBackgroundColor(TITLECOLOR);
+            	NPOProfTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 2; i < NPOProfRows.length; i++) {
+            	singleRow = NPOProfRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j++) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+                	if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                	NPOProfTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(NPOProfTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (NPOOpt.equals("2") || NPOOpt.equals("3")){
+            SimpleTable NPOGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getNPOGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            NPOGraph.setWidthpercentage(100);
+            NPOGraph.addElement(row);
+            doc.add(NPOGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getProgramProfileTable(String programOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Program Profile Table.
+        if (!programOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(programProfTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (programOpt.equals("1") || programOpt.equals("3")){
+            Table programProfTbl = null;
+            String[] programProfRows = vForm.getExportData().getProgramTableData().split("<");
+            int colspan = programProfRows[1].split(">").length; 
+            programProfTbl = new Table(colspan);
+            programProfTbl.setWidth(100);
+            RtfCell cell = new RtfCell(new Paragraph(programTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            programProfTbl.addCell(cell);
+            String[] singleRow = programProfRows[1].split(">");
+            for (int i = 1; i < singleRow.length; i++) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	cell.setBackgroundColor(TITLECOLOR);
+            	programProfTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 2; i < programProfRows.length; i++) {
+            	singleRow = programProfRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j++) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+                	if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                	programProfTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(programProfTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (programOpt.equals("2") || programOpt.equals("3")){
+            SimpleTable programGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getProgramGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            programGraph.setWidthpercentage(100);
+            programGraph.addElement(row);
+            doc.add(programGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getAidPredictabilityQuarterTable(String aidPredicQuarterOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Aid Predictability Quarterly Table.
+	       if (!aidPredicQuarterOpt.equals("0")){
+         	doc.newPage();
+         	Paragraph subTitle = new Paragraph(aidPredQuarterTrn + " (" + currName + ")", SUBTITLEFONT);
+             subTitle.setAlignment(Element.ALIGN_LEFT);
+             doc.add(subTitle);
+         }
+         if (aidPredicQuarterOpt.equals("1") || aidPredicQuarterOpt.equals("3")){
+	            Table aidPredQuarterTbl = null;
+	            String[] aidPredQuarterRows = vForm.getExportData().getAidPredicQuarterTableData().split("<");
+	            int colspan = (aidPredQuarterRows[1].split(">").length + 1)/2; 
+	            aidPredQuarterTbl = new Table(colspan);
+	            aidPredQuarterTbl.setWidth(100);
+	            //RtfCell aidPredTitleCell = new RtfCell(new Paragraph(aidPredTrn + " (" + currName + ")", HEADERFONTWHITE));
+	            //aidPredTitleCell.setColspan(colspan);
+	            //aidPredTitleCell.setBackgroundColor(TITLECOLOR);
+	            //aidPredTbl.addCell(aidPredTitleCell);
+	            RtfCell cell = new RtfCell(new Paragraph(quarterTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            cell.setBackgroundColor(TITLECOLOR);
+	            aidPredQuarterTbl.addCell(cell);
+	            cell = new RtfCell(new Paragraph(plannedTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            cell.setBackgroundColor(TITLECOLOR);
+	            aidPredQuarterTbl.addCell(cell);
+	            cell = new RtfCell(new Paragraph(actualTrn, HEADERFONTWHITE));
+	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	            cell.setBackgroundColor(TITLECOLOR);
+	            aidPredQuarterTbl.addCell(cell);
+	            int count = 0;
+	            for (int i = 1; i < aidPredQuarterRows.length; i++) {
+	            	String[] singleRow = aidPredQuarterRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j=j+2) {
+	                	if(j > 0) {
+		                	BigDecimal bd = new BigDecimal(singleRow[j]);
+	                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+	                	}
+	                	else
+	                		cell = new RtfCell(new Paragraph(singleRow[j]));
+	            		if (count % 2 == 0)
+	    		        	cell.setBackgroundColor(CELLCOLOR);
+	            		cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+	            		aidPredQuarterTbl.addCell(cell);
+	    			}
+	            	count++;
+				}
+	            doc.add(aidPredQuarterTbl);
+	            doc.add(new Paragraph(" "));
+         }
+         if (aidPredicQuarterOpt.equals("2") || aidPredicQuarterOpt.equals("3")){
+	         SimpleTable fundingGraph = new SimpleTable();
+             SimpleCell row = new SimpleCell(SimpleCell.ROW);
+             SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+             //cel.setBorder(1);
+             ByteArrayOutputStream ba = new ByteArrayOutputStream();
+             ImageIO.write(scaleImage(vForm.getExportData().getAidPredictabilityQuarterGraph(),580,410), "png", ba);
+             Image img = Image.getInstance(ba.toByteArray());
+             cel.add(img);
+             row.add(cel);
+             fundingGraph.setWidthpercentage(100);
+             fundingGraph.addElement(row);
+             doc.add(fundingGraph);
+	         doc.add(new Paragraph(" "));
+         }
+    }
+    
+    private void getBudgetBreakdownTable(String budgetBreakdownOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Budget Breakdown Table.
+		if (!budgetBreakdownOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(budgetBreakdownTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (budgetBreakdownOpt.equals("1") || budgetBreakdownOpt.equals("3")){
+            Table budgetBreakdownTbl = null;
+            String[] budgetBreakdownRows = vForm.getExportData().getBudgetTableData().split("<");
+            int colspan = (budgetBreakdownRows[1].split(">").length + 1)/2; 
+            budgetBreakdownTbl = new Table(colspan);
+            budgetBreakdownTbl.setWidth(100);
+            //RtfCell aidTypeTitleCell = new RtfCell(new Paragraph(aidTypeTrn + " (" + currName + ")", HEADERFONTWHITE));
+            //aidTypeTitleCell.setColspan(colspan);
+            //aidTypeTitleCell.setBackgroundColor(TITLECOLOR);
+            //aidTypeTbl.addCell(aidTypeTitleCell);
+            RtfCell cell = new RtfCell(new Paragraph(yearTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            budgetBreakdownTbl.addCell(cell);
+            String[] singleRow = budgetBreakdownRows[1].split(">");
+            for (int i = 1; i < singleRow.length; i=i+2) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	cell.setBackgroundColor(TITLECOLOR);
+            	budgetBreakdownTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 1; i < budgetBreakdownRows.length; i++) {
+            	singleRow = budgetBreakdownRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j=j+2) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+                	if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                	budgetBreakdownTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(budgetBreakdownTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (budgetBreakdownOpt.equals("2") || budgetBreakdownOpt.equals("3")){
+            SimpleTable budgetBreakdownGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getBudgetGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            budgetBreakdownGraph.setWidthpercentage(100);
+            budgetBreakdownGraph.addElement(row);
+            doc.add(budgetBreakdownGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
+    private void getBeneficiaryAgencyProfileTable(String beneficiaryAgencyOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    	//Beneficiary Agency Profile Table.
+        if (!beneficiaryAgencyOpt.equals("0")){
+        	doc.newPage();
+        	Paragraph subTitle = new Paragraph(beneficiaryAgencyProfTrn + " (" + currName + ")", SUBTITLEFONT);
+            subTitle.setAlignment(Element.ALIGN_LEFT);
+            doc.add(subTitle);
+        }
+        if (beneficiaryAgencyOpt.equals("1") || beneficiaryAgencyOpt.equals("3")){
+            Table organizationProfTbl = null;
+            String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
+            int colspan = organizationProfRows[1].split(">").length; 
+            organizationProfTbl = new Table(colspan);
+            organizationProfTbl.setWidth(100);
+            //RtfCell organizationProfTitleCell = new RtfCell(new Paragraph(organizationProfTrn + " (" + currName + ")", HEADERFONTWHITE));
+            //organizationProfTitleCell.setColspan(colspan);
+            //organizationProfTitleCell.setBackgroundColor(TITLECOLOR);
+            //organizationProfTbl.addCell(organizationProfTitleCell);
+            RtfCell cell = new RtfCell(new Paragraph(organizationTrn, HEADERFONTWHITE));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cell.setBackgroundColor(TITLECOLOR);
+            organizationProfTbl.addCell(cell);
+            String[] singleRow = organizationProfRows[1].split(">");
+            for (int i = 1; i < singleRow.length; i++) {
+            	cell = new RtfCell(new Paragraph(singleRow[i], HEADERFONTWHITE));
+            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            	cell.setBackgroundColor(TITLECOLOR);
+            	organizationProfTbl.addCell(cell);
+			}
+            int count = 0;
+            for (int i = 2; i < organizationProfRows.length; i++) {
+            	singleRow = organizationProfRows[i].split(">");
+            	for (int j = 0; j < singleRow.length; j++) {
+                	if(j > 0) {
+	                	BigDecimal bd = new BigDecimal(singleRow[j]);
+                		cell = new RtfCell(new Paragraph(getFormattedNumber(bd)));
+                	}
+                	else
+                		cell = new RtfCell(new Paragraph(singleRow[j]));
+                	if (count % 2 == 0)
+    		        	cell.setBackgroundColor(CELLCOLOR);
+                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                	organizationProfTbl.addCell(cell);
+    			}
+            	count++;
+			}
+            doc.add(organizationProfTbl);
+            doc.add(new Paragraph(" "));
+        }
+        if (beneficiaryAgencyOpt.equals("2") || beneficiaryAgencyOpt.equals("3")){
+            SimpleTable organizationGraph = new SimpleTable();
+            SimpleCell row = new SimpleCell(SimpleCell.ROW);
+            SimpleCell cel = new SimpleCell(SimpleCell.CELL);
+            //cel.setBorder(1);
+            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+            ImageIO.write(scaleImage(vForm.getExportData().getBeneficiaryAgencyGraph(),580,410), "png", ba);
+            Image img = Image.getInstance(ba.toByteArray());
+            cel.add(img);
+            row.add(cel);
+            organizationGraph.setWidthpercentage(100);
+            organizationGraph.addElement(row);
+            doc.add(organizationGraph);
+            doc.add(new Paragraph(" "));
+        }
+    }
+    
 }

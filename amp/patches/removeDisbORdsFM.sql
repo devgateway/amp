@@ -1,2 +1,0 @@
-delete from amp_features_templates where feature = (select id from amp_features_visibility where convert(name,BINARY) like 'Disbursement orders' );
-delete from amp_features_visibility where convert(name,BINARY) like 'Disbursement orders' ;

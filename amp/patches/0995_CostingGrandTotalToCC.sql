@@ -1,1 +1,0 @@
-update amp_columns set cellType = 'org.dgfoundation.amp.ar.cell.ComputedAmountCell', extractorView = null, tokenExpression = 'grandTotalCost' where  columnName= 'Grand Total Cost';

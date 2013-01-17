@@ -1,1 +1,0 @@
-update amp_global_settings set possibleValues='v_g_settings_countries' where settingsName='Default Country';

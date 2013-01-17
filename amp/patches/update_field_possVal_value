@@ -1,1 +1,0 @@
-ALTER TABLE amp_templDoc_field_pos_val MODIFY value text CHARACTER SET utf8;

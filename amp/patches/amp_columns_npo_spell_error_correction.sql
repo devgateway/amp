@@ -1,1 +1,0 @@
- update amp_columns set extractorView="v_nationalobjectives" where columnName="National Planning Objectives";

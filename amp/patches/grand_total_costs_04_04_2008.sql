@@ -1,1 +1,0 @@
-update amp_columns set columnName="Grand Total Cost" where columnName="Total Costs";

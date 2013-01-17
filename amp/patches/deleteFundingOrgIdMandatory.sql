@@ -1,2 +1,0 @@
-delete from amp_fields_templates where field in (select id from amp_fields_visibility where name="Mandatory Indicator For Funding Org Id");
-delete from amp_fields_visibility where name="Mandatory Indicator For Funding Org Id";

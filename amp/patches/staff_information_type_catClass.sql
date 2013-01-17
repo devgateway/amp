@@ -1,1 +1,0 @@
-Insert into amp_category_class(category_name,keyName,is_multiselect,is_ordered) values ('Staff Information Type','staff_information_type',false,false);

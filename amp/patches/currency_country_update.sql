@@ -1,2 +1,0 @@
-update amp_currency c, dg_countries dc, amp_category_value_location loc set c.country_location_id=loc.id
- where c.country_id=dc.iso AND (c.country_location_id is null) AND lower(trim(dc.country_name))=lower(trim(loc.location_name));

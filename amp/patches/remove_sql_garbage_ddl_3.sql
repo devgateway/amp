@@ -1,1 +1,0 @@
-ALTER TABLE `amp_indicator_connection` DROP FOREIGN KEY `FK29AA02E94E5537E3`;

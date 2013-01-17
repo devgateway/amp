@@ -209,6 +209,43 @@ public class DataExchangeUtils {
 		}
 		return col;
 	}
+	
+	public static Collection<DEMappingFields> getDEMappingFieldsByAmpClass(String ampClass, int startIndex,String sort,String sortOrder) {
+		Session session = null;
+		Collection col = new ArrayList();
+		String qryStr = null;
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			qryStr = "select f from " + DEMappingFields.class.getName() + " f where f.ampClass=:ampClass order by f."+sort+" "+sortOrder;
+			qry = session.createQuery(qryStr);
+            qry.setParameter("ampClass", ampClass, Hibernate.STRING);
+            if(startIndex!=-1)
+             {
+            	qry.setFirstResult(startIndex);
+            	qry.setMaxResults(Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE);
+             }
+			
+			col = qry.list();
+
+		}
+		catch (Exception ex) {
+			logger.error("Exception getDEMappingFieldsByAmpClass: " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		finally {
+			if (session != null) {
+				try {
+					;//PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;
+	}
 
 	public static int getCountDEMappingFieldsByAmpClass(String ampClass) {
 		Session session = null;
@@ -1518,8 +1555,37 @@ public class DataExchangeUtils {
         }
         return result;
     }
+    
+    public static List<String> getAllActivitiesName(String str){
+    	Session session = null;
+        Query qry = null;
+        TreeMap<Long,String> result = new TreeMap<Long,String>();
+        List<String> result1 = new ArrayList<String>();
+        try {
+            session = PersistenceManager.getSession();
+            String queryString = "select f.name, f.ampActivityGroup from " + AmpActivity.class.getName()
+                + " f where lower(f.name) like lower('"+str+"%') order by f.name asc";
+            qry = session.createQuery(queryString);
+            Iterator iter = qry.list().iterator();
+            while (iter.hasNext()) {
+            	Object[] item = (Object[])iter.next();
+                AmpActivityGroup actGroup = (AmpActivityGroup) item[1];
+                if(actGroup!=null){
+                	result.put(actGroup.getAmpActivityGroupId(),(String)item[0]);
+                	//result1.add((String)item[0]+"!<>!"+actGroup.getAmpActivityGroupId());
+                	//result1.add("[\""+(String)item[0]+"\",\""+actGroup.getAmpActivityGroupId()+"\"]");
+                	result1.add((String)item[0]+"("+actGroup.getAmpActivityGroupId()+")");
+                }
+            }
 
-
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        	PersistenceManager.releaseSession(session);
+        }
+        return result1;
+    }
+    
 	public static TreeMap<Long, String> getNameIdAllEntities(String queryString) {
 	        Session session = null;
 	        Query qry = null;

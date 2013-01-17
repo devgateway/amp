@@ -44,6 +44,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
@@ -59,6 +60,8 @@ import org.digijava.module.message.util.AmpMessageUtil;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.digijava.module.sdm.util.DbUtil;
+
+import com.lowagie.text.pdf.hyphenation.TernaryTree.Iterator;
 
 public class AmpMessageActions extends DispatchAction {
 
@@ -120,6 +123,33 @@ public class AmpMessageActions extends DispatchAction {
 
 	    return null;
 	}
+    
+    public ActionForward searchActivitiesName (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+    	
+    	String srchStr = request.getParameter("srchStr");
+    	StringBuffer retVal = new StringBuffer();
+    	List<String> srcResArray = DataExchangeUtils.getAllActivitiesName(srchStr);
+    	String newValue = "Add New(-1)";
+    	if(newValue.toLowerCase().startsWith(srchStr.toLowerCase())){
+    		retVal.append(newValue);
+    		retVal.append("\n");
+    	}
+    	//retVal.append("[");
+    	for(int i=0; i<srcResArray.size();i++){
+    		/*if(i>0){
+    			retVal.append(",");
+    		}*/
+    		retVal.append(srcResArray.get(i));
+        	retVal.append("\n");
+        	
+    	}
+    	//retVal.append("]");
+    	response.setCharacterEncoding("UTF-8");
+        ServletOutputStream sos = response.getOutputStream();
+        sos.write(retVal.toString().getBytes("UTF-8"));
+        sos.close();
+    	return null;
+    }
 
     public ActionForward searchExternalContacts (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	AmpMessageForm messageForm=(AmpMessageForm)form;

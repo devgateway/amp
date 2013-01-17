@@ -37,6 +37,9 @@ public class MapFieldsForm extends ActionForm {
 	private int page = 0;
 	private int lastPage ;
 	
+	private String sort;
+	private String sortOrder;
+	
 	public Integer getCurrentPage() {
 		return currentPage;
 	}
@@ -130,6 +133,22 @@ public class MapFieldsForm extends ActionForm {
 	//	selectedAmpClass 	 = 	null;
 		selectedAmpValues 	 =  null;
 		selectedAmpIds 		 =	null;
+	}
+
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 	
 }

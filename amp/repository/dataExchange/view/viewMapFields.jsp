@@ -11,6 +11,105 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:instance property="mapFieldsForm" id="mff"/>
+<!-- Individual YUI CSS files -->
+<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/assets/skins/sam/autocomplete.css">
+<!-- Individual YUI JS files --> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/animation/animation-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/datasource/datasource-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/autocomplete/autocomplete-min.js"></script>
+<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/searchManager.js'/>" ></script>
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+<style>
+<!--
+.ui-autocomplete {
+	font-size:12px;
+	border: 1px solid silver;
+	max-height: 150px;
+	overflow-y: scroll;
+	background: white;
+}
+
+-->
+</style>
+<!-- for browse button -->
+<style type="text/css">
+<!--
+div.charcounter-progress-container {
+	width:100%; 
+	height:3px;
+	max-height:3px;
+	border: 1px solid gray; 
+	filter:alpha(opacity=20); 
+	opacity:0.2;
+}
+
+div.charcounter-progress-bar {
+	height:3px; 
+	max-height:3px;
+	font-size:3px;
+	background-color:#5E8AD1;
+}
+
+
+-->
+</style>
+
+<style type="text/css">
+<!--
+div.fileinputs {
+	position: relative;
+	height: 30px;
+	width: 300px;
+}
+
+input.file {
+	width: 300px;
+	margin: 0;
+}
+
+input.file.hidden {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+}
+
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+
+div.fakefile input {
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 217px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
+-->
+</style>
+
 <script type="text/javascript">
 function saveRecord(id) {
 	var loadingImgDiv = document.getElementById("loadingImg");
@@ -92,13 +191,106 @@ function page (page, ampSelectedClass){
 	form.submit();	
 }
 
+function sortMe(val) {
+	
+	var form = document.getElementById('logForm');
+	<digi:context name="sel" property="/dataExchange/mapFields.do" />
+		 url = "<%= sel %>" ;
+		var sval = document.mapFieldsForm.sort.value;
+		var soval = document.mapFieldsForm.sortOrder.value;
+
+		if ( val == sval ) {
+			if (soval == "asc")
+				document.mapFieldsForm.sortOrder.value = "desc";
+			else if (soval == "desc")
+				document.mapFieldsForm.sortOrder.value = "asc";
+		}
+		else
+			document.mapFieldsForm.sortOrder.value = "asc";
+
+		form.sort.value = val;
+		form.action = url;
+		//form.target="_self";
+		form.submit(); 
+		
+}
+
+document.getElementsByTagName('body')[0].className='yui-skin-sam';
+
 </script>
 
+<style  type="text/css">
+<!--
+
+.contentbox_border{
+        border: 1px solid black;
+	border-width: 1px 1px 1px 1px; 
+	background-color: #ffffff;
+}
+
+#statesAutoComplete ul,
+{
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+#contactsAutocomplete ul {
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+#statesAutoComplete div{
+	padding: 0px;
+	margin: 0px; 
+}
+
+#contactsAutocomplete div {
+	padding: 0px;
+	margin: 0px; 
+}
+
+#statesAutoComplete,
+#contactsAutocomplete {
+    width:15em; /* set width here */
+    padding-bottom:2em;
+}
+#statesAutoComplete,contactsAutocomplete {
+    z-index:3; /* z-index needed on top instance for ie & sf absolute inside relative issue */
+    font-size: 12px;
+}
+
+#statesInput,
+#contactInput {
+    font-size: 12px;
+}
+.charcounter {
+    display: block;
+    font-size: 11px;
+}
+
+#statesAutoComplete {
+    width:320px; /* set width here or else widget will expand to fit its container */
+    padding-bottom:2em;
+}
+#myImage {
+    position:absolute; left:320px; margin-left:1em; /* place the button next to the input */
+}
+
+span.extContactDropdownEmail {
+	color:grey;
+}
+
+-->
+</style>
 
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
 <!-- MAIN CONTENT PART START -->
 <digi:form action="/mapFields.do" styleId="logForm">
+<html:hidden property="sort" />
+<html:hidden property="sortOrder" />
 
 		<table width="1000px" border="0" cellspacing="0" cellpadding="0" align="center">
 			<!-- BREADCRUMP START -->
@@ -144,10 +336,45 @@ function page (page, ampSelectedClass){
 						</tr>
 						<tr>
 						    <td width="20" background="images/ins_bg.gif" class="inside"><b class="ins_title"><input id="checkAll" type="checkbox" onclick="checksAll()" /></b></td>
-						    <td width="400" background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Iati Items</digi:trn></b></td>
-						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>IATI values</digi:trn></b></td>
-						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Current value</digi:trn></b></td>
-						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Status</digi:trn></b></td>
+						    <td width="400" background="images/ins_bg.gif" class="inside"><b class="ins_title">
+						    					<a  style="color:black" href="javascript:sortMe('iati items')" title="Click here to sort by Activity Details">
+														<b><digi:trn>Iati Items</digi:trn></b>
+													<c:if test="${empty mapFieldsForm.sort || mapFieldsForm.sort=='iati items' && mapFieldsForm.sortOrder=='asc'}">
+														<img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+													</c:if>
+													<c:if test="${empty mapFieldsForm.sort || mapFieldsForm.sort=='iati items' && mapFieldsForm.sortOrder=='desc'}">
+														<img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+													</c:if>
+												</a></b></td>
+						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title">
+						    	<a  style="color:black" href="javascript:sortMe('iati values')" title="Click here to sort by Activity Details">
+														<b><digi:trn>IATI values</digi:trn></b>
+													<c:if test="${empty mapFieldsForm.sort || mapFieldsForm.sort=='iati values' && mapFieldsForm.sortOrder=='asc'}">
+														<img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+													</c:if>
+													<c:if test="${empty mapFieldsForm.sort || mapFieldsForm.sort=='iati values' && mapFieldsForm.sortOrder=='desc'}">
+														<img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+													</c:if>
+												</a></b></td>
+						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title"><a  style="color:black" href="javascript:sortMe('current value')" title="Click here to sort by Activity Details">
+														<b><digi:trn>Current value</digi:trn></b>
+													<c:if test="${empty mapFieldsForm.sort || mapFieldsForm.sort=='current value' && mapFieldsForm.sortOrder=='asc'}">
+														<img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+													</c:if>
+													<c:if test="${empty mapFieldsForm.sort || mapFieldsForm.sort=='current value' && mapFieldsForm.sortOrder=='desc'}">
+														<img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+													</c:if>
+												</a></b></td>
+						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title">
+						    <a  style="color:black" href="javascript:sortMe('status')" title="Click here to sort by Activity Details">
+														<b><digi:trn>Status</digi:trn></b>
+													<c:if test="${empty mapFieldsForm.sort || mapFieldsForm.sort=='status' && mapFieldsForm.sortOrder=='asc'}">
+														<img id="activityColumnImg" src="/repository/aim/images/up.gif" />
+													</c:if>
+													<c:if test="${empty mapFieldsForm.sort || mapFieldsForm.sort=='status' && mapFieldsForm.sortOrder=='desc'}">
+														<img id="activityColumnImg" src="/repository/aim/images/down.gif" />
+													</c:if>
+												</a></b></td>
 						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Values from AMP</digi:trn></b></td>
 						    <td width="50" background="images/ins_bg.gif" class="inside" align="center"><b class="ins_title"><digi:trn>Actions</digi:trn></b></td>
 						</tr>
@@ -185,15 +412,56 @@ function page (page, ampSelectedClass){
 								    	</c:if>
 								    	</div>
 								    </td>
-								    <td bgcolor="#FFFFFF" class="inside ampvalues">
-								  		<html:select  name="mapFieldsForm"  property="allSelectedAmpValues" styleClass="dropdwn_sm" styleId="ampValues[${field.ampField.id}]">
+								    <td bgcolor="#FFFFFF" class="inside ampvalues" style="width:40%;">
+								    	<%-- <html:select  name="mapFieldsForm"  property="allSelectedAmpValues" styleClass="dropdwn_sm" styleId="ampValues[${field.ampField.id}]">
 								  			<html:option value="-1" ><digi:trn>Add new</digi:trn></html:option>
         									<logic:iterate id="cls" name="field" property="sortedLabels" >
 												<html:option value="${cls.key}">
 												${cls.value}
 												</html:option>
 											</logic:iterate>
-        								</html:select>
+        								</html:select> --%>
+								    	<div>
+								        <div style="width:100%;" class="">
+								            <html:text name="mapFieldsForm"  property="allSelectedAmpValues" style="width:100%;"  styleId="statesinput[${field.ampField.id}]"></html:text>
+								            <div id="statesautocomplete[${field.ampField.id}]"></div>
+								        </div>
+								      </div>
+								      <script type="text/javascript">
+										var relatedActDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", ";"]);
+										relatedActDataSource.scriptQueryAppend = "actionType=searchActivitiesName";
+										relatedActDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+										relatedActDataSource.queryMatchContains = true;
+										relatedActDataSource.scriptQueryParam  = "srchStr";
+										var relatedActAutoComp = new YAHOO.widget.AutoComplete("statesinput[${field.ampField.id}]","statesautocomplete[${field.ampField.id}]", relatedActDataSource);
+										relatedActAutoComp.forceSelection = true;
+										relatedActAutoComp.queryDelay = 0.5;
+										$("#statesinput").css("position", "static");
+
+										//define your itemSelect handler function:
+										var itemSelectHandler = function(sType, aArgs) {
+											YAHOO.log(sType); // this is a string representing the event;
+														      // e.g., "itemSelectEvent"
+											var oMyAcInstance = aArgs[0]; // your AutoComplete instance
+											var elListItem = aArgs[1]; // the <li> element selected in the suggestion
+											   					       // container
+											var oData = String(aArgs[2]); // object literal of data for the result
+											var ampId = oData.substring (oData.indexOf('(') + 1, oData.indexOf(')'));
+											var value = oData.substring (0, oData.indexOf('('));
+											var loadingImgDiv = document.getElementById("loadingImg");
+											loadingImgDiv.style.display="block";
+												 var el = document.getElementById("ampValues["+${field.ampField.id}+"]");
+												 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
+												 url = "<%= saveRecord %>?actionType=saveRecord&id="+${field.ampField.id}+"&ampId="+ampId+"&mappedValue="+value;
+												 mapFieldsForm.action =url;
+												 mapFieldsForm.submit();
+												 return true;
+										};
+
+										//subscribe your handler to the event, assuming
+										//you have an AutoComplete instance myAC:
+										relatedActAutoComp.itemSelectEvent.subscribe(itemSelectHandler);
+									 </script>
 								  	</td>
 								    <td bgcolor="#FFFFFF" class="inside" align="center">
 								    		<input type="button" value="<digi:trn>Save</digi:trn>" class="buttonx_sm" onclick="saveRecord(${field.ampField.id})" />

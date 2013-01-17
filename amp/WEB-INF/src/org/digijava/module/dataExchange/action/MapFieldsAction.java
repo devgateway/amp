@@ -5,12 +5,17 @@ package org.digijava.module.dataExchange.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -18,11 +23,14 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -36,6 +44,7 @@ import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.utils.Constants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
+import org.digijava.module.message.form.AmpMessageForm;
 
 /**
  * @author Dan Mihaila
@@ -96,8 +105,27 @@ public class MapFieldsAction extends MultiAction {
 		if (mForm.getPage() != 0 ) {
 			startIndex = Constants.MAPPING_RECORDS_AMOUNT_PER_PAGE *( mForm.getPage()-1);
 		}
+		String sortDB=null;
+		String sort = (mForm.getSort() == null) ? null : mForm.getSort().trim();
+	    String sortOrder = (mForm.getSortOrder() == null) ? null : mForm.getSortOrder().trim();
+	    if(sort == null || "".equals(sort) || sortOrder == null || "".equals(sortOrder)) {
+            mForm.setSort("iati items");
+            mForm.setSortOrder("asc");
+            sortDB = "iatiItems";
+            sortOrder = "asc";
+        } else {
+            if("iati items".equals(sort)) {
+            	sortDB = "iatiItems";
+            } else if("iati values".equals(sort)) {
+            	sortDB = "iatiValues";
+            } else if("current value".equals(sort)) {
+            	sortDB = "ampValues";
+            } else if("status".equals(sort)) {
+            	sortDB = "status";
+            }
+        }
 		
-		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getDEMappingFieldsByAmpClass(ampClassTypeSelected,startIndex);
+		Collection<DEMappingFields> allAmpDEMappingFields = DataExchangeUtils.getDEMappingFieldsByAmpClass(ampClassTypeSelected,startIndex,sortDB,sortOrder);
 		ArrayList<DEMappingFieldsDisplay> fieldDisplayList = new ArrayList<DEMappingFieldsDisplay>();
 		
 		DataExchangeUtils.getAmpClassesFromDb(ampClasses);
@@ -106,6 +134,8 @@ public class MapFieldsAction extends MultiAction {
 		mForm.setMappedFields(fieldDisplayList);
 		mForm.setAmpClasses(ampClasses);
 		
+		
+        mForm.setAllSelectedAmpValues(null);
 		if(mForm.getPage() == 0){
 			mForm.setCurrentPage(1);
 		}else{
@@ -120,7 +150,7 @@ public class MapFieldsAction extends MultiAction {
 		
 		return mapping.findForward("forward");
 	}
-
+	
 	private void saveMappedField(HttpServletRequest request, String fieldId, String ampId, String mappedValue) {
 		DEMappingFields ampDEMappingField = DataExchangeUtils.getAmpDEMappingField(new Long(fieldId));
 		Long id = new Long(ampId);

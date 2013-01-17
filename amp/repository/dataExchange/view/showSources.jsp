@@ -21,6 +21,17 @@ function viewLog(sourceId) {
 	form.submit();	
 }
 
+function deleteSource1(sourceId){
+	var msg = '<digi:trn>Delete this source?</digi:trn>';
+	var result = confirm(msg);
+	if (result==true) {
+	//Logic to delete the item
+		var form = document.getElementById('manageForm');
+		form.action = "/dataExchange/manageSource.do?action=delete&selectedSourceId="+sourceId;
+		form.target="_self"
+		form.submit();
+	}
+}
 
 function deleteSource(sourceId) {
 	var form = document.getElementById('manageForm');
@@ -265,7 +276,7 @@ function page (page){
 				    	 <img src="/TEMPLATE/ampTemplate/img_2/ico_edit_perm.gif"  onclick="editSource(${source.id});" style="cursor:pointer;"/> &nbsp;
 				    	 <img src="/TEMPLATE/ampTemplate/img_2/execute_icon.gif" onClick="execute(${source.id});" style="cursor:pointer;" title="<digi:trn>Execute</digi:trn>"/>
 				    	 <img src="/TEMPLATE/ampTemplate/img_2/view_log_icon.gif" onClick="viewLog(${source.id});" style="cursor:pointer;" title="<digi:trn>View Log</digi:trn>"/>
-				    	 <img src="/TEMPLATE/ampTemplate/img_2/ico_del_perm.gif" onClick="deleteSource(${source.id});" style="cursor:pointer;" title="<digi:trn>Delete</digi:trn>"/>
+				    	 <img src="/TEMPLATE/ampTemplate/img_2/ico_del_perm.gif" onClick="deleteSource1(${source.id});" style="cursor:pointer;" title="<digi:trn>Delete</digi:trn>"/>
 				    	
 				    </td>
 				</tr>		

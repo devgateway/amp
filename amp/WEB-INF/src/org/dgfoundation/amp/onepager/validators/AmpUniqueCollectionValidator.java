@@ -29,7 +29,8 @@ public class AmpUniqueCollectionValidator  extends AmpSemanticValidator<String>{
 		if(value.length()>0)
 		{
 			ValidationError error = new ValidationError();
-			error.addMessageKey("AmpUniqueCollectionValidator");
+			error.addKey("AmpUniqueCollectionValidator");
+            error.setVariable("label", value);
 			validatable.error(error);
 		}
 	}

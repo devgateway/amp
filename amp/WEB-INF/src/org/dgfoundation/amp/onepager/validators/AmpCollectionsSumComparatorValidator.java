@@ -23,7 +23,7 @@ public class AmpCollectionsSumComparatorValidator extends AmpSemanticValidator<D
 		if(value.longValue()<0)
 		{
 			ValidationError error = new ValidationError();
-			error.addMessageKey(messageKey);
+			error.addKey(messageKey);
 			validatable.error(error);
 		}
 		

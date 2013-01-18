@@ -96,7 +96,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		
 		
 		final AmpCollectionsSumComparatorValidatorField amountSumComparator1=
-				new AmpCollectionsSumComparatorValidatorField("amountSumComparator1",setAmountListModel,"checkExpenditureSum", "AmpExpemdituresCollectionsSumComparatorValidator"); 
+				new AmpCollectionsSumComparatorValidatorField("amountSumComparator1",setAmountListModel,"checkExpenditureSum", "AmpExpendituresCollectionsSumComparatorValidator");
 		amountSumComparator1.setIndicatorAppender(iValidator);
 		amountSumComparator1.setSecondCollectionModel(expenditureModel);
 		amountSumComparator1.setAlertIfCurrentModelAmountSumBig(false);

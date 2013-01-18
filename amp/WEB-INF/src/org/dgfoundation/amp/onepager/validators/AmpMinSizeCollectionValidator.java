@@ -29,7 +29,7 @@ public class AmpMinSizeCollectionValidator extends AmpSemanticValidator<Integer>
 		if (value.compareTo(minimum) < 0)
 		{
 			ValidationError error = new ValidationError();
-			error.addMessageKey("AmpMinSizeCollectionValidator");
+			error.addKey("AmpMinSizeCollectionValidator");
 			error.setVariable("minimum", minimum);		
 			validatable.error(error);
 		}

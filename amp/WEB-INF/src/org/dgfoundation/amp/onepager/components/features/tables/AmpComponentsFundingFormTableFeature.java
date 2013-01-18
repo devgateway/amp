@@ -127,7 +127,7 @@ public class AmpComponentsFundingFormTableFeature extends
 		 } else if(transactionType == Constants.EXPENDITURE)
 		 {
 			 model = expenditureModel;
-			 errorMassage = "AmpExpemdituresCollectionsSumComparatorValidator";
+			 errorMassage = "AmpExpendituresCollectionsSumComparatorValidator";
 			 secondModel = disbursementsListModel;
 			 fieldFMName= "checkExpenditureSum";
 			 alertIfcurrentSumIsBigger=true;
@@ -145,7 +145,7 @@ public class AmpComponentsFundingFormTableFeature extends
 		 if(transactionType == Constants.DISBURSEMENT)
 		 {
 			 model = disbursementsListModel;
-			 errorMassage = "AmpExpemdituresCollectionsSumComparatorValidator";
+			 errorMassage = "AmpExpendituresCollectionsSumComparatorValidator";
 			 secondModel = expenditureModel;
 			 alertIfcurrentSumIsBigger=false;
 			 fieldFMName= "checkExpenditureSum";

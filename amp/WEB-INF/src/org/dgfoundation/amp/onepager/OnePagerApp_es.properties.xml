@@ -13,5 +13,5 @@
 	<entry key="AmpUniqueComponentTitleValidator">Un componente con este titulo ya existe.</entry>
 	<entry key="CoordinatesValidator">Las coordenadas ingresadas no están en el formato correcto.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Los desembolsos son más grandes que la suma de los compromisos</entry>
-	<entry key="AmpExpemdituresCollectionsSumComparatorValidator">Los gastos son mayores que la suma de los desembolsos</entry>
+	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Los gastos son mayores que la suma de los desembolsos</entry>
 </properties>

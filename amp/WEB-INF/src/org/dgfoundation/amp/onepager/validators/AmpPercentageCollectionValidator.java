@@ -29,7 +29,8 @@ public class AmpPercentageCollectionValidator extends AmpSemanticValidator<Doubl
 		if(value.doubleValue()!=100)
 		{
 			ValidationError error = new ValidationError();
-			error.addMessageKey("AmpPercentageCollectionValidator");
+			error.addKey("AmpPercentageCollectionValidator");
+            error.setVariable("label", value);
 			validatable.error(error);
 		}
 

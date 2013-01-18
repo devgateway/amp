@@ -13,5 +13,5 @@
 	<entry key="AmpUniqueComponentTitleValidator">Il existe déjà un composant avec le même titre.</entry>
 	<entry key="CoordinatesValidator">Les coordonnées n’ont pas été saisies dans un format correct.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Les décaissements sont supérieurs à la somme des engagements</entry>
-	<entry key="AmpExpemdituresCollectionsSumComparatorValidator">Les dépenses sont supérieures à la somme des décaissements</entry>
+	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Les dépenses sont supérieures à la somme des décaissements</entry>
 </properties>

@@ -64,7 +64,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 		add(wmc);
 		
 		final AmpCollectionsSumComparatorValidatorField amountSumComparator=
-				new AmpCollectionsSumComparatorValidatorField("amountSumComparator",setAmountListModel,"checkCommitmentSum", "AmpExpemdituresCollectionsSumComparatorValidator"); 
+				new AmpCollectionsSumComparatorValidatorField("amountSumComparator",setAmountListModel,"checkCommitmentSum", "AmpExpendituresCollectionsSumComparatorValidator");
 		wmc.add(amountSumComparator.getIndicatorAppender());;
 		amountSumComparator.setSecondCollectionModel(disbursementModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(true);

@@ -94,8 +94,11 @@ public class ShowImage
             else {
                 ImageInfo imageInfo = DbUtil.getSdmImage(paramDocId.
                     longValue(), paramParagId.longValue());
-                picture = imageInfo.getImageData();
-                contentType = imageInfo.getContentType();
+                if (imageInfo != null)
+                {
+                	picture = imageInfo.getImageData();
+                	contentType = imageInfo.getContentType();
+                }
             }
             if (picture != null) {
                 ResponseUtil.writeFile(response, contentType, null, picture);

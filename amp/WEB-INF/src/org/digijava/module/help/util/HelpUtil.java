@@ -819,7 +819,9 @@ System.out.println("lang:"+lang);
 				retVal +="<tr height=\"5px\"><td>&nbsp;</td></tr>";
 				if(topic.getBodyEditKey()!=null){					
 					Editor editor = DbUtil.getEditor(topic.getBodyEditKey(), lang);
-					retVal +="<tr><td style=\"text-align:left;\">"+editor.getBody()+"</td></tr>";
+					
+					String editorBody = editor == null ? "(" + TranslatorWorker.translateText("missing topic", request) + ")" : editor.getBody();						
+					retVal +="<tr><td style=\"text-align:left;\">" + editorBody + "</td></tr>";
 				}
 				
 				retVal += "</table>";

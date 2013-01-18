@@ -300,6 +300,10 @@ public class CurrencyUtil {
 		}
 	}
 
+    public static Collection getAllCurrencies(int active){
+        return getAllCurrencies(active, "");
+    }
+
 	public static Collection getAllCurrencies(int active,String sortOrder) {
 		Collection col = new ArrayList();
 		Session session = null;

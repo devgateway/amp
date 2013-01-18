@@ -74,7 +74,7 @@ public class AmpMTEFProjectionSubsectionFeature extends
 				calendar.set(Calendar.YEAR, currentYear + 1);
 				projection.setProjectionDate(calendar.getTime());
 				projection.setReportingDate(new Date(System.currentTimeMillis()));
-				projection.setAmpCurrency(CurrencyUtil.getCurrencyByCode(FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.BASE_CURRENCY )));
+				projection.setAmpCurrency(CurrencyUtil.getWicketWorkspaceCurrency());
 				mtefTableFeature.getEditorList().addItem(projection);
 				target.add(mtefTableFeature);
 				AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);

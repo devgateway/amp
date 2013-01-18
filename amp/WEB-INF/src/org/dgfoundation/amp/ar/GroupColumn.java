@@ -39,8 +39,10 @@ public class GroupColumn extends Column {
 
 	/**
 	 * Returns the max of the underlying visible rows of the subcolumns
+	 * Constantin: function probably incorrect, but impossible to debug because it seems it is not used from anywhere
+	 * Constantin: case where this function probably fails: column 1: 1/0, column 2: 0/1, return of this function will be probably 1, although the correct result is definitely 2
 	 */
-    	@Override
+ 	@Override
 	public int getVisibleRows() {
     	//BOZO: is it sure that we don't have to return getOwnerIds().size() here (if reportMetaData.getHideActivities is not true)
     	Iterator i=items.iterator();

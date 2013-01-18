@@ -990,7 +990,10 @@ public class GisUtil {
                     java.awt.Font f = new java.awt.Font("Helvetica", java.awt.Font.BOLD, 12);
                     g2d.setFont(f);
 
-                    String capt = String.valueOf(item.getLessThen());
+                    String capt = new StringBuilder(String.valueOf((int)item.getStart())).
+                            append("-").append(String.valueOf((int)item.getLessThen())).
+                            append("%").
+                            toString();
                     GlyphVector minVector = g2d.getFont().createGlyphVector(g2d.
                             getFontRenderContext(), capt);
                     int captionWidth = (int)minVector.getVisualBounds().getWidth();

@@ -35,6 +35,5 @@ public class AutocompleteAcronymTitleModel extends Model<String>{
 		}
 		ret = ret + titleModel.getObject();
 		return ret;
-	};
-
+	}
 }

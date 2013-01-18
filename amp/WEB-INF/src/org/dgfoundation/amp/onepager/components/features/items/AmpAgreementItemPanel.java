@@ -27,15 +27,29 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 			String fmName) {
 		super(id, model, fmName);
 		
-		final Model<AmpAgreement> newAgModel = new Model<AmpAgreement>(new AmpAgreement());
+		final Model<AmpAgreement> editAgModel = new Model<AmpAgreement>(new AmpAgreement());
 		
-		PropertyModel<AmpAgreement> agreement = new PropertyModel<AmpAgreement>(model, "agreement");
+		final PropertyModel<AmpAgreement> agreement = new PropertyModel<AmpAgreement>(model, "agreement");
 		final Label agreementTextLabel = new Label("agreementText", 
 				new AutocompleteAcronymTitleModel(new PropertyModel<String>(agreement, "code"),
 												  new PropertyModel<String>(agreement, "title"), 
 												  TranslatorUtil.getTranslation("No agreement was selected!")));
 		agreementTextLabel.setOutputMarkupId(true);
 		add(agreementTextLabel);
+
+        final Form<AmpAgreement> newAgreementForm = new Form<AmpAgreement>("newAgreement", editAgModel);
+        newAgreementForm.setVisibilityAllowed(false);
+
+        AmpEditLinkField editAgreement = new AmpEditLinkField("editAgreement", "Edit Agreement") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                //prepare the editing
+                editAgModel.setObject(agreement.getObject());
+                newAgreementForm.setVisibilityAllowed(true);
+                target.add(this.getParent());
+            }
+        };
+        add(editAgreement);
 
         AmpDeleteLinkField deleteAgreement = new AmpDeleteLinkField("deleteAgreement", "Delete Agreement") {
             @Override
@@ -46,8 +60,6 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
         };
         add(deleteAgreement);
 
-		final Form<AmpAgreement> newAgreementForm = new Form<AmpAgreement>("newAgreement", newAgModel);
-		newAgreementForm.setVisibilityAllowed(false);
 		final AmpAutocompleteFieldPanel<AmpAgreement> search = new AmpAutocompleteFieldPanel<AmpAgreement>(
 				"search", "Search Agreements", AmpAgreementSearchModel.class) {
 			private static final long serialVersionUID = 1L;
@@ -87,17 +99,17 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 		search.setOutputMarkupId(true);
 		add(search);
 		
-		AmpTextFieldPanel<String> agCode = new AmpTextFieldPanel<String>("newAgCode", new PropertyModel<String>(newAgModel, "code"), "Code");
+		AmpTextFieldPanel<String> agCode = new AmpTextFieldPanel<String>("newAgCode", new PropertyModel<String>(editAgModel, "code"), "Code");
 		agCode.getTextContainer().setRequired(true);
 		newAgreementForm.add(agCode);
-		AmpTextFieldPanel<String> agTitle = new AmpTextFieldPanel<String>("newAgTitle", new PropertyModel<String>(newAgModel, "title"), "Title");
+		AmpTextFieldPanel<String> agTitle = new AmpTextFieldPanel<String>("newAgTitle", new PropertyModel<String>(editAgModel, "title"), "Title");
 		agTitle.getTextContainer().setRequired(true);
 		newAgreementForm.add(agTitle);
 		
-		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgEfDate", new PropertyModel<Date>(newAgModel, "effectiveDate"), "Effective Date"));
-		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgSgDate", new PropertyModel<Date>(newAgModel, "signatureDate"), "Signature Date"));
-		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgClDate", new PropertyModel<Date>(newAgModel, "closeDate"), "Close Date"));
-		AmpButtonField submit = new AmpButtonField("submit", "Add Agreement", true, true) {
+		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgEfDate", new PropertyModel<Date>(editAgModel, "effectiveDate"), "Effective Date"));
+		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgSgDate", new PropertyModel<Date>(editAgModel, "signatureDate"), "Signature Date"));
+		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgClDate", new PropertyModel<Date>(editAgModel, "closeDate"), "Close Date"));
+		AmpButtonField submit = new AmpButtonField("submit", "Save", true, true) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -110,10 +122,10 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 					agItems = new HashSet<AmpAgreement>();
 					wSession.setMetaData(OnePagerConst.AGREEMENT_ITEMS, agItems);
 				}
-				agItems.add(ag);
+                agItems.add(ag);
 				model.getObject().setAgreement(ag);
 				target.add(agreementTextLabel);
-				newAgModel.setObject(new AmpAgreement());
+				editAgModel.setObject(new AmpAgreement());
 				newAgreementForm.setVisibilityAllowed(false);
 				target.add(newAgreementForm.getParent());
 				target.add(search);

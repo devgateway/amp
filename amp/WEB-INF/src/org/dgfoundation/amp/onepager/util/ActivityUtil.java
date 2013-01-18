@@ -459,7 +459,6 @@ public class ActivityUtil {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		HashSet<AmpAgreement> agreements = s.getMetaData(OnePagerConst.AGREEMENT_ITEMS);
 		
-		
 		if (agreements == null)
 			return;
 		Iterator<AmpAgreement> it = agreements.iterator();

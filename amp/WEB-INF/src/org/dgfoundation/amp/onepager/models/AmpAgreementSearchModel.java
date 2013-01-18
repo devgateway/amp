@@ -63,9 +63,21 @@ public class AmpAgreementSearchModel extends
 				agItems = new HashSet<AmpAgreement>();
 				wSession.setMetaData(OnePagerConst.AGREEMENT_ITEMS, agItems);
 			}
-			
-			if (!isExactMatch()){
-				list.addAll(agItems);
+
+            //Remove from list the agreements that have been edited and are now in the NEW_AGREEMENT metadata set
+            Iterator<AmpAgreement> listIt = list.iterator();
+            while (listIt.hasNext()) {
+                AmpAgreement tmpAg = listIt.next();
+                for (AmpAgreement tmpAg2 : agItems) {
+                    if (tmpAg.getId().equals(tmpAg2.getId())) {
+                        listIt.remove();
+                        break;
+                    }
+                }
+            }
+
+            if (!isExactMatch()){
+                list.addAll(agItems);
 				list.add(NEW_AGREEMENT);
 			}
 			else{

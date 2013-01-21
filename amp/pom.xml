@@ -520,11 +520,6 @@
 			<version>0.9.8.343</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>javax.mail-api</artifactId>
-			<version>1.4.4</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-asm</artifactId>
 			<version>3.0.5.RELEASE</version>
@@ -858,6 +853,11 @@
 			<artifactId>mailapi</artifactId>
 			<version>1.4.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>smtp</artifactId>
+			<version>1.4.5</version>
+		</dependency>		
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>

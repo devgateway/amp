@@ -32,6 +32,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -62,6 +63,7 @@ public class ExportToExcel extends Action {
     private final static short TITLE_WIDTH=8960;
 
     String orgInfoTrn = "";
+    String orgGrpInfoTrn = "";
 	String contactInfoTrn = "";
 	String addNotesTrn = "";
 	String nameTrn = "";
@@ -70,7 +72,9 @@ public class ExportToExcel extends Action {
 	String phonesTrn = "";
 	String faxesTrn = "";
 	String backOrgTrn = "";
+	String backOrgGrpTrn = "";
 	String descriptionTrn = "";
+	String keyAreasTrn = "";
 	String pageTrn = "";
 	String filtersTrn = "";
 	String filtersAllTrn = "";
@@ -175,6 +179,7 @@ public class ExportToExcel extends Action {
     
     	try {
     		orgInfoTrn = TranslatorWorker.translateText("Organization Information", langCode, siteId);
+        	orgGrpInfoTrn = TranslatorWorker.translateText("Organization Group Information", langCode, siteId);
         	contactInfoTrn = TranslatorWorker.translateText("Contact Information", langCode, siteId);
         	addNotesTrn = TranslatorWorker.translateText("Additional Notes", langCode, siteId);
         	nameTrn = TranslatorWorker.translateText("Name", langCode, siteId);
@@ -183,7 +188,9 @@ public class ExportToExcel extends Action {
         	phonesTrn = TranslatorWorker.translateText("Phones", langCode, siteId);
         	faxesTrn = TranslatorWorker.translateText("Faxes", langCode, siteId);
         	backOrgTrn = TranslatorWorker.translateText("Background of organization", langCode, siteId);
+        	backOrgGrpTrn = TranslatorWorker.translateText("Background of organization group", langCode, siteId);
         	descriptionTrn = TranslatorWorker.translateText("Description", langCode, siteId);
+        	keyAreasTrn = TranslatorWorker.translateText("Key Areas of Focus", langCode, siteId);
 			filtersTrn = TranslatorWorker.translateText("Filters", langCode, siteId);
 			filtersAllTrn = TranslatorWorker.translateText("All", langCode, siteId);
 			filtersAmountsInTrn = ""; 
@@ -390,7 +397,7 @@ public class ExportToExcel extends Action {
 	        
 	      //Org. Information
             if (vForm.getFilter().getDashboardType()==org.digijava.module.visualization.util.Constants.DashboardType.DONOR) {
-            	if (vForm.getFilter().getSelOrgIds().length==1){
+            	if (vForm.getFilter().getSelOrgIds().length==1 && vForm.getFilter().getSelOrgIds()[0] != -1){
             		long orgId = vForm.getFilter().getSelOrgIds()[0];
                 	row = sheet.createRow(rowNum++);
                 	cell = row.createCell(0);
@@ -493,9 +500,69 @@ public class ExportToExcel extends Action {
                         cell = row.createCell(1);
                         headerText = new HSSFRichTextString(organization.getOrgDescription());
                         cell.setCellValue(headerText);
+                        cell.setCellStyle(cellStyleLeft);
+                        row = sheet.createRow(rowNum++);
+                        cell = row.createCell(0);
+                        headerText = new HSSFRichTextString(keyAreasTrn);
+                        cell.setCellValue(headerText);
+                        cell.setCellStyle(cellStyleLeft);
+                        cell = row.createCell(1);
+                        headerText = new HSSFRichTextString(organization.getOrgKeyAreas());
+                        cell.setCellValue(headerText);
                         cell.setCellStyle(lastCellStyleLeft);
         			}
         			rowNum++;
+            	}
+            	else {
+                	if (vForm.getFilter().getSelOrgGroupIds().length==1 && vForm.getFilter().getSelOrgGroupIds()[0] != -1){
+                		long orgGrpId = vForm.getFilter().getSelOrgGroupIds()[0];
+                    	row = sheet.createRow(rowNum++);
+                    	cell = row.createCell(0);
+                        headerText = new HSSFRichTextString(orgGrpInfoTrn);
+                        cell.setCellValue(headerText);
+                        cell.setCellStyle(subHeaderCS);
+                        cellNum = 0;
+            			AmpOrgGroup orgGroup=DbUtil.getOrgGroup(orgGrpId);
+            			if(orgGroup!=null){
+            				HSSFRichTextString headerText2 = null;
+                        	row = sheet.createRow(rowNum++);
+                        	cell = row.createCell(0);
+                            headerText2 = new HSSFRichTextString(addNotesTrn);
+                            cell.setCellValue(headerText2);
+                            cell.setCellStyle(subHeaderCS);
+                            cell = row.createCell(1);
+                            cell.setCellStyle(subHeaderCS);
+                            
+                            row = sheet.createRow(rowNum++);
+                            cell = row.createCell(0);
+                            headerText = new HSSFRichTextString(backOrgGrpTrn);
+                            cell.setCellValue(headerText);
+                            cell.setCellStyle(cellStyleLeft);
+                            cell = row.createCell(1);
+                            headerText = new HSSFRichTextString(orgGroup.getOrgGrpBackground());
+                            cell.setCellValue(headerText);
+                            cell.setCellStyle(cellStyleLeft);
+                            row = sheet.createRow(rowNum++);
+                            cell = row.createCell(0);
+                            headerText = new HSSFRichTextString(descriptionTrn);
+                            cell.setCellValue(headerText);
+                            cell.setCellStyle(cellStyleLeft);
+                            cell = row.createCell(1);
+                            headerText = new HSSFRichTextString(orgGroup.getOrgGrpDescription());
+                            cell.setCellValue(headerText);
+                            cell.setCellStyle(cellStyleLeft);
+                            row = sheet.createRow(rowNum++);
+                            cell = row.createCell(0);
+                            headerText = new HSSFRichTextString(keyAreasTrn);
+                            cell.setCellValue(headerText);
+                            cell.setCellStyle(cellStyleLeft);
+                            cell = row.createCell(1);
+                            headerText = new HSSFRichTextString(orgGroup.getOrgGrpKeyAreas());
+                            cell.setCellValue(headerText);
+                            cell.setCellStyle(lastCellStyleLeft);
+            			}
+            			rowNum++;
+                	}
             	}
             }
             

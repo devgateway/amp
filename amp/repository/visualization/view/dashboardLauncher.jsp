@@ -502,7 +502,7 @@ function initializeGlobalVariables(){
 																<c:forEach items="${item.subordinateEntityList}"
 																	var="organization">
 																	<li><input type="checkbox"
-																		id="organization_check_${item.mainEntity.ampOrgId}"
+																		id="organization_check_${organization.ampOrgId}"
 																		class="organization_check_${item.mainEntity.ampOrgGrpId}"
 																		name="organization_check" title="<c:out value='${organization.name}'/>"
 																		value="${organization.ampOrgId}"

@@ -35,6 +35,8 @@
 <input type="hidden" id="trnMessageEmpty" value="<digi:trn jsFriendly='true'>No data to show</digi:trn>" />
 <input type="hidden" id="trnMessageLoadingPanel" value="<digi:trn jsFriendly='true'>Loading</digi:trn>" />
 <input type="hidden" id="trnMessageLoading" value="<digi:trn jsFriendly='true'>Loading data...</digi:trn>" />
+<input type="hidden" id="trnMessageYearError" value="<digi:trn jsFriendly='true'>Please select at least two different years</digi:trn>" />
+<input type="hidden" id="trnMessageError" value="<digi:trn jsFriendly='true'>Error</digi:trn>" />
 
 <!--  End Global variables for all flash files -->
 			<fieldset class="chartFieldset">

@@ -2038,8 +2038,8 @@ function changeChart(e, chartType, container, useGeneric){
 	var attributes = {};
 	attributes.id = container;
 	//Setting for cache in development mode
-	var cache = "?rnd=" + Math.floor(Math.random()*50000);
-//	var cache = "";
+//	var cache = "?rnd=" + Math.floor(Math.random()*50000);
+	var cache = "";
 
 	switch(chartType){
 		case "bar":

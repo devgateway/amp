@@ -717,6 +717,25 @@ var callbackChildrenCall = {
 			    		for(var i = 0; i < results.children.length; i++){
 			    			orgDropdown.options[orgDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
+			    		orgDropdown.value = currentOrg;
+			    		break;
+				    case "OrganizationGroup":
+			    		var orgGrpDropdown = document.getElementById("org_group_dropdown_id");
+			    		orgGrpDropdown.options.length = 0;
+			    		orgGrpDropdown.options[0] = new Option(trnAll, -1);
+			    		var currentOrgGrpInOptions = false;
+			    		for(var i = 0; i < results.children.length; i++){
+			    			orgGrpDropdown.options[orgGrpDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+			    			if(currentOrgGroup == results.children[i].ID)
+			    				currentOrgGrpInOptions = true;
+			    		}
+			    		if(currentOrgGroup == "-1" || currentOrgGrpInOptions)
+			    			orgGrpDropdown.value = currentOrgGroup;
+			    		else
+			    		{
+			    			orgGrpDropdown.value = "-1";
+			    			callbackApplyFilter();
+			    		}	
 			    		break;
 				    case "Sector":
 			    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
@@ -855,11 +874,40 @@ var callbackApplyFilterCall = {
 			  panelLoaded = true;
 			  refreshBoxes(o);
 			  refreshGraphs();
+			  refreshDropdowns();
 		  },
 		  failure: function(o) {
 			  loadingPanel.hide();
 		  }
 		};
+
+var currentOrgGroup = "-1";
+var currentOrg = "-1";
+
+var refreshDropdowns = function(){
+	// Reload the Organization Groups
+	// Reassign the selected organization group
+	// If there's an organization group selected, then load the children and select the appropriate ones.
+	// Find out: Where is the list of Organization Groups stored: DashboardFilter.orgGroups()
+	// Where is the list of Organizations stored: not stored anywhere, it's loaded dynamically in DataDispatcher.getJSONObject()
+	// Where is the currently selected organization group: visualizationForm.getFilter().setSelOrgGroupIds
+	// document.forms[1].org_group_dropdown_id.value
+	// where is the currently selected organization selected: visualizationForm.getFilter().setSelOrgIds
+	// document.forms[1].org_dropdown_id.value
+	console.log("Refreshing Dropdowns");
+	currentOrgGroup = document.getElementById("org_group_dropdown_id").value;
+	console.log("currentOrgGroup:" + currentOrgGroup);
+	currentOrg = document.getElementById("org_dropdown_id").value;
+	console.log("currentOrg:" + currentOrg);
+	var objectType = "OrganizationGroup";
+
+	var transactionOrgGroup = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getJSONObject&objectType=" + objectType, callbackChildrenCall, null);
+	
+	if (currentOrgGroup != null && currentOrgGroup != "-1"){
+		objectType = "Organization";
+		var transactionOrg = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getJSONObject&objectType=" + objectType + "&parentId=" + currentOrgGroup, callbackChildrenCall, null);
+	}
+};
 
 function hasFlash(){
 	var hasFlash = false;
@@ -1914,8 +1962,8 @@ function changeChart(e, chartType, container, useGeneric){
 	var attributes = {};
 	attributes.id = container;
 	//Setting for cache in development mode
-//	var cache = "?rnd=" + Math.floor(Math.random()*50000);
-	var cache = "";
+	var cache = "?rnd=" + Math.floor(Math.random()*50000);
+//	var cache = "";
 
 	switch(chartType){
 		case "bar":
@@ -2085,8 +2133,8 @@ function callbackGetGraphs(id,baseType) {
 	var typeSel1 = document.getElementById("agencyTypeSelector1");
 	var typeSel2 = document.getElementById("agencyTypeSelector2");
 	if (baseType==1||baseType=='undefined') {
-		typeSel1.style.display='block';
-		typeSel2.style.display='block';
+		typeSel1.style.display='inline';
+		typeSel2.style.display='inline';
 	} else {
 		typeSel1.style.display='none';
 		typeSel2.style.display='none';
@@ -2170,7 +2218,8 @@ var callbackGetGraphsCall = {
 			    alert("Invalid respose.");
 			}
 	  },
-	  failure: function(o) {//Fail silently
+	  failure: function(o) {
+		  	alert("faileD");
 		  }
 	};
 

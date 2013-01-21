@@ -1071,7 +1071,7 @@ function initializeGlobalVariables(){
 			<td><b><digi:trn>Type of Funding</digi:trn>:</b>
 		 	</td>
 			<td align="right">
-				<html:select property="filter.transactionTypeQuickFilter" styleId="transactionType_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+				<html:select property="filter.transactionTypeQuickFilter" styleId="transactionType_dropdown" styleClass="dropdwn_sm" style="width:145px;" onchange="callbackApplyFilter()">
 					<html:option value="0"><digi:trn>Commitments</digi:trn></html:option>
 					<html:option value="1"><digi:trn>Disbursements</digi:trn></html:option>
 					<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
@@ -1083,7 +1083,7 @@ function initializeGlobalVariables(){
 				<td><b><digi:trn>Type of Agency</digi:trn>:</b>
 			 	</td>
 				<td align="right">
-					<html:select property="filter.agencyTypeQuickFilter" styleId="agencyTypeQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+					<html:select property="filter.agencyTypeQuickFilter" styleId="agencyTypeQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;" onchange="callbackApplyFilter()">
 						<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
 						<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
 						<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>

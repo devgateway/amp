@@ -42,6 +42,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -3177,6 +3178,25 @@ public class DataDispatcher extends DispatchAction {
 			root.put("objectType", objectType);
 			root.put("children", children);
 			
+		}
+		else if(objectType != null && (objectType.equals("OrganizationGroup"))) {
+	        List<AmpOrgGroup> orgGrps=new ArrayList<AmpOrgGroup>();
+	        try {
+	        	orgGrps = DbUtil.getOrganisationGroupsByRole(visualizationForm.getFilter().getFromPublicView(),visualizationForm.getFilter());
+				JSONObject child = new JSONObject();
+				Iterator<AmpOrgGroup> it = orgGrps.iterator();
+				while(it.hasNext()){
+					AmpOrgGroup org = it.next();
+					child.put("ID", org.getAmpOrgGrpId());
+					child.put("name", org.getOrgGrpName());
+					children.add(child);
+				}
+				root.put("ID", parentId);
+				root.put("objectType", objectType);
+				root.put("children", children);
+	        } catch (Exception e) {
+	            logger.error("unable to load organization groups", e);
+	        }
 		}
 		response.setContentType("text/json-comment-filtered");
 		OutputStreamWriter outputStream = null;

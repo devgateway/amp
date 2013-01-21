@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -62,7 +63,39 @@ import org.hibernate.Transaction;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
-	
+
+	public static List<AmpOrgGroup> getOrganisationGroupsByRole(boolean publicView, DashboardFilter filter) {
+        Session session = null;
+        Query q = null;
+        
+        List<AmpOrgGroup> organizations = new ArrayList<AmpOrgGroup>();
+        StringBuilder queryString = new StringBuilder("select distinct org.orgGrpId from " + AmpOrgRole.class.getName() + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
+        if (publicView) {
+            queryString.append(" inner join orgRole.activity act  inner join act.team tm ");
+        }
+        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY)
+        	queryString.append(" where  role.roleCode='EA' ");
+        else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        	queryString.append(" where  role.roleCode='BA' ");
+        else
+			queryString.append(" where  role.roleCode='DN' ");
+
+        if (publicView) {
+            queryString.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+        }
+
+//        queryString.append("order by org.orgGrpId.orgGrpName asc");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+
+            organizations = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp organization group names from database ", ex);
+        }
+        Collections.sort(organizations);
+        return organizations;
+    }	
 	public static List<AmpOrganisation> getDonorOrganisationByGroupId(
 			Long orgGroupId, boolean publicView, DashboardFilter filter) {
         Session session = null;

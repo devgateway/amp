@@ -787,7 +787,9 @@ function initializeGlobalVariables(){
 	   <i><digi:trn>Organizations</digi:trn>: </i><label id="filterOrganizations"><digi:trn>All</digi:trn></label> | 
 	   <i><digi:trn>Configuration</digi:trn>: </i><label id="filterSectorConfiguration"><digi:trn>Primary</digi:trn></label> | 
 	   <i><digi:trn>Sectors</digi:trn>: </i><label id="filterSectors"><digi:trn>All</digi:trn></label> |
-	   <i><digi:trn>Regions</digi:trn>: </i><label id="filterRegions"><digi:trn>All</digi:trn></label>
+	   <i><digi:trn>SubSectors</digi:trn>: </i><label id="filterSubSectors"><digi:trn>All</digi:trn></label> |
+	   <i><digi:trn>Regions</digi:trn>: </i><label id="filterRegions"><digi:trn>All</digi:trn></label> |
+	   <i><digi:trn>Zones</digi:trn>: </i><label id="filterZones"><digi:trn>All</digi:trn></label> |
 	</td>
 	</tr>
 	<tr>

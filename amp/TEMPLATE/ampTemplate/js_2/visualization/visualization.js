@@ -599,6 +599,8 @@ function resetToDefaults(){
 	document.getElementById("filterOrganizations").innerHTML = trnAll;
 	document.getElementById("filterOrgGroups").innerHTML = trnAll;
 	document.getElementById("filterSectors").innerHTML = trnAll;
+	document.getElementById("filterSubSectors").innerHTML = trnAll;
+	document.getElementById("filterZones").innerHTML = trnAll;
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
 	document.getElementById("show_amounts_in_thousands").checked = false;
@@ -988,7 +990,9 @@ function callbackApplyFilter(e){
 		document.getElementById("filterOrganizations").innerText = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSectorConfiguration").innerText = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSectors").innerText = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
+		document.getElementById("filterSubSectors").innerText = document.getElementById("sub_sector_dropdown_id").options[document.getElementById("sub_sector_dropdown_id").selectedIndex].text;
 		document.getElementById("filterRegions").innerText = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
+		document.getElementById("filterZones").innerText = document.getElementById("zone_dropdown_id").options[document.getElementById("zone_dropdown_id").selectedIndex].text;
 		document.getElementById("filterStartYear").innerText = document.getElementById("startYearQuickFilter_dropdown").options[document.getElementById("startYearQuickFilter_dropdown").selectedIndex].text;
 		document.getElementById("filterEndYear").innerText = document.getElementById("endYearQuickFilter_dropdown").options[document.getElementById("endYearQuickFilter_dropdown").selectedIndex].text;
 	}
@@ -998,7 +1002,9 @@ function callbackApplyFilter(e){
 		document.getElementById("filterOrganizations").textContent = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSectorConfiguration").textContent = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSectors").textContent = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
+		document.getElementById("filterSubSectors").textContent = document.getElementById("sub_sector_dropdown_id").options[document.getElementById("sub_sector_dropdown_id").selectedIndex].text;
 		document.getElementById("filterRegions").textContent = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
+		document.getElementById("filterZones").textContent = document.getElementById("zone_dropdown_id").options[document.getElementById("zone_dropdown_id").selectedIndex].text;
 		document.getElementById("filterStartYear").textContent = document.getElementById("startYearQuickFilter_dropdown").options[document.getElementById("startYearQuickFilter_dropdown").selectedIndex].text;
 		document.getElementById("filterEndYear").textContent = document.getElementById("endYearQuickFilter_dropdown").options[document.getElementById("endYearQuickFilter_dropdown").selectedIndex].text;
 	}
@@ -1382,14 +1388,17 @@ function refreshBoxes(o){
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
 					inner = "<hr/>";
+					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 						if (fromGenerator=="true")
 							checkOptionByNameAndValue("zone_check",child.list[i].id);
 					}
 					inner = inner + "<hr/>";
 					var div = document.getElementById("zone_list_id");
 					div.innerHTML = inner;
+					document.getElementById("filterZones").innerHTML = inner2;
 					div.style.display = "";
 					document.getElementById("zone_dropdown_id").style.display = "none";
 					} else {
@@ -1439,14 +1448,17 @@ function refreshBoxes(o){
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
 					inner = "<hr/>";
+					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 						if (fromGenerator=="true")
 							checkOptionByNameAndValue("sub_sector_check",child.list[i].id);
 					}
 					inner = inner + "<hr/>";
 					var div = document.getElementById("sub_sector_list_id");
 					div.innerHTML = inner;
+					document.getElementById("filterSubSectors").innerHTML = inner2;
 					div.style.display = "";
 					document.getElementById("sub_sector_dropdown_id").style.display = "none";
 					} else {

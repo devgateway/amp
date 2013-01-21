@@ -50,7 +50,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		super(id, model, fmName, Constants.COMMITMENT, 7);
 
 		
-		 if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS).equalsIgnoreCase("TRUE"))
+		 if("TRUE".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS)))
 		    alertIfDisbursmentBiggerCommitments = true;
 
 		AbstractReadOnlyModel<List<AmpFundingDetail>> setAmountListModel = OnePagerUtil
@@ -66,6 +66,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 		wmc.add(amountSumComparator.getIndicatorAppender());
 		amountSumComparator.setSecondCollectionModel(disbursementModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(false);
+        amountSumComparator.setOutputMarkupId(true);
 		amountSumComparator.setVisibilityAllowed(alertIfDisbursmentBiggerCommitments);
 		wmc.setVisibilityAllowed(alertIfDisbursmentBiggerCommitments);
 		add(amountSumComparator);			

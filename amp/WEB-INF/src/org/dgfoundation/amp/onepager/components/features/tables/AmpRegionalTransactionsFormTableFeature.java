@@ -54,9 +54,9 @@ public class AmpRegionalTransactionsFormTableFeature extends
 			final IModel<Set<AmpRegionalFunding>> model, String fmName, int transactionType, IModel<AmpCategoryValueLocations> cvLocationModel) throws Exception {
 		super(id, model, fmName, transactionType, 6,cvLocationModel);
 
-		 if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT).equalsIgnoreCase("TRUE"));
+		 if("TRUE".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT)))
 		 	alertIfExpenditureBiggerDisbursment = true;
-		 if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS).equalsIgnoreCase("TRUE"));
+		 if("TRUE".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS)))
 		    alertIfDisbursmentBiggerCommitments = true;
 
 		    
@@ -104,6 +104,7 @@ public class AmpRegionalTransactionsFormTableFeature extends
 				new AmpCollectionsSumComparatorValidatorField("regAmountSumComparator",firstModel,fieldFMName, errorMassage); 
 		amountSumComparator.setIndicatorAppender(iValidator);
 		amountSumComparator.setSecondCollectionModel(secondModel);
+        amountSumComparator.setOutputMarkupId(true);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(alertIfcurrentSumIsBigger);		
 		add(amountSumComparator);
 		
@@ -125,6 +126,7 @@ public class AmpRegionalTransactionsFormTableFeature extends
 		amountSumComparator1.setIndicatorAppender(iValidator);
 		amountSumComparator1.setSecondCollectionModel(secondModel);
 		amountSumComparator1.setAlertIfCurrentModelAmountSumBig(alertIfcurrentSumIsBigger);
+        amountSumComparator1.setOutputMarkupId(true);
 		add(amountSumComparator1);
 		amountSumComparator1.setVisibilityAllowed(visibleAllowed);
 		

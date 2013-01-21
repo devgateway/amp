@@ -93,6 +93,8 @@
 			private var trnMessageEmpty:String = "";
 			private var trnMessageLoadingPanel:String = "";
 			private var trnMessageLoading:String = "";
+			private var trnMessageYearError:String = "";
+			private var trnMessageError:String = "";
 
 			/**
 			 * This example is using xml data read from the file system. 
@@ -110,6 +112,12 @@
 				//Since our data has the time entries on each row (a common format for temporal data) we want to pivot the data
 				//This then makes a column for each unique time entrie and a row for each unique column.
 				ds.pivotTable(0);
+				if(ds.data.pivot.header.length <= 2){
+					showYearMessage();
+					return;
+				}
+				else
+					hideYearMessage();
 				dataProvider = ds.data.pivot.rows;
 				
 
@@ -134,6 +142,7 @@
 				}
 				else
 				{
+					messagePanel.title = trnMessagePanel;
 					dc.visible = false;
 					messagePanel.visible = true;
 					sizePanel(300, 200);
@@ -238,8 +247,8 @@
 				else
 					legendLayout.visible = false;
 
-				messageLoadingPanel.visible = false;
-				sizeLoadingPanel(0, 0);
+				messagePanel.visible = false;
+				sizePanel(0, 0);
 				//dc.visible = true;
 				
 			}
@@ -258,10 +267,7 @@
 				messagePanel.width = w;
 				messagePanel.height = h;
 			}
-			private function sizeLoadingPanel(w:uint, h:uint):void {
-				messageLoadingPanel.width = w;
-				messageLoadingPanel.height = h;
-			}		
+		
 			private function captureSnapshot():void
 			{
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
@@ -351,7 +357,17 @@
 			{
 				start();
 			}
-			
+			protected function showYearMessage():void {
+				messagePanelText.text = trnMessageYearError;
+				messagePanel.title = trnMessageError;
+				dc.visible = false;
+				messagePanel.visible = true;
+				sizePanel(300, 200);
+			}
+			protected function hideYearMessage():void {
+				dc.visible = true;
+				messagePanel.visible = false;
+			}
 			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
 				//Initialize variables and get the URL for the service that will provide data
@@ -367,14 +383,20 @@
 				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
 				trnMessageLoadingPanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoadingPanel','')}"));
 				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
+				trnMessageYearError = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageYearError','')}"));
+				trnMessageError = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageError','')}"));
 				
 				messagePanel.title = trnMessagePanel;
-				messageEmpty.text = trnMessageEmpty;
-				messageLoadingPanel.title = trnMessageLoadingPanel;
-				messageLoading.text = trnMessageLoading;
+				messagePanelText.text = trnMessageEmpty;
 				
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+
+				if (startYear == endYear)
+					showYearMessage();
+				else
+					hideYearMessage();
+				
 				var labelArray:Array = new Array();
 				for(var year:int = startYear; year <= endYear; year++){
 					labelArray.push(year);
@@ -424,9 +446,11 @@
 
 			public function refreshGraph():void
 			{
+				messagePanel.title = trnMessageLoadingPanel;
+				messagePanelText.text = trnMessageLoading;
+				messagePanel.visible = true;
 				
-				messageLoadingPanel.visible = true;
-				sizeLoadingPanel(300, 200);
+				sizePanel(300, 200);
 				dc.visible = false;
 				
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
@@ -991,11 +1015,8 @@
 		</mx:HBox>
 	</mx:HBox>
 -->
-	<mx:Panel x="{(this.width-300)/2}" y="100" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
-		<mx:Label id="messageEmpty" fontWeight="bold" fontSize="13" color="black" text="No data to show"/>
-	</mx:Panel>
-	<mx:Panel x="{(this.width-300)/2}" y="100" title="Loading" width="0" height="0" id="messageLoadingPanel" visible="false" resizeEffect="{resize}">
-		<mx:Label id="messageLoading" fontWeight="bold" fontSize="13" color="black" text="Loading data..."/>
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Message" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messagePanelText" fontWeight="bold" fontSize="13" color="black" text="..."/>
 	</mx:Panel>
 
 </mx:Application>

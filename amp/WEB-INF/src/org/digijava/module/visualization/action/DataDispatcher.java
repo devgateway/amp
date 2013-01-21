@@ -296,45 +296,70 @@ public class DataDispatcher extends DispatchAction {
 				}
 			}
 			if( currentOrgId!=null){
-			AmpContact contact=DbUtil.getPrimaryContactForOrganization(currentOrgId);
-			if(contact!=null){
-			JSONObject jcontact = new JSONObject();
-			jcontact.put("title", contact.getTitle()!=null?contact.getTitle().getValue():"");
-			jcontact.put("name", contact.getName()+" "+contact.getLastname());
-			JSONArray emails=new JSONArray();
-			JSONArray phones=new JSONArray();
-			JSONArray faxes=new JSONArray();
-			if(contact.getProperties()!=null){
-				for (AmpContactProperty property : contact.getProperties()) {
-					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
-						JSONObject email= new JSONObject();
-						email.put("value",property.getValue());
-						emails.add(email);
-					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
-						JSONObject phone= new JSONObject();
-						phone.put("value",property.getValueAsFormatedPhoneNum());
-						phones.add(phone);
-					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
-						JSONObject fax= new JSONObject();
-						fax.put("value",property.getValue());
-						faxes.add(fax);
+				AmpContact contact=DbUtil.getPrimaryContactForOrganization(currentOrgId);
+				if(contact!=null){
+					JSONObject jcontact = new JSONObject();
+					jcontact.put("title", contact.getTitle()!=null?contact.getTitle().getValue():"");
+					jcontact.put("name", contact.getName()+" "+contact.getLastname());
+					JSONArray emails=new JSONArray();
+					JSONArray phones=new JSONArray();
+					JSONArray faxes=new JSONArray();
+					if(contact.getProperties()!=null){
+						for (AmpContactProperty property : contact.getProperties()) {
+							if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
+								JSONObject email= new JSONObject();
+								email.put("value",property.getValue());
+								emails.add(email);
+							}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
+								JSONObject phone= new JSONObject();
+								phone.put("value",property.getValueAsFormatedPhoneNum());
+								phones.add(phone);
+							}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
+								JSONObject fax= new JSONObject();
+								fax.put("value",property.getValue());
+								faxes.add(fax);
+							}
+						}
 					}
+					jcontact.put("email", emails);
+					jcontact.put("phones", phones);
+					jcontact.put("faxes", faxes);
+					selOrgContacts.add(jcontact);
 				}
-			}
-			jcontact.put("email", emails);
-			jcontact.put("phones", phones);
-			jcontact.put("faxes", faxes);
-			selOrgContacts.add(jcontact);
-			
-			}
 				AmpOrganisation organization=DbUtil.getOrganisation(currentOrgId);
 				JSONObject jorganizationInfo = new JSONObject();
-				jorganizationInfo.put("orgId", currentOrgId);
-				jorganizationInfo.put("orgBackground", organization.getOrgBackground());
-				jorganizationInfo.put("orgDescription", organization.getOrgDescription());
+				jorganizationInfo.put("id", currentOrgId);
+				jorganizationInfo.put("type", "Organization");
+				jorganizationInfo.put("background", organization.getOrgBackground());
+				jorganizationInfo.put("description", organization.getOrgDescription());
+				jorganizationInfo.put("keyAreas", organization.getOrgKeyAreas());
 				selAdditionalInfo.put("info", jorganizationInfo);
-				
 			}
+			else
+			{
+				Long currentOrgGrpId=null;
+				if (orgsGrpIds == null || orgsGrpIds.length == 0 || orgsGrpIds[0] == -1) {
+					if(orgsGrpId != null && orgsGrpId!=-1){
+						currentOrgGrpId=orgsGrpId;
+					}
+				}
+				else{
+					if(selOrgGroups.size()==1){
+						currentOrgGrpId=orgsGrpIds[0];
+					}
+				}			
+				if( currentOrgGrpId!=null){
+					AmpOrgGroup orgGroup=DbUtil.getOrgGroup(currentOrgGrpId);
+					JSONObject jorganizationGroupInfo = new JSONObject();
+					jorganizationGroupInfo.put("id", currentOrgGrpId);
+					jorganizationGroupInfo.put("type", "OrganizationGroup");
+					jorganizationGroupInfo.put("background", orgGroup.getOrgGrpBackground());
+					jorganizationGroupInfo.put("description", orgGroup.getOrgGrpDescription());
+					jorganizationGroupInfo.put("keyAreas", orgGroup.getOrgGrpKeyAreas());
+					selAdditionalInfo.put("info", jorganizationGroupInfo);
+				}
+			}
+			
 			rootOrgContacts.put("type", "SelOrgContact");
 			rootOrgContacts.put("list", selOrgContacts);
 			children.add(rootOrgContacts);

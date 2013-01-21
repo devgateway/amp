@@ -2598,18 +2598,28 @@ public class DbUtil {
         }
     	return contact;
     }
-    public static void saveAdditionalInfo(Long orgId, String orgBackground,String orgDescription) throws DgException{
+    public static void saveAdditionalInfo(Long id, String type, String background,String description, String keyAreas) throws DgException{
         Session sess = null;
         Transaction tx = null;
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-            AmpOrganisation org = (AmpOrganisation) sess.get(AmpOrganisation.class, orgId);
-            org.setOrgBackground(orgBackground);
-            org.setOrgDescription(orgDescription);
-            sess.update(org);
-            //tx.commit();
+            if(type.equals("Organization")){
+                AmpOrganisation org = (AmpOrganisation) sess.get(AmpOrganisation.class, id);
+                org.setOrgBackground(background);
+                org.setOrgDescription(description);
+                org.setOrgKeyAreas(keyAreas);
+                sess.update(org);
+            }
+            else if (type.equals("OrganizationGroup")){
+                AmpOrgGroup orgGrp = (AmpOrgGroup) sess.get(AmpOrgGroup.class, id);
+                orgGrp.setOrgGrpBackground(background);
+                orgGrp.setOrgGrpDescription(description);
+                orgGrp.setOrgGrpKeyAreas(keyAreas);
+                sess.update(orgGrp);
+            }
+
+        
         } catch (Exception e) {
             logger.error("Unable to update", e);
             if (tx != null) {

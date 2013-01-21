@@ -84,13 +84,15 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 
 	private Set<AmpOrganisationContact> organizationContacts;
 	
-    // this field is saved in org. profile and not from organization manager in admin
+    // this field is saved in Organization Dashboard and not from organization manager in admin
     private String orgBackground;
     /*
-     *this field is saved in org. profile and not from organization manager in admin
+     *this field is saved in Organization Dashboard and not from organization manager in admin
      * don't confuse it with Description field
      */
     private String orgDescription;
+    // this field is saved in Organization Dashboard and not from organization manager in admin
+    private String orgKeyAreas;
     
     //Budget fields
     private AmpBudgetSector parentsector;
@@ -718,6 +720,14 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public String getOrgKeyAreas() {
+		return orgKeyAreas;
+	}
+
+	public void setOrgKeyAreas(String orgKeyAreas) {
+		this.orgKeyAreas = orgKeyAreas;
 	}
 	
 	

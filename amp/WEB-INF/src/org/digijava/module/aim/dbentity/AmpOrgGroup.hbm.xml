@@ -16,6 +16,9 @@
 
 		<many-to-one name="orgType" column="org_type"
 			class="org.digijava.module.aim.dbentity.AmpOrgType" cascade="none" />
+        <property name="orgGrpBackground" column="org_grp_background" type="java.lang.String" />
+        <property name="orgGrpDescription" column="org_grp_description" type="java.lang.String" />
+        <property name="orgGrpKeyAreas" column="org_grp_keyareas" type="java.lang.String" />
 
 	</class>
 </hibernate-mapping>

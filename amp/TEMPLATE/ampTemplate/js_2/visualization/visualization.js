@@ -894,11 +894,8 @@ var refreshDropdowns = function(){
 	// document.forms[1].org_group_dropdown_id.value
 	// where is the currently selected organization selected: visualizationForm.getFilter().setSelOrgIds
 	// document.forms[1].org_dropdown_id.value
-	console.log("Refreshing Dropdowns");
 	currentOrgGroup = document.getElementById("org_group_dropdown_id").value;
-	console.log("currentOrgGroup:" + currentOrgGroup);
 	currentOrg = document.getElementById("org_dropdown_id").value;
-	console.log("currentOrg:" + currentOrg);
 	var objectType = "OrganizationGroup";
 
 	var transactionOrgGroup = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getJSONObject&objectType=" + objectType, callbackChildrenCall, null);
@@ -1189,6 +1186,7 @@ function refreshBoxes(o){
 	var valAvgProjSize="";
 	var fromGenerator = document.getElementById("fromGenerator").value;
 	document.getElementById("info_link").style.display = "none";
+	$("#additional_info").hide();
 
 	for(var j = 0; j < results.children.length; j++){
 		var child = results.children[j];
@@ -1537,13 +1535,28 @@ function refreshBoxes(o){
 			case "SelAdditionalInfo":
 				if (typeof child.additionalInfo.info != 'undefined') {
 					var info=child.additionalInfo.info;
+					var trnBackground = "";
+					switch(info.type){
+						case "Organization":
+							trnBackground = trnBackgroundOrganization;
+							//Show Contacts Tab. Organizations can have contacts.
+							$("#contact_info_tab").show();
+							myPanel.setHeader("\n" + trnOrgInfo);
+							break;
+						case "OrganizationGroup":
+							trnBackground = trnBackgroundOrganizationGroup;
+							//Hide Contacts Tab. Organization Groups cannot have contacts.
+							$("#contact_info_tab").hide()
+							myPanel.setHeader("\n" + trnOrgGrpInfo);
+							break;
+					}
 					var infoMarkup = new Array();
 					infoMarkup.push("<div id=\"saveResultMsg\"></div><table class=\"inside\"><tbody>");
 					infoMarkup.push("<tr>");
-					infoMarkup.push("<td class=\"inside\">" + trnBackgroundOrganization +":</td>");
+					infoMarkup.push("<td class=\"inside\">" + trnBackground +":</td>");
 					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"orgBackground\">");
-					infoMarkup.push(info.orgBackground);
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"background\">");
+					infoMarkup.push(info.background);
 					infoMarkup.push("</textarea>");
 					infoMarkup.push("</td>");
 					infoMarkup.push("</tr>");
@@ -1551,20 +1564,52 @@ function refreshBoxes(o){
 					infoMarkup.push("<tr>");
 					infoMarkup.push("<td class=\"inside\">" + trnDescription + ":</td>");
 					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"orgDescription\">");
-					infoMarkup.push(info.orgDescription);
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"description\">");
+					infoMarkup.push(info.description);
+					infoMarkup.push("</textarea>");
+					infoMarkup.push("</td>");
+					infoMarkup.push("</tr>");
+
+					infoMarkup.push("<tr>");
+					infoMarkup.push("<td class=\"inside\">" + trnKeyAreas + ":</td>");
+					infoMarkup.push("<td class=\"inside\">");
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"keyAreas\">");
+					infoMarkup.push(info.keyAreas);
 					infoMarkup.push("</textarea>");
 					infoMarkup.push("</td>");
 					infoMarkup.push("</tr>");
 					
 					infoMarkup.push("<tr>");
 					infoMarkup.push("<td class=\"inside\" colspan=\"2\">");
-					infoMarkup.push("<input type=\"button\" value=\"" + trnSave + "\" onclick=\"saveAdditionalInfo("+info.orgId+")\"/>");
+					infoMarkup.push("<input type=\"button\" value=\"" + trnSave + "\" onclick=\"saveAdditionalInfo("+info.id+",'" + info.type +"')\"/>");
 					infoMarkup.push("</td>");
 					infoMarkup.push("</tr>");
 					infoMarkup.push("</tbody></table>");
 					var markup=infoMarkup.join("");
 					$("#tab3").html(markup);
+					
+					var infoBox = new Array();
+					infoBox.push("<table class=\"inside\"><tbody>");
+					infoBox.push("<tr>");
+					infoBox.push("<td class=\"inside\"><strong>" + trnBackground + ":</strong>");
+					infoBox.push(info.background);
+					infoBox.push("</td>");
+					infoBox.push("</tr>");
+
+					infoBox.push("<tr>");
+					infoBox.push("<td class=\"inside\"><strong>" + trnDescription + ":</strong>");
+					infoBox.push(info.description);
+					infoBox.push("</td>");
+					infoBox.push("</tr>");
+
+					infoBox.push("<tr>");
+					infoBox.push("<td class=\"inside\"><strong>" + trnKeyAreas + ":</strong>");
+					infoBox.push(info.keyAreas);
+					infoBox.push("</td>");
+					infoBox.push("</tr>");
+					infoBox.push("</tbody></table>");
+					$("#additional_info_box").html(infoBox.join(""));
+					$("#additional_info").show();
 				}
 				else{
 					$("#tab3").html(trnNoAdditionalInfo);
@@ -1597,19 +1642,19 @@ function refreshBoxes(o){
 		if (getSelectionsFromElement("org_grp_check",true)==""){
 			if (document.getElementById("org_group_dropdown_id").selectedIndex != 0) {
 				name1 = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+				document.getElementById("info_link").style.display = "block";
 			}
 		} else {
 			if (getSelectionsFromElement("org_grp_check",false).indexOf(',') !=-1) {
 				name1 = trnMultipleOrgGrp;
 			} else {
 				name1 = getSelectionsFromElement("org_grp_check",true);
+				document.getElementById("info_link").style.display = "block";
 			}
 		}
 		if (getSelectionsFromElement("organization_check",true)==""){
 			if (document.getElementById("org_dropdown_id").selectedIndex != 0) {
 				name2 = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
-				document.getElementById("info_link").style.display = "block";
-//				name2 = name2+ "  <img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' title='"+trnOrgInfo+"'/>";
 			}
 		} else {
 			if (getSelectionsFromElement("organization_check",false).indexOf(',') !=-1) {
@@ -1617,7 +1662,6 @@ function refreshBoxes(o){
 			} else {
 				name2 = getSelectionsFromElement("organization_check",true);
 				document.getElementById("info_link").style.display = "block";
-//				name2 = name2 + "  <img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' title='"+trnOrgInfo+"'/>";
 			}
 		}
 		if (name1 == "") {
@@ -1855,9 +1899,11 @@ function drawGraph(id){
 		changeChart(null, 'bar', id, true);
 }
 
-function  saveAdditionalInfo(orgId){
-    var postString		="orgBackground=" + document.getElementById("orgBackground").value+
-        "&orgDescription="+document.getElementById("orgDescription").value+"&orgId="+orgId ;
+function  saveAdditionalInfo(id, type){
+    var postString = "background=" + document.getElementById("background").value +
+	    "&description=" + document.getElementById("description").value + 
+	    "&keyAreas=" + document.getElementById("keyAreas").value + 
+        "&id=" + id + "&type=" + type;
         $("#saveResultMsg").html(trnSavingInformation);
         YAHOO.util.Connect.asyncRequest("POST", urlSaveAdditional, additionalInfoCallback, postString);
     }
@@ -2348,7 +2394,7 @@ var myPanel = new YAHOO.widget.Panel("new", {
 
 function initPopin() {
 	
-	var msg='\n<digi:trn jsFriendly="true">Organization Info</digi:trn>';
+	var msg='\n' + trnOrgInfo;
 	myPanel.setHeader(msg);
 	myPanel.setBody("");
 	myPanel.render(document.body);

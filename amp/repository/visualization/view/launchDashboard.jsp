@@ -422,42 +422,32 @@ function initializeGlobalVariables(){
 												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
 												id="orgGrpDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li><c:if
-															test="${visualizationform.filter.dashboardType eq '1' }">
-															<input type="radio" value="-1" id="org_grp_check_all"
-																name="org_grp_check"
-																onClick="uncheckAllRelatedEntities('organization_check')" />
-														</c:if> <c:if
-															test="${visualizationform.filter.dashboardType ne '1' }">
-															<input type="checkbox" id="org_grp_check_all" value="-1"
-																name="org_grp_check"
-																onClick="allOptionChecked(this,'org_grp_check','organization_check')" />
-														</c:if> <span><digi:trn>All</digi:trn>
-													</span></li>
+													<li>
+														<input type="checkbox" id="org_grp_check_all" value="-1"
+															name="org_grp_check"
+															onClick="allOptionChecked(this,'org_grp_check','organization_check')" />
+														<span><digi:trn>All</digi:trn>
+														</span>
+													</li>
 													<c:forEach
 														items="${visualizationform.filter.orgGroupWithOrgsList}"
 														var="item">
 														<c:set var="orgGrp">
 															<c:out value="${item.mainEntity.orgGrpName}"/>
 														</c:set>
-														<li><c:if
-																test="${visualizationform.filter.dashboardType eq '1' }">
-																<input type="radio" name="org_grp_check"
-																	title="${orgGrp}"
-																	value="${item.mainEntity.ampOrgGrpId}"
-																	onClick="checkUncheckRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															</c:if> <c:if
-																test="${visualizationform.filter.dashboardType ne '1' }">
-																<input type="checkbox" name="org_grp_check"
-																	title="${orgGrpe}"
-																	value="${item.mainEntity.ampOrgGrpId}"
-																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															</c:if> <span><c:out value="${orgGrp}"/>
-														</span> <br />
+														<li>
+															<input type="checkbox" name="org_grp_check"
+																id="org_grp_check_${item.mainEntity.ampOrgGrpId}"
+																title="${orgGrp}"
+																value="${item.mainEntity.ampOrgGrpId}"
+																onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
+															<span><c:out value="${orgGrp}"/>
+															</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
 																	var="organization">
 																	<li><input type="checkbox"
+																		id="organization_check_${organization.ampOrgId}"
 																		class="organization_check_${item.mainEntity.ampOrgGrpId}"
 																		name="organization_check" title="<c:out value='${organization.name}'/>"
 																		value="${organization.ampOrgId}"
@@ -491,39 +481,28 @@ function initializeGlobalVariables(){
 												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
 												id="regionDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li><c:if
-															test="${visualizationform.filter.dashboardType eq '2' }">
-															<input type="radio" id="region_check_all"
-																name="region_check" value="-1"
-																onClick="uncheckAllRelatedEntities('zone_check')" />
-														</c:if> <c:if
-															test="${visualizationform.filter.dashboardType ne '2' }">
-															<input type="checkbox" id="region_check_all"
-																name="region_check" value="-1"
-																onClick="allOptionChecked(this,'region_check','zone_check')" />
-														</c:if> <span><digi:trn>All</digi:trn>
+													<li>
+														<input type="checkbox" id="region_check_all"
+															name="region_check" value="-1"
+															onClick="allOptionChecked(this,'region_check','zone_check')" />
+														<span><digi:trn>All</digi:trn>
 													</span></li>
 													<c:forEach
 														items="${visualizationform.filter.regionWithZones}"
 														var="item">
-														<li><c:if
-																test="${visualizationform.filter.dashboardType eq '2' }">
-																<input type="radio" name="region_check"
-																	title="${item.mainEntity.name}"
-																	value="${item.mainEntity.id}"
-																	onClick="checkUncheckRelatedEntities(this,'zone_check',${item.mainEntity.id})" />
-															</c:if> <c:if
-																test="${visualizationform.filter.dashboardType ne '2' }">
-																<input type="checkbox" name="region_check"
-																	title="${item.mainEntity.name}"
-																	value="${item.mainEntity.id}"
-																	onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})">
-															</c:if> <span><c:out value="${item.mainEntity.name}"/>
+														<li>
+															<input type="checkbox" name="region_check"
+																id="region_check_${item.mainEntity.id}"
+																title="${item.mainEntity.name}"
+																value="${item.mainEntity.id}"
+																onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})">
+															<span><c:out value="${item.mainEntity.name}"/>
 														</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
 																	var="zone">
 																	<li><input type="checkbox"
+																		id="zone_check_${zone.id}"
 																		class="zone_check_${item.mainEntity.id}"
 																		name="zone_check" title="${zone.name}"
 																		value="${zone.id}"

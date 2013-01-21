@@ -946,6 +946,24 @@ function callbackApplyFilter(e){
 		return;
 	}
 	
+	if(document.getElementById("org_group_dropdown_id")!=null && document.getElementById("org_group_dropdown_id").value!=-1)
+		document.getElementById("org_grp_check_"+document.getElementById("org_group_dropdown_id").value).checked = true;
+	
+	if(document.getElementById("org_dropdown_id")!=null && document.getElementById("org_dropdown_id").value!=-1)
+		document.getElementById("organization_check_"+document.getElementById("org_dropdown_id").value).checked = true;
+	
+	if(document.getElementById("sector_dropdown_id")!=null && document.getElementById("sector_dropdown_id").value!=-1)
+		document.getElementById("sector_check_"+document.getElementById("sector_dropdown_id").value).checked = true;
+	
+	if(document.getElementById("sub_sector_dropdown_id")!=null && document.getElementById("sub_sector_dropdown_id").value!=-1)
+		document.getElementById("sub_sector_check_"+document.getElementById("sub_sector_dropdown_id").value).checked = true;
+	
+	if(document.getElementById("region_dropdown_id")!=null && document.getElementById("region_dropdown_id").value!=-1)
+		document.getElementById("region_check_"+document.getElementById("region_dropdown_id").value).checked = true;
+	
+	if(document.getElementById("zone_dropdown_id")!=null && document.getElementById("zone_dropdown_id").value!=-1)
+		document.getElementById("zone_check_"+document.getElementById("zone_dropdown_id").value).checked = true;
+	
 	var params = "";
 	params = params + "&orgGroupIds=" + getQueryParameter("orgGroupIds");
 	params = params + "&orgIds=" + getQueryParameter("orgIds");

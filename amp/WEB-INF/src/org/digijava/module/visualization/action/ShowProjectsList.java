@@ -180,6 +180,37 @@ public class ShowProjectsList extends Action {
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
+		if (type.equals("BeneficiaryAgencyProfile")){
+			for (int i = 0; i < ids.length; i++) {
+				Long long1 = ids[i];
+				itemName = DbUtil.getOrganisation(long1).getName();
+				Long[] id1 = {long1};
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				newFilter.setAgencyType(org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY);
+				newFilter.setSelOrgIds(id1);
+				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				BigDecimal divideByDenominator;
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
+			}
+			visualizationForm.setItemProjectsList(itemProjectsList);
+		}
+		if (type.equals("ExecutingAgencyProfile")){
+			for (int i = 0; i < ids.length; i++) {
+				Long long1 = ids[i];
+				itemName = DbUtil.getOrganisation(long1).getName();
+				Long[] id1 = {long1};
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				newFilter.setAgencyType(org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY);
+				newFilter.setSelOrgIds(id1);
+				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				BigDecimal divideByDenominator;
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
+			}
+			visualizationForm.setItemProjectsList(itemProjectsList);
+		}
+				
 		if (type.equals("NPOProfile")||type.equals("ProgramProfile")){
 	    	for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];

@@ -1476,7 +1476,12 @@ public class DbUtil {
 
     	DecimalWraper total = null;
         String oql = "";
-
+        //This determines if this query needs additional joins for role and role percentage
+        Boolean organizationRoleQuery = false;
+    	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			organizationRoleQuery = true;
+    	
         oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name";
         if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
         	oql += ", actProg.programPercentage ";
@@ -1484,6 +1489,8 @@ public class DbUtil {
         	oql += ", actloc.locationPercentage ";
         if (sectorCondition)
         	oql += ", actsec.sectorPercentage ";
+        if (organizationRoleQuery)
+        	oql += ", orole.percentage ";
         
         oql += " from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
     	
@@ -1491,10 +1498,10 @@ public class DbUtil {
         	oql += " inner join act.ampActivityGroupCached actGroup ";
         else
         	oql += " inner join act.ampActivityGroup actGroup ";
-    	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    	if (organizationRoleQuery)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
-    	 if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
+    	
+    	if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
          	oql += " inner join act.actPrograms actProg ";
             oql += " inner join actProg.program prog ";
  		}

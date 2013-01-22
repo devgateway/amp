@@ -203,7 +203,7 @@
 			private function onItemMouseMove(e:LayoutItemEvent):void
 			{
 				var value:int=Math.floor(e.item.mouseX / (this.width / this._plotIndexes.length));
-				if (value != currentPlotIndex && this.showDataTips)
+				if (this.showDataTips)
 				{
 					currentPlotIndex=_plotIndexes[value];
 					this.dispatchEvent(new LayoutItemEvent("itemDataTip", e.item, e));

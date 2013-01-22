@@ -84,6 +84,8 @@
 			private var trnMessageEmpty:String = "";
 			private var trnMessageLoadingPanel:String = "";
 			private var trnMessageLoading:String = "";
+			private var trnYears:String = "";
+			private var trnCurrency:String = "";
 			
 			public function start():void
 			{
@@ -246,6 +248,7 @@
 				messageLoadingPanel.visible = false;
 				sizeLoadingPanel(0, 0);
 				//dc.visible = true;
+				printLabel.text = trnYears + ": " + startYear + " to " + endYear +" - " + trnCurrency + ": " + currCode;
 
 			}
 			private function getDeterminedMaxValue(magnitude, maxValue, step){
@@ -263,6 +266,8 @@
 
 			private function captureSnapshot():void
 			{
+				sliderYear.visible = false;
+				printLabel.visible = true;
 				var curUrl:String =  String(ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String = "/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
 				var strDomain:String = "";
@@ -278,6 +283,8 @@
 				}
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
+				printLabel.visible = false;
+				sliderYear.visible = true;
 			}
 			
 			protected function service_resultHandler(event:ResultEvent):void
@@ -299,6 +306,8 @@
 				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
 				trnMessageLoadingPanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoadingPanel','')}"));
 				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
+				trnYears = String(ExternalInterface.call("function(){ return getValueToFlash('trnYears','')}"));
+				trnCurrency = String(ExternalInterface.call("function(){ return getValueToFlash('trnCurrency','')}"));
 				
 				messagePanel.title = trnMessagePanel;
 				messageEmpty.text = trnMessageEmpty;
@@ -811,6 +820,7 @@
 		</axiis:layouts>
 	</axiis:DataCanvas>
 	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="{showTrackHighlight}" thumbCount="{thumbCount}" change="sliderYear_changeHandler(event)" width="450" x="92" y="420" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
+	<mx:Label width="450" x="92" y="420" id="printLabel" height="36" fontSize="12" visible="false"/>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
 	
 	</mx:Canvas>

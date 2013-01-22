@@ -95,7 +95,9 @@
 			private var trnMessageLoading:String = "";
 			private var trnMessageYearError:String = "";
 			private var trnMessageError:String = "";
-
+			private var trnYears:String = "";
+			private var trnCurrency:String = "";
+			
 			/**
 			 * This example is using xml data read from the file system. 
 			 * In practical usage, you'ld have some data in a model that you want to display
@@ -250,6 +252,7 @@
 				messagePanel.visible = false;
 				sizePanel(0, 0);
 				//dc.visible = true;
+				printLabel.text = trnYears + ": " + startYear + " to " + endYear +" - " + trnCurrency + ": " + currCode;
 				
 			}
 			private function getDeterminedMaxValue(magnitude, maxValue, step){
@@ -270,6 +273,8 @@
 		
 			private function captureSnapshot():void
 			{
+				sliderYear.visible = false;
+				printLabel.visible = true;
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
 				var strDomain:String = "";
@@ -285,6 +290,8 @@
 				}
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
+				printLabel.visible = false;
+				sliderYear.visible = true;
 			}
 			/**
 			 * This function is called when the % data slider changes.
@@ -385,6 +392,8 @@
 				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
 				trnMessageYearError = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageYearError','')}"));
 				trnMessageError = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageError','')}"));
+				trnYears = String(ExternalInterface.call("function(){ return getValueToFlash('trnYears','')}"));
+				trnCurrency = String(ExternalInterface.call("function(){ return getValueToFlash('trnCurrency','')}"));
 				
 				messagePanel.title = trnMessagePanel;
 				messagePanelText.text = trnMessageEmpty;
@@ -866,6 +875,7 @@
 		
 	</axiis:DataCanvas>
 	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="420" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
+	<mx:Label width="450" x="92" y="420" id="printLabel" height="36" fontSize="12" visible="false"/>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
 
 	</mx:Canvas>

@@ -2757,10 +2757,10 @@ public class DataDispatcher extends DispatchAction {
         csvString.append("\n");
         BigDecimal total = new BigDecimal(0);
         
-        //for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
+        for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
             // apply calendar filter
-            Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, endYear.intValue());
-            Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
+            Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+            Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 	        String headingFY = TranslatorWorker.translateText("FY", locale, siteId);
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			
@@ -2831,7 +2831,7 @@ public class DataDispatcher extends DispatchAction {
 			if (fundingPlanned.doubleValue() != 0 || fundingActual.doubleValue() != 0) {
 				nodata = false;
 			}
-		//}
+		}
 		if (nodata) {
 //			result = new DefaultCategoryDataset();
 		}

@@ -1940,6 +1940,39 @@ function  saveAdditionalInfo(id, type){
 
     var additionalInfoResponseSuccess = function(o){
     	$("#saveResultMsg").html(trnSavedInformation);
+    	var results = YAHOO.lang.JSON.parse(o.responseText);
+		var trnBackground = "";
+		switch(results.type){
+			case "Organization":
+				trnBackground = trnBackgroundOrganization;
+				break;
+			case "OrganizationGroup":
+				trnBackground = trnBackgroundOrganizationGroup;
+				break;
+		}
+		var infoBox = new Array();
+		infoBox.push("<table class=\"inside\"><tbody>");
+		infoBox.push("<tr>");
+		infoBox.push("<td class=\"inside\"><strong>" + trnBackground + ":</strong>");
+		infoBox.push(results.background);
+		infoBox.push("</td>");
+		infoBox.push("</tr>");
+
+		infoBox.push("<tr>");
+		infoBox.push("<td class=\"inside\"><strong>" + trnDescription + ":</strong>");
+		infoBox.push(results.description);
+		infoBox.push("</td>");
+		infoBox.push("</tr>");
+
+		infoBox.push("<tr>");
+		infoBox.push("<td class=\"inside\"><strong>" + trnKeyAreas + ":</strong>");
+		infoBox.push(results.keyAreas);
+		infoBox.push("</td>");
+		infoBox.push("</tr>");
+		infoBox.push("</tbody></table>");
+		$("#additional_info_box").html(infoBox.join(""));
+    	
+    	
     }
 
     var additionalInfoResponseFailure = function(o){
@@ -2038,8 +2071,8 @@ function changeChart(e, chartType, container, useGeneric){
 	var attributes = {};
 	attributes.id = container;
 	//Setting for cache in development mode
-//	var cache = "?rnd=" + Math.floor(Math.random()*50000);
-	var cache = "";
+	var cache = "?rnd=" + Math.floor(Math.random()*50000);
+//	var cache = "";
 
 	switch(chartType){
 		case "bar":

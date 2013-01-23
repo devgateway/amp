@@ -42,6 +42,14 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 
         AmpEditLinkField editAgreement = new AmpEditLinkField("editAgreement", "Edit Agreement") {
             @Override
+            protected void onConfigure() {
+                if (agreement.getObject() == null)
+                    this.setVisibilityAllowed(false);
+                else
+                    this.setVisibilityAllowed(true);
+            }
+
+            @Override
             protected void onClick(AjaxRequestTarget target) {
                 //prepare the editing
                 editAgModel.setObject(agreement.getObject());
@@ -52,6 +60,14 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
         add(editAgreement);
 
         AmpDeleteLinkField deleteAgreement = new AmpDeleteLinkField("deleteAgreement", "Delete Agreement") {
+            @Override
+            protected void onConfigure() {
+                if (agreement.getObject() == null)
+                    this.setVisibilityAllowed(false);
+                else
+                    this.setVisibilityAllowed(true);
+            }
+
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 model.getObject().setAgreement(null);

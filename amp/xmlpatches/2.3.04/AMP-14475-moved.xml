@@ -7,11 +7,19 @@
 	<keyword>Agreement</keyword>
 	<author>apopescu</author>
 	<description>Adds the columns for the sectors tags</description>
+    <trigger type="all">
+        <condition type="custom">
+            <script returnVar="y">
+                <lang type="sql">SELECT count(*) from amp_columns WHERE columnName like 'Agreement Effective Date'</lang>
+            </script>
+            <test>y.intValue()==0</test>
+        </condition>
+    </trigger>
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
         		insert into amp_columns(columnId,columnName, aliasName,cellType, extractorView) 
-				values(nextval('amp_columns_seq'),'Agreement Effective Date', 'effective_date','org.dgfoundation.amp.ar.cell.DateCell', 'v_agreement_effective_date');
+				    values(nextval('amp_columns_seq'),'Agreement Effective Date', 'effective_date','org.dgfoundation.amp.ar.cell.DateCell', 'v_agreement_effective_date');
 
 				insert into amp_columns(columnId,columnName, aliasName,cellType, extractorView) 
 				values(nextval('amp_columns_seq'),'Agreement Signature Date', 'signature_date','org.dgfoundation.amp.ar.cell.DateCell', 'v_agreement_signature_date');

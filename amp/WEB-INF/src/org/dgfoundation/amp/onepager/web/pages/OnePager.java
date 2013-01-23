@@ -6,15 +6,9 @@ package org.dgfoundation.amp.onepager.web.pages;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -32,15 +26,19 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
-import org.dgfoundation.amp.onepager.helper.OnepagerSection;
+import org.digijava.module.aim.dbentity.OnepagerSection;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 22, 2010
@@ -77,7 +75,8 @@ public class OnePager extends AmpHeaderFooter {
 		new OnepagerSection("Related Documents", "org.dgfoundation.amp.onepager.components.features.sections.AmpResourcesFormSectionFeature", 19, false),
 		new OnepagerSection("Line Ministry Observations", "org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistryObservationsFormSectionFeature", 20, false)
 		};
-	public static final LinkedList<OnepagerSection> flist = new LinkedList<OnepagerSection>(Arrays.asList(test));
+	public static final LinkedList<OnepagerSection> fList = new LinkedList<OnepagerSection>(Arrays.asList(test));
+    public static final AtomicBoolean savedSections = new AtomicBoolean(false);
 	protected AbstractReadOnlyModel<List<AmpComponentPanel>> listModel;
 	private Component editLockRefresher;
 
@@ -86,9 +85,9 @@ public class OnePager extends AmpHeaderFooter {
 	}
 
 	public static OnepagerSection findByName(String name){
-		Iterator<OnepagerSection> it = flist.iterator();
+		Iterator<OnepagerSection> it = fList.iterator();
 		while (it.hasNext()) {
-			OnepagerSection os = (OnepagerSection) it.next();
+			OnepagerSection os = it.next();
 			if (os.getClassName().compareTo(name) == 0)
 				return os;
 		}
@@ -96,9 +95,9 @@ public class OnePager extends AmpHeaderFooter {
 	}
 	
 	public static OnepagerSection findByPosition(int pos){
-		Iterator<OnepagerSection> it = flist.iterator();
+		Iterator<OnepagerSection> it = fList.iterator();
 		while (it.hasNext()) {
-			OnepagerSection os = (OnepagerSection) it.next();
+			OnepagerSection os = it.next();
 			if (os.getPosition() == pos)
 				return os;
 		}
@@ -121,18 +120,18 @@ public class OnePager extends AmpHeaderFooter {
 			am.getObject().setTeam(session.getAmpCurrentMember().getAmpTeam());
 			
 			if(parameters.get("lat") != null && parameters.get("lat") != null && parameters.get("geoId") != null && parameters.get("name") != null){
-				String activityName = (String)parameters.get("name").toString();
-				String latitude = (String)parameters.get("lat").toString();
-				String longitude = (String)parameters.get("lon").toString();
-				String geoId = (String)parameters.get("geoId").toString();
+				String activityName = parameters.get("name").toString();
+				String latitude = parameters.get("lat").toString();
+				String longitude = parameters.get("lon").toString();
+				String geoId = parameters.get("geoId").toString();
 				
 				initializeActivity(am.getObject(), activityName, latitude, longitude, geoId);
 			}
 		}
 		else{
-			//try to aquire lock for activity editing
+			//try to acquire lock for activity editing
 			String key = ActivityGatekeeper.lockActivity(activityId, ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
-			if (key == null){ //lock not aquired
+			if (key == null){ //lock not acquired
 				//redirect page
 				getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(ActivityGatekeeper.buildRedirectLink(activityId)));
 				//return;
@@ -171,11 +170,11 @@ public class OnePager extends AmpHeaderFooter {
 				@Override
 				protected void onTimer(AjaxRequestTarget target) {
 					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
-					if (editLockRefresher.isEnabled() && refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED) 
+					if (editLockRefresher.isEnabled() && refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
 						getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()))));
 					
 					if (DEBUG_ACTIVITY_LOCK){
-						if (refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED)
+						if (refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
 							editLockRefresher.setDefaultModelObject("FAILED to refresh lock!");
 						else
 							editLockRefresher.setDefaultModelObject("Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
@@ -249,8 +248,10 @@ public class OnePager extends AmpHeaderFooter {
 	}
 	
 	public void initializeFormComponents(final IModel<AmpActivityVersion> am) throws Exception {
-
-		Collections.sort(flist, new Comparator<OnepagerSection>() {
+        loadPositions(fList);
+        checkOrder(fList);
+        saveOnce(fList);
+		Collections.sort(fList, new Comparator<OnepagerSection>() {
 			@Override
 			public int compare(OnepagerSection o1, OnepagerSection o2) {
 				return o1.getPosition() - o2.getPosition();
@@ -265,11 +266,11 @@ public class OnePager extends AmpHeaderFooter {
 					return existing;
 				
 				AmpComponentPanel dep = null;
-				if (os.isDependent()){
+				if (os.getDependent()){
 					Iterator<OnepagerSection> it = features.iterator();
 					OnepagerSection depOs = null;
 					while (it.hasNext()) {
-						OnepagerSection tmpos = (OnepagerSection) it
+						OnepagerSection tmpos = it
 								.next();
 						if (tmpos.getClassName().compareTo(os.getDependentClassName()) == 0){
 							depOs = tmpos;
@@ -287,20 +288,20 @@ public class OnePager extends AmpHeaderFooter {
 				}
 				Constructor constructor = null;
 				try {
-					if (os.isDependent())
+					if (os.getDependent())
 						constructor = clazz.getConstructor(String.class, String.class, IModel.class, AmpComponentPanel.class);
 					else
 						constructor = clazz.getConstructor(String.class, String.class, IModel.class);
 					
 					AmpComponentPanel feature = null;
-					if (os.isDependent())
+					if (os.getDependent())
 						feature = (AmpComponentPanel) constructor.newInstance("featureItem", os.getName(), am, dep);
 					else
 						feature = (AmpComponentPanel) constructor.newInstance("featureItem", os.getName(), am);
 					
 					if (AmpFormSectionFeaturePanel.class.isAssignableFrom(feature.getClass())){
 						AmpFormSectionFeaturePanel fsfp = (AmpFormSectionFeaturePanel) feature;
-						fsfp.setFolded(os.isFolded());
+						fsfp.setFolded(os.getFolded());
 					}
 					
 					temp.put(os.getClassName(), feature);
@@ -314,13 +315,13 @@ public class OnePager extends AmpHeaderFooter {
 			}
 			
 			public List<AmpComponentPanel> initObjects(){
-				Iterator<OnepagerSection> it = flist.iterator();
+				Iterator<OnepagerSection> it = fList.iterator();
 				LinkedList<AmpComponentPanel> ret = new LinkedList<AmpComponentPanel>();
 				HashMap<String, AmpComponentPanel> temp = new HashMap<String, AmpComponentPanel>();
 				while (it.hasNext()) {
-					OnepagerSection os = (OnepagerSection) it
+					OnepagerSection os = it
 							.next();
-					AmpComponentPanel fet = initObject(os, flist, temp);
+					AmpComponentPanel fet = initObject(os, fList, temp);
 					ret.add(fet);
 				}
 				return ret;
@@ -335,4 +336,60 @@ public class OnePager extends AmpHeaderFooter {
 			}
 		};
 	}
+
+    private void saveOnce(List<OnepagerSection> fList) {
+        //Only update the whole collection one time at startup in order to save new sections
+        if (savedSections.compareAndSet(false, true)){
+            try {
+                Session session = PersistenceManager.getRequestDBSession();
+                for (OnepagerSection os : fList)
+                    session.saveOrUpdate(os);
+            } catch (DgException e) {
+                logger.error("Can't save onepager sections: ", e);
+            }
+        }
+    }
+
+    private void checkOrder(List<OnepagerSection> fList) {
+        TreeSet<Integer> positions = new TreeSet<Integer>();
+        for (OnepagerSection os : fList){
+            if (positions.contains(os.getPosition())){
+                Integer newPosition = positions.last() + 1;
+                positions.add(newPosition);
+                os.setPosition(newPosition);
+            }
+            else
+                positions.add(os.getPosition());
+        }
+    }
+
+    private void loadPositions(LinkedList<OnepagerSection> fList) {
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+        } catch (DgException e) {
+            logger.error("Can't load onepager section positions:", e);
+            return;
+        }
+        Criteria c = session.createCriteria(OnepagerSection.class);
+        c.setCacheable(true);
+        List<OnepagerSection> results = c.list();
+        List<OnepagerSection> returnList = new LinkedList<OnepagerSection>();
+        for (OnepagerSection localOs : fList) {
+            boolean found = false;
+            for (OnepagerSection savedOs : results){
+                if (localOs.getClassName().equals(savedOs.getClassName())){
+                    //load transient fields
+                    savedOs.load(localOs);
+                    found = true;
+                    returnList.add(savedOs);
+                    break;
+                }
+            }
+            if (!found)
+                returnList.add(localOs);
+        }
+        fList.clear();
+        fList.addAll(returnList);
+    }
 }

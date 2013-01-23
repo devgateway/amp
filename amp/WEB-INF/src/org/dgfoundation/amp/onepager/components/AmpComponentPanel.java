@@ -16,10 +16,13 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
-import org.dgfoundation.amp.onepager.helper.OnepagerSection;
+import org.digijava.module.aim.dbentity.OnepagerSection;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.hibernate.Session;
 
 /**
  * Basic class for AMP components. This component wraps a feature manager connectivity, receiving
@@ -183,11 +186,21 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				OnepagerSection os = OnePager.findByName(this.getParent().getClass().getName());
+                if (os == null)
+                    return;
 				OnepagerSection tmpOs = OnePager.findByPosition(os.getPosition() - 1);
-				if (tmpOs == null || os == null)
+				if (tmpOs == null)
 					return;
 				tmpOs.setPosition(tmpOs.getPosition() + 1);
 				os.setPosition(os.getPosition() - 1);
+
+                try {
+                    Session session = PersistenceManager.getRequestDBSession();
+                    session.update(os);
+                    session.update(tmpOs);
+                } catch (DgException e) {
+                    logger.error("Can't save onepager sections:", e);
+                }
 				target.appendJavaScript("window.location.reload()");
 			}
 		};
@@ -197,11 +210,20 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				OnepagerSection os = OnePager.findByName(this.getParent().getClass().getName());
+                if (os == null)
+                    return;
 				OnepagerSection tmpOs = OnePager.findByPosition(os.getPosition() + 1);
-				if (tmpOs == null || os == null)
+				if (tmpOs == null)
 					return;
 				tmpOs.setPosition(tmpOs.getPosition() - 1);
 				os.setPosition(os.getPosition() + 1);
+                try {
+                    Session session = PersistenceManager.getRequestDBSession();
+                    session.update(os);
+                    session.update(tmpOs);
+                } catch (DgException e) {
+                    logger.error("Can't save onepager sections:", e);
+                }
 				target.appendJavaScript("window.location.reload()");
 			}
 		};
@@ -213,8 +235,14 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 				OnepagerSection os = OnePager.findByName(this.getParent().getClass().getName());
 				if (os == null)
 					return;
-				os.setFolded(!os.isFolded());
-				target.appendJavaScript("window.location.reload()"); 
+				os.setFolded(!os.getFolded());
+                try {
+                    Session session = PersistenceManager.getRequestDBSession();
+                    session.update(os);
+                } catch (DgException e) {
+                    logger.error("Can't save onepager sections:", e);
+                }
+                target.appendJavaScript("window.location.reload()");
 			}
 		};
 		add(foldButton);
@@ -284,8 +312,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		if (this instanceof AmpFormSectionFeaturePanel && fmMode){
 			OnepagerSection tmpos = OnePager.findByName(this.getClass().getName());
 			if (tmpos != null){
-				foldButton.add(new AttributeModifier("title", new Model<String>((tmpos.isFolded()?"Unfold":"Fold"))));
-				foldButton.add(new AttributeModifier("src", new Model<String>("/TEMPLATE/ampTemplate/img_2/onepager/"+(tmpos.isFolded()?"fold.png":"unfold.png"))));		
+				foldButton.add(new AttributeModifier("title", new Model<String>((tmpos.getFolded()?"Unfold":"Fold"))));
+				foldButton.add(new AttributeModifier("src", new Model<String>("/TEMPLATE/ampTemplate/img_2/onepager/"+(tmpos.getFolded()?"fold.png":"unfold.png"))));
 			}
 		}
 		

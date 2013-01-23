@@ -58,7 +58,7 @@ public abstract class Viewable implements Cloneable {
 	 * @return the full viewer path
 	 */
 	public String getViewerPath(String viewType) {
-		String className = this.getClass().getName();
+		String className = getMyClassName();
 		String key=className+viewType;
 		String value=(String) viewerPaths.get(key);
 		if(value!=null) return value;
@@ -127,6 +127,10 @@ public abstract class Viewable implements Cloneable {
 
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
+	}
+	
+	protected String getMyClassName() {
+		return this.getClass().getName();
 	}
 
 	/**

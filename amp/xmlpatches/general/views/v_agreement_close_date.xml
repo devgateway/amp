@@ -21,8 +21,13 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 			    	CREATE OR REPLACE VIEW v_agreement_close_date AS 
-			    	SELECT DISTINCT f.amp_activity_id, ag.close_date as close_date, ag.id from amp_agreement ag, amp_funding f 
- 						WHERE f.agreement=ag.id AND ag.close_date IS NOT NULL;
+			    	SELECT DISTINCT f.amp_activity_id, ag.close_date as close_date, ag.id, 
+			    		(ag.title::text || ' - '::text) || ag.code::text AS "Agreement Title + Code",
+			    		ag.code AS "Agreement Code",
+			    		o.name AS "Donor Agency" 
+			    		FROM amp_agreement ag, amp_funding f, amp_organisation o 
+ 						WHERE f.agreement=ag.id AND f.amp_donor_org_id = o.amp_org_id AND 
+ 						ag.close_date IS NOT NULL;
         		</lang>
 		</script>
 	</apply>

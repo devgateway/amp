@@ -31,7 +31,7 @@ public class TextCell extends Cell {
 		value="";		
 	}
 	
-	public Class<TextColWorker> getWorker() {
+	public Class<? extends TextColWorker> getWorker() {
 		return TextColWorker.class;
 	}
 	

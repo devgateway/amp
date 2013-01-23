@@ -15,7 +15,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
+import org.dgfoundation.amp.onepager.models.AmpActivityModel;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.module.aim.dbentity.OnepagerSection;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.FMUtil;
@@ -201,7 +204,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
                 } catch (DgException e) {
                     logger.error("Can't save onepager sections:", e);
                 }
-				target.appendJavaScript("window.location.reload()");
+
+                target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 			}
 		};
 		add(upButton);
@@ -224,7 +228,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
                 } catch (DgException e) {
                     logger.error("Can't save onepager sections:", e);
                 }
-				target.appendJavaScript("window.location.reload()");
+                target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 			}
 		};
 		add(downButton);
@@ -242,7 +246,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
                 } catch (DgException e) {
                     logger.error("Can't save onepager sections:", e);
                 }
-                target.appendJavaScript("window.location.reload()");
+                target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 			}
 		};
 		add(foldButton);

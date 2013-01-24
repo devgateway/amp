@@ -156,7 +156,7 @@ public class ShowProjectsList extends Action {
 				Long long1 = ids[i];
 				itemName = DbUtil.getOrganisation(long1).getName();
 				Long[] id1 = {long1};
-				newFilter.setOrgIds(id1);
+				newFilter.setSelOrgIds(id1);
 				activities = DbUtil.getActivityList(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				itemProjectsList.put(itemName, getActivitiesValues(activities, filter, type, ids[i].toString(), startYearInt, endYearInt));
 			}
@@ -298,9 +298,9 @@ public class ShowProjectsList extends Action {
 					newFilter.setSelLocationIds(null);
 	        	} else if (type.equals("DonorProfile")){
 	        		Long[] id1 = {Long.parseLong(id)};
-	        		newFilter.setOrgIds(id1);
+	        		newFilter.setSelOrgIds(id1);
 					fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-					newFilter.setOrgIds(null);
+					newFilter.setSelOrgIds(null);
 	        	} else {
 	        		fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	        	}

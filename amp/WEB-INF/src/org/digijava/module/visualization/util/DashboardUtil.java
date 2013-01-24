@@ -76,7 +76,7 @@ public class DashboardUtil {
 			//Long[] oldIds = filter.getOrgIds();
 			Long[] ids = {ampOrg.getAmpOrgId()};
             DashboardFilter newFilter = filter.getCopyFilterForFunding();
-			newFilter.setOrgIds(ids);
+			newFilter.setSelOrgIds(ids);
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
             //filter.setOrgIds(oldIds);
             BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);

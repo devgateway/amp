@@ -1055,7 +1055,7 @@ public class DataDispatcher extends DispatchAction {
                 for (Long i = startYear; i <= endYear; i++) {
         			DashboardFilter newFilter = filter.getCopyFilterForFunding();
         			Long[] ids = {org.getAmpOrgId()};
-        			newFilter.setOrgIds(ids);
+        			newFilter.setSelOrgIds(ids);
                     startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
                     DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
@@ -1096,7 +1096,7 @@ public class DataDispatcher extends DispatchAction {
 				idsArrayStr = idsArrayStr + String.valueOf(long1) + "-";
 				index++;
 			}
-            newFilter.setOrgIds(idsArray);
+            newFilter.setSelOrgIds(idsArray);
             if (ids.size()!=0){
             	csvString.append(",");
 	        	csvString.append("Others");
@@ -2521,7 +2521,7 @@ public class DataDispatcher extends DispatchAction {
 				AmpOrganisation ampOrganisation = (AmpOrganisation) iterator.next();
 				DashboardFilter newFilter = filter.getCopyFilterForFunding();
 				Long[] ids = {ampOrganisation.getAmpOrgId()};
-				newFilter.setOrgIds(ids);
+				newFilter.setSelOrgIds(ids);
 	            startDate = DashboardUtil.getStartDate(fiscalCalendarId, year.intValue());
 	            endDate = DashboardUtil.getEndDate(fiscalCalendarId, year.intValue());
 	            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);

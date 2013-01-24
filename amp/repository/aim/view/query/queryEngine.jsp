@@ -113,10 +113,10 @@ queryValidCbObj	= {
 function validateSubmitQuery () {
 		var formName	= "aimReportsFilterPickerForm";
 		var filterForm		= document.getElementsByName(formName)[0];
-		var fromDate=filterForm.fromDate.value;
-		var toDate=filterForm.toDate.value;
-		if(fromDate!=null&&fromDate!=''&&toDate!=null&&toDate!=''){
-			var additionalParams	= "fromDate="+fromDate+"&toDate="+toDate;
+		var fromDate = filterForm.fromDate.value;
+		var toDate = filterForm.toDate.value;
+		if (fromDate != null && fromDate != '' && toDate != null && toDate != ''){
+			var additionalParams	= "fromDate=" + fromDate + "&toDate=" + toDate;
 			YAHOO.util.Connect.asyncRequest("POST", "/aim/validateReportsFilterPicker.do" , queryValidCbObj, additionalParams);
 		}
 		else{

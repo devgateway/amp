@@ -215,8 +215,8 @@ public class FilterUtil {
 		form.setToYear( filter.getYearTo()!=null ? filter.getYearTo().longValue() : null );
 		form.setFromMonth( filter.getFromMonth() );
 		form.setToMonth( filter.getToMonth() );
-		form.setFromDate( filter.getFromDate() );
-		form.setToDate( filter.getToDate() );
+		form.setFromDate(FormatHelper.formatDate(filter.buildFromDateAsDate()));
+		form.setToDate(FormatHelper.formatDate(filter.buildToDateAsDate()));
 		
 		form.setToActivityStartDate(filter.getToActivityStartDate());
 		form.setFromActivityStartDate(filter.getFromActivityStartDate());

@@ -74,8 +74,22 @@ import org.digijava.module.mondrian.query.MoConstants;
  */
 
 public class AmpARFilter extends PropertyListable {
-	private static SimpleDateFormat sdfOut=new SimpleDateFormat("yyyy-MM-dd");
-	private static SimpleDateFormat sdfIn=new SimpleDateFormat("dd/MM/yyyy");
+	
+	public final static String SDF_OUT_FORMAT_STRING = "yyyy-MM-dd";
+	public final static String SDF_IN_FORMAT_STRING = "dd/MM/yyyy";
+	
+	/**
+	 * Date string formatted for SQL queries
+	 * field not static because SimpleDateFormat is not thread-safe
+	 */
+	private final SimpleDateFormat sdfOut = new SimpleDateFormat(SDF_OUT_FORMAT_STRING);
+	
+	/**
+	 * Date string formatted for database serialization
+	 * field not static because SimpleDateFormat is not thread-safe
+	 */
+	private final SimpleDateFormat sdfIn = new SimpleDateFormat(SDF_IN_FORMAT_STRING);
+	
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	private Long id;
 	private boolean justSearch=false;
@@ -269,7 +283,15 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpCategoryValue> budget = null;
 	private Collection<Integer> lineMinRank;
 	private Collection<Integer> planMinRank;
+	
+	/**
+	 * the date is stored in the {@link #sdfIn} hardcoded format
+	 */
 	private String fromDate;
+	
+	/**
+	 * the date is stored in the {@link #sdfIn} hardcoded format
+	 */
 	private String toDate;
 	
 	private String fromActivityStartDate; // view: v_actual_start_date, column name: Actual Start Date
@@ -1885,22 +1907,82 @@ public class AmpARFilter extends PropertyListable {
 		}
 	}
 
+	/**
+	 * returns the date in the {@link #sdfIn} format
+	 */
 	public String getFromDate() {
 		return fromDate;
 	}
 
+	/**
+	 * returns the fromDate as a Date object
+	 * @return
+	 */
+	public Date buildFromDateAsDate()
+	{
+		if (fromDate == null || (fromDate.length() == 0))
+			return null;
+		try
+		{
+			return sdfIn.parse(fromDate);
+		}
+		catch(ParseException e)
+		{
+			logger.error("invalid date trickled into AmpARFilter::fromDate!", e); // SHOULD NOT HAPPEN!
+			return null;
+		}
+	}
+	
+	/**
+	 * returns the toDate as a Date object
+	 * @return
+	 */
+	public Date buildToDateAsDate()
+	{
+		if (toDate == null || (toDate.length() == 0))
+			return null;
+		try
+		{
+			return sdfIn.parse(toDate);
+		}
+		catch(ParseException e)
+		{
+			logger.error("invalid date trickled into AmpARFilter::toDate!", e); // SHOULD NOT HAPPEN!
+			return null;
+		}
+	}
+	
+	/**
+	 * sets the date in the {@link #sdfIn} format. Will ignore call if fed incorrect data
+	 */
 	public void setFromDate(String fromDate) {
+		if (!FormatHelper.isValidDateString(fromDate, sdfIn))
+		{
+			logger.error("tried to push invalidly-formatted date into AmpARFilter: " + fromDate, new RuntimeException());
+			return;
+		}
 		this.fromDate = fromDate;
 	}
 
+	/**
+	 * returns the date in the {@link #sdfIn} format
+	 */
 	public String getToDate() {
 		return toDate;
 	}
 
+	/**
+	 * sets the date in the {@link #sdfIn} format. Will ignore call if fed incorrect data
+	 */
 	public void setToDate(String toDate) {
+		if (!FormatHelper.isValidDateString(fromDate, sdfIn))
+		{
+			logger.error("tried to push invalidly-formatted date into AmpARFilter: " + fromDate, new RuntimeException());
+			return;
+		}
 		this.toDate = toDate;
 	}
-	
+		
 
 	/**
 	 * @return the fromActivityStartDate

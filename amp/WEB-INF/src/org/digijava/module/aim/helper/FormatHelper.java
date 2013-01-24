@@ -242,21 +242,42 @@ public class FormatHelper {
 	return String.valueOf(getDefaultFormat().getDecimalFormatSymbols().getGroupingSeparator());
     }
 
-   public static GregorianCalendar parseDate(String sDate) throws Exception{
-	if (sDate==null) return null;
-       String defaultFormat= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
-	  SimpleDateFormat formater=new SimpleDateFormat(defaultFormat);
-	  GregorianCalendar result=new GregorianCalendar();
-	try {
-	    result.setTime(formater.parse(sDate));
-	} catch (ParseException e) {
-	    // TODO Auto-generated catch block
-	   throw new Exception("The source string has not a format according to globbal setting "+defaultFormat,e );
-	}
-	  return result;
-   }
+    public final static String formatDate(GregorianCalendar date, String formatString)
+    {
+    	if (date == null)
+    		return null;
+    	return new SimpleDateFormat(formatString).format(date.getTime());
+    }
+    
+    public final static boolean isValidDateString(String sDate, SimpleDateFormat formatter)
+    {
+    	if (sDate == null)
+    		return true;
+    	try
+    	{
+    		return (formatter.parse(sDate) != null);
+    	}
+    	catch(Exception e)
+    	{
+    		return false;
+    	}
+    }
+    
+    public static GregorianCalendar parseDate(String sDate) throws Exception{
+    	if (sDate==null) return null;
+    	String defaultFormat= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+    	SimpleDateFormat formater=new SimpleDateFormat(defaultFormat);
+    	GregorianCalendar result=new GregorianCalendar();
+    	try {
+    		result.setTime(formater.parse(sDate));
+    	} catch (ParseException e) {
+    		// TODO Auto-generated catch block
+    		throw new Exception("The source string has not a format according to global setting "+defaultFormat,e );
+    	}
+    	return result;
+    }
    
-   public static Date  parseDate2(String sDate){
+   public static Date parseDate2(String sDate){
 	   try {
 		   return FormatHelper.parseDate(sDate).getTime();
 	} catch (Exception e) {
@@ -265,11 +286,11 @@ public class FormatHelper {
 	}
    }
    
-   public static String formatDate(Date date) {
-	if(date==null) return null;
-	String defaultFormat = FeaturesUtil
-		.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
-	SimpleDateFormat formater = new SimpleDateFormat(defaultFormat);	
-	return formater.format(date);
-    }
+   public static String formatDate(Date date)
+   {
+	   if(date==null) return null;
+	   String defaultFormat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+	   SimpleDateFormat formater = new SimpleDateFormat(defaultFormat);	
+	   return formater.format(date);
+   }
 }

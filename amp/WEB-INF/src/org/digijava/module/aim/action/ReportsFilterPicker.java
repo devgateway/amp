@@ -1409,8 +1409,8 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setYearTo(filterForm.getToYear() == null || filterForm.getToYear().longValue() == -1 ? null : new Integer(filterForm.getToYear().intValue()));
 		arf.setFromMonth(filterForm.getFromMonth() == null || filterForm.getFromMonth().intValue() == -1 ? null : new Integer(filterForm.getFromMonth().intValue()));
 		arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1 ? null : new Integer(filterForm.getToMonth().intValue()));
-		arf.setFromDate(filterForm.getFromDate() == null ? null : new String(filterForm.getFromDate()));
-		arf.setToDate(filterForm.getToDate() == null ? null : new String(filterForm.getToDate()));
+		arf.setFromDate(filterForm.getFromDate() == null ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getFromDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
+		arf.setToDate(filterForm.getToDate() == null ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getToDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
 		
 		arf.setToActivityStartDate(filterForm.getToActivityStartDate() );
 		arf.setFromActivityStartDate(filterForm.getFromActivityStartDate() );

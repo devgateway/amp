@@ -88,24 +88,22 @@ public class CategAmountColWorker extends ColumnWorker {
 		//we now check if the year filtering is used - we do not want items from other years to be shown
 		//now this is null due we have one field 
 		try {
-			if(filter.getFromDate()!=null || filter.getToDate()!=null) {
+			java.util.Date fromDate = filter.buildFromDateAsDate();
+			java.util.Date toDate = filter.buildToDateAsDate();
+			
+			if (fromDate != null || toDate != null) {
 			//	java.util.Date tDate=(java.util.Date) MetaInfo.getMetaInfo(td.getMetaData(),ArConstants.TRANSACTION_DATE).getValue();
 				java.util.Date tDate=new Date(td.getTime());
 				
-				if (filter.getFromDate()!=null  && !("".equalsIgnoreCase(filter.getFromDate()))){
-					java.util.Date sDate=FormatHelper.parseDate2(filter.getFromDate());
-					if (tDate.before(sDate)) 
-						showable=false;
+				if (fromDate != null && tDate.before(fromDate)){
+					showable = false;
 				}
 				
-				if (filter.getToDate()!=null && !("".equalsIgnoreCase(filter.getToDate()))){
-					java.util.Date toDate=FormatHelper.parseDate2(filter.getToDate());
-					if (tDate.after(toDate)) 
-						showable=false;
+				if (toDate != null && tDate.after(toDate)){
+					showable = false;
 				}
 		}
-	
-		
+			
 			
 		} catch (Exception e) {
 			logger.error("Can't define if cell is Showable possible parse error detected",e );

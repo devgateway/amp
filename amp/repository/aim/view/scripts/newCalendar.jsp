@@ -146,7 +146,7 @@
 			monthPos = format.toLowerCase().indexOf('mmm');
 			yearPos = format.indexOf('yyyy');
 			dayPos = format.indexOf('dd');
-			month = inputArray.monthName;		
+			month = YUI_MONTH_NAMES_MEDIUM[inputArray.month - 1];		
 		}
 		else{
 			monthPos = format.toLowerCase().indexOf('mm');
@@ -223,6 +223,7 @@
 	}
 
 	function pickDateById(buttonId,objectId){
+		// debugger;
 		pickDateById2(buttonId, objectId, true);
 	}
 	
@@ -311,7 +312,8 @@
                     var parameter = {
                     	year: yStr,
                     	month: mStr,
-                    	day: dStr
+                    	day: dStr,
+                    	monthName: [selDate.getMonth()]
                     };
                     var dateString	= getDateFromCalendar(parameter);
                     textboxEl.value = dateString;

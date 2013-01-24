@@ -41,16 +41,20 @@
 <input type="hidden" id="trnCurrency" value="<digi:trn jsFriendly='true'>Currency</digi:trn>" />
 
 <!--  End Global variables for all flash files -->
+<input type="hidden" id="${graph.containerId}ShowFontFamily" value="Verdana"/>
+<input type="hidden" id="${graph.containerId}DataAction" value="get${graph.containerId}GraphData" />
+<input type="hidden" id="${graph.containerId}DataField" value="dataField" />
+<input type="hidden" id="${graph.containerId}ItemId"/>
+<input type="hidden" id="${graph.containerId}TitleLegendTrn" value="<digi:trn>${graph.name}</digi:trn>" />
+			<c:if test="${fromLaunchGraphAction}">
+				<%@ include file="graphTypesOptions.jsp" %>
+			</c:if>
+			<c:if test="${!fromLaunchGraphAction}">
 			<fieldset class="chartFieldset">
 				<legend><span id="${graph.containerId}TitleLegend" class=legend_label ></span></legend>
 
-					<input type="hidden" id="${graph.containerId}ShowFontFamily" value="Verdana"/>
-					<input type="hidden" id="${graph.containerId}DataAction" value="get${graph.containerId}GraphData" />
-					<input type="hidden" id="${graph.containerId}DataField" value="dataField" />
-					<input type="hidden" id="${graph.containerId}ItemId"/>
-					<input type="hidden" id="${graph.containerId}TitleLegendTrn" value="<digi:trn>${graph.name}</digi:trn>" />
 
-				<c:if test="${!fromLaunchGraphAction}">
+				
 					<a onclick="toggleHeader(this, '${graph.containerId}Header')" style=""><img src="/TEMPLATE/ampTemplate/img_2/ico_perm_open.gif" vspace="5" align="absMiddle"/> <digi:trn>Show settings</digi:trn></a>
 					<div id="${graph.containerId}Header" class="chart_header" style="display:none;">
 					<digi:trn>Title</digi:trn> <input type="text" id="${graph.containerId}Title" value="" size="50">
@@ -70,26 +74,7 @@
 					&nbsp;<input type="checkbox" id="${graph.containerId}Ignore" style="display: none;" checked="checked"><label id="${graph.containerId}IgnoreLabel" style="display: none;" for="${graph.containerId}Ignore"><digi:trn>Ignore big values</digi:trn></label></br>
 					<input type="button" class="buttonx" value="<digi:trn>Update chart</digi:trn>" onclick="updateGraph(event, '${graph.containerId}')">
 					</div>
-					<div class="dash_graph_opt">
-						<c:if test="${graph.barGraphEnabled==true}">
-							<img style="padding-left: 5px" onclick="changeChart(event, 'bar', '${graph.containerId}', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/>
-						</c:if>
-						<c:if test="${graph.barProfileGraphEnabled==true}">
-							<img style="padding-left: 5px" onclick="changeChart(event, 'bar_profile', '${graph.containerId}', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/>
-						</c:if>
-						<c:if test="${graph.barGrowthGraphEnabled==true}">
-							<img style="padding-left: 5px" onclick="changeChart(event, 'bar_growth', '${graph.containerId}', true)" src="/TEMPLATE/ampTemplate/img_2/barchart.gif" title="<digi:trn>Bar Chart</digi:trn>"/>
-						</c:if>
-						<c:if test="${graph.pieGraphEnabled==true}">
-							<img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/donutchart.png" onclick="changeChart(event, 'donut', '${graph.containerId}', true)" title="<digi:trn>Donut Chart</digi:trn>"/>
-						</c:if>
-						<c:if test="${graph.lineGraphEnabled==true}">
-							<img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/linechart.gif" onclick="changeChart(event, 'line', '${graph.containerId}', true)" title="<digi:trn>Line Chart</digi:trn>"/>
-						</c:if>
-						<c:if test="${graph.dataListEnabled==true}">
-							<img style="padding-left: 5px" src="/TEMPLATE/ampTemplate/img_2/datasheet.gif" onclick="changeChart(event, 'dataview', '${graph.containerId}', true)" title="<digi:trn>Data View</digi:trn>"/>
-						</c:if>
-					</div>
+					<%@ include file="graphTypesOptions.jsp" %>
 					<br />
 					<br />
 				</c:if>
@@ -104,5 +89,5 @@
 				<div align="right">
 					<br /><a href="javascript:document.getElementById('dashboard_name').scrollIntoView(true);"><digi:trn>Back to Top</digi:trn></a>
 				</div> 
-				</c:if>
 			</fieldset>
+			</c:if>

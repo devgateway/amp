@@ -17,6 +17,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -38,7 +39,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
-import org.digijava.module.visualization.util.DashboardUtil;
 import org.digijava.module.visualization.util.DbUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
@@ -778,16 +778,26 @@ public class DbHelper {
 		}
 		return ampStructureType;
 	}
-	public static void deleteStructureType(AmpStructureType structureType) {
+	public static void deleteStructureType(AmpStructureType structureType) throws AdminException {
 		Session sess = null;
 		Transaction tx = null;
 
 		try {
 			sess = PersistenceManager.getRequestDBSession();
+            Query q = sess.createQuery("select st from " + AmpStructure.class.getName() + " st where st.type.typeId=:typeId "  );
+            q.setLong("typeId", structureType.getTypeId());
+            if (!q.list().isEmpty()){
+            	throw new AdminException("The Structure Type is being referenced, it can not be deleted.");	
+            }	
+			
 //beginTransaction();
 			sess.delete(structureType);
 			//tx.commit();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
+			if (e instanceof AdminException){
+				throw (AdminException)e;
+			}
 			if (e instanceof JDBCException)
 				throw (JDBCException) e;
 			logger.error("Exception " + e.toString());

@@ -1,31 +1,26 @@
 package org.digijava.module.esrigis.action;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
-import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.AmpStructureType;
-import org.digijava.module.content.action.DisplayThumbnail;
-import org.digijava.module.content.dbentity.AmpContentItem;
-import org.digijava.module.content.dbentity.AmpContentItemThumbnail;
-import org.digijava.module.content.form.ContentForm;
-import org.digijava.module.content.util.DbUtil;
 import org.digijava.module.esrigis.form.StructureTypeForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
 
@@ -92,7 +87,25 @@ public class StructureTypeManager extends DispatchAction {
 		if (request.getParameter("id") != null) {
 			Long structureTypeId = Long.parseLong(request.getParameter("id"));
 			AmpStructureType structureType = DbHelper.getStructureType(structureTypeId);
-			DbHelper.deleteStructureType(structureType);
+			try{
+				DbHelper.deleteStructureType(structureType);
+			}
+			catch(AdminException e){
+
+				String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+	    		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+				
+				ActionMessages errors = new ActionMessages();
+				errors.add(
+						ActionErrors.GLOBAL_MESSAGE,
+						new ActionMessage(
+								"error.aim.structureTypeManager.typeBeingReferenced",
+								TranslatorWorker
+										.translateText(
+												e.getMessage(),
+												locale, siteId)));
+				saveErrors(request, errors);
+			}
 		}
 		return mapping.findForward("delete");
 	}

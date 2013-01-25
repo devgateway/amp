@@ -67,12 +67,14 @@ function popup(mylink, windowname)
 			<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
 				<li class="tri">
 					<digi:link  title="${report.name}" href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
-	                    <c:if test="${fn:length(report.name) > 50}" >
-	                    	<c:out value="${fn:substring(report.name, 0, 50)}"/>...
-	                    </c:if>
-	                    <c:if test="${fn:length(report.name) <= 50}">
-	                    	<c:out value="${report.name}"/>
-	                    </c:if>
+						<c:choose>
+	                    	<c:when test="${fn:length(report.name) > 50}" >
+	                    		<c:out value="${fn:substring(report.name, 0, 50)}"/>...
+	                    	</c:when>
+	                    	<c:otherwise>
+	                    		<c:out value="${report.name}"/>
+	                    	</c:otherwise>
+	                    </c:choose>
 					</digi:link>
 				</li>
 			</logic:iterate>

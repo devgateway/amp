@@ -348,25 +348,27 @@ function submitForm(action){
 																							paramProperty="ampReportId"
 																							onclick="return popup(this,'');"
 																							title="${nameTooltip}">
-																							<b> <c:if
-																									test="${fn:length(report.name) > 120}">
-																									<c:out
-																										value="${fn:substring(report.name, 0, 120)}" />... </c:if>
-																								<c:if test="${fn:length(report.name) < 120}">
-																									<c:out value="${report.name}" />
-																								</c:if> </b>
+																							<b> 
+																								<c:choose>
+																									<c:when test="${fn:length(report.name) > 120}">
+																										<c:out value="${fn:substring(report.name, 0, 120)}" />... 
+																									</c:when>
+																									<c:otherwise>
+																										<c:out value="${report.name}" />
+																									</c:otherwise>
+																								</c:choose>
+																							</b>
 																						</digi:link>
 																						<br>
-																						<logic:present name="report"
-																							property="reportDescription">
-																							<c:if
-																								test="${fn:length(report.reportDescription) > 120}">
-																								<c:out
-																									value="${fn:substring(report.reportDescription, 0, 120)}" />... </c:if>
-																							<c:if
-																								test="${fn:length(report.reportDescription) < 120}">
-																								<c:out value="${report.reportDescription}" />
-																							</c:if>
+																						<logic:present name="report" property="reportDescription">
+																							<c:choose>
+																								<c:when test="${fn:length(report.reportDescription) > 120}">
+																									<c:out value="${fn:substring(report.reportDescription, 0, 120)}" />... 
+																								</c:when>
+																								<c:otherwise>
+																									<c:out value="${report.reportDescription}" />
+																								</c:otherwise>
+																							</c:choose>
 																						</logic:present>
 																					</div></td>
 																				<td class="report_inside" align="center"

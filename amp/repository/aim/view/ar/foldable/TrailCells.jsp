@@ -38,15 +38,15 @@
 	<% } else { %>
          <b class="desktop_project_name">
             <c:choose>
-            <c:when test="${fn:length(reportData.name)>25}">
-            <span title='<c:out value="${reportData.name}"/>' >
-                <c:out value="${fn:substring(reportData.name,0,25)}"/>...
-            </span>
-            </c:when>
-            <c:otherwise>
-                <bean:write name="reportData" property="name"/>
-            </c:otherwise>
-        </c:choose>(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;
+            	<c:when test="${fn:length(reportData.name)>25}">
+            		<span title='<c:out value="${reportData.name}"/>' >
+                		<c:out value="${fn:substring(reportData.name,0,25)}"/>...
+            		</span>
+            	</c:when>
+            	<c:otherwise>
+                	<bean:write name="reportData" property="name"/>
+            	</c:otherwise>
+        	</c:choose>(<bean:write name="reportData" property="totalUniqueRows"/>)&nbsp;
         </b>
     <% } %> 
 </td>

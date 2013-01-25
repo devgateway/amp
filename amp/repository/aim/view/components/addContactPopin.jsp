@@ -65,24 +65,24 @@
 							<html:radio property="selContactIds" value="${contact.id}"></html:radio>
 							</td>
 							<td class="inside"  width="15%">
-							<c:choose>
+								<c:choose>
 									<c:when test="${fn:length(contact.name)>15}">
 										<span title="${contact.name}">${fn:substring(contact.name,0,12)}...</span> 	
 									</c:when>
 									<c:otherwise>
 											<c:out value="${contact.name}"/>
 									</c:otherwise>
-									</c:choose>
+								</c:choose>
 							</td>
 							<td class="inside"  width="15%">
-									<c:choose>
+								<c:choose>
 									<c:when test="${fn:length(contact.lastname)>15}">
 										<span title="${contact.lastname}">${fn:substring(contact.lastname,0,12)}...</span> 	
 									</c:when>
 									<c:otherwise>
-											<c:out value="${contact.lastname}"/>
+										<c:out value="${contact.lastname}"/>
 									</c:otherwise>
-									</c:choose>
+								</c:choose>
 							</td>
 							<td class="inside"  width="25%">
 							<ul>
@@ -103,18 +103,17 @@
 							<td class="inside" width="20%">
 							<ul>
 							 <c:if test="${not empty contact.organisationName}">
-							 <c:choose>
+							 	<c:choose>
 									<c:when test="${fn:length(contact.organisationName)>13}">
 										<li title="${contact.organisationName}">${fn:substring(contact.organisationName,0,10)}...</li> 	
 									</c:when>
 									<c:otherwise>
 										<li><c:out value="${contact.organisationName}"/></li>
 									</c:otherwise>
-								</c:choose>
-								
-								</c:if>
-								<c:forEach var="contOrg" items="${contact.organizationContacts}">
-								 <c:choose>
+								</c:choose>								
+							</c:if>
+							<c:forEach var="contOrg" items="${contact.organizationContacts}">
+								<c:choose>
 									<c:when test="${fn:length(contOrg.organisation.name)>13}">
 										<li title="${contOrg.organisation.name}">${fn:substring(contOrg.organisation.name,0,10)}...</li> 	
 									</c:when>

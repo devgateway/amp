@@ -42,12 +42,14 @@
 								<option value="${tab.ampReportId }" title="${tab.name }"
 								<c:if test="${tab.ampReportId == myForm.tabsId[k-1]}">SELECTED</c:if>
 								>
-									<c:if test="${fn:length(tab.name) > 40}" >
-										${fn:substring(tab.name, 0, 40)}...
-									</c:if>
-									<c:if test="${fn:length(tab.name) <= 40}" >
-										${tab.name}
-									</c:if>
+									<c:choose>									
+										<c:when test="${fn:length(tab.name) > 40}" >
+											${fn:substring(tab.name, 0, 40)}...
+										</c:when>
+										<c:otherwise>
+											${tab.name}
+										</c:otherwise>
+									</c:choose>
 								</option>
 							</c:forEach>
 						</html:select>

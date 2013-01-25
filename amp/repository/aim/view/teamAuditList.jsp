@@ -189,32 +189,38 @@ function showUser(email){
 								<logic:iterate name="aimTeamAuditListForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 									<tr>
 										<td width="280" class="inside" title="${log.objectName}">
-											<c:if test="${fn:length(log.objectName) > 30}" >
-												<c:out value="${fn:substring(log.objectName, 0, 30)}" />...
-											</c:if>
-											<c:if test="${fn:length(log.objectName) < 30}" >
-												<bean:write name="log" property="objectName"/>
-											</c:if>
+											<c:choose>
+												<c:when test="${fn:length(log.objectName) > 30}" >
+													<c:out value="${fn:substring(log.objectName, 0, 30)}" />...
+												</c:when>
+												<c:otherwise>
+													<bean:write name="log" property="objectName"/>
+												</c:otherwise>
+											</c:choose>
 										</td>
 										<td class="inside" width="150" title="${log.objectTypeTrimmed}">
 											<bean:write name="log" property="objectTypeTrimmed"/>									
 										</td>
 										<td class="inside" width="100" title="${log.teamName}">
-											<c:if test="${fn:length(log.objectName) > 10}" >
-												<c:out value="${fn:substring(log.teamName, 0, 10)}" />...
-											</c:if>
-											<c:if test="${fn:length(log.teamName) < 10}" >
-												<bean:write name="log" property="teamName"/>
-											</c:if>									
+											<c:choose>
+												<c:when test="${fn:length(log.objectName) > 10}" >
+													<c:out value="${fn:substring(log.teamName, 0, 10)}" />...
+												</c:when>
+												<c:otherwise>
+													<bean:write name="log" property="teamName"/>
+												</c:otherwise>
+											</c:choose>									
 										</td>
 										<td class="inside" width="150">
 											<a href="javascript:showUser('<bean:write name="log" property="authorEmail"/>')" style="text-decoration: none" title="${log.authorName}" class="l_sm">
-												<c:if test="${fn:length(log.objectName) > 8}" >
-													<c:out value="${fn:substring(log.authorName, 0, 8)}" />...
-												</c:if>
-												<c:if test="${fn:length(log.objectName) < 8}" >
-													<bean:write name="log" property="authorName"/>
-												</c:if>
+												<c:choose>
+													<c:when test="${fn:length(log.objectName) > 8}" >
+														<c:out value="${fn:substring(log.authorName, 0, 8)}" />...
+													</c:when>
+													<c:otherwise>
+														<bean:write name="log" property="authorName"/>
+													</c:otherwise>
+												</c:choose>
 											</a>								  
 										</td>
 										<td width="100" class="inside" title="${log.loggedDate}">

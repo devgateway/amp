@@ -204,12 +204,14 @@
 														</td>
 														<td class="inside">
 															<span  title="<c:out value="${ampReports.name}"/>">
-															<c:if test="${fn:length(ampReports.name) > 25}" >
-																<c:out value="${fn:substring(ampReports.name, 0, 25)}" />...
-															</c:if>
-															<c:if test="${fn:length(ampReports.name) < 25}" >
-																<c:out value="${ampReports.name}" /> 
-															</c:if>
+																<c:choose>
+																	<c:when test="${fn:length(ampReports.name) > 25}" >
+																		<c:out value="${fn:substring(ampReports.name, 0, 25)}" />...
+																	</c:when>
+																	<c:otherwise>
+																		<c:out value="${ampReports.name}" /> 
+																	</c:otherwise>
+																</c:choose>
 															</span>														
 														</td>
 														<td class="inside">

@@ -42,43 +42,57 @@ public class StructuresImporter extends Action {
 												"The file to import must be an text/csv file.",
 												locale, siteId)));
 				saveErrors(request, errors);
-			}
-			try{
-				InputStreamReader isr = new InputStreamReader(sform.getUploadedFile().getInputStream());
-				CSVReader reader = new CSVReader(isr);
-				String [] nextLine;
-				Boolean firstLine = true;
-				while ((nextLine = reader.readNext()) != null) {
-					if(firstLine){
-						firstLine = false;
-					}
-					else
-					{
-						AmpStructure st = new AmpStructure();
-						st.setTitle(nextLine[1]);
-						st.setLatitude(nextLine[2]);
-						st.setLongitude(nextLine[3]);
-						st.setType(DbHelper.getStructureTypesByName(nextLine[4]));
-						st.setActivities(DbHelper.getActivityByAmpId(nextLine[0]));
-						st.setDescription(nextLine[5]);
-						if (!"".equalsIgnoreCase(st.getTitle()) && st.getType()!=null && st.getActivities().size()!=0){
-							DbHelper.saveStructure(st);
+			}else{
+				try{
+					InputStreamReader isr = new InputStreamReader(sform.getUploadedFile().getInputStream());
+					CSVReader reader = new CSVReader(isr);
+					String [] nextLine;
+					Boolean firstLine = true;
+					while ((nextLine = reader.readNext()) != null) {
+						if(firstLine){
+							firstLine = false;
 						}
-						
+						else
+						{
+							AmpStructure st = new AmpStructure();
+							st.setTitle(nextLine[1]);
+							st.setLatitude(nextLine[2]);
+							st.setLongitude(nextLine[3]);
+							st.setType(DbHelper.getStructureTypesByName(nextLine[4]));
+							st.setActivities(DbHelper.getActivityByAmpId(nextLine[0]));
+							st.setDescription(nextLine[5]);
+							if (!"".equalsIgnoreCase(st.getTitle()) && st.getType()!=null && st.getActivities().size()!=0){
+								DbHelper.saveStructure(st);
+							}
+							
+						}
 					}
+					
+					errors.add(
+							ActionErrors.GLOBAL_MESSAGE,
+							new ActionMessage(
+									"aim.structureImporter.success",
+									TranslatorWorker
+											.translateText(
+													"Structures import done successfully.",
+													locale, siteId)));
+					//saved as error just to be shown in red
+					saveErrors(request, errors);
+					
+					
+				}catch(Exception e){
+					errors.add(
+							ActionErrors.GLOBAL_MESSAGE,
+							new ActionMessage(
+									"error.aim.structureImporter.error",
+									TranslatorWorker
+											.translateText(
+													"An error occurred while processing the file.",
+													locale, siteId)));
+					saveErrors(request, errors);
 				}
-			}catch(Exception e){
-				errors.add(
-						ActionErrors.GLOBAL_MESSAGE,
-						new ActionMessage(
-								"error.aim.structureImporter.error",
-								TranslatorWorker
-										.translateText(
-												"An error occurred while processing the file.",
-												locale, siteId)));
-				saveErrors(request, errors);
+				
 			}
-			
 		}
 		return mapping.findForward("forward");
 		

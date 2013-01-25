@@ -253,6 +253,8 @@ public class FormatHelper {
     {
     	if (sDate == null)
     		return true;
+    	if (sDate.length() == 0)
+    		return true;
     	try
     	{
     		return (formatter.parse(sDate) != null);

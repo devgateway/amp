@@ -854,7 +854,7 @@ function initializeGlobalVariables(){
 		</tr>
 	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
 		<tr>
-		  <td><digi:trn>Organization Group</digi:trn>:</td>
+		  <td><b><digi:trn>Organization Group</digi:trn>:</b></td>
 		  	<td align=right>
 		     <html:select property="filter.orgGroupId" styleId="org_group_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 		         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
@@ -866,7 +866,7 @@ function initializeGlobalVariables(){
 			</td>
 		</tr>
 		<tr>
-			<td><digi:trn>Organization</digi:trn>:</td>
+			<td><b><digi:trn>Organization</digi:trn>:</b></td>
 			<td align=right>
 			   <html:select property="filter.orgId" styleId="org_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 			       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
@@ -877,7 +877,7 @@ function initializeGlobalVariables(){
 	</c:if>
 	<c:if test="${visualizationform.filter.dashboardType eq '2' }">
 	  <tr>
-		<td><digi:trn>Region</digi:trn>:</td>
+		<td><b><digi:trn>Region</digi:trn>:</b></td>
 		<td align=right>
 		   <html:select property="filter.regionId" styleId="region_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 		       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
@@ -887,7 +887,7 @@ function initializeGlobalVariables(){
 		</td>
 	 </tr> 
 	 <tr>
-	  	<td><digi:trn>Zone</digi:trn>:</td>
+	  	<td><b><digi:trn>Zone</digi:trn>:</b></td>
 	   	<td align=right>
 	      <html:select property="filter.zoneId" styleId="zone_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 	          <html:option value="-1"><digi:trn>All</digi:trn></html:option>
@@ -898,7 +898,7 @@ function initializeGlobalVariables(){
   </c:if>
   <c:if test="${visualizationform.filter.dashboardType eq '3' }">
   <tr>
-	<td><digi:trn>Configurations</digi:trn>:</td>
+	<td><b><digi:trn>Configurations</digi:trn>:</b></td>
 	  <td align="right">
 	  <html:select property="filter.selSectorConfigId" styleId="sector_config_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 	  <c:forEach var="config" items="${visualizationform.filter.sectorConfigs}">
@@ -927,7 +927,7 @@ function initializeGlobalVariables(){
 		</td>
 	</tr>
 	<tr>
-	<td><digi:trn>Sector</digi:trn>:</td>
+	<td><b><digi:trn>Sector</digi:trn>:</b></td>
 	  <td align="right">
 	  <html:select property="filter.sectorId" styleId="sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 	         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
@@ -937,7 +937,7 @@ function initializeGlobalVariables(){
 		</td>
 	</tr>
 	<tr>
-	   <td><digi:trn>Sub-Sector</digi:trn>:</td>
+	   <td><b><digi:trn>Sub-Sector</digi:trn>:</b></td>
 	  <td align=right>
 	     <html:select property="filter.subSectorId" styleId="sub_sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
 	         <html:option value="-1"><digi:trn>All</digi:trn></html:option>

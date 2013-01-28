@@ -394,7 +394,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		cancelSaveAsDraft.setVisible(true);
 		cancelSaveAsDraft.getButton().add(new AttributeModifier("class", true, new Model<String>("sideMenuButtons")));
 		activityForm.add(cancelSaveAsDraft);
-		
+
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

@@ -1066,18 +1066,10 @@ public class HelpActions extends DispatchAction {
          // String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 
           String xmlString = request.getParameter("changedXml");
-          String replacedXmlString =  xmlString.replaceAll("&", "&amp;");
+          //String replacedXmlString =  xmlString.replaceAll("&", "&amp;");
           
           String moduleInstance = request.getParameter("Request");
-          
-          
-          org.w3c.dom.Element e;
-          org.w3c.dom.NamedNodeMap nnm;
-          int i;
-          org.w3c.dom.Node n;
-          String attrname;
-          String attrval;
-
+                  
        List<HelpTopic> listOfTree = new ArrayList<HelpTopic>();
         HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
 
@@ -1086,7 +1078,7 @@ public class HelpActions extends DispatchAction {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         DocumentBuilder builder = factory.newDocumentBuilder();
-        org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(replacedXmlString)));                 
+        org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(xmlString)));                 
                   
         org.w3c.dom.NodeList nl = document.getElementsByTagName("item");
         

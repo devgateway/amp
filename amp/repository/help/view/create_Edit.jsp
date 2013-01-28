@@ -79,9 +79,20 @@ function create(){
 }
 
 function saveTreeState(){
+	debugger;
      var xmlString = document.getElementById("xmlString").value;
      //======= URL Encoded Character is %26 for &. and we have &amp; that need to replace there are ajax sending problrm ====== //
-     replacedXmlString = xmlString.replace(/&amp;/,"%26");
+     
+     $.ajax({
+		type: "POST",
+		url: '/help/helpActions.do?actionType=saveTreeState&Request=${request}',
+		data: {
+			changedXml: xmlString
+		},
+		success: stateChanged
+	});
+     
+/*     replacedXmlString = xmlString.replace(/&amp;/,"%26");
      xmlHttp=GetXmlHttpObj();
 		if (xmlHttp==null){
 	 			alert ("Browser does not support HTTP Request")
@@ -92,20 +103,13 @@ function saveTreeState(){
 	    xmlHttp.open("POST",urlact,true);
 	    xmlHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
         xmlHttp.send("&changedXml="+replacedXmlString);
-		xmlHttp.onreadystatechange=stateChanged;
+		xmlHttp.onreadystatechange=stateChanged; */
 }
 
 function stateChanged(){
-
-   if (xmlHttp.readyState==4)
-  {
-        if(xmlHttp.status == 200)
-        {
-          //code to process Ajax request
-          hideProgress('progress');
-          reFresh();
-        }
-   }
+	//code to process Ajax request
+	hideProgress('progress');
+	reFresh();
 }
 
 function GetXmlHttpObj()	{
@@ -184,7 +188,7 @@ function GetXmlHttpObj()	{
                                   <digi:trn>Click here to Delete Help Topic</digi:trn>
                                 </c:set>
                                 <c:set var="savetreeState">
-                                  <digi:trn>Click here to Delete Help Topic</digi:trn>
+                                  <digi:trn>Click here to Save Tree State</digi:trn>
                                 </c:set>
                                 	<a class="link" onclick="printAllPreview();" title="${topicEdit}" ><digi:trn>Print All</digi:trn></a> |
 									

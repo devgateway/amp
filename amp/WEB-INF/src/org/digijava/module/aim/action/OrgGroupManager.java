@@ -172,7 +172,7 @@ public class OrgGroupManager extends Action {
 			            }			            
 			            
 			            if (NUM_RECORDS ==-1){
-			            	NUM_RECORDS = ampOrg.size();
+			            	NUM_RECORDS = ampOrg.size() > 0 ? ampOrg.size() : 100;
 			            }
 			            int stIndex = ((page - 1) * NUM_RECORDS) + 1;
 			            int edIndex=page * NUM_RECORDS ;

@@ -34,7 +34,7 @@ public class DisplayThumbnail extends Action {
 		String pageCode = request.getParameter("pageCode");
 		String labelText = request.getParameter("labelText");
 		Boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
-		ContentForm contentForm = (ContentForm) form;
+		//ContentForm contentForm = (ContentForm) form;
 
 		HttpSession session = request.getSession();
 		if (index != null) {

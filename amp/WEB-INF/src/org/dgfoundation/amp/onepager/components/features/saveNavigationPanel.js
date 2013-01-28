@@ -27,4 +27,30 @@ function hideDraftPanel(){
 		saveAsDraftPanel.hide();
 	}
 }
- 
+
+var warnSavePanel;
+function showWarningPanel(){
+    if(warnSavePanel==null){
+        warnSavePanel = new YAHOOAmp.widget.Panel("warnSavePanel", {
+            width : "450px",
+            fixedcenter : true,
+            constraintoviewport : true,
+            underlay : "shadow",
+            close : true,
+            visible : true,
+            modal : true,
+            draggable : false
+        });
+        $("#warnSavePanel").show();
+        warnSavePanel.render();
+    }
+    else{
+        warnSavePanel.show();
+    }
+    return false;
+}
+function hideWarningPanel(){
+    if(warnSavePanel!=null){
+        warnSavePanel.hide();
+    }
+}

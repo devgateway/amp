@@ -4,20 +4,10 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
+import org.apache.wicket.model.*;
 import org.apache.wicket.validation.validator.MaximumValidator;
 import org.apache.wicket.validation.validator.MinimumValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
@@ -25,19 +15,17 @@ import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpCollectionsSumComparatorValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.models.AmpTransactionTypeDonorFundingDetailModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
@@ -68,43 +56,6 @@ public class AmpDonorDisbursementsFormTableFeature extends
 			}
 		};		
 		
-
-		if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT).equalsIgnoreCase("TRUE"))
-			alertIfExpenditureBiggerDisbursment = true;
-		if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS).equalsIgnoreCase("TRUE"))
-			alertIfDisbursmentBiggerCommitments = true;
-
-		AbstractReadOnlyModel<List<AmpFundingDetail>> setAmountListModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel);
-		AbstractReadOnlyModel<List<AmpFundingDetail>> commitmentModel =  OnePagerUtil
-				.getReadOnlyListModelFromSetModel(new AmpTransactionTypeDonorFundingDetailModel(parentModel, Constants.COMMITMENT));
-		AbstractReadOnlyModel<List<AmpFundingDetail>> expenditureModel =  OnePagerUtil
-				.getReadOnlyListModelFromSetModel(new AmpTransactionTypeDonorFundingDetailModel(parentModel, Constants.EXPENDITURE));
-
-		
-		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
-		add(wmc);
-		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();
-		wmc.add(iValidator);
-		
-		final AmpCollectionsSumComparatorValidatorField amountSumComparator=
-				new AmpCollectionsSumComparatorValidatorField("amountSumComparator",setAmountListModel,"checkCommitmentSum", "AmpCommitmentsCollectionsSumComparatorValidator"); 
-		amountSumComparator.setIndicatorAppender(iValidator);
-		amountSumComparator.setSecondCollectionModel(commitmentModel);
-		amountSumComparator.setAlertIfCurrentModelAmountSumBig(true);
-		amountSumComparator.setVisibilityAllowed(alertIfDisbursmentBiggerCommitments);
-		add(amountSumComparator);
-		
-		
-		final AmpCollectionsSumComparatorValidatorField amountSumComparator1=
-				new AmpCollectionsSumComparatorValidatorField("amountSumComparator1",setAmountListModel,"checkExpenditureSum", "AmpExpemdituresCollectionsSumComparatorValidator"); 
-		amountSumComparator1.setIndicatorAppender(iValidator);
-		amountSumComparator1.setSecondCollectionModel(expenditureModel);
-		amountSumComparator1.setAlertIfCurrentModelAmountSumBig(false);
-		amountSumComparator1.setVisibilityAllowed(alertIfExpenditureBiggerDisbursment);
-		wmc.setVisibilityAllowed(alertIfDisbursmentBiggerCommitments || alertIfExpenditureBiggerDisbursment);
-		add(amountSumComparator1);
-		
 		list = new ListEditor<AmpFundingDetail>("listDisbursements", setModel, new AmpFundingDetail.FundingDetailComparator()) {
 
 			@Override
@@ -112,9 +63,6 @@ public class AmpDonorDisbursementsFormTableFeature extends
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingDetail> item) {
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 				AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
-				
-				amountComponent.setAmountValidator(amountSumComparator1);
-				amountComponent.setAmountValidator(amountSumComparator); 	
 				item.add(amountComponent);
 
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
@@ -176,17 +124,6 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 						updateModel();
-						
-						parent.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>(){
-							@Override
-							public void component(
-									AmpCollectionValidatorField component,
-									IVisit<Void> visit) {
-								component.reloadValidationField(target);
-								target.add(component.getParent());
-								visit.dontGoDeeper();
-							}
-						});
 					};
 				});
 			}

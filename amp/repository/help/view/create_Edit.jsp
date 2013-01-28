@@ -63,7 +63,8 @@ function printAllPreview (){
 }
 
 function remove(){
-    if(validate(getKey())){
+	var confirmMessage = "<digi:trn>Are you sure you want to remove this topic?</digi:trn>";
+    if(confirm(confirmMessage) && validate(getKey())){
         var actUrl = "<%=removeTopic%>"+"~helpTopicId="+selectedTopicId+"~wizardStep=0~multi=false";
         window.location = actUrl;
     }

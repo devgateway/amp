@@ -13,8 +13,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.exception.AdminException;
@@ -35,10 +39,12 @@ import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
+import org.digijava.module.visualization.util.DashboardUtil;
 import org.digijava.module.visualization.util.DbUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
@@ -49,7 +55,7 @@ import org.hibernate.Transaction;
 public class DbHelper {
 	private static Logger logger = Logger.getLogger(DbHelper.class);
 
-	public static List<AmpActivityVersion> getActivities(MapFilter filter)throws DgException {
+	public static List<AmpActivityVersion> getActivities(MapFilter filter,HttpServletRequest request)throws DgException {
 		Long[] orgGroupIds = filter.getSelOrgGroupIds();
 		List<AmpActivityVersion> activities = null;
 		Long[] orgIds = filter.getOrgIds();
@@ -66,10 +72,15 @@ public class DbHelper {
 		Long[] locationIds = filter.getSelLocationIds();
 		boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
 		Long[] zonesids = filter.getZoneIds();
-		boolean zonescondition = zonesids != null && zonesids.length > 1;
+		//boolean zonescondition = zonesids != null && zonesids.length > 1;
 		Long[] sectorIds = filter.getSelSectorIds();
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !QueryUtil.inArray(-1l,filter.getSelStructureTypes() );
+		Boolean iscomputedwithorgs =  TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation() && TeamUtil.getAmpTeam(teamMember.getTeamId()).getOrganizations()!=null 
+		&& TeamUtil.getAmpTeam(teamMember.getTeamId()).getOrganizations().size()>0; 
+		Boolean isfilteredworkspace = TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation() && TeamUtil.getAmpTeam(teamMember.getTeamId()).getFilterDataSet()!=null
+		&& TeamUtil.getAmpTeam(teamMember.getTeamId()).getFilterDataSet().size()>0;
+		
 		AmpCategoryValue budgetOn = null;
 		AmpCategoryValue budgetOff=null;
 		try {
@@ -101,8 +112,10 @@ public class DbHelper {
 			if (sectorCondition) {
 				oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 			}
+			
+			
 			//Organization Type
-			if(filter.getSelorganizationsTypes()!=null){
+			if(filter.getSelorganizationsTypes()!=null || iscomputedwithorgs ){
 				oql += " inner join act.orgrole role  ";
 			}
 			if(structureTypeCondition){
@@ -141,7 +154,9 @@ public class DbHelper {
 			if (filter.getFromPublicView() != null && filter.getFromPublicView() == true) {
 				oql += QueryUtil.getTeamQueryManagement();
 			} else {
-				oql += QueryUtil.getTeamQuery(teamMember);
+				if (!isfilteredworkspace){
+					oql += QueryUtil.getTeamQuery(teamMember);
+				}
 			}
 			
 			//locations filter
@@ -158,9 +173,6 @@ public class DbHelper {
             		oql += " and loc.id in (" + QueryUtil.getInStatement(locationIds) + ") ";
             	}
 			}
-			
-			
-			
 			
 			if (sectorCondition) {
 				oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
@@ -229,7 +241,22 @@ public class DbHelper {
 				}
 				oql += " and act.ampActivityId in("+ inactivities +")";
 			}
-
+			
+			if (isfilteredworkspace){
+				String inactivities= "";
+				AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
+				ArrayList<BigInteger> filteractivities = getInActivities(teamFilter.getGeneratedFilterQuery());
+				for (Iterator iterator = filteractivities.iterator(); iterator.hasNext();) {
+					BigInteger id = (BigInteger) iterator.next();
+					if (inactivities ==""){
+						inactivities += id.toString();
+					}else{
+						inactivities +="," + id.toString();
+					}
+				}
+				oql += " and act.ampActivityId in("+ inactivities +")";
+			}
+			
 			Session session = PersistenceManager.getRequestDBSession();
 			Query query = session.createQuery(oql);
 			query.setDate("startDate", startDate);
@@ -237,7 +264,7 @@ public class DbHelper {
 			if (filter.getTransactionType() < 2) { // the option comm&disb is
 				query.setLong("transactionType", transactionType);
 			}
-
+			
 			activities = query.list();
 		} catch (Exception e) {
 			logger.error(e);
@@ -253,7 +280,7 @@ public class DbHelper {
 		return result;
 	}
 	
-    public static List<AmpCategoryValueLocations> getLocations(MapFilter filter, String implementationLevel) throws DgException {
+    public static List<AmpCategoryValueLocations> getLocations(MapFilter filter, String implementationLevel,HttpServletRequest request) throws DgException {
     	List<AmpCategoryValueLocations> locations = new ArrayList<AmpCategoryValueLocations>();
     	if (filter.getSelLocationIds()!=null && filter.getSelLocationIds().length > 0 && filter.getSelLocationIds()[0] != -1) {
 			if (filter.getSelLocationIds().length == 1) {
@@ -281,6 +308,10 @@ public class DbHelper {
 	        Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 	        Long[] sectorIds = filter.getSelSectorIds();
 	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+	        Boolean iscomputedwithorgs =  TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation() && TeamUtil.getAmpTeam(teamMember.getTeamId()).getOrganizations()!=null
+	        && TeamUtil.getAmpTeam(teamMember.getTeamId()).getOrganizations().size()>0;
+	        Boolean isfilteredworkspace = TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation() && TeamUtil.getAmpTeam(teamMember.getTeamId()).getFilterDataSet()!=null
+			&& TeamUtil.getAmpTeam(teamMember.getTeamId()).getFilterDataSet().size()>0;
 	        /*
 	         * We are selecting regions which are funded
 	         * In selected year by the selected organization
@@ -302,6 +333,11 @@ public class DbHelper {
 	            if (sectorCondition) {
 	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
 	            }
+	            
+	            if(iscomputedwithorgs ){
+					oql += " inner join act.orgrole role  ";
+				}
+	            
 	            oql += "  where fd.adjustmentType ="+CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId();
 	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
 	                oql += " and fd.transactionType =:transactionType  ";
@@ -319,10 +355,10 @@ public class DbHelper {
 	            
 	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
 	                oql += QueryUtil.getTeamQueryManagement();
-	            }
-	            else
-	            {
-	                oql += QueryUtil.getTeamQuery(teamMember);
+	            }else{
+	            	if (!isfilteredworkspace){
+						oql += QueryUtil.getTeamQuery(teamMember);
+					}
 	            }
 	            if (sectorCondition) {
 	                oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
@@ -358,12 +394,39 @@ public class DbHelper {
 	            	query.setString("district", "District");
 	            	query.setString("communal", "Communal section");
 	            }
-	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
-	            //    query.setLong("orgGroupId", orgGroupId);
-	            //}
+	           
+	            if (filter.isModeexport()){
+					String inactivities= "";
+					ArrayList<BigInteger> filteractivities = getInActivities(filter.getReportfilterquery());
+					for (Iterator iterator = filteractivities.iterator(); iterator.hasNext();) {
+						BigInteger id = (BigInteger) iterator.next();
+						if (inactivities ==""){
+							inactivities += id.toString();
+						}else{
+							inactivities +="," + id.toString();
+						}
+					}
+					oql += " and act.ampActivityId in("+ inactivities +")";
+				}
+	            
 	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
 	                query.setLong("transactionType", transactionType);
 	            }
+	            
+	            if (isfilteredworkspace){
+					String inactivities= "";
+					AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
+					ArrayList<BigInteger> filteractivities = getInActivities(teamFilter.getGeneratedFilterQuery());
+					for (Iterator iterator = filteractivities.iterator(); iterator.hasNext();) {
+						BigInteger id = (BigInteger) iterator.next();
+						if (inactivities ==""){
+							inactivities += id.toString();
+						}else{
+							inactivities +="," + id.toString();
+						}
+					}
+					oql += " and act.ampActivityId in("+ inactivities +")";
+				}
 	            locations = query.list();
 	        }
 	        catch (Exception e) {
@@ -471,11 +534,9 @@ public class DbHelper {
 
     @SuppressWarnings("unchecked")
     //TODO: Remove this and make a common function for Visualization/GIS
-    public static DecimalWraper getFunding(MapFilter filter, Date startDate,
-            Date endDate, Long assistanceTypeId,
-            Long financingInstrumentId,
-            int transactionType,Long adjustmentType) throws DgException {
-        DecimalWraper total = null;
+     public static ArrayList<DecimalWraper> getFunding(MapFilter filter, Date startDate,Date endDate,HttpServletRequest request,Long assistanceTypeId,Long financingInstrumentId,
+            Long adjustmentType) throws Exception {
+    	ArrayList<DecimalWraper> totals = new ArrayList<DecimalWraper>();
         String oql = "";
         String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -490,7 +551,11 @@ public class DbHelper {
         Long[] sectorIds = filter.getSelSectorIds();
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
         boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
-
+        Boolean iscomputedwithorgs =  TeamUtil.getAmpTeam(tm.getTeamId()).getComputation() && TeamUtil.getAmpTeam(tm.getTeamId()).getOrganizations()!=null 
+        && TeamUtil.getAmpTeam(tm.getTeamId()).getOrganizations().size()>0;
+        Boolean isfilteredworkspace = TeamUtil.getAmpTeam(tm.getTeamId()).getComputation() && TeamUtil.getAmpTeam(tm.getTeamId()).getFilterDataSet()!=null
+		&& TeamUtil.getAmpTeam(tm.getTeamId()).getFilterDataSet().size()>0;
+		
         if (locationCondition && sectorCondition) {
         	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,fd.fixedExchangeRate) ";
         } else if (locationCondition)  {
@@ -516,8 +581,12 @@ public class DbHelper {
         if (sectorCondition) {
             oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
         }
-
-        oql += " where  fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
+        
+        if(iscomputedwithorgs ){
+			oql += " inner join act.orgrole role  ";
+		}
+        
+        oql += " where fd.adjustmentType =:adjustmentType ";
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
                 oql += QueryUtil.getOrganizationQuery(true, orgIds, orgGroupIds);
@@ -550,15 +619,30 @@ public class DbHelper {
 		}
         if(filter.getFromPublicView() != filter.getFromPublicView()){
             oql += QueryUtil.getTeamQueryManagement();
-        }
-        else
-        {
-            oql += QueryUtil.getTeamQuery(tm);
+        }else{
+        	if(!isfilteredworkspace){
+        		oql += QueryUtil.getTeamQuery(tm);
+        	}
         }
         
         if (ActivityVersionUtil.isVersioningEnabled()){
 			oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
 			oql += " and (act.deleted = false or act.deleted is null)";
+		}
+        
+        if (isfilteredworkspace){
+			String inactivities= "";
+			AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
+			ArrayList<BigInteger> filteractivities = getInActivities(teamFilter.getGeneratedFilterQuery());
+			for (Iterator iterator = filteractivities.iterator(); iterator.hasNext();) {
+				BigInteger id = (BigInteger) iterator.next();
+				if (inactivities ==""){
+					inactivities += id.toString();
+				}else{
+					inactivities +="," + id.toString();
+				}
+			}
+			oql += " and act.ampActivityId in("+ inactivities +")";
 		}
         
         Session session = PersistenceManager.getRequestDBSession();
@@ -576,43 +660,34 @@ public class DbHelper {
             if (financingInstrumentId != null) {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
-            query.setLong("transactionType", transactionType);
             query.setLong("adjustmentType",adjustmentType);
             
             if (filter.getActivityId()!=null) {
                 query.setLong("activityId", filter.getActivityId());
             }
             
+            
+            
             fundingDets = query.list();
-            /*the objects returned by query  and   selected currency
-            are passed doCalculations  method*/
+            
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
             cal.doCalculations(fundingDets, currCode);
-            /*Depending on what is selected in the filter
-            we should return either actual commitments
-            or actual Disbursement or  */
-            switch (transactionType) {
-                case Constants.EXPENDITURE:
-                    if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PLANNED).getId().compareTo(adjustmentType)==0) {
-                        total = cal.getTotPlannedExp();
-                    } else {
-                        total = cal.getTotActualExp();
-                    }
-                    break;
-                case Constants.DISBURSEMENT:
-                    if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId().compareTo(adjustmentType)==0) {
-                        total = cal.getTotActualDisb();
-                    } else {
-                        total = cal.getTotPlanDisb();
-                    }
-                    break;
-                default:
-                    if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId().compareTo(adjustmentType)==0) {
-                        total = cal.getTotActualComm();
-                    } else {
-                        total = cal.getTotPlannedComm();
-                    }
-            }
+            
+                if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_PLANNED).getId().compareTo(adjustmentType)==0) {
+                    totals.add(cal.getTotPlannedExp());
+                } else {
+                	totals.add(cal.getTotActualExp());
+                }
+                if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId().compareTo(adjustmentType)==0) {
+                    totals.add(cal.getTotActualDisb());
+                } else {
+                    totals.add(cal.getTotPlanDisb());
+                }
+                if (CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId().compareTo(adjustmentType)==0) {
+                    totals.add(cal.getTotActualComm());
+                } else {
+                    totals.add(cal.getTotPlannedComm());
+                }
 
         } catch (Exception e) {
             logger.error(e);
@@ -621,7 +696,7 @@ public class DbHelper {
         }
 
 
-        return total;
+        return totals;
 	}
     
     public static List<AmpOrganisation> getDonorOrganisationByGroupId(Long orgGroupId, boolean publicView) {

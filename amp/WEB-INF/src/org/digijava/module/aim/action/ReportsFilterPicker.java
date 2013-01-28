@@ -1277,7 +1277,7 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.getSelectedSectors().addAll(selectedSectors);
 
 			arf.setSectors(SectorUtil.getSectorDescendents(selectedSectors));
-			if (!(filterForm.getReporttype()==ArConstants.PLEDGES_TYPE)){
+			if (filterForm.getReporttype()!=null && !(filterForm.getReporttype()==ArConstants.PLEDGES_TYPE)){
 				arf.setSectorsAndAncestors( new HashSet<AmpSector>() );
 				arf.getSectorsAndAncestors().addAll( arf.getSectors() );
 				arf.getSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(selectedSectors) );
@@ -1409,8 +1409,8 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setYearTo(filterForm.getToYear() == null || filterForm.getToYear().longValue() == -1 ? null : new Integer(filterForm.getToYear().intValue()));
 		arf.setFromMonth(filterForm.getFromMonth() == null || filterForm.getFromMonth().intValue() == -1 ? null : new Integer(filterForm.getFromMonth().intValue()));
 		arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1 ? null : new Integer(filterForm.getToMonth().intValue()));
-		arf.setFromDate(filterForm.getFromDate() == null ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getFromDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
-		arf.setToDate(filterForm.getToDate() == null ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getToDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
+		arf.setFromDate(filterForm.getFromDate() == null || "".equalsIgnoreCase(filterForm.getFromDate())? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getFromDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
+		arf.setToDate(filterForm.getToDate() == null || "".equalsIgnoreCase(filterForm.getToDate())? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getToDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
 		
 		arf.setToActivityStartDate(filterForm.getToActivityStartDate() );
 		arf.setFromActivityStartDate(filterForm.getFromActivityStartDate() );

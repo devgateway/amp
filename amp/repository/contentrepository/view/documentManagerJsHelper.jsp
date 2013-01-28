@@ -1,6 +1,9 @@
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <!-- Individual YUI CSS files -->
 <link type="text/css" rel="stylesheet" href="/TEMPLATE/ampTemplate/js_2/yui/datatable/assets/skins/sam/datatable.css">
@@ -117,7 +120,7 @@ font-weight : bold;
 	var show_category = false;
 	var show_organisations = false;
 	
-	<feature:display name="Resource Columns" module="Content Repository"></feature:display>
+	<feature:display name="Resource Columns" module="Content Repository">
 	
 	<field:display name="Resource Index" feature="Resource Columns">
 		show_index = true;
@@ -130,6 +133,7 @@ font-weight : bold;
 	<field:display name="Resource Organisations" feature="Resource Columns">
 		show_organisations = true;
 	</field:display>
+	</feature:display>
 </script>
 
 

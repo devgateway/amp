@@ -14,7 +14,7 @@
 
 	<!--
 
-	function selectSector() {		
+	function selectSector() {
 		<digi:context name="selSector" property="context/module/moduleinstance/sectorActions.do?actionType=addsectorToindicator"/>
 	    document.aimIndicatorForm.action = "<%= selSector %>";
 		 //document.aimIndicatorForm.target = window.opener.name;

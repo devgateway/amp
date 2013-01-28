@@ -223,7 +223,6 @@
 	}
 
 	function pickDateById(buttonId,objectId){
-		// debugger;
 		pickDateById2(buttonId, objectId, true);
 	}
 	

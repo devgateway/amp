@@ -459,7 +459,6 @@ saveReportEngine	= null;
 		myPanel2.hide();
 	}
 	function resetSorter(button) {
-		debugger;
 		var form1		= button.form;
 		for (var i=0; i<form1.elements.length; i++) {
 				var selEl	= form1.elements[i];

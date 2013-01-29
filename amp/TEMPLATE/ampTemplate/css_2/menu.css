@@ -137,6 +137,7 @@
 	line-height: 1.5;
 	*line-height: 1.45;
 	z-index:9999;
+    width: 100%;
 }
 .yuiamp-skin-amp .yuiampmenubar .yuiampmenu, .yuiamp-skin-amp .yuiampmenu .yuiampmenu {
 	font-size: 100%;

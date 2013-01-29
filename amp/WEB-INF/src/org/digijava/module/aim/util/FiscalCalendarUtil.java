@@ -18,6 +18,52 @@ public class FiscalCalendarUtil {
 	
 	private static Logger logger = Logger.getLogger(FiscalCalendarUtil.class);
 	
+	
+	public static Date addToDate(Date dfromDate, Integer amount, Integer calendarPeriod){
+		if(amount == null){
+			amount = 0;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dfromDate);
+		cal.add(calendarPeriod, amount);
+		return cal.getTime();
+	}
+	
+	public static Date getCalendarEndDateForCurrentYear(Long id) {
+		Integer year = getCurrentYear();
+		Date endDate = getCalendarEndDate(id, year);
+		return endDate;
+	}
+
+	public static Date getFirstDateOfCurrentMonth(){
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.DATE, 1);
+		return cal.getTime();
+	}
+
+	public static Date getLastDateOfCurrentMonth(){
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.DATE, 1);
+		cal.add(Calendar.MONTH, 1);
+		cal.add(Calendar.DATE, -1);
+		return cal.getTime();
+	}
+
+	public static Date getCurrentDate(){
+		Calendar cal = Calendar.getInstance();
+		return cal.getTime();
+	}
+	
+	public static Integer getCurrentYear(){
+		Calendar cal = Calendar.getInstance();
+		return cal.get(Calendar.YEAR);
+	}
+	
+	public static Date getCalendarStartDateForCurrentYear(Long id) {
+		Integer year = getCurrentYear();
+		return getCalendarStartDate(id, year);
+	}
+	
 	public static Date getCalendarStartDate(Long id,int year) {
 		Date d = null;
 		Session session = null;

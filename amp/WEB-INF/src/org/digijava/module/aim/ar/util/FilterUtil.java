@@ -138,15 +138,35 @@ public class FilterUtil {
 		form.setToYear( filter.getYearTo()!=null ? filter.getYearTo().longValue() : null );
 		form.setFromMonth( filter.getFromMonth() );
 		form.setToMonth( filter.getToMonth() );
+		
 		form.setFromDate( filter.getFromDate() );
 		form.setToDate( filter.getToDate() );
+		form.getDynamicDateFilter().setCurrentPeriod(filter.getDynDateFilterCurrentPeriod());
+		form.getDynamicDateFilter().setAmount(filter.getDynDateFilterAmount());
+		form.getDynamicDateFilter().setOperator(filter.getDynDateFilterOperator());
+		form.getDynamicDateFilter().setxPeriod(filter.getDynDateFilterXPeriod());
 		
 		form.setToActivityStartDate(filter.getToActivityStartDate());
 		form.setFromActivityStartDate(filter.getFromActivityStartDate());
+		form.getDynamicActivityStartFilter().setCurrentPeriod(filter.getDynActivityStartFilterCurrentPeriod());
+		form.getDynamicActivityStartFilter().setAmount(filter.getDynActivityStartFilterAmount());
+		form.getDynamicActivityStartFilter().setOperator(filter.getDynActivityStartFilterOperator());
+		form.getDynamicActivityStartFilter().setxPeriod(filter.getDynActivityStartFilterXPeriod());
 		
 		form.setToActivityActualCompletionDate(filter.getToActivityActualCompletionDate() );
 		form.setFromActivityActualCompletionDate(filter.getFromActivityActualCompletionDate());
+		form.getDynamicActivityActualCompletionFilter().setCurrentPeriod(filter.getDynActivityActualCompletionFilterCurrentPeriod());
+		form.getDynamicActivityActualCompletionFilter().setAmount(filter.getDynActivityActualCompletionFilterAmount());
+		form.getDynamicActivityActualCompletionFilter().setOperator(filter.getDynActivityActualCompletionFilterOperator());
+		form.getDynamicActivityActualCompletionFilter().setxPeriod(filter.getDynActivityActualCompletionFilterXPeriod());
 
+		form.setToActivityFinalContractingDate(filter.getToActivityFinalContractingDate());
+		form.setFromActivityFinalContractingDate(filter.getFromActivityFinalContractingDate());
+		form.getDynamicActivityFinalContractingFilter().setCurrentPeriod(filter.getDynActivityFinalContractingFilterCurrentPeriod());
+		form.getDynamicActivityFinalContractingFilter().setAmount(filter.getDynActivityFinalContractingFilterAmount());
+		form.getDynamicActivityFinalContractingFilter().setOperator(filter.getDynActivityFinalContractingFilterOperator());
+		form.getDynamicActivityFinalContractingFilter().setxPeriod(filter.getDynActivityFinalContractingFilterXPeriod());
+		
 		if (filter.getCurrency() != null)
 			form.setCurrency( filter.getCurrency().getAmpCurrencyId() );
 		else

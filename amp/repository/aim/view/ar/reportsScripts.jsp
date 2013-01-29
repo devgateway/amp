@@ -326,8 +326,11 @@ saveReportEngine	= null;
 		if(document.getElementById("workspace_only")!=null)
 			document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
-		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true&reportContextId=" + reportContextId;
-		filterForm.submit();
+		
+		if (validateDynamicDateFilters()){
+			filterForm.action	= "/aim/reportsFilterPicker.do?apply=true&reportContextId=" + reportContextId;
+			filterForm.submit();
+		};
 	}
 	
 	function submitSettings(reportContextId) {

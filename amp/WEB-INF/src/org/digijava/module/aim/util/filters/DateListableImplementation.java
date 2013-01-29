@@ -16,6 +16,7 @@ public class DateListableImplementation extends HierarchyListableImplementation 
 	private String label;
 	private String uniqueId;
 	private boolean translateable;
+	private boolean selected;
 	
 	/**
 	 * As opposed to other HierarchyListable hierarchies of objects the DateListableImplementations 
@@ -138,6 +139,16 @@ public class DateListableImplementation extends HierarchyListableImplementation 
 				ret += hl.getCountDescendants();
 		}
 		return ret;
+	}
+
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 }

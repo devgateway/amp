@@ -34,16 +34,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Hits;
-import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.ar.util.FilterUtil;
-import org.digijava.module.aim.ar.util.ReportFilterFormUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -60,7 +55,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -69,13 +63,12 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.exceptions.UsedCategoryException;
 import org.digijava.module.mondrian.query.MoConstants;
+
+import com.ibm.icu.util.Calendar;
 
 
 /**
@@ -93,6 +86,12 @@ public class AmpARFilter extends PropertyListable {
 	public final static int FILTER_SECTION_FILTERS = 1;
 	public final static int FILTER_SECTION_SETTINGS = 2;
 	public final static int FILTER_SECTION_ALL = FILTER_SECTION_FILTERS | FILTER_SECTION_SETTINGS;
+	
+	public final static String DYNAMIC_FILTER_YEAR = "year";
+	public final static String DYNAMIC_FILTER_MONTH = "month";
+	public final static String DYNAMIC_FILTER_DAY = "day";
+	public final static String DYNAMIC_FILTER_ADD_OP = "+";
+	public final static String DYNAMIC_FILTER_SUBTRACT_OP = "-";
 	
 	private static SimpleDateFormat sdfOut=new SimpleDateFormat("yyyy-MM-dd");
 	private static SimpleDateFormat sdfIn=new SimpleDateFormat("dd/MM/yyyy");
@@ -308,15 +307,32 @@ public class AmpARFilter extends PropertyListable {
 	private Collection<Integer> planMinRank;
 	private String fromDate;
 	private String toDate;
+
+	private String dynDateFilterCurrentPeriod;
+	private Integer dynDateFilterAmount;
+	private String dynDateFilterOperator;
+	private String dynDateFilterXPeriod;
 	
 	private String fromActivityStartDate; // view: v_actual_start_date, column name: Actual Start Date
 	private String toActivityStartDate;
+	private String dynActivityStartFilterCurrentPeriod;
+	private Integer dynActivityStartFilterAmount;
+	private String dynActivityStartFilterOperator;
+	private String dynActivityStartFilterXPeriod;
 	
 	private String fromActivityActualCompletionDate; // view: v_actual_completion_date, column name: Current Completion Date
 	private String toActivityActualCompletionDate;  // view: v_actual_completion_date, column name: Current Completion Date
+	private String dynActivityActualCompletionFilterCurrentPeriod;
+	private Integer dynActivityActualCompletionFilterAmount;
+	private String dynActivityActualCompletionFilterOperator;
+	private String dynActivityActualCompletionFilterXPeriod;
 	
 	private String fromActivityFinalContractingDate; // view: v_contracting_date, column name: Final Date for Contracting
 	private String toActivityFinalContractingDate;  // view: v_contracting_date, column name: Final Date for Contracting
+	private String dynActivityFinalContractingFilterCurrentPeriod;
+	private Integer dynActivityFinalContractingFilterAmount;
+	private String dynActivityFinalContractingFilterOperator;
+	private String dynActivityFinalContractingFilterXPeriod;
 	
 	private Integer fromMonth;
 	private Integer yearFrom;
@@ -1161,8 +1177,12 @@ public class AmpARFilter extends PropertyListable {
 							: "(archived=false or archived is null)");
 
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
-
-		if(dateFilterHidesProjects && fromDate!=null && fromDate.length()>0) {
+		
+		String[] dates = this.calculateDateFilters(fromDate, toDate, dynDateFilterCurrentPeriod, dynDateFilterAmount, dynDateFilterOperator, dynDateFilterXPeriod);
+		String fromDate = dates[0];
+		String toDate = dates[1];
+		
+		if(dateFilterHidesProjects && fromDate !=null && fromDate.length()>0) {
 			String FROM_DATE_FILTER=null;
 			try {
 				FROM_DATE_FILTER = " SELECT distinct(f.amp_activity_id) FROM amp_funding_detail fd, amp_funding f WHERE f.amp_funding_id=fd.amp_funding_id AND fd.transaction_date>='"
@@ -1188,19 +1208,31 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(TO_DATE_FILTER);
 		}
 		
-		String ACTIVITY_START_DATE_FILTER	 	= this.createDateCriteria(toActivityStartDate, fromActivityStartDate, "asd.actual_start_date");
+		dates = this.calculateDateFilters(fromActivityStartDate, toActivityStartDate, dynActivityStartFilterCurrentPeriod, dynActivityStartFilterAmount, dynActivityStartFilterOperator, dynActivityStartFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+
+		String ACTIVITY_START_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "asd.actual_start_date");
 		if ( ACTIVITY_START_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_START_DATE_FILTER = "SELECT asd.amp_activity_id from v_actual_start_date asd WHERE " + ACTIVITY_START_DATE_FILTER;
 			queryAppend(ACTIVITY_START_DATE_FILTER);
 		}
 		
-		String ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER	 	= this.createDateCriteria(toActivityActualCompletionDate, fromActivityActualCompletionDate, "acd.actual_completion_date");
+		dates = this.calculateDateFilters(fromActivityActualCompletionDate, toActivityActualCompletionDate, dynActivityActualCompletionFilterCurrentPeriod, dynActivityActualCompletionFilterAmount, dynActivityActualCompletionFilterOperator, dynActivityActualCompletionFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+
+		String ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "acd.actual_completion_date");
 		if ( ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER = "SELECT acd.amp_activity_id from v_actual_completion_date acd WHERE " + ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER;
 			queryAppend(ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER);
 		}
 		
-		String ACTIVITY_FINAL_CONTRACTING_DATE_FILTER	 	= this.createDateCriteria(toActivityFinalContractingDate, fromActivityFinalContractingDate, "ctrd.contracting_date");
+		dates = this.calculateDateFilters(fromActivityFinalContractingDate, toActivityFinalContractingDate, dynActivityFinalContractingFilterCurrentPeriod, dynActivityFinalContractingFilterAmount, dynActivityFinalContractingFilterOperator, dynActivityFinalContractingFilterXPeriod);
+		fromDate = dates[0];
+		toDate = dates[1];
+
+		String ACTIVITY_FINAL_CONTRACTING_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "ctrd.contracting_date");
 		if ( ACTIVITY_FINAL_CONTRACTING_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_FINAL_CONTRACTING_DATE_FILTER = "SELECT ctrd.amp_activity_id from v_contracting_date ctrd WHERE " + ACTIVITY_FINAL_CONTRACTING_DATE_FILTER;
 			queryAppend(ACTIVITY_FINAL_CONTRACTING_DATE_FILTER);
@@ -1472,7 +1504,58 @@ public class AmpARFilter extends PropertyListable {
 //			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 //		}
 	}
+	
+	
+	private String[] calculateDateFilters(String startDate, String lastDate, String currentPeriod, Integer amount, String op, String xPeriod){
+		
+		String fromDate = startDate;
+		String toDate = lastDate;
 
+		Date dfromDate = null;
+		Date dtoDate = null;
+
+		if(currentPeriod != null){
+
+			Integer calendarPeriod = null;
+			if(DYNAMIC_FILTER_YEAR.equals(xPeriod)){
+				calendarPeriod = Calendar.YEAR;
+			}else if(DYNAMIC_FILTER_MONTH.equals(xPeriod)){
+				calendarPeriod = Calendar.MONTH;
+			}else{
+				calendarPeriod = Calendar.DATE;
+			}
+
+			if(DYNAMIC_FILTER_ADD_OP.equals(op)){/* + */
+				//start date is always the first date of the selected period
+				if(DYNAMIC_FILTER_YEAR.equals(currentPeriod)){/*years*/
+					dfromDate = FiscalCalendarUtil.getCalendarStartDateForCurrentYear(calendarType.getAmpFiscalCalId());//first date of current fiscal year					
+				}else if(DYNAMIC_FILTER_MONTH.equals(currentPeriod)){/*months*/
+					dfromDate = FiscalCalendarUtil.getFirstDateOfCurrentMonth();//first date of current month
+				}else{ /*days*/
+					dfromDate = FiscalCalendarUtil.getCurrentDate();
+				}
+				
+				dtoDate = FiscalCalendarUtil.addToDate(dfromDate, amount, calendarPeriod);
+				
+			}else{/* - */
+				//end date is always the last date of the selected period
+				if(DYNAMIC_FILTER_YEAR.equals(currentPeriod)){/*years*/
+					dtoDate = FiscalCalendarUtil.getCalendarEndDateForCurrentYear(calendarType.getAmpFiscalCalId());//first date of current fiscal year					
+				}else if(DYNAMIC_FILTER_MONTH.equals(currentPeriod)){/*months*/
+					dtoDate = FiscalCalendarUtil.getLastDateOfCurrentMonth();//last date of current month
+				}else{ /*days*/
+					dtoDate = FiscalCalendarUtil.getCurrentDate();
+				}
+				
+				dfromDate = FiscalCalendarUtil.addToDate(dtoDate, -amount, calendarPeriod);
+			}
+			
+			fromDate = FormatHelper.formatDate(dfromDate);
+			toDate = FormatHelper.formatDate(dtoDate);
+		}
+		
+		return new String[]{fromDate, toDate};
+	}
 	/**
 	 * returns the default currency name
 	 * default is taken from either user settings, workspace settings or hardcoded global setting, whichever has the value first
@@ -2175,7 +2258,145 @@ public class AmpARFilter extends PropertyListable {
 			String toActivityActualCompletionDate) {
 		this.toActivityActualCompletionDate = toActivityActualCompletionDate;
 	}
-	
+
+	public String getDynDateFilterCurrentPeriod() {
+		return dynDateFilterCurrentPeriod;
+	}
+
+	public void setDynDateFilterCurrentPeriod(String dynDateFilterCurrentPeriod) {
+		this.dynDateFilterCurrentPeriod = dynDateFilterCurrentPeriod;
+	}
+
+	public Integer getDynDateFilterAmount() {
+		return dynDateFilterAmount;
+	}
+
+	public void setDynDateFilterAmount(Integer dynDateFilterAmount) {
+		this.dynDateFilterAmount = dynDateFilterAmount;
+	}
+
+	public String getDynDateFilterOperator() {
+		return dynDateFilterOperator;
+	}
+
+	public void setDynDateFilterOperator(String dynDateFilterOperator) {
+		this.dynDateFilterOperator = dynDateFilterOperator;
+	}
+
+	public String getDynDateFilterXPeriod() {
+		return dynDateFilterXPeriod;
+	}
+
+	public void setDynDateFilterXPeriod(String dynDateFilterXPeriod) {
+		this.dynDateFilterXPeriod = dynDateFilterXPeriod;
+	}
+
+	public String getDynActivityStartFilterCurrentPeriod() {
+		return dynActivityStartFilterCurrentPeriod;
+	}
+
+	public void setDynActivityStartFilterCurrentPeriod(
+			String dynActivityStartFilterCurrentPeriod) {
+		this.dynActivityStartFilterCurrentPeriod = dynActivityStartFilterCurrentPeriod;
+	}
+
+	public Integer getDynActivityStartFilterAmount() {
+		return dynActivityStartFilterAmount;
+	}
+
+	public void setDynActivityStartFilterAmount(Integer dynActivityStartFilterAmount) {
+		this.dynActivityStartFilterAmount = dynActivityStartFilterAmount;
+	}
+
+	public String getDynActivityStartFilterOperator() {
+		return dynActivityStartFilterOperator;
+	}
+
+	public void setDynActivityStartFilterOperator(
+			String dynActivityStartFilterOperator) {
+		this.dynActivityStartFilterOperator = dynActivityStartFilterOperator;
+	}
+
+	public String getDynActivityStartFilterXPeriod() {
+		return dynActivityStartFilterXPeriod;
+	}
+
+	public void setDynActivityStartFilterXPeriod(
+			String dynActivityStartFilterXPeriod) {
+		this.dynActivityStartFilterXPeriod = dynActivityStartFilterXPeriod;
+	}
+
+	public String getDynActivityActualCompletionFilterCurrentPeriod() {
+		return dynActivityActualCompletionFilterCurrentPeriod;
+	}
+
+	public void setDynActivityActualCompletionFilterCurrentPeriod(
+			String dynActivityActualCompletionFilterCurrentPeriod) {
+		this.dynActivityActualCompletionFilterCurrentPeriod = dynActivityActualCompletionFilterCurrentPeriod;
+	}
+
+	public Integer getDynActivityActualCompletionFilterAmount() {
+		return dynActivityActualCompletionFilterAmount;
+	}
+
+	public void setDynActivityActualCompletionFilterAmount(
+			Integer dynActivityActualCompletionFilterAmount) {
+		this.dynActivityActualCompletionFilterAmount = dynActivityActualCompletionFilterAmount;
+	}
+
+	public String getDynActivityActualCompletionFilterOperator() {
+		return dynActivityActualCompletionFilterOperator;
+	}
+
+	public void setDynActivityActualCompletionFilterOperator(
+			String dynActivityActualCompletionFilterOperator) {
+		this.dynActivityActualCompletionFilterOperator = dynActivityActualCompletionFilterOperator;
+	}
+
+	public String getDynActivityActualCompletionFilterXPeriod() {
+		return dynActivityActualCompletionFilterXPeriod;
+	}
+
+	public void setDynActivityActualCompletionFilterXPeriod(
+			String dynActivityActualCompletionFilterXPeriod) {
+		this.dynActivityActualCompletionFilterXPeriod = dynActivityActualCompletionFilterXPeriod;
+	}
+
+	public String getDynActivityFinalContractingFilterCurrentPeriod() {
+		return dynActivityFinalContractingFilterCurrentPeriod;
+	}
+
+	public void setDynActivityFinalContractingFilterCurrentPeriod(
+			String dynActivityFinalContractingFilterCurrentPeriod) {
+		this.dynActivityFinalContractingFilterCurrentPeriod = dynActivityFinalContractingFilterCurrentPeriod;
+	}
+
+	public Integer getDynActivityFinalContractingFilterAmount() {
+		return dynActivityFinalContractingFilterAmount;
+	}
+
+	public void setDynActivityFinalContractingFilterAmount(
+			Integer dynActivityFinalContractingFilterAmount) {
+		this.dynActivityFinalContractingFilterAmount = dynActivityFinalContractingFilterAmount;
+	}
+
+	public String getDynActivityFinalContractingFilterOperator() {
+		return dynActivityFinalContractingFilterOperator;
+	}
+
+	public void setDynActivityFinalContractingFilterOperator(
+			String dynActivityFinalContractingFilterOperator) {
+		this.dynActivityFinalContractingFilterOperator = dynActivityFinalContractingFilterOperator;
+	}
+
+	public String getDynActivityFinalContractingFilterXPeriod() {
+		return dynActivityFinalContractingFilterXPeriod;
+	}
+
+	public void setDynActivityFinalContractingFilterXPeriod(
+			String dynActivityFinalContractingFilterXPeriod) {
+		this.dynActivityFinalContractingFilterXPeriod = dynActivityFinalContractingFilterXPeriod;
+	}
 
 	/**
 	 * @return the fromActivityFinalContractingDate

@@ -84,13 +84,7 @@ function resetFilter(reportContextId){
 			aimReportsFilterPickerForm.computedYear.selectedIndex=0;
 		}
 		
-		var dateInputEls = YAHOO.util.Dom.getElementsByClassName('dateInputMarker', 'input');
-		if ( dateInputEls != null ) {
-			for (var i=0; i< dateInputEls.length; i++ ) {
-				dateInputEls[i].value = "";
-			}
-		}
-		
+		resetDateOptions();
 	}
 
 function resetElement( elem ) {
@@ -132,7 +126,8 @@ YAHOO.amptab.afterFiltersLoad   = function (){
 	 	YAHOO.amptab.initDisplayOfMemberSelectors("financingLocTab");
 	 	YAHOO.amptab.initDisplayOfMemberSelectors("otherCriteriaTab");
 	 	
-
+	 	enableDisableDateOptions();
+	 	
 	 };
 	 	
 YAHOO.amptab.initDisplayOfMemberSelectors       = function(bigDivId) {
@@ -212,3 +207,99 @@ DivManager.prototype.onSelect           = function () {
 	 		getSearchManagerInstanceById( parentDiv.id+"_search" ).setDiv(this.divEl);
 	 	}
 	 };
+	 
+
+	 function changeDateFilteringGroup(group){
+	 	var selectFields = $("#" + group.name + "_1").find("select[id^='filter_input']");
+	 	selectFields = selectFields.add(  $("#" + group.name + "_1").find("input[id^='filter_input']"));
+	 	
+	 	var dateFields = $("#" + group.name + "_0").find(".dateInputMarker");
+	 	dateFields = dateFields.add( $("#" + group.name + "_0").find("a"));
+	 	
+	 	if(group.value == "1"){//dynamic filter selected
+	 		enableDisableInputs(selectFields, dateFields);
+	 	}else{//date fields filter selected
+	 		enableDisableInputs(dateFields, selectFields);
+	 	}
+	 }
+	 
+	 function disabler(event) {
+		    event.preventDefault();
+		    return false;
+	}
+	 
+	 function enableDisableInputs(toEnable, toDisable){
+	 	toDisable.each(
+	 		function(){
+	 			$(this).attr("disabled", "disabled");
+	 			
+	 			if( $(this).attr("href") ){
+	 				$(this).bind("click",disabler);	
+	 			}
+	 			
+	 		}		
+	 	);	
+	 	toEnable.each(
+	 			function(){
+	 				$(this).removeAttr("disabled");
+	 				if( $(this).attr("href") ){
+	 					$(this).unbind("click",disabler);
+	 				}
+	 			}		
+	 		);	
+	 }
+	 
+	 function enableDisableDateOptions(){
+
+		 var groups = $("input[name^='optGroupDateFilter_']:radio");
+		 groups.each(
+				 function(){
+					 if ($(this).attr("checked")){
+						 changeDateFilteringGroup(this);
+					 }
+				 }
+		 );
+	 }
+	 
+	 function resetDateOptions(){
+		 var groups = $("input[name^='optGroupDateFilter_']:radio");
+		 groups.each(
+				 function(){
+
+					 var selectFields = $("#" + this.name + "_" + this.value).find("select[id^='filter_input']");
+					 selectFields.each(function(){
+						 this.selectedIndex = 0;
+					 });
+					 
+					 var inputFields = $("#" + this.name + "_" + this.value).find(".dateInputMarker");
+					 inputFields = inputFields.add(  $("#" + this.name + "_" + this.value).find("input[id^='filter_input']")); 
+					 inputFields.each(function(){
+						 this.value = "";
+					 });
+
+					 if (this.value == 0){
+						 $(this).attr("checked","checked");
+						 changeDateFilteringGroup(this);
+					 }else{
+						 $(this).removeAttr("checked");
+					 }
+				 }
+		 );
+	 }
+	 
+		function validateDynamicDateFilters(){
+			var wrongMsg = null;
+			$("input[id^='filter_input_amount_']:text").each(function () { 
+				var re =new RegExp(/[^0-9]/g);
+				if(!$(this).attr("disabled") && this.value && re.test(this.value)){
+					$(this).focus();
+					wrongMsg = $("#" + this.id + "_error").val();
+				}
+			});
+			if (wrongMsg){
+				alert(wrongMsg);
+				return false;
+			}
+			return true;
+		}
+	 

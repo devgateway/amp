@@ -5,13 +5,7 @@ package org.digijava.module.aim.form;
 
 import java.util.Collection;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.filters.GroupingElement;
@@ -105,18 +99,23 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long toYear;
 	private Integer toMonth;
 	private Integer fromMonth;
+	
 	private String fromDate;
 	private String toDate;
+	private DynamicDateFilter dynamicDateFilter = new DynamicDateFilter();
 	
 	private String fromActivityStartDate;
 	private String toActivityStartDate;
+	private DynamicDateFilter dynamicActivityStartFilter = new DynamicDateFilter(); 
 	
 	private String fromActivityActualCompletionDate;
 	private String toActivityActualCompletionDate;
+	private DynamicDateFilter dynamicActivityActualCompletionFilter = new DynamicDateFilter(); 
 	
 	private String fromActivityFinalContractingDate; 
-	private String toActivityFinalContractingDate;  
-	
+	private String toActivityFinalContractingDate;
+	private DynamicDateFilter dynamicActivityFinalContractingFilter = new DynamicDateFilter();	
+
 	private Long countYear;
 	private Long currency;
 	private Long calendar;
@@ -1176,6 +1175,19 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.toActivityFinalContractingDate = toActivityFinalContractingDate;
 	}
 
-	
-	
+	public DynamicDateFilter getDynamicDateFilter() {
+		return dynamicDateFilter;
+	}
+
+	public DynamicDateFilter getDynamicActivityStartFilter() {
+		return dynamicActivityStartFilter;
+	}
+
+	public DynamicDateFilter getDynamicActivityActualCompletionFilter() {
+		return dynamicActivityActualCompletionFilter;
+	}
+
+	public DynamicDateFilter getDynamicActivityFinalContractingFilter() {
+		return dynamicActivityFinalContractingFilter;
+	}
 }

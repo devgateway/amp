@@ -806,10 +806,33 @@ public class ReportsFilterPicker extends Action {
 			toDate.setTranslateable(true);
 			children.add(toDate);
 			
+			DateListableImplementation groupFromTo = new DateListableImplementation();
+			groupFromTo.setLabel("");
+			groupFromTo.setUniqueId("0");
+			groupFromTo.setTranslateable(false);
+			groupFromTo.setChildren(children);
+			
+			children		= 
+					new ArrayList<DateListableImplementation>();
+			children.add(groupFromTo);
+			
+			DateListableImplementation dynamicFilter			= new DateListableImplementation();	
+			dynamicFilter.setLabel("Dynamic Date Filter");
+			dynamicFilter.setUniqueId("dynamicActivityStartFilter");
+			dynamicFilter.setActionFormProperty("dynamicActivityStartFilter");
+			dynamicFilter.setTranslateable(true);
+			children.add(dynamicFilter);
+			
+			if(filterForm.getDynamicActivityStartFilter().getCurrentPeriod() != null){
+				dynamicFilter.setSelected(true);
+			}else{
+				groupFromTo.setSelected(true);
+			}
+			
 			DateListableImplementation rootDate			= new DateListableImplementation();
 			rootDate.setLabel("Actual Start Date");
 			rootDate.setTranslateable(true);
-			rootDate.setUniqueId("0");
+			rootDate.setUniqueId("rootActivityStart");
 			rootDate.setChildren(children);
 			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
 					new GroupingElement<HierarchyListableImplementation>("Actual Start Date", "filter_activity_start_date_div", rootDate, "");
@@ -833,11 +856,34 @@ public class ReportsFilterPicker extends Action {
 			toDate.setActionFormProperty("toActivityActualCompletionDate");
 			toDate.setTranslateable(true);
 			children.add(toDate);
+
+			DateListableImplementation groupFromTo = new DateListableImplementation();
+			groupFromTo.setLabel("");
+			groupFromTo.setUniqueId("0");
+			groupFromTo.setTranslateable(false);
+			groupFromTo.setChildren(children);
+			
+			children		= 
+					new ArrayList<DateListableImplementation>();
+			children.add(groupFromTo);
+			
+			DateListableImplementation dynamicFilter			= new DateListableImplementation();	
+			dynamicFilter.setLabel("Dynamic Date Filter");
+			dynamicFilter.setUniqueId("dynamicActivityActualCompletionFilter");
+			dynamicFilter.setActionFormProperty("dynamicActivityActualCompletionFilter");
+			dynamicFilter.setTranslateable(true);
+			children.add(dynamicFilter);
+
+			if(filterForm.getDynamicActivityActualCompletionFilter().getCurrentPeriod() != null){
+				dynamicFilter.setSelected(true);
+			}else{
+				groupFromTo.setSelected(true);
+			}
 			
 			DateListableImplementation rootDate			= new DateListableImplementation();
 			rootDate.setLabel("Current Completion Date");
 			rootDate.setTranslateable(true);
-			rootDate.setUniqueId("0");
+			rootDate.setUniqueId("rootActivityActualCompletion");
 			rootDate.setChildren(children);
 			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
 					new GroupingElement<HierarchyListableImplementation>("Current Completion Date", "filter_activity_actual_completion_date_div", rootDate, "");
@@ -861,16 +907,89 @@ public class ReportsFilterPicker extends Action {
 			toDate.setTranslateable(true);
 			children.add(toDate);
 			
+			DateListableImplementation groupFromTo = new DateListableImplementation();
+			groupFromTo.setLabel("");
+			groupFromTo.setUniqueId("0");
+			groupFromTo.setTranslateable(false);
+			groupFromTo.setChildren(children);
+			
+			children = new ArrayList<DateListableImplementation>();
+			children.add(groupFromTo);
+
+			DateListableImplementation dynamicFilter			= new DateListableImplementation();	
+			dynamicFilter.setLabel("Dynamic Date Filter");
+			dynamicFilter.setUniqueId("dynamicActivityFinalContractingFilter");
+			dynamicFilter.setActionFormProperty("dynamicActivityFinalContractingFilter");
+			dynamicFilter.setTranslateable(true);
+			children.add(dynamicFilter);
+
+			if(filterForm.getDynamicActivityFinalContractingFilter().getCurrentPeriod() != null){
+				dynamicFilter.setSelected(true);
+			}else{
+				groupFromTo.setSelected(true);
+			}
+			
 			DateListableImplementation rootDate			= new DateListableImplementation();
 			rootDate.setLabel("Final Date for Contracting");
 			rootDate.setTranslateable(true);
-			rootDate.setUniqueId("0");
+			rootDate.setUniqueId("rootActivityFinalContracting");
 			rootDate.setChildren(children);
 			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
 					new GroupingElement<HierarchyListableImplementation>("Final Date for Contracting", "filter_activity_final_contracting_date_div", rootDate, "");
 			
 			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
 		}
+		//Finance date filter
+		//TODO validate field name
+		if (true ) {
+			Collection<DateListableImplementation> children		= 
+					new ArrayList<DateListableImplementation>();
+			DateListableImplementation fromDate			= new DateListableImplementation();	
+			fromDate.setLabel("From");
+			fromDate.setUniqueId("fromDate");
+			fromDate.setActionFormProperty("fromDate");
+			fromDate.setTranslateable(true);
+			children.add(fromDate);
+			
+			DateListableImplementation toDate			= new DateListableImplementation();	
+			toDate.setLabel("To");
+			toDate.setUniqueId("toDate");
+			toDate.setActionFormProperty("toDate");
+			toDate.setTranslateable(true);
+			children.add(toDate);
+			
+			DateListableImplementation groupFromTo = new DateListableImplementation();
+			groupFromTo.setLabel("");
+			groupFromTo.setUniqueId("0");
+			groupFromTo.setTranslateable(false);
+			groupFromTo.setChildren(children);
+			
+			children = new ArrayList<DateListableImplementation>();
+			children.add(groupFromTo);
+
+			DateListableImplementation dynamicFilter			= new DateListableImplementation();	
+			dynamicFilter.setLabel("Dynamic Date Filter");
+			dynamicFilter.setUniqueId("dynamicDateFilter");
+			dynamicFilter.setActionFormProperty("dynamicDateFilter");
+			dynamicFilter.setTranslateable(true);
+			children.add(dynamicFilter);
+
+			if(filterForm.getDynamicDateFilter().getCurrentPeriod() != null){
+				dynamicFilter.setSelected(true);
+			}else{
+				groupFromTo.setSelected(true);
+			}
+
+			DateListableImplementation rootDate			= new DateListableImplementation();
+			rootDate.setLabel("Date Filter");
+			rootDate.setTranslateable(true);
+			rootDate.setUniqueId("rootDate");
+			rootDate.setChildren(children);
+			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
+					new GroupingElement<HierarchyListableImplementation>("Date Filter", "filter_date_div", rootDate, "");
+			
+			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
+		}		
 		
 		Collection<AmpIndicatorRiskRatings> meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
 		for (AmpIndicatorRiskRatings element:meRisks) {
@@ -1195,15 +1314,31 @@ public class ReportsFilterPicker extends Action {
 		arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1 ? null : filterForm.getToMonth().intValue());
 		arf.setFromDate(filterForm.getFromDate() == null ? null : new String(filterForm.getFromDate()));
 		arf.setToDate(filterForm.getToDate() == null ? null : new String(filterForm.getToDate()));
+		arf.setDynDateFilterCurrentPeriod(filterForm.getDynamicDateFilter().getCurrentPeriod());
+		arf.setDynDateFilterAmount(filterForm.getDynamicDateFilter().getAmount());
+		arf.setDynDateFilterOperator(filterForm.getDynamicDateFilter().getOperator());
+		arf.setDynDateFilterXPeriod(filterForm.getDynamicDateFilter().getxPeriod());
 		
 		arf.setToActivityStartDate(filterForm.getToActivityStartDate() );
 		arf.setFromActivityStartDate(filterForm.getFromActivityStartDate() );
+		arf.setDynActivityStartFilterCurrentPeriod(filterForm.getDynamicActivityStartFilter().getCurrentPeriod());
+		arf.setDynActivityStartFilterAmount(filterForm.getDynamicActivityStartFilter().getAmount());
+		arf.setDynActivityStartFilterOperator(filterForm.getDynamicActivityStartFilter().getOperator());
+		arf.setDynActivityStartFilterXPeriod(filterForm.getDynamicActivityStartFilter().getxPeriod());
 		
 		arf.setToActivityActualCompletionDate(filterForm.getToActivityActualCompletionDate() );
 		arf.setFromActivityActualCompletionDate(filterForm.getFromActivityActualCompletionDate());
+		arf.setDynActivityActualCompletionFilterCurrentPeriod(filterForm.getDynamicActivityActualCompletionFilter().getCurrentPeriod());
+		arf.setDynActivityActualCompletionFilterAmount(filterForm.getDynamicActivityActualCompletionFilter().getAmount());
+		arf.setDynActivityActualCompletionFilterOperator(filterForm.getDynamicActivityActualCompletionFilter().getOperator());
+		arf.setDynActivityActualCompletionFilterXPeriod(filterForm.getDynamicActivityActualCompletionFilter().getxPeriod());
 		
 		arf.setToActivityFinalContractingDate(filterForm.getToActivityFinalContractingDate() );
 		arf.setFromActivityFinalContractingDate(filterForm.getFromActivityFinalContractingDate());
+		arf.setDynActivityFinalContractingFilterCurrentPeriod(filterForm.getDynamicActivityFinalContractingFilter().getCurrentPeriod());
+		arf.setDynActivityFinalContractingFilterAmount(filterForm.getDynamicActivityFinalContractingFilter().getAmount());
+		arf.setDynActivityFinalContractingFilterOperator(filterForm.getDynamicActivityFinalContractingFilter().getOperator());
+		arf.setDynActivityFinalContractingFilterXPeriod(filterForm.getDynamicActivityFinalContractingFilter().getxPeriod());
 
 		int curYear = new GregorianCalendar().get(Calendar.YEAR);
 		

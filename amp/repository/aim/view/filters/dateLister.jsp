@@ -10,43 +10,77 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
-
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
+<%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 
 <style>
  .dateInputMarker{}
 </style>
-
 <bean:define id="entityList" toScope="page" scope="request" name="reqEntityList" />
 
+<c:set var="radioGroupName" value="optGroupDateFilter_${element.rootHierarchyListable.uniqueId}"></c:set>
 
 <logic:notEmpty name="entityList">
-		<table style="margin: 45px;">
-		<logic:iterate id="entity" name="entityList" scope="page">
-					<tr>
+		<table style="margin-left: 45px;">
+		<logic:iterate id="entity" name="entityList" scope="page" indexId="idx">
+		<tr>	
+						<c:if test="${entity.selected}">
+							<c:set var="radioState" value="checked='checked'"/>	
+							<c:set var="inputState" value=""/>					
+						</c:if>
+						<c:if test="${not entity.selected}">
+							<c:set var="inputState" value="disabled='true'"/>
+							<c:set var="radioState" value=""/>
+						</c:if>
+						<c:choose>
+						<c:when test="${fn:length(entity.children) > 0}">
 						<td>
-							<span style="font-family: Arial; font-size: 12px;">
-								<c:if test="${entity.translateable}">
-									<digi:trn><c:out value="${entity.label}"/></digi:trn> 
-								</c:if>
-								<c:if test="${!entity.translateable}">
-									<c:out value="${entity.label}"/> 
-								</c:if>
-							</span>
-							<div style="display:none">
-								<c:out value="${entity.additionalSearchString}"/>
+						<input type="radio" name="${radioGroupName}" value="0" onclick="changeDateFilteringGroup(this);" <c:out value="${radioState}"/>></input>
+						</td>
+						<td>
+						<br/>
+						<div id="${radioGroupName}_0" style="border: 1px solid #CCCCCC;padding:10px;">
+							<table>
+						<%-- from - to date fields --%>
+							<logic:iterate id="subentity" name="entity" property="children">
+								<bean:define id="dateentity" name="subentity" /> 
+								<%@include file="filterDate.jsp" %>
+							</logic:iterate>
+							</table>
+						</div>
+						</td>
+						</c:when>
+						
+						<c:otherwise>
+						<%-- dynamic filter --%>
+							<td>
+							<input type="radio" name="${radioGroupName}" value="1" onclick="changeDateFilteringGroup(this);" <c:out value="${radioState}"/>></input>
+							</td>
+							<td>
+							<div id="${radioGroupName}_1" style="border: 1px solid #CCCCCC;padding:10px;">
+							<digi:trn>From Current </digi:trn>
+							<html:select property="${entity.actionFormProperty}.currentPeriod" styleId="filter_input_curr_period_${entity.uniqueId }">
+								<html:option value="<%= AmpARFilter.DYNAMIC_FILTER_DAY %>"><digi:trn>day</digi:trn></html:option>
+								<html:option value="<%= AmpARFilter.DYNAMIC_FILTER_MONTH %>"><digi:trn>month</digi:trn></html:option>
+								<html:option value="<%= AmpARFilter.DYNAMIC_FILTER_YEAR %>"><digi:trn>year</digi:trn></html:option>
+							</html:select>
+							<html:select property="${entity.actionFormProperty}.operator" styleId="filter_input_op_${entity.uniqueId }">
+								<html:option value="<%= AmpARFilter.DYNAMIC_FILTER_ADD_OP %>">+</html:option>
+								<html:option value="<%= AmpARFilter.DYNAMIC_FILTER_SUBTRACT_OP %>">-</html:option>
+							</html:select>
+							<html:text property="${entity.actionFormProperty}.amount" maxlength="3" size="3" styleId="filter_input_amount_${entity.uniqueId }">
+							</html:text>
+							<input type="hidden" value="<digi:trn>Please enter a valid integer number for </digi:trn> <digi:trn>${element.rootHierarchyListable.label}</digi:trn>" id="filter_input_amount_${entity.uniqueId }_error"/>
+							<html:select property="${entity.actionFormProperty}.xPeriod" styleId="filter_input_x_period_${entity.uniqueId }">
+								<html:option value="<%= AmpARFilter.DYNAMIC_FILTER_DAY %>"><digi:trn>days</digi:trn></html:option>
+								<html:option value="<%= AmpARFilter.DYNAMIC_FILTER_MONTH %>"><digi:trn>months</digi:trn></html:option>
+								<html:option value="<%= AmpARFilter.DYNAMIC_FILTER_YEAR %>"><digi:trn>years</digi:trn></html:option>
+							</html:select>
 							</div>
-						</td>
-						<td >
-							<html:text readonly="true" property="${entity.actionFormProperty}" styleId="filter_input_${entity.uniqueId }" styleClass="dateInputMarker" />
-							<a id="filter_a_${entity.uniqueId }" style="background-color: #F6FAFF;" href='javascript:pickDateById("filter_a_${entity.uniqueId }","filter_input_${entity.uniqueId }")'>
-								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0" />
-							</a>
-							<a id="clearDate_${entity.uniqueId }" style="background-color: #F6FAFF;" href='javascript:clearDate("filter_input_${entity.uniqueId }")' title="<digi:trn>Clear</digi:trn>">
-								<img src="../ampTemplate/images/deleteIcon.gif" border="0">
-							</a>
-							
-						</td>
-					</tr>
+							</td>
+						</c:otherwise>
+						</c:choose>
+		</tr>
 		</logic:iterate>
 		</table>
 </logic:notEmpty>

@@ -1,8 +1,6 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.Date;
-import java.util.HashSet;
-
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -19,6 +17,9 @@ import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.util.DbUtil;
+
+import java.util.Date;
+import java.util.HashSet;
 
 public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 	private static final long serialVersionUID = 1L;
@@ -119,6 +120,7 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 		agCode.getTextContainer().setRequired(true);
 		newAgreementForm.add(agCode);
 		AmpTextFieldPanel<String> agTitle = new AmpTextFieldPanel<String>("newAgTitle", new PropertyModel<String>(editAgModel, "title"), "Title");
+        agTitle.getTextContainer().add(new AttributeModifier("size", new Model<String>("50")));
 		agTitle.getTextContainer().setRequired(true);
 		newAgreementForm.add(agTitle);
 		

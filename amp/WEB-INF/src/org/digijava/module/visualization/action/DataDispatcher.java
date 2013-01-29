@@ -2921,23 +2921,23 @@ public class DataDispatcher extends DispatchAction {
         String text = TranslatorWorker.translateText("Year",locale, siteId);
 
 		csvString.append("\"" + text + "\"");
-		if (filter.isPledgeVisible() && pledgesVisible) {
+		if (filter.getPledgeVisible() && pledgesVisible) {
 			csvString.append(",");
 			csvString.append("\"" + pledgesTranslatedTitle + "\"");
 		}
-		if (filter.isCommitmentsVisible()) {
+		if (filter.getCommitmentsVisible()) {
 			csvString.append(",");
 			csvString.append("\"" + comTranslatedTitle);
 			csvString.append("#");
 	        csvString.append(Constants.COMMITMENT + "\"");
 		}
-        if (filter.isDisbursementsVisible()) {
+        if (filter.getDisbursementsVisible()) {
     		csvString.append(",");
 	        csvString.append("\"" + disbTranslatedTitle);
 			csvString.append("#");
 	        csvString.append(Constants.DISBURSEMENT + "\"");
         }
-        if (filter.isExpendituresVisible() && expendituresVisible) {
+        if (filter.getExpendituresVisible() && expendituresVisible) {
 			csvString.append(",");
 			csvString.append("\"" + expTranslatedTitle);
 			csvString.append("#");
@@ -2959,14 +2959,14 @@ public class DataDispatcher extends DispatchAction {
 				String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 				xmlString.append("<year name=\"" + yearName + "\">\n");
 				fundingData += "<" + yearName;
-				if (filter.isPledgeVisible() && pledgesVisible) {
+				if (filter.getPledgeVisible() && pledgesVisible) {
 					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter, startDate, endDate,
 							currCode);
 					xmlString
 					.append("<dataField category=\""+TranslatorWorker.translateText("Pledges", locale, siteId)+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + pledgesTranslatedTitle + ">"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
-				if (filter.isCommitmentsVisible()) {
+				if (filter.getCommitmentsVisible()) {
 					DecimalWraper fundingComm = DbUtil
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
@@ -2974,7 +2974,7 @@ public class DataDispatcher extends DispatchAction {
 					.append("<dataField category=\""+ comTranslatedTitle +"\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + comTranslatedTitle + ">"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
-				if (filter.isDisbursementsVisible()) {
+				if (filter.getDisbursementsVisible()) {
 					DecimalWraper fundingDisb = DbUtil
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
@@ -2982,7 +2982,7 @@ public class DataDispatcher extends DispatchAction {
 					.append("<dataField category=\""+ disbTranslatedTitle +"\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + disbTranslatedTitle + ">"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
-				if (filter.isExpendituresVisible() && expendituresVisible) {
+				if (filter.getExpendituresVisible() && expendituresVisible) {
 					DecimalWraper fundingExp = DbUtil
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
@@ -3028,21 +3028,21 @@ public class DataDispatcher extends DispatchAction {
 			//csvString.append(",");
 
 			DecimalWraper fundingPledge =  new DecimalWraper();
-			if (filter.isPledgeVisible() && pledgesVisible) {
+			if (filter.getPledgeVisible() && pledgesVisible) {
 				fundingPledge = DbUtil.getPledgesFunding(filter, startDate, endDate,currCode);
 				csvString.append(",");
 				csvString.append(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 				total = total.add(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
 			
-			if (filter.isCommitmentsVisible()) {
+			if (filter.getCommitmentsVisible()) {
 				DecimalWraper fundingComm = DbUtil.getFunding(filter, startDate, endDate, null, null,Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				csvString.append(",");
 				csvString.append(fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 				total = total.add(fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			}
 			
-			if (filter.isDisbursementsVisible()) {
+			if (filter.getDisbursementsVisible()) {
 	    		DecimalWraper fundingDisb = DbUtil.getFunding(filter, startDate,endDate, null, null, Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 	    		csvString.append(",");
 	    		csvString.append(fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
@@ -3050,7 +3050,7 @@ public class DataDispatcher extends DispatchAction {
 			}
 			
 			DecimalWraper fundingExp = new DecimalWraper();
-			if (filter.isExpendituresVisible() && expendituresVisible) {
+			if (filter.getExpendituresVisible() && expendituresVisible) {
 				fundingExp = DbUtil.getFunding(filter, startDate, endDate,null, null, Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
 				csvString.append(",");
 				csvString.append(fundingExp.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));

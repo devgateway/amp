@@ -868,7 +868,10 @@ public class DashboardUtil {
 			filter.setFromPublicView(false);
 		}
 		filter.setDashboardType(Constants.DashboardType.DONOR);
-		
+		filter.setCommitmentsVisible(true);
+		filter.setDisbursementsVisible(true);
+		filter.setExpendituresVisible(true);
+		filter.setPledgeVisible(true);
 		filter.setShowOrganizationsRanking(false);
 		filter.setShowRegionsRanking(false);
 		filter.setShowSectorsRanking(false);

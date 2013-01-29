@@ -85,10 +85,10 @@ public class DashboardFilter {
     private Integer divideThousandsDecimalPlaces;
    
     private Long yearToCompare;
-    private Boolean commitmentsVisible = true;
-    private Boolean disbursementsVisible= true;
-    private Boolean pledgeVisible= true;
-    private Boolean expendituresVisible= true;
+    private Boolean commitmentsVisible;
+    private Boolean disbursementsVisible;
+    private Boolean pledgeVisible;
+    private Boolean expendituresVisible;
     private Boolean fromPublicView;
     private Boolean showOnlyApprovedActivities;
     private Boolean showOnlyNonDraftActivities;
@@ -631,22 +631,6 @@ public class DashboardFilter {
     public void setSelLocationIds(Long[] locationIds) {
         this.selLocationIds = locationIds;
     }
-
-	public boolean isCommitmentsVisible() {
-		return commitmentsVisible;
-	}
-
-	public boolean isDisbursementsVisible() {
-		return disbursementsVisible;
-	}
-    
-	public boolean isExpendituresVisible() {
-		return expendituresVisible;
-	}
-    
-	public boolean isPledgeVisible() {
-		return pledgeVisible;
-	}
 
 	public void setSectorIds(Long[] sectorIds) {
 		this.sectorIds = sectorIds;

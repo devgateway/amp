@@ -3,6 +3,7 @@ package org.dgfoundation.amp.onepager.components;
 
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -66,12 +67,14 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 			}
 
 		});
-		orgGroupPanel.getChoiceContainer().add(new AttributeAppender("style", true, new Model("width: 100px; height: 22px; margin-top: 1px;"), ";"));
+		orgGroupPanel.getChoiceContainer().add(new AttributeAppender("style", true, new Model<String>("width: 100px; height: 22px; margin-top: 1px;"), ";"));
+        orgGroupPanel.getChoiceContainer().add(new AttributeModifier("title", new Model<String>(TranslatorUtil.getTranslatedText("Choose an organisation group to filter by"))));
 		add(orgGroupPanel);
 	    
 	    
 		orgGroupPanel.setOutputMarkupId(true);
-		this.autocompletePanel = autocompletePanel;
+        this.autocompletePanel = autocompletePanel;
+        autocompletePanel.getTextField().add(new AttributeModifier("title", new Model<String>(TranslatorUtil.getTranslatedText("Type an organisation name to filter by"))));
 		add(autocompletePanel);
 	}
 	

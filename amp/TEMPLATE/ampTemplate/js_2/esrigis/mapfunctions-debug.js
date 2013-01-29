@@ -1206,7 +1206,8 @@ function MapFindStructure(activity, structureGraphicLayer) {
 						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
 							+ activity.ampactivityid+ '~isPreview=1" target="_blank">'
 							+ activity.activityname+ '</a>',
-						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y
+						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y,
+						"Structure Description" : description
 					});
 	
 				}

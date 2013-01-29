@@ -4,6 +4,8 @@ import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpColumns;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: flyer
@@ -21,7 +23,9 @@ public class BEMapRuleForm extends ActionForm {
 
     private boolean allowNone;
     private boolean allowAll;
-
+    private String dataRetrieverClass;
+    private Set<Map.Entry<String, String>> availRetrieverClasses;
+    
     public Long getId() {
         return id;
     }
@@ -92,5 +96,21 @@ public class BEMapRuleForm extends ActionForm {
 
     public void setAllowAll(boolean allowAll) {
         this.allowAll = allowAll;
+    }
+
+    public String getDataRetrieverClass() {
+        return dataRetrieverClass;
+    }
+
+    public void setDataRetrieverClass(String dataRetrieverClass) {
+        this.dataRetrieverClass = dataRetrieverClass;
+    }
+
+    public Set<Map.Entry<String, String>> getAvailRetrieverClasses() {
+        return availRetrieverClasses;
+    }
+
+    public void setAvailRetrieverClasses(Set<Map.Entry<String, String>> availRetrieverClasses) {
+        this.availRetrieverClasses = availRetrieverClasses;
     }
 }

@@ -158,10 +158,15 @@ var trnAlertBadFile = "<digi:trn jsFriendly='true'>Invalid file extension</digi:
 
     	<logic:present name="beMapActionsForm" property="rule.csvItems">
 				<bean:size name="beMapActionsForm" property="rule.csvItems" id="csvItemCount"/>
-				<digi:trn>CSV Items uploaded for current rule</digi:trn> (<bean:write name="csvItemCount"/>)
+				<digi:trn>Mapping Items for the current rule</digi:trn> (<bean:write name="csvItemCount"/>)
 			</logic:present>
-			<html:file name="beMapActionsForm" property="upload" styleClass="button"/>
-			<input type="button" class="buttonx" value="<digi:trn>Upload</digi:trn>" onClick="uploadFile(this)"/>
+			<logic:equal name="beMapActionsForm" property="rule.project.dataSource" value="0">
+				<html:file name="beMapActionsForm" property="upload" styleClass="button"/>
+				<input type="button" class="buttonx" value="<digi:trn>Upload</digi:trn>" onClick="uploadFile(this)"/>
+			</logic:equal>
+			<logic:equal name="beMapActionsForm" property="rule.project.dataSource" value="1">
+				<input type="button" class="buttonx" value="<digi:trn>Update</digi:trn>" onClick="updateFromService(this)"/>
+			</logic:equal>
     </td>
   </tr>
 </table>

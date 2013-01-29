@@ -1,5 +1,6 @@
 package org.digijava.module.budgetexport.serviceimport;
 
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -9,5 +10,5 @@ import java.util.Map;
  */
 public interface ObjectRetriever {
     String getName();
-    Map<String, String> getItems(String serviceResponseBody);
+    Map<String, String> getItems(InputStream serviceResponseStr);
 }

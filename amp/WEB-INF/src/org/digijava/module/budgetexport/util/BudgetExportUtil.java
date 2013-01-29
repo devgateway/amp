@@ -1,5 +1,6 @@
 package org.digijava.module.budgetexport.util;
 
+import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.budgetexport.adapter.DummyAmpEntity;
@@ -9,8 +10,21 @@ import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
+import org.digijava.module.budgetexport.serviceimport.ObjectRetriever;
 
-import java.util.*;
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,12 +34,19 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class BudgetExportUtil {
+    private static Logger logger = Logger.getLogger(BudgetExportUtil.class);
+
     private static final String CSV_ROW_DELIMITER = "\n";
     private static final String CSV_COL_DELIMITER_COMA = ",";
     private static final String CSV_COL_DELIMITER_TAB = "\t";
 
+    private static final String RETRIEVER_PACKAGE = "org.digijava.module.budgetexport.serviceimport.impl";
+    private static final String RETRIEVER_INTERFACE = "org.digijava.module.budgetexport.serviceimport.ObjectRetriever";
+
+    private static Set<Map.Entry<String, String>> serviceObjectRetrievers;
+
     public static Map<String, String> parseCSV (String csvContent, int delimiter, boolean hasHeader) {
-        Map<String, String> retVal = new HashMap<String, String> ();
+        Map<String, String> retVal = new HashMap<String, String>();
         String delimiterStr = null;
 
         if (delimiter == AmpBudgetExportMapRule.CSV_COL_DELIMITER_COMA) {
@@ -319,5 +340,90 @@ public class BudgetExportUtil {
             }
         }
         return retVal;
+    }
+    
+    public static Set<Map.Entry<String, String>> getAvailRetrievers() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        Set<Map.Entry<String, String>> retVal = null;
+
+        if (serviceObjectRetrievers != null) {
+            retVal = serviceObjectRetrievers;
+        } else {
+
+            retVal = new HashSet<Map.Entry<String, String>>();
+
+            /*
+            Reflections reflections = new Reflections("org.digijava.module.budgetexport.serviceimport.impl");
+            Set<Class<? extends ObjectRetriever>> classes = reflections.getSubTypesOf(ObjectRetriever.class);
+            */
+            Set<Class> classes = getClassesInPackage(RETRIEVER_PACKAGE, RETRIEVER_INTERFACE);
+
+            for (Class clazz : classes) {
+                String className = clazz.getName();
+                ObjectRetriever or =
+                        (ObjectRetriever)Class.forName(className).newInstance();
+                String displayName = or.getName();
+
+                retVal.add(new HashMap.SimpleEntry<String, String>(className, displayName));
+            }
+
+            serviceObjectRetrievers = retVal;
+        }
+
+
+        return retVal;
+    }
+
+    /**
+     * Given a package name, attempts to reflect to find all classes within the package
+     * on the local file system.
+     *
+     * @param packageName
+     * @return
+     */
+    private static Set<Class> getClassesInPackage(String packageName, String implInterface) {
+        Set<Class> classes = new HashSet<Class>();
+        String packageNameSlashed = "/" + packageName.replace(".", "/");
+        // Get a File object for the package
+        URL directoryURL = Thread.currentThread().getContextClassLoader().getResource(packageNameSlashed);
+        if (directoryURL == null) {
+            return classes;
+        }
+
+        String directoryString = directoryURL.getFile();
+        if (directoryString == null) {
+            return classes;
+        }
+
+        File directory = new File(directoryString);
+        if (directory.exists()) {
+            // Get the list of the files contained in the package
+            String[] files = directory.list();
+            for (String fileName : files) {
+                // We are only interested in .class files
+                if (fileName.endsWith(".class")) {
+                    // Remove the .class extension
+                    fileName = fileName.substring(0, fileName.length() - 6);
+                    try {
+                        Class clazz = Class.forName(packageName + "." + fileName);
+                        //Check if class implements ObjectRetriever interface
+                        java.lang.Class[] interfaces = clazz.getInterfaces();
+                        if (interfaces != null && interfaces.length > 0) {
+                            for (int intIdx = 0; intIdx < interfaces.length; intIdx ++) {
+                                if (interfaces[intIdx].getName().equals(implInterface)) {
+                                    classes.add(clazz);
+                                    break;
+                                }
+                            }
+                        }
+
+                    } catch (ClassNotFoundException e) {
+
+                    }
+                }
+            }
+        } else {
+            logger.warn(packageName + " does not appear to exist as a valid package on the file system.");
+        }
+        return classes;
     }
 }

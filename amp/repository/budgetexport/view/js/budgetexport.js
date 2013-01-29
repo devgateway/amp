@@ -29,6 +29,12 @@ function uploadFile(obj) {
 		}
 	}
 	
+	function updateFromService(obj) {
+			obj.form.setAttribute("accept-charset", "UTF-8");
+			obj.form.action=obj.form.action + "?action=upload";
+			obj.form.submit();
+	}
+	
 	function saveMapping(obj) {
 		obj.form.action=obj.form.action + "?action=save";
 		obj.form.submit();

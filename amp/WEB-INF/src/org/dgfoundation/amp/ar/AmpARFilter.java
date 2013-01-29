@@ -661,12 +661,16 @@ public class AmpARFilter extends PropertyListable {
 				request.getSession().getAttribute(ArConstants.PLEDGES_REPORT).toString().equalsIgnoreCase("true")){
 			indexedParams=new ArrayList<FilterParam>();
 			
-			/*String WORKSPACE_ONLY="";
-			if (this.workspaceonly){
-					WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE amp_team_id IN ("
-					+ Util.toCSString(ampTeams) + ")";
+			
+			Set<String> activityStatus = new HashSet<String>();
+			activityStatus.add(Constants.APPROVED_STATUS);
+			activityStatus.add(Constants.EDITED_STATUS);
+			activityStatus.add(Constants.STARTED_APPROVED_STATUS);
+			String WORKSPACE_ONLY="";
+			if (this.workspaceonly && "Management".equals(this.getAccessType())){
+					WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE v.approval_status IN ("+Util.toCSString(activityStatus)+")";
 					PledgequeryAppend(WORKSPACE_ONLY);
-			}*/
+			}
 			
 			String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
 				+ Util.toCSString(donnorgAgency) + ")";

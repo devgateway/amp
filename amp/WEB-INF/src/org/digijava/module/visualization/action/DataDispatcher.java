@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +34,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -45,6 +48,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -55,6 +59,7 @@ import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -94,41 +99,54 @@ public class DataDispatcher extends DispatchAction {
 
 		VisualizationForm visualizationForm = (VisualizationForm)form;
 		HttpSession session = request.getSession();
-
-		ArrayList<AmpOrganisation> orgs = new ArrayList<AmpOrganisation>();
+		
+		AmpTeam currentTeam = null;
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if (tm!=null && tm.getTeamAccessType().equals("Management")) {
 			visualizationForm.getFilter().setFromPublicView(true);// sets as public view when team is management, so it shows only approved activities
         } 
+		
 		if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
+	    	currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
+	    	if(currentTeam.getComputation() != null && currentTeam.getComputation()){
+	    		AmpARFilter filter = (AmpARFilter)session.getAttribute(ArConstants.TEAM_FILTER);
+	    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(filter.getFilterConditionOnly());
+	    		visualizationForm.getFilter().setActivityComputedList(activityList);
+			}
 			visualizationForm.getFilter().setTeamMember(tm);
         } else {
+        	visualizationForm.getFilter().setActivityComputedList(null);
         	visualizationForm.getFilter().setTeamMember(null);
         }
 		
+		// Parameters coming from queryString for the list of Organization Groups/Organizations, Regions/Zones, Sector/Sub-sector
 		if (request.getParameter("orgGroupIds")!=null && !request.getParameter("orgGroupIds").equals("null"))
 			visualizationForm.getFilter().setOrgGroupIds(getLongArrayFromParameter(request.getParameter("orgGroupIds")));
 		if (request.getParameter("orgIds")!=null && !request.getParameter("orgIds").equals("null"))
 			visualizationForm.getFilter().setSelOrgIds(getLongArrayFromParameter(request.getParameter("orgIds")));	
+		if (request.getParameter("regionIds")!=null && !request.getParameter("regionIds").equals("null"))
+			visualizationForm.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
 		if (request.getParameter("zoneIds")!=null && !request.getParameter("zoneIds").equals("null"))
 			visualizationForm.getFilter().setZoneIds(getLongArrayFromParameter(request.getParameter("zoneIds")));
 		if (request.getParameter("sectorIds")!=null && !request.getParameter("sectorIds").equals("null"))
 			visualizationForm.getFilter().setSectorIds(getLongArrayFromParameter(request.getParameter("sectorIds")));
 		if (request.getParameter("subSectorIds")!=null && !request.getParameter("subSectorIds").equals("null"))
 			visualizationForm.getFilter().setSubSectorIds(getLongArrayFromParameter(request.getParameter("subSectorIds")));
-		if (request.getParameter("regionIds")!=null && !request.getParameter("regionIds").equals("null"))
-			visualizationForm.getFilter().setRegionIds(getLongArrayFromParameter(request.getParameter("regionIds")));
 		
+		// The organization groups can either be only one selected, or many, from either the Quick Filter or the Advanced Filter
+		// This checks that Filter.getSelOrgGroupsIds always has the correct list of organizationGroup/s (either one or many)
 		Long[] orgsGrpIds = visualizationForm.getFilter().getOrgGroupIds();
 		Long orgsGrpId = visualizationForm.getFilter().getOrgGroupId();
 		if (orgsGrpIds == null || orgsGrpIds.length == 0 || orgsGrpIds[0] == -1) {
 			Long[] temp = {orgsGrpId};
 			visualizationForm.getFilter().setSelOrgGroupIds(temp);
 		} else {
-			visualizationForm.getFilter().setOrgGroupId(-1l);//unset orgsGrpIds
+			visualizationForm.getFilter().setOrgGroupId(-1l);
 			visualizationForm.getFilter().setSelOrgGroupIds(orgsGrpIds);
 		}	
 		
+		// The organization can either be only one selected, or many, from either the Quick Filter or the Advanced Filter
+		// This checks that Filter.getSelOrgIds always has the correct list of organization/s (either one or many)
 		Long[] orgsIds = visualizationForm.getFilter().getOrgIds();
 		Long orgsId = visualizationForm.getFilter().getOrgId();
 		if (orgsIds == null || orgsIds.length == 0 || orgsIds[0] == -1) {
@@ -136,7 +154,6 @@ public class DataDispatcher extends DispatchAction {
 				Long[] temp = {orgsId};
 				visualizationForm.getFilter().setSelOrgIds(temp);
 			}
-			//visualizationForm.getFilter().setOrgIds(temp);
 		} else {
 			visualizationForm.getFilter().setOrgId(-1l);//unset orgId
 			visualizationForm.getFilter().setSelOrgIds(orgsIds);

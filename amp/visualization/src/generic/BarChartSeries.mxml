@@ -554,7 +554,7 @@
 	<!--  GLOBAL VARIABLES -->
 	<mx:Boolean id="showTrackHighlight">true</mx:Boolean>
 	<mx:Object id="dataProvider"/>
-	<mx:Number id="thumbCount"></mx:Number>
+	<mx:Number id="thumbCount">2</mx:Number>
 	<mx:Number id="startYear"></mx:Number>
 	<mx:Number id="endYear"></mx:Number>
 	<mx:Object id="categories"/>

@@ -106,13 +106,15 @@ function saveDashboard() {
 	if (validateData()){
 		var i = 0;
 		var param = "";
+		var graphArray=new Array();
 		var duplicated = false;
 		while (i<=numGraphs){
 			if(document.getElementById('graphDiv_'+i)!=null){
-				var idxStr = document.getElementsByName('graphDrDw_'+i)[0].value + "_"
-				if (param.indexOf(idxStr)!=-1)
+				var idxStr = document.getElementsByName('graphDrDw_'+i)[0].value;
+				if (graphArray.indexOf(idxStr)!=-1)
 					duplicated = true;
-				param += idxStr;
+				param += idxStr+"_";
+				graphArray.push(idxStr);
 			}
 			i++;
 		}

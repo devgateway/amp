@@ -105,12 +105,19 @@ public class DashboardUtil {
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		BigDecimal divideByDenominator;
+		if (regList.size()==0) {
+			return map;
+		}
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        AmpCategoryValueLocations tempLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation();
+        AmpCategoryValueLocations tempLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]);
         AmpCategoryValueLocations natLevelLocation = new AmpCategoryValueLocations();
         if (tempLocation != null)
-        	natLevelLocation = tempLocation;
+        	if (tempLocation.getParentLocation()!=null) {
+        		natLevelLocation = tempLocation.getParentLocation();
+			} else {
+				natLevelLocation = tempLocation;
+			}
         else if(regList.size() > 1)
         	natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[1]).getParentLocation();
 

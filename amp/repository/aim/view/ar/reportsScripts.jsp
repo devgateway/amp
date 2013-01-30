@@ -182,6 +182,7 @@ saveReportEngine	= null;
 </script>
 
 <script type="text/javascript">
+		dateFilterErrorMsg = "<digi:trn>From must be before than To date </digi:trn>";
 		var currentReportId	= -1;
 		<logic:present name="reportMeta" scope="session">
 			currentReportId	= ${reportObject.ampReportId};
@@ -318,8 +319,11 @@ saveReportEngine	= null;
 		if(document.getElementById("workspace_only")!=null)
 			document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
-		filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
-		filterForm.submit();
+		
+		if(validateDateFilters()){
+			filterForm.action	= "/aim/reportsFilterPicker.do?apply=true";
+			filterForm.submit();
+		}
 	}
 	function submitSettings() {
 		//This is needed for unfreezing the report. applyFormat parameter needs to be set so that the function

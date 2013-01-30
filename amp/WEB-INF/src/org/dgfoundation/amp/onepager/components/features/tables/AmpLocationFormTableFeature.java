@@ -228,69 +228,25 @@ public class AmpLocationFormTableFeature extends
 			
 		});
 		
-		final AmpAutocompleteFieldPanel<AmpCategoryValueLocations> searchLocations=new AmpAutocompleteFieldPanel<AmpCategoryValueLocations>("searchLocations","Search Locations",AmpLocationSearchModel.class,false) {			
+		final AmpAutocompleteFieldPanel<AmpCategoryValueLocations> searchLocations=
+                new AmpAutocompleteFieldPanel<AmpCategoryValueLocations>("searchLocations","Search Locations",
+                        AmpLocationSearchModel.class,false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSelect(AjaxRequestTarget target,
 					AmpCategoryValueLocations choice) {
-				AmpActivityLocation activityLocation = new AmpActivityLocation();
-				AmpLocation ampLoc = LocationUtil
-						.getAmpLocationByCVLocation(choice.getId());
-				if (ampLoc == null) {
-					ampLoc = new AmpLocation();
+				locationSelected(choice, am, disablePercentagesForInternational);
 
-					ampLoc.setDescription(new String(" "));
-					ampLoc.setLocation(choice);
-					if (choice != null) {
-						AmpCategoryValueLocations regionLocation = DynLocationManagerUtil
-								.getAncestorByLayer(
-										choice,
-										CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-						if (regionLocation != null) {
-							ampLoc.setRegionLocation(regionLocation);
-							ampLoc.setRegion(regionLocation.getName());
-						}
-					}
-					DbUtil.add(ampLoc);
-				}
-				activityLocation.setLocation(ampLoc);
-				if (disablePercentagesForInternational.getObject()){
-					String cIso = null;
-					try {
-						cIso = FeaturesUtil.getDefaultCountryIso();
-					} catch (Exception e) {
-						logger.error(e);
-					}
-					AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-					if (choice.getId().longValue() == defCountry.getId().longValue())
-						activityLocation.setLocationPercentage(100f);
-					else
-						activityLocation.setLocationPercentage(0f);
-				}
-				else{
-					if(list.size()>0)
-						activityLocation.setLocationPercentage(0f);
-					else 
-						activityLocation.setLocationPercentage(100f); 
-				}
-
-				activityLocation.setActivity(am.getObject());
-				
-				if (setModel.getObject() == null)
-					setModel.setObject(new HashSet<AmpActivityLocation>());
-				
-				Set<AmpActivityLocation> set = setModel.getObject();
-				set.add(activityLocation);
-				// toggleHeading(target, setModel.getObject());
-				target.add(list.getParent());
-				regionalFundingFeature.getList().removeAll();
-				target.add(regionalFundingFeature);
-				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
-				percentageValidationField.reloadValidationField(target);		
-				uniqueCollectionValidationField.reloadValidationField(target);
-				minSizeCollectionValidationField.reloadValidationField(target);
-				list.removeAll();
+                // toggleHeading(target, setModel.getObject());
+                target.add(list.getParent());
+                regionalFundingFeature.getList().removeAll();
+                target.add(regionalFundingFeature);
+                target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
+                percentageValidationField.reloadValidationField(target);
+                uniqueCollectionValidationField.reloadValidationField(target);
+                minSizeCollectionValidationField.reloadValidationField(target);
+                list.removeAll();
 			}
 
 			@Override
@@ -313,4 +269,56 @@ public class AmpLocationFormTableFeature extends
 		
 		add(searchLocations);
 	}
+
+    public void locationSelected(AmpCategoryValueLocations choice, IModel<AmpActivityVersion> am, IModel<Boolean> disablePercentagesForInternational){
+        AmpActivityLocation activityLocation = new AmpActivityLocation();
+
+        AmpLocation ampLoc = LocationUtil
+                .getAmpLocationByCVLocation(choice.getId());
+        if (ampLoc == null) {
+            ampLoc = new AmpLocation();
+
+            ampLoc.setDescription(new String(" "));
+            ampLoc.setLocation(choice);
+            if (choice != null) {
+                AmpCategoryValueLocations regionLocation = DynLocationManagerUtil
+                        .getAncestorByLayer(
+                                choice,
+                                CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+                if (regionLocation != null) {
+                    ampLoc.setRegionLocation(regionLocation);
+                    ampLoc.setRegion(regionLocation.getName());
+                }
+            }
+            DbUtil.add(ampLoc);
+        }
+        activityLocation.setLocation(ampLoc);
+        if (disablePercentagesForInternational.getObject()){
+            String cIso = null;
+            try {
+                cIso = FeaturesUtil.getDefaultCountryIso();
+            } catch (Exception e) {
+                logger.error(e);
+            }
+            AmpCategoryValueLocations defCountry = DynLocationManagerUtil.getLocationByIso(cIso, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+            if (choice.getId().longValue() == defCountry.getId().longValue())
+                activityLocation.setLocationPercentage(100f);
+            else
+                activityLocation.setLocationPercentage(0f);
+        }
+        else{
+            if(list.size()>0)
+                activityLocation.setLocationPercentage(0f);
+            else
+                activityLocation.setLocationPercentage(100f);
+        }
+
+        activityLocation.setActivity(am.getObject());
+
+        if (setModel.getObject() == null)
+            setModel.setObject(new HashSet<AmpActivityLocation>());
+
+        Set<AmpActivityLocation> set = setModel.getObject();
+        set.add(activityLocation);
+    }
 }

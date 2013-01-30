@@ -18,9 +18,12 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPan
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -33,42 +36,8 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * @see OnePager
  */
 public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8671173324087460636L;
 
-	private void checkDisablePercentages(AmpCategorySelectFieldPanel implementationLevel, AmpCategorySelectFieldPanel implementationLocation, Model<Boolean> disablePercentagesForInternational){
-		disablePercentagesForInternational.setObject(false);
-		/**
-		 * When implementation level is international and implementation location is country
-		 * we need to set the percentage for the default country to 100% and the rest of the 
-		 * percentages to 0%
-		 */
-		AmpCategoryValue implLevel = null;
-		AmpCategoryValue implLocValue = null;
-		if (implementationLevel.getChoiceModel() != null){
-			Set<AmpCategoryValue> tmp = implementationLevel.getChoiceModel().getObject();
-			if (tmp.size() == 1)
-				implLevel = tmp.iterator().next();
-		}
-		if (implementationLocation.getChoiceModel() != null){
-			Set<AmpCategoryValue> tmp = implementationLocation.getChoiceModel().getObject();
-			if (tmp.size() == 1)
-				implLocValue = tmp.iterator().next();
-		}
-		
-		if ( !"true".equals( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES ) ) &&
-				implLevel!=null && implLocValue!=null &&
-				CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
-				CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY)
-				)
-			disablePercentagesForInternational.setObject(true);
-
-		
-	}
-	
 	/**
 	 * @param id
 	 * @param fmName
@@ -92,7 +61,9 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 				CategoryConstants.IMPLEMENTATION_LEVEL_NAME, true, true, null, AmpFMTypes.MODULE);
 		add(implementationLevel);
 
-		final Model<Boolean> disablePercentagesForInternational = new Model<Boolean>(false);
+
+
+        final Model<Boolean> disablePercentagesForInternational = new Model<Boolean>(false);
 		final AmpCategorySelectFieldPanel implementationLocation = new AmpCategorySelectFieldPanel(
 				"implementationLocation",
 				CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
@@ -103,20 +74,22 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 				CategoryConstants.IMPLEMENTATION_LOCATION_NAME, true, true,
 				null, implementationLevel.getChoiceModel(), AmpFMTypes.MODULE);
 		implementationLocation.setOutputMarkupId(true);
+
+        final AmpLocationFormTableFeature locationsTable = new AmpLocationFormTableFeature(
+                "locationsTable", "Locations", am, (AmpRegionalFundingFormSectionFeature) regionalFundingFeature,
+                implementationLocation, implementationLevel, disablePercentagesForInternational);
+
 		implementationLocation.getChoiceContainer().add(
 				new AjaxFormComponentUpdatingBehavior("onchange") {
 					@Override
-					protected void onUpdate(AjaxRequestTarget arg0) {
-						checkDisablePercentages(implementationLevel, implementationLocation, disablePercentagesForInternational);
+					protected void onUpdate(AjaxRequestTarget target) {
+						defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
+                                target, locationsTable);
 					}
 				});
 		add(implementationLocation);
 
-		final AmpLocationFormTableFeature locationsTable = new AmpLocationFormTableFeature(
-				"locationsTable", "Locations", am, (AmpRegionalFundingFormSectionFeature) regionalFundingFeature, 
-				implementationLocation, implementationLevel, disablePercentagesForInternational);
 
-		
 		// add behavior to update implementation location when implementation
 		// level choice changes
 		// when chaging implementation level, remove all locations
@@ -138,14 +111,68 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
 								target.add(locationsTable);
 							}
 						}
-						checkDisablePercentages(implementationLevel, implementationLocation, disablePercentagesForInternational);
+						defaultCountryChecks(implementationLevel, implementationLocation,
+                                disablePercentagesForInternational, target, locationsTable);
 					}
-				});
+                });
 
 		// add location table
 		
 		add(locationsTable);
-		checkDisablePercentages(implementationLevel, implementationLocation, disablePercentagesForInternational);
+		defaultCountryChecks(implementationLevel, implementationLocation, disablePercentagesForInternational,
+                null, locationsTable);
 	}
+
+    private boolean checkDefaultCountry(AmpCategorySelectFieldPanel implementationLevel,
+                                        AmpCategorySelectFieldPanel implementationLocation){
+        AmpCategoryValue implLevel = null;
+        AmpCategoryValue implLocValue = null;
+        if (implementationLevel.getChoiceModel() != null){
+            Set<AmpCategoryValue> tmp = implementationLevel.getChoiceModel().getObject();
+            if (tmp.size() == 1)
+                implLevel = tmp.iterator().next();
+        }
+        if (implementationLocation.getChoiceModel() != null){
+            Set<AmpCategoryValue> tmp = implementationLocation.getChoiceModel().getObject();
+            if (tmp.size() == 1)
+                implLocValue = tmp.iterator().next();
+        }
+
+        boolean defaultCountryCheck = CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL) &&
+                CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+        return defaultCountryCheck;
+    }
+
+    private void defaultCountryChecks(AmpCategorySelectFieldPanel implementationLevel,
+                                      AmpCategorySelectFieldPanel implementationLocation,
+                                      Model<Boolean> disablePercentagesForInternational,
+                                      AjaxRequestTarget target, AmpLocationFormTableFeature locationsTable){
+        disablePercentagesForInternational.setObject(false);
+        /**
+         * When implementation level is international and implementation location is country
+         * we need to set the percentage for the default country to 100% and the rest of the
+         * percentages to 0%
+         */
+        boolean defaultCountryCheck = checkDefaultCountry(implementationLevel, implementationLocation);
+        if (!"true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES)) && defaultCountryCheck)
+            disablePercentagesForInternational.setObject(true);
+
+        if (defaultCountryCheck){
+            AmpCategoryValueLocations defaultCountry = null;
+            try {
+                defaultCountry = DynLocationManagerUtil.getLocationByIso(
+                        FeaturesUtil.getDefaultCountryIso(), CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+                locationsTable.locationSelected(defaultCountry, am, disablePercentagesForInternational);
+                if (target!=null){ //we're in an ajax context
+                    target.add(locationsTable);
+                    target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(locationsTable));
+                }
+            } catch (DgException e) {
+                logger.error("Can't get default country:", e);
+            }
+        }
+
+
+    }
 
 }

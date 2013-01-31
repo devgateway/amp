@@ -1,5 +1,5 @@
 html{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;}
-body{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;font-family:arial;}
+body{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;font-family:arial;margin:0;padding:0}
 div#ampcontainer{width:1000px;margin:0 auto;}
 #content{z-index:1000;}
 div#ampcontainer{width:1000px;margin:0 auto;}

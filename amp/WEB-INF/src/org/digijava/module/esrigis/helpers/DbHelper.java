@@ -76,9 +76,9 @@ public class DbHelper {
 		Long[] sectorIds = filter.getSelSectorIds();
 		boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 		boolean structureTypeCondition = filter.getSelStructureTypes() != null && !QueryUtil.inArray(-1l,filter.getSelStructureTypes() );
-		Boolean iscomputedwithorgs =  TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation() && TeamUtil.getAmpTeam(teamMember.getTeamId()).getOrganizations()!=null 
+		Boolean iscomputedwithorgs =  TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation()!=null && TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation() && TeamUtil.getAmpTeam(teamMember.getTeamId()).getOrganizations()!=null 
 		&& TeamUtil.getAmpTeam(teamMember.getTeamId()).getOrganizations().size()>0; 
-		Boolean isfilteredworkspace = TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation() && TeamUtil.getAmpTeam(teamMember.getTeamId()).getFilterDataSet()!=null
+		Boolean isfilteredworkspace = TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation()!=null && TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation() && TeamUtil.getAmpTeam(teamMember.getTeamId()).getFilterDataSet()!=null
 		&& TeamUtil.getAmpTeam(teamMember.getTeamId()).getFilterDataSet().size()>0;
 		
 		AmpCategoryValue budgetOn = null;
@@ -115,9 +115,9 @@ public class DbHelper {
 			
 			
 			//Organization Type
-			if(filter.getSelorganizationsTypes()!=null || iscomputedwithorgs ){
+			//if(filter.getSelorganizationsTypes()!=null || iscomputedwithorgs ){
 				oql += " inner join act.orgrole role  ";
-			}
+			//}
 			if(structureTypeCondition){
 				oql += " inner join act.structures str  ";
 			}

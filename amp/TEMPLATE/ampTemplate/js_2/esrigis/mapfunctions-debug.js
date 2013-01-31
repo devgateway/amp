@@ -1167,7 +1167,7 @@ function MapFindStructure(activity, structureGraphicLayer) {
 									+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
 						"Structure Type" : structure.type,
 						"Structure Description" : description,
-						"Coordinates" : pt.x + " , " + pt.y,
+						"Coordinates" : structure.lat + " , " + structure.lon,
 						"Type_id" : structure.typeId
 					});
 				structurespoint.push(pgraphic);

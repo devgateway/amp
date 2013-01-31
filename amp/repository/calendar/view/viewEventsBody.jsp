@@ -382,6 +382,7 @@ window.onload=init;
 					</tr>
 					<tr>
 						<td>
+							<div style="height: 600px;">&nbsp;</div>
 							<div class="dhx_cal_header" style=""></div>
 							<div class="dhx_cal_data"></div>
 						</td>

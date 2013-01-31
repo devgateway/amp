@@ -22,9 +22,9 @@
 &nbsp;
 </td>
 <% if (reportData.getLevelDepth() < 3) { %>		
-		<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
+		<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>px;">
 	<% } else { %>	
-		<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
+		<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>px;">
 	<% } %>			
 
 	<% if(reportData.getName().indexOf(':')!=-1) { %>

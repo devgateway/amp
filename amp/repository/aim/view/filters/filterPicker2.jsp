@@ -26,7 +26,7 @@
 <link href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" rel="stylesheet" type="text/css"></link>
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
 <digi:instance property="aimReportsFilterPickerForm" />
-<digi:form action="/reportsFilterPicker.do">
+<digi:form action="/reportsFilterPicker.do" style="height: 100%">
 <bean:define id="reqBeanSetterObject" toScope="request" name="aimReportsFilterPickerForm"/>
 
 <% 
@@ -49,8 +49,8 @@ StopWatch.next("Filters", true);
 		<li><a href="#otherCriteriaTab"><div><digi:trn>Other Criteria</digi:trn></div></a></li>
 	</ul>
 	<div class="yui-content" style="background-color: #f6faff; height: 92%;margin-top: 10px;background: white;" >
-		<div id="donorsTab" style="height: 91%;">
-			<div class="grayBorder">
+		<div id="donorsTab" class="clrfix" style="height: 91%;">
+			<div class="grayBorder clrfix">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="donorsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="donorsTab_search" />
@@ -58,8 +58,8 @@ StopWatch.next("Filters", true);
 			</div>
 		</div>
 		<logic:notEqual name="is_pledge_report" value="true" scope="request">
-			<div id="relAgenciesTab" class="yui-hidden" style="height: 91%;">
-				<div class="grayBorder">
+            <div id="relAgenciesTab" class="yui-hidden clrfix" style="height: 91%;">
+                <div class="grayBorder clrfix">
 					<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
 					<bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
 					<bean:define id="reqSearchManagerId" toScope="request" value="relAgenciesTab_search" />
@@ -67,8 +67,8 @@ StopWatch.next("Filters", true);
 				</div>
 			</div>
 		</logic:notEqual>
-		<div id="sectorsTab" class="yui-hidden"  style="height: 91%;">
-			<div class="grayBorder">
+		<div id="sectorsTab" class="yui-hidden clrfix"  style="height: 91%;">
+			<div class="grayBorder clrfix">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="sectorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="sectorsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="sectorsTab_search" />
@@ -76,8 +76,8 @@ StopWatch.next("Filters", true);
 			</div>
 		</div>
 		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
-			<div id="programsTab" class="yui-hidden"  style="height: 91%;" >
-				<div class="grayBorder">
+			<div id="programsTab" class="yui-hidden clrfix"  style="height: 91%;" >
+				<div class="grayBorder clrfix">
 					<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
 					<bean:define id="reqPropertyObj" toScope="request" value="programsPropertyObj" />
 					<bean:define id="reqSearchManagerId" toScope="request" value="programsTab_search" />
@@ -85,8 +85,8 @@ StopWatch.next("Filters", true);
 				</div>
 			</div>
 		</module:display>
-		<div id="financingLocTab" class="yui-hidden"  style="height: 91%;" >
-			<div class="grayBorder" style="width: 95%; float: left;">
+		<div id="financingLocTab" class="yui-hidden clrfix"  style="height: 91%;" >
+			<div class="grayBorder clrfix" style="width: 95%; float: left;">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="financingLocPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="financingLocTab_search" />
@@ -95,8 +95,8 @@ StopWatch.next("Filters", true);
 				<bean:define id="reqSearchFieldWidth" toScope="request" value="" />
 			</div>
 		</div>
-		<div id="otherCriteriaTab" class="yui-hidden"  style="height: 91%;">
-			<div class="grayBorder">
+		<div id="otherCriteriaTab" class="yui-hidden clrfix"  style="height: 91%;">
+			<div class="grayBorder clrfix">
 				<logic:notEqual name="is_pledge_report" value="true" scope="request">
 					<c:set var="reqSelectorHeaderSize" scope="request" value="13" />
 					<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="otherCriteriaElements" />
@@ -161,26 +161,39 @@ StopWatch.next("Filters", true);
 	</div>
 </div>
 <logic:notEqual name="is_pledge_report" value="true" scope="request">
+<div class="clrfix" style="height: 15%;">
 	<div style="width:60%; float:left; font-size: 12px;text-align: center;">
-		<c:set var="tooltip_translation">
-			<digi:trn>Specify keywords to look for in the project data.</digi:trn>
-		</c:set>
-		<digi:trn>Keyword Search</digi:trn>
-		<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
-			src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
-			<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
-			&nbsp;
-			<html:select property="searchMode" styleClass="inp-text" style="width: 150px;">
-				<option value="0"><digi:trn>Any keyword</digi:trn></option>
-				<option value="1"><digi:trn>All keywords</digi:trn></option>
-			</html:select>
-			
+			<c:set var="tooltip_translation">
+				<digi:trn>Specify keywords to look for in the project data.</digi:trn>
+			</c:set>
+			<digi:trn>Keyword Search</digi:trn>
+			<img onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')" height="15px" 
+				src="/TEMPLATE/ampTemplate/images/info.png" alt="Click to View Calendar" border="0" />
+				<html:text property="indexString" style="width: 150px"	styleClass="inp-text"  />
+				&nbsp;
+				<html:select property="searchMode" styleClass="inp-text" style="width: 150px;">
+					<option value="0"><digi:trn>Any keyword</digi:trn></option>
+					<option value="1"><digi:trn>All keywords</digi:trn></option>
+				</html:select>
+				
 	</div>
-</logic:notEqual>
-<div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
-	<html:checkbox property="justSearch" value="true" />&nbsp;
-	<digi:trn>Use filter as advanced search</digi:trn>
+	<div style="display: block;width:40%; float:left; font-size: 12px">
+		<html:checkbox property="justSearch" value="true" />&nbsp;
+		<digi:trn>Use filter as advanced search</digi:trn>
+	</div>
+	
+	<div style="clear:both;text-align:center;padding:2px 0px 0px 0px;margin-top: 20px;">
+					<html:hidden property="ampReportId" />
+	
+					<html:hidden property="defaultCurrency" />
+					<input class="buttonx_sm" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters()"
+					value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 
+					<html:button onclick="resetFilter();" styleClass="buttonx_sm" property="reset" styleId="filterPickerResetButton">
+						<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
+					</html:button>
+    </div>
 </div>
+</logic:notEqual>
 <%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
 <%if ((arf != null) && (arf.isPublicView()==false)){%>
 	<c:if test="${aimReportsFilterPickerForm.reporttype eq '5'}">
@@ -190,16 +203,6 @@ StopWatch.next("Filters", true);
 		</div>
 	</c:if>
 <%} %>
-
-<div style="clear:both;text-align:center;padding:2px 0px 0px 0px;margin-top: 20px;height: 15%;">
-				<html:hidden property="ampReportId" />
-
-				<html:hidden property="defaultCurrency" />
-				<input class="buttonx_sm" id="filterPickerSubmitButton" name="apply" type="button" onclick="text.value='';submitFilters()"
-				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters</digi:trn>" /> 
-				<html:button onclick="resetFilter();" styleClass="buttonx_sm" property="reset" styleId="filterPickerResetButton">
-					<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
-				</html:button> </div>
 
 <html:hidden property="workspaceonly" styleId="workspaceOnly"/>
 </digi:form>

@@ -20,7 +20,7 @@
 
 <digi:instance property="aimReportWizardForm" />
 <bean:define name="aimReportWizardForm" id="myForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm"/>
-<digi:form action="/viewNewAdvancedReport.do" method="post">
+
 	<p id="columnTree">
 	<c:if test="${!empty aimReportWizardForm.ampTreeColumns}">
 		<bean:define name="aimReportWizardForm" property="ampTreeColumns" id="ampTreeColumns" type="java.util.Map"  toScope="page"/>
@@ -73,5 +73,5 @@
 		</font>
 	</c:if>
 </p>
-</digi:form>
+
 <jsp:include page="../allVisibilityTags.jsp"></jsp:include>

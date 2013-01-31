@@ -13,7 +13,6 @@
 				
 				if ( ! this.checkDestination(destObj) )
 					return;
-								
 				if (destObj.nodeName.toLowerCase()=="li") {
 					if ( this.goingUp ) {
 						destObj.parentNode.insertBefore(srcObj, destObj);
@@ -23,16 +22,18 @@
 // 					alert(destObj.parentNode.id);
 				}
 				if (destObj.nodeName.toLowerCase()=="ul" || destObj.nodeName.toLowerCase()=="ol") {
-					destObj.appendChild( srcObj );
+					if ( srcObj.parentNode != destObj ) {
+						destObj.appendChild( srcObj );
+					}
 				}
-			}
+			};
 			MyDragAndDropObject.prototype.startDrag		= function(x, y) {
 				//alert('startDrag');
 				( new YAHOO.util.Element(this.getDragEl()) ).addClass("list1");
 				var realObj	= this.getEl();
 				var dragObj	= this.getDragEl();
 				dragObj.innerHTML	= realObj.innerHTML;
-			}
+			};
 			MyDragAndDropObject.prototype.endDrag		= function(e) {
 				var realObj	= this.getEl();
 				var dragObj	= this.getDragEl();
@@ -41,7 +42,7 @@
 					repManager.checkSteps();
 				}
 				
-			}
+			};
 			MyDragAndDropObject.prototype.onDrag		= function(e) {
 				//alert('onDrag');
 		        // Keep track of the direction of the drag for use during onDragOver
@@ -53,7 +54,7 @@
 					this.goingUp = false;
 				}
 				this.lastY = y;
-			}
+			};
 			
 			MyDragAndDropObject.prototype.createDragAndDropItems	= function() {
 				var src_container	= document.getElementById( this.containerId );
@@ -67,7 +68,7 @@
 						}
 					}
 				}
-			}
+			};
 			
 		MyDragAndDropObject.prototype.endAnimation		= function(realObj, dragObj) {
 				
@@ -90,7 +91,7 @@
 					YAHOO.util.Dom.setStyle(realObj.id, "visibility", ""); 
 				}); 
 				a.animate();
-		}
+		};
 		
 		MyDragAndDropObject.prototype.addActions	= function (obj) {
 		
@@ -103,7 +104,7 @@
 			obj.checkDestination	= this.checkDestination;
 			obj.containerId			= this.containerId;
 			obj.destContainerId		= this.destContainerId;
-		}
+		};
 		
 		MyDragAndDropObject.prototype.checkDestination			= function (destObj) {
 			var tempObj			= destObj;
@@ -117,11 +118,11 @@
 				return false;
 			
 			return true;
-		}
+		};
 		
 		MyDragAndDropObject.selectObj			= function (ddObj, srcObj, destObj) {
 			destObj.appendChild( srcObj );
-		}
+		};
 		MyDragAndDropObject.deselectObj			= MyDragAndDropObject.selectObj;
 		MyDragAndDropObject.selectObjs			= function (srcId, destId) {
 			var srcEl		= document.getElementById(srcId);
@@ -139,7 +140,7 @@
 				repManager.checkSteps();
 			}
 			return false;
-		}
+		};
 		MyDragAndDropObject.deselectObjs		= MyDragAndDropObject.selectObjs;
 		
 		MyDragAndDropObject.selectObjsByDbId	= function (srcId, destId, arrayOfIds) {
@@ -158,7 +159,7 @@
 				repManager.checkSteps();
 			}
 			return false;
-		}
+		};
 		
 		/**
 		* The ColumnsDragAndDropObject class extends MyDragAndDropObject
@@ -195,7 +196,7 @@
 						imgObjs[i].style.display	= "none";
 					}
 				}
-			}
+			};
 			ColumnsDragAndDropObject.prototype.startDrag	= function(x, y) {
 				//this.getDragEl().setAttribute('class','list1');
 				var dragYEl					= new YAHOO.util.Element( this.getDragEl() );
@@ -220,7 +221,7 @@
 				
 				this.dndObj					= new SelColsDragAndDropObject();
 
-			}
+			};
 			ColumnsDragAndDropObject.prototype.onDragOver	= function (e, tId) {
 				var destObj			= document.getElementById(tId);
 				var srcObj			= this.newObj;
@@ -274,7 +275,7 @@
 						srcObj.parentNode.removeChild(srcObj);
 					}
 				}
-			}
+			};
 			ColumnsDragAndDropObject.prototype.endDrag 		= function(e) {
 				var realObj	= this.colObj;
 				if ( this.newObj!=null && this.newObj.parentNode!=null )
@@ -283,7 +284,7 @@
 				MyDragAndDropObject.prototype.endAnimation(realObj, dragObj);
 				generateHierarchies();
 				repManager.checkSteps();
-			}
+			};
 			ColumnsDragAndDropObject.generateLi			=  function (liId, liClass, inputId, inputValue, inputName, html) {
 				var startHtml				= "<input type='checkbox' name='"+inputName+"' id='"+inputId+"' value='"+inputValue+"' style='line-height:15px; margin-top:6px;'/>  ";
 				var newObj					= document.createElement("li");
@@ -297,20 +298,20 @@
 				newObjY.addClass( liClass );
 				
 				return newObj;
-			}
+			};
 			ColumnsDragAndDropObject.selectObj			= function (ddObj, srcObj, destObj, realSrcObj) {
 				realSrcObj.style.display	= "none";
 				destObj.appendChild( srcObj );
 				var dragObj					= new YAHOO.util.DDProxy(srcObj.id);
 				ddObj.addActions( dragObj );
-			}
+			};
 			ColumnsDragAndDropObject.deselectObj		= function (srcObj) {
 				destId		= srcObj.firstChild.id.substring(4);
 				document.getElementById(destId).style.display	= "";
 				if (srcObj.parentNode!=null) {
 					srcObj.parentNode.removeChild(srcObj);
 				}
-			}
+			};
 			ColumnsDragAndDropObject.selectObjs			= function (srcId, destId) {
 				var srcEl		= document.getElementById(srcId);
 				var destEl		= document.getElementById(destId);
@@ -334,7 +335,7 @@
 					repManager.checkSteps();
 				}
 				return false;
-			}
+			};
 			ColumnsDragAndDropObject.selectObjsByDbId	= function (srcId, destId, arrayOfIds) {
 				var srcEl		= document.getElementById(srcId);
 				var destEl		= document.getElementById(destId);
@@ -358,7 +359,7 @@
 					repManager.checkSteps();
 				}
 				return false;
-			}
+			};
 			ColumnsDragAndDropObject.deselectObjs		= function (srcId) {
 				var srcEl		= document.getElementById(srcId);
 				inputEls		= srcEl.getElementsByTagName("input");
@@ -374,14 +375,14 @@
 					repManager.checkSteps();
 				}
 				return false;
-			}
+			};
 			
 		SelColsDragAndDropObject.prototype				= new ColumnsDragAndDropObject('source_col_div','dest_col_ul');
 		SelColsDragAndDropObject.prototype.parent		= ColumnsDragAndDropObject;
 		SelColsDragAndDropObject.prototype.constructor	= SelColsDragAndDropObject;
 		function SelColsDragAndDropObject() {
 			this.realWidth	= "30%";
-		}
+		};
 		SelColsDragAndDropObject.prototype.startDrag	= function(x, y) {
 			MyDragAndDropObject.prototype.startDrag.call(this,x,y);
 			this.newObj			= document.getElementById(this.id);
@@ -389,7 +390,7 @@
 			colId				= this.newObj.firstChild.id.substring(4);
 			this.colObj			= document.getElementById(colId);
 			YAHOO.util.Dom.setStyle(this.getDragEl(), "background", "#D7EAFD"); 	
-		}
+		};
 		
 		
 		

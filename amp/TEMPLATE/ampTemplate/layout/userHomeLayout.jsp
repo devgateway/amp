@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
 <html>
+	<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=edge">
 	<digi:base />
 	<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
@@ -56,7 +57,7 @@
 	</digi:secure>
 	<digi:secure authenticated="true">
 		<jsp:include page="headerTop_2.jsp"/>
-	</digi:secure><center>
+	</digi:secure>
 	<div class="main_menu" id="userHomeMenu" >
     	<table cellpadding="0"cellspacing="0" width="1000">
         	<tr>
@@ -76,7 +77,7 @@
 	</div>
    
 	<div class="breadcrump_1">
-	</div></center>
+	</div>
 	<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
 	<!-- BREADCRUMP START -->
 	<div class="breadcrump">
@@ -135,10 +136,7 @@
 			</div>
 		</div>
 	</div>	
-    <center>
-    
-			
-            </center>
+
 	<!-- BREADCRUMP END -->
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tbody>

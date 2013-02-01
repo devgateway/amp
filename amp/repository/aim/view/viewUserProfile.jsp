@@ -116,7 +116,7 @@ td.inside_header {background-color:#C7D4DB; color:#000; height:30px; border-colo
 						</tr>
 						<tr>
 							<td class="inside" bgcolor="#C7D4DB" colspan="2" align="center">
-								<digi:trn key="aim:teamsAssociatedWith" ><b>Teams Associated with</b></digi:trn>
+								<b><digi:trn key="aim:teamsAssociatedWith">Teams Associated with</digi:trn></b>
 							</td>
 						</tr>
 						

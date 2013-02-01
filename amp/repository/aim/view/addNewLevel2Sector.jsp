@@ -161,12 +161,11 @@
 																		style="font-size: 12px;">
 																		<thead>
 																			<tr>
-																				<td colspan="3" bgColor=#c7d4db class=box-title
-																					height="20" align="center">
-																					<!-- Table title --> <digi:trn
-																						key="aim:LeveltwoSectors">
-																						<b>Level Two Sectors</b>
-																					</digi:trn> <!-- end table title -->
+																				<td colspan="3" bgColor=#c7d4db class=box-title height="20" align="center">
+																					<!-- Table title -->
+																					<b>
+																						<digi:trn key="aim:LeveltwoSectors">Level Two Sectors</digi:trn>
+																					</b> <!-- end table title -->
 																				</td>
 																			</tr>
 																		</thead>
@@ -174,10 +173,10 @@
 																			<logic:empty name="aimAddSectorForm"
 																				property="subSectors">
 																				<tr bgcolor="#ffffff">
-																					<td colspan="5" align="center"><b> <digi:trn
-																								key="aim:noSectorPresent">
-															No Sector present
-															</digi:trn> </b>
+																					<td colspan="5" align="center">
+																						<b>
+																							<digi:trn key="aim:noSectorPresent">No Sector present</digi:trn>
+																						</b>
 																					</td>
 																				</tr>
 																			</logic:empty>

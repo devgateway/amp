@@ -97,10 +97,10 @@
 			
 			<table border="0" cellpadding="1" cellspacing="1">
   <tr>
-    <td><digi:trn><b>Keyword</b></digi:trn>: </td>
+    <td><b><digi:trn>Keyword</digi:trn></b>: </td>
     <td><html:text title="${searchTooltip}" 
 				property="keyword" styleClass="inputx insidex" size="25" /></td>
-    <td><digi:trn><b>Type</b></digi:trn>:</td>
+    <td><b><digi:trn>Type</digi:trn></b>:</td>
     <td><html:select property="queryType" styleClass="inputx insidex">
 				<html:option value="-1">
 					<digi:trn>ALL</digi:trn>
@@ -133,7 +133,7 @@
                                                         </field:display>
                                                     </feature:display>
 			</html:select> </td>
-    <td><digi:trn><b>Search Mode</b></digi:trn>:</td>
+    <td><b><digi:trn>Search Mode</digi:trn></b>:</td>
     <td><html:select property="searchMode" styleClass="inputx insidex">
 				<html:option value="0">
 					<digi:trn>Any keyword</digi:trn>

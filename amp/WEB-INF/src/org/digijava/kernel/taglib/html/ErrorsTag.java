@@ -168,8 +168,6 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
         ActionMessages errors = null;
         ActionMessages newErrors = null;
 //        Message message;
-        String newKey = null;
-        StringBuilder result=new StringBuilder();
 
         try {
             errors = TagUtils.getInstance().getActionMessages(pageContext, name);
@@ -183,7 +181,6 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
             Locale currentLocale = RequestUtils.getNavigationLanguage(request);
             Site site = RequestUtils.getSite(request);
 
-            @SuppressWarnings("unchecked")
             Iterator iter = (property == null) ? errors.get() : errors.get(property);
             newErrors = new ActionMessages();
             while (iter.hasNext()) {
@@ -195,43 +192,39 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
                 
                 //Add the new string id if needed.
                 try {
-	                Message msg = new Message();
-                        ServletContext context = pageContext.getServletContext();
-	                //msg.setKey(item.getKey().trim().toLowerCase());
 					String body = bundleApplication.getString(item.getKey());
 					if (item.getValues() != null) {
 						MessageFormat format = new MessageFormat(body);
 						body = format.format(item.getValues());
 					}
-					msg.setKey(TranslatorWorker.generateTrnKey(body));
-					msg.setMessage(body);
-					String errorMsg = body;
-					msg.setSite(site);
-					msg.setLocale(currentLocale.getCode().trim());
-	                //msg.setLocale("en");
-                        Message message=TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId());
-                        if (!msg.getLocale().equals("en")) {
-                        Message messageEn = TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), "en", site.getId());
-                        if (messageEn == null) {
-                            messageEn = new Message();
-                            messageEn.setKey(msg.getKey());
-                            messageEn.setMessage(body);
-                            messageEn.setSite(site);
-                            messageEn.setLocale("en");
-                            TranslatorWorker.getInstance(msg.getKey()).save(messageEn);
-                            LuceneWorker.addItemToIndex(messageEn, context, "en");
+					body = body.trim();
+					/**
+					 * Constantin: atrocious hack - do not translate html tags from application.properties
+					 */
+					String eliminatedPrefix = "";
+					String eliminatedSuffix = "";
+					if (body.toLowerCase().startsWith("<font"))
+					{
+						eliminatedPrefix += body.substring(0, body.indexOf(">") + 1);
+						eliminatedSuffix = "</font>" + eliminatedSuffix;
+						body = body.substring(eliminatedPrefix.length()); // delete prefix
+						body = body.substring(0, body.length() - eliminatedSuffix.length()); // delete suffix
+						body = body.trim();
+					}
+					/**
+					 * Constantin: copy paste all day long!
+					 */
+					if (body.toLowerCase().startsWith("<li"))
+					{
+						eliminatedPrefix += body.substring(0, body.indexOf(">") + 1);
+						eliminatedSuffix = "</li>" + eliminatedSuffix;
+						body = body.substring(eliminatedPrefix.length()); // delete prefix
+						body = body.substring(0, body.length() - eliminatedSuffix.length()); // delete suffix
+						body = body.trim();
+					}
 
-                        }
-                    }
-	                if (message == null) {
-		                if (item.getKey() != null)  {                   
-	               			TranslatorWorker.getInstance(msg.getKey()).save(msg);
-      					LuceneWorker.addItemToIndex(msg, context,msg.getLocale());				
-		                }
-	                }
-                        else{
-                            errorMsg=message.getMessage();
-                        }
+					String translatedBody = TranslatorWorker.translateText(body);
+					String errorMsg = eliminatedPrefix + translatedBody + eliminatedSuffix;
                   newErrors.add((property==null)?Globals.MESSAGE_KEY:property, new ActionMessage(errorMsg,false));
                 }catch(Exception e){
                 	logger.error(e);

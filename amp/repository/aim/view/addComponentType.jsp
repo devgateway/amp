@@ -130,8 +130,8 @@ hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 10
 							<table width="100%" border="0" style="font-size:12px; font-family:Arial, Helvetica, sans-serif;">
 								<field:display name="Admin - Component Type Name" feature="Admin - Component Type">
 						  		<tr>
-									<td width="50%" height="22" align="right"><font color=red>*</font> <digi:trn
-										key="aim:typeName"><b>Name</b></digi:trn>
+									<td width="50%" height="22" align="right"><font color=red>*</font>
+									<b><digi:trn key="aim:typeName">Name</digi:trn></b>
 								    &nbsp;</td>
 								  <td width="50%"><html:text property="name" size="40"/></td>
 								</tr>

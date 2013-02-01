@@ -852,14 +852,14 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 									<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 											<tr bgcolor="#ffffff">			
 												<field:display name="Pledge Contact 1 - Name" feature="Pledge Contact 1">								
-													<td width="50%" align="left" valign="middle">
-														
-													<digi:trn key="pointContactName"><b>Name</b></digi:trn>													</td>
+													<td width="50%" align="left" valign="middle">														
+														<b><digi:trn key="pointContactName">Name</digi:trn></b>												
+													</td>
 												</field:display>
 												<field:display name="Pledge Contact 1 - Title" feature="Pledge Contact 1">
-													<td width="50%" align="left" valign="middle">
-														
-															<digi:trn key="pointContactTitle"><b>Title</b></digi:trn>																																								</td>
+													<td width="50%" align="left" valign="middle">														
+														<b><digi:trn key="pointContactTitle">Title</digi:trn></b>																																								
+													</td>
 												</field:display>								
 											</tr>
 											<tr>
@@ -928,7 +928,7 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 												<tr bgcolor="#ffffff">											
 													<td width="50%" align="left" valign="middle">
 														
-													<digi:trn key="pointContactName"><b>Name</b></digi:trn>													</td>
+													<b><digi:trn key="pointContactName">Name</digi:trn></b>												</td>
 													<td width="50%" align="left" valign="middle">
 														
 															<digi:trn key="pointContactTelephone"><b>Telephone</b></digi:trn>																										</td>
@@ -973,9 +973,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 											</tr>
 											<tr bgcolor="#ffffff">
 												<field:display name="Pledge Contact 2 - Name" feature="Pledge Contact 2">											
-													<td width="50%" align="left" valign="middle">
-														
-													<digi:trn key="pointContactName"><b>Name</b></digi:trn>													</td>
+													<td width="50%" align="left" valign="middle">														
+														<b><digi:trn key="pointContactName">Name</digi:trn></b>												
+													</td>
 												</field:display>
 												<field:display name="Pledge Contact 2 - Title" feature="Pledge Contact 2">
 													<td width="50%" align="left" valign="middle">
@@ -1046,9 +1046,9 @@ document.getElementsByTagName('body')[0].className='yui-skin-sam';
 										<tr><td>
 										<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellspacing="1">
 												<tr bgcolor="#ffffff">											
-													<td width="50%" align="left" valign="middle">
-														
-															<digi:trn key="pointContactName"><b>Name</b></digi:trn>																										</td>
+													<td width="50%" align="left" valign="middle">														
+														<b><digi:trn key="pointContactName">Name</digi:trn></b>																										
+													</td>
 													<td width="50%" align="left" valign="middle">
 														
 															<digi:trn key="pointContactTelephone"><b>Telephone</b></digi:trn>																										</td>

@@ -581,13 +581,13 @@ function setSearchMessage(stringMessage){
 					</TR>
 					<TR>
 						<TD nowrap="nowrap" bgcolor="#E9E9E9">
-							<digi:trn>CTRL+> - next result&nbsp;</digi:trn>
+							CTRL+> - <digi:trn>next result</digi:trn>&nbsp;
 						<br />
 						</TD>
 					</TR>
 					<TR>
 						<TD nowrap="nowrap" bgcolor="#E9E9E9">
-							<digi:trn>CTRL+< - previous result&nbsp;</digi:trn>
+							CTRL+< - <digi:trn>previous result</digi:trn>&nbsp;
 						<br />
 						</TD>
 					</TR>					

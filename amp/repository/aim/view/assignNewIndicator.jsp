@@ -234,9 +234,9 @@ enterBinder.map(["keyWordTextField"], "searchIndBtn");
 				<td align=left valign="top">
 					<table cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding style="font-size:12px;">
 						<tr bgcolor="#c7d4db">
-						  <td vAlign="center" width="100%" align ="center" class="textalb" height="25">
-							  <digi:trn key="aim:searchind">
-							    <b>Search Indicators</b></digi:trn>							</td>
+							<td vAlign="center" width="100%" align ="center" class="textalb" height="25">
+							  <b><digi:trn key="aim:searchind">Search Indicators</digi:trn></b>
+							</td>
 						</tr>
 						<tr>
 							<td align="center" bgcolor=#f2f2f2>
@@ -315,9 +315,7 @@ enterBinder.map(["keyWordTextField"], "searchIndBtn");
                                       <table width="100%" align="center" border="0" style="font-family:arial;font-size:12px; margin-bottom:15px; margin-top:15px;" cellspacing=0 cellpadding=0>
                                         <tr bgcolor="#c7d4db">
 	                                        <td vAlign="center" width="100%" align ="center" class="textalb" height="30" colspan="2" style="font-size:12px;">
-												<digi:trn key="aim:listofprgIndicators">
-													<b>List Of Program Indicators</b>
-												</digi:trn>
+												<b><digi:trn key="aim:listofprgIndicators">List Of Program Indicators</digi:trn></b>
 											</td>
 										</tr>
                                     </tr>

@@ -85,28 +85,6 @@
 		<tr>
 			<td align=left valign="top" width=1000>
 				<table cellPadding=5 cellspacing="0" width="1000">
-					<!-- <tr> -->
-					<!-- Start Navigation -->
-					<!-- <td height=33 colspan="7" width="867"><span class=crumb>
-						<digi:link href="/admin.do" styleClass="comment">
-						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:organizationManager"> Organization Manager
-						</digi:trn>
-                      </span>
-					</td>-->
-					<!-- End navigation -->
-					<!-- </tr> -->
-					<!--<tr>
-					<td height=16 valign="center" width=867 colspan="7"><span class=subtitle-blue>
-						<digi:trn key="aim:organizationManager"></span><span class=crumb>Organization
-                      Manager
-						</digi:trn>
-                      </span>
-					</td>
-				</tr>-->
 				<digi:secure actions="ADMIN">
 					<tr>
 						<td align="left" colspan=7>

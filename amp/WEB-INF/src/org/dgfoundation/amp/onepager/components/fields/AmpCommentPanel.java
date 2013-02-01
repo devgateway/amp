@@ -62,12 +62,9 @@ public class AmpCommentPanel extends AmpFieldPanel {
 		super.setOutputMarkupId(true);
 		this.fmType = AmpFMTypes.MODULE;
 
-		final String trnAddComment = TranslatorUtil
-				.getTranslatedText(" <<add new comment>>");
-		final String savedMsg = TranslatorUtil
-				.getTranslatedText(" <<comment saved>>");
-		final String notSavedMsg = TranslatorUtil
-				.getTranslatedText(" <<error, comment not saved>>");
+		final String trnAddComment = " <<" + TranslatorUtil.getTranslatedText("add new comment") + ">>";
+		final String savedMsg = " <<" + TranslatorUtil.getTranslatedText("comment saved") + ">>";
+		final String notSavedMsg = " <<" + TranslatorUtil.getTranslatedText("error, comment not saved") + ">>";
 		final Model trnAddCommentModel = new Model(trnAddComment);
 		Form<String> form = new Form<String>("form", trnAddCommentModel);
 		add(form);

@@ -250,19 +250,15 @@
 				</td>
 				<td valign="middle" class="inside" width=50%>
 					<html:checkbox property="isMultiselect" />
-					<digi:trn key="aim:categoryManagerAllowMultiselect">
-						Should <strong>multiselect</strong> be allowed for this category
-					</digi:trn> 
+					<digi:trn>Should</digi:trn> <strong><digi:trn>multiselect</digi:trn></strong> <digi:trn>be allowed for this category</digi:trn>
 					<br />
 					<html:checkbox property="isOrdered" />
-					<digi:trn key="aim:categoryManagerIsOrdered">
-						Should the values be presented in <strong>alphabetical order</strong> 
-					</digi:trn>
+					<digi:trn">Should the values be presented in</digi:trn> <strong><digi:trn>alphabetical order</digi:trn></strong> 
 				</td>
 				</tr>
 				<tr>
 					<td class="inside">
-						<digi:trn key="aim:categoryManagerEnterKeyText"> Please Enter the Key</digi:trn>
+						<digi:trn key="aim:categoryManagerEnterKeyText">Please Enter the Key</digi:trn>
 						<font color="#FF0000">*</font>
 					</td>
 					<td class="inside">

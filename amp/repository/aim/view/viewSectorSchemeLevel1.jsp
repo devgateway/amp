@@ -133,10 +133,11 @@
 																			<tr>
 																				<td colspan="3" bgColor=#c7d4db class=box-title
 																					height="25" align="center">
-																					<!-- Table title --> <digi:trn
-																						key="aim:LeveloneSectors">
-																						<b style="font-size: 12px;">Level One Sectors</b>
-																					</digi:trn> <!-- end table title -->
+																					<!-- Table title -->
+																					<b style="font-size: 12px;">
+																						<digi:trn key="aim:LeveloneSectors">Level One Sectors</digi:trn>
+																					</b>
+																					<!-- end table title -->
 																				</td>
 																			</tr>
 																		</thead>

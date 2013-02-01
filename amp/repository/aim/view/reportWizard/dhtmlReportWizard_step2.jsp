@@ -28,7 +28,7 @@
 									<div id="searchBox" style="  font-size:12px;">
 <!-- 										<form name="searchBoxForm" onsubmit="searchFunction();return false;"> -->
 
-<digi:trn key="fm:search:searchTitle"><b>Search</b></digi:trn> 
+<b><digi:trn key="fm:search:searchTitle">Search</digi:trn></b> 
 <input type="Text" id="searchCriteria"/> 
 <input type="button" class="buttonx" src="#" value="<digi:trn key="fm:search:search">Search</digi:trn>" onclick="searchFunction(); return false;" />
 <input type="button" class="buttonx" onclick="resetSearch()" value="<digi:trn key="fm:search:reset">Reset</digi:trn>" />

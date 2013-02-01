@@ -1007,7 +1007,7 @@ border-right: 1px solid rgb(208, 208, 208);
                         </td>
                     </tr>-->
                     <tr>
-                        <td><digi:trn>All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn></td>
+                        <td><digi:trn>All fields marked with</digi:trn> <font size="2" color="#FF0000">*</font> <digi:trn>are required</digi:trn></td>
                     </tr>
                     <tr>
                         <td><digi:errors /></td>

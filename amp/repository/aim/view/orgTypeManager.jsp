@@ -18,28 +18,6 @@
 	<tr>
 		<td align=left valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%">
-				<!-- <tr> -->
-					<!-- Start Navigation -->
-					<!-- <td height=33 colspan=5><span class=crumb>
-						<digi:link href="/admin.do" styleClass="comment">
-						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:orgTypeManager"> Organization Type Manager
-						</digi:trn>
-                      </span>
-					</td> -->
-					<!-- End navigation -->
-				<!-- </tr> -->
-				<!--<tr>
-					<td height=16 valign="center" width=571><span class=subtitle-blue>
-						<digi:trn key="aim:orgTypeManager"></span><span class=crumb>Organization Type
-                      Manager
-						</digi:trn>
-                      </span>
-					</td>
-				</tr>-->
 				<tr>
 					<td noWrap width="100%" vAlign="top" colspan=5>
 					<table width="100%" cellpadding="1" cellspacing="1">
@@ -200,9 +178,11 @@
 										<table cellpadding="0" cellspacing="0" width="100">
 											<tr>
 												<td bgColor=#c9c9c7 class=box-title>
-													<digi:trn key="aim:otherLinks">
-													<b style="font-size:12px; padding-left:5px;">Other links</b>
-													</digi:trn>
+													<b style="font-size:12px; padding-left:5px;">
+														<digi:trn key="aim:otherLinks">
+															Other links
+														</digi:trn>
+													</b>												
 												</td>
 												<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 											</tr>

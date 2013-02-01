@@ -37,31 +37,9 @@
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=700>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
-				<!-- <tr> -->
-					<!-- Start Navigation -->
-					<!-- <td height=33><span class=crumb>
-					<c:set var="clickToViewAdmin">
-					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-					</c:set>
-						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
-						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:sectorManager">
-						Sector Manager
-						</digi:trn>
-					</td> -->
-					<!-- End navigation -->
-				<!-- </tr> -->
-				<!--<tr>
-					<td height=25 valign="center" align=center width=1000 bgcolor="#c7d4db"><digi:trn key="aim:sectorManager"><b style="font-size:12px;">Sector Manager</b></digi:trn>
-					</td>
-				</tr>-->
 				<tr>
-						<td align="left">
-							<jsp:include
-									page="/repository/aim/view/adminXSLExportToolbar.jsp" />
+					<td align="left">
+						<jsp:include page="/repository/aim/view/adminXSLExportToolbar.jsp" />
 					</td>
 				</tr>
 				<tr>
@@ -179,9 +157,11 @@
 									<table cellpadding="0" cellspacing="0" width="100">
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
-												<digi:trn key="aim:otherLinks">
-												<b style="font-size:12px; padding-left:5px;">Other links</b>
-												</digi:trn>
+												<b style="font-size:12px; padding-left:5px;">
+													<digi:trn key="aim:otherLinks">
+														Other links
+													</digi:trn>
+												</b>
 											</td>
 											<td background="module/aim/images/corner-r.gif" height="17" width=17></td>
 										</tr>

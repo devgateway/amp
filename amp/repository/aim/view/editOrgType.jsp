@@ -111,7 +111,7 @@
 						<!--<digi:trn key="aim:orgTypeManager">
 						Oraganization Type Manager						</digi:trn>-->
 						</span>
-						<digi:trn key="um:allMarkedRequiredField">All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn>						
+						<digi:trn>All fields marked with</digi:trn> <font size="2" color="#FF0000">*</font> <digi:trn>are required</digi:trn>						
 						<digi:errors/>					</td>
 				</tr>
 				<tr>

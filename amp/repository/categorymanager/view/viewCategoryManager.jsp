@@ -33,31 +33,12 @@ function exportXSL(){
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
 			<table cellPadding=5 cellspacing="0" width="100%" border="0">
-				<!--<tr>-->
-					<!-- Start Navigation -->
-					<!--<td height=33 bgcolor=#F2F2F2><span class=crumb>
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</c:set>
-						<digi:link href="/admin.do" styleClass="comment" title="${translation}" contextPath="/aim">
-						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						
-						
-						<digi:trn key="aim:categoryManager">
-							<b>Category Manager</b>
-						</digi:trn>
-					</td>-->
-					<!-- End navigation -->
-				<!--</tr>-->
 				<tr>
 					<td valign="center" style="padding-top:10px;">
 					
-					<h1 style="text-align:left;" class="admintitle"><digi:trn key="aim:categoryManager">
-								Category Manager
-							</digi:trn></h1>
+					<h1 style="text-align:left;" class="admintitle">
+						<digi:trn key="aim:categoryManager">Category Manager</digi:trn>
+					</h1>
 					
 					</td>
 				</tr>
@@ -79,30 +60,19 @@ function exportXSL(){
 					<thead>
 						<tr align="center">
 							<td bgcolor="#c7d4db" class="inside" align="center" >
-								<digi:trn key="aim:categoryName">
-									<b>Category Name</b>
-								</digi:trn>
+								<b><digi:trn key="aim:categoryName">Category Name</digi:trn></b>
 							</td>
 							<td bgcolor="#c7d4db" class="inside" align="center">
-								<digi:trn key="aim:categoryDescription">
-									<b>Category Description</b>
-								</digi:trn>
-							
+								<b><digi:trn key="aim:categoryDescription">Category Description</digi:trn></b>
 							</td>
 							<td bgcolor="#c7d4db" class="inside" align="center">
-								<digi:trn key="aim:categoryPossibleValues">
-									<b>Possible Values</b>
-								</digi:trn>
+								<b><digi:trn key="aim:categoryPossibleValues">Possible Values</digi:trn></b>
 							</td>
 							<td bgcolor="#c7d4db" class="inside" align="center">
-								<digi:trn key="aim:categoryOptions">
-									<b>Category Options</b>
-								</digi:trn>
+								<b><digi:trn key="aim:categoryOptions">Category Options</digi:trn></b>
 							</td>
 							<td bgcolor="#c7d4db" class="inside ignore" align="center">
-								<digi:trn key="aim:categoryActions">
-									<b>Actions</b>
-								</digi:trn>
+								<b><digi:trn key="aim:categoryActions">Actions</digi:trn></b>
 							</td>
 						</tr>
 						</thead>

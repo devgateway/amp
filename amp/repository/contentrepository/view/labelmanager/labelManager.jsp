@@ -280,7 +280,7 @@
 				</td>
 			</tr>
                          <tr>
-                            <td colspan="2"><digi:trn>All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn></td>
+                            <td colspan="2"><digi:trn>All fields marked with</digi:trn> <font size="2" color="#FF0000">*</font> <digi:trn>are required</digi:trn></td>
                         </tr>
 		</table>
 		

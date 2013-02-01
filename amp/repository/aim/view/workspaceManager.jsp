@@ -1166,7 +1166,7 @@
                                 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">
                                     <tr><td bgColor=#c7d4db class=box-title height="25" align="center">
                                             <!-- Table title -->
-                                    <digi:trn><b>Teams</b></digi:trn>
+                                    <b><digi:trn>Teams</digi:trn></b>
                                     <!-- end table title -->
                             </td>
                         </tr>
@@ -1255,7 +1255,7 @@
             <td vAlign="top" width="100%">
                 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">
                     <tr><td bgColor=#c7d4db class=box-title height="25" align="center" id="teamTitle" style="font-weight:bold;">
-                    <digi:trn><b>Team Name</b></digi:trn>
+                    <b><digi:trn>Team Name</digi:trn></b>
             </td>
         </tr>
         <tr><td>&nbsp;</td></tr>
@@ -1297,8 +1297,8 @@
 				<div class="reportHead" style="width: 100%; height: 22px; max-height: 22px; ">
                                                 <table width="100%" class="inside"style="border-top:1px solid #cccccc;">																				
                                                     <tr class="headTableTr">
-                                                        <td align="center" width="300" class="inside" bgcolor=#F2F2f2><digi:trn><b>Name</b></digi:trn></td>
-                                                    <td align="center" width="100" class="inside" bgcolor=#F2F2f2><digi:trn><b>Actions</b></digi:trn></td>
+                                                        <td align="center" width="300" class="inside" bgcolor=#F2F2f2><b><digi:trn>Name</digi:trn></b></td>
+                                                    <td align="center" width="100" class="inside" bgcolor=#F2F2f2><b><digi:trn>Actions</digi:trn></b></td>
                                                     </tr>
                                                 </table>
                                             </div>

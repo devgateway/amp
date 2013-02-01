@@ -110,8 +110,7 @@ function countryChanged() {
 					<table cellpadding="0" cellspacing="0" width="100%" class=box-border-nopadding style="font-size:12px;">
 						<tr bgcolor="#c7d4db">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="30">
-								<digi:trn key="aim:selectLocation">
-								<b>Select Location</b></digi:trn>
+								<b><digi:trn key="aim:selectLocation">Select Location</digi:trn></b>
 							</td>
 						</tr>
 						<tr>

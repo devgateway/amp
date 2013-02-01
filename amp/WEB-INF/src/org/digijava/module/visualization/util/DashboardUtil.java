@@ -783,16 +783,17 @@ public class DashboardUtil {
 		
 		BigDecimal divideByDenominator;
 		if(isProfile){ //The profile already divide in the preload of data in method getSummaryAndRankInformation(VisualizationForm, HttpServletRequest)
-			return new BigDecimal(1);
+			//return new BigDecimal(1);
+			if (divideThousands)
+				divideByDenominator = new BigDecimal(1000);
+			else
+				divideByDenominator = new BigDecimal(1);
 		}
 		else
 		{
 	        if(divideThousands == null) divideThousands = false;
 
-	        if ("true"
-					.equals(FeaturesUtil
-							.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
-				
+	        if ("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {
 	        	if(showInThousands){
 		        	if (divideThousands)
 						divideByDenominator = new BigDecimal(1000);

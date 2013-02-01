@@ -100,7 +100,7 @@
                                                              		<c:set var="trnEditScheme">
                                                                  		<digi:trn key="aim:clickToDeleteClassification">Click here to Delete a Classification</digi:trn>
                                                                    	</c:set>
-                                                                     [ <digi:link onclick="onDelete('/updateSectorClassConfig.do?event=delete&id=${classConfig.id}')" href="/getSectorClassConfig.do"  title="${trnEditScheme}">
+                                                                     [ <digi:link onclick="onDelete('/updateSectorClassConfig.do?event=delete&id=${classConfig.id}'); return false;" href="/getSectorClassConfig.do"  title="${trnEditScheme}">
                                                                      	 <digi:trn key="aim:delete">Delete</digi:trn>
                                                                      </digi:link>]	
                                                                      </c:if>												  

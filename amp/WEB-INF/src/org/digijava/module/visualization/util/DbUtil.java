@@ -594,7 +594,25 @@ public class DbUtil {
 	         */
 	        try {
 	            String oql = "select distinct agency ";
-	            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true);
+	            String specialInner = "";
+	            String specialCondition = "";
+	            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+	            	specialInner = " inner join act.orgrole orole inner join orole.role role ";
+	            
+	            switch (filter.getAgencyType()) {
+	            case org.digijava.module.visualization.util.Constants.DONOR_AGENCY:
+	            	specialInner += " inner join f.ampDonorOrgId agency ";
+	    			break;
+	            case org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY:
+	            	specialInner += " inner join orole.organisation agency ";
+	            	specialCondition = " and role.roleCode='EA' ";
+	    			break;
+	            case org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY:
+	            	specialInner += " inner join orole.organisation agency ";
+	            	specialCondition = " and role.roleCode='BA' ";
+	    			break;
+	            }
+	        	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, specialCondition);
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
 	            query.setDate("startDate", startDate);
@@ -752,7 +770,10 @@ public class DbUtil {
         return total;
     }
 
-	private static String getHQLQuery(DashboardFilter filter, Long[] orgIds, Long[] orgGroupIds, boolean locationCondition, boolean sectorCondition, boolean programCondition, Long[] locationIds, Long[] sectorIds, Long[] programIds, Long assistanceTypeId, Long financingInstrumentId, TeamMember tm, boolean fundingTypeSpecified) {
+    private static String getHQLQuery(DashboardFilter filter, Long[] orgIds, Long[] orgGroupIds, boolean locationCondition, boolean sectorCondition, boolean programCondition, Long[] locationIds, Long[] sectorIds, Long[] programIds, Long assistanceTypeId, Long financingInstrumentId, TeamMember tm, boolean fundingTypeSpecified) {
+		return getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, fundingTypeSpecified, null, null);
+    }
+	private static String getHQLQuery(DashboardFilter filter, Long[] orgIds, Long[] orgGroupIds, boolean locationCondition, boolean sectorCondition, boolean programCondition, Long[] locationIds, Long[] sectorIds, Long[] programIds, Long assistanceTypeId, Long financingInstrumentId, TeamMember tm, boolean fundingTypeSpecified, String specialInner, String specialCondition) {
 		
 		
 		String oql = "";
@@ -764,22 +785,9 @@ public class DbUtil {
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
  
-        switch (filter.getAgencyType()) {
-	        case org.digijava.module.visualization.util.Constants.DONOR_AGENCY:
-	        	oql += " inner join f.ampDonorOrgId agency ";
-				break;
-	
-	        case org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY:
-	        	oql += " inner join orole.organisation agency ";
-				break;
-	
-	        case org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY:
-	        	oql += " inner join orole.organisation agency ";
-	            break;
-	
-			default:
-				break;
-		}       
+        if (specialInner!=null && specialInner.length()>0)
+        	oql += specialInner;
+
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
         	oql += " inner join act.ampActivityGroupCached actGroup ";
         else
@@ -806,6 +814,9 @@ public class DbUtil {
         	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         else
         	oql += " where 1 = 1 ";
+        
+        if (specialCondition!=null && specialCondition.length()>0)
+        	oql += specialCondition;
         
         if (sectorCondition) {
         	oql += " and config.id=:config ";
@@ -855,19 +866,6 @@ public class DbUtil {
         if (financingInstrumentId != null) {
             oql += "   and f.financingInstrument=:financingInstrumentId  ";
         }
-        switch (filter.getAgencyType()) {
-        case org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY:
-        	oql += " and role.roleCode='EA' ";
-			break;
-
-        case org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY:
-        	oql += " and role.roleCode='BA' ";
-            break;
-
-		default:
-			break;
-	}
-
         
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
             oql += DashboardUtil.getTeamQueryManagement();
@@ -1177,8 +1175,11 @@ public class DbUtil {
         if (sectorCondition)
         	oql += ", actsec.sectorPercentage ";
         
-       
-        oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true);
+        String specialInner = null;
+    	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    		specialInner = " inner join act.orgrole orole inner join orole.role role inner join orole.organisation roleOrg ";
+    
+    	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, null);
     	
 
         Session session = PersistenceManager.getRequestDBSession();

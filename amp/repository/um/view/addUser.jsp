@@ -55,10 +55,10 @@
 
 -->
 </style>
-<script language="JavaScript">
 
+<%@include file="userValidation.jsp" %>
 
-
+<script type="text/javascript">
 	function optionChanged(flag) {
 		if (flag == 'otype') {
 			var index1  = document.umAddUserForm.selectedOrgType.selectedIndex;
@@ -161,8 +161,10 @@
 			alert("${translation}");
         	return false;
         }
-        if(validateEmail()==false)
-            return false
+        var address = document.umAddUserForm.email.value;
+		var address2 = document.umAddUserForm.emailConfirmation.value;
+        if(! validateEmails(address, address2))
+            return false;
         if (isPassVoid(password)||isPassVoid(passwordConfirmation))
         {
 			<c:set var="translation">
@@ -202,38 +204,18 @@
 
         return true;
 	}
-	function validateEmail() {
-	    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-		var address = document.umAddUserForm.email.value;
-		var address2 = document.umAddUserForm.emailConfirmation.value;
-		if(reg.test(address) == false||reg.test(address2) == false) {
-			<c:set var="translation">
-			<digi:trn key="error.registration.noemail">you must enter Valid email please check in</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-		}
-		if(address != address2){
-			<c:set var="translation">
-			<digi:trn key="error.registration.noemailmatch">Emails in both fields must be the same</digi:trn>
-    		</c:set>
-			alert("${translation}");
-        	return false;
-		}
-		return true;
-	}
 
 	function init() {
-		var u = document.getElementById('email');
+		var u = document.getElementById('userEmail');
 		u.setAttribute("autocomplete", "off");
 		
-		var u = document.getElementById('emailConfirmation');
+		var u = document.getElementById('userEmailConfirmation');
 		u.setAttribute("autocomplete", "off");
 		
-		var u = document.getElementById('password');
+		var u = document.getElementById('userPassword');
 		u.setAttribute("autocomplete", "off");
 		
-		var u = document.getElementById('passwordConfirmation');
+		var u = document.getElementById('userPasswordConfirmation');
 		u.setAttribute("autocomplete", "off");
 		
 	}

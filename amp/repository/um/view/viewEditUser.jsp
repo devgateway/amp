@@ -15,7 +15,10 @@
 <!--  AMP Admin Logo -->
 <!-- jsp:include page="teamPagesHeader.jsp"  /-->
 <!-- End of Logo -->
-<script language="javascript" type="text/javascript">
+
+<%@include file="userValidation.jsp" %>
+
+<script type="text/javascript">
 
 function cancel()
 {
@@ -82,13 +85,7 @@ function validateUserInfo(){
 	var country=document.getElementById("country").value;
 	var errorMsg='';
 	
-	if(isInvalid(userMail)==1){
-		errorMsg='<digi:trn jsFriendly="true">Email Is Blank or starts with an space</digi:trn>';
-		alert(errorMsg);
-		return false;
-	}else if(userMail.indexOf('@')==-1 || userMail.indexOf('.')==-1){
-		errorMsg='<digi:trn jsFriendly="true" >Please enter valid email</digi:trn>';
-		alert(errorMsg);
+	if(! validateEmail(userMail)) {
 		return false;
 	}
 	if(isInvalid(firstName)==1){
@@ -127,15 +124,6 @@ function validateUserInfo(){
 	return true;
 }
 
-function isInvalid(field){
-	if (field == "" || field == null || field.charAt(0) == ' '){
-    	return 1;
-    }		
-	if (!isNaN(field)){
-    	return 2;
-    }		
-	return 0;
-}
 </script>
 <center>
 <div class="ampFormContainer">

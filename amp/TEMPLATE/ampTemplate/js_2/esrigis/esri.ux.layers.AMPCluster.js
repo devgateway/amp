@@ -118,7 +118,8 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
             if (wkid == 4326 || wkid == 4269 || wkid == 4267) {
                 dojo.forEach(features, function(feature) {
                     point = esri.geometry.geographicToWebMercator(feature.geometry);
-                    point.attributes =dojo.mixin(feature.attributes,{point:point,index:i++}) ;
+                    var attributes =dojo.mixin(feature.attributes,{point:dojo.clone(point),index:i++}) ;
+                    point.attributes =attributes;
                     this._features.push(point);
                 }, this);
             } else {
@@ -128,7 +129,8 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
         } else {
             dojo.forEach(features, function(feature) {
                 point = feature.geometry;
-                point.attributes =dojo.mixin(feature.attributes,{point:point,index:i++}) ;
+                var attributes =dojo.mixin(feature.attributes,{point:dojo.clone(point),index:i++}) ;
+                point.attributes =attributes;
                 this._features.push(point);
             }, this);
         }
@@ -329,7 +331,6 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
 			textSymbol.hide();
         	dojo.forEach(graphic.attributes,function(item){
 				var pt=graphic.attributes[i].point;
-
 				var currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ graphic.attributes[i].Type_id, 21, 25);
 				
 				var ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin(graphic.attributes[i], { baseGraphic: graphic }), this._infoTemplate);   
@@ -471,8 +472,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
                                 //initial testing w/ IE8 shows that TextSymbols are not displayed for some reason
                                 //this may be an isolated issue.  more testing needed.
                                 //it should work fine for IE7, FF, Chrome
-								var clusterLabel=new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length).setOffset(0, -5),
-								{baseGraphic:clusterGraphic})
+								var clusterLabel=new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length).setOffset(0, -5),{baseGraphic:clusterGraphic})
 								clusterGraphic.attributes=dojo.mixin(clusterGraphic.attributes,{textSymbol:clusterLabel})
 								this.add(clusterGraphic)   
 								this.add(clusterLabel);

@@ -34,6 +34,9 @@ public class ActivityForm extends ActionForm implements Serializable {
     private Integer currentPage;
     private Collection pages = null;
     
+    private String sort;
+    private String sortOrder;
+    
 	/**
 	 * @return Returns the activityList.
 	 */
@@ -173,6 +176,22 @@ public class ActivityForm extends ActionForm implements Serializable {
 
 	public void setLastKeyword(String lastKeyword) {
 		this.lastKeyword = lastKeyword;
+	}
+
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 

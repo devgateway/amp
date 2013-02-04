@@ -99,6 +99,30 @@
     }
 
 
+	function sortSubmit(val){
+		
+		var sval = document.aimActivityForm.sort.value;
+		var soval = document.aimActivityForm.sortOrder.value;
+
+		if ( val == sval ) {
+			if (soval == "asc"){
+				document.aimActivityForm.sortOrder.value = "desc";
+			}
+			if (soval == "desc"){
+				document.aimActivityForm.sortOrder.value = "asc";
+			}
+		}
+		else
+			document.aimActivityForm.sortOrder.value = "asc";
+		
+		document.aimActivityForm.sort.value=val;
+		
+		<digi:context name="sorting" property="context/module/moduleinstance/activityManager.do" />
+		document.aimActivityForm.action = "<%= sorting %>";
+		document.aimActivityForm.target = "_self";
+		document.aimActivityForm.submit();
+	}
+	
 	function resetSearch() {
 		<digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>     
 		url = "<%= searchOrg %>?action=reset";
@@ -128,7 +152,8 @@
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
-
+<html:hidden property="sort" />
+<html:hidden property="sortOrder" />
 <table bgColor=#ffffff cellpadding="0" cellspacing="0" width=1000 align="center">
 	<tr>
 		<td align=left class=r-dotted-lg valign="top" width=750>
@@ -201,7 +226,7 @@
 														<html:option value="10">10</html:option>
 														<html:option value="20">20</html:option>
 														<html:option value="50">50</html:option>
-														<html:option value="-1">
+														<html:option value="-1" >
 															<digi:trn key="aim:resultsAll">All</digi:trn>
 														</html:option>
 													</html:select></td>
@@ -245,30 +270,71 @@
 																<c:set target="${urlParamsSort}" property="action"
 																	value="sort" />
 																<td width="9" height="15" class="inside ignore">&nbsp;</td>
-																<td class="inside"><b> <c:set target="${urlParamsSort}"
+																<td class="inside" >
+																<a href="javascript:sortSubmit('activityName')">
+																<b> <digi:trn key="aim:ActivityNameCol">
+	                                                                            	Activity Name
+	                                                                            </digi:trn>
+																<%-- <c:set target="${urlParamsSort}"
 																	property="sortByColumn" value="activityName" /> <digi:link
 																	href="/activityManager.do" name="urlParamsSort">
 																	<digi:trn key="aim:ActivityNameCol">
 	                                                                            	Activity Name
 	                                                                            </digi:trn>
-																</digi:link> </b></td>
-																<td width="200" class="inside"><b> <c:set
+																</digi:link>  --%></b>
+																<c:if test="${aimActivityForm.sort=='activityName' && aimActivityForm.sortOrder=='asc'}">
+																		<img src="/repository/aim/images/up.gif" alt="up" />
+																	</c:if>
+																<c:if test="${aimActivityForm.sort=='activityName' && aimActivityForm.sortOrder=='desc'}">
+																		<img src="/repository/aim/images/down.gif" alt="down" />
+																	</c:if>
+																</a>
+																</td>
+																<td width="200" class="inside" >
+																<a href="javascript:sortSubmit('activityTeamName')">
+																<b> 
+																<digi:trn key="aim:ActivityTeamName">
+	                                                                            	Team Name
+	                                                                            </digi:trn>
+																<%-- <c:set
 																	target="${urlParamsSort}" property="sortByColumn"
 																	value="activityTeamName" /> <digi:link
 																	href="/activityManager.do" name="urlParamsSort">
 																	<digi:trn key="aim:ActivityTeamName">
 	                                                                            	Team Name
 	                                                                            </digi:trn>
-																</digi:link> </b></td>
+																</digi:link>  --%></b>
+																<c:if test="${aimActivityForm.sort=='activityTeamName' && aimActivityForm.sortOrder=='asc'}">
+																		<img src="/repository/aim/images/up.gif" alt="up" />
+																	</c:if>
+																<c:if test="${aimActivityForm.sort=='activityTeamName' && aimActivityForm.sortOrder=='desc'}">
+																		<img src="/repository/aim/images/down.gif" alt="down" />
+																	</c:if>
+																</a>
+																</td>
 
-																<td width="100" class="inside"><b> <c:set
+																<td width="100" class="inside" >
+																<a href="javascript:sortSubmit('activityId')">
+																<b>
+																<digi:trn key="aim:ActivityIdCol">
+	                                                                            	Activity Id
+	                                                                            </digi:trn> 
+																<%-- <c:set
 																	target="${urlParamsSort}" property="sortByColumn"
 																	value="activityId" /> <digi:link
 																	href="/activityManager.do" name="urlParamsSort">
 																	<digi:trn key="aim:ActivityIdCol">
 	                                                                            	Activity Id
 	                                                                            </digi:trn>
-																</digi:link> </b></td>
+																</digi:link> --%> </b>
+																<c:if test="${aimActivityForm.sort=='activityId' && aimActivityForm.sortOrder=='asc'}">
+																		<img src="/repository/aim/images/up.gif" alt="up" />
+																	</c:if>
+																<c:if test="${aimActivityForm.sort=='activityId' && aimActivityForm.sortOrder=='desc'}">
+																		<img src="/repository/aim/images/down.gif" alt="down" />
+																	</c:if>
+																</a>
+																</td>
 																<td width="5%" align="left" class="inside ignore"><c:set
 																	var="trnSelectAll">
 																	<digi:trn>Select All</digi:trn>

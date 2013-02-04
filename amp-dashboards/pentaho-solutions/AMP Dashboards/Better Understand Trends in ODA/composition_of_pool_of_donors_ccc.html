@@ -5,7 +5,7 @@
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_region")</div> <div style="float:left;width:300px;" id="regionSelect_object"></div>
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_sector")</div> <div style="float:left;" id="sectorSelect_object"></div>
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_program")</div> <div style="float:left;" id="programSelect_object"></div>
-        <div style="float:left;padding:0px 2px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;"><button id="apply" style="font-size:10pt;font-weight:bold;padding:0px;float:right;">CDF.i18n("msg_reset")
+        <div style="float:left;padding:0px 2px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;"><button id="apply" style="font-size:10pt;font-weight:bold;padding:0px;float:right;">CDF.i18n("msg_reset")</button>
     </div>
     </div>
     <div id="first_section" style="float:left;margin:10px 10x 10px 10px;">
@@ -41,6 +41,7 @@
     </div>
 </div>
 <script language="javascript" type="text/javascript">
+
 
 //Filter criteria
 var regionParameter = "";
@@ -108,8 +109,8 @@ var startYearSelect =
   htmlObject: "startYearSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
       return query;
@@ -133,8 +134,8 @@ var endYearSelect =
   htmlObject: "endYearSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
       return query;
@@ -171,8 +172,8 @@ var regionSelect =
   htmlObject: "regionSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [Regions].[Region].Members ON ROWS " +
@@ -183,7 +184,6 @@ var regionSelect =
   executeAtStart: true,
   preExecution:function(){},
   postExecution:function(){
-    console.log("Postexec in Region executed");
     Dashboards.processChange(this.name);
     $("#regionSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
     $('#regionSelect_object > select').width('300px');
@@ -202,8 +202,8 @@ var sectorSelect =
   htmlObject: "sectorSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [Primary Sector].[Primary Sector].Members ON ROWS " +
@@ -232,8 +232,8 @@ var programSelect =
   htmlObject: "programSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [National Program].[National Program].Members ON ROWS " +
@@ -274,6 +274,7 @@ first_line_chart.listeners = listeners;
 first_line_chart.parameters = parameters;
 first_line_chart.htmlObject = "first_chart_line";
 first_line_chart.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
+first_line_chart.chartDefinition.path = "/AMP Dashboards/Better Understand Trends in ODA/composition_of_pool_of_donors_ccc.cda";
 first_line_chart.chartDefinition.valueFormat = function f(value){return value;};
 first_line_chart.chartDefinition.seriesInRows = true;
 first_line_chart.chartDefinition.crosstabMode = true;

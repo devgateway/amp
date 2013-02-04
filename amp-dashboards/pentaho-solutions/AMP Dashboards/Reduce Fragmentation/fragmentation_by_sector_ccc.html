@@ -96,8 +96,8 @@ var startYearSelect =
   htmlObject: "startYearSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
       return query;
@@ -121,8 +121,8 @@ var endYearSelect =
   htmlObject: "endYearSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
       return query;
@@ -158,8 +158,8 @@ var regionSelect =
   htmlObject: "regionSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [Regions].[Region].Members ON ROWS " +
@@ -189,8 +189,8 @@ var sectorSelect =
   htmlObject: "sectorSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [Primary Sector].[Primary Sector].Members ON ROWS " +
@@ -219,8 +219,8 @@ var programSelect =
   htmlObject: "programSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [National Program].[National Program].Members ON ROWS " +

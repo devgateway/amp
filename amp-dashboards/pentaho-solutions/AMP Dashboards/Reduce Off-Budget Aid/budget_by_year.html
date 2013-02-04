@@ -119,8 +119,8 @@ var regionSelect =
   htmlObject: "regionSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [Regions].[Region].Members ON ROWS " +
@@ -150,8 +150,8 @@ var sectorSelect =
   htmlObject: "sectorSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [Primary Sector].[Primary Sector].Members ON ROWS " +
@@ -180,8 +180,8 @@ var programSelect =
   htmlObject: "programSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPMalawiStaging",
-    catalog: "solution:/AMP Dashboards/AmpMalawiStaging.xml",
+    jndi: "AMPBurkinaProduction",
+    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [National Program].[National Program].Members ON ROWS " +
@@ -234,7 +234,7 @@ first_bar_chart.chartDefinition.path = "/AMP Dashboards/Reduce Off-Budget Aid/bu
 first_bar_chart.chartDefinition.stacked = true;
 first_bar_chart.chartDefinition.title = function() {return Dashboards.i18nSupport.prop("msg_on_off_budget_by_year")};
 first_bar_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","0"],["xAxisLabel_font","10px sans-serif"],["yAxisLabel_font","10px sans-serif"], ["legendLabel_text", function(d){return formatLabel(d)}]];
-first_bar_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ value};
+first_bar_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ formatCurrencyValue(currency, value)};
 first_bar_chart.chartDefinition.clickable = true;// 
 first_bar_chart.chartDefinition.clickAction = function(s,c,v){processParameters();year=formatLabel(c); Dashboards.fireChange('yearParameter',"[Donor Dates].[" + formatLabel(c) + "]") };
 first_bar_chart.listeners = listeners_first;
@@ -286,7 +286,7 @@ second_bar_chart.chartDefinition.path = "/AMP Dashboards/Reduce Off-Budget Aid/b
 second_bar_chart.chartDefinition.stacked = true;
 second_bar_chart.chartDefinition.title = function(){return Dashboards.i18nSupport.prop("msg_on_off_budget_by_donor") + (year != "" ? " (" + year +")": "" )};
 second_bar_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","0"],["xAxisLabel_font","10px sans-serif"],["yAxisLabel_font","10px sans-serif"], ["legendLabel_text", function(d){return formatLabel(d)}]];
-second_bar_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ value};
+second_bar_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ formatCurrencyValue(currency, value)};
 second_bar_chart.chartDefinition.clickable = true;// 
 
 

@@ -2,12 +2,12 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="first_datasource" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
       <Connection id="first_datasource_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
    </DataSources>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_datasource"

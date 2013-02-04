@@ -2,28 +2,28 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="first_chart_mdx" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
       <Connection id="first_chart_mdx_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
       <Connection id="second_chart_mdx" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
       <Connection id="second_chart_mdx_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
       <Connection id="third_chart_mdx" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
       <Connection id="third_chart_mdx_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
    </DataSources>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx"

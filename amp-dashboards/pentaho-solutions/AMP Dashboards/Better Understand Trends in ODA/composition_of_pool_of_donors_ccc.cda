@@ -2,20 +2,20 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="first_chart_mdx" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
       <Connection id="first_chart_mdx_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
       <Connection id="second_chart_mdx_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
       <Connection id="second_chart_mdx" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AmpMalawiStaging.xml</Catalog>
-         <Jndi>AMPMalawiStaging</Jndi>
+         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
+         <Jndi>AMPBurkinaProduction</Jndi>
       </Connection>
    </DataSources>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx"
@@ -43,7 +43,7 @@ Set [*CJ_ROW_AXIS] as 'Generate([*METRIC_CJ_SET], {([Donor Types].currentMember)
 Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
 Set [*CJ_COL_AXIS] as 'Generate([*METRIC_CJ_SET], {([Donor Dates].currentMember)})'
 Member [Measures].[*MEASURE_SEL~AGG] as '([Measures].[${type_of_funding} ${currency}],[Donor Types].CurrentMember,[Donor Dates].[*CTX_MEMBER_SEL~AGG])', SOLVE_ORDER=300
-Member [Measures].[${type_of_funding_translation} ${currency}] as '([Measures].[${type_of_funding} ${currency}]/([Measures].[${type_of_funding} ${currency}],[Donor Types].[*TOTAL_MEMBER_SEL~AGG])*100)+0', SOLVE_ORDER=100
+Member [Measures].[${type_of_funding_translation} ${currency}] as 'IIF( [Measures].[${type_of_funding} ${currency}] > 0,([Measures].[${type_of_funding} ${currency}]/([Measures].[${type_of_funding} ${currency}],[Donor Types].[*TOTAL_MEMBER_SEL~AGG])*100),0)', SOLVE_ORDER=100
 Member [Donor Dates].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-101
 Member [Donor Types].[*TOTAL_MEMBER_SEL~AGG] as 'Aggregate(Generate([*METRIC_CJ_SET], {([Donor Types].currentMember)}))', SOLVE_ORDER=-100
 Select
@@ -84,10 +84,10 @@ Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
 Set [*NATIVE_MEMBERS_Regions] as 'Generate([*NATIVE_CJ_SET], {[Regions].CurrentMember})'
 Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
 Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Types].currentMember)})'
-Set [*BASE_MEMBERS_Primary Sector] as '${sectorParameter}'
+Set [*BASE_MEMBERS_Primary Sector] as '{${sectorParameter}}'
 Member [National Program].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_National Program])', SOLVE_ORDER=-400
 Member [Regions].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Regions])', SOLVE_ORDER=-400
-Member [Measures].[${type_of_funding_translation} ${currency}] as '([Measures].[${type_of_funding} ${currency}]/([Measures].[${type_of_funding} ${currency}],[Donor Types].[*TOTAL_MEMBER_SEL~AGG])*100)+0', SOLVE_ORDER=100
+Member [Measures].[${type_of_funding_translation} ${currency}] as 'IIF( [Measures].[${type_of_funding} ${currency}] > 0,([Measures].[${type_of_funding} ${currency}]/([Measures].[${type_of_funding} ${currency}],[Donor Types].[*TOTAL_MEMBER_SEL~AGG])*100),0)', SOLVE_ORDER=100
 Member [Primary Sector].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Primary Sector])', SOLVE_ORDER=-400
 Member [Donor Types].[*TOTAL_MEMBER_SEL~AGG] as 'Aggregate({[Donor Types].[All Donor Typess]})', SOLVE_ORDER=-100
 Select

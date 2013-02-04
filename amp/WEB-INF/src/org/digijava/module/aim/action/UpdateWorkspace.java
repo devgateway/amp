@@ -39,6 +39,9 @@ public class UpdateWorkspace extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 
+		ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, false);
+		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_WORKSPACE_EDITOR);
+		
 		boolean permitted = false;
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") != null) {

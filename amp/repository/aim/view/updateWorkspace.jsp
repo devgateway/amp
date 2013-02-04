@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -7,6 +8,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/aim"prefix="aim"%>
+
+<%	
+	ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, false);
+	request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_WORKSPACE_EDITOR);
+%>
 
 <html:javascript formName="aimUpdateWorkspaceForm"/>
 

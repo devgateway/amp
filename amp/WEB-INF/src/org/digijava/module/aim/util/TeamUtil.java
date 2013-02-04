@@ -330,7 +330,7 @@ public class TeamUtil {
     		session = PersistenceManager.getSession();
 //beginTransaction();
 
-            //check whether a team with the same name already exist
+            //check whether a team with the same name already exists
     		String qryStr = "select t from " + AmpTeam.class.getName() + " t "
     				+ "where (t.name=:name)";
     		Query qry = session.createQuery(qryStr);
@@ -343,7 +343,7 @@ public class TeamUtil {
     		} 
             
     		// save the new team
-    		//session.save(team);
+    		session.save(team);
 
     		qryStr = "select fiscal from "
     				+ AmpFiscalCalendar.class.getName() + " fiscal "

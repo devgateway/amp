@@ -39,6 +39,7 @@ public class ReportContextData
 	 */
 	public final static String REPORT_ID_CURRENT_WORKSPACE = "current_workspace";
 	public final static String REPORT_ID_REPORT_WIZARD = "report_wizard";
+	public final static String REPORT_ID_WORKSPACE_EDITOR = "workspace_editor";
 	
 	public final static Long QUERY_ENGINE_REPORT_ID = -7L;
 	public final static String REPORT_ID_QUERY_ENGINE = QUERY_ENGINE_REPORT_ID.toString(); // don't change this line or saving Query as Tab won't work!
@@ -400,6 +401,17 @@ public class ReportContextData
 	 * lock object for all the destructive operations on data shared across sessions
 	 */
 	private final static Object RCD_LOCK = new Object();
+	
+	public static void ensureReportContextMapExists()
+	{
+		HttpSession session = TLSUtils.getRequest().getSession();
+		Map<String, ReportContextData> map = (Map<String, ReportContextData>) session.getAttribute("reportContext");
+		if (map == null)
+		{
+			map = new HashMap<String, ReportContextData>();
+			session.setAttribute("reportContext", map);
+		}
+	}
 	
 	/**
 	 * creates a ReportContextData with a given id, replacing the already-existing one with the same id

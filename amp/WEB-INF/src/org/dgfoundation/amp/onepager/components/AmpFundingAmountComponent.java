@@ -25,11 +25,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
-import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.digijava.module.aim.action.AddFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -135,6 +131,10 @@ public class AmpFundingAmountComponent<T> extends Panel {
 			date = datetmp;
 		}
 		add(date);
+
+        QuarterInformationPanel quarterInfo = new QuarterInformationPanel("quarterInfo", "Quarter Information Panel");
+        add(quarterInfo);
+
 		setRenderBodyOnly(true);
 	}
 

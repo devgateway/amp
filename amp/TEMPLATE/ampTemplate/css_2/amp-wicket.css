@@ -394,4 +394,14 @@ div.tabpanel div.tab-row a:hover {
 .feedbackPanelINFO{color: green;}
 .wicketFloatLeft{float: left;}
 .wicketPaddingRight10{padding-right: 10px;}
+.wicketPadding2{padding: 2px;}
+
+.quarterPanel{
+    border: 1px #003366 solid;
+    background: #e7e7e7;
+    opacity: 50;
+    z-index: 10000;
+    position: absolute;
+    font-size: small;
+}
 /* -- ONE PAGER END -- */

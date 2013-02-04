@@ -177,7 +177,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		
 		cascadeFmToChildren.setOutputMarkupId(true);
 		cascadeFmToChildren.setVisible(false);
-		cascadeFmToChildren.add(new AttributeModifier("title", new Model("Cascade to children")));
+		cascadeFmToChildren.add(new AttributeModifier("title", new Model<String>("Cascade to children")));
 		add(cascadeFmToChildren);
 		
 		enabledFmButton.setOutputMarkupId(true);

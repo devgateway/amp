@@ -10,7 +10,7 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 				<td width="768">
 				<div class="step_head">
 				<div class="step_head_cont"><wicket:trn key="aim:EditActivityForm">Edit Activity Form</wicket:trn>&nbsp;<span wicket:id="activityName"></span></div>
-				
+
 				</div>
 				</td>
 				<td width="232"></td>
@@ -46,14 +46,14 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 										<div id="imgOnepagerModeTitle"><wicket:trn jsFriendly="true">Press here to switch to one page view</wicket:trn></div>
 										<div id="imgGroupModeTitle"><wicket:trn jsFriendly="true">Press here to switch to multiple pages view</wicket:trn></div>
 									</div>
-									<img id="imgOnepagerMode" alt="" src="/repository/admin/view/images/tree/icons/layout.gif" 
+									<img id="imgOnepagerMode" alt="" src="/repository/admin/view/images/tree/icons/layout.gif"
 										title=""
 										class="onepager-pic-icon"
 										onclick="switchOnepagerMode(); return true;"/>
-									<img id="imgGroupMode" alt="" src="/repository/admin/view/images/tree/icons/group.gif" 
+									<img id="imgGroupMode" alt="" src="/repository/admin/view/images/tree/icons/group.gif"
 										title=""
 										class="onepager-pic-icon"
-										onclick="switchOnepagerMode(); return true;"/>	
+										onclick="switchOnepagerMode(); return true;"/>
 								</div>
 								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
 									<div class="padding-two-pixels" wicket:id="saveAndSubmit" />
@@ -62,16 +62,16 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 										<div class="hd" style="text-align: left">
 											<wicket:trn>Save as Draft</wicket:trn>
 										</div>
-									    
-										
+
+
 										<div class="bd" style="text-align: center">
 									        <p>
 									        	<wicket:trn>Where would you like to navigate after save action?</wicket:trn>
 									        </p>
-											<span wicket:id="draftRedirectedGroup"> 
+											<span wicket:id="draftRedirectedGroup">
 												<input type="radio" wicket:id="draftRedirectedDesktop">
 													<wicket:trn>Go to the desktop</wicket:trn>
-												</input> 
+												</input>
 												<input type="radio" wicket:id="draftStayOnPage">
 													<wicket:trn>Stay on the activity page</wicket:trn>
 												</input>
@@ -79,13 +79,13 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 									      	<br />
 									     	<div style="width:155px; margin-left:auto; margin-right:auto; margin-bottom:10px;"><span name="saveAsDraftPanelButton"  wicket:id="saveAsDraftAction" /></div>
 									     	<div style="width:155px; margin-left:auto; margin-right:auto;"><span wicket:id="saveAsDraftCanceld" /></div>
-									    
-										
-										
-										
+
+
+
+
 									    <div class="ft"></div>
 									</div>
-									<!-- 
+									<!--
 									<div class="padding-two-pixels" wicket:id="logframe" />
 									 -->
 									<div class="padding-two-pixels" wicket:id="preview" />
@@ -100,12 +100,53 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 				</td>
 			</tr>
 		</tbody>
-	</table>			
-	
+	</table>
+
 	<div id="myPLogframe" class="invisible-item">
 		<div id="myPLogframeContent" class="content">
 			===== ERROR =====
 		</div>
 	</div>
+    <div id="quarterInformationPanel" class="invisible-item quarterPanel">
+        <table>
+            <tr>
+                <td colspan="2">
+                    <b><wicket:trn>Quarter Information</wicket:trn></b><br/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:trn>Quarter</wicket:trn> 1:
+                </td>
+                <td id="quarterInformationPanel-Q1">
+                    1 Jan - 31 Mar
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:trn>Quarter</wicket:trn> 2:
+                </td>
+                <td id="quarterInformationPanel-Q2">
+                    1 Apr - 30 Jun
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:trn>Quarter</wicket:trn> 3:
+                </td>
+                <td id="quarterInformationPanel-Q3">
+                    1 Jul - 31 Sept
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <wicket:trn>Quarter</wicket:trn> 4:
+                </td>
+                <td id="quarterInformationPanel-Q4">
+                    1 Oct - 31 Dec
+                </td>
+            </tr>
+        </table>
+    </div>
     </div>
 </wicket:extend>

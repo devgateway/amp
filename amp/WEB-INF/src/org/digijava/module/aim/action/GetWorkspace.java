@@ -40,6 +40,9 @@ public class GetWorkspace extends Action {
 
 		logger.debug("In GetWorkspace");
 		
+		ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, false);
+		request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_WORKSPACE_EDITOR);
+
 		boolean permitted = false;
 		HttpSession session = request.getSession();
 		TeamMember tmember = (TeamMember) session.getAttribute("currentMember");

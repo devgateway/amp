@@ -196,12 +196,15 @@ function validateData(){
 		<td align=left valign="top" class=r-dotted-lg>
 			<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 				<tr>
-					<td width="50%" align="left" valign="middle">
+					<td width="18%" align="left" valign="middle">
 						<digi:trn><b>Dashboard Name</b></digi:trn>
+					</td>
+					<td>
 					<html:text property="dashboardName" size="40" styleClass="inp-text"/></td>
 				</tr>
 				<tr>
-					<td><digi:trn><b>Select a base type</b></digi:trn>
+					<td><digi:trn><b>Select a base type</b></digi:trn></td>
+					<td>
 						<html:select property="baseType" styleId="baseType_dropdown" styleClass="inp-text" style="width:250px;">
 						<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
 						<html:option value="0"><digi:trn>None</digi:trn></html:option>
@@ -211,7 +214,8 @@ function validateData(){
 					</html:select></td>
 				</tr>
 				<tr>
-					<td><digi:trn><b>Select Agency type for pivot</b></digi:trn>
+					<td><digi:trn><b>Select Agency type for pivot</b></digi:trn></td>
+					<td>
 						<html:select property="pivot" styleId="pivot_dropdown" styleClass="inp-text" style="width:250px;">
 						<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
 						<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
@@ -220,13 +224,14 @@ function validateData(){
 					</html:select></td>
 				</tr>
 				<tr>
-					<td><digi:trn><b>Show in AMP main menu</b></digi:trn>
+					<td><digi:trn><b>Show in AMP main menu</b></digi:trn></td>
+					<td>
 						<input type="checkbox" id="show_in_menu"/>
 						<html:hidden property="showInMenu" styleId="showInMenu2" />
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td colspan="2">
 						<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 							<tr>
 								<td>

@@ -391,4 +391,13 @@ public class CellColumn extends Column {
 				cells.remove();
 		}
 	}
+	
+	@Override
+	public List<Cell> getAllCells(List<Cell> src)
+	{
+		for(Object obj:this.getItems())
+			src.add((Cell) obj);
+		return src;
+	}
 }
+

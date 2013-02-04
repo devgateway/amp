@@ -84,4 +84,15 @@ public abstract class CategCell extends Cell implements Categorizable {
 		return metaData;
 	}
 
+	/**
+	 * cleans all metadata which is safe to be deleted after the report has been generated and is only used for viewing
+	 * @param cell
+	 * @return
+	 */
+	public int clearMetaData()
+	{
+		int sz = metaData.size();
+		metaData.clear();
+		return sz;
+	}
 }

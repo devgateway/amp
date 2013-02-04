@@ -496,5 +496,11 @@ public class CategAmountColWorker extends ColumnWorker {
 	public Cell newCellInstance() {
 		return new CategAmountCell();
 	}
+	
+	@Override
+	protected void cleanup()
+	{
+		metaInfoCache.clear();
+	}
 
 }

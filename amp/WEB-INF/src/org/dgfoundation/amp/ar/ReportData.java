@@ -438,6 +438,13 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	public abstract void computeRowSpan(int numOfPreviousRows, int startRow, int endRow) ;
 	
 	/**
+	 * adds into a list all the cells contained recursively in the instance and returns a pointer to the same list
+	 * @param src
+	 * @return
+	 */
+	public abstract List<Cell> getAllCells(List<Cell> src);
+	
+	/**
 	 * encodes the name of this reportdata if it is unallocated
 	 */
 	String encodeUnallocatedName(String name) {

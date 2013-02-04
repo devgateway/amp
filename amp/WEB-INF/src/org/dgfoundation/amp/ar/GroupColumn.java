@@ -764,4 +764,13 @@ public class GroupColumn extends Column {
 		
 		return null;
 	}
+	
+	@Override
+	public List<Cell> getAllCells(List<Cell> src)
+	{
+		for(Object obj:items)
+			((Column) obj).getAllCells(src);
+		return src;
+	}
 }
+

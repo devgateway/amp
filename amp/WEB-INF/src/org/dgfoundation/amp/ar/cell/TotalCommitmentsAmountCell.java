@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.ar.cell;
 
 import java.util.Iterator;
+import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.module.aim.logic.AmountCalculator;
@@ -40,7 +41,7 @@ public class TotalCommitmentsAmountCell extends AmountCell {
     public double getAmount() {
 		if (id != null)
 			return convert();
-		return Logic.getInstance().getCommitmentCalculator().calculateAmount(mergedCells);
+		return Logic.getInstance().getCommitmentCalculator().calculateAmount((Set)mergedCells);
 	}
 
     @Override

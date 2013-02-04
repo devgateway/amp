@@ -31,7 +31,7 @@ public class AmountCell extends Cell {
 	
 	protected double percentage = 100;
 
-	protected Set mergedCells;
+	protected Set<AmountCell> mergedCells;
 
 	public Map<String, Double> getColumnPercent() {
 		return columnPercent;
@@ -125,13 +125,12 @@ public class AmountCell extends Cell {
 	 */
 	public AmountCell() {
 		super();
-		mergedCells = new HashSet();
-		// TODO Auto-generated constructor stub
+		mergedCells = new HashSet<AmountCell>(8);
 	}
 
 	public AmountCell(int ensureCapacity) {
 		super();
-		mergedCells = new HashSet(ensureCapacity);
+		mergedCells = new HashSet<AmountCell>(ensureCapacity);
 	}
 
 	/**
@@ -139,7 +138,7 @@ public class AmountCell extends Cell {
 	 */
 	public AmountCell(Long id) {
 		super(id);
-		mergedCells = new HashSet();
+		mergedCells = new HashSet<AmountCell>(8);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -231,25 +230,26 @@ public class AmountCell extends Cell {
 		HashMap<Long, CategAmountCell> percentageless = new HashMap<Long, CategAmountCell>();
 		HashSet<Long> percentagefulIds = new HashSet<Long>();
 		
-		Iterator i = mergedCells.iterator();
-		while (i.hasNext()) {
-			AmountCell element = (AmountCell) i.next();
-					
-			if ( element instanceof CategAmountCell && ((CategAmountCell)element).getColumnPercent() == null ) {
-				CategAmountCell caCell	= (CategAmountCell)element;
-				if (caCell.getOwnerId() != null)
-					percentageless.put(caCell.getOwnerId(), caCell);
-				String idString			= caCell.getId() + "_" + caCell.getOwnerId();
-				if ( !summedCells.contains(idString) ) {
-					ret += element.getAmount();
-					summedCells.add(idString);
+		if (mergedCells != null)
+		{
+			for(AmountCell element:mergedCells)
+			{					
+				if ( element instanceof CategAmountCell && ((CategAmountCell)element).getColumnPercent() == null ) {
+					CategAmountCell caCell	= (CategAmountCell)element;
+					if (caCell.getOwnerId() != null)
+						percentageless.put(caCell.getOwnerId(), caCell);
+					String idString			= caCell.getId() + "_" + caCell.getOwnerId();
+					if ( !summedCells.contains(idString) ) {
+						ret += element.getAmount();
+						summedCells.add(idString);
+					}
 				}
-			}
-			else
-			{
-				ret += element.getAmount();
-				if ((element instanceof CategAmountCell) && (element.getOwnerId() != null))
-					percentagefulIds.add(element.getOwnerId());
+				else
+				{
+					ret += element.getAmount();
+					if ((element instanceof CategAmountCell) && (element.getOwnerId() != null))
+						percentagefulIds.add(element.getOwnerId());
+				}
 			}
 		}
 		
@@ -288,10 +288,15 @@ public class AmountCell extends Cell {
 	/**
 	 * @return Returns the mergedCells.
 	 */
-	public Set getMergedCells() {
-		return mergedCells;
+	public Set<AmountCell> getMergedCells() {
+		return mergedCells == null ? new HashSet<AmountCell>() : mergedCells;
 	}
 
+	public void setNullMergedCells()
+	{
+		this.mergedCells = null;
+	}
+	
 	/**
 	 * @return Returns the currencyCode.
 	 */
@@ -394,7 +399,7 @@ public class AmountCell extends Cell {
 				mergedAnything = true;
 			}
 		}
-		return mergedAnything ? realRet : null; //BOZO: why zero here?
+		return mergedAnything ? realRet : null;
 	}
 
 	public AmountCell newInstance() {

@@ -484,5 +484,15 @@ public class GroupReportData extends ReportData<ReportData> {
 		return this.totalac;
 	}
 
+	@Override
+	public List<Cell> getAllCells(List<Cell> src)
+	{
+		for(ReportData rd:this.getItems())
+		{
+			rd.getAllCells(src);
+		}
+		return src;
+	}
 	
 }
+

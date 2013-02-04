@@ -24,8 +24,10 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
+import org.dgfoundation.amp.ar.cell.CategCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ComputedAmountCell;
+import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
@@ -836,8 +838,63 @@ public class AmpReportGenerator extends ReportGenerator {
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
 		report.removeChildrenWithoutActivities(); //postProcess might have created some more empty children
+		deleteMetadata(report.getAllCells(new ArrayList<Cell>()));
+		deleteMetadata(rawColumns.getAllCells(new ArrayList<Cell>()));
+		
+		rawColumnsByName.clear();
+		rawColumnsByName = null;
+		rawColumns.getItems().clear();
+		rawColumns = null;
 	}
 
+	/**
+	 * returns total number of MetaData instances deleted
+	 * @param cell
+	 * @return
+	 */
+	protected int clearCellMetadata(Cell cell)
+	{
+		int mergedCellsSum = 0;
+		
+		if (cell instanceof AmountCell)
+		{
+			AmountCell amCell = (AmountCell) cell;
+			amCell.setCurrencyDate(null); // unused anymore, eats 120b per instance
+			
+			if (amCell.getMergedCells().isEmpty())
+				amCell.setNullMergedCells(); // unused at this point, eats 136b per instance
+			
+			for(Object obj:amCell.getMergedCells())
+				mergedCellsSum += clearCellMetadata((AmountCell) obj);
+		}
+		
+		if (cell instanceof CategAmountCell)
+			return mergedCellsSum + ((CategAmountCell) cell).clearMetaData();
+		
+		if (cell instanceof CategCell)	
+			return mergedCellsSum + ((CategCell) cell).clearMetaData();
+		
+		if (cell instanceof ListCell)
+		{
+			int sum = 0;
+			Iterator it = ((ListCell) cell).iterator();
+			while (it.hasNext())
+				sum += clearCellMetadata((Cell) it.next());
+			return mergedCellsSum + sum;
+		}
+		// cell without metadata
+		return mergedCellsSum;
+	}
+	
+	protected void deleteMetadata(List<Cell> cells)
+	{
+		logger.warn("going to clean up " + cells.size() + " cells...");
+		int cl = 0;
+		for(Cell cell:cells)
+			cl += clearCellMetadata(cell);
+		logger.warn("cleaned up " + cl + " metadata instances");
+	}
+	
 	/**
 	 * creates Horizontal categories (hierarchies). The column list from
 	 * report's metadata is iterated and each column acts as the drivinpg filter

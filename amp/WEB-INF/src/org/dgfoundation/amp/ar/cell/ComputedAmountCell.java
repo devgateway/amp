@@ -152,7 +152,7 @@ public class ComputedAmountCell extends CategAmountCell {
 	public Values getValues() {
 		if (values == null) {
 			values = new Values(ownerId); // getAmount();
-			Iterator<CategAmountCell> i = mergedCells.iterator();
+			Iterator<AmountCell> i = mergedCells.iterator();
 			while (i.hasNext()) {
 				values.collectCellVariables((CategAmountCell) i.next());
 			}

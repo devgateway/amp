@@ -667,6 +667,15 @@ public class ColumnReportData extends ReportData<Column> {
 	}
 	
 
-
+	@Override
+	public List<Cell> getAllCells(List<Cell> src)
+	{
+		for(Object obj:items)
+		{
+			Column col = (Column) obj;
+			col.getAllCells(src);
+		}
+		return src;
+	}
 	
 }

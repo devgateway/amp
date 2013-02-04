@@ -464,5 +464,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	 */
 	public abstract void filterByIds(Set<Long> idsToRetain);
 	
+	
+	public abstract List<Cell> getAllCells(List<Cell> src);
 }
 

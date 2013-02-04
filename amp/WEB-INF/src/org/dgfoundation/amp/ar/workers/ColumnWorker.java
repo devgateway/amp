@@ -100,7 +100,16 @@ public abstract class ColumnWorker {
 			else c = generateCellColumn();
 		c.setWorker(this);
 		c.setDescription(this.getRelatedColumn().getDescription());
+		this.cleanup();
 		return c;
+	}
+	
+	/**
+	 * called after column extraction is done to cleanup any stale used memory
+	 */
+	protected void cleanup()
+	{
+		
 	}
 	
 	/**
@@ -189,7 +198,7 @@ public abstract class ColumnWorker {
 					cc.addCell(c);				
 			}
 
-			rs.close();				
+			rs.close();
 
 		} catch (SQLException e) {
 			logger.error("Unable to complete extraction for column "+columnName+". Master query was "+query);

@@ -91,7 +91,7 @@ public class ComputedMeasureCell extends AmountCell {
 	public Values getValues() {
 		if (values == null) {
 			values = new Values();
-			Iterator<CategAmountCell> i = mergedCells.iterator();
+			Iterator<AmountCell> i = mergedCells.iterator();
 			while (i.hasNext()) {
 				values.collectCellVariables((CategAmountCell) i.next());
 			}

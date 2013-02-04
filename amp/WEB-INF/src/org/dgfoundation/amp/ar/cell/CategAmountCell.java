@@ -303,6 +303,23 @@ public boolean hasMetaInfo(MetaInfo m) {
 		return false;
 }
 	
+
+	/**
+	 * cleans all metadata which is safe to be deleted after the report has been generated and is only used for viewing
+	 * @param cell
+	 * @return
+	 */
+	public int clearMetaData()
+	{
+		if (metaData != null)
+		{
+			int sz = metaData.size();
+			metaData.clear();
+			metaData = null;
+			return sz;
+		}
+		return 0;
+	}
 	
 private  boolean render;
 public void  setRenderizable(boolean prender) {

@@ -108,7 +108,6 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
     handleMapExtentChange: function(extent, delta, leveChange, lod) {
         this.clusterFeatures(true);
     },
-
     
     //this function may not be needed exactly as is below.  somehow, the attributes need to be mapped to the points.
     setFeatures: function(features) {
@@ -120,10 +119,11 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
                 dojo.forEach(features, function(feature) {
                     point = esri.geometry.geographicToWebMercator(feature.geometry);
                     
-                    var newPoint=dojo.clone(point); //clone in order to avoid the cricular reference issue
-                    newPoint.attributes=dojo.mixin(feature.attributes,{index:i})
                     
-                    point.attributes ==dojo.mixin(feature.attributes,{point:newPoint,index:i});
+                    var newPoint=dojo.clone(point); //clone in order to avoid the cricular reference issue
+                    newPoint.attribues=dojo.mixin({index:i},feature.attributes);
+                  
+                    point.attributes=dojo.mixin({point:newPoint,index:i},feature.attributes);
                     this._features.push(point);
                     i++;
                 }, this);
@@ -132,12 +132,14 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
                 return;
             }
         } else {
+        	
             dojo.forEach(features, function(feature) {
-                
-            	point = feature.geometry;
-                var newPoint=dojo.clone(point); //clone in order to avoid the cricular reference issue
-            	newPoint.attributes=dojo.mixin(feature.attributes,{index:i});
-            	point.attributes =dojo.mixin(feature.attributes,{point:newPoint,index:i});
+                point = feature.geometry;
+
+                var newPoint=dojo.clone(point);
+            	newPoint.attributes=dojo.mixin({index:i},feature.attributes);
+            	
+            	point.attributes=dojo.mixin({point:newPoint,index:i},feature.attributes);
                 this._features.push(point);
                 i++;
                 
@@ -216,7 +218,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
                 pt = new esri.geometry.Point(x, y, this._map.spatialReference)
 				var currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ graphic.attributes[i].Type_id, 21, 25);
               
-                ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin(graphic.attributes[i], { baseGraphic: graphic }), this._infoTemplate);
+                ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin({ baseGraphic: graphic },graphic.attributes[i]), this._infoTemplate);
 
                 //try to always bring flare graphic to front of everything else
                 p = this.add(ptGraphic);
@@ -342,7 +344,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
 				var pt=graphic.attributes[i].point;
 				var currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ graphic.attributes[i].Type_id, 21, 25);
 				
-				var ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin(graphic.attributes[i], { baseGraphic: graphic }), this._infoTemplate);   
+				var ptGraphic = new esri.Graphic(pt, currentSymbol, dojo.mixin({ baseGraphic: graphic },graphic.attributes[i]), this._infoTemplate);   
 					
 				var ptNumber=this._features.indexOf(pt);
 				
@@ -354,7 +356,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
             	}
 		    }
 				this.onClusterExpand();
-				console.log(this._features.length);
+					//console.log(this._features.length);
 			      i++;	
 				
         		
@@ -368,9 +370,14 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
 	
     resetCluster:function(){
     	dojo.forEach(this.expandedPointsLayers.graphics,function(item){
-			this._features.push(item.geometry);
+    		var point=item.geometry
+    		var newPoint=dojo.clone(item.geometry); //clone in order to avoid the cricular reference issue
+    		newPoint.attribues=dojo.mixin({},point.attributes);
+            point.attributes=dojo.mixin({point:newPoint},point.attributes);
+            
+            this._features.push(point);
 		},this);
-    	
+    	//this.setFeatures(this._features);
     	this.expandedPointsLayers.clear();
     	this.clusterFeatures(true);
 		},
@@ -490,7 +497,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
                                 dojo.forEach(col, function(point) {
                                 	var currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ point.attributes.Type_id, 21, 25);
                                     
-                                    this.add(new esri.Graphic(point, currentSymbol, dojo.mixin(point.attributes, { isCluster: false }), this._infoTemplate));
+                                    this.add(new esri.Graphic(point, currentSymbol, dojo.mixin({ isCluster: false },point.attributes), this._infoTemplate));
                                 }, this);
                             }
                         }

@@ -395,7 +395,10 @@ function findbydistance(evt) {
 		for ( var int = 0; int < structurespoint.length; int++) {
 			distParams.distanceUnit = esri.tasks.GeometryService.UNIT_KILOMETER;
 			distParams.geometry1 = evt.mapPoint;
-			distParams.geometry2 = structurespoint[int].geometry;
+			distParams.geometry2 = dojo.clone(structurespoint[int].geometry);
+
+			//speed up request data removing not needed elements,Sebas
+			distParams.geometry2.attributes={};
 			distParams.geodesic = true;
 
 			geometryService.distance(distParams, function(distance) {

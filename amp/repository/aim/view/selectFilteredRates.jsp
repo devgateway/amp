@@ -84,7 +84,6 @@
 						<table width="100%" cellspacing="2" cellPadding="2" align="left">
 							<tr>
 								<td valign="top" width="100%">
-									<logic:notEmpty name="myForm" property="existingFilteredRates">
 									<table width="100%">
 										<tr>
 											<td>
@@ -174,7 +173,6 @@
 									</table></td>
 									  </tr>
 									</table>
-									</logic:notEmpty>
 							  </td>
 								
 							</tr>

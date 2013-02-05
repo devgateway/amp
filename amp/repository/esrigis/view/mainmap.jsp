@@ -47,8 +47,17 @@
    	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
    	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.AMPCluster.js"/>"></script>
    	
-   	
-   	<script type="text/javascript" defer="defer"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
+	<field:display   name="Html Printing" feature="Printing">
+		<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/map-printingfunctions-html.js"/>"></script>
+	</field:display> 			
+	<field:display   name="Esri Printing" feature="Printing">
+		<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.customPrintTask.js"/>"></script>
+		<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/map-printingfunctions-esri.js"/>"></script>
+		
+	</field:display>
+	
+	   		
+   	<script type="text/javascript" defer="defer"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery-esri.js"/>"></script>
    	
 
 <!-- Individual YUI CSS files --> 
@@ -446,6 +455,26 @@
 								<digi:trn>Export to csv</digi:trn>
 							</digi:link>
 						</li>
+						
+						<feature:display name="HTML Printing" module="Map Module">
+						
+						<li id="print" style="cursor: pointer;" onclick="captureMap()">
+								<digi:trn>Take Map SnapShot</digi:trn>
+						</li>
+						
+						<li id="printAll" onclick="printAllSnapShoots()" style="cursor: pointer;">
+								<digi:trn>Print All</digi:trn>
+						</li>
+						
+						
+							</feature:display>
+						
+					<feature:display name="Esri Printing" module="Map Module">
+						<li id="esriPrintBtn" onclick="esriPrinting()" style="cursor: pointer;">
+								<digi:trn>Esri Printing</digi:trn>
+						</li>
+						</feature:display>						
+						
 				     </ul>
 			     </div>
 		    </div>
@@ -604,5 +633,89 @@
 	<digi:form action="/datadispatcher.do" method="post">
 		<html:hidden name="datadispatcherform" property="structures"  styleId="st"/>
 	</digi:form>
+	
+	
+	
+<feature:display name="HTML Printing" module="Map Module">
+	 <div id="snapShoots" class="snapShoots" style="display: none;">
+         	<div class="list_carousel" >
+				<ul id="printList">
+				</ul>
+			</div>
+		        
+        </div>
+
+<script type="text/javascript" language="javascript">
+function htmlWithStyles() {  
+    // Mapping between tag names and css default values lookup tables. This allows to exclude default values in the result.
+    var defaultStylesByTagName = {};
+
+    // Styles inherited from style sheets will not be rendered for elements with these tag names
+    var noStyleTags = {"BASE":true,"HEAD":true,"HTML":true,"META":true,"NOFRAME":true,"NOSCRIPT":true,"PARAM":true,"SCRIPT":true,"STYLE":true,"TITLE":true};
+
+    // This list determines which css default values lookup tables are precomputed at load time
+    // Lookup tables for other tag names will be automatically built at runtime if needed
+    var tagNames = ["A","ABBR","ADDRESS","AREA","ARTICLE","ASIDE","AUDIO","B","BASE","BDI","BDO","BLOCKQUOTE","BODY","BR","BUTTON","CANVAS","CAPTION","CENTER","CITE","CODE","COL","COLGROUP","COMMAND","DATALIST","DD","DEL","DETAILS","DFN","DIV","DL","DT","EM","EMBED","FIELDSET","FIGCAPTION","FIGURE","FONT","FOOTER","FORM","H1","H2","H3","H4","H5","H6","HEAD","HEADER","HGROUP","HR","HTML","I","IFRAME","IMG","INPUT","INS","KBD","KEYGEN","LABEL","LEGEND","LI","LINK","MAP","MARK","MATH","MENU","META","METER","NAV","NOBR","NOSCRIPT","OBJECT","OL","OPTION","OPTGROUP","OUTPUT","P","PARAM","PRE","PROGRESS","Q","RP","RT","RUBY","S","SAMP","SCRIPT","SECTION","SELECT","SMALL","SOURCE","SPAN","STRONG","STYLE","SUB","SUMMARY","SUP","SVG","TABLE","TBODY","TD","TEXTAREA","TFOOT","TH","THEAD","TIME","TITLE","TR","TRACK","U","UL","VAR","VIDEO","WBR"];
+
+    // Precompute the lookup tables.
+   
+
+    this.computeDefaultStyleByTagName=function(tagName) {
+        var defaultStyle = {};
+        var element = document.body.appendChild(document.createElement(tagName));
+        var computedStyle = window.getComputedStyle(element);
+        for (var i = 0; i < computedStyle.length; i++) {
+            defaultStyle[computedStyle[i]] = computedStyle[computedStyle[i]];
+        }
+        document.body.removeChild(element); 
+        return defaultStyle;
+    }
+
+    for (var i = 0; i < tagNames.length; i++) {
+        if(!noStyleTags[tagNames[i]]) {
+            defaultStylesByTagName[tagNames[i]] = this.computeDefaultStyleByTagName(tagNames[i]);
+        }
+    }
+    
+    this.getDefaultStyleByTagName=function(tagName) {
+        tagName = tagName.toUpperCase();
+        if (!defaultStylesByTagName[tagName]) {
+            defaultStylesByTagName[tagName] = this.computeDefaultStyleByTagName(tagName);
+        }
+        return defaultStylesByTagName[tagName];
+    }
+
+    this.html=function (node) {
+        if (node.nodeType !== 1) { throw new TypeError(); }
+        var cssTexts = [];
+        var elements = node.querySelectorAll("*");
+        for ( var i = 0; i < elements.length; i++ ) {
+            var e = elements[i];
+            if (!noStyleTags[e.tagName]) {
+                var computedStyle = window.getComputedStyle(e);
+                var defaultStyle = this.getDefaultStyleByTagName(e.tagName);
+                cssTexts[i] = e.style.cssText;
+                for (var ii = 0; ii < computedStyle.length; ii++) {
+                    var cssPropName = computedStyle[ii];
+                    if (computedStyle[cssPropName] !== defaultStyle[cssPropName]) {
+                        e.style[cssPropName] = computedStyle[cssPropName];
+                    }
+                }
+            }
+        }
+        var randomnumber=Math.floor(Math.random()*1500)
+        //node.id=node.id+"_"+randomnumber;
+        var result = node.outerHTML;
+        for ( var i = 0; i < elements.length; i++ ) {
+            elements[i].style.cssText = cssTexts[i];
+        }
+        return result;
+    }
+};
+
+
+</script>
+        
+</feature:display>        
 	</body>
 </html>

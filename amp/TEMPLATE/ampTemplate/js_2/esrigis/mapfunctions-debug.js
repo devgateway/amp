@@ -58,6 +58,10 @@ var basemapsarray = new Array();
 var povertyratesurl;
 var population;
 
+
+
+
+/*
 function print(){
 	 var template = new esri.tasks.PrintTemplate();
 	  template.exportOptions = {
@@ -76,7 +80,7 @@ function print(){
 	  var printTask = new esri.tasks.CustomPrintTask("http://gis.devgateway.org/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task", {async:false});
 	  printTask.execute(params, function(){alert("ok")},function(){alert("ERROR")});
 }
-
+*/
 function init() {
 	var xhrArgs = {
 		url : "/esrigis/datadispatcher.do?getconfig=true",

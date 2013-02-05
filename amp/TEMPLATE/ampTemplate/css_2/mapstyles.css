@@ -250,3 +250,61 @@ div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/c
 div.gisBoxHeader{width:100%;height:40px;position:relative}
 div.gisBoxHeader a{width:10px;height:10px; display:block;position:absolute;right:5px;top:5px;}
 div.gisBoxHeader a:hover{width:10px;height:10px; display:block;position:absolute;right:5px;top:5px;background:url(/TEMPLATE/ampTemplate/img_2/gis/close.gif);}
+
+.snapShoots{
+		    position:absolute;
+			z-Index:100;
+			display: block;
+			bottom:5px;
+			width:auto;
+			height:auto;
+			margin-left: 25% ;
+  			margin-right: 25%; 
+			background:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);
+		    color:#fff;
+		    }
+		    .snapShoots a{
+		    	color:#fff;
+		    	text-decoration: none;
+		    	font-weight: bold;
+		    }	
+		    
+		   .print_snap_shoot_item{
+		   		padding:0px;
+		   		margin:0px;
+			    boder: 2px solid #FF000;
+			     width: 0px;
+			   
+		    }
+		    
+
+			.list_carousel {
+				margin: 0px 0px 0px 0px;
+			}
+			.list_carousel ul {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				display: block;
+			}
+			.list_carousel li {
+				text-align: center;
+				overflow:visible;
+				padding: 0;
+				margin:1px;
+				display: block;
+				float: left;
+				border: 1px solid #FFFFFF;
+				
+			}
+			.list_carousel li:hover {
+			border: 1px solid green; 
+			}
+			
+			.clearfix {
+				float: none;
+				clear: both;
+			}
+	
+	
+}

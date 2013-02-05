@@ -102,6 +102,12 @@
 <field:display name="Use Local Base Maps" feature="Select Base Map"></field:display>
 <feature:display name="Map Options" module="Map Module"></feature:display>
 <field:display name="Show Map In Activity Preview" feature="Map Options"></field:display>
+
+<feature:display name="Printing" module="Map Module"></feature:display>
+<field:display   name="Html Printing" feature="Printing"></field:display>
+<field:display   name="Esri Printing" feature="Printing"></field:display>
+
+
 <feature:display name="Use Indicators Maps" module="Map Module"></feature:display>
 <feature:display name="Add activity" module="Map Module"></feature:display>
 <feature:display name="Search  Structures" module="Map Module"></feature:display>

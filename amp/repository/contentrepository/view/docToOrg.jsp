@@ -52,6 +52,6 @@
 				form="${crDocToOrgForm}" styleClass="buttonx"><digi:trn>Add Organizations</digi:trn></aim:addOrganizationButton>
 	 
 	 <c:set var="trnclose"><digi:trn>Close</digi:trn></c:set>
-	 <input class="buttonx" type="button" name="close" value="${trnclose}" onclick="organisationPanel.hide(); location.reload();">
+	 <input class="buttonx" type="button" name="close" value="${trnclose}" onclick="organisationPanel.hide(); window.location = window.location.href;">
 </c:if>
 

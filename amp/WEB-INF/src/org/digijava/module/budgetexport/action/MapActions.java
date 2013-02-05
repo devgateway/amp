@@ -178,16 +178,19 @@ public class MapActions extends DispatchAction {
             }
             csvMap = BudgetExportUtil.parseCSV(new String(file.getFileData(), "UTF-8"),rule.getCsvColDelimiter(), rule.isHeader());
         } else if (rule.getProject().getDataSource() == AmpBudgetExportProject.DATA_SOURCE_SERVICE) {
+            /*
             String serviceURL = rule.getProject().getMappingImportServiceURL();
+            String actionURL = rule.getProject().getServiceActionURL();
+            
             URL serviceConnURL = new URL(serviceURL);
-            URLConnection urlConn = serviceConnURL.openConnection();
+            URLConnection urlConn = serviceConnURL.openConnection();*/
             /*
             StringWriter writer = new StringWriter();
             IOUtils.copy(urlConn.getInputStream(), writer, "UTF8");
             String serviceResults = writer.toString();
             */
             ObjectRetriever or = (ObjectRetriever) Class.forName(rule.getDataRetrieverClass()).newInstance();
-            csvMap = or.getItems(urlConn.getInputStream());
+            csvMap = or.getItems(rule);
         }
         
         Set <Map.Entry<String, String>> mapEntrySet = csvMap.entrySet();

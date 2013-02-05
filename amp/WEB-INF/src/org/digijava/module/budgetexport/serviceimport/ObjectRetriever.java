@@ -1,5 +1,7 @@
 package org.digijava.module.budgetexport.serviceimport;
 
+import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
+
 import java.io.InputStream;
 import java.util.Map;
 
@@ -10,5 +12,5 @@ import java.util.Map;
  */
 public interface ObjectRetriever {
     String getName();
-    Map<String, String> getItems(InputStream serviceResponseStr);
+    Map<String, String> getItems(AmpBudgetExportMapRule rule);
 }

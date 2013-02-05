@@ -1,5 +1,6 @@
 package org.digijava.module.budgetexport.serviceimport.impl;
 
+import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.serviceimport.ObjectRetriever;
 
 import java.io.InputStream;
@@ -18,7 +19,7 @@ public class ProjectRetriever implements ObjectRetriever {
     }
 
     @Override
-    public Map<String, String> getItems(InputStream serviceResponseStr) {
+    public Map<String, String> getItems(AmpBudgetExportMapRule rule) {
         return null;
     }
 }

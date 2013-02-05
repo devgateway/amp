@@ -20,6 +20,7 @@ public class AmpBudgetExportProject {
     private List<AmpBudgetExportMapRule> rules;
     private Long ampReportId;
     private String mappingImportServiceURL;
+    private String serviceActionURL;
     private int dataSource;
     
     public Long getId() {
@@ -84,5 +85,13 @@ public class AmpBudgetExportProject {
 
     public void setDataSource(int dataSource) {
         this.dataSource = dataSource;
+    }
+
+    public String getServiceActionURL() {
+        return serviceActionURL;
+    }
+
+    public void setServiceActionURL(String serviceActionURL) {
+        this.serviceActionURL = serviceActionURL;
     }
 }

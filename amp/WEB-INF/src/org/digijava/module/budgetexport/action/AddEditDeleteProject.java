@@ -56,6 +56,7 @@ public class AddEditDeleteProject extends DispatchAction {
         prj.setName(beProjectForm.getName());
         prj.setDescription(beProjectForm.getDescription());
         prj.setMappingImportServiceURL(beProjectForm.getMappingImportServiceURL());
+        prj.setServiceActionURL(beProjectForm.getServiceActionURL());
         prj.setDataSource(beProjectForm.getDataSource());
 
 
@@ -84,6 +85,7 @@ public class AddEditDeleteProject extends DispatchAction {
         beProjectForm.setName(prj.getName());
         beProjectForm.setDescription(prj.getDescription());
         beProjectForm.setMappingImportServiceURL(prj.getMappingImportServiceURL());
+        beProjectForm.setServiceActionURL(prj.getServiceActionURL());
         beProjectForm.setDataSource(prj.getDataSource());
 
         return mapping.findForward("forward");

@@ -109,6 +109,7 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
         this.clusterFeatures(true);
     },
 
+    
     //this function may not be needed exactly as is below.  somehow, the attributes need to be mapped to the points.
     setFeatures: function(features) {
 	var i=0;
@@ -118,9 +119,13 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
             if (wkid == 4326 || wkid == 4269 || wkid == 4267) {
                 dojo.forEach(features, function(feature) {
                     point = esri.geometry.geographicToWebMercator(feature.geometry);
-                    var attributes =dojo.mixin(feature.attributes,{point:dojo.clone(point),index:i++}) ;
-                    point.attributes =attributes;
+                    
+                    var newPoint=dojo.clone(point); //clone in order to avoid the cricular reference issue
+                    newPoint.attributes=dojo.mixin(feature.attributes,{index:i})
+                    
+                    point.attributes ==dojo.mixin(feature.attributes,{point:newPoint,index:i});
                     this._features.push(point);
+                    i++;
                 }, this);
             } else {
                 throw 'Input Spatial Reference Must Be in Either WKID: 102110 or WKID: 4326';
@@ -128,10 +133,14 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
             }
         } else {
             dojo.forEach(features, function(feature) {
-                point = feature.geometry;
-                var attributes =dojo.mixin(feature.attributes,{point:dojo.clone(point),index:i++}) ;
-                point.attributes =attributes;
+                
+            	point = feature.geometry;
+                var newPoint=dojo.clone(point); //clone in order to avoid the cricular reference issue
+            	newPoint.attributes=dojo.mixin(feature.attributes,{index:i});
+            	point.attributes =dojo.mixin(feature.attributes,{point:newPoint,index:i});
                 this._features.push(point);
+                i++;
+                
             }, this);
         }
     },

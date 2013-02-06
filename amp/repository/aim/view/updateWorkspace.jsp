@@ -26,6 +26,23 @@
         background-color:#ffffff;
         padding:10px;
     }
+    
+    fieldset.main_side_cont.disabled{
+    	background-color: #f1f1f1;
+    }
+
+    fieldset.main_side_cont.disabled div, fieldset.main_side_cont.disabled table{
+    	background-color: #f1f1f1;
+    	color: #D1D1D1;
+    }
+    
+	fieldset.main_side_cont.disabled a, fieldset.main_side_cont.disabled button, fieldset.main_side_cont.disabled input{
+		cursor: default;
+    }
+        
+    fieldset.main_side_cont.disabled legend{
+    	background-color: #D1D1D1;
+    }
  </style>
 <!-- Jquery Base Library -->
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
@@ -57,9 +74,10 @@
 </c:set>
 
 <script type="text/javascript">
-    <!--
-
-    YAHOO.namespace("YAHOO.amp");
+	
+	YAHOO.util.Event.onDOMReady(initComputationsFields);
+    
+	YAHOO.namespace("YAHOO.amp");
 
     var myPanel = new YAHOO.widget.Panel("newpopins", {
         width:"600px",
@@ -161,7 +179,63 @@
             
         }            
      }
-    -->
+    
+     
+     function initComputationsFields(){
+    	 $("input[name='useFilter']:radio").each(
+    			 function(){
+    				 if ($(this).attr("checked")){
+    					 toggleFilterVsOrgs(this);				 
+    				 }
+    			 });
+     }
+     
+     function toggleFilterVsOrgs(radio){
+    	 var useFilter = radio.value == "true";
+
+    	 enableFilter(useFilter);
+    	 enableOrgs(!useFilter);
+     }
+
+     function enableFilter(enabled){
+ 
+    	 var legend = $("input[name='useFilter'][value='true']:radio").parent();
+    	 var fieldset =  legend.parent();
+    	 
+    	 if(enabled){
+        	 $("#add_filters_button").removeAttr("disabled");
+        	 $(fieldset).removeClass("disabled");
+    	 }else{
+        	 $("#add_filters_button").attr("disabled", "disabled");
+        	 $(fieldset).addClass("disabled");
+    	 };
+     }
+
+     function disabler(event) {
+		    event.preventDefault();
+		    return false;
+	 }
+
+     function enableOrgs(enabled){
+    	 var legend = $("input[name='useFilter'][value='false']:radio").parent();
+    	 var fieldset =  legend.parent();
+    	 
+    	 if(enabled){
+    		 $(fieldset).find($("a")).each(function(){
+        		 $(this).unbind("click", disabler);
+        	 });
+        	 
+        	 $(fieldset).find($("input:button")).removeAttr("disabled");
+        	 $(fieldset).removeClass("disabled");
+    	 }else{
+    		 $(fieldset).find($("a")).each(function(){
+        		 $(this).bind("click", disabler);
+        	 });
+        	 $(fieldset).find($("input:button")).attr("disabled", "disabled");
+        	 $(fieldset).addClass("disabled");
+    	 };
+     }
+    
 </script>
 <jsp:include page="/repository/aim/view/addOrganizationPopin.jsp"  />
 
@@ -809,7 +883,9 @@ function cancel()
 																	
 																</table>
 																<fieldset class="main_side_cont">
-																	<legend><span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
+																	<legend>
+																		<html:radio property="useFilter" value="${true}" onclick="toggleFilterVsOrgs(this);"/>
+																		<span class="legend_label"><digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn></span></legend>
 																	<div id="listFiltersDiv" style="height:85px; overflow-y:auto; overflow-x:hidden; margin-bottom: 5px;" class="inputx">
 																		<jsp:include page="reportWizard/showSelectedFilters.jsp" />				
 																	</div>
@@ -817,9 +893,10 @@ function cancel()
 																		<digi:trn key="btn:repFilters">Filters</digi:trn>
 																	</button>
 																</fieldset>
-																			
 																<fieldset class="main_side_cont">
-																	<legend><span class="legend_label"><digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn></span></legend>
+																	<legend>
+																		<html:radio property="useFilter" value="${false}" onclick="toggleFilterVsOrgs(this);"/>
+																		<span class="legend_label"><digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn></span></legend>
 																	<c:if test="${!empty aimUpdateWorkspaceForm.organizations}">
 																		<table width="98%" cellPadding=2 cellspacing="0" valign="top" align="center"
 																			class="box-border-nopadding">

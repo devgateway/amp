@@ -90,6 +90,7 @@ public class UpdateWorkspace extends Action {
 				&& "Management".compareTo(uwForm.getWorkspaceType()) == 0) {
 			uwForm.setOrganizations(new ArrayList());
 			uwForm.setComputation(null);
+			uwForm.setUseFilter(null);
 			uwForm.setAddActivity(null);
 		}
 
@@ -102,14 +103,19 @@ public class UpdateWorkspace extends Action {
 			newTeam.setAccessType(uwForm.getWorkspaceType());
 			newTeam.setAddActivity(uwForm.getAddActivity());
 			newTeam.setComputation(uwForm.getComputation());
+			newTeam.setUseFilter(uwForm.getUseFilter());
 			newTeam.setHideDraftActivities(uwForm.getHideDraftActivities());
                 newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
-
-			if (uwForm.getOrganizations() != null) {
-				TreeSet s = new TreeSet();
-				s.addAll(uwForm.getOrganizations());
-				newTeam.setOrganizations(s);
-			}
+            
+            if(!uwForm.getUseFilter()){
+				if (uwForm.getOrganizations() != null) {
+					TreeSet s = new TreeSet();
+					s.addAll(uwForm.getOrganizations());
+					newTeam.setOrganizations(s);
+				}
+            }else{
+            	newTeam.setOrganizations(null);
+            }
 			if (null == uwForm.getRelatedTeam()
 					|| "-1".equals(uwForm.getRelatedTeam().toString().trim()))
 				newTeam.setRelatedTeamId(null);
@@ -137,6 +143,7 @@ public class UpdateWorkspace extends Action {
 			uwForm.setAddActivity(null);
 			uwForm.setHideDraftActivities(false);
 			uwForm.setComputation(null);
+			uwForm.setUseFilter(null);
 			if (uwForm.getChildWorkspaces() != null)
 				uwForm.getChildWorkspaces().clear();
 			if(uwForm.getDeletedChildWorkspaces() != null){
@@ -158,24 +165,31 @@ public class UpdateWorkspace extends Action {
 					return mapping.getInputForward();
 				}
 				
-				Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
-				if ( filter == null )
-					filter		= request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );
-				if ( filter != null) {
-					if ( newTeam.getAmpTeamId()!=null )
-						AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
-					Set fdSet	= AmpFilterData.createFilterDataSet(newTeam, filter);
-					if ( newTeam.getFilterDataSet() == null )
-						newTeam.setFilterDataSet(fdSet);
-					else {
-						newTeam.getFilterDataSet().clear();
-						newTeam.getFilterDataSet().addAll(fdSet);
+				if(uwForm.getUseFilter()){
+					Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
+					if ( filter == null )
+						filter		= request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );
+					if ( filter != null) {
+						if ( newTeam.getAmpTeamId()!=null )
+							AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
+						Set fdSet	= AmpFilterData.createFilterDataSet(newTeam, filter);
+						if ( newTeam.getFilterDataSet() == null )
+							newTeam.setFilterDataSet(fdSet);
+						else {
+							newTeam.getFilterDataSet().clear();
+							newTeam.getFilterDataSet().addAll(fdSet);
+						}
+					}else{
+						if (newTeam.getAmpTeamId()!=null ){
+							AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
+						}
 					}
-				}
-				else
-					if (newTeam.getAmpTeamId()!=null )
-						AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
-
+				}else{//don't use filter
+						if (newTeam.getAmpTeamId()!=null ){
+							AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
+						}
+					}
+				
 
 				boolean teamExist = TeamUtil.createTeam(newTeam,
 						uwForm.getChildWorkspaces());
@@ -221,32 +235,42 @@ public class UpdateWorkspace extends Action {
 					uwForm.getDeletedChildWorkspaces().clear();
 				}
 
-				if (uwForm.getOrganizations() != null) {
-					TreeSet s = new TreeSet();
-					s.addAll(uwForm.getOrganizations());
-					newTeam.setOrganizations(s);
+				if(!uwForm.getUseFilter() ){
+					if (uwForm.getOrganizations() != null) {
+						TreeSet s = new TreeSet();
+						s.addAll(uwForm.getOrganizations());
+						newTeam.setOrganizations(s);
+					}
+					if (newTeam.getAmpTeamId()!=null )
+						AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
+					
+				}else{//uses filter
+					newTeam.setOrganizations(null);
+
+					Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
+					if ( filter == null )
+						filter		= request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );
+					if ( filter != null) {
+						if ( newTeam.getAmpTeamId()!=null )
+							AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
+						Set fdSet	= AmpFilterData.createFilterDataSet(newTeam, filter);
+						if ( newTeam.getFilterDataSet() == null )
+							newTeam.setFilterDataSet(fdSet);
+						else {
+							newTeam.getFilterDataSet().clear();
+							newTeam.getFilterDataSet().addAll(fdSet);
+						}
+					}
+					else
+						if (newTeam.getAmpTeamId()!=null )
+							AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
+					
 				}
-	                if(uwForm.getWorkspaceGroup() != null){
+	                
+					if(uwForm.getWorkspaceGroup() != null){
 	                	newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
 	                }
 	            
-                Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
-				if ( filter == null )
-					filter		= request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );
-				if ( filter != null) {
-					if ( newTeam.getAmpTeamId()!=null )
-						AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
-					Set fdSet	= AmpFilterData.createFilterDataSet(newTeam, filter);
-					if ( newTeam.getFilterDataSet() == null )
-						newTeam.setFilterDataSet(fdSet);
-					else {
-						newTeam.getFilterDataSet().clear();
-						newTeam.getFilterDataSet().addAll(fdSet);
-					}
-				}
-				else
-					if (newTeam.getAmpTeamId()!=null )
-						AmpTeamFilterData.deleteOldFilterData(newTeam.getAmpTeamId());
                     
 				boolean teamExist = TeamUtil.updateTeam(newTeam,
 						uwForm.getChildWorkspaces());

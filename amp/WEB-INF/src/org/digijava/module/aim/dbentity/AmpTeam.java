@@ -29,6 +29,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	private Boolean addActivity;
 	private Boolean computation;
 	private Boolean hideDraftActivities;
+	private Boolean useFilter;
 
 	private String description;
 
@@ -333,6 +334,14 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 		return workspaceGroup;
 	}
 
+
+	public Boolean getUseFilter() {
+		return useFilter;
+	}
+
+	public void setUseFilter(Boolean useFilter) {
+		this.useFilter = useFilter;
+	}
 
 	@Override
 	public boolean equalsForVersioning(Object obj) {

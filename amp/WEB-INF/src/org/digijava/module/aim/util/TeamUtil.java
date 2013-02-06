@@ -476,6 +476,7 @@ public class TeamUtil {
                 workspace.setWorkspaceType(team.getAccessType());
                 workspace.setAddActivity(team.getAddActivity());
                 workspace.setComputation(team.getComputation());
+                workspace.setUseFilter(team.getUseFilter());
                 workspace.setWorkspaceGroup(team.getWorkspaceGroup());
                 workspace.setHideDraftActivities(team.getHideDraftActivities() );
                 
@@ -597,6 +598,7 @@ public class TeamUtil {
                 updTeam.setOrganizations(team.getOrganizations());
                 updTeam.setAddActivity(team.getAddActivity());
                 updTeam.setComputation(team.getComputation());
+                updTeam.setUseFilter(team.getUseFilter());
                 updTeam.setHideDraftActivities(team.getHideDraftActivities() );
                 updTeam.setWorkspaceGroup(team.getWorkspaceGroup());
                 if (updTeam.getFilterDataSet() == null)

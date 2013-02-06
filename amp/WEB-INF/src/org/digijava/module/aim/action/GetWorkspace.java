@@ -171,6 +171,7 @@ public class GetWorkspace extends Action {
 			uwForm.setOrganizations(orgs);
 			uwForm.setAddActivity(workspace.getAddActivity());
 			uwForm.setComputation(workspace.getComputation());
+			uwForm.setUseFilter(workspace.getUseFilter());
 			uwForm.setRelatedTeam(workspace.getRelatedTeam());
 			uwForm.setTeamAccessType(tmember.getTeamAccessType());
 			uwForm.setHideDraftActivities(workspace.getHideDraftActivities() );

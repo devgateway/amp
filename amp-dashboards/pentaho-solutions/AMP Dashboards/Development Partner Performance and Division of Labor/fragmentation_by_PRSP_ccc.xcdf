@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdf>
+  <title>Fragmentation by PRSP</title>
+  <author>Mauricio Bertoli</author>
+  <description>This contains a description of the dashboards</description>
+  <icon></icon>
+  <template>fragmentation_by_PRSP_ccc.html</template>
+  <style>amp</style>
+</cdf>

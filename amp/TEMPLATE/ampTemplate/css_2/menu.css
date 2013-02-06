@@ -1,8 +1,6 @@
 /*Copyright (c) 2008, Yahoo! Inc. All rights reserved.Code licensed under the BSD License:http://developer.yahoo.net/yuiamp/license.txtversion: 2.5.1*/
 
-.main_menu .yuiamp-skin-amp{margin:0 auto;clear:both;z-index:9999;float:left;padding-top:3px;}
-
-.main_menu .yuiamp-skin-amp{margin:0 auto;}
+.main_menu .yuiamp-skin-amp{margin:0 auto;clear:both;z-index:9999;float:left;padding-top:3px;width: 100%;}
 
 .yuiamp-skin-amp ul{background:none;border:none;}
 
@@ -137,7 +135,6 @@
 	line-height: 1.5;
 	*line-height: 1.45;
 	z-index:9999;
-    width: 100%;
 }
 .yuiamp-skin-amp .yuiampmenubar .yuiampmenu, .yuiamp-skin-amp .yuiampmenu .yuiampmenu {
 	font-size: 100%;

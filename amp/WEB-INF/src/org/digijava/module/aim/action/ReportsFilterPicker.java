@@ -1674,11 +1674,13 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		
 		arf.setWorkspaceonly(filterForm.getWorkspaceonly()==null?false:filterForm.getWorkspaceonly());
-		if(arf.isWorkspaceonly()){
-			arf.setAmpTeamsforpledges(arf.getAmpTeams());
-		}else{
-			arf.setAmpTeamsforpledges(null);
-		}
+		
+//		NOT USED
+//		if(arf.isWorkspaceonly()){
+//			arf.setAmpTeamsforpledges(arf.getAmpTeams());
+//		}else{
+//			arf.setAmpTeamsforpledges(null);
+//		}
 		
 		arf.setRenderStartYear((filterForm.getRenderStartYear() != -1) ? filterForm.getRenderStartYear() : 0);
 		arf.setRenderEndYear((filterForm.getRenderEndYear() != -1) ? filterForm.getRenderEndYear() : 0);

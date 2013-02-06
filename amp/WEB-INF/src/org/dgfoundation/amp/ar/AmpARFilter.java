@@ -62,6 +62,8 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.mondrian.query.MoConstants;
 
+import edu.emory.mathcs.backport.java.util.Collections;
+
 
 /**
  * Filtering bean. Holds info about filtering parameters and creates the
@@ -78,6 +80,11 @@ public class AmpARFilter extends PropertyListable {
 	public final static String SDF_OUT_FORMAT_STRING = "yyyy-MM-dd";
 	public final static String SDF_IN_FORMAT_STRING = "dd/MM/yyyy";
 	
+	public final static Set<String> activityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
+														this.add(Constants.APPROVED_STATUS);
+														this.add(Constants.EDITED_STATUS);
+														this.add(Constants.STARTED_APPROVED_STATUS);
+														}});
 	/**
 	 * Date string formatted for SQL queries
 	 * field not static because SimpleDateFormat is not thread-safe
@@ -105,6 +112,8 @@ public class AmpARFilter extends PropertyListable {
 	private Set sectorsAndAncestors	= null;
 	private Set selectedSectors = null;
 	
+	private Long teamMemberId;
+	
 	private String CRISNumber;
 	private String budgetNumber;
 	private Boolean showArchived    = false;
@@ -117,10 +126,11 @@ public class AmpARFilter extends PropertyListable {
 	
 	@PropertyListableIgnore
 	private ArrayList<FilterParam> indexedParams=null;
-
 	
-	@PropertyListableIgnore
-	private Long activitiesRejectedByFilter;
+	/**
+	 * whether this filter should queryAppend a WorkspaceFilter query in generateFilterQuery. Ignored when building a workspace filter (always ON)
+	 */
+	private boolean needsTeamFilter;
 	
 	@PropertyListableIgnore
 	private Set secondarySectors = null;
@@ -180,8 +190,7 @@ public class AmpARFilter extends PropertyListable {
 	public void setNationalPlanningObjectives(List nationalPlanningObjectives) {
 		this.nationalPlanningObjectives = nationalPlanningObjectives;
 	}
-	
-	
+
 
 	@PropertyListableIgnore
 	public Set getRelatedNatPlanObjs() {
@@ -264,8 +273,6 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpOrganisation> beneficiaryAgency;
 	private Set<AmpOrganisation> donnorgAgency;
 
-	private Set teamAssignedOrgs = null;
-
 	private Set financingInstruments = null;
 	private Set<AmpCategoryValue> projectCategory = null;
 
@@ -275,8 +282,11 @@ public class AmpARFilter extends PropertyListable {
 	// private Long ampModalityId=null;
 
 	private AmpCurrency currency = null;
-	private Set ampTeams = null;
+
+	/* NOT USED
 	private Set ampTeamsforpledges = null;
+	*/
+	
 	private AmpFiscalCalendar calendarType = null;
 	private boolean widget = false;
 	private boolean publicView = false;
@@ -432,7 +442,6 @@ public class AmpARFilter extends PropertyListable {
 		this.generatedFilterQuery = initialFilterQuery;
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
 				Constants.CURRENT_MEMBER);
-		this.setAmpTeams(new TreeSet());
 		
 		String ampReportId = null ;
 		//Check if the reportid is not nut for public mondrian reports
@@ -470,15 +479,11 @@ public class AmpARFilter extends PropertyListable {
 		if (tm == null || tm.getTeamId() == null ) {
 			tm	= null;
 		}
+				
 		if (tm != null) {
+			this.setNeedsTeamFilter(false);
 			this.setAccessType(tm.getTeamAccessType());
-			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
-			// set the computed workspace orgs
-			//Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
-			Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
-
-			if (teamAO != null && teamAO.size() > 0)
-				this.setTeamAssignedOrgs(teamAO);
+			teamMemberId = tm.getMemberId();
 
 			tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 
@@ -491,26 +496,12 @@ public class AmpARFilter extends PropertyListable {
 
 		}
 		else {
+			this.setNeedsTeamFilter(true);
 			//Check if the reportid is not nut for public mondrian reports
-			if (ampReportId !=null){
+			if (ampReportId != null){
 				AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
-			
-				//TreeSet allManagementTeams=(TreeSet) TeamUtil.getAllRelatedTeamsByAccessType("Management");
-				TreeSet teams=new TreeSet();
-				this.setAccessType("team");
-				if (ampReport.getOwnerId()!=null){
-					teams.add(ampReport.getOwnerId().getAmpTeam());
-					teams.addAll(TeamUtil.getAmpLevel0Teams(ampReport.getOwnerId().getAmpTeam().getAmpTeamId()));
-					this.setAmpTeams(teams);
-					Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
-					if (teamAO != null && teamAO.size() > 0){
-						this.setTeamAssignedOrgs(teamAO);
-					}
-				}else{
-					teams.add(-1);
-					this.setAmpTeams(teams);
-					logger.error("Error getOwnerId() is null setting team to -1");
-				}
+				if (ampReport != null && ampReport.getOwnerId() != null)
+					teamMemberId = ampReport.getOwnerId().getAmpTeamMemId();
 			}
 		}
 		
@@ -620,10 +611,12 @@ public class AmpARFilter extends PropertyListable {
 			this.setWidget(new Boolean(widget).booleanValue());
 
 		try {
-			this.setAmpReportId(new Long(ampReportId));
+			if (ampReportId != null)
+				this.setAmpReportId(new Long(ampReportId));
 		}
 		catch (NumberFormatException e) {
 			logger.info("NumberFormatException:" + e.getMessage());
+			e.printStackTrace();
 		}
 
 	}
@@ -662,10 +655,6 @@ public class AmpARFilter extends PropertyListable {
 			indexedParams=new ArrayList<FilterParam>();
 			
 			
-			Set<String> activityStatus = new HashSet<String>();
-			activityStatus.add(Constants.APPROVED_STATUS);
-			activityStatus.add(Constants.EDITED_STATUS);
-			activityStatus.add(Constants.STARTED_APPROVED_STATUS);
 			String WORKSPACE_ONLY="";
 			if (this.workspaceonly && "Management".equals(this.getAccessType())){
 					WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE v.approval_status IN ("+Util.toCSString(activityStatus)+")";
@@ -742,80 +731,7 @@ public class AmpARFilter extends PropertyListable {
 		indexedParams=new ArrayList<FilterParam>();
 		
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM v_on_off_budget WHERE budget_id IN ("
-			+ Util.toCSString(budget) + ")";
-		String TEAM_FILTER = "";
-
-		//new computed filter - after permissions #3167
-		//AMP-3726
-		Set<String> activityStatus = new HashSet<String>();
-		activityStatus.add(Constants.APPROVED_STATUS);
-		activityStatus.add(Constants.EDITED_STATUS);
-		activityStatus.add(Constants.STARTED_APPROVED_STATUS);
-//		activityStatus.add(Constants.STARTED_STATUS);
-		String NO_MANAGEMENT_ACTIVITIES="";
-		if("Management".equals(this.getAccessType()))
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND draft<>true AND " +
-					"amp_team_id IS NOT NULL AND amp_team_id IN ("
-				+ Util.toCSString(ampTeams)
-				+ ") ";
-				// + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				//+ Util.toCSString(ampTeams) + ") ) AND draft<>true "; 
-		else{
-			
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
-				+ Util.toCSString(ampTeams)
-				+ ") ";
-				//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				//+ Util.toCSString(ampTeams) + ") )" ;
-		}
-		NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
-			+ Util.toCSString(ampTeams)
-			+ ") ";
-			//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-			//+ Util.toCSString(ampTeams) + ") )" ;
-			
-
-	// computed workspace filter -- append it to the team filter so normal
-	// team activities are also possible
-		//AMP-4495 - in computed workspace, the unapproved or draft activities from other
-		//worskpaces should not be displayed
-			if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
-				
-				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
-						+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
-						Util.toCSString(activityStatus)	+")  ) " + (draft?"AND draft<>true ":"");
-				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
-						+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
-						Util.toCSString(activityStatus)	+")  ) " + (draft?"AND draft<>true ":"");
-//				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
-//					+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL )";
-//				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
-//					+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL )";
-
-				
-				NO_MANAGEMENT_ACTIVITIES += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
-					+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL )";
-				NO_MANAGEMENT_ACTIVITIES +=" OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
-					+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL )";
-		
-			}
-			
-			if (!workspaceFilter){
-				//Merge Filter with the Workspace Filter
-				AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
-				if (teamFilter != null){
-					TEAM_FILTER += " OR " + teamFilter.getFilterConditionOnly();
-				}
-			}
-		int c;
-		if (!workspaceFilter){
-			if(draft){
-				c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
-			}
-			else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null) - DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
-			this.setActivitiesRejectedByFilter(new Long(c));
-			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
-		}
+			+ Util.toCSString(budget) + ")";			
 
 		String STATUS_FILTER = "SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("
 				+ Util.toCSString(statuses) + ")";
@@ -1196,9 +1112,24 @@ public class AmpARFilter extends PropertyListable {
 
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
-		
-		if (!workspaceFilter &&  !this.budgetExport && ampTeams != null && ampTeams.size() > 0)
+
+		if (needsTeamFilter || workspaceFilter)
+		{
+			String TEAM_FILTER = WorkspaceFilter.getWorkspaceFilterQuery(this.getTeamMemberId(), this.getAccessType(), this.isDraft());
 			queryAppend(TEAM_FILTER);
+		}
+
+		if (!workspaceFilter)
+		{
+			// not workspace, e.g. normal report/tab filter
+			// Merge Filter with the Workspace Filter
+			AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
+
+			if (!this.budgetExport && (teamFilter != null))
+			{
+				queryAppend(teamFilter.getGeneratedFilterQuery());
+			}
+		}
 		if (statuses != null && statuses.size() > 0)
 			queryAppend(STATUS_FILTER);
 		if (workspaces != null && workspaces.size() > 0)
@@ -1312,16 +1243,7 @@ public class AmpARFilter extends PropertyListable {
 		}
 
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
-		logger.info(this.generatedFilterQuery);
-		
-		if (!workspaceFilter){
-			if(draft){
-				c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
-			}
-			else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
-			this.setActivitiesRejectedByFilter(new Long(c));
-			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
-		}
+		logger.info(this.generatedFilterQuery);		
 	}
 
 	/**
@@ -1371,7 +1293,6 @@ public class AmpARFilter extends PropertyListable {
 		this.sectors = sectors;
 	}
 	
-	
 
 	/**
 	 * @return the sectorsAndAncestors
@@ -1402,22 +1323,6 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	public int getInitialQueryLength() {
 		return initialQueryLength;
-	}
-	
-	/**
-	 * @return Returns the ampTeams.
-	 */
-	@PropertyListableIgnore
-	public Set getAmpTeams() {
-		return ampTeams;
-	}
-
-	/**
-	 * @param ampTeams
-	 *            The ampTeams to set.
-	 */
-	public void setAmpTeams(Set ampTeams) {
-		this.ampTeams = ampTeams;
 	}
 
 	/**
@@ -1874,15 +1779,6 @@ public class AmpARFilter extends PropertyListable {
 		this.modeOfPayment = modeOfPayment;
 	}
 
-	@IgnorePersistence
-	public Set getTeamAssignedOrgs() {
-		return teamAssignedOrgs;
-	}
-
-	public void setTeamAssignedOrgs(Set teamAssignedOrgs) {
-		this.teamAssignedOrgs = teamAssignedOrgs;
-	}
-
 	public Integer getRenderStartYear() {
 		return renderStartYear;
 	}
@@ -2101,15 +1997,6 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setAccessType(String accessType) {
 		this.accessType = accessType;
-	}
-
-	@IgnorePersistence
-	public Long getActivitiesRejectedByFilter() {
-		return activitiesRejectedByFilter;
-	}
-
-	public void setActivitiesRejectedByFilter(Long activitiesRejectedByFilter) {
-		this.activitiesRejectedByFilter = activitiesRejectedByFilter;
 	}
 
 	public String getTeamAccessType() {
@@ -2371,6 +2258,8 @@ public class AmpARFilter extends PropertyListable {
 		this.tagSectorsAndAncestors = tagSectorsAndAncestors;
 	}
 
+	/*
+	 * FIELD NOT USED
 	public Set getAmpTeamsforpledges() {
 		return ampTeamsforpledges;
 	}
@@ -2378,7 +2267,30 @@ public class AmpARFilter extends PropertyListable {
 	public void setAmpTeamsforpledges(Set ampTeamsforpledges) {
 		this.ampTeamsforpledges = ampTeamsforpledges;
 	}
-
+	 */
 	
+	/**
+	 * effective team member - used for generating the TeamFilter
+	 * equals currently logged-in user or, if missing, the AmpReport owner
+	 * @return
+	 */
+	public Long getTeamMemberId()
+	{
+		return this.teamMemberId;
+	}
 
+	public void setTeamMemberId(Long teamMemberId)
+	{
+		this.teamMemberId =teamMemberId; 
+	}
+	
+	public boolean getNeedsTeamFilter()
+	{
+		return needsTeamFilter;
+	}
+	
+	private void setNeedsTeamFilter(boolean needs)
+	{
+		this.needsTeamFilter = needs;
+	}
 }

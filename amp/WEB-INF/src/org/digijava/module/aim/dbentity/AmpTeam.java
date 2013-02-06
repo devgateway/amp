@@ -65,20 +65,29 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	public static void initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
 		//Initialize Team Filter
 		AmpTeam ampTeam = member.getAmpTeam();
-		AmpARFilter af = null;
+		AmpARFilter af = new AmpARFilter();
+		
+		/**
+		 *  ARTY ARTY ARTY
+		 *  take care when migrating this patch to AMP 2.4 - as far as I remember the canonical way of generating
+		 *  filters has been changed there (I mean especially the FilterUtil.prepare() call)
+		 */
+		af.readRequestData(request);
+		
 		if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
-			af = new AmpARFilter();
-			af.readRequestData(request);
 			FilterUtil.populateFilter(ampTeam, af);
-			/* The prepare function needs to have the filter (af) already populated */
-			try {
-				FilterUtil.prepare(request, af);
-			} catch (Exception e) {
-				logger.error("Error while preparing filter:", e);
-			}
-			af.generateFilterQuery(request, true);
 		}
+
+		/* The prepare function needs to have the filter (af) already populated */
+		try {
+			FilterUtil.prepare(request, af);
+		} catch (Exception e) {
+			logger.error("Error while preparing filter:", e);
+		}
+		af.generateFilterQuery(request, true);
 		session.setAttribute(ArConstants.TEAM_FILTER, af);
+		System.out.flush();
+		System.err.flush();
 	}
 	
 	@Override

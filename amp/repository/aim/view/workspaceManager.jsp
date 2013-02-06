@@ -1098,10 +1098,6 @@
             myPanel.setBody(bodymsg);
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
         }
-        else{
-            alert('<digi:trn jsFriendly="true">Validation Error</digi:trn>')
-        }
-	
     }
 </script>
 <script language="javascript">

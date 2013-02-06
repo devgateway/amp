@@ -2349,8 +2349,8 @@ public class ExportActivityToPDF extends Action {
 							pcs1.setBorder(0);
 							financeNestedTable.addCell(pcs1);								
 							PdfPCell pcs2=new PdfPCell();
-							Double a=myMap.get("MontoProgramado");
-							Double plannedCommSum=new Double(new DecimalFormat("0.00").format(a));
+							Double a = myMap.get("MontoProgramado");
+							Double plannedCommSum=new Double(new DecimalFormat("#.##").format(a));
 							p1=new Paragraph(plannedCommSum.toString(),plainFont);
 							p1.setAlignment(Element.ALIGN_LEFT);
 							pcs2.addElement(p1);
@@ -2367,7 +2367,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell acs2=new PdfPCell();
 							acs2.setBackgroundColor(new Color(255,255,255));
 							acs2.setBorder(0);
-							Double actCommSum=new Double(new DecimalFormat("0.00").format( myMap.get("MontoReprogramado") ));
+							Double actCommSum=new Double(new DecimalFormat("#.##").format( myMap.get("MontoReprogramado") ));
 							acs2.addElement(new Paragraph(actCommSum.toString(),plainFont));
 							financeNestedTable.addCell(acs2);								
 							
@@ -2383,7 +2383,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell aes2=new PdfPCell();
 							aes2.setBackgroundColor(new Color(255,255,255));
 							aes2.setBorder(0);
-							Double actExpSum=new Double(new DecimalFormat("0.00").format( myMap.get("MontoEjecutado") ));
+							Double actExpSum=new Double(new DecimalFormat("#.##").format( myMap.get("MontoEjecutado") ));
 							p1=new Paragraph(actExpSum.toString(),plainFont);
 							aes2.addElement(p1);
 							p1.setAlignment(Element.ALIGN_LEFT);
@@ -3101,7 +3101,7 @@ public class ExportActivityToPDF extends Action {
 	}
 	
 	private PdfPTable buildRegionalFundingInfoOutput(String elementName, String regionLocation, List<FundingDetail> listToIterate,String locale,Long siteId,ServletContext ampContext) throws Exception{
-		PdfPTable regFundTable=new PdfPTable(4);
+		PdfPTable regFundTable=new PdfPTable(2);
 		regFundTable.getDefaultCell().setBorder(0);
 		regFundTable.setWidths(new float[] {1f,3f});
 		
@@ -3118,11 +3118,6 @@ public class ExportActivityToPDF extends Action {
 		PdfPTable fdTable=new PdfPTable(3);
 		fdTable.getDefaultCell().setBorder(0);
 		for (FundingDetail fd : listToIterate) {			
-			cell=new PdfPCell();
-			paragraph=new Paragraph(regionLocation, plainFont);
-			cell.addElement(paragraph);
-			cell.setBorder(0);
-			fdTable.addCell(cell);
 
 			cell=new PdfPCell();
 			paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue(),locale,siteId),plainFont);

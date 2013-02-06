@@ -8,5 +8,7 @@
 		<page name="edit" page="edit" title="Admin Structure Types" />
 		<page name="importstructures" title="Admin Structure Importer"/>
 		<page name="mapconfiguration" title="Admin Map Configuration	"/>
+		<page name="mapconfigurationList" title="Admin Map Configuration	"/>
+		<page name="mapconfigurationEdit" title="Admin Map Configuration	"/>
 	</secondary-pages>
 </config>

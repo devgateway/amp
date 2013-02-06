@@ -55,8 +55,9 @@ var DISTRICT;
 var COUNT;
 var GEO_ID;
 var basemapsarray = new Array();
-var povertyratesurl;
-var population;
+var indicatorLayerArray = new Array();
+var indicatorMapArray = new Array();
+
 
 
 
@@ -81,6 +82,23 @@ function print(){
 	  printTask.execute(params, function(){alert("ok")},function(){alert("ERROR")});
 }
 */
+
+var MapConstants = {
+		   "MapType": {
+				"BASE_MAP" : 1,
+				"MAIN_MAP" : 2,
+				"GEOMETRY_SERVICE" : 4,
+				"ARCGIS_API" : 5,
+				"GEOLOCATOR_SERVICE" : 7,
+				"BASEMAPS_ROOT" : 8,
+				"NATIONAL_LAYER" : 9,
+				"INDICATOR_LAYER" : 10			   
+		   },
+		   "MapSubType": {
+			   "BASE" : 1,
+			   "INDICATOR" : 2
+		   }
+		};
 function init() {
 	var xhrArgs = {
 		url : "/esrigis/datadispatcher.do?getconfig=true",
@@ -88,34 +106,35 @@ function init() {
 		sync : true,
 		load : function(jsonData) {
 			dojo.forEach(jsonData, function(map) {
-				switch (map.maptype) {
-				case 1:
-					basemapUrl = map.mapurl;
-					break;
-				case 2:
-					countrymapurl = map.mapurl;
-					COUNTY = map.countyfield;
-					DISTRICT = map.districtfield;
-					GEO_ID = map.geoidfield;
-					COUNT = map.countfield;
-					break;
-				case 4:
-					geometryServiceurl = map.mapurl;
-					break;
-				case 8:
-					rooturl = map.mapurl;
-					break;
-				case 9:
-					nationalborderurl= map.mapurl;
-					break;
-				case 10:
-					povertyratesurl= map.mapurl;
-					break;
-				case 11:
-					population= map.mapurl;
-					break;
-				default:
-					break;
+				if (map.mapSubType == MapConstants.MapSubType.INDICATOR)
+				{
+					indicatorLayerArray.push(map);
+				}
+				else
+				{
+					switch (map.mapType) {
+					case MapConstants.MapType.BASE_MAP:
+						basemapUrl = map.mapUrl;
+						break;
+					case MapConstants.MapType.MAIN_MAP:
+						countrymapurl = map.mapUrl;
+						COUNTY = map.countyField;
+						DISTRICT = map.districtField;
+						GEO_ID = map.geoIdField;
+						COUNT = map.countField;
+						break;
+					case MapConstants.MapType.GEOMETRY_SERVICE:
+						geometryServiceurl = map.mapUrl;
+						break;
+					case MapConstants.MapType.BASEMAPS_ROOT:
+						rooturl = map.mapUrl;
+						break;
+					case MapConstants.MapType.NATIONAL_LAYER:
+						nationalborderurl= map.mapUrl;
+						break;
+					default:
+						break;
+					}
 				}
 			});
 		},
@@ -138,12 +157,13 @@ function init() {
 	 esri.layers.FeatureLayer.MODE_ONDEMAND,outFields: ["*"],
 	 id:'indicator',opacity : 0.80, visible:false });
 	 */
-	if (povertyratesurl){
-		povertyratesmap = new esri.layers.ArcGISDynamicMapServiceLayer(povertyratesurl,{opacity :0.80,visible:false,id:'indicator'});
+	for(var idx = 0; idx < indicatorLayerArray.length ; idx++){
+		if(indicatorLayerArray[idx].mapUrl != ""){
+			var currentMap = new esri.layers.ArcGISDynamicMapServiceLayer(indicatorLayerArray[idx].mapUrl,{opacity :0.80,visible:false, id:'indicator_'+indicatorLayerArray[idx].id});
+			indicatorMapArray.push(currentMap);
+		}
 	}
-	if (population){
-		populationmap = new esri.layers.ArcGISDynamicMapServiceLayer(population,{opacity :0.80,visible:false,id:'census'});
-	}
+
 	if (nationalborderurl){
 		bordermap= new esri.layers.ArcGISDynamicMapServiceLayer(nationalborderurl,{opacity :0.90,visible:false,id:'border'});
 	}
@@ -180,9 +200,9 @@ function init() {
 			}
 		});
 	}
-	
-	var dnd = new dojo.dnd.Moveable(dojo.byId("poplegendDiv"));
-	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
+	for(var idx = 0; idx < indicatorLayerArray.length; idx++)
+		var dnd = new dojo.dnd.Moveable(dojo.byId("indicator_legend_" + indicatorLayerArray[idx].id));
+//	var dnd = new dojo.dnd.Moveable(dojo.byId("legendDiv"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("selectedfilter"));
 	var dnd = new dojo.dnd.Moveable(dojo.byId("structuresdiv"));
 	
@@ -243,11 +263,8 @@ function createMapAddLayers(myService1, myService2) {
 	if (bordermap){
 		map.addLayer(bordermap);
 	}
-	if (population){
-		map.addLayer(populationmap);
-	}
-	if (povertyratesurl){
-		map.addLayer(povertyratesmap);
+	for(var idx = 0; idx < indicatorMapArray.length; idx++){
+		map.addLayer(indicatorMapArray[idx]);
 	}
 	//dojo.connect(map, "onExtentChange", showExtent);
 	
@@ -263,21 +280,16 @@ function createMapAddLayers(myService1, myService2) {
  */
 var indicatoractive = false;
 function toggleindicatormap(id) {
-	var layer = map.getLayer(id);
+	var layer = map.getLayer("indicator_" + id);
 	var functionalayer = map.getLayer('countrymap');
 	if (layer.visible) {
 		layer.hide();
-		$('#legendDiv').hide('slow');
-		$('#poplegendDiv').hide('slow');
+		$('#indicatorLegend > .legendContent').hide('slow');
 		functionalayer.show();
 		indicatoractive = false;
 	} else if (!indicatoractive) {
 		layer.show();
-		if (id=='indicator'){
-			$('#legendDiv').show('slow');
-		}else{
-			$('#poplegendDiv').show('slow');
-		}
+		$('#indicator_legend_' + id).show('slow');
 		functionalayer.hide();
 		indicatoractive = true;
 	}

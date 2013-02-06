@@ -8,10 +8,6 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script> 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
-
 <script type="text/javascript">
 //Global declaration
 	trnPrimary = "";
@@ -41,6 +37,10 @@ function initializeTranslations(){
 	trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
 }
 </script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script> 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
+
 <digi:instance property="datadispatcherform" />
 <digi:form action="/mainmap.do">
 	<table>

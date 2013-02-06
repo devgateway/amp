@@ -1,6 +1,9 @@
 package org.digijava.module.esrigis.form;
 
+import java.util.List;
+
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.MapFilter;
 
 public class DataDispatcherForm extends ActionForm {
@@ -12,6 +15,7 @@ public class DataDispatcherForm extends ActionForm {
 	private MapFilter filter = null;
 	private String apiurl;
 	private String structures;
+	private List<AmpMapConfig> indicators;
 
 	public String getStructures() {
 		return structures;
@@ -34,5 +38,13 @@ public class DataDispatcherForm extends ActionForm {
 	}
 	public void setApiurl(String apiurl) {
 		this.apiurl = apiurl;
+	}
+
+	public List<AmpMapConfig> getIndicators() {
+		return indicators;
+	}
+
+	public void setIndicators(List<AmpMapConfig> indicators) {
+		this.indicators = indicators;
 	}
 }

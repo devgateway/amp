@@ -101,7 +101,7 @@
 				<table width="100%" height="100%" border="0" align="center"
 					cellpadding="0" cellspacing="0" id="dataTable">
 					<tr>
-						<td colspan="5" align="center" style="font-weight: bold;"><digi:trn>Current Configuration</digi:trn>
+						<td colspan="6" align="center" style="font-weight: bold;"><digi:trn>Current Configuration</digi:trn>
 						</td>
 					</tr>
 					<tr>
@@ -110,6 +110,7 @@
 						<td style="font-weight: bold;"><digi:trn>Admin 1</digi:trn></td>
 						<td style="font-weight: bold;"><digi:trn>Admin 2</digi:trn></td>
 						<td style="font-weight: bold;"><digi:trn>GeoId</digi:trn></td>
+						<td style="font-weight: bold;"><digi:trn>Action</digi:trn></td>
 					</tr>
 					<tr>
 						<td><digi:trn>Base Map</digi:trn></td>

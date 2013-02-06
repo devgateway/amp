@@ -124,8 +124,6 @@ div#mainGisMenu ul li#hlight{background:url(/TEMPLATE/ampTemplate/img_2/gis/high
 div#mainGisMenu ul li#hlightz{background:url(/TEMPLATE/ampTemplate/img_2/gis/highlightzones.png) no-repeat right;background-position:135px 8px;}
 div#mainGisMenu ul li#add{background:url(/TEMPLATE/ampTemplate/img_2/gis/addactivity.png) no-repeat right;background-position:135px 8px;}
 div#mainGisMenu ul li#structures{background:url(/TEMPLATE/ampTemplate/img_2/gis/structures.png) no-repeat right;background-position:135px 8px;}
-div#mainGisMenu ul li#povmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/povertymap.png) no-repeat right;background-position:135px 8px;}
-div#mainGisMenu ul li#censusmap{background:url(/TEMPLATE/ampTemplate/img_2/gis/censusmap.png) no-repeat right;background-position:135px 8px;}
 
 .usaidlogo{
     position:absolute;

@@ -72,12 +72,12 @@
     			sync:true,
     			load: function(jsonData) {
     				   dojo.forEach(jsonData,function(map) {
-    			        	switch (map.maptype) {
+    			        	switch (map.mapType) {
     						case 1:
-    							basemapUrl = map.mapurl;
+    							basemapUrl = map.mapUrl;
     							break;
     						case 2:
-    							mapurl = map.mapurl;
+    							mapurl = map.mapUrl;
     						default:
     							break;
     						}

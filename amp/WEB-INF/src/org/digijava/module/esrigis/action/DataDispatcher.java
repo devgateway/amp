@@ -59,7 +59,7 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
-import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
+import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.helpers.ActivityPoint;
 import org.digijava.module.esrigis.helpers.DbHelper;

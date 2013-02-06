@@ -6,6 +6,6 @@
 	</security>
 	
 	<hibernate-classes required="false">
-		<hibernate-class>org.digijava.module.esrigis.dbentitiy.AmpMapConfig</hibernate-class>
+		<hibernate-class>org.digijava.module.esrigis.dbentity.AmpMapConfig</hibernate-class>
 	</hibernate-classes>
 </module-config>

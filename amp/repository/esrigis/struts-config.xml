@@ -23,7 +23,10 @@
 	    </action>
 	    
 	    <action name="mapsconfigurationform" path="/esrigis/MapsConfiguration" parameter="action" scope="session" type="org.digijava.module.esrigis.action.MapsConfiguration" validate="false">
-	      <forward name="list" path="/showLayout.do?layout=mapconfiguration"/>
+	      <forward name="list" path="/showLayout.do?layout=mapconfigurationList" />
+	      <forward name="addEdit" path="/showLayout.do?layout=mapconfigurationEdit"  />
+	      <forward name="save" path="/esrigis/MapsConfiguration.do?action=list" redirect="true" />
+	      <forward name="delete" path="/esrigis/MapsConfiguration.do?action=list" redirect="true" />
 	    </action>
 	    
 	     

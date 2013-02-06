@@ -25,8 +25,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
+import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
+import org.digijava.module.esrigis.helpers.MapConstants;
 
 public class EsriProxy extends Action {
 	
@@ -45,16 +46,8 @@ public class EsriProxy extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		
-		List<AmpMapConfig> maps = (List<AmpMapConfig>) DbHelper.getMaps();
-		int i=0;
-		for (Iterator iterator = maps.iterator(); iterator.hasNext();) {
-			AmpMapConfig map = (AmpMapConfig) iterator.next();
-			if (map.getMaptype() == 7){
-				serverUrls[i]=map.getMapurl();
-			}
-			i++;
-		}
-		
+		AmpMapConfig map = DbHelper.getMapByType(MapConstants.MapType.GEOLOCATOR_SERVICE);
+		serverUrls[MapConstants.MapType.GEOLOCATOR_SERVICE]=map.getMapUrl();
 		try {
 			String reqUrl = request.getQueryString();
 			boolean allowed = false;

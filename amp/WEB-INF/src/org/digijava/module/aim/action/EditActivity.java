@@ -128,8 +128,9 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
-import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
+import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
+import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.hibernate.Session;
 
@@ -202,13 +203,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     }
     
     /* Set Map configuration */ 
-    List<AmpMapConfig> maps = (List<AmpMapConfig>) DbHelper.getMaps();
-	for (Iterator iterator = maps.iterator(); iterator.hasNext();) {
-		AmpMapConfig map = (AmpMapConfig) iterator.next();
-		if (map.getMaptype() == 5){
-			eaForm.setEsriapiurl(map.getMapurl());
-		}
-	}
+    AmpMapConfig map = DbHelper.getMapByType(MapConstants.MapType.ARCGIS_API);
+    if (map != null && map.getMapUrl() != null && !map.getMapUrl().equals(""))
+    	eaForm.setEsriapiurl(map.getMapUrl());
 	
     
     // set Globam Settings Multi-Sector Selecting

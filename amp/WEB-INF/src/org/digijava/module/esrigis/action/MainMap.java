@@ -49,10 +49,11 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.esrigis.dbentitiy.AmpMapConfig;
+import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.form.MainMapForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
+import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.esrigis.helpers.MapFilter;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.helper.EntityRelatedListHelper;
@@ -77,14 +78,16 @@ public class MainMap extends Action {
 			return displayIcon(mapping, form, request, response);
 		}
 
-		List<AmpMapConfig> maps = (List<AmpMapConfig>) DbHelper.getMaps();
-		for (Iterator iterator = maps.iterator(); iterator.hasNext();) {
-			AmpMapConfig map = (AmpMapConfig) iterator.next();
-			if (map.getMaptype() == 5) {
-				dataDispatcherForm.setApiurl(map.getMapurl());
-			}
-		}
+		AmpMapConfig map = DbHelper.getMapByType(MapConstants.MapType.ARCGIS_API);
+		if(map != null && map.getMapUrl() != null && !"".equals(map.getMapUrl()))
+			dataDispatcherForm.setApiurl(map.getMapUrl());
 
+		//Load indicator layers
+		List<AmpMapConfig> indicators = DbHelper.getMapsBySubType(MapConstants.MapSubType.INDICATOR);
+		if(indicators.size() > 0) {
+			dataDispatcherForm.setIndicators(indicators);
+		}
+		
 		if (filter == null) {
 			filter = new MapFilter();
 			if (request.getParameter("public") != null

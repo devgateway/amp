@@ -57,7 +57,7 @@
 	</field:display>
 	
 	   		
-   	<script type="text/javascript" defer="defer"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery-esri.js"/>"></script>
+   	<script type="text/javascript" defer="defer"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/basemapgallery.js"/>"></script>
    	
 
 <!-- Individual YUI CSS files --> 
@@ -439,8 +439,9 @@
 						-->
 						
 						<feature:display name="Use Indicators Maps" module="Map Module">
-							<li id="povmap" onclick="toggleindicatormap('indicator');" style="cursor: pointer;"><digi:trn>Poverty Map</digi:trn></li>
-							<li id="censusmap" onclick="toggleindicatormap('census');" style="cursor: pointer;"><digi:trn>Census Map</digi:trn></li>
+						<c:forEach var="indicatorItem" items="${datadispatcherform.indicators}">
+							<li id="indicator_menu_${indicatorItem.id}" onclick="toggleindicatormap('${indicatorItem.id}');" style="cursor: pointer;"><digi:trn>${indicatorItem.configName}</digi:trn></li>
+						</c:forEach>
 						</feature:display>
 						<li id="datasource" style="cursor: pointer;"><digi:trn>Data Source</digi:trn></li>
 						<feature:display name="Media Search" module="Map Module">
@@ -486,9 +487,13 @@
  		<div class='legendHeader' id="fakecolor">Donor Legend<br/><hr/></div>
  		<div id="pointsLegend" class="legendContent" style="rigth:10px;top:421px;"></div>
         <div id="highlightLegend" class="legendContent" style="left:240px;"></div>
-        <div id="legendDiv" class="legendContent" style="top:585px;left:65px;width: 165px;">
-        	<img src="/TEMPLATE/ampTemplate/img_2/gis/legend-poverty.jpg">	
-        </div>
+        <span id="indicatorLegend">
+			<c:forEach var="indicatorItem" items="${datadispatcherform.indicators}">
+		        <div id="indicator_legend_${indicatorItem.id}" class="legendContent" style="top:585px;left:65px;width: 180px;text-align:center">
+		        	<img src="/esrigis/MapsConfiguration.do~action=displayLegend~id=${indicatorItem.id}">	
+		        </div>
+			</c:forEach>
+        </span>
         
         <div id="structuresdiv" class="legendContent" style="left:70px;top:80px;overflow-y:scroll;height: 500px;">
         	<div class='legendHeader'>
@@ -508,9 +513,6 @@
 	    	</table>
         </div>
         
-        <div id="poplegendDiv" class="legendContent" style="top:570px;left:65px;width: 180px;">
-        	<img src="/TEMPLATE/ampTemplate/img_2/gis/population-legend.jpg">	
-        </div>
         <div id="NationalDiv" class="legendContent" style="top:310px;left:74%;font-size: 10px;width: 170px;">
         	<p id="nationalp">
         		<digi:trn>Click here to see national projects</digi:trn>

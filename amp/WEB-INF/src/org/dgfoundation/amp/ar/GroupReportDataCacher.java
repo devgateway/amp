@@ -17,7 +17,7 @@ import edu.emory.mathcs.backport.java.util.Collections;
  */
 public class GroupReportDataCacher 
 {
-	public final static int MAX_CACHED_REPORTS_PER_USER = 3; // BOZO temporary value for debugging could be made a GlobalSettings in the future
+	public final static int MAX_CACHED_REPORTS_PER_USER = 7;
 	public final static String GROUP_REPORT_DATA_CACHER_SESSION_ATTRIBUTE = "group_report_cache";
 	
 	private Map<Integer, GroupReportData> lru = Collections.synchronizedMap(new LRUMap(MAX_CACHED_REPORTS_PER_USER));		 

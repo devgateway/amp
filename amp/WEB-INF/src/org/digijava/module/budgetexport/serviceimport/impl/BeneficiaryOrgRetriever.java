@@ -3,17 +3,16 @@ package org.digijava.module.budgetexport.serviceimport.impl;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.serviceimport.ObjectRetriever;
 
-import java.io.InputStream;
 import java.util.Map;
 
 /**
  * User: flyer
- * Date: 1/28/13
- * Time: 4:47 PM
+ * Date: 2/6/13
+ * Time: 6:47 PM
  */
-public class ProjectRetriever extends LocationRetriever implements ObjectRetriever {
-    private static final String RET_NAME = "Freebalance Service Projects";
-    private static String RETRIEVER_XPATH = "//root/element/concept_name[text()='ACT']";
+public class BeneficiaryOrgRetriever extends LocationRetriever implements ObjectRetriever {
+    private static String RET_NAME = "Freebalance Service Beneficiary";
+    private static String RETRIEVER_XPATH = "//root/element/concept_name[text()='DIV']";
 
     private static String getXPath() {
         return RETRIEVER_XPATH;

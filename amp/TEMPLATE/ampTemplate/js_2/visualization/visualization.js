@@ -948,24 +948,30 @@ function callbackApplyFilter(e){
 		return;
 	}
 	
-	if(document.getElementById("org_group_dropdown_id")!=null && document.getElementById("org_group_dropdown_id").value!=-1)
+	if(document.getElementById("org_group_dropdown_id")!=null && document.getElementById("org_group_dropdown_id").value!=-1){
+		unCheckOptions("org_grp_check");
 		document.getElementById("org_grp_check_"+document.getElementById("org_group_dropdown_id").value).checked = true;
-	
-	if(document.getElementById("org_dropdown_id")!=null && document.getElementById("org_dropdown_id").value!=-1)
+	}
+	if(document.getElementById("org_dropdown_id")!=null && document.getElementById("org_dropdown_id").value!=-1){
+		unCheckOptions("organization_check");
 		document.getElementById("organization_check_"+document.getElementById("org_dropdown_id").value).checked = true;
-	
-	if(document.getElementById("sector_dropdown_id")!=null && document.getElementById("sector_dropdown_id").value!=-1)
+	}
+	if(document.getElementById("sector_dropdown_id")!=null && document.getElementById("sector_dropdown_id").value!=-1){
+		unCheckOptions("sector_check");
 		document.getElementById("sector_check_"+document.getElementById("sector_dropdown_id").value).checked = true;
-	
-	if(document.getElementById("sub_sector_dropdown_id")!=null && document.getElementById("sub_sector_dropdown_id").value!=-1)
+	}
+	if(document.getElementById("sub_sector_dropdown_id")!=null && document.getElementById("sub_sector_dropdown_id").value!=-1){
+		unCheckOptions("sub_sector_check");
 		document.getElementById("sub_sector_check_"+document.getElementById("sub_sector_dropdown_id").value).checked = true;
-	
-	if(document.getElementById("region_dropdown_id")!=null && document.getElementById("region_dropdown_id").value!=-1)
+	}
+	if(document.getElementById("region_dropdown_id")!=null && document.getElementById("region_dropdown_id").value!=-1){
+		unCheckOptions("region_check");
 		document.getElementById("region_check_"+document.getElementById("region_dropdown_id").value).checked = true;
-	
-	if(document.getElementById("zone_dropdown_id")!=null && document.getElementById("zone_dropdown_id").value!=-1)
+	}
+	if(document.getElementById("zone_dropdown_id")!=null && document.getElementById("zone_dropdown_id").value!=-1){
+		unCheckOptions("zone_check");
 		document.getElementById("zone_check_"+document.getElementById("zone_dropdown_id").value).checked = true;
-	
+	}
 	var params = "";
 	params = params + "&orgGroupIds=" + getQueryParameter("orgGroupIds");
 	params = params + "&orgIds=" + getQueryParameter("orgIds");

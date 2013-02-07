@@ -5,9 +5,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 
+<%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
+<%
+	pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
+%>
+
+<bean:define id="generatedReport" name="reportCD" property="generatedReport" type="org.dgfoundation.amp.ar.GroupReportData" toScope="page"/>
+<bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
+
 <div class="paging">
-	<c:if test="${(report.visibleRows / recordsPerPage > 1) && (recordsPerPage ne max_value)}">
-		<c:if test="${report.startRow != 0}">
+	<c:if test="${(generatedReport.visibleRows / recordsPerPage > 1) && (recordsPerPage ne max_value)}">
+		<c:if test="${generatedReport.startRow != 0}">
 			<!-- Go to FIRST PAGE -->
 			<c:choose>
 				<c:when test="${param.queryEngine!='true' }">
@@ -15,7 +23,7 @@
 		           		&lt;&lt;
 		           	</a>
 		       		&nbsp;|&nbsp;
-					<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow-recordsPerPage}"/>~endRow=<c:out value="${report.startRow-1}"/>');">	
+					<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${generatedReport.startRow-recordsPerPage}"/>~endRow=<c:out value="${generatedReport.startRow-1}"/>');">	
 						<digi:trn key="aim:previous">Previous</digi:trn>
 					</a>
 					&nbsp;|&nbsp;
@@ -25,7 +33,7 @@
 						&lt;&lt;
 					</a>
 					&nbsp;|&nbsp;
-					<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${report.startRow-recordsPerPage}~endRow=${report.startRow-1}~queryEngine=true');">	
+					<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${generatedReport.startRow-recordsPerPage}~endRow=${generatedReport.startRow-1}~queryEngine=true');">	
 						<digi:trn key="aim:previous">Previous</digi:trn>
 					</a>
 					&nbsp;|&nbsp;
@@ -41,17 +49,17 @@
 					<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${i}~endRow=${i+recordsPerPage-1}~queryEngine=true');">	
 				</c:otherwise>
 			</c:choose>	
-			<b ${i == report.startRow ? 'class="paging_sel"' : ''}>
+			<b ${i == generatedReport.startRow ? 'class="paging_sel"' : ''}>
 				<fmt:formatNumber value="${(i)/recordsPerPage + 1}" maxFractionDigits="0"/>
 			</b>										
 			</a>  
 			&nbsp;|&nbsp;
 		</c:forEach>
 
-		<c:if test="${(report.startRow+recordsPerPage+1) <= report.visibleRows}">
+		<c:if test="${(generatedReport.startRow+recordsPerPage+1) <= generatedReport.visibleRows}">
 			<c:choose>
 				<c:when test="${param.queryEngine!='true' }">
-					<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${report.startRow+recordsPerPage}"/>~endRow=<c:out value="${report.startRow+(recordsPerPage*2)-1}"/>');">	
+					<a class="l_sm" style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="ampReportId"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${generatedReport.startRow+recordsPerPage}"/>~endRow=<c:out value="${generatedReport.startRow+(recordsPerPage*2)-1}"/>');">	
 						<digi:trn key="aim:next">Next</digi:trn>
 					</a>
 					&nbsp;|&nbsp;
@@ -60,7 +68,7 @@
 					</a>
 				</c:when>
 				<c:otherwise>
-					<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${report.startRow+recordsPerPage}~endRow=${report.startRow+(recordsPerPage*2)-1}~queryEngine=true');">	
+					<a class="l_sm" style="cursor:pointer" onclick="changeStep('/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=${reportMeta.ampReportId}~widget=true~cached=true~startRow=${generatedReport.startRow+recordsPerPage}~endRow=${generatedReport.startRow+(recordsPerPage*2)-1}~queryEngine=true');">	
 						<digi:trn key="aim:next">Next</digi:trn>
 					</a>
 					&nbsp;|&nbsp;

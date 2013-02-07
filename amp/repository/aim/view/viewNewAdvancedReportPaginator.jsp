@@ -5,6 +5,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 
+<!-- paginator, viewFormat = ${viewFormat} -->
+
 <c:set var="max_value" scope="request"><%=Integer.MAX_VALUE%></c:set>
 <c:choose>
 	<c:when test="${(viewFormat=='html2') || (viewFormat=='html') }">

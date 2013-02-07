@@ -192,7 +192,7 @@ public class ViewNewAdvancedReport extends Action {
 			progressValue = progressValue + 20;// 20 is the weight of this process on the progress bar
 			ReportContextData.getFromRequest().setProgressValue(progressValue);
 
-			rd = ARUtil.generateReport(request, report, filter);
+			rd = ARUtil.generateReport(report, filter, true);
 			progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
 			ReportContextData.getFromRequest().setProgressValue(progressValue);
 	
@@ -220,7 +220,7 @@ public class ViewNewAdvancedReport extends Action {
 			}
 		}
 		/* If sorting info comes in request save this info in the filter bean */
-		else{
+		else if (sortBy != null){
 				filter.setSortBy(sortBy);
 				filter.setSortByAsc( Boolean.parseBoolean(sortByAsc) );
 		}

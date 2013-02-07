@@ -148,9 +148,8 @@ public final class ARUtil {
 
 	protected static Logger logger = Logger.getLogger(ARUtil.class);
 
-	public static Constructor getConstrByParamNo(Class c, int paramNo, HttpServletRequest request) {
+	public static Constructor getConstrByParamNo(Class c, int paramNo, HttpSession session) {
 		try {
-			HttpSession session		= request.getSession();
 			String budgetTypeReport	= (String) session.getAttribute(BudgetExportConstants.BUDGET_EXPORT_TYPE );
 			
 			return getConstrByParamNo(c, paramNo, budgetTypeReport != null );
@@ -242,12 +241,12 @@ public final class ARUtil {
 	 * @param filter - the filter to be used
 	 * @return
 	 */
-	public static GroupReportData generateReport(HttpServletRequest request, AmpReports r, AmpARFilter filter)  {
+	public static GroupReportData generateReport(AmpReports r, AmpARFilter filter, boolean regenerateFilterQuery)  {
 
-		HttpSession httpSession = request.getSession();
 
 		CellColumn.calls = CellColumn.iterations = MetaInfo.calls = MetaInfo.iterations = 0;
-		
+
+		HttpSession httpSession = TLSUtils.getRequest().getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
 
 		if (teamMember != null)
@@ -255,11 +254,16 @@ public final class ARUtil {
 					+ teamMember.getEmail() + " from team "
 					+ teamMember.getTeamName());
 
-		AmpReportGenerator arg = new AmpReportGenerator(r, filter, request);
+		AmpReportGenerator arg = new AmpReportGenerator(r, filter, regenerateFilterQuery);
 		arg.generate();
 		
 		logger.info(String.format("while generating report, had %d / %d CellColumn calls and %d / %d MetaInfo calls", CellColumn.iterations, CellColumn.calls, MetaInfo.iterations, MetaInfo.calls));
-		return arg.getReport();
+		GroupReportData result = arg.getReport();
+		
+		arg.setReport(null);
+		r.setReportGenerator(null);
+		
+		return result;
 	}
 
 	public static Collection getFilterDonors(AmpTeam ampTeam) {

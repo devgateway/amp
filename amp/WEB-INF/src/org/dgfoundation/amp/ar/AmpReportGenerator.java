@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.dgfoundation.amp.ar.ArConstants.SyntheticColumnsMeta;
@@ -37,6 +38,7 @@ import org.dgfoundation.amp.ar.filtercacher.FastFilterCacher;
 import org.dgfoundation.amp.ar.filtercacher.NopFilterCacher;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpColumnsFilters;
@@ -67,7 +69,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	private boolean debugMode=false;
 	private boolean pledgereport=false;
 	
-	private HttpServletRequest request	= null;
+	private HttpSession session	= null;
 	private BigDecimal totalac;
 
 
@@ -196,8 +198,8 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected void createDataForColumns(Collection<AmpReportColumn> extractable) {
 		
 		List <SyntheticColumnsMeta> possibleSyntColMeta	= ArConstants.syntheticColumns;
-		if ( this.request != null ) {
-			possibleSyntColMeta	= ARUtil.getSyntheticGeneratorList(this.request.getSession() );
+		if ( this.session != null ) {
+			possibleSyntColMeta	= ARUtil.getSyntheticGeneratorList(this.session);
 		}
 		List <SyntheticCellGenerator> syntCellGenerators	= new ArrayList<SyntheticCellGenerator>();
 		
@@ -205,8 +207,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		for (ArConstants.SyntheticColumnsMeta scm:  possibleSyntColMeta) {
 			SyntheticCellGenerator generator	= scm.getGenerator();
 			if ( generator.checkIfApplicabale(reportMetadata)  ) {
-				if ( this.request != null )
-					generator.setSession(this.request.getSession() );
+				if ( this.session != null )
+					generator.setSession(this.session);
 				syntCellGenerators.add(generator);
 			}
 		}
@@ -269,20 +271,19 @@ public class AmpReportGenerator extends ReportGenerator {
 
 				if (extractorView != null) {
 
-					Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 4, this.request);
+					Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 4, this.session);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							filter.getGeneratedFilterQuery(), extractorView,
 							columnName, this });
 				} else {
-					Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 3, this.request);
+					Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 3, this.session);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							columnName, rawColumns, this });
 				}
 				
 				ce.setRelatedColumn(col);
 				ce.setInternalCondition(columnFilterSQLClause);
-				if (request != null)
-					ce.setSession(request.getSession());
+				ce.setSession(this.session);
 				
 				
 				ce.setDebugMode(debugMode);
@@ -1000,10 +1001,9 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param reportMetadata
 	 * @param condition
 	 */
-	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter,
-			HttpServletRequest request) {
+	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter, boolean regenerateFilterQuery) {
 		super(USE_FILTER_CACHING ? new FastFilterCacher(filter) : new NopFilterCacher(filter));
-		this.request		= request;
+		this.session		= TLSUtils.getRequest().getSession();
 		this.reportMetadata = reportMetadata;
 		this.reportMetadata.setReportGenerator(this);
 		
@@ -1018,9 +1018,14 @@ public class AmpReportGenerator extends ReportGenerator {
 			ReportContextData.getFromRequest().setPledgeReport(true);
 		}
 		
-		filter.generateFilterQuery(request, false);
+		if (regenerateFilterQuery)
+		{
+			filter.generateFilterQuery(TLSUtils.getRequest(), false);
+			debugMode = (TLSUtils.getRequest().getParameter("debugMode") != null);
+		}
+		else
+			debugMode = false;
 
-		debugMode=(request.getParameter("debugMode")!=null);
 
 		logger.error("Master report query:" + filter.getGeneratedFilterQuery());
 

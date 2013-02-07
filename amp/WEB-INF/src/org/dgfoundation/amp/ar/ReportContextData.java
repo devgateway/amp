@@ -60,7 +60,7 @@ public class ReportContextData
 	private int progressValue;								// session["progressValue"]
 	private int progressTotalRows;							// session["progressTotalRows"]
 	private Map<Long, MetaInfo<String>> reportSorters;	// session["reportSorters"]
-	private GroupReportData generatedReport;				// session["report"];
+	//private GroupReportData generatedReport;				// session["report"];
 	private AmpReports reportMeta;							// session["reportMeta"]
 	private String sortBy;									// session["sortBy"]
 	private Boolean sortAscending;							// session[ArConstants.SORT_ASCENDING]
@@ -194,12 +194,25 @@ public class ReportContextData
 		this.filter = filter;
 	}
 
+	private boolean isNullGeneratedReport = true;
+	
 	public GroupReportData getGeneratedReport() {
-		return generatedReport;
+		if (isNullGeneratedReport)
+			return null;
+		return GroupReportDataCacher.staticRecall(this);
 	}
 
 	public void setGeneratedReport(GroupReportData generatedReport) {
-		this.generatedReport = generatedReport;
+		if (generatedReport == null)
+		{
+			GroupReportDataCacher.staticDelete(this);
+			this.isNullGeneratedReport = true;
+		}
+		else
+		{
+			GroupReportDataCacher.staticMemorize(this, generatedReport);
+			this.isNullGeneratedReport = false;
+		}
 	}
 
 	public AmpReports getReportMeta() {
@@ -310,10 +323,9 @@ public class ReportContextData
 	 */
 	public void cleanReportCaches()
 	{
-		generatedReport = null;
+		setGeneratedReport(null);
 		progressTotalRows = 0;
 		progressValue = 0;
-		generatedReport = null;
 	}
 	
 	public static boolean contextIdExists()

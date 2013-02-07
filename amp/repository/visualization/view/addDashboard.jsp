@@ -131,6 +131,16 @@ function saveDashboard() {
 	}
 }
 
+function trim (str) {
+    str = str.replace(/^\s+/, '');
+    for (var i = str.length - 1; i >= 0; i--) {
+        if (/\S/.test(str.charAt(i))) {
+            str = str.substring(0, i + 1);
+            break;
+        }
+    }
+    return str;
+}
 
 function validateData(){
 	
@@ -139,7 +149,7 @@ function validateData(){
 	  	Please, add a name for dashboard.
 	  </digi:trn>
 	</c:set>
-	if (document.getElementsByName("dashboardName")[0]==null || document.getElementsByName("dashboardName")[0].value.length == 0){
+	if (document.getElementsByName("dashboardName")[0]==null || document.getElementsByName("dashboardName")[0].value.length == 0 || trim(document.getElementsByName("dashboardName")[0].value).length==0){
 		alert ("${addTitle}")
 		return false;
 	}

@@ -453,7 +453,10 @@ function showPopin() {
 }
 
 function hidePopin() {
-	popinPanels['Panel1'].hide();
+	try {
+		popinPanels['Panel1'].hide();
+	}
+	catch(e){}
 }
 
 function showExport() {
@@ -948,13 +951,15 @@ function callbackApplyFilter(e){
 		return;
 	}
 	
-	if(document.getElementById("org_group_dropdown_id")!=null && document.getElementById("org_group_dropdown_id").value!=-1){
+	if(document.getElementById("org_group_dropdown_id")!=null){
 		unCheckOptions("org_grp_check");
-		document.getElementById("org_grp_check_"+document.getElementById("org_group_dropdown_id").value).checked = true;
+		if (document.getElementById("org_group_dropdown_id").value!=-1)
+			document.getElementById("org_grp_check_"+document.getElementById("org_group_dropdown_id").value).checked = true;
 	}
-	if(document.getElementById("org_dropdown_id")!=null && document.getElementById("org_dropdown_id").value!=-1){
+	if(document.getElementById("org_dropdown_id")!=null){
 		unCheckOptions("organization_check");
-		document.getElementById("organization_check_"+document.getElementById("org_dropdown_id").value).checked = true;
+		if (document.getElementById("org_dropdown_id").value!=-1)
+			document.getElementById("organization_check_"+document.getElementById("org_dropdown_id").value).checked = true;
 	}
 	if(document.getElementById("sector_dropdown_id")!=null && document.getElementById("sector_dropdown_id").value!=-1){
 		unCheckOptions("sector_check");
@@ -1628,7 +1633,7 @@ function refreshBoxes(o){
 					infoBox.push("<table class=\"inside\"><tbody>");
 					infoBox.push("<tr>");
 					infoBox.push("<td class=\"inside\"><strong>" + trnBackground + ":</strong>");
-					if (info.background.length > 100)
+					if (info.background != undefined && info.background.length > 100)
 					{
 						var shortBackground = info.background.substring(0, 100) + "...";
 						infoBox.push("<div id='short_background_info'>");
@@ -1649,7 +1654,7 @@ function refreshBoxes(o){
 
 					infoBox.push("<tr>");
 					infoBox.push("<td class=\"inside\"><strong>" + trnDescription + ":</strong>");
-					if (info.description.length > 100)
+					if (info.description != undefined && info.description.length > 100)
 					{
 						var shortDescription = info.description.substring(0, 100) + "...";
 						infoBox.push("<div id='short_description_info'>");
@@ -1670,7 +1675,7 @@ function refreshBoxes(o){
 
 					infoBox.push("<tr>");
 					infoBox.push("<td class=\"inside\"><strong>" + trnKeyAreas + ":</strong>");
-					if (info.keyAreas.length > 100)
+					if (info.keyAreas != undefined && info.keyAreas.length > 100)
 					{
 						var shortKeyAreas = info.keyAreas.substring(0, 100) + "...";
 						infoBox.push("<div id='short_keyareas_info'>");
@@ -2031,7 +2036,7 @@ function  saveAdditionalInfo(id, type){
 		infoBox.push("<table class=\"inside\"><tbody>");
 		infoBox.push("<tr>");
 		infoBox.push("<td class=\"inside\"><strong>" + trnBackground + ":</strong>");
-		if (info.background.length > 100)
+		if (info.background != undefined && info.background.length > 100)
 		{
 			var shortBackground = info.background.substring(0, 100) + "...";
 			infoBox.push("<div id='short_background_info'>");
@@ -2052,7 +2057,7 @@ function  saveAdditionalInfo(id, type){
 
 		infoBox.push("<tr>");
 		infoBox.push("<td class=\"inside\"><strong>" + trnDescription + ":</strong>");
-		if (info.description.length > 100)
+		if (info.description != undefined && info.description.length > 100)
 		{
 			var shortDescription = info.description.substring(0, 100) + "...";
 			infoBox.push("<div id='short_description_info'>");
@@ -2073,7 +2078,7 @@ function  saveAdditionalInfo(id, type){
 
 		infoBox.push("<tr>");
 		infoBox.push("<td class=\"inside\"><strong>" + trnKeyAreas + ":</strong>");
-		if (info.keyAreas.length > 100)
+		if (info.keyAreas != undefined && info.keyAreas.length > 100)
 		{
 			var shortKeyAreas = info.keyAreas.substring(0, 100) + "...";
 			infoBox.push("<div id='short_keyareas_info'>");

@@ -539,7 +539,12 @@ public class CurrencyUtil {
 		}
 	}
 
-	public static void deleteCurrencyRates(Long cRates[]) {
+	public static void deleteCurrencyRates(Long[] cRates) {
+		
+		if (cRates == null) {
+			return;
+		}
+		
 		Session session = null;
 		Transaction tx = null;
 

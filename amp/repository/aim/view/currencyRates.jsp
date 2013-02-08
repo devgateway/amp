@@ -112,8 +112,14 @@ function checkall() {
 }
 
 function deleteRates() {
-	var flag = validate();
-	if(flag){
+	var atLeastOneItemSelected = $("input[type='checkbox'][name='selectedRates']:checked").length > 0;
+
+	if (! atLeastOneItemSelected) {
+		alert('<digi:trn>Please select rate to delete</digi:trn>');
+		return false;
+	}	
+	
+	if(validate()) {
 		document.aimCurrencyRateForm.doAction.value = "delete";
 		<digi:context name="showCurrRates" property="context/module/moduleinstance/showCurrencyRates.do" />
 		document.aimCurrencyRateForm.action = "<%=showCurrRates %>";

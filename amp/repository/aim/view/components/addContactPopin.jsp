@@ -303,7 +303,7 @@
 					<td colspan="2" />
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><html:button property=""
+					<td colspan="2" align="center"><html:button styleId="saveOrgContactBtn" property=""
 						styleClass="dr-menu" onclick="saveContact()">
 						<digi:trn>Save</digi:trn>
 					</html:button> <c:if test="${aimAddContactForm.action=='edit'}">

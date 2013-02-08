@@ -149,6 +149,7 @@ YAHOO.namespace("YAHOO.amp");
     
     function saveContact(){
         if(validateInfo()){
+        	document.getElementById("saveOrgContactBtn").disabled=true;
             //ajax check for duplicate email - disabled for now
             //checkForduplicateEmail();
         	addContact();
@@ -360,7 +361,7 @@ YAHOO.namespace("YAHOO.amp");
     	failure: responseFailureAddContact
     }; 
 
-   // function closeContactPopin(status, statusText, responseText, responseXML){
+   // function closeContactPopin(status, statusText, responseText, responseXresponseSuccessAddContactML){
    // 	checkAndCloseContact=true;
    //     checkErrorAndCloseContact();
    // }

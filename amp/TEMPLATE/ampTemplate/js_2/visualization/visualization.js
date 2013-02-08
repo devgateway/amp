@@ -1751,7 +1751,21 @@ function refreshBoxes(o){
 			}
 		}
 		if (name1 == "") {
-			name1 = trnAllOrgGroups;
+			agType = 1*document.getElementById("agencyType").value;
+			switch (agType) {
+			case 0:
+				name1 = trnAllOrgGroups;
+				break;
+			case 1:
+				name1 = trnAllExecOrgGroups;
+				break;
+			case 2:
+				name1 = trnAllBenOrgGroups;
+				break;
+			default:
+				name1 = trnAllOrgGroups;
+				break;
+			}
 		}
 		name1 = name1.replace(/</g, "< ");
 		namePlaceholder.innerHTML =  "<span style=\"font-size:18px\">" + name1 + "</span><br/><span style=\"font-size:13px\">" + name2 + "</span>";

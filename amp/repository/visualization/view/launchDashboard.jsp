@@ -117,6 +117,8 @@ var trnDescription = "";
 var trnBackgroundOrganization = "";
 var trnNoAdditionalInfo = "";
 var trnAllOrgGroups = "";
+var trnAllBenOrgGroups = "";
+var trnAllExecOrgGroups = "";
 var trnMultipleOrgs = "";
 var trnOrgInfo="";
 var trnAllSectors = "";
@@ -209,6 +211,8 @@ function initializeTranslations(){
 	trnBackgroundOrganizationGroup = "<digi:trn>Background of organization group</digi:trn>";
 	trnNoAdditionalInfo = "<digi:trn>No Additional Information available for current filter</digi:trn>";
 	trnAllOrgGroups = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
+	trnAllBenOrgGroups = "<digi:trn jsFriendly='true'>All Beneficiary Organization Groups</digi:trn>";
+	trnAllExecOrgGroups = "<digi:trn jsFriendly='true'>All Executing Organization Groups</digi:trn>";
 	trnMultipleOrgs = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>"; 
 	trnAllSectors = "<digi:trn jsFriendly='true'>ALL Sectors</digi:trn>"; 
 	trnMultipleSubSector = "<digi:trn jsFriendly='true'>Multiple Sub Sectors</digi:trn>"; 

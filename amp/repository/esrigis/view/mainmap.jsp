@@ -453,7 +453,7 @@
 						<!-- li id="print_button" style="cursor: pointer;"></li-->
 						<li id="shownational" style="cursor: pointer;">
 							<digi:link href="/datadispatcher.do?exporttocsv=true" style="text-decoration: none;color: white;">
-								<digi:trn>Export to csv</digi:trn>
+								<digi:trn>Export Map</digi:trn>
 							</digi:link>
 						</li>
 						

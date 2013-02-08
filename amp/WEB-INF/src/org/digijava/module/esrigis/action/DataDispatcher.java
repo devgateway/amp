@@ -5,15 +5,16 @@ package org.digijava.module.esrigis.action;
  */
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,9 +38,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -50,7 +49,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -58,28 +56,18 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.helpers.ActivityPoint;
 import org.digijava.module.esrigis.helpers.DbHelper;
-import org.digijava.module.esrigis.helpers.Html2Text;
 import org.digijava.module.esrigis.helpers.MapFilter;
 import org.digijava.module.esrigis.helpers.PointContent;
 import org.digijava.module.esrigis.helpers.QueryUtil;
 import org.digijava.module.esrigis.helpers.SimpleDonor;
 import org.digijava.module.esrigis.helpers.SimpleLocation;
 import org.digijava.module.esrigis.helpers.Structure;
+import org.digijava.module.esrigis.helpers.XlsHelper;
 import org.digijava.module.visualization.util.DbUtil;
-
-import au.com.bytecode.opencsv.CSVWriter;
-
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 public class DataDispatcher extends MultiAction {
 	private static Logger logger = Logger.getLogger(DataDispatcher.class);
 
@@ -126,8 +114,7 @@ public class DataDispatcher extends MultiAction {
 		return null;
 	}
 		
-	private ActionForward modeExportToCsv(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
+	private ActionForward modeExportToCsv(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		
 		StringBuffer line = new StringBuffer();
@@ -139,106 +126,17 @@ public class DataDispatcher extends MultiAction {
 		
 		long startTS=System.currentTimeMillis();
 		list = DbHelper.getActivities(maphelperform.getFilter());
-		
-		Site site = RequestUtils.getSiteDomain(request).getSite();
-        String langCode = RequestUtils.getNavigationLanguage(request).getCode();
-        java.util.Date date= new java.util.Date();
-        Html2Text html2text = new Html2Text();
-        line.append(TranslatorWorker.translateText("Time Stamp")+",");
-        line.append(TranslatorWorker.translateText("Activity Id")+",");
-        line.append(TranslatorWorker.translateText("Project Title")+",");
-        line.append(TranslatorWorker.translateText("Approval Date")+",");
-        line.append(TranslatorWorker.translateText("GEOID")+",");
-        line.append(TranslatorWorker.translateText("Location Name")+",");
-        line.append(TranslatorWorker.translateText("Latitude")+",");
-        line.append(TranslatorWorker.translateText("Longitude")+",");
-        line.append(TranslatorWorker.translateText("Sectors")+",");
-        line.append(TranslatorWorker.translateText("Donors")+",");
-        line.append(TranslatorWorker.translateText("Total Commitments")+",");
-        line.append(TranslatorWorker.translateText("Total Disbursement"));
-        line.append("\n");
-        
-		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
-			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
-			ArrayList<SimpleLocation> sla = new ArrayList<SimpleLocation>();
-			for (Iterator iterator2 = aA.getLocations().iterator(); iterator2.hasNext();) {
-				AmpActivityLocation alocation = (AmpActivityLocation) iterator2.next();
-				boolean implocation = alocation.getLocation().getLocation().getParentCategoryValue().getValue().equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey());
-				if (!implocation) {
-					line.append(date+",");
-					line.append(aA.getAmpId()+",");
-					if (aA.getName().indexOf(",")>1){
-						line.append('"'+aA.getName().replace("\n", " ")+'"'+",");
-					}else{
-						line.append(aA.getName().replace("\n", " ")+",");
-					}
-					if (aA.getApprovalDate()!=null){
-						line.append(aA.getApprovalDate()+",");
-					}else{
-						line.append(",");	
-					}
-					line.append(alocation.getLocation().getLocation().getGeoCode()+",");
-					line.append(alocation.getLocation().getLocation().getName()+",");
-					line.append(alocation.getLocation().getLocation().getGsLat()+",");
-					line.append(alocation.getLocation().getLocation().getGsLong()+",");
-					String sectorstr = "";
-					for (Iterator iterator3 = aA.getSectors().iterator(); iterator3.hasNext();) {
-						AmpActivitySector sector = (AmpActivitySector) iterator3.next();
-						if (iterator3.hasNext()){
-							sectorstr = sectorstr + sector.getSectorId().getName() + " - ";
-						}else{
-							sectorstr = sectorstr + sector.getSectorId().getName();
-						}
-					}
-					line.append(sectorstr+",");
-					
-					FundingCalculationsHelper calculations = new FundingCalculationsHelper();
-					
-					String donors = "";
-					Iterator fundItr = aA.getFunding().iterator();
-					while (fundItr.hasNext()) {
-						AmpFunding ampFunding = (AmpFunding) fundItr.next();
-						Collection fundDetails = ampFunding.getFundingDetails();
-						calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
-						if (fundItr.hasNext()){
-							donors = donors + ampFunding.getAmpDonorOrgId().getName() + " - ";
-						}else{
-							donors = donors + ampFunding.getAmpDonorOrgId().getName();
-						}	
-					}
-					line.append(donors + ",");
-					if ("".equalsIgnoreCase(calculations.getTotalCommitments().toString())){
-						line.append(",");
-					}else{
-						line.append(calculations.getTotalCommitments().toString()+",");
-					}
-					line.append(calculations.getTotActualDisb().toString());
-					line.append("\n");	
-				}
-			}
+	    OutputStream out = response.getOutputStream();
+        XlsHelper Xls = new XlsHelper(); 
+		try {
+			Xls.XlsMaker(list, request, response, maphelperform.getFilter()).write(out);
+			out.flush();
+			out.close();
+			return null;
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		/*
-		for (Iterator iterator = activity.getLocations().iterator(); iterator.hasNext();) {
-			AmpActivityLocation alocation = (AmpActivityLocation) iterator.next();
-			if (alocation.getLocation().getLocation().getName().equalsIgnoreCase(request.getParameter("name"))){
-				ct.setCommitmentsforlocation(QueryUtil.getPercentage(calculations.getTotalCommitments().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-				ct.setDisbursementsforlocation(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-				ct.setExpendituresforlocation(QueryUtil.getPercentage(calculations.getTotActualExp().getValue(),new BigDecimal(alocation.getLocationPercentage())));
-				break;
-			}
-		}
-		*/
-		
-		BufferedWriter writer = new BufferedWriter(response.getWriter());
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType("text/csv");
-		response.setHeader("Content-Disposition", "attachment;filename=\"file.csv\"");
-	    writer.write(line.toString());
-        writer.newLine();
-        writer.flush();
-        writer.close();
-        return null;
+		return null;
 	}
 
 	public ActionForward modeShowNational(ActionMapping mapping, ActionForm form, HttpServletRequest request,

@@ -1755,7 +1755,7 @@ border-right: 1px solid rgb(208, 208, 208);
                                                             </td>
                                                             <td class="tdClass" style="width:100px;text-align:center;">${orgInfo.year}</td>
                                                             <td class="tdClass" style="width:205px;text-align:center;" ><digi:trn>${orgInfo.type}</digi:trn></td>
-                                                            <td class="tdClass" style="width:150px;text-align:center;"> <ul>
+                                                            <td class="tdClass" style="width:150px;text-align:left;"> <ul>
                                                                     <c:forEach var="budgetOrganization" items="${orgInfo.organizations}">
                                                                         <li>${budgetOrganization.name}</li>
                                                                     </c:forEach>

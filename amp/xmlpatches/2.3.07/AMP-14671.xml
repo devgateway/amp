@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-14671</jira>
+	<keyword>Organization description</keyword>
+	<author>fferreyra</author>
+	<description>Increase length of description, background and key areas in Organizations and Organization Groups</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				ALTER TABLE amp_org_group
+				   ALTER COLUMN org_grp_background TYPE character varying(10000);
+				ALTER TABLE amp_org_group
+				   ALTER COLUMN org_grp_description TYPE character varying(10000);
+				ALTER TABLE amp_org_group
+				   ALTER COLUMN org_grp_keyareas TYPE character varying(10000);
+				ALTER TABLE amp_organisation
+				   ALTER COLUMN org_background TYPE character varying(10000);
+				ALTER TABLE amp_organisation
+				   ALTER COLUMN org_description TYPE character varying(10000);
+				ALTER TABLE amp_organisation
+				   ALTER COLUMN org_key_areas TYPE character varying(10000);
+           	</lang>
+		</script>
+	</apply>
+</tns:patch>

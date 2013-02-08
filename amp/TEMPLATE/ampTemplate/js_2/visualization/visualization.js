@@ -1628,19 +1628,64 @@ function refreshBoxes(o){
 					infoBox.push("<table class=\"inside\"><tbody>");
 					infoBox.push("<tr>");
 					infoBox.push("<td class=\"inside\"><strong>" + trnBackground + ":</strong>");
-					infoBox.push(info.background);
+					if (info.background.length > 100)
+					{
+						var shortBackground = info.background.substring(0, 100) + "...";
+						infoBox.push("<div id='short_background_info'>");
+						infoBox.push(shortBackground);
+						infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#long_background_info').show();$('#short_background_info').hide();\">More</a>");
+						infoBox.push("</div>");
+						infoBox.push("<div id='long_background_info' style='display:none;'>");
+						infoBox.push(info.background);
+						infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#short_background_info').show();$('#long_background_info').hide();\">Less</a>");
+						infoBox.push("</div>");
+					}
+					else
+					{
+						infoBox.push(info.background);
+					}
 					infoBox.push("</td>");
 					infoBox.push("</tr>");
 
 					infoBox.push("<tr>");
 					infoBox.push("<td class=\"inside\"><strong>" + trnDescription + ":</strong>");
-					infoBox.push(info.description);
+					if (info.description.length > 100)
+					{
+						var shortDescription = info.description.substring(0, 100) + "...";
+						infoBox.push("<div id='short_description_info'>");
+						infoBox.push(shortDescription);
+						infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#long_description_info').show();$('#short_description_info').hide();\">More</a>");
+						infoBox.push("</div>");
+						infoBox.push("<div id='long_description_info' style='display:none;'>");
+						infoBox.push(info.description);
+						infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#short_description_info').show();$('#long_description_info').hide();\">Less</a>");
+						infoBox.push("</div>");
+					}
+					else
+					{
+						infoBox.push(info.description);
+					}
 					infoBox.push("</td>");
 					infoBox.push("</tr>");
 
 					infoBox.push("<tr>");
 					infoBox.push("<td class=\"inside\"><strong>" + trnKeyAreas + ":</strong>");
-					infoBox.push(info.keyAreas);
+					if (info.keyAreas.length > 100)
+					{
+						var shortKeyAreas = info.keyAreas.substring(0, 100) + "...";
+						infoBox.push("<div id='short_keyareas_info'>");
+						infoBox.push(shortKeyAreas);
+						infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#long_keyareas_info').show();$('#short_keyareas_info').hide();\">More</a>");
+						infoBox.push("</div>");
+						infoBox.push("<div id='long_keyareas_info' style='display:none;'>");
+						infoBox.push(info.keyAreas);
+						infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#short_keyareas_info').show();$('#long_keyareas_info').hide();\">Less</a>");
+						infoBox.push("</div>");
+					}
+					else
+					{
+						infoBox.push(info.keyAreas);
+					}
 					infoBox.push("</td>");
 					infoBox.push("</tr>");
 					infoBox.push("</tbody></table>");
@@ -1945,20 +1990,36 @@ function drawGraph(id){
 		changeChart(null, 'bar', id, true);
 }
 
+function validateAdditionalInfo(){
+	var background = document.getElementById("background").value;
+	var description = document.getElementById("description").value;
+	var keyAreas = document.getElementById("keyAreas").value;
+	if (background.length > 10000 || description.length > 10000 || keyAreas.length > 10000) {
+		alert(trnAdditionalInfoError);
+		return false;
+	}
+	else
+		return true;
+	
+}
+
 function  saveAdditionalInfo(id, type){
-    var postString = "background=" + document.getElementById("background").value +
+	if(validateAdditionalInfo()){
+	    var postString = "background=" + document.getElementById("background").value +
 	    "&description=" + document.getElementById("description").value + 
 	    "&keyAreas=" + document.getElementById("keyAreas").value + 
         "&id=" + id + "&type=" + type;
         $("#saveResultMsg").html(trnSavingInformation);
         YAHOO.util.Connect.asyncRequest("POST", urlSaveAdditional, additionalInfoCallback, postString);
-    }
+	}
+	
+}
 
     var additionalInfoResponseSuccess = function(o){
     	$("#saveResultMsg").html(trnSavedInformation);
-    	var results = YAHOO.lang.JSON.parse(o.responseText);
+    	var info = YAHOO.lang.JSON.parse(o.responseText);
 		var trnBackground = "";
-		switch(results.type){
+		switch(info.type){
 			case "Organization":
 				trnBackground = trnBackgroundOrganization;
 				break;
@@ -1970,22 +2031,68 @@ function  saveAdditionalInfo(id, type){
 		infoBox.push("<table class=\"inside\"><tbody>");
 		infoBox.push("<tr>");
 		infoBox.push("<td class=\"inside\"><strong>" + trnBackground + ":</strong>");
-		infoBox.push(results.background);
+		if (info.background.length > 100)
+		{
+			var shortBackground = info.background.substring(0, 100) + "...";
+			infoBox.push("<div id='short_background_info'>");
+			infoBox.push(shortBackground);
+			infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#long_background_info').show();$('#short_background_info').hide();\">More</a>");
+			infoBox.push("</div>");
+			infoBox.push("<div id='long_background_info' style='display:none;'>");
+			infoBox.push(info.background);
+			infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#short_background_info').show();$('#long_background_info').hide();\">Less</a>");
+			infoBox.push("</div>");
+		}
+		else
+		{
+			infoBox.push(info.background);
+		}
 		infoBox.push("</td>");
 		infoBox.push("</tr>");
 
 		infoBox.push("<tr>");
 		infoBox.push("<td class=\"inside\"><strong>" + trnDescription + ":</strong>");
-		infoBox.push(results.description);
+		if (info.description.length > 100)
+		{
+			var shortDescription = info.description.substring(0, 100) + "...";
+			infoBox.push("<div id='short_description_info'>");
+			infoBox.push(shortDescription);
+			infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#long_description_info').show();$('#short_description_info').hide();\">More</a>");
+			infoBox.push("</div>");
+			infoBox.push("<div id='long_description_info' style='display:none;'>");
+			infoBox.push(info.description);
+			infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#short_description_info').show();$('#long_description_info').hide();\">Less</a>");
+			infoBox.push("</div>");
+		}
+		else
+		{
+			infoBox.push(info.description);
+		}
 		infoBox.push("</td>");
 		infoBox.push("</tr>");
 
 		infoBox.push("<tr>");
 		infoBox.push("<td class=\"inside\"><strong>" + trnKeyAreas + ":</strong>");
-		infoBox.push(results.keyAreas);
+		if (info.keyAreas.length > 100)
+		{
+			var shortKeyAreas = info.keyAreas.substring(0, 100) + "...";
+			infoBox.push("<div id='short_keyareas_info'>");
+			infoBox.push(shortKeyAreas);
+			infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#long_keyareas_info').show();$('#short_keyareas_info').hide();\">More</a>");
+			infoBox.push("</div>");
+			infoBox.push("<div id='long_keyareas_info' style='display:none;'>");
+			infoBox.push(info.keyAreas);
+			infoBox.push("<br/><a style=\"cursor:pointer;\" onclick=\"$('#short_keyareas_info').show();$('#long_keyareas_info').hide();\">Less</a>");
+			infoBox.push("</div>");
+		}
+		else
+		{
+			infoBox.push(info.keyAreas);
+		}
 		infoBox.push("</td>");
 		infoBox.push("</tr>");
 		infoBox.push("</tbody></table>");
+
 		$("#additional_info_box").html(infoBox.join(""));
     	
     	

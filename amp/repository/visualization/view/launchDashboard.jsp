@@ -142,6 +142,9 @@ var urlSaveAdditional = "";
 var urlShowList = "";
 var trnKeyAreas = "";
 var trnBackgroundOrganizationGroup = "";
+var trnAdditionalInfoError = "";
+var trnMore = "";
+var trnLess = "";
 
 //Section for all translation as global so included javascript can use them
 function initializeTranslations(){
@@ -225,6 +228,9 @@ function initializeTranslations(){
 	trnOrgInfo="<digi:trn>Organization Info</digi:trn>";
 	trnOrgGrpInfo="<digi:trn>Organization Group Info</digi:trn>";
 	trnKeyAreas="<digi:trn>Key Areas of focus</digi:trn>";
+	trnAdditionalInfoError = "<digi:trn>The text entered is too long. The limit is 10000 characters.</digi:trn>";
+	trnMore="<digi:trn>More</digi:trn>";
+	trnLess="<digi:trn>Less</digi:trn>";
 }
 function initializeGlobalVariables(){
 	//Other global variables

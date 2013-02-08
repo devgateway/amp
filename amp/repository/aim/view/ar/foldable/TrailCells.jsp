@@ -19,7 +19,7 @@
 </c:set>
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' class="row_data_header" title="${depthRelatVar}" style="<%=display%>;" onmouseover="this.title='${reportDataNameVar}'" onmouseout="this.title='${depthRelatVar}'">
 	<td class="report_inside" width="25">&nbsp;</td>
-	<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>;">
+	<td class="report_inside" style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>px;">
 	<% if(reportData.getName().indexOf(':')!=-1) { %>
 	<!-- *************************************************** 
 			WARNING:

@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <html>
+	<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=edge">
 	<digi:base />
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 	<digi:context name="digiContext" property="context"/>
@@ -68,7 +69,6 @@
 		<jsp:include page="headerTop_2.jsp"/>
 	</digi:secure>
 </div>
-	<center>
 	<div class="main_menu" >
 		  	<table cellpadding="0"cellspacing="0" width="1000">
         	<tr>
@@ -84,9 +84,7 @@
         </table>
 		
 	</div>
-    </center>
     
-<center>
 <div class="breadcrump_1">&nbsp;</div>	
 			<div style="width:1000px;margin:0 auto;">
 	<table width="100%" id="homelayout">
@@ -101,6 +99,5 @@
     <div class="footerText" >
     <digi:insert attribute="footer"/>
     </div>
-    </center>
 </body>
 </html>

@@ -338,7 +338,7 @@ saveReportEngine	= null;
 		
 		var element = document.getElementById("myFilter");
 		element.style.display   = "block";
- 	 	element.style.height    = "500px";
+ 	 	//element.style.height    = "500px";
 
  	 	myPanel1.setBody(element);
 		

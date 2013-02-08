@@ -1849,8 +1849,7 @@ public class DataDispatcher extends DispatchAction {
                 organizationData += "<" + org.getName() + ">";
                 for (Long i = startYear; i <= endYear; i++) {
         			Long[] ids = {org.getAmpOrgId()};
-        			//DashboardFilter newFilter = filter.getCopyFilterForFunding();
-	    			newFilter.setSelOrgIds(ids);
+        			newFilter.setSelOrgIds(ids);
                     startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
                     endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
                     DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
@@ -1891,6 +1890,7 @@ public class DataDispatcher extends DispatchAction {
 				idsArrayStr = idsArrayStr + String.valueOf(long1) + "_";
 				index++;
 			}
+            newFilter.setSelOrgIds(idsArray);
             if (ids.size()!=0){
             	csvString.append(",");
 	        	csvString.append("Others");

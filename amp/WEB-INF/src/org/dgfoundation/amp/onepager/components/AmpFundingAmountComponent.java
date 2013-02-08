@@ -4,13 +4,6 @@
  */
 package org.dgfoundation.amp.onepager.components;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -25,17 +18,16 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpComponentField;
-import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.digijava.module.aim.action.AddFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.CurrencyUtil;
+
+import java.text.NumberFormat;
+import java.util.*;
 
 /**
  * Reusable component capturing an amount item in AMP (the tuple amount /
@@ -96,7 +88,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
 			@Override
 			public List<AmpCurrency> getObject() {
-				return (List<AmpCurrency>) CurrencyUtil.getActiveAmpCurrencyByCode() ;
+				return CurrencyUtil.getActiveAmpCurrencyByCode();
 			}
 		};
 		
@@ -148,29 +140,5 @@ public class AmpFundingAmountComponent<T> extends Panel {
 
 	public Component getDate() {
 		return date;
-	}
-	
-	public void setAmountValidator(final AmpCollectionValidatorField validationHiddenField){
-		validationFields.add(validationHiddenField);
-		/*
-		amount.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onblur") {
-			@Override
-			protected void onUpdate(final AjaxRequestTarget target) {
-				AmpComponentPanel parentPanel = findParent(AmpFundingItemFeaturePanel.class);
-				if(parentPanel ==null)
-					parentPanel = findParent(AmpComponentField.class);				
-				if(parentPanel ==null)
-					parentPanel = findParent(AmpRegionalFundingItemFeaturePanel.class);
-				parentPanel.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>() {
-					@Override
-					public void component(AmpCollectionValidatorField component,
-							IVisit<Void> visit) {
-						component.reloadValidationField(target);
-						visit.dontGoDeeper();
-					}
-				});
-			}
-		});
-		 */
 	}
 }

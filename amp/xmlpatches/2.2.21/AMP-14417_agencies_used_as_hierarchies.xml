@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMP-14417</jira>
+    <keyword>Report generator</keyword>
+    <author>apopescu</author>
+    <description>agencies used as hierarchies</description> 
+       <apply>
+        <script>
+            <lang  delimiter=";" type="postgres">
+            	update amp_columns set relatedcontentpersisterclass='org.digijava.module.aim.dbentity.AmpOrgGroup' where columnname='Implementing Agency Groups';
+            	update amp_columns set relatedcontentpersisterclass='org.digijava.module.aim.dbentity.AmpOrgGroup' where columnname='Beneficiary Agency Groups';
+            	update amp_columns set relatedcontentpersisterclass='org.digijava.module.aim.dbentity.AmpOrgGroup' where columnname='Executing Agency Groups';
+            	
+            	update amp_columns set relatedcontentpersisterclass='org.digijava.module.aim.dbentity.AmpOrgType' where columnname='Implementing Agency Type';
+            	update amp_columns set relatedcontentpersisterclass='org.digijava.module.aim.dbentity.AmpOrgType' where columnname='Executing Agency Type';
+            </lang>
+        </script>
+    </apply>
+</tns:patch>

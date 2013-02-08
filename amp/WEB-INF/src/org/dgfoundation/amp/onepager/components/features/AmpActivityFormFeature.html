@@ -58,40 +58,36 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 								<div class="right_menu_box" style="margin-top:0px;background:#fff;">
 									<div class="padding-two-pixels" wicket:id="saveAndSubmit" />
 									<div class="padding-two-pixels" wicket:id="saveAsDraft" />
-									<div id="saveAsDraftPanel" style="display:none">
-										<div class="hd" style="text-align: left">
-											<wicket:trn>Save as Draft</wicket:trn>
-										</div>
-									    
-										
-										<div class="bd" style="text-align: center">
-									        <p>
-									        	<wicket:trn>Where would you like to navigate after save action?</wicket:trn>
-									        </p>
-											<span wicket:id="draftRedirectedGroup"> 
-												<input type="radio" wicket:id="draftRedirectedDesktop">
-													<wicket:trn>Go to the desktop</wicket:trn>
-												</input> 
-												<input type="radio" wicket:id="draftStayOnPage">
-													<wicket:trn>Stay on the activity page</wicket:trn>
-												</input>
-											</span></div>
-									      	<br />
-									     	<div style="width:155px; margin-left:auto; margin-right:auto; margin-bottom:10px;"><span name="saveAsDraftPanelButton"  wicket:id="saveAsDraftAction" /></div>
-									     	<div style="width:155px; margin-left:auto; margin-right:auto;"><span wicket:id="saveAsDraftCanceld" /></div>
-									    
-										
-										
-										
-									    <div class="ft"></div>
-									</div>
-									<!-- 
+
+									<!--
 									<div class="padding-two-pixels" wicket:id="logframe" />
 									 -->
 									<div class="padding-two-pixels" wicket:id="preview" />
 								</div>
 							</div>
 					</div>
+                    <div id="saveAsDraftPanel" style="display:none">
+                        <div class="hd" style="text-align: left">
+                            <wicket:trn>Save as Draft</wicket:trn>
+                        </div>
+                        <div class="bd" style="text-align: center">
+                            <p>
+                                <wicket:trn>Where would you like to navigate after save action?</wicket:trn>
+                            </p>
+											<span wicket:id="draftRedirectedGroup">
+												<input type="radio" wicket:id="draftRedirectedDesktop">
+													<wicket:trn>Go to the desktop</wicket:trn>
+                                                </input>
+                                                <input type="radio" wicket:id="draftStayOnPage">
+													<wicket:trn>Stay on the activity page</wicket:trn>
+                                                </input>
+											</span></div>
+                        <br />
+                        <div style="width:155px; margin-left:auto; margin-right:auto; margin-bottom:10px;"><span name="saveAsDraftPanelButton"  wicket:id="saveAsDraftAction" /></div>
+                        <div style="width:155px; margin-left:auto; margin-right:auto;"><span wicket:id="saveAsDraftCanceld" /></div>
+
+                        <div class="ft"></div>
+                    </div>
 				</form>
 				</td>
 				<td>
@@ -100,8 +96,55 @@ div.right_menu_box{padding:5px 0px 0px 0px; margin: 0px 0px 0px 0px;}
 				</td>
 			</tr>
 		</tbody>
-	</table>			
-	
+	</table>
+    <div id="warnSavePanel" style="display:none;">
+        <div class="hd" style="text-align: left">
+            <wicket:trn>Are you sure you want to save?</wicket:trn>
+        </div>
+        <div class="bd" style="text-align: left;">
+            <b>
+                <wicket:trn>Warnings:</wicket:trn>
+            </b>
+            <p>
+                <span wicket:id="saveWarningsWrapper">
+                    <table wicket:id="saveWarningsList">
+                        <tr>
+                            <td colspan="2">
+                                <b>
+                                    <span wicket:id="warnName"/>
+                                </b>
+                            </td>
+                        </tr>
+                        <tr style="background-color: #dfdfdf">
+                            <td>
+                                <i>
+                                    <wicket:trn>Item identifier</wicket:trn>
+                                </i>
+                            </td>
+                            <td>
+                                <i>
+                                    <wicket:trn>Sum comparison</wicket:trn>
+                                </i>
+                            </td>
+                        </tr>
+                        <tr wicket:id="warnList">
+                            <td>
+                                <span wicket:id="org"/>
+                            </td>
+                            <td>
+                                <span wicket:id="value"/>
+                            </td>
+                        </tr>
+                    </table>
+                </span>
+            </p>
+        </div>
+        <br />
+        <div style="text-align: center;">
+            <input type="button" wicket:id="warnPanelSave" value="Button" class="button_green_btm" />  <input type="button" wicket:id="warnPanelCancel" value="Button" class="button_green_btm" />
+        </div>
+        <div class="ft"></div>
+    </div>
 	<div id="myPLogframe" class="invisible-item">
 		<div id="myPLogframeContent" class="content">
 			===== ERROR =====

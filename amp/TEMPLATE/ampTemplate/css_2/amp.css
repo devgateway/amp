@@ -92,7 +92,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .min_max_info {font-size:11px; width:500px; margin-left:auto; margin-right:auto; text-align:left;}
 
 /* HEADER */
-.header { height:51px;text-align:center;width:1000px;margin:0 auto;position:relative;}
+.header { height:51px;text-align:center;width:1000px;margin:0 auto;}
 .logo {color:#FFFFFF; font-size:18px; font-weight:bold; float:left;padding:8px 0px 0px 0px;}
 .logo a {color:#FFFFFF; font-size:18px; font-weight:bold;}
 .amp_label {padding-top:7px !important;font-size:14px;}
@@ -682,7 +682,7 @@ html.ie  div.login_here {background-image:url(/TEMPLATE/ampTemplate/img_2/login_
 html.ie .login_nav {font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; overflow:visible;position:absolute;right:0px;}
 html.ie .right_menu_box {border-left:1px solid #D0D0D0; border-right:1px solid #D0D0D0; border-bottom:1px solid #D0D0D0; width:162px; }
 html.ie li.tri a{background:(/TEMPLATE/ampTemplate/img_2/ico_tri.gif)no-repeat left;  font-size:11px;}
-html.ie li.tri {padding:0px;margin:0px;text-indent:none;backgrund:red;}
+html.ie li.tri {padding:0px 0px 0px 10px;margin:0px;text-indent:none;}
 html.ie li.tri:first-child{padding:0px 0px 0px 10px;}
 html.ie div.header {overflow:visible;}
 html.ie .main_menu .bd_drop {position:absolute;z-index:9999;}

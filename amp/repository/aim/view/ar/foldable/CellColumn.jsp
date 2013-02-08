@@ -15,7 +15,7 @@
 <% Cell c=cellColumn.getByOwner(ownerId);%>
 <logic:equal name="columnNo" value="0">
 	<bean:define id="reportData" name="cellColumn" property="parent" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="page"/>
-	<td class="report_inside" style="padding-left:<%=10+10*(reportData.getLevelDepth()-1)%>;" valign="middle"  bgcolor="<%= bckColor.equals("true")?"#F2F2F2":"ffffff" %>" >
+	<td class="report_inside" style="padding-left:<%=10+10*(reportData.getLevelDepth()-1)%>px;" valign="middle"  bgcolor="<%= bckColor.equals("true")?"#F2F2F2":"ffffff" %>" >
 </logic:equal>
 <logic:notEqual name="columnNo" value="0">
 	<td class="report_inside"  bgcolor="<%= bckColor.equals("true")?"#F2F2F2":"#ffffff" %>">

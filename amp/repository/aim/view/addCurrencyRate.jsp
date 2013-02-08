@@ -227,9 +227,8 @@ function validate() {
 }
 
 function saveRate() {
-	var valid = validate();
 
-	var callbackImpl	= {
+	var callbackImpl = {
 		success: function () {
 			myclose();
 			reload();
@@ -239,8 +238,8 @@ function saveRate() {
 		}
 	};
 	
-	if (valid == true) {
-		var postString		= generateFields(2);
+	if (confirm('<digi:trn>Do you want to add this Currency rate?</digi:trn>')) {
+		var postString = generateFields(2);
 
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 		var url = "<%=addExchangeRate %>";
@@ -248,6 +247,7 @@ function saveRate() {
 	}
 	return valid;
 }
+
 function reload() {
 	document.aimCurrencyRateForm.submit();
 }

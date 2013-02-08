@@ -123,7 +123,7 @@ function deleteRates() {
 }
 
 function validate(){
-	return(confirm('<digi:trn>Do you want to delete this Currency rate?</digi:trn>'));
+	return(confirm('<digi:trn>Do you want to add this Currency rate?</digi:trn>'));
 }
 
 function selectFile() {

@@ -486,6 +486,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 AmpFunding funding = iterator.next();
                 verifySet(new PropertyModel<Set>(funding, "fundingDetails"),  alertIfDisbursementBiggerCommitments,
                         alertIfExpenditureBiggerDisbursement, commitmentErrors, expenditureErrors, funding,
+                        TranslatorUtil.getTranslatedText(OnePager.DONOR_FUNDING_SECTION_NAME) + ": " +
                         funding.getAmpDonorOrgId().getAcronymAndName()+" ["+funding.getGroupVersionedFunding()+"]");
             }
         }
@@ -501,6 +502,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 verifiedRegions.add(funding.getRegionLocation().getId());
                 verifySet(new PropertyModel<Set>(am, "regionalFundings"), alertIfDisbursementBiggerCommitments,
                         alertIfExpenditureBiggerDisbursement, commitmentErrors, expenditureErrors, funding.getRegionLocation(),
+                        TranslatorUtil.getTranslatedText(OnePager.REGIONAL_FUNDING_SECTION_NAME) + ": " +
                         funding.getRegionLocation().getAutoCompleteLabel());
             }
         }
@@ -516,6 +518,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                 verifiedComponents.add(funding.getComponent().getTitle());
                 verifySet(new PropertyModel<Set>(am, "componentFundings"), alertIfDisbursementBiggerCommitments,
                         alertIfExpenditureBiggerDisbursement, commitmentErrors, expenditureErrors, funding.getComponent(),
+                        TranslatorUtil.getTranslatedText(OnePager.COMPONENTS_SECTION_NAME) + ": " +
                         funding.getComponent().getTitle());
             }
         }
@@ -530,12 +533,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         if (alertIfDisbursementBiggerCommitments){
             double commitmentSum = sumUp(details, Constants.COMMITMENT, parent);
             if (disbursementSum > commitmentSum)
-                commitmentErrors.put(itemIdentifier, disbursementSum + " > " + commitmentSum);
+                commitmentErrors.put(itemIdentifier, Double.toString(disbursementSum) + " > " + Double.toString(commitmentSum));
         }
         if (alertIfExpenditureBiggerDisbursement){
             double expenditureSum = sumUp(details, Constants.EXPENDITURE, parent);
             if (expenditureSum > disbursementSum)
-                expenditureErrors.put(itemIdentifier, expenditureSum + " > " + disbursementSum);
+                expenditureErrors.put(itemIdentifier, Double.toString(expenditureSum) + " > " + Double.toString(disbursementSum));
         }
     }
 

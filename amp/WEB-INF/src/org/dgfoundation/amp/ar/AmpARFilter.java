@@ -79,6 +79,7 @@ public class AmpARFilter extends PropertyListable {
 	
 	public final static String SDF_OUT_FORMAT_STRING = "yyyy-MM-dd";
 	public final static String SDF_IN_FORMAT_STRING = "dd/MM/yyyy";
+	public final static Long TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES = -997L;
 	
 	public final static Set<String> activityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
 														this.add(Constants.APPROVED_STATUS);
@@ -283,9 +284,11 @@ public class AmpARFilter extends PropertyListable {
 
 	private AmpCurrency currency = null;
 
-	/* NOT USED
+	/**
+	 *  FIELD NOT USED, but cannot delete it because of serialized instances
+	 */
 	private Set ampTeamsforpledges = null;
-	*/
+	
 	
 	private AmpFiscalCalendar calendarType = null;
 	private boolean widget = false;
@@ -499,9 +502,23 @@ public class AmpARFilter extends PropertyListable {
 			this.setNeedsTeamFilter(true);
 			//Check if the reportid is not nut for public mondrian reports
 			if (ampReportId != null){
-				AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
-				if (ampReport != null && ampReport.getOwnerId() != null)
-					teamMemberId = ampReport.getOwnerId().getAmpTeamMemId();
+				AmpReports ampReport = DbUtil.getAmpReport(Long.parseLong(ampReportId));
+				if (ampReport != null)
+				{
+					if (ampReport.getWorkspaceLinked())
+					{
+						if (ampReport.getOwnerId() != null)
+						{
+							teamMemberId = ampReport.getOwnerId().getAmpTeamMemId();
+						}
+					} else
+					{
+						// not workspace linked
+						teamMemberId = TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES;
+						this.setAccessType("Management");
+						this.setDraft(false);
+					}
+				}
 			}
 		}
 		
@@ -2259,19 +2276,25 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	/*
-	 * FIELD NOT USED
+	 * FIELD NOT USED, but cannot delete it because of serialized instances
+	 */
 	public Set getAmpTeamsforpledges() {
 		return ampTeamsforpledges;
 	}
 
+	/**
+	 *
+	 * FIELD NOT USED, but cannot delete it because of serialized instances
+	 **/
 	public void setAmpTeamsforpledges(Set ampTeamsforpledges) {
 		this.ampTeamsforpledges = ampTeamsforpledges;
 	}
-	 */
+	 
 	
 	/**
 	 * effective team member - used for generating the TeamFilter
 	 * equals currently logged-in user or, if missing, the AmpReport owner
+	 * take care for special values (always negative) like TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES!
 	 * @return
 	 */
 	public Long getTeamMemberId()

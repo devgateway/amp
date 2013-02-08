@@ -37,6 +37,7 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean overwritingForeignReport = false;
 	
 	private Boolean publicReport 		= false;
+	private Boolean workspaceLinked = false;
 	private Boolean useFilters			= false;
 	
 	private Boolean allowEmptyFundingColumns	= false;
@@ -184,6 +185,16 @@ public class ReportWizardForm extends ActionForm {
 
 	public Boolean getPublicReport() {
 		return publicReport;
+	}
+	
+	public Boolean getWorkspaceLinked()
+	{
+		return this.workspaceLinked;
+	}
+	
+	public void setWorkspaceLinked(Boolean workspaceLinked)
+	{
+		this.workspaceLinked = workspaceLinked;
 	}
 
 	public Boolean getUseFilters() {

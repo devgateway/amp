@@ -46,6 +46,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	private Boolean drilldownTab;
 
 	private Boolean publicReport;
+	private Boolean workspaceLinked;
 
 	private Long type;
 
@@ -345,6 +346,14 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 		this.publicReport = publicReport;
 	}
 
+	public Boolean getWorkspaceLinked() {
+		return workspaceLinked;
+	}
+
+	public void setWorkspaceLinked(Boolean workspaceLinked) {
+		this.workspaceLinked = workspaceLinked;
+	}
+	
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}

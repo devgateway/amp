@@ -59,6 +59,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 /**
  * Persister class for all Team/Workspaces related Objects
  *
@@ -134,14 +136,21 @@ public class TeamUtil {
         return col;
     }
 
-    public static Set getRelatedTeamsForMember(TeamMember tm) {
-    	Set teams=new TreeSet();
-    	AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-	    
-		teams.add(ampTeam);
-		teams.addAll(TeamUtil.getAmpLevel0Teams(tm.getTeamId()));
-		
-		return teams;
+    public static Set<AmpTeam> getRelatedTeamsForTeams(Collection<AmpTeam> teams)
+    {
+    	Set<AmpTeam> result = new HashSet<AmpTeam>();
+    	for(AmpTeam ampTeam:teams)
+    	{
+    		result.add(ampTeam);
+    		result.addAll(TeamUtil.getAmpLevel0Teams(ampTeam.getAmpTeamId()));
+    	}
+    	return result;
+    }
+    
+    public static Set getRelatedTeamsForMember(TeamMember tm) 
+    {
+    	AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());	    
+		return getRelatedTeamsForTeams(Arrays.asList(new AmpTeam[]{ampTeam}));
     }
     
 	public static Set getComputedOrgs(Collection relatedTeams) {
@@ -2064,6 +2073,11 @@ public class TeamUtil {
     	return getAllTeamReports( teamId, null,  currentPage,  reportPerPage, false,null,null,null);
     }
  
+    public static List<AmpTeam> getAllManagementWorkspaces()
+    {
+    	return getAllTeams(null, "management");
+    }
+    
     /**
      * 
      * @param teamId
@@ -2310,10 +2324,11 @@ public class TeamUtil {
         }
         return teams;
     }
-    public static Collection<AmpTeam> getAllTeams(String keyword,String type) {
+    
+    public static List<AmpTeam> getAllTeams(String keyword,String type) {
         Session session = null;
         Query qry = null;
-        Collection<AmpTeam> teams = null;
+        List<AmpTeam> teams = null;
         boolean computed=type!=null&&type.equals("computed");
         String accessType= null;
 		if (type.equals("management")) {

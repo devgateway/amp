@@ -11,7 +11,27 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-   
+  
+ <script type="text/javascript">
+ 	$(document).ready(function()
+ 	{
+		setWorkspaceLinkedVisibility();
+	 	$("input[name=publicReport]").change(function()
+	 	 		{
+	 	 			setWorkspaceLinkedVisibility();
+	 	 		});
+ 	});
+ 	
+ 	function setWorkspaceLinkedVisibility()
+	{
+		var show = $("input[name=publicReport]").is(':checked');
+		if (show)
+			$("#workspaceLinkedHolder").show();
+		else
+			$("#workspaceLinkedHolder").hide();
+	}
+ </script>
+ 
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 	<nested:root name="myForm">
 				<div class="main_side_cont yui-tab-content" id="type_step_div" style="${topBottomPadding}">
@@ -149,8 +169,13 @@
 												<div id="optionsDiv" class="inputx">
 													<feature:display  name="Public View Checkbox" module="Report and Tab Options">
 														<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
-															<nested:checkbox property="publicReport"/><digi:trn key="aim:makePublic">Make public</digi:trn>
-															<br />
+															<nested:checkbox property="publicReport"/><digi:trn key="aim:makePublic">Make public</digi:trn> <br />
+															<c:set var="workspaceLinkedWarningTitle">
+																<digi:trn>WARNING! leaving unchecked means that this report will render ALL activities from ALL management workspaces in the database. Putting the checkbox ON will only render the activities from the creating workspace </digi:trn>
+															</c:set>
+															<div style="margin-left: 30px;" id="workspaceLinkedHolder" title="${workspaceLinkedWarningTitle}">
+																<nested:checkbox property="workspaceLinked"/><digi:trn>Link public view with creating workspace</digi:trn>
+															</div>															
 				                                    	</c:if>
 			                                    	</feature:display>
 			                                    	<c:if test="${!myForm.desktopTab}">

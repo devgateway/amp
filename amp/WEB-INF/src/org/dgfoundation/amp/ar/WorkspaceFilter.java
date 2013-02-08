@@ -3,6 +3,7 @@ package org.dgfoundation.amp.ar;
 import java.util.*;
 
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -19,6 +20,12 @@ public class WorkspaceFilter
 	private boolean draft;
 	private long activitiesRejectedByFilter;
 	
+	/**
+	 * take care for special values of teamMemberId, like TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES !
+	 * @param teamMemberId
+	 * @param accessType
+	 * @param draft
+	 */
 	public WorkspaceFilter(Long teamMemberId, String accessType, boolean draft)
 	{
 		this.teamMemberId = teamMemberId;
@@ -26,18 +33,37 @@ public class WorkspaceFilter
 		this.accessType = accessType;
 		prepareTeams();
 	}
+
+	/**
+	 * computes teamAssignedOrg based on already-filled ampTeams
+	 */
+	protected void fillTeamAO()
+	{
+		// set the computed workspace orgs
+		//Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
+
+		Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
+
+		if (teamAO != null && teamAO.size() > 0)
+			this.setTeamAssignedOrgs(teamAO);
+	}
 	
 	protected void prepareTeams()
 	{
+		if (teamMemberId == AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES)
+		{
+			// special case: simulate like "all management workspaces" has been selected
+			Set<AmpTeam> allManagementTeams = new HashSet<AmpTeam>();
+			allManagementTeams.addAll(TeamUtil.getAllManagementWorkspaces());
+			this.setAmpTeams(TeamUtil.getRelatedTeamsForTeams(allManagementTeams));
+			
+			fillTeamAO();
+			return;
+		}
 		TeamMember tm = teamMemberId == null ? null : TeamMemberUtil.getTeamMember(teamMemberId);
 		if (tm != null) {
 			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
-			// set the computed workspace orgs
-			//Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
-			Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
-
-			if (teamAO != null && teamAO.size() > 0)
-				this.setTeamAssignedOrgs(teamAO);
+			fillTeamAO();
 		}
 		else {
 			// nothing to do?
@@ -111,6 +137,13 @@ public class WorkspaceFilter
 		return TEAM_FILTER;
 	}
 	
+	/**
+	 * take care for special values of teamMemberId, like TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES !
+	 * @param teamMemberId
+	 * @param accessType
+	 * @param draft
+	 * @return
+	 */
 	public static String getWorkspaceFilterQuery(Long teamMemberId, String accessType, boolean draft)
 	{
 		return new WorkspaceFilter(teamMemberId, accessType, draft).getGeneratedQuery();

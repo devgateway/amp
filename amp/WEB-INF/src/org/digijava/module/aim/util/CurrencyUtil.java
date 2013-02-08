@@ -34,6 +34,7 @@ import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.hibernate.FlushMode;
 import org.hibernate.Hibernate;
 import org.hibernate.JDBCException;
 import org.hibernate.Query;
@@ -1347,15 +1348,53 @@ public class CurrencyUtil {
 		{
 		*/	AmpCurrency ampC = new AmpCurrency();
 			ampC = CurrencyUtil.getCurrencyByCode(Code);
-			if (ampC != null)
-				DbUtil.delete(ampC);
+			if (ampC != null){
+				/*List<AmpApplicationSettings> list = CurrencyUtil.getAppSett(ampC.getAmpCurrencyId());
+				Iterator it = list.iterator();
+				while(it.hasNext()){
+					DbUtil.delete(it.next());
+				}*/
+				
+				deleteCurrency(ampC);
+			}
 		/*}
 		catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()");
 			e.printStackTrace(System.out);
 		}*/
 	}
-
+	
+	public static void deleteCurrency(AmpCurrency curr) throws JDBCException{
+		Session hibernateSession = null;
+		try {
+			hibernateSession = PersistenceManager.openNewSession();
+			hibernateSession.beginTransaction();
+			hibernateSession.delete(curr);
+			hibernateSession.getTransaction().commit();
+			hibernateSession.flush();
+			hibernateSession.setFlushMode(FlushMode.AUTO);
+		} catch (Exception e) {
+			if (e instanceof JDBCException)
+				throw (JDBCException) e;
+			logger.error("Exception " + e.toString());
+		try {
+			logger.error("Error while flushing session:", e);
+			if (hibernateSession.getTransaction().isActive()) {
+				logger.info("Trying to rollback database transaction after exception");
+				hibernateSession.getTransaction().rollback();
+			}
+			else
+				logger.error("Can't rollback transaction because transaction not active");
+		} catch (Throwable rbEx) {
+			logger.error("Could not rollback transaction after exception!",
+					rbEx);
+		}
+	} finally { 
+		hibernateSession.close(); 
+	}
+	}
+	
+	
 	public static AmpCurrency getWorkspaceCurrency(TeamMember tm) {		 
 		 if(tm.getAppSettings().getCurrencyId()!= null)
 		    return getAmpcurrency(tm.getAppSettings().getCurrencyId());

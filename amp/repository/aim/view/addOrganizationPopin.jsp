@@ -269,4 +269,12 @@ var validationCallback =
 	}
 
 
+	function selectAllOrganizations(checkboxDomElement) {
+		var organizations = $("table#searchResults input.orgsMultibox[type='checkbox']");
+		if ($(checkboxDomElement).attr('checked')) {
+			organizations.attr('checked', true);
+		} else {
+			organizations.attr('checked', false);	
+		}		
+	}
 </script>

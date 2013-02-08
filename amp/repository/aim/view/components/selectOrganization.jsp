@@ -296,7 +296,19 @@
 											<html:text property="tempNumResults" size="2" styleClass="inp-text" styleId="tempNumResults"/>
 										</td>
 									</tr>
-	
+									
+									<tr>
+										<c:set var="selectDeselectOrganizations">
+											<digi:trn>Select/deselect all organizations on current page</digi:trn>
+										</c:set>
+										<td title="${selectDeselectOrganizations}">
+											<digi:trn>Select all</digi:trn>
+										</td>
+										<td>
+											<input type="checkbox" class="inp-text" onclick="selectAllOrganizations(this);" title="${selectDeselectOrganizations}"/>
+										</td>
+									</tr>
+										
 									<tr>
 										<td align="center" colspan="2">
 											<html:button styleClass="buttonx" property="submitButton" onclick="return searchOrganization()" styleId="orgSearchBtn">

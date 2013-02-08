@@ -2,6 +2,8 @@ package org.dgfoundation.amp.ar;
 
 import java.util.*;
 
+import javax.servlet.http.HttpSession;
+
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
@@ -147,6 +149,27 @@ public class WorkspaceFilter
 	public static String getWorkspaceFilterQuery(Long teamMemberId, String accessType, boolean draft)
 	{
 		return new WorkspaceFilter(teamMemberId, accessType, draft).getGeneratedQuery();
+	}
+	
+	/**
+	 * entry point for getting "current user's workspace filter"
+	 * @param session
+	 * @return
+	 */
+	public static String getWorkspaceFilterQuery(HttpSession session)
+	{
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (tm == null)
+		{
+			//public view
+			return getWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, "Management", false);
+		}
+		else
+		{
+			boolean useDraft = Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
+					"Donor".equalsIgnoreCase(tm.getTeamType());
+			return getWorkspaceFilterQuery(tm.getMemberId(), tm.getTeamAccessType(), useDraft);
+		}
 	}
 	
 	public Set getTeamAssignedOrgs() {

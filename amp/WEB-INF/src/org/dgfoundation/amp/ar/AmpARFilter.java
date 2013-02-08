@@ -58,6 +58,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.mondrian.query.MoConstants;
@@ -499,6 +500,7 @@ public class AmpARFilter extends PropertyListable {
 
 		}
 		else {
+			// public view
 			this.setNeedsTeamFilter(true);
 			//Check if the reportid is not nut for public mondrian reports
 			if (ampReportId != null){
@@ -510,6 +512,9 @@ public class AmpARFilter extends PropertyListable {
 						if (ampReport.getOwnerId() != null)
 						{
 							teamMemberId = ampReport.getOwnerId().getAmpTeamMemId();
+							tm = TeamMemberUtil.getTeamMember(teamMemberId);
+							this.setAccessType("Management"); // should always be Management, as a report can be made public only from management workspace
+							this.setDraft(false); // never show draft activities to public view
 						}
 					} else
 					{
@@ -1132,6 +1137,8 @@ public class AmpARFilter extends PropertyListable {
 
 		if (needsTeamFilter || workspaceFilter)
 		{
+			//String TEAM_FILTER = WorkspaceFilter.getWorkspaceFilterQuery(request.getSession());			
+			// cannot use generic call from above, because this.getTeamMemberId() might be non-null even in the absence of a logged-in-user (a report with workspaceLinked = true)
 			String TEAM_FILTER = WorkspaceFilter.getWorkspaceFilterQuery(this.getTeamMemberId(), this.getAccessType(), this.isDraft());
 			queryAppend(TEAM_FILTER);
 		}

@@ -1,5 +1,9 @@
 package org.digijava.module.gis.util;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -14,10 +18,14 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -1926,6 +1934,46 @@ public class DbUtil {
         sess.save(sets);
     }
     
+    /**
+     * generates list of AmpActivityIds which would appear in a "no-filters" report's output 
+     * @param allActivityIdsSet
+     */
+    public static void intersectWithWorkspaceFilter(HttpSession session, Set<Long> allActivityIdsSet)
+    {
+    	AmpARFilter teamFilter = (AmpARFilter) session.getAttribute(ArConstants.TEAM_FILTER);
+    	String usedQuery;
+    	if (teamFilter != null)
+    		usedQuery = teamFilter.getGeneratedFilterQuery();
+    	else
+    		usedQuery = WorkspaceFilter.getWorkspaceFilterQuery(session);
+    	
+    	try
+    	{
+    		Set<Long> legalAmpActivityIds = new HashSet<Long>();
+    		Connection conn = PersistenceManager.getJdbcConnection();
+    		Statement stmt = conn.createStatement();
+			ResultSet resultSet = stmt.executeQuery(usedQuery);
+			while (resultSet.next())
+			{
+				Long ampActivityId = resultSet.getLong(1);
+				legalAmpActivityIds.add(ampActivityId);
+			}
+			Iterator<Long> ids = allActivityIdsSet.iterator();
+			while (ids.hasNext())
+			{
+				Long id = ids.next();
+				if (!legalAmpActivityIds.contains(id))
+					ids.remove();
+			}
+			conn.close();
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    		throw new RuntimeException(e);
+    	}
+    	
+    }
     
     // NEW PART
     
@@ -1940,7 +1988,8 @@ public class DbUtil {
                                                 Collection <Long> typeOfAssistanceIds,
                                                 java.util.Date startDate,
                                                 java.util.Date endDate,
-                                                boolean isPublic) {
+                                                boolean isPublic,
+                                                HttpSession session) {
         List queryResults = null;
         Object[] retVal = null;
 
@@ -1997,6 +2046,8 @@ public class DbUtil {
             }
         }
 
+        intersectWithWorkspaceFilter(session, allActivityIdsSet);
+        
         cleanUpMap(sectorPercentageMap, allActivityIdsSet);
         cleanUpMap(programPercentageMap, allActivityIdsSet);
         cleanUpMap(locationPercentageMap, allActivityIdsSet);
@@ -2021,7 +2072,7 @@ public class DbUtil {
 
 
             String activityWhereclause = generateWhereclause(allActivityIdsSet, new GenericIdGetter());
-
+            
 
 
             Session sess = null;
@@ -2064,13 +2115,11 @@ public class DbUtil {
                     queryStr.append(typeOfAssistanceWhereclause);
                 }
 
-                if (isPublic) {
-                    queryStr.append(" and (fd.ampFundingId.ampActivityId.approvalStatus ='approved' or fd.ampFundingId.ampActivityId.approvalStatus ='startedapproved')");
-                    queryStr.append(" and fd.ampFundingId.ampActivityId.team.parentTeamId is not null");
-                }
-                
-                
-
+//                if (isPublic) {
+//                    queryStr.append(" and (fd.ampFundingId.ampActivityId.approvalStatus ='approved' or fd.ampFundingId.ampActivityId.approvalStatus ='startedapproved')");
+//                    queryStr.append(" and fd.ampFundingId.ampActivityId.team.parentTeamId is not null");
+//                }
+ 
                 Query q = sess.createQuery(queryStr.toString());
                 q.setDate("START_DATE", startDate);
                 q.setDate("END_DATE", endDate);
@@ -2122,7 +2171,8 @@ public class DbUtil {
                                                         List <AmpTeam> workspaces,
                                                         java.util.Date startDate,
                                                         java.util.Date endDate,
-                                                        boolean isPublic) {
+                                                        boolean isPublic,
+                                                        HttpSession session) {
         List queryResults = null;
         Object[] retVal = null;
 
@@ -2148,7 +2198,7 @@ public class DbUtil {
             locationWhereclause = generateWhereclause(locations, new LocationIdGetter());
         }
 
-
+        intersectWithWorkspaceFilter(session, allActivityIdsSet);
 
         //If any activity in selected filter
         if (!allActivityIdsSet.isEmpty()) {

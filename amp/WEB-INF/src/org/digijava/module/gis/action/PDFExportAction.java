@@ -346,7 +346,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
             if (!isPublic && request.getSession().getAttribute("currentMember") == null) {
                 isPublic = true;
             }
-            filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional, isPublic);
+            filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional, isPublic, session);
 
             if (filterForm.isFilterAllSectors()) {
                 sectorName = "All";

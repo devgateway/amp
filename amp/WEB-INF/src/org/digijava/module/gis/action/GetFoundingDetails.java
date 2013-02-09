@@ -22,6 +22,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
@@ -64,7 +65,8 @@ public class GetFoundingDetails extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
         ServletOutputStream sos = null;
-
+        
+        HttpSession session = request.getSession();
 
         try {
 
@@ -1168,7 +1170,7 @@ public class GetFoundingDetails extends Action {
                     }
 
                     GisFilterForm filterForm = GisUtil.parseFilterRequest (request);
-                    Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional, isPublic);
+                    Object[] filterResults = RMMapCalculationUtil.getAllFundingsFiltered(filterForm, isRegional, isPublic, session);
                     request.getSession().setAttribute("GIS_FILTER_RESULTS", new Object[] {filterForm, filterResults});
 
                 }

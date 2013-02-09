@@ -14,6 +14,8 @@ import org.digijava.module.gis.dbentity.GisMapSegment;
 import java.math.BigDecimal;
 import java.util.*;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * Created by IntelliJ IDEA.
  * User: flyer
@@ -35,7 +37,7 @@ public class RMMapCalculationUtil {
 	    return workspaces;
 	}
 	
-    public static Object[] getAllFundingsFiltered (GisFilterForm filter, boolean isRegional, boolean isPublic) {
+    public static Object[] getAllFundingsFiltered (GisFilterForm filter, boolean isRegional, boolean isPublic, HttpSession session) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
         Collection<Long> secondarySectors = null;//longArrayToColl(filter.getSelectedSecondarySectors());
@@ -72,8 +74,9 @@ public class RMMapCalculationUtil {
         Calendar fStartDate = Calendar.getInstance();
                 fStartDate.set(Integer.parseInt(filter.getFilterStartYear()), 0, 1, 0, 0, 0);
         Calendar fEndDate = Calendar.getInstance();
-                fEndDate.set(Integer.parseInt(filter.getFilterEndYear() + 1), 0, 1, 0, 0, 0);
-		        fEndDate.add(Calendar.SECOND, -1);
+        	fEndDate.set(Integer.parseInt(filter.getFilterEndYear()), 11, 31, 23, 59, 59);
+	        //fEndDate.add(Calendar.SECOND, -1); // THERE IS A BUG IN JDK - THIS METHOD YIELDS A RESULT IN 20120 on 1/1/2013!
+
         String currencyCode = filter.getSelectedCurrency();
 
 
@@ -99,7 +102,8 @@ public class RMMapCalculationUtil {
                                                            typeOfAssistanceIds,
                                                            fStartDate.getTime(),
                                                            fEndDate.getTime(),
-                                                           isPublic);
+                                                           isPublic,
+                                                           session);
             }
 
             if (isRegional == GisUtil.GIS_REGIONAL_FUNDINGS) {
@@ -113,7 +117,8 @@ public class RMMapCalculationUtil {
                                                                            workspaces,
                                                                            fStartDate.getTime(),
                                                                            fEndDate.getTime(),
-                                                                           isPublic);
+                                                                           isPublic,
+                                                                           session);
             }
         } else {
             activityFundings = DbUtil.getPledgeFundings(sectorCollector,
@@ -142,7 +147,7 @@ public class RMMapCalculationUtil {
         return fundingList;
     }
 
-    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isRegional, boolean isPublic) {
+    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isRegional, boolean isPublic, HttpSession session) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
         //Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
@@ -190,8 +195,8 @@ public class RMMapCalculationUtil {
         Calendar fStartDate = Calendar.getInstance();
                 fStartDate.set(Integer.parseInt(filter.getFilterStartYear()), 0, 1, 0, 0, 0);
         Calendar fEndDate = Calendar.getInstance();
-                fEndDate.set(Integer.parseInt(filter.getFilterEndYear() + 1), 0, 1, 0, 0, 0);
-		        fEndDate.add(Calendar.SECOND, -1);
+                fEndDate.set(Integer.parseInt(filter.getFilterEndYear()), 11, 31, 23, 59, 59);
+		        //fEndDate.add(Calendar.SECOND, -1); // THERE IS A BUG IN JDK - THIS METHOD YIELDS A RESULT IN 20120 on 1/1/2013!
 
         String currencyCode = filter.getSelectedCurrency();
 
@@ -210,7 +215,7 @@ public class RMMapCalculationUtil {
                                                                donorTypeIds,
                                                                includeCildLocations,
                                                                locations,
-                                                               workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), isPublic);
+                                                               workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), isPublic, session);
         } else {
             activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
@@ -219,7 +224,7 @@ public class RMMapCalculationUtil {
                                                                                donorTypeIds,
                                                                                includeCildLocations,
                                                                                locations,
-                                                                               workspaces, fStartDate.getTime(), fEndDate.getTime(), isPublic);
+                                                                               workspaces, fStartDate.getTime(), fEndDate.getTime(), isPublic, session);
         }
         Object[] fundingList = getAllFundingsByLocations(activityFundings, activityRegionalFundings, includeCildLocations, locations, currencyCode, true);
 

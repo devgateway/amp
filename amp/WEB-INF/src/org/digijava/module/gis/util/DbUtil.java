@@ -2080,7 +2080,7 @@ public class DbUtil {
                 sess = PersistenceManager.getRequestDBSession();
                 StringBuilder queryStr = new StringBuilder("select fd.transactionAmount, fd.transactionType, fd.adjustmentType.id, fd.transactionDate, fd.ampCurrencyId.currencyCode, fd.ampFundingId.ampActivityId.ampActivityId from ");
                 queryStr.append(AmpFundingDetail.class.getName());
-                queryStr.append(" as fd where fd.transactionDate >= :START_DATE and fd.transactionDate <= :END_DATE and fd.ampFundingId.ampActivityId.draft = false");
+                queryStr.append(" as fd where fd.transactionDate >= :START_DATE and fd.transactionDate <= :END_DATE");
 
                 queryStr.append(" and fd.ampFundingId.ampActivityId.ampActivityId in ");
                 queryStr.append(activityWhereclause);

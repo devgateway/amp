@@ -1267,7 +1267,7 @@ public class AmpARFilter extends PropertyListable {
 		}
 
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
-		logger.info(this.generatedFilterQuery);		
+		logger.info(this.generatedFilterQuery);
 	}
 
 	/**

@@ -172,6 +172,11 @@ function continueInitialization( e, rmParams ){
 		repManager.checkSteps();
 		repManager.disableToolbarButton( document.getElementById("step3_next_button") );
 		
+		//calling function from filters.js
+		toggleWorkspaceLinkedVisibility();
+		//Weird events to catch onchange in IE
+		YAHOO.util.Event.on("publicReportChkBox","blur", toggleWorkspaceLinkedVisibility); 
+		YAHOO.util.Event.on("publicReportChkBox","click", toggleWorkspaceLinkedVisibility);
 	}
 
 function toggleMoreSettings() {

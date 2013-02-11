@@ -71,12 +71,15 @@ public class PercentageHelperMap extends HashMap<String, PercentageHelperList> {
 						}
 						
 						if ( temp.hasAsDescendent(itemId) ) {
-							temp.setItem(item);
-							temp.setItemId(itemId);
-							temp.setPercentage(percentage);
+//							temp.setItem(item);
+//							temp.setItemId(itemId);
+//							temp.setPercentage(percentage);
 							return;
 						}
 						if (newPhd.hasAsDescendent(temp)) {
+							temp.setItem(item);
+							temp.setItemId(itemId);
+							temp.setPercentage(percentage);
 							return;
 							
 						}

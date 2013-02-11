@@ -25,7 +25,7 @@ public class AmpPMFieldPermissionViewer implements Comparable, Serializable{
 
 	public AmpPMFieldPermissionViewer(PermissionMap pm) {
 		this.fullName  	= FeaturesUtil.getModuleNameVisibility(pm.getObjectIdentifier());
-		this.path		= this.getPath(fullName);
+		this.path		= this.getPath(fullName);// if will appear here an error, most probably will be because db is inconsistent, probably some amp_module_visibility modules are missing
 		this.name 		= this.getShortName(fullName);
 		this.strategy	= getStringBuilder(pm).toString();
 		this.id			= pm.getObjectIdentifier();

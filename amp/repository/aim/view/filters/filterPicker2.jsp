@@ -119,7 +119,7 @@ StopWatch.next("Filters", true);
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
 							<a id="clearDate1" style="background-color: #F6FAFF;" href='javascript:clearDate("fromDate")' title="<digi:trn>Clear</digi:trn>">
-								<img src="../ampTemplate/images/deleteIcon.gif" alt="Clear" border="0">
+								<img src="/TEMPLATE/ampTemplate/images/trash_16.gif" alt="Clear" border="0">
 							</a>
 							</td>
 							<td align="left">&nbsp;&nbsp;
@@ -128,7 +128,7 @@ StopWatch.next("Filters", true);
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
 							<a id="clearDate2" style="background-color: #F6FAFF;" href='javascript:clearDate("toDate")' title="<digi:trn>Clear</digi:trn>">
-								<img src="../ampTemplate/images/deleteIcon.gif" border="0">
+								<img src="/TEMPLATE/ampTemplate/images/trash_16.gif" border="0">
 							</a>
 							</td>
 						</tr>

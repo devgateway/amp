@@ -53,6 +53,17 @@
         </Level>
       </Hierarchy>
     </Dimension>
+    <Dimension visible="true" highCardinality="false" name="Beneficiary Agency">
+      <Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Beneficiary_Agency#" allLevelName="All Beneficiary Agency" caption="#Beneficiary_Agency#">
+        <Level name="Beneficiary Agency" visible="true" column="ba_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+          <NameExpression>
+            <SQL dialect="generic">
+              <![CDATA[COALESCE(ba_name,'#No_Data#')]]>
+            </SQL>
+          </NameExpression>
+        </Level>
+      </Hierarchy>
+    </Dimension>
     <Dimension visible="true" highCardinality="false" name="Donor Group">
       <Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Donor_Group#" allLevelName="#All Donor Group" caption="#Donor_Group#">
         <Level name="DonorGroup" visible="true" column="org_grp_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">

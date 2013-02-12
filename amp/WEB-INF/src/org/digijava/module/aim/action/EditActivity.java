@@ -528,7 +528,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         else {
             String showOnlyAct=request.getParameter("showOnlyAct"); // to show activity preview without next, previous links
             boolean withoutNextPrevLink=Boolean.parseBoolean(showOnlyAct);
-        	   if (ReportContextData.getFromRequest().getGeneratedReport() != null && !withoutNextPrevLink) {
+        	   if (ReportContextData.contextIdExists() && ReportContextData.getFromRequest().getGeneratedReport() != null && !withoutNextPrevLink) {
                 GroupReportData r = ReportContextData.getFromRequest().getGeneratedReport();
                 TreeSet l = (TreeSet) r.getOwnerIds();
                 Iterator i = l.iterator();

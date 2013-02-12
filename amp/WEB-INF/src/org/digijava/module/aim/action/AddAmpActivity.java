@@ -1198,10 +1198,10 @@ private ActionForward showStep9(ActionMapping mapping,
 	        request.setAttribute("overallRisk", riskName);
 	        request.setAttribute("riskColor", rskColor);
 	
-	        Long prev = new Long( -1);
-	        Long next = new Long( -1);
 	        // What does this cycle do?
-	        if (eaForm.getActivityId() != null) {
+	        if (eaForm.getActivityId() != null && ReportContextData.contextIdExists()) {
+	        	Long prev = new Long( -1);
+	        	Long next = new Long( -1);
 	          ReportData rep = ReportContextData.getFromRequest().getGeneratedReport();
 	          if (rep != null) {
 	            Iterator<Long> it = rep.getOwnerIds().iterator();

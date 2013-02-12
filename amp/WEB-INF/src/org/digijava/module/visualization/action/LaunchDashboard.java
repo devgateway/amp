@@ -230,10 +230,14 @@ public class LaunchDashboard extends Action {
 		dForm.getFilter().setOrgGroups(org.digijava.module.visualization.util.DbUtil.getOrganisationGroupsByRole(false, dForm.getFilter()));
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if(tm != null)
+		if(tm != null){
+			dForm.getFilter().setFromPublicView(false);
 			dForm.getFilter().setOrgInfoEditable(true);
-		else
+		}
+		else {
+			dForm.getFilter().setFromPublicView(true);
 			dForm.getFilter().setOrgInfoEditable(false);
+		}
 
 		if (request.getParameter("graphId") != null){
 			return mapping.findForward("showGraph");

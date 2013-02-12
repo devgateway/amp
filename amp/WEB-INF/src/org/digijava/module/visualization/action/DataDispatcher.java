@@ -36,6 +36,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -106,19 +107,19 @@ public class DataDispatcher extends DispatchAction {
 			visualizationForm.getFilter().setFromPublicView(true);// sets as public view when team is management, so it shows only approved activities
         } 
 		
-		if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
-	    	currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
-	    	if(currentTeam.getComputation() != null && currentTeam.getComputation()){
-	    		AmpARFilter filter = (AmpARFilter)session.getAttribute(ArConstants.TEAM_FILTER);
-	    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(filter.getFilterConditionOnly());
-	    		visualizationForm.getFilter().setActivityComputedList(activityList);
-			}
+		if (tm == null || visualizationForm.getFilter().getWorkspaceOnly() == null || !visualizationForm.getFilter().getWorkspaceOnly()) //Public view
+		{
+    		String sqlQuery = WorkspaceFilter.getWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, "Management", false);
+    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(sqlQuery);
+    		visualizationForm.getFilter().setActivityComputedList(activityList);
 			visualizationForm.getFilter().setTeamMember(tm);
-        } else {
-        	visualizationForm.getFilter().setActivityComputedList(null);
-        	visualizationForm.getFilter().setTeamMember(null);
+		}
+		else if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
+    		String sqlQuery = WorkspaceFilter.getWorkspaceFilterQuery(tm.getMemberId(), null, false);
+    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(sqlQuery);
+    		visualizationForm.getFilter().setActivityComputedList(activityList);
+			visualizationForm.getFilter().setTeamMember(tm);
         }
-		
 		// Parameters coming from queryString for the list of Organization Groups/Organizations, Regions/Zones, Sector/Sub-sector
 		if (request.getParameter("orgGroupIds")!=null && !request.getParameter("orgGroupIds").equals("null"))
 			visualizationForm.getFilter().setOrgGroupIds(getLongArrayFromParameter(request.getParameter("orgGroupIds")));

@@ -867,25 +867,10 @@ public class DbUtil {
             oql += "   and f.financingInstrument=:financingInstrumentId  ";
         }
         
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-            oql += DashboardUtil.getTeamQueryManagement();
-        }
-        else
-        {
-        	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
-        		oql += DashboardUtil.getTeamQuery(tm);
-        	else
-        		oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
-
-        }
-
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
-
         if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
         	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+
+    	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 		return oql;
 	}
@@ -2338,7 +2323,7 @@ public class DbUtil {
     }
 	public static ArrayList<BigInteger> getInActivities(String query) throws Exception{
 		Session session = PersistenceManager.getRequestDBSession();
-		ArrayList<BigInteger> result = (ArrayList<BigInteger>) session.createSQLQuery("select amp_activity_id from amp_activity where " + query).list();
+		ArrayList<BigInteger> result = (ArrayList<BigInteger>) session.createSQLQuery(query).list();
 		return result;
 	}
 }

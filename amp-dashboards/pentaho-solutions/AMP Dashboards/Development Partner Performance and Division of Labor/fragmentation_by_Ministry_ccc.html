@@ -4,10 +4,10 @@
 <!-- The dashboard layout -->
 <div id="dashboard" style="width:100%;">
     <div id="filter_object_container">
-      <div id="filter_object" style="width:1200px;height:30px;padding:5px 5px 5px 5px;border-bottom: 1px solid black;margin: 0px auto;">
+      <div id="filter_object" style="width:1400px;height:30px;padding:5px 5px 5px 5px;border-bottom: 1px solid black;margin: 0px auto;">
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_region")</div> <div style="float:left;width:300px;" id="regionSelect_object"></div>
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_sector")</div> <div style="float:left;" id="sectorSelect_object"></div>
-        <!--<div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_program")</div> <div style="float:left;" id="programSelect_object"></div>-->
+        <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_program")</div> <div style="float:left;" id="programSelect_object"></div>
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_show_values")</div><div style="float:left;" id="showValues_object"><input type="checkbox"/></div>
         <div style="float:left;padding:0px 2px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;"><button id="apply" style="font-size:10pt;font-weight:bold;padding:0px;float:right;">CDF.i18n("msg_reset")</div>
       </div>
@@ -52,6 +52,7 @@
 //Filter criteria
 var regionParameter = "";
 var sectorParameter = "";
+var programParameter = "";
 var currency = Dashboards.getQueryParameter("currency");
 var startYear = "2001";
 var endYear = "2011";
@@ -77,6 +78,16 @@ var processParameters = function(){
         sectorParameter = (sectorParameter == "" ? "": sectorParameter + ",") + "[Primary Sector].[" + value +"]";
       });
     if(sectorParameter == "") sectorParameter = "[Primary Sector].Members";
+
+	var programValues = $("#programSelect_object > select").val();
+    programValues = programValues != null ? programValues : [];
+    //Reset global parameter
+    programParameter = "";
+    $.each(programValues,
+      function(idx, value){ 
+        programParameter = (programParameter == "" ? "": programParameter + ",") + "[National Program].[" + value +"]";
+      });
+    if(programParameter == "") programParameter = "[National Program].Members";
 
     console.log("Postchage in Region/Sector executed");
     first_data_table.chartDefinition.colTypes = [];
@@ -241,11 +252,11 @@ var programSelect =
 
 
 var getParameters = function() {
-  return regionParameter + sectorParameter;
+  return regionParameter + sectorParameter + programParameter;
 }
 
-var listeners = ["startYear","endYear","regionParameter","sectorParameter"];
-var parameters = [["startYear","startYear"], ["endYear","endYear"], ["regionParameter","regionParameter"], ["sectorParameter","sectorParameter"]];
+var listeners = ["startYear","endYear","regionParameter","sectorParameter", "programParameter"];
+var parameters = [["startYear","startYear"], ["endYear","endYear"], ["regionParameter","regionParameter"], ["sectorParameter","sectorParameter"], ["programParameter","programParameter"]];
 
 </script>
 
@@ -352,10 +363,11 @@ first_data_table.name = "first_data_table";
 first_data_table.chartDefinition.dataAccessId = "first_datasource";
 first_data_table.chartDefinition.path = "/AMP Dashboards/Development Partner Performance and Division of Labor/fragmentation_by_Ministry_ccc.cda";
 first_data_table.postFetch = pfetch;
-
+first_data_table.listeners = listeners;
+first_data_table.parameters = parameters;
 
     // These are the components to be loaded into the dashboard withing the [] separated by ,
-    var components = [first_heatgrid_chart,first_data_table, regionSelect, sectorSelect, startYearSelect, endYearSelect];
+    var components = [first_heatgrid_chart,first_data_table, regionSelect, sectorSelect, programSelect, startYearSelect, endYearSelect];
     // The initial dashboard load function definition
     function load(){
       Dashboards.init(components);
@@ -396,6 +408,7 @@ $(window).ready(function() {
   $("#apply").click(function () {
   regionParameter = "";
   sectorParameter = "";
+  programParameter = "";
   startYear = "2001";
   endYear = "2009";    
   first_data_table.chartDefinition.colTypes = [];

@@ -58,7 +58,7 @@ Where ([Donor Dates].[*SLICER_MEMBER])
       </Parameters>
       <Query>
 With
-Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Beneficiary Agency],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_Primary Sector],[*BASE_MEMBERS_Donor Dates]))))'
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Beneficiary Agency],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_National Program],NonEmptyCrossJoin([*BASE_MEMBERS_Primary Sector],[*BASE_MEMBERS_Donor Dates])))))'
 Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Group].CurrentMember.OrderKey,BDESC)'
 Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Beneficiary Agency].CurrentMember.OrderKey,BASC,Ancestor([Beneficiary Agency].CurrentMember,[Beneficiary Agency]).OrderKey,BASC)'
 Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
@@ -69,11 +69,14 @@ Set [*NATIVE_MEMBERS_Donor Group] as 'Generate([*NATIVE_CJ_SET], {[Donor Group].
 Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
 Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
 Set [*NATIVE_MEMBERS_Regions] as 'Generate([*NATIVE_CJ_SET], {[Regions].CurrentMember})'
+Set [*BASE_MEMBERS_National Program] as '{${programParameter}}'
+Set [*NATIVE_MEMBERS_National Program] as 'Generate([*NATIVE_CJ_SET], {[National Program].CurrentMember})'
 Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Group].currentMember)})'
 Set [*BASE_MEMBERS_Donor Group] as '[Donor Group].[DonorGroup].Members'
 Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
 Set [*BASE_MEMBERS_Beneficiary Agency] as '[Beneficiary Agency].[Beneficiary Agency].Members'
 Member [Primary Sector].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Primary Sector])', SOLVE_ORDER=-400
+Member [National Program].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_National Program])', SOLVE_ORDER=-400
 Member [Regions].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Regions])', SOLVE_ORDER=-400
 Member [Measures].[Actual Disbursements %] as 'IIF((([Measures].[Actual Disbursements] / ([Measures].[Actual Disbursements], [Donor Group].[*TOTAL_MEMBER_SEL~AGG]))) > 0,([Measures].[Actual Disbursements] / ([Measures].[Actual Disbursements], [Donor Group].[*TOTAL_MEMBER_SEL~AGG])),0)', FORMAT_STRING = Case When [Measures].CurrentMember = 1 Then '|#%' When [Measures].CurrentMember >= 0.2 Then '|#.##%|style=green' When [Measures].CurrentMember >= 0.15 Then '|#.##%|style=yellow' When [Measures].CurrentMember > 0 Then '|0.##%|style=red' End, SOLVE_ORDER=100
 Member [Donor Dates].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-400
@@ -82,7 +85,7 @@ Select
 CrossJoin([*SORTED_COL_AXIS],[*BASE_MEMBERS_Measures]) on columns,
 Non Empty [*SORTED_ROW_AXIS] on rows
 From [Donor Funding]
-Where ([Regions].[*SLICER_MEMBER], [Primary Sector].[*SLICER_MEMBER], [Donor Dates].[*SLICER_MEMBER])
+Where ([Regions].[*SLICER_MEMBER], [Primary Sector].[*SLICER_MEMBER], [National Program].[*SLICER_MEMBER], [Donor Dates].[*SLICER_MEMBER])
       </Query>
    </DataAccess>
 </CDADescriptor>

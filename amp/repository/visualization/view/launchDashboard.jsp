@@ -55,6 +55,7 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script> 
+<digi:instance property="visualizationform"/>
 <script type="text/javascript">
 //Global declaration
 var trnPrimary = "";
@@ -244,8 +245,11 @@ function initializeGlobalVariables(){
 	urlWordExport = "${url2}";
 	<digi:context name="url3" property="/visualization/excelExport.do"/>
 	urlExcelExport = "${url3}";
-	<digi:context name="url" property="context/visualization/saveOrgInfo.do"/>
-	urlSaveAdditional = "${url}";
+	${visualizationform.filter.orgInfoEditable}
+	<c:if test="${visualizationform.filter.orgInfoEditable}">
+		<digi:context name="url" property="context/visualization/saveOrgInfo.do"/>
+		urlSaveAdditional = "${url}";
+	</c:if>
 	<digi:context name="showList" property="context/module/moduleinstance/showProjectsList.do?" />
 	urlShowList = "${showList}";
 }
@@ -256,7 +260,6 @@ function initializeGlobalVariables(){
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
 
-<digi:instance property="visualizationform"/>
 <digi:form action="/filters.do">
 
 <!-- POPUPS START -->

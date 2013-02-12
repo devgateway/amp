@@ -1591,12 +1591,13 @@ function refreshBoxes(o){
 							myPanel.setHeader("\n" + trnOrgGrpInfo);
 							break;
 					}
+					disabledInfo = (urlSaveAdditional != "") ? "": "disabled='disabled'";
 					var infoMarkup = new Array();
 					infoMarkup.push("<div id=\"saveResultMsg\"></div><table class=\"inside\"><tbody>");
 					infoMarkup.push("<tr>");
 					infoMarkup.push("<td class=\"inside\">" + trnBackground +":</td>");
 					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"background\">");
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"background\" " + disabledInfo + ">");
 					infoMarkup.push(info.background);
 					infoMarkup.push("</textarea>");
 					infoMarkup.push("</td>");
@@ -1605,7 +1606,7 @@ function refreshBoxes(o){
 					infoMarkup.push("<tr>");
 					infoMarkup.push("<td class=\"inside\">" + trnDescription + ":</td>");
 					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"description\">");
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"description\" " + disabledInfo + ">");
 					infoMarkup.push(info.description);
 					infoMarkup.push("</textarea>");
 					infoMarkup.push("</td>");
@@ -1614,16 +1615,18 @@ function refreshBoxes(o){
 					infoMarkup.push("<tr>");
 					infoMarkup.push("<td class=\"inside\">" + trnKeyAreas + ":</td>");
 					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"keyAreas\">");
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"keyAreas\" " + disabledInfo + ">");
 					infoMarkup.push(info.keyAreas);
 					infoMarkup.push("</textarea>");
 					infoMarkup.push("</td>");
 					infoMarkup.push("</tr>");
 					
 					infoMarkup.push("<tr>");
-					infoMarkup.push("<td class=\"inside\" colspan=\"2\">");
-					infoMarkup.push("<input type=\"button\" value=\"" + trnSave + "\" onclick=\"saveAdditionalInfo("+info.id+",'" + info.type +"')\"/>");
-					infoMarkup.push("</td>");
+					if (urlSaveAdditional != ""){
+						infoMarkup.push("<td class=\"inside\" colspan=\"2\">");
+						infoMarkup.push("<input type=\"button\" value=\"" + trnSave + "\" onclick=\"saveAdditionalInfo("+info.id+",'" + info.type +"')\"/>");
+						infoMarkup.push("</td>");
+					}
 					infoMarkup.push("</tr>");
 					infoMarkup.push("</tbody></table>");
 					var markup=infoMarkup.join("");

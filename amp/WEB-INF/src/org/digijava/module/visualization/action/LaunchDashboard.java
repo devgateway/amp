@@ -228,6 +228,13 @@ public class LaunchDashboard extends Action {
 		dForm.getFilter().setFromGenerator(true);
 		//Set a reduced list of Organization Groups considering the role in the list of activities
 		dForm.getFilter().setOrgGroups(org.digijava.module.visualization.util.DbUtil.getOrganisationGroupsByRole(false, dForm.getFilter()));
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if(tm != null)
+			dForm.getFilter().setOrgInfoEditable(true);
+		else
+			dForm.getFilter().setOrgInfoEditable(false);
+
 		if (request.getParameter("graphId") != null){
 			return mapping.findForward("showGraph");
 		}

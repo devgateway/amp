@@ -96,6 +96,7 @@ public class DashboardFilter {
     private Boolean showNPORanking;
     private Boolean showProgramsRanking;
     private Boolean fromGenerator;
+    private Boolean orgInfoEditable = false;
     private int agencyType;
     private int agencyTypeQuickFilter;
     private int agencyTypeFilter;
@@ -908,5 +909,11 @@ public class DashboardFilter {
 	public ArrayList<BigInteger> getActivityComputedList() {
 		return this.activityList;
 	}
-	
+	public Boolean getOrgInfoEditable() {
+		return this.orgInfoEditable;
+	}
+	public void setOrgInfoEditable(Boolean orgInfoEditable) {
+		this.orgInfoEditable = orgInfoEditable;
+	}
+
 }

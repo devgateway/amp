@@ -1197,7 +1197,7 @@ function changeTabStructureInfo(info){
 function MapFindStructure(activity, structureGraphicLayer) {
 	
 	
-	var infoTemplate =	"<table style='font-size: 11px;'>"
+	var noTabTemplate =	"<table style='font-size: 11px;'>"
 		+ "<tr><td style='padding-right:20px;'><b>Name<b></td><td><b>${Structure Name}</b></td></tr>"
 		+ "<tr><td nowrap style='padding-right:20px;'><b>"+translate('Activity')+"<b></td><td style='margin-right:5px;'>${Activity}</td></tr>"
 		+ "<tr><td nowrap style='padding-right:20px;'><b>Type<b></td><td>${Structure Type}</td></tr>"
@@ -1207,13 +1207,11 @@ function MapFindStructure(activity, structureGraphicLayer) {
 	var tabTemplate = "<div id='infotabs' class='infotab'>"
 		+ " <ul><li><a id='aStrInfo' class='selected' href='#' onclick='changeTabStructureInfo(true);'>Details</a></li>"
 		+ "<li><a id='aStrImage' href='#' onclick='changeTabStructureInfo(false);'>Image</a></li></ul>"
-		+ "<div id='strInfo' ><br /><br />"+ infoTemplate +"</div>"
+		+ "<div id='strInfo' ><br /><br />"+ noTabTemplate +"</div>"
 		+ "<div id='strImage' align='center' style='display:none;' >${Structure Image}</div>"
 		+ "</div>";
 		
-	var stinfoTemplate = new esri.InfoTemplate(
-			"Structure Details",
-tabTemplate);
+	var stinfoTemplate = null;
 	
 var structureID=1;
 	dojo.forEach(activity.structures,function(structure) {
@@ -1221,6 +1219,16 @@ var structureID=1;
 			var pgraphic;
 			
 			var previewActivityUrl ="/aim/viewActivityPreview.do~pageId=2~isPreview=1~activityId=" + activity.ampactivityid;
+			
+			if(structure.hasImage){
+				stinfoTemplate = new esri.InfoTemplate(
+						"Structure Details",
+						tabTemplate);
+			}else{
+				stinfoTemplate = new esri.InfoTemplate(
+						"Structure Details",
+						"<div class='infotab'>" + noTabTemplate + "</div>");
+			}
 			
 			if (structure.shape == "") {
 				var pt = new esri.geometry.Point(structure.lon,structure.lat, map.spatialReference);

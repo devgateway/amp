@@ -643,6 +643,7 @@ public class DataDispatcher extends MultiAction {
 					structureJSON.setShape(structure.getShape());
 					structureJSON.setType(structure.getType().getName());
 					structureJSON.setTypeId(structure.getType().getTypeId());
+					structureJSON.setHasImage(structure.getImages() != null && structure.getImages().size() > 0);
 					structures.add(structureJSON);
 					structuresExists = true;
 				}

@@ -15,6 +15,7 @@ public class Structure {
 	private String shape;
 	private String type;
 	private Long typeId;
+	private Boolean hasImage;
 	
 	
 	public Long getId() {
@@ -64,5 +65,11 @@ public class Structure {
 	}
 	public Long getTypeId() {
 		return typeId;
+	}
+	public Boolean getHasImage() {
+		return hasImage;
+	}
+	public void setHasImage(Boolean hasImage) {
+		this.hasImage = hasImage;
 	}
 }

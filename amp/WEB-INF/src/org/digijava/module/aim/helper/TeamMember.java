@@ -45,7 +45,10 @@ public class TeamMember implements Comparable, Serializable{
 	private Boolean publishDocuments; /*permissions to make docs public*/
 	private boolean approver;
 
-	public TeamMember() {}
+	public TeamMember() 
+	{
+		
+	}
         
         public TeamMember( String teamName,String teamMemberRole) {
             this.teamName = teamName;

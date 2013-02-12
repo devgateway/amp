@@ -328,8 +328,10 @@ public class AmpARFilter extends PropertyListable {
 	private Boolean unallocatedLocation = null;
 	//private AmpCategoryValueLocations regionSelected = null;
 	private Collection<String> approvalStatusSelected=null;
-	private boolean approved = false;
-	private boolean draft = false;
+	
+	// these fields moved to WorkspaceFilter in AMP 2.3.7
+	//private boolean approved = false;
+	//private boolean draft = false;
 
 	private Integer renderStartYear = null; // the range of dates columns that
 											// has to be render, years not in
@@ -502,27 +504,18 @@ public class AmpARFilter extends PropertyListable {
 		else {
 			// public view
 			this.setNeedsTeamFilter(true);
+			this.setAccessType("Management"); // should always be Management, as a report can be made public only from management workspace
+
 			//Check if the reportid is not nut for public mondrian reports
 			if (ampReportId != null){
 				AmpReports ampReport = DbUtil.getAmpReport(Long.parseLong(ampReportId));
-				if (ampReport != null)
+				if (ampReport != null && ampReport.getWorkspaceLinked() && ampReport.getOwnerId() != null)
+				{					
+					teamMemberId = ampReport.getOwnerId().getAmpTeamMemId();
+				} else
 				{
-					if (ampReport.getWorkspaceLinked())
-					{
-						if (ampReport.getOwnerId() != null)
-						{
-							teamMemberId = ampReport.getOwnerId().getAmpTeamMemId();
-							tm = TeamMemberUtil.getTeamMember(teamMemberId);
-							this.setAccessType("Management"); // should always be Management, as a report can be made public only from management workspace
-							this.setDraft(false); // never show draft activities to public view
-						}
-					} else
-					{
-						// not workspace linked
-						teamMemberId = TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES;
-						this.setAccessType("Management");
-						this.setDraft(false);
-					}
+					// not workspace linked or no report (??)
+					teamMemberId = TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES;
 				}
 			}
 		}
@@ -886,14 +879,7 @@ public class AmpARFilter extends PropertyListable {
 		    	actStatusValue.delete(posi, posi+2);
 		}    
 		String ACTIVITY_STATUS="select amp_activity_id from amp_activity where "+actStatusValue.toString();
-		String APPROVED_FILTER = "";
-			if("Management".equals(this.getAccessType()))
-				APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("
-					+ Util.toCSString(activityStatus) + ")";
-			else APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ('"
-				+ Constants.APPROVED_STATUS + "','"+ Constants.STARTED_APPROVED_STATUS +"')";
 		
-		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false )";
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
 			+ Util.toCSString(typeOfAssistance) + ")";
 
@@ -1139,7 +1125,7 @@ public class AmpARFilter extends PropertyListable {
 		{
 			//String TEAM_FILTER = WorkspaceFilter.getWorkspaceFilterQuery(request.getSession());			
 			// cannot use generic call from above, because this.getTeamMemberId() might be non-null even in the absence of a logged-in-user (a report with workspaceLinked = true)
-			String TEAM_FILTER = WorkspaceFilter.getWorkspaceFilterQuery(this.getTeamMemberId(), this.getAccessType(), this.isDraft());
+			String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMemberId, this.isPublicView());
 			queryAppend(TEAM_FILTER);
 		}
 
@@ -1198,10 +1184,7 @@ public class AmpARFilter extends PropertyListable {
 		}
 		if(approvalStatusSelected!=null)
 			queryAppend(ACTIVITY_STATUS);
-		if (approved == true)
-			queryAppend(APPROVED_FILTER);
-		if (draft == true)
-			queryAppend(DRAFT_FILTER);
+
 		if (typeOfAssistance != null && typeOfAssistance.size() > 0)
 			queryAppend(TYPE_OF_ASSISTANCE_FILTER);
 		if (modeOfPayment != null && modeOfPayment.size() > 0)
@@ -1641,29 +1624,8 @@ public class AmpARFilter extends PropertyListable {
 		return indexText;
 	}
 
-	@PropertyListableIgnore
-	public boolean isApproved() {
-		return approved;
-	}
-
 	public void setIndexText(String indexText) {
 		this.indexText = indexText;
-	}
-
-	public void setApproved(boolean approved) {
-		this.approved = approved;
-	}
-
-	@IgnorePersistence
-	public boolean isDraft() {
-		return draft;
-	}
-	/**
-	 * TODO draft parameter needs to be renamed to hideDraft 
-	 * @param draft
-	 */
-	public void setDraft(boolean draft) {
-		this.draft = draft;
 	}
 
 	public Set getDonorTypes() {
@@ -2222,7 +2184,7 @@ public class AmpARFilter extends PropertyListable {
 	}
 	
 	@PropertyListableIgnore
-	public String getOffLineQuery(String query) {
+	public static String getOffLineQuery(String query) {
 		String result = query;
 		Pattern p = Pattern.compile(MoConstants.AMP_ACTIVITY_TABLE);
 		Matcher m = p.matcher(result);

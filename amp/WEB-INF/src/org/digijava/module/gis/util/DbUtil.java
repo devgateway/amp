@@ -1940,12 +1940,7 @@ public class DbUtil {
      */
     public static void intersectWithWorkspaceFilter(HttpSession session, Set<Long> allActivityIdsSet)
     {
-    	AmpARFilter teamFilter = (AmpARFilter) session.getAttribute(ArConstants.TEAM_FILTER);
-    	String usedQuery;
-    	if (teamFilter != null)
-    		usedQuery = teamFilter.getGeneratedFilterQuery();
-    	else
-    		usedQuery = WorkspaceFilter.getWorkspaceFilterQuery(session);
+    	String usedQuery = WorkspaceFilter.getWorkspaceFilterQuery(session);
     	
     	try
     	{

@@ -51,7 +51,7 @@
 
 //Filter criteria
 var regionParameter = "";
-var programParameter = "";
+var sectorParameter = "";
 var currency = Dashboards.getQueryParameter("currency");
 var startYear = "2001";
 var endYear = "2011";
@@ -96,8 +96,8 @@ var startYearSelect =
   htmlObject: "startYearSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
+    jndi: jndi,
+    catalog: catalogPath,
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
       return query;
@@ -121,8 +121,8 @@ var endYearSelect =
   htmlObject: "endYearSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
+    jndi: jndi,
+    catalog: catalogPath,
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
       return query;
@@ -158,8 +158,8 @@ var regionSelect =
   htmlObject: "regionSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
+    jndi: jndi,
+    catalog: catalogPath,
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [Regions].[Region].Members ON ROWS " +
@@ -189,8 +189,8 @@ var sectorSelect =
   htmlObject: "sectorSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
+    jndi: jndi,
+    catalog: catalogPath,
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [Primary Sector].[Primary Sector].Members ON ROWS " +
@@ -209,43 +209,14 @@ var sectorSelect =
   postChange:processParameters
 }
 
-var programSelect = 
-{
-  name: "programSelect",
-  type: "SelectMulti",
-  parameters:[],
-  parameter:"programParameter",
-  valueAsId: true,
-  htmlObject: "programSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
-        "NON EMPTY [National Program].[National Program].Members ON ROWS " +
-        "FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    $("#programSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
-    $('#programSelect_object > select').width('300px');
-    $('#programSelect_object > select').multiselect(multiSelectConfig);
-  },
-  postChange:processParameters
-}
 
 
 var getParameters = function() {
-  return regionParameter + programParameter;
+  return regionParameter + sectorParameter;
 }
 
-var listeners = ["startYear","endYear","regionParameter","programParameter"];
-var parameters = [["startYear","startYear"], ["endYear","endYear"], ["regionParameter","regionParameter"], ["programParameter","programParameter"]];
+var listeners = ["startYear","endYear","regionParameter","sectorParameter"];
+var parameters = [["startYear","startYear"], ["endYear","endYear"], ["regionParameter","regionParameter"], ["sectorParameter","sectorParameter"]];
 
 </script>
 
@@ -395,7 +366,7 @@ $(window).ready(function() {
 });
   $("#apply").click(function () {
   regionParameter = "";
-  programParameter = "";
+  sectorParameter = "";
   startYear = "2001";
   endYear = "2009";    
   first_data_table.chartDefinition.colTypes = [];

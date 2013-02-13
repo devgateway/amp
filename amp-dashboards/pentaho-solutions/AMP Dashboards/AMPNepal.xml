@@ -1,4 +1,4 @@
-<Schema name="AMPBurkinaProduction">
+<Schema name="AMPNepal">
 	<Dimension visible="true" highCardinality="false" name="Activity">
 		<Hierarchy visible="true" hasAll="true" allMemberName="All Activities" allMemberCaption="#All_Activities#" primaryKey="amp_activity_id" caption="#Activity#">
 			<Table name="cached_amp_activity"/>
@@ -46,6 +46,17 @@
 					<NameExpression>
 						<SQL dialect="generic">
 							<![CDATA[COALESCE(ba_name,'#No_Data#')]]>
+						</SQL>
+					</NameExpression>
+				</Level>
+			</Hierarchy>
+		</Dimension>
+		<Dimension visible="true" highCardinality="false" name="Implementing Agency">
+			<Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Implementing_Agency#" allLevelName="All Implementing Agency" caption="#Implementing_Agency#">
+				<Level name="Implementing Agency" visible="true" column="ia_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+					<NameExpression>
+						<SQL dialect="generic">
+							<![CDATA[COALESCE(ia_name,'#No_Data#')]]>
 						</SQL>
 					</NameExpression>
 				</Level>

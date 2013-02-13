@@ -450,6 +450,7 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
          fd.transaction_amount * (
          
          coalesce(cba.percentage, 100) / 100 *
+         coalesce(cia.percentage, 100) / 100 *
          coalesce(rc.location_percentage, 100) / 100 *
          coalesce(pp.program_percentage, 100) / 100 *
          coalesce(sp.program_percentage, 100) / 100 *
@@ -510,7 +511,8 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
           npl6.name as npl6_name,
           npl7.name as npl7_name,
           npl8.name as npl8_name,
-          cba.name as BA_name
+          cba.name as BA_name,
+          cia.name as IA_name
           
   from cached_amp_activity aa join amp_funding f on aa.amp_activity_id = f.amp_activity_id
        join amp_funding_detail fd on f.amp_funding_id = fd.amp_funding_id
@@ -527,9 +529,8 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
        
        left join amp_sector_scheme ss on secs.amp_sector_scheme_id = ss.amp_sec_scheme_id
        join cached_v_m_regions rc on aa.amp_activity_id = rc.amp_activity_id
-		join cached_v_beneficiary_agency cba on aa.amp_activity_id = cba.amp_activity_id
-
-
+       left join cached_v_beneficiary_agency cba on aa.amp_activity_id = cba.amp_activity_id
+       left join cached_v_implementing_agency cia on aa.amp_activity_id = cia.amp_activity_id
        left join cached_v_primaryprogram_level_0 pp on f.amp_activity_id = pp.amp_activity_id
        left join cached_v_primaryprogram_level_1 ppl1 on f.amp_activity_id = ppl1.amp_activity_id
        left join cached_v_primaryprogram_level_2 ppl2 on f.amp_activity_id = ppl2.amp_activity_id
@@ -590,6 +591,8 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
            rc.amp_activity_id,
            cba.name,
            cba.amp_activity_id,
+           cia.name,
+           cia.amp_activity_id,
            pp.amp_program_id,
       	   ppl2.amp_program_id,
            ppl3.amp_program_id,
@@ -617,6 +620,7 @@ CREATE OR REPLACE VIEW v_donor_funding_cached AS
            npl8.amp_program_id,
            rc.location_percentage,
            cba.percentage,
+           cia.percentage,
            pp.program_percentage,
            sp.program_percentage,
            np.program_percentage,

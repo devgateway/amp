@@ -2,12 +2,12 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="first_datasource" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
-         <Jndi>AMPBurkinaProduction</Jndi>
+         <Catalog>AMP Dashboards/AMPNepal.xml</Catalog>
+         <Jndi>AMPNepal</Jndi>
       </Connection>
       <Connection id="first_datasource_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
-         <Jndi>AMPBurkinaProduction</Jndi>
+         <Catalog>AMP Dashboards/AMPNepal.xml</Catalog>
+         <Jndi>AMPNepal</Jndi>
       </Connection>
    </DataSources>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_datasource"
@@ -24,15 +24,15 @@
 With
 Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_National Program],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],[*BASE_MEMBERS_Donor Dates]))'
 Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Group].CurrentMember.OrderKey,BDESC)'
-Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Primary Sector].CurrentMember.OrderKey,BASC,Ancestor([National Program].CurrentMember,[National Program]).OrderKey,BASC)'
+Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Primary Sector].CurrentMember.OrderKey,BASC,Ancestor([National Program Level 1].CurrentMember,[National Program Level 1]).OrderKey,BASC)'
 Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
 Set [*BASE_MEMBERS_Measures] as '{[Measures].[Actual Disbursements %]}'
 Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Group].currentMember)})'
 Set [*BASE_MEMBERS_Donor Group] as '[Donor Group].[DonorGroup].Members'
 Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
 Set [*NATIVE_MEMBERS_Donor Group] as 'Generate([*NATIVE_CJ_SET], {[Donor Group].CurrentMember})'
-Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([National Program].currentMember)})'
-Set [*BASE_MEMBERS_National Program] as '[National Program].[National Program].Members'
+Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([National Program Level 1].currentMember)})'
+Set [*BASE_MEMBERS_National Program] as '[National Program Level 1].[National Program Level 1].Members'
 Member [Measures].[Actual Disbursements %] as 'IIF((([Measures].[Actual Disbursements] / ([Measures].[Actual Disbursements], [Donor Group].[*TOTAL_MEMBER_SEL~AGG]))) > 0,([Measures].[Actual Disbursements] / ([Measures].[Actual Disbursements], [Donor Group].[*TOTAL_MEMBER_SEL~AGG])),0)', FORMAT_STRING = Case When [Measures].CurrentMember = 1 Then '|#%' When [Measures].CurrentMember >= 0.2 Then '|#.##%|style=green' When [Measures].CurrentMember >= 0.15 Then '|#.##%|style=yellow' When [Measures].CurrentMember > 0 Then '|0.##%|style=red' End, SOLVE_ORDER=100
 Member [Donor Dates].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-400
 Member [Donor Group].[*TOTAL_MEMBER_SEL~AGG] as 'Aggregate({[Donor Group].[All Donor Groups]})', SOLVE_ORDER=-100
@@ -52,7 +52,6 @@ Where ([Donor Dates].[*SLICER_MEMBER])
          <Parameter default="USD" name="currency" type="String"/>
          <Parameter default="[Regions].Members" name="regionParameter" type="String"/>
          <Parameter default="[Primary Sector].Members" name="sectorParameter" type="String"/>
-         <Parameter default="[National Program].Members" name="programParameter" type="String"/>
          <Parameter default="2000" name="startYear" type="String"/>
          <Parameter default="2009" name="endYear" type="String"/>
       </Parameters>
@@ -60,11 +59,11 @@ Where ([Donor Dates].[*SLICER_MEMBER])
 With
 Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_National Program],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_Primary Sector],[*BASE_MEMBERS_Donor Dates]))))'
 Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Group].CurrentMember.OrderKey,BDESC)'
-Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[National Program].CurrentMember.OrderKey,BASC,Ancestor([National Program].CurrentMember,[National Program]).OrderKey,BASC)'
+Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[National Program Level 1].CurrentMember.OrderKey,BASC,Ancestor([National Program Level 1].CurrentMember,[National Program Level 1]).OrderKey,BASC)'
 Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
 Set [*BASE_MEMBERS_Measures] as '{[Measures].[Actual Disbursements %]}'
 Set [*BASE_MEMBERS_Primary Sector] as '{${sectorParameter}}'
-Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([National Program].currentMember)})'
+Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([National Program Level 1].currentMember)})'
 Set [*NATIVE_MEMBERS_Donor Group] as 'Generate([*NATIVE_CJ_SET], {[Donor Group].CurrentMember})'
 Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
 Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
@@ -72,7 +71,7 @@ Set [*NATIVE_MEMBERS_Regions] as 'Generate([*NATIVE_CJ_SET], {[Regions].CurrentM
 Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Group].currentMember)})'
 Set [*BASE_MEMBERS_Donor Group] as '[Donor Group].[DonorGroup].Members'
 Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
-Set [*BASE_MEMBERS_National Program] as '[National Program].[National Program].Members'
+Set [*BASE_MEMBERS_National Program] as '[National Program Level 1].[National Program Level 1].Members'
 Member [Primary Sector].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Primary Sector])', SOLVE_ORDER=-400
 Member [Regions].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Regions])', SOLVE_ORDER=-400
 Member [Measures].[Actual Disbursements %] as 'IIF((([Measures].[Actual Disbursements] / ([Measures].[Actual Disbursements], [Donor Group].[*TOTAL_MEMBER_SEL~AGG]))) > 0,([Measures].[Actual Disbursements] / ([Measures].[Actual Disbursements], [Donor Group].[*TOTAL_MEMBER_SEL~AGG])),0)', FORMAT_STRING = Case When [Measures].CurrentMember = 1 Then '|#%' When [Measures].CurrentMember >= 0.2 Then '|#.##%|style=green' When [Measures].CurrentMember >= 0.15 Then '|#.##%|style=yellow' When [Measures].CurrentMember > 0 Then '|0.##%|style=red' End, SOLVE_ORDER=100

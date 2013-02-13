@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -26,6 +27,8 @@ import org.hibernate.Session;
  */
 public class DonorDimension extends ARDimension {
 
+	protected static Logger logger = Logger.getLogger(DonorDimension.class);
+	
 	/** TODO description here
 	 * 
 	 */
@@ -54,7 +57,11 @@ public class DonorDimension extends ARDimension {
 			AmpOrganisation as= (AmpOrganisation) it.next();
 			if(as.getAmpOrgId()==null) continue;
 			AmpOrgGroup orgGrp = as.getOrgGrpId();
-			if (orgGrp == null) continue;
+			if (orgGrp == null)
+			{
+				logger.error("invalid database state", new RuntimeException("invalid organisation state: Organisation " + as.getAcronymAndName() + " has no Organisation Group!"));
+				continue;
+			}
 			typeMap.put(as.getAmpOrgId(), orgGrp.getOrgType()==null?null:orgGrp.getOrgType().getAmpOrgTypeId());
 			groupMap.put(as.getAmpOrgId(), as.getOrgGrpId()==null?null:as.getOrgGrpId().getAmpOrgGrpId());	       
 		}

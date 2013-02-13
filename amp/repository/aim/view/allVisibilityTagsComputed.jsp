@@ -523,6 +523,7 @@
 <field:display name="Humanitarian Aid" feature="Identification"></field:display> 
 <field:display name="Implementation Level" feature="Location"></field:display> 
 <field:display name="Implementation Location" feature="Location"></field:display> 
+<field:display name="Implementation Location gis" feature="Location"></field:display>
 <field:display name="Implementing Agency Add Button" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency Remove Button" feature="Implementing Agency"></field:display> 

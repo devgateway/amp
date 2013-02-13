@@ -23,7 +23,11 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -139,7 +143,7 @@ public class OnePager extends AmpHeaderFooter {
 			String key = ActivityGatekeeper.lockActivity(activityId, ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
 			if (key == null){ //lock not aquired
 				//redirect page
-				getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(ActivityGatekeeper.buildRedirectLink(activityId)));
+                throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(activityId));
 				//return;
 			}
 			
@@ -175,9 +179,9 @@ public class OnePager extends AmpHeaderFooter {
 				@Override
 				protected void onTimer(AjaxRequestTarget target) {
 					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId());
-					if (editLockRefresher.isEnabled() && refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED) 
-						getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()))));
-					
+					if (editLockRefresher.isEnabled() && refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED)
+                        throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId())));
+
 					if (DEBUG_ACTIVITY_LOCK){
 						if (refreshStatus == ActivityGatekeeper.REFRESH_LOCK_LOCKED)
 							editLockRefresher.setDefaultModelObject("FAILED to refresh lock!");

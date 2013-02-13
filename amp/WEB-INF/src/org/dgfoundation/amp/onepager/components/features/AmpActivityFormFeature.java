@@ -37,6 +37,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.visit.IVisit;
@@ -87,7 +88,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	protected Form<AmpActivityVersion> activityForm;
 	private static final Integer GO_TO_DESKTOP=1;
 	private static final Integer STAY_ON_PAGE=2;
-	private Integer redirected = GO_TO_DESKTOP;
 
     private static final String DISBURSEMENTS_BIGGER_ERROR =
             TranslatorUtil.getTranslatedText("The sum of disbursements is greater than the sum of commitments");
@@ -280,8 +280,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				// process the form for this request
 				form.process(this.getButton());
 				
-				if(!form.hasError()) 
-					saveMethod(target, am, feedbackPanel, false, redirected);
 				if(!form.hasError()){
                     HashMap<String, String> commitmentErrors = new HashMap<String, String>();
                     HashMap<String, String> expenditureErrors = new HashMap<String, String>();
@@ -343,7 +341,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		Radio<Integer> radioDesktop=new Radio<Integer>("draftRedirectedDesktop", new Model<Integer>(GO_TO_DESKTOP));
 		myDraftOpts.setOutputMarkupId(true);
         myDraftOpts.setRenderBodyOnly(false);
-        radioDesktop.add(new AttributeModifier("value", GO_TO_DESKTOP));
         radioDesktop.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 			protected void onEvent(final AjaxRequestTarget target) {
@@ -354,7 +351,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		});
 		myDraftOpts.add(radioDesktop);
 		Radio<Integer> radioStay=new Radio<Integer>("draftStayOnPage", new Model<Integer>(STAY_ON_PAGE));
-        radioStay.add(new AttributeModifier("value", STAY_ON_PAGE));
 		radioStay.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
 			protected void onEvent(final AjaxRequestTarget target) {
@@ -662,8 +658,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		//Before starting to save check lock
 		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())){
 			//Someone else has grabbed the lock ... maybe connection slow and lock refresh timed out
-			getRequestCycle().scheduleRequestHandlerAfterCurrent(new RedirectRequestHandler(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()))));
-			return;
+            throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId())));
 		}
 		
 		ActivityUtil.saveActivity((AmpActivityModel) am, draft);
@@ -726,21 +721,21 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		}
 
-		//if (newActivity){
-			Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
-			String replaceStr;
-			if (oldId == null)
-				replaceStr = "new";
-			else
-				replaceStr = String.valueOf(oldId);
-			if(redirected.getObject().equals(STAY_ON_PAGE)){
+        Long actId = am.getObject().getAmpActivityId();//getAmpActivityGroup().getAmpActivityGroupId();
+        String replaceStr;
+        if (oldId == null) {
+            replaceStr = "new";
+        }
+        else {
+            replaceStr = String.valueOf(oldId);
+        }
+        if(draft && redirected.getObject().equals(STAY_ON_PAGE)){
 				target.appendJavaScript("var newLoc=window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\");newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
-			}
-			else{
-				target.appendJavaScript("window.location.replace('/');");
-			}
-		//}
-		target.add(feedbackPanel);
+        }
+        else{
+            target.appendJavaScript("window.location.replace('/aim/');");
+        }
+        target.add(feedbackPanel);
 	}
 
 	private void quickMenu(IModel<AmpActivityVersion> am, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) {

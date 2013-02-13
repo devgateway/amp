@@ -341,6 +341,8 @@ public class HelpUtil {
 	 */
 	private static void deleteAllMatchedImages(Session session, String imgTags) throws SDMException
 	{
+		List<Long> docIds = new ArrayList<Long>();
+		boolean tested = false;
 		while(true)
 		{
 			// invariant: string always starts with <img - once this invariant is violated, exit the loop
@@ -367,28 +369,35 @@ public class HelpUtil {
 					logger.error("invalidly parsed docId " + docId, new RuntimeException());
 					break;
 				}
-				
-				try
-				{
-					Sdm doc = org.digijava.module.sdm.util.DbUtil.getDocument(new Long (docId), session);
-					session.delete(doc);
+				Iterator<Long> it = docIds.iterator();
+				while(it.hasNext()){
+					if(it.next().compareTo(new Long(docId))==0)
+						tested = true;
 				}
-				catch(SDMException e)
-				{
-					if (e.getCause() instanceof org.hibernate.ObjectNotFoundException)
+				if(!tested){
+					docIds.add(new Long(docId));
+					try
 					{
-						// swallow exception
-						logger.warn("could not delete document with id " + docId, new RuntimeException());
+						Sdm doc = org.digijava.module.sdm.util.DbUtil.getDocument(new Long (docId), session);
+						session.delete(doc);
 					}
-					else
-						throw e;
+					catch(SDMException e)
+					{
+						if (e.getCause() instanceof org.hibernate.ObjectNotFoundException)
+						{
+							// swallow exception
+							logger.warn("could not delete document with id " + docId, new RuntimeException());
+						}
+						else
+							throw e;
+					}
 				}
 			}
-			
 			int nextImgTagPos = imgTags.indexOf("<img", imgTagEndPos);
 			if (nextImgTagPos <= 0)
 				break;
 			imgTags = imgTags.substring(nextImgTagPos);
+			tested = false;
 		}
 	}
 	

@@ -82,10 +82,14 @@ public class AmpARFilter extends PropertyListable {
 	public final static String SDF_IN_FORMAT_STRING = "dd/MM/yyyy";
 	public final static Long TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES = -997L;
 	
+	/**
+	 * list of all legal values of AmpActivity::"approvalStatus". DO NOT CHANGE, make a different set with a subset of these if you need the subset only
+	 */
 	public final static Set<String> activityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
 														this.add(Constants.APPROVED_STATUS);
 														this.add(Constants.EDITED_STATUS);
 														this.add(Constants.STARTED_APPROVED_STATUS);
+														this.add(Constants.STARTED_STATUS);
 														}});
 	/**
 	 * Date string formatted for SQL queries

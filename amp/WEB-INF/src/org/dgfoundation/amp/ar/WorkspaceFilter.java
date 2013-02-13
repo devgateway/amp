@@ -90,7 +90,7 @@ public class WorkspaceFilter
 				"'" + Constants.APPROVED_STATUS + "'" :			// Management workspace: approved activities only
 				(approved ? // non-management workspace, but only approved activities wanted nevertheless
 						"'" + Constants.APPROVED_STATUS + "'" :
-						Util.toCSString(AmpARFilter.activityStatus)	// other workspaces: other kinds of activities
+						Util.toCSString(AmpARFilter.activityStatus)	// other workspaces: all kinds of activities
 				);
 		
 		if("Management".equals(this.getAccessType()))

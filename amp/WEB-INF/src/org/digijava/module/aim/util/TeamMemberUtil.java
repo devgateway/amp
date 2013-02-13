@@ -304,6 +304,7 @@ public class TeamMemberUtil {
 		tm.setPublishDocuments(ampMem.getPublishDocPermission());
 		tm.setTeamAccessType(ampMem.getAmpTeam().getAccessType());
 		tm.setComputation(ampMem.getAmpTeam().getComputation());
+		tm.setUseFilters(ampMem.getAmpTeam().getUseFilter());
 		tm.setRoleId(ampMem.getAmpMemberRole().getAmpTeamMemRoleId());
 		tm.setComputation(ampMem.getAmpTeam().getComputation());
 		if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {

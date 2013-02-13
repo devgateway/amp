@@ -58,10 +58,9 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.mondrian.query.MoConstants;
+
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
@@ -91,6 +90,12 @@ public class AmpARFilter extends PropertyListable {
 														this.add(Constants.STARTED_APPROVED_STATUS);
 														this.add(Constants.STARTED_STATUS);
 														}});
+	
+	public final static Set<String> validatedActivityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
+														this.add(Constants.APPROVED_STATUS);
+														this.add(Constants.STARTED_APPROVED_STATUS);
+		}});
+	
 	/**
 	 * Date string formatted for SQL queries
 	 * field not static because SimpleDateFormat is not thread-safe
@@ -450,8 +455,7 @@ public class AmpARFilter extends PropertyListable {
 	public void readRequestData(HttpServletRequest request) {
 		
 		this.generatedFilterQuery = initialFilterQuery;
-		TeamMember tm = (TeamMember) request.getSession().getAttribute(
-				Constants.CURRENT_MEMBER);
+		TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 		
 		String ampReportId = null ;
 		//Check if the reportid is not nut for public mondrian reports
@@ -746,6 +750,12 @@ public class AmpARFilter extends PropertyListable {
 		
 			return;
 		}
+		
+		TeamMember loggedInTeamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+		
+		boolean thisIsComputedWorkspaceWithFilters = workspaceFilter && (loggedInTeamMember != null) && 
+											(loggedInTeamMember.getComputation() != null) && (loggedInTeamMember.getComputation()) &&
+											(loggedInTeamMember.getUseFilters() != null) && (loggedInTeamMember.getUseFilters());
 		
 		indexedParams=new ArrayList<FilterParam>();
 		
@@ -1124,15 +1134,7 @@ public class AmpARFilter extends PropertyListable {
 
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
-
-		if (needsTeamFilter || workspaceFilter)
-		{
-			//String TEAM_FILTER = WorkspaceFilter.getWorkspaceFilterQuery(request.getSession());			
-			// cannot use generic call from above, because this.getTeamMemberId() might be non-null even in the absence of a logged-in-user (a report with workspaceLinked = true)
-			String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMemberId, this.isPublicView());
-			queryAppend(TEAM_FILTER);
-		}
-
+		
 		if (!workspaceFilter)
 		{
 			// not workspace, e.g. normal report/tab filter
@@ -1144,6 +1146,7 @@ public class AmpARFilter extends PropertyListable {
 				queryAppend(teamFilter.getGeneratedFilterQuery());
 			}
 		}
+		
 		if (statuses != null && statuses.size() > 0)
 			queryAppend(STATUS_FILTER);
 		if (workspaces != null && workspaces.size() > 0)
@@ -1249,6 +1252,45 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend( MULTI_DONOR );
 		}
 
+		/* TEAM FILTER HACK ZONE
+		 * because in certain situations this zone can add an OR, any queryAppend calls MUST be done BEFORE THIS AREA
+		 */
+		
+		/**
+		 * NO queryAppend CALLS (except TEAM_FILTER) AFTER THIS POINT !
+		 */
+		String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMemberId, this.isPublicView());
+
+		if (needsTeamFilter)
+		{
+			/* needsTeamFilter can only be true in public view
+			 * public views cannot be shared from within a computed Workspace (THIS IS NOT SUPPORTED NOW)
+			 */
+			 queryAppend(TEAM_FILTER);
+		}
+		else
+		if (workspaceFilter)
+		{
+			if (thisIsComputedWorkspaceWithFilters)
+			{
+				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
+				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
+				 */
+				String allValidatedActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE draft<> true AND approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) +")";				
+				queryAppend(allValidatedActivitiesInTheDatabaseQuery);
+				generatedFilterQuery += " OR amp_activity_id IN (" + TEAM_FILTER + ")";
+			}
+			else
+			{
+				// normal workspace filter, works hackless
+				queryAppend(TEAM_FILTER);
+			}
+		}
+		
+		/**
+		 * NO queryAppend CALLS AFTER THIS POINT !
+		 */
+		
 		if ( this.isPublicView() && ! this.budgetExport  ){
 			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
 		}

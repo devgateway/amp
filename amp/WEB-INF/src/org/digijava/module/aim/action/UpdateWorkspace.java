@@ -107,7 +107,7 @@ public class UpdateWorkspace extends Action {
 			newTeam.setHideDraftActivities(uwForm.getHideDraftActivities());
                 newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
             
-            if(!uwForm.getUseFilter()){
+            if(uwForm.getUseFilter() == null || !uwForm.getUseFilter()){ // temporary fix for AMP-14704 by ConstantinDolghier
 				if (uwForm.getOrganizations() != null) {
 					TreeSet s = new TreeSet();
 					s.addAll(uwForm.getOrganizations());
@@ -165,7 +165,7 @@ public class UpdateWorkspace extends Action {
 					return mapping.getInputForward();
 				}
 				
-				if(uwForm.getUseFilter()){
+				if(uwForm.getUseFilter() != null && uwForm.getUseFilter()){ // temporary fix for AMP-14704 by ConstantinDolghier
 					Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
 					if ( filter == null )
 						filter		= request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );

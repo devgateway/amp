@@ -26,6 +26,8 @@ public class TeamMember implements Comparable, Serializable{
 	
 	private Boolean computation;
 	
+	private Boolean useFilters;
+	
 	private Boolean addActivity;
 	
 	private boolean teamHead;
@@ -268,6 +270,16 @@ public class TeamMember implements Comparable, Serializable{
 		return approver;
 	}
 
+	public void setUseFilters(Boolean useFilters)
+	{
+		this.useFilters = useFilters;
+	}
+	
+	public Boolean getUseFilters()
+	{
+		return this.useFilters;
+	}
+	
 	@Override
 	public int compareTo(Object arg0) {
 		// TODO Auto-generated method stub

@@ -26,6 +26,11 @@ public class WorkspaceFilter
 	private long activitiesRejectedByFilter;
 	
 	/**
+	 * might be null!
+	 */
+	private TeamMember teamMember;
+	
+	/**
 	 * take care for special values of teamMemberId, like TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES !
 	 * @param teamMemberId
 	 * @param accessType
@@ -67,9 +72,9 @@ public class WorkspaceFilter
 			fillTeamAO();
 			return;
 		}
-		TeamMember tm = teamMemberId == null ? null : TeamMemberUtil.getTeamMember(teamMemberId);
-		if (tm != null) {
-			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
+		teamMember = teamMemberId == null ? null : TeamMemberUtil.getTeamMember(teamMemberId);
+		if (teamMember != null) {
+			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(teamMember));
 			fillTeamAO();
 		}
 		else {
@@ -77,6 +82,11 @@ public class WorkspaceFilter
 		}
 	}
 	
+	/**
+	 * HACK: for computed Workspaces With Filters, will return a query which only selects activities from within the workspace
+	 * AmpARFilter is responsible for fetching / filtering the other activities and doing the OR
+	 * @return
+	 */
 	public String getGeneratedQuery()
 	{
 		String TEAM_FILTER = "";
@@ -87,9 +97,9 @@ public class WorkspaceFilter
 		String NO_MANAGEMENT_ACTIVITIES="";
 		
 		String used_approval_status = "Management".equals(this.getAccessType()) ? 
-				"'" + Constants.APPROVED_STATUS + "'" :			// Management workspace: approved activities only
-				(approved ? // non-management workspace, but only approved activities wanted nevertheless
-						"'" + Constants.APPROVED_STATUS + "'" :
+				Util.toCSString(AmpARFilter.validatedActivityStatus) :			// Management workspace: validated activities only
+				(approved ? // non-management workspace, but only validated activities wanted nevertheless
+						Util.toCSString(AmpARFilter.validatedActivityStatus) :
 						Util.toCSString(AmpARFilter.activityStatus)	// other workspaces: all kinds of activities
 				);
 		
@@ -127,10 +137,10 @@ public class WorkspaceFilter
 				
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 						+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
-						used_approval_status	+")  ) " + (hideDraft ? "AND draft<>true ":"");
+						Util.toCSString(AmpARFilter.validatedActivityStatus)	+")  ) " + (hideDraft ? "AND draft<>true ":"");
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
 						+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
-						used_approval_status	+")  ) " + (hideDraft ? "AND draft<>true ":"");
+						Util.toCSString(AmpARFilter.validatedActivityStatus)	+")  ) " + (hideDraft ? "AND draft<>true ":"");
 //				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 //					+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL )";
 //				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
@@ -141,8 +151,8 @@ public class WorkspaceFilter
 					+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL )";
 				NO_MANAGEMENT_ACTIVITIES +=" OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
 					+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL )";		
-			}		
-		
+			}
+				
 		int c;
 		if (hideDraft){
 			c = Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));

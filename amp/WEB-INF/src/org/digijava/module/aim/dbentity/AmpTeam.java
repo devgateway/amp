@@ -86,8 +86,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 		}
 		af.generateFilterQuery(request, true);
 		session.setAttribute(ArConstants.TEAM_FILTER, af);
-		System.out.flush();
-		System.err.flush();
 	}
 	
 	@Override

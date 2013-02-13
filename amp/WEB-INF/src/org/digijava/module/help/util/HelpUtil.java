@@ -414,8 +414,6 @@ public class HelpUtil {
 				if (editors!=null && editors.size()>0){
 					for (Editor editor : editors) {
 						if(editor.getBody()!=null){
-							if (editor.getEditorKey().equals("help-admin-2116913595-1357837306810"))
-								System.out.println("I am atrociously handsome");
 							String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;
 							Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
 							Matcher matcher = pattern.matcher(editor.getBody());

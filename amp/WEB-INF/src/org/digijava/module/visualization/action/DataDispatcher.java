@@ -109,13 +109,13 @@ public class DataDispatcher extends DispatchAction {
 		
 		if (tm == null || visualizationForm.getFilter().getWorkspaceOnly() == null || !visualizationForm.getFilter().getWorkspaceOnly()) //Public view
 		{
-    		String sqlQuery = WorkspaceFilter.getWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, "Management", false);
+    		String sqlQuery = WorkspaceFilter.generateWorkspaceFilterQuery(session, AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
     		ArrayList<BigInteger> activityList = DbUtil.getInActivities(sqlQuery);
     		visualizationForm.getFilter().setActivityComputedList(activityList);
 			visualizationForm.getFilter().setTeamMember(tm);
 		}
 		else if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
-    		String sqlQuery = WorkspaceFilter.getWorkspaceFilterQuery(tm.getMemberId(), null, false);
+    		String sqlQuery = WorkspaceFilter.generateWorkspaceFilterQuery(session, tm.getMemberId(), false);
     		ArrayList<BigInteger> activityList = DbUtil.getInActivities(sqlQuery);
     		visualizationForm.getFilter().setActivityComputedList(activityList);
 			visualizationForm.getFilter().setTeamMember(tm);

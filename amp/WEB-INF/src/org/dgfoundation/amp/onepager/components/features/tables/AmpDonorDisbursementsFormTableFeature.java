@@ -68,9 +68,9 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		};		
 		
 
-		if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT).equalsIgnoreCase("TRUE"))
+		if("TRUE".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT)))
 			alertIfExpenditureBiggerDisbursment = true;
-		if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS).equalsIgnoreCase("TRUE"))
+		if("TRUE".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS)))
 			alertIfDisbursmentBiggerCommitments = true;
 
 		AbstractReadOnlyModel<List<AmpFundingDetail>> setAmountListModel = OnePagerUtil
@@ -91,15 +91,17 @@ public class AmpDonorDisbursementsFormTableFeature extends
 		amountSumComparator.setIndicatorAppender(iValidator);
 		amountSumComparator.setSecondCollectionModel(commitmentModel);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(true);
+        amountSumComparator.setOutputMarkupId(true);
 		amountSumComparator.setVisibilityAllowed(alertIfDisbursmentBiggerCommitments);
 		add(amountSumComparator);
 		
 		
 		final AmpCollectionsSumComparatorValidatorField amountSumComparator1=
-				new AmpCollectionsSumComparatorValidatorField("amountSumComparator1",setAmountListModel,"checkExpenditureSum", "AmpExpemdituresCollectionsSumComparatorValidator"); 
+				new AmpCollectionsSumComparatorValidatorField("amountSumComparator1",setAmountListModel,"checkExpenditureSum", "AmpExpendituresCollectionsSumComparatorValidator");
 		amountSumComparator1.setIndicatorAppender(iValidator);
 		amountSumComparator1.setSecondCollectionModel(expenditureModel);
 		amountSumComparator1.setAlertIfCurrentModelAmountSumBig(false);
+        amountSumComparator1.setOutputMarkupId(true);
 		amountSumComparator1.setVisibilityAllowed(alertIfExpenditureBiggerDisbursment);
 		wmc.setVisibilityAllowed(alertIfDisbursmentBiggerCommitments || alertIfExpenditureBiggerDisbursment);
 		add(amountSumComparator1);

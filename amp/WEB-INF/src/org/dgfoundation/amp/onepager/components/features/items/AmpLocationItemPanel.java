@@ -16,11 +16,7 @@ import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -42,11 +38,13 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 	private IModel<AmpActivityLocation> locationModel;
 
 	public AmpLocationItemPanel(String id, final IModel<AmpActivityLocation> model,
-			String fmName, final IModel<Boolean> disablePercentagesForInternational, 
-			final IModel<AmpActivityVersion> am, final AmpRegionalFundingFormSectionFeature regionalFundingFeature, 
-			final AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField, 
-			final AmpUniqueCollectionValidatorField<AmpActivityLocation> uniqueCollectionValidationField, 
-			final IModel<Set<AmpActivityLocation>> setModel, final ListView<AmpActivityLocation> list) {
+                                String fmName, final IModel<Boolean> disablePercentagesForInternational,
+                                final IModel<AmpActivityVersion> am, final AmpRegionalFundingFormSectionFeature regionalFundingFeature,
+                                final AmpPercentageCollectionValidatorField<AmpActivityLocation> percentageValidationField,
+                                final AmpUniqueCollectionValidatorField<AmpActivityLocation> uniqueCollectionValidationField,
+                                final AmpCollectionValidatorField minSizeCollectionValidationField,
+                                final AmpCollectionValidatorField treeCollectionValidatorField,
+                                final IModel<Set<AmpActivityLocation>> setModel, final ListView<AmpActivityLocation> list) {
 		super(id, model, fmName, true);
 		
 		this.locationModel = model;
@@ -137,6 +135,8 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 					
 					percentageValidationField.reloadValidationField(target);							
 					uniqueCollectionValidationField.reloadValidationField(target);
+                    minSizeCollectionValidationField.reloadValidationField(target);
+                    treeCollectionValidatorField.reloadValidationField(target);
 				}
 				setModel.getObject().remove(model.getObject());
 				target.add(list.getParent());

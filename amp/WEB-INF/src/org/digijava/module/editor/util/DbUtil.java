@@ -357,10 +357,7 @@ public class DbUtil {
             @SuppressWarnings("unchecked")
 			List<Editor> result = q.list();
             if (result != null && (result.size() != 0)) {
-            	for (Editor editor : result) {
-                    item = editor;
-                    break;
-				}
+            	item = result.get(0);
             }
             else {
                 item = null;

@@ -492,6 +492,7 @@ function initializeGlobalVariables(){
 															<c:out value="${item.mainEntity.orgGrpName}"/>
 														</c:set>
 														<li><input type="checkbox" name="org_grp_check"
+																	id="org_grp_check_${item.mainEntity.ampOrgGrpId}"
 																	title="${orgGrp}"
 																	value="${item.mainEntity.ampOrgGrpId}"
 																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
@@ -501,6 +502,7 @@ function initializeGlobalVariables(){
 																<c:forEach items="${item.subordinateEntityList}"
 																	var="organization">
 																	<li><input type="checkbox"
+																		id="organization_check_${organization.ampOrgId}"
 																		class="organization_check_${item.mainEntity.ampOrgGrpId}"
 																		name="organization_check" title="<c:out value='${organization.name}'/>"
 																		value="${organization.ampOrgId}"
@@ -534,6 +536,7 @@ function initializeGlobalVariables(){
 														items="${visualizationform.filter.regionWithZones}"
 														var="item">
 														<li><input type="checkbox" name="region_check"
+																	id="region_check_${item.mainEntity.id}"
 																	title="${item.mainEntity.name}"
 																	value="${item.mainEntity.id}"
 																	onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})">
@@ -543,6 +546,7 @@ function initializeGlobalVariables(){
 																<c:forEach items="${item.subordinateEntityList}"
 																	var="zone">
 																	<li><input type="checkbox"
+																		id="zone_check_${zone.id}"
 																		class="zone_check_${item.mainEntity.id}"
 																		name="zone_check" title="${zone.name}"
 																		value="${zone.id}"

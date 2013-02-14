@@ -98,9 +98,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	public ListView<AmpComponentPanel> getFeatureList() {
 		return featureList;
 	}
-	private Integer redirected = GO_TO_DESKTOP;
-	
-	
+
 	/**
 	 * Toggles the validation of semantic validators. 
 	 * @param enabled whether these validators are enabled
@@ -208,7 +206,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 		activityForm.add(feedbackPanel);
 		add(activityForm);
-		
+        final Model<Integer> redirected = new Model<Integer>(GO_TO_DESKTOP){
+            @Override
+            public void setObject(Integer object) {
+                super.setObject(object);    //To change body of overridden methods use File | Settings | File Templates.
+            }
+        };
+
 		//add ajax submit button
 		AmpButtonField saveAndSubmit = new AmpButtonField("saveAndSubmit","Save and Submit", AmpFMTypes.MODULE, true) {
 			@Override
@@ -219,7 +223,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				form.process(this.getButton());
 				
 				if(!form.hasError()) 
-					saveMethod(target, am, feedbackPanel, false);
+					saveMethod(target, am, feedbackPanel, false, redirected);
 				else
 					onError(target, form);
 			}
@@ -254,48 +258,48 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		});
 		activityForm.add(saveAsDraft);
-		final RadioGroup<Integer> myDraftOpts = new RadioGroup<Integer>("draftRedirectedGroup", new Model<Integer>(GO_TO_DESKTOP));
+
+		final RadioGroup<Integer> myDraftOpts = new RadioGroup<Integer>("draftRedirectedGroup", new Model<Integer>());
 		Radio<Integer> radioDesktop=new Radio<Integer>("draftRedirectedDesktop", new Model<Integer>(GO_TO_DESKTOP));
 		myDraftOpts.setOutputMarkupId(true);
-		myDraftOpts.setRenderBodyOnly(false);
-		radioDesktop.add(new AjaxEventBehavior("onclick") {
+        myDraftOpts.setRenderBodyOnly(false);
+        radioDesktop.add(new AttributeModifier("value", GO_TO_DESKTOP));
+        radioDesktop.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
-
 			protected void onEvent(final AjaxRequestTarget target) {
-				myDraftOpts.setModelObject(GO_TO_DESKTOP);
-				target.add(myDraftOpts);
+				redirected.setObject(GO_TO_DESKTOP);
+                myDraftOpts.setModelObject(GO_TO_DESKTOP);
+                target.add(myDraftOpts);
 			}
 		});
 		myDraftOpts.add(radioDesktop);
 		Radio<Integer> radioStay=new Radio<Integer>("draftStayOnPage", new Model<Integer>(STAY_ON_PAGE));
-		radioStay.add(new AjaxEventBehavior("onclick") {
+        radioStay.add(new AttributeModifier("value", STAY_ON_PAGE));
+		radioStay.add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
-			
 			protected void onEvent(final AjaxRequestTarget target) {
-				myDraftOpts.setModelObject(STAY_ON_PAGE);
-				target.add(myDraftOpts);
+				redirected.setObject(STAY_ON_PAGE);
+                myDraftOpts.setModelObject(STAY_ON_PAGE);
+                target.add(myDraftOpts);
 			}
 		});
 		myDraftOpts.add(radioStay);
 		activityForm.add(myDraftOpts);
-		
 
-		AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
+        AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
 			TextField<String> titleField=null;
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				target.appendJavaScript("hideDraftPanel();");
 				am.setObject(am.getObject());
 				
-				redirected= new Integer(myDraftOpts.getModelObject());
 				toggleSemanticValidation(false, form,target);
-
 
 				// process the form for this request
 				form.process(this.getButton());
 				//only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
 				if(!form.hasError())  
-					saveMethod(target, am, feedbackPanel, true);
+					saveMethod(target, am, feedbackPanel, true, redirected);
 				else
 					onError(target, form);
 			}
@@ -427,8 +431,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	}
 
 	protected void saveMethod(AjaxRequestTarget target,
-			IModel<AmpActivityVersion> am, FeedbackPanel feedbackPanel,
-			boolean draft) {
+                              IModel<AmpActivityVersion> am, FeedbackPanel feedbackPanel,
+                              boolean draft, Model<Integer> redirected) {
 		
 		OnePager op = this.findParent(OnePager.class);
 		//disable lock refresher
@@ -517,7 +521,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				replaceStr = "new";
 			else
 				replaceStr = String.valueOf(oldId);
-			if(redirected.equals(STAY_ON_PAGE)){
+			if(redirected.getObject().equals(STAY_ON_PAGE)){
 				target.appendJavaScript("var newLoc=window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\");newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 			}
 			else{

@@ -4,8 +4,8 @@
 	<form-beans>
 		<form-bean name="visualizationform"
 			type="org.digijava.module.visualization.form.VisualizationForm" />
-			<form-bean name="visualizationSaveOrgInfoForm"
-			type="org.digijava.module.visualization.form.SaveOrgInfoForm" />
+			<form-bean name="visualizationSaveInfoForm"
+			type="org.digijava.module.visualization.form.SaveInfoForm" />
 			<form-bean name="dashboardform"
 			type="org.digijava.module.visualization.form.DashboardForm" />
 			
@@ -38,7 +38,7 @@
     	<action name="visualizationform" path="/visualization/pdfExport" type="org.digijava.module.visualization.action.ExportToPDF"/>
     	<action name="visualizationform" path="/visualization/wordExport" type="org.digijava.module.visualization.action.ExportToWord"/>
     	<action name="visualizationform" path="/visualization/excelExport" type="org.digijava.module.visualization.action.ExportToExcel"/>
-    	<action name="visualizationSaveOrgInfoForm" path="/visualization/saveOrgInfo" type="org.digijava.module.visualization.action.SaveAdditionalInformation" scope="request"/>
+    	<action name="visualizationSaveInfoForm" path="/visualization/saveOrgInfo" type="org.digijava.module.visualization.action.SaveAdditionalInformation" scope="request"/>
     
 	    <action name="dashboardform" path="/visualization/viewDashboardsList" scope="session" type="org.digijava.module.visualization.action.ShowDashboardsList">
 	      	<forward name="forward" path="/showLayout.do?layout=viewDashboardsList"/>

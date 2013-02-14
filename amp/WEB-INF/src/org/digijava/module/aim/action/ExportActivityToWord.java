@@ -3,7 +3,6 @@ package org.digijava.module.aim.action;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -1844,28 +1843,20 @@ public class ExportActivityToWord extends Action {
 			fundingByYearSection.addRowData(rowData);
 
 			Map<String, Double> myMap = comp.getFinanceByYearInfo().get(key);
-
-			Double a = myMap.get("MontoProgramado");
-			Double plannedCommSum = new Double(
-					new DecimalFormat("0.00").format(a));
-
+			String plannedCommSum = FormatHelper.formatNumber(myMap.get("MontoProgramado"));
 			rowData = new ExportSectionHelperRowData("Planned Commitments Sum",
-					null, null, true).addRowData(plannedCommSum.toString());
+					null, null, true).addRowData(plannedCommSum);
 			fundingByYearSection.addRowData(rowData);
-
-			Double actCommSum = new Double(
-					new DecimalFormat("0.00").format(myMap
-							.get("MontoReprogramado")));
+			
+			String actCommSum = FormatHelper.formatNumber(myMap.get("MontoReprogramado"));
 			rowData = new ExportSectionHelperRowData("Actual Commitments Sum",
-					null, null, true).addRowData(actCommSum.toString());
+					null, null, true).addRowData(actCommSum);
 			fundingByYearSection.addRowData(rowData);
 
-			Double actExpSum = new Double(
-					new DecimalFormat("0.00").format(myMap
-							.get("MontoEjecutado")));
+			String actExpSum =FormatHelper.formatNumber(myMap.get("MontoEjecutado"));
 
 			rowData = new ExportSectionHelperRowData("Actual Expenditures Sum",
-					null, null, true).addRowData(actExpSum.toString());
+					null, null, true).addRowData(actExpSum);
 			fundingByYearSection.addRowData(rowData);
 		}
 	}

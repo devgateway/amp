@@ -139,8 +139,8 @@ public class FilterUtil {
 		form.setFromMonth( filter.getFromMonth() );
 		form.setToMonth( filter.getToMonth() );
 		
-		form.setFromDate( filter.getFromDate() );
-		form.setToDate( filter.getToDate() );
+		form.setFromDate(FormatHelper.formatDate(filter.buildFromDateAsDate()));
+		form.setToDate(FormatHelper.formatDate(filter.buildToDateAsDate()));
 		form.getDynamicDateFilter().setCurrentPeriod(filter.getDynDateFilterCurrentPeriod());
 		form.getDynamicDateFilter().setAmount(filter.getDynDateFilterAmount());
 		form.getDynamicDateFilter().setOperator(filter.getDynDateFilterOperator());

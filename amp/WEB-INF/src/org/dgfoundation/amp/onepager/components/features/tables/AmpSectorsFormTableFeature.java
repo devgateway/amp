@@ -142,10 +142,6 @@ public class AmpSectorsFormTableFeature extends
 		 
 
 		list = new ListView<AmpActivitySector>("listSectors", listModel) {
-			
-			
-			
-
 			@Override
 			protected void populateItem(final ListItem<AmpActivitySector> item) {
 				final MarkupContainer listParent = this.getParent();

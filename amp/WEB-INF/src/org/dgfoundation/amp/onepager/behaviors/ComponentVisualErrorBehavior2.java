@@ -19,7 +19,12 @@ public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegi
 	public static final String INVALID_CLASS="formcomponent invalid";
 	private static final long serialVersionUID = 1L;
 
-	@Override
+    @Override
+    public void onConfigure(Component component) {
+        super.onConfigure(component);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public void onComponentTag(Component component, ComponentTag tag) {
 		if (!((FormComponent<?>) component).isValid()){
 			String c1 = tag.getAttribute("class");

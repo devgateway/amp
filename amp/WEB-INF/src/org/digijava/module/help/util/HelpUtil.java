@@ -566,7 +566,7 @@ System.out.println("lang:"+lang);
 		
 		
 	} catch (Exception e) {
-		logger.error("Unable to load help data");
+		logger.error("Unable to load help data", e);
 			throw new EditorException("Unable to Load Help data", e);
 	}
 	return helpTopics;
@@ -609,7 +609,7 @@ System.out.println("lang:"+lang);
 		
 		
 	} catch (Exception e) {
-		logger.error("Unable to load help data");
+		logger.error("Unable to load help data", e);
 			throw new EditorException("Unable to Load Help data", e);
 	}
 	return helpTopics;
@@ -630,7 +630,7 @@ System.out.println("lang:"+lang);
     	     result = query.list();
     	     
 		} catch (Exception e) {
-			logger.error("Unable to load help data");
+			logger.error("Unable to load help data", e);
 		}
         logger.debug("getBodyResult:"+result);
     	return result;
@@ -652,7 +652,7 @@ System.out.println("lang:"+lang);
     	     result = query.list();
     	     
 		} catch (Exception e) {
-			logger.error("Unable to load help data");
+			logger.error("Unable to load help data", e);
 		}
     
     	return result;
@@ -817,7 +817,9 @@ System.out.println("lang:"+lang);
 				retVal +="<tr height=\"5px\"><td>&nbsp;</td></tr>";
 				if(topic.getBodyEditKey()!=null){					
 					Editor editor = DbUtil.getEditor(topic.getBodyEditKey(), lang);
-					retVal +="<tr><td style=\"text-align:left;\">"+editor.getBody()+"</td></tr>";
+					
+					String editorBody = editor == null ? "(" + TranslatorWorker.translateText("missing topic") + ")" : editor.getBody();
+					retVal +="<tr><td style=\"text-align:left;\">" + editorBody + "</td></tr>";
 				}
 				
 				retVal += "</table>";
@@ -951,20 +953,22 @@ System.out.println("lang:"+lang);
                                   Long paragraphOrderObj = new Long (paragraphOrder);
 
              					 SdmItem sdmItem = org.digijava.module.sdm.util.DbUtil.getSdmItem(new Long (docId), new Long (paragraphOrder));
-             					 //get image extensions
-             					 String imgType=sdmItem.getContentType();
-             					 String imgExtension = ".jpg";
-             					 if(imgType.indexOf("jpeg")==-1){
-             						 imgExtension = "." + imgType.substring(imgType.lastIndexOf("/")+1);
-             					 }
-             					 
-             					 out.putNextEntry(new ZipEntry(imgName +imgExtension));
-             					 byte[] buf =  sdmItem.getContent();
-             			         // Transfer bytes from the file to the ZIP file			 		
-             			         int len=buf.length;	           
-             				     out.write(buf, 0, len);
-             				     // Complete the entry
-             				     out.closeEntry();
+                                 if (sdmItem != null) {
+                                     //get image extensions
+                                     String imgType=sdmItem.getContentType();
+                                     String imgExtension = ".jpg";
+                                     if(imgType.indexOf("jpeg")==-1){
+                                         imgExtension = "." + imgType.substring(imgType.lastIndexOf("/")+1);
+                                     }
+
+                                     out.putNextEntry(new ZipEntry(imgName +imgExtension));
+                                     byte[] buf =  sdmItem.getContent();
+                                     // Transfer bytes from the file to the ZIP file
+                                     int len=buf.length;
+                                     out.write(buf, 0, len);
+                                     // Complete the entry
+                                     out.closeEntry();
+                                 }
                               }
              					 //replace editor body with new tag
              					 String newTag = "<sdmTag " + imgTag.substring(5,imgTag.indexOf("src=")) + "imgName=\""+imgName+"\" />";
@@ -996,7 +1000,7 @@ System.out.println("lang:"+lang);
               retVal.add(helpout);
          }	
  		} catch (Exception e) {
- 			logger.error("Unable to load help data");
+ 			logger.error("Unable to load help data", e);
  				
  		}
  		return retVal;

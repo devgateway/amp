@@ -28,7 +28,15 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	
 	
 	private boolean translateable	= true;
-	
+    // this field is saved in Organization Dashboard and not from organization manager in admin
+    private String orgGrpBackground;
+    /*
+     *this field is saved in Organization Dashboard and not from organization manager in admin
+     * don't confuse it with Description field
+     */
+    private String orgGrpDescription;
+    // this field is saved in  Organization Dashboard and not from organization manager in admin
+    private String orgGrpKeyAreas;
 	
 	/**
 	 * @return Returns the ampOrgGrpId.
@@ -144,5 +152,23 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	public String[] getSubHeaders() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	public String getOrgGrpBackground() {
+		return orgGrpBackground;
+	}
+	public void setOrgGrpBackground(String orgGrpBackground) {
+		this.orgGrpBackground = orgGrpBackground;
+	}
+	public String getOrgGrpDescription() {
+		return orgGrpDescription;
+	}
+	public void setOrgGrpDescription(String orgGrpDescription) {
+		this.orgGrpDescription = orgGrpDescription;
+	}
+	public String getOrgGrpKeyAreas() {
+		return orgGrpKeyAreas;
+	}
+	public void setOrgGrpKeyAreas(String orgKeyAreas) {
+		this.orgGrpKeyAreas = orgKeyAreas;
 	}
 }

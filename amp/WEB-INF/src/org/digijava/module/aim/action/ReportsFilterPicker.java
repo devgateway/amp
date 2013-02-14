@@ -3,28 +3,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.management.RuntimeErrorException;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -33,51 +11,19 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
-import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.ar.util.FilterUtil;
-import org.digijava.module.aim.ar.util.ReportFilterFormUtil;
 import org.digijava.module.aim.ar.util.ReportsUtil;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
-import org.digijava.module.aim.util.AmpMath;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.HierarchyListableUtil;
-import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.aim.util.filters.DateListableImplementation;
 import org.digijava.module.aim.util.filters.GroupingElement;
@@ -91,7 +37,10 @@ import org.hibernate.Session;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
-import com.sun.media.jai.util.RWLock;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * @author mihai
@@ -103,10 +52,12 @@ public class ReportsFilterPicker extends Action {
 	final static String KEY_RISK_PREFIX = "aim:risk:";
 	public final static String ONLY_JOINT_CRITERIA	= "0";
 	public final static String ONLY_GOV_PROCEDURES	= "1";
-			
-	@Override
+
+    public final static String PLEDGE_REPORT_REQUEST_ATTRIBUTE = "is_pledge_report";
+
+    @Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception{
-			
+	
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		//filterForm.setAmpReportId(ReportContextData.getFromRequest().getAmp);
 					
@@ -117,7 +68,6 @@ public class ReportsFilterPicker extends Action {
 		Long longAmpReportId = ampReportId == null ? null : Long.parseLong(ampReportId);
 		
 		String sourceIsReportWizard			= request.getParameter("sourceIsReportWizard");
-		
 		if ("true".equals(sourceIsReportWizard) ) {
 			filterForm.setSourceIsReportWizard(true);
 			if ( request.getParameter("doreset") != null ) {
@@ -293,7 +243,7 @@ public class ReportsFilterPicker extends Action {
 			HierarchyListableImplementation rootModeOfPayment	= new HierarchyListableImplementation();
 			rootModeOfPayment.setLabel(rootLabel);
 			rootModeOfPayment.setUniqueId("0");
-			rootModeOfPayment.setChildren( modeOfPaymentValues );
+			rootModeOfPayment.setChildren(modeOfPaymentValues);
 			GroupingElement<HierarchyListableImplementation> modeOfPaymentElement	=
 					new GroupingElement<HierarchyListableImplementation>(elementName, filterId,	rootModeOfPayment, selectId);
 			filterForm.getFinancingLocationElements().add(modeOfPaymentElement);
@@ -301,34 +251,47 @@ public class ReportsFilterPicker extends Action {
 	}
 	
 	/**
-	 * fills the dropdowns part of ReportsFilterPickerForm pertaining to "settings"
-	 * @param filterForm
+	 * removes an element with the given name, if exists. Noop if it doesn't exist
+	 * @param hier
+	 * @param name
 	 */
-	private static void fillSettingsFormDropdowns(ReportsFilterPickerForm filterForm)
+	public static void removeElementByName(Collection<GroupingElement<HierarchyListableImplementation>> hier, String name)
 	{
-		StopWatch.reset("Filters-Settings");
-		StopWatch.next("Filters-Settings", true, "Settings part dropdowns START");
-	
-		filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
-		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
+		Iterator<GroupingElement<HierarchyListableImplementation>> iter = hier.iterator();
+		while (iter.hasNext())
+			if (iter.next().getName().equals(name))
+				iter.remove();
+	}
+
+    /**
+     * fills the dropdowns part of ReportsFilterPickerForm pertaining to "settings"
+     * @param filterForm
+     */
+    private static void fillSettingsFormDropdowns(ReportsFilterPickerForm filterForm)
+    {
+        StopWatch.reset("Filters-Settings");
+        StopWatch.next("Filters-Settings", true, "Settings part dropdowns START");
+
+        filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
+        filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
 
 
-		Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
-		Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
-	
-		if (filterForm.getCountYear() == null) {
-			filterForm.setCountYear(countYear);
-		}
+        Long yearFrom = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
+        Long countYear = Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
 
-		if (filterForm.getCountYearFrom() == null) {
-			filterForm.setCountYearFrom(yearFrom);
-		}
-		
-		for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
+        if (filterForm.getCountYear() == null) {
+            filterForm.setCountYear(countYear);
+        }
+
+        if (filterForm.getCountYearFrom() == null) {
+            filterForm.setCountYearFrom(yearFrom);
+        }
+
+        for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
 			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
 			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));
 		}
-		
+ 	 	
 		ArrayList<String> decimalseparators = new ArrayList<String>();
 		DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
 		String selecteddecimalseparator  = String.valueOf((usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator()));
@@ -528,6 +491,34 @@ public class ReportsFilterPicker extends Action {
 		addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory");
 		
 						
+		// do NOT add nullguards in the request.getAttribute - it should always be set and if it is null, then it is a bug elsewhere
+		if (FeaturesUtil.isVisibleField("Mode of Payment") && "false".equals(TLSUtils.getRequest().getAttribute(PLEDGE_REPORT_REQUEST_ATTRIBUTE))) {
+			Collection<AmpCategoryValue> modeOfPaymentValues	=
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MODE_OF_PAYMENT_KEY, true);
+			HierarchyListableImplementation rootModeOfPayment	= new HierarchyListableImplementation();
+			rootModeOfPayment.setLabel("All Mode of Payment Values");
+			rootModeOfPayment.setUniqueId("0");
+			rootModeOfPayment.setChildren( modeOfPaymentValues );
+			GroupingElement<HierarchyListableImplementation> modeOfPaymentElement	=
+					new GroupingElement<HierarchyListableImplementation>("Mode of Payment", "filter_mode_of_payment_div", 
+							rootModeOfPayment, "selectedModeOfPayment");
+			filterForm.getFinancingLocationElements().add(modeOfPaymentElement);
+		} else
+			removeElementByName(filterForm.getFinancingLocationElements(), "Mode of Payment"); 
+		
+		if (FeaturesUtil.isVisibleField("Project Category")) {
+			Collection<AmpCategoryValue> projCategoryValues	=
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_CATEGORY_KEY, true);
+			HierarchyListableImplementation rootProjCategory	= new HierarchyListableImplementation();
+			rootProjCategory.setLabel("All Project Category Values");
+			rootProjCategory.setUniqueId("0");
+			rootProjCategory.setChildren( projCategoryValues );
+			GroupingElement<HierarchyListableImplementation> projCategoryElement	=
+					new GroupingElement<HierarchyListableImplementation>("Project Category", "filter_project_category_div", 
+							rootProjCategory, "selectedProjectCategory");
+			filterForm.getFinancingLocationElements().add(projCategoryElement);
+		}
+		
 		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> activityStatusValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true);	
@@ -603,7 +594,7 @@ public class ReportsFilterPicker extends Action {
 							rootDisbursementOrders, "disbursementOrders");
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
-		if (true) { //Here needs to be a check to see if the field/feature is enabled
+		if (true && "false".equals(TLSUtils.getRequest().getAttribute(PLEDGE_REPORT_REQUEST_ATTRIBUTE))) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> budgetCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY, true);	
 			HierarchyListableImplementation rootBudgetCategory	= new HierarchyListableImplementation();
 			rootBudgetCategory.setLabel("All");
@@ -614,6 +605,9 @@ public class ReportsFilterPicker extends Action {
 						rootBudgetCategory, "selectedBudgets");
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
+		else 
+			removeElementByName(filterForm.getFinancingLocationElements(), "Activity Budget");
+		
 		if (true) { 
 			StopWatch.next("Filters", true, "start rendering regions");
 			Collection<AmpCategoryValueLocations> regions = DynLocationManagerUtil.getRegionsOfDefCountryHierarchy();
@@ -1312,8 +1306,19 @@ public class ReportsFilterPicker extends Action {
 		arf.setYearTo(filterForm.getToYear() == null || filterForm.getToYear().longValue() == -1 ? null : filterForm.getToYear().intValue());
 		arf.setFromMonth(filterForm.getFromMonth() == null || filterForm.getFromMonth().intValue() == -1 ? null : filterForm.getFromMonth().intValue());
 		arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1 ? null : filterForm.getToMonth().intValue());
-		arf.setFromDate(filterForm.getFromDate() == null ? null : new String(filterForm.getFromDate()));
-		arf.setToDate(filterForm.getToDate() == null ? null : new String(filterForm.getToDate()));
+        try{
+            arf.setFromDate(null);
+            arf.setFromDate(filterForm.getFromDate() == null ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getFromDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
+        } catch (Exception e){
+            logger.error("Can't parse dates:", e);
+        }
+        try{
+            arf.setToDate(null);
+            arf.setToDate(filterForm.getToDate() == null ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getToDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
+        } catch (Exception e){
+            logger.error("Can't parse dates:", e);
+        }
+
 		arf.setDynDateFilterCurrentPeriod(filterForm.getDynamicDateFilter().getCurrentPeriod());
 		arf.setDynDateFilterAmount(filterForm.getDynamicDateFilter().getAmount());
 		arf.setDynDateFilterOperator(filterForm.getDynamicDateFilter().getOperator());

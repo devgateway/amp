@@ -93,8 +93,22 @@ public class AmpARFilter extends PropertyListable {
 	public final static String DYNAMIC_FILTER_ADD_OP = "+";
 	public final static String DYNAMIC_FILTER_SUBTRACT_OP = "-";
 	
-	private static SimpleDateFormat sdfOut=new SimpleDateFormat("yyyy-MM-dd");
-	private static SimpleDateFormat sdfIn=new SimpleDateFormat("dd/MM/yyyy");
+	
+	public final static String SDF_OUT_FORMAT_STRING = "yyyy-MM-dd";
+	public final static String SDF_IN_FORMAT_STRING = "dd/MM/yyyy";
+	
+	/**
+	 * Date string formatted for SQL queries
+	 * field not static because SimpleDateFormat is not thread-safe
+	 */
+	private final SimpleDateFormat sdfOut = new SimpleDateFormat(SDF_OUT_FORMAT_STRING);
+	
+	/**
+	 * Date string formatted for database serialization
+	 * field not static because SimpleDateFormat is not thread-safe
+	 */
+	private final SimpleDateFormat sdfIn = new SimpleDateFormat(SDF_IN_FORMAT_STRING);
+	
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	
 	private Long id;
@@ -305,7 +319,15 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpCategoryValue> budget = null;
 	private Collection<Integer> lineMinRank;
 	private Collection<Integer> planMinRank;
+	
+	/**
+	 * the date is stored in the {@link #sdfIn} hardcoded format
+	 */
 	private String fromDate;
+	
+	/**
+	 * the date is stored in the {@link #sdfIn} hardcoded format
+	 */
 	private String toDate;
 
 	private String dynDateFilterCurrentPeriod;
@@ -341,6 +363,7 @@ public class AmpARFilter extends PropertyListable {
 	private Collection<AmpCategoryValueLocations> locationSelected;
 	@PropertyListableIgnore
 	private Collection<AmpCategoryValueLocations> relatedLocations;
+	private Collection<AmpCategoryValueLocations> pledgesLocations;
 	private Boolean unallocatedLocation = null;
 	//private AmpCategoryValueLocations regionSelected = null;
 	private Collection<String> approvalStatusSelected;
@@ -879,6 +902,28 @@ public class AmpARFilter extends PropertyListable {
 				+ " WHERE ps.amp_sector_id=s.amp_sector_id"
 				+ " AND ps.amp_sector_id in ("+ Util.toCSString(sectors) + ")";
 			
+			String REGION_SELECTED_FILTER = "";
+			if (locationSelected!=null) {
+				Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
+				allSelectedLocations.addAll(locationSelected);
+				
+				DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected);
+				this.pledgesLocations = new ArrayList<AmpCategoryValueLocations>();
+				this.pledgesLocations.addAll(allSelectedLocations);
+				DynLocationManagerUtil.populateWithAscendants(this.pledgesLocations, locationSelected);
+				
+				String allSelectedLocationString = Util.toCSString(allSelectedLocations);
+				String subSelect = "SELECT aal.pledge_id FROM amp_funding_pledges_location aal, amp_location al " +
+						"WHERE ( aal.location_id=al.location_id AND " +
+						"al.location_id IN (" + allSelectedLocationString + ") )";
+				
+				if (REGION_SELECTED_FILTER.equals("")) {
+					REGION_SELECTED_FILTER	= subSelect;
+				} else {
+					REGION_SELECTED_FILTER += " OR amp_activity_id IN (" + subSelect + ")"; 
+				}			
+			}
+			
 			if (donnorgAgency != null && donnorgAgency.size() > 0){
 				PledgequeryAppend(DONNOR_AGENCY_FILTER);
 			}
@@ -897,6 +942,9 @@ public class AmpARFilter extends PropertyListable {
 			}
 			if (sectors != null && sectors.size() > 0){
 				PledgequeryAppend(SECTOR_FILTER);
+			}
+			if (!REGION_SELECTED_FILTER.equals("")) {
+				PledgequeryAppend(REGION_SELECTED_FILTER);
 			}
 		
 			return;
@@ -1054,7 +1102,7 @@ public class AmpARFilter extends PropertyListable {
 	 	String MULTI_DONOR		= "SELECT amp_activity_id FROM v_multi_donor WHERE value = '" + multiDonor + "'";
 	 	
 	 	String REGION_SELECTED_FILTER = "";
-		if (unallocatedLocation != null) {
+ 		if (unallocatedLocation != null) {
 			if (unallocatedLocation == true) {
 				REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id NOT IN(SELECT amp_activity_id FROM amp_activity_location)";
 			}
@@ -2182,22 +2230,82 @@ public class AmpARFilter extends PropertyListable {
 		this.currentFormat = currentFormat;
 	}
 
+	/**
+	 * returns the date in the {@link #sdfIn} format
+	 */
 	public String getFromDate() {
 		return fromDate;
 	}
 
+	/**
+	 * returns the fromDate as a Date object
+	 * @return
+	 */
+	public Date buildFromDateAsDate()
+	{
+		if (fromDate == null || (fromDate.length() == 0))
+			return null;
+		try
+		{
+			return sdfIn.parse(fromDate);
+		}
+		catch(ParseException e)
+		{
+			logger.error("invalid date trickled into AmpARFilter::fromDate!", e); // SHOULD NOT HAPPEN!
+			return null;
+		}
+	}
+	
+	/**
+	 * returns the toDate as a Date object
+	 * @return
+	 */
+	public Date buildToDateAsDate()
+	{
+		if (toDate == null || (toDate.length() == 0))
+			return null;
+		try
+		{
+			return sdfIn.parse(toDate);
+		}
+		catch(ParseException e)
+		{
+			logger.error("invalid date trickled into AmpARFilter::toDate!", e); // SHOULD NOT HAPPEN!
+			return null;
+		}
+	}
+	
+	/**
+	 * sets the date in the {@link #sdfIn} format. Will ignore call if fed incorrect data
+	 */
 	public void setFromDate(String fromDate) {
+		if (!FormatHelper.isValidDateString(fromDate, sdfIn))
+		{
+			logger.error("tried to push invalidly-formatted date into AmpARFilter: " + fromDate, new RuntimeException());
+			return;
+		}
 		this.fromDate = fromDate;
 	}
 
+	/**
+	 * returns the date in the {@link #sdfIn} format
+	 */
 	public String getToDate() {
 		return toDate;
 	}
 
+	/**
+	 * sets the date in the {@link #sdfIn} format. Will ignore call if fed incorrect data
+	 */
 	public void setToDate(String toDate) {
+		if (!FormatHelper.isValidDateString(fromDate, sdfIn))
+		{
+			logger.error("tried to push invalidly-formatted date into AmpARFilter: " + fromDate, new RuntimeException());
+			return;
+		}
 		this.toDate = toDate;
 	}
-	
+		
 
 	/**
 	 * @return the fromActivityStartDate
@@ -2619,11 +2727,22 @@ public class AmpARFilter extends PropertyListable {
 			Collection<AmpCategoryValueLocations> relatedLocations) {
 		this.relatedLocations = relatedLocations;
 	}
+	
+	public Collection<AmpCategoryValueLocations> getPledgesLocations() {
+		return pledgesLocations;
+	}
+
+	public void setPledgesLocations(
+			Collection<AmpCategoryValueLocations> pledgesLocations) {
+		this.pledgesLocations = pledgesLocations;
+	}
 
 	public Set<AmpCategoryValue> getProjectImplementingUnits() {
 		return projectImplementingUnits;
 	}
-
+	
+	
+	
 	public void setProjectImplementingUnits(
 			Set<AmpCategoryValue> projectImplementingUnits) {
 		this.projectImplementingUnits = projectImplementingUnits;

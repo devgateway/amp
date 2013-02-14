@@ -88,7 +88,7 @@ public abstract class ARDimension {
 		translatedTextUnallocated = text;
 	
 	//See AMP-9522
-	if(childCell.getValue().toString().contains(translatedTextUnallocated)) return true;
+ 	if(childCell.getValue().toString().contains(translatedTextUnallocated)) return true;
 	
 	Class relatedContentPersisterClass = childCell.getColumn().getRelatedContentPersisterClass();
 	if(relatedContentPersisterClass==null) return true; // default behavior is to accept anything we have no information about

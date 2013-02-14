@@ -47,6 +47,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.DbUtil;
@@ -819,7 +820,6 @@ public class HelpActions extends DispatchAction {
         return null;
 
 	}
-
 	
 	public ActionForward importing(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
@@ -847,9 +847,11 @@ public class HelpActions extends DispatchAction {
         Sdm kuku=new Sdm();
         kuku.setItems(new HashSet<SdmItem>());
         
+        Set<String> imageFileExtensions = new HashSet<String>(){{add("jpg"); add("jpeg");}};
+
         while ((entry = zis.getNextEntry()) != null) {        	
         	if(entry.getName().endsWith(".xml")){
-        		
+        		logger.info("processing ZIP entry file " + entry.getName());
         		int size = 0;
     	        byte[] buffer = new byte[1*1024*1024];
     	        int realZize = 0;
@@ -862,6 +864,14 @@ public class HelpActions extends DispatchAction {
     	        
     	        xmlContent = Arrays.copyOfRange(largeBuffer, 0, realZize);
         	}else{
+        		if (entry.getName().indexOf('.') < 0)
+        			continue; //file without extension - skip
+
+        		String fileExtension = entry.getName().substring(entry.getName().lastIndexOf('.') + 1).toLowerCase();
+        		if (!imageFileExtensions.contains(fileExtension))
+        			continue; // file is not a supported image file - skip
+
+        		logger.info("processing ZIP entry file " + entry.getName());
         		int size = 0;
     	        byte[] buffer = new byte[1*1024*1024];
     	        int realZize = 0;
@@ -881,6 +891,11 @@ public class HelpActions extends DispatchAction {
     	        sdmItem.setContentTitle(entry.getName());
     	        //paragraph order
     	        String parOrd = entry.getName().substring(entry.getName().lastIndexOf("_")+1,entry.getName().indexOf("."));
+    	        if (!AmpMath.isLong(parOrd))
+    	        {
+    	        	logger.info("ignoring invalidly-named ZIP entry " + entry.getName());
+    	        	continue;
+    	        }
     	        sdmItem.setParagraphOrder(new Long(parOrd));
     	        
     	        //get parent help topic

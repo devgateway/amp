@@ -599,6 +599,8 @@ function resetToDefaults(){
 	document.getElementById("filterOrganizations").innerHTML = trnAll;
 	document.getElementById("filterOrgGroups").innerHTML = trnAll;
 	document.getElementById("filterSectors").innerHTML = trnAll;
+	document.getElementById("filterSubSectors").innerHTML = trnAll;
+	document.getElementById("filterZones").innerHTML = trnAll;
 	document.getElementById("filterSectorConfiguration").innerHTML = trnPrimary;
 	document.getElementById("filterRegions").innerHTML = trnAll;
 	setSelectedValue("show_amounts_in_thousands", 2); // Show amounts in millions
@@ -717,6 +719,25 @@ var callbackChildrenCall = {
 			    		for(var i = 0; i < results.children.length; i++){
 			    			orgDropdown.options[orgDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
 			    		}
+			    		orgDropdown.value = currentOrg;
+			    		break;
+				    case "OrganizationGroup":
+			    		var orgGrpDropdown = document.getElementById("org_group_dropdown_id");
+			    		orgGrpDropdown.options.length = 0;
+			    		orgGrpDropdown.options[0] = new Option(trnAll, -1);
+			    		var currentOrgGrpInOptions = false;
+			    		for(var i = 0; i < results.children.length; i++){
+			    			orgGrpDropdown.options[orgGrpDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+			    			if(currentOrgGroup == results.children[i].ID)
+			    				currentOrgGrpInOptions = true;
+			    		}
+			    		if(currentOrgGroup == "-1" || currentOrgGrpInOptions)
+			    			orgGrpDropdown.value = currentOrgGroup;
+			    		else
+			    		{
+			    			orgGrpDropdown.value = "-1";
+			    			callbackApplyFilter();
+			    		}	
 			    		break;
 				    case "Sector":
 			    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
@@ -752,18 +773,24 @@ var callbackChildrenCall = {
 			    		var endYearQuickFilterDropdown = document.getElementById("endYearQuickFilter_dropdown");
 			    		var startYearDropdown = document.getElementById("startYear_dropdown");
 			    		var endYearDropdown = document.getElementById("endYear_dropdown");
-			    		startYearQuickFilterDropdown.options.length = 0;
-			    		endYearQuickFilterDropdown.options.length = 0;
+			    		if (startYearQuickFilterDropdown!=null)
+			    			startYearQuickFilterDropdown.options.length = 0;
+			    		if (endYearQuickFilterDropdown!=null)
+			    			endYearQuickFilterDropdown.options.length = 0;
 			    		startYearDropdown.options.length = 0;
-			    		endYearDropdown.options.length = 0;
-			    		for(var i = 0; i < results.children.length; i++){
-			    			startYearQuickFilterDropdown.options[startYearQuickFilterDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
-			    			endYearQuickFilterDropdown.options[endYearQuickFilterDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+					    endYearDropdown.options.length = 0;
+					    for(var i = 0; i < results.children.length; i++){
+					    	if (startYearQuickFilterDropdown!=null)
+				    			startYearQuickFilterDropdown.options[startYearQuickFilterDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+					    	if (endYearQuickFilterDropdown!=null)
+				    			endYearQuickFilterDropdown.options[endYearQuickFilterDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
 			    			startYearDropdown.options[startYearDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
 			    			endYearDropdown.options[endYearDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
 			    		}
-			    		startYearQuickFilterDropdown.selectedIndex = startYearSelectedIndex;
-			    		endYearQuickFilterDropdown.selectedIndex = endYearSelectedIndex;
+					    if (startYearQuickFilterDropdown!=null)
+			    			startYearQuickFilterDropdown.selectedIndex = startYearSelectedIndex;
+					    if (endYearQuickFilterDropdown!=null)
+			    			endYearQuickFilterDropdown.selectedIndex = endYearSelectedIndex;
 			    		startYearDropdown.selectedIndex = startYearSelectedIndex;
 			    		endYearDropdown.selectedIndex = endYearSelectedIndex;
 			    		break;
@@ -849,11 +876,37 @@ var callbackApplyFilterCall = {
 			  panelLoaded = true;
 			  refreshBoxes(o);
 			  refreshGraphs();
+			  refreshDropdowns();
 		  },
 		  failure: function(o) {
 			  loadingPanel.hide();
 		  }
 		};
+
+var currentOrgGroup = "-1";
+var currentOrg = "-1";
+
+var refreshDropdowns = function(){
+	// Reload the Organization Groups
+	// Reassign the selected organization group
+	// If there's an organization group selected, then load the children and select the appropriate ones.
+	// Find out: Where is the list of Organization Groups stored: DashboardFilter.orgGroups()
+	// Where is the list of Organizations stored: not stored anywhere, it's loaded dynamically in DataDispatcher.getJSONObject()
+	// Where is the currently selected organization group: visualizationForm.getFilter().setSelOrgGroupIds
+	// document.forms[1].org_group_dropdown_id.value
+	// where is the currently selected organization selected: visualizationForm.getFilter().setSelOrgIds
+	// document.forms[1].org_dropdown_id.value
+	currentOrgGroup = document.getElementById("org_group_dropdown_id").value;
+	currentOrg = document.getElementById("org_dropdown_id").value;
+	var objectType = "OrganizationGroup";
+
+	var transactionOrgGroup = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getJSONObject&objectType=" + objectType, callbackChildrenCall, null);
+	
+	if (currentOrgGroup != null && currentOrgGroup != "-1"){
+		objectType = "Organization";
+		var transactionOrg = YAHOO.util.Connect.asyncRequest('GET', "/visualization/dataDispatcher.do?action=getJSONObject&objectType=" + objectType + "&parentId=" + currentOrgGroup, callbackChildrenCall, null);
+	}
+};
 
 function hasFlash(){
 	var hasFlash = false;
@@ -895,6 +948,24 @@ function callbackApplyFilter(e){
 		return;
 	}
 	
+	if(document.getElementById("org_group_dropdown_id")!=null && document.getElementById("org_group_dropdown_id").value!=-1)
+		document.getElementById("org_grp_check_"+document.getElementById("org_group_dropdown_id").value).checked = true;
+	
+	if(document.getElementById("org_dropdown_id")!=null && document.getElementById("org_dropdown_id").value!=-1)
+		document.getElementById("organization_check_"+document.getElementById("org_dropdown_id").value).checked = true;
+	
+	if(document.getElementById("sector_dropdown_id")!=null && document.getElementById("sector_dropdown_id").value!=-1)
+		document.getElementById("sector_check_"+document.getElementById("sector_dropdown_id").value).checked = true;
+	
+	if(document.getElementById("sub_sector_dropdown_id")!=null && document.getElementById("sub_sector_dropdown_id").value!=-1)
+		document.getElementById("sub_sector_check_"+document.getElementById("sub_sector_dropdown_id").value).checked = true;
+	
+	if(document.getElementById("region_dropdown_id")!=null && document.getElementById("region_dropdown_id").value!=-1)
+		document.getElementById("region_check_"+document.getElementById("region_dropdown_id").value).checked = true;
+	
+	if(document.getElementById("zone_dropdown_id")!=null && document.getElementById("zone_dropdown_id").value!=-1)
+		document.getElementById("zone_check_"+document.getElementById("zone_dropdown_id").value).checked = true;
+	
 	var params = "";
 	params = params + "&orgGroupIds=" + getQueryParameter("orgGroupIds");
 	params = params + "&orgIds=" + getQueryParameter("orgIds");
@@ -919,7 +990,9 @@ function callbackApplyFilter(e){
 		document.getElementById("filterOrganizations").innerText = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSectorConfiguration").innerText = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSectors").innerText = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
+		document.getElementById("filterSubSectors").innerText = document.getElementById("sub_sector_dropdown_id").options[document.getElementById("sub_sector_dropdown_id").selectedIndex].text;
 		document.getElementById("filterRegions").innerText = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
+		document.getElementById("filterZones").innerText = document.getElementById("zone_dropdown_id").options[document.getElementById("zone_dropdown_id").selectedIndex].text;
 		document.getElementById("filterStartYear").innerText = document.getElementById("startYearQuickFilter_dropdown").options[document.getElementById("startYearQuickFilter_dropdown").selectedIndex].text;
 		document.getElementById("filterEndYear").innerText = document.getElementById("endYearQuickFilter_dropdown").options[document.getElementById("endYearQuickFilter_dropdown").selectedIndex].text;
 	}
@@ -929,7 +1002,9 @@ function callbackApplyFilter(e){
 		document.getElementById("filterOrganizations").textContent = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSectorConfiguration").textContent = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSectors").textContent = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
+		document.getElementById("filterSubSectors").textContent = document.getElementById("sub_sector_dropdown_id").options[document.getElementById("sub_sector_dropdown_id").selectedIndex].text;
 		document.getElementById("filterRegions").textContent = document.getElementById("region_dropdown_id").options[document.getElementById("region_dropdown_id").selectedIndex].text;
+		document.getElementById("filterZones").textContent = document.getElementById("zone_dropdown_id").options[document.getElementById("zone_dropdown_id").selectedIndex].text;
 		document.getElementById("filterStartYear").textContent = document.getElementById("startYearQuickFilter_dropdown").options[document.getElementById("startYearQuickFilter_dropdown").selectedIndex].text;
 		document.getElementById("filterEndYear").textContent = document.getElementById("endYearQuickFilter_dropdown").options[document.getElementById("endYearQuickFilter_dropdown").selectedIndex].text;
 	}
@@ -1135,6 +1210,7 @@ function refreshBoxes(o){
 	var valAvgProjSize="";
 	var fromGenerator = document.getElementById("fromGenerator").value;
 	document.getElementById("info_link").style.display = "none";
+	$("#additional_info").hide();
 
 	for(var j = 0; j < results.children.length; j++){
 		var child = results.children[j];
@@ -1312,14 +1388,17 @@ function refreshBoxes(o){
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
 					inner = "<hr/>";
+					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 						if (fromGenerator=="true")
 							checkOptionByNameAndValue("zone_check",child.list[i].id);
 					}
 					inner = inner + "<hr/>";
 					var div = document.getElementById("zone_list_id");
 					div.innerHTML = inner;
+					document.getElementById("filterZones").innerHTML = inner2;
 					div.style.display = "";
 					document.getElementById("zone_dropdown_id").style.display = "none";
 					} else {
@@ -1369,14 +1448,17 @@ function refreshBoxes(o){
 				//if (dashboardType!=3) {
 					if (child.list.length > 0) {
 					inner = "<hr/>";
+					inner2 = "";
 					for(var i = 0; i < child.list.length; i++){
 						inner = inner + "<li>" + child.list[i].name + "</li>";
+						inner2 = inner2 + child.list[i].name + " - ";
 						if (fromGenerator=="true")
 							checkOptionByNameAndValue("sub_sector_check",child.list[i].id);
 					}
 					inner = inner + "<hr/>";
 					var div = document.getElementById("sub_sector_list_id");
 					div.innerHTML = inner;
+					document.getElementById("filterSubSectors").innerHTML = inner2;
 					div.style.display = "";
 					document.getElementById("sub_sector_dropdown_id").style.display = "none";
 					} else {
@@ -1484,13 +1566,28 @@ function refreshBoxes(o){
 			case "SelAdditionalInfo":
 				if (typeof child.additionalInfo.info != 'undefined') {
 					var info=child.additionalInfo.info;
+					var trnBackground = "";
+					switch(info.type){
+						case "Organization":
+							trnBackground = trnBackgroundOrganization;
+							//Show Contacts Tab. Organizations can have contacts.
+							$("#contact_info_tab").show();
+							myPanel.setHeader("\n" + trnOrgInfo);
+							break;
+						case "OrganizationGroup":
+							trnBackground = trnBackgroundOrganizationGroup;
+							//Hide Contacts Tab. Organization Groups cannot have contacts.
+							$("#contact_info_tab").hide()
+							myPanel.setHeader("\n" + trnOrgGrpInfo);
+							break;
+					}
 					var infoMarkup = new Array();
 					infoMarkup.push("<div id=\"saveResultMsg\"></div><table class=\"inside\"><tbody>");
 					infoMarkup.push("<tr>");
-					infoMarkup.push("<td class=\"inside\">" + trnBackgroundOrganization +":</td>");
+					infoMarkup.push("<td class=\"inside\">" + trnBackground +":</td>");
 					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"orgBackground\">");
-					infoMarkup.push(info.orgBackground);
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"background\">");
+					infoMarkup.push(info.background);
 					infoMarkup.push("</textarea>");
 					infoMarkup.push("</td>");
 					infoMarkup.push("</tr>");
@@ -1498,20 +1595,52 @@ function refreshBoxes(o){
 					infoMarkup.push("<tr>");
 					infoMarkup.push("<td class=\"inside\">" + trnDescription + ":</td>");
 					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"orgDescription\">");
-					infoMarkup.push(info.orgDescription);
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"description\">");
+					infoMarkup.push(info.description);
+					infoMarkup.push("</textarea>");
+					infoMarkup.push("</td>");
+					infoMarkup.push("</tr>");
+
+					infoMarkup.push("<tr>");
+					infoMarkup.push("<td class=\"inside\">" + trnKeyAreas + ":</td>");
+					infoMarkup.push("<td class=\"inside\">");
+					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"keyAreas\">");
+					infoMarkup.push(info.keyAreas);
 					infoMarkup.push("</textarea>");
 					infoMarkup.push("</td>");
 					infoMarkup.push("</tr>");
 					
 					infoMarkup.push("<tr>");
 					infoMarkup.push("<td class=\"inside\" colspan=\"2\">");
-					infoMarkup.push("<input type=\"button\" value=\"" + trnSave + "\" onclick=\"saveAdditionalInfo("+info.orgId+")\"/>");
+					infoMarkup.push("<input type=\"button\" value=\"" + trnSave + "\" onclick=\"saveAdditionalInfo("+info.id+",'" + info.type +"')\"/>");
 					infoMarkup.push("</td>");
 					infoMarkup.push("</tr>");
 					infoMarkup.push("</tbody></table>");
 					var markup=infoMarkup.join("");
 					$("#tab3").html(markup);
+					
+					var infoBox = new Array();
+					infoBox.push("<table class=\"inside\"><tbody>");
+					infoBox.push("<tr>");
+					infoBox.push("<td class=\"inside\"><strong>" + trnBackground + ":</strong>");
+					infoBox.push(info.background);
+					infoBox.push("</td>");
+					infoBox.push("</tr>");
+
+					infoBox.push("<tr>");
+					infoBox.push("<td class=\"inside\"><strong>" + trnDescription + ":</strong>");
+					infoBox.push(info.description);
+					infoBox.push("</td>");
+					infoBox.push("</tr>");
+
+					infoBox.push("<tr>");
+					infoBox.push("<td class=\"inside\"><strong>" + trnKeyAreas + ":</strong>");
+					infoBox.push(info.keyAreas);
+					infoBox.push("</td>");
+					infoBox.push("</tr>");
+					infoBox.push("</tbody></table>");
+					$("#additional_info_box").html(infoBox.join(""));
+					$("#additional_info").show();
 				}
 				else{
 					$("#tab3").html(trnNoAdditionalInfo);
@@ -1544,19 +1673,19 @@ function refreshBoxes(o){
 		if (getSelectionsFromElement("org_grp_check",true)==""){
 			if (document.getElementById("org_group_dropdown_id").selectedIndex != 0) {
 				name1 = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+				document.getElementById("info_link").style.display = "block";
 			}
 		} else {
 			if (getSelectionsFromElement("org_grp_check",false).indexOf(',') !=-1) {
 				name1 = trnMultipleOrgGrp;
 			} else {
 				name1 = getSelectionsFromElement("org_grp_check",true);
+				document.getElementById("info_link").style.display = "block";
 			}
 		}
 		if (getSelectionsFromElement("organization_check",true)==""){
 			if (document.getElementById("org_dropdown_id").selectedIndex != 0) {
 				name2 = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
-				document.getElementById("info_link").style.display = "block";
-//				name2 = name2+ "  <img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' title='"+trnOrgInfo+"'/>";
 			}
 		} else {
 			if (getSelectionsFromElement("organization_check",false).indexOf(',') !=-1) {
@@ -1564,7 +1693,6 @@ function refreshBoxes(o){
 			} else {
 				name2 = getSelectionsFromElement("organization_check",true);
 				document.getElementById("info_link").style.display = "block";
-//				name2 = name2 + "  <img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' title='"+trnOrgInfo+"'/>";
 			}
 		}
 		if (name1 == "") {
@@ -1802,15 +1930,50 @@ function drawGraph(id){
 		changeChart(null, 'bar', id, true);
 }
 
-function  saveAdditionalInfo(orgId){
-    var postString		="orgBackground=" + document.getElementById("orgBackground").value+
-        "&orgDescription="+document.getElementById("orgDescription").value+"&orgId="+orgId ;
+function  saveAdditionalInfo(id, type){
+    var postString = "background=" + document.getElementById("background").value +
+	    "&description=" + document.getElementById("description").value + 
+	    "&keyAreas=" + document.getElementById("keyAreas").value + 
+        "&id=" + id + "&type=" + type;
         $("#saveResultMsg").html(trnSavingInformation);
         YAHOO.util.Connect.asyncRequest("POST", urlSaveAdditional, additionalInfoCallback, postString);
     }
 
     var additionalInfoResponseSuccess = function(o){
     	$("#saveResultMsg").html(trnSavedInformation);
+    	var results = YAHOO.lang.JSON.parse(o.responseText);
+		var trnBackground = "";
+		switch(results.type){
+			case "Organization":
+				trnBackground = trnBackgroundOrganization;
+				break;
+			case "OrganizationGroup":
+				trnBackground = trnBackgroundOrganizationGroup;
+				break;
+		}
+		var infoBox = new Array();
+		infoBox.push("<table class=\"inside\"><tbody>");
+		infoBox.push("<tr>");
+		infoBox.push("<td class=\"inside\"><strong>" + trnBackground + ":</strong>");
+		infoBox.push(results.background);
+		infoBox.push("</td>");
+		infoBox.push("</tr>");
+
+		infoBox.push("<tr>");
+		infoBox.push("<td class=\"inside\"><strong>" + trnDescription + ":</strong>");
+		infoBox.push(results.description);
+		infoBox.push("</td>");
+		infoBox.push("</tr>");
+
+		infoBox.push("<tr>");
+		infoBox.push("<td class=\"inside\"><strong>" + trnKeyAreas + ":</strong>");
+		infoBox.push(results.keyAreas);
+		infoBox.push("</td>");
+		infoBox.push("</tr>");
+		infoBox.push("</tbody></table>");
+		$("#additional_info_box").html(infoBox.join(""));
+    	
+    	
     }
 
     var additionalInfoResponseFailure = function(o){
@@ -1909,8 +2072,8 @@ function changeChart(e, chartType, container, useGeneric){
 	var attributes = {};
 	attributes.id = container;
 	//Setting for cache in development mode
-//	var cache = "?rnd=" + Math.floor(Math.random()*50000);
-	var cache = "";
+	var cache = "?rnd=" + Math.floor(Math.random()*50000);
+//	var cache = "";
 
 	switch(chartType){
 		case "bar":
@@ -2165,7 +2328,8 @@ var callbackGetGraphsCall = {
 			    alert("Invalid respose.");
 			}
 	  },
-	  failure: function(o) {//Fail silently
+	  failure: function(o) {
+		  	alert("faileD");
 		  }
 	};
 
@@ -2181,7 +2345,6 @@ function launchDashboard(){
 		alert(selectOneGraph);
 		return;
 	}
-	
 	document.getElementById("topLists").value = document.getElementById("topLists_dropdown").options[document.getElementById("topLists_dropdown").selectedIndex].value;
 	document.getElementById("decimalsToShow").value = document.getElementById("decimalsToShow_dropdown").options[document.getElementById("decimalsToShow_dropdown").selectedIndex].value;
 	document.getElementById("startYear").value = document.getElementById("startYear_dropdown").options[document.getElementById("startYear_dropdown").selectedIndex].value;
@@ -2222,8 +2385,10 @@ function launchDashboard(){
 	document.getElementById("showProgramsRanking").value = document.getElementById("show_programs_ranking").checked;
 	
 	var params = "";
-	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
-	params = params + "&orgIds=" + getSelectionsFromElement("organization_check",false);
+	if (document.getElementById("org_grp_check_all").checked!=true){
+		params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
+		params = params + "&orgIds=" + getSelectionsFromElement("organization_check",false);
+	}
 	params = params + "&regionIds=" + getSelectionsFromElement("region_check",false);
 	params = params + "&zoneIds=" + getSelectionsFromElement("zone_check",false);
 	params = params + "&selSectorConfigId=" + getSelectionsFromElement("sector_config_check",false);
@@ -2293,7 +2458,7 @@ var myPanel = new YAHOO.widget.Panel("new", {
 
 function initPopin() {
 	
-	var msg='\n<digi:trn jsFriendly="true">Organization Info</digi:trn>';
+	var msg='\n' + trnOrgInfo;
 	myPanel.setHeader(msg);
 	myPanel.setBody("");
 	myPanel.render(document.body);

@@ -137,6 +137,8 @@ var urlWordExport = "";
 var urlExcelExport = "";
 var urlSaveAdditional = "";
 var urlShowList = "";
+var trnKeyAreas = "";
+var trnBackgroundOrganizationGroup = "";
 
 //Section for all translation as global so included javascript can use them
 function initializeTranslations(){
@@ -195,6 +197,7 @@ function initializeTranslations(){
 	trnSave = "<digi:trn>Save</digi:trn>";
 	trnDescription = "<digi:trn>Description</digi:trn>";
 	trnBackgroundOrganization = "<digi:trn>Background of organization</digi:trn>";
+	trnBackgroundOrganizationGroup = "<digi:trn>Background of organization group</digi:trn>";
 	trnNoAdditionalInfo = "<digi:trn>No Additional Information available for current filter</digi:trn>";
 	trnAllOrgGroups = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
 	trnMultipleOrgs = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>"; 
@@ -214,6 +217,8 @@ function initializeTranslations(){
 	alertBadDate="<digi:trn>Start year can't be greater than end year</digi:trn>";
 	trnNoDataToShow="<digi:trn>No data to show</digi:trn>";
 	trnOrgInfo="<digi:trn>Organization Info</digi:trn>";
+	trnOrgGrpInfo="<digi:trn>Organization Group Info</digi:trn>";
+	trnKeyAreas="<digi:trn>Key Areas of focus</digi:trn>";
 }
 function initializeGlobalVariables(){
 	//Other global variables
@@ -251,7 +256,7 @@ function initializeGlobalVariables(){
 		<c:if test="${!visualizationform.filter.fromPublicView}">
 		<li><a href="#tab3"><div><digi:trn>Additional Notes</digi:trn></div></a></li>
 		</c:if>
-		<li><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
+		<li id="contact_info_tab"><a href="#tab2"><div><digi:trn>Contact Information</digi:trn></div></a></li>
 		</c:if>
 		</ul>
 		<div class="yui-content">
@@ -417,42 +422,32 @@ function initializeGlobalVariables(){
 												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
 												id="orgGrpDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li><c:if
-															test="${visualizationform.filter.dashboardType eq '1' }">
-															<input type="radio" value="-1" id="org_grp_check_all"
-																name="org_grp_check"
-																onClick="uncheckAllRelatedEntities('organization_check')" />
-														</c:if> <c:if
-															test="${visualizationform.filter.dashboardType ne '1' }">
-															<input type="checkbox" id="org_grp_check_all" value="-1"
-																name="org_grp_check"
-																onClick="allOptionChecked(this,'org_grp_check','organization_check')" />
-														</c:if> <span><digi:trn>All</digi:trn>
-													</span></li>
+													<li>
+														<input type="checkbox" id="org_grp_check_all" value="-1"
+															name="org_grp_check"
+															onClick="allOptionChecked(this,'org_grp_check','organization_check')" />
+														<span><digi:trn>All</digi:trn>
+														</span>
+													</li>
 													<c:forEach
 														items="${visualizationform.filter.orgGroupWithOrgsList}"
 														var="item">
 														<c:set var="orgGrp">
 															<c:out value="${item.mainEntity.orgGrpName}"/>
 														</c:set>
-														<li><c:if
-																test="${visualizationform.filter.dashboardType eq '1' }">
-																<input type="radio" name="org_grp_check"
-																	title="${orgGrp}"
-																	value="${item.mainEntity.ampOrgGrpId}"
-																	onClick="checkUncheckRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															</c:if> <c:if
-																test="${visualizationform.filter.dashboardType ne '1' }">
-																<input type="checkbox" name="org_grp_check"
-																	title="${orgGrpe}"
-																	value="${item.mainEntity.ampOrgGrpId}"
-																	onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
-															</c:if> <span><c:out value="${orgGrp}"/>
-														</span> <br />
+														<li>
+															<input type="checkbox" name="org_grp_check"
+																id="org_grp_check_${item.mainEntity.ampOrgGrpId}"
+																title="${orgGrp}"
+																value="${item.mainEntity.ampOrgGrpId}"
+																onClick="uncheckAllOption('org_grp_check');checkRelatedEntities(this,'organization_check',${item.mainEntity.ampOrgGrpId})" />
+															<span><c:out value="${orgGrp}"/>
+															</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
 																	var="organization">
 																	<li><input type="checkbox"
+																		id="organization_check_${organization.ampOrgId}"
 																		class="organization_check_${item.mainEntity.ampOrgGrpId}"
 																		name="organization_check" title="<c:out value='${organization.name}'/>"
 																		value="${organization.ampOrgId}"
@@ -486,39 +481,28 @@ function initializeGlobalVariables(){
 												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
 												id="regionDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li><c:if
-															test="${visualizationform.filter.dashboardType eq '2' }">
-															<input type="radio" id="region_check_all"
-																name="region_check" value="-1"
-																onClick="uncheckAllRelatedEntities('zone_check')" />
-														</c:if> <c:if
-															test="${visualizationform.filter.dashboardType ne '2' }">
-															<input type="checkbox" id="region_check_all"
-																name="region_check" value="-1"
-																onClick="allOptionChecked(this,'region_check','zone_check')" />
-														</c:if> <span><digi:trn>All</digi:trn>
+													<li>
+														<input type="checkbox" id="region_check_all"
+															name="region_check" value="-1"
+															onClick="allOptionChecked(this,'region_check','zone_check')" />
+														<span><digi:trn>All</digi:trn>
 													</span></li>
 													<c:forEach
 														items="${visualizationform.filter.regionWithZones}"
 														var="item">
-														<li><c:if
-																test="${visualizationform.filter.dashboardType eq '2' }">
-																<input type="radio" name="region_check"
-																	title="${item.mainEntity.name}"
-																	value="${item.mainEntity.id}"
-																	onClick="checkUncheckRelatedEntities(this,'zone_check',${item.mainEntity.id})" />
-															</c:if> <c:if
-																test="${visualizationform.filter.dashboardType ne '2' }">
-																<input type="checkbox" name="region_check"
-																	title="${item.mainEntity.name}"
-																	value="${item.mainEntity.id}"
-																	onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})">
-															</c:if> <span><c:out value="${item.mainEntity.name}"/>
+														<li>
+															<input type="checkbox" name="region_check"
+																id="region_check_${item.mainEntity.id}"
+																title="${item.mainEntity.name}"
+																value="${item.mainEntity.id}"
+																onClick="uncheckAllOption('region_check');checkRelatedEntities(this,'zone_check',${item.mainEntity.id})">
+															<span><c:out value="${item.mainEntity.name}"/>
 														</span> <br />
 															<ul style="list-style-type: none">
 																<c:forEach items="${item.subordinateEntityList}"
 																	var="zone">
 																	<li><input type="checkbox"
+																		id="zone_check_${zone.id}"
 																		class="zone_check_${item.mainEntity.id}"
 																		name="zone_check" title="${zone.name}"
 																		value="${zone.id}"
@@ -781,7 +765,7 @@ function initializeGlobalVariables(){
     	<table>
     		<tr>
     			<td style="width:110px;"><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"><div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm"><digi:trn>Export Options</digi:trn></a></div></div></td>
-    			<td><div id="info_link"><img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' align=left style="margin-right:5px;margin-top:5px;"/><div class="dash_ico_link"><a href="javascript:showOrgInfo()" class="l_sm"><digi:trn>Organization Info</digi:trn></a></div></div></td>
+    			<td><div id="info_link"><img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' align=left style="margin-right:5px;margin-top:5px;"/><div class="dash_ico_link"><a href="javascript:showOrgInfo()" class="l_sm"><digi:trn>Additional Info</digi:trn></a></div></div></td>
     		</tr>
     		<tr>
     			<td colspan="2"><div id="currencyInfo"></div></td>
@@ -805,7 +789,9 @@ function initializeGlobalVariables(){
 	   <i><digi:trn>Organizations</digi:trn>: </i><label id="filterOrganizations"><digi:trn>All</digi:trn></label> | 
 	   <i><digi:trn>Configuration</digi:trn>: </i><label id="filterSectorConfiguration"><digi:trn>Primary</digi:trn></label> | 
 	   <i><digi:trn>Sectors</digi:trn>: </i><label id="filterSectors"><digi:trn>All</digi:trn></label> |
-	   <i><digi:trn>Regions</digi:trn>: </i><label id="filterRegions"><digi:trn>All</digi:trn></label>
+	   <i><digi:trn>SubSectors</digi:trn>: </i><label id="filterSubSectors"><digi:trn>All</digi:trn></label> |
+	   <i><digi:trn>Regions</digi:trn>: </i><label id="filterRegions"><digi:trn>All</digi:trn></label> |
+	   <i><digi:trn>Zones</digi:trn>: </i><label id="filterZones"><digi:trn>All</digi:trn></label> |
 	</td>
 	</tr>
 	<tr>
@@ -1073,7 +1059,7 @@ function initializeGlobalVariables(){
 			<td><b><digi:trn>Type of Funding</digi:trn>:</b>
 		 	</td>
 			<td align="right">
-				<html:select property="filter.transactionTypeQuickFilter" styleId="transactionType_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+				<html:select property="filter.transactionTypeQuickFilter" styleId="transactionType_dropdown" styleClass="dropdwn_sm" style="width:145px;" onchange="callbackApplyFilter()">
 					<html:option value="0"><digi:trn>Commitments</digi:trn></html:option>
 					<html:option value="1"><digi:trn>Disbursements</digi:trn></html:option>
 					<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
@@ -1085,7 +1071,7 @@ function initializeGlobalVariables(){
 				<td><b><digi:trn>Type of Agency</digi:trn>:</b>
 			 	</td>
 				<td align="right">
-					<html:select property="filter.agencyTypeQuickFilter" styleId="agencyTypeQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;">
+					<html:select property="filter.agencyTypeQuickFilter" styleId="agencyTypeQuickFilter_dropdown" styleClass="dropdwn_sm" style="width:145px;" onchange="callbackApplyFilter()">
 						<html:option value="0"><digi:trn>Donor</digi:trn></html:option>
 						<html:option value="1"><digi:trn>Executing</digi:trn></html:option>
 						<html:option value="2"><digi:trn>Beneficiary</digi:trn></html:option>
@@ -1096,7 +1082,17 @@ function initializeGlobalVariables(){
 		<tr>
 	</table>
 </fieldset>
-
+<c:if test="${visualizationform.filter.dashboardType==1}">
+<fieldset id="additional_info">
+	<legend><span class=legend_label><digi:trn>Additional Info</digi:trn></span></legend>
+	<table cellspacing="0" cellpadding="0" width="100%"> 
+		<tr>
+			<td id="additional_info_box">
+			</td>
+		</tr>
+	</table>
+</fieldset>
+</c:if>
 <fieldset>
 	<legend><span class=legend_label><digi:trn>Quick Access</digi:trn></span></legend>
 	<table cellspacing="0" cellpadding="0" width="100%"> 
@@ -1301,81 +1297,8 @@ function initializeGlobalVariables(){
 </table>
 
 <script language="Javascript">
-function initializeTranslations(){
-	trnPrimary = "<digi:trn jsFriendly='true'>Primary</digi:trn>";
-	trnAll="<digi:trn jsFriendly='true'>All</digi:trn>";
-	trnExportOptions = '\n<digi:trn jsFriendly="true">Export Options</digi:trn>' 
-	trnAdvancedFilter = '\n<digi:trn jsFriendly="true">Advanced Filters</digi:trn>'; 
-	trnInstallFlash = '\n<digi:trn jsFriendly="true">Install Flash Plugin</digi:trn>'; 
-	trnCancel = '<digi:trn>Cancel</digi:trn>';
-	trnShowSettings="<digi:trn jsFriendly='true'>Show settings</digi:trn>"; 
-	trnHideSettings="<digi:trn jsFriendly='true'>Hide settings</digi:trn>"; 
-	trnLoading = '<digi:trn>Loading, please wait...</digi:trn>';
-	trnShowTop="<digi:trn jsFriendly='true'>View Top List</digi:trn>"; 
-	trnTotalDisbs="<digi:trn jsFriendly='true'>Total Disbursements</digi:trn>: ";
-	trnNumOfProjs="<digi:trn jsFriendly='true'>Total Number of Projects</digi:trn>: ";
-	trnNumOfDons="<digi:trn jsFriendly='true'>Total Number of Organizations</digi:trn>: ";
-	trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
-	trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
-	trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
-	trnTotalDisbsDescription="<digi:trn jsFriendly='true'>Sum of Disbursements on projets filtered.</digi:trn>";
-	trnNumOfProjsDescription="<digi:trn jsFriendly='true'>Number of Projects filtered.</digi:trn>";
-	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Organizations on projects filtered</digi:trn>";
-	trnNumOfSecsDescription="<digi:trn jsFriendly='true'>Number of Sectors on projects filtered</digi:trn>";
-	trnNumOfRegsDescription="<digi:trn jsFriendly='true'>Number of Regions on projects filtered</digi:trn>";
-	trnAvgProjSizeDescription="<digi:trn jsFriendly='true'>Total Disbursements divided Number of Projects</digi:trn>";
-	trnCommitments="<digi:trn jsFriendly='true'>Commitments</digi:trn>";
-	trnDisbursements="<digi:trn jsFriendly='true'>Disbursements</digi:trn>";
-	trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";
-	trnPledges="<digi:trn jsFriendly='true'>Pledges</digi:trn>";
-	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
-	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
-	trnFinancingInstrument="<digi:trn jsFriendly='true'>Financing Instrument</digi:trn>";
-	trnOrganizationProfile="<digi:trn jsFriendly='true'>Organization Profile</digi:trn>";
-	trnSectorProfile="<digi:trn jsFriendly='true'>Sector Profile</digi:trn>";
-	trnSubSectorProfile="<digi:trn jsFriendly='true'>Sub-sector breakdown</digi:trn>";
-	trnRegionProfile="<digi:trn jsFriendly='true'>Region Profile</digi:trn>";
-	trnSubRegionProfile="<digi:trn jsFriendly='true'>Zone breakdown</digi:trn>";
-	trnShowFullList="<digi:trn jsFriendly='true'>Show Full List</digi:trn>"; 
-	trnTopProjects="<digi:trn jsFriendly='true'>Top Projects</digi:trn>";
-	trnTopSectors="<digi:trn jsFriendly='true'>Top Sectors</digi:trn>";
-	trnTopRegions="<digi:trn jsFriendly='true'>Top Regions</digi:trn>"; 
-	trnTopOrganizations="<digi:trn jsFriendly='true'>Top Organizations</digi:trn>"; 
-	trnTopNPOs="<digi:trn jsFriendly='true'>Top NPO</digi:trn>"; 
-	trnTopPrograms="<digi:trn jsFriendly='true'>Top Programs</digi:trn>"; 
-	trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter settings</digi:trn>"; 
-	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
-	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
-	trnAllAmountsInMillions = "<digi:trn>All amounts in millions</digi:trn>";
-	trnTitle = "<digi:trn>Title</digi:trn>";
-	trnName = "<digi:trn>Name</digi:trn>";
-	trnEmails = "<digi:trn>Emails</digi:trn>";
-	trnPhones = "<digi:trn>Phones</digi:trn>";
-	trnFaxes = "<digi:trn>Faxes</digi:trn>";
-	trnNoContactInfo ="<digi:trn>No Contact Information available for current filter</digi:trn>"; 
-	trnSave = "<digi:trn>Save</digi:trn>";
-	trnDescription = "<digi:trn>Description</digi:trn>";
-	trnBackgroundOrganization = "<digi:trn>Background of organization</digi:trn>";
-	trnNoAdditionalInfo = "<digi:trn>No Additional Information available for current filter</digi:trn>";
-	trnAllOrgGroups = "<digi:trn jsFriendly='true'>ALL Organization Groups</digi:trn>";
-	trnMultipleOrgs = "<digi:trn jsFriendly='true'>Multiple Organizations</digi:trn>"; 
-	trnAllSectors = "<digi:trn jsFriendly='true'>ALL Sectors</digi:trn>"; 
-	trnMultipleSubSector = "<digi:trn jsFriendly='true'>Multiple Sub Sectors</digi:trn>"; 
-	trnAllSubSector = "<digi:trn jsFriendly='true'>ALL Sub Sectors</digi:trn>"; 
-	trnAllRegions ="<digi:trn jsFriendly='true'>ALL Regions</digi:trn>"; 
-	trnAllZones = "<digi:trn jsFriendly='true'>ALL Zones</digi:trn>"; 
-	trnMultipleZones = "<digi:trn jsFriendly='true'>Multiple Zones</digi:trn>";
-	trnMultipleOrgGrp = "<digi:trn jsFriendly='true'>Multiple Org. Groups</digi:trn>"; 
-	trnMultipleRegion = "<digi:trn jsFriendly='true'>Multiple Regions</digi:trn>"; 
-	trnMultipleSector = "<digi:trn jsFriendly='true'>Multiple Sectors</digi:trn>"; 
-	trnODAGrowth = "<digi:trn jsFriendly='true'>ODA Growth Percentage</digi:trn>"; 
-	trnSavingInformation = "<digi:trn>saving information, please wait</digi:trn>..."; 
-	trnSavedInformation = "<digi:trn>Information was saved</digi:trn>"; 
-	trnFailedSave = "<digi:trn>Failed to save information</digi:trn>";
-	alertBadDate="<digi:trn>Start year can't be greater than end year</digi:trn>";
-	trnNoDataToShow="<digi:trn>No data to show</digi:trn>";
-	trnOrgInfo="<digi:trn>Organization Info</digi:trn>";
-}
+
+/*
 function initializeGlobalVariables(){
 	//Other global variables
 	loadingPanel;
@@ -1391,7 +1314,7 @@ function initializeGlobalVariables(){
 	<digi:context name="showList" property="context/module/moduleinstance/showProjectsList.do?" />
 	urlShowList = "${showList}";
 }
-
+*/
 </script>
 
 </digi:form>

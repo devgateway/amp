@@ -43,7 +43,9 @@
 <div id="tabview_container" class="yui-navset" style="display: block; overflow: hidden; height: 80%; padding-bottom: 0px;margin-top: 15px;margin-left: 5px;margin-right: 5px">
 	<ul class="yui-nav" style="border-bottom: 1px solid #CCCCCC">
 		<li class="selected"><a href="#donorsTab"><div><digi:trn>Donor Agencies</digi:trn></div></a></li>
-		<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
+		<logic:notEqual name="is_pledge_report" value="true" scope="request">
+			<li><a href="#relAgenciesTab"><div><digi:trn>Related Agencies</digi:trn></div></a></li>
+		</logic:notEqual>
 		<li><a href="#sectorsTab"><div><digi:trn>Sectors</digi:trn></div></a></li>
 		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 			<li><a href="#programsTab"><div><digi:trn>Programs</digi:trn></div></a></li>
@@ -65,15 +67,17 @@
 		</div>
 	<% 
 		StopWatch.next("Filters", true, "related agencies tab begin");
-	%>		
-		<div id="relAgenciesTab" class="yui-hidden" style="height: 91%;">
-			<div class="grayBorder">
-				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
-				<bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
-				<bean:define id="reqSearchManagerId" toScope="request" value="relAgenciesTab_search" />
-				<%@include file="bigFilterTable.jsp" %>
-			</div>
-		</div>
+	%>
+        <logic:notEqual name="is_pledge_report" value="true" scope="request">
+            <div id="relAgenciesTab" class="yui-hidden" style="height: 91%;">
+                <div class="grayBorder">
+                    <bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
+                    <bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
+                    <bean:define id="reqSearchManagerId" toScope="request" value="relAgenciesTab_search" />
+                    <%@include file="bigFilterTable.jsp" %>
+                </div>
+            </div>
+        </logic:notEqual>
 	<% 
 		StopWatch.next("Filters", true, "sectors tab begin");
 	%>		
@@ -119,6 +123,7 @@
 		%>				
 		<div id="otherCriteriaTab" class="yui-hidden"  style="height: 91%;">
 			<div class="grayBorder">
+				<logic:notEqual name="is_pledge_report" value="true" scope="request">
 				<c:set var="reqSelectorHeaderSize" scope="request" value="13" />
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="otherCriteriaElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="otherCriteriaPropertyObj" />
@@ -133,16 +138,45 @@
 			StopWatch.next("Filters", true, "other criteria tab end");
 		%>						
 				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
-
+				</logic:notEqual>
+				<div style="width: 55%; height:30%; padding: 10px; float: left;">
+					<b><digi:trn>Date Filter</digi:trn> </b>
+					
+					<div style="margin-top:7px;">
+					<table style="font-family: Arial; font-size: 1em;">
+						<tr>
+							<td align="left">
+							<digi:trn key="rep:filer:From"> From </digi:trn> <html:text  property="fromDate" size="10" styleId="fromDate" styleClass="inp-text" readonly="true" />
+							<a id="date1" style="background-color: #F6FAFF;" href='javascript:pickDateById("date1","fromDate")'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+							</a>
+							<a id="clearDate1" style="background-color: #F6FAFF;" href='javascript:clearDate("fromDate")' title="<digi:trn>Clear</digi:trn>">
+								<img src="../ampTemplate/images/deleteIcon.gif" alt="Clear" border="0">
+							</a>
+							</td>
+							<td align="left">&nbsp;&nbsp;
+							<digi:trn key="rep:filer:To"> To </digi:trn> <html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" />
+							<a id="date2" style="background-color: #F6FAFF;" href='javascript:pickDateById("date2","toDate")'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
+							</a>
+							<a id="clearDate2" style="background-color: #F6FAFF;" href='javascript:clearDate("toDate")' title="<digi:trn>Clear</digi:trn>">
+								<img src="../ampTemplate/images/deleteIcon.gif" border="0">
+							</a>
+							</td>
+						</tr>
+					</table></div>
+				</div>
+				<logic:notEqual name="is_pledge_report" value="true" scope="request">
 				<div style="width: 17%; height: 30%; padding: 10px; float: left;">
 					<span style="white-space: nowrap"><b><digi:trn>Actual Approval Year</digi:trn> </b></span>
 						<div style="margin-top:10px;">
-						<html:select property="actualAppYear"  style="width: 100px" styleClass="inp-text">
-							<option value="-1"><digi:trn key="aim:filters:actualAppYear">Year</digi:trn></option>
-                         	<html:optionsCollection property="actualAppYearsRange" label="wrappedInstance" value="wrappedInstance" />
-						</html:select>
+							<html:select property="actualAppYear"  style="width: 100px" styleClass="inp-text">
+								<option value="-1"><digi:trn key="aim:filters:actualAppYear">Year</digi:trn></option>
+                       			<html:optionsCollection property="actualAppYearsRange" label="wrappedInstance" value="wrappedInstance" />
+							</html:select>
 						</div>
-				</div>
+					</div>
+				</logic:notEqual>
 				<feature:display name="Computed Columns Filters" module="Filter Section">
 					<div style="margin-left: 80%;width: 20%; height: 30%; padding: 10px; ">
 						<span style="white-space: nowrap"><b><digi:trn>Computed Columns</digi:trn> </b></span>
@@ -158,7 +192,8 @@
 		</div>
 	</div>
 </div>
-<div style="width:60%; float:left; font-size: 12px;text-align: center;">
+<logic:notEqual name="is_pledge_report" value="true" scope="request">
+	<div style="width:60%; float:left; font-size: 12px;text-align: center;">
 		<c:set var="tooltip_translation">
 			<digi:trn>Specify keywords to look for in the project data.</digi:trn>
 		</c:set>
@@ -172,7 +207,8 @@
 				<option value="1"><digi:trn>All keywords</digi:trn></option>
 			</html:select>
 			
-</div>
+	</div>
+</logic:notEqual>
 <div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
 	<html:checkbox property="justSearch" value="true" />&nbsp;
 	<digi:trn>Use filter as advanced search</digi:trn>

@@ -36,12 +36,12 @@ public abstract class AmpTreeCollectionValidatorField<T> extends
 	@Override
 	public IModel getHiddenContainerModel(
 			final IModel<? extends Collection<T>> collectionModel) {
-			Model<String> model=new Model<String>() {
+        Model<String> model=new Model<String>() {
 			@Override
 			public String getObject() {
 				Set<AmpAutoCompleteDisplayable> quickItems=new TreeSet<AmpAutoCompleteDisplayable>();
 				for (T t : collectionModel.getObject()) quickItems.add(getItem(t));
-				
+
 				Set<String> ret=new TreeSet<String>();
 				for (T t : collectionModel.getObject()) {
 					AmpAutoCompleteDisplayable node=getItem(t).getParent();
@@ -50,8 +50,8 @@ public abstract class AmpTreeCollectionValidatorField<T> extends
 						node=node.getParent();
 					}
 				}
-						
-				if(ret.size()>0) 
+
+				if(ret.size()>0)
 						return ret.toString();
 				return "";
 			}

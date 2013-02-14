@@ -846,6 +846,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		rawColumnsByName = null;
 		rawColumns.getItems().clear();
 		rawColumns = null;
+		report.removeEmptyChildren();
+		report.removeChildrenWithoutActivities(); //postProcess might have created some more empty children
 	}
 
 	/**

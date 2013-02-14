@@ -395,9 +395,11 @@ public class ReportContextData
 	public static ReportContextData getFromRequest(boolean createIfNotExists)
 	{
 		HttpServletRequest request = TLSUtils.getRequest();
-		if (request == null)
-			throw new RuntimeException("TLS Request not found!");
-		return getFromRequest(request, createIfNotExists);
+        if (request == null) {
+            throw new RuntimeException("TLS Request not found!");
+        }
+        request.getSession().setAttribute("reportMeta", null); //VERY important for pledge reports recognisation. For porting to AMP 2.4: put null in RCD.reportMeta
+        return getFromRequest(request, createIfNotExists);
 	}
 	
 	/**

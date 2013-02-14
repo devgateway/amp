@@ -71,9 +71,24 @@ function applyFilter() {
 	else alert("<digi:trn>Number of records per page should be greater than 0</digi:trn>");
 }
 
-function sortSubmit(value){
+function sortSubmit(val){
+	
+	var sval = document.aimCurrencyForm.sort.value;
+	var soval = document.aimCurrencyForm.sortOrder.value;
+
+	if ( val == sval ) {
+		if (soval == "asc")
+			document.aimCurrencyForm.sortOrder.value = "desc";
+		else if (soval == "desc")
+			document.aimCurrencyForm.sortOrder.value = "asc";
+	}
+	else
+		document.aimCurrencyForm.sortOrder.value = "asc";
+	
+	document.aimCurrencyForm.sort.value=val;
+	
 	<digi:context name="sorting" property="context/module/moduleinstance/currencyManager.do" />
-	document.aimCurrencyForm.action = "<%= sorting %>~order="+value;
+	document.aimCurrencyForm.action = "<%= sorting %>";
 	document.aimCurrencyForm.target = "_self";
 	document.aimCurrencyForm.submit();
 }
@@ -108,6 +123,8 @@ function exportXSL(){
 <digi:instance property="aimCurrencyForm" />
 <digi:form action="/currencyManager.do">
 
+<html:hidden property="sort" />
+<html:hidden property="sortOrder" />
 	<table width="1000" cellspacing="0" cellpadding="0" valign="top"
 		align="center">
 		<tr>
@@ -292,34 +309,43 @@ function exportXSL(){
 															<tr bgcolor="eeeeee">
 																<td width="5%" class="inside"></td>
 																<td align="left" class="inside" width="20%"
-																	style="cursor: pointer;" onclick="sortSubmit(1)"
+																	style="cursor: pointer;" onclick="sortSubmit('code')"
 																	onMouseOver="this.className='colHeaderOver'"
 																	onMouseOut="this.className='colHeaderLink'"><b><digi:trn
 																			key="aim:currCode">Code</digi:trn>
 																</b>
-																<c:if test="${aimCurrencyForm.order==1}">
+																<c:if test="${aimCurrencyForm.sort=='code' && aimCurrencyForm.sortOrder=='asc'}">
 																		<img src="/repository/aim/images/up.gif" alt="up" />
+																	</c:if>
+																<c:if test="${aimCurrencyForm.sort=='code' && aimCurrencyForm.sortOrder=='desc'}">
+																		<img src="/repository/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</td>
 																<td align="left" class="inside" width="35%"
-																	style="cursor: pointer;" onclick="sortSubmit(2)"
+																	style="cursor: pointer;" onclick="sortSubmit('cname')"
 																	onMouseOver="this.className='colHeaderOver'"
 																	onMouseOut="this.className='colHeaderLink'"><b><digi:trn
 																			key="aim:currencyName">Currency Name</digi:trn>
 																</b>
-																<c:if test="${aimCurrencyForm.order==2}">
+																<c:if test="${aimCurrencyForm.sort=='cname' && aimCurrencyForm.sortOrder=='asc'}">
 																		<img src="/repository/aim/images/up.gif" alt="up" />
+																	</c:if>
+																<c:if test="${aimCurrencyForm.sort=='cname' && aimCurrencyForm.sortOrder=='desc'}">
+																		<img src="/repository/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</td>
 																<td colspan="2" align="left" class="inside"
 																	style="cursor: pointer;"
 																	onMouseOver="this.className='colHeaderOver'"
-																	onclick="sortSubmit(3)"
+																	onclick="sortSubmit('country')"
 																	onMouseOut="this.className='colHeaderLink'"><b><digi:trn
 																			key="aim:countryName">Country</digi:trn>
 																</b>
-																<c:if test="${aimCurrencyForm.order==3}">
+																<c:if test="${aimCurrencyForm.sort=='country' && aimCurrencyForm.sortOrder=='asc'}">
 																		<img src="/repository/aim/images/up.gif" alt="up" />
+																	</c:if>
+																<c:if test="${aimCurrencyForm.sort=='country' && aimCurrencyForm.sortOrder=='desc'}">
+																		<img src="/repository/aim/images/down.gif" alt="down" />
 																	</c:if>
 																</td>
 															</tr>

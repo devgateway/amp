@@ -25,6 +25,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
@@ -32,6 +33,7 @@ import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.util.DbUtil;
@@ -48,6 +50,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	private static final long serialVersionUID = 1L;
 	protected AmpUniqueCollectionValidatorField<AmpOrgRole> uniqueCollectionValidationField;
 	protected AmpPercentageCollectionValidatorField<AmpOrgRole> percentageValidationField;
+    protected AmpMinSizeCollectionValidationField<AmpOrgRole> minSizeCollectionValidationField;
 	protected final IModel<ListView<AmpOrgRole>> list = new Model<ListView<AmpOrgRole>>();
 	protected IModel<List<AmpOrgRole>> listModel;
 	protected IModel<Set<AmpOrgRole>> setModel;
@@ -121,7 +124,16 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 			}
 		};
 		add(uniqueCollectionValidationField);
-		
+
+        minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpOrgRole>("minSizeValidator", listModel, "Required Validator"){
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                reqStar.setVisible(isVisible());
+            }
+        };
+        add(minSizeCollectionValidationField);
+
 		WebMarkupContainer wmc = new WebMarkupContainer("ajaxIndicator");
 		add(wmc);
 		AjaxIndicatorAppender iValidator = new AjaxIndicatorAppender();

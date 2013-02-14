@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -62,7 +63,39 @@ import org.hibernate.Transaction;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
-	
+
+	public static List<AmpOrgGroup> getOrganisationGroupsByRole(boolean publicView, DashboardFilter filter) {
+        Session session = null;
+        Query q = null;
+        
+        List<AmpOrgGroup> organizations = new ArrayList<AmpOrgGroup>();
+        StringBuilder queryString = new StringBuilder("select distinct org.orgGrpId from " + AmpOrgRole.class.getName() + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
+        if (publicView) {
+            queryString.append(" inner join orgRole.activity act  inner join act.team tm ");
+        }
+        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY)
+        	queryString.append(" where  role.roleCode='EA' ");
+        else if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+        	queryString.append(" where  role.roleCode='BA' ");
+        else
+			queryString.append(" where  role.roleCode='DN' ");
+
+        if (publicView) {
+            queryString.append(" and act.draft=false and act.approvalStatus ='approved' and tm.parentTeamId is not null ");
+        }
+
+//        queryString.append("order by org.orgGrpId.orgGrpName asc");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+
+            organizations = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp organization group names from database ", ex);
+        }
+        Collections.sort(organizations);
+        return organizations;
+    }	
 	public static List<AmpOrganisation> getDonorOrganisationByGroupId(
 			Long orgGroupId, boolean publicView, DashboardFilter filter) {
         Session session = null;
@@ -205,10 +238,20 @@ public class DbUtil {
      * @throws org.digijava.kernel.exception.DgException
      */
     @SuppressWarnings("unchecked")
-    public static DecimalWraper getPledgesFunding(Long[] orgIds, Long[] orgGroupIds,
+    public static DecimalWraper getPledgesFunding(DashboardFilter filter,
             Date startDate, Date endDate,
             String currCode) throws DgException {
     	DecimalWraper totalPlannedPldges = new DecimalWraper();
+        Long[] orgsGrpIds = filter.getOrgGroupIds();
+		Long orgsGrpId = filter.getOrgGroupId();
+		Long[] orgIds = filter.getSelOrgIds();
+		Long[] orgGroupIds;
+		if (orgsGrpIds == null || orgsGrpIds.length == 0 || orgsGrpIds[0] == -1) {
+			Long[] temp = {orgsGrpId};
+	        orgGroupIds = temp;
+		} else {
+	        orgGroupIds = orgsGrpIds;
+		}	
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         Integer startYear = Integer.valueOf(sdf.format(startDate));
         Integer endYear = Integer.valueOf(sdf.format(endDate));
@@ -223,15 +266,19 @@ public class DbUtil {
         oql += " from ";
         oql += FundingPledgesDetails.class.getName()
                 + " fd inner join fd.pledgeid plg ";
-        oql += " inner join  plg.organization org  ";
-        oql += " where  fd.fundingYear in (" + years + ")";
+        String where = " where  fd.fundingYear in (" + years + ")";
         if (orgIds == null || orgIds.length==0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-                oql += " and  org.orgGrpId.ampOrgGrpId in (" + DashboardUtil.getInStatement(orgGroupIds) + ") ";
+                oql += " left outer join  plg.organization org  ";
+            	oql += " inner join plg.organizationGroup orgGrp ";
+            	where += " and (org.orgGrpId.ampOrgGrpId in (" + DashboardUtil.getInStatement(orgGroupIds) + ") ";
+            	where += " or  orgGrp.ampOrgGrpId in (" + DashboardUtil.getInStatement(orgGroupIds) + ")) ";
             }
         } else {
-            oql += " and org.ampOrgId in (" + DashboardUtil.getInStatement(orgIds) + ") ";
+            oql += " inner join  plg.organization org  ";
+        	where += " and org.ampOrgId in (" + DashboardUtil.getInStatement(orgIds) + ") ";
         }
+        oql += where;
         Session session = PersistenceManager.getRequestDBSession();
         List<FundingPledgesDetails> fundingDets = null;
         try {
@@ -668,8 +715,9 @@ public class DbUtil {
         List<AmpTheme> programs2 = new ArrayList<AmpTheme>();
         for (Iterator iterator = programs.iterator(); iterator.hasNext();) {
 			AmpTheme ampTheme = (AmpTheme) iterator.next();
-			if (sett.getDefaultHierarchyId()== DashboardUtil.getTopLevelProgram(ampTheme).getParentThemeId().getAmpThemeId())
-				programs2.add(ampTheme);
+			if (ampTheme.getIndlevel()>0)
+				if (sett.getDefaultHierarchyId()== DashboardUtil.getTopLevelProgram(ampTheme).getParentThemeId().getAmpThemeId())
+					programs2.add(ampTheme);
 		}
         return programs2;
 	}
@@ -1428,7 +1476,12 @@ public class DbUtil {
 
     	DecimalWraper total = null;
         String oql = "";
-
+        //This determines if this query needs additional joins for role and role percentage
+        Boolean organizationRoleQuery = false;
+    	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			organizationRoleQuery = true;
+    	
         oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name";
         if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
         	oql += ", actProg.programPercentage ";
@@ -1436,6 +1489,8 @@ public class DbUtil {
         	oql += ", actloc.locationPercentage ";
         if (sectorCondition)
         	oql += ", actsec.sectorPercentage ";
+        if (organizationRoleQuery)
+        	oql += ", orole.percentage ";
         
         oql += " from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
     	
@@ -1443,10 +1498,10 @@ public class DbUtil {
         	oql += " inner join act.ampActivityGroupCached actGroup ";
         else
         	oql += " inner join act.ampActivityGroup actGroup ";
-    	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    	if (organizationRoleQuery)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
-    	 if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
+    	
+    	if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
          	oql += " inner join act.actPrograms actProg ";
             oql += " inner join actProg.program prog ";
  		}
@@ -2550,18 +2605,28 @@ public class DbUtil {
         }
     	return contact;
     }
-    public static void saveAdditionalInfo(Long orgId, String orgBackground,String orgDescription) throws DgException{
+    public static void saveAdditionalInfo(Long id, String type, String background,String description, String keyAreas) throws DgException{
         Session sess = null;
         Transaction tx = null;
 
         try {
             sess = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-            AmpOrganisation org = (AmpOrganisation) sess.get(AmpOrganisation.class, orgId);
-            org.setOrgBackground(orgBackground);
-            org.setOrgDescription(orgDescription);
-            sess.update(org);
-            //tx.commit();
+            if(type.equals("Organization")){
+                AmpOrganisation org = (AmpOrganisation) sess.get(AmpOrganisation.class, id);
+                org.setOrgBackground(background);
+                org.setOrgDescription(description);
+                org.setOrgKeyAreas(keyAreas);
+                sess.update(org);
+            }
+            else if (type.equals("OrganizationGroup")){
+                AmpOrgGroup orgGrp = (AmpOrgGroup) sess.get(AmpOrgGroup.class, id);
+                orgGrp.setOrgGrpBackground(background);
+                orgGrp.setOrgGrpDescription(description);
+                orgGrp.setOrgGrpKeyAreas(keyAreas);
+                sess.update(orgGrp);
+            }
+
+        
         } catch (Exception e) {
             logger.error("Unable to update", e);
             if (tx != null) {

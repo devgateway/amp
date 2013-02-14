@@ -146,6 +146,31 @@
 																		</td>
 																	</tr>
 																</module:display>
+																<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Agreement"
+																	parentModule="/Activity Form/Donor Funding/Funding Group/Funding Classification">
+																	<tr>
+																		<td align="left" width="150">
+																			<a title='<digi:trn>Agreement Title</digi:trn>'>
+																				<digi:trn>Agreement Title</digi:trn>
+																			</a>
+																		</td>
+																		<td width="1">:</td>
+																		<td align="left">
+																			<b>${funding.title}</b>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td align="left" width="150">
+																			<a title='<digi:trn>Agreement Code</digi:trn>'>
+																				<digi:trn>Agreement Code</digi:trn>
+																			</a>
+																		</td>
+																		<td width="1">:</td>
+																		<td align="left">
+																			<b>${funding.code}</b>
+																		</td>
+																	</tr>
+																</module:display>
 															</table>
 															</td>
 														</tr>

@@ -93,7 +93,11 @@
 			private var trnMessageEmpty:String = "";
 			private var trnMessageLoadingPanel:String = "";
 			private var trnMessageLoading:String = "";
-
+			private var trnMessageYearError:String = "";
+			private var trnMessageError:String = "";
+			private var trnYears:String = "";
+			private var trnCurrency:String = "";
+			
 			/**
 			 * This example is using xml data read from the file system. 
 			 * In practical usage, you'ld have some data in a model that you want to display
@@ -110,6 +114,12 @@
 				//Since our data has the time entries on each row (a common format for temporal data) we want to pivot the data
 				//This then makes a column for each unique time entrie and a row for each unique column.
 				ds.pivotTable(0);
+				if(ds.data.pivot.header.length <= 2){
+					showYearMessage();
+					return;
+				}
+				else
+					hideYearMessage();
 				dataProvider = ds.data.pivot.rows;
 				
 
@@ -134,6 +144,7 @@
 				}
 				else
 				{
+					messagePanel.title = trnMessagePanel;
 					dc.visible = false;
 					messagePanel.visible = true;
 					sizePanel(300, 200);
@@ -150,6 +161,7 @@
 					}
 				} catch (errObject:Error) {
 				}
+				
 				var magnitude:Number;
 				magnitude = Math.pow(10,(Math.round(maxValue).toString().length));
 				//for 10.000 to 99.999 it's 100.000, now determine the segment there.
@@ -160,7 +172,13 @@
 					newMaxValue = getDeterminedMaxValue(magnitude, maxValue, magnitude/100);
 				}
 				
-				vScale.maxValue = newMaxValue*10;
+				if(newMaxValue == 0) //Special case for small numbers
+				{
+					newMaxValue = maxValue;
+				}
+				if(newMaxValue >= 80 && newMaxValue < 100) //Special case for maxValues between 80-100
+					newMaxValue = 100;
+				vScale.maxValue = newMaxValue;
 				vScale.minValue = 0;
 
 				// Set the intial dp to the intial setting of the %data slider
@@ -231,9 +249,10 @@
 				else
 					legendLayout.visible = false;
 
-				messageLoadingPanel.visible = false;
-				sizeLoadingPanel(0, 0);
+				messagePanel.visible = false;
+				sizePanel(0, 0);
 				//dc.visible = true;
+				printLabel.text = trnYears + ": " + startYear + " to " + endYear +" - " + trnCurrency + ": " + currCode;
 				
 			}
 			private function getDeterminedMaxValue(magnitude, maxValue, step){
@@ -251,12 +270,11 @@
 				messagePanel.width = w;
 				messagePanel.height = h;
 			}
-			private function sizeLoadingPanel(w:uint, h:uint):void {
-				messageLoadingPanel.width = w;
-				messageLoadingPanel.height = h;
-			}		
+		
 			private function captureSnapshot():void
 			{
+				sliderYear.visible = false;
+				printLabel.visible = true;
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
 				var strDomain:String = "";
@@ -272,6 +290,8 @@
 				}
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
+				printLabel.visible = false;
+				sliderYear.visible = true;
 			}
 			/**
 			 * This function is called when the % data slider changes.
@@ -344,7 +364,17 @@
 			{
 				start();
 			}
-			
+			protected function showYearMessage():void {
+				messagePanelText.text = trnMessageYearError;
+				messagePanel.title = trnMessageError;
+				dc.visible = false;
+				messagePanel.visible = true;
+				sizePanel(300, 200);
+			}
+			protected function hideYearMessage():void {
+				dc.visible = true;
+				messagePanel.visible = false;
+			}
 			protected function application1_creationCompleteHandler(event:FlexEvent):void
 			{
 				//Initialize variables and get the URL for the service that will provide data
@@ -360,14 +390,22 @@
 				trnMessageEmpty = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageEmpty','')}"));
 				trnMessageLoadingPanel = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoadingPanel','')}"));
 				trnMessageLoading = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageLoading','')}"));
+				trnMessageYearError = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageYearError','')}"));
+				trnMessageError = String(ExternalInterface.call("function(){ return getValueToFlash('trnMessageError','')}"));
+				trnYears = String(ExternalInterface.call("function(){ return getValueToFlash('trnYears','')}"));
+				trnCurrency = String(ExternalInterface.call("function(){ return getValueToFlash('trnCurrency','')}"));
 				
 				messagePanel.title = trnMessagePanel;
-				messageEmpty.text = trnMessageEmpty;
-				messageLoadingPanel.title = trnMessageLoadingPanel;
-				messageLoading.text = trnMessageLoading;
+				messagePanelText.text = trnMessageEmpty;
 				
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+
+				if (startYear == endYear)
+					showYearMessage();
+				else
+					hideYearMessage();
+				
 				var labelArray:Array = new Array();
 				for(var year:int = startYear; year <= endYear; year++){
 					labelArray.push(year);
@@ -417,9 +455,11 @@
 
 			public function refreshGraph():void
 			{
+				messagePanel.title = trnMessageLoadingPanel;
+				messagePanelText.text = trnMessageLoading;
+				messagePanel.visible = true;
 				
-				messageLoadingPanel.visible = true;
-				sizeLoadingPanel(300, 200);
+				sizePanel(300, 200);
 				dc.visible = false;
 				
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
@@ -578,7 +618,6 @@
 	<mx:Number id="endYear"></mx:Number>
 	<mx:Object id="categories"/>
 	<mx:Object id="dataProvider"/>
-	<mx:String id="verticalField"/>
 	<mx:Number id="percentGap">.02</mx:Number>
 	<mx:String id="dataField">fundingtype</mx:String>
 	<mx:String id="itemId">-1</mx:String>
@@ -800,6 +839,7 @@
 				itemClick="this.itemClick(event);"
 				dataTipLabelFunction="{dataTipLabelFunction}"
 				enableRollOver="true"
+				autoAdjustScale="false"
 				/>
 			<axiis:HBoxLayout id="legendLayout" 
 							  x="-40"
@@ -835,6 +875,7 @@
 		
 	</axiis:DataCanvas>
 	<mx:HSlider minimum="{startYear}" maximum="{endYear}" snapInterval="1" id="sliderYear" showTrackHighlight="true" thumbCount="2" change="sliderYear_changeHandler(event)" width="450" x="92" y="420" dataTipPrecision="0" showDataTip="false" tickInterval="1" visible="true"/>
+	<mx:Label width="450" x="92" y="420" id="printLabel" height="36" fontSize="12" visible="false"/>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
 
 	</mx:Canvas>
@@ -984,11 +1025,8 @@
 		</mx:HBox>
 	</mx:HBox>
 -->
-	<mx:Panel x="{(this.width-300)/2}" y="100" title="Empty Dataset" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
-		<mx:Label id="messageEmpty" fontWeight="bold" fontSize="13" color="black" text="No data to show"/>
-	</mx:Panel>
-	<mx:Panel x="{(this.width-300)/2}" y="100" title="Loading" width="0" height="0" id="messageLoadingPanel" visible="false" resizeEffect="{resize}">
-		<mx:Label id="messageLoading" fontWeight="bold" fontSize="13" color="black" text="Loading data..."/>
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Message" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messagePanelText" fontWeight="bold" fontSize="13" color="black" text="..."/>
 	</mx:Panel>
 
 </mx:Application>

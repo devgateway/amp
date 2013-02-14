@@ -53,22 +53,24 @@ public class CurrencyManager extends Action {
 				crForm.setCantDelete(true);
 			}
 
-			int sortingValue = crForm.getOrder();
-			if (sortingValue == 0) {
-				if ((crForm.getAllCurrencies() == null)	|| ((reload != null) && (reload.compareTo("true") == 0))) {
-					crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
-				}else{
-                    crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
-                }
-			} else if (sortingValue == -1) {
-				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
-			} else if (sortingValue == 1) {
-				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
-			} else if (sortingValue == 2) {
-				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_NAME));
-			} else if (sortingValue == 3) {
-				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME));
-			}
+			int sortDB=-1;
+			String sort = (crForm.getSort() == null) ? null : crForm.getSort().trim();
+		    String sortOrder = (crForm.getSortOrder() == null) ? null : crForm.getSortOrder().trim();
+		    if(sort == null || "".equals(sort) || sortOrder == null || "".equals(sortOrder)) {
+		    	crForm.setSort("code");
+		    	crForm.setSortOrder("asc");
+	            sortDB = CurrencyUtil.ORDER_BY_CURRENCY_CODE;
+	            sortOrder = "asc";
+	        } else {
+	            if("code".equals(sort)) {
+	            	sortDB = CurrencyUtil.ORDER_BY_CURRENCY_CODE;
+	            } else if("cname".equals(sort)) {
+	            	sortDB = CurrencyUtil.ORDER_BY_CURRENCY_NAME;
+	            } else if("country".equals(sort)) {
+	            	sortDB = CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME;
+	            } 
+	        }
+		    crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(sortDB,sortOrder));
 
             Collection currencies =crForm.getAllCurrencies();
 

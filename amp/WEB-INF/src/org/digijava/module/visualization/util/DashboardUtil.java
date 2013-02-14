@@ -18,41 +18,54 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.visualization.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
+import org.digijava.module.visualization.helper.EntityRelatedListHelper;
 
 import org.joda.time.DateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.GregorianChronology;
 
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -311,10 +324,10 @@ public class DashboardUtil {
 				// TODO Auto-generated catch block
 				logger.error("AdjustmenType is unknown.");
 			}
-			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.COMMITMENT, adjustmentType);
+			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, adjustmentType);
 			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep3);
-			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, Constants.DISBURSEMENT, adjustmentType);
+			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, adjustmentType);
 			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			form.getSummaryInformation().setNumberOfProjects(activityList.size());
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());
@@ -771,7 +784,7 @@ public class DashboardUtil {
 		//If it's activated, then the dividing denominator should be 1000 instead of 1000000
 		//This has to take into account that the amounts could already be in thousands
 		//In this method, divideThousands holds the individual chart information if it's going to be divided again
-		
+
 		BigDecimal divideByDenominator;
 		if(isProfile){ //The profile already divide in the preload of data in method getSummaryAndRankInformation(VisualizationForm, HttpServletRequest)
 			return new BigDecimal(1);
@@ -796,4 +809,203 @@ public class DashboardUtil {
 		}
 		return false;
 	}
+	
+	public static void initializeFilter(DashboardFilter filter, HttpServletRequest request) {
+		
+		String publicView = request.getParameter("publicView") != null ? (String) request.getParameter("publicView") : "false";
+		if (publicView.equals("true")) {
+			filter.setFromPublicView(true);
+		} else {
+			filter.setFromPublicView(false);
+		}
+		filter.setDashboardType(Constants.DashboardType.DONOR);
+		
+		filter.setShowOrganizationsRanking(false);
+		filter.setShowRegionsRanking(false);
+		filter.setShowSectorsRanking(false);
+		filter.setShowProjectsRanking(false);
+		String siteId = RequestUtils.getSiteDomain(request).getSite().getId().toString();
+		String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		if (value != null) {
+			Long fisCalId = Long.parseLong(value);
+			filter.setFiscalCalendarId(fisCalId);
+		}
+
+		List<AmpOrgGroup> orgGroups = new ArrayList<AmpOrgGroup>(org.digijava.module.aim.util.DbUtil.getAllOrgGroups());
+		filter.setOrgGroups(orgGroups);
+		List<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>> orgGroupsWithOrgsList = new ArrayList<EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>>();
+		for(AmpOrgGroup orgGroup:orgGroups){
+			List<AmpOrganisation> organizations=org.digijava.module.aim.util.DbUtil.getOrganisationByGroupId(orgGroup.getAmpOrgGrpId());
+			orgGroupsWithOrgsList.add(new EntityRelatedListHelper<AmpOrgGroup,AmpOrganisation>(orgGroup,organizations));
+		}
+		filter.setOrgGroupWithOrgsList(orgGroupsWithOrgsList);
+		List<AmpOrganisation> orgs = null;
+
+		if (filter.getOrgGroupId() == null
+				|| filter.getOrgGroupId() == -1) {
+
+			filter.setOrgGroupId(-1l);// -1 option denotes
+												// "All Groups", which is the
+												// default choice.
+		}
+		if(filter.getOrgGroupId()!=-1){
+
+		orgs = org.digijava.module.aim.util.DbUtil.getDonorOrganisationByGroupId(
+				filter.getOrgGroupId(), filter.getFromPublicView());
+		}
+		filter.setOrganizations(orgs);
+		try {
+		if(filter.getSelSectorConfigId()==null){
+				filter.setSelSectorConfigId(SectorUtil.getPrimaryConfigClassification().getId());
+		}
+		filter.setSectorConfigs(SectorUtil.getAllClassificationConfigs());
+		filter.setConfigWithSectorAndSubSectors(new ArrayList<EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>>());
+		List<AmpSector> sectors = org.digijava.module.visualization.util.DbUtil
+					.getParentSectorsFromConfig(filter.getSelSectorConfigId());
+		filter.setSectors(sectors);
+		for(AmpClassificationConfiguration config: filter.getSectorConfigs()){
+			List<AmpSector> currentConfigSectors = org.digijava.module.visualization.util.DbUtil.getParentSectorsFromConfig(config.getId());
+			List<EntityRelatedListHelper<AmpSector,AmpSector>> sectorsWithSubSectors = new ArrayList<EntityRelatedListHelper<AmpSector,AmpSector>>();
+			for(AmpSector sector:currentConfigSectors){;
+				List<AmpSector> sectorList=new ArrayList<AmpSector>(sector.getSectors());
+				sectorsWithSubSectors.add(new EntityRelatedListHelper<AmpSector,AmpSector>(sector,sectorList));
+			}
+			filter.getConfigWithSectorAndSubSectors().add(new EntityRelatedListHelper<AmpClassificationConfiguration,EntityRelatedListHelper<AmpSector,AmpSector>>(config,sectorsWithSubSectors));
+			}
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (filter.getStartYear() == null) {
+			Long year = null;
+			try {
+				year = Long.parseLong(FeaturesUtil
+						.getGlobalSettingValue("Current Fiscal Year"));
+			} catch (NumberFormatException ex) {
+				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
+			}
+			filter.setDefaultStartYear(year-3);
+			filter.setStartYear(year-3);
+			filter.setStartYearQuickFilter(year-3);
+			filter.setStartYearFilter(year-3);
+			filter.setEndYear(year);
+			filter.setDefaultEndYear(year);
+			filter.setEndYearQuickFilter(year);
+			filter.setEndYearFilter(year);
+			filter.setYearToCompare(year-1);
+		}
+		filter.setYears(new TreeMap<String, Integer>());
+		int yearFrom = Integer.parseInt(FeaturesUtil
+						.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
+		int countYear = Integer.parseInt(FeaturesUtil
+						.getGlobalSettingValue(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+		long maxYear = yearFrom + countYear;
+		if (maxYear < filter.getStartYear()) {
+			maxYear = filter.getStartYear();
+		}
+		for (int i = yearFrom; i <= maxYear; i++) {
+			Long fiscalCalendarId = filter.getFiscalCalendarId();
+			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
+            String headingFY = TranslatorWorker.translateText("FY");
+			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+			filter.getYears().put(yearName,i);
+		}
+
+		Collection calendars = org.digijava.module.aim.util.DbUtil.getAllFisCalenders();
+		if (calendars != null) {
+			filter.setFiscalCalendars(new ArrayList(calendars));
+		}
+		// if (fromPublicView == false) {
+		// if (orgForm.getFiscalCalendarId() == null) {
+		// Long fisCalId = tm.getAppSettings().getFisCalId();
+		// if (fisCalId == null) {
+		// String value = FeaturesUtil
+		// .getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		// if (value != null) {
+		// fisCalId = Long.parseLong(value);
+		// }
+		// }
+		// orgForm.setFiscalCalendarId(fisCalId);
+		// }
+		// } else {
+		// }
+		if (filter.getLargestProjectNumber() == null) {
+			filter.setLargestProjectNumber(10);
+		}
+		if (filter.getDivideThousands() == null) {
+			filter.setDivideThousands(false);
+		}
+		if (filter.getDivideThousandsDecimalPlaces() == null) {
+			filter.setDivideThousandsDecimalPlaces(0);
+		}
+		if (filter.getShowAmountsInThousands() == null) {
+			filter.setShowAmountsInThousands(AmpARFilter.AMOUNT_OPTION_IN_UNITS);
+		}
+		//Initialize formatting information
+		if(filter.getDecimalSeparator() == null || filter.getGroupSeparator() == null ){
+			filter.setDecimalSeparator(FormatHelper.getDecimalSymbol());
+			filter.setGroupSeparator(FormatHelper.getGroupSymbol());
+		}
+		
+		if (filter.getRegions() == null) {
+			try {
+				filter.setRegions(new ArrayList<AmpCategoryValueLocations>(
+						DynLocationManagerUtil.
+						getRegionsOfDefCountryHierarchy()));
+				List<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>> regionWithZones = new ArrayList<EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>>();
+				for(AmpCategoryValueLocations region:filter.getRegions()){
+					List<AmpCategoryValueLocations> zones=new ArrayList<AmpCategoryValueLocations>(region.getChildLocations());
+					regionWithZones.add(new EntityRelatedListHelper<AmpCategoryValueLocations,AmpCategoryValueLocations>(region,zones));
+				}
+				filter.setRegionWithZones(regionWithZones);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		Long[] regionId = filter.getRegionIds();
+		List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
+
+		if (regionId != null && regionId.length!=0 && regionId[0] != -1) {
+			AmpCategoryValueLocations region;
+			try {
+				region = LocationUtil.getAmpCategoryValueLocationById(regionId[0]);
+				if (region.getChildLocations() != null) {
+					zones.addAll(region.getChildLocations());
+
+				}
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		filter.setZones(zones);
+		Collection currency = CurrencyUtil.getActiveAmpCurrencyByName();
+        List<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
+        filter.setCurrencies(validcurrencies);
+        //Only currencies which have exchanges rates
+        for (Iterator iter = currency.iterator(); iter.hasNext();) {
+            AmpCurrency element = (AmpCurrency) iter.next();
+            if (CurrencyUtil.isRate(element.getCurrencyCode()) == true) {
+                filter.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+            }
+        }
+        HttpSession httpSession = request.getSession();
+        TeamMember teamMember = (TeamMember) httpSession.getAttribute("currentMember");
+		AmpApplicationSettings tempSettings = null;
+		if (teamMember != null) {
+			tempSettings = org.digijava.module.aim.util.DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			if (tempSettings!=null && tempSettings.getCurrency()!=null){
+				filter.setCurrencyId(tempSettings.getCurrency().getAmpCurrencyId());
+				filter.setCurrencyIdQuickFilter(tempSettings.getCurrency().getAmpCurrencyId());
+			}
+		}
+	}
+
+
+
 }

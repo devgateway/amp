@@ -23,10 +23,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpLocationItemPanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpLocationSearchModel;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
@@ -35,10 +32,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.*;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
@@ -132,7 +126,17 @@ public class AmpLocationFormTableFeature extends
 				"minSizeValidator", listModel, "Location required validator");
 		minSizeCollectionValidationField.setIndicatorAppender(iValidator);
 		add(minSizeCollectionValidationField);
-		
+
+
+        final AmpTreeCollectionValidatorField<AmpActivityLocation> treeCollectionValidatorField = new AmpTreeCollectionValidatorField<AmpActivityLocation>("treeValidator", listModel, "Tree Validator") {
+            @Override
+            public AmpAutoCompleteDisplayable getItem(AmpActivityLocation l) {
+                return l.getLocation().getLocation();
+            }
+        };
+        treeCollectionValidatorField.setIndicatorAppender(iValidator);
+        add(treeCollectionValidatorField);
+
 		list = new ListView<AmpActivityLocation>("listLocations", listModel) {
 			private static final long serialVersionUID = 1L;
 
@@ -140,7 +144,7 @@ public class AmpLocationFormTableFeature extends
 			protected void populateItem(final ListItem<AmpActivityLocation> item) {
 				AmpLocationItemPanel li = new AmpLocationItemPanel("locationItem", item.getModel(), "Location Item", 
 						disablePercentagesForInternational, am, regionalFundingFeature, percentageValidationField, 
-						uniqueCollectionValidationField, setModel, list);
+						uniqueCollectionValidationField, minSizeCollectionValidationField, treeCollectionValidatorField, setModel, list);
 				item.add(li);
 			}
 		};
@@ -246,6 +250,7 @@ public class AmpLocationFormTableFeature extends
                 percentageValidationField.reloadValidationField(target);
                 uniqueCollectionValidationField.reloadValidationField(target);
                 minSizeCollectionValidationField.reloadValidationField(target);
+                treeCollectionValidatorField.reloadValidationField(target);
                 list.removeAll();
 			}
 

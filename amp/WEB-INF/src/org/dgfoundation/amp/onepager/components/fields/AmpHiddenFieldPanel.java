@@ -37,6 +37,4 @@ public class AmpHiddenFieldPanel<T> extends AmpFieldPanel<T> {
 		hiddenContainer.setOutputMarkupId(true);
 		addFormComponent(hiddenContainer);
 	}
-
-
 }

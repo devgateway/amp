@@ -42,6 +42,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -295,45 +296,70 @@ public class DataDispatcher extends DispatchAction {
 				}
 			}
 			if( currentOrgId!=null){
-			AmpContact contact=DbUtil.getPrimaryContactForOrganization(currentOrgId);
-			if(contact!=null){
-			JSONObject jcontact = new JSONObject();
-			jcontact.put("title", contact.getTitle()!=null?contact.getTitle().getValue():"");
-			jcontact.put("name", contact.getName()+" "+contact.getLastname());
-			JSONArray emails=new JSONArray();
-			JSONArray phones=new JSONArray();
-			JSONArray faxes=new JSONArray();
-			if(contact.getProperties()!=null){
-				for (AmpContactProperty property : contact.getProperties()) {
-					if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
-						JSONObject email= new JSONObject();
-						email.put("value",property.getValue());
-						emails.add(email);
-					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
-						JSONObject phone= new JSONObject();
-						phone.put("value",property.getValueAsFormatedPhoneNum());
-						phones.add(phone);
-					}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
-						JSONObject fax= new JSONObject();
-						fax.put("value",property.getValue());
-						faxes.add(fax);
+				AmpContact contact=DbUtil.getPrimaryContactForOrganization(currentOrgId);
+				if(contact!=null){
+					JSONObject jcontact = new JSONObject();
+					jcontact.put("title", contact.getTitle()!=null?contact.getTitle().getValue():"");
+					jcontact.put("name", contact.getName()+" "+contact.getLastname());
+					JSONArray emails=new JSONArray();
+					JSONArray phones=new JSONArray();
+					JSONArray faxes=new JSONArray();
+					if(contact.getProperties()!=null){
+						for (AmpContactProperty property : contact.getProperties()) {
+							if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL) && property.getValue().length()>0){
+								JSONObject email= new JSONObject();
+								email.put("value",property.getValue());
+								emails.add(email);
+							}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE) && property.getValueAsFormatedPhoneNum().length()>0){
+								JSONObject phone= new JSONObject();
+								phone.put("value",property.getValueAsFormatedPhoneNum());
+								phones.add(phone);
+							}else if(property.getName().equals(Constants.CONTACT_PROPERTY_NAME_FAX) && property.getValue().length()>0){
+								JSONObject fax= new JSONObject();
+								fax.put("value",property.getValue());
+								faxes.add(fax);
+							}
+						}
 					}
+					jcontact.put("email", emails);
+					jcontact.put("phones", phones);
+					jcontact.put("faxes", faxes);
+					selOrgContacts.add(jcontact);
 				}
-			}
-			jcontact.put("email", emails);
-			jcontact.put("phones", phones);
-			jcontact.put("faxes", faxes);
-			selOrgContacts.add(jcontact);
-			
-			}
 				AmpOrganisation organization=DbUtil.getOrganisation(currentOrgId);
 				JSONObject jorganizationInfo = new JSONObject();
-				jorganizationInfo.put("orgId", currentOrgId);
-				jorganizationInfo.put("orgBackground", organization.getOrgBackground());
-				jorganizationInfo.put("orgDescription", organization.getOrgDescription());
+				jorganizationInfo.put("id", currentOrgId);
+				jorganizationInfo.put("type", "Organization");
+				jorganizationInfo.put("background", organization.getOrgBackground());
+				jorganizationInfo.put("description", organization.getOrgDescription());
+				jorganizationInfo.put("keyAreas", organization.getOrgKeyAreas());
 				selAdditionalInfo.put("info", jorganizationInfo);
-				
 			}
+			else
+			{
+				Long currentOrgGrpId=null;
+				if (orgsGrpIds == null || orgsGrpIds.length == 0 || orgsGrpIds[0] == -1) {
+					if(orgsGrpId != null && orgsGrpId!=-1){
+						currentOrgGrpId=orgsGrpId;
+					}
+				}
+				else{
+					if(selOrgGroups.size()==1){
+						currentOrgGrpId=orgsGrpIds[0];
+					}
+				}			
+				if( currentOrgGrpId!=null){
+					AmpOrgGroup orgGroup=DbUtil.getOrgGroup(currentOrgGrpId);
+					JSONObject jorganizationGroupInfo = new JSONObject();
+					jorganizationGroupInfo.put("id", currentOrgGrpId);
+					jorganizationGroupInfo.put("type", "OrganizationGroup");
+					jorganizationGroupInfo.put("background", orgGroup.getOrgGrpBackground());
+					jorganizationGroupInfo.put("description", orgGroup.getOrgGrpDescription());
+					jorganizationGroupInfo.put("keyAreas", orgGroup.getOrgGrpKeyAreas());
+					selAdditionalInfo.put("info", jorganizationGroupInfo);
+				}
+			}
+			
 			rootOrgContacts.put("type", "SelOrgContact");
 			rootOrgContacts.put("list", selOrgContacts);
 			children.add(rootOrgContacts);
@@ -2714,10 +2740,10 @@ public class DataDispatcher extends DispatchAction {
         csvString.append("\n");
         BigDecimal total = new BigDecimal(0);
         
-        //for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
+        for (int i = startYear.intValue(); i <= endYear.intValue(); i++) {
             // apply calendar filter
-            Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, endYear.intValue());
-            Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
+            Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i);
+            Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i);
 	        String headingFY = TranslatorWorker.translateText("FY");
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			
@@ -2788,7 +2814,7 @@ public class DataDispatcher extends DispatchAction {
 			if (fundingPlanned.doubleValue() != 0 || fundingActual.doubleValue() != 0) {
 				nodata = false;
 			}
-		//}
+		}
 		if (nodata) {
 //			result = new DefaultCategoryDataset();
 		}
@@ -2915,8 +2941,7 @@ public class DataDispatcher extends DispatchAction {
 				xmlString.append("<year name=\"" + yearName + "\">\n");
 				fundingData += "<" + yearName;
 				if (filter.isPledgeVisible() && pledgesVisible) {
-					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter.getSelOrgIds(),
-							filter.getOrgGroupIds(), startDate, endDate,
+					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter, startDate, endDate,
 							currCode);
 					xmlString
 					.append("<dataField category=\""+TranslatorWorker.translateText("Pledges")+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
@@ -2985,7 +3010,7 @@ public class DataDispatcher extends DispatchAction {
 
 			DecimalWraper fundingPledge =  new DecimalWraper();
 			if (filter.isPledgeVisible() && pledgesVisible) {
-				fundingPledge = DbUtil.getPledgesFunding(filter.getSelOrgIds(),filter.getSelOrgGroupIds(), startDate, endDate,currCode);
+				fundingPledge = DbUtil.getPledgesFunding(filter, startDate, endDate,currCode);
 				csvString.append(",");
 				csvString.append(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 				total = total.add(fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
@@ -3152,6 +3177,25 @@ public class DataDispatcher extends DispatchAction {
 			root.put("objectType", objectType);
 			root.put("children", children);
 			
+		}
+		else if(objectType != null && (objectType.equals("OrganizationGroup"))) {
+	        List<AmpOrgGroup> orgGrps=new ArrayList<AmpOrgGroup>();
+	        try {
+	        	orgGrps = DbUtil.getOrganisationGroupsByRole(visualizationForm.getFilter().getFromPublicView(),visualizationForm.getFilter());
+				JSONObject child = new JSONObject();
+				Iterator<AmpOrgGroup> it = orgGrps.iterator();
+				while(it.hasNext()){
+					AmpOrgGroup org = it.next();
+					child.put("ID", org.getAmpOrgGrpId());
+					child.put("name", org.getOrgGrpName());
+					children.add(child);
+				}
+				root.put("ID", parentId);
+				root.put("objectType", objectType);
+				root.put("children", children);
+	        } catch (Exception e) {
+	            logger.error("unable to load organization groups", e);
+	        }
 		}
 		response.setContentType("text/json-comment-filtered");
 		OutputStreamWriter outputStream = null;

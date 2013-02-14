@@ -21,8 +21,16 @@ public class ReportFilterPickerValidator extends Action {
 			throws java.lang.Exception {
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		boolean isValid = true;
-		if (FormatHelper.parseDate(filterForm.getToDate()).before(
+		try
+		{
+			if (FormatHelper.parseDate(filterForm.getToDate()).before(
 				FormatHelper.parseDate(filterForm.getFromDate()))) {
+				isValid = false;
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("error parsing filter date", e);
 			isValid = false;
 		}
 		response.setContentType("text/xml");

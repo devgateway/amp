@@ -37,6 +37,9 @@ public class CurrencyForm extends ActionForm {
     
     private int order;
     private Integer activeFlag;
+    
+    private String sort;
+    private String sortOrder;
 
 	/**
 	 * @return Returns the activeFlag.
@@ -339,5 +342,17 @@ public class CurrencyForm extends ActionForm {
      */
 	public void setPagesSize(int pagesSize) {
 		this.pagesSize = pagesSize;
+	}
+	public String getSort() {
+		return sort;
+	}
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+	public String getSortOrder() {
+		return sortOrder;
+	}
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 }

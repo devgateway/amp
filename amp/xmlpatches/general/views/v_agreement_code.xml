@@ -20,9 +20,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_agreement_code AS 
-			    	SELECT f.amp_activity_id, ag.code, ag.id from amp_agreement ag, amp_funding f 
- 						WHERE f.agreement=ag.id;
+			   CREATE OR REPLACE VIEW v_agreement_code AS 
+ 			SELECT f.amp_activity_id, ag.code, ag.id, 
+ 				(ag.title::text || ' - '::text) || ag.code::text AS "Agreement Title + Code", 
+ 				o.name AS "Donor Agency" 
+   			FROM amp_agreement ag, amp_funding f, amp_organisation o 
+ 			WHERE f.agreement = ag.id AND f.amp_donor_org_id = o.amp_org_id;
         		</lang>
 		</script>
 	</apply>

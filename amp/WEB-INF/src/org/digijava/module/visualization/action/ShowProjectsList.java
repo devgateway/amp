@@ -54,7 +54,23 @@ public class ShowProjectsList extends Action {
 		
 		int startYearInt = 0;
 		if (startYear.contains("-")) {
-			startYearInt = Integer.parseInt(startYear.substring(startYear.lastIndexOf("-")+1,startYear.lastIndexOf("-")+3))+2000-1;
+			String startYearStr = startYear.substring(startYear.lastIndexOf("-")+1,startYear.lastIndexOf("-")+3);
+			
+			if(type.equals("AidPredictabilityQuarter") && startYearStr.trim().startsWith("Q")){
+				//Fix for AMP-14389, line area graph is not sending the same data format as the bar graph
+				//Example: Line graph -> startYear = FY 11-12 - Q1 
+				//                       id = Actual
+				//         Bar chart -> startYear = FY 11-12 
+				//                      id = Actual-1
+
+				//Extracting the quarter and adding it to the id, used forward
+				String quarterStr = startYear.substring(startYear.lastIndexOf("-")+1,startYear.lastIndexOf("-")+4);
+				id = id +"-"+ quarterStr.trim().substring(1,2);
+				//Calculating startYear after removing the quarter
+				startYearStr = startYear.substring(0, startYear.lastIndexOf("-"));
+				startYearStr = startYearStr.substring(startYearStr.lastIndexOf("-")+1,startYearStr.lastIndexOf("-")+3);
+			}
+			startYearInt = Integer.parseInt(startYearStr)+2000-1;
 		} else {
 			startYearInt = Integer.parseInt(startYear);
 		}
@@ -154,6 +170,37 @@ public class ShowProjectsList extends Action {
 			}
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
+		if (type.equals("BeneficiaryAgencyProfile")){
+			for (int i = 0; i < ids.length; i++) {
+				Long long1 = ids[i];
+				itemName = DbUtil.getOrganisation(long1).getName();
+				Long[] id1 = {long1};
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				newFilter.setAgencyType(org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY);
+				newFilter.setSelOrgIds(id1);
+				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				BigDecimal divideByDenominator;
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
+			}
+			visualizationForm.setItemProjectsList(itemProjectsList);
+		}
+		if (type.equals("ExecutingAgencyProfile")){
+			for (int i = 0; i < ids.length; i++) {
+				Long long1 = ids[i];
+				itemName = DbUtil.getOrganisation(long1).getName();
+				Long[] id1 = {long1};
+				DashboardFilter newFilter = filter.getCopyFilterForFunding();
+				newFilter.setAgencyType(org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY);
+				newFilter.setSelOrgIds(id1);
+				activities = this.getActivities(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+				BigDecimal divideByDenominator;
+				divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+				itemProjectsList.put(itemName, DbUtil.getFundingByActivityList(activities.keySet(), newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator));
+			}
+			visualizationForm.setItemProjectsList(itemProjectsList);
+		}
+				
 		if (type.equals("NPOProfile")||type.equals("ProgramProfile")){
 	    	for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];

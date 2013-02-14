@@ -170,7 +170,9 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 	 */
 	public Cell filter(Cell metaCell,Set ids) {
 		try {
-		if(ids.contains(ownerId)) return (Cell) this.clone(); else return null;
+		if(ids.contains(ownerId)) 
+			return (Cell) this.clone(); 
+		else return null;
 		} catch(CloneNotSupportedException e) {
 			e.printStackTrace();
 		}

@@ -199,17 +199,13 @@ public class AmpMath {
         return result;
     }
 
-    public static boolean isLong(String s)
-    {
-    	try
-    	{
-    		Long.parseLong(s);
-    		return true;
-    	}
-    	catch(NumberFormatException ex)
-    	{
-    		return false;
-    	}
+    public static boolean isLong(String str) {
+        try {
+            Long.valueOf(str);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
     
     public static boolean isNumeric(Object o) {

@@ -93,7 +93,7 @@
 <digi:form module="visualization" action="/filters.do">
 
 
-<div class="yui-content">
+<div class="yui-content" style="width:635px;">
 <%@include file="/repository/visualization/view/graph.jsp" %>
 </div>
 		

@@ -159,7 +159,7 @@
 	<logic:notEqual name="widget" value="true" scope="request">
 		<tr>
 			<td width="40%" style="text-align: right">
-				<digi:trn>Year Range</digi:trn>
+				<digi:trn>Year Range</digi:trn> <b>*</b>
 			</td>
 			<td>
 				<digi:trn>From</digi:trn>:
@@ -176,6 +176,15 @@
 						</html:option>
 						<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
 					</html:select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div style="color: red; font-weight: bolder;">
+					* <span title="<digi:trn>If you want to filter the computed range, please use Change Filters -> Other Criteria -> Date Filters</digi:trn>">
+						<digi:trn>The range selected does not affect Totals or Computed amounts.</digi:trn>
+					</span>
+				</div>
 			</td>
 		</tr>
 	</logic:notEqual>

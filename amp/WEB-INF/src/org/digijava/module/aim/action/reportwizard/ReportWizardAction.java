@@ -235,6 +235,8 @@ public class ReportWizardAction extends MultiAction {
 			request.getParameterMap().put("type", "5");
 		}
 		
+		request.getSession().setAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE, Boolean.toString(typereport == ArConstants.PLEDGES_TYPE)); //WARNING: When merging with 2.4, using ReportContextData attribute instead of storing in the session		
+		
 		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(),typereport,request.getSession()));
 		if (typereport==ArConstants.PLEDGES_TYPE || myForm.getReportType().equalsIgnoreCase("pledge")){
 			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("P"));

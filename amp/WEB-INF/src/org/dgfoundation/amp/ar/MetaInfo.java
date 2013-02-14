@@ -19,7 +19,7 @@ import java.util.Iterator;
  * @since Jun 15, 2006
  * 
  */
-public class MetaInfo<T extends Comparable<? super T>> implements Comparable<MetaInfo<T>> , Serializable  {
+public class MetaInfo<T extends Comparable<? super T>> implements Comparable<MetaInfo<T>> , Serializable, Cloneable  {
 
 	protected String category;
 

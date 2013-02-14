@@ -1217,6 +1217,8 @@ var structureID=1;
 	dojo.forEach(activity.structures,function(structure) {
 			var sms = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ structure.typeId, 21, 25);
 			var pgraphic;
+			description =  structure.description.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+			name =  structure.name.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 			
 			var previewActivityUrl ="/aim/viewActivityPreview.do~pageId=2~isPreview=1~activityId=" + activity.ampactivityid;
 			
@@ -1237,13 +1239,12 @@ var structureID=1;
 					"Temp" : "Temporal Attribute"
 				};
 				pgraphic = new esri.Graphic(transpt, sms, attr,stinfoTemplate);
-	
 				pgraphic.setAttributes({
 						"Structure Name" : structure.name,
 						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+ activity.ampactivityid
 									+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
 						"Structure Type" : structure.type,
-						"Structure Description" : structure.description,
+						"Structure Description" : description,
 						"Coordinates" : pt.x + " , " + pt.y,
 						"Type_id" : structure.typeId,
 						"Id":structureID++,
@@ -1262,11 +1263,12 @@ var structureID=1;
 					// If it's a complete Graphic object
 					pgraphic = new esri.Graphic(jsonObject);
 					pgraphic.setAttributes({
-						"Structure Name" : structure.name,
+						"Structure Name" : name,
 						"Structure Type" : structure.type,
 						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='+ activity.ampactivityid
 								+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
 						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y,
+                        "Structure Description" : description,
 						"Structure Image" : '<a target="_blank" href="'+previewActivityUrl+'">' 
 						+ '<img style="cursor:pointer;" src="/aim/displayStructureImage.do?structureId=' 
 							+ structure.id + '" border="0"></a>'
@@ -1285,7 +1287,7 @@ var structureID=1;
 					};
 					pgraphic = new esri.Graphic(pt, sms, attr,infoTemplate);
 					pgraphic.setAttributes({
-						"Structure Name" : structure.name,
+						"Structure Name" : name,
 						"Structure Type" : structure.type,
 						"Activity" : '<a href="/aim/viewActivityPreview.do~pageId=2~activityId='
 							+ activity.ampactivityid+ '~isPreview=1" target="_blank">'

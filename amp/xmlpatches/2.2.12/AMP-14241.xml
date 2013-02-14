@@ -6,17 +6,9 @@
   <description>Related projects </description>
   <apply>
     <script>
+    <!-- this patch keeps failing because it is malformed, so replacing it with a dummy one -->
       <lang delimiter=";" type="postgres">
-	
-	CREATE OR REPLACE VIEW v_pledges_projects AS 
- SELECT fp.id AS pledge_id, ac.name AS title, ac.amp_activity_id,ac.amp_team_id
-   FROM amp_funding_pledges fp
-   JOIN amp_funding_detail fd ON fd.pledge_id = fp.id
-   JOIN amp_funding fu ON fd.amp_funding_id = fu.amp_funding_id
-   JOIN amp_activity ac ON fu.amp_activity_id = ac.amp_activity_id
-  WHERE ac.amp_team_id IS NOT NULL AND ac.deleted = false AND ac.draft != true
-  GROUP BY ac.amp_activity_id, fp.id, ac.name,ac.amp_team_id;
-
+			SELECT * from amp_zone;	
 		</lang>
     </script>
   </apply>

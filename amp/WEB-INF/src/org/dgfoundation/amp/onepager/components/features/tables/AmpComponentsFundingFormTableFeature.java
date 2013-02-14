@@ -87,9 +87,9 @@ public class AmpComponentsFundingFormTableFeature extends
 		};
 
 		
-		 if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT).equalsIgnoreCase("TRUE"));
+		 if("TRUE".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_EXPENDITURE_BIGGER_DISBURSMENT)))
 		 	alertIfExpenditureBiggerDisbursment = true;
-		 if( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS).equalsIgnoreCase("TRUE"));
+		 if("TRUE".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALERT_IF_DISBURSMENT_BIGGER_COMMITMENTS)))
 		    alertIfDisbursmentBiggerCommitments = true;
 
 		    
@@ -127,7 +127,7 @@ public class AmpComponentsFundingFormTableFeature extends
 		 } else if(transactionType == Constants.EXPENDITURE)
 		 {
 			 model = expenditureModel;
-			 errorMassage = "AmpExpemdituresCollectionsSumComparatorValidator";
+			 errorMassage = "AmpExpendituresCollectionsSumComparatorValidator";
 			 secondModel = disbursementsListModel;
 			 fieldFMName= "checkExpenditureSum";
 			 alertIfcurrentSumIsBigger=true;
@@ -137,6 +137,7 @@ public class AmpComponentsFundingFormTableFeature extends
 				new AmpCollectionsSumComparatorValidatorField("amountSumComparator",model,fieldFMName, errorMassage); 
 		amountSumComparator.setIndicatorAppender(iValidator);
 		amountSumComparator.setSecondCollectionModel(secondModel);
+        amountSumComparator.setOutputMarkupId(true);
 		amountSumComparator.setAlertIfCurrentModelAmountSumBig(alertIfcurrentSumIsBigger);		
 		add(amountSumComparator);
 		
@@ -145,7 +146,7 @@ public class AmpComponentsFundingFormTableFeature extends
 		 if(transactionType == Constants.DISBURSEMENT)
 		 {
 			 model = disbursementsListModel;
-			 errorMassage = "AmpExpemdituresCollectionsSumComparatorValidator";
+			 errorMassage = "AmpExpendituresCollectionsSumComparatorValidator";
 			 secondModel = expenditureModel;
 			 alertIfcurrentSumIsBigger=false;
 			 fieldFMName= "checkExpenditureSum";
@@ -158,6 +159,7 @@ public class AmpComponentsFundingFormTableFeature extends
 		amountSumComparator1.setIndicatorAppender(iValidator);
 		amountSumComparator1.setSecondCollectionModel(secondModel);
 		amountSumComparator1.setAlertIfCurrentModelAmountSumBig(alertIfcurrentSumIsBigger);
+        amountSumComparator1.setOutputMarkupId(true);
 		add(amountSumComparator1);
 		amountSumComparator1.setVisibilityAllowed(visibleAllowed);
 		

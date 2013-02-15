@@ -114,7 +114,7 @@
 				//Since our data has the time entries on each row (a common format for temporal data) we want to pivot the data
 				//This then makes a column for each unique time entrie and a row for each unique column.
 				ds.pivotTable(0);
-				if(ds.data.pivot.header.length <= 2){
+				if(ds.data.pivot.header.length == 2){
 					showYearMessage();
 					return;
 				}
@@ -249,12 +249,16 @@
 				else
 					legendLayout.visible = false;
 
-				messagePanel.visible = false;
-				sizePanel(0, 0);
+				messageLoadingPanel.visible = false;
+				sizeLoadingPanel(0, 0);
 				//dc.visible = true;
 				printLabel.text = trnYears + ": " + startYear + " to " + endYear +" - " + trnCurrency + ": " + currCode;
-				
+				sliderYear.setVisible(true);
 			}
+			private function sizeLoadingPanel(w:uint, h:uint):void {
+				messageLoadingPanel.width = w;
+				messageLoadingPanel.height = h;
+			}			
 			private function getDeterminedMaxValue(magnitude, maxValue, step){
 				var determinedMaxValue:Number = 0;
 				for(var tenth:Number = magnitude; tenth > 0; tenth = tenth - step)
@@ -273,7 +277,7 @@
 		
 			private function captureSnapshot():void
 			{
-				sliderYear.visible = false;
+				//sliderYear.visible = false;
 				printLabel.visible = true;
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
@@ -291,7 +295,7 @@
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
 				printLabel.visible = false;
-				sliderYear.visible = true;
+				//sliderYear.visible = true;
 			}
 			/**
 			 * This function is called when the % data slider changes.
@@ -365,11 +369,14 @@
 				start();
 			}
 			protected function showYearMessage():void {
+				messageLoadingPanel.visible = false;
+				sizeLoadingPanel(0,0);
 				messagePanelText.text = trnMessageYearError;
 				messagePanel.title = trnMessageError;
 				dc.visible = false;
 				messagePanel.visible = true;
 				sizePanel(300, 200);
+				sliderYear.visible = true;
 			}
 			protected function hideYearMessage():void {
 				dc.visible = true;
@@ -397,6 +404,8 @@
 				
 				messagePanel.title = trnMessagePanel;
 				messagePanelText.text = trnMessageEmpty;
+				messageLoadingPanel.title = trnMessageLoadingPanel;
+				messageLoading.text = trnMessageLoading;
 				
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
@@ -455,11 +464,8 @@
 
 			public function refreshGraph():void
 			{
-				messagePanel.title = trnMessageLoadingPanel;
-				messagePanelText.text = trnMessageLoading;
-				messagePanel.visible = true;
-				
-				sizePanel(300, 200);
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
 				dc.visible = false;
 				
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
@@ -598,8 +604,12 @@
 				if(itemId != null && itemId != "-1"){
 					params["itemId"] = itemId;
 				}
+				messageLoadingPanel.visible = true;
+				sizeLoadingPanel(300, 200);
+				dc.visible = false;
 				service.send(params);
 				var delayer:Delay = new Delay(captureSnapshot,4000,1);
+				sliderYear.setVisible(false);
 			}
 
 		]]>
@@ -1028,5 +1038,7 @@
 	<mx:Panel x="{(this.width-300)/2}" y="100" title="Message" width="0" height="0" id="messagePanel" visible="false" resizeEffect="{resize}">
 		<mx:Label id="messagePanelText" fontWeight="bold" fontSize="13" color="black" text="..."/>
 	</mx:Panel>
-
+	<mx:Panel x="{(this.width-300)/2}" y="100" title="Loading" width="0" height="0" id="messageLoadingPanel" visible="false" resizeEffect="{resize}">
+		<mx:Label id="messageLoading" fontWeight="bold" fontSize="13" color="black" text="Loading data..."/>
+	</mx:Panel>
 </mx:Application>

@@ -125,7 +125,7 @@ public class DataDispatcher extends MultiAction {
 		List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
 		
 		long startTS=System.currentTimeMillis();
-		list = DbHelper.getActivities(maphelperform.getFilter());
+		list = DbHelper.getActivities(maphelperform.getFilter(), request);
 	    OutputStream out = response.getOutputStream();
         XlsHelper Xls = new XlsHelper(); 
 		try {
@@ -149,7 +149,7 @@ public class DataDispatcher extends MultiAction {
 
 		JSONArray jsonArray = new JSONArray();
 		List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
-		list = DbHelper.getActivities(maphelperform.getFilter());
+		list = DbHelper.getActivities(maphelperform.getFilter(),request);
 		Boolean isaggregatable = true;
 		for (Iterator<AmpActivityVersion> iterator = list.iterator(); iterator.hasNext();) {
 			ActivityPoint ap = new ActivityPoint();
@@ -392,7 +392,7 @@ public class DataDispatcher extends MultiAction {
 		List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
 		
 		long startTS=System.currentTimeMillis();
-		list = DbHelper.getActivities(maphelperform.getFilter());
+		list = DbHelper.getActivities(maphelperform.getFilter(),request);
 		long endTS=System.currentTimeMillis();
 		logger.info("getActivities in "+(endTS-startTS)/1000.0+" seconds. ");
 		logger.info("Iteration Starts");
@@ -505,7 +505,7 @@ public class DataDispatcher extends MultiAction {
 
 		// List<AmpCategoryValueLocations> locations =
 		// DbHelper.getRegions(filter);
-		List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel);
+		List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel, request);
 		Iterator<AmpCategoryValueLocations> locationsIt = locations.iterator();
 		String tq = QueryUtil.getTeamQuery(tm);
 		ArrayList<SimpleLocation> locationsarray = new ArrayList<SimpleLocation>();
@@ -518,7 +518,7 @@ public class DataDispatcher extends MultiAction {
 			newFilter.setSelLocationIds(allids);
 			
 			ArrayList<DecimalWraper> amounts;
-			amounts = DbHelper.getFunding(newFilter, startDate, endDate,tq, null, null, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId());
+			amounts = DbHelper.getFunding(newFilter, startDate, endDate, request, null, null, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId());
 			BigDecimal amountCommitments = amounts.get(2).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 			BigDecimal amountDisbursements = amounts.get(1).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 			BigDecimal amountExpenditures = amounts.get(0).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
@@ -608,7 +608,7 @@ public class DataDispatcher extends MultiAction {
 		
 		JSONArray jsonArray = new JSONArray();
 		 List<AmpActivityVersion> list = new ArrayList<AmpActivityVersion>();
-		 list = DbHelper.getActivities(maphelperform.getFilter());
+		 list = DbHelper.getActivities(maphelperform.getFilter(),request);
    		 boolean structuresExists = false;
    		 Long[] selectedStructures = maphelperform.getFilter().getSelStructureTypes();
    		 

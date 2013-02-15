@@ -19,8 +19,8 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_donor_cont_phone AS SELECT ac.activity_id AS amp_activity_id, (COALESCE(((((SELECT amp_category_value.category_value FROM amp_category_value WHERE ((amp_category_value.id)::text = "substring"((cp.value)::text, 1, "position"((cp.value)::text, ' '::text)))))::text || ' '::text) || substr((cp.value)::text, "position"((cp.value)::text, ' '::text)))) || "substring"((cp.value)::text, "position"((cp.value)::text, ' '::text))) AS phone FROM amp_activity_contact ac, amp_contact_properties cp WHERE (((ac.contact_id = cp.contact_id) AND ((cp.name)::text = 'contact phone'::text)) AND ((ac.contact_type)::text = 'DONOR_CONT'::text));;;
-        		</lang>
+			    	CREATE OR REPLACE VIEW v_donor_cont_phone AS SELECT ac.activity_id AS amp_activity_id, (COALESCE((((SELECT amp_category_value.category_value FROM amp_category_value WHERE ((amp_category_value.id)::text = "substring"((cp.value)::text, 0, "position"((cp.value)::text, ' '::text))))::text || ' '::text) )) || "substring"((cp.value)::text, "position"((cp.value)::text, ' '::text))) AS phone FROM amp_activity_contact ac, amp_contact_properties cp WHERE (((ac.contact_id = cp.contact_id) AND ((cp.name)::text = 'contact phone'::text)) AND ((ac.contact_type)::text = 'DONOR_CONT'::text));
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

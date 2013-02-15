@@ -29,7 +29,7 @@ public class SearchUser extends Action {
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session = request.getSession();
+        //HttpSession session = request.getSession();
         String srchStr = request.getParameter("srchStr");
         TeamMemberForm upMemForm = (TeamMemberForm) form;
         Long teamId= upMemForm.getTeamId();

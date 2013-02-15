@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -132,7 +133,11 @@ public class AmpDonorFundingFormSectionFeature extends
 			fundingModel.setObject(new LinkedHashSet<AmpFunding>());
 		
 		setModel = new AmpFundingGroupModel(fundingModel);
-		
+
+        final WebMarkupContainer wmc = new WebMarkupContainer("container");
+        wmc.setOutputMarkupId(true);
+        add(wmc);
+
 		list = new ListEditor<AmpOrganisation>("listFunding", setModel) {
 			@Override
 			protected void onPopulateItem(ListItem<AmpOrganisation> item) {
@@ -163,12 +168,8 @@ public class AmpDonorFundingFormSectionFeature extends
 					super.addItem(org);
 				}
 			}
-			
-			public void addItem(AmpFunding org) {
-				
-			}
 		};
-		add(list);
+		wmc.add(list);
 
 		
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations", true, AmpOrganisationSearchModel.class) {
@@ -193,7 +194,7 @@ public class AmpDonorFundingFormSectionFeature extends
 				list.addItem(choice);
 
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
-				target.add(list.getParent());
+				target.add(wmc);
 			}
 
 			@Override
@@ -203,9 +204,9 @@ public class AmpDonorFundingFormSectionFeature extends
 			}
 		};
 
-		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchFundingOrgs", new Model<String> (),
+		AmpSearchOrganizationComponent<String> searchOrganization = new AmpSearchOrganizationComponent<String>("searchFundingOrgs", new Model<String> (),
 				"Search Funding Organizations",   searchOrgs );
-		add(searchOrganization);
+		wmc.add(searchOrganization);
 
 	}
 

@@ -251,7 +251,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		addMetaIfExists(rs, acc, "related_project", ArConstants.RELATED_PROJECTS, null);
 		addMetaIfExists(rs, acc, "agreement_code", ArConstants.AGREEMENT_CODE, null);
 		addMetaIfExists(rs, acc, "agreement_title_code", ArConstants.AGREEMENT_TITLE_CODE, null);
-	
+		addMetaIfExists(rs, acc, "component_type", ArConstants.COMPONENT, null);
+		
 		MetaInfo headMeta=null;
 		
 		if("region_name".equals(headMetaName)){

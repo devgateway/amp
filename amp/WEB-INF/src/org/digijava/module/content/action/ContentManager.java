@@ -38,17 +38,29 @@ public class ContentManager extends DispatchAction {
 		return mapping.findForward("list");
 	}
 
+	/**
+	 * list of extensions of files which are safe to be imported/exported for direct inclusion as a <src> file
+	 * a lame, poor man's, way of checking that a file is an image
+	 */
+	private static Set<String> imageFileExtensions = new HashSet<String>(){{add("jpg"); add("jpeg"); add("gif"); add("png");}};
+
+	
 	public ActionForward upload(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 
 		// Thumbnail upload
+		
 		ContentForm contentForm = (ContentForm) form;
-		int placeholder = contentForm.getPlaceholder();
+		//int placeholder = contentForm.getPlaceholder();
 		FormFile thumbnail = contentForm.getTempContentThumbnail();
 		FormFile file = contentForm.getTempContentFile();
 		String label = contentForm.getTempContentThumbnailLabel();
 
+   		String fileExtension = thumbnail.getFileName().substring(thumbnail.getFileName().lastIndexOf('.') + 1).toLowerCase();
+		if (!imageFileExtensions.contains(fileExtension))
+			return mapping.findForward("addEdit"); // file is not a supported image file - skip the DB serialization part
+		
 		AmpContentItemThumbnail thumb = new AmpContentItemThumbnail();
 		thumb.setThumbnail(thumbnail.getFileData());
 		thumb.setThumbnailContentType(thumbnail.getContentType());

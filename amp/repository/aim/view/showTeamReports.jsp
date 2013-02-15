@@ -601,12 +601,14 @@ $(document).ready(function() {
 					                             
 					                              									<logic:present name="report" property="reportDescription" >
 					                                									<p style="max-width: 400px;white-space: normal" title="${report.reportDescription}">
-																							<c:if test="${fn:length(report.reportDescription) > 120}" >
-																								<c:out value="${fn:substring(report.reportDescription, 0, 120)}" />...
-																							</c:if>
-																							<c:if test="${fn:length(report.reportDescription) < 120}" >
-																								<c:out value="${report.reportDescription}" />
-																							</c:if>
+																							<c:choose>
+																								<c:when test="${fn:length(report.reportDescription) > 120}" >
+																									<c:out value="${fn:substring(report.reportDescription, 0, 120)}" />...
+																								</c:when>
+																								<c:otherwise>
+																									<c:out value="${report.reportDescription}" />
+																								</c:otherwise>
+																							</c:choose>
 					                                									</p>
 					                              									</logic:present>
 					                              								</td>

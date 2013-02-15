@@ -2,9 +2,9 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-14167</jira>
+	<jira>AMP-14579</jira>
 	<keyword>Views</keyword>
-	<author>Alexandru Artimon</author>
+	<author>Constantin Dolghier</author>
 	<description>recreate view, this will always be the last version of the view</description>
 	<trigger type="all">
 		<condition type="custom">
@@ -19,7 +19,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_components AS SELECT DISTINCT a.amp_activity_id, b.title, b.amp_component_id FROM amp_activity a, amp_components b, amp_component_funding c WHERE ((a.amp_activity_id = c.activity_id) AND (b.amp_component_id = c.amp_component_id));;;
+					CREATE OR REPLACE VIEW v_components AS
+			    		SELECT aac.amp_activity_id, c.title AS title, c.amp_component_id AS amp_component_id
+							FROM amp_components c, amp_component_type ct, amp_activity_components aac
+							WHERE c.type = ct.type_id AND aac.amp_component_id = c.amp_component_id;
         		</lang>
 		</script>
 	</apply>

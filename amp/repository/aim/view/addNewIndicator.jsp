@@ -144,6 +144,16 @@ function removeSelSectors() {
           return true;
 }
 
+function resetAddNewIndicator()
+{
+	return true;
+	/*
+	$('#txtName').val("");
+	$('#txtDescription').val("");
+	$('#txtCode').val("");
+	$('#selectSorting').val("A");*/
+}
+
 function selectProgram(){
 
   <digi:context name="selPrg" property="context/module/moduleinstance/selectProgramForIndicator.do" />
@@ -250,7 +260,7 @@ function closeWindow() {
           <field:display name="Indicator Type" feature="Admin">
           <tr>
           	<td class="addNewIndicatorLabel"><digi:trn key="admin:indicatorType">Indicator Type</digi:trn>: <span style="color:Red;">*</span></td>
-          	<td><html:select name="aimNewIndicatorForm" property="type">          		
+          	<td><html:select name="aimNewIndicatorForm" property="type" styleId="selectSorting">          		
           		<html:option value="A"><digi:trn key="admin:indicatorType:ascending">ascending</digi:trn></html:option>
           		<html:option value="D"><digi:trn key="admin:indicatorType:descending">descending</digi:trn></html:option>
           	</html:select>
@@ -262,19 +272,19 @@ function closeWindow() {
           <tr id="trCategory">
           </tr>
           <field:display name="Sectors" feature="Admin"></field:display> 
-          <tr>
-          <td  class="addNewIndicatorLabel">
-          <digi:trn key="admin:sectors">
-          	Sectors
-          </digi:trn>
-          <span style="color:Red;">*</span></td>
-            <td >
-              <jsp:include page="addIndicatorSector.jsp"/>
-             </td>
-          </tr> 
-           
-           <tr id="trSector">
-           </tr>
+			<tr>
+				<td class="addNewIndicatorLabel">
+					<digi:trn key="admin:sectors">
+						Sectors
+					</digi:trn>
+					<span style="color:Red;">*</span>
+				</td>
+				<td>
+					<jsp:include page="addIndicatorSector.jsp"/>
+				</td>
+			</tr>
+			<tr id="trSector">
+			</tr>
           <field:display name="Creation date" feature="Admin">
 	      <tr id="trCreationDate">
             <td  class="addNewIndicatorLabel">
@@ -347,9 +357,14 @@ function closeWindow() {
 		<digi:trn key="btn:add">Add</digi:trn> 													
  	 </html:button>
  	 </field:display>
- 	 <html:reset  styleClass="buttonx" property="submitButton">
+ 	
+<%-- <html:reset  styleClass="buttonx" property="submitButton">
 		<digi:trn key="btn:clear">Clear</digi:trn> 
-	</html:reset>											
+	</html:reset>
+--%>	 
+ 	
+	<input type="submit" name="clearButton" value='<digi:trn key="btn:clear">Clear</digi:trn>' class="buttonx" onclick="resetAddNewIndicator();"/>
+ 
  	 <html:button  styleClass="buttonx" property="submitButton"  onclick="closeWindow()">
 			<digi:trn key="btn:close">Close</digi:trn> 
 	 </html:button>

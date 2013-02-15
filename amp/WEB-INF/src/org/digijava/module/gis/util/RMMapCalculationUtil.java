@@ -670,7 +670,12 @@ public class RMMapCalculationUtil {
 
                         }
                     } else if (scheme.getType().equalsIgnoreCase(MapColorScheme.COLOR_SCHEME_PREDEFINED)) {
-                        float percentage = (Float.parseFloat(sd.getSegmentValue()) - min.floatValue()) / deltaVal * 100f;
+                        float percentage;
+                        if (deltaVal > 0) {
+                            percentage = (Float.parseFloat(sd.getSegmentValue()) - min.floatValue()) / deltaVal * 100f;
+                        } else {
+                            percentage = 100f;
+                        }
                         ColorRGB rangeColor = null;
                         for (MapColorSchemePredefinedItem item : scheme.getPredefinedColors()) {
                             if ((item.getStart() <= percentage && item.getLessThen() > percentage) || (item.getStart() <= percentage && item.getLessThen()==100f && percentage == 100f)) {

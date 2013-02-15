@@ -17,6 +17,9 @@ public class BEProjectForm extends ActionForm {
     private String description;
     private Long selReport;
     private List<AmpEntityNameIdPair> availReports;
+    private String mappingImportServiceURL;
+    private String serviceActionURL;
+    private int dataSource;
 
 
     public Long getId() {
@@ -57,5 +60,29 @@ public class BEProjectForm extends ActionForm {
 
     public void setAvailReports(List<AmpEntityNameIdPair> availReports) {
         this.availReports = availReports;
+    }
+
+    public String getMappingImportServiceURL() {
+        return mappingImportServiceURL;
+    }
+
+    public void setMappingImportServiceURL(String mappingImportServiceURL) {
+        this.mappingImportServiceURL = mappingImportServiceURL;
+    }
+
+    public int getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(int dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public String getServiceActionURL() {
+        return serviceActionURL;
+    }
+
+    public void setServiceActionURL(String serviceActionURL) {
+        this.serviceActionURL = serviceActionURL;
     }
 }

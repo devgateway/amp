@@ -9,14 +9,20 @@ import java.util.List;
  * Time: 5:20 PM
  */
 public class AmpBudgetExportProject {
+    public static final int DATA_SOURCE_CSV = 0;
+    public static final int DATA_SOURCE_SERVICE = 1;
+
+    
     private Long id;
     private String name;
     private String description;
     private Date creationDate;
     private List<AmpBudgetExportMapRule> rules;
     private Long ampReportId;
-
-
+    private String mappingImportServiceURL;
+    private String serviceActionURL;
+    private int dataSource;
+    
     public Long getId() {
         return id;
     }
@@ -63,5 +69,29 @@ public class AmpBudgetExportProject {
 
     public void setAmpReportId(Long ampReportId) {
         this.ampReportId = ampReportId;
+    }
+
+    public String getMappingImportServiceURL() {
+        return mappingImportServiceURL;
+    }
+
+    public void setMappingImportServiceURL(String mappingImportServiceURL) {
+        this.mappingImportServiceURL = mappingImportServiceURL;
+    }
+
+    public int getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(int dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public String getServiceActionURL() {
+        return serviceActionURL;
+    }
+
+    public void setServiceActionURL(String serviceActionURL) {
+        this.serviceActionURL = serviceActionURL;
     }
 }

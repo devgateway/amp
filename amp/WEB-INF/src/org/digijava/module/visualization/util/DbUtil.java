@@ -1,11 +1,8 @@
 package org.digijava.module.visualization.util;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -131,40 +128,6 @@ public class DbUtil {
         }
         return organizations;
     }
-	
-	public static Collection<AmpOrganisation> getAllOrganizations() {
-		Session session = null;
-		Collection<AmpOrganisation> col = new ArrayList<AmpOrganisation>();
-
-		try {
-			session = PersistenceManager.getSession();
-			
-			String queryString = " SELECT aorg FROM " + AmpOrganisation.class.getName() + " aorg where (aorg.deleted is null or aorg.deleted = false)  ";
-			
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-		} catch (Exception ex) {
-			logger.error("Unable to get Organizations, " + ex);
-		} 
-		return col;
-	}
-	
-	public static Collection<AmpSector> getAllSectors(){
-		Session session = null;
-        Query qry = null;
-        Collection<AmpSector> col = new ArrayList<AmpSector>();
-        try {	
-        	session = PersistenceManager.getSession();
-			String queryString = "SELECT DISTINCT s.* FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
-					+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id AND s.parent_sector_id is null "
-					+ "AND c.name='Primary' AND ( s.deleted is null OR s.deleted = false) ";
-             qry = session.createSQLQuery(queryString).addEntity(AmpSector.class);
-             col = qry.list();
-		} catch (Exception ex) {
-			logger.error("Exception while getting sectors : " + ex);
-		} 
-        return col;
-	}
 	
 	public static List<AmpSector> getParentSectorsFromConfig(Long configId) throws DgException{
 		  	Session session = null;
@@ -311,74 +274,6 @@ public class DbUtil {
 
         return totalPlannedPldges;
     }
-    @SuppressWarnings("unchecked")
-    public static List<AmpFundingDetail> getUnallocatedFunding(DashboardFilter filter)
-            throws DgException {
-        Long[] orgIds = filter.getSelOrgIds();
-        Long[] orgGroupIds = filter.getSelOrgGroupIds();
-        int transactionType = filter.getTransactionType();
-        TeamMember tm = filter.getTeamMember();
-        Long fiscalCalendarId = filter.getFiscalCalendarId();
-        Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
-        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
-        Session session = PersistenceManager.getRequestDBSession();
-        String oql = "select fd ";
-        oql += " from ";
-        oql += AmpFundingDetail.class.getName()
-                + " as fd inner join fd.ampFundingId f ";
-        oql += "   inner join f.ampActivityId act ";
-        oql += " left join act.locations actloc  ";
-        oql += "   inner join act.sectors actSec ";
-        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-    			oql += " inner join act.orgrole orole inner join orole.role role ";
-        oql += "   inner join actSec.classificationConfig config ";
-
-        oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
-        oql += " and fd.transactionType =:transactionType  ";
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<:endDate)   ";
-        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
-            }
-        } else {
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
-        }
-     
-        if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-            oql += DashboardUtil.getTeamQueryManagement();
-        }
-        else
-        {
-            oql += DashboardUtil.getTeamQuery(tm);
-        }
-        
-        oql += " and actloc is NULL ";
-
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
-        
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-        oql += " and (act.deleted = false or act.deleted is null)";
-
-        Query query = session.createQuery(oql);
-        query.setDate("startDate", startDate);
-        query.setDate("endDate", endDate);
-        query.setLong("config", filter.getSelSectorConfigId());
-        //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
-        //    query.setLong("orgGroupId", orgGroupId);
-        //}
-        query.setLong("transactionType", transactionType);
-        query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
-        List<AmpFundingDetail> fundingDets = query.list();
-        return fundingDets;
-
-    }
 	public static Set<AmpCategoryValueLocations> getSubRegions(Long id){
         List<AmpCategoryValueLocations> zones = new ArrayList<AmpCategoryValueLocations>();
 
@@ -417,7 +312,7 @@ public class DbUtil {
 	        Long[] orgIds = filter.getSelOrgIds();
 	        
 	        int transactionType = filter.getTransactionType();
-	        TeamMember teamMember = filter.getTeamMember();
+	        TeamMember tm = filter.getTeamMember();
 	        // apply calendar filter
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
 	        
@@ -425,67 +320,24 @@ public class DbUtil {
 	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 	        Long[] sectorIds = filter.getSelSectorIds();
 	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+	        Long[] programIds = filter.getSelProgramIds();
+	        boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
 	        /*
 	         * We are selecting regions which are funded
 	         * In selected year by the selected organization
 	         *
 	         */
 	        try {
-	            String oql = "select distinct loc  from ";
-	            oql += AmpFundingDetail.class.getName()
-	                    + " as fd inner join fd.ampFundingId f ";
-	            oql += "   inner join f.ampActivityId act ";
-	            oql += "   inner join act.sectors actSec ";
-	            oql += "   inner join actSec.classificationConfig config ";
-	            if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-	        		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-	        			oql += " inner join act.orgrole orole inner join orole.role role ";
-	            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-	            oql += " inner join loc.parentCategoryValue parcv ";
-	            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-	            	oql += " inner join act.ampActivityGroupCached actGroup ";
-	            else
-	            	oql += " inner join act.ampActivityGroup actGroup ";
-	            if (sectorCondition) {
-	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
-	            }
-	            oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
-                oql += " and fd.transactionType =:transactionType  ";
-	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
-	                }
-	            } else {
-	                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
-	            }
-	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-	            
-	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-	                oql += DashboardUtil.getTeamQueryManagement();
-	            }
-	            else
-	            {
-	                oql += DashboardUtil.getTeamQuery(teamMember);
-	            }
-	            if (sectorCondition) {
-	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-	            }
-	
-	            //oql += "  and (parcv.value = 'Region' ) ";// get not only regions, but any subregions that might have data
-
-	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-	    		}
-	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-	            oql += " and (act.deleted = false or act.deleted is null)";
-
+	            String oql = "select distinct loc  ";
+	            oql += getHQLQuery(filter, orgIds, orgGroupIds, true, sectorCondition, programCondition, null, sectorIds, programIds, null, null, tm, true);
 	            oql+=" order by loc.parentCategoryValue";
 	            
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
 	            query.setDate("startDate", startDate);
 	            query.setDate("endDate", endDate);
-	            query.setLong("config", filter.getSelSectorConfigId());
+	            if (sectorCondition)
+	            	query.setLong("config", filter.getSelSectorConfigId());
                 query.setLong("transactionType", transactionType);
                 query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 	            locations = query.list();
@@ -521,7 +373,7 @@ public class DbUtil {
 	        int transactionType = filter.getTransactionType();
 
 	        //Get the user logged in to filter later
-	        TeamMember teamMember = filter.getTeamMember();
+	        TeamMember tm = filter.getTeamMember();
 
 	        //Get the Fiscal Calendar to determine Start/End Date
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
@@ -529,62 +381,16 @@ public class DbUtil {
 	        Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 	        Long[] locationIds = filter.getSelLocationIds();
 	        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
+	        Long[] programIds = filter.getSelProgramIds();
+	        boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
 	        /*
 	         * We are selecting sectors which are funded
 	         * In selected year by the selected organization
 	         *
 	         */
 	        try {
-	            String oql = "select distinct sec  from ";
-	            oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
-	            oql += " inner join f.ampActivityId act ";
-	            oql += " inner join act.sectors actSec ";
-	            oql += " inner join actSec.sectorId sec ";
-	            if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-	        		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-	        			oql += " inner join act.orgrole orole inner join orole.role role ";
-	            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-	            	oql += " inner join act.ampActivityGroupCached actGroup ";
-	            else
-	            	oql += " inner join act.ampActivityGroup actGroup ";
-	            if (locationCondition) {
-	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-	            }
-	            oql += "  where fd.adjustmentType.value =:adjustmentType";
-                oql += " and fd.transactionType =:transactionType  ";
-	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
-	                }
-	            } else {
-	                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
-	            }
-	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-	            
-	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-	                oql += DashboardUtil.getTeamQueryManagement();
-	            }
-	            else
-	            {
-	                oql += DashboardUtil.getTeamQuery(teamMember);
-	            }
-	            if (locationCondition) {
-	            	if (locationIds[0].equals(0l)) {
-	            		oql += " and actloc is NULL "; //Unallocated condition
-	    			} else {
-	    				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-	    	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-	    			}
-	            }
-	
-	            oql += "  and sec.ampSecSchemeId in (select clscfg.classification.id from " 
-	            	+ AmpClassificationConfiguration.class.getName() + " clscfg where clscfg.id =:configId) "; 
-	            
-	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-	    		}
-	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-	            oql += " and (act.deleted = false or act.deleted is null)";
+	            String oql = "select distinct sec ";
+	            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, true, programCondition, locationIds, null, programIds, null, null, tm, true);
 
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
@@ -594,7 +400,7 @@ public class DbUtil {
 	            //    query.setLong("orgGroupId", orgGroupId);
 	            //}
                 query.setLong("transactionType", transactionType);
-	            query.setLong("configId", filter.getSelSectorConfigId());
+	            query.setLong("config", filter.getSelSectorConfigId());
                 query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 	
 	            sectors = query.list();
@@ -618,7 +424,7 @@ public class DbUtil {
         int transactionType = filter.getTransactionType();
 
         //Get the user logged in to filter later
-        TeamMember teamMember = filter.getTeamMember();
+        TeamMember tm = filter.getTeamMember();
 
         //Get the Fiscal Calendar to determine Start/End Date
         Long fiscalCalendarId = filter.getFiscalCalendarId();
@@ -634,61 +440,8 @@ public class DbUtil {
          *
          */
         try {
-            String oql = "select distinct prog from ";
-            oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
-            oql += " inner join f.ampActivityId act ";
-            oql += " inner join act.sectors actSec ";
-            oql += " inner join actSec.sectorId sec ";
-            oql += " inner join actSec.classificationConfig config ";
-            oql += " inner join act.actPrograms actProg ";
-            oql += " inner join actProg.program prog ";
-            if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-        		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-        			oql += " inner join act.orgrole orole inner join orole.role role ";
-            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-            	oql += " inner join act.ampActivityGroupCached actGroup ";
-            else
-            	oql += " inner join act.ampActivityGroup actGroup ";
-            if (locationCondition) {
-                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-            }
-            oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
-            oql += " and fd.transactionType =:transactionType  ";
-            
-            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
-                }
-            } else {
-                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
-            }
-            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-            
-            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-                oql += DashboardUtil.getTeamQueryManagement();
-            }
-            else
-            {
-                oql += DashboardUtil.getTeamQuery(teamMember);
-            }
-            if (locationCondition) {
-            	if (locationIds[0].equals(0l)) {
-            		oql += " and actloc is NULL "; //Unallocated condition
-    			} else {
-    				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-    	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-    			}
-            }
-            if (sectorCondition) {
-                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-            }
-
-            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-    		}
-            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-            oql += " and (act.deleted = false or act.deleted is null)";
-
+            String oql = "select distinct prog ";
+            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, true, locationIds, sectorIds, null, null, null, tm, true);
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
@@ -697,7 +450,8 @@ public class DbUtil {
             //    query.setLong("orgGroupId", orgGroupId);
             //}
             query.setLong("transactionType", transactionType);
-            query.setLong("config", filter.getSelSectorConfigId());
+            if (sectorCondition)
+            	query.setLong("config", filter.getSelSectorConfigId());
             query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 
             programs = query.list();
@@ -752,7 +506,7 @@ public class DbUtil {
         Long[] orgIds= filter.getSelOrgIds();
         
         //int transactionType = filter.getTransactionType();
-        TeamMember teamMember = filter.getTeamMember();
+        TeamMember tm = filter.getTeamMember();
         // apply calendar filter
         Long fiscalCalendarId = filter.getFiscalCalendarId();
         
@@ -762,6 +516,8 @@ public class DbUtil {
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
         Long[] sectorIds = filter.getSelSectorIds();
         boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+        Long[] programIds = filter.getSelProgramIds();
+        boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
 
         //Sectors should include all the subsectors
         if(sectorCondition){
@@ -773,96 +529,14 @@ public class DbUtil {
          *
          */
         try {
-        	String oql = "select act.ampActivityId, act.ampId, act.name from ";
-            oql += AmpFundingDetail.class.getName()
-                    + " as fd inner join fd.ampFundingId f ";
-            oql += " inner join f.ampActivityId act ";
-            oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
-            if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-        		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-        			oql += " inner join act.orgrole orole inner join orole.role role ";
-            oql += " inner join actsec.classificationConfig config ";
-            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-            	oql += " inner join act.ampActivityGroupCached actGroup ";
-            else
-            	oql += " inner join act.ampActivityGroup actGroup ";
-            if (locationCondition) {
-                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-            }
-            if (sectorCondition) {
-                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
-            }
-            if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-            	oql += " inner join act.actPrograms actProg ";
-                oql += " inner join actProg.program prog ";
-    		}
-
-            if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
-            	oql += " inner join act.categories categ ";
-    		}
-
-            oql += "  where fd.adjustmentType.value =:adjustmentType and config.id=:config";
-            oql += " and fd.transactionType =:transactionType  ";
-            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
-                }
-            } else {
-                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
-            }
-            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-            
-            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-                oql += DashboardUtil.getTeamQueryManagement();
-            }
-            else
-            {
-                oql += DashboardUtil.getTeamQuery(teamMember);
-            }
-            if (locationCondition) {
-            	if (locationIds[0].equals(0l)) {
-            		oql += " and actloc is NULL "; //Unallocated condition
-    			} else {
-    				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-    	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-    			}
-            }
-            if (sectorCondition) {
-            	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
-                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-            }
-            
-            if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-            	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
-    		}
-            
-            if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
-            	if (filter.getSelCVIds()[0]==-1) {
-            		oql += " and categ.id NOT in ("+DashboardUtil.getInStatement(filter.getBudgetCVIds())+") ";
-    			} else {
-    				oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelCVIds())+") ";
-    			}
-    		}
-            
-            if (assistanceTypeId != null) {
-                oql += "  and f.typeOfAssistance=:assistanceTypeId ";
-            }
-            if (financingInstrumentId != null) {
-                oql += "   and f.financingInstrument=:financingInstrumentId  ";
-            }
-
-            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-				oql += ActivityUtil.getNonDraftActivityQueryString("act");
-			}
-            
-            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-            oql += " and (act.deleted = false or act.deleted is null)";
-
+        	String oql = "select act.ampActivityId, act.ampId, act.name ";
+            oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true);
             Session session = PersistenceManager.getRequestDBSession();
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            query.setLong("config", filter.getSelSectorConfigId());
+            if (sectorCondition)
+            	query.setLong("config", filter.getSelSectorConfigId());
             
             if (assistanceTypeId != null) {
                 query.setLong("assistanceTypeId", assistanceTypeId);
@@ -901,7 +575,7 @@ public class DbUtil {
 			}
 		} else {
 	        int transactionType = filter.getTransactionType();
-	        TeamMember teamMember = filter.getTeamMember();
+	        TeamMember tm = filter.getTeamMember();
 	        // apply calendar filter
 	        Long fiscalCalendarId = filter.getFiscalCalendarId();
 	        
@@ -911,105 +585,40 @@ public class DbUtil {
 	        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
 	        Long[] sectorIds = filter.getSelSectorIds();
 	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+	        Long[] programIds = filter.getSelProgramIds();
+	        boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
 	        /*
 	         * We are selecting sectors which are funded
 	         * In selected year by the selected organization
 	         *
 	         */
 	        try {
-	            String oql = "select distinct agency from ";
-	            oql += AmpFundingDetail.class.getName()
-	                    + " as fd inner join fd.ampFundingId f ";
-	            oql += "   inner join f.ampActivityId act ";
-	            oql += " inner join act.sectors actsec ";
+	            String oql = "select distinct agency ";
+	            String specialInner = "";
+	            String specialCondition = "";
 	            if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-	            	oql += " inner join act.orgrole orole inner join orole.role role ";
+	            	specialInner = " inner join act.orgrole orole inner join orole.role role ";
 	            
 	            switch (filter.getAgencyType()) {
 	            case org.digijava.module.visualization.util.Constants.DONOR_AGENCY:
-	            	oql += " inner join f.ampDonorOrgId agency ";
+	            	specialInner += " inner join f.ampDonorOrgId agency ";
 	    			break;
-
 	            case org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY:
-	            	oql += " inner join orole.organisation agency ";
+	            	specialInner += " inner join orole.organisation agency ";
+	            	specialCondition = " and role.roleCode='EA' ";
 	    			break;
-
 	            case org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY:
-	            	oql += " inner join orole.organisation agency ";
-		            break;
-
-	    		default:
+	            	specialInner += " inner join orole.organisation agency ";
+	            	specialCondition = " and role.roleCode='BA' ";
 	    			break;
-	    		}
-	            
-	            oql+=" inner join actsec.classificationConfig config ";
-	            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-	            	oql += " inner join act.ampActivityGroupCached actGroup ";
-	            else
-	            	oql += " inner join act.ampActivityGroup actGroup ";
-	            if (locationCondition) {
-	                oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            }
-	            if (sectorCondition) {
-	                oql += " inner join act.sectors actsec inner join actsec.sectorId sec ";
-	            }
-	            oql += "  where fd.adjustmentType.value = :adjustmentType and config.id=:config";
-	            
-	            switch (filter.getAgencyType()) {
-		            case org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY:
-		            	oql += " and role.roleCode='EA' ";
-		    			break;
-	
-		            case org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY:
-		            	oql += " and role.roleCode='BA' ";
-			            break;
-	
-		    		default:
-		    			break;
-	    		}
-                oql += " and fd.transactionType =:transactionType  ";
-	            if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-	                if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-	                    oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
-	                }
-	            } else {
-	                oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
-	            }
-	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-	            
-	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-	                oql += DashboardUtil.getTeamQueryManagement();
-	            }
-	            else
-	            {
-	                oql += DashboardUtil.getTeamQuery(teamMember);
-	            }
-	            if (locationCondition) {
-	            	if (locationIds[0].equals(0l)) {
-	            		oql += " and actloc is NULL "; //Unallocated condition
-	    			} else {
-	    				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-	    	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-	    			}
-	            }
-
-	            if (sectorCondition) {
-	            	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
-	                oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-	            }
-
-	           
-	            if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-	    			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-	    		}
-	            oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-	            oql += " and (act.deleted = false or act.deleted is null)";
-
+	        	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, specialCondition);
 	            Session session = PersistenceManager.getRequestDBSession();
 	            Query query = session.createQuery(oql);
 	            query.setDate("startDate", startDate);
 	            query.setDate("endDate", endDate);
-	            query.setLong("config", filter.getSelSectorConfigId());
+	            if (sectorCondition)
+	            	query.setLong("config", filter.getSelSectorConfigId());
                 query.setLong("transactionType", transactionType);
                 query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
                 agencies = query.list();
@@ -1045,10 +654,8 @@ public class DbUtil {
 		} 
 
         Long[] orgIds = filter.getSelOrgIds();
-
         Long[] orgsGrpIds = filter.getOrgGroupIds();
 		Long orgsGrpId = filter.getOrgGroupId();
-
 		Long[] orgGroupIds;
 		if (orgsGrpIds == null || orgsGrpIds.length == 0 || orgsGrpIds[0] == -1) {
 			Long[] temp = {orgsGrpId};
@@ -1057,143 +664,47 @@ public class DbUtil {
 	        orgGroupIds = orgsGrpIds;
 		}	
         
-        
         TeamMember tm = filter.getTeamMember();
         Long[] locationIds = filter.getSelLocationIds();
         Long[] sectorIds = filter.getSelSectorIds();
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
         boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+        Long[] programIds = filter.getSelProgramIds();
+        boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
 
         if (((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1)) 
         	&& ((filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY))){
 			if (locationCondition && sectorCondition) {
-				oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
+				oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
 	        } else if (locationCondition)  {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,orole.percentage,fd.fixedExchangeRate) ";
+	        	oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,orole.percentage,fd.fixedExchangeRate) ";
 	        } else if (sectorCondition)  {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
+	        	oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
 	        } else {
-	            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,orole.percentage,fd.fixedExchangeRate) ";
+	            oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,orole.percentage,fd.fixedExchangeRate) ";
 	        }
 		} else if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
         	if (locationCondition && sectorCondition) {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
 	        } else if (locationCondition)  {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
 	        } else if (sectorCondition)  {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
 	        } else {
-	            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actProg.programPercentage,fd.fixedExchangeRate) ";
+	            oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actProg.programPercentage,fd.fixedExchangeRate) ";
 	        }
 		} else {
 	        if (locationCondition && sectorCondition) {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,fd.fixedExchangeRate) ";
 	        } else if (locationCondition)  {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
 	        } else if (sectorCondition)  {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,fd.fixedExchangeRate) ";
 	        } else {
-	            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate) ";
+	            oql = " select distinct new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate) ";
 	        }
 		}
-        oql += " from ";
-        oql += AmpFundingDetail.class.getName()
-                + " as fd inner join fd.ampFundingId f ";
-        oql += "   inner join f.ampActivityId act ";
-        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-    			oql += " inner join act.orgrole orole inner join orole.role role ";
-        
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
-        	
-        if (locationCondition) {
-            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-        }
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-        	oql += " inner join act.actPrograms actProg ";
-            oql += " inner join actProg.program prog ";
-		}
-
-        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
-        	oql += " inner join act.categories categ ";
-		}
-
-        if (sectorCondition) {
-            oql += "  inner join act.sectors actsec ";
-            oql += "  inner join actsec.classificationConfig config  ";
-            oql += " inner join actsec.sectorId sec ";
-        }
-
-        if (sectorCondition) {
-        	oql += " where config.id=:config and  fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
-        }
-        else
-        	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
-        
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-        	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
-		}
-
-        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
-            }
-        } else {
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
-        }
-        if (locationCondition) {
-        	if (locationIds[0].equals(0l)) {
-        		oql += " and actloc is NULL "; //Unallocated condition
-			} else {
-				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-			}
-        }
-
-        if (sectorCondition) {
-        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
-            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-        }
-
-        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
-        	if (filter.getSelCVIds()[0]==-1) {
-        		oql += " and categ.id NOT in ("+DashboardUtil.getInStatement(filter.getBudgetCVIds())+") ";
-			} else {
-				oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelCVIds())+") ";
-			}
-		}
-
-        if (filter.getActivityId()!=null) {
-            oql += " and act.ampActivityId =:activityId ";
-        }
-
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-        if (assistanceTypeId != null) {
-            oql += "  and f.typeOfAssistance=:assistanceTypeId ";
-        }
-        if (financingInstrumentId != null) {
-            oql += "   and f.financingInstrument=:financingInstrumentId  ";
-        }
-
-        
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-            oql += DashboardUtil.getTeamQueryManagement();
-        }
-        else
-        {
-            oql += DashboardUtil.getTeamQuery(tm);
-        }
-
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
-
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-        oql += " and (act.deleted = false or act.deleted is null)";
-
+        oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true);
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
         try {
@@ -1259,6 +770,125 @@ public class DbUtil {
         return total;
     }
 
+    private static String getHQLQuery(DashboardFilter filter, Long[] orgIds, Long[] orgGroupIds, boolean locationCondition, boolean sectorCondition, boolean programCondition, Long[] locationIds, Long[] sectorIds, Long[] programIds, Long assistanceTypeId, Long financingInstrumentId, TeamMember tm, boolean fundingTypeSpecified) {
+		return getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, fundingTypeSpecified, null, null);
+    }
+	private static String getHQLQuery(DashboardFilter filter, Long[] orgIds, Long[] orgGroupIds, boolean locationCondition, boolean sectorCondition, boolean programCondition, Long[] locationIds, Long[] sectorIds, Long[] programIds, Long assistanceTypeId, Long financingInstrumentId, TeamMember tm, boolean fundingTypeSpecified, String specialInner, String specialCondition) {
+		
+		
+		String oql = "";
+		oql += " from ";
+        oql += AmpFundingDetail.class.getName()
+                + " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act ";
+        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
+    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    			oql += " inner join act.orgrole orole inner join orole.role role ";
+ 
+        if (specialInner!=null && specialInner.length()>0)
+        	oql += specialInner;
+
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " inner join act.ampActivityGroupCached actGroup ";
+        else
+        	oql += " inner join act.ampActivityGroup actGroup ";
+        	
+        if (locationCondition) {
+            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+        }
+        if (programCondition) {
+        	oql += " inner join act.actPrograms actProg ";
+            oql += " inner join actProg.program prog ";
+		}
+
+        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
+        	oql += " inner join act.categories categ ";
+		}
+
+        if (sectorCondition) {
+            oql += "  inner join act.sectors actsec ";
+            oql += "  inner join actsec.classificationConfig config  ";
+            oql += " inner join actsec.sectorId sec ";
+        }
+        if(fundingTypeSpecified)
+        	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
+        else
+        	oql += " where 1 = 1 ";
+        
+        if (specialCondition!=null && specialCondition.length()>0)
+        	oql += specialCondition;
+        
+        if (sectorCondition) {
+        	oql += " and config.id=:config ";
+        }
+        
+        if (programCondition && filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
+        	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
+		}
+
+        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
+                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
+            }
+        } else {
+            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
+        }
+        if (locationCondition && locationIds != null && locationIds.length > 0) {
+        	if (locationIds[0].equals(0l)) {
+        		oql += " and actloc is NULL "; //Unallocated condition
+			} else {
+				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+			}
+        }
+
+        if (sectorCondition && sectorIds != null && sectorIds.length > 0) {
+        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
+            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+        }
+
+        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
+        	if (filter.getSelCVIds()[0]==-1) {
+        		oql += " and categ.id NOT in ("+DashboardUtil.getInStatement(filter.getBudgetCVIds())+") ";
+			} else {
+				oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelCVIds())+") ";
+			}
+		}
+
+        if (filter.getActivityId()!=null) {
+            oql += " and act.ampActivityId =:activityId ";
+        }
+
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        if (assistanceTypeId != null) {
+            oql += "  and f.typeOfAssistance=:assistanceTypeId ";
+        }
+        if (financingInstrumentId != null) {
+            oql += "   and f.financingInstrument=:financingInstrumentId  ";
+        }
+        
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
+            oql += DashboardUtil.getTeamQueryManagement();
+        }
+        else
+        {
+        	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
+        		oql += DashboardUtil.getTeamQuery(tm);
+        	else
+        		oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
+
+        }
+
+        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
+			oql += ActivityUtil.getNonDraftActivityQueryString("act");
+		}
+
+        if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
+        	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
+        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        oql += " and (act.deleted = false or act.deleted is null)";
+		return oql;
+	}
 	/**
      * Returns funding amount
      * @param orgID
@@ -1284,6 +914,9 @@ public class DbUtil {
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
         boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
 
+        Long[] programIds = filter.getSelProgramIds();
+        boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
+        
         if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
         	if (locationCondition && sectorCondition) {
 	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
@@ -1305,91 +938,7 @@ public class DbUtil {
 	            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate) ";
 	        }
 		}
-        oql += " from ";
-        oql += AmpFundingDetail.class.getName()
-                + " as fd inner join fd.ampFundingId f ";
-        oql += "   inner join f.ampActivityId act ";
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-        	oql += " inner join act.actPrograms actProg ";
-            oql += " inner join actProg.program prog ";
-		}
-        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-        	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-        		oql += " inner join act.orgrole orole inner join orole.role role ";
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
-        if (locationCondition) {
-            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-        }
-
-        if (sectorCondition) {
-            oql += "  inner join act.sectors actsec ";
-            oql += "  inner join actsec.classificationConfig config  ";
-            oql += " inner join actsec.sectorId sec ";
-        }
-
-        if (sectorCondition) {
-        	oql += " where config.id=:config  ";
-        }
-        else
-        {
-        	oql += " where 1=1 ";
-        }
-        	
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-        	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
-		}
-        
-        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
-            }
-        } else {
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
-        }
-        if (locationCondition) {
-        	if (locationIds[0].equals(0l)) {
-        		oql += " and actloc is NULL "; //Unallocated condition
-			} else {
-				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-			}
-        }
-
-        if (sectorCondition) {
-        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
-            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-        }
-
-        if (filter.getActivityId()!=null) {
-            oql += " and act.ampActivityId =:activityId ";
-        }
-
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-        if (assistanceTypeId != null) {
-            oql += "  and f.typeOfAssistance=:assistanceTypeId ";
-        }
-        if (financingInstrumentId != null) {
-            oql += "   and f.financingInstrument=:financingInstrumentId  ";
-        }
-
-        
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-            oql += DashboardUtil.getTeamQueryManagement();
-        }
-        else
-        {
-            oql += DashboardUtil.getTeamQuery(tm);
-        }
-
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
-
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-        oql += " and (act.deleted = false or act.deleted is null)";
+        oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, false);
 
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
@@ -1473,6 +1022,8 @@ public class DbUtil {
         Long[] sectorIds = filter.getSelSectorIds();
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
         boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+        Long[] programIds = filter.getSelProgramIds();
+        boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
 
     	DecimalWraper total = null;
         String oql = "";
@@ -1492,73 +1043,9 @@ public class DbUtil {
         if (organizationRoleQuery)
         	oql += ", orole.percentage ";
         
-        oql += " from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
+        oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true);
     	
-    	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
-    	if (organizationRoleQuery)
-    			oql += " inner join act.orgrole orole inner join orole.role role ";
-    	
-    	if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-         	oql += " inner join act.actPrograms actProg ";
-            oql += " inner join actProg.program prog ";
- 		}
-        if (locationCondition) 
-            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-        if (sectorCondition) {
-            oql += "  inner join act.sectors actsec ";
-            oql += "  inner join actsec.classificationConfig config  ";
-            oql += " inner join actsec.sectorId sec ";
-        }
-        if (sectorCondition) 
-        	oql += " where config.id=:config  ";
-        else
-        	oql += " where 1=1 ";
-        
-        oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
-        oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         oql += " and f.ampActivityId in (" + DashboardUtil.getInStatement(actList.toArray()) + ")";
-
-        if (assistanceTypeId != null) {
-            oql += "  and f.typeOfAssistance=:assistanceTypeId ";
-        }
-        if (financingInstrumentId != null) {
-            oql += "   and f.financingInstrument=:financingInstrumentId  ";
-        }
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-        	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
-		}
-        
-        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) 
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType());
-        } else 
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds, filter.getAgencyType());
-        if (locationCondition) {
-        	if (locationIds[0].equals(0l)) {
-        		oql += " and actloc is NULL "; //Unallocated condition
-			} else {
-				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-			}
-        }
-        if (sectorCondition) {
-        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
-            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-        }
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-            oql += DashboardUtil.getTeamQueryManagement();
-        else
-            oql += DashboardUtil.getTeamQuery(tm);
-
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
-
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-        oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
@@ -1672,6 +1159,8 @@ public class DbUtil {
         Long[] sectorIds = filter.getSelSectorIds();
         boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
         boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
+        Long[] programIds = filter.getSelProgramIds();
+        boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
 
     	DecimalWraper total = null;
         String oql = "";
@@ -1686,60 +1175,12 @@ public class DbUtil {
         if (sectorCondition)
         	oql += ", actsec.sectorPercentage ";
         
-        oql += " from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
+        String specialInner = null;
+    	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+    		specialInner = " inner join act.orgrole orole inner join orole.role role inner join orole.organisation roleOrg ";
+    
+    	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, null, null, tm, true, specialInner, null);
     	
-    	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
-        if (locationCondition) 
-            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-        //if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-    			oql += " inner join act.orgrole orole inner join orole.role role inner join orole.organisation roleOrg ";
-        if (sectorCondition) {
-            oql += "  inner join act.sectors actsec ";
-            oql += "  inner join actsec.classificationConfig config  ";
-            oql += " inner join actsec.sectorId sec ";
-        }
-        if (sectorCondition) 
-        	oql += " where config.id=:config  ";
-        else
-        	oql += " where 1=1 ";
-        
-        oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
-        oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-        //oql += " and f.ampDonorOrgId in (" + DashboardUtil.getInStatement(orgList.toArray()) + ")";
-
-       
-        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) 
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType());
-        } else 
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds, filter.getAgencyType());
-        if (locationCondition) {
-        	if (locationIds[0].equals(0l)) {
-        		oql += " and actloc is NULL "; //Unallocated condition
-			} else {
-				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-			}
-        }
-        if (sectorCondition) {
-        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
-            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-        }
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-            oql += DashboardUtil.getTeamQueryManagement();
-        else
-            oql += DashboardUtil.getTeamQuery(tm);
-
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
-
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-        oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
@@ -1905,12 +1346,18 @@ public class DbUtil {
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
             oql += DashboardUtil.getTeamQueryManagement();
         else
-            oql += DashboardUtil.getTeamQuery(tm);
+        	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
+        		oql += DashboardUtil.getTeamQuery(tm);
+        	else
+        		oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
+        		
 
         if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
 			oql += ActivityUtil.getNonDraftActivityQueryString("act");
 		}
 
+        if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
+        	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 
@@ -2085,12 +1532,17 @@ public class DbUtil {
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
             oql += DashboardUtil.getTeamQueryManagement();
         else
-            oql += DashboardUtil.getTeamQuery(tm);
+        	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
+        		oql += DashboardUtil.getTeamQuery(tm);
+        	else
+        		oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
 
         if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
 			oql += ActivityUtil.getNonDraftActivityQueryString("act");
 		}
 
+        if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
+        	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 
@@ -2264,12 +1716,17 @@ public class DbUtil {
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
             oql += DashboardUtil.getTeamQueryManagement();
         else
-            oql += DashboardUtil.getTeamQuery(tm);
+        	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
+        		oql += DashboardUtil.getTeamQuery(tm);
+        	else
+        		oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
 
         if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
 			oql += ActivityUtil.getNonDraftActivityQueryString("act");
 		}
 
+        if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
+        	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
         oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 
@@ -2435,154 +1892,6 @@ public class DbUtil {
         return orgGrp;
     }
     
-    /**
-     * Returns Activity List using filter
-     */
-    @SuppressWarnings("unchecked")
-    public static List<AmpActivityVersion> getActivityList(DashboardFilter filter, Date startDate,
-            Date endDate, Long assistanceTypeId,
-            Long financingInstrumentId,
-            int transactionType,HardCodedCategoryValue adjustmentTypeActual) throws DgException {
-        DecimalWraper total = null;
-        String oql = "";
-        List<AmpActivityVersion> activities = null;
-        String currCode = "USD";
-        if (filter.getCurrencyId()!=null) {
-        	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
-		} 
-        
-        Long[] orgIds = filter.getSelOrgIds();
-        Long[] orgGroupIds = filter.getSelOrgGroupIds();
-        
-        TeamMember tm = filter.getTeamMember();
-        Long[] locationIds = filter.getSelLocationIds();
-        Long[] sectorIds = filter.getSelSectorIds();
-        boolean locationCondition = locationIds != null && locationIds.length > 0 && !locationIds[0].equals(-1l);
-        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
-
-        oql = "select distinct act from ";
-        oql += AmpFundingDetail.class.getName()
-                + " as fd inner join fd.ampFundingId f ";
-        oql += "   inner join f.ampActivityId act ";
-        if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
-    		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-    			oql += " inner join act.orgrole orole inner join orole.role role ";
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
-        if (locationCondition) {
-            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-        }
-        if (sectorCondition) {
-            oql += "  inner join act.sectors actsec ";
-            oql += "  inner join actsec.classificationConfig config  ";
-            oql += " inner join actsec.sectorId sec ";
-        }
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-        	oql += " inner join act.actPrograms actProg ";
-            oql += " inner join actProg.program prog ";
-		}
-        
-        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
-        	oql += " inner join act.categories categ ";
-		}
-        
-        if (sectorCondition) {
-        	oql += " where config.id=:config and  fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
-        } else {
-        	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
-        }
-        //oql += " where config.id=:config and fd.transactionType =:transactionType  and  fd.adjustmentType =:adjustmentType ";
-        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
-            if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
-                oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
-            }
-        } else {
-            oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
-        }
-        if (locationCondition) {
-        	if (locationIds[0].equals(0l)) {
-        		oql += " and actloc is NULL "; //Unallocated condition
-			} else {
-				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-			}
-        }
-
-        if (sectorCondition) {
-        	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
-            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
-        }
-
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-        	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
-		}
-        
-        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
-        	if (filter.getSelCVIds()[0]==-1) {
-        		oql += " and categ.id NOT in ("+DashboardUtil.getInStatement(filter.getBudgetCVIds())+") ";
-			} else {
-				oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelCVIds())+") ";
-			}
-		}
-        if (filter.getActivityId()!=null) {
-            oql += " and act.ampActivityId =:activityId ";
-        }
-
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-        if (assistanceTypeId != null) {
-            oql += "  and f.typeOfAssistance=:assistanceTypeId ";
-        }
-        if (financingInstrumentId != null) {
-            oql += "   and f.financingInstrument=:financingInstrumentId  ";
-        }
-
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
-            oql += DashboardUtil.getTeamQueryManagement();
-        }
-        else
-        {
-            oql += DashboardUtil.getTeamQuery(tm);
-        }
-
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-        oql += " and (act.deleted = false or act.deleted is null)";
-
-        Session session = PersistenceManager.getRequestDBSession();
-        try {
-            Query query = session.createQuery(oql);
-            query.setDate("startDate", startDate);
-            query.setDate("endDate", endDate);
-            if (sectorCondition) {
-            	query.setLong("config", filter.getSelSectorConfigId());
-            }
-
-            if (assistanceTypeId != null) {
-                query.setLong("assistanceTypeId", assistanceTypeId);
-            }
-            if (financingInstrumentId != null) {
-                query.setLong("financingInstrumentId", financingInstrumentId);
-            }
-            query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentTypeActual.getValueKey());
-            
-            if (filter.getActivityId()!=null) {
-                query.setLong("activityId", filter.getActivityId());
-            }
-            activities = query.list();
-        } catch (Exception e) {
-            logger.error(e);
-            throw new DgException(
-                    "Cannot load fundings from db", e);
-        }
-
-
-        return activities;
-    }
     public static AmpContact getPrimaryContactForOrganization(Long orgId) throws DgException{
     	AmpContact contact=null;
     	Session session = null;
@@ -2640,70 +1949,7 @@ public class DbUtil {
         }
 
     }
-	public static AmpSector getAmpSector(Long id) {
 
-		Session session = null;
-		Query qry = null;
-		Iterator itr = null;
-		AmpSector ampSector = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = new String();
-			queryString = "select s from " + AmpSector.class.getName()
-					+ " s where (s.ampSectorId=:ampSectorId) and (s.deleted is null or s.deleted = false) ";
-
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampSectorId", id, Hibernate.LONG);
-			itr = qry.list().iterator();
-
-			if (itr.hasNext()) {
-				ampSector = (AmpSector) itr.next();
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get amp_sector info");
-			logger.debug("Exceptiion " + ex);
-		}
-//session.flush();
-		return ampSector;
-
-	}
-	public static ArrayList getAmpSubSectors(Long ampSectorId) {
-		Session session = null;
-		Query q = null;
-		AmpSector ampSector = null;
-		ArrayList subsector = new ArrayList();
-		String queryString = null;
-		Iterator iter = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			queryString = " select new AmpSector(ampSectorId, parentSectorId) from "
-					+ AmpSector.class.getName()
-					+ " Sector where Sector.parentSectorId is not null and Sector.parentSectorId.ampSectorId=:ampSectorId and (Sector.deleted is null or Sector.deleted = false) ";
-			q = session.createQuery(queryString);
-			q.setParameter("ampSectorId", ampSectorId, Hibernate.LONG);
-			iter = q.list().iterator();
-
-			while (iter.hasNext()) {
-
-				ampSector = (AmpSector) iter.next();
-				subsector.add(ampSector);
-			}
-
-		} catch (Exception ex) {
-			logger.error("Unable to get Amp sub sectors  from database "
-					+ ex.getMessage());
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
-		return subsector;
-	}
 	public static ArrayList<AmpSector> getAmpSectors() {
 		Session session = null;
 		Query q = null;
@@ -3010,7 +2256,6 @@ public class DbUtil {
 	
 	public static void updateDashboard(AmpDashboard dashboard, DashboardForm form) throws DgException {
 		
-		Transaction tx=null;
 		try {
 			Session session = PersistenceManager.getSession();
 			session.update(dashboard);
@@ -3046,19 +2291,10 @@ public class DbUtil {
 			}
 		} catch (HibernateException e) {
 			logger.error("Error saving dashboard",e);
-			if (tx!=null){
-				try {
-					tx.rollback();
-				} catch (Exception ex) {
-					throw new DgException("Cannot rallback save dashboard action",ex);
-				}
-				throw new DgException("Cannot save dashboard!",e);
-			}
 		}
 	}
 	
 	public static void removeDashboard(AmpDashboard dashboard) throws DgException {
-		Transaction tx=null;
 		try {
 			Session session = PersistenceManager.getSession();
 
@@ -3071,42 +2307,9 @@ public class DbUtil {
 			session.delete(dashboard);
 		} catch (HibernateException e) {
 			logger.error("Error deleting dashboard",e);
-			if (tx!=null){
-				try {
-					tx.rollback();
-				} catch (Exception ex) {
-					throw new DgException("Cannot rallback remove dashboard action",ex);
-				}
-				throw new DgException("Cannot delete dashboard!",e);
-			}
 		}
 	}
 	
-	
-	public static Collection<AmpCategoryValueLocations> getChildLocationById(Long id) {
-		Session session = null;
-		Collection<AmpCategoryValueLocations> ret = new ArrayList<AmpCategoryValueLocations>();;
-		Iterator<AmpCategoryValueLocations> iter = null;
- 	 	try {
- 	 		session = PersistenceManager.getSession();
- 	 		String queryString = "select loc from "
- 	 		+ AmpCategoryValueLocations.class.getName()
- 	 		+ " loc where (loc.parentLocation=:id)" ;                   
- 	 		Query qry = session.createQuery(queryString);
- 	 		qry.setLong("id", id);
- 	 		iter = qry.list().iterator();
-
-			while (iter.hasNext()) {
-				AmpCategoryValueLocations acv = (AmpCategoryValueLocations) iter.next();
-				ret.add(acv);
-			}
- 	 		return ret;
- 	 	} catch (Exception e) {
- 	 		e.printStackTrace();
- 	 	}
- 	 	return null;
- 	}
-
 	public static List<AmpDashboard> getDashboardsToShowInMenu() {
         Session session = null;
         List<AmpDashboard> dashs = null;
@@ -3124,5 +2327,9 @@ public class DbUtil {
         }
         return dashs;
     }
-
+	public static ArrayList<BigInteger> getInActivities(String query) throws Exception{
+		Session session = PersistenceManager.getRequestDBSession();
+		ArrayList<BigInteger> result = (ArrayList<BigInteger>) session.createSQLQuery("select amp_activity_id from amp_activity where " + query).list();
+		return result;
+	}
 }

@@ -20,7 +20,9 @@ import org.digijava.module.budgetexport.adapter.MappingEntityAdapterUtil;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportCSVItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapItem;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
+import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
 import org.digijava.module.budgetexport.form.BEMapActionsForm;
+import org.digijava.module.budgetexport.serviceimport.ObjectRetriever;
 import org.digijava.module.budgetexport.util.AmpEntityMappedItem;
 import org.digijava.module.budgetexport.util.BudgetExportUtil;
 import org.digijava.module.budgetexport.util.DbUtil;
@@ -30,6 +32,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -161,27 +165,33 @@ public class MapActions extends DispatchAction {
         AmpBudgetExportMapRule rule = DbUtil.getMapRuleById(beMapActionsForm.getRuleId());
         List<AmpEntityMappedItem> ampEntityMappedItems = (List<AmpEntityMappedItem>) request.getSession().getAttribute(AMP_MAPPED_ENTITY_LIST);
 
+        Map<String, String> csvMap = null;
+
         FormFile file = beMapActionsForm.getUpload();
 
-        /*
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(file.getInputStream(), writer, "UTF-8");
-        String csvContent = writer.toString();
-        */
-
-        StringBuilder strBld = new StringBuilder();
-        InputStream is = file.getInputStream();
-        int b;
-        while ((b = is.read()) != -1) {
-            strBld.append((char)b);
+        if (rule.getProject().getDataSource() == AmpBudgetExportProject.DATA_SOURCE_CSV) {
+            StringBuilder strBld = new StringBuilder();
+            InputStream is = file.getInputStream();
+            int b;
+            while ((b = is.read()) != -1) {
+                strBld.append((char)b);
+            }
+            csvMap = BudgetExportUtil.parseCSV(new String(file.getFileData(), "UTF-8"),rule.getCsvColDelimiter(), rule.isHeader());
+        } else if (rule.getProject().getDataSource() == AmpBudgetExportProject.DATA_SOURCE_SERVICE) {
+            /*
+            String serviceURL = rule.getProject().getMappingImportServiceURL();
+            String actionURL = rule.getProject().getServiceActionURL();
+            
+            URL serviceConnURL = new URL(serviceURL);
+            URLConnection urlConn = serviceConnURL.openConnection();*/
+            /*
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(urlConn.getInputStream(), writer, "UTF8");
+            String serviceResults = writer.toString();
+            */
+            ObjectRetriever or = (ObjectRetriever) Class.forName(rule.getDataRetrieverClass()).newInstance();
+            csvMap = or.getItems(rule);
         }
-
-        //String str = new String(strBld.toString().getBytes(), "UTF-8");
-        /*
-        Map<String, String> csvMap = BudgetExportUtil.parseCSV(csvContent, rule.isHeader());
-          */
-        
-        Map<String, String> csvMap = BudgetExportUtil.parseCSV(new String(file.getFileData(), "UTF-8"),rule.getCsvColDelimiter(), rule.isHeader());
         
         Set <Map.Entry<String, String>> mapEntrySet = csvMap.entrySet();
         Iterator<Map.Entry<String, String>> mapEntrySetIt = mapEntrySet.iterator();

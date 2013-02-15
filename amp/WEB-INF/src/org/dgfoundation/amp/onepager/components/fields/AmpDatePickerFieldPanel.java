@@ -117,22 +117,20 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 	
 	
 	
-	public void setDuplicateFieldOnChange(final AmpDatePickerFieldPanel peerPickerField)
-	{
-	
-	AjaxEventBehavior onChange =new AjaxEventBehavior("onchange") {
-		private static final long serialVersionUID = 1L;
+	public void setDuplicateFieldOnChange(final AmpDatePickerFieldPanel peerPickerField){
+        AjaxEventBehavior onChange =new AjaxEventBehavior("onchange") {
+            private static final long serialVersionUID = 1L;
 
-	    protected void onEvent(final AjaxRequestTarget target) {
-			Boolean check = (Boolean)peerPickerField.getCheckBox().getModelObject();
-			if(check != null && check){
-				String js=String.format("$('#%s').val($('#%s').val());",peerPickerField.date.getMarkupId(),date.getMarkupId());
-				target.appendJavaScript(js);
-			    target.add(peerPickerField.date.getParent());
-			}
-		 }			
-	    };
-	    date.add(onChange);	
+            protected void onEvent(final AjaxRequestTarget target) {
+                Boolean check = (Boolean)peerPickerField.getCheckBox().getModelObject();
+                if(check != null && check){
+                    String js=String.format("$('#%s').val($('#%s').val());",peerPickerField.date.getMarkupId(),date.getMarkupId());
+                    target.appendJavaScript(js);
+                    target.add(peerPickerField.date.getParent());
+                }
+             }
+        };
+        date.add(onChange);
 	}
 	
 	public AjaxCheckBox getCheckBox()

@@ -289,9 +289,18 @@ public class NodeWrapper{
 			if(originalNode.hasProperty(CrConstants.PROPERTY_YEAR_OF_PUBLICATION)){
 				yearOfPublication=originalNode.getProperty(CrConstants.PROPERTY_YEAR_OF_PUBLICATION).getDate();
 			}
-			
-			String docIndex = decodeUTF8(originalNode.getProperty(CrConstants.PROPERTY_INDEX).getString());
-			String docCategory = decodeUTF8(originalNode.getProperty(CrConstants.PROPERTY_CATEGORY).getString());
+			String docIndex;
+			String docCategory;
+			try {
+				docIndex = decodeUTF8(originalNode.getProperty(CrConstants.PROPERTY_INDEX).getString());
+			} catch (Exception e) {
+				docIndex="";
+			}
+			try {
+				docCategory = decodeUTF8(originalNode.getProperty(CrConstants.PROPERTY_CATEGORY).getString());
+			} catch (Exception e) {
+				docCategory="";
+			}
 			
 			populateNode(isANewVersion, newNode, decodeUTF8(docTitle), description, docNotes, contentType, 
 					docType, teamMember.getEmail(), teamMember.getTeamId(), yearOfPublication,

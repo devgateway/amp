@@ -26,6 +26,7 @@ public class Workspace {
 	private Boolean hideDraftActivities;
 	private Boolean addActivity;
 	private Boolean computation;
+	private Boolean useFilter;
 	
 	public Boolean getAddActivity() {
 		return addActivity;
@@ -41,6 +42,14 @@ public class Workspace {
 
 	public void setComputation(Boolean computation) {
 		this.computation = computation;
+	}
+
+	public Boolean getUseFilter() {
+		return useFilter;
+	}
+
+	public void setUseFilter(Boolean useFilter) {
+		this.useFilter = useFilter;
 	}
 
 	public Workspace() {

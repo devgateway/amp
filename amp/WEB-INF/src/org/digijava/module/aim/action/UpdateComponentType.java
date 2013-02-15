@@ -112,7 +112,7 @@ public class UpdateComponentType extends Action {
 	
 	public ActionForward list(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		ArrayList<AmpComponentType> com = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
-		Iterator it = com.iterator();
+		/*Iterator it = com.iterator();
 		while (it.hasNext()) {
 			AmpComponentType componentType = (AmpComponentType) it.next();
 			Set<AmpComponent> components = componentType.getComponents();
@@ -124,7 +124,7 @@ public class UpdateComponentType extends Action {
 					ComponentsUtil.deleteComponent(ampComp.getAmpComponentId());
 				}
 			}
-		}
+		}*/
 		ComponentTypeForm compForm = (ComponentTypeForm) form;
 		compForm.setComponentTypesList(com);
 		return mapping.findForward("default");

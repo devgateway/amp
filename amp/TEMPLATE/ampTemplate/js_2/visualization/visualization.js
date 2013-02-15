@@ -1837,13 +1837,23 @@ function updateTitles(){
 	if (type==2) {
 		fundType = trnExpenditures;
 	}
-	
 	var titlesObj = getTitlesObjects();
 	for ( var i = 0; i < titlesObj.length; i++) {
 		var id = titlesObj[i].getAttribute("id");
 		if(id!=null && id.indexOf("Legend")!=-1){
+			var divide =  document.getElementById(id.substr(0,id.indexOf("TitleLegend"))+"Divide").checked;
+			var inThousands =  document.getElementById("showAmountsInThousands").value;
+			var anmtIn = trnInMillions;
+			if (divide && inThousands=="true")
+				anmtIn = trnInMillions;
+			if (!divide && inThousands=="true")
+				anmtIn = trnInThousands;
+			if (divide && inThousands=="false")
+				anmtIn = trnInBillions;
+			if (!divide && inThousands=="false")
+				anmtIn = trnInMillions;
 			var input = document.getElementById(id.substr(0,id.indexOf("Legend")));
-			var trnTitle = document.getElementById(id+"Trn").value + " - " + fundType;
+			var trnTitle = document.getElementById(id+"Trn").value + " - " + fundType + " (" + anmtIn + ")";
 			titlesObj[i].innerHTML = trnTitle;
 			if (input != null)
 				input.value = trnTitle;
@@ -2016,12 +2026,37 @@ function getValueToFlash(idContainer, field){
 
 function updateGraph(e, chartName){
 
+	var type = document.getElementById("transactionType").value;
+	var fundType = "";
+	if (type==0) {
+		fundType = trnCommitments;
+	}
+	if (type==1) {
+		fundType = trnDisbursements;
+	}
+	if (type==2) {
+		fundType = trnExpenditures;
+	}
 	//Get array of graphs
 	var allGraphs = getElementsByName_iefix("div", "flashContent");
 	//Iterate and refresh the graph
+	var divide =  document.getElementById(chartName+"Divide").checked;
+	var inThousands =  document.getElementById("showAmountsInThousands").value;
+	var anmtIn = trnInMillions;
+	if (divide && inThousands=="true")
+		anmtIn = trnInMillions;
+	if (!divide && inThousands=="true")
+		anmtIn = trnInThousands;
+	if (divide && inThousands=="false")
+		anmtIn = trnInBillions;
+	if (!divide && inThousands=="false")
+		anmtIn = trnInMillions;
+	
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		// Get flash object and refresh it by calling internal
 		if(allGraphs[idx].children[0].id.toLowerCase() == chartName.toLowerCase()){
+			var trnTitle = document.getElementById(chartName+"TitleLegendTrn").value + " - " + fundType + " (" + anmtIn + ")";
+			document.getElementById(chartName + "Title").value = trnTitle;
 			document.getElementById(chartName + "TitleLegend").innerHTML = document.getElementById(chartName + "Title").value; 
 			allGraphs[idx].children[0].refreshGraph();
 			break;
@@ -2072,8 +2107,8 @@ function changeChart(e, chartType, container, useGeneric){
 	var attributes = {};
 	attributes.id = container;
 	//Setting for cache in development mode
-	var cache = "?rnd=" + Math.floor(Math.random()*50000);
-//	var cache = "";
+//	var cache = "?rnd=" + Math.floor(Math.random()*50000);
+	var cache = "";
 
 	switch(chartType){
 		case "bar":

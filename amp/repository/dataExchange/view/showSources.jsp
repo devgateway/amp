@@ -34,10 +34,14 @@ function deleteSource1(sourceId){
 }
 
 function deleteSource(sourceId) {
-	var form = document.getElementById('manageForm');
-	form.action = "/dataExchange/manageSource.do?action=delete&selectedSourceId="+sourceId;
-	form.target="_self"
-	form.submit();
+	var msg = '<digi:trn>Delete this source?</digi:trn>';
+	var result = confirm(msg);
+	if (result==true) {
+		var form = document.getElementById('manageForm');
+		form.action = "/dataExchange/manageSource.do?action=delete&selectedSourceId="+sourceId;
+		form.target="_self"
+		form.submit();
+	}
 }
 
 function execute(sourceId){

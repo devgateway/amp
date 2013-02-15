@@ -1825,6 +1825,7 @@ function collapseAll() {
 									<i><digi:trn key="aim:component_code">Component code</digi:trn>
 								:</i><c:out value="${comp.code}" /></td>
 							</tr>
+							<c:if test="${!empty comp.url} }">
 							<tr>
 								<td>
 									<a href="<c:out value="${comp.url}"/>" target="_blank">
@@ -1832,6 +1833,7 @@ function collapseAll() {
 										<c:out value="${comp.code}"/>
 									</a>								</td>
 							</tr>
+							</c:if>
 							<tr>
 								<td class="prv_right"><b>
 									<digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>								</td>

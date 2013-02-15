@@ -229,7 +229,7 @@ public class QueryUtil {
 	            }
 	            if (relatedOrgs.length() > 1) {
 	                relatedOrgs = relatedOrgs.substring(0, relatedOrgs.length() - 1);
-	                qr += " or f.ampDonorOrgId in(" + relatedOrgs + ")";
+	                qr += " or f.ampDonorOrgId in(" + relatedOrgs + ") or role.organisation in (" + relatedOrgs + ")";
 	            }
 	            qr += ")";
 

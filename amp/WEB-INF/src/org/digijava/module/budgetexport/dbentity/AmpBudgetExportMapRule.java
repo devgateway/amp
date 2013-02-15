@@ -26,7 +26,8 @@ public class AmpBudgetExportMapRule {
 
     private boolean allowNoneItem;
     private boolean allowAllItem;
-
+    private String dataRetrieverClass;
+    
     //Not persistent fields
     private int totalAmpEntityCount;
 
@@ -126,5 +127,13 @@ public class AmpBudgetExportMapRule {
 
     public void setAllowAllItem(boolean allowAllItem) {
         this.allowAllItem = allowAllItem;
+    }
+
+    public String getDataRetrieverClass() {
+        return dataRetrieverClass;
+    }
+
+    public void setDataRetrieverClass(String dataRetrieverClass) {
+        this.dataRetrieverClass = dataRetrieverClass;
     }
 }

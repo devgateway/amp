@@ -23,6 +23,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private Boolean addActivity=null;
 	@Checkbox(step=1, resetValue="false")
 	private Boolean computation=null;
+	private Boolean useFilter;
 	
 	@Checkbox(step=1, resetValue="false")
 	private Boolean hideDraftActivities=null;
@@ -440,6 +441,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			reset	= false;
 			addActivity=null;
 			computation=null;
+			useFilter=true;
 			
 		}		
 		if (popupReset) {
@@ -703,9 +705,11 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 		return workspaceGroup;
 	}
 
+	public Boolean getUseFilter() {
+		return useFilter;
+	}
 
-
-
-
-
+	public void setUseFilter(Boolean useFilter) {
+		this.useFilter = useFilter;
+	}
 }

@@ -64,6 +64,7 @@
 	            <digi:errors/>
 	            <p/>
 				<html:file property="uploadedFile"/>
+				(<digi:trn>text/csv file only </digi:trn>)
 				<p/>
 					<html:submit property="importPerform"><digi:trn>Import</digi:trn></html:submit>
 				</digi:form>

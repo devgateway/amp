@@ -8,20 +8,20 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<style>
+body{
+	background: none;
+}
+</style>
 
 <digi:instance property="helpForm" />
-
-<table cellpadding="0" cellspacing="0">
-	<tr>
-		<td align="center"><span style="font: 20px bold;"><digi:trn>${helpForm.topicKey}</digi:trn></span></td>
-	</tr>
-	<tr height="5px"><td>&nbsp;</td></tr>
-	<tr>
-		<td>
-			<bean:define id="descKey">
-				<c:out value="${helpForm.bodyEditKey}"/>
-			</bean:define>
-			<digi:edit key="<%=descKey%>" displayText=""/>
-		</td>
-	</tr>
-</table>
+<div style="width:100%;text-align:center;">
+	<span style="font-family:arial; font-size: 20px; font-weight: bold; color:#F1F1F1;"><digi:trn>${helpForm.topicKey}</digi:trn></span>
+</div>
+<br />
+<div style="background: white;">
+		<bean:define id="descKey">
+			<c:out value="${helpForm.bodyEditKey}"/>
+		</bean:define>
+		<digi:edit key="<%=descKey%>" displayText=""/>
+</div>

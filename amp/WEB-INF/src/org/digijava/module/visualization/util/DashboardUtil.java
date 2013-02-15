@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -24,13 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -48,27 +45,23 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.visualization.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
-import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.VisualizationForm;
 import org.digijava.module.visualization.helper.DashboardFilter;
 import org.digijava.module.visualization.helper.EntityRelatedListHelper;
-
 import org.joda.time.DateTime;
 import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.GregorianChronology;
-
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class DashboardUtil {
 	
@@ -84,7 +77,7 @@ public class DashboardUtil {
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
         map = DbUtil.getFundingByAgencyList(orgList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
-		return sortByValue (map);
+		return sortByValue (map, null);
 	}
 	
 	public static Map<AmpSector, BigDecimal> getRankSectorsByKey(Collection<AmpSector> secListChildren, Collection<AmpSector> secListParent,  DashboardFilter filter) throws DgException{
@@ -97,7 +90,7 @@ public class DashboardUtil {
         String currCode = filter.getCurrencyCode();
         if (secListChildren!=null && secListChildren.size()!=0)
         	map = DbUtil.getFundingBySectorList(secListChildren, secListParent, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
-		return sortByValue (map);
+		return sortByValue (map, null);
 	}
 	
 	public static Map<AmpCategoryValueLocations, BigDecimal> getRankRegionsByKey(Collection<AmpCategoryValueLocations> regList,  DashboardFilter filter, HttpServletRequest request) throws DgException{
@@ -106,12 +99,19 @@ public class DashboardUtil {
         Date startDate = getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		BigDecimal divideByDenominator;
+		if (regList.size()==0) {
+			return map;
+		}
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        AmpCategoryValueLocations tempLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]).getParentLocation();
+        AmpCategoryValueLocations tempLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[0]);
         AmpCategoryValueLocations natLevelLocation = new AmpCategoryValueLocations();
         if (tempLocation != null)
-        	natLevelLocation = tempLocation;
+        	if (tempLocation.getParentLocation()!=null) {
+        		natLevelLocation = tempLocation.getParentLocation();
+			} else {
+				natLevelLocation = tempLocation;
+			}
         else if(regList.size() > 1)
         	natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regList.toArray()[1]).getParentLocation();
 
@@ -131,7 +131,7 @@ public class DashboardUtil {
 		BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 		if (total.compareTo(BigDecimal.ZERO) == 1)
 			map.put(tempLoc2, total);
-        return sortByValue (map);
+        return sortByValue (map, null);
 	}
 	
 	public static Map<AmpTheme, BigDecimal> getRankProgramsByKey(Collection<AmpTheme> progList,  DashboardFilter filter) throws DgException{
@@ -144,7 +144,7 @@ public class DashboardUtil {
         String currCode = filter.getCurrencyCode();
         if (progList!=null && progList.size()!=0)
         	map = DbUtil.getFundingByProgramList(progList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
-		return sortByValue (map);
+		return sortByValue (map, null);
 	}
 	
 	public static Map<AmpActivityVersion, BigDecimal> getRankActivitiesByKey(Collection<Long> actList,  DashboardFilter filter) throws DgException{
@@ -156,7 +156,7 @@ public class DashboardUtil {
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 		if (actList!=null && actList.size()!=0)
         	map = DbUtil.getFundingByActivityList(actList, filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator);
-        return sortByValue (map);
+        return sortByValue (map, null);
 	}
 	
 	public static Map<AmpSector, BigDecimal> getRankSubSectors (Collection<AmpSector> sectorsList, DashboardFilter filter, Integer startYear, Integer endYear) throws DgException{
@@ -176,17 +176,13 @@ public class DashboardUtil {
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelSectorIds(ids);
             DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-            //filter.setSectorIds(temp);
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(sector, total);
 		}
-		return sortByValue (map);
+		return sortByValue (map, null);
 	}
 	
-	public static Map sortByValue(Map map) {
-		return sortByValue(map, null);
-	}
-	
+
 	public static Map sortByValue(Map map, Long top) {
 	     List list = new LinkedList(map.entrySet());
 	     Collections.sort(list, new Comparator() {
@@ -613,25 +609,6 @@ public class DashboardUtil {
         return qry;
     }
 
-    private static String getInStatementList(
-			List selectedItems) {
-        String oql = "";
-        Iterator it = selectedItems.iterator();
-
-        while(it.hasNext()){
-        	Object object = it.next();
-        	if (object instanceof AmpOrganisation) {
-    			AmpOrganisation ampOrganization = (AmpOrganisation)object;
-            	oql += ampOrganization.getAmpOrgId();
-            	if (it.hasNext()){
-            		oql += ",";
-            	}
-        	}
-        	
-        }
-        return oql;
-	}
-
 	public static String getTeamQueryManagement() {
         String qr = "";
         List<AmpTeam> teams = DbUtil.getAllChildComputedWorkspaces();
@@ -787,7 +764,11 @@ public class DashboardUtil {
 
 		BigDecimal divideByDenominator;
 		if(isProfile){ //The profile already divide in the preload of data in method getSummaryAndRankInformation(VisualizationForm, HttpServletRequest)
-			return new BigDecimal(1);
+			//return new BigDecimal(1);
+			if (divideThousands)
+				divideByDenominator = new BigDecimal(1000);
+			else
+				divideByDenominator = new BigDecimal(1);
 		}
 		else
 		{
@@ -819,7 +800,10 @@ public class DashboardUtil {
 			filter.setFromPublicView(false);
 		}
 		filter.setDashboardType(Constants.DashboardType.DONOR);
-		
+		filter.setCommitmentsVisible(true);
+		filter.setDisbursementsVisible(true);
+		filter.setExpendituresVisible(true);
+		filter.setPledgeVisible(true);
 		filter.setShowOrganizationsRanking(false);
 		filter.setShowRegionsRanking(false);
 		filter.setShowSectorsRanking(false);

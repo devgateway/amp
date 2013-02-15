@@ -5071,7 +5071,7 @@ public class DbUtil {
 		Collection<AmpOrgGroup> col = new ArrayList();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select distinct amp_org_grp_id from v_contracting_agency_groups";
+			String queryString = "select distinct amp_org_grp_id, name from v_contracting_agency_groups order by name";
 			Query qry = session.createSQLQuery(queryString).addEntity(
 					AmpOrgGroup.class);
 			col = qry.list();

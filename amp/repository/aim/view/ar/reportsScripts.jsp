@@ -189,6 +189,7 @@ saveReportEngine	= null;
 </script>
 
 <script type="text/javascript">
+		dateFilterErrorMsg = "<digi:trn>From must be before than To date </digi:trn>";
 		var currentReportId	= -1;
 		<logic:present name="reportObject">
 			currentReportId	= ${reportObject.ampReportId};
@@ -471,7 +472,6 @@ saveReportEngine	= null;
 		myPanel2.hide();
 	}
 	function resetSorter(button) {
-		//debugger;
 		var form1		= button.form;
 		for (var i=0; i<form1.elements.length; i++) {
 				var selEl	= form1.elements[i];

@@ -37,6 +37,7 @@ import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
@@ -51,6 +52,7 @@ import org.digijava.module.help.jaxbi.ObjectFactory;
 import org.digijava.module.help.lucene.LucHelpModule;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
+import org.digijava.module.sdm.exception.SDMException;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -333,6 +335,65 @@ public class HelpUtil {
 		}
 	}
 
+	/**
+	 * scans the input string for all the "<img>" tags (usually there is only one, but occasionally there are more of them) and deleted documents referenced in them
+	 * @param session
+	 * @param imgTag - a string of the form 
+	 * <img   width="259" height="125" src="/sdm/showImage.do?activeParagraphOrder=0&documentId=179" /></span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img   width="345" height="201" src="/sdm/showImage.do?activeParagraphOrder=2&documentId=179" />
+	 */
+	private static void deleteAllMatchedImages(Session session, String imgTags) throws SDMException
+	{
+		while(true)
+		{
+			// invariant: string always starts with <img - once this invariant is violated, exit the loop
+			if (imgTags == null || !imgTags.startsWith("<img"))
+				break;
+			int imgTagEndPos = imgTags.indexOf("/>");
+			if (imgTagEndPos < 5) // malformed or non-closed tag 
+			{
+				logger.error("invalidly parsed img " + imgTags, new RuntimeException());
+				break;
+			}
+			String imgTag = imgTags.substring(0, imgTagEndPos + 2); // include "/>"
+		
+			if(imgTag.contains("documentId=")){
+				String docId = imgTag.substring(imgTag.indexOf("documentId=")+11);
+				if(docId.contains("&")){
+					docId = docId .substring(0,docId.indexOf("&"));
+				}else{
+					docId = docId .substring(0,docId.indexOf("\""));
+				}
+				
+				if (!AmpMath.isLong(docId))
+				{
+					logger.error("invalidly parsed docId " + docId, new RuntimeException());
+					break;
+				}
+				
+				try
+				{
+					Sdm doc = org.digijava.module.sdm.util.DbUtil.getDocument(new Long (docId), session);
+					session.delete(doc);
+				}
+				catch(SDMException e)
+				{
+					if (e.getCause() instanceof org.hibernate.ObjectNotFoundException)
+					{
+						// swallow exception
+						logger.warn("could not delete document with id " + docId, new RuntimeException());
+					}
+					else
+						throw e;
+				}
+			}
+			
+			int nextImgTagPos = imgTags.indexOf("<img", imgTagEndPos);
+			if (nextImgTagPos <= 0)
+				break;
+			imgTags = imgTags.substring(nextImgTagPos);
+		}
+	}
+	
 	public static void deleteHelpTopic(HelpTopic topic, HttpServletRequest request) throws AimException{
 		Session session = null;
 		Transaction tx = null;
@@ -346,21 +407,14 @@ public class HelpUtil {
 				if (editors!=null && editors.size()>0){
 					for (Editor editor : editors) {
 						if(editor.getBody()!=null){
+							if (editor.getEditorKey().equals("help-admin-2116913595-1357837306810"))
+								System.out.println("I am atrociously handsome");
 							String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*\"\\s?/>" ;
 							Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
 							Matcher matcher = pattern.matcher(editor.getBody());
 							if (matcher.find()){				
 								String imgTag = matcher.group(0);
-								if(imgTag.contains("documentId=")){
-									String docId = imgTag.substring(imgTag.indexOf("documentId=")+11);
-									if(docId.contains("&")){
-										docId = docId .substring(0,docId.indexOf("&"));
-									}else{
-										docId = docId .substring(0,docId.indexOf("\""));
-									}
-									Sdm doc = org.digijava.module.sdm.util.DbUtil.getDocument(new Long (docId),session);
-									session.delete(doc);
-								}
+								deleteAllMatchedImages(session, imgTag);
 							}							
 						}	
 						session.delete(editor);
@@ -1043,7 +1097,7 @@ System.out.println("lang:"+lang);
                 }else{
                 	TranslatorWorker.getInstance("").save(newMsg);
                 }
-                udateEditpData(xmlLangTag,help.getEditorKey(),help.getLastModDate(),helpDocIdHolder);
+                updateEditData(xmlLangTag,help.getEditorKey(),help.getLastModDate(),helpDocIdHolder);
             }
             //insertHelp(helptopic);
             saveOrUpdateHelpTopic(helptopic, request);
@@ -1066,7 +1120,7 @@ System.out.println("lang:"+lang);
 		 
 	 }
 	 
-	 public static void udateEditpData(HelpLang help,String key,Calendar lastModDate,HashMap<String, Long> helpDocIdHolder){
+	 public static void updateEditData(HelpLang help,String key,Calendar lastModDate,HashMap<String, Long> helpDocIdHolder){
  	   List<HelpTopic> result = null;
 	   Session session = null;
 	   Query query = null;

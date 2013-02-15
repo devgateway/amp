@@ -228,7 +228,7 @@ function fnSubmit() {
 											<html:select property="filterByCurrCode" styleClass="inp-text">
 												<html:option value="">--<digi:trn key="aim:all">All</digi:trn>--</html:option>
 												<html:optionsCollection name="aimCurrencyRateForm" property="currencyCodes"
-												value="currencyCode" label="currencyCode" />&nbsp;&nbsp;&nbsp;											</html:select>										</td>
+												value="currencyCode" label="currencyCode" />&nbsp;&nbsp;&nbsp;											</html:select>				&nbsp;&nbsp;&nbsp;						</td>
 										<td vAlign="center">
 											<digi:trn key="aim:ratesOfDate">Rates of date</digi:trn>										</td>
 										<%--
@@ -257,7 +257,7 @@ function fnSubmit() {
 													</c:set>						
 													<html:option value="${period.value}">${translation}</html:option>
 												</logic:iterate>
-											</html:select>										</td>
+											</html:select>			&nbsp;						</td>
 										
 										<td vAlign="center">
                                           <c:set var="trnGoBtn">
@@ -275,6 +275,7 @@ function fnSubmit() {
 										<td vAlign="left" width="50" align="center">
 											<html:text property="numResultsPerPage" size="3" styleClass="inp-text"/>										</td>
 										<td  vAlign="left" align="center">
+											&nbsp;
                                           <c:set var="trnViewBtn">
                                             <digi:trn key="aim:viewBtn"> View </digi:trn>
                                           </c:set>
@@ -293,7 +294,7 @@ function fnSubmit() {
                                           <a title="<digi:trn key="aim:LocationoftheFile">URI Location of the document to be attached</digi:trn>"><digi:trn key="aim:file">File</digi:trn>
 										  </a>                                        </td>
                                         <td vAlign="middle" align="center">
-										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file should have 3 columns: the first column contains currency codes 
+										  &nbsp;&nbsp;&nbsp;<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:currencyFormatHint"> The file needs to be CSV type and should have 3 columns: the first column contains currency codes 
 										  (ex. CAD, or ETB), the second column contains rates (per 1 US dollar), and the 3rd column contains the dates (in format  dd-mm-yyyy).
 										  </digi:trn><digi:trn>Default Decimal Separator is: <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.DECIMAL_SEPARATOR) %> &nbsp;&nbsp;and Default Exchange Rate Separator is: <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.EXCHANGE_RATE_SEPARATOR) %>
 										  </digi:trn>"/></td>                                   
@@ -303,7 +304,7 @@ function fnSubmit() {
                                         <c:set var="trnUpdateValues">
                                             <digi:trn key="aim:UpdateValues">Update Values</digi:trn>
                                         </c:set>
- 
+ 										
                                         <a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
 										 	<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
 												<input id="currRateFile" name="currRateFile" type="file" class="file"/>

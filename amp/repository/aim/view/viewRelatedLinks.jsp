@@ -121,28 +121,32 @@
 														<c:out value="${relatedLink.activityId}"/>
 													</c:set>
 													<c:set target="${docParams}" property="pageId" value="1"/>
-						                            <c:if test="${fn:length(relatedLink.title) > 30}" >
-						                            	<digi:link href="/getDocumentDetails.do" name="docParams" title="${relatedLink.title}" styleClass="l_sm">
-						                              	<c:out value="${fn:substring(relatedLink.title, 0, 30)}" />...
-						                              	</digi:link>
-						                            </c:if>
-						                            <c:if test="${fn:length(relatedLink.title) <= 30}" >
-						                            	<digi:link href="/getDocumentDetails.do" name="docParams" title="${relatedLink.title}" styleClass="l_sm">
-						                              	<bean:write name="relatedLink" property="title" />
-						                              	</digi:link>
-						                            </c:if>
+													<c:choose>
+						                            	<c:when test="${fn:length(relatedLink.title) > 30}" >
+						                            		<digi:link href="/getDocumentDetails.do" name="docParams" title="${relatedLink.title}" styleClass="l_sm">
+						                              			<c:out value="${fn:substring(relatedLink.title, 0, 30)}" />...
+						                              		</digi:link>
+						                            	</c:when>
+						                            	<c:otherwise>
+						                            		<digi:link href="/getDocumentDetails.do" name="docParams" title="${relatedLink.title}" styleClass="l_sm">
+						                              			<bean:write name="relatedLink" property="title" />
+						                              		</digi:link>
+						                            	</c:otherwise>
+						                            </c:choose>
                           						</td>
                           						<td class="inside">
                           							<logic:notEmpty name="relatedLink" property="fileName">
 						                                <bean:define name="relatedLink" property="fileName" id="fileName"/>
 						                            </logic:notEmpty>
 						                            <a href="<%=digiContext%>/contentrepository/downloadFile.do?uuid=<bean:write name="relatedLink" property="uuid" />" title="<c:out value='${relatedLink.fileName}' />" class="l_sm">
-						                                    <c:if test="${fn:length(relatedLink.fileName) > 30}" >
+						                            	<c:choose>
+						                                    <c:when test="${fn:length(relatedLink.fileName) > 30}" >
 						                                        <c:out value="${fn:substring(relatedLink.fileName, 0, 30)}" />...
-						                                    </c:if>
-						                                    <c:if test="${fn:length(relatedLink.fileName) <= 30}" >
+						                                    </c:when>
+						                                    <c:otherwise>
 						                                        <c:out value="${relatedLink.fileName}" />
-						                                    </c:if>
+						                                    </c:otherwise>
+														</c:choose>
 						                            </a>
 						                        </td>
                         
@@ -158,12 +162,14 @@
 														2
 													</c:set>
 													<digi:link href="/viewActivityPreview.do" name="urlParams2" title="${translation}" styleClass="l_sm">
-						                              <c:if test="${fn:length(relatedLink.activityName) > 30}" >
-						                                  <c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
-						                              </c:if>
-						                              <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
-						                                  <c:out value="${relatedLink.activityName}" />
-						                              </c:if>
+														<c:choose>
+						                              		<c:when test="${fn:length(relatedLink.activityName) > 30}" >
+																<c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
+															</c:when>
+						                              		<c:otherwise>
+						                                  		<c:out value="${relatedLink.activityName}" />
+															</c:otherwise>
+														</c:choose>
 													</digi:link>
                          						</td>
                          
@@ -193,16 +199,18 @@
 						                          	<c:out value="${relatedLink.activityId}"/>
 						                          </c:set>
 						                          <c:set target="${docPars}" property="pageId" value="1"/>
-						                          <c:if test="${fn:length(relatedLink.title) > 30}" >
-						                          	<digi:link href="/getDocumentDetails.do" name="docPars" title="${relatedLink.title}" styleClass="l_sm">
-						                            	<c:out value="${fn:substring(relatedLink.title, 0, 30)}" />...
-						                            </digi:link>
-						                          </c:if>
-						                          <c:if test="${fn:length(relatedLink.title) <= 30}" >
-						                          	<digi:link href="/getDocumentDetails.do" name="docPars" title="${relatedLink.title}" styleClass="l_sm">
-						                            	<bean:write name="relatedLink" property="title" />
-						                            </digi:link>
-						                          </c:if>
+						                          	<c:choose>
+						                          		<c:when test="${fn:length(relatedLink.title) > 30}" >
+						                          			<digi:link href="/getDocumentDetails.do" name="docPars" title="${relatedLink.title}" styleClass="l_sm">
+						                            			<c:out value="${fn:substring(relatedLink.title, 0, 30)}" />...
+						                            		</digi:link>
+						                          		</c:when>
+						                          		<c:otherwise>
+						                          			<digi:link href="/getDocumentDetails.do" name="docPars" title="${relatedLink.title}" styleClass="l_sm">
+						                            			<bean:write name="relatedLink" property="title" />
+						                            		</digi:link>
+						                          		</c:otherwise>
+						                          	</c:choose>
 						                        </td>
 						                        <td class="inside">
 						                        	<c:if test="${relatedLink.isFile == false}">
@@ -224,12 +232,14 @@
 														2
 													</c:set>
 													<digi:link href="/viewActivityPreview.do" name="urlParams" title="${translation}" styleClass="l_sm">
-									                    <c:if test="${fn:length(relatedLink.activityName) > 30}" >
-									                    	<c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
-									                    </c:if>
-									                    <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
-									                    	<c:out value="${relatedLink.activityName}" />
-									                    </c:if>
+														<c:choose>
+									                    	<c:when test="${fn:length(relatedLink.activityName) > 30}" >
+									                    		<c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
+									                    	</c:when>
+									                    	<c:otherwise>
+									                    		<c:out value="${relatedLink.activityName}" />
+									                    	</c:otherwise>
+									                    </c:choose>
 													</digi:link>
 												</td>
 						                     </tr>

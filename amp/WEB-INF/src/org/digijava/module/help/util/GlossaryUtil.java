@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -113,8 +112,8 @@ public class GlossaryUtil {
 			int c = 0;
 			for (int i=0;i<keyWords.size();i++){
 				if (c>0) oql += " or ";
-				oql += " ht.topicKey like :KEY_WORD_"+c;
-				oql += " or e.body like :KEY_WORD_"+c;
+				oql += " lower(ht.topicKey) like :KEY_WORD_"+c;
+				oql += " or lower(e.body) like :KEY_WORD_"+c;
 				c++;
 			}
 			oql+=" )";
@@ -139,7 +138,7 @@ public class GlossaryUtil {
 		if (keyWords!=null && keyWords.size()>0){
 			int c = 0;
 			for (String kw : keyWords) {
-				query.setString("KEY_WORD_"+c, "%"+kw+"%");
+				query.setString("KEY_WORD_"+c, "%"+kw.toLowerCase()+"%");
 				c++;
 			}
 		}

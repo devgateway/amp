@@ -249,7 +249,7 @@
 				sizeLoadingPanel(0, 0);
 				//dc.visible = true;
 				printLabel.text = trnYears + ": " + startYear + " to " + endYear +" - " + trnCurrency + ": " + currCode;
-
+				sliderYear.setVisible(true);
 			}
 			private function getDeterminedMaxValue(magnitude, maxValue, step){
 				var determinedMaxValue:Number = 0;
@@ -266,7 +266,7 @@
 
 			private function captureSnapshot():void
 			{
-				sliderYear.visible = false;
+				//sliderYear.visible = false;
 				printLabel.visible = true;
 				var curUrl:String =  String(ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String = "/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
@@ -284,7 +284,7 @@
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
 				printLabel.visible = false;
-				sliderYear.visible = true;
+				//sliderYear.visible = true;
 			}
 			
 			protected function service_resultHandler(event:ResultEvent):void
@@ -536,6 +536,7 @@
 				sizeLoadingPanel(300, 200);
 				dc.visible = false;
 				var delayer:Delay = new Delay(captureSnapshot,4000,1);
+				sliderYear.setVisible(false);
 			}
 
 		]]>
@@ -553,7 +554,7 @@
 	<!--  GLOBAL VARIABLES -->
 	<mx:Boolean id="showTrackHighlight">true</mx:Boolean>
 	<mx:Object id="dataProvider"/>
-	<mx:Number id="thumbCount"></mx:Number>
+	<mx:Number id="thumbCount">2</mx:Number>
 	<mx:Number id="startYear"></mx:Number>
 	<mx:Number id="endYear"></mx:Number>
 	<mx:Object id="categories"/>

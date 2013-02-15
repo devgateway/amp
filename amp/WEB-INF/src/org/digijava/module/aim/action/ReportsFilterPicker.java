@@ -1518,11 +1518,13 @@ public class ReportsFilterPicker extends Action {
 		
 		
 		arf.setWorkspaceonly(filterForm.getWorkspaceonly()==null?false:filterForm.getWorkspaceonly());
-		if(arf.isWorkspaceonly()){
-			arf.setAmpTeamsforpledges(arf.getAmpTeams());
-		}else{
-			arf.setAmpTeamsforpledges(null);
-		}
+		
+//		NOT USED
+//		if(arf.isWorkspaceonly()){
+//			arf.setAmpTeamsforpledges(arf.getAmpTeams());
+//		}else{
+//			arf.setAmpTeamsforpledges(null);
+//		}
 		
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency()));
 		arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency()));

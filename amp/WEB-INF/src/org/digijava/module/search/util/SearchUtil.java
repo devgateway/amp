@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.helper.AmpActivityFake;
@@ -176,20 +177,15 @@ public class SearchUtil {
 	public static Collection<LoggerIdentifiable> getActivities(String keyword, HttpServletRequest request, TeamMember tm) {
 		Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
 		StopWatch.reset("Search");
+		
 		AmpARFilter filter = new AmpARFilter();
-//		StopWatch.next("Search", true,"mycomment 1");
-		filter.setAmpTeams(new TreeSet());
 
-		if (tm != null) {
-			filter.setAccessType(tm.getTeamAccessType());
-			filter.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
-			Set teamAO = TeamUtil.getComputedOrgs(filter.getAmpTeams());
+        /**
+         * AmpARFilter.FILTER_SECTION_ALL, null - parameters were added on merge, might not be right
+         */
+		filter.readRequestData(request, AmpARFilter.FILTER_SECTION_ALL, null); // init teamAO and other auxiliary info
 
-			if (teamAO != null && teamAO.size() > 0)
-				filter.setTeamAssignedOrgs(teamAO);
-		}
 		filter.setIndexText(keyword);
-
 		filter.generateFilterQuery(request, false);
 
 		String hsqlQuery = filter.getGeneratedFilterQuery().replaceAll(

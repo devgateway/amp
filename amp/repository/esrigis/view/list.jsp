@@ -120,7 +120,9 @@ $(document).ready(function(){
             </span> </td>
         </tr>-->
         <tr>
-          <td noWrap width=570 vAlign="top"><table border="0" width="100%">
+          <td noWrap width=570 vAlign="top">
+          <digi:errors/>
+          <table border="0" width="100%">
               <tr>
                 <td align="center">
                   <table width="100%" id="dataTable" cellpadding="4" class="inside"> 

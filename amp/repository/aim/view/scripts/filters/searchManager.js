@@ -83,7 +83,7 @@ SearchManager.prototype.findNext	= function() {
 			return;
 		var spans				= this.getMainElements();//this.divEl.getElementsByTagName("span");
 		var additionalSrchDivs	= this.getAdditionalElements();//this.divEl.getElementsByTagName("DIV");
-		//debugger;
+
 		//console.log(spans.length);
 		//console.log(additionalSrchDivs.length);
 		var numFound	= 0;

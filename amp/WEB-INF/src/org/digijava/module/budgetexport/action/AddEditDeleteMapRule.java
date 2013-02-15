@@ -12,6 +12,7 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportMapRule;
 import org.digijava.module.budgetexport.dbentity.AmpBudgetExportProject;
 import org.digijava.module.budgetexport.form.BEMapRuleForm;
+import org.digijava.module.budgetexport.util.BudgetExportUtil;
 import org.digijava.module.budgetexport.util.DbUtil;
 
 
@@ -37,6 +38,7 @@ public class AddEditDeleteMapRule extends DispatchAction {
         BEMapRuleForm beMapRuleForm = (BEMapRuleForm) form;
         List<AmpColumns> cols = DbUtil.getAvailableColumns();
         beMapRuleForm.setAvailColumns(cols);
+        beMapRuleForm.setAvailRetrieverClasses(BudgetExportUtil.getAvailRetrievers());
         return mapping.findForward("forward");
     }
 
@@ -53,6 +55,8 @@ public class AddEditDeleteMapRule extends DispatchAction {
         beMapRuleForm.setCsvColDelimiter(rule.getCsvColDelimiter());
         beMapRuleForm.setAllowAll(rule.isAllowAllItem());
         beMapRuleForm.setAllowNone(rule.isAllowNoneItem());
+        beMapRuleForm.setDataRetrieverClass(rule.getDataRetrieverClass());
+        beMapRuleForm.setAvailRetrieverClasses(BudgetExportUtil.getAvailRetrievers());
 
 
         return mapping.findForward("forward");
@@ -99,6 +103,7 @@ public class AddEditDeleteMapRule extends DispatchAction {
         mapRule.setCsvColDelimiter(beMapRuleForm.getCsvColDelimiter());
         mapRule.setAllowAllItem(beMapRuleForm.isAllowAll());
         mapRule.setAllowNoneItem(beMapRuleForm.isAllowNone());
+        mapRule.setDataRetrieverClass(beMapRuleForm.getDataRetrieverClass());
 
 
         if (DbUtil.ruleWithNameExists(beMapRuleForm.getCurProjectId(), mapRule.getName(), mapRule.getId())) {

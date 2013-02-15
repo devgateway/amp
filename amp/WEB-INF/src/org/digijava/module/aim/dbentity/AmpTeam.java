@@ -29,6 +29,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	private Boolean addActivity;
 	private Boolean computation;
 	private Boolean hideDraftActivities;
+	private Boolean useFilter;
 
 	private String description;
 
@@ -64,11 +65,28 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	public static void initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
 		//Initialize Team Filter
 		AmpTeam ampTeam = member.getAmpTeam();
-		AmpARFilter af = null;
+		AmpARFilter af = new AmpARFilter();
+		
+		/**
+		 *  AmpARFilter.FILTER_SECTION_ALL, null - parameters were added on merge, might not be right
+		 */
+		af.readRequestData(request, AmpARFilter.FILTER_SECTION_ALL, null);
+		
 		if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
 			af = FilterUtil.buildFilter(ampTeam, null);
 			af.generateFilterQuery(request, true);
 		}
+
+		/* The prepare function needs to have the filter (af) already populated */
+        /**
+         * on merge - prepare is gone :)
+		try {
+			FilterUtil.prepare(request, af);
+		} catch (Exception e) {
+			logger.error("Error while preparing filter:", e);
+		}
+		*/
+		af.generateFilterQuery(request, true);
 		session.setAttribute(ArConstants.TEAM_FILTER, af);
 	}
 	
@@ -325,6 +343,14 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 		return workspaceGroup;
 	}
 
+
+	public Boolean getUseFilter() {
+		return useFilter;
+	}
+
+	public void setUseFilter(Boolean useFilter) {
+		this.useFilter = useFilter;
+	}
 
 	@Override
 	public boolean equalsForVersioning(Object obj) {

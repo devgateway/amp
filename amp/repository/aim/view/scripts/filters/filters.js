@@ -1,5 +1,5 @@
-function resetFilter(reportContextId){
-		//debugger;
+var dateFilterErrorMsg = null; 
+function resetFilter(){
 		resetRootCheckboxes();
 		if (aimReportsFilterPickerForm.text)
 			aimReportsFilterPickerForm.text.value="";
@@ -303,3 +303,45 @@ DivManager.prototype.onSelect           = function () {
 			return true;
 		}
 	 
+	 
+	 function validateDateFilters(){
+		 var wrongMsg = null;
+		 var inputFields = $(document).find(".dateInputMarker");
+		 inputFields = inputFields.add($("#fromDate")).add($("#toDate"));
+		 //assuming that the date fields come in pairs (from-to)
+		 for(var i=0; i < inputFields.length - 1; i+=2){
+			 var fromStr = inputFields[i].value;
+			 var toStr = inputFields[i+1].value;
+			 
+			 if(!validateFromToDates(fromStr, toStr)){
+					wrongMsg = dateFilterErrorMsg; 
+					
+					var label = $(inputFields[i]).next("input:hidden").val();
+					
+					if(label){
+						wrongMsg = wrongMsg + " ( " + label + " )";
+					}
+					
+					break;
+			 }
+		 }
+			if (wrongMsg){
+				alert(wrongMsg);
+				return false;
+			}
+			return true;
+		 
+	 }
+	 
+	 //this function depends on newCalendar.jsp
+	 function validateFromToDates(fromStr, toStr){
+		 if (!fromStr || !toStr) return true;
+		 var fromArray = dateStringToObject (fromStr, dateFormat );
+		 var toArray = dateStringToObject (toStr, dateFormat );
+		 
+		 var from = new Date(fromArray.year, fromArray.month - 1, fromArray.day);
+		 var to = new Date(toArray.year, toArray.month - 1, toArray.day);
+		 
+		 return (from <= to);
+		 
+	 }

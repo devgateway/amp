@@ -106,13 +106,15 @@ function saveDashboard() {
 	if (validateData()){
 		var i = 0;
 		var param = "";
+		var graphArray=new Array();
 		var duplicated = false;
 		while (i<=numGraphs){
 			if(document.getElementById('graphDiv_'+i)!=null){
-				var idxStr = document.getElementsByName('graphDrDw_'+i)[0].value + "_"
-				if (param.indexOf(idxStr)!=-1)
+				var idxStr = document.getElementsByName('graphDrDw_'+i)[0].value;
+				if (graphArray.indexOf(idxStr)!=-1)
 					duplicated = true;
-				param += idxStr;
+				param += idxStr+"_";
+				graphArray.push(idxStr);
 			}
 			i++;
 		}
@@ -129,6 +131,16 @@ function saveDashboard() {
 	}
 }
 
+function trim (str) {
+    str = str.replace(/^\s+/, '');
+    for (var i = str.length - 1; i >= 0; i--) {
+        if (/\S/.test(str.charAt(i))) {
+            str = str.substring(0, i + 1);
+            break;
+        }
+    }
+    return str;
+}
 
 function validateData(){
 	
@@ -137,7 +149,7 @@ function validateData(){
 	  	Please, add a name for dashboard.
 	  </digi:trn>
 	</c:set>
-	if (document.getElementsByName("dashboardName")[0]==null || document.getElementsByName("dashboardName")[0].value.length == 0){
+	if (document.getElementsByName("dashboardName")[0]==null || document.getElementsByName("dashboardName")[0].value.length == 0 || trim(document.getElementsByName("dashboardName")[0].value).length==0){
 		alert ("${addTitle}")
 		return false;
 	}
@@ -224,7 +236,7 @@ function validateData(){
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td colspan="2">
 						<table width="100%" bgcolor="#FFFFFF" cellPadding=5 cellSpacing=1>
 							<tr>
 								<td>

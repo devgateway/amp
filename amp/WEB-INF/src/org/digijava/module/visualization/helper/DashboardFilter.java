@@ -1,8 +1,7 @@
 package org.digijava.module.visualization.helper;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +19,9 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.springframework.beans.BeanWrapperImpl;
 
 public class DashboardFilter {
     
-    private static final long serialVersionUID = 1L;
     private int dashboardType;
     private Long startYear;
     private Long endYear;
@@ -86,10 +83,10 @@ public class DashboardFilter {
     private Integer divideThousandsDecimalPlaces;
    
     private Long yearToCompare;
-    private Boolean commitmentsVisible = true;
-    private Boolean disbursementsVisible= true;
-    private Boolean pledgeVisible= true;
-    private Boolean expendituresVisible= true;
+    private Boolean commitmentsVisible;
+    private Boolean disbursementsVisible;
+    private Boolean pledgeVisible;
+    private Boolean expendituresVisible;
     private Boolean fromPublicView;
     private Boolean showOnlyApprovedActivities;
     private Boolean showOnlyNonDraftActivities;
@@ -150,6 +147,7 @@ public class DashboardFilter {
     	newFilter.setBudgetCVIds(this.getBudgetCVIds());
     	newFilter.setDivideThousands(this.getDivideThousands());
     	newFilter.setShowAmountsInThousands(this.getShowAmountsInThousands());
+    	newFilter.setActivityComputedList(this.getActivityComputedList());
     	return newFilter;
     }
 	
@@ -634,22 +632,6 @@ public class DashboardFilter {
         this.selLocationIds = locationIds;
     }
 
-	public boolean isCommitmentsVisible() {
-		return commitmentsVisible;
-	}
-
-	public boolean isDisbursementsVisible() {
-		return disbursementsVisible;
-	}
-    
-	public boolean isExpendituresVisible() {
-		return expendituresVisible;
-	}
-    
-	public boolean isPledgeVisible() {
-		return pledgeVisible;
-	}
-
 	public void setSectorIds(Long[] sectorIds) {
 		this.sectorIds = sectorIds;
 	}
@@ -938,6 +920,12 @@ public class DashboardFilter {
 	public void setBudgetCVIds(Long[] budgetCVIds) {
 		this.budgetCVIds = budgetCVIds;
 	}
-
+	private ArrayList<BigInteger> activityList;
+	public void setActivityComputedList(ArrayList<BigInteger> activityList) {
+		this.activityList = activityList;
+	}
+	public ArrayList<BigInteger> getActivityComputedList() {
+		return this.activityList;
+	}
 	
 }

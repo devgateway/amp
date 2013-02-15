@@ -50,15 +50,13 @@ public class ActivityManager extends Action {
 			reset(actForm, request);
 		} else if (action.equals("delete")) {
 			deleteActivity(actForm, request);
-		} else if (action.equals("sort")) {
-			sortActivities(actForm, request);
 		} else if (action.equals("search")) {
 			actForm.setLastKeyword(actForm.getKeyword());
 			searchActivities(actForm, request);
 		} else if (action.equals("reset")) {
 			reset(actForm, request);
 		}
-		
+		sortActivities(actForm, request);
 		int page = 0;
 		if (request.getParameter("page") == null) {
 			page = 0;
@@ -66,7 +64,7 @@ public class ActivityManager extends Action {
 			page = Integer.parseInt(request.getParameter("page"));
 		}
 		actForm.setCurrentPage(new Integer (page));
-		actForm.setPagesToShow(10);
+		actForm.setPagesToShow(-1);
 		
 		doPagination(actForm, request);
 
@@ -79,11 +77,12 @@ public class ActivityManager extends Action {
 		actForm.setLastKeyword(null);
 		actForm.setSortByColumn(null);
 		actForm.setPage(0);
-		actForm.setTempNumResults(10);
+		actForm.setTempNumResults(-1);
 	}
 
 	private void doPagination(ActivityForm actForm, HttpServletRequest request) {
 		List<AmpActivityFake> allActivities = actForm.getAllActivityList();
+		//sort...
 		List<AmpActivityFake> pageList = actForm.getActivityList();
 		int pageSize = actForm.getTempNumResults();
 		if (pageList == null) {
@@ -130,17 +129,25 @@ public class ActivityManager extends Action {
 		actForm.setAllActivityList(activities);
 		sortActivities(actForm,request);
 	}
-
+	
 	private void sortActivities(ActivityForm actForm, HttpServletRequest request) {
 		List<AmpActivityFake> activities = actForm.getAllActivityList();
 
+		String sort = (actForm.getSort() == null) ? null : actForm.getSort().trim();
+	    String sortOrder = (actForm.getSortOrder() == null) ? null : actForm.getSortOrder().trim();
 		int sortBy = 0;
-		if("activityName".equals(actForm.getSortByColumn())){
+		if("activityName".equals(sort)&&"asc".equalsIgnoreCase(sortOrder)){
 			sortBy = 1;
-		}else if("activityId".equals(actForm.getSortByColumn())){
+		}else if("activityName".equals(sort)&&"desc".equalsIgnoreCase(sortOrder)){
 			sortBy = 2;
-		}else if("activityTeamName".equals(actForm.getSortByColumn())){
+		}else if("activityId".equals(sort)&&"asc".equalsIgnoreCase(sortOrder)){
 			sortBy = 3;
+		}else if("activityId".equals(sort)&&"desc".equalsIgnoreCase(sortOrder)){
+			sortBy = 4;
+		}else if("activityTeamName".equals(sort)&&"asc".equalsIgnoreCase(sortOrder)){
+			sortBy = 5;
+		}else if("activityTeamName".equals(sort)&&"desc".equalsIgnoreCase(sortOrder)){
+			sortBy = 6;
 		}
 
 		switch (sortBy) {
@@ -161,6 +168,21 @@ public class ActivityManager extends Action {
 			break;
 		case 2:
 			Collections.sort(activities, new Comparator<AmpActivityFake>(){
+				public int compare(AmpActivityFake a1, AmpActivityFake a2) {
+					String s1	= a1.getName();
+					String s2	= a2.getName();
+					if ( s1 == null )
+						s1	= "";
+					if ( s2 == null )
+						s2	= "";
+					
+					return -s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
+					//return a1.getName().compareTo(a2.getName());
+				}
+			});
+			break;	
+		case 3:
+			Collections.sort(activities, new Comparator<AmpActivityFake>(){
 				public int compare(AmpActivityFake a1, AmpActivityFake a2) 
 				{
 					//return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
@@ -173,7 +195,21 @@ public class ActivityManager extends Action {
 				}
 			});
 			break;
-		case 3:
+		case 4:
+			Collections.sort(activities, new Comparator<AmpActivityFake>(){
+				public int compare(AmpActivityFake a1, AmpActivityFake a2) 
+				{
+					//return a1.getAmpActivityId().compareTo(a2.getAmpActivityId());
+					String c1="";
+					String c2="";
+					if(a1.getAmpId()!=null) c1=a1.getAmpId();
+					if(a2.getAmpId()!=null) c2=a2.getAmpId();
+					
+					return -c1.compareTo(c2);
+				}
+			});
+			break;
+		case 5:
 			Collections.sort(activities, new Comparator<AmpActivityFake>(){
 				public int compare(AmpActivityFake a1, AmpActivityFake a2) {
                                 String s1 = "";
@@ -199,6 +235,32 @@ public class ActivityManager extends Action {
                             }
 			});
 			break;
+		case 6:
+			Collections.sort(activities, new Comparator<AmpActivityFake>(){
+				public int compare(AmpActivityFake a1, AmpActivityFake a2) {
+                                String s1 = "";
+                                String s2 = "";
+                                if (a1.getTeam() != null) {
+                                    s1 = a1.getTeam().getName();
+
+                                }
+                                if (a2.getTeam() != null) {
+                                    s2 = a2.getTeam().getName();
+
+                                }
+
+
+                                if (s1 == null) {
+                                    s1 = "";
+                                }
+                                if (s2 == null) {
+                                    s2 = "";
+                                }
+                                return -s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
+                            //return a1.getName().compareTo(a2.getName());
+                            }
+			});
+			break;	
 		default:
 			Collections.sort(activities, new Comparator<AmpActivityFake>(){
 				public int compare(AmpActivityFake a1, AmpActivityFake a2) {

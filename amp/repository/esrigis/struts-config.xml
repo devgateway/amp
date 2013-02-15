@@ -15,7 +15,7 @@
 	      <forward name="list" path="/showLayout.do?layout=list" />
 	      <forward name="addEdit" path="/showLayout.do?layout=edit" />
 	      <forward name="save" path="/esrigis/structureTypeManager.do?action=list" redirect="true" />
-	      <forward name="delete" path="/esrigis/structureTypeManager.do?action=list" redirect="true" />
+	      <forward name="delete" path="/esrigis/structureTypeManager.do?action=list" />
 	    </action>
 	    
 	    <action name="structuresimporterform" path="/esrigis/StructuresImporter" scope="session" validate="false" type="org.digijava.module.esrigis.action.StructuresImporter">

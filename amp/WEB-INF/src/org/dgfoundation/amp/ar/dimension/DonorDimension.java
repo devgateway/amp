@@ -48,10 +48,13 @@ public class DonorDimension extends ARDimension {
 		List<AmpOrganisation> list;
 		list = createQuery.list();
 		Iterator<AmpOrganisation> it=list.iterator();
+		int i = 0;
 		while (it.hasNext()) {
+			i++;
 			AmpOrganisation as= (AmpOrganisation) it.next();
 			if(as.getAmpOrgId()==null) continue;
-			AmpOrgGroup orgGrp=as.getOrgGrpId();
+			AmpOrgGroup orgGrp = as.getOrgGrpId();
+			if (orgGrp == null) continue;
 			typeMap.put(as.getAmpOrgId(), orgGrp.getOrgType()==null?null:orgGrp.getOrgType().getAmpOrgTypeId());
 			groupMap.put(as.getAmpOrgId(), as.getOrgGrpId()==null?null:as.getOrgGrpId().getAmpOrgGrpId());	       
 		}

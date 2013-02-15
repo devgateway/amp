@@ -103,6 +103,9 @@ var trnHideFilterSetttings = "";
 var trnTotalCommitments = "";
 var trnAllAmountsInMillions = "";
 var trnAllAmountsInThousands = "";
+var trnInMillions = "";
+var trnInThousands = "";
+var trnInBillions = "";
 var trnTitle = "";
 var trnName = "";
 var trnEmails = "";
@@ -188,6 +191,9 @@ function initializeTranslations(){
 	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
 	trnAllAmountsInMillions = "<digi:trn>All amounts in millions</digi:trn>";
 	trnAllAmountsInThousands = "<digi:trn>All amounts in thousands</digi:trn>";
+	trnInMillions = "<digi:trn>In millions</digi:trn>";
+	trnInThousands = "<digi:trn>In thousands</digi:trn>";
+	trnInBillions = "<digi:trn>In billions</digi:trn>";
 	trnTitle = "<digi:trn>Title</digi:trn>";
 	trnName = "<digi:trn>Name</digi:trn>";
 	trnEmails = "<digi:trn>Emails</digi:trn>";
@@ -827,7 +833,100 @@ function initializeGlobalVariables(){
 				</td>
 			</tr>
 		</c:if>
+		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
+				<tr>
+				  <td><b><digi:trn>Organization Group</digi:trn>:</b></td>
+				  	<td align=right>
+				     <html:select property="filter.orgGroupId" styleId="org_group_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+				         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+				         <c:forEach var="orgGrp" items="${visualizationform.filter.orgGroups}">
+				         	<html:option value="${orgGrp.ampOrgGrpId}"><c:out value="${orgGrp.orgGrpName}"/></html:option>
+				         </c:forEach>
+				     </html:select>
+				     <div id="org_group_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
+					</td>
+				</tr>
+				<tr>
+					<td><b><digi:trn>Organization</digi:trn>:</b></td>
+					<td align=right>
+					   <html:select property="filter.orgId" styleId="org_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+					       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+					   </html:select>
+					   <div id="org_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
+					</td>
+				</tr>
+			</c:if>
+			<c:if test="${visualizationform.filter.dashboardType eq '2' }">
+			  <tr>
+				<td><b><digi:trn>Region</digi:trn>:</b></td>
+				<td align=right>
+				   <html:select property="filter.regionId" styleId="region_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+				       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+				       <html:optionsCollection property="filter.regions" value="id" label="name" />
+				   </html:select>
+				   <div id="region_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
+				</td>
+			 </tr> 
+			 <tr>
+			  	<td><b><digi:trn>Zone</digi:trn>:</b></td>
+			   	<td align=right>
+			      <html:select property="filter.zoneId" styleId="zone_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+			          <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+			      </html:select>
+			      <div id="zone_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
+				</td>
+			</tr> 
+		  </c:if>
+		  <c:if test="${visualizationform.filter.dashboardType eq '3' }">
+		  <tr>
+			<td><b><digi:trn>Configurations</digi:trn>:</b></td>
+			  <td align="right">
+			  <html:select property="filter.selSectorConfigId" styleId="sector_config_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+			  <c:forEach var="config" items="${visualizationform.filter.sectorConfigs}">
+				<c:choose>
+								<c:when test="${config.name=='Primary'}">
+									<field:display name="Primary Sector" feature="Sectors">
+									         <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
+			     					 </field:display>
+								</c:when>
+								<c:when test="${config.name=='Secondary'}">
+									<field:display name="Secondary Sector" feature="Sectors">
+									    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
+			     					 </field:display>
+								</c:when>
+								<c:when test="${config.name=='Tertiary'}">
+									<field:display name="Tertiary Sector" feature="Sectors">
+									    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
+			     					 </field:display>
+								</c:when>
+				</c:choose>
 		
+		        
+			  </c:forEach>
+			     </html:select>
+			     <div id="sector_config_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
+				</td>
+			</tr>
+			<tr>
+			<td><b><digi:trn>Sector</digi:trn>:</b></td>
+			  <td align="right">
+			  <html:select property="filter.sectorId" styleId="sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+			         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+			         <html:optionsCollection property="filter.sectors" value="ampSectorId" label="name" />
+			     </html:select>
+			     <div id="sector_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
+				</td>
+			</tr>
+			<tr>
+			   <td><b><digi:trn>Sub-Sector</digi:trn>:</b></td>
+			  <td align=right>
+			     <html:select property="filter.subSectorId" styleId="sub_sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+			         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+			     </html:select>
+			     <div id="sub_sector_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
+				</td>
+			</tr>
+		  </c:if>
 			<td><digi:trn>Currency Type</digi:trn>:
 		 	</td>
 			<td align="right">
@@ -854,101 +953,6 @@ function initializeGlobalVariables(){
 				</html:select>
 		 	</td>
 		</tr>
-	<c:if test="${visualizationform.filter.dashboardType eq '1' }">
-		<tr>
-		  <td><digi:trn>Organization Group</digi:trn>:</td>
-		  	<td align=right>
-		     <html:select property="filter.orgGroupId" styleId="org_group_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-		         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-		         <c:forEach var="orgGrp" items="${visualizationform.filter.orgGroups}">
-		         	<html:option value="${orgGrp.ampOrgGrpId}"><c:out value="${orgGrp.orgGrpName}"/></html:option>
-		         </c:forEach>
-		     </html:select>
-		     <div id="org_group_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
-			</td>
-		</tr>
-		<tr>
-			<td><digi:trn>Organization</digi:trn>:</td>
-			<td align=right>
-			   <html:select property="filter.orgId" styleId="org_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-			       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-			   </html:select>
-			   <div id="org_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
-			</td>
-		</tr>
-	</c:if>
-	<c:if test="${visualizationform.filter.dashboardType eq '2' }">
-	  <tr>
-		<td><digi:trn>Region</digi:trn>:</td>
-		<td align=right>
-		   <html:select property="filter.regionId" styleId="region_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-		       <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-		       <html:optionsCollection property="filter.regions" value="id" label="name" />
-		   </html:select>
-		   <div id="region_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
-		</td>
-	 </tr> 
-	 <tr>
-	  	<td><digi:trn>Zone</digi:trn>:</td>
-	   	<td align=right>
-	      <html:select property="filter.zoneId" styleId="zone_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-	          <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-	      </html:select>
-	      <div id="zone_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
-		</td>
-	</tr> 
-  </c:if>
-  <c:if test="${visualizationform.filter.dashboardType eq '3' }">
-  <tr>
-	<td><digi:trn>Configurations</digi:trn>:</td>
-	  <td align="right">
-	  <html:select property="filter.selSectorConfigId" styleId="sector_config_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-	  <c:forEach var="config" items="${visualizationform.filter.sectorConfigs}">
-		<c:choose>
-						<c:when test="${config.name=='Primary'}">
-							<field:display name="Primary Sector" feature="Sectors">
-							         <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
-	     					 </field:display>
-						</c:when>
-						<c:when test="${config.name=='Secondary'}">
-							<field:display name="Secondary Sector" feature="Sectors">
-							    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
-	     					 </field:display>
-						</c:when>
-						<c:when test="${config.name=='Tertiary'}">
-							<field:display name="Tertiary Sector" feature="Sectors">
-							    <html:option value="${config.id}">${config.classification.secSchemeName}</html:option>
-	     					 </field:display>
-						</c:when>
-		</c:choose>
-
-        
-	  </c:forEach>
-	     </html:select>
-	     <div id="sector_config_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
-		</td>
-	</tr>
-	<tr>
-	<td><digi:trn>Sector</digi:trn>:</td>
-	  <td align="right">
-	  <html:select property="filter.sectorId" styleId="sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-	         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-	         <html:optionsCollection property="filter.sectors" value="ampSectorId" label="name" />
-	     </html:select>
-	     <div id="sector_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
-		</td>
-	</tr>
-	<tr>
-	   <td><digi:trn>Sub-Sector</digi:trn>:</td>
-	  <td align=right>
-	     <html:select property="filter.subSectorId" styleId="sub_sector_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
-	         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
-	     </html:select>
-	     <div id="sub_sector_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
-		</td>
-	</tr>
-  </c:if>
-  
 	<c:if test="${visualizationform.filter.dashboardType ne '1' }">
 		<tr>
 		  <td><digi:trn>Organization Group</digi:trn>:</td>

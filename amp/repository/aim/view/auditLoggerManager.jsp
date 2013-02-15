@@ -344,12 +344,14 @@ function toggleSettings(){
 								id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 								<tr>
 								<td class="auditloggername" width="280" height="18" align="center" title="${log.objectName}">
-								<c:if test="${fn:length(log.objectName) > 30}" >
-									<c:out value="${fn:substring(log.objectName, 0, 30)}" />...
-								</c:if>
-								<c:if test="${fn:length(log.objectName) <= 30}" >
-									<bean:write name="log" property="objectName"/>
-								</c:if>
+									<c:choose>
+										<c:when test="${fn:length(log.objectName) > 30}" >
+											<c:out value="${fn:substring(log.objectName, 0, 30)}" />...
+										</c:when>
+										<c:otherwise>
+											<bean:write name="log" property="objectName"/>
+										</c:otherwise>
+									</c:choose>
 								</td>
 								<td align="center" width="150" title="${log.objectTypeTrimmed}">
 									<digi:trn key="aim:ObjectType${log.objectTypeTrimmed}"><bean:write name="log" property="objectTypeTrimmed"/></digi:trn>									
@@ -359,21 +361,25 @@ function toggleSettings(){
 								</td>
 								<td align="center" width="150">
 									<a href="javascript:showUser('<bean:write name="log" property="authorEmail"/>')" style="text-decoration: none" title="${log.authorName}">
-										<c:if test="${fn:length(log.objectName) > 8}" >
-											<c:out value="${fn:substring(log.authorName, 0, 8)}" />...
-										</c:if>
-										<c:if test="${fn:length(log.objectName) <= 8}" >
-											 <bean:write name="log" property="authorName"/>
-										</c:if>
+										<c:choose>
+											<c:when test="${fn:length(log.objectName) > 8}" >
+												<c:out value="${fn:substring(log.authorName, 0, 8)}" />...
+											</c:when>
+											<c:otherwise>
+											 	<bean:write name="log" property="authorName"/>
+											</c:otherwise>
+										</c:choose>
 									</a>								  
 								</td>
 								<td width="100" align="center" title="${log.loggedDate}">
-									<c:if test="${fn:length(log.sloggeddate) < 8}" >
-										<digi:trn>No Date</digi:trn>
-									</c:if>
-									<c:if test="${fn:length(log.sloggeddate) > 8}" >
-										<bean:write name="log" property="sloggeddate"/>
-									</c:if>
+									<c:choose>
+										<c:when test="${fn:length(log.sloggeddate) < 8}" >
+											<digi:trn>No Date</digi:trn>
+										</c:when>
+										<c:otherwise>
+											<bean:write name="log" property="sloggeddate"/>
+										</c:otherwise>
+									</c:choose>
 								</td>
 								<td width="100" align="center" title="${log.editorName}">
 									<bean:write name="log" property="editorName" />								  

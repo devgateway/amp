@@ -279,7 +279,7 @@ public class HelpActions extends DispatchAction {
 				buf.append("  <div class=\"bodyShort\" >");
 				String body = topic.getBody();
 				if (body != null && body.length()>100){
-					body =body.substring(0, 100).replaceAll("\\<.*?\\>", "")+"...";
+					body = getShortVersionOfBody(body);
 				}
 				buf.append(body);
 				buf.append("  </div>");
@@ -303,6 +303,26 @@ public class HelpActions extends DispatchAction {
 			buf.append("...</div>");
 		}
 		return buf.toString();
+	}
+	
+	private String getShortVersionOfBody(String body){
+		StringBuffer aux = new StringBuffer(body);
+		
+		String[] tokens = {"<!--[if", "<![endif]-->", "<style", "</style>", "<xml", "</xml>" };
+		
+		for(int i = 0; i < tokens.length - 1; i+=2){
+
+			while(aux.indexOf(tokens[i]) >= 0){
+				int start = aux.lastIndexOf(tokens[i]);
+				int end = aux.indexOf(tokens[i+1], start);
+				if (end >= 0){
+					aux.replace(start, end + tokens[i+1].length(), "");
+				}
+			}
+		}
+		String shortBody = aux.substring(0, 100).replaceAll("\\<.*?\\>", "")+"...";	
+		
+		return shortBody;
 	}
 	
 	/**
@@ -1039,7 +1059,7 @@ public class HelpActions extends DispatchAction {
          // String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
 
           String xmlString = request.getParameter("changedXml");
-          String replacedXmlString =  xmlString.replaceAll("&", "&amp;");
+          //String replacedXmlString =  xmlString.replaceAll("&", "&amp;");
           
           String moduleInstance = request.getParameter("Request");
                     
@@ -1051,7 +1071,7 @@ public class HelpActions extends DispatchAction {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         DocumentBuilder builder = factory.newDocumentBuilder();
-        org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(replacedXmlString)));                 
+        org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(xmlString)));                 
                   
         org.w3c.dom.NodeList nl = document.getElementsByTagName("item");
         

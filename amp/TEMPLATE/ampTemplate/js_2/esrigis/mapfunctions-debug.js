@@ -1245,7 +1245,7 @@ var structureID=1;
 									+ '~isPreview=1" target="_blank">'+ activity.activityname+ '</a>',
 						"Structure Type" : structure.type,
 						"Structure Description" : description,
-						"Coordinates" : pt.x + " , " + pt.y,
+						"Coordinates" : structure.lat + " , " + structure.lon,
 						"Type_id" : structure.typeId,
 						"Id":structureID++,
 						"Structure Image" : '<a target="_blank" href="'+previewActivityUrl+'">' 
@@ -1293,6 +1293,7 @@ var structureID=1;
 							+ activity.ampactivityid+ '~isPreview=1" target="_blank">'
 							+ activity.activityname+ '</a>',
 						"Coordinates" : pgraphic.geometry.x+ " , "+ pgraphic.geometry.y,
+                        "Structure Description" : description,
 						"Structure Image" : '<a target="_blank" href="'+previewActivityUrl+'">' 
 						+ '<img style="cursor:pointer;" src="/aim/displayStructureImage.do?structureId=' 
 							+ structure.id + '" border="0"></a>'

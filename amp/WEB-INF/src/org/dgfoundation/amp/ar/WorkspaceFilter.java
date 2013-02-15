@@ -218,7 +218,9 @@ public class WorkspaceFilter
 			boolean draft = true;
 			boolean approved = true;
 			String accessType = Constants.ACCESS_TYPE_MNGMT;
-			return generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType, approved, draft, publicView);
+			String onlineQuery = generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType, approved, draft, publicView);
+			String offlineQuery = AmpARFilter.getOffLineQuery(onlineQuery);
+			return offlineQuery;
 		}
 		else
 		{

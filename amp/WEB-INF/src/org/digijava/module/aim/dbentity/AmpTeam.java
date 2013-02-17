@@ -70,7 +70,9 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 		/**
 		 *  AmpARFilter.FILTER_SECTION_ALL, null - parameters were added on merge, might not be right
 		 */
-		af.readRequestData(request, AmpARFilter.FILTER_SECTION_ALL, null);
+		//af.readRequestData(request, AmpARFilter.FILTER_SECTION_ALL, null);
+		af.fillWithDefaultsSettings();
+		af.fillWithDefaultsFilter(null);
 		
 		if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
 			af = FilterUtil.buildFilter(ampTeam, null);

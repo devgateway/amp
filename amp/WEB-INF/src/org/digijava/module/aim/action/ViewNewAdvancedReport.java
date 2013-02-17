@@ -151,29 +151,9 @@ public class ViewNewAdvancedReport extends Action {
 		boolean resetSettings = "true".equals(request.getParameter("resetSettings"));// || (!"true".equals(request.getParameter("cached")));
 		AmpARFilter filter = ReportContextData.getFromRequest().loadOrCreateFilter(resetSettings, report);
 
-		if (tm !=null && (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
-				"Donor".equalsIgnoreCase(tm.getTeamType()))){
-			filter.setApproved(true);
-			filter.setDraft(true);
-		}else{
-			filter.setApproved(false);
-			filter.setDraft(false);
-		}
 		if (tm ==null)
 		{
 			filter.setPublicView(true);
-			filter.setApproved(true);
-			filter.setDraft(true);
-		}
-		/**
-		 * Checks if the team is a computed workspace and in case it is
-		 * it checks if it should hide the draft activities
-		 */
-		if ( tm != null && tm.getComputation() != null && tm.getComputation() ) {
-			Workspace wrksp	= TeamUtil.getWorkspace( tm.getTeamId() );
-			if ( wrksp != null && wrksp.getHideDraftActivities() != null && wrksp.getHideDraftActivities() ) {
-				filter.setDraft(true);
-			}
 		}
 		
 		int progressValue = 0;

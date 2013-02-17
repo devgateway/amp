@@ -17,6 +17,13 @@ function getPublicReport() {
 	return checkboxObject.checked;
 }
 
+function getWorkspaceLinked() {
+	if (aimReportWizardForm.workspaceLinked == null)
+			return false;
+	var checkboxObject		= aimReportWizardForm.workspaceLinked;
+	return checkboxObject.checked;
+}
+
 function getReportTitleEl() {
 	var divEl	= document.getElementById("titlePanelBody");
 	var titleEl	= divEl.getElementsByTagName("input")[0];
@@ -168,7 +175,7 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 };
 
 SaveReportEngine.prototype.saveReport	= function () {	
-	debugger;
+	//debugger;
 	var title = getReportTitle();
 	if (title.indexOf('<')!=-1 && title.indexOf('>')!=-1 && title.indexOf('<')<title.indexOf('>')){
         alert("Tags are not allowed on name.");
@@ -185,6 +192,7 @@ SaveReportEngine.prototype.saveReport	= function () {
 						"&reportCategory="+ getReportCategory()+
 						"&desktopTab="+getDesktopTab() +
 						"&publicReport="+getPublicReport() +
+						"&workspaceLinked="+getWorkspaceLinked() +
 						"&hideActivities="+getHideActivities() +
 						"&useFilters="+getUseFilters()+
 						//"&reportContextId="+getReportContextId()+

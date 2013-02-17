@@ -21,7 +21,7 @@ import bsh.org.objectweb.asm.Constants;
 /**
  * holds all the information (AmpReports instance + extra information) needed to generate and render a report<br />
  * extra information == anything which is not not in an AmpReports instance or accessible through 1:1 relationships with one <br />
- * the class is <b>not</b>synchronized because:<br />
+ * the class is <b>not</b> synchronized because:<br />
  *		the "global" data it operates one is split across sessions<br />
  *		the only destructive operation is creating a RCD, and this operation happens in very few places of code which do not happen at the same time
  * @author Dolghier Constantin

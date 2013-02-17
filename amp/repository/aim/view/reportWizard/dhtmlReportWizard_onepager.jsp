@@ -16,8 +16,8 @@
 <%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 
 <!-- CSS -->
-<link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
-<link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'>
+<%-- <link href='TEMPLATE/ampTemplate/css_2/amp.css' rel='stylesheet' type='text/css'>
+<link href='TEMPLATE/ampTemplate/css_2/tabs.css' rel='stylesheet' type='text/css'> --%>
 <link rel="stylesheet" type="text/css" href="/repository/aim/view/css/filters/filters2.css">
 
 <!-- Individual YUI CSS files --> 
@@ -47,7 +47,6 @@
 
 <!-- MORE CSS -->
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 
 <!-- DEFINITIONS AND VARIABLES -->
 <digi:instance property="aimReportWizardForm" />

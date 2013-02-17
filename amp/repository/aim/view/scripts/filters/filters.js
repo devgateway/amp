@@ -261,6 +261,25 @@ DivManager.prototype.onSelect           = function () {
 		 );
 	 }
 	 
+	 function toggleWorkspaceLinkedVisibility() {
+		 // var testFunction       = function (e) {
+	 	 //                       if ( e.name == "publicReport")
+	 	 //                               return true;
+	 	 //                       return false;
+	 	 //               };              
+	 	 //               var publicRepEl        = YAHOO.util.Dom.getElementBy(testFunction, "input", "type_step_div");
+		 var publicRepEl                = document.getElementById("publicReportChkBox");
+		 var workSpaceLinkedEl  = document.getElementById("workspaceLinkedHolder");
+
+		 if ( workSpaceLinkedEl != null ) {
+			 if ( publicRepEl.checked ) 
+				 workSpaceLinkedEl.style.display = "block";
+			 else
+	 	 	 	workSpaceLinkedEl.style.display = "none";
+		 	}
+	 }
+
+
 	 function resetDateOptions(){
 		 var groups = $("input[name^='optGroupDateFilter_']:radio");
 		 groups.each(

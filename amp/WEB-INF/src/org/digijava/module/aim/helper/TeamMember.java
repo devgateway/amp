@@ -26,6 +26,8 @@ public class TeamMember implements Comparable, Serializable{
 	
 	private Boolean computation;
 	
+	private Boolean useFilters;
+	
 	private Boolean addActivity;
 	
 	private boolean teamHead;
@@ -45,7 +47,10 @@ public class TeamMember implements Comparable, Serializable{
 	private Boolean publishDocuments; /*permissions to make docs public*/
 	private boolean approver;
 
-	public TeamMember() {}
+	public TeamMember()
+	{
+		
+	}
         
         public TeamMember( String teamName,String teamMemberRole) {
             this.teamName = teamName;
@@ -263,6 +268,16 @@ public class TeamMember implements Comparable, Serializable{
 
 	public boolean isApprover() {
 		return approver;
+	}
+	
+	public void setUseFilters(Boolean useFilters)
+	{
+		this.useFilters = useFilters;
+	}
+	
+	public Boolean getUseFilters()
+	{
+		return this.useFilters;
 	}
 
 	@Override

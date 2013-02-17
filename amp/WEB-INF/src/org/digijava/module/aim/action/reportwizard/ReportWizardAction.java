@@ -198,6 +198,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setDesktopTab( false );
 		myForm.setDuplicateName(false);
 		myForm.setPublicReport(false);
+		myForm.setWorkspaceLinked(false);
 		myForm.setAllowEmptyFundingColumns(false);
 		myForm.setUseFilters(false);
 		myForm.setBudgetExporter(false);
@@ -282,6 +283,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setDesktopTab( ampReport.getDrilldownTab() );
 		myForm.setOriginalTitle( ampReport.getName() );
 		myForm.setPublicReport( ampReport.getPublicReport() );
+		myForm.setWorkspaceLinked(ampReport.getWorkspaceLinked());
 		myForm.setHideActivities( ampReport.getHideActivities() );
 		myForm.setAllowEmptyFundingColumns( ampReport.getAllowEmptyFundingColumns() );
 		if(ampReport.getReportCategory() !=null){
@@ -359,6 +361,7 @@ public class ReportWizardAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
 		ReportWizardForm myForm		= (ReportWizardForm) form;
+        myForm.setWorkspaceLinked(Boolean.valueOf(request.getParameter("workspaceLinked"))); //Struts for some reason ignores this field and I am tired of it
 		
 		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
@@ -390,6 +393,7 @@ public class ReportWizardAction extends MultiAction {
 		ampReport.setName( myForm.getReportTitle().trim() );
 		ampReport.setDrilldownTab( myForm.getDesktopTab() );
 		ampReport.setPublicReport(myForm.getPublicReport());
+		ampReport.setWorkspaceLinked(myForm.getWorkspaceLinked());
 		if(myForm.getReportCategory()!=null && myForm.getReportCategory()!=0){
 			ampReport.setReportCategory(CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getReportCategory()));
 		}else{

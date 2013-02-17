@@ -90,11 +90,24 @@ public class AmpARFilter extends PropertyListable {
 	public final static String SDF_OUT_FORMAT_STRING = "yyyy-MM-dd";
 	public final static String SDF_IN_FORMAT_STRING = "dd/MM/yyyy";
 	
+	public final static Long TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES = -997L;
+	
+	/**
+	 * list of all legal values of AmpActivity::"approvalStatus". DO NOT CHANGE, make a different set with a subset of these if you need the subset only
+	 */
 	public final static Set<String> activityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
-        this.add(Constants.APPROVED_STATUS);
-        this.add(Constants.EDITED_STATUS);
-        this.add(Constants.STARTED_APPROVED_STATUS);
-    }});
+														this.add(Constants.APPROVED_STATUS);
+														this.add(Constants.EDITED_STATUS);
+														this.add(Constants.STARTED_APPROVED_STATUS);
+														this.add(Constants.STARTED_STATUS);
+														}});
+	
+	public final static Set<String> validatedActivityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
+														this.add(Constants.APPROVED_STATUS);
+														this.add(Constants.STARTED_APPROVED_STATUS);
+		}});
+	
+
 	/**
 	 * Date string formatted for SQL queries
 	 * field not static because SimpleDateFormat is not thread-safe
@@ -138,8 +151,6 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private ArrayList<FilterParam> indexedParams=null;
 	
-//	@PropertyListableIgnore
-//	private Long activitiesRejectedByFilter;
 	/**
 	 * whether this filter should queryAppend a WorkspaceFilter query in generateFilterQuery. Ignored when building a workspace filter (always ON)
 	 */
@@ -304,8 +315,6 @@ public class AmpARFilter extends PropertyListable {
 	private Set<AmpOrganisation> beneficiaryAgency;
 	private Set<AmpOrganisation> donnorgAgency;
 
-	private Set teamAssignedOrgs = null;
-
 	private Set<AmpCategoryValue> financingInstruments = null;
 	private Set<AmpCategoryValue> projectCategory = null;
 
@@ -315,10 +324,11 @@ public class AmpARFilter extends PropertyListable {
 	// private Long ampModalityId=null;
 
 	private AmpCurrency currency = null;
-	private Set<AmpTeam> ampTeams = null;
-    /*
+	
+	/**
+	 *  FIELD NOT USED, but cannot delete it because of serialized instances
+	 */   
 	private Set ampTeamsforpledges = null;
-	*/
 	
 	private AmpFiscalCalendar calendarType = null;
 	private boolean widget = false;
@@ -374,8 +384,10 @@ public class AmpARFilter extends PropertyListable {
 	private Boolean unallocatedLocation = null;
 	//private AmpCategoryValueLocations regionSelected = null;
 	private Collection<String> approvalStatusSelected;
-	private boolean approved = false;
-	private boolean draft = false;
+	
+	// these fields moved to WorkspaceFilter in AMP 2.3.7
+	//private boolean approved = false;
+	//private boolean draft = false;
 
 	private Integer renderStartYear = null; // the range of dates columns that
 											// has to be render, years not in
@@ -636,44 +648,31 @@ public class AmpARFilter extends PropertyListable {
 
 		AmpApplicationSettings settings = getEffectiveSettings();
 		
-		TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
-		this.setAmpTeams(new TreeSet<AmpTeam>());		
+		TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);	
 		if (tm == null || tm.getTeamId() == null )
 			tm	= null;
 
 		if (tm != null) {
 			this.setNeedsTeamFilter(false);
 			this.setAccessType(tm.getTeamAccessType());
-			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
-			// set the computed workspace orgs
-			//Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
-			Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
-
-			if (teamAO != null && teamAO.size() > 0)
-				this.setTeamAssignedOrgs(teamAO);
+			teamMemberId = tm.getMemberId();
 		}
 		else {
+			// public view
 			this.setNeedsTeamFilter(true);
+			this.setAccessType("Management"); // should always be Management, as a report can be made public only from management workspace
+
 			//Check if the reportid is not nut for public mondrian reports
 			if (ampReport != null)
 			{
-				//TreeSet allManagementTeams=(TreeSet) TeamUtil.getAllRelatedTeamsByAccessType("Management");
-				TreeSet<AmpTeam> teams=new TreeSet<AmpTeam>();
-				this.setAccessType("team");
-				if (ampReport.getOwnerId()!=null){
-					teams.add(ampReport.getOwnerId().getAmpTeam());
-					teams.addAll(TeamUtil.getAmpLevel0Teams(ampReport.getOwnerId().getAmpTeam().getAmpTeamId()));
-					this.setAmpTeams(teams);
-					Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
-					if (teamAO != null && teamAO.size() > 0){
-						this.setTeamAssignedOrgs(teamAO);
-					}
-				}else{
-					((Set) teams).add(-1); //TODO:Constantin - waddafa?
-					this.setAmpTeams(teams);
-					logger.error("Error getOwnerId() is null setting team to -1");
+				if (ampReport != null && ampReport.getWorkspaceLinked() && ampReport.getOwnerId() != null)
+				{					
+					teamMemberId = ampReport.getOwnerId().getAmpTeamMemId();
+				} else
+				{
+					// not workspace linked or no report (??)
+					teamMemberId = TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES;
 				}
-                teamMemberId = ampReport.getOwnerId().getAmpTeamMemId();
 			}
 		}
 		
@@ -881,7 +880,7 @@ public class AmpARFilter extends PropertyListable {
 
 	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter) {
 		initFilterQuery(); //reinit filters or else they will grow indefinitely
-		if (ReportContextData.getFromRequest().isPledgeReport()){
+		if ((!workspaceFilter) && ReportContextData.getFromRequest().isPledgeReport()){
 			this.pledgeFilter = true;
 			indexedParams=new ArrayList<FilterParam>();
 			
@@ -960,6 +959,13 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 		this.pledgeFilter = false;
+		
+		TeamMember loggedInTeamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);		
+		
+		boolean thisIsComputedWorkspaceWithFilters = workspaceFilter && (loggedInTeamMember != null) && 
+											(loggedInTeamMember.getComputation() != null) && (loggedInTeamMember.getComputation()) &&
+											(loggedInTeamMember.getUseFilters() != null) && (loggedInTeamMember.getUseFilters());
+				
 		indexedParams=new ArrayList<FilterParam>();
 		
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM v_on_off_budget WHERE budget_id IN ("
@@ -1096,14 +1102,7 @@ public class AmpARFilter extends PropertyListable {
 		    	actStatusValue.delete(posi, posi+2);
 		}    
 		String ACTIVITY_STATUS="select amp_activity_id from amp_activity where "+actStatusValue.toString();
-		String APPROVED_FILTER = "";
-			if("Management".equals(this.getAccessType()))
-				APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("
-					+ Util.toCSString(activityStatus) + ")";
-			else APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ('"
-				+ Constants.APPROVED_STATUS + "','"+ Constants.STARTED_APPROVED_STATUS +"')";
-		
-		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false )";
+
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
 			+ Util.toCSString(typeOfAssistance) + ")";
 
@@ -1362,12 +1361,6 @@ public class AmpARFilter extends PropertyListable {
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
 
-		if (needsTeamFilter || workspaceFilter)
-		{
-			String TEAM_FILTER = WorkspaceFilter.getWorkspaceFilterQuery(this.getTeamMemberId(), this.getAccessType(), this.isDraft());
-			queryAppend(TEAM_FILTER);
-		}
-
 		if (!workspaceFilter)
 		{
 			// not workspace, e.g. normal report/tab filter
@@ -1423,10 +1416,7 @@ public class AmpARFilter extends PropertyListable {
 		}
 		if(approvalStatusSelected!=null)
 			queryAppend(ACTIVITY_STATUS);
-		if (approved == true)
-			queryAppend(APPROVED_FILTER);
-		if (draft == true)
-			queryAppend(DRAFT_FILTER);
+
 		if (typeOfAssistance != null && typeOfAssistance.size() > 0)
 			queryAppend(TYPE_OF_ASSISTANCE_FILTER);
 		if (modeOfPayment != null && modeOfPayment.size() > 0)
@@ -1487,21 +1477,51 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend( MULTI_DONOR );
 		}
 
+		/* TEAM FILTER HACK ZONE
+		 * because in certain situations this zone can add an OR, any queryAppend calls MUST be done BEFORE THIS AREA
+		 */
+		
+		/**
+		 * NO queryAppend CALLS (except TEAM_FILTER) AFTER THIS POINT !
+		 */
+		String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMemberId, this.isPublicView());
+
+		if (needsTeamFilter)
+		{
+			/* needsTeamFilter can only be true in public view
+			 * public views cannot be shared from within a computed Workspace (THIS IS NOT SUPPORTED NOW)
+			 */
+			 queryAppend(TEAM_FILTER);
+		}
+		else
+		if (workspaceFilter)
+		{
+			if (thisIsComputedWorkspaceWithFilters)
+			{
+				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
+				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
+				 */
+				String allValidatedActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE draft<> true AND approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) +")";				
+				queryAppend(allValidatedActivitiesInTheDatabaseQuery);
+				generatedFilterQuery += " OR amp_activity_id IN (" + TEAM_FILTER + ")";
+			}
+			else
+			{
+				// normal workspace filter, works hackless
+				queryAppend(TEAM_FILTER);
+			}
+		}
+		
+		/**
+		 * NO queryAppend CALLS AFTER THIS POINT !
+		 */
+		
 		if ( this.isPublicView() && ! this.budgetExport  ){
 			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
 		}
 
-//		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams); //BOZO: why is this query run, if its output is ignored?
+		//DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		logger.info(this.generatedFilterQuery);
-		
-//		if (!workspaceFilter){
-//			if(draft){
-//				c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
-//			}
-//			else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
-//			this.setActivitiesRejectedByFilter(new Long(c));
-//			request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
-//		}
 	}
 	
 	
@@ -1656,22 +1676,6 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	public int getInitialQueryLength() {
 		return initialQueryLength;
-	}
-
-	/**
-	 * @return Returns the ampTeams.
-	 */
-	@PropertyListableIgnore
-	public Set<AmpTeam> getAmpTeams() {
-		return ampTeams;
-	}
-
-	/**
-	 * @param ampTeams
-	 *            The ampTeams to set.
-	 */
-	public void setAmpTeams(Set<AmpTeam> ampTeams) {
-		this.ampTeams = ampTeams;
 	}
 
 	/**
@@ -1830,7 +1834,8 @@ public class AmpARFilter extends PropertyListable {
 					continue;
 				Method m = propertyDescriptors[i].getReadMethod();
 				Object object = m.invoke(this, new Object[] {});
-				if (object == null)
+				if (object == null || IGNORED_PROPERTIES.contains(propertyDescriptors[i]
+						.getName()))
 					continue;
 				ret.append("<b>").append(propertyDescriptors[i].getName())
 						.append(": ").append("</b>");
@@ -1896,7 +1901,10 @@ public class AmpARFilter extends PropertyListable {
 		if (text == null)
 			this.text = text;
 		else
-			this.text = text.trim();
+			if (text.trim().length() == 0)
+				this.text = null;
+			else
+				this.text = text.trim();
 
 	}
 
@@ -1980,30 +1988,9 @@ public class AmpARFilter extends PropertyListable {
 		return indexText;
 	}
 
-	@PropertyListableIgnore
-	public boolean isApproved() {
-		return approved;
-	}
 
 	public void setIndexText(String indexText) {
 		this.indexText = indexText;
-	}
-
-	public void setApproved(boolean approved) {
-		this.approved = approved;
-	}
-
-	@IgnorePersistence
-	public boolean isDraft() {
-		return draft;
-	}
-	
-	/**
-	 * TODO draft parameter needs to be renamed to hideDraft 
-	 * @param draft
-	 */
-	public void setDraft(boolean draft) {
-		this.draft = draft;
 	}
 
 	public Set<AmpOrgType> getDonorTypes() {
@@ -2141,15 +2128,6 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setModeOfPayment(Set<AmpCategoryValue> modeOfPayment) {
 		this.modeOfPayment = modeOfPayment;
-	}
-
-	@IgnorePersistence
-	public Set getTeamAssignedOrgs() {
-		return teamAssignedOrgs;
-	}
-
-	public void setTeamAssignedOrgs(Set teamAssignedOrgs) {
-		this.teamAssignedOrgs = teamAssignedOrgs;
 	}
 
 	public Integer getRenderStartYear() {
@@ -2725,7 +2703,7 @@ public class AmpARFilter extends PropertyListable {
 	}
 	
 	@PropertyListableIgnore
-	public String getOffLineQuery(String query) {
+	public static String getOffLineQuery(String query) {
 		String result = query;
 		Pattern p = Pattern.compile(MoConstants.AMP_ACTIVITY_TABLE);
 		Matcher m = p.matcher(result);
@@ -2787,19 +2765,25 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	/*
-	 * FIELD NOT USED
+	 * FIELD NOT USED, but cannot delete it because of serialized instances
+	 */
 	public Set getAmpTeamsforpledges() {
 		return ampTeamsforpledges;
 	}
 
-	public void setAmpTeamsforpledges(Set<AmpTeam> ampTeamsforpledges) {
+	/**
+	 *
+	 * FIELD NOT USED, but cannot delete it because of serialized instances
+	 **/
+	public void setAmpTeamsforpledges(Set ampTeamsforpledges) {
 		this.ampTeamsforpledges = ampTeamsforpledges;
 	}
-	 */
+	 
 	
 	/**
 	 * effective team member - used for generating the TeamFilter
 	 * equals currently logged-in user or, if missing, the AmpReport owner
+	 * take care for special values (always negative) like TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES!
 	 * @return
 	 */
 	public Long getTeamMemberId()

@@ -149,8 +149,14 @@
 												<div id="optionsDiv" class="inputx">
 													<feature:display  name="Public View Checkbox" module="Report and Tab Options">
 														<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
-															<nested:checkbox property="publicReport"/><digi:trn key="aim:makePublic">Make public</digi:trn>
-															<br />
+															<nested:checkbox property="publicReport" styleId="publicReportChkBox"/>
+															<digi:trn key="aim:makePublic">Make public</digi:trn> <br />
+															<c:set var="workspaceLinkedWarningTitle">
+																<digi:trn>WARNING! leaving unchecked means that this report will render ALL activities from ALL management workspaces in the database. Putting the checkbox ON will only render the activities from the creating workspace </digi:trn>
+															</c:set>
+															<div style="margin-left: 30px; display: none;" id="workspaceLinkedHolder" title="${workspaceLinkedWarningTitle}">
+																<nested:checkbox property="workspaceLinked" /><digi:trn>Link public view with creating workspace</digi:trn>
+															</div>															
 				                                    	</c:if>
 			                                    	</feature:display>
 			                                    	<c:if test="${!myForm.desktopTab}">

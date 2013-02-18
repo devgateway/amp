@@ -204,7 +204,45 @@ public class AmountCell extends Cell {
 
 		return ret;
 	}
-
+ 
+	/**
+	 * debug function for future use - leave it here
+	 * @param input
+	 */
+	private static void printAsSorted(Set<AmountCell> input)
+	{
+		Comparator<AmountCell> comparator = new Comparator<AmountCell>(){
+					public int compare(AmountCell a, AmountCell b)
+					{
+						return new Double(a.getAmount()).compareTo(new Double(b.getAmount()));
+					}
+				};
+		SortedSet<AmountCell> v = new TreeSet<AmountCell>(comparator);
+		v.addAll(input);
+		System.out.println("=== mergedCells dump start ===");
+		int i = 0;
+		for(AmountCell cell:v)
+		{
+			i++;
+			System.out.println("i = " + i + ", cell = " + cell);
+		}
+		System.out.println("=== DONE ===");
+	}
+	
+	private static void printSet(String title, Set<? extends Object> uset)
+	{
+		SortedSet set = new TreeSet();
+		set.addAll(uset);
+		System.out.println("==== printing " + title + " =====");
+		int i = 0;
+		for(Object obj:set)
+		{
+			i++;
+			System.out.println("i = " + i + ", item = " + obj);
+		}
+		System.out.println("=== DONE ===");
+	}
+	
 	/**
 	 * @return Returns the amount.
 	 */
@@ -256,7 +294,10 @@ public class AmountCell extends Cell {
 		// now fix part (3) described above: decrease each "double element"'s cost once
 		for(Long ownerId:percentagefulIds)
 			if (percentageless.containsKey(ownerId))
-				ret -= percentageless.get(ownerId).getAmount();
+			{
+				double toDecrease = percentageless.get(ownerId).getAmount(); 
+				ret -= toDecrease;
+			}
 		
 		// logger.info("******total amount for owner
 		// "+this.getOwnerId()+"="+ret);		

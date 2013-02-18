@@ -45,21 +45,19 @@ public class CellColumn extends Column {
 		return items.iterator();
 	}
 
-	protected HashMap<Long, Cell> itemsMap;
+	protected HashMap<Long, List<Cell>> itemsMap = new HashMap<Long, List<Cell>>();
 
 	public CellColumn(ColumnWorker worker) {
 		super(worker);
-		itemsMap = new HashMap<Long, Cell>();
 	}
 
 	public CellColumn(String name) {
 		super(name);
-		itemsMap = new HashMap<Long, Cell>();
 	}
 
 	public CellColumn(String name, int initialCapacity) {
 		super(name, initialCapacity);
-		itemsMap = new HashMap<Long, Cell>(initialCapacity);
+		itemsMap = new HashMap<Long, List<Cell>>(initialCapacity);
 	}
 
 	public CellColumn(Column source) {
@@ -72,19 +70,20 @@ public class CellColumn extends Column {
 		
 		this.setDescription(source.getDescription());
 		this.setExpression(source.getExpression());
-		this.setTotalExpression(source.getTotalExpression());	
-		
-		itemsMap = new HashMap<Long, Cell>();
+		this.setTotalExpression(source.getTotalExpression());
 	}
 
 	public CellColumn(Column parent, String name) {
 		super(parent, name);
 		this.contentCategory = parent.getContentCategory();
-		itemsMap = new HashMap<Long, Cell>();
 	}
 
 	public Cell getByOwner(Long ownerId) {
-		return itemsMap.get(ownerId);
+		List<Cell> cells = itemsMap.get(ownerId);
+		if (cells == null || cells.isEmpty())
+			return null;
+		
+		return cells.get(0); // return the first one since the caller doesn't care
 	}
 
 	//BOZO: delete
@@ -93,11 +92,18 @@ public class CellColumn extends Column {
 	
 	public Cell getByOwnerAndValue(Long ownerId, Object value) {
 		calls ++;
-		Cell res = getByOwner(ownerId);
-		if (res == null)
+		
+		List<Cell> list = itemsMap.get(ownerId);
+		if (list == null)
 			return null;
-		if (value.equals(res.getValue()))
-			return res;
+		
+		for(Cell element:list)
+		{
+			iterations ++;
+			if (value.equals(element.getValue()))
+				return element;
+		}
+		
 //		Iterator i = items.iterator();
 //		while (i.hasNext()) {
 //			iterations ++;
@@ -116,7 +122,9 @@ public class CellColumn extends Column {
 	public void addCell(Object cc) {
 		Cell c = (Cell) cc;
 		c.setColumn(this);
-		itemsMap.put(c.getOwnerId(), c);
+		if (!itemsMap.containsKey(c.getOwnerId()))
+			itemsMap.put(c.getOwnerId(), new ArrayList<Cell>());
+		itemsMap.get(c.getOwnerId()).add(c);
 		items.add(c);
 	}
 
@@ -264,13 +272,10 @@ public class CellColumn extends Column {
 	 * @see org.dgfoundation.amp.ar.Column#getOwnerIds()
 	 */
 	@Override
-	public Set getOwnerIds() {
-		TreeSet ret = new TreeSet();
-		Iterator i = items.iterator();
-		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
+	public Set<Long> getOwnerIds() {
+		TreeSet<Long> ret = new TreeSet<Long>();
+		for(Cell element:((List<Cell>)items))
 			ret.add(element.getOwnerId());
-		}
 		return ret;
 	}
 
@@ -308,12 +313,20 @@ public class CellColumn extends Column {
 		
 	}
 
+	/**
+	 * will crash if oldCell does not exist in the column
+	 * @param oldCell
+	 * @param newCell
+	 */
 	public void replaceCell(Cell oldCell, Cell newCell) {
 		int idx = items.indexOf(oldCell);
 		items.remove(idx);
 		items.add(idx, newCell);
-		itemsMap.remove(oldCell.getOwnerId());
-		itemsMap.put(newCell.getOwnerId(), newCell);
+		
+		int idx2 = itemsMap.get(oldCell.getOwnerId()).indexOf(oldCell);
+		itemsMap.get(oldCell.getOwnerId()).remove(idx2);
+		itemsMap.get(oldCell.getOwnerId()).add(newCell);
+
 		newCell.setColumn(this);
 	}
 
@@ -350,13 +363,13 @@ public class CellColumn extends Column {
 		return false;
 	}
 
-	public HashMap getItemsMap() {
-		return itemsMap;
-	}
-
-	public void setItemsMap(HashMap itemsMap) {
-		this.itemsMap = itemsMap;
-	}
+//	public HashMap getItemsMap() {
+//		return itemsMap;
+//	}
+//
+//	public void setItemsMap(HashMap itemsMap) {
+//		this.itemsMap = itemsMap;
+//	}
 	
 	@Override
 	public boolean removeEmptyChildren(boolean checkFunding) {

@@ -53,7 +53,8 @@ public class PlainReportHeadingsXLS extends ReportHeadingsXLS {
 		ColumnReportData columnReport = (ColumnReportData) item;
 		Integer rowSpan = columnReport.getMaxColumnDepth();
 			
-			if ( this.getMetadata().getHierarchies() != null ) {
+			if ( this.getMetadata().getHierarchies() != null &&
+					this.getMetadata().getHierarchies().size() > 0) {
 				boolean first = true;
 				for (AmpReportHierarchy arh: this.getMetadata().getHierarchies() ) {
 					String colName			= arh.getColumn().getColumnName();
@@ -76,6 +77,8 @@ public class PlainReportHeadingsXLS extends ReportHeadingsXLS {
 						}
 					}					
 				}
+			}else{
+				colId.dec();
 			}
 
 	}

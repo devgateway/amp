@@ -202,7 +202,7 @@ public class QueryUtil {
 	        }
 	    }
 
-
+	  @Deprecated
 	  public static String getTeamQuery(TeamMember teamMember) {
 	        String qr = "";
 	        if (teamMember != null) {

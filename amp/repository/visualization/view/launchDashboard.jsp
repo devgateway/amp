@@ -1121,169 +1121,184 @@ function initializeGlobalVariables(){
 	</table>
 </fieldset>
 
-<c:if test="${visualizationform.filter.showProjectsRanking eq 'true'}">
-	<fieldset>
-		<legend><span id="topProjectsTitle" class=legend_label style="width:200px"></span></legend>
-		<div id="divTopProjects" class="field_text">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.topProjects}" var="projectItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <a href="/aim/selectActivityTabs.do~ampActivityId=${projectItem.key.ampActivityId}">${projectItem.key}</a> <b>($<c:out value="${projectItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:showFullProjects()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
-		</div>
-		<div id="divFullProjects" class="field_text" style="display: none;">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.fullProjects}" var="projectItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <a href="/aim/selectActivityTabs.do~ampActivityId=${projectItem.key.ampActivityId}">${projectItem.key}</a>  <b>($<c:out value="${projectItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:hideFullProjects()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
-		</div>
-	</fieldset>
-</c:if>
-<c:if test="${visualizationform.filter.showOrganizationsRanking eq 'true'}">
-	<fieldset>
-		<legend><span id="topOrganizationsTitle" class=legend_label style="width:200px"></span></legend>
-		<div id="divTopOrganizations" class="field_text">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.topOrganizations}" var="organizationItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <c:out value="${organizationItem.key}"/>  <b>($<c:out value="${organizationItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:showFullOrganizations()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
-		</div>
-		<div id="divFullOrganizations" class="field_text" style="display: none;">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.fullOrganizations}" var="organizationItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <c:out value="${organizationItem.key}"/>  <b>($<c:out value="${organizationItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:hideFullOrganizations()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
-		</div>
-	</fieldset>	
-</c:if>
-<c:if test="${visualizationform.filter.showSectorsRanking eq 'true'}">
-	<fieldset>
-		<legend><span id="topSectorsTitle" class=legend_label style="width:200px"></span></legend>
-		<div id="divTopSectors" class="field_text">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.topSectors}" var="sectorItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <c:out value="${sectorItem.key}"/>  <b>($<c:out value="${sectorItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:showFullSectors()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
-		</div>
-		<div id="divFullSectors" class="field_text" style="display: none;">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.fullSectors}" var="sectorItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <c:out value="${sectorItem.key}"/>  <b>($<c:out value="${sectorItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:hideFullSectors()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
-		</div>
-	</fieldset>	
-</c:if>
-<c:if test="${visualizationform.filter.showRegionsRanking eq 'true'}">
-	<fieldset>
-		<legend><span id="topRegionsTitle" class=legend_label style="width:200px"></span></legend>
-		<div id="divTopRegions" class="field_text">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.topRegions}" var="regionItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <c:out value="${regionItem.key}"/>  <b>($<c:out value="${regionItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:showFullRegions()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
-		</div>
-		<div id="divFullRegions" class="field_text" style="display: none;">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.fullRegions}" var="regionItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <c:out value="${regionItem.key}"/>  <b>($<c:out value="${regionItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:hideFullRegions()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
-		</div>
-	</fieldset>	
-</c:if>
-<c:if test="${visualizationform.filter.showNPORanking eq 'true'}">
-	<fieldset>
-		<legend><span id="topNPOsTitle" class=legend_label style="width:200px"></span></legend>
-		<div id="divTopNPOs" class="field_text">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.topNPOs}" var="NPOItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <c:out value="${NPOItem.key}"/>  <b>($<c:out value="${NPOItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:showFullNPOs()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
-		</div>
-		<div id="divFullNPOs" class="field_text" style="display: none;">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.fullNPOs}" var="NPOItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <c:out value="${NPOItem.key}"/>  <b>($<c:out value="${NPOItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:hideFullNPOs()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
-		</div>
-	</fieldset>	
-</c:if>
-<c:if test="${visualizationform.filter.showProgramsRanking eq 'true'}">
-	<fieldset>
-		<legend><span id="topProgramsTitle" class=legend_label style="width:200px"></span></legend>
-		<div id="divTopPrograms" class="field_text">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.topPrograms}" var="programItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <c:out value="${programItem.key}"/>  <b>($<c:out value="${programItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:showFullPrograms()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
-		</div>
-		<div id="divFullPrograms" class="field_text" style="display: none;">
-			<c:set var="index" value="0"/>
-			<c:forEach items="${visualizationform.ranksInformation.fullPrograms}" var="programItem">
-			<c:set var="index" value="${index+1}"/>
-			
-			 <c:out value="${index}"/>. <c:out value="${programItem.key}"/>  <b>($<c:out value="${programItem.value}"/>)</b>
-				<hr />
-			</c:forEach>
-		
-			<a href="javascript:hideFullPrograms()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
-		</div>
-	</fieldset>	
-</c:if>
-</div>
+<feature:display name="Ranking Categories" module="Dashboard Generator">
+	<field:display name="Projects Ranking" feature="Ranking Categories">
+		<c:if test="${visualizationform.filter.showProjectsRanking eq 'true'}">
+			<fieldset>
+				<legend><span id="topProjectsTitle" class=legend_label style="width:200px"></span></legend>
+				<div id="divTopProjects" class="field_text">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.topProjects}" var="projectItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <a href="/aim/selectActivityTabs.do~ampActivityId=${projectItem.key.ampActivityId}">${projectItem.key}</a> <b>($<c:out value="${projectItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:showFullProjects()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+				</div>
+				<div id="divFullProjects" class="field_text" style="display: none;">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.fullProjects}" var="projectItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <a href="/aim/selectActivityTabs.do~ampActivityId=${projectItem.key.ampActivityId}">${projectItem.key}</a>  <b>($<c:out value="${projectItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:hideFullProjects()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+				</div>
+			</fieldset>
+		</c:if>
+	</field:display>
+	<field:display name="Organizations Ranking" feature="Ranking Categories">	
+		<c:if test="${visualizationform.filter.showOrganizationsRanking eq 'true'}">
+			<fieldset>
+				<legend><span id="topOrganizationsTitle" class=legend_label style="width:200px"></span></legend>
+				<div id="divTopOrganizations" class="field_text">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.topOrganizations}" var="organizationItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${organizationItem.key}"/>  <b>($<c:out value="${organizationItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:showFullOrganizations()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+				</div>
+				<div id="divFullOrganizations" class="field_text" style="display: none;">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.fullOrganizations}" var="organizationItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${organizationItem.key}"/>  <b>($<c:out value="${organizationItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:hideFullOrganizations()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+				</div>
+			</fieldset>	
+		</c:if>
+	</field:display>	
+	<field:display name="Sectors Ranking" feature="Ranking Categories">	
+		<c:if test="${visualizationform.filter.showSectorsRanking eq 'true'}">
+			<fieldset>
+				<legend><span id="topSectorsTitle" class=legend_label style="width:200px"></span></legend>
+				<div id="divTopSectors" class="field_text">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.topSectors}" var="sectorItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${sectorItem.key}"/>  <b>($<c:out value="${sectorItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:showFullSectors()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+				</div>
+				<div id="divFullSectors" class="field_text" style="display: none;">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.fullSectors}" var="sectorItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${sectorItem.key}"/>  <b>($<c:out value="${sectorItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:hideFullSectors()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+				</div>
+			</fieldset>	
+		</c:if>
+	</field:display>
+	<field:display name="Regions Ranking" feature="Ranking Categories">	
+		<c:if test="${visualizationform.filter.showRegionsRanking eq 'true'}">
+			<fieldset>
+				<legend><span id="topRegionsTitle" class=legend_label style="width:200px"></span></legend>
+				<div id="divTopRegions" class="field_text">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.topRegions}" var="regionItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${regionItem.key}"/>  <b>($<c:out value="${regionItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:showFullRegions()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+				</div>
+				<div id="divFullRegions" class="field_text" style="display: none;">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.fullRegions}" var="regionItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${regionItem.key}"/>  <b>($<c:out value="${regionItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:hideFullRegions()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+				</div>
+			</fieldset>	
+		</c:if>
+	</field:display>
+	<field:display name="NPO Ranking" feature="Ranking Categories">	
+		<c:if test="${visualizationform.filter.showNPORanking eq 'true'}">
+			<fieldset>
+				<legend><span id="topNPOsTitle" class=legend_label style="width:200px"></span></legend>
+				<div id="divTopNPOs" class="field_text">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.topNPOs}" var="NPOItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${NPOItem.key}"/>  <b>($<c:out value="${NPOItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:showFullNPOs()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+				</div>
+				<div id="divFullNPOs" class="field_text" style="display: none;">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.fullNPOs}" var="NPOItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${NPOItem.key}"/>  <b>($<c:out value="${NPOItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:hideFullNPOs()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+				</div>
+			</fieldset>	
+		</c:if>
+	</field:display>
+	<field:display name="Programs Ranking" feature="Ranking Categories">	
+		<c:if test="${visualizationform.filter.showProgramsRanking eq 'true'}">
+			<fieldset>
+				<legend><span id="topProgramsTitle" class=legend_label style="width:200px"></span></legend>
+				<div id="divTopPrograms" class="field_text">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.topPrograms}" var="programItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${programItem.key}"/>  <b>($<c:out value="${programItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:showFullPrograms()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+				</div>
+				<div id="divFullPrograms" class="field_text" style="display: none;">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.fullPrograms}" var="programItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${programItem.key}"/>  <b>($<c:out value="${programItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:hideFullPrograms()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+				</div>
+			</fieldset>	
+		</c:if>
+	</field:display>	
+</feature:display>
+	</div>
+
 </td>
 <td width=15>&nbsp;</td>
 <td width=689 valign="top">

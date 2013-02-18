@@ -198,7 +198,7 @@
 		<Measure name="Actual Disbursements" aggregator="sum" caption="#Actual_Disbursements#">
 			<MeasureExpression>
 				<SQL dialect="generic">
-					<![CDATA[case when cached_v_m_donor_funding.transaction_type=1					and cached_v_m_donor_funding.adjustment_type=getCategoryValueId('Planned') then					(1/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate))* cached_v_m_donor_funding.transaction_amount * 					getExchange('USD',cached_v_m_donor_funding.transaction_date)					else 0 end]]>
+					<![CDATA[case when cached_v_m_donor_funding.transaction_type=1					and cached_v_m_donor_funding.adjustment_type=getCategoryValueId('Actual') then					(1/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate))* cached_v_m_donor_funding.transaction_amount * 					getExchange('USD',cached_v_m_donor_funding.transaction_date)					else 0 end]]>
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -252,13 +252,6 @@
 			</MeasureExpression>
 		</Measure>
 		<Measure name="Activity Count" column="amp_activity_id" aggregator="distinct-count" caption="#Activity_Count#"/>
-		<Measure name="Actual Expenditures" aggregator="sum" caption="#Actual_Expenditures#">
-			<MeasureExpression>
-				<SQL dialect="generic">
-					<![CDATA[case when cached_v_m_donor_funding.transaction_type=2					and cached_v_m_donor_funding.adjustment_type=getCategoryValueId('Actual') then					(1/getExchangeWithFixed(cached_v_m_donor_funding.currency_code,cached_v_m_donor_funding.transaction_date,cached_v_m_donor_funding.fixed_exchange_rate))* cached_v_m_donor_funding.transaction_amount * 					getExchange('USD',cached_v_m_donor_funding.transaction_date)					else 0 end]]>
-				</SQL>
-			</MeasureExpression>
-		</Measure>
 		<Measure name="Planned Commitments" aggregator="sum" caption="#Planned_Commitments#">
 			<MeasureExpression>
 				<SQL dialect="generic">

@@ -310,7 +310,7 @@ var first_heatgrid_chart = {
 		width: 1300,
 		height: 400,
 		dataAccessId:  function() {return getParameters() == "" ? "first_datasource" : "first_datasource_params"},
-    path: "/AMP Dashboards/Development Partner Performance and Division of Labor/fragmentation_by_Ministry_ccc.cda",
+    path: "/AMP Dashboards/Division of Labor/fragmentation_by_Ministry_ccc.cda",
 		crosstabMode: true,
 		seriesInRows: false,
 		animate: false,
@@ -361,7 +361,7 @@ var first_data_table = jQuery.extend(true, {}, seminal_data_table);
 first_data_table.htmlObject = "first_chart_data";
 first_data_table.name = "first_data_table";
 first_data_table.chartDefinition.dataAccessId = "first_datasource";
-first_data_table.chartDefinition.path = "/AMP Dashboards/Development Partner Performance and Division of Labor/fragmentation_by_Ministry_ccc.cda";
+first_data_table.chartDefinition.path = "/AMP Dashboards/Division of Labor/fragmentation_by_Ministry_ccc.cda";
 first_data_table.postFetch = pfetch;
 first_data_table.listeners = listeners;
 first_data_table.parameters = parameters;

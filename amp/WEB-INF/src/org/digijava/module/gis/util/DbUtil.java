@@ -1,7 +1,12 @@
 package org.digijava.module.gis.util;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.Collator;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -14,14 +19,19 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -585,23 +595,23 @@ public class DbUtil {
         return retVal;
     }
 
-    public static List getActIdsHavingFundings() {
-        List<Long> retVal = null;
-        Session session = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            Query q = null;
-            StringBuffer qs = new StringBuffer();
-            qs.append("select distinct actFundDet.ampFundingId.ampActivityId.ampActivityId from ");
-            qs.append(AmpFundingDetail.class.getName());
-            qs.append(" as actFundDet");
-            q = session.createQuery(qs.toString());
-            retVal = q.list();
-        } catch (Exception ex) {
-            logger.debug("Unable to get activity IDs from DB", ex);
-        }
-        return retVal;
-    }
+//    public static List getActIdsHavingFundings() {
+//        List<Long> retVal = null;
+//        Session session = null;
+//        try {
+//            session = PersistenceManager.getRequestDBSession();
+//            Query q = null;
+//            StringBuffer qs = new StringBuffer();
+//            qs.append("select distinct actFundDet.ampFundingId.ampActivityId.ampActivityId from ");
+//            qs.append(AmpFundingDetail.class.getName());
+//            qs.append(" as actFundDet");
+//            q = session.createQuery(qs.toString());
+//            retVal = q.list();
+//        } catch (Exception ex) {
+//            logger.debug("Unable to get activity IDs from DB", ex);
+//        }
+//        return retVal;
+//    }
 
     
     public static List getSectorFoundingsPublic(Long sectorId, int sectorQueryType) {
@@ -1070,20 +1080,20 @@ public class DbUtil {
         return retVal;
     }
 
-    public static Double getTotalActivityFoundings(String ActIdWhereclause) {
-            Double retVal = null;
-            Session session = null;
-            try {
-                session = PersistenceManager.getRequestDBSession();
-                Query q = session.createQuery("select sum(fd.transactionAmount) from " +AmpFundingDetail.class.getName() + " fd where fd.ampFundingId.ampActivityId.ampActivityId in ("+ActIdWhereclause + ")");
-                List tmpLst = q.list();
-                if (!tmpLst.isEmpty())
-                retVal = (Double)tmpLst.get(0);
-            } catch (Exception ex) {
-                logger.debug("Unable to get map from DB", ex);
-            }
-            return retVal;
-    }
+//    public static Double getTotalActivityFoundings(String ActIdWhereclause) {
+//            Double retVal = null;
+//            Session session = null;
+//            try {
+//                session = PersistenceManager.getRequestDBSession();
+//                Query q = session.createQuery("select sum(fd.transactionAmount) from " +AmpFundingDetail.class.getName() + " fd where fd.ampFundingId.ampActivityId.ampActivityId in ("+ActIdWhereclause + ")");
+//                List tmpLst = q.list();
+//                if (!tmpLst.isEmpty())
+//                retVal = (Double)tmpLst.get(0);
+//            } catch (Exception ex) {
+//                logger.debug("Unable to get map from DB", ex);
+//            }
+//            return retVal;
+//    }
 
     /**
      * loads  all IndicatorSector ;
@@ -1926,9 +1936,172 @@ public class DbUtil {
         sess.save(sets);
     }
     
+    /**
+     * returns a set of all ampActivityIds passed by the workspace filter
+     * @param session
+     */
+    public static Set<Long> getAllAmpActivityIds(String usedQuery)
+    {
+    	try
+    	{
+    		Set<Long> ampActivityIds = new HashSet<Long>();
+    		Connection conn = PersistenceManager.getJdbcConnection();
+    		Statement stmt = conn.createStatement();
+			ResultSet resultSet = stmt.executeQuery(usedQuery);
+			while (resultSet.next())
+			{
+				Long ampActivityId = resultSet.getLong(1);
+				ampActivityIds.add(ampActivityId);
+			}
+			conn.close();
+			return ampActivityIds;
+    	}
+    	catch(SQLException ex)
+    	{
+       		ex.printStackTrace();
+    		throw new RuntimeException(ex);
+    	}
+    }
+    
+    /**
+     * returns a set of all ampActivityIds passed by the workspace filter
+     * @param session
+     */
+    public static Set<Long> getAllLegalAmpActivityIds()
+    {
+    	String usedQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
+    	return getAllAmpActivityIds(usedQuery);
+    }
+    
+    /**
+     * generates list of AmpActivityIds which would appear in a "no-filters" report's output 
+     * @param allActivityIdsSet
+     */
+    public static void intersectWithWorkspaceFilter(Set<Long> allActivityIdsSet)
+    {
+    	String usedQuery = WorkspaceFilter.getWorkspaceFilterQuery(TLSUtils.getRequest().getSession());
+    	
+   		Set<Long> legalAmpActivityIds = getAllLegalAmpActivityIds();
+   		allActivityIdsSet.retainAll(legalAmpActivityIds);   	
+    }
+    
+    public static Long getActualCommitmentCategValueId()
+    {
+    	AmpCategoryClass catClass = null;
+        Long actualCommitmentCatValId = null;
+        try {
+            catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
+            for (AmpCategoryValue val : catClass.getPossibleValues()) {
+                if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                    return val.getId();
+                }
+            }
+        } catch (NoCategoryClassException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("could not get an ActualCommitment category value from the database");
+    }
+    
+    /**
+     * fetches list of all activities which match a set of ampActivityIds <br />
+     * the returns Object[] elements have the following elements:<br />
+     * fd.transactionAmount[0], fd.transactionType[1], fd.adjustmentType.id[2], fd.transactionDate[3], fd.ampCurrencyId.currencyCode[4], fd.ampFundingId.ampActivityId.ampActivityId[5]
+     * types are Double ammount = (Double)fundingInfo[0];
+            Integer type = (Integer)fundingInfo[1];
+            Long adjustementTypeId = (Long)fundingInfo[2];
+            Date date = (Date)fundingInfo[3];
+            String currencyCode = (String)fundingInfo[4];
+            Long activityId = (Long)fundingInfo[5];
+     * @return
+     */
+    public static List<Object[]> fetchFundingInformation(String view_prefix, Set<Long> allActivityIdsSet, String donorIdsWhereclause, String donorGroupIdsWhereclause,
+    		String donorTypeIdsWhereclause, String workspaceIdsWhereclause, String typeOfAssistanceWhereclause, java.util.Date startDate, java.util.Date endDate)
+    		throws SQLException
+    {
+        String activityWhereclause = generateWhereclause(allActivityIdsSet, new GenericIdGetter());        
+
+        Long actualCommitmentCatValId = getActualCommitmentCategValueId();
+
+        SimpleDateFormat sdfOut = new SimpleDateFormat(AmpARFilter.SDF_OUT_FORMAT_STRING);
+        
+        String view_name = view_prefix + "v_donor_funding";
+        StringBuilder queryString = new StringBuilder("SELECT f.transaction_amount, f.transaction_type, f.adjustment_type, f.transaction_date, f.currency_code, f.amp_activity_id FROM " + view_name + " f JOIN amp_funding af ON af.amp_funding_id = f.amp_funding_id WHERE ");
+        queryString.append("f.transaction_date >= '" + sdfOut.format(startDate) + "' AND f.transaction_date <= '" + sdfOut.format(endDate) + "'");
+        queryString.append(" AND f.amp_activity_id IN " + activityWhereclause );
+        queryString.append(" AND f.adjustment_type = " + actualCommitmentCatValId);
+        queryString.append(" AND f.transaction_type = " + 0); //BOZO: REMOVE THIS LINE!!!!
+        
+        if (donorIdsWhereclause != null) {
+        	queryString.append(" AND f.org_id IN ");
+        	queryString.append(donorIdsWhereclause);
+        }
+   
+        if (donorGroupIdsWhereclause != null) {
+        	queryString.append(" AND f.org_grp_id IN ");
+        	queryString.append(donorGroupIdsWhereclause);
+        }
+        
+        if (donorTypeIdsWhereclause != null) {
+        	queryString.append(" AND f.org_type_id IN ");
+        	queryString.append(donorTypeIdsWhereclause);
+        }
+        
+        if (typeOfAssistanceWhereclause != null) {
+        	queryString.append(" AND af.type_of_assistance_category_va IN ");
+        	queryString.append(typeOfAssistanceWhereclause);
+        }
+        
+        Connection conn = null;
+        
+        try
+        {
+        	conn = PersistenceManager.getJdbcConnection();
+        	Statement stmt = conn.createStatement();
+        	ResultSet resultSet = stmt.executeQuery(queryString.toString());
+        	
+        	List<Object[]> result = new ArrayList<Object[]>();
+        	int nrColumns = resultSet.getMetaData().getColumnCount();
+        	if (nrColumns != 6)
+        		throw new RuntimeException("invalid Funding SQL query");
+        	while (resultSet.next())
+        	{
+        		Object[] item = new Object[nrColumns];
+        		item[0] = resultSet.getDouble(1);
+        		item[1] = resultSet.getInt(2);
+        		item[2] = resultSet.getLong(3);
+        		item[3] = resultSet.getDate(4);
+        		item[4] = resultSet.getString(5);
+        		item[5] = resultSet.getLong(6);
+        		result.add(item);
+        	}
+        	return result;
+        }
+        finally
+        {
+        	if (conn != null)
+        		conn.close();
+        }
+    }
     
     // NEW PART
     
+    /**
+     * fetches all funding info which matches given filters. Null in any of the filter column means "no filtering by it"
+     * @param sectorIds
+     * @param programIds
+     * @param donorIds
+     * @param donorGroupIds
+     * @param donorTypeIds
+     * @param includeCildLocations
+     * @param locations
+     * @param workspaces
+     * @param typeOfAssistanceIds
+     * @param startDate
+     * @param endDate
+     * @param isPublic
+     * @param session
+     * @return
+     */
     public static Object[] getActivityFundings (Collection<Long> sectorIds,
                                                 Collection<Long> programIds,
                                                 Collection<Long> donorIds,
@@ -1940,8 +2113,8 @@ public class DbUtil {
                                                 Collection <Long> typeOfAssistanceIds,
                                                 java.util.Date startDate,
                                                 java.util.Date endDate,
-                                                boolean isPublic) {
-        List queryResults = null;
+                                                boolean isPublic,
+                                                boolean filterByLocations) {
         Object[] retVal = null;
 
         Map<Long, Map<Long, Float>> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
@@ -1969,126 +2142,57 @@ public class DbUtil {
             typeOfAssistanceWhereclause = generateWhereclause(typeOfAssistanceIds, new GenericIdGetter());
         }
 
+        String view_prefix = isPublic ? "cached_" : "";
+        
         String workspaceIdsWhereclause = null;
         if (workspaces != null && !workspaces.isEmpty()) {
-            workspaceIdsWhereclause = generateWhereclause(workspaces, new WorkspaceIdGetter());
+            workspaceIdsWhereclause = "SELECT amp_activity_id FROM " + view_prefix + "amp_activity WHERE amp_team_id IN " + generateWhereclause(workspaces, new WorkspaceIdGetter());
         }
 
-        Set<Long> allActivityIdsSet = new HashSet<Long>();
+        Set<Long> allActivityIdsSet = getAllLegalAmpActivityIds();
 
-        //If no locations selected no data will be returned
-        if (locationPercentageMap != null && !locationPercentageMap.isEmpty()) {
-
-            Set<Long> secActIds = null;
-            if (sectorPercentageMap != null) {
-                secActIds = sectorPercentageMap.keySet();
-            }
-
-            Set<Long> prgActIds = null;
-            if (programPercentageMap != null) {
-                prgActIds = programPercentageMap.keySet();
-            }
-
-            Set<Long> actIds = locationPercentageMap.keySet();
-            for (Long actId : actIds) {
-                if ((secActIds != null && secActIds.contains(actId)) ||  (prgActIds != null && prgActIds.contains(actId))) {
-                    allActivityIdsSet.add(actId);
-                }
-            }
+        if (filterByLocations && (locationPercentageMap != null))
+        	allActivityIdsSet.retainAll(locationPercentageMap.keySet());
+        
+        Set<Long> secActIds = null;
+        if (sectorPercentageMap != null) {
+        	allActivityIdsSet.retainAll(sectorPercentageMap.keySet());
         }
 
+        if (programPercentageMap != null) {
+        	allActivityIdsSet.retainAll(programPercentageMap.keySet());
+        }
+
+        if (workspaceIdsWhereclause != null) {
+        	Set<Long> workspaceFilterAmpActivityIds = getAllAmpActivityIds(workspaceIdsWhereclause);
+        	allActivityIdsSet.retainAll(workspaceFilterAmpActivityIds);
+        }
+        
+       // intersectWithWorkspaceFilter(session, allActivityIdsSet);
+        
         cleanUpMap(sectorPercentageMap, allActivityIdsSet);
         cleanUpMap(programPercentageMap, allActivityIdsSet);
         cleanUpMap(locationPercentageMap, allActivityIdsSet);
 
 
         //If any activity in selected filter
-        if (!allActivityIdsSet.isEmpty()) {
-
-            AmpCategoryClass catClass = null;
-            Long actualCommitmentCatValId = null;
-            try {
-                catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
-                for (AmpCategoryValue val : catClass.getPossibleValues()) {
-                    if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                        actualCommitmentCatValId = val.getId();
-                        break;
-                    }
-                }
-            } catch (NoCategoryClassException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-
-
-            String activityWhereclause = generateWhereclause(allActivityIdsSet, new GenericIdGetter());
-
-
-
-            Session sess = null;
-            try {
-                sess = PersistenceManager.getRequestDBSession();
-                StringBuilder queryStr = new StringBuilder("select fd.transactionAmount, fd.transactionType, fd.adjustmentType.id, fd.transactionDate, fd.ampCurrencyId.currencyCode, fd.ampFundingId.ampActivityId.ampActivityId from ");
-                queryStr.append(AmpFundingDetail.class.getName());
-                queryStr.append(" as fd where fd.transactionDate >= :START_DATE and fd.transactionDate <= :END_DATE and fd.ampFundingId.ampActivityId.draft = false");
-
-                queryStr.append(" and fd.ampFundingId.ampActivityId.ampActivityId in ");
-                queryStr.append(activityWhereclause);
-
-                queryStr.append(" and fd.adjustmentType.id=");
-                queryStr.append(actualCommitmentCatValId);
-
-
-                
-                if (donorIdsWhereclause != null) {
-                    queryStr.append(" and fd.ampFundingId.ampDonorOrgId.ampOrgId in ");
-                    queryStr.append(donorIdsWhereclause);
-                }
-
-                if (donorGroupIdsWhereclause != null) {
-                    queryStr.append(" and fd.ampFundingId.ampDonorOrgId.orgGrpId.ampOrgGrpId in ");
-                    queryStr.append(donorGroupIdsWhereclause);
-                }
-
-                if (donorTypeIdsWhereclause != null) {
-                    queryStr.append(" and fd.ampFundingId.ampDonorOrgId.orgGrpId.orgType.ampOrgTypeId in ");
-                    queryStr.append(donorTypeIdsWhereclause);
-                }
-
-                if (workspaceIdsWhereclause != null) {
-                    queryStr.append(" and fd.ampFundingId.ampActivityId.team.ampTeamId in ");
-                    queryStr.append(workspaceIdsWhereclause);
-                }
-
-                if (typeOfAssistanceWhereclause != null) {
-                    queryStr.append(" and fd.ampFundingId.typeOfAssistance.id in ");
-                    queryStr.append(typeOfAssistanceWhereclause);
-                }
-
-                if (isPublic) {
-                    queryStr.append(" and (fd.ampFundingId.ampActivityId.approvalStatus ='approved' or fd.ampFundingId.ampActivityId.approvalStatus ='startedapproved')");
-                    queryStr.append(" and fd.ampFundingId.ampActivityId.team.parentTeamId is not null");
-                }
-                
-                
-
-                Query q = sess.createQuery(queryStr.toString());
-                q.setDate("START_DATE", startDate);
-                q.setDate("END_DATE", endDate);
-
-                queryResults = q.list();
-
-            } catch (DgException ex) {
-              logger.error("Error getting activity fundings from database " + ex);
-            }
-
-            retVal = new Object[] {queryResults, sectorPercentageMap, programPercentageMap, locationPercentageMap};
-        } else {
-            //return dummy result
-            retVal = new Object[]{};
+        if (allActivityIdsSet.isEmpty())
+        {
+        	//return dummy result
+        	return new Object[]{};
+        }
+        try
+        {
+            List<Object[]> queryResults = fetchFundingInformation(view_prefix, allActivityIdsSet, donorIdsWhereclause, donorGroupIdsWhereclause, donorTypeIdsWhereclause, workspaceIdsWhereclause, typeOfAssistanceWhereclause, startDate, endDate);
+        	return new Object[] {queryResults, sectorPercentageMap, programPercentageMap, locationPercentageMap};
+        }
+        catch(SQLException ex)
+        {
+        	logger.error("Error getting activity fundings from database " + ex);
+        	return new Object[]{};
         }
 
-
-        return retVal;
+        
     }
 
 
@@ -2148,7 +2252,7 @@ public class DbUtil {
             locationWhereclause = generateWhereclause(locations, new LocationIdGetter());
         }
 
-
+        intersectWithWorkspaceFilter(allActivityIdsSet);
 
         //If any activity in selected filter
         if (!allActivityIdsSet.isEmpty()) {

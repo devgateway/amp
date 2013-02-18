@@ -576,8 +576,8 @@ public class GetFoundingDetails extends Action {
                         XMLDocument segmendDataInfo = new XMLDocument();
                         segmendDataInfo.setCodeset("UTF-8");
 
-                        String numberFormat = FeaturesUtil.getGlobalSettingValue(
-                                GlobalSettingsConstants.NUMBER_FORMAT);
+//                        String numberFormat = FeaturesUtil.getGlobalSettingValue(
+//                                GlobalSettingsConstants.NUMBER_FORMAT);
                         //NumberFormat formatter = new DecimalFormat(numberFormat);
 
                         XML root = new XML("funding");

@@ -323,7 +323,7 @@ saveReportEngine	= null;
 	
 	function submitFilters(reportContextId) {
 		//alert("SUBMITTING FILTERS");
-		//debugger;
+		debugger;
 		if(document.getElementById("workspace_only")!=null)
 			document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];

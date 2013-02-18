@@ -1308,13 +1308,13 @@ public class ReportsFilterPicker extends Action {
 		arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1 ? null : filterForm.getToMonth().intValue());
         try{
             arf.setFromDate(null);
-            arf.setFromDate(filterForm.getFromDate() == null ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getFromDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
+            arf.setFromDate((filterForm.getFromDate() == null || filterForm.getFromDate().length() == 0) ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getFromDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
         } catch (Exception e){
             logger.error("Can't parse dates:", e);
         }
         try{
             arf.setToDate(null);
-            arf.setToDate(filterForm.getToDate() == null ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getToDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
+            arf.setToDate((filterForm.getToDate() == null || filterForm.getToDate().length() == 0) ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getToDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
         } catch (Exception e){
             logger.error("Can't parse dates:", e);
         }

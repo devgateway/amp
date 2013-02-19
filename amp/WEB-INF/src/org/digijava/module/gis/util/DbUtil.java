@@ -2029,7 +2029,6 @@ public class DbUtil {
         queryString.append("f.transaction_date >= '" + sdfOut.format(startDate) + "' AND f.transaction_date <= '" + sdfOut.format(endDate) + "'");
         queryString.append(" AND f.amp_activity_id IN " + activityWhereclause );
         queryString.append(" AND f.adjustment_type = " + actualCommitmentCatValId);
-        queryString.append(" AND f.transaction_type = " + 0); //BOZO: REMOVE THIS LINE!!!!
         
         if (donorIdsWhereclause != null) {
         	queryString.append(" AND f.org_id IN ");

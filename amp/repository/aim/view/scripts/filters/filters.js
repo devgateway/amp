@@ -326,7 +326,6 @@ DivManager.prototype.onSelect           = function () {
 	 function validateDateFilters(){
 		 var wrongMsg = null;
 		 var inputFields = $(document).find(".dateInputMarker");
-		 inputFields = inputFields.add($("#fromDate")).add($("#toDate"));
 		 //assuming that the date fields come in pairs (from-to)
 		 for(var i=0; i < inputFields.length - 1; i+=2){
 			 var fromStr = inputFields[i].value;

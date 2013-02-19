@@ -118,7 +118,7 @@ public class AmpARFilter extends PropertyListable {
 	 * Date string formatted for database serialization
 	 * field not static because SimpleDateFormat is not thread-safe
 	 */
-	private final SimpleDateFormat sdfIn = new SimpleDateFormat(SDF_IN_FORMAT_STRING);
+	private final SimpleDateFormat sdfIn = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT));
 	
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	
@@ -1530,6 +1530,23 @@ public class AmpARFilter extends PropertyListable {
 		
 		String fromDate = startDate;
 		String toDate = lastDate;
+		
+		Date[] ddates = calculateDateFiltersAsDate(currentPeriod, amount, op, xPeriod);
+		
+		Date dfromDate = ddates[0];
+		Date dtoDate = ddates[1];
+		
+		if (dfromDate != null){
+			fromDate = FormatHelper.formatDate(dfromDate);
+		}
+		if (dtoDate != null){
+			toDate = FormatHelper.formatDate(dtoDate);
+		}
+
+		return new String[]{fromDate, toDate};
+	}
+	
+	private Date[] calculateDateFiltersAsDate(String currentPeriod, Integer amount, String op, String xPeriod){
 
 		Date dfromDate = null;
 		Date dtoDate = null;
@@ -1569,13 +1586,10 @@ public class AmpARFilter extends PropertyListable {
 				
 				dfromDate = FiscalCalendarUtil.addToDate(dtoDate, -amount, calendarPeriod);
 			}
-			
-			fromDate = FormatHelper.formatDate(dfromDate);
-			toDate = FormatHelper.formatDate(dtoDate);
 		}
 		
-		return new String[]{fromDate, toDate};
-	}
+		return new Date[]{dfromDate, dtoDate};
+	}	
 	/**
 	 * returns the default currency name
 	 * default is taken from either user settings, workspace settings or hardcoded global setting, whichever has the value first
@@ -2173,8 +2187,10 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public Date buildFromDateAsDate()
 	{
-		if (fromDate == null || (fromDate.length() == 0))
-			return null;
+		if (fromDate == null || (fromDate.length() == 0)){//if fromDate is not set, maybe a dynamic filter was applied
+			Date[] dates = this.calculateDateFiltersAsDate(this.dynDateFilterCurrentPeriod, this.dynDateFilterAmount, this.dynDateFilterOperator, this.dynDateFilterXPeriod);
+			return dates[0];
+		}
 		try
 		{
 			return sdfIn.parse(fromDate);
@@ -2192,8 +2208,10 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public Date buildToDateAsDate()
 	{
-		if (toDate == null || (toDate.length() == 0))
-			return null;
+		if (toDate == null || (toDate.length() == 0)){//if toDate is not set, maybe a dynamic filter was applied
+			Date[] dates = this.calculateDateFiltersAsDate(this.dynDateFilterCurrentPeriod, this.dynDateFilterAmount, this.dynDateFilterOperator, this.dynDateFilterXPeriod);
+			return dates[1];
+		}
 		try
 		{
 			return sdfIn.parse(toDate);
@@ -2230,7 +2248,7 @@ public class AmpARFilter extends PropertyListable {
 	public void setToDate(String toDate) {
 		if (!FormatHelper.isValidDateString(fromDate, sdfIn))
 		{
-			logger.error("tried to push invalidly-formatted date into AmpARFilter: " + fromDate, new RuntimeException());
+			logger.error("tried to push invalidly-formatted date into AmpARFilter: " + toDate, new RuntimeException());
 			return;
 		}
 		this.toDate = toDate;

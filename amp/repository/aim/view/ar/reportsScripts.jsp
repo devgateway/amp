@@ -328,7 +328,7 @@ saveReportEngine	= null;
 			document.getElementById("workspaceOnly").value = document.getElementById("workspace_only").checked;
 		var filterForm		= document.getElementsByName("aimReportsFilterPickerForm")[0];
 		
-		if (validateDynamicDateFilters()){
+		if (validateDynamicDateFilters() && validateDateFilters()){
 			filterForm.action	= "/aim/reportsFilterPicker.do?apply=true&reportContextId=" + reportContextId;
 			filterForm.submit();
 		};

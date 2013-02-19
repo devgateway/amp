@@ -21,7 +21,9 @@
 	<td><html:text readonly="true"
 			property="${dateentity.actionFormProperty}"
 			styleId="filter_input_${dateentity.uniqueId }"
-			styleClass="dateInputMarker" /> <a id="filter_a_${dateentity.uniqueId }"
+			styleClass="dateInputMarker" />
+		<input type="hidden" value="<digi:trn>${element.rootHierarchyListable.label}</digi:trn>" />		
+		 <a id="filter_a_${dateentity.uniqueId }"
 		style="background-color: #F6FAFF;"
 		href='javascript:pickDateById("filter_a_${dateentity.uniqueId }","filter_input_${dateentity.uniqueId }")'>
 			<img src="../ampTemplate/images/show-calendar.gif"

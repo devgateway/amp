@@ -1306,19 +1306,9 @@ public class ReportsFilterPicker extends Action {
 		arf.setYearTo(filterForm.getToYear() == null || filterForm.getToYear().longValue() == -1 ? null : filterForm.getToYear().intValue());
 		arf.setFromMonth(filterForm.getFromMonth() == null || filterForm.getFromMonth().intValue() == -1 ? null : filterForm.getFromMonth().intValue());
 		arf.setToMonth(filterForm.getToMonth() == null || filterForm.getToMonth().intValue() == -1 ? null : filterForm.getToMonth().intValue());
-        try{
-            arf.setFromDate(null);
-            arf.setFromDate((filterForm.getFromDate() == null || filterForm.getFromDate().length() == 0) ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getFromDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
-        } catch (Exception e){
-            logger.error("Can't parse dates:", e);
-        }
-        try{
-            arf.setToDate(null);
-            arf.setToDate((filterForm.getToDate() == null || filterForm.getToDate().length() == 0) ? null : FormatHelper.formatDate(FormatHelper.parseDate(filterForm.getToDate()), AmpARFilter.SDF_IN_FORMAT_STRING));
-        } catch (Exception e){
-            logger.error("Can't parse dates:", e);
-        }
 
+		arf.setFromDate(filterForm.getFromDate());
+		arf.setToDate(filterForm.getToDate());
 		arf.setDynDateFilterCurrentPeriod(filterForm.getDynamicDateFilter().getCurrentPeriod());
 		arf.setDynDateFilterAmount(filterForm.getDynamicDateFilter().getAmount());
 		arf.setDynDateFilterOperator(filterForm.getDynamicDateFilter().getOperator());

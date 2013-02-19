@@ -71,12 +71,15 @@ public class PercentageHelperMap extends HashMap<String, PercentageHelperList> {
 						}
 						
 						if ( temp.hasAsDescendent(itemId) ) {
-							temp.setItem(item);
-							temp.setItemId(itemId);
-							temp.setPercentage(percentage);
+//							temp.setItem(item);
+//							temp.setItemId(itemId);
+//							temp.setPercentage(percentage);
 							return;
 						}
 						if (newPhd.hasAsDescendent(temp)) {
+							temp.setItem(item);
+							temp.setItemId(itemId);
+							temp.setPercentage(percentage);
 							return;
 							
 						}
@@ -135,17 +138,14 @@ public class PercentageHelperMap extends HashMap<String, PercentageHelperList> {
 
 		public PercentageHelperList() {
 			super();
-			// TODO Auto-generated constructor stub
 		}
 
 		public PercentageHelperList(Collection<? extends PercentageHelperData> c) {
 			super(c);
-			// TODO Auto-generated constructor stub
 		}
 
 		public PercentageHelperList(int initialCapacity) {
 			super(initialCapacity);
-			// TODO Auto-generated constructor stub
 		}
 
 		/**

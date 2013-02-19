@@ -191,7 +191,15 @@ public class ReportsFilterPicker extends MultiAction {
 		} else
 		{
 			// teamMember == null, show the filter as-is. NOTE TO THE UNFORTUNATE SOUL DOING MERGE WITH 2.4: NOTHING SHOULD BE DONE HERE, AS 2.4 IS SANE IN THIS REGARD.
-			AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
+			AmpARFilter existingFilter = null;
+			
+			// DO NOT PORT THIS HACKY FIX TO AMP 2.4, AS IT IS SANE THERE AND DOES NOT NEED IT
+			if (filterForm.getSourceIsReportWizard())
+				existingFilter = (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.SESSION_FILTER);
+			
+			if (existingFilter == null)
+				existingFilter = (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
+			
 			if (existingFilter != null && (!"true".equals(applyStr)))
 				FilterUtil.populateForm(filterForm, existingFilter);
 		}

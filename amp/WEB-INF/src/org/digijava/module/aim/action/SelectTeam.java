@@ -146,6 +146,7 @@ public class SelectTeam extends Action {
             tm.setEmail(member.getUser().getEmail());
             tm.setTeamAccessType(member.getAmpTeam().getAccessType());
             tm.setComputation(member.getAmpTeam().getComputation());
+            tm.setUseFilters(member.getAmpTeam().getUseFilter());
             tm.setAddActivity(member.getAmpTeam().getAddActivity());
             tm.setPledger(member.getUser().getPledger());
             tm.setPublishDocuments(member.getPublishDocPermission());

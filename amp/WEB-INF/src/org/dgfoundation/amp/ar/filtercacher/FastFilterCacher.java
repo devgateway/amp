@@ -52,8 +52,6 @@ public class FastFilterCacher extends FilterCacher {
 	{
 		if (tempTableName == null)
 			return; //nothing to delete
-//		if (System.currentTimeMillis() > 1)
-//			return; //BOZO!DELETE!FORDEBUG!
 		try
 		{
 			Statement statement = getConnection().createStatement();

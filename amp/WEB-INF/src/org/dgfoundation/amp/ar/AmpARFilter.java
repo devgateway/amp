@@ -748,7 +748,8 @@ public class AmpARFilter extends PropertyListable {
 		if (request.getParameter("ampReportId") != null && request.getParameter("ampReportId").length() > 0)
 			ampReportId = request.getParameter("ampReportId");
 
-		if (ampReportId == null) {
+		if (ampReportId == null && ReportContextData.contextIdExists())
+		{
 			AmpReports ar = ReportContextData.getFromRequest().getReportMeta();
 			if (ar != null){
 				ampReportId = ar.getAmpReportId().toString();

@@ -76,7 +76,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 		
 		if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
 			af = FilterUtil.buildFilter(ampTeam, null);
-			af.generateFilterQuery(request, true);
+			//af.generateFilterQuery(request, true);
 		}
 
 		/* The prepare function needs to have the filter (af) already populated */

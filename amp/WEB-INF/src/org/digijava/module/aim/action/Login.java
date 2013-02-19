@@ -289,6 +289,7 @@ public class Login extends Action {
 					tm.setTeamType(member.getAmpTeam().getTeamCategory());
 					tm.setTeamAccessType(member.getAmpTeam().getAccessType());
 					tm.setComputation(member.getAmpTeam().getComputation());
+					tm.setUseFilters(member.getAmpTeam().getUseFilter());
 					tm.setAddActivity(member.getAmpTeam().getAddActivity());
 					tm.setAppSettings(appSettings);
 					if (usr != null) {

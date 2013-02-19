@@ -91,6 +91,8 @@ public class RMMapCalculationUtil {
 
         if (filter.getMapModeFin() == null || !filter.getMapModeFin().equalsIgnoreCase("pledgesData")) {
             if (isRegional == GisUtil.GIS_DONOR_FUNDINGS) {
+            
+            // activityFundings[0] = List<Object[7]>
             activityFundings = DbUtil.getActivityFundings(sectorCollector,
                                                            programsIds,
                                                            donnorAgencyIds,
@@ -209,6 +211,7 @@ public class RMMapCalculationUtil {
         Object[] activityFundings = null;
         Object[] activityRegionalFundings = null;
         if (!isRegional) {
+        	// activityFundings[0] = List<Object[7]>
             activityFundings = DbUtil.getActivityFundings(sectorCollector,
                                                                programsIds,
                                                                donnorAgencyIds,
@@ -246,6 +249,16 @@ public class RMMapCalculationUtil {
         return retVal;
     }
 
+    /**
+     * 
+     * @param activityFundingData either Object[6] or Object[7], depending on source.
+     * @param activityRegionalFundingData
+     * @param includeCildLocations
+     * @param locations
+     * @param currencyCode
+     * @param detailedActData
+     * @return
+     */
     public static Object[] getAllFundingsByLocations (Object[] activityFundingData,
                                                    Object[] activityRegionalFundingData,
                                                    boolean includeCildLocations,
@@ -301,11 +314,20 @@ public class RMMapCalculationUtil {
         return retVal;
     }
 
+    /**
+     * 
+     * @param data either Object[6] or Object[7], depending on source.
+     * @param locations
+     * @param currencyCode
+     * @param detailedActData
+     * @param inculedChildLocations
+     * @return
+     */
     private static Object[] getFundingsByLocations (Object[] data, Collection<AmpCategoryValueLocations> locations, String currencyCode, boolean detailedActData, boolean inculedChildLocations){
         Object[] retVal = null;
 
         if (data != null && data instanceof Object[] && data.length > 0) {
-            List fundings = (List)data[0];
+            List<Object[]> fundings = (List<Object[]>)data[0];
             Map <Long, Map> sectorPercentageMap = (Map <Long, Map>) data[1];
             Map <Long, Map> programPercentageMap = (Map <Long, Map>) data[2];
             Map <Long, Map> locationPercentageMap = (Map <Long, Map>) data[3];
@@ -410,7 +432,11 @@ public class RMMapCalculationUtil {
         return retVal;
     }
 
-    private static void applySectorOrProgramPercentages (List fundings, Map <Long, Map> sectorOrProgramPercentageMap) {
+    /**
+     * @param fundings either Object[6] or Object[7], depending on source.
+     * @param sectorOrProgramPercentageMap
+     */
+    private static void applySectorOrProgramPercentages (List<Object[]> fundings, Map <Long, Map> sectorOrProgramPercentageMap) {
         for (Object fundingInfoObj: fundings) {
             Object[] fundingInfo = (Object[]) fundingInfoObj;
             BigDecimal ammount = new BigDecimal((Double)fundingInfo[0]);
@@ -438,6 +464,14 @@ public class RMMapCalculationUtil {
     public final static String UNALLOCATED_REGION_NAME = "Region Unallocated";
     public final static Set<Long> UNALLOCATED_REGION_LOC_KEY_SET = Collections.unmodifiableSet(new HashSet<Long>(){{this.add(UNALLOCATED_REGION_KEY);}});
 
+    /**
+     * 
+     * @param fundings either Object[6] or Object[7], depending on source.
+     * @param locationPercentageMap
+     * @param locationIdNameMap
+     * @param locationParentMap
+     * @return
+     */
     private static Map<String, Set<AmpFundingDetail>> groupFundingsByLocationAndApplyPercentages (List<Object[]> fundings, Map <Long, Map> locationPercentageMap, Map<Long, String> locationIdNameMap, Map<Long, Long> locationParentMap) {
         Map <String, Set<AmpFundingDetail>> retVal = new HashMap <String, Set<AmpFundingDetail>> ();
         Map<String, AmpCurrency> currencyCodeObjectMap = getCurrencyCodeObjectMap();
@@ -449,7 +483,10 @@ public class RMMapCalculationUtil {
             Date date = (Date)fundingInfo[3];
             String currencyCode = (String)fundingInfo[4];
             Long activityId = (Long)fundingInfo[5];
-
+            Double fixedExchangeRate = fundingInfo.length >= 7 ? (Double) fundingInfo[6] : null;
+            if ((fixedExchangeRate != null) && fixedExchangeRate <= 1e-10)
+            	fixedExchangeRate = null;
+            
             Map locationPercentageMapItem = locationPercentageMap.get(activityId);
             Set<Long> locKeySet;
             
@@ -484,6 +521,7 @@ public class RMMapCalculationUtil {
             	forCalculations.setAdjustmentType(adjTypeCatVal);
             	forCalculations.setTransactionDate(date);
             	forCalculations.setTransactionType(type);
+            	forCalculations.setFixedExchangeRate(fixedExchangeRate);
 
 
             	// Once do not use AmpFundingDetail as persistent object, and need activity ID for next calculations

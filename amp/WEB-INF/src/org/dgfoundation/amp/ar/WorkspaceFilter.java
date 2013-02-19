@@ -172,9 +172,9 @@ public class WorkspaceFilter
 	 * @param draft
 	 * @return
 	 */
-	private static String generateWorkspaceFilterQuery(Long teamMemberId, String accessType, boolean approved, boolean draft, boolean publicView)
+	private static String generateWorkspaceFilterQuery(Long teamMemberId, String accessType, boolean approved, boolean hideDraft, boolean publicView)
 	{
-		return new WorkspaceFilter(teamMemberId, accessType, approved, draft, publicView).getGeneratedQuery();
+		return new WorkspaceFilter(teamMemberId, accessType, approved, hideDraft, publicView).getGeneratedQuery();
 	}
 	
 	/**
@@ -215,17 +215,17 @@ public class WorkspaceFilter
 		if (tm == null)
 		{
 			//public view
-			boolean draft = true;
+			boolean hideDraft = true;
 			boolean approved = true;
 			String accessType = Constants.ACCESS_TYPE_MNGMT;
-			String onlineQuery = generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType, approved, draft, publicView);
+			String onlineQuery = generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType, approved, hideDraft, publicView);
 			String offlineQuery = AmpARFilter.getOffLineQuery(onlineQuery);
 			return offlineQuery;
 		}
 		else
 		{
-			boolean draft = Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) || "Donor".equalsIgnoreCase(tm.getTeamType());
-			boolean approved = draft;
+			boolean hideDraft = Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) || "Donor".equalsIgnoreCase(tm.getTeamType());
+			boolean approved = hideDraft;
 			
 			/**
 			 * Checks if the team is a computed workspace and in case it is
@@ -234,10 +234,10 @@ public class WorkspaceFilter
 			if (tm.getComputation() != null && tm.getComputation() ) {
 				Workspace wrksp	= TeamUtil.getWorkspace( tm.getTeamId() );
 				if ( wrksp != null && wrksp.getHideDraftActivities() != null && wrksp.getHideDraftActivities() )
-					draft = true;
+					hideDraft = true;
 			}
 			String accessType = tm.getTeamAccessType();
-			return generateWorkspaceFilterQuery(tm.getMemberId(), accessType, approved, draft, publicView);
+			return generateWorkspaceFilterQuery(tm.getMemberId(), accessType, approved, hideDraft, publicView);
 		}
 	}
 	

@@ -623,7 +623,7 @@
                 <td color="white" colspan="2" nowrap bgcolor="#c3b6a5" id="tooltipCurencyYearRange" style="font-size: 12px; color:#373735;">&nbsp;</td>
             </tr>
             <tr>
-                <td color="white" bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;"><digi:trn>Total funding for this sector</digi:trn> (<b><digi:trn>activities without attached location not counted</digi:trn></b>)</td>
+                <td color="white" bgcolor="#c3b6a5" colspan="2" style="font-size: 12px; color:#373735;"><digi:trn>Total funding for this sector</digi:trn></td>
             </tr>
             <field:display name="Measure Commitment" feature="GIS DASHBOARD">
             <tr>

@@ -2004,13 +2004,14 @@ public class DbUtil {
     /**
      * fetches list of all activities which match a set of ampActivityIds <br />
      * the returns Object[] elements have the following elements:<br />
-     * fd.transactionAmount[0], fd.transactionType[1], fd.adjustmentType.id[2], fd.transactionDate[3], fd.ampCurrencyId.currencyCode[4], fd.ampFundingId.ampActivityId.ampActivityId[5]
-     * types are Double ammount = (Double)fundingInfo[0];
+     * fd.transactionAmount[0], fd.transactionType[1], fd.adjustmentType.id[2], fd.transactionDate[3], fd.ampCurrencyId.currencyCode[4], fd.ampFundingId.ampActivityId.ampActivityId[5], fixed_exchange_rate[6]
+     * types are Double amount = (Double)fundingInfo[0];
             Integer type = (Integer)fundingInfo[1];
             Long adjustementTypeId = (Long)fundingInfo[2];
             Date date = (Date)fundingInfo[3];
             String currencyCode = (String)fundingInfo[4];
             Long activityId = (Long)fundingInfo[5];
+            Double fixed_exchange_rate = (Double) fundingInfo[6]
      * @return
      */
     public static List<Object[]> fetchFundingInformation(String view_prefix, Set<Long> allActivityIdsSet, String donorIdsWhereclause, String donorGroupIdsWhereclause,
@@ -2024,7 +2025,7 @@ public class DbUtil {
         SimpleDateFormat sdfOut = new SimpleDateFormat(AmpARFilter.SDF_OUT_FORMAT_STRING);
         
         String view_name = view_prefix + "v_donor_funding";
-        StringBuilder queryString = new StringBuilder("SELECT f.transaction_amount, f.transaction_type, f.adjustment_type, f.transaction_date, f.currency_code, f.amp_activity_id FROM " + view_name + " f JOIN amp_funding af ON af.amp_funding_id = f.amp_funding_id WHERE ");
+        StringBuilder queryString = new StringBuilder("SELECT f.transaction_amount, f.transaction_type, f.adjustment_type, f.transaction_date, f.currency_code, f.amp_activity_id, f.fixed_exchange_rate FROM " + view_name + " f JOIN amp_funding af ON af.amp_funding_id = f.amp_funding_id WHERE ");
         queryString.append("f.transaction_date >= '" + sdfOut.format(startDate) + "' AND f.transaction_date <= '" + sdfOut.format(endDate) + "'");
         queryString.append(" AND f.amp_activity_id IN " + activityWhereclause );
         queryString.append(" AND f.adjustment_type = " + actualCommitmentCatValId);
@@ -2059,7 +2060,7 @@ public class DbUtil {
         	
         	List<Object[]> result = new ArrayList<Object[]>();
         	int nrColumns = resultSet.getMetaData().getColumnCount();
-        	if (nrColumns != 6)
+        	if (nrColumns != 7)
         		throw new RuntimeException("invalid Funding SQL query");
         	while (resultSet.next())
         	{
@@ -2070,6 +2071,7 @@ public class DbUtil {
         		item[3] = resultSet.getDate(4);
         		item[4] = resultSet.getString(5);
         		item[5] = resultSet.getLong(6);
+        		item[6] = resultSet.getDouble(7);
         		result.add(item);
         	}
         	return result;
@@ -2085,6 +2087,7 @@ public class DbUtil {
     
     /**
      * fetches all funding info which matches given filters. Null in any of the filter column means "no filtering by it"
+     * result[0] = List<Object[7]>
      * @param sectorIds
      * @param programIds
      * @param donorIds
@@ -2182,6 +2185,7 @@ public class DbUtil {
         }
         try
         {
+        	// Object[7]
             List<Object[]> queryResults = fetchFundingInformation(view_prefix, allActivityIdsSet, donorIdsWhereclause, donorGroupIdsWhereclause, donorTypeIdsWhereclause, workspaceIdsWhereclause, typeOfAssistanceWhereclause, startDate, endDate);
         	return new Object[] {queryResults, sectorPercentageMap, programPercentageMap, locationPercentageMap};
         }
@@ -2456,6 +2460,23 @@ public class DbUtil {
 
 
     //For pledges
+    /**
+     * fixedExchangeRate NOT implemented for pledges, so even if it will return a list of Object[7], the last element will always be null
+     * Constantin: this function seems broken, because it returns the fundings as a list of Object[5], so further down the line ArrayOutOfBounds should happen
+     * @param sectorIds
+     * @param programIds
+     * @param donorIds
+     * @param donorGroupIds
+     * @param donorTypeIds
+     * @param includeCildLocations
+     * @param locations
+     * @param workspaces
+     * @param typeOfAssistanceIds
+     * @param startDate
+     * @param endDate
+     * @param isPublic
+     * @return
+     */
     public static Object[] getPledgeFundings (Collection<Long> sectorIds,
                                                     Collection<Long> programIds,
                                                     Collection<Long> donorIds,

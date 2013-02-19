@@ -1,7 +1,7 @@
 tr.firstLevel, td.firstLevel {
 	background:#BFC9CE; 
 	border-bottom: black 1px solid;
-	border-right: none;
+	border-right: 1px solid black;
 	padding-left: 5px;
 	padding-right: 3px;
 	font-family:Arial, Helvetica, sans-serif; 
@@ -11,7 +11,7 @@ tr.firstLevel, td.firstLevel {
 tr.secondLevel, td.secondLevel {
 	background: #D6DCDF;
 	border-bottom:#A9A9A9 2px solid;
-	border-right:#B6DDE8 1px solid;
+	border-right: #383838 1px solid;
 	padding-left: 5px;
 	padding-right: 3px;
 	font-family:Arial, Helvetica, sans-serif;
@@ -21,7 +21,7 @@ tr.secondLevel, td.secondLevel {
 tr.thirdLevel, td.thirdLevel {
 	background: #E9EBED;
 	border-bottom:#A9A9A9 2px solid;
-	border-right:#DBEEF3 1px solid;
+	border-right:#8B9EA3 1px solid;
 	padding-left: 5px;
 	padding-right: 3px;
 	width: 170px;

@@ -869,6 +869,9 @@ public class DbUtil {
         
         if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
         	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
+        else
+        	oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
+        	
 
     	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";

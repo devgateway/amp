@@ -107,19 +107,29 @@ public class DataDispatcher extends DispatchAction {
 			visualizationForm.getFilter().setFromPublicView(true);// sets as public view when team is management, so it shows only approved activities
         } 
 		
-		if (tm == null || visualizationForm.getFilter().getWorkspaceOnly() == null || !visualizationForm.getFilter().getWorkspaceOnly()) //Public view
-		{
-    		String sqlQuery = WorkspaceFilter.generateWorkspaceFilterQuery(session, AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
+
+		if(visualizationForm.getFilter().getWorkspaceOnly()){
+    		String sqlQuery = WorkspaceFilter.getWorkspaceFilterQuery(session);
     		ArrayList<BigInteger> activityList = DbUtil.getInActivities(sqlQuery);
     		visualizationForm.getFilter().setActivityComputedList(activityList);
-			visualizationForm.getFilter().setTeamMember(tm);
 		}
-		else if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
-    		String sqlQuery = WorkspaceFilter.generateWorkspaceFilterQuery(session, tm.getMemberId(), false);
-    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(sqlQuery);
-    		visualizationForm.getFilter().setActivityComputedList(activityList);
-			visualizationForm.getFilter().setTeamMember(tm);
-        }
+		else
+		{
+    		visualizationForm.getFilter().setActivityComputedList(null);
+//			boolean hideDraft = true;
+//			boolean approved = true;
+//			String accessType = Constants.ACCESS_TYPE_MNGMT;
+//
+//    		String sqlQuery = WorkspaceFilter.generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType, approved, hideDraft, true);
+//			session.setAttribute("currentMemberTemp", tm);
+//			session.setAttribute("currentMember", null);
+//    		String sqlQuery = WorkspaceFilter.getWorkspaceFilterQuery(session);
+//    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(sqlQuery);
+//			session.setAttribute("currentMemberTemp", tm);
+//			session.setAttribute("currentMember", tm);
+		}
+			
+		visualizationForm.getFilter().setTeamMember(tm);
 		// Parameters coming from queryString for the list of Organization Groups/Organizations, Regions/Zones, Sector/Sub-sector
 		if (request.getParameter("orgGroupIds")!=null && !request.getParameter("orgGroupIds").equals("null"))
 			visualizationForm.getFilter().setOrgGroupIds(getLongArrayFromParameter(request.getParameter("orgGroupIds")));

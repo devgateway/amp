@@ -103,28 +103,34 @@ public class WorkspaceFilter
 						Util.toCSString(AmpARFilter.activityStatus)	// other workspaces: all kinds of activities
 				);
 		
-		if("Management".equals(this.getAccessType()))
+		if("Management".equals(this.getAccessType())) {
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+used_approval_status+") AND draft<>true AND " +
-					"amp_team_id IS NOT NULL AND amp_team_id IN ("
+					"amp_team_id IS NOT NULL ";
+        if (ampTeams != null) {
+        TEAM_FILTER += " AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
-				+ ") ";
+				+ ") "; } }
 				// + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				//+ Util.toCSString(ampTeams) + ") ) AND draft<>true "; 
 		else{
 			
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
-				+ Util.toCSString(ampTeams)
-				+ ") ";
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL ";
+			        if (ampTeams != null) {
+			        TEAM_FILTER += " AND amp_team_id IN ("
+							+ Util.toCSString(ampTeams)
+							+ ") "; }
 				//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				//+ Util.toCSString(ampTeams) + ") )" ;
 		}
-		NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
-			+ Util.toCSString(ampTeams)
-			+ ") ";
+		NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL ";
+		        if (ampTeams != null) {
+		        TEAM_FILTER += " AND amp_team_id IN ("
+						+ Util.toCSString(ampTeams)
+						+ ") "; }
 			//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 			//+ Util.toCSString(ampTeams) + ") )" ;
 			
-		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false )";
+		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) ";
 		if (hideDraft)
 			TEAM_FILTER += "AND amp_activity_id IN (" + DRAFT_FILTER + ") ";		
 		
@@ -211,8 +217,9 @@ public class WorkspaceFilter
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if (forcedTeamMemberId != null && forcedTeamMemberId != AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES)
 			tm = TeamMemberUtil.getTeamMember(forcedTeamMemberId);
-		
-		if (tm == null)
+
+        //Hotfix for timor budget integration report
+		if (tm == null || tm.getMemberName().equalsIgnoreCase("AMP Admin"))
 		{
 			//public view
 			boolean hideDraft = true;

@@ -45,9 +45,9 @@ public class ShareDocument extends Action {
 			Node node=DocumentManagerUtil.getReadNode(nodeBaseUUID, request);
 			AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
 			
-			CrSharedDoc sharedDoc = null;
-			
 			if(shareWith.equals(CrConstants.SHAREABLE_WITH_TEAM)){//user is sharing resource from his private space !
+				CrSharedDoc sharedDoc = null;
+				
 				AmpTeam team=TeamUtil.getAmpTeam(teamMember.getTeamId());
 				boolean shareWithoutApprovalNeeded=((sett!=null && sett.getAllowAddTeamRes()!=null && sett.getAllowAddTeamRes().intValue()>=CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER) || teamMember.getTeamHead());
 				
@@ -100,8 +100,8 @@ public class ShareDocument extends Action {
 						//store last approved version of the team node in db
 						lastAppVersion=new NodeLastApprovedVersion(nodeWrapper.getUuid(), lastApprovedNodeVersionUUID);
 						DbUtil.saveOrUpdateObject(lastAppVersion);
-					}				
-				}else{
+					}	
+				} else {
 					sharedDoc=DocumentManagerUtil.getCrSharedDoc(node.getUUID(), teamMember.getTeamId(), CrConstants.PENDING_STATUS);
 					if(sharedDoc!=null){ //if there was other version of this resource,which was not approved as team doc,then that previous version is replaced with this one
 						DbUtil.delete(sharedDoc);
@@ -115,7 +115,12 @@ public class ShareDocument extends Action {
 					//create new Approval
 					new PendingResourceShareTrigger(lastVersionNode);
 				}
+				
+				// copy all organizations from the original Node
+				copyOrganizations(nodeBaseUUID, sharedDoc.getNodeUUID());
+				
 			}else if(shareWith.equals(CrConstants.SHAREABLE_WITH_OTHER_TEAMS)){
+				CrSharedDoc sharedDoc = null;
 				/**
 				 * if other version was already shared, then just need to update version of the shared node among workspaces, 
 				 * otherwise should create new one.
@@ -140,23 +145,34 @@ public class ShareDocument extends Action {
 						}
 						
 						DbUtil.saveOrUpdateObject(sharedDoc);
+						
+						// copy all organizations from the original Node
+						copyOrganizations(node.getUUID(), sharedDoc.getSharedNodeVersionUUID());
 					}
 				}
 			}
 			
-			// copy all organizations from the original Node
-			List<AmpOrganisation> existingOrgs = DocToOrgDAO.getOrgsObjByUuid(nodeBaseUUID);
-			if (existingOrgs != null) {
-				for (AmpOrganisation organizationLinkToClone : existingOrgs) {
-					CrDocumentsToOrganisations docToOrgObj = new CrDocumentsToOrganisations(sharedDoc.getNodeUUID(), organizationLinkToClone);
-					DocToOrgDAO.saveObject(docToOrgObj);
-				}
-			}
 		}
 		
 		
 		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		request.getSession().setAttribute("resourcesTab", myForm.getType());
 		return null;
+	}
+	
+	/**
+	 * Since the documents are cloned when shared, we need to clone related list of organizations as well
+	 * @param originalNodeUUID
+	 * @param destinationNodeUUID
+	 */
+	private void copyOrganizations(String originalNodeUUID, String destinationNodeUUID) {
+		// copy all organizations from the original Node
+		List<AmpOrganisation> existingOrgs = DocToOrgDAO.getOrgsObjByUuid(originalNodeUUID);
+		if (existingOrgs != null) {
+			for (AmpOrganisation organizationLinkToClone : existingOrgs) {
+				CrDocumentsToOrganisations docToOrgObj = new CrDocumentsToOrganisations(destinationNodeUUID, organizationLinkToClone);
+				DocToOrgDAO.saveObject(docToOrgObj);
+			}
+		}		
 	}
 }

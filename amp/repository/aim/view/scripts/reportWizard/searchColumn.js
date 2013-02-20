@@ -8,7 +8,7 @@ var currentScrollItem = 0;
 var minusImage = 'DHTMLSuite_minus.gif';
 var plusImage = 'DHTMLSuite_plus.gif';
 
-function searchFunction()
+function searchFunction(no_match_msg)
 {
 
 	var searchCriteria = document.getElementById("searchCriteria").value;
@@ -107,6 +107,7 @@ function searchFunction()
 	document.getElementById('nextSearchButton').focus();
 
 	if(countMatches > 0){
+		setSearchMessage('');
 		scrollArray[0].style.backgroundColor = '#FF0000';
 		scrollArray[0].style.color = '#EEEEEE';
 		scrollArray[0].scrollIntoView(false);
@@ -115,7 +116,9 @@ function searchFunction()
 	else
 	{
 //		showNodeObject(false,"dhtmlgoodies_tree");
-	//	setSearchMessage("<digi:trn key="fm:search:noMatches">No matches found</digi:trn>.");
+		setSearchMessage(no_match_msg);
+		document.getElementById("prevSearchButton").style.display = 'none';
+		document.getElementById("nextSearchButton").style.display = 'none';
 	}	
 	
 }

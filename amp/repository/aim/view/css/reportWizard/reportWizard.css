@@ -294,3 +294,13 @@ button.toolbar-dis {
 	vertical-align: bottom;
 	padding: 1px;
 }
+
+#wizard_container #searchBox input#searchCriteria
+{
+	width: 138px;
+}
+
+#wizard_container #searchBox #prevSearchButton, #wizard_container #searchBox #nextSearchButton
+{
+	width: 38px;
+}

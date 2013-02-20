@@ -1,6 +1,7 @@
 package org.digijava.module.contentrepository.action;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
@@ -13,16 +14,19 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.contentrepository.dbentity.CrDocumentsToOrganisations;
 import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
 import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocToOrgDAO;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
@@ -41,10 +45,12 @@ public class ShareDocument extends Action {
 			Node node=DocumentManagerUtil.getReadNode(nodeBaseUUID, request);
 			AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
 			
+			CrSharedDoc sharedDoc = null;
+			
 			if(shareWith.equals(CrConstants.SHAREABLE_WITH_TEAM)){//user is sharing resource from his private space !
 				AmpTeam team=TeamUtil.getAmpTeam(teamMember.getTeamId());
 				boolean shareWithoutApprovalNeeded=((sett!=null && sett.getAllowAddTeamRes()!=null && sett.getAllowAddTeamRes().intValue()>=CrConstants.TEAM_RESOURCES_ADD_ALLOWED_WORKSP_MEMBER) || teamMember.getTeamHead());
-				CrSharedDoc sharedDoc=null;
+				
 				
 				if(shareWithoutApprovalNeeded){
 					String sharedPrivateNodeVersionUUID=null;
@@ -115,7 +121,6 @@ public class ShareDocument extends Action {
 				 * otherwise should create new one.
 				 */
 				Collection<AmpTeam> teams= TeamUtil.getAllTeams();
-				CrSharedDoc sharedDoc=null;
 				if(teams!=null && teams.size()>0){
 					for (AmpTeam ampTeam : teams) {
 						sharedDoc=DocumentManagerUtil.getCrSharedDoc(node.getUUID(),ampTeam.getAmpTeamId(),CrConstants.SHARED_AMONG_WORKSPACES);
@@ -138,7 +143,18 @@ public class ShareDocument extends Action {
 					}
 				}
 			}
+			
+			// copy all organizations from the original Node
+			List<AmpOrganisation> existingOrgs = DocToOrgDAO.getOrgsObjByUuid(nodeBaseUUID);
+			if (existingOrgs != null) {
+				for (AmpOrganisation organizationLinkToClone : existingOrgs) {
+					CrDocumentsToOrganisations docToOrgObj = new CrDocumentsToOrganisations(sharedDoc.getNodeUUID(), organizationLinkToClone);
+					DocToOrgDAO.saveObject(docToOrgObj);
+				}
+			}
 		}
+		
+		
 		DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		request.getSession().setAttribute("resourcesTab", myForm.getType());
 		return null;

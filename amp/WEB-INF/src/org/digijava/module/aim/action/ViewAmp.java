@@ -328,6 +328,8 @@ public class ViewAmp
             if (usr != null) {
                 tm.setEmail(usr.getEmail());
             }
+            
+            session.setAttribute(Constants.CURRENT_MEMBER, tm);            
             AmpTeam.initializeTeamFiltersSession(member, request, session);
 			
             // Check whether the user is a transalator for the amp site.
@@ -337,7 +339,7 @@ public class ViewAmp
             } else {
                 tm.setTranslator(false);
             }
-            session.setAttribute(Constants.CURRENT_MEMBER, tm);
+            
 
             // Set the session infinite. i.e. session never timeouts
             session.setMaxInactiveInterval(-1);

@@ -20,7 +20,6 @@
 	</div>
 	<div class="right_menu_box">
 		<div class="right_menu_cont">
-		CARAMBA
 			<logic:notEmpty name="recentResources" scope="session">
 				<logic:iterate name="recentResources" id="doc" scope="session" type="org.digijava.module.contentrepository.helper.DocumentData"> 
 					<c:if test="${doc.webLink == null}" >
@@ -40,8 +39,8 @@
 				</a>	 	
 				</div>
 	      </logic:notEmpty>    
-	      <logic:empty name="myLinks" scope="session">
-          	<digi:trn key="aim:noResources">No Resources</digi:trn>
+	      <logic:empty name="recentResources" scope="session">
+          	<digi:trn key="aim:noResources">No Resources Viewed</digi:trn>
           </logic:empty>       		
           </div>
 		</div>

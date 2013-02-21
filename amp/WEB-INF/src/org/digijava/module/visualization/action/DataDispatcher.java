@@ -2949,23 +2949,23 @@ public class DataDispatcher extends DispatchAction {
         String text = TranslatorWorker.translateText("Year",locale, siteId);
 
 		csvString.append("\"" + text + "\"");
-		if (filter.getPledgeVisible() && pledgesVisible) {
+		if (filter.getPledgeVisible()!=null && filter.getPledgeVisible() && pledgesVisible) {
 			csvString.append(",");
 			csvString.append("\"" + pledgesTranslatedTitle + "\"");
 		}
-		if (filter.getCommitmentsVisible()) {
+		if (filter.getCommitmentsVisible()!=null && filter.getCommitmentsVisible()) {
 			csvString.append(",");
 			csvString.append("\"" + comTranslatedTitle);
 			csvString.append("#");
 	        csvString.append(Constants.COMMITMENT + "\"");
 		}
-        if (filter.getDisbursementsVisible()) {
+        if (filter.getDisbursementsVisible()!=null && filter.getDisbursementsVisible()) {
     		csvString.append(",");
 	        csvString.append("\"" + disbTranslatedTitle);
 			csvString.append("#");
 	        csvString.append(Constants.DISBURSEMENT + "\"");
         }
-        if (filter.getExpendituresVisible() && expendituresVisible) {
+        if (filter.getExpendituresVisible()!=null && filter.getExpendituresVisible() && expendituresVisible) {
 			csvString.append(",");
 			csvString.append("\"" + expTranslatedTitle);
 			csvString.append("#");
@@ -2987,14 +2987,14 @@ public class DataDispatcher extends DispatchAction {
 				String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 				xmlString.append("<year name=\"" + yearName + "\">\n");
 				fundingData += "<" + yearName;
-				if (filter.getPledgeVisible() && pledgesVisible) {
+				if (filter.getPledgeVisible()!=null && filter.getPledgeVisible() && pledgesVisible) {
 					DecimalWraper fundingPledge = DbUtil.getPledgesFunding(filter, startDate, endDate,
 							currCode);
 					xmlString
 					.append("<dataField category=\""+TranslatorWorker.translateText("Pledges", locale, siteId)+"\" amount=\""+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + pledgesTranslatedTitle + ">"+ fundingPledge.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
-				if (filter.getCommitmentsVisible()) {
+				if (filter.getCommitmentsVisible()!=null && filter.getCommitmentsVisible()) {
 					DecimalWraper fundingComm = DbUtil
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
@@ -3002,7 +3002,7 @@ public class DataDispatcher extends DispatchAction {
 					.append("<dataField category=\""+ comTranslatedTitle +"\" id=\"" + Constants.COMMITMENT + "\" amount=\""+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + comTranslatedTitle + ">"+ fundingComm.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
-				if (filter.getDisbursementsVisible()) {
+				if (filter.getDisbursementsVisible()!=null && filter.getDisbursementsVisible()) {
 					DecimalWraper fundingDisb = DbUtil
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
@@ -3010,7 +3010,7 @@ public class DataDispatcher extends DispatchAction {
 					.append("<dataField category=\""+ disbTranslatedTitle +"\" id=\"" + Constants.DISBURSEMENT + "\" amount=\""+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) +  "\"  year=\"" + yearName + "\"/>\n");
 					fundingData += ">" + disbTranslatedTitle + ">"+ fundingDisb.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				}
-				if (filter.getExpendituresVisible() && expendituresVisible) {
+				if (filter.getExpendituresVisible()!=null && filter.getExpendituresVisible() && expendituresVisible) {
 					DecimalWraper fundingExp = DbUtil
 					.getFunding(filter, startDate, endDate, null, null,
 							Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);

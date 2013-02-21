@@ -45,6 +45,7 @@ public class SelectTeam extends Action {
         session.removeAttribute("reportSorters");
         session.removeAttribute("ampReportId");
         session.removeAttribute(ArConstants.REPORTS_FILTER);
+        session.removeAttribute(Constants.MOST_RECENT_RESOURCES);
 
 
 

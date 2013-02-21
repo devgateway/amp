@@ -99,17 +99,22 @@ public class AmpFundingDetail implements Serializable, Cloneable {
         
         public AmpFundingDetail(){}
         
-        
         public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent,Double fixedExchangeRate){
-            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
+            this(null,transactionType, adjustmentType, transactionAmount, transactionDate, ampCurrencyId,  percent, fixedExchangeRate);
+        }
+        public AmpFundingDetail(Long ampFundDetailId, Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent,Double fixedExchangeRate){
+            this(ampFundDetailId,transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
             if (percent == null) {
                 percent = 0f;
             }
             this.transactionAmount = transactionAmount * percent / 100;
         }
         
-        public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent1, Float percent2,Double fixedExchangeRate){
-            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
+        public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent, Float percent2,Double fixedExchangeRate){
+            this(null,transactionType, adjustmentType, transactionAmount, transactionDate, ampCurrencyId,  percent, percent2,fixedExchangeRate);
+        }
+        public AmpFundingDetail(Long ampFundDetailId, Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent1, Float percent2,Double fixedExchangeRate){
+            this(ampFundDetailId,transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
             if((percent1==null||percent1==0)&&(percent2==null||percent2==0)){
             this.transactionAmount=transactionAmount;
             }
@@ -128,7 +133,10 @@ public class AmpFundingDetail implements Serializable, Cloneable {
         
         // used in dashborads when there is a filter by location, sector and program
         public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent1, Float percent2, Float percent3,Double fixedExchangeRate){
-            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
+        	this(null,transactionType, adjustmentType, transactionAmount, transactionDate, ampCurrencyId,  percent1, percent2,percent3,fixedExchangeRate);
+        }
+        public AmpFundingDetail(Long ampFundDetailId, Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent1, Float percent2, Float percent3,Double fixedExchangeRate){
+                this(ampFundDetailId,transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
             if((percent1==null||percent1==0)&&(percent2==null||percent2==0)&&(percent3==null||percent3==0)){
             	this.transactionAmount=transactionAmount;
             }
@@ -147,19 +155,23 @@ public class AmpFundingDetail implements Serializable, Cloneable {
         
         // used in org profile for indicator 4
          public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate, Long ahsureyId){
-            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
+            this(null, transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
             this.transactionAmount=transactionAmount*OrgProfileUtil.getQ4Value(ahsureyId);
      
         }
           // used in org profile 
-         public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
-            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
+        public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
+         	this(null,transactionType, adjustmentType, transactionAmount, transactionDate, ampCurrencyId, fixedExchangeRate);
+		}
+        public AmpFundingDetail(Long ampFundDetailId, Integer transactionType,AmpCategoryValue adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
+            this(ampFundDetailId, transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
             this.transactionAmount=transactionAmount;
             
         }
          
-        public AmpFundingDetail(Integer transactionType,AmpCategoryValue adjustmentType,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
-            this.transactionType=transactionType;
+        public AmpFundingDetail(Long ampFundDetailId, Integer transactionType,AmpCategoryValue adjustmentType,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
+        	this.ampFundDetailId=ampFundDetailId;
+        	this.transactionType=transactionType;
             this.adjustmentType=adjustmentType;
             this.transactionDate=transactionDate;
             this.ampCurrencyId=ampCurrencyId;

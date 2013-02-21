@@ -1441,6 +1441,45 @@ function collapseAll() {
 
 <!-- FUNDING SECTION -->
 <logic:present name="currentMember" scope="session">
+<!-- PROPOSED PROJECT COST -->
+<module:display name="/Activity Form/Donor Funding/Proposed Project Cost" parentModule="/Activity Form/Donor Funding">
+<fieldset>
+	<legend>
+		<span class=legend_label id="proposedcostlink" style="cursor: pointer;">
+			<digi:trn>Proposed Project Cost</digi:trn>
+		</span>	</legend>
+	<div id="proposedcostdiv">
+		<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
+			<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%" >
+				<tr bgcolor="#f0f0f0">
+					<td>
+						<digi:trn key="aim:cost">Cost</digi:trn>					
+					</td>
+					<td bgcolor="#f0f0f0" align="left">
+						<c:if test="${aimEditActivityForm.funding.proProjCost.funAmount!=null}">
+							<b>${aimEditActivityForm.funding.proProjCost.funAmount}</b>						
+						</c:if>&nbsp;
+						<c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> 
+							<b>${aimEditActivityForm.funding.proProjCost.currencyCode}</b>						
+						</c:if>					
+					</td>
+				</tr>
+				<tr bgcolor="#f0f0f0">
+					<td>
+						<digi:trn>Date</digi:trn>					
+					</td>
+					<td bgcolor="#f0f0f0" align="left" width="150">
+						<c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
+							<b>${aimEditActivityForm.funding.proProjCost.funDate}</b>						
+						</c:if>					
+					</td>
+				</tr>
+			</table>
+		</c:if>
+	</div>
+</fieldset>
+</module:display>
+<!-- END PROPOSED PROJECT COST -->	
 	<module:display name="/Activity Form/Donor Funding" parentModule="/Activity Form">
 		<fieldset>
 			<legend>
@@ -2386,47 +2425,6 @@ function collapseAll() {
 </fieldset>
 </module:display>
 <!-- END CONTACT INFORMATION -->
-
-<!-- PROPOSED PROJECT COST -->
-<module:display name="/Activity Form/Donor Funding/Proposed Project Cost" parentModule="/Activity Form/Donor Funding">
-<fieldset>
-	<legend>
-		<span class=legend_label id="proposedcostlink" style="cursor: pointer;">
-			<digi:trn>Proposed Project Cost</digi:trn>
-		</span>	</legend>
-	<div id="proposedcostdiv">
-		<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
-			<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa" width="100%" >
-				<tr bgcolor="#f0f0f0">
-					<td>
-						<digi:trn key="aim:cost">Cost</digi:trn>					
-					</td>
-					<td bgcolor="#f0f0f0" align="left">
-						<c:if test="${aimEditActivityForm.funding.proProjCost.funAmount!=null}">
-							<b>${aimEditActivityForm.funding.proProjCost.funAmount}</b>						
-						</c:if>&nbsp;
-						<c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> 
-							<b>${aimEditActivityForm.funding.proProjCost.currencyCode}</b>						
-						</c:if>					
-					</td>
-				</tr>
-				<tr bgcolor="#f0f0f0">
-					<td>
-						<digi:trn>Date</digi:trn>					
-					</td>
-					<td bgcolor="#f0f0f0" align="left" width="150">
-						<c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
-							<b>${aimEditActivityForm.funding.proProjCost.funDate}</b>						
-						</c:if>					
-					</td>
-				</tr>
-			</table>
-		</c:if>
-	</div>
-</fieldset>
-</module:display>
-<!-- END PROPOSED PROJECT COST -->
-
 <!-- COSTING -->
 <feature:display name="Costing" module="Activity Costing">
 <fieldset>

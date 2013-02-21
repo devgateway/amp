@@ -197,7 +197,7 @@ public abstract class ColumnWorker {
 					cc.addCell(c);				
 			}
 
-			rs.close();				
+			rs.close();
 
 		} catch (SQLException e) {
 			logger.error("Unable to complete extraction for column "+columnName+". Master query was "+query);

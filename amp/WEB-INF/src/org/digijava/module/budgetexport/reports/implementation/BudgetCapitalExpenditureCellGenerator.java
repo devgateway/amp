@@ -29,13 +29,12 @@ public class BudgetCapitalExpenditureCellGenerator extends
 	public BudgetCapitalExpenditureCellGenerator(String metaDataName,
 			String measureName, String originalMeasureName) {
 		super(metaDataName, measureName, originalMeasureName);
-		
-		this.insider	= new ColWorkerInsider(null, "v_capital_and_exp", "Capital - Expenditure", null);
 	}
 	
 	@Override
 	public void setSession ( HttpSession session ) {
-		this.insider.setSession(session);
+		this.insider	= ColWorkerInsider.getOrBuildInsider("v_capital_and_exp", "Capital - Expenditure", session);
+		this.session = session;
 	}
 	
 	@Override

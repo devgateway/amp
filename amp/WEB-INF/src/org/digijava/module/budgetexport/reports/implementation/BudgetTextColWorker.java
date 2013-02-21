@@ -35,11 +35,6 @@ public class BudgetTextColWorker extends TextColWorker {
 	public BudgetTextColWorker(String condition, String viewName,
 			String columnName, ReportGenerator generator) {
 		super(condition, viewName, columnName, generator);
-		
-		this.insider	= new ColWorkerInsider(condition, viewName, columnName, generator);
-//		this.generator	= generator;
-//		this.columnName	= columnName;
-//		this.viewName	= viewName;
 	}
 	
 	@Override
@@ -49,7 +44,7 @@ public class BudgetTextColWorker extends TextColWorker {
 	
 	@Override
 	public void setSession(HttpSession session) {
-		this.insider.setSession( session );
+		this.insider = ColWorkerInsider.getOrBuildInsider(viewName, columnName, session);
 	}
 	
 //	public void prepareEncoder() {

@@ -32,13 +32,12 @@ public class BudgetActualDisbCapitalCellGenerator extends
 	public BudgetActualDisbCapitalCellGenerator(String metaDataName,
 			String measureName, String originalMeasureName) {
 		super(metaDataName, measureName, originalMeasureName);
-		// TODO Auto-generated constructor stub
-		this.insider	= new ColWorkerInsider(null, "v_mode_of_payment_capital_recurrent", ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT, null);
 	}
 	
 	@Override
 	public void setSession ( HttpSession session ) {
-		this.insider.setSession(session);
+		this.insider	= ColWorkerInsider.getOrBuildInsider("v_mode_of_payment_capital_recurrent", ArConstants.COLUMN_ACTUAL_DISB_CAPITAL_RECURRENT, session);
+		this.session = session;
 	}
 	
 	@Override

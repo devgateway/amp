@@ -25,7 +25,6 @@ import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -2307,7 +2306,7 @@ public class DbUtil {
 		}
 	}
 	
-	public static List<AmpDashboard> getDashboardsToShowInMenu() {
+	public static List<AmpDashboard> getDashboardsToShowInMenu(boolean donorDashVisible, boolean regionDashVisible, boolean sectorDashVisible) {
         Session session = null;
         List<AmpDashboard> dashs = null;
         Iterator itr = null;
@@ -2322,6 +2321,28 @@ public class DbUtil {
         } catch (Exception ex) {
             logger.error("Unable to get dashboards from database", ex);
         }
+        
+        Collection<AmpDashboard> noVisibleDashboards = new ArrayList<AmpDashboard>();
+        
+        for(AmpDashboard d : dashs){
+        	
+        	if (org.digijava.module.visualization.util.Constants.DashboardType.DONOR ==  d.getBaseType() &&
+        			! donorDashVisible){
+        		noVisibleDashboards.add(d);
+        	}
+        	if (org.digijava.module.visualization.util.Constants.DashboardType.REGION ==  d.getBaseType() &&
+        			! regionDashVisible){
+        		noVisibleDashboards.add(d);
+        	}
+        	if (org.digijava.module.visualization.util.Constants.DashboardType.SECTOR ==  d.getBaseType() &&
+        			! sectorDashVisible){
+        		noVisibleDashboards.add(d);
+        	}
+        }
+        dashs.removeAll(noVisibleDashboards);
+        
+        
+        
         return dashs;
     }
 	public static ArrayList<BigInteger> getInActivities(String query) throws Exception{

@@ -39,12 +39,14 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.visualization.dbentity.AmpDashboard;
 
 /**
  * Shows the index page
@@ -81,7 +83,13 @@ public class ViewAmp
         Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
         session.setAttribute(Constants.USER_WORKSPACES, members);
         
-        Collection dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
+        
+        boolean donorDashVisible = FeaturesUtil.isVisibleModule("Org. Dashboard", request.getSession().getServletContext());
+        boolean regionDashVisible = FeaturesUtil.isVisibleModule("Region Dashboard", request.getSession().getServletContext());
+        boolean sectorDashVisible = FeaturesUtil.isVisibleModule("Sector Dashboard", request.getSession().getServletContext());
+        
+        Collection<AmpDashboard> dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu(donorDashVisible, regionDashVisible, sectorDashVisible);
+        
         session.setAttribute(Constants.MENU_DASHBOARDS, dashboards);
         
         if (tm != null && tm.getTeamId() != null &&

@@ -33,18 +33,18 @@ function init() {
 			sync:true,
 			load: function(jsonData) {
 				   dojo.forEach(jsonData,function(map) {
-			        	switch (map.maptype) {
+			        	switch (map.mapType) {
 						case 1:
-							basemapurl = map.mapurl;
+							basemapurl = map.mapUrl;
 							break;
 						case 2:
-							mapurl = map.mapurl;
+							mapurl = map.mapUrl;
 							break;
 						case 7:
-							locatorurl = map.mapurl;
+							locatorurl = map.mapUrl;
 							break;
 						case 8:
-							rooturl = map.mapurl;
+							rooturl = map.mapUrl;
 							break;
 						default:
 							break;

@@ -8,6 +8,7 @@ package org.digijava.module.aim.action;
 
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -95,7 +97,25 @@ public class ViewNewAdvancedReport extends Action {
 		}
 		
 		if ( ampReportId != null )
+		{
+			if (request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS) == null)
+			{
+				Comparator<AmpReports> ampReportsComparator = new Comparator<AmpReports>()
+				{
+					public int compare(AmpReports a, AmpReports b)
+					{
+						return a.getAmpReportId().compareTo(b.getAmpReportId());
+					}
+				};
+				request.getSession().setAttribute(Constants.LAST_VIEWED_REPORTS, new BoundedList<AmpReports>(5, ampReportsComparator));
+			}
+			
+			BoundedList<AmpReports> bList = (BoundedList<AmpReports>) request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS);
+			AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, Long.parseLong(ampReportId));
+			if (!report.getDrilldownTab())
+				bList.add(report);
 			request.getSession().setAttribute("LAST_REPORT_ID", ampReportId);
+		}
 		
 		if ( lastReportId == null || !lastReportId.equals(ampReportId) ) { 
 			// if it's the first time we load a report/tab OR if we are loading another report we should reset

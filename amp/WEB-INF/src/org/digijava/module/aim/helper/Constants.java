@@ -272,6 +272,7 @@ public class Constants
 	public static final String FILTER_CURRENT_REPORT	= "filterCurrentReport";
 	
 	public static final String MY_REPORTS 		= "myReports";
+	public static final String LAST_VIEWED_REPORTS 		= "lastViewedReports"; // BoundedList
 	public static final String MY_ACTIVE_TABS 	= "myActiveTabs";
 	public static final String MY_TABS 			= "myTabs";
 	public static final String MY_TASKS = "myTasks";

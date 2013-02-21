@@ -46,8 +46,7 @@ public class SelectTeam extends Action {
         session.removeAttribute("ampReportId");
         session.removeAttribute(ArConstants.REPORTS_FILTER);
         session.removeAttribute(Constants.MOST_RECENT_RESOURCES);
-
-
+        session.removeAttribute(Constants.LAST_VIEWED_REPORTS);
 
 
         LoginForm lForm = (LoginForm) form;

@@ -3,7 +3,9 @@ package org.dgfoundation.amp.utils;
 import java.util.*;
 
 /**
- * a class which is a like linkedlist bounded by a maximum length
+ * a class which is a like linkedlist bounded by a maximum length<br />
+ * <b>only the add method enforces the limit - the others are seen just through inheritance!</b><br />
+ * used inheritance in lieu of encapsulation because this list needs to be iterated by JSP files
  * repeatedly-inserted elements are moved to front, the bottom is lost to make place 
  * @author simple
  *

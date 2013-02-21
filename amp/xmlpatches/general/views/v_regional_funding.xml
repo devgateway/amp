@@ -19,7 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_regional_funding AS SELECT f.activity_id AS amp_activity_id, f.amp_regional_funding_id, f.amp_regional_funding_id AS amp_fund_detail_id, r.location_name AS region_name, f.transaction_type, f.adjustment_type, f.transaction_date, f.transaction_amount, c.currency_code, f.region_location_id AS region_id FROM amp_regional_funding f, amp_category_value_location r, amp_currency c, amp_category_value v WHERE ((((c.amp_currency_id = f.currency_id) AND (f.region_location_id = r.id)) AND (r.parent_category_value = v.id)) AND ((v.category_value)::text = 'Region'::text)) ORDER BY f.activity_id;;;
+			    	CREATE OR REPLACE VIEW v_regional_funding AS SELECT f.activity_id AS amp_activity_id, f.amp_regional_funding_id, f.amp_regional_funding_id AS amp_fund_detail_id, r.location_name AS region_name, f.transaction_type, f.adjustment_type, v1.category_value AS adjustment_type_name, f.transaction_date, f.transaction_amount, c.currency_code, f.region_location_id AS region_id FROM amp_regional_funding f, amp_category_value_location r, amp_currency c, amp_category_value v, amp_category_value v1 WHERE c.amp_currency_id = f.currency_id AND f.region_location_id = r.id AND r.parent_category_value = v.id AND v.category_value::text = 'Region'::text AND v1.id = f.adjustment_type ORDER BY f.activity_id;
         		</lang>
 		</script>
 	</apply>

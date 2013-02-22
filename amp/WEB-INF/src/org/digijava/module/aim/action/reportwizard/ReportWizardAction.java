@@ -555,7 +555,7 @@ public class ReportWizardAction extends MultiAction {
 		if ( ampReportTitle.equals(ampReport.getName()) ) { // we need to override the report
 			if (sourceReport.getOwnerId() == null)
 				throw new RuntimeException("unknown owner id of source report");
-			if (sourceReport.getOwnerId().getAmpTeamMemId() != ampTeamMember.getAmpTeamMemId())
+			if (!sourceReport.getOwnerId().getAmpTeamMemId().equals(ampTeamMember.getAmpTeamMemId()))
 			{
 				myForm.setOverwritingForeignReport(true);
 				throw new Exception("you are not allowed to override someone else's report");

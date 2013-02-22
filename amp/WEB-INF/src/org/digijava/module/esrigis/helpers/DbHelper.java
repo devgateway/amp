@@ -153,7 +153,7 @@ public class DbHelper {
 				String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
 				workSpaceactivityList = getInActivities(workSpacequery);
 			} else if(!filter.isModeexport()){
-				String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMember.getMemberId(), false);
+				String workSpacequery = WorkspaceFilter.getWorkspaceFilterQuery(request.getSession());
 				workSpaceactivityList = getInActivities(workSpacequery);
 			}
 			String inactivities= "";
@@ -347,7 +347,7 @@ public class DbHelper {
 	    			String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
 	    			workSpaceactivityList = getInActivities(workSpacequery);
 	    		} else if(!filter.isModeexport()){
-	    			String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMember.getMemberId(), false);
+	    			String workSpacequery = WorkspaceFilter.getWorkspaceFilterQuery(request.getSession());
 	    			workSpaceactivityList = getInActivities(workSpacequery);
 	    		}
 	    		for (Iterator iterator = workSpaceactivityList.iterator(); iterator.hasNext();) {
@@ -601,7 +601,7 @@ public class DbHelper {
 			String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
 			workSpaceactivityList = getInActivities(workSpacequery);
 		} else if(!filter.isModeexport()){
-			String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), tm.getMemberId(), false);
+			String workSpacequery = WorkspaceFilter.getWorkspaceFilterQuery(request.getSession());
 			workSpaceactivityList = getInActivities(workSpacequery);
 		}
 		for (Iterator iterator = workSpaceactivityList.iterator(); iterator.hasNext();) {

@@ -62,7 +62,7 @@ public class WorkspaceFilter
 	
 	protected void prepareTeams()
 	{
-		if (teamMemberId == AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES)
+		if (teamMemberId.equals(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES))
 		{
 			// special case: simulate like "all management workspaces" has been selected
 			Set<AmpTeam> allManagementTeams = new HashSet<AmpTeam>();

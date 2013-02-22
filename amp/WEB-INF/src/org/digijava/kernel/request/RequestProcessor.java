@@ -111,6 +111,8 @@ public class RequestProcessor
         bypassRefererCheckActions.add("/visualization/launchGraph.do");
         bypassRefererCheckActions.add("/aim/csvExport.do");
         bypassRefererCheckActions.add("/aim/xlsExport.do");
+        bypassRefererCheckActions.add("/aim/viewNewAdvancedReport.do");
+        bypassRefererCheckActions.add("/exception/showExceptionReport.do");
     }
     
 
@@ -315,8 +317,7 @@ public class RequestProcessor
         		commonURL = new String(request.getRequestURL());
         		if (request.getQueryString() != null)
         			commonURL += "?" + request.getQueryString();
-        		if (checkForIdInQuery(commonURL)){
-
+        		if (!bypassRefererCheck && checkForIdInQuery(commonURL)){
         			throw new RuntimeException("Access denied!!!!");
         			//response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
         		}

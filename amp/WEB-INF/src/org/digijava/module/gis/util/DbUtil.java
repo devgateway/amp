@@ -2093,7 +2093,7 @@ public class DbUtil {
      * @param donorIds
      * @param donorGroupIds
      * @param donorTypeIds
-     * @param includeCildLocations
+     * @param includeCildLocations IGNORED
      * @param locations
      * @param workspaces
      * @param typeOfAssistanceIds
@@ -2117,11 +2117,30 @@ public class DbUtil {
                                                 boolean isPublic,
                                                 HttpSession session,
                                                 boolean filterByLocations) {
+    		
+        	Map<Long, Map<Long, Float>> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds, null) : null;
+        	Map<Long, Map<Long, Float>> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
+        	Map<Long, Map<Long, Float>> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations, includeCildLocations) : null;
+
+    		return getActivityFundings(sectorPercentageMap, programPercentageMap, donorIds, donorGroupIds, donorTypeIds, locationPercentageMap, workspaces, typeOfAssistanceIds, startDate, endDate, isPublic, session, filterByLocations);    		
+    	}
+    
+    public static Object[] getActivityFundings (Map<Long, Map<Long, Float>> sectorPercentageMap,
+			    			Map<Long, Map<Long, Float>> programPercentageMap,
+			    			Collection<Long> donorIds,
+			    			Collection<Long> donorGroupIds,
+			    			Collection<Long> donorTypeIds,
+			    			Map<Long, Map<Long, Float>> locationPercentageMap,
+			    			List <AmpTeam> workspaces,
+			    			Collection <Long> typeOfAssistanceIds,
+			    			java.util.Date startDate,
+			    			java.util.Date endDate,
+			    			boolean isPublic,
+			    			HttpSession session,
+			    			boolean filterByLocations) 
+    {
         Object[] retVal = null;
 
-        Map<Long, Map<Long, Float>> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
-        Map<Long, Map<Long, Float>> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
-        Map<Long, Map<Long, Float>> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations, includeCildLocations) : null;
 
         String donorIdsWhereclause = generateWhereclause(donorIds, new GenericIdGetter());
         String donorGroupIdsWhereclause = generateWhereclause(donorGroupIds, new GenericIdGetter());
@@ -2234,7 +2253,7 @@ public class DbUtil {
         List queryResults = null;
         Object[] retVal = null;
 
-        Map<Long, Map<Long, Float>> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds) : null;
+        Map<Long, Map<Long, Float>> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds, null) : null;
         Map<Long, Map<Long, Float>> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
 
         String donorIdsWhereclause = generateWhereclause(donorIds, new GenericIdGetter());
@@ -2318,16 +2337,16 @@ public class DbUtil {
         return retVal;
     }
 
-    private static Map<Long, Map<Long, Float>> getActivitySectorPercentages (Collection<Long> sectorsIds) {
+    public static Map<Long, Map<Long, Float>> getActivitySectorPercentages (Collection<Long> sectorsIds, String classificationConfigName) {
         String sectorWhereclause = generateWhereclause(sectorsIds, new GenericIdGetter());
         Session sess = null;
         try {
             sess = PersistenceManager.getRequestDBSession();
-            StringBuilder queryStr = new StringBuilder("select actSec.activityId.ampActivityId, actSec.sectorId.ampSectorId, actSec.sectorPercentage from ");
+            StringBuilder queryStr = new StringBuilder("SELECT actSec.activityId.ampActivityId, actSec.sectorId.ampSectorId, actSec.sectorPercentage FROM ");
             queryStr.append(AmpActivitySector.class.getName());
-            queryStr.append(" as actSec where actSec.sectorPercentage is not null and actSec.sectorPercentage > 0");
+            queryStr.append(" AS actSec INNER JOIN actSec.classificationConfig config WHERE actSec.sectorPercentage IS NOT NULL and actSec.sectorPercentage > 0");
             if (sectorWhereclause != null) {
-                queryStr.append(" and actSec.sectorId.ampSectorId in ");
+                queryStr.append(" AND actSec.sectorId.ampSectorId IN ");
                 queryStr.append(sectorWhereclause);
                 /*
                 queryStr.append(" or actSec.sectorId.parentSectorId.ampSectorId in ");
@@ -2336,6 +2355,8 @@ public class DbUtil {
                 queryStr.append(sectorWhereclause);
                 */
             }
+            if (classificationConfigName != null)
+            	queryStr.append(" AND config.name='" + classificationConfigName + "' ");
             
             return fetchListAsPercentageMap(sess, queryStr.toString());
         } catch (DgException ex) {
@@ -2666,16 +2687,6 @@ public class DbUtil {
             Long retVal = null;
             if (obj != null && obj instanceof AmpCategoryValueLocations) {
                 retVal = ((AmpCategoryValueLocations) obj).getId();
-            }
-            return retVal;
-        }
-    }
-
-    public static class GenericIdGetter implements IdGetter {
-        public Long getId (Object obj) {
-            Long retVal = null;
-            if (obj != null) {
-                retVal = (Long) obj;
             }
             return retVal;
         }

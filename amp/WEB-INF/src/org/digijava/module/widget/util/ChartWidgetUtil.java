@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
@@ -57,6 +59,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.gis.util.RMMapCalculationUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
 import org.digijava.module.orgProfile.helper.PieChartLegendGenerator;
@@ -95,6 +98,8 @@ import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.VerticalAlignment;
+
+import java.util.Arrays;
 
 /**
  * Chart widgets util.
@@ -387,12 +392,12 @@ public class ChartWidgetUtil {
      * @throws DgException
      * @throws WorkerException
      */
-    public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt) throws DgException, WorkerException {
+    public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt, HttpSession session) throws DgException, WorkerException {
         JFreeChart result = null;
 		Font titleFont = new Font("Arial", Font.BOLD, 12);
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
 
-        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt);
+        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt, session);
         String titleMsg = TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
         String title = (opt.isShowTitle()) ? titleMsg : null;
         boolean tooltips = true;
@@ -480,7 +485,7 @@ public class ChartWidgetUtil {
      * @return
      * @throws DgException
      */
-    public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt) throws DgException {
+    public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt, HttpSession session) throws DgException {
         DefaultPieDataset ds = new DefaultPieDataset();
         Date fromDate = null;
         Date toDate = null;
@@ -498,21 +503,26 @@ public class ChartWidgetUtil {
             toDate = new Date(getStartOfYear(toYear.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
         }
         Double[] allFundingWrapper = {new Double(0)};// to hold whole funding value// to hold whole funding value
-        Collection<DonorSectorFundingHelper> fundings = getDonorSectorFunding(donors, fromDate, toDate, allFundingWrapper);
+        List<DonorSectorFundingHelper> fundings = getDonorSectorFunding(donors, fromDate, toDate, allFundingWrapper, session);
+        double sumA = 0, sumB = 0;
         if (fundings != null) {
             Double otherFunding = new Double(0);
             List<Long> otherIds = new ArrayList<Long>();
+            int totalAdded = 0;
             for (DonorSectorFundingHelper funding : fundings) {
-                Double percent = funding.getFounding() / allFundingWrapper[0];
+            	sumA += funding.getFounding();
+            	sumB += funding.getDisbFunding();
+                Double percent = (funding.getFounding() + funding.getDisbFunding())/ allFundingWrapper[0];
                 // the sectors which percent is less then 5% should be group in "Other"
                 AmpSector sector = funding.getSector();
 
-                if (percent >= 0.05) {
+                if (percent >= 0.05) { //BOZO
                     SectorHelper secHelper = new SectorHelper();
                     secHelper.setName(sector.getName());
                     secHelper.setIds(new ArrayList<Long>());
                     secHelper.getIds().add(sector.getAmpSectorId());
                     ds.setValue(secHelper, Math.round(funding.getFounding()));
+                    totalAdded ++;
                 } else {
                     otherFunding += funding.getFounding();
                     otherIds.add(sector.getAmpSectorId());
@@ -530,6 +540,7 @@ public class ChartWidgetUtil {
                 secHelper.setIds(otherIds);
                 ds.setValue(secHelper, otherFunding);
             }
+            return ds;
         }
         return ds;
     }
@@ -540,6 +551,17 @@ public class ChartWidgetUtil {
         return cal.getTime();
     }
 
+    private static class SectorInfo
+    {
+    	AmpSector sector;
+    	List<AmpFundingDetail> fundings;
+    	
+    	public SectorInfo(long sectorId)
+    	{
+    		sector = SectorUtil.getAmpSector(sectorId);
+    		fundings = new ArrayList<AmpFundingDetail>();
+    	}    	
+    }
     /**
      * Returns collection of DonorSectorFundingHelper beans.
      * Each of them represents funding of one particular sector.
@@ -550,92 +572,121 @@ public class ChartWidgetUtil {
      * @return
      * @throws DgException
      */
-    public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding) throws DgException {
+    public static List<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding, HttpSession session) throws DgException {
 
-        AmpCategoryClass catClass = null;
-        Long actualCommitmentCatValId = null;
-        try {
-            catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
-            for (AmpCategoryValue val : catClass.getPossibleValues()) {
-                if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                    actualCommitmentCatValId = val.getId();
-                    break;
-                }
-            }
-        } catch (NoCategoryClassException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+    	boolean isPublic = session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER) == null;
+    	List<Long> donorIds = donorIDs == null ? null : Arrays.asList(donorIDs);
+    	
+    	Map<Long, Map<Long, Float>> sectorPercentageMap = org.digijava.module.gis.util.DbUtil.getActivitySectorPercentages(null, "Primary");
+    	Object[] allFundings = org.digijava.module.gis.util.DbUtil.getActivityFundings(null /*sectorPercentageMap*/, null, donorIds, null, null, null, null, null, fromDate, toDate, isPublic, session, false);
+    	// partial copy-paste from RMMapCalclation.getFundingsByLocation coming
+    	List<Object[]> fundings = (List<Object[]>) allFundings[0];
 
+    	//RMMapCalculationUtil.applySectorOrProgramPercentages (fundings, sectorPercentageMap);
+    	
+    	String calcCurrencyCode;
+    	String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+    	if ( baseCurr == null )
+    		baseCurr	= "USD";
+    	calcCurrencyCode = baseCurr;
 
+    	Map<Long, AmpCategoryValue> adjustementIdTypeMap = new HashMap <Long, AmpCategoryValue> ();    	
+    	Map<Long, SectorInfo> fundingsByTopLevelSectorId = new HashMap<Long, SectorInfo>();
+    	for(Object[] fundingInfo:fundings)
+    	{
+    		// fundingInfo = Object[7];
+    		// partial copy-paste from RMMapCalculationUtil::groupFundingsByLocationAndApplyPercentages
+            Double ammount = (Double)fundingInfo[0];
+            Integer type = (Integer)fundingInfo[1];
+            Long adjustementTypeId = (Long)fundingInfo[2];
+            Date date = (Date)fundingInfo[3];
+            String currencyCode = (String)fundingInfo[4];
+            Long activityId = (Long)fundingInfo[5];
+            Double fixedExchangeRate = fundingInfo.length >= 7 ? (Double) fundingInfo[6] : null;
+            if ((fixedExchangeRate != null) && fixedExchangeRate <= 1e-10)
+            	fixedExchangeRate = null;
+            
+        	AmpCategoryValue adjTypeCatVal = null;
 
-        Collection<DonorSectorFundingHelper> fundings = null;
-        String oql = "select sec.ampSectorId, sum(fd.transactionAmountInBaseCurrency*actSec.sectorPercentage*0.01)";
-        oql += " from ";
-        oql += AmpFundingDetail.class.getName()
-                + " as fd inner join fd.ampFundingId f ";
-        oql += "   inner join f.ampActivityId act "
-                + " inner join act.sectors actSec "
-                + " inner join actSec.sectorId sec "
-                + " inner join actSec.classificationConfig config ";
-        if (donorIDs != null && donorIDs.length > 0) {
-            oql += " inner join f.ampDonorOrgId org ";
-        }
-        oql += " where  fd.transactionType = 0 and fd.adjustmentType = " + actualCommitmentCatValId.toString() + " ";
-        if (donorIDs != null && donorIDs.length > 0) {
-            oql += " and (org.ampOrgId in (:donors ) ) ";
-        }
-        if (fromDate != null && toDate != null) {
-            oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
-        }
-               
-        oql += " and config.name='Primary' and act.team is not null ";
-        oql += " group by sec.ampSectorId ";
+        	if (!adjustementIdTypeMap.containsKey(adjustementTypeId)) {
+        		adjustementIdTypeMap.put(adjustementTypeId, CategoryManagerUtil.getAmpCategoryValueFromDb(adjustementTypeId));
+        	}
 
-        Session session = PersistenceManager.getRequestDBSession();
-        //search for grouped data
-        @SuppressWarnings("unchecked")
-        List result = null;
-        try {
-            Query query = session.createQuery(oql);
-            if (fromDate != null && toDate != null) {
-                query.setDate("fDate", fromDate);
-                query.setDate("eDate", toDate);
-				if (donorIDs != null && donorIDs.length > 0) {
-					query.setParameterList("donors", donorIDs);
-				}
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MMMM-dd hh:mm:ss");
-                logger.debug("Filtering from " + df.format(fromDate) + " to " + df.format(toDate));
-            }
-            result = query.list();
-        } catch (Exception e) {
-            throw new DgException(
-                    "Cannot load sector fundings by donors from db", e);
-        }
+        	adjTypeCatVal = adjustementIdTypeMap.get(adjustementTypeId);
 
-        //Process grouped data
-        if (result != null) {
-            Map<Long, DonorSectorFundingHelper> donors = new HashMap<Long, DonorSectorFundingHelper>();
-            for (Object row : result) {
-                Object[] rowData = (Object[]) row;
-                //AmpOrganisation donor = (AmpOrganisation) rowData[0];
-                Long sectorId = (Long) rowData[0];
-                Double amt = (Double) rowData[1];
-                Double amount = FeaturesUtil.applyThousandsForVisibility(amt);
-                AmpSector sector = SectorUtil.getTopLevelParent(SectorUtil.getAmpSector(sectorId));
-                DonorSectorFundingHelper sectorFundngObj = donors.get(sector.getAmpSectorId());
-                //if not create and add to map
-                if (sectorFundngObj == null) {
-                    sectorFundngObj = new DonorSectorFundingHelper(sector);
-                    donors.put(sector.getAmpSectorId(), sectorFundngObj);
-                }
-                //add amount to sector
-                sectorFundngObj.addFunding(amount);
-                //calculate whole funding information
-                wholeFunding[0] = wholeFunding[0] + amount;
-            }
-            fundings = donors.values();
-        }
-        return fundings;
+        	
+        	Map<Long, Float> fundingPercentBySectors = sectorPercentageMap.get(activityId); // this item is not null because each activity has at least one sector
+        	if (fundingPercentBySectors == null)
+        	{
+        		logger.warn("there shouldn't be any no-sector activity!");
+        		continue; //but if it is really null -> ignore it in lieu of crashing
+        	}
+        	for(Long sectorId:fundingPercentBySectors.keySet())
+        	{
+        		AmpSector topLevelSector = SectorUtil.getTopLevelParent(SectorUtil.getAmpSector(sectorId));        		
+//        		if (!topLevelSector.getAmpSectorId().equals(sectorId))
+//        			continue; // percentages are inclusive, so we would double count if we wouldn't ignore subsectors from v_sectors
+        		
+              	AmpFundingDetail forCalculations = new AmpFundingDetail();
+               	AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currencyCode);
+            	forCalculations.setAmpCurrencyId(currency);
+            	forCalculations.setTransactionAmount(ammount * fundingPercentBySectors.get(sectorId) * 0.01);
+            	forCalculations.setAdjustmentType(adjTypeCatVal);
+            	forCalculations.setTransactionDate(date);
+            	forCalculations.setTransactionType(type);
+            	forCalculations.setFixedExchangeRate(fixedExchangeRate);
+            	
+            	Long storeSectorId = topLevelSector.getAmpSectorId();
+            	if (!fundingsByTopLevelSectorId.containsKey(storeSectorId))
+            	{
+            		fundingsByTopLevelSectorId.put(storeSectorId, new SectorInfo(storeSectorId));
+            	}
+            	fundingsByTopLevelSectorId.get(storeSectorId).fundings.add(forCalculations);
+        	}
+        	
+    	}
+
+    	List<DonorSectorFundingHelper> result = new ArrayList<DonorSectorFundingHelper>();
+    	// calculate all amounts in calcCurrencyCode, per sector
+    	wholeFunding[0] = 0d;
+    	for(Long sectorId:fundingsByTopLevelSectorId.keySet())
+    	{
+    		FundingCalculationsHelper fch = new FundingCalculationsHelper();
+    		fch.doCalculations(fundingsByTopLevelSectorId.get(sectorId).fundings, calcCurrencyCode);
+    		
+    		DonorSectorFundingHelper dsfh = new DonorSectorFundingHelper(fundingsByTopLevelSectorId.get(sectorId).sector);
+    		dsfh.addFunding(FeaturesUtil.applyThousandsForVisibility(fch.getTotActualComm().doubleValue()));
+    		dsfh.addDisbFunding(FeaturesUtil.applyThousandsForVisibility(fch.getTotActualDisb().doubleValue()));
+    		result.add(dsfh);
+    		wholeFunding[0] = wholeFunding[0] + dsfh.getFounding() + dsfh.getDisbFunding();
+    	}
+       	return result;
+    	//Object[] bySectors = calculateTotalsAndApplyExchangeRates (locationGroupedFnds, currencyCode, detailedActData);
+
+//        //Process grouped data
+//        if (result != null) {
+//            Map<Long, DonorSectorFundingHelper> donors = new HashMap<Long, DonorSectorFundingHelper>();
+//            for (Object row : result) {
+//                Object[] rowData = (Object[]) row;
+//                //AmpOrganisation donor = (AmpOrganisation) rowData[0];
+//                Long sectorId = (Long) rowData[0];
+//                Double amt = (Double) rowData[1];
+//                Double amount = FeaturesUtil.applyThousandsForVisibility(amt);
+//                AmpSector sector = SectorUtil.getTopLevelParent(SectorUtil.getAmpSector(sectorId));
+//                DonorSectorFundingHelper sectorFundngObj = donors.get(sector.getAmpSectorId());
+//                //if not create and add to map
+//                if (sectorFundngObj == null) {
+//                    sectorFundngObj = new DonorSectorFundingHelper(sector);
+//                    donors.put(sector.getAmpSectorId(), sectorFundngObj);
+//                }
+//                //add amount to sector
+//                sectorFundngObj.addFunding(amount);
+//                //calculate whole funding information
+//                wholeFunding[0] = wholeFunding[0] + amount;
+//            }
+//            fundings = donors.values();
+//        }
+//        return fundings;
     }
 
     public static Double getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Long sectorIds[], boolean showOnlyApprovedActivities) throws DgException {

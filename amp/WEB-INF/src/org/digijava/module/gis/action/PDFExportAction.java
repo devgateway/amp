@@ -2067,7 +2067,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		// generate chart
 		JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs,
-				fromYear, toYear, opt);
+				fromYear, toYear, opt, request.getSession());
 		chart.setBackgroundPaint(new Color(206, 226, 251));
 		Plot plot = chart.getPlot();
 		plot.setBackgroundPaint(new Color(206, 226, 251));

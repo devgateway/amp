@@ -119,9 +119,11 @@ public class DbHelper {
 				oql += " inner join act.structures str  ";
 			}
 			//Status
-		    if (filter.getSelprojectstatus()!=null){
+		    //if (filter.getSelprojectstatus()!=null){
 		    	oql+=" join  act.categories as categories ";
-		    }
+		    //}
+		    
+		    
 		    
 		    oql += "  where fd.adjustmentType = "+CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId();
 			if (filter.getTransactionType() < 2) {

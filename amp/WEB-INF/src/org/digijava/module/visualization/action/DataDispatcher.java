@@ -3876,7 +3876,7 @@ public class DataDispatcher extends DispatchAction {
 	            	BigDecimal growthPercent = amtCurrentYear.divide(amtPreviousYear, RoundingMode.HALF_UP).subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
 	                if (!ignore || (growthPercent.compareTo(new BigDecimal(100))==-1) && (growthPercent.compareTo(new BigDecimal(-100))==1)) {
 	                	map.put(ampOrganisation, growthPercent);
-	                    csvString.append(ampOrganisation.getName());
+	                    csvString.append(ampOrganisation.getName().replace(",", " "));
 	            		csvString.append(",");
 	            		odaGrowthData += "<"+ ampOrganisation.getName() +">";
 	            		csvString.append(amtPreviousYear);

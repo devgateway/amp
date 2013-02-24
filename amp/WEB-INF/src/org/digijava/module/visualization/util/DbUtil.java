@@ -355,6 +355,8 @@ public class DbUtil {
         if (filter.getSelSectorIds()!=null && filter.getSelSectorIds().length > 0 && filter.getSelSectorIds()[0] != -1) {
 			if (filter.getSelSectorIds().length == 1) {
 				List<AmpSector> sector = getSubSectors(filter.getSelSectorIds()[0]);
+				AmpSector parentSector = SectorUtil.getAmpSector(filter.getSelSectorIds()[0]);
+				sector.add(parentSector);
 				sectors.addAll(sector);
 				return sectors;
 			} else {

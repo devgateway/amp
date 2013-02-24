@@ -15,6 +15,9 @@ import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesFormTableFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpLabelLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpNewResourceFieldPanel;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.AmpResourcesSearchModel;
@@ -51,13 +54,27 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 		final AmpResourcesFormTableFeature resourcesList = new AmpResourcesFormTableFeature("resourcesList", "Resource List", am);
 		resourcesList.setOutputMarkupId(true);
 		add(resourcesList);
-		
-		AmpNewResourceFieldPanel newDoc = new AmpNewResourceFieldPanel("addNewDocument", am, "Add New Document", resourcesList, false);
-		add(newDoc);
-		
-		AmpNewResourceFieldPanel newLink = new AmpNewResourceFieldPanel("addNewWebLink", am, "Add New Web Link", resourcesList, true);
-		add(newLink);
-		
+
+        final AmpNewResourceFieldPanel newDoc = new AmpNewResourceFieldPanel("addNewDocument", am, "Add New Document", resourcesList, false);
+        newDoc.setOutputMarkupId(true);
+        newDoc.setVisibilityAllowed(false);
+        add(newDoc);
+
+        AmpNewResourceFieldPanel newLink = new AmpNewResourceFieldPanel("addNewWebLink", am, "Add New Web Link", resourcesList, true);
+        newLink.setOutputMarkupId(true);
+        newLink.setVisibilityAllowed(false);
+        add(newLink);
+
+        AmpLabelLinkField alf = new AmpLabelLinkField("testing", "Add New Document Link", "Add New Document"){
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                newDoc.setVisibilityAllowed(true);
+                target.add(newDoc);
+            }
+        };
+        add(alf);
+
+
 		final AmpAutocompleteFieldPanel<NodeWrapper> searchDocs=new AmpAutocompleteFieldPanel<NodeWrapper>("addExisting","Search Resources",AmpResourcesSearchModel.class) {			
 			
 			private static final long serialVersionUID = 1227775244079125152L;

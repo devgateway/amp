@@ -663,7 +663,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		ActivityUtil.saveActivity((AmpActivityModel) am, draft);
 
-		info("Activity saved successfully");
+		info(TranslatorUtil.getTranslatedText("Activity saved successfully"));
 
 		/*
 		 * if activity created or created as draft 

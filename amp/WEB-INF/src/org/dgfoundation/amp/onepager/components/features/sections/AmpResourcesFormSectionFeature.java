@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -60,22 +61,31 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
         newDoc.setVisibilityAllowed(false);
         add(newDoc);
 
-        AmpNewResourceFieldPanel newLink = new AmpNewResourceFieldPanel("addNewWebLink", am, "Add New Web Link", resourcesList, true);
+        final AmpNewResourceFieldPanel newLink = new AmpNewResourceFieldPanel("addNewWebLink", am, "Add New Web Link", resourcesList, true);
         newLink.setOutputMarkupId(true);
         newLink.setVisibilityAllowed(false);
         add(newLink);
 
-        AmpLabelLinkField alf = new AmpLabelLinkField("testing", "Add New Document Link", "Add New Document"){
+        AmpLabelLinkField alf = new AmpLabelLinkField("newDocLink", "Add New Document Link", "Add New Document"){
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 newDoc.setVisibilityAllowed(true);
-                target.add(newDoc);
+                target.add(newDoc.getParent());
             }
         };
         add(alf);
 
+        AmpLabelLinkField alf2 = new AmpLabelLinkField("newWebLink", "Add New WebLink Link", "Add New Web Link"){
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                newLink.setVisibilityAllowed(true);
+                target.add(newLink.getParent());
+            }
+        };
+        add(alf2);
 
-		final AmpAutocompleteFieldPanel<NodeWrapper> searchDocs=new AmpAutocompleteFieldPanel<NodeWrapper>("addExisting","Search Resources",AmpResourcesSearchModel.class) {			
+
+        final AmpAutocompleteFieldPanel<NodeWrapper> searchDocs=new AmpAutocompleteFieldPanel<NodeWrapper>("addExisting","Search Resources",AmpResourcesSearchModel.class) {
 			
 			private static final long serialVersionUID = 1227775244079125152L;
 

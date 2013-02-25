@@ -100,13 +100,6 @@ public class DataDispatcher extends DispatchAction {
 
 		VisualizationForm visualizationForm = (VisualizationForm)form;
 		HttpSession session = request.getSession();
-		
-		AmpTeam currentTeam = null;
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (tm!=null && tm.getTeamAccessType().equals("Management")) {
-			visualizationForm.getFilter().setFromPublicView(true);// sets as public view when team is management, so it shows only approved activities
-        } 
-		
 
 		if(visualizationForm.getFilter().getWorkspaceOnly()){
     		String sqlQuery = WorkspaceFilter.getWorkspaceFilterQuery(session);
@@ -116,19 +109,8 @@ public class DataDispatcher extends DispatchAction {
 		else
 		{
     		visualizationForm.getFilter().setActivityComputedList(null);
-//			boolean hideDraft = true;
-//			boolean approved = true;
-//			String accessType = Constants.ACCESS_TYPE_MNGMT;
-//
-//    		String sqlQuery = WorkspaceFilter.generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType, approved, hideDraft, true);
-//			session.setAttribute("currentMemberTemp", tm);
-//			session.setAttribute("currentMember", null);
-//    		String sqlQuery = WorkspaceFilter.getWorkspaceFilterQuery(session);
-//    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(sqlQuery);
-//			session.setAttribute("currentMemberTemp", tm);
-//			session.setAttribute("currentMember", tm);
 		}
-			
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");	
 		visualizationForm.getFilter().setTeamMember(tm);
 		// Parameters coming from queryString for the list of Organization Groups/Organizations, Regions/Zones, Sector/Sub-sector
 		if (request.getParameter("orgGroupIds")!=null && !request.getParameter("orgGroupIds").equals("null"))

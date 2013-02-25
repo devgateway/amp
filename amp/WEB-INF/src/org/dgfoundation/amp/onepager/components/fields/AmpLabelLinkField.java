@@ -14,7 +14,7 @@ public abstract class AmpLabelLinkField extends AmpLinkField {
     public AmpLabelLinkField(String id, String fmName, String labelCaption) {
         super(id, fmName, true, true);
         Label label = new Label("label", labelCaption);
-        add(label);
+        getLink().add(label);
 
     }
 }

@@ -3100,6 +3100,7 @@ function collapseAll() {
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		showOrHide=true;
 		  	  }
+			showMapInTooltipDialog(ashowmap,true);
 		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv").toggle(showOrHide);
 	});
 	
@@ -3114,7 +3115,9 @@ function collapseAll() {
 			  		$("#collapseall").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		showOrHide=true;
 		  	  }
+			  showMapInTooltipDialog(ashowmap,true);
 			  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv").toggle(showOrHide);
+			  document.body.scrollTop = document.documentElement.scrollTop = 0;
 	});
 	
 	//Change map URLs to popin

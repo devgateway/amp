@@ -1149,7 +1149,7 @@ function collapseAll() {
 </module:display>
 
 <!-- REFERENCES -->
-<module:display name="/References">	
+<module:display name="References" parentModule="PROJECT MANAGEMENT">	
 <fieldset>
 	<legend>
 		<span class=legend_label id="referenceslink" style="cursor: pointer;">

@@ -2539,6 +2539,35 @@ public class ExportActivityToPDF extends Action {
 							donorObjCell2.setBackgroundColor(new Color(221,221,221));
 							fundingTable.addCell(donorObjCell2);
 						}
+						//Agreement
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext)){
+							PdfPCell agreementCell1=new PdfPCell();
+							agreementCell1.setBackgroundColor(new Color(221,221,221));
+							agreementCell1.setBorder(0);
+							p1=new Paragraph(TranslatorWorker.translateText("Agreement Title",locale,siteId)+":",plainFont);
+							agreementCell1.addElement(p1);
+							fundingTable.addCell(agreementCell1);							
+							//meaning
+							PdfPCell agreementCell2=new PdfPCell(new Paragraph(funding.getTitle(),plainFont));
+							agreementCell2.setBorder(0);
+							agreementCell2.setColspan(2);
+							agreementCell2.setBackgroundColor(new Color(221,221,221));
+							fundingTable.addCell(agreementCell2);
+
+							agreementCell1=new PdfPCell();
+							agreementCell1.setBackgroundColor(new Color(221,221,221));
+							agreementCell1.setBorder(0);
+							p1=new Paragraph(TranslatorWorker.translateText("Agreement Code",locale,siteId)+":",plainFont);
+							agreementCell1.addElement(p1);
+							fundingTable.addCell(agreementCell1);							
+							//meaning
+							agreementCell2=new PdfPCell(new Paragraph(funding.getCode(),plainFont));
+							agreementCell2.setBorder(0);
+							agreementCell2.setColspan(2);
+							agreementCell2.setBackgroundColor(new Color(221,221,221));
+							fundingTable.addCell(agreementCell2);
+							
+						}
 											
 						if(visibleModuleCommitments){
 							//PLANNED COMITMENTS

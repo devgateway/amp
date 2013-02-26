@@ -1997,6 +1997,14 @@ public class ExportActivityToWord extends Action {
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Donor Objective", null, null, true))
 										.addRowData(fnd.getDonorObjective()));
 					}
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext)) {
+						String agreementTitle = fnd.getAgreement() != null ? fnd.getAgreement().getTitle() : " ";
+						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Agreement Title", null, null, true))
+										.addRowData(agreementTitle));
+						String agreementCode = fnd.getAgreement() != null ? fnd.getAgreement().getCode() : " ";
+						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Agreement Code", null, null, true))
+										.addRowData(agreementCode));
+					}
                     
                     eshDonorInfo.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
                     retVal.add(createSectionTable(eshDonorInfo, request, ampContext));

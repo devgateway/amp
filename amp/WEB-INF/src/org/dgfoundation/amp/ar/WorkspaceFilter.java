@@ -167,6 +167,7 @@ public class WorkspaceFilter
 //			c = Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null) - DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 //		this.setActivitiesRejectedByFilter(new Long(c));
 		
+		//return "(2677)";
 		
 		return TEAM_FILTER;
 	}

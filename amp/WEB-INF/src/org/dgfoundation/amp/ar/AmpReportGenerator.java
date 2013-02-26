@@ -893,7 +893,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			}
 
 		}
-		// now we can create the hiearchy tree
+		// now we can create the hierarchy tree
 		for (AmpReportHierarchy element:orderedHierarchies) {
 			// TODO: the set is NOT a list, so the hierarchies are unordered.
 			AmpColumns c = element.getColumn();

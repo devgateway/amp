@@ -490,67 +490,67 @@ public class DbUtil {
 		return funding;
 	}
 
-	public static int countActivitiesByQuery(String sQuery,
-			ArrayList<FilterParam> params) {
-
-		Session sess = null;
-		Connection conn = null;
-		CellColumn cc = null;
-		try {
-			sess = PersistenceManager.getSession();
-
-			conn = sess.connection();
-		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (SQLException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-
-		int ii = 0;
-
-		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
-				+ sQuery + " ) ";
-		// System.out.println("MASTER query count activities::: " + query);
-		PreparedStatement ps;
-
-		try {
-			ps = conn.prepareStatement(query);
-			if (params != null) {
-
-				// add params if exist
-				for (int i = 0; i < params.size(); i++) {
-					ps.setObject(i + 1, params.get(i).getValue(), params.get(i)
-							.getSqlType());
-				}
-
-			}
-			ResultSet rs = ps.executeQuery();
-			ResultSetMetaData rsmd;
-			rsmd = rs.getMetaData();
-			rs.next();
-			ii = rs.getInt(1);
-			rs.close();
-
-		} catch (SQLException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				if (sess != null) {
-					PersistenceManager.releaseSession(sess);
-				}
-			} catch (Exception e) {
-				logger.error("Error parsing date filters");
-			}
-		}
-		// System.out.println("--------------------- "+ii);
-		return ii;
-	}
+//	public static int countActivitiesByQuery(String sQuery,
+//			ArrayList<FilterParam> params) {
+//
+//		Session sess = null;
+//		Connection conn = null;
+//		CellColumn cc = null;
+//		try {
+//			sess = PersistenceManager.getSession();
+//
+//			conn = sess.connection();
+//		} catch (HibernateException e) {
+//			logger.error(e);
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			logger.error(e);
+//			e.printStackTrace();
+//		}
+//
+//		int ii = 0;
+//
+//		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
+//				+ sQuery + " ) ";
+//		// System.out.println("MASTER query count activities::: " + query);
+//		PreparedStatement ps;
+//
+//		try {
+//			ps = conn.prepareStatement(query);
+//			if (params != null) {
+//
+//				// add params if exist
+//				for (int i = 0; i < params.size(); i++) {
+//					ps.setObject(i + 1, params.get(i).getValue(), params.get(i)
+//							.getSqlType());
+//				}
+//
+//			}
+//			ResultSet rs = ps.executeQuery();
+//			ResultSetMetaData rsmd;
+//			rsmd = rs.getMetaData();
+//			rs.next();
+//			ii = rs.getInt(1);
+//			rs.close();
+//
+//		} catch (SQLException e) {
+//			logger.error(e);
+//			e.printStackTrace();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				if (sess != null) {
+//					PersistenceManager.releaseSession(sess);
+//				}
+//			} catch (Exception e) {
+//				logger.error("Error parsing date filters");
+//			}
+//		}
+//		// System.out.println("--------------------- "+ii);
+//		return ii;
+//	}
 
 	public static String getTrnMessage(String keyTrn) {
 		Session session = null;

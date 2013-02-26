@@ -952,6 +952,9 @@ public class AmpARFilter extends PropertyListable {
 
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
 
+		//debugging placeholders, place leave here
+//		fromDate = "12/07/2010";
+//		toDate = "12/07/2010";
 		if(dateFilterHidesProjects && fromDate!=null && fromDate.length()>0) {
 			String FROM_DATE_FILTER=null;
 			try {
@@ -1295,7 +1298,7 @@ public class AmpARFilter extends PropertyListable {
 			generatedFilterQuery = getOffLineQuery(generatedFilterQuery);
 		}
 
-		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
+		//DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		logger.info(this.generatedFilterQuery);
 	}
 

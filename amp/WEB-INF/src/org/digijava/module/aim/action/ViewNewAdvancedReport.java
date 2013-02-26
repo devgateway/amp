@@ -54,6 +54,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.AdvancedReportUtil;
+import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -111,9 +112,12 @@ public class ViewNewAdvancedReport extends Action {
 			}
 			
 			BoundedList<AmpReports> bList = (BoundedList<AmpReports>) request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS);
-			AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, Long.parseLong(ampReportId));
-			if (!report.getDrilldownTab())
-				bList.add(report);
+			if (AmpMath.isLong(ampReportId))
+			{
+				AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, Long.parseLong(ampReportId));
+				if (!report.getDrilldownTab())
+					bList.add(report);
+			}
 			request.getSession().setAttribute("LAST_REPORT_ID", ampReportId);
 		}
 		

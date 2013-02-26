@@ -117,21 +117,23 @@
 				<html:option value="3">
 					<digi:trn>Resources</digi:trn>
 				</html:option>
-                                                     <feature:display name="Responsible Organization" module="Organizations">
-                                                     	<field:display name="Search Feature - Responsible Organization" feature="Search Feature">
-                                                        	<html:option value="4"><digi:trn>Responsible Organization</digi:trn></html:option>
-                                                        </field:display>
-                                                    </feature:display>
-                                                    <feature:display name="Executing Agency" module="Organizations">
-                                                    	<field:display name="Search Feature - Executing Agency" feature="Search Feature">
-                                                        	<html:option value="5"><digi:trn>Executing Agency</digi:trn></html:option>
-                                                        </field:display>
-                                                    </feature:display>
-                                                    <feature:display name="Implementing Agency" module="Organizations">
-                                                    	<field:display name="Search Feature - Implementing Agency" feature="Search Feature">
-                                                        	<html:option value="6"><digi:trn>Implementing Agency</digi:trn></html:option>
-                                                        </field:display>
-                                                    </feature:display>
+				
+                <feature:display name="Responsible Organization" module="Organizations">
+                	<field:display name="Search Feature - Responsible Organization" feature="Search Feature">
+                   	<html:option value="4"><digi:trn>Responsible Organization</digi:trn></html:option>
+                   </field:display>
+               </feature:display>
+               <feature:display name="Executing Agency" module="Organizations">
+               	<field:display name="Search Feature - Executing Agency" feature="Search Feature">
+                   	<html:option value="5"><digi:trn>Executing Agency</digi:trn></html:option>
+                   </field:display>
+               </feature:display>
+               <feature:display name="Implementing Agency" module="Organizations">
+               	<field:display name="Search Feature - Implementing Agency" feature="Search Feature">
+                   	<html:option value="6"><digi:trn>Implementing Agency</digi:trn></html:option>
+                   </field:display>
+               </feature:display>
+               
 			</html:select> </td>
     <td><digi:trn><b>Search Mode</b></digi:trn>:</td>
     <td><html:select property="searchMode" styleClass="inputx insidex">
@@ -148,19 +150,8 @@
     <td> <a style="font-size: 11px;" href="/aim/queryEngine.do"><digi:trn>Advanced Search</digi:trn></a></td>
   </tr>
 </table>
-
-			
-			
-			
-			
-				
-			
-			
-			
-			
-			
-			
-                        </div>
+		
+        </div>
 		</digi:form>
 		<table width="100%">
 			<tbody>
@@ -168,7 +159,7 @@
 					<td width="50%" valign="top"><c:choose>
 						<c:when test="${empty resultList}">
 							<c:if test="${param.reset != 'true'}">
-    <div class="txt_sm_b"><digi:trn>Your search return no results. Please try another keyword.</digi:trn></div>
+    							<div class="txt_sm_b"><digi:trn>Your search return no results. Please try another keyword.</digi:trn></div>
 							</c:if>
 						</c:when>
 						<c:otherwise>
@@ -178,100 +169,111 @@
 										search_results_block
 									</c:when>
 									<c:otherwise>
-									search_results_block_last
-								</c:otherwise>
+										search_results_block_last
+									</c:otherwise>
 								</c:choose>
-
 							</c:set>
+							
 							<c:set var="resultFound">
-							<digi:trn>Results found in</digi:trn>
+								<digi:trn>Results found in</digi:trn>
 							</c:set>
+							
 							<div class="search_results">
 							<c:if test="${searchform.queryType==-1||searchform.queryType==0}">
 								<div class="${search_results_block_class}"><span
 									class="button_green">${fn:length(resultActivities)}</span>
 								 ${resultFound} <span class="button_green"><digi:trn>Activities</digi:trn></span>
+									<ul>
+										<c:forEach items="${resultActivities}" var="activity">
+											<li><digi:link module="aim"
+												href="/viewActivityPreview.do?pageId=2&activityId=${activity.ampActivityId}">${activity.objectFilteredName}</digi:link>
+										</c:forEach>
+									</ul>
+								</div>
+							</c:if>
+							
+							<c:if test="${searchform.queryType==-1||searchform.queryType==2}">
+								<div class="${search_results_block_class}"><span
+									class="button_green">${fn:length(resultTabs)}</span> ${resultFound} <span class="button_green"><digi:trn>Tabs</digi:trn></span>
 								<ul>
-									<c:forEach items="${resultActivities}" var="activity">
-										<li><digi:link module="aim"
-											href="/viewActivityPreview.do?pageId=2&activityId=${activity.ampActivityId}">${activity.objectFilteredName}</digi:link>
+									<c:forEach items="${resultTabs}" var="tab">
+										<li><a
+											title="<digi:trn>Click here to view the tab</digi:trn>"
+											href="/search/search.do?ampReportId=${tab.ampReportId}">${tab.objectFilteredName}</a>
 									</c:forEach>
 								</ul>
 								</div>
-								</c:if>
-								<c:if test="${searchform.queryType==-1||searchform.queryType==2}">
-							<div class="${search_results_block_class}"><span
-								class="button_green">${fn:length(resultTabs)}</span> ${resultFound} <span class="button_green"><digi:trn>Tabs</digi:trn></span>
-							<ul>
-								<c:forEach items="${resultTabs}" var="tab">
-									<li><a
-										title="<digi:trn>Click here to view the tab</digi:trn>"
-										href="/search/search.do?ampReportId=${tab.ampReportId}">${tab.objectFilteredName}</a>
-								</c:forEach>
-							</ul>
-							</div>
 							</c:if>
+							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==1}">
-							<div class="${search_results_block_class}"><span
-								class="button_green">${fn:length(resultReports)}</span> ${resultFound} <span class="button_green"><digi:trn>Reports</digi:trn></span> 
-							<ul>
-								<c:forEach items="${resultReports}" var="report">
-									<li><a
-										title="<digi:trn>Click here to view the report</digi:trn>"
-										onclick="return popup(this,'');"
-										href="/search/search.do?ampReportId=${report.ampReportId}">${report.objectFilteredName}</a>
-								</c:forEach>
-							</ul>
-							</div>
+								<div class="${search_results_block_class}"><span
+									class="button_green">${fn:length(resultReports)}</span> ${resultFound} <span class="button_green"><digi:trn>Reports</digi:trn></span> 
+									<ul>
+										<c:forEach items="${resultReports}" var="report">
+											<li><a
+												title="<digi:trn>Click here to view the report</digi:trn>"
+												onclick="return popup(this,'');"
+												href="/search/search.do?ampReportId=${report.ampReportId}">${report.objectFilteredName}</a>
+										</c:forEach>
+									</ul>
+								</div>
 							</c:if>
+							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==3}">
-							<div class="search_results_block_last"><span
-								class="button_green">${fn:length(resultResources)}</span>
-							${resultFound} <span class="button_green"><digi:trn>Resources</digi:trn></span>
-							<ul>
-								<c:forEach items="${resultResources}" var="resource">
-									<li><c:choose>
-										<c:when test="${empty resource.webLink}">
-											<a style="cursor: pointer;text-decoration: underline;"
-												onclick="downloadFile('${resource.uuid}');"
-												title="<digi:trn>Click here to download file</digi:trn>">
-											<c:out value="${resource.name}"></c:out> </a>
-										</c:when>
-										<c:otherwise>
-											<a href="${resource.webLink}"
-												title="Click here to follow link" target="_blank">
-											<c:out value="${resource.webLink}"></c:out> </a>
-										</c:otherwise>
-									</c:choose>
-								</c:forEach>
-							</ul>
-							</div>
+								<div class="search_results_block_last"><span
+									class="button_green">${fn:length(resultResources)}</span>
+								${resultFound} <span class="button_green"><digi:trn>Resources</digi:trn></span>
+									<ul>
+										<c:forEach items="${resultResources}" var="resource">
+											<li><c:choose>
+												<c:when test="${empty resource.webLink}">
+													<a style="cursor: pointer;text-decoration: underline;"
+														onclick="downloadFile('${resource.uuid}');"
+														title="<digi:trn>Click here to download file</digi:trn>">
+													<c:out value="${resource.name}"></c:out> </a>
+												</c:when>
+												<c:otherwise>
+													<a href="${resource.webLink}"
+														title="Click here to follow link" target="_blank">
+													<c:out value="${resource.webLink}"></c:out> </a>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</ul>
+								</div>
 							</c:if>
+							
 							</div>
 						</c:otherwise>
 					</c:choose></td>
 				</tr>
 			</tbody>
-                                                                  <feature:display name="Responsible Organization" module="Organizations">
-                                                                    <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithRespOrgs}"/>
-                                                                    <c:set var="relatedOrgIndex" scope="request" value="1"/>
-                                                                    <c:set var="relatedOrgType" scope="request" value="Responsible Organization"/>
-                                                                    <jsp:include page="relatedOrgs.jsp"/>
-                                                                    </feature:display>
-                                                                        
-                                                                        <feature:display name="Executing Agency" module="Organizations">
-                                                                            <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithExeOrgs}"/>
-                                                                            <c:set var="relatedOrgIndex" scope="request" value="2"/>
-                                                                            <c:set var="relatedOrgType" scope="request" value="Executing Agency"/>
-                                                                            <jsp:include page="relatedOrgs.jsp"/>
-                                                                        </feature:display>
-                                                                            
-                                                                        <feature:display name="Implementing Agency" module="Organizations">
-                                                                            <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithImpOrgs}"/>
-                                                                            <c:set var="relatedOrgIndex" scope="request" value="3"/>
-                                                                             <c:set var="relatedOrgType" scope="request" value="Implementing Agency"/>
-                                                                            <jsp:include page="relatedOrgs.jsp"/>
-                                                                        </feature:display>
+			<feature:display name="Responsible Organization" module="Organizations">
+			  <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithRespOrgs}"/>
+			  <c:set var="relatedOrgIndex" scope="request" value="1"/>
+			  <c:set var="relatedOrgType" scope="request">
+			  	  <digi:trn>Responsible Organization</digi:trn>
+			  </c:set>	
+			  <jsp:include page="relatedOrgs.jsp"/>
+			</feature:display>
+			      
+			<feature:display name="Executing Agency" module="Organizations">
+			    <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithExeOrgs}"/>
+			    <c:set var="relatedOrgIndex" scope="request" value="2"/>
+			    <c:set var="relatedOrgType" scope="request">
+			    	<digi:trn>Executing Agency</digi:trn>
+			    </c:set>
+			    <jsp:include page="relatedOrgs.jsp"/>
+			</feature:display>
+			          
+			<feature:display name="Implementing Agency" module="Organizations">
+			    <c:set var="resultActivitiesWithOrgs" scope="request" value="${requestScope.resultActivitiesWithImpOrgs}"/>
+			    <c:set var="relatedOrgIndex" scope="request" value="3"/>
+			    <c:set var="relatedOrgType" scope="request">
+			    	<digi:trn>Implementing Agency</digi:trn>
+			    </c:set>
+			    <jsp:include page="relatedOrgs.jsp"/>
+			</feature:display>
 		</table>
 		</fieldset>
 		</td>

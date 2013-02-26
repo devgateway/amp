@@ -104,6 +104,8 @@ var trnHideFilterSetttings = "";
 var trnTotalCommitments = "";
 var trnAllAmountsInMillions = "";
 var trnAllAmountsInThousands = "";
+var trnMillions = "";
+var trnThousands = "";
 var trnInMillions = "";
 var trnInThousands = "";
 var trnInBillions = "";
@@ -167,6 +169,7 @@ function initializeTranslations(){
 	trnNumOfSecs="<digi:trn jsFriendly='true'>Total Number of Sectors</digi:trn>: ";
 	trnNumOfRegs="<digi:trn jsFriendly='true'>Total Number of Regions</digi:trn>: ";
 	trnAvgProjSize="<digi:trn jsFriendly='true'>Average Project Size</digi:trn>: ";
+	trnTotalCommitsDescription="<digi:trn jsFriendly='true'>Sum of Commitments on projets filtered.</digi:trn>";
 	trnTotalDisbsDescription="<digi:trn jsFriendly='true'>Sum of Disbursements on projets filtered.</digi:trn>";
 	trnNumOfProjsDescription="<digi:trn jsFriendly='true'>Number of Projects filtered.</digi:trn>";
 	trnNumOfDonsDescription="<digi:trn jsFriendly='true'>Number of Organizations on projects filtered</digi:trn>";
@@ -194,9 +197,11 @@ function initializeTranslations(){
 	trnTopPrograms="<digi:trn jsFriendly='true'>Top Programs</digi:trn>"; 
 	trnShowFilterSetttings="<digi:trn jsFriendly='true'>Show filter settings</digi:trn>"; 
 	trnHideFilterSetttings="<digi:trn jsFriendly='true'>Hide filter settings</digi:trn>"; 
-	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>";
+	trnTotalCommitments = "<digi:trn>Total Commitments</digi:trn>:";
 	trnAllAmountsInMillions = "<digi:trn>All amounts in millions</digi:trn>";
 	trnAllAmountsInThousands = "<digi:trn>All amounts in thousands</digi:trn>";
+	trnMillions = "<digi:trn>Millions</digi:trn>";
+	trnThousands = "<digi:trn>Thousands</digi:trn>";
 	trnInMillions = "<digi:trn>In millions</digi:trn>";
 	trnInThousands = "<digi:trn>In thousands</digi:trn>";
 	trnInBillions = "<digi:trn>In billions</digi:trn>";
@@ -772,10 +777,10 @@ function initializeGlobalVariables(){
 
 <div class="dashboard_header">
 <!--<div class="dashboard_total"><b class="dashboard_total_num">${visualizationform.summaryInformation.totalCommitments}</b><br /><digi:trn>Total Commitments</digi:trn> ( ${visualizationform.filter.currencyId} )</div>-->
-<div class="dashboard_total" id="divTotalComms"></div>
 <div class="dashboard_name" id="dashboard_name">
 <span style="font-size:18px">${visualizationform.dashboardTitle}</span><br/><span style="font-size:13px">${visualizationform.dashboardSubTitle}</span>
 </div>
+<div>
  <table border="0" cellspacing="0" cellpadding="0">
   <tr>  
     <td>
@@ -784,13 +789,14 @@ function initializeGlobalVariables(){
     			<td style="width:110px;"><div class="dash_ico"><img src="/TEMPLATE/ampTemplate/img_2/ico_export.gif" align=left style="margin-right:5px;"><div class="dash_ico_link"><a href="javascript:showExport()" class="l_sm"><digi:trn>Export Options</digi:trn></a></div></div></td>
     			<td><div id="info_link"><img src='/TEMPLATE/ampTemplate/img_2/ico_info.gif' onclick='showOrgInfo();' align=left style="margin-right:5px;margin-top:5px;"/><div class="dash_ico_link"><a href="javascript:showOrgInfo()" class="l_sm"><digi:trn>Additional Info</digi:trn></a></div></div></td>
     		</tr>
-    		<tr>
-    			<td colspan="2"><div id="currencyInfo"></div></td>
-    		</tr>
     	</table>
    	</td>
   </tr>
 </table>
+</div>
+<br />
+<div class="dashboard_total" id="divTotals"></div><div id="currencyInfo"></div>
+
 <div class="dashboard_stat" id="divSummaryInfo" ></div>
 <div class="dashboard_stat"><a onClick="toggleSettings();" id="displaySettingsButton"><digi:trn>Show filter settings</digi:trn></a></div>
 <div class="dashboard_stat" style="display:none;" id="currentDisplaySettings" >

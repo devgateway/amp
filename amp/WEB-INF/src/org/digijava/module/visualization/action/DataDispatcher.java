@@ -525,6 +525,7 @@ public class DataDispatcher extends DispatchAction {
 		
 		rootTotDisbs.put("type", "TotalDisbs");
 		rootTotDisbs.put("value", FormatHelper.formatNumberNotRounded(visualizationForm.getSummaryInformation().getTotalDisbursements().doubleValue()));
+		rootTotDisbs.put("curr", visualizationForm.getFilter().getCurrencyCode());
 		children.add(rootTotDisbs);
 		
 		rootNumOfProjs.put("type", "NumberOfProjs");
@@ -544,7 +545,8 @@ public class DataDispatcher extends DispatchAction {
 		children.add(rootNumOfDons);
 		
 		rootAvgProjs.put("type", "AvgProjSize");
-		rootAvgProjs.put("value", FormatHelper.formatNumberNotRounded( visualizationForm.getSummaryInformation().getAverageProjectSize().doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+		rootAvgProjs.put("value", FormatHelper.formatNumberNotRounded( visualizationForm.getSummaryInformation().getAverageProjectSize().doubleValue()) );
+		rootAvgProjs.put("curr", visualizationForm.getFilter().getCurrencyCode());
 		children.add(rootAvgProjs);
 		
 		root.put("objectType", "lists");

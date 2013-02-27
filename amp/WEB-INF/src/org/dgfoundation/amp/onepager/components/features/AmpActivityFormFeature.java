@@ -48,10 +48,7 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
-import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
@@ -221,6 +218,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             }
         };
 
+
+
         ListView<String> warningsList = new ListView<String>("saveWarningsList", saveWarningsListModel) {
             @Override
             protected void populateItem(ListItem<String> item) {
@@ -319,15 +318,17 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		saveAndSubmit.getButton().add(updateEditors);
 		saveAndSubmit.getButton().setDefaultFormProcessing(false);
 		activityForm.add(saveAndSubmit);
-		
-		AmpButtonField saveAsDraft = new AmpButtonField("saveAsDraft", "Save as Draft", AmpFMTypes.MODULE, true) {
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-			}
-		};
+
+        AmpAjaxLinkField saveAsDraft = new AmpAjaxLinkField("saveAsDraft", "Save as Draft", "Save as Draft") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+            }
+        };
 		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();"));
 		saveAsDraft.setVisible(true);
-		saveAsDraft.getButton().add(new AttributeModifier("class", true, new Model<String>("sideMenuButtons")));
+		saveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
+        activityForm.add(saveAsDraft);
+
 		activityForm.add(new Behavior(){
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
@@ -335,7 +336,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpActivityFormFeature.class, "saveNavigationPanel.js")));
 			}
 		});
-		activityForm.add(saveAsDraft);
 
 		final RadioGroup<Integer> myDraftOpts = new RadioGroup<Integer>("draftRedirectedGroup", new Model<Integer>());
 		Radio<Integer> radioDesktop=new Radio<Integer>("draftRedirectedDesktop", new Model<Integer>(GO_TO_DESKTOP));
@@ -352,13 +352,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		myDraftOpts.add(radioDesktop);
 		Radio<Integer> radioStay=new Radio<Integer>("draftStayOnPage", new Model<Integer>(STAY_ON_PAGE));
 		radioStay.add(new AjaxEventBehavior("click") {
-			private static final long serialVersionUID = 1L;
-			protected void onEvent(final AjaxRequestTarget target) {
-				redirected.setObject(STAY_ON_PAGE);
+            private static final long serialVersionUID = 1L;
+
+            protected void onEvent(final AjaxRequestTarget target) {
+                redirected.setObject(STAY_ON_PAGE);
                 myDraftOpts.setModelObject(STAY_ON_PAGE);
                 target.add(myDraftOpts);
-			}
-		});
+            }
+        });
 		myDraftOpts.add(radioStay);
 		activityForm.add(myDraftOpts);
 

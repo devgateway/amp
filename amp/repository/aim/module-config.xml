@@ -31,8 +31,9 @@
 		<action login-required="true" pattern="/saveFMDescription" />
 		<action login-required="false" pattern="/getLoginStatus" />
 		<action login-required="false" pattern="/reportTableProxy" />
-
-	</security>
+		<action login-required="false" pattern="/exportActToPDF" />
+		<action login-required="false" pattern="/exportActToWord" />
+</security>
 
 	<!-- AIM classes Begin-->
 	<hibernate-classes required="false">

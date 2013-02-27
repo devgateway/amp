@@ -918,7 +918,7 @@
 
 	
 	function applySectorFilter() {
-		
+		//debugger;
 		$("#filterStartYear").val($("select[name='selectedFromYear']").val());
 		$("#filterEndYear").val($("select[name='selectedToYear']").val());
 		

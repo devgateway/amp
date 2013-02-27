@@ -56,14 +56,6 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 				boolean disableBudgetCode = true;
 				AmpOrgRole orole = item.getModelObject();
 				String orgCode = orole.getOrganisation().getBudgetOrgCode();
-				Long lOrgCode = null;
-				try {
-					lOrgCode = Long.parseLong(orgCode);
-					disableBudgetCode = false;
-				} catch (Exception e) {
-					logger.error("Wrong Org Code for organisation: " + orole.getOrganisation(), e);
-					orgCode = "ERROR";
-				}
 				item.add(new Label("budgetCodeLabel", orgCode));
 				
 				AmpTextFieldPanel<Long> budgetCode = new AmpTextFieldPanel<Long>("budgetCodeEdit", new PropertyModel<Long>(item.getModel(), "budgetCode"), "Budget Code", true, true);

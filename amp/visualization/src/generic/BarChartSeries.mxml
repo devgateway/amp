@@ -248,7 +248,7 @@
 				messageLoadingPanel.visible = false;
 				sizeLoadingPanel(0, 0);
 				//dc.visible = true;
-				printLabel.text = trnYears + ": " + startYear + " to " + endYear +" - " + trnCurrency + ": " + currCode;
+				printLabel.text = trnYears + ": " + sliderYear.values[0] + " to " + sliderYear.values[1] +" - " + trnCurrency + ": " + currCode;
 				sliderYear.setVisible(true);
 			}
 			private function getDeterminedMaxValue(magnitude, maxValue, step){
@@ -266,7 +266,7 @@
 
 			private function captureSnapshot():void
 			{
-				//sliderYear.visible = false;
+				sliderYear.visible = false;
 				printLabel.visible = true;
 				var curUrl:String =  String(ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String = "/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
@@ -284,7 +284,7 @@
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
 				printLabel.visible = false;
-				//sliderYear.visible = true;
+				sliderYear.visible = true;
 			}
 			
 			protected function service_resultHandler(event:ResultEvent):void
@@ -531,6 +531,7 @@
 					params["startYear"] = sliderYear.values[0];
 					params["endYear"] = sliderYear.values[1];
 				}
+				printLabel.text = trnYears + ": " + sliderYear.values[0] + " to " + sliderYear.values[1] +" - " + trnCurrency + ": " + currCode;
 				service.send(params);
 				messageLoadingPanel.visible = true;
 				sizeLoadingPanel(300, 200);

@@ -378,8 +378,10 @@ public class AmpARFilter extends PropertyListable {
 	private Integer toMonth;
 	private Integer yearTo;
 	private Collection<AmpCategoryValueLocations> locationSelected;
-	@PropertyListableIgnore
-	private Collection<AmpCategoryValueLocations> relatedLocations;
+	
+	//@PropertyListableIgnore
+	//private Collection<AmpCategoryValueLocations> relatedLocations;
+	
 	private Collection<AmpCategoryValueLocations> pledgesLocations;
 	private Boolean unallocatedLocation = null;
 	//private AmpCategoryValueLocations regionSelected = null;
@@ -1057,13 +1059,17 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 		if (locationSelected!=null) {
-			Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
-			allSelectedLocations.addAll(locationSelected);
+			long a = System.currentTimeMillis();
+			Set<Long> allDescendantsIds = DynLocationManagerUtil.populateWithDescendantsIds(locationSelected);
+			long b = System.currentTimeMillis();
+			logger.error("generating " + allDescendantsIds.size() + " ids took " + (b - a) + " millies");
 			
-			DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected);
-			this.relatedLocations						= new ArrayList<AmpCategoryValueLocations>();
-			this.relatedLocations.addAll(allSelectedLocations);
-			DynLocationManagerUtil.populateWithAscendants(this.relatedLocations, locationSelected);
+			List<AmpCategoryValueLocations> allAscendingLocations	= new ArrayList<AmpCategoryValueLocations>();
+			DynLocationManagerUtil.populateWithAscendants(allAscendingLocations, locationSelected);
+			
+			Set<Long> allSelectedLocations = new HashSet<Long>(allDescendantsIds);
+			for(AmpCategoryValueLocations ascendant:allAscendingLocations)
+				allSelectedLocations.add(ascendant.getId());
 			
 			String allSelectedLocationString			= Util.toCSString(allSelectedLocations);
 			String subSelect			= "SELECT aal.amp_activity_id FROM amp_activity_location aal, amp_location al " +
@@ -2651,21 +2657,22 @@ public class AmpARFilter extends PropertyListable {
 			return AMOUNT_OPTION_IN_UNITS;
 		return getAmountinthousand();
 	}
-	/**
-	 * @return the relatedLocations
-	 */
-	@PropertyListableIgnore
-	public Collection<AmpCategoryValueLocations> getRelatedLocations() {
-		return relatedLocations;
-	}
-
-	/**
-	 * @param relatedLocations the relatedLocations to set
-	 */
-	public void setRelatedLocations(
-			Collection<AmpCategoryValueLocations> relatedLocations) {
-		this.relatedLocations = relatedLocations;
-	}
+	
+//	/**
+//	 * @return the relatedLocations
+//	 */
+//	@PropertyListableIgnore
+//	public Collection<AmpCategoryValueLocations> getRelatedLocations() {
+//		return relatedLocations;
+//	}
+//
+//	/**
+//	 * @param relatedLocations the relatedLocations to set
+//	 */
+//	public void setRelatedLocations(
+//			Collection<AmpCategoryValueLocations> relatedLocations) {
+//		this.relatedLocations = relatedLocations;
+//	}
 	
 	public Collection<AmpCategoryValueLocations> getPledgesLocations() {
 		return pledgesLocations;

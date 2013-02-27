@@ -1397,7 +1397,7 @@ public class ReportsFilterPicker extends Action {
 			arf.getLocationSelected().addAll(selectedRegions);
 		} else {
 			arf.setLocationSelected(null);
-			arf.setRelatedLocations(null);
+			//arf.setRelatedLocations(null);
 		}
 		
 		if (!all.equals(filterForm.getApprovalStatusSelected())){

@@ -1,6 +1,9 @@
 package org.digijava.module.aim.util;
 
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -22,6 +26,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.dgfoundation.amp.Util;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -745,21 +750,86 @@ public class DynLocationManagerUtil {
 		return null;
 	}
 
-	public static void populateWithDescendants(Collection <AmpCategoryValueLocations> destCollection, 
+	/**
+	 * returns set of all (recursive) descendants' ids of a given set of locations
+	 * @param locations
+	 * @return
+	 */
+	public static Set<Long> populateWithDescendantsIds(Collection<AmpCategoryValueLocations> locations)
+	{
+		Set<Long> allInputLocations = new HashSet<Long>();
+		
+		for(AmpCategoryValueLocations acvl:locations)
+			allInputLocations.add(acvl.getId());
+		
+		Set<Long> allOutputLocations = getRecursiveChildrenOfCategoryValueLocations(allInputLocations);
+		return allOutputLocations;
+	}
+	
+	/**
+	 * returns set of all (recursive) descendants of a given set of locations
+	 * @param destCollection
+	 * @param locations
+	 */
+	public static void populateWithDescendants(Set <AmpCategoryValueLocations> destCollection, 
 			Collection<AmpCategoryValueLocations> locations ) {
-		if (  locations != null ) {
-			Iterator<AmpCategoryValueLocations> iterLoc	= locations.iterator();
-			while (iterLoc.hasNext()) {
-				AmpCategoryValueLocations loc	 = 
-					DynLocationManagerUtil.getLocation(iterLoc.next().getId(), true);
-				Set<AmpCategoryValueLocations> childrenLocs		= loc.getChildLocations();
-				if ( childrenLocs  != null && childrenLocs.size() > 0 ) {
-					destCollection.addAll(childrenLocs);
-					populateWithDescendants(destCollection, childrenLocs );
-				}
-			}
+		
+		Set<Long> allOutputLocations = populateWithDescendantsIds(locations);
+		for(Long outputId:allOutputLocations)
+			destCollection.add(getLocation(outputId, false));
+	}
+	
+	/**
+	 * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
+	 * @param inIds
+	 * @return
+	 */
+	private static Set<Long> getRecursiveChildrenOfCategoryValueLocations(Collection<Long> inIds)
+	{
+		Set<Long> result = new HashSet<Long>();
+		if (inIds == null)
+			return result;
+		Set<Long> currentWave = new HashSet<Long>();currentWave.addAll(inIds);
+		while (currentWave.size() > 0)
+		{
+			result.addAll(currentWave);
+			currentWave = getChildrenOfCategoryValueLocations(currentWave);
+			currentWave.removeAll(result); // in case there is a cycle somewhere in the DB, do not cycle forever
+		}
+		return result;
+	}
+	
+	/*
+	 * returns the list of all the children of all the AmpCategoryValueLocations given by ids
+	 * NON-RECURSIVE
+	 */
+	private static Set<Long> getChildrenOfCategoryValueLocations(Collection<Long> inIds)
+	{
+		Set<Long> result = new HashSet<Long>();
+		if (inIds == null)
+			return result;
+		Connection conn = null;
+		try
+		{
+			conn = PersistenceManager.getJdbcConnection();
+			String query = "SELECT DISTINCT id FROM amp_category_value_location WHERE parent_location IN (" + Util.toCSString(inIds) + ")";
+			ResultSet rs = conn.createStatement().executeQuery(query);
+			while (rs.next())
+				result.add(rs.getLong(1));
+			rs.close();
+			return result;
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e);
+		}
+		finally
+		{
+			try {conn.close();}
+			catch(Exception e){};
 		}
 	}
+	
 	public static void populateWithAscendants(Collection <AmpCategoryValueLocations> destCollection, 
 			Collection<AmpCategoryValueLocations> locations ) {
 		if (  locations != null ) {

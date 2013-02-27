@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <html>
-	<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=edge">
+	<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=8">
 	<digi:base />
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 	<digi:context name="digiContext" property="context"/>

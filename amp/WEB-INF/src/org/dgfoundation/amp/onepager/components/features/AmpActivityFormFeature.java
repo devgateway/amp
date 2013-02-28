@@ -363,6 +363,17 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		myDraftOpts.add(radioStay);
 		activityForm.add(myDraftOpts);
 
+        final AmpButtonField cancelSaveAsDraft = new AmpButtonField("saveAsDraftCanceld", "Cancel", AmpFMTypes.MODULE, true) {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            }
+        };
+        cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();"));
+        cancelSaveAsDraft.setVisible(true);
+        cancelSaveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
+        cancelSaveAsDraft.setOutputMarkupId(true);
+        activityForm.add(cancelSaveAsDraft);
+
 		AmpButtonField saveAsDraftAction = new AmpButtonField("saveAsDraftAction", "Save as Draft", AmpFMTypes.MODULE, true) {
             @Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -376,8 +387,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				//only in the eventuality that the title field is valid (is not empty) we proceed with the real save!
 				if(!form.hasError())  
 					saveMethod(target, am, feedbackPanel, true, redirected);
-				else
-					onError(target, form);
+				else {
+                    target.add(this);
+                    target.add(cancelSaveAsDraft);
+                    onError(target, form);
+                }
 			}
 			
 			@Override
@@ -386,20 +400,15 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				formSubmitErrorHandle(form, target, feedbackPanel); 
 			}
 		};
+
+        String onClickSaveAsDraft = "$(\"#"+ saveAsDraftAction.getButton().getMarkupId() +"\").prop('disabled', true);";
+        onClickSaveAsDraft += "$(\"#"+ cancelSaveAsDraft.getButton().getMarkupId() +"\").prop('disabled', true);";
+
 		saveAsDraftAction.getButton().setDefaultFormProcessing(false); //disable global validation of the form
-		saveAsDraftAction.getButton().add(new AttributeModifier("class", true, new Model<String>("sideMenuButtons")));
-		saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model<String>("this.disabled='disabled';"), ""));
+		saveAsDraftAction.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
+		saveAsDraftAction.getButton().add(new AttributePrepender("onclick", new Model<String>(onClickSaveAsDraft), ""));
 		saveAsDraftAction.getButton().add(updateEditors);
 		activityForm.add(saveAsDraftAction);
-		AmpButtonField cancelSaveAsDraft = new AmpButtonField("saveAsDraftCanceld", "Cancel", AmpFMTypes.MODULE, true) {
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-			}
-		};
-		cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();"));
-		cancelSaveAsDraft.setVisible(true);
-		cancelSaveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
-		activityForm.add(cancelSaveAsDraft);
 
 		AmpButtonField preview = new AmpButtonField("preview", "Preview", AmpFMTypes.MODULE, true) {
 			@Override

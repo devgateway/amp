@@ -9,7 +9,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta 	="Content-Type" content="text/html; charset=utf-8" />
 <title>Home</title>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
 <digi:ref href="/TEMPLATE/ampTemplate/css_2/amp_public_portal_login.css" type="text/css" rel="stylesheet" />
@@ -112,7 +112,10 @@ $.ajax({
                 <c:set var="title">
 						<digi:trn>Click here to change your password</digi:trn>
 					</c:set>
-				<digi:link href="/showChangePassword.do" styleId="changePassword" title="${title}">&raquo;&nbsp;<digi:trn>Change Password</digi:trn></digi:link><digi:link href="/showEmailForm.do" styleId="trouble" title="${trn1}">&raquo;&nbsp;<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn></digi:link>
+				<%-- <digi:link href="/showChangePassword.do"  styleId="changePassword" 
+					title="${title}">&raquo;&nbsp;<digi:trn>Change Password</digi:trn></digi:link> --%>
+				<a href="/aim/showChangePassword.do" id="changePassword" title="${title}">&raquo;&nbsp;<digi:trn>Change Password</digi:trn></a>
+				<digi:link href="/showEmailForm.do" styleId="trouble" title="${trn1}">&raquo;&nbsp;<digi:trn key="aim:forgotPassword">Trouble signing in?</digi:trn></digi:link>
 				</div>
 				<feature:display name="Enable New User Registration"
 							module="Login - User Management">

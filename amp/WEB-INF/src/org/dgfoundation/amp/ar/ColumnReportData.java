@@ -85,7 +85,43 @@ public class ColumnReportData extends ReportData<Column> {
     {
     	// do nothing - the children are columns and we never remove columns 
     }        
-	 	
+	
+    /**
+     * removes from all the columns all the activities without any funding attached
+     * only call for non-drill-down tabs!
+     * @return
+     */
+    public void removeActivitiesWithoutFunding()
+    {
+    	Column fundingColumn = getMainFundingColumn();
+    	if (fundingColumn == null)
+    		return;
+    	Set<Long> allFundedActivities = fundingColumn.getOwnerIds();
+    	for(Column column:this.getItems())
+    	{
+    		Set<Long> columnOwnerIds = column.getOwnerIds();
+    		columnOwnerIds.removeAll(allFundedActivities);
+   			column.deleteByOwnerId(columnOwnerIds);
+    	}
+    }
+    
+    /**
+     * calculates the "funding" column of this report - the column which, if it is empty for an activity, would mean that the activity has no business of remaining in the CRD
+     * @return
+     */
+    protected Column getMainFundingColumn()
+    {
+    	Column fundingColumn = getColumn(ArConstants.COLUMN_FUNDING);
+    	
+    	if (fundingColumn == null)
+    		fundingColumn = getColumn(ArConstants.COLUMN_TOTAL);
+    	
+    	if (fundingColumn == null)
+    		fundingColumn = getColumn(ArConstants.COSTING_GRAND_TOTAL);
+    	
+    	return fundingColumn;
+    }
+    
     /**
      * calculates whether this ColumnReportData is useless and should not appear in a report
      * at the moment, "useless" means that ALL of the conditions below hold:
@@ -97,11 +133,7 @@ public class ColumnReportData extends ReportData<Column> {
      */
     public boolean shouldBeRemoved()
     {
-    	Column fundingColumn = getColumn(ArConstants.COLUMN_FUNDING);
-    	if (fundingColumn == null)
-    		fundingColumn = getColumn(ArConstants.COLUMN_TOTAL);
-    	if (fundingColumn == null)
-    		fundingColumn = getColumn(ArConstants.COSTING_GRAND_TOTAL);  	
+    	Column fundingColumn = getMainFundingColumn(); 	
     	if (fundingColumn == null)
     		return false;
     	return fundingColumn.getOwnerIds().isEmpty();

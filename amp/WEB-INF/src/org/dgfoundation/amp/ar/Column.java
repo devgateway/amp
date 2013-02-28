@@ -457,5 +457,11 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 			return "/" + name;
 	}
 	
+	/**
+	 * remove any sign of existence of any data with given ownerId's
+	 * @param ownerId
+	 */
+	public abstract void deleteByOwnerId(Set<Long> ownerId);
+	
 }
 

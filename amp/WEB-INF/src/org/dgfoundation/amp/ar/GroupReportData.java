@@ -454,9 +454,16 @@ public class GroupReportData extends ReportData<ReportData> {
 		while (i.hasNext())
 		{
 			ReportData element = i.next();
-			if ((element instanceof ColumnReportData) &&
-					((ColumnReportData) element).shouldBeRemoved())
-				i.remove();
+			if (element instanceof ColumnReportData)
+			{
+				ColumnReportData crd = (ColumnReportData) element;
+				if (crd.shouldBeRemoved())
+					i.remove();
+				else
+					crd.removeActivitiesWithoutFunding();
+			}
+			if (element instanceof GroupReportData)
+				((GroupReportData) element).cleanActivitiesWithoutFunding();
 		}
 	}
 	

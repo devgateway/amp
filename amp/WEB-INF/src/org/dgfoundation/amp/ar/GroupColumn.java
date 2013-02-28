@@ -749,4 +749,12 @@ public class GroupColumn extends Column {
 		
 		return null;
 	}
+	
+	@Override
+	public void deleteByOwnerId(Set<Long> ownerId)
+	{
+		for(Object columnObj:items)
+			((Column) columnObj).deleteByOwnerId(ownerId);
+	}
 }
+

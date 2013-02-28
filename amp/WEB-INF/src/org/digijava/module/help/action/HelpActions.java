@@ -48,6 +48,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.content.action.ContentManager;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.dbentity.HelpTopic;
@@ -872,7 +873,7 @@ public class HelpActions extends DispatchAction {
         Sdm kuku=new Sdm();
         kuku.setItems(new HashSet<SdmItem>());
         
-        Set<String> imageFileExtensions = new HashSet<String>(){{add("jpg"); add("jpeg");}};
+        Set<String> imageFileExtensions = new HashSet<String>(ContentManager.imageFileExtensions);
 
         while ((entry = zis.getNextEntry()) != null) {        	
         	if(entry.getName().endsWith(".xml")){
@@ -944,7 +945,7 @@ public class HelpActions extends DispatchAction {
         List<HelpTopic> firstLevelTopics=HelpUtil.getFirstLevelTopics(siteId);
       
         for (HelpTopic helpTopic : firstLevelTopics) {
-				removeLastLevelTopic(helpTopic, request);
+			removeLastLevelTopic(helpTopic, request);
 		}
         
         for (String  helpTopicEditKey : imgsHolder.keySet()) { //store which topic has reference for what Sdm doc

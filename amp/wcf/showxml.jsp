@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ROOT [
 <!ENTITY nbsp "&#160;">
 <!ENTITY Uuml "&#220;">
@@ -11,7 +11,7 @@
 ]>
 <%@ page
   session="true"
-  contentType="text/xml; charset=UTF-8" pageEncoding="ISO-8859-1"
+  contentType="text/xml; charset=UTF-8" pageEncoding="UTF-8"
   import="javax.servlet.http.*" %>
 
 <%@ taglib prefix="wcf" uri="http://www.tonbeller.com/wcf" %>

@@ -7,7 +7,7 @@ function delayer(){
 }
 </script>
 
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>AMP Auto Login</title>
 </head>
 <body onLoad="setTimeout('delayer()', 500)">

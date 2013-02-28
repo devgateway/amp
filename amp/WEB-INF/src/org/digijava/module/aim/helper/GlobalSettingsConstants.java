@@ -114,4 +114,6 @@ public class GlobalSettingsConstants {
 	public static final String COMPONENTS_SORT_ORDER = "Components Sort Order";
 	
 	public static final String GIS_FUNDING_TYPE = "GIS Funding Type";
+
+    public static final String SHOW_FUNDING_GROUP_ID = "Show funding group id";
 }

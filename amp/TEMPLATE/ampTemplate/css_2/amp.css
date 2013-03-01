@@ -45,6 +45,7 @@ legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bol
 html.ie .legend_label {line-height:22px;display:block;white-space:normal;}
 .mand {color:#FF0000;}
 table.inside, td.inside,td.report_inside {border:1px solid #b8b7b7;  font-size:11px;}
+td.inside ul{padding-left: 1.3em;}
 table.inside1, td.inside1 {background:#fff;padding:0px 5px ;}
 table.inside, td.inside_zebra {}
 td.tdInsideHeader{background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x;padding:3px;text-align:center;}

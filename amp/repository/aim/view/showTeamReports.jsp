@@ -638,7 +638,8 @@ $(document).ready(function() {
 					                              								</td>
 					                              								<c:if test="${!aimTeamReportsForm.tabs}">
 					                              								<td class="inside" style="padding-right: 8px; padding-left: 8px; font-size: 11px;" bgcolor="<%=color%>">
-					                                								<p style="white-space: nowrap">
+					                                								<div style="white-space: nowrap">
+					                                								<ul>
 					                                  									<li>
 																							<%
 														                                    if (report.getType()!=null && report.getType().equals(new Long(1))) {
@@ -696,7 +697,8 @@ $(document).ready(function() {
 					                                    										<digi:trn key="aim:monthlyreport">Monthly</digi:trn>	
 					                                    									</li>
 					                                  									</logic:equal>
-					                                								</p>
+					                                  								</ul>
+					                                								</div>
 					                              								</td>
 					                              								
 					                              							</c:if>
@@ -707,6 +709,7 @@ $(document).ready(function() {
 					                              							</c:if>
 					                              								
 					                              								<td class="inside" style="padding-right: 10px; padding-left: 10px;  font-size: 11px; width: 20%;" bgcolor="<%=color%>">
+					                              								<ul>
 					                                								<logic:iterate name="report" property="hierarchies" id="hierarchy" >
 					                                  									<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
 					                                  									<li>
@@ -715,10 +718,12 @@ $(document).ready(function() {
 						                                      								</digi:trn>
 					                                  									</li>
 					                                								</logic:iterate>
+					                                							</ul>
 					                              								</td>
 					                              							<%if (tm != null) {%>
 					                              								<td width="200" class="inside" style="padding-right: 10px; padding-left: 10px; font-size: 11px; width: 150px;" align="center" bgcolor="<%=color%>">  
-						                                							<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'> 
+						                                							<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'>
+						                                							<ul> 
 						                                  								<logic:iterate name="report" property="columns" id="column" indexId="index"  >
 						                                    								<%if (index.intValue()%2==0){ %>
 						                                      									<li>                                      
@@ -733,14 +738,17 @@ $(document).ready(function() {
 						                                      									</li>
 						                                    								<%} %>
 						                                  								</logic:iterate>
+						                                  							</ul>
 						                                							</div>
 						                                							<span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn>Columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[0])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn>Columns</digi:trn></u> ]&nbsp;</span>                               
-						                                							<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="ampReportId"/>'> 
+						                                							<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="ampReportId"/>'>
+						                                							<ul> 
 						                                  								<logic:iterate name="report" property="measures" id="measure" indexId="index"  >
 						                                    								<li>
 						                                    									<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">${measure.measure.aliasName}</digi:trn>
 						                                    								</li>
 						                                  								</logic:iterate>
+						                                  							</ul>
 						                                							</div>
 						                                							<span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br /></span>
 					                                							</td>

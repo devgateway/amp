@@ -730,7 +730,7 @@ public class DbUtil {
 		finally {
 			try {
 				if (session != null) {
-					PersistenceManager.releaseSession(session);
+					session.close();
 				}
 			}
 			catch (Exception ex1) {
@@ -764,7 +764,8 @@ public class DbUtil {
 		finally {
 			try {
 				if (session != null) {
-					PersistenceManager.releaseSession(session);
+					//PersistenceManager.releaseSession(session);
+                    session.close();
 				}
 			}
 			catch (Exception ex1) {

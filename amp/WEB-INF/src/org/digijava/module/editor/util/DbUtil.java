@@ -477,12 +477,8 @@ public class DbUtil {
             throw new EditorException(
                 "Unable to save editor information into database", ex);
         } finally {
-        				if (newSess && session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch (Exception rsf) {
-                    logger.error("Release session failed :" + rsf.getMessage());
-                }
+            if (newSess && session != null) {
+                session.close();
             }
         }
     }

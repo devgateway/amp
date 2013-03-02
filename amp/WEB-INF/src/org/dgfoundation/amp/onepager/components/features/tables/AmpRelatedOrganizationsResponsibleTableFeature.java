@@ -53,7 +53,7 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 				AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel, "percentage",percentageValidationField);
 				item.add(percentageField);
 				
-				boolean disableBudgetCode = true;
+				//boolean disableBudgetCode = true;
 				AmpOrgRole orole = item.getModelObject();
 				String orgCode = orole.getOrganisation().getBudgetOrgCode();
 				item.add(new Label("budgetCodeLabel", orgCode));
@@ -62,10 +62,11 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 				budgetCode.getTextContainer().add(new AttributeModifier("style", "width: 40px;"));
 				budgetCode.getTextContainer().add(new AttributeModifier("maxlength", "3"));
 				budgetCode.getTextContainer().add(new RangeValidator<Long>(null, 1000L));
-				if (disableBudgetCode){
+
+				/*if (disableBudgetCode){
 					budgetCode.setIgnorePermissions(true);
 					budgetCode.setEnabled(false);
-				}
+				}*/
 				item.add(budgetCode);
 				
 				AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField("delRelOrg", "Delete Related Organisation") {

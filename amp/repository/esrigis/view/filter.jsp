@@ -210,8 +210,8 @@ function initializeTranslations(){
 																	<li><input type="checkbox"
 																		class="organization_check_${item.mainEntity.ampOrgGrpId}"
 																		name="organization_check" title="<c:out value='${organization.name}'/>"
-																		value="${organization.ampOrgId}"
-																		onclick="uncheckAllOption('org_grp_check');checkParentOption('org_grp_check',${item.mainEntity.ampOrgGrpId})" /> <span><c:out value="${organization.name}"/></span>
+																		value="${organization.ampOrgId}"/> 
+																		<span><c:out value="${organization.name}"/></span>
 																	</li>
 																</c:forEach>
 															</ul></li>
@@ -254,7 +254,7 @@ function initializeTranslations(){
 																		class="zone_check_${item.mainEntity.id}"
 																		name="zone_check" title="${zone.name}"
 																		value="${zone.id}"
-																		onclick="uncheckAllOption('region_check');checkParentOption('region_check',${item.mainEntity.id})" /><span><c:out value="${zone.name}"/></span>
+																		 /><span><c:out value="${zone.name}"/></span>
 																	</li>
 																</c:forEach>
 															</ul></li>

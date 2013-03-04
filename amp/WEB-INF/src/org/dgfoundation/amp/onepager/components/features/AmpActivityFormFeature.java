@@ -179,6 +179,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		};
 		activityForm.setOutputMarkupId(true);
+        activityForm.setMultiPart(true);
 
 		String actNameStr = am.getObject().getName();
         if (actNameStr != null && !actNameStr.trim().isEmpty()) {

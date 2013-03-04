@@ -9,7 +9,7 @@
 <script type="text/javascript" src="js/jquery-ui-1.8.20/js/jquery.myplugin.js"></script>
 <script type="text/javascript" src="js/jquery-ui-1.8.20/js/jquery.i18n.properties-1.0.9.js"></script>
 
-<title>AMP Dashboard Test</title>
+<title>Analysis Dashboards</title>
 <style>
     .ui-button-text { font-size:8pt;}
     .ui-state-active { font-weight:bold;}
@@ -109,49 +109,37 @@
 			$("#options").slideUp();
 			var currentGroup = dashboards.children[currentlySelectedDashboard.idParent];
 			var currentDashboard = currentGroup.children[currentlySelectedDashboard.idChild];
-/*			if (currentDashboard.currency_selectable || currentDashboard.type_of_funding_selectable) {
-        $("#options").appendTo("#header_buttons");
-        $("#options").promise().done(function(){
-          $("#options").css("margin","0px 0px");
-          $("#options").css("float","right");
-          $("#options").fadeIn();
-        });
-        $("#reset").css("float","right");
-			}*/ 
 
 			$("#selection").slideDown();
-      $("#header").slideUp();
-        $("#run").slideUp();
+			$("#header").slideUp();
+			$("#run").slideUp();
 			$("#selection h3 > a").text(getTranslated(currentGroup.name) + " > " +getTranslated(currentDashboard.name));
-      
-      
-			
+
 			var currency = $('input:radio[name=cur]:checked').val();
 			var type_of_funding = $('input:radio[name=tof]:checked').val();
-      var currencyUrl = "";
+			var currencyUrl = "";
 			if (currentDashboard.currency_selectable) {
 				currencyUrl = "&currency=" + currency;
 			}
-      var typeOfFundingUrl = "";
+			var typeOfFundingUrl = "";
 			if (currentDashboard.type_of_funding_selectable) {
 				typeOfFundingUrl = "&type_of_funding=" + type_of_funding;
 			}
 			var fileName = currentDashboard.action_name + ".xcdf";
-			
 			var url = "/pentaho/content/pentaho-cdf/RenderXCDF?solution=" + dashboards.solution + "&path=" + currentGroup.path + 
 				"&action=" + fileName + "" + "&userid=" + dashboards.userid + "&password=" + dashboards.password + "" + currencyUrl + "" + typeOfFundingUrl;
-      $("#accordion").promise().done(function() {
-        $("#options").promise().done(function() {
-          $("#selection").promise().done(function() {
-            $("#header").promise().done(function() {
-              $( "#iframeDashboards").attr("src", url);
-            });
-          });
-        });
-      });
+			$("#accordion").promise().done(function() {
+				$("#options").promise().done(function() {
+					$("#selection").promise().done(function() {
+						$("#header").promise().done(function() {
+						  $( "#iframeDashboards").attr("src", url);
+						});
+					});
+				});
+			});
 			resizeAccordion();
 			showDialog();
-	}
+	};
 
 	var showDialog = function() {
 		$( "#dialog-modal" ).dialog({
@@ -160,21 +148,21 @@
 			modal: true
 		});
 		$(".ui-dialog-titlebar").hide()
-	}
+	};
 
 	var closeDialog = function() {
 		$( "#dialog-modal" ).dialog("close");
-	}
+	};
 
 	var resizeIframe = function() {
 		$("#iframeDashboards", parent.document.body).height($(window).height() - $("#mainContainer").height()-30);
 		$("#iframeDashboards", parent.document.body).width($(document.body).width()-5);
-	}
+	};
 	
 	var resizeAccordion = function() {
 		$("#accordion", parent.document.body).width($(document.body).width()-20);
 		$("#selection", parent.document.body).width($(document.body).width()-20);
-	}
+	};
 	
 </script>
 
@@ -193,7 +181,7 @@
 			{
 				"name":"Composition of Pool of Donors",
         "idString": "",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=composition_of_pool_of_donors_ccc.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FBetter+Understand+Trends+in+ODA&action=composition_of_pool_of_donors_ccc.xcdf&template=mantle",
 				"action_name": "composition_of_pool_of_donors_ccc",
 				"type_of_funding_selectable": true,
 				"currency_selectable": true
@@ -201,7 +189,7 @@
 			{
 				"name":"ODA Global vs Local Trends",
         "idString": "msg_better_understand_trends_in_oda",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=oda_vs_national_indicators_ccc.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FBetter+Understand+Trends+in+ODA&action=oda_vs_national_indicators_ccc.xcdf&template=mantle",
 				"action_name": "oda_global_vs_local_trends_ccc",
 				"type_of_funding_selectable": false,
 				"currency_selectable": false
@@ -209,7 +197,7 @@
 			{
 				"name":"ODA vs GNI",
         "idString": "msg_better_understand_trends_in_oda",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=oda_global_vs_local_trends_ccc.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FBetter+Understand+Trends+in+ODA&action=oda_global_vs_local_trends_ccc.xcdf&template=mantle",
 				"action_name": "oda_vs_national_indicators_ccc",
 				"type_of_funding_selectable": false,
 				"currency_selectable": false
@@ -217,7 +205,7 @@
 			{
 				"name":"Share of ODA by Donor Group",
         "idString": "msg_better_understand_trends_in_oda",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=share_of_oda_by_donor_group_ccc.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FBetter+Understand+Trends+in+ODA&action=share_of_oda_by_donor_group_ccc.xcdf&template=mantle",
 				"action_name": "share_of_oda_by_donor_group_ccc",
 				"type_of_funding_selectable": true,
 				"currency_selectable": true
@@ -225,7 +213,7 @@
 			{
 				"name":"Share of ODA by Donor Organization",
         "idString": "msg_better_understand_trends_in_oda",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=share_of_oda_by_donor_organization_ccc.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FBetter+Understand+Trends+in+ODA&action=share_of_oda_by_donor_organization_ccc.xcdf&template=mantle",
 				"action_name": "share_of_oda_by_donor_organization_ccc",
 				"type_of_funding_selectable": true,
 				"currency_selectable": true
@@ -233,7 +221,7 @@
 			{
 				"name":"Share of ODA by Sector",
         "idString": "msg_better_understand_trends_in_oda",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FBetter+Understand+Trends+in+ODA&action=share_of_oda_by_sector_ccc.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FBetter+Understand+Trends+in+ODA&action=share_of_oda_by_sector_ccc.xcdf&template=mantle",
 				"action_name": "share_of_oda_by_sector_ccc",
 				"type_of_funding_selectable": true,
 				"currency_selectable": true
@@ -250,7 +238,7 @@
 			{
 				"name":"Aid by Type and Budget",
         "idString": "msg_better_understand_trends_in_oda",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FAlign+Aid+with+National+Priorities&action=Dashboard_CCC.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FAlign+Aid+with+National+Priorities&action=Dashboard_CCC.xcdf&template=mantle",
 				"action_name": "Dashboard_CCC",
 				"type_of_funding_selectable": true,
 				"currency_selectable": true
@@ -267,7 +255,7 @@
 			{
 				"name":"Fragmentation by Donor",
         "idString": "msg_better_understand_trends_in_oda",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FReduce+Fragmentation&action=fragmentation_by_donor_ccc.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FReduce+Fragmentation&action=fragmentation_by_donor_ccc.xcdf&template=mantle",
 				"action_name": "fragmentation_by_donor_ccc",
 				"type_of_funding_selectable": false,
 				"currency_selectable": false
@@ -275,7 +263,7 @@
 			{
 				"name":"Fragmentation by Sector",
         "idString": "msg_better_understand_trends_in_oda",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FReduce+Fragmentation&action=fragmentation_by_sector_ccc.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FReduce+Fragmentation&action=fragmentation_by_sector_ccc.xcdf&template=mantle",
 				"action_name": "fragmentation_by_sector_ccc",
 				"type_of_funding_selectable": false,
 				"currency_selectable": false
@@ -292,7 +280,7 @@
 			{
 				"name":"On/Off Budget by Donor Group",
         "idString": "msg_better_understand_trends_in_oda",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FReduce+Off-Budget+Aid=budget_by_donor.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FReduce+Off-Budget+Aid=budget_by_donor.xcdf&template=mantle",
 				"action_name": "budget_by_donor",
 				"type_of_funding_selectable": true,
 				"currency_selectable": true
@@ -300,39 +288,10 @@
 			{
 				"name":"On/Off Budget by Year",
         "idString": "msg_better_understand_trends_in_oda",
-				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FReduce+Off-Budget+Aid=budget_by_year.xcdf&template=mantle",
+				"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FReduce+Off-Budget+Aid=budget_by_year.xcdf&template=mantle",
 				"action_name": "budget_by_year",
 				"type_of_funding_selectable": true,
 				"currency_selectable": true
-			}
-		]
-	}
-	dashboardGroups.push(dashboardGroup);
-	dashboardGroup = {
-		name: "Division of Labor",
-		path: "%2FDivision+of+Labor",
-		idGroup: "division_labor",
-		children: [
-			{
-			"name":"Concentration by PRSP",
-			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FDivision+of+Labor&action=fragmentation_by_PRSP_ccc.xcdf&template=mantle",
-			"action_name": "fragmentation_by_PRSP_ccc",
-			"type_of_funding_selectable": false,
-			"currency_selectable": false
-			},
-			{
-			"name":"Concentration by Ministry",
-			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FDivision+of+Labor&action=fragmentation_by_Ministry_ccc.xcdf&template=mantle",
-			"action_name": "fragmentation_by_Ministry_ccc",
-			"type_of_funding_selectable": false,
-				"currency_selectable": false
-			},
-			{
-			"name":"Overall Delivery Performance",
-			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FDivision+of+Labor&action=delivery_rate_by_donor.xcdf&template=mantle",
-			"action_name": "fragmentation_by_Ministry_ccc",
-			"type_of_funding_selectable": false,
-				"currency_selectable": false
 			}
 		]
 	}
@@ -344,15 +303,125 @@
 		children: [
 			{
 			"name":"Delivery Rate for Donors",
-			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FDevelopment+Partner+Performance&action=delivery_rate_for_donors.xcdf&template=mantle",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FDevelopment+Partner+Performance&action=delivery_rate_for_donors.xcdf&template=mantle",
 			"action_name": "delivery_rate_for_donors",
 			"type_of_funding_selectable": false,
 			"currency_selectable": false
 			},
 			{
 			"name":"ODA recorded in the national budget",
-			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards&path=%2FDevelopment+Partner+Performance&action=oda_in_national_budget.xcdf&template=mantle",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FDevelopment+Partner+Performance&action=oda_in_national_budget.xcdf&template=mantle",
 			"action_name": "oda_in_national_budget",
+			"type_of_funding_selectable": false,
+			"currency_selectable": false
+			},
+			{
+			"name":"ODA delivered and recorded",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FDevelopment+Partner+Performance&action=oda_delivered_and_recorded.xcdf&template=mantle",
+			"action_name": "oda_delivered_and_recorded",
+			"type_of_funding_selectable": false,
+			"currency_selectable": false
+			},
+			{
+			"name":"Development Partners involved in less than 5 sectors",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FDevelopment+Partner+Performance&action=donor_less.xcdf&template=mantle",
+			"action_name": "donor_less",
+			"type_of_funding_selectable": false,
+			"currency_selectable": false
+			},
+			{
+			"name":"Sectors with fewer than 5 donors",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FDevelopment+Partner+Performance&action=sector_less.xcdf&template=mantle",
+			"action_name": "sector_less",
+			"type_of_funding_selectable": false,
+			"currency_selectable": false
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Division of Labor",
+		path: "%2FDivision+of+Labor",
+		idGroup: "division_labor",
+		children: [
+			{
+			"name":"Concentration by PRSP",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FDivision+of+Labor&action=fragmentation_by_PRSP_ccc.xcdf&template=mantle",
+			"action_name": "fragmentation_by_PRSP_ccc",
+			"type_of_funding_selectable": false,
+			"currency_selectable": false
+			},
+			{
+			"name":"Concentration by Ministry",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FDivision+of+Labor&action=fragmentation_by_Ministry_ccc.xcdf&template=mantle",
+			"action_name": "fragmentation_by_Ministry_ccc",
+			"type_of_funding_selectable": false,
+				"currency_selectable": false
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Government Performance Ratios",
+		path: "%2FGovernment+Performance+Ratios",
+		idGroup: "government_performance",
+		children: [
+			{
+			"name":"Absorption rate",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FGovernment+Performance+Ratios&action=absorption_rate.xcdf&template=mantle",
+			"action_name": "absorption_rate",
+			"type_of_funding_selectable": false,
+			"currency_selectable": false
+			},
+			{
+			"name":"Dependence on Aid by Ministry",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FDivision+of+Labor&action=dependance_by_ministry.xcdf&template=mantle",
+			"action_name": "dependance_by_ministry",
+			"type_of_funding_selectable": false,
+				"currency_selectable": false
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Better Targeting of Aid Recipients",
+		path: "%2FBetter+Targeting+of+Aid+Recipients",
+		idGroup: "better_targeting",
+		children: [
+			{
+			"name":"Ratio map",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2F2FBetter+Targeting+of+Aid+Recipients&action=ratio_map.xcdf&template=mantle",
+			"action_name": "ratio_map",
+			"type_of_funding_selectable": false,
+			"currency_selectable": false
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Country dependence on development aid",
+		path: "%2FCountry+dependence+on+development+aid",
+		idGroup: "country_dependance",
+		children: [
+			{
+			"name":"Off Budget Aid vs Annual State Budget",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FCountry+dependence+on+development+aid&action=off_budget_vs_state_budget.xcdf&template=mantle",
+			"action_name": "off_budget_vs_state_budget",
+			"type_of_funding_selectable": false,
+			"currency_selectable": false
+			}
+		]
+	}
+	dashboardGroups.push(dashboardGroup);
+	dashboardGroup = {
+		name: "Data Quality",
+		path: "%2FData+Quality",
+		idGroup: "data_quality",
+		children: [
+			{
+			"name":"Completeness of data",
+			"url": "/pentaho/content/pentaho-cdf/RenderXCDF?solution=AMP+Dashboards+Phase+2&path=%2FData+Quality&action=completeness_of_data.xcdf&template=mantle",
+			"action_name": "completeness_of_data",
 			"type_of_funding_selectable": false,
 			"currency_selectable": false
 			}
@@ -363,7 +432,7 @@
 		children: dashboardGroups, 
 		userid: "joe", 
 		password: "password",
-		solution: "AMP+Dashboards",
+		solution: "AMP+Dashboards+Phase+2",
 		path: "/pentaho/content/dashboards"
 	};
 	var currentlySelectedDashboard = {};

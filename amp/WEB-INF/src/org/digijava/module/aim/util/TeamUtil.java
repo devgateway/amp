@@ -5,7 +5,11 @@
 package org.digijava.module.aim.util;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1518,46 +1522,76 @@ public class TeamUtil {
     }
  
 
-    public static Collection getAllTeamAmpActivities(Long teamId, boolean includedraft, String keyword) {
-        Session session = null;
-        Collection<AmpActivity> col = new ArrayList();
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            StringBuilder queryString = new StringBuilder("select g.ampActivityLastVersion from "+ AmpActivityGroup.class.getName()+" g where");
-            Query qry = null;
-            queryString.append(" (g.ampActivityLastVersion.deleted is null or g.ampActivityLastVersion.deleted=false) and ") ;
-            if(teamId == null) {
-            	queryString.append(" g.ampActivityLastVersion.team is null") ;
-            }else{
-            	queryString.append(" (g.ampActivityLastVersion.team=:teamId)") ;
-            }
-            if(!includedraft){
-            	queryString.append("  and   (g.ampActivityLastVersion.draft is null or g.ampActivityLastVersion.draft=false)) ");
-            }
-            if(keyword!=null && keyword.length()>0){
-            	queryString.append(" and lower(g.ampActivityLastVersion.name) like lower(:name)") ;
-            }
-            
-            qry = session.createQuery(queryString.toString());
-          	if(keyword!=null && keyword.length()>0){
-              	qry.setString("name", "%" + keyword + "%");
-            }
-          	if(teamId!=null){
-          		qry.setLong("teamId", teamId);
-          	}       
-   
-   
-            col  = qry.list();
-                
-        } catch(Exception e) {
-            logger.debug("Exception from getAllTeamAmpActivities()");
-            logger.debug(e.toString());
-            throw new RuntimeException(e);
-        } 
-        return col;
+    public static Set<Long> fetchIds(PreparedStatement statement)
+    {
+    	ResultSet rs = null;
+    	try
+    	{
+    		rs = statement.executeQuery();
+    		Set<Long> res = new HashSet<Long>();
+    		while (rs.next())
+    			res.add(rs.getLong(1));
+    		return res;
+    	}
+    	catch(SQLException ex)
+    	{
+    		return null;
+    	}
+    	finally
+    	{
+    		if (rs != null)
+    		{
+    			try{rs.close();}
+    			catch(SQLException e){}
+    		}
+    	}
+    	
     }
+        
+  public static List<AmpActivity> getAllTeamAmpActivities(Long teamId, boolean includedraft, String keyword) {
+	Connection conn = null;
+	try {
+		conn = PersistenceManager.getJdbcConnection();
 
+		StringBuilder queryString = new StringBuilder("select distinct(amp_activity_id) from amp_activity A WHERE ");
+        
+		queryString.append(" (A.deleted is null or A.deleted=false) and ") ;
+		if (teamId == null) {
+			queryString.append(" (A.amp_team_id is null)") ;
+		}else{
+			queryString.append(" (A.amp_team_id=" + teamId + ")") ;
+		}
+        if(!includedraft){
+        	queryString.append("  and   (A.draft is null or A.draft=false) ");
+        }
+        if(keyword!=null && keyword.length()>0){
+        	queryString.append(" and lower(A.name) like lower(?)") ;
+        }
+        
+        PreparedStatement statement = conn.prepareStatement(queryString.toString());
+        if(keyword!=null && keyword.length()>0){
+        	statement.setString(1, "%" + keyword + "%");
+        }
+        Set<Long> ids = fetchIds(statement);
+        
+        List<AmpActivity> res = new ArrayList<AmpActivity>();
+        Session session = PersistenceManager.getSession();
+        for(Long id:ids)
+        	res.add((AmpActivity)session.load(AmpActivity.class, id));
+        return res;
+        
+    } catch(Exception e) {
+        logger.debug("Exception from getAllTeamAmpActivities()");
+        logger.debug(e.toString());
+        throw new RuntimeException(e);
+    }
+	finally
+	{
+		org.digijava.module.gis.util.DbUtil.closeConnection(conn);
+	}
+}
+
+    
     public static boolean hasActivities(Long teamId) {
         Session session = null;
         boolean flag = false;

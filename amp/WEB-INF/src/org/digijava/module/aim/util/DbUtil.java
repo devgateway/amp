@@ -7450,4 +7450,5 @@ public class DbUtil {
 		}
 		return ampAppSettings != null ? ampAppSettings.getValidation() : null;
 	}
+	 
 }

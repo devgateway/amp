@@ -58,6 +58,7 @@ var endYear = "2011";
 var dateRangeInitialized = false;
 
 var processParameters = function(){
+	console.log("Processing parameters.");
     var regionValues = $("#regionSelect_object > select").val();
     regionValues = regionValues != null ? regionValues : [];
     //Reset global parameter
@@ -66,78 +67,29 @@ var processParameters = function(){
       function(idx, value){ 
         regionParameter = (regionParameter == "" ? "": regionParameter + ",") + "[Region].[" + value +"]";
       });
-    if(regionParameter == "") regionParameter = "[Regions].Members";
 
     var programValues = $("#programSelect_object > select").val();
     programValues = programValues != null ? programValues : [];
+
     //Reset global parameter
     programParameter = "";
     $.each(programValues,
       function(idx, value){ 
-        programParameter = (programParameter == "" ? "": programParameter + ",") + "[National Program].[" + value +"]";
+        programParameter = (programParameter == "" ? "": programParameter + ",") + "[National Program Level 1].[" + value +"]";
       });
-    if(programParameter == "") programParameter = "[National Program].Members";
 
-    console.log("Postchage in Region/Sector executed");
+    //Reset global parameter
+	console.log("regionParameter:" + regionParameter);
+	if (regionParameter != "" || programParameter != "")
+	{
+		if(regionParameter == "") regionParameter = "[Regions].Members";
+		if(programParameter == "") programParameter = "[National Program Level 1].Members";
+	}
     first_data_table.chartDefinition.colTypes = [];
     first_data_table.chartDefinition.colFormats = [];
     first_data_table.chartDefinition.colHeaders = [];
   };
 
-
-
-var startYearSelect = 
-{
-  name: "startYearSelect",
-  type: "select",
-  parameters:[],
-  parameter:"startYear",
-  valueAsId: true,
-  htmlObject: "startYearSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    $("#startYearSelect_object select").val(startYear);
-    $("#startYearSelect_object select")[0].id = "startYear";
-  }
-}
-var endYearSelect = 
-{
-  name: "endYearSelect",
-  type: "select",
-  parameters:[],
-  parameter:"endYear",
-  valueAsId: true,
-  htmlObject: "endYearSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    console.log("postExec endYear");
-    dateRangeInitialized = true;
-    $("#endYearSelect_object select").val(endYear);
-    $("#endYearSelect_object select")[0].id = "endYear";
-  }
-}
 
 var multiSelectConfig;
 $(window).ready(function() {
@@ -148,97 +100,6 @@ $(window).ready(function() {
         selectedText: Dashboards.i18nSupport.prop("msg_selected_option")
      }
 });  
-
-var regionSelect = 
-{
-  name: "regionSelect",
-  type: "SelectMulti",
-  parameters:[],
-  parameter: "regionParameter",
-  valueAsId: true,
-  htmlObject: "regionSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
-        "NON EMPTY [Regions].[Region].Members ON ROWS " +
-        "FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    console.log("Postexec in Region executed");
-    Dashboards.processChange(this.name);
-    $("#regionSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
-    $('#regionSelect_object > select').width('300px');
-    $('#regionSelect_object > select').multiselect(multiSelectConfig);
-  },
-  postChange: processParameters
-}
-  
-var sectorSelect = 
-{
-  name: "sectorSelect",
-  type: "SelectMulti",
-  parameters:[],
-  parameter:"sectorParameter",
-  valueAsId: true,
-  htmlObject: "sectorSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
-        "NON EMPTY [Primary Sector].[Primary Sector].Members ON ROWS " +
-        "FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    $("#sectorSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
-    $('#sectorSelect_object > select').width('300px');
-    $('#sectorSelect_object > select').multiselect(multiSelectConfig);
-  },
-  postChange:processParameters
-}
-
-var programSelect = 
-{
-  name: "programSelect",
-  type: "SelectMulti",
-  parameters:[],
-  parameter:"programParameter",
-  valueAsId: true,
-  htmlObject: "programSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
-        "NON EMPTY [National Program].[National Program].Members ON ROWS " +
-        "FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    $("#programSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
-    $('#programSelect_object > select').width('300px');
-    $('#programSelect_object > select').multiselect(multiSelectConfig);
-  },
-  postChange:processParameters
-}
 
 var getParameters = function() {
   return regionParameter + programParameter;
@@ -253,11 +114,11 @@ var parameters = [["startYear","startYear"], ["endYear","endYear"], ["regionPara
 var showValues = false;
 $("#showValues_object input").click(function() {
   if($("#showValues_object input").attr("checked")) {
-    Dashboards.components[0].chartDefinition.showValues = true
+    Dashboards.components[4].chartDefinition.showValues = true
   }
   else
-    Dashboards.components[0].chartDefinition.showValues = false
-  Dashboards.components[0].update()
+    Dashboards.components[4].chartDefinition.showValues = false
+  Dashboards.components[4].update()
 });
 
 
@@ -298,7 +159,7 @@ var first_heatgrid_chart = {
 		width: 1200,
 		height: 400,
 		dataAccessId: function() {return getParameters() == "" ? "first_datasource" : "first_datasource_params"},
-    path: "/AMP Dashboards/Reduce Fragmentation/fragmentation_by_donor_ccc.cda",
+    path: "/AMP Dashboards Phase 2/Reduce Fragmentation/fragmentation_by_donor_ccc.cda",
 		crosstabMode: true,
 		seriesInRows: false,
 		animate: false,
@@ -344,26 +205,16 @@ var first_heatgrid_chart = {
 };
 first_heatgrid_chart.listeners = listeners;
 first_heatgrid_chart.parameters = parameters;
+first_heatgrid_chart.preExecution = processParameters;
 
 var first_data_table = jQuery.extend(true, {}, seminal_data_table);
 first_data_table.htmlObject = "first_chart_data";
 first_data_table.name = "first_data_table";
 first_data_table.chartDefinition.dataAccessId = "first_datasource";
-first_data_table.chartDefinition.path = "/AMP Dashboards/Reduce Fragmentation/fragmentation_by_donor_ccc.cda";
+first_data_table.chartDefinition.path = "/AMP Dashboards Phase 2/Reduce Fragmentation/fragmentation_by_donor_ccc.cda";
 first_data_table.postFetch = pfetch;
 first_data_table.chartDefinition.colTypes = [];
 first_data_table.chartDefinition.colFormats = [];
-
-
-    // These are the components to be loaded into the dashboard withing the [] separated by ,
-    var components = [first_heatgrid_chart,first_data_table, regionSelect, programSelect, startYearSelect, endYearSelect];
-    // The initial dashboard load function definition
-    function load(){
-      Dashboards.init(components);
-    }
-
-    // The initial dashboard load function execution
-    load();
 
 </script>
 
@@ -390,6 +241,8 @@ first_data_table.chartDefinition.colFormats = [];
   
 $(window).resize(resizeLayout);
 $(window).ready(function() {
+  var components = [regionSelect, programSelect, startYearSelect, endYearSelect, first_heatgrid_chart, first_data_table];
+  Dashboards.init(components);
   resizeLayout();
   initialized = true;
   setTimeout(applyDateRange, 500);

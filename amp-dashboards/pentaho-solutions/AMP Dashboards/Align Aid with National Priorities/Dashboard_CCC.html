@@ -58,6 +58,7 @@ var endYear = "2011";
 var dateRangeInitialized = false;
 
 var processParameters = function(){
+	console.log("Processing parameters.");
     var regionValues = $("#regionSelect_object > select").val();
     regionValues = regionValues != null ? regionValues : [];
     //Reset global parameter
@@ -66,7 +67,6 @@ var processParameters = function(){
       function(idx, value){ 
         regionParameter = (regionParameter == "" ? "": regionParameter + ",") + "[Region].[" + value +"]";
       });
-    if(regionParameter == "") regionParameter = "[Regions].Members";
 
     var sectorValues = $("#sectorSelect_object > select").val();
     sectorValues = sectorValues != null ? sectorValues : [];
@@ -74,9 +74,8 @@ var processParameters = function(){
     sectorParameter = "";
     $.each(sectorValues,
       function(idx, value){ 
-        sectorParameter = (sectorParameter == "" ? "": sectorParameter + ",") + "[Primary Sector].[Malawi Sectors].[" + value +"]";
+        sectorParameter = (sectorParameter == "" ? "": sectorParameter + ",") + "[Primary Sector].[Nepal Sector Classification].[" + value +"]";
       });
-    if(sectorParameter == "") sectorParameter = "[Primary Sector].Members";
 
     var programValues = $("#programSelect_object > select").val();
     programValues = programValues != null ? programValues : [];
@@ -84,76 +83,23 @@ var processParameters = function(){
     programParameter = "";
     $.each(programValues,
       function(idx, value){ 
-        programParameter = (programParameter == "" ? "": programParameter + ",") + "[National Program].[" + value +"]";
+        programParameter = (programParameter == "" ? "": programParameter + ",") + "[National Program Level 1].[" + value +"]";
       });
-    if(programParameter == "") programParameter = "[National Program].Members";
 
     //Reset global parameter
-    aidTypeParameter = "";
-    aidTypeParameter = (aidTypeParameter == "" ? "": "" + aidTypeParameter +"");
-    if(aidTypeParameter == "") aidTypeParameter = "[Financing Instrument].Members";
 
-    console.log("Postchage in Region/Sector executed");
-
+	console.log("regionParameter:" + regionParameter);
+	if (regionParameter != "" || sectorParameter != "" || programParameter != "")
+	{
+		if(regionParameter == "") regionParameter = "[Regions].Members";
+		if(sectorParameter == "") sectorParameter = "[Primary Sector].Members";
+		if(programParameter == "") programParameter = "[National Program Level 1].Members";
+	}
     first_data_table.chartDefinition.colTypes = [];
     first_data_table.chartDefinition.colFormats = [];
     first_data_table.chartDefinition.colHeaders = [];
   };
 
-
-
-var startYearSelect = 
-{
-  name: "startYearSelect",
-  type: "select",
-  parameters:[],
-  parameter:"startYear",
-  valueAsId: true,
-  htmlObject: "startYearSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    $("#startYearSelect_object select").val(startYear);
-    $("#startYearSelect_object select")[0].id = "startYear";
-  }
-}
-var endYearSelect = 
-{
-  name: "endYearSelect",
-  type: "select",
-  parameters:[],
-  parameter:"endYear",
-  valueAsId: true,
-  htmlObject: "endYearSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    console.log("postExec endYear");
-    dateRangeInitialized = true;
-    $("#endYearSelect_object select").val(endYear);
-    $("#endYearSelect_object select")[0].id = "endYear";
-  }
-}
 
 var multiSelectConfig;
 $(window).ready(function() {
@@ -165,99 +111,9 @@ $(window).ready(function() {
      }
 });  
 
-var regionSelect = 
-{
-  name: "regionSelect",
-  type: "SelectMulti",
-  parameters:[],
-  parameter: "regionParameter",
-  valueAsId: true,
-  htmlObject: "regionSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
-        "NON EMPTY [Regions].[Region].Members ON ROWS " +
-        "FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    console.log("Postexec in Region executed");
-    Dashboards.processChange(this.name);
-    $("#regionSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
-    $('#regionSelect_object > select').width('300px');
-    $('#regionSelect_object > select').multiselect(multiSelectConfig);
-  },
-  postChange: processParameters
-}
-  
-var sectorSelect = 
-{
-  name: "sectorSelect",
-  type: "SelectMulti",
-  parameters:[],
-  parameter:"sectorParameter",
-  valueAsId: true,
-  htmlObject: "sectorSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
-        "NON EMPTY [Primary Sector].[Primary Sector].Members ON ROWS " +
-        "FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    $("#sectorSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
-    $('#sectorSelect_object > select').width('300px');
-    $('#sectorSelect_object > select').multiselect(multiSelectConfig);
-  },
-  postChange:processParameters
-}
-
-var programSelect = 
-{
-  name: "programSelect",
-  type: "SelectMulti",
-  parameters:[],
-  parameter:"programParameter",
-  valueAsId: true,
-  htmlObject: "programSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
-        "NON EMPTY [National Program].[National Program].Members ON ROWS " +
-        "FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    $("#programSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
-    $('#programSelect_object > select').width('300px');
-    $('#programSelect_object > select').multiselect(multiSelectConfig);
-  },
-  postChange:processParameters
-}
 
 var getParameters = function() {
-  return aidTypeParameter+regionParameter + sectorParameter + programParameter;
+  return aidTypeParameter + regionParameter + sectorParameter + programParameter;
 }
 
 var listeners_first = ["startYear","endYear","regionParameter","sectorParameter", "programParameter"];
@@ -280,7 +136,7 @@ first_bar_chart.chartDefinition.crosstabMode = true;
 first_bar_chart.chartDefinition.seriesInRows = false;
 first_bar_chart.chartDefinition.orientation = "horizontal";
 first_bar_chart.chartDefinition.valueFormat = function f(value){return (value);};
-first_bar_chart.chartDefinition.path = "/AMP Dashboards/Align Aid with National Priorities/Dashboard_CCC.cda";
+first_bar_chart.chartDefinition.path = "/AMP Dashboards Phase 2/Align Aid with National Priorities/Dashboard_CCC.cda";
 first_bar_chart.chartDefinition.stacked = true;
 first_bar_chart.chartDefinition.title = function() { return Dashboards.i18nSupport.prop("msg_oda_by_type_of_funding") + " (" + type_of_funding_translation + ", " + currency + ")";};
 first_bar_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","0"],["xAxisLabel_font","12px sans-serif"],["yAxisLabel_font","12px sans-serif"], ["legendLabel_text", function(d){return formatLabel(d)}]];
@@ -289,6 +145,7 @@ first_bar_chart.chartDefinition.clickAction = function(s,c,v){ aidType = formatL
 first_bar_chart.listeners = listeners_first;
 first_bar_chart.parameters = parameters_first;
 first_bar_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ formatCurrencyValue(currency, value)};
+first_bar_chart.preExecution = processParameters;
 
 var first_line_chart = jQuery.extend(true, {}, seminal_chart);
 first_line_chart.type = "cccLineChart";
@@ -296,10 +153,11 @@ first_line_chart.htmlObject = "first_chart_line";
 first_line_chart.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
 first_line_chart.title = function() { return Dashboards.i18nSupport.prop("msg_oda_by_type_of_funding")};
 first_line_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ formatCurrencyValue(currency, value)};
+first_line_chart.preExecution = processParameters;
 
 var first_data_table = jQuery.extend(true, {}, seminal_data_table);
 first_data_table.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
-first_data_table.chartDefinition.path = "/AMP Dashboards/Align Aid with National Priorities/Dashboard_CCC.cda";
+first_data_table.chartDefinition.path = "/AMP Dashboards Phase 2/Align Aid with National Priorities/Dashboard_CCC.cda";
 first_data_table.htmlObject = "first_chart_data";
 first_data_table.name = "first_data_table";
 first_data_table.chartDefinition.colTypes = [];
@@ -315,7 +173,7 @@ second_line_chart.chartDefinition.title = function(){return (aidTypeParameter ==
 //second_line_chart.type = "cccLineChart";
 second_line_chart.htmlObject = "second_chart_line";
 second_line_chart.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "second_chart_mdx" : "second_chart_mdx_params"};
-second_line_chart.chartDefinition.path = "/AMP Dashboards/Align Aid with National Priorities/Dashboard_CCC.cda";
+second_line_chart.chartDefinition.path = "/AMP Dashboards Phase 2/Align Aid with National Priorities/Dashboard_CCC.cda";
 second_line_chart.chartDefinition.yAxisSize = 100;
 second_line_chart.listeners = listeners_second;
 second_line_chart.parameters = parameters_second;
@@ -324,6 +182,7 @@ second_line_chart.chartDefinition.crosstabMode = false;
 second_line_chart.chartDefinition.seriesInRows = true;
 second_line_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","-.5"],["xAxisLabel_font","10px sans-serif"],["xAxisLabel_textAlign","right"],["yAxisLabel_font","10px sans-serif"], ["legendLabel_text", function(d){return formatLabel(d)}]];
 second_line_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ formatCurrencyValue(currency, value)};
+second_line_chart.preExecution = processParameters;
 
 var second_bar_chart = jQuery.extend(true, {}, seminal_chart);
 second_bar_chart.type = "cccBarChart";
@@ -336,36 +195,23 @@ second_bar_chart.chartDefinition.crosstabMode = false;
 second_bar_chart.chartDefinition.seriesInRows = true;
 second_bar_chart.chartDefinition.orientation = "horizontal";
 second_bar_chart.chartDefinition.valueFormat = function f(value){return (value);};
-second_bar_chart.chartDefinition.path = "/AMP Dashboards/Align Aid with National Priorities/Dashboard_CCC.cda";
+second_bar_chart.chartDefinition.path = "/AMP Dashboards Phase 2/Align Aid with National Priorities/Dashboard_CCC.cda";
 second_bar_chart.chartDefinition.stacked = true;
 second_bar_chart.chartDefinition.xAxisSize = 80;
 second_bar_chart.chartDefinition.title =  function(){return (aidTypeParameter == "" ? Dashboards.i18nSupport.prop("msg_budget_status")  + " (" + type_of_funding_translation + ", " + currency + ")": Dashboards.i18nSupport.prop("msg_budget_status_for") + " " + aidType + " (" + type_of_funding_translation + ", " + currency + ")")};
 second_bar_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","-.9"],["xAxisLabel_font","10px sans-serif"],["xAxisLabel_textAlign","right"],["yAxisLabel_font","10px sans-serif"]];
 second_bar_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ formatCurrencyValue(currency, value)};
-
+second_bar_chart.preExecution = processParameters;
 
 var second_data_table = jQuery.extend(true, {}, first_data_table);
 second_data_table.chartDefinition.dataAccessId = function(){return (aidTypeParameter == "" ? "second_chart_mdx" : "second_chart_mdx_params")};
-second_data_table.chartDefinition.path = "/AMP Dashboards/Align Aid with National Priorities/Dashboard_CCC.cda";
+second_data_table.chartDefinition.path = "/AMP Dashboards Phase 2/Align Aid with National Priorities/Dashboard_CCC.cda";
 second_data_table.htmlObject = "second_chart_data";
 second_data_table.name = "second_data_table";
 second_data_table.chartDefinition.colTypes = [];
 second_data_table.chartDefinition.colFormats = [];
 second_data_table.listeners = listeners_second;
 second_data_table.parameters = parameters_second;
-
-
-    // These are the components to be loaded into the dashboard withing the [] separated by ,
-//    var components = [first_line_chart,first_bar_chart,first_data_table, second_line_chart,second_bar_chart,second_data_table, regionSelect, sectorSelect, programSelect, startYearSelect, endYearSelect];
-    var components = [first_bar_chart, second_bar_chart, first_data_table, second_line_chart, second_data_table,regionSelect, sectorSelect, programSelect, startYearSelect, endYearSelect];
-    // The initial dashboard load function definition
-    function load(){
-      Dashboards.init(components);
-    }
-
-    // The initial dashboard load function execution
-    load();
-
 </script>
 
 <script language="javascript">
@@ -407,6 +253,8 @@ second_data_table.parameters = parameters_second;
 	var initialized = false;
 $(window).resize(resizeLayout);
 $(window).ready(function() {
+  var components = [regionSelect, sectorSelect, programSelect, startYearSelect, endYearSelect, first_bar_chart, second_bar_chart, first_data_table, second_line_chart, second_data_table];
+  Dashboards.init(components);
   resizeLayout();
   initialized = true;
   setTimeout(applyDateRange, 500);

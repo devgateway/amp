@@ -41,7 +41,9 @@ var startYear = "2001";
 var endYear = "2011";
 var dateRangeInitialized = false;
 
+
 var processParameters = function(){
+	console.log("Processing parameters.");
     var regionValues = $("#regionSelect_object > select").val();
     regionValues = regionValues != null ? regionValues : [];
     //Reset global parameter
@@ -50,7 +52,6 @@ var processParameters = function(){
       function(idx, value){ 
         regionParameter = (regionParameter == "" ? "": regionParameter + ",") + "[Region].[" + value +"]";
       });
-    if(regionParameter == "") regionParameter = "[Regions].Members";
 
     var sectorValues = $("#sectorSelect_object > select").val();
     sectorValues = sectorValues != null ? sectorValues : [];
@@ -58,9 +59,8 @@ var processParameters = function(){
     sectorParameter = "";
     $.each(sectorValues,
       function(idx, value){ 
-        sectorParameter = (sectorParameter == "" ? "": sectorParameter + ",") + "[Primary Sector].[Malawi Sectors].[" + value +"]";
+        sectorParameter = (sectorParameter == "" ? "": sectorParameter + ",") + "[Primary Sector].[Nepal Sector Classification].[" + value +"]";
       });
-    if(sectorParameter == "") sectorParameter = "[Primary Sector].Members";
 
     var programValues = $("#programSelect_object > select").val();
     programValues = programValues != null ? programValues : [];
@@ -68,17 +68,22 @@ var processParameters = function(){
     programParameter = "";
     $.each(programValues,
       function(idx, value){ 
-        programParameter = (programParameter == "" ? "": programParameter + ",") + "[National Program].[" + value +"]";
+        programParameter = (programParameter == "" ? "": programParameter + ",") + "[National Program Level 1].[" + value +"]";
       });
-    if(programParameter == "") programParameter = "[National Program].Members";
 
-    console.log("Postchage in Region/Sector executed");
+    //Reset global parameter
+
+	console.log("regionParameter:" + regionParameter);
+	if (regionParameter != "" || sectorParameter != "" || programParameter != "")
+	{
+		if(regionParameter == "") regionParameter = "[Regions].Members";
+		if(sectorParameter == "") sectorParameter = "[Primary Sector].Members";
+		if(programParameter == "") programParameter = "[National Program Level 1].Members";
+	}
     first_data_table.chartDefinition.colTypes = [];
     first_data_table.chartDefinition.colFormats = [];
     first_data_table.chartDefinition.colHeaders = [];
   };
-
-
 
 var startYearSelect = 
 {
@@ -90,8 +95,8 @@ var startYearSelect =
   htmlObject: "startYearSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
+    jndi: jndi,
+    catalog: catalogPath,
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
       return query;
@@ -115,8 +120,8 @@ var endYearSelect =
   htmlObject: "endYearSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
+    jndi: jndi,
+    catalog: catalogPath,
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
       return query;
@@ -153,8 +158,8 @@ var regionSelect =
   htmlObject: "regionSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
+    jndi: jndi,
+    catalog: catalogPath,
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [Regions].[Region].Members ON ROWS " +
@@ -184,8 +189,8 @@ var sectorSelect =
   htmlObject: "sectorSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
+    jndi: jndi,
+    catalog: catalogPath,
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
         "NON EMPTY [Primary Sector].[Primary Sector].Members ON ROWS " +
@@ -214,11 +219,11 @@ var programSelect =
   htmlObject: "programSelect_object",
   queryDefinition: {
     queryType: "mdx",
-    jndi: "AMPBurkinaProduction",
-    catalog: "solution:/AMP Dashboards/AMPBurkinaProduction.xml",
+    jndi: jndi,
+    catalog: catalogPath,
     query: function(){
       var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
-        "NON EMPTY [National Program].[National Program].Members ON ROWS " +
+        "NON EMPTY [National Program Level 1].[National Program Level 1].Members ON ROWS " +
         "FROM [Donor Funding]";
       return query;
     }
@@ -230,6 +235,7 @@ var programSelect =
     $("#programSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
     $('#programSelect_object > select').width('300px');
     $('#programSelect_object > select').multiselect(multiSelectConfig);
+
   },
   postChange:processParameters
 }
@@ -256,16 +262,17 @@ first_bar_chart.chartDefinition.seriesInRows = false;
 first_bar_chart.chartDefinition.yAxisSize = 320;
 first_bar_chart.chartDefinition.legend = false;
 first_bar_chart.chartDefinition.valueFormat = function f(value){return (Math.round(value*100)/100) + "%";};
-first_bar_chart.chartDefinition.path = "/AMP Dashboards/Better Understand Trends in ODA/share_of_oda_by_donor_group_ccc.cda";
+first_bar_chart.chartDefinition.path = "/AMP Dashboards Phase 2/Better Understand Trends in ODA/share_of_oda_by_donor_group_ccc.cda";
 first_bar_chart.chartDefinition.title = function() { return Dashboards.i18nSupport.prop("msg_percentage_by_donor_group") + " (" + startYear + "-" + endYear + ")"};
 first_bar_chart.chartDefinition.orientation = "horizontal";
 first_bar_chart.listeners = listeners;
 first_bar_chart.parameters = parameters;
 first_bar_chart.chartDefinition.extensionPoints = [["yAxisLabel_font","10px sans-serif"]];
+first_bar_chart.preExecution = processParameters;
 
 var first_data_table = jQuery.extend(true, {}, seminal_data_table);
 first_data_table.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
-first_data_table.chartDefinition.path = "/AMP Dashboards/Better Understand Trends in ODA/share_of_oda_by_donor_group_ccc.cda";
+first_data_table.chartDefinition.path = "/AMP Dashboards Phase 2/Better Understand Trends in ODA/share_of_oda_by_donor_group_ccc.cda";
 first_data_table.htmlObject = "first_chart_data";
 first_data_table.name = "first_data_table";
 first_data_table.listeners = listeners;
@@ -274,7 +281,7 @@ first_data_table.chartDefinition.colTypes = [];
 first_data_table.chartDefinition.colFormats = [];
 
     // These are the components to be loaded into the dashboard withing the [] separated by ,
-    var components = [first_bar_chart, first_data_table, regionSelect, sectorSelect, programSelect, startYearSelect, endYearSelect];
+    var components = [regionSelect, sectorSelect, programSelect, startYearSelect, endYearSelect, first_bar_chart, first_data_table];
     // The initial dashboard load function definition
     function load(){
       Dashboards.init(components);

@@ -53,11 +53,12 @@
 var regionParameter = "";
 var sectorParameter = "";
 var currency = Dashboards.getQueryParameter("currency");
-var startYear = "2001";
-var endYear = "2011";
+var startYear = startYearConfig;
+var endYear = endYearConfig;
 var dateRangeInitialized = false;
 
 var processParameters = function(){
+	console.log("Processing parameters.");
     var regionValues = $("#regionSelect_object > select").val();
     regionValues = regionValues != null ? regionValues : [];
     //Reset global parameter
@@ -66,7 +67,6 @@ var processParameters = function(){
       function(idx, value){ 
         regionParameter = (regionParameter == "" ? "": regionParameter + ",") + "[Region].[" + value +"]";
       });
-    if(regionParameter == "") regionParameter = "[Regions].Members";
 
     var sectorValues = $("#sectorSelect_object > select").val();
     sectorValues = sectorValues != null ? sectorValues : [];
@@ -74,70 +74,20 @@ var processParameters = function(){
     sectorParameter = "";
     $.each(sectorValues,
       function(idx, value){ 
-        sectorParameter = (sectorParameter == "" ? "": sectorParameter + ",") + "[Primary Sector].[" + value +"]";
+        sectorParameter = (sectorParameter == "" ? "": sectorParameter + ",") + "[Primary Sector].[Nepal Sector Classification].[" + value +"]";
       });
-    if(sectorParameter == "") sectorParameter = "[Primary Sector].Members";
 
-    console.log("Postchage in Region/Sector executed");
+
+	if (regionParameter != "" || sectorParameter != "")
+	{
+		if(regionParameter == "") regionParameter = "[Regions].Members";
+		if(sectorParameter == "") sectorParameter = "[Primary Sector].Members";
+	}
     first_data_table.chartDefinition.colTypes = [];
     first_data_table.chartDefinition.colFormats = [];
     first_data_table.chartDefinition.colHeaders = [];
   };
-
-
-
-var startYearSelect = 
-{
-  name: "startYearSelect",
-  type: "select",
-  parameters:[],
-  parameter:"startYear",
-  valueAsId: true,
-  htmlObject: "startYearSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: jndi,
-    catalog: catalogPath,
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    $("#startYearSelect_object select").val(startYear);
-    $("#startYearSelect_object select")[0].id = "startYear";
-  }
-}
-var endYearSelect = 
-{
-  name: "endYearSelect",
-  type: "select",
-  parameters:[],
-  parameter:"endYear",
-  valueAsId: true,
-  htmlObject: "endYearSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: jndi,
-    catalog: catalogPath,
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    console.log("postExec endYear");
-    dateRangeInitialized = true;
-    $("#endYearSelect_object select").val(endYear);
-    $("#endYearSelect_object select")[0].id = "endYear";
-  }
-}
+  
 var multiSelectConfig;
 $(window).ready(function() {
   multiSelectConfig = {
@@ -147,69 +97,6 @@ $(window).ready(function() {
         selectedText: Dashboards.i18nSupport.prop("msg_selected_option")
      }
 });  
-
-var regionSelect = 
-{
-  name: "regionSelect",
-  type: "SelectMulti",
-  parameters:[],
-  parameter: "regionParameter",
-  valueAsId: true,
-  htmlObject: "regionSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: jndi,
-    catalog: catalogPath,
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
-        "NON EMPTY [Regions].[Region].Members ON ROWS " +
-        "FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    console.log("Postexec in Region executed");
-    Dashboards.processChange(this.name);
-    $("#regionSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
-    $('#regionSelect_object > select').width('300px');
-    $('#regionSelect_object > select').multiselect(multiSelectConfig);
-  },
-  postChange: processParameters
-}
-  
-var sectorSelect = 
-{
-  name: "sectorSelect",
-  type: "SelectMulti",
-  parameters:[],
-  parameter:"sectorParameter",
-  valueAsId: true,
-  htmlObject: "sectorSelect_object",
-  queryDefinition: {
-    queryType: "mdx",
-    jndi: jndi,
-    catalog: catalogPath,
-    query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
-        "NON EMPTY [Primary Sector].[Primary Sector].Members ON ROWS " +
-        "FROM [Donor Funding]";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    $("#sectorSelect_object select option[value='#No_Data#']").html(Dashboards.i18nSupport.prop("msg_no_data"));
-    $('#sectorSelect_object > select').width('300px');
-    $('#sectorSelect_object > select').multiselect(multiSelectConfig);
-  },
-  postChange:processParameters
-}
-
-
 
 var getParameters = function() {
   return regionParameter + sectorParameter;
@@ -225,11 +112,11 @@ var parameters = [["startYear","startYear"], ["endYear","endYear"], ["regionPara
 var showValues = false;
 $("#showValues_object input").click(function() {
   if($("#showValues_object input").attr("checked")) {
-    Dashboards.components[0].chartDefinition.showValues = true
+    Dashboards.components[4].chartDefinition.showValues = true
   }
   else
-    Dashboards.components[0].chartDefinition.showValues = false
-  Dashboards.components[0].update()
+    Dashboards.components[4].chartDefinition.showValues = false
+  Dashboards.components[4].update()
 });
 
 
@@ -270,7 +157,7 @@ var first_heatgrid_chart = {
 		width: 1300,
 		height: 400,
 		dataAccessId:  function() {return getParameters() == "" ? "first_datasource" : "first_datasource_params"},
-    path: "/AMP Dashboards/Division of Labor/fragmentation_by_PRSP_ccc.cda",
+    path: "/AMP Dashboards Phase 2/Division of Labor/fragmentation_by_PRSP_ccc.cda",
 		crosstabMode: true,
 		seriesInRows: false,
 		animate: false,
@@ -316,24 +203,15 @@ var first_heatgrid_chart = {
 
 first_heatgrid_chart.listeners = listeners;
 first_heatgrid_chart.parameters = parameters;
+first_heatgrid_chart.preExecution = processParameters;
 
 var first_data_table = jQuery.extend(true, {}, seminal_data_table);
 first_data_table.htmlObject = "first_chart_data";
 first_data_table.name = "first_data_table";
 first_data_table.chartDefinition.dataAccessId = "first_datasource";
-first_data_table.chartDefinition.path = "/AMP Dashboards/Division of Labor/fragmentation_by_PRSP_ccc.cda";
+first_data_table.chartDefinition.path = "/AMP Dashboards Phase 2/Division of Labor/fragmentation_by_PRSP_ccc.cda";
 first_data_table.postFetch = pfetch;
 
-
-    // These are the components to be loaded into the dashboard withing the [] separated by ,
-    var components = [first_heatgrid_chart,first_data_table, regionSelect, sectorSelect, startYearSelect, endYearSelect];
-    // The initial dashboard load function definition
-    function load(){
-      Dashboards.init(components);
-    }
-
-    // The initial dashboard load function execution
-    load();
 
 </script>
 
@@ -358,17 +236,20 @@ first_data_table.postFetch = pfetch;
 	}
   
 $(window).resize(resizeLayout);
+
 $(window).ready(function() {
+  var components = [regionSelect, sectorSelect, startYearSelect, endYearSelect, first_heatgrid_chart, first_data_table];
+  Dashboards.init(components);
   resizeLayout();
   initialized = true;
   setTimeout(applyDateRange, 500);
-  
 });
+
   $("#apply").click(function () {
   regionParameter = "";
   sectorParameter = "";
-  startYear = "2001";
-  endYear = "2009";    
+  startYear = startYearConfig;
+  endYear = endYearConfig;    
   first_data_table.chartDefinition.colTypes = [];
   first_data_table.chartDefinition.colFormats = [];
   first_data_table.chartDefinition.colHeaders = [];

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="first_chart_mdx" type="mondrian.jndi">
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+         <Jndi>AMPNepal</Jndi>
+      </Connection>
+      <Connection id="first_chart_mdx_params" type="mondrian.jndi">
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+         <Jndi>AMPNepal</Jndi>
+      </Connection>
+      <Connection id="first_linechart_mdx" type="mondrian.jndi">
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+         <Jndi>AMPNepal</Jndi>
+      </Connection>
+      <Connection id="first_linechart_mdx_params" type="mondrian.jndi">
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+         <Jndi>AMPNepal</Jndi>
+      </Connection>
+      <Connection id="second_chart_mdx" type="mondrian.jndi">
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+         <Jndi>AMPNepal</Jndi>
+      </Connection>
+      <Connection id="second_chart_mdx_params" type="mondrian.jndi">
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+         <Jndi>AMPNepal</Jndi>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx"
+               id="first_chart_mdx"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
+         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
+         <Parameter default="USD" name="currency" type="String"/>
+         <Parameter default="2000" name="startYear" type="String"/>
+         <Parameter default="2009" name="endYear" type="String"/>
+      </Parameters>
+      <Query>
+With
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],[*BASE_MEMBERS_Donor Dates])'
+Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Planned Disbursements_SEL~AGG] &gt; 0.0)'
+Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Measures].[*CALCULATED_MEASURE_0],BDESC)'
+Set [*METRIC_MEMBERS_Donor Dates] as 'Generate([*METRIC_CJ_SET], {[Donor Dates].CurrentMember})'
+Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[*CALCULATED_MEASURE_0]}'
+Set [*CJ_SLICER_AXIS] as 'Generate([*METRIC_CJ_SET], {([Donor Dates].currentMember)})'
+Set [*CJ_ROW_AXIS] as 'Generate([*METRIC_CJ_SET], {([Donor Group].currentMember)})'
+Set [*BASE_MEMBERS_Donor Group] as 'Filter([Donor Group].[DonorGroup].Members,[Donor Group].CurrentMember Not In {[Donor Group].[Govt Agency/Ministry]})'
+Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
+Set [*CJ_COL_AXIS] as '[*METRIC_CJ_SET]'
+Member [Donor Dates].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-401
+Member [Measures].[*Planned Disbursements_SEL~AGG] as '([Measures].[Planned Disbursements],[Donor Group].CurrentMember,[Donor Dates].[*CTX_MEMBER_SEL~AGG])', SOLVE_ORDER=300
+Member [Measures].[*CALCULATED_MEASURE_0] as 'IIF([Measures].[Planned Disbursements] > 0,([Measures].[Actual Disbursements]/[Measures].[Planned Disbursements]*100), 0)', FORMAT_STRING = '#,##0.00', SOLVE_ORDER=0
+Select
+[*BASE_MEMBERS_Measures] on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]
+Where ([*CJ_SLICER_AXIS])
+</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx_params"
+               id="first_chart_mdx_params"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
+         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
+         <Parameter default="USD" name="currency" type="String"/>
+         <Parameter default="[Regions].Members" name="regionParameter" type="String"/>
+         <Parameter default="[Primary Sector].Members" name="sectorParameter" type="String"/>
+         <Parameter default="[National Program].Members" name="programParameter" type="String"/>
+         <Parameter default="2000" name="startYear" type="String"/>
+         <Parameter default="2009" name="endYear" type="String"/>
+      </Parameters>
+      <Query>
+With
+Set [*NATIVE_CJ_SET] as 'Filter(NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_National Program Level 1],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Dates],[*BASE_MEMBERS_Primary Sector])))), Not ([Donor Group].CurrentMember Is [Donor Group].[Govt Agency/Ministry]))'
+Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Planned Disbursements_SEL~AGG] &gt; 0.0)'
+Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Measures].[*CALCULATED_MEASURE_0],BDESC)'
+Set [*NATIVE_MEMBERS_National Program Level 1] as 'Generate([*NATIVE_CJ_SET], {[National Program Level 1].CurrentMember})'
+Set [*METRIC_MEMBERS_Donor Dates] as 'Generate([*METRIC_CJ_SET], {[Donor Dates].CurrentMember})'
+Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
+Set [*METRIC_MEMBERS_Regions] as 'Generate([*METRIC_CJ_SET], {[Regions].CurrentMember})'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[*CALCULATED_MEASURE_0]}'
+Set [*CJ_COL_AXIS] as '[*METRIC_CJ_SET]'
+Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
+Set [*NATIVE_MEMBERS_Regions] as 'Generate([*NATIVE_CJ_SET], {[Regions].CurrentMember})'
+Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
+Set [*CJ_SLICER_AXIS] as 'Generate([*METRIC_CJ_SET], {([Regions].currentMember,[National Program Level 1].currentMember,[Donor Dates].currentMember,[Primary Sector].currentMember)})'
+Set [*METRIC_MEMBERS_National Program Level 1] as 'Generate([*METRIC_CJ_SET], {[National Program Level 1].CurrentMember})'
+Set [*CJ_ROW_AXIS] as 'Generate([*METRIC_CJ_SET], {([Donor Group].currentMember)})'
+Set [*METRIC_MEMBERS_Primary Sector] as 'Generate([*METRIC_CJ_SET], {[Primary Sector].CurrentMember})'
+Set [*BASE_MEMBERS_Donor Group] as '[Donor Group].[DonorGroup].Members'
+Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
+Set [*BASE_MEMBERS_National Program Level 1] as '{${programParameter}}'
+Set [*BASE_MEMBERS_Primary Sector] as '{${sectorParameter}}'
+Member [Regions].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Regions])', SOLVE_ORDER=-401
+Member [Primary Sector].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Primary Sector])', SOLVE_ORDER=-404
+Member [Donor Dates].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-403
+Member [Measures].[*Planned Disbursements_SEL~AGG] as '([Measures].[Planned Disbursements],[Donor Group].CurrentMember,[Regions].[*CTX_MEMBER_SEL~AGG],[National Program Level 1].[*CTX_MEMBER_SEL~AGG],[Donor Dates].[*CTX_MEMBER_SEL~AGG],[Primary Sector].[*CTX_MEMBER_SEL~AGG])', SOLVE_ORDER=300
+Member [National Program Level 1].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_National Program Level 1])', SOLVE_ORDER=-402
+Member [Measures].[*CALCULATED_MEASURE_0] as 'IIF([Measures].[Planned Disbursements] &gt; 0,([Measures].[Actual Disbursements]/[Measures].[Planned Disbursements]*100), 0)', FORMAT_STRING = '#,##0.00', SOLVE_ORDER=0
+Select
+[*BASE_MEMBERS_Measures] on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]
+Where ([*CJ_SLICER_AXIS])
+    </Query>
+   </DataAccess>
+   
+   
+   
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_linechart_mdx"
+               id="first_linechart_mdx"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
+         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
+         <Parameter default="USD" name="currency" type="String"/>
+         <Parameter default="2005" name="startYear" type="String"/>
+         <Parameter default="2012" name="endYear" type="String"/>
+      </Parameters>
+      <Query>
+With
+Set [*NATIVE_CJ_SET] as 'Filter(NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],[*BASE_MEMBERS_Donor Dates]), Not ([Donor Group].CurrentMember Is [Donor Group].[Govt Agency/Ministry]))'
+Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Planned Disbursements_SEL~AGG] &gt; 0.0 And [Measures].[*Actual Disbursements_SEL~AGG] &gt; 0.0)'
+Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Dates].CurrentMember.OrderKey,BASC,[Donor Group].CurrentMember.OrderKey,BASC)'
+Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[*CALCULATED_MEASURE_0]}'
+Set [*CJ_ROW_AXIS] as 'Generate([*METRIC_CJ_SET], {([Donor Group].currentMember,[Donor Dates].currentMember)})'
+Set [*BASE_MEMBERS_Donor Group] as '[Donor Group].[DonorGroup].Members'
+Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
+Set [*CJ_COL_AXIS] as '[*METRIC_CJ_SET]'
+Member [Measures].[*Actual Disbursements_SEL~AGG] as '([Measures].[Actual Disbursements],[Donor Group].CurrentMember,[Donor Dates].[*CTX_MEMBER_SEL~AGG])', SOLVE_ORDER=300
+Member [Donor Dates].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-101
+Member [Measures].[*Planned Disbursements_SEL~AGG] as '([Measures].[Planned Disbursements],[Donor Group].CurrentMember,[Donor Dates].[*CTX_MEMBER_SEL~AGG])', SOLVE_ORDER=300
+Member [Measures].[*CALCULATED_MEASURE_0] as 'IIF([Measures].[Planned Disbursements] &gt; 0,([Measures].[Actual Disbursements]/[Measures].[Planned Disbursements]*100), 0)', SOLVE_ORDER=0
+Select
+[*BASE_MEMBERS_Measures] on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]	  
+
+    </Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_linechart_mdx_params"
+               id="first_linechart_mdx_params"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
+         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
+         <Parameter default="USD" name="currency" type="String"/>
+         <Parameter default="[Regions].Members" name="regionParameter" type="String"/>
+         <Parameter default="[Primary Sector].Members" name="sectorParameter" type="String"/>
+         <Parameter default="[National Program].Members" name="programParameter" type="String"/>
+         <Parameter default="2000" name="startYear" type="String"/>
+         <Parameter default="2009" name="endYear" type="String"/>
+      </Parameters>
+      <Query>
+With
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Dates],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_National Program Level 1],[*BASE_MEMBERS_Primary Sector]))))'
+Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Planned Disbursements_SEL~AGG] &gt; 0.0 And [Measures].[*Actual Disbursements_SEL~AGG] &gt; 0.0)'
+Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Dates].CurrentMember.OrderKey,BASC,[Donor Group].CurrentMember.OrderKey,BASC)'
+Set [*NATIVE_MEMBERS_National Program Level 1] as 'Generate([*NATIVE_CJ_SET], {[National Program Level 1].CurrentMember})'
+Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
+Set [*METRIC_MEMBERS_Regions] as 'Generate([*METRIC_CJ_SET], {[Regions].CurrentMember})'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[*CALCULATED_MEASURE_0]}'
+Set [*CJ_COL_AXIS] as '[*METRIC_CJ_SET]'
+Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
+Set [*NATIVE_MEMBERS_Regions] as 'Generate([*NATIVE_CJ_SET], {[Regions].CurrentMember})'
+Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
+Set [*CJ_SLICER_AXIS] as 'Generate([*METRIC_CJ_SET], {([Regions].currentMember,[National Program Level 1].currentMember,[Primary Sector].currentMember)})'
+Set [*METRIC_MEMBERS_National Program Level 1] as 'Generate([*METRIC_CJ_SET], {[National Program Level 1].CurrentMember})'
+Set [*CJ_ROW_AXIS] as 'Generate([*METRIC_CJ_SET], {([Donor Group].currentMember,[Donor Dates].currentMember)})'
+Set [*METRIC_MEMBERS_Primary Sector] as 'Generate([*METRIC_CJ_SET], {[Primary Sector].CurrentMember})'
+Set [*BASE_MEMBERS_Donor Group] as '[Donor Group].[DonorGroup].Members'
+Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
+Set [*BASE_MEMBERS_National Program Level 1] as '{${programParameter}}'
+Set [*BASE_MEMBERS_Primary Sector] as '{${sectorParameter}}'
+Member [Regions].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Regions])', SOLVE_ORDER=-401
+Member [Measures].[*Actual Disbursements_SEL~AGG] as '([Measures].[Actual Disbursements],[Donor Group].CurrentMember,[Donor Dates].[*CTX_MEMBER_SEL~AGG],[Regions].[*CTX_MEMBER_SEL~AGG],[National Program Level 1].[*CTX_MEMBER_SEL~AGG],[Primary Sector].[*CTX_MEMBER_SEL~AGG])', SOLVE_ORDER=300
+Member [Primary Sector].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Primary Sector])', SOLVE_ORDER=-403
+Member [Donor Dates].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-101
+Member [Measures].[*Planned Disbursements_SEL~AGG] as '([Measures].[Planned Disbursements],[Donor Group].CurrentMember,[Donor Dates].[*CTX_MEMBER_SEL~AGG],[Regions].[*CTX_MEMBER_SEL~AGG],[National Program Level 1].[*CTX_MEMBER_SEL~AGG],[Primary Sector].[*CTX_MEMBER_SEL~AGG])', SOLVE_ORDER=300
+Member [National Program Level 1].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_National Program Level 1])', SOLVE_ORDER=-402
+Member [Measures].[*CALCULATED_MEASURE_0] as 'IIF([Measures].[Planned Disbursements] &gt; 0,([Measures].[Actual Disbursements]/[Measures].[Planned Disbursements]*100), 0)', FORMAT_STRING = '#,##0.00', SOLVE_ORDER=0
+Select
+[*BASE_MEMBERS_Measures] on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]
+Where ([*CJ_SLICER_AXIS])	  
+	  
+	  
+
+    </Query>
+   </DataAccess>
+   
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="second_chart_mdx"
+               id="second_chart_mdx"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
+         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
+         <Parameter default="USD" name="currency" type="String"/>
+         <Parameter default="2000" name="startYear" type="String"/>
+         <Parameter default="2009" name="endYear" type="String"/>
+      </Parameters>
+      <Query>
+With
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],[*BASE_MEMBERS_Donor Dates])'
+Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Group].CurrentMember.OrderKey,BASC,[Donor Dates].CurrentMember.OrderKey,BASC)'
+Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[*CALCULATED_MEASURE_0]}'
+Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Group].currentMember,[Donor Dates].currentMember)})'
+Set [*BASE_MEMBERS_Donor Group] as '{[Donor Group].[Korea]}'
+Set [*CJ_COL_AXIS] as '[*NATIVE_CJ_SET]'
+Member [Measures].[*CALCULATED_MEASURE_0] as 'IIF([Measures].[Planned Disbursements] > 0,([Measures].[Actual Disbursements]/[Measures].[Planned Disbursements]*100), 0)', FORMAT_STRING = '#,##0.00', SOLVE_ORDER=0
+Select
+[*BASE_MEMBERS_Measures] on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]
+</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="second_chart_mdx_params"
+               id="second_chart_mdx_params"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
+         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
+         <Parameter default="USD" name="currency" type="String"/>
+         <Parameter default="[Donor Group].[DonorGroup].Members" name="donorGroupParameter" type="String"/>
+         <Parameter default="[Regions].Members" name="regionParameter" type="String"/>
+         <Parameter default="[Primary Sector].Members" name="sectorParameter" type="String"/>
+         <Parameter default="[National Program].Members" name="programParameter" type="String"/>
+         <Parameter default="2000" name="startYear" type="String"/>
+         <Parameter default="2009" name="endYear" type="String"/>
+      </Parameters>
+      <Query>
+With
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Dates],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_National Program Level 1],[*BASE_MEMBERS_Primary Sector]))))'
+Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Planned Disbursements_SEL~AGG] &gt; 0.0 And [Measures].[*Actual Disbursements_SEL~AGG] &gt; 0.0)'
+Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Dates].CurrentMember.OrderKey,BASC,[Donor Group].CurrentMember.OrderKey,BASC)'
+Set [*NATIVE_MEMBERS_National Program Level 1] as 'Generate([*NATIVE_CJ_SET], {[National Program Level 1].CurrentMember})'
+Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
+Set [*METRIC_MEMBERS_Regions] as 'Generate([*METRIC_CJ_SET], {[Regions].CurrentMember})'
+Set [*BASE_MEMBERS_Measures] as '{[Measures].[*CALCULATED_MEASURE_0]}'
+Set [*CJ_COL_AXIS] as '[*METRIC_CJ_SET]'
+Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
+Set [*NATIVE_MEMBERS_Regions] as 'Generate([*NATIVE_CJ_SET], {[Regions].CurrentMember})'
+Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
+Set [*CJ_SLICER_AXIS] as 'Generate([*METRIC_CJ_SET], {([Regions].currentMember,[National Program Level 1].currentMember,[Primary Sector].currentMember)})'
+Set [*METRIC_MEMBERS_National Program Level 1] as 'Generate([*METRIC_CJ_SET], {[National Program Level 1].CurrentMember})'
+Set [*CJ_ROW_AXIS] as 'Generate([*METRIC_CJ_SET], {([Donor Group].currentMember,[Donor Dates].currentMember)})'
+Set [*METRIC_MEMBERS_Primary Sector] as 'Generate([*METRIC_CJ_SET], {[Primary Sector].CurrentMember})'
+Set [*BASE_MEMBERS_Donor Group] as '{${donorGroupParameter}}'
+Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
+Set [*BASE_MEMBERS_National Program Level 1] as '{${programParameter}}'
+Set [*BASE_MEMBERS_Primary Sector] as '{${sectorParameter}}'
+Member [Regions].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Regions])', SOLVE_ORDER=-401
+Member [Measures].[*Actual Disbursements_SEL~AGG] as '([Measures].[Actual Disbursements],[Donor Group].CurrentMember,[Donor Dates].[*CTX_MEMBER_SEL~AGG],[Regions].[*CTX_MEMBER_SEL~AGG],[National Program Level 1].[*CTX_MEMBER_SEL~AGG],[Primary Sector].[*CTX_MEMBER_SEL~AGG])', SOLVE_ORDER=300
+Member [Primary Sector].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Primary Sector])', SOLVE_ORDER=-403
+Member [Donor Dates].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-101
+Member [Measures].[*Planned Disbursements_SEL~AGG] as '([Measures].[Planned Disbursements],[Donor Group].CurrentMember,[Donor Dates].[*CTX_MEMBER_SEL~AGG],[Regions].[*CTX_MEMBER_SEL~AGG],[National Program Level 1].[*CTX_MEMBER_SEL~AGG],[Primary Sector].[*CTX_MEMBER_SEL~AGG])', SOLVE_ORDER=300
+Member [National Program Level 1].[*CTX_MEMBER_SEL~AGG] as 'Aggregate([*NATIVE_MEMBERS_National Program Level 1])', SOLVE_ORDER=-402
+Member [Measures].[*CALCULATED_MEASURE_0] as 'IIF([Measures].[Planned Disbursements] &gt; 0,([Measures].[Actual Disbursements]/[Measures].[Planned Disbursements]*100), 0)', FORMAT_STRING = '#,##0.00', SOLVE_ORDER=0
+Select
+[*BASE_MEMBERS_Measures] on columns,
+Non Empty [*SORTED_ROW_AXIS] on rows
+From [Donor Funding]
+Where ([*CJ_SLICER_AXIS])
+	  
+	</Query>
+   </DataAccess>
+</CDADescriptor>
+
+

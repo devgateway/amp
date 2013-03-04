@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdf>
+  <title>Delivery Rate by Development Partner</title>
+  <author>Fernando Ferreyra</author>
+  <description>This contains a description of the dashboards</description>
+  <icon></icon>
+  <template>delivery_rate_for_donors.html</template>
+  <style>amp-functions</style>
+</cdf>

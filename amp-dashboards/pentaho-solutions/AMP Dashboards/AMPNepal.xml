@@ -40,6 +40,17 @@
 				</Level>
 			</Hierarchy>
 		</Dimension>
+		<Dimension visible="true" highCardinality="false" name="Responsible Organization">
+			<Hierarchy visible="true" hasAll="true" allMemberCaption="All Responsible Organizations" allLevelName="All Responsible Organizations" caption="Responsible Organization">
+				<Level name="Responsible Organization" visible="true" column="ro_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+					<NameExpression>
+						<SQL dialect="generic">
+							<![CDATA[COALESCE(ro_name,'#No_Data#')]]>
+						</SQL>
+					</NameExpression>
+				</Level>
+			</Hierarchy>
+		</Dimension>
 		<Dimension visible="true" highCardinality="false" name="Beneficiary Agency">
 			<Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Beneficiary_Agency#" allLevelName="All Beneficiary Agency" caption="#Beneficiary_Agency#">
 				<Level name="Beneficiary Agency" visible="true" column="ba_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
@@ -251,7 +262,6 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Activity Count" column="amp_activity_id" aggregator="distinct-count" caption="#Activity_Count#"/>
 		<Measure name="Planned Commitments" aggregator="sum" caption="#Planned_Commitments#">
 			<MeasureExpression>
 				<SQL dialect="generic">
@@ -273,5 +283,6 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
+		<Measure name="Activity Count" column="amp_activity_id" aggregator="distinct-count" caption="#Activity_Count#"/>
 	</Cube>
 </Schema>

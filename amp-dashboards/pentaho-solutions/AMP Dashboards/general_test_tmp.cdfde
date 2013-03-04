@@ -9,27 +9,27 @@
         "parent": "UnIqEiD",
         "properties": [
           {
-            "order": 5,
-            "description": "Name",
             "name": "name",
             "value": "cssfile",
             "type": "Id",
+            "order": 5,
+            "description": "Name",
             "tooltip": "Name"
           },
           {
-            "order": 19,
-            "description": "Type",
             "name": "resourceType",
             "value": "Css",
             "type": "Label",
+            "order": 19,
+            "description": "Type",
             "tooltip": "Resource Type to include"
           },
           {
-            "order": 18,
-            "description": "Resource file",
             "name": "resourceFile",
             "value": "${res:jquery.multiselect.css}",
             "type": "ResourceFile",
+            "order": 18,
+            "description": "Resource file",
             "tooltip": "Resource file to include"
           }
         ]
@@ -41,27 +41,27 @@
         "parent": "UnIqEiD",
         "properties": [
           {
-            "order": 5,
-            "description": "Name",
             "name": "name",
             "value": "multiselect",
             "type": "Id",
+            "order": 5,
+            "description": "Name",
             "tooltip": "Name"
           },
           {
-            "order": 19,
-            "description": "Type",
             "name": "resourceType",
             "value": "Javascript",
             "type": "Label",
+            "order": 19,
+            "description": "Type",
             "tooltip": "Resource Type to include"
           },
           {
-            "order": 18,
-            "description": "Resource file",
             "name": "resourceFile",
             "value": "${res:jquery.multiselect.js}",
             "type": "ResourceFile",
+            "order": 18,
+            "description": "Resource file",
             "tooltip": "Resource file to include"
           }
         ]
@@ -69,183 +69,7 @@
     ]
   },
   "components": {
-    "rows": [
-      {
-        "id": "SELECTORS",
-        "name": "Selects",
-        "type": "Label",
-        "typeDesc": "<i>Group</i>",
-        "parent": "UnIqEiD",
-        "properties": [
-          {
-            "name": "Group",
-            "description": "Group",
-            "value": "Selects",
-            "type": "Label"
-          }
-        ]
-      },
-      {
-        "id": "3dad6159-7cca-d9d1-3f10-04257670bf58",
-        "type": "ComponentsSelectMulti",
-        "typeDesc": "Multiple Select Component",
-        "parent": "SELECTORS",
-        "properties": [
-          {
-            "order": 5,
-            "description": "Name",
-            "name": "name",
-            "value": "asdsafasdf",
-            "type": "Id",
-            "tooltip": "Name"
-          },
-          {
-            "order": 12,
-            "description": "Parameter",
-            "name": "parameter",
-            "value": "",
-            "type": "Parameter",
-            "tooltip": "Parameter to prompt"
-          },
-          {
-            "order": 90,
-            "description": "HtmlObject",
-            "name": "htmlObject",
-            "value": "asdfasdfssssss",
-            "type": "HtmlObject",
-            "tooltip": "HtmlObject to prompt"
-          },
-          {
-            "order": 13,
-            "description": "Listeners",
-            "name": "listeners",
-            "value": "[]",
-            "type": "Listeners",
-            "tooltip": "Parameters to listen to"
-          },
-          {
-            "order": 40,
-            "description": "Parameters",
-            "name": "xActionArrayParameter",
-            "value": "[]",
-            "type": "ValuesArray",
-            "tooltip": " Parameters to pass to the component"
-          },
-          {
-            "name": "dataSource",
-            "description": "Datasource",
-            "tooltip": "DataSource to be used in this selector",
-            "type": "Datasource",
-            "value": "",
-            "order": 43
-          },
-          {
-            "order": 93,
-            "description": "Post Fetch",
-            "name": "postFetch",
-            "value": "",
-            "classType": "advanced",
-            "type": "JavaScript",
-            "tooltip": "Code executed after this component's data is fetched from the server"
-          },
-          {
-            "order": 44,
-            "description": "Values array",
-            "name": "valuesArray",
-            "value": "[]",
-            "type": "ValuesArray",
-            "tooltip": "Array to be used "
-          },
-          {
-            "order": 41,
-            "description": "Value as id",
-            "name": "valueAsId",
-            "value": "true",
-            "type": "Boolean",
-            "tooltip": "If false, uses the first column of the dataset as id. If true, Use the value as the id"
-          },
-          {
-            "order": 50,
-            "description": "Size",
-            "name": "size",
-            "value": "",
-            "type": "Integer",
-            "tooltip": "List Elements Size "
-          },
-          {
-            "order": 41,
-            "description": "jQuery Plugin",
-            "name": "externalPlugin",
-            "value": "",
-            "type": "String",
-            "tooltip": "chosen: uses chosen.jquery.js to render select tags"
-          },
-          {
-            "order": 91,
-            "description": "Execute at start",
-            "name": "executeAtStart",
-            "value": "true",
-            "classType": "advanced",
-            "type": "Boolean",
-            "tooltip": "Execute at start?"
-          },
-          {
-            "order": 92,
-            "description": "Pre Execution",
-            "name": "preExecution",
-            "value": "",
-            "classType": "advanced",
-            "type": "JavaScript",
-            "tooltip": "Function to be executed before the component is updated"
-          },
-          {
-            "order": 93,
-            "description": "Post Execution",
-            "name": "postExecution",
-            "value": "",
-            "classType": "advanced",
-            "type": "JavaScript",
-            "tooltip": "Function to be executed after the component is updated"
-          },
-          {
-            "order": 94,
-            "description": "Pre Change",
-            "name": "preChange",
-            "value": "",
-            "classType": "advanced",
-            "type": "JavaScript",
-            "tooltip": "Function to be executed before the component is changed. It's a function of the type function(value){return value}, and can be used for validation"
-          },
-          {
-            "order": 95,
-            "description": "Post Change",
-            "name": "postChange",
-            "value": "",
-            "classType": "advanced",
-            "type": "JavaScript",
-            "tooltip": "Function to be executed after the component is changed. It's a function of the type function(value){...}"
-          },
-          {
-            "order": 50,
-            "description": "Refresh Period",
-            "name": "refreshPeriod",
-            "value": "",
-            "classType": "advanced",
-            "type": "Integer",
-            "tooltip": "Time interval (in seconds) to refresh the component. If 0 or not set component won't refresh."
-          },
-          {
-            "order": 99,
-            "description": "Tooltip",
-            "name": "tooltip",
-            "value": "",
-            "classType": "advanced",
-            "type": "Html",
-            "tooltip": "Tooltip to be displayed on component's mouse hover"
-          }
-        ]
-      }
-    ]
+    "rows": []
   },
   "datasources": {
     "rows": []

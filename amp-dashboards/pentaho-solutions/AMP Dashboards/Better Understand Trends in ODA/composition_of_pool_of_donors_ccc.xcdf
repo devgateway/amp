@@ -5,6 +5,6 @@
   <description>This contains a description of the dashboards</description>
   <icon></icon>
   <template>composition_of_pool_of_donors_ccc.html</template>
-  <style>amp</style>
+  <style>amp2</style>
   <messages>messages</messages>
 </cdf>

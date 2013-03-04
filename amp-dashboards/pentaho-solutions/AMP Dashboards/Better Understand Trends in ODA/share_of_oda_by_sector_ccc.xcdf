@@ -5,5 +5,5 @@
   <description>This contains a description of the dashboards</description>
   <icon></icon>
   <template>share_of_oda_by_sector_ccc.html</template>
-  <style>amp</style>
+  <style>amp-functions</style>
 </cdf>

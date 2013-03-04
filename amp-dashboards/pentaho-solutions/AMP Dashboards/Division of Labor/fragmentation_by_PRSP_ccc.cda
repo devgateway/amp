@@ -2,11 +2,11 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="first_datasource" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AMPNepal.xml</Catalog>
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
          <Jndi>AMPNepal</Jndi>
       </Connection>
       <Connection id="first_datasource_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AMPNepal.xml</Catalog>
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
          <Jndi>AMPNepal</Jndi>
       </Connection>
    </DataSources>

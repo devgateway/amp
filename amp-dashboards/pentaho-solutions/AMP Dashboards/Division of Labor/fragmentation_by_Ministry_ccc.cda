@@ -2,11 +2,11 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="first_datasource" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AMPNepal.xml</Catalog>
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
          <Jndi>AMPNepal</Jndi>
       </Connection>
       <Connection id="first_datasource_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AMPNepal.xml</Catalog>
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
          <Jndi>AMPNepal</Jndi>
       </Connection>
    </DataSources>
@@ -22,17 +22,17 @@
       </Parameters>
       <Query>
 With
-Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Implementing Agency],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],[*BASE_MEMBERS_Donor Dates]))'
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Responsible Organization],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],[*BASE_MEMBERS_Donor Dates]))'
 Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Group].CurrentMember.OrderKey,BDESC)'
-Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Primary Sector].CurrentMember.OrderKey,BASC,Ancestor([Implementing Agency].CurrentMember,[Implementing Agency]).OrderKey,BASC)'
+Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Primary Sector].CurrentMember.OrderKey,BASC,Ancestor([Responsible Organization].CurrentMember,[Responsible Organization]).OrderKey,BASC)'
 Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
 Set [*BASE_MEMBERS_Measures] as '{[Measures].[Actual Disbursements %]}'
 Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Group].currentMember)})'
 Set [*BASE_MEMBERS_Donor Group] as '[Donor Group].[DonorGroup].Members'
 Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
 Set [*NATIVE_MEMBERS_Donor Group] as 'Generate([*NATIVE_CJ_SET], {[Donor Group].CurrentMember})'
-Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Implementing Agency].currentMember)})'
-Set [*BASE_MEMBERS_Implementing Agency] as '[Implementing Agency].[Implementing Agency].Members'
+Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Responsible Organization].currentMember)})'
+Set [*BASE_MEMBERS_Responsible Organization] as '[Responsible Organization].[Responsible Organization].Members'
 Member [Measures].[Actual Disbursements %] as 'IIF((([Measures].[Actual Disbursements] / ([Measures].[Actual Disbursements], [Donor Group].[*TOTAL_MEMBER_SEL~AGG]))) > 0,([Measures].[Actual Disbursements] / ([Measures].[Actual Disbursements], [Donor Group].[*TOTAL_MEMBER_SEL~AGG])),0)', FORMAT_STRING = Case When [Measures].CurrentMember = 1 Then '|#%' When [Measures].CurrentMember >= 0.2 Then '|#.##%|style=green' When [Measures].CurrentMember >= 0.15 Then '|#.##%|style=yellow' When [Measures].CurrentMember > 0 Then '|0.##%|style=red' End, SOLVE_ORDER=100
 Member [Donor Dates].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Donor Dates])', SOLVE_ORDER=-400
 Member [Donor Group].[*TOTAL_MEMBER_SEL~AGG] as 'Aggregate({[Donor Group].[All Donor Groups]})', SOLVE_ORDER=-100
@@ -58,13 +58,13 @@ Where ([Donor Dates].[*SLICER_MEMBER])
       </Parameters>
       <Query>
 With
-Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Implementing Agency],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_National Program],NonEmptyCrossJoin([*BASE_MEMBERS_Primary Sector],[*BASE_MEMBERS_Donor Dates])))))'
+Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Responsible Organization],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Group],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_National Program],NonEmptyCrossJoin([*BASE_MEMBERS_Primary Sector],[*BASE_MEMBERS_Donor Dates])))))'
 Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Group].CurrentMember.OrderKey,BDESC)'
-Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Implementing Agency].CurrentMember.OrderKey,BASC,Ancestor([Implementing Agency].CurrentMember,[Implementing Agency]).OrderKey,BASC)'
+Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Responsible Organization].CurrentMember.OrderKey,BASC,Ancestor([Responsible Organization].CurrentMember,[Responsible Organization]).OrderKey,BASC)'
 Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
 Set [*BASE_MEMBERS_Measures] as '{[Measures].[Actual Disbursements %]}'
 Set [*BASE_MEMBERS_Primary Sector] as '{${sectorParameter}}'
-Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Implementing Agency].currentMember)})'
+Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Responsible Organization].currentMember)})'
 Set [*NATIVE_MEMBERS_Donor Group] as 'Generate([*NATIVE_CJ_SET], {[Donor Group].CurrentMember})'
 Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
 Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
@@ -74,7 +74,7 @@ Set [*NATIVE_MEMBERS_National Program] as 'Generate([*NATIVE_CJ_SET], {[National
 Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Group].currentMember)})'
 Set [*BASE_MEMBERS_Donor Group] as '[Donor Group].[DonorGroup].Members'
 Set [*NATIVE_MEMBERS_Donor Dates] as 'Generate([*NATIVE_CJ_SET], {[Donor Dates].CurrentMember})'
-Set [*BASE_MEMBERS_Implementing Agency] as '[Implementing Agency].[Implementing Agency].Members'
+Set [*BASE_MEMBERS_Responsible Organization] as '[Responsible Organization].[Responsible Organization].Members'
 Member [Primary Sector].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Primary Sector])', SOLVE_ORDER=-400
 Member [National Program].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_National Program])', SOLVE_ORDER=-400
 Member [Regions].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Regions])', SOLVE_ORDER=-400

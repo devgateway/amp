@@ -2,12 +2,12 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="first_datasource" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
-         <Jndi>AMPBurkinaProduction</Jndi>
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+         <Jndi>AMPNepal</Jndi>
       </Connection>
       <Connection id="first_datasource_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards/AMPBurkinaProduction.xml</Catalog>
-         <Jndi>AMPBurkinaProduction</Jndi>
+         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+         <Jndi>AMPNepal</Jndi>
       </Connection>
    </DataSources>
    <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_datasource"
@@ -53,7 +53,7 @@ Where ([Donor Dates].[*SLICER_MEMBER])
          <Parameter default="USD" name="currency" type="String"/>
          <Parameter default="[Regions].Members" name="regionParameter" type="String"/>
          <Parameter default="[Primary Sector].Members" name="sectorParameter" type="String"/>
-         <Parameter default="[National Program].Members" name="programParameter" type="String"/>
+         <Parameter default="[National Program Level 1].Members" name="programParameter" type="String"/>
          <Parameter default="2000" name="startYear" type="String"/>
          <Parameter default="2009" name="endYear" type="String"/>
       </Parameters>
@@ -66,7 +66,7 @@ Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].
 Set [*BASE_MEMBERS_Measures] as '{[Measures].[Actual Disbursements %]}'
 Set [*BASE_MEMBERS_National Program] as '{${programParameter}}'
 Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Primary Sector].currentMember)})'
-Set [*NATIVE_MEMBERS_National Program] as 'Generate([*NATIVE_CJ_SET], {[National Program].CurrentMember})'
+Set [*NATIVE_MEMBERS_National Program] as 'Generate([*NATIVE_CJ_SET], {[National Program Level 1].CurrentMember})'
 Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
 Set [*NATIVE_MEMBERS_Regions] as 'Generate([*NATIVE_CJ_SET], {[Regions].CurrentMember})'
 Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'

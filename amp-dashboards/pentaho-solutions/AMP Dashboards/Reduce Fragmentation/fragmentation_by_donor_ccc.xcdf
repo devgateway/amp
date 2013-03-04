@@ -5,5 +5,5 @@
   <description>This contains a description of the dashboards</description>
   <icon></icon>
   <template>fragmentation_by_donor_ccc.html</template>
-  <style>amp</style>
+  <style>amp-functions</style>
 </cdf>

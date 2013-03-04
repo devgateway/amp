@@ -384,14 +384,25 @@ function selectCurrentLocation(){
 
 function selectLocationCaller(currentLocation){
 	//Hack to get the Ids for the fields lan/lon from parent window
-	var callerButton = window.opener.callerGisObject;
+	var callerButton = $(window.opener.callerGisObject).parent().parent();
 	//Lat
-	callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1].value = esri.geometry.webMercatorToGeographic(currentLocation).y;
+    var element = callerButton.find('input').eq(1);
+    element.focus();
+    element.val(esri.geometry.webMercatorToGeographic(currentLocation).y);
+    element.change();
+    element.blur();
 	//Long
-	callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2].value = esri.geometry.webMercatorToGeographic(currentLocation).x;
+    element = callerButton.find('input').eq(2);
+    element.focus();
+    element.val(esri.geometry.webMercatorToGeographic(currentLocation).x);
+    element.change();
+    element.blur();
+
+    $(window.opener.callerGisObject).blur();
+    $(window.opener.callerGisObject).focus();
 	//Very experimental, storing the point as Json Object
-	var shapeField = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[4]; //this is the "shape" field
-	shapeField.value = JSON.stringify(currentLocation.toJson());
+	//var shapeField = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[4]; //this is the "shape" field
+	//shapeField.value = JSON.stringify(currentLocation.toJson());
 	window.close();
 }
 

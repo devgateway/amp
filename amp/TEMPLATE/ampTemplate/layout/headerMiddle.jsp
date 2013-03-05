@@ -62,7 +62,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 <div class="yuiamp-skin-amp" >
     <div id="mainmenuHeader" class="yuiampmenu">
-      <div class="bd bd_drop">   
+      <div class="bd">   
       	 <ul class="first-of-type">
       	 	<module:display name="Home Page Menu Entry" parentModule="PUBLIC VIEW">
 	            <li class="yuiampmenuitem">

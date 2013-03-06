@@ -91,7 +91,10 @@ public class ShowLogsAction extends MultiAction {
 		//import one activity
 		if(actType!=null )
 			if("saveAct".compareTo(actType)==0){
-				importActivity(request, myForm, itemId);
+				if(itemId!=null){
+					String[] item = new String[]{itemId};
+				importActivity(request, myForm, item);
+				}
 			}
 			else
 				if("saveAllAct".compareTo(actType)==0){
@@ -99,9 +102,7 @@ public class ShowLogsAction extends MultiAction {
 						String[] selectedActivities = myForm.getSelectedActivities();
 						//Object o = request.getParameter("idss");
 						if(selectedActivities != null) 
-							for (int i = 0; i < selectedActivities.length; i++) {
-								importActivity(request, myForm, selectedActivities[i]);
-							}
+								importActivity(request, myForm, selectedActivities);
 					}
 			
 		}		
@@ -169,7 +170,7 @@ public class ShowLogsAction extends MultiAction {
 		
 	}
 
-	private void importActivity(HttpServletRequest request, ShowLogsForm myForm, String itemId) throws SQLException, DgException {
+	private void importActivity(HttpServletRequest request, ShowLogsForm myForm, String[] itemId) throws SQLException, DgException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		Sdm attachedFile = new SessionSourceSettingDAO().getSourceSettingById( myForm.getSelectedSourceId()).getAttachedFile();
 		outputStream = DataExchangeUtils.getFileByOutputstream(attachedFile);
@@ -188,7 +189,7 @@ public class ShowLogsAction extends MultiAction {
 		DEImportBuilder deib 	= new DEImportBuilder(deItem);
 		if(itemId != null)
 			{
-				deib.runIATI(request,"import",itemId);
+				deib.runIATI2(request,"import",itemId);
 			}
 	}
 

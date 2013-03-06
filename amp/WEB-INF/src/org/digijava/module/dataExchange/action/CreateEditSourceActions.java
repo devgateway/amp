@@ -1,11 +1,17 @@
 package org.digijava.module.dataExchange.action;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
+
+import javassist.bytecode.Descriptor.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,13 +21,16 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.form.CreateSourceForm;
+import org.digijava.module.dataExchange.form.CreateSourceForm.ComponentFM;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
 import org.digijava.module.dataExchange.util.CreateSourceUtil;
 import org.digijava.module.dataExchange.util.ExportHelper;
@@ -60,6 +69,22 @@ public class CreateEditSourceActions extends DispatchAction {
 		fillForm(myform, request);
 		
 		DESourceSetting ss	= new SessionSourceSettingDAO().getSourceSettingById( myform.getSourceId() );
+		List<String> importComponents =ss.getFields();
+		for(int i=0;i<importComponents.size();i++){
+			String comp = importComponents.get(i);
+			String[] info = comp.split("\\|\\|\\|");
+			if(info.length==3){
+				for(int j=0;j<myform.getListComponents().size();j++){
+					if(myform.getListComponents().get(j).getIatiName().compareTo(info[0])==0){
+						if(myform.getListComponents().get(j).isState()){
+							myform.getListComponents().get(j).setImportComp(Boolean.parseBoolean(info[1]));
+							myform.getListComponents().get(j).setAutoOverwrite(Boolean.parseBoolean(info[2]));
+						}
+						break;
+					}
+				}
+			}
+		}
 		myform.setName(ss.getName());
 		myform.setApprovalStatus(ss.getApprovalStatus());
 		myform.setImportStrategy(ss.getImportStrategy());
@@ -82,6 +107,14 @@ public class CreateEditSourceActions extends DispatchAction {
 		
 		CreateSourceForm myForm = (CreateSourceForm) form;
 		
+		myForm.getListComponents();
+		for(int i=0; i<myForm.getListComponents().size();i++){
+			myForm.getListComponents().get(i).setImportComp(Boolean.parseBoolean(myForm.getModuleImport()[i]));
+			if(Boolean.parseBoolean(myForm.getModuleImport()[i]))
+				myForm.getListComponents().get(i).setAutoOverwrite(Boolean.parseBoolean(myForm.getModuleAOW()[i]));
+			else
+				myForm.getListComponents().get(i).setAutoOverwrite(false);
+		}
 		DESourceSetting srcSetting	= null;
 		if(myForm.getSourceId() !=null && ! myForm.getSourceId().equals(new Long(-1))){
 			srcSetting	= new SourceSettingDAO().getSourceSettingById(myForm.getSourceId());
@@ -91,7 +124,12 @@ public class CreateEditSourceActions extends DispatchAction {
 		
 		srcSetting.setName(myForm.getName() );
 		srcSetting.setSource( myForm.getSource() );
-		srcSetting.setFields(  CreateSourceUtil.getFieldNames(myForm.getActivityTree(), null) );
+		//srcSetting.setFields(  CreateSourceUtil.getFieldNames(myForm.getActivityTree(), null) );
+		List<String> importModules = new ArrayList<String>();
+		for(int i=0; i<myForm.getListComponents().size();i++){
+			importModules.add(myForm.getListComponents().get(i).getIatiName()+"|||"+myForm.getListComponents().get(i).isImportComp()+"|||"+myForm.getListComponents().get(i).isAutoOverwrite());
+		}
+		srcSetting.setFields( importModules );
 		srcSetting.setImportStrategy( myForm.getImportStrategy() );
 		srcSetting.setUniqueIdentifier( myForm.getUniqueIdentifier() );
 		srcSetting.setApprovalStatus( myForm.getApprovalStatus() );
@@ -205,6 +243,32 @@ public class CreateEditSourceActions extends DispatchAction {
 		
 		Collection<AmpTeam> teams	= TeamUtil.getAllTeams();
 		myform.setTeamValues(teams);
+		Properties prop = new Properties();
+		List<ComponentFM> componentsList = new ArrayList<CreateSourceForm.ComponentFM>();
+		try {
+			InputStream inStream = CreateEditSourceActions.class.getClassLoader().
+		            getResourceAsStream("org/digijava/module/dataExchange/action/iatiModule.properties");
+			prop.load(inStream);
+			Enumeration keys = prop.keys();
+			while(keys.hasMoreElements()){
+				String key = (String)keys.nextElement();
+				String value = (String)prop.get(key);
+				
+				ComponentFM compFM = myform.new ComponentFM();
+				compFM.setName(key);
+				compFM.setIatiName(value);
+				compFM.setId(AmpDbUtil.getComponentFMIdfromName(compFM.getName()));
+				compFM.setState(AmpDbUtil.getComponentState(compFM.getName()));
+				compFM.setImportComp(compFM.isState());
+				compFM.setAutoOverwrite(false);
+				componentsList.add(compFM);
+			}
+		} catch (IOException e) {
+			log.error(e);
+			e.printStackTrace();
+		}
+		
+		myform.setListComponents(componentsList);
 		
 		//myform.setActivityTree(ExportHelper.getActivityStruct("activity","activityTree","activity",ActivityType.class,true) );
 		myform.setActivityTree(ExportHelper.getIATIActivityStruct("Activity","activityTree","Activity",request) );

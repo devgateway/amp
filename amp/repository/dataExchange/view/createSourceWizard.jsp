@@ -82,6 +82,20 @@ div.fakefile2 input{
 	
 var W3CDOM = (document.createElement && document.getElementsByTagName);
 
+window.onload = function(){
+	var list = document.createSourceForm.moduleImport;
+	for(i=0;i<list.length;i++){
+		if(list[i].value=="true")
+			document.createSourceForm.moduleImport[i].checked = true;
+	}
+	list =document.createSourceForm.moduleAOW;
+	for(i=0;i<list.length;i++){
+		if(list[i].value=="true")
+			document.createSourceForm.moduleAOW[i].checked = true;
+	}
+	//document.createSourceForm.moduleImport[0].checked = true;
+	} 
+
 function initFileUploads() {
 	if (!W3CDOM) return;
 	var fakeFileUpload = document.createElement('div');
@@ -118,19 +132,74 @@ function initFileUploads() {
 
 <script type="text/javascript">
 
+function checkImport(){
+	var checkBox = document.getElementById('ckImport');
+	if(checkBox.checked){
+		var list = document.createSourceForm.moduleImport;
+		for(i=0;i<list.length;i++){
+			if(!list[i].disabled)
+				document.createSourceForm.moduleImport[i].checked = true;
+		}		
+	}else{
+		var list = document.createSourceForm.moduleImport;
+		for(i=0;i<list.length;i++){
+			if(!list[i].disabled)
+				document.createSourceForm.moduleImport[i].checked = false;
+		}
+	}
+}
+
+function checkAOW(){
+	var checkBox = document.getElementById('ckAOW');
+	if(checkBox.checked){
+		var list = document.createSourceForm.moduleAOW;
+		for(i=0;i<list.length;i++){
+			if(!list[i].disabled)
+				document.createSourceForm.moduleAOW[i].checked = true;
+		}		
+	}else{
+		var list = document.createSourceForm.moduleAOW;
+		for(i=0;i<list.length;i++){
+			if(!list[i].disabled)
+				document.createSourceForm.moduleAOW[i].checked = false;
+		}
+	}
+}
+
 function cancelImportManager() {
     <digi:context name="url" property="/aim/admin.do" />
     window.location="<%= url %>";
 }
 
+function trim1 (str) {
+    return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+}
+
  function importActivities(sourceId){
+	 var nameS = document.createSourceForm.name;
+	 var msg = '<digi:trn>Please insert name</digi:trn>';
+	 if(trim1(nameS.value).length==0){
+		alert(msg);
+		return true;
+		}
+	 var importCK = document.getElementsByName("moduleImport");
+	 var importCK1 = document.getElementsByName("moduleAOW");
+	 var params="";
+	 for(i=0;i<importCK.length;i++){
+		
+			 var opts = importCK[i];
+			 params+="&moduleId="+opts.id;
+			 params+="&moduleImport="+opts.checked;
+			 var opts = importCK1[i];
+			 params+="&moduleAOW="+opts.checked;
+		 }
 	 if(checkAttachment()){
 		 var form = document.getElementById('form');
 //	      form.action = "/dataExchange/createSource.do?saveImport=true";
 //	      if(sourceId != -1){
 //	    	  form.action ="/dataExchange/editSource.do?action=saveSource&sourceId="+sourceId;
 //	      }
-		  form.action = "/dataExchange/createEditSource.do?action=saveSource";
+		  form.action = "/dataExchange/createEditSource.do?action=saveSource"+params;
 	      if(sourceId != -1){
 	    	  form.action +="&sourceId="+sourceId;
 	      }
@@ -202,14 +271,14 @@ function cancelImportManager() {
         						</logic:iterate>
 								<br /><br />
 								
-								<b><digi:trn>Please choose the type of source</digi:trn>:</b> <br>
+								<%-- <b><digi:trn>Please choose the type of source</digi:trn>:</b> <br>
 								<logic:iterate name="createSourceForm" property="sourceValues" id="srcVal">  									
         							<html:radio property="source" value="${srcVal.key}">
 		        						<digi:trn>${srcVal.value}</digi:trn>
 		        					</html:radio>
 		        					&nbsp;&nbsp;
         						</logic:iterate>				
-								<br><br>
+								<br><br> --%>
 								
 								<b><digi:trn>Please choose the workspace that will be used</digi:trn>:</b><br />
 								<html:select property="teamId" styleClass="inputx" style="margin-top:5px;">
@@ -222,10 +291,16 @@ function cancelImportManager() {
        								<html:radio property="importStrategy" value="${impVal.key}">
        									<digi:trn>${impVal.value}</digi:trn>&nbsp;&nbsp;
        								</html:radio>
-        						</logic:iterate>
+        						</logic:iterate><br /><br />
+        						
+        						<b><digi:trn>Select the approval status that the new activities will have</digi:trn>:</b><br />
+								
+								<logic:iterate id="appStatus" name="createSourceForm" property="approvalStatusValues">
+		                    		<html:radio property="approvalStatus" value="${appStatus.key}"><digi:trn>${appStatus.value}</digi:trn></html:radio> <br />
+                    			</logic:iterate>
 							</fieldset>
 							<br />
-							<fieldset>
+							<%-- <fieldset>
 								<legend><span class=legend_label><digi:trn>Filter and Identifier</digi:trn></span></legend>
 								<b><digi:trn>Type unique identifier</digi:trn> (<digi:trn>Title</digi:trn>, <digi:trn>Id</digi:trn>,<digi:trn>Amp Id</digi:trn>,<digi:trn>PTIP code</digi:trn>) <digi:trn>separated by</digi:trn> '|' </b>:
 								<html:text property="uniqueIdentifier" styleClass="inputx" style="width:95%; margin-top:5px;"/><br /><br />
@@ -235,7 +310,7 @@ function cancelImportManager() {
 		                    		<html:radio property="approvalStatus" value="${appStatus.key}"><digi:trn>${appStatus.value}</digi:trn></html:radio> <br />
                     			</logic:iterate>								
 							</fieldset>
-							<br />							
+							<br /> --%>							
 							<fieldset>
 								<legend><span class=legend_label><digi:trn>Upload a file</digi:trn></span></legend>
 								<c:if test="${not empty createSourceForm.sdmDocument}">
@@ -268,7 +343,7 @@ function cancelImportManager() {
 				    	<td width=49% valign="top">
 				    		<fieldset>
 								<legend><span class=legend_label><digi:trn>Field Selection</digi:trn></span></legend>
-								<a href=# class="t_sm" id="expand"><b><digi:trn>Expand all</digi:trn></b></a>&nbsp; | &nbsp;
+								<%-- <a href=# class="t_sm" id="expand"><b><digi:trn>Expand all</digi:trn></b></a>&nbsp; | &nbsp;
 								<a href=# class="t_sm" id="collapse"><b><digi:trn>Collapse all</digi:trn></b></a>&nbsp; | &nbsp;
 								<a href=# class="t_sm" id="check"><b><digi:trn>Check all</digi:trn></b></a>&nbsp; | &nbsp;
 								<a href=# class="t_sm" id="uncheck"><b><digi:trn>Uncheck all</digi:trn></b></a>
@@ -276,7 +351,33 @@ function cancelImportManager() {
 								<c:if test="${not empty createSourceForm.sourceId}">
 									<bean:define id="sourceId" name="createSourceForm" property="sourceId" type="java.lang.Long" toScope="request" />
 								</c:if>
-								<jsp:include page="fieldsModule.jsp"></jsp:include>
+								<jsp:include page="fieldsModule.jsp"></jsp:include> --%>
+								<table cellSpacing="1" cellPadding="4" vAlign="top"
+														align="left" width="100%" class="inside">
+									<tr >
+										<td vAlign="top"  align="left" class="inside" width="70%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif"><digi:trn>Name</digi:trn></td>
+										<td  align="center" class="inside" width="10%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif"><digi:trn>Import </digi:trn><br /><input type="checkbox" id="ckImport" onchange="checkImport()"></td>
+										<td  align="center" class="inside" width="20%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif"><digi:trn>Auto Overwrite</digi:trn><br /><input type="checkbox" id="ckAOW" onchange="checkAOW()"></td>
+									</tr>
+									<!-- <tr >
+										<td  align="left" class="inside" width="75%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif"></td>
+										<td  align="center" class="inside" width="10%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
+											<input type="checkbox" id="ckImport" onchange="checkImport()">
+								    	</td>
+										<td  align="center" class="inside" width="15%" background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif">
+											<input type="checkbox" id="ckAOW" onchange="checkAOW()">
+										</td>
+									</tr> -->
+									<logic:iterate id="component" name="createSourceForm" property="listComponents">
+										<tr>
+											<td class="inside" bgcolor="#FFFFFF">${component.name}</td>
+								    		<td class="inside" bgcolor="#FFFFFF" align="center"><html:checkbox name="createSourceForm"  property="moduleImport"  value="${component.importComp}" disabled="${!component.state}" 
+								    		styleId="${component.id}"/></td>
+											<td class="inside" bgcolor="#FFFFFF" align="center"><html:checkbox name="createSourceForm"  property="moduleAOW"  value="${component.autoOverwrite}" disabled="${!component.state}"
+								    		styleId="${component.id}"/></td>
+										</tr>
+									</logic:iterate>
+								</table>
 							</fieldset>
 						</td>
 					</tr>

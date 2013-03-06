@@ -13,6 +13,8 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteCache;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
@@ -491,6 +493,117 @@ public class AmpDbUtil {
 
 		return id;
 	}
+	  
+	  public static long getComponentFMIdfromName(String name){
+		  Session session = null;
+			Query qry = null;
+			AmpModulesVisibility ampModule = null;
+
+			try {
+				session = PersistenceManager.getSession();
+				String queryString = "select m from " + AmpModulesVisibility.class.getName()
+						+ " m where (m.name=:name)";
+				qry = session.createQuery(queryString);
+				qry.setParameter("name", name, Hibernate.STRING);
+				Iterator itr = qry.list().iterator();
+				if (itr.hasNext()) {
+					ampModule = (AmpModulesVisibility) itr.next();
+				}
+			} catch (Exception e) {
+				logger.error("Unable to get currency");
+				logger.debug("Exceptiion " + e);
+			} finally {
+				try {
+					if (session != null) {
+						PersistenceManager.releaseSession(session);
+					}
+				} catch (Exception ex) {
+					logger.error("releaseSession() failed");
+				}
+			}
+			return ampModule.getId();
+	  }
+	  
+	  public static AmpModulesVisibility getComponentFMfromName(String name){
+		  Session session = null;
+			Query qry = null;
+			AmpModulesVisibility ampModule = null;
+
+			try {
+				session = PersistenceManager.getSession();
+				String queryString = "select m from " + AmpModulesVisibility.class.getName()
+						+ " m where (m.name=:name)";
+				qry = session.createQuery(queryString);
+				qry.setParameter("name", name, Hibernate.STRING);
+				Iterator itr = qry.list().iterator();
+				if (itr.hasNext()) {
+					ampModule = (AmpModulesVisibility) itr.next();
+				}
+			} catch (Exception e) {
+				logger.error("Unable to get currency");
+				logger.debug("Exceptiion " + e);
+			} finally {
+				try {
+					if (session != null) {
+						PersistenceManager.releaseSession(session);
+					}
+				} catch (Exception ex) {
+					logger.error("releaseSession() failed");
+				}
+			}
+			return ampModule;
+	  }
+	  
+	  public static List getComponentsId(List<String> components){
+		  List<Long> ids = new ArrayList<Long>();
+		  Iterator<String> it = components.iterator();
+		  while(it.hasNext()){
+			  ids.add(getComponentFMIdfromName(it.next()));
+		  }
+		  return ids;
+	  }
+	  
+	  public static boolean getComponentState(String componentName){
+		  AmpModulesVisibility amv = getComponentFMfromName(componentName);
+		  return getComponentVisibility(amv);
+	  }
+	  
+	  public static List<Boolean> getStateComponents(List<String> componentsName){
+		  List<Boolean> result = new ArrayList<Boolean>();
+		  Iterator<String> it = componentsName.iterator();
+		  while(it.hasNext()){
+			  AmpModulesVisibility amv = getComponentFMfromName(it.next());
+			  //result.add(Boolean.valueOf(amv.getVisible()));
+			  result.add(getComponentVisibility(amv));
+		  }
+		  return result;
+	  }
+	  
+	  public static Boolean getComponentVisibility(AmpModulesVisibility amv){
+		  Session session = null;
+			Query qry = null;
+			try {
+				session = PersistenceManager.getSession();
+				String queryString = "select m.module from amp_modules_templates m where m.module=" + amv.getId();
+				qry = session.createSQLQuery(queryString);
+				Iterator itr = qry.list().iterator();
+				if (itr.hasNext()) {
+					return true;
+				}
+			} catch (Exception e) {
+				logger.error("Unable to get currency");
+				logger.debug("Exceptiion " + e);
+			} finally {
+				try {
+					if (session != null) {
+						PersistenceManager.releaseSession(session);
+					}
+				} catch (Exception ex) {
+					logger.error("releaseSession() failed");
+				}
+			}
+			return false;
+	  }
   }
   
 

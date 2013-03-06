@@ -2098,6 +2098,49 @@ public class DEImportBuilder {
 
 	//*****************************IATI import
 	//private void validateIATIActivity(DELogPerExecution log, SourceSettingDAO iLog, HttpServletRequest request) {
+	
+	public void runIATI2(HttpServletRequest request, String runType, String[] itemId) {
+		// TODO Auto-generated method stub
+		DELogPerExecution execLog 	= new DELogPerExecution(this.getDESourceSetting());
+		if(execLog.getLogItems() == null)
+			execLog.setLogItems(new ArrayList<DELogPerItem>());
+		execLog.setDeSourceSetting(this.getDESourceSetting());
+		this.getDESourceSetting().getLogs().add(execLog);
+		SourceSettingDAO iLog	 		= null;
+		
+		try {
+				iLog		 = 	new SessionSourceSettingDAO();
+		} catch (HibernateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		execLog.setExecutionTime(new Timestamp(System.currentTimeMillis()));
+		iLog.saveObject(this.getDESourceSetting());
+		if("check".compareTo(runType)==0)
+			execLog.setDescription(Constants.LOG_PER_EXECUTION_DESC_CHECK);
+		if("import".compareTo(runType)==0)
+			execLog.setDescription(Constants.LOG_PER_EXECUTION_DESC_IMPORT);
+		boolean ok 	 =	checkIATIInputString(execLog.getDescription());
+		iLog.saveObject(this.getDESourceSetting());
+		if(!ok) return;
+		//generateFieldHashMap();
+		if("check".compareTo(runType)==0)
+			processIATIFeed(request,execLog, iLog, "check",null);
+		if("import".compareTo(runType)==0){
+			if(itemId!=null && itemId.length>0){
+				for(int i=0;i<itemId.length;i++){
+					processIATIFeed(request,execLog, iLog, "import", itemId[i]);
+				}
+			}
+		}
+		
+	}
 
 	public void runIATI(HttpServletRequest request, String runType, String itemId) {
 		// TODO Auto-generated method stub
@@ -2135,6 +2178,63 @@ public class DEImportBuilder {
 		if("import".compareTo(runType)==0)
 			processIATIFeed(request,execLog, iLog, "import", itemId);
 		
+	}
+	
+	private void processIATIFeed2(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String[] itemsId) {
+		logger.info("SYSOUT: processing iati activities");
+		
+			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
+			int noAct = 0;
+			for (Iterator it = iatiActs.getIatiActivityOrAny().iterator(); it.hasNext();) {
+				Object obj =  it.next();
+				if( !(obj instanceof IatiActivity) ) continue;
+				IatiActivity iAct = (IatiActivity) obj;
+				String logAct = "";
+				String title = "";
+				String iatiID = "";
+				String ampID = null;
+				IatiActivityWorker iWorker= new IatiActivityWorker(iAct, logAct);
+				noAct ++;
+				ArrayList<AmpMappedField> activityLogs = null;
+				if( "check".compareTo(actionType) ==0 )
+					//CHECK content
+					{
+						System.out.println(".......Starting processing activity "+noAct);
+						activityLogs	=	iWorker.checkContent(noAct, this.getHierarchies());
+						System.out.println("..................End processing activity "+noAct);
+					}
+				else
+					if( "import".compareTo(actionType) ==0 )
+						//import
+						{
+							if(itemsId!=null && itemsId.length>0){
+								for(int i=0;i<itemsId.length;i++){
+									DELogPerItem deLogPerItem = DataExchangeUtils.getDELogPerItemById(new Long(itemsId[i]));
+								}
+							}
+							DELogPerItem deLogPerItem = DataExchangeUtils.getDELogPerItemById(new Long(itemsId[0]));
+							if( iWorker.existActivityByTitleIatiId(deLogPerItem.getName())){
+								Long grpId = new Long(deLogPerItem.getItemType());
+								AmpActivityVersion ampActivity = new AmpActivityVersion();
+								activityLogs	=	iWorker.populateActivity(ampActivity);
+								AmpTeam team = getAssignedWorkspace();
+								ampActivity.setApprovalStatus(getApprovalStatus());
+								DataExchangeUtils.saveActivity(request,grpId, ampActivity, team);
+								
+								//update the AmpId of the DEMappingField.
+								AmpMappedField checkedActivity = iWorker.checkActivity(iWorker.getTitle(),iWorker.getIatiID(), iWorker.getLang());
+								DEMappingFields item = checkedActivity.getItem();
+								item.setAmpId(ampActivity.getAmpActivityGroup().getAmpActivityGroupId());//getAmpActivityId());
+								item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(),iWorker.getIatiID()));
+								DataExchangeUtils.addObjectoToAmp(item);
+							}
+							else continue;
+						}
+				//process log
+				if(activityLogs == null) continue;
+				processLog(log, iLog, iWorker, activityLogs, actionType);
+			}
+			iLog.saveObject(log.getDeSourceSetting());
 	}
 
 	private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId) {

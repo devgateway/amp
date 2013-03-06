@@ -53,6 +53,56 @@ public class CreateSourceForm extends ActionForm {
 	//holds attached files	
 	private Sdm sdmDocument;
 	
+	private List<ComponentFM> listComponents;
+	
+	private String [] moduleId;
+	private String [] moduleImport;
+	private String [] moduleAOW;
+	
+	public class ComponentFM{
+		private long id;
+		private String name;
+		private String iatiName;
+		private boolean state;
+		private boolean importComp;
+		private boolean autoOverwrite;
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public boolean isState() {
+			return state;
+		}
+		public void setState(boolean state) {
+			this.state = state;
+		}
+		public boolean isImportComp() {
+			return importComp;
+		}
+		public void setImportComp(boolean importComp) {
+			this.importComp = importComp;
+		}
+		public boolean isAutoOverwrite() {
+			return autoOverwrite;
+		}
+		public void setAutoOverwrite(boolean autoOverwrite) {
+			this.autoOverwrite = autoOverwrite;
+		}
+		public long getId() {
+			return id;
+		}
+		public void setId(long id) {
+			this.id = id;
+		}
+		public String getIatiName() {
+			return iatiName;
+		}
+		public void setIatiName(String iatiName) {
+			this.iatiName = iatiName;
+		}
+	}	
 
 	public String[] getSelectedLanguages() {
 		return selectedLanguages;
@@ -298,6 +348,39 @@ public class CreateSourceForm extends ActionForm {
 
 	public void setSdmDocument(Sdm sdmDocument) {
 		this.sdmDocument = sdmDocument;
+	}
+
+
+	public List<ComponentFM> getListComponents() {
+		return listComponents;
+	}
+
+	public void setListComponents(List<ComponentFM> listComponents) {
+		this.listComponents = listComponents;
+	}
+
+	public String [] getModuleId() {
+		return moduleId;
+	}
+
+	public void setModuleId(String [] moduleId) {
+		this.moduleId = moduleId;
+	}
+
+	public String [] getModuleImport() {
+		return moduleImport;
+	}
+
+	public void setModuleImport(String [] moduleImport) {
+		this.moduleImport = moduleImport;
+	}
+
+	public String [] getModuleAOW() {
+		return moduleAOW;
+	}
+
+	public void setModuleAOW(String [] moduleAOW) {
+		this.moduleAOW = moduleAOW;
 	}
 	
 }

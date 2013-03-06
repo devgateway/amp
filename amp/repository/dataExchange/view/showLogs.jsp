@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
@@ -174,7 +175,15 @@ function page (page){
 							     -->
 							    <td bgcolor=#FFFFFF class=inside align="center">
 							    	<div class="t_sm">
-							    		<digi:trn>${log.description }</digi:trn>
+							    		<c:if test="${log.description=='Import activities'}">
+							    			<c:if test="${fn:length(log.logItems)==1}">
+							    				<digi:trn>Import</digi:trn> 1 <digi:trn>activity</digi:trn>
+							    			</c:if>
+							    			<c:if test="${fn:length(log.logItems)!=1}">
+							    				<digi:trn>Import</digi:trn> ${fn:length(log.logItems)} <digi:trn>activities</digi:trn>
+							    			</c:if>
+							    		<%-- <digi:trn>Import</digi:trn> ${fn:length(log.logItems)} <digi:trn>activities</digi:trn>
+							    		<digi:trn>${log.description } ${fn:length(log.logItems)} </digi:trn> --%>
 							    			<%-- 
 							    			Name:	  |   ${log.name}
 							    		Database ID:	 ${log.id}	  
@@ -183,7 +192,11 @@ function page (page){
 							    		|   Time:	 ${log.timeAsString }	  
 							    		|   Description:	${log.logType }	  
 							    		|   Item Type:	Activity
-							    		 --%>						    		
+							    		 --%>	
+							    		 </c:if>
+							    		 <c:if test="${log.description=='Check feed source'}">	
+							    		 	<digi:trn>${log.description } </digi:trn>
+							    		 </c:if>				    		
 							    	</div>
 							    </td>
 							    <td bgcolor=#FFFFFF class=inside align="center">

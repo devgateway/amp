@@ -21,7 +21,6 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.gateperm.core.Permission;
-import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.um.exception.UMException;
 
 public class PermissionManagerFormFeature  extends AmpFeaturePanel{
@@ -53,7 +52,7 @@ public class PermissionManagerFormFeature  extends AmpFeaturePanel{
 		
 		Set<Permission> permissonsSet = new TreeSet<Permission>();
 		final IModel<Set<Permission>> globalPermissionsModel = new Model((Serializable)permissonsSet);
-		adminPMForm.add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", globalPermissionsModel, "Manage Global Permissions", false));
+		adminPMForm.add(new AmpPMManageGlobalPermissionsSectionFeaturePanel("manageGlobalPermissions", globalPermissionsModel, teamsModel, "Manage Global Permissions", false));
 		
 		AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
 		ampTreeVisibility.buildAmpTreeVisibility(PMUtil.getDefaultAmpTemplateVisibility());

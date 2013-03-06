@@ -233,7 +233,7 @@ public final class PMUtil {
 		}
 	}
 
-	public static void assignGlobalPermission(Set<AmpPMReadEditWrapper> gatesSet,	Class globalPermissibleClass) {
+	public static void assignGlobalPermission(Set<AmpPMReadEditWrapper> gatesSet, Set<AmpPMReadEditWrapper> workspaceSet,	Class globalPermissibleClass) {
 		// TODO Auto-generated method stub
 		Session session = null;
 		try {
@@ -270,6 +270,10 @@ public final class PMUtil {
 		cp.setName(getFieldSimpleName(globalPermissibleClass.getSimpleName()) + " - Composite Permission");
 		
 		for (AmpPMReadEditWrapper ampPMGateWrapper : gatesSet) {
+			initializeAndSaveGatePermission(session,cp,ampPMGateWrapper, true, null);
+		}
+		
+		for (AmpPMReadEditWrapper ampPMGateWrapper : workspaceSet) {
 			initializeAndSaveGatePermission(session,cp,ampPMGateWrapper, true, null);
 		}
 		

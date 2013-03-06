@@ -228,7 +228,7 @@ li.ui-tabs-selected.filter_tab {border:1px solid #D0D0D0; float:left; margin-rig
 .perm_level {font-size:11px;}
 .perm_tree {padding:10px;}
 .perm_tree_cont {width:95%; height:300px; overflow:scroll; background-color:#FFFFFF; padding:10px;}
-.perm_tree_cont_long {width:95%; height:610px; overflow:scroll; background-color:#FFFFFF; padding:10px;}
+.perm_tree_cont_long {width:95%; height:570px; overflow:scroll; background-color:#FFFFFF; padding:10px;}
 .perm_view_cont {padding-top:10px; padding-right:10px; padding-bottom:10px;}
 .perm_wrksp {height:200px; overflow:scroll; background-color:#FFFFFF; padding:10px; margin-top:5px; margin-bottom:5px;}
 .perm_wrksp_det {height:300px; overflow:scroll; background-color:#FFFFFF; padding:10px; margin-top:5px; margin-bottom:5px;}

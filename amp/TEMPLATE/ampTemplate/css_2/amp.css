@@ -319,11 +319,12 @@ html.chrome #show_login_pop_box{display:none; margin:37px 0px 0px 55px;width:240
 .perm_level {font-size:11px;}
 .perm_tree {padding:10px;}
 .perm_tree_cont {width:95%; height:300px; overflow:scroll; background-color:#FFFFFF; padding:10px;}
-.perm_tree_cont_long {width:95%; height:610px; overflow:scroll; background-color:#FFFFFF; padding:10px;}
+.perm_tree_cont_long {width:95%; height:550px; overflow:scroll; background-color:#FFFFFF; padding:10px;}
 .perm_view_cont {padding-top:10px; padding-right:10px; padding-bottom:10px;}
 .perm_wrksp {height:200px; overflow:scroll; background-color:#FFFFFF; padding:10px; margin-top:5px; margin-bottom:5px;}
 .perm_wrksp_det {height:300px; overflow:scroll; background-color:#FFFFFF; padding:10px; margin-top:5px; margin-bottom:5px;}
 .perm_wrksp_det_short {height:200px; overflow:scroll; background-color:#FFFFFF; padding:10px; margin-top:5px; margin-bottom:5px;}
+.perm_wrksp_det_long {height:400px; overflow:scroll; background-color:#FFFFFF; padding:0px; margin-top:0px; margin-bottom:5px;}
 
 /* EXPORT TOOLBAR  */
 table.report_indicator{margin-bottom:15px}

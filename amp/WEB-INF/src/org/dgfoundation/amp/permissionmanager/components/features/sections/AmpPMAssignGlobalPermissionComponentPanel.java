@@ -25,6 +25,7 @@ import org.dgfoundation.amp.permissionmanager.components.features.fields.AmpPMPe
 import org.dgfoundation.amp.permissionmanager.components.features.models.AmpPMReadEditWrapper;
 import org.dgfoundation.amp.permissionmanager.components.features.tables.AmpPMAddPermFormTableFeaturePanel;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permission;
@@ -38,7 +39,7 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPanel {
 
 
-	public AmpPMAssignGlobalPermissionComponentPanel(String id,  IModel<Set<Permission>> globalPermissionsModel, String fmName) {
+	public AmpPMAssignGlobalPermissionComponentPanel(String id,  IModel<Set<Permission>> globalPermissionsModel, IModel<Set<AmpTeam>> tm, String fmName) {
 		super(id, globalPermissionsModel, fmName, AmpFMTypes.MODULE);
 
 		List<Class> availablePermissibleCategories = Arrays.asList(GatePermConst.availablePermissibles);
@@ -59,7 +60,6 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		form.add(infoGlobalPermLabel);
 		
 		//gates list 
-		final IModel<PermissionMap> pmAuxModel = new Model<PermissionMap>(null);
 		Set<AmpPMReadEditWrapper> gatesSet = null;
 		gatesSet 			= new TreeSet<AmpPMReadEditWrapper>();
 		populateGatesSet(gatesSet, globalPermissibleClassModel, infoGlobalPermModel);
@@ -93,14 +93,26 @@ public class AmpPMAssignGlobalPermissionComponentPanel extends  AmpComponentPane
 		resetGlobalPerm.getButton().add(new AttributeModifier("class", new Model("buttonx")));
 		form.add(resetGlobalPerm);
 
+		
+		TreeSet<AmpPMReadEditWrapper> workspacesSet = new TreeSet<AmpPMReadEditWrapper>();
+		PMUtil.generateWorkspacesList(tm, workspacesSet);
+		final IModel<Set<AmpPMReadEditWrapper>> workspacesSetModel = new Model((Serializable) workspacesSet);
+		final AmpPMAddPermFormTableFeaturePanel permWorkspacesFieldsFormTable = new AmpPMAddPermFormTableFeaturePanel("permWorkspacesFieldsForm", workspacesSetModel, "Workspaces Form Table", true);
+		permWorkspacesFieldsFormTable.setTableWidth(470);
+		permWorkspacesFieldsFormTable.setIgnorePermissions(true);
+		permWorkspacesFieldsFormTable.setOutputMarkupId(true);
+		permWorkspacesFieldsFormTable.setEnabled(true); 
+		form.add(permWorkspacesFieldsFormTable);
+		
 		AmpButtonField saveAndSubmit = new AmpButtonField("saveGlobalPermissionButton", "Save Global Permission", "Save", true, true){
-					protected void onSubmit(AjaxRequestTarget target, Form<?> form){
-					PMUtil.assignGlobalPermission(gatesSetModel.getObject(), globalPermissibleClassModel.getObject());
-					infoGlobalPermModel.setObject("Permission saved");
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form){
+				PMUtil.assignGlobalPermission(gatesSetModel.getObject(),workspacesSetModel.getObject(), globalPermissibleClassModel.getObject());
+				infoGlobalPermModel.setObject("Permission saved");
 			}
 		};
 		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model("buttonx")));
 		form.add(saveAndSubmit);
+		
 		add(form);
 	}
 

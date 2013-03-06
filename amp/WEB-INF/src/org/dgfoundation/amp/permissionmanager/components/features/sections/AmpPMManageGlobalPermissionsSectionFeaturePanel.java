@@ -7,17 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.gateperm.core.Permission;
 
 /**
@@ -33,7 +29,7 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 	 * @param hideLabel
 	 * @throws Exception
 	 */
-	public AmpPMManageGlobalPermissionsSectionFeaturePanel(final String id, final IModel<Set<Permission>> permissionsModel, String fmName, boolean hideLabel) throws Exception {
+	public AmpPMManageGlobalPermissionsSectionFeaturePanel(final String id, final IModel<Set<Permission>> permissionsModel, final IModel<Set<AmpTeam>> tm,  String fmName, boolean hideLabel) throws Exception {
 		super(id, permissionsModel, fmName, hideLabel);
 		// TODO Auto-generated constructor stub
 		List<ITab> globalPermissionsTabs = new ArrayList<ITab>();
@@ -43,7 +39,7 @@ public class AmpPMManageGlobalPermissionsSectionFeaturePanel extends AmpPMSectio
 		      {
 		    	  AmpPMAddGlobalPermissionPanel newGlobalPerm = null;
 		    	try {
-					newGlobalPerm = new AmpPMAddGlobalPermissionPanel(panelId, permissionsModel, "Add Global Permission");
+					newGlobalPerm = new AmpPMAddGlobalPermissionPanel(panelId, permissionsModel, tm, "Add Global Permission");
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

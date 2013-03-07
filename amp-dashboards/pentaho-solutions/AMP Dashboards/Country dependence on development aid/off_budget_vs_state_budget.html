@@ -36,31 +36,6 @@ var processParameters = function(){
     first_data_table.chartDefinition.colHeaders = [];
   };
 
-var pieYearSelect = 
-{
-  name: "pieYearSelect",
-  type: "select",
-  parameters:[],
-  parameter:"pieYear",
-  valueAsId: true,
-  htmlObject: "pieYearSelect_object",
-  queryDefinition: {
-    queryType: "sql",
-    jndi: jndi,
-    catalog: catalogPath,
-    query: function(){
-      var query = "SELECT DISTINCT year_value FROM pentaho_off_budget_vs_state_budget ORDER BY year_value";
-      return query;
-    }
-  },
-  executeAtStart: true,
-  preExecution:function(){},
-  postExecution:function(){
-    Dashboards.processChange(this.name);
-    $("#pieYearSelect_object select").val(pieYear);
-    $("#pieYearSelect_object select")[0].id = "pieYear";
-  }
-}
   
 var multiSelectConfig;
 $(window).ready(function() {
@@ -186,7 +161,7 @@ second_data_table.chartDefinition.colHeaders = [];
 	var initialized = false;
 $(window).resize(resizeLayout);
 $(window).ready(function() {
-  var components = [pieYearSelect, first_bar_chart, first_data_table, second_line_chart, second_data_table];
+  var components = [first_bar_chart, first_data_table, second_line_chart, second_data_table];
   Dashboards.init(components);
   resizeLayout();
   initialized = true;

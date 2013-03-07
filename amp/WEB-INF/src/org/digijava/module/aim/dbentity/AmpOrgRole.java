@@ -13,7 +13,7 @@ public class AmpOrgRole implements Serializable, Versionable, Cloneable
 	private AmpOrganisation organisation;
 	private AmpRole role;
 	private Float 	percentage;
-	private Long budgetCode;
+	private String budgetCode;
 	private String additionalInfo;
 	
     public Float getPercentage() {
@@ -85,10 +85,10 @@ public class AmpOrgRole implements Serializable, Versionable, Cloneable
 		this.additionalInfo = additionalInfo;
 	}
 	
-	public Long getBudgetCode() {
+	public String getBudgetCode() {
 		return budgetCode;
 	}
-	public void setBudgetCode(Long budgetCode) {
+	public void setBudgetCode(String budgetCode) {
 		this.budgetCode = budgetCode;
 	}
 

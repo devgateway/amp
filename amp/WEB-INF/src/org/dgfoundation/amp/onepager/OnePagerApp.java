@@ -5,6 +5,11 @@ package org.dgfoundation.amp.onepager;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Page;
+import org.apache.wicket.Session;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -12,11 +17,6 @@ import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
-import org.apache.wicket.Session;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
-import org.apache.wicket.markup.html.WebPage;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
 import org.dgfoundation.amp.onepager.util.FMComponentResolver;
 import org.dgfoundation.amp.onepager.util.JspResolver;
@@ -86,7 +86,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax-debug.js"));
 			 jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
 			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
-			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "draftSaveNavigationPanel.js"));
+			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "saveNavigationPanel.js"));
 			 
 			 mount.clone()
 			 	.setPath("/style/all-23.css")
@@ -146,7 +146,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
 		 getMarkupSettings().setDefaultMarkupEncoding("UTF-8"); 
 		 
-		 
+         /*
 		 // Error handling
 		 getRequestCycleListeners().add(new AbstractRequestCycleListener() {
 
@@ -156,7 +156,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 	              return new RenderPageRequestHandler(new PageProvider(new AmpExceptionPage(e)));  
 					}
 				});
-		 
+		 */
 
 		 
 		 

@@ -129,7 +129,7 @@ public class GetWorkspace extends Action {
 			if ( fdSet != null && fdSet.size() > 0 ) {
 				AmpARFilter filter		= new AmpARFilter();
 				FilterUtil.populateFilter(ampTeam, filter);
-				FilterUtil.prepare(request, filter);
+				FilterUtil.prepare(request, filter, true);
 				request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER , filter);
 				ReportsFilterPickerForm rfpForm2	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
 				new ReportsFilterPicker().modeRefreshDropdowns(mapping, rfpForm2, request, response, getServlet().getServletContext() );

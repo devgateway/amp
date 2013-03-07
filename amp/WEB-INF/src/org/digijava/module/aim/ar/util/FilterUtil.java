@@ -38,7 +38,14 @@ public class FilterUtil {
 		}
 	}
 	
-	public static void prepare(HttpServletRequest request, AmpARFilter arf) throws Exception {
+	/**
+	 * storeIntoSession is a hack! probably not needed in AMP 2.4 - check there when merging with AMP 2.4
+	 * @param request
+	 * @param arf
+	 * @param storeIntoSession
+	 * @throws Exception
+	 */
+	public static void prepare(HttpServletRequest request, AmpARFilter arf, boolean storeIntoSession) throws Exception {
 		HttpSession httpSession = request.getSession();
 
 		request.setAttribute("apply", "apply");
@@ -170,7 +177,9 @@ public class FilterUtil {
 		custom.setGroupingSize(customGroupSize);
 		custom.setDecimalFormatSymbols(ds);
 		arf.setCurrentFormat(custom);
-		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
+		
+		if (storeIntoSession)
+			httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
 	}
 	
 	public static Long[] getObjectsIds (Collection<? extends Identifiable> col) {

@@ -688,3 +688,45 @@ CREATE INDEX idx_pri_prog_name ON cached_v_m_donor_funding (primary_program_name
 CREATE INDEX idx_sec_prog_name ON cached_v_m_donor_funding (secondary_program_name);
 CREATE INDEX idx_pri_sector_name ON cached_v_m_donor_funding (p_sectorname);
 CREATE INDEX idx_nac_prog_name ON cached_v_m_donor_funding (national_program_name);
+
+DROP TABLE IF EXISTS pentaho_dependence_aid_by_ministry;
+CREATE TABLE pentaho_dependence_aid_by_ministry AS (
+SELECT cvmdf.ro_id AS ministry_id,
+cvmdf.ro_name AS ministry_name,
+(SELECT EXTRACT(YEAR FROM ped.value_date)) AS year_value,
+ped.budget_value,
+(SELECT 
+	SUM ((1/getExchangeWithFixed(cvmdf2.currency_code,cvmdf2.transaction_date,cvmdf2.fixed_exchange_rate))* cvmdf2.transaction_amount *getExchange('USD',cvmdf2.transaction_date)) AS suma 
+	FROM cached_v_m_donor_funding cvmdf2 
+	WHERE cvmdf2.ro_id = ped.amp_org_id 
+	AND (SELECT EXTRACT(YEAR FROM ped.value_date))=(SELECT EXTRACT(YEAR FROM cvmdf2.transaction_date))
+	AND cvmdf2.adjustment_type = getCategoryValueId('Planned') 
+	AND cvmdf2.amp_activity_id IN (SELECT DISTINCT amp_activity_id FROM amp_activities_categoryvalues WHERE amp_categoryvalue_id = getCategoryValueIdbyclass('On Budget','activity_budget'))
+	AND cvmdf2.transaction_type = 1	
+) AS measure_value
+FROM cached_v_m_donor_funding cvmdf 
+INNER JOIN pentaho_external_data ped ON cvmdf.ro_id = ped.amp_org_id
+GROUP BY cvmdf.ro_id, ped.value_date, year_value, ped.budget_value, cvmdf.ro_name, ped.amp_org_id
+)
+
+DROP TABLE IF EXISTS pentaho_off_budget_vs_state_budget
+CREATE TABLE pentaho_off_budget_vs_state_budget AS (
+SELECT cvmdf.ro_id AS ministry_id,
+cvmdf.ro_name AS ministry_name,
+(SELECT EXTRACT(YEAR FROM ped.value_date)) AS year_value,
+ped.budget_value,
+(SELECT 
+	SUM ((1/getExchangeWithFixed(cvmdf2.currency_code,cvmdf2.transaction_date,cvmdf2.fixed_exchange_rate))* cvmdf2.transaction_amount *getExchange('USD',cvmdf2.transaction_date)) AS suma 
+	FROM cached_v_m_donor_funding cvmdf2 
+	WHERE cvmdf2.ro_id = ped.amp_org_id 
+	AND (SELECT EXTRACT(YEAR FROM ped.value_date))=(SELECT EXTRACT(YEAR FROM cvmdf2.transaction_date))
+	AND cvmdf2.adjustment_type = getCategoryValueId('Actual') 
+	AND cvmdf2.amp_activity_id IN (SELECT DISTINCT amp_activity_id FROM amp_activities_categoryvalues WHERE amp_categoryvalue_id = getCategoryValueIdbyclass('Off Budget','activity_budget'))
+	AND cvmdf2.transaction_type = 1
+	AND cvmdf2.org_type_id <> 10
+	AND cvmdf2.terms_assist_id <> 172
+) AS measure_value
+FROM cached_v_m_donor_funding cvmdf 
+INNER JOIN pentaho_external_data ped ON cvmdf.ro_id = ped.amp_org_id
+GROUP BY cvmdf.ro_id, ped.value_date, year_value, ped.budget_value, cvmdf.ro_name, ped.amp_org_id
+)

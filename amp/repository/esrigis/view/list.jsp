@@ -149,7 +149,7 @@ $(document).ready(function(){
                     </c:set>
                       <c:forEach  var="structureType" items="${requestScope.structureTypesList}">
                         <tr bgColor=#f4f4f2>
-                          <td align="center" class="inside"> ${structureType.name} </td>
+                          <td align="center" class="inside"> <c:out value="${structureType.name}" escapeXml="true"/> </td>
                           <!-- <td align="center" class="inside"> ${structureType.graphicType}</td> -->
                           <td align="center" class="inside">
                           	<digi:link href="/structureTypeManager.do?action=edit&id=${structureType.typeId}">

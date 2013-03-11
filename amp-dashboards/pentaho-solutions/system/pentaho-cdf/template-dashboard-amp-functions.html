@@ -198,7 +198,7 @@ var startYearSelect =
     jndi: jndi,
     catalog: catalogPath,
     query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
+      var query = "SELECT NON EMPTY {[Measures].[Activity Count]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
       return query;
     }
   },
@@ -223,7 +223,7 @@ var endYearSelect =
     jndi: jndi,
     catalog: catalogPath,
     query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
+      var query = "SELECT NON EMPTY {[Measures].[Activity Count]} ON COLUMNS, NON EMPTY [Donor Dates].[Year].Members ON ROWS FROM [Donor Funding]";
       return query;
     }
   },
@@ -252,7 +252,7 @@ var regionSelect =
     jndi: jndi,
     catalog: catalogPath,
     query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
+      var query = "SELECT NON EMPTY {[Measures].[Activity Count]} ON COLUMNS, " +
         "NON EMPTY [Regions].[Region].Members ON ROWS " +
         "FROM [Donor Funding]";
       return query;
@@ -282,7 +282,7 @@ var sectorSelect =
     jndi: jndi,
     catalog: catalogPath,
     query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
+      var query = "SELECT NON EMPTY {[Measures].[Activity Count]} ON COLUMNS, " +
         "NON EMPTY [Primary Sector].[Primary Sector].Members ON ROWS " +
         "FROM [Donor Funding]";
       return query;
@@ -312,7 +312,7 @@ var programSelect =
     jndi: jndi,
     catalog: catalogPath,
     query: function(){
-      var query = "SELECT NON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS, " +
+      var query = "SELECT NON EMPTY {[Measures].[Activity Count]} ON COLUMNS, " +
         "NON EMPTY [National Program Level 1].[National Program Level 1].Members ON ROWS " +
         "FROM [Donor Funding]";
       return query;

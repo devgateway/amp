@@ -50,6 +50,8 @@ public class CreateSourceForm extends ActionForm {
 	
 	private Long sourceId;
 	
+	private boolean errorName = false;
+	
 	//holds attached files	
 	private Sdm sdmDocument;
 	
@@ -298,6 +300,14 @@ public class CreateSourceForm extends ActionForm {
 
 	public void setSdmDocument(Sdm sdmDocument) {
 		this.sdmDocument = sdmDocument;
+	}
+
+	public boolean isErrorName() {
+		return errorName;
+	}
+
+	public void setErrorName(boolean errorName) {
+		this.errorName = errorName;
 	}
 	
 }

@@ -46,6 +46,12 @@ public class CreateEditSourceActions extends DispatchAction {
 		CreateSourceForm myform = (CreateSourceForm) form;
 		modeReset(myform);
 		fillForm(myform,request);
+		String[] lang = {"1"};
+		myform.setSelectedLanguages(lang);
+		myform.setImportStrategy(DESourceSetting.IMPORT_STRATEGY_NEW_PROJ);
+		myform.setApprovalStatus(Constants.STARTED_STATUS);
+		myform.setSource(DESourceSetting.SOURCE_FILE);
+		myform.setErrorName(false);
 		return mapping.findForward("forward");
 	}
 	
@@ -69,6 +75,7 @@ public class CreateEditSourceActions extends DispatchAction {
 		myform.setSource(ss.getSource());
 		myform.setUniqueIdentifier(ss.getUniqueIdentifier());
 		myform.setSdmDocument(ss.getAttachedFile());
+		myform.setErrorName(false);
 		return mapping.findForward("forward");
 	}
 	
@@ -87,6 +94,18 @@ public class CreateEditSourceActions extends DispatchAction {
 			srcSetting	= new SourceSettingDAO().getSourceSettingById(myForm.getSourceId());
 		}else{
 			srcSetting	= new DESourceSetting();
+		}
+		DESourceSetting nameTest = new SourceSettingDAO().getSourceSettingByName(myForm.getName());
+		if (nameTest!=null){
+			if(myForm.getSourceId()==-1){
+				myForm.setErrorName(true);
+				return mapping.findForward("forward");
+			}
+			if(myForm.getSourceId()!=-1 && srcSetting.getName().compareToIgnoreCase(nameTest.getName())!=0){
+				myForm.setErrorName(true);
+				return mapping.findForward("forward");
+			}
+			
 		}
 		
 		srcSetting.setName(myForm.getName() );

@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
@@ -24,7 +25,9 @@ import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * flat report: X x Y
@@ -429,13 +432,30 @@ public class ColumnReportData extends ReportData<Column> {
 		}
 	}
 
+	/**
+	 * it is important for the input to be of type SortedSet, as ampActivityIds grow with each modification, so having the input sorted by ampActivityId is equivalent to having them sorted oldest-to-newest
+	 * @param ids
+	 * @return
+	 */
+	public List<Long> sortActivitiesByAge(SortedSet<Long> ids)
+	{
+		boolean newestComeFirst = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_MOST_RECENT_ACTIVITIES_ON_TOP));
+		
+		List<Long> res = new ArrayList<Long>(ids);
+		if (newestComeFirst)
+		{
+			Collections.reverse(res);
+		}
+		return res;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getOwnerIds()
 	 */
-	public Collection<Long> getOwnerIds() {
-		Set<Long> allIds = new TreeSet<Long>();
+	public List<Long> getOwnerIds() {
+		SortedSet<Long> allIds = new TreeSet<Long>();
 		//get the entire set of ids:
 		try {
 			for(Column element:items) {
@@ -444,7 +464,7 @@ public class ColumnReportData extends ReportData<Column> {
 		
 			//if there is no sorter column, just return all ids
 			if(this.getSorterColumn()==null) 
-				return allIds;
+				return sortActivitiesByAge(allIds);
 		
 		
 		// if we have a sorter column, get all its items:
@@ -475,7 +495,7 @@ public class ColumnReportData extends ReportData<Column> {
 		
 				if (theColumn == null) {
 					logger.warn("Tried to sort by an invalid column:" + mySorterColPath);
-					return allIds;
+					return sortActivitiesByAge(allIds);
 				}
 		
 				List<Cell> sorterItems = theColumn.getItems();
@@ -511,7 +531,7 @@ public class ColumnReportData extends ReportData<Column> {
 				return sortedIds;
 		} catch (Exception e) {
 			logger.error(e);
-			return allIds;
+			return sortActivitiesByAge(allIds);
 		}
 		
 	}

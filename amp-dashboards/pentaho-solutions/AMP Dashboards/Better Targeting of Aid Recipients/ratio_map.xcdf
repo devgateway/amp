@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cdf>
-  <title>Template</title>
+  <title>Ratio Map</title>
   <author>Development Gateway</author>
   <description>This contains a description of the dashboards</description>
   <icon></icon>
-  <template>template.html</template>
+  <template>ratio_map.html</template>
   <style>amp-functions</style>
 </cdf>

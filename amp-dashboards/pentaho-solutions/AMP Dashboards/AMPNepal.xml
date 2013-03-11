@@ -284,5 +284,7 @@
 			</MeasureExpression>
 		</Measure>
 		<Measure name="Activity Count" column="amp_activity_id" aggregator="distinct-count" caption="#Activity_Count#"/>
+		<Measure name="Primary Sector Count" column="p_sectorname" aggregator="distinct-count" caption="Primary Sector Count"/>
+		<Measure name="Donor Group Count" column="org_grp_name" aggregator="distinct-count" caption="Donor Group Count"/>
 	</Cube>
 </Schema>

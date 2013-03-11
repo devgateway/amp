@@ -4,6 +4,6 @@
   <author>Development Gateway</author>
   <description>This contains a description of the dashboards</description>
   <icon></icon>
-  <template>template.html</template>
+  <template>oda_in_national_budget.html</template>
   <style>amp-functions</style>
 </cdf>

@@ -1,24 +1,90 @@
+<style type="text/css"> @import "http://serverapi.arcgisonline.com/jsapi/arcgis/2.6/js/dojo/dijit/themes/tundra/tundra.css";
+@import "/arcgis/rest/static/jsapi.css";
+</style>
+<script type="text/javascript"> 
+var djConfig = { parseOnLoad: true };
+</script>
+<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.6"> </script>
+
+    <script type="text/javascript">
+		dojo.require("dijit.layout.ContentPane");
+		dojo.require("esri.map");
+		var map;
+		function init() {
+			basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://gis.devgateway.org/arcgis/rest/services/World_Street_Map/MapServer");
+			countrymap = new esri.layers.ArcGISDynamicMapServiceLayer("http://gis.devgateway.org/arcgis/rest/services/Nepal/Nepal/MapServer", {opacity : 0.50});
+			var layerLoadCount = 0;
+			if (basemap.loaded) {
+				layerLoadCount += 1;
+				if (layerLoadCount === 2) {
+					createMapAddLayers(basemap, countrymap);
+				}
+			} else {
+				dojo.connect(basemap, "onLoad", function(service) {
+					layerLoadCount += 1;
+					if (layerLoadCount === 2) {
+						createMapAddLayers(basemap, countrymap);
+					}
+					});
+			}
+			if (countrymap.loaded) {
+				layerLoadCount += 1;
+				if (layerLoadCount === 2) {
+					createMapAddLayers(basemap, countrymap);
+				}
+				} else {
+					dojo.connect(countrymap, "onLoad", function(service) {
+						layerLoadCount += 1;
+						if (layerLoadCount === 2) {
+						createMapAddLayers(basemap, countrymap);
+						}
+					});
+			}
+		}
+
+	function createMapAddLayers(myService1, myService2) {
+		customLods = [
+			{"level" : 0,"resolution" : 19567.87924099992,"scale" : 7.3957190948944E7},
+			{"level" : 1,"resolution" : 4891.96981024998,"scale" : 18489297.737236},
+			{"level" : 2,"resolution" : 2445.98490512499,"scale" : 9244648.868618},
+			{"level" : 3,"resolution" : 1222.99245256249,"scale" : 4622324.434309},
+			{"level" : 4,"resolution" : 611.49622628138,"scale" : 2311162.217155},
+			{"level" : 5,"resolution" : 305.748113140558,"scale" : 1155581.108577},
+			{"level" : 6,"resolution" : 152.874056570411,"scale" : 577790.554289},
+			{"level" : 7,"resolution" : 76.4370282850732,"scale" : 288895.277144},
+			{"level" : 8,"resolution" : 38.2185141425366,"scale" : 144447.638572},
+			{"level" : 9,"resolution" : 19.1092570712683,"scale" : 72223.819286},
+			{"level" : 10,"resolution" : 9.55462853563415,"scale" : 36111.909643},
+			{"level" : 11,"resolution" : 4.77731426794937,"scale" : 18055.954822} ];
+		map = new esri.Map("first_chart_map",{
+			lods : customLods,
+			extent : esri.geometry.geographicToWebMercator(myService2.fullExtent),
+			"fadeOnZoom": true,
+			"force3DTransforms": true,
+			"navigationMode": "css-transforms"
+			});
+		dojo.connect(map, 'onLoad', function(map) {
+		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+		dojo.byId('first_chart_map_zoom_slider').style.top = '95px';
+		dojo.byId('first_chart_map_zoom_slider').style.width = '80px';
+		});
+		map.addLayer(myService1);
+		map.addLayer(myService2);
+	}
+		dojo.addOnLoad(init);
+    </script>
+
 <!-- The dashboard layout -->
 <div id="dashboard" style="width:100%;">
       <div id="filter_object_container">
       <div id="filter_object" style="width:1300px;height:40px;padding:5px 5px 5px 5px;border-bottom: 1px solid black;margin: 0px auto;">
-        <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_region")</div> <div style="float:left;width:300px;" id="regionSelect_object"></div>
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_sector")</div> <div style="float:left;" id="sectorSelect_object"></div>
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_program")</div> <div style="float:left;" id="programSelect_object"></div>
         <div style="float:left;padding:0px 2px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;"><button id="apply" style="font-size:10pt;font-weight:bold;padding:0px;float:right;">CDF.i18n("msg_reset")</div>
       </div>
     </div>
-    <div id="first_section" style="float:left;margin:10px 10x 10px 10px;width:70%;">
-      <div id="firstChartTypeSelect_object">
-        <span class="#format" id="firstChartTypeSelector">
-            <input type="radio" id="first_bar" name="first_chart_type" CHECKED value="bar"/><label for="first_bar">CDF.i18n("msg_bar1")</label>
-            <!--<input type="radio" id="first_line" name="first_chart_type" value="line"/><label for="first_line">CDF.i18n("msg_line1")</label>-->
-            <input type="radio" id="first_data" name="first_chart_type" value="data"/><label for="first_data">CDF.i18n("msg_data1")</label>
-        </span>
-      </div>
-      <div id="first_chart_line"></div>
-      <div id="first_chart_bar"></div>
-      <div id="first_chart_data" style="width:800px;overflow:auto"></div>
+    <div id="first_section" style="border:2px solid #ebebeb;">
+      <div id="first_chart_map" class="tundra" style="height:600px" dojotype="dijit.layout.ContentPane" region="center"></div>
     </div>
     <div id="dateRangeSelector" style="clear:both;">
       <div id="startYearSelect_object" style="padding:10px 10px 10px 10px">
@@ -30,7 +96,6 @@
 <script language="javascript" type="text/javascript">
 
 //Filter criteria
-var regionParameter = "";
 var sectorParameter = "";
 var programParameter = "";
 var aidTypeParameter = "";
@@ -47,15 +112,6 @@ var dateRangeInitialized = false;
 
 var processParameters = function(){
 	console.log("Processing parameters.");
-    var regionValues = $("#regionSelect_object > select").val();
-    regionValues = regionValues != null ? regionValues : [];
-    //Reset global parameter
-    regionParameter = "";
-    $.each(regionValues,
-      function(idx, value){ 
-        regionParameter = (regionParameter == "" ? "": regionParameter + ",") + "[Region].[" + value +"]";
-      });
-
     var sectorValues = $("#sectorSelect_object > select").val();
     sectorValues = sectorValues != null ? sectorValues : [];
     //Reset global parameter
@@ -74,12 +130,8 @@ var processParameters = function(){
         programParameter = (programParameter == "" ? "": programParameter + ",") + "[National Program Level 1].[" + value +"]";
       });
 
-    //Reset global parameter
-
-	console.log("regionParameter:" + regionParameter);
-	if (regionParameter != "" || sectorParameter != "" || programParameter != "")
+	if (sectorParameter != "" || programParameter != "")
 	{
-		if(regionParameter == "") regionParameter = "[Regions].Members";
 		if(sectorParameter == "") sectorParameter = "[Primary Sector].Members";
 		if(programParameter == "") programParameter = "[National Program Level 1].Members";
 	}
@@ -101,11 +153,11 @@ $(window).ready(function() {
 
 
 var getParameters = function() {
-  return aidTypeParameter + regionParameter + sectorParameter + programParameter;
+  return sectorParameter + programParameter;
 }
 
-var listeners_first = ["startYear","endYear","regionParameter","sectorParameter", "programParameter"];
-var parameters_first = [["startYear","startYear"], ["endYear","endYear"], ["regionParameter","regionParameter"], ["sectorParameter","sectorParameter"], ["programParameter","programParameter"],["currency","currency"], ["type_of_funding","type_of_funding"], ["type_of_funding_translation","type_of_funding_translation"]];
+var listeners_first = ["startYear","endYear","sectorParameter", "programParameter"];
+var parameters_first = [["startYear","startYear"], ["endYear","endYear"], ["sectorParameter","sectorParameter"], ["programParameter","programParameter"],["currency","currency"], ["type_of_funding","type_of_funding"], ["type_of_funding_translation","type_of_funding_translation"]];
 
 </script>
 
@@ -133,14 +185,6 @@ first_bar_chart.parameters = parameters_first;
 first_bar_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ formatCurrencyValue(currency, value)};
 first_bar_chart.preExecution = processParameters;
 
-var first_line_chart = jQuery.extend(true, {}, seminal_chart);
-first_line_chart.type = "cccLineChart";
-first_line_chart.htmlObject = "first_chart_line";
-first_line_chart.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
-first_line_chart.title = function() { return Dashboards.i18nSupport.prop("msg_oda_by_type_of_funding")};
-first_line_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ formatCurrencyValue(currency, value)};
-first_line_chart.preExecution = processParameters;
-
 var first_data_table = jQuery.extend(true, {}, seminal_data_table);
 first_data_table.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
 first_data_table.chartDefinition.path = "/AMP Dashboards Phase 2/Align Aid with National Priorities/Dashboard_CCC.cda";
@@ -157,9 +201,7 @@ first_data_table.parameters = parameters_first;
 
 <script language="javascript">
     var cType = "bar";
-		$("#firstChartTypeSelector").buttonset();
-    $("#first_chart_line").hide();
-    $("#first_chart_data").hide();
+    $("#first_chart_bar").hide();
 	$("#firstChartTypeSelector").click(function (){
 	var oldCType = cType;
 	cType = $("#firstChartTypeSelector :radio:checked").val();
@@ -169,17 +211,13 @@ first_data_table.parameters = parameters_first;
   var resizeLayout = function() {
 		$("#dashboard").height($(window).height()-30);
 		$("#dashboard").width($(document.body).width()-5);
-		$("#first_section").width($("#dashboard").width()*0.7);
-
-    
-		first_line_chart.chartDefinition.width = $("#first_section").width()-20;
-		first_bar_chart.chartDefinition.width = $("#first_section").width()-20;
-		first_data_table.chartDefinition.width = $("#first_section").width()-20;
+		$("#first_section").width($("#dashboard").width()-5);
+		$("#first_map_chart").width($("#dashboard").width()-5);
     }
 	var initialized = false;
 $(window).resize(resizeLayout);
 $(window).ready(function() {
-  var components = [regionSelect, sectorSelect, programSelect, startYearSelect, endYearSelect, first_bar_chart, first_data_table];
+  var components = [sectorSelect, programSelect, startYearSelect, endYearSelect];
   Dashboards.init(components);
   resizeLayout();
   initialized = true;
@@ -188,7 +226,6 @@ $(window).ready(function() {
 });	
 
 $("#apply").click(function () {
-  regionParameter = "";
   sectorParameter = "";
   programParameter = "";
   aidTypeParameter = "";
@@ -231,4 +268,3 @@ var applyDateRange = function() {
     .ui-state-active { font-weight:bold;}
     .ui-widget { font-size:8pt;}
     </style>
-

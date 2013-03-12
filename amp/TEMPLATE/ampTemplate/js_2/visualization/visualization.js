@@ -2198,8 +2198,9 @@ function updateGraph(e, chartName){
 		// Get flash object and refresh it by calling internal
 		if(allGraphs[idx].children[0].id.toLowerCase() == chartName.toLowerCase()){
 			var trnTitle = document.getElementById(chartName+"TitleLegendTrn").value + " - " + fundType + " (" + anmtIn + ")";
-			document.getElementById(chartName + "Title").value = trnTitle;
-			document.getElementById(chartName + "TitleLegend").innerHTML = document.getElementById(chartName + "Title").value; 
+			//document.getElementById(chartName + "Title").value = trnTitle;
+			//document.getElementById(chartName + "TitleLegend").innerHTML = document.getElementById(chartName + "Title").value; 
+			document.getElementById(chartName + "TitleLegend").innerHTML = trnTitle;
 			allGraphs[idx].children[0].refreshGraph();
 			break;
 		}

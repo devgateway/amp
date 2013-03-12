@@ -120,7 +120,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
                                         "capitalSpendingPercentage",
-                                        new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage",true);
+                                        new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage", false, true);
                 capitalSpendingPercentage.getTextContainer().add(new RangeValidator<Float>(0f, 100f));
                 capitalSpendingPercentage.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
                 item.add(capitalSpendingPercentage);
@@ -129,7 +129,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						new PropertyModel<String>(item.getModel(),
 								"disbOrderId")
 								,disbOrderIdModel,
-						"Disbursement Order Id", true, true);
+						"Disbursement Order Id", false, true, null, true);
                 disbOrdIdSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
 				item.add(disbOrdIdSelector);
 				
@@ -142,8 +142,8 @@ public class AmpDonorDisbursementsFormTableFeature extends
 				AmpSelectFieldPanel<IPAContract> contractSelector = new AmpSelectFieldPanel<IPAContract>("contract",
 						new PropertyModel<IPAContract>(item.getModel(),
 								"contract"),
-						contractList,
-						"Contract", true, true);
+						new Model<ArrayList<IPAContract>>(contractList),
+						"Contract", false, true, null, true);
 				
 				contractSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
 				item.add(contractSelector);
@@ -159,12 +159,12 @@ public class AmpDonorDisbursementsFormTableFeature extends
 				AmpSelectFieldPanel<FundingPledges> pledgeSelector = new AmpSelectFieldPanel<FundingPledges>("pledge",
 						new PropertyModel<FundingPledges>(item.getModel(),
 								"pledgeid"), pledgesModel,
-						"Pledges", true, true, new ChoiceRenderer<FundingPledges>() {
+						"Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
 							@Override
 							public Object getDisplayValue(FundingPledges arg0) {
 								return arg0.getTitle();
 							}
-						});
+						}, true);
 				pledgeSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
 				item.add(pledgeSelector);
 				item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"){

@@ -50,8 +50,8 @@ public class AmpSelectFieldPanel<T> extends AmpFieldPanel<T> {
 	public AmpSelectFieldPanel(String id, IModel<T> model,
 			IModel<? extends List<? extends T>> choicesList, String fmName,
 			boolean hideLabel, boolean nullValid,
-			IChoiceRenderer<? super T> renderer) {
-		super(id, fmName, hideLabel);
+			IChoiceRenderer<? super T> renderer, boolean hideNewLine) {
+		super(id, fmName, hideLabel, hideNewLine);
 		choiceContainer = new DropDownChoice<T>("choice", model, choicesList,
 				renderer){
 			protected boolean isDisabled(T object, int index, String selected) {
@@ -71,6 +71,13 @@ public class AmpSelectFieldPanel<T> extends AmpFieldPanel<T> {
 		choiceContainer.setOutputMarkupId(true);
 		addFormComponent(choiceContainer);
 	}
+
+    public AmpSelectFieldPanel(String id, IModel<T> model,
+                               IModel<? extends List<? extends T>> choicesList, String fmName,
+                               boolean hideLabel, boolean nullValid,
+                               IChoiceRenderer<? super T> renderer){
+        this(id, model, choicesList, fmName, hideLabel, nullValid, renderer, false);
+    }
 	
 	public AmpSelectFieldPanel(String id, IModel<T> model,
 			IModel<? extends List<? extends T>> choicesList, String fmName,

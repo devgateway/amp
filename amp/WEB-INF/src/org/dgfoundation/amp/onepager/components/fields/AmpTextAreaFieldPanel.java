@@ -74,7 +74,7 @@ public class AmpTextAreaFieldPanel<T> extends AmpFieldPanel<T> {
 	}
 	
 	public AmpTextAreaFieldPanel(String id,IModel<T> model, String fmName,boolean wysiwyg) {
-		this(id, model, fmName, wysiwyg, false, true);
+		this(id, model, fmName, wysiwyg, false, false);
 	}
 	
 

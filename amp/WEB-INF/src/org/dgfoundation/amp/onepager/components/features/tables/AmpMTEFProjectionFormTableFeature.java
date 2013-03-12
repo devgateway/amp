@@ -18,6 +18,7 @@ import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -45,26 +46,21 @@ public class AmpMTEFProjectionFormTableFeature extends
 				model, "mtefProjections");
 		if (setModel.getObject() == null)
 			setModel.setObject(new TreeSet<AmpFundingMTEFProjection>());
-
 		setTitleHeaderColSpan(5);
-		AbstractReadOnlyModel<List<AmpFundingMTEFProjection>> listModel = OnePagerUtil
-				.getReadOnlyListModelFromSetModel(setModel, new AmpFundingMTEFProjection.FundingMTEFProjectionComparator());
-
 		list = new ListEditor<AmpFundingMTEFProjection>("listMTEF",
 				setModel, new AmpFundingMTEFProjection.FundingMTEFProjectionComparator()) {
-
 			@Override
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFundingMTEFProjection> item) {
 			
-				AmpCategoryGroupFieldPanel projected;
+				AmpCategorySelectFieldPanel projected;
 				try {
-					projected = new AmpCategoryGroupFieldPanel("projected",
+					projected = new AmpCategorySelectFieldPanel("projected",
 							CategoryConstants.MTEF_PROJECTION_KEY,
 							new PropertyModel<AmpCategoryValue>(
 									item.getModel(), "projected"),
 							CategoryConstants.MTEF_PROJECTION_NAME, true,
-							false, true);
+							false, false, null, true);
 					projected.getChoiceContainer().setRequired(true);
 					item.add(projected);
 				} catch (Exception e) {

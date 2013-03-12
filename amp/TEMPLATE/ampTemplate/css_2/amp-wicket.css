@@ -396,6 +396,9 @@ div.tabpanel div.tab-row a:hover {
 .wicketFloatRight{float: right;}
 .wicketPaddingRight10{padding-right: 10px;}
 .wicketPadding2{padding: 2px;}
+.wicketPadding5{padding: 5px;}
+.wicketMargin5{margin: 5px}
+.wicketMarginLeft5{margin-left: 5px}
 
 .quarterPanel{
     border: 1px #003366 solid;

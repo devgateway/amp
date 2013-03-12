@@ -46,15 +46,24 @@ public class AmpFundingAmountComponent<T> extends Panel {
 	private Component date;
  
 	private Collection<AmpCollectionValidatorField> validationFields = new ArrayList<AmpCollectionValidatorField>();
-	/**
-	 * @param id
-	 */
-	public AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,
+
+    public AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,
+                                     String propertyAmount, String fmCurrency, String propertyCurrency,
+                                     String fmDate, String propertyDate, boolean isMTEFProjection) {
+        this(id, model, fmAmount, propertyAmount, fmCurrency, propertyCurrency, fmDate, propertyDate,
+                isMTEFProjection, false);
+    }
+
+    protected AmpFundingAmountComponent(String id, IModel<T> model, String fmAmount,
 			String propertyAmount, String fmCurrency, String propertyCurrency,
-			String fmDate, String propertyDate, boolean isMTEFProjection) {
+			String fmDate, String propertyDate, boolean isMTEFProjection, boolean fundingComponentTableMode) {
 		super(id, model);
+
+        boolean hideLabel = fundingComponentTableMode;
+        boolean hideNewLine = true;
+
 		amount = new AmpTextFieldPanel<Double>("amount",
-				new PropertyModel<Double>(model, propertyAmount), fmAmount,true,true) {
+				new PropertyModel<Double>(model, propertyAmount), fmAmount, hideLabel, hideNewLine) {
 			
 			@Override
 			protected void onAjaxOnUpdate(final AjaxRequestTarget target) {
@@ -99,13 +108,13 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		currency = new AmpSelectFieldPanel<AmpCurrency>("currency",
 				new PropertyModel<AmpCurrency>(model, propertyCurrency),
 				currencyList,
-				fmCurrency, true, false);
+				fmCurrency, hideLabel, false, null, hideNewLine);
 		currency.getChoiceContainer().setRequired(true);
 		currency.getChoiceContainer().add(new AttributeModifier("class", "dropdwn_currency"));
 		add(currency);
 		if (!isMTEFProjection){
 			AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(
-					model, propertyDate), fmDate,true);
+					model, propertyDate), fmDate, null, hideLabel, hideNewLine);
 			datetmp.getDate().setRequired(true);
 			datetmp.getDate().add(new AttributeModifier("class", "inputx_date"));
 			date = datetmp;
@@ -125,7 +134,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 				}
 			};
 			MTEFYearsModel yearModel = new MTEFYearsModel(new PropertyModel<Date>(model, propertyDate));
-			AmpTextFieldPanel<String> datetmp = new AmpTextFieldPanel<String>("date", yearModel, fmDate, true, true);
+			AmpTextFieldPanel<String> datetmp = new AmpTextFieldPanel<String>("date", yearModel, fmDate, hideLabel, hideNewLine);
 			datetmp.getTextContainer().setEnabled(false);
 			datetmp.getTextContainer().add(new AttributeModifier("size", new Model<String>("10")));
 			date = datetmp;

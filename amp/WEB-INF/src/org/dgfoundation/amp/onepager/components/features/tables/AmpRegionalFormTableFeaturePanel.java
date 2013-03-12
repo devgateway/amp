@@ -16,8 +16,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.AmpTableFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoModel;
@@ -53,11 +55,10 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
 				transactionType,cvLocationModel);
 	}
 
-	protected AmpCategoryGroupFieldPanel getAdjustmentTypeComponent(
-			IModel<AmpRegionalFunding> model) {
+	protected AmpCategorySelectFieldPanel getAdjustmentTypeComponent(
+            IModel<AmpRegionalFunding> model) {
 		try{
-		
-			AmpCategoryGroupFieldPanel adjustmentTypes = new AmpCategoryGroupFieldPanel(
+            AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
 				"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
 						new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
 						CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
@@ -74,7 +75,7 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
 
 	protected AmpFundingAmountComponent getFundingAmountComponent(
 			IModel<AmpRegionalFunding> model) {
-		return new AmpFundingAmountComponent<AmpRegionalFunding>("fundingAmount",
+		return new AmpTableFundingAmountComponent<AmpRegionalFunding>("fundingAmount",
 				model, "Amount", "transactionAmount", "Currency",
 				"currency", "Transaction Date", "transactionDate", false);
 	}

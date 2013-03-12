@@ -94,8 +94,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 				};
 
 				AmpTextFieldPanel<Double> exchangeRate = new AmpTextFieldPanel<Double>("exchangeRate",
-						new PropertyModel<Double>(item.getModel(), "fixedExchangeRate"), "Exchange Rate",true,true);
-
+						new PropertyModel<Double>(item.getModel(), "fixedExchangeRate"), "Exchange Rate", false, true);
 				exchangeRate.getTextContainer().add(new RangeValidator<Double>(0.001d, null));
 				exchangeRate.getTextContainer().add(new AttributeModifier("size", new Model<String>("6")));
 				item.add(exchangeRate);
@@ -103,12 +102,12 @@ public class AmpDonorCommitmentsFormTableFeature extends
 				item.add(new AmpSelectFieldPanel<FundingPledges>("pledge",
 						new PropertyModel<FundingPledges>(item.getModel(),
 								"pledgeid"), pledgesModel,
-								"Pledges", true, true, new ChoiceRenderer<FundingPledges>() {
+								"Pledges", false, true, new ChoiceRenderer<FundingPledges>() {
 					@Override
 					public Object getDisplayValue(FundingPledges arg0) {
 						return arg0.getTitle();
 					}
-				}));
+				}, true));
 				item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);

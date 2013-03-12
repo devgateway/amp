@@ -19,6 +19,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpTransactionTypeDonorFundingDetailModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -60,7 +61,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 	}
 
 
-	protected AmpCategoryGroupFieldPanel getAdjustmentTypeComponent(
+	protected AmpCategorySelectFieldPanel getAdjustmentTypeComponent(
 			IModel<AmpFundingDetail> model, int transactionType) {
 		
 		String transactionTypeString = "";
@@ -91,8 +92,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 		List<AmpCategoryValue> values = categClass.getPossibleValues();
 		Iterator<AmpCategoryValue> it = values.iterator();
 		while (it.hasNext()) {
-			AmpCategoryValue val = (AmpCategoryValue) it
-					.next();
+			AmpCategoryValue val = it.next();
 			if (val.getValue().compareTo(transactionTypeString) == 0){
 				if (val.getUsedByValues() != null && val.getUsedByValues().size() > 0){
 					HashSet<AmpCategoryValue> tmp = new HashSet<AmpCategoryValue>();
@@ -104,11 +104,11 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 		}
 		
 		try{
-			AmpCategoryGroupFieldPanel adjustmentTypes = new AmpCategoryGroupFieldPanel(
+			AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
 				"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
 						new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
 						CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
-						 false, false, true, dependantModel);
+						 false, false, false, dependantModel, true);
 			adjustmentTypes.getChoiceContainer().setRequired(true);
 			return adjustmentTypes;
 		}catch(Exception e)

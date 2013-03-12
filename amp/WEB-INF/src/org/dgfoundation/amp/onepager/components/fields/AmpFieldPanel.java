@@ -200,6 +200,9 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 	public AmpFieldPanel(String id, IModel<T> model, final String fmName,boolean hideLabel, boolean hideNewLine, final boolean showReqStarForNotReqComp, boolean enableReqStar){
 		super(id, model,fmName, AmpFMTypes.MODULE);
 		this.fmType = AmpFMTypes.MODULE;
+
+        if (hideLabel) //doesn't make sense (yet) to show the new line when the label is hidden
+            hideNewLine = true;
 		
 		setOutputMarkupId(true);
 		this.fmName = fmName;
@@ -212,14 +215,14 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 				super.onBeforeRender();
 				if (((formComponent!=null && formComponent.isRequired())||showReqStarForNotReqComp)){
 					this.setDefaultModelObject("<font color=\"red\">*</font>");
-					this.add(new AttributeModifier("style", new Model<String>("padding-left: -5px; float: left;")));
+					this.add(new AttributeModifier("style", new Model<String>("padding-left: -5px;")));
 					this.setEscapeModelStrings(false);
 				} 
 				else
 					this.add(new AttributeModifier("style", new Model<String>("display: none;")));
 			}
 		};
-		requiredStar.setVisible(!hideNewLine||enableReqStar);
+		//requiredStar.setVisible(!hideNewLine||enableReqStar);
 		add(requiredStar);
 		titleLabel = new TrnLabel("fieldLabel", fmName){
 			private Behavior titleBehavior = new AttributeModifier("title", "Original field name: " + fmName);

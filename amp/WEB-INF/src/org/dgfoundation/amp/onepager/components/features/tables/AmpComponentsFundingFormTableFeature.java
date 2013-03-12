@@ -22,10 +22,8 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpCollectionsSumComparatorValidatorField;
-import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
+import org.dgfoundation.amp.onepager.components.AmpTableFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoModel;
 import org.dgfoundation.amp.onepager.models.AmpMetaInfoRenderer;
 import org.dgfoundation.amp.onepager.models.AmpTransactionTypeDonorFundingDetailModel;
@@ -170,20 +168,19 @@ public class AmpComponentsFundingFormTableFeature extends
 			protected void populateItem(final ListItem<AmpComponentFunding> item) {
 				IModel<AmpComponentFunding> model = item.getModel();
 					try{
-						AmpCategoryGroupFieldPanel adjustmentTypes = new AmpCategoryGroupFieldPanel(
+                        AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
 							"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
 									new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
 									CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
 									 false, false, true);
-					adjustmentTypes.getChoiceContainer().setRequired(true);
-					
-					item.add(adjustmentTypes);
-					}catch(Exception e)
-					{
+                        adjustmentTypes.getChoiceContainer().setRequired(true);
+
+                        item.add(adjustmentTypes);
+					}catch(Exception e)	{
 						logger.error("AmpCategoryGroupFieldPanel initialization failed");
 					}
 					
-					AmpFundingAmountComponent amountComponent = new AmpFundingAmountComponent<AmpComponentFunding>("fundingAmount",
+					AmpFundingAmountComponent amountComponent = new AmpTableFundingAmountComponent<AmpComponentFunding>("fundingAmount",
 							model, "Amount", "transactionAmount", "Currency",
 							"currency", "Transaction Date", "transactionDate", false);
 					

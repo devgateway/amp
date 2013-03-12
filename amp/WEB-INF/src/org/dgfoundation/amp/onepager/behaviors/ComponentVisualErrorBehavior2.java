@@ -38,7 +38,7 @@ public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegi
 	@Override
 	public void beforeRender(Component component) {
 		Response r = component.getResponse();
-		r.write("<div id=\"");
+		r.write("<span id=\"");
 		r.write(getAjaxRegionMarkupId(component));
 		r.write("\">");
 	}
@@ -59,7 +59,7 @@ public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegi
 				message.markRendered();
 			}
 		}
-		r.write("</div>");
+		r.write("</span>");
 	}
 
 	@Override

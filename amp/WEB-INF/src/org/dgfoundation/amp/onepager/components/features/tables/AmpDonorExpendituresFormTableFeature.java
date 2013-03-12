@@ -81,15 +81,13 @@ public class AmpDonorExpendituresFormTableFeature extends
 
 				item.add(getAdjustmentTypeComponent(item.getModel(), transactionType));
 				final AmpFundingAmountComponent amountComponent = getFundingAmountComponent(item.getModel());
-
-				
-				 amountComponent.setAmountValidator(amountSumComparator); 	
+                amountComponent.setAmountValidator(amountSumComparator);
 				item.add(amountComponent);
 				
 				AmpTextFieldPanel<String> classification = new AmpTextFieldPanel<String>(
 						"classification", new PropertyModel<String>(
 								item.getModel(), "expCategory"),
-						"Expenditure Classification",true);
+						"Expenditure Classification", false, true);
 				classification.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 				classification.setTextContainerDefaultMaxSize();
 				item.add(classification);

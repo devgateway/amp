@@ -9,6 +9,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.util.WildcardListModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
@@ -47,7 +48,7 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 				AmpTextFieldPanel<String> disbOrderId = new AmpTextFieldPanel<String>(
 						"disbOrderId", new PropertyModel<String>(
 								item.getModel(), "disbOrderId"),
-						"Disbursement Order ID",true);
+						"Disbursement Order ID",false, true);
 				disbOrderId.setEnabled(false);
 				disbOrderId.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
 				item.add(disbOrderId);
@@ -62,12 +63,12 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 				item.add(new AmpSelectFieldPanel<IPAContract>("contract",
 						new PropertyModel<IPAContract>(item.getModel(),
 								"contract"),
-						contractList,
-						"Contract", true, true));
+                        new WildcardListModel<IPAContract>(contractList),
+						"Contract", false, true, null, true));
 
 				AmpCheckBoxFieldPanel rejected = new AmpCheckBoxFieldPanel(
 						"rejected", new PropertyModel<Boolean>(item.getModel(),
-								"disbursementOrderRejected"), "Rejected", true);
+								"disbursementOrderRejected"), "Rejected", false);
 				item.add(rejected);
 
 				item.add(new ListEditorRemoveButton("delDisbOrder", "Delete Disbursement Order"){

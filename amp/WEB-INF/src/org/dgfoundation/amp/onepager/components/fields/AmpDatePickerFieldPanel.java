@@ -39,8 +39,8 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 	 */
 	public AmpDatePickerFieldPanel(String id, 
 			IModel<Date> model, String fmName,final AmpDatePickerFieldPanel otherDatePicker,
-			boolean hideLabel) {
-		super(id, fmName, hideLabel);
+			boolean hideLabel, boolean hideNewLine) {
+		super(id, fmName, hideLabel, hideNewLine);
 		this.fmType = AmpFMTypes.MODULE;
 		
 		setOutputMarkupId(true);
@@ -88,6 +88,11 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 
 	}
 
+    public AmpDatePickerFieldPanel(String id,
+                                   IModel<Date> model, String fmName,final AmpDatePickerFieldPanel otherDatePicker,
+                                   boolean hideLabel) {
+        this(id, model, fmName, otherDatePicker, hideLabel, false);
+    }
 
 	/**
 	 * Constructs a new datepicker field panel

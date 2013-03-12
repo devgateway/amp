@@ -82,8 +82,8 @@ public abstract class AmpCategoryFieldPanel extends
 	 */
 	public AmpCategoryFieldPanel(String id, final String categoryKey, String fmName,
 			boolean ordered, Boolean isMultiselect,
-			final IModel<Set<AmpCategoryValue>> relatedChoicesModel,boolean hideLabel) throws Exception {
-		super(id, fmName,hideLabel);
+			final IModel<Set<AmpCategoryValue>> relatedChoicesModel,boolean hideLabel, boolean hideNewLine) throws Exception {
+		super(id, fmName,hideLabel, hideNewLine);
 		selectedMultiselect = isMultiselect;
 		this.categoryKey = categoryKey;
 		this.relatedChoicesModel = relatedChoicesModel;
@@ -121,6 +121,12 @@ public abstract class AmpCategoryFieldPanel extends
 		};
 		
 	}
+
+    public AmpCategoryFieldPanel(String id, final String categoryKey, String fmName,
+                                 boolean ordered, Boolean isMultiselect,
+                                 final IModel<Set<AmpCategoryValue>> relatedChoicesModel,boolean hideLabel) throws Exception {
+        this(id,categoryKey,fmName,ordered,isMultiselect,relatedChoicesModel, hideLabel, true);
+    }
 	
 	public AmpCategoryFieldPanel(String id, String categoryKey, String fmName,
 			boolean ordered, Boolean isMultiselect,

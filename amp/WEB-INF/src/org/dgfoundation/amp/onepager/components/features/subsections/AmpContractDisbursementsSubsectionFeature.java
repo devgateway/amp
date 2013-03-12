@@ -15,8 +15,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.AmpTableFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
@@ -49,9 +51,10 @@ public class AmpContractDisbursementsSubsectionFeature extends
 			protected void populateItem(final ListItem<IPAContractDisbursement> item) {
 				IModel<IPAContractDisbursement> model = item.getModel();
 				
-				AmpCategoryGroupFieldPanel adjTypes = null;
+				AmpCategorySelectFieldPanel adjTypes = null;
 				try {
-					adjTypes = new AmpCategoryGroupFieldPanel(
+
+					adjTypes = new AmpCategorySelectFieldPanel(
 							"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
 							new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
 							CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
@@ -63,7 +66,7 @@ public class AmpContractDisbursementsSubsectionFeature extends
 				adjTypes.getChoiceContainer().setRequired(true);
 				item.add(adjTypes);
 				
-				AmpFundingAmountComponent<IPAContractDisbursement> funding = new AmpFundingAmountComponent<IPAContractDisbursement>("fundingAmount",
+				AmpFundingAmountComponent<IPAContractDisbursement> funding = new AmpTableFundingAmountComponent<IPAContractDisbursement>("fundingAmount",
 						model, "Amount", "amount", "Currency",
 						"currency", "Transaction Date", "date", false);
 				item.add(funding);

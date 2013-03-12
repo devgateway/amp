@@ -74,14 +74,21 @@ public class AmpCategorySelectFieldPanel extends AmpCategoryFieldPanel{
 	 */
 	public AmpCategorySelectFieldPanel(String id, String categoryKey,
 			IModel<AmpCategoryValue> model, String fmName,
-			boolean ordered, Boolean nullValid, boolean hideLabel) throws Exception {
-		super(id,categoryKey,fmName,ordered,false,null,hideLabel);
+			boolean ordered, Boolean nullValid, boolean hideLabel,
+            IModel<Set<AmpCategoryValue>> relatedChoicesModel, boolean hideNewLine) throws Exception {
+		super(id,categoryKey,fmName,ordered,false,relatedChoicesModel,hideLabel, hideNewLine);
 		choiceContainer = new DropDownChoice<AmpCategoryValue>(
 				"choice",model, choices, new TranslatedChoiceRenderer<AmpCategoryValue>())
 				.setNullValid(nullValid);
 		choiceContainer.setOutputMarkupId(true);
 		addFormComponent(choiceContainer);
 	}
+
+    public AmpCategorySelectFieldPanel(String id, String categoryKey,
+                                       IModel<AmpCategoryValue> model, String fmName,
+                                       boolean ordered, Boolean nullValid, boolean hideLabel) throws Exception {
+        this(id, categoryKey, model, fmName, ordered, nullValid, hideLabel, null, false);
+    }
 	
 	public AmpCategorySelectFieldPanel(String id, String categoryKey,
 			IModel<AmpCategoryValue> model, String fmName,
@@ -102,7 +109,7 @@ public class AmpCategorySelectFieldPanel extends AmpCategoryFieldPanel{
 	public AmpCategorySelectFieldPanel(String id, String categoryKey,
 			IModel<Set<AmpCategoryValue>> model, String fmName,
 			boolean ordered, Boolean nullValid, Boolean isMultiselect,IModel<Set<AmpCategoryValue>> relatedChoicesModel) throws Exception {
-		super(id,categoryKey,fmName,ordered,isMultiselect,relatedChoicesModel);
+		super(id,categoryKey,fmName,ordered,isMultiselect,relatedChoicesModel, false, false);
 			this.choiceModel=model;
 			if (selectedMultiselect)
 				choiceContainer = new ListMultipleChoice<AmpCategoryValue>(

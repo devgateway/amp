@@ -1,35 +1,16 @@
 <wicket:extend>
-	<tr wicket:id="tableHeading">
-		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="right"><b class="ins_title">
-			<wicket:trn key="trn:adjType">Adjustment Type</wicket:trn></b></td>
-		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:amount">Amount</wicket:trn></b></td>	
-		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:currency">Currency</wicket:trn></b></td>	
-		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:transactionDate">Transaction Date</wicket:trn></b></td>
-		<wicket:fm fmNames="Disbursement Order ID">
-			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:disbOrderId">Disbursement Order ID</wicket:trn></b></td>	
-		</wicket:fm>	
-		<wicket:fm fmNames="Contract">
-			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:contract">Contract</wicket:trn></b></td>
-		</wicket:fm>	
-		<wicket:fm fmNames="Rejected">
-			<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn key="trn:rejected">Rejected</wicket:trn></b></td>
-		</wicket:fm>	
-		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>	
+	<tr wicket:id="tableHeading" class="invisible-item">
 	</tr>
 	<tr wicket:id="listDisbOrders">
-		<td  class="inside"><div wicket:id="adjustmentType"/></td>
-		<span class="invisible-item" wicket:id="fundingAmount"/>
-		<wicket:fm fmNames="Disbursement Order ID">	
-			<td class="inside"><span wicket:id="disbOrderId"/></td>
-		</wicket:fm>
-		<wicket:fm fmNames="Contract">
-			<td class="inside"><span wicket:id="contract"/></td>
-		</wicket:fm>
-		<wicket:fm fmNames="Rejected">
-			<td class="inside"><span wicket:id="rejected"/></td>
-		</wicket:fm>
-		<td  class="inside">
-		<span wicket:id="delDisbOrder"/>
-		</td>
+		<td colspan="7" class="inside">
+            <div class="wicketMargin5">
+                <span class="wicketMargin5" wicket:id="adjustmentType"/> <br/>
+                <span class="wicketMargin5" wicket:id="fundingAmount"/>
+                <span class="wicketMargin5" wicket:id="disbOrderId"/>
+                <span class="wicketMargin5" wicket:id="contract"/>
+                <span class="wicketMargin5" wicket:id="rejected"/>
+            </div>
+        </td>
+        <td><span wicket:id="delDisbOrder"/></td>
 	</tr>
 </wicket:extend>

@@ -707,9 +707,9 @@ ped.budget_value,
 FROM cached_v_m_donor_funding cvmdf 
 INNER JOIN pentaho_external_data ped ON cvmdf.ro_id = ped.amp_org_id
 GROUP BY cvmdf.ro_id, ped.value_date, year_value, ped.budget_value, cvmdf.ro_name, ped.amp_org_id
-)
+);
 
-DROP TABLE IF EXISTS pentaho_off_budget_vs_state_budget
+DROP TABLE IF EXISTS pentaho_off_budget_vs_state_budget;
 CREATE TABLE pentaho_off_budget_vs_state_budget AS (
 SELECT cvmdf.ro_id AS ministry_id,
 cvmdf.ro_name AS ministry_name,
@@ -729,4 +729,4 @@ ped.budget_value,
 FROM cached_v_m_donor_funding cvmdf 
 INNER JOIN pentaho_external_data ped ON cvmdf.ro_id = ped.amp_org_id
 GROUP BY cvmdf.ro_id, ped.value_date, year_value, ped.budget_value, cvmdf.ro_name, ped.amp_org_id
-)
+);

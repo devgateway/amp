@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cdf>
-  <title>Template</title>
+  <title>Sectors with less than 5 donors</title>
   <author>Development Gateway</author>
   <description>This contains a description of the dashboards</description>
   <icon></icon>
-  <template>template.html</template>
+  <template>sector_less.html</template>
   <style>amp-functions</style>
 </cdf>

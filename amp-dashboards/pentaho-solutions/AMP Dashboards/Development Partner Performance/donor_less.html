@@ -3,7 +3,6 @@
       <div id="filter_object_container">
       <div id="filter_object" style="width:1300px;height:40px;padding:5px 5px 5px 5px;border-bottom: 1px solid black;margin: 0px auto;">
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_region")</div> <div style="float:left;width:300px;" id="regionSelect_object"></div>
-        <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_sector")</div> <div style="float:left;" id="sectorSelect_object"></div>
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_program")</div> <div style="float:left;" id="programSelect_object"></div>
         <div style="float:left;padding:0px 2px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;"><button id="apply" style="font-size:10pt;font-weight:bold;padding:0px;float:right;">CDF.i18n("msg_reset")</div>
       </div>
@@ -12,13 +11,25 @@
       <div id="firstChartTypeSelect_object">
         <span class="#format" id="firstChartTypeSelector">
             <input type="radio" id="first_bar" name="first_chart_type" CHECKED value="bar"/><label for="first_bar">CDF.i18n("msg_bar1")</label>
-            <!--<input type="radio" id="first_line" name="first_chart_type" value="line"/><label for="first_line">CDF.i18n("msg_line1")</label>-->
+            <input type="radio" id="first_line" name="first_chart_type" value="line"/><label for="first_line">CDF.i18n("msg_line1")</label>
             <input type="radio" id="first_data" name="first_chart_type" value="data"/><label for="first_data">CDF.i18n("msg_data1")</label>
         </span>
       </div>
       <div id="first_chart_line"></div>
       <div id="first_chart_bar"></div>
-      <div id="first_chart_data" style="width:800px;overflow:auto"></div>
+      <div id="first_chart_data" style="padding-left:10px;height:400px;width:400px;overflow:auto;"></div>
+    </div>
+    <div id="second_section" style="float:left;width:30%;display:none;">
+      <div id="secondChartTypeSelect_object">
+        <span class="#format" id="secondChartTypeSelector">
+            <!--<input type="radio" id="second_bar" name="second_chart_type"  value="bar"/><label for="second_bar">CDF.i18n("msg_bar2")</label>-->
+            <input type="radio" id="second_line" name="second_chart_type" CHECKED value="line"/><label for="second_line">CDF.i18n("msg_line2")</label>
+            <input type="radio" id="second_data" name="second_chart_type" value="data"/><label for="second_data">CDF.i18n("msg_data2")</label>
+        </span>
+      </div>
+      <div id="second_chart_line"></div>
+      <div id="second_chart_bar"></div>
+      <div id="second_chart_data" style="padding-left:10px;width:400px;overflow:auto;"></div>
     </div>
     <div id="dateRangeSelector" style="clear:both;">
       <div id="startYearSelect_object" style="padding:10px 10px 10px 10px">
@@ -31,9 +42,8 @@
 
 //Filter criteria
 var regionParameter = "";
-var sectorParameter = "";
 var programParameter = "";
-var aidTypeParameter = "";
+var donorGroupParameter = "";
 var currency = Dashboards.getQueryParameter("currency");
 var type_of_funding = Dashboards.getQueryParameter("type_of_funding");
 var type_of_funding_translation = "Actual Disbursements";
@@ -44,6 +54,13 @@ var startYear = startYearConfig;
 var endYear = endYearConfig;
 
 var dateRangeInitialized = false;
+
+var postExecutionSort =  function(data){
+  if(data.resultset != null) {
+      var rs = data.resultset.sort(function(a,b) {return (a[1]-b[1]);});
+  }
+  return data;
+};
 
 var processParameters = function(){
 	console.log("Processing parameters.");
@@ -56,15 +73,6 @@ var processParameters = function(){
         regionParameter = (regionParameter == "" ? "": regionParameter + ",") + "[Region].[" + value +"]";
       });
 
-    var sectorValues = $("#sectorSelect_object > select").val();
-    sectorValues = sectorValues != null ? sectorValues : [];
-    //Reset global parameter
-    sectorParameter = "";
-    $.each(sectorValues,
-      function(idx, value){ 
-        sectorParameter = (sectorParameter == "" ? "": sectorParameter + ",") + "[Primary Sector].[Nepal Sector Classification].[" + value +"]";
-      });
-
     var programValues = $("#programSelect_object > select").val();
     programValues = programValues != null ? programValues : [];
     //Reset global parameter
@@ -75,17 +83,22 @@ var processParameters = function(){
       });
 
     //Reset global parameter
+    donorGroupParameter = (donorGroupParameter == "" ? "": "" + donorGroupParameter +"");
+    if(donorGroupParameter == "") donorGroupParameter = "[Donor Group].[DonorGroup].Members";
 
 	console.log("regionParameter:" + regionParameter);
-	if (regionParameter != "" || sectorParameter != "" || programParameter != "")
+	if (regionParameter != "" || programParameter != "")
 	{
 		if(regionParameter == "") regionParameter = "[Regions].Members";
-		if(sectorParameter == "") sectorParameter = "[Primary Sector].Members";
 		if(programParameter == "") programParameter = "[National Program Level 1].Members";
 	}
     first_data_table.chartDefinition.colTypes = [];
     first_data_table.chartDefinition.colFormats = [];
     first_data_table.chartDefinition.colHeaders = [];
+	second_data_table.chartDefinition.colTypes = [];
+	second_data_table.chartDefinition.colFormats = [];
+	second_data_table.chartDefinition.colHeaders = [];
+
   };
 
 
@@ -101,102 +114,211 @@ $(window).ready(function() {
 
 
 var getParameters = function() {
-  return aidTypeParameter + regionParameter + sectorParameter + programParameter;
+  return regionParameter + programParameter;
 }
-
-var listeners_first = ["startYear","endYear","regionParameter","sectorParameter", "programParameter"];
-var parameters_first = [["startYear","startYear"], ["endYear","endYear"], ["regionParameter","regionParameter"], ["sectorParameter","sectorParameter"], ["programParameter","programParameter"],["currency","currency"], ["type_of_funding","type_of_funding"], ["type_of_funding_translation","type_of_funding_translation"]];
+var listeners_first = ["startYear","endYear","regionParameter","programParameter"];
+var listeners_second = ["startYear","endYear","regionParameter", "programParameter", "donorGroupParameter"];
+var parameters_first = [["startYear","startYear"], ["endYear","endYear"], ["regionParameter","regionParameter"], ["programParameter","programParameter"],["currency","currency"], ["type_of_funding","type_of_funding"], ["type_of_funding_translation","type_of_funding_translation"]];
+var parameters_second = [["startYear","startYear"], ["endYear","endYear"], ["regionParameter","regionParameter"], ["programParameter","programParameter"], ["donorGroupParameter","donorGroupParameter"],["currency","currency"], ["type_of_funding","type_of_funding"], ["type_of_funding_translation","type_of_funding_translation"]];
 
 </script>
 
 <script language="javascript" type="text/javascript">
+var donorGroupParameter = "";
+var donorGroup = "";
 
-
-var aidType = "";
+var processClickAction = function(s,c,v) {
+	processParameters();
+	donorGroup = formatLabel(c); 
+	if(donorGroup != "")
+		$("#second_section").fadeIn();
+	resizeLayout();
+	first_bar_chart.update();
+	first_line_chart.update();
+	Dashboards.fireChange('donorGroupParameter',"[Donor Group].[" + formatLabel(c) + "]"); 
+};
 var first_bar_chart = jQuery.extend(true, {}, seminal_chart);
 first_bar_chart.type = "cccBarChart";
 first_bar_chart.htmlObject = "first_chart_bar";
 first_bar_chart.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
-first_bar_chart.chartDefinition.legendSize = 320;
-first_bar_chart.chartDefinition.crosstabMode = true;
+first_bar_chart.chartDefinition.legend = false;
+first_bar_chart.chartDefinition.yAxisSize = 240;
+first_bar_chart.chartDefinition.height = 450;
+first_bar_chart.chartDefinition.panelSizeRatio  = 0.9;
+first_bar_chart.chartDefinition.crosstabMode = false;
 first_bar_chart.chartDefinition.seriesInRows = false;
 first_bar_chart.chartDefinition.orientation = "horizontal";
 first_bar_chart.chartDefinition.valueFormat = function f(value){return (value);};
-first_bar_chart.chartDefinition.path = "/AMP Dashboards Phase 2/Align Aid with National Priorities/Dashboard_CCC.cda";
-first_bar_chart.chartDefinition.stacked = true;
-first_bar_chart.chartDefinition.title = function() { return Dashboards.i18nSupport.prop("msg_oda_by_type_of_funding") + " (" + type_of_funding_translation + ", " + currency + ")";};
-first_bar_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","0"],["xAxisLabel_font","12px sans-serif"],["yAxisLabel_font","12px sans-serif"], ["legendLabel_text", function(d){return formatLabel(d)}]];
-first_bar_chart.chartDefinition.clickable = true;// 
-first_bar_chart.chartDefinition.clickAction = function(s,c,v){ aidType = formatLabel(s);processParameters();Dashboards.fireChange('aidTypeParameter',"[Financing Instrument].[" + formatLabel(s) + "]") };
-first_bar_chart.listeners = listeners_first;
+first_bar_chart.chartDefinition.path = "/AMP Dashboards Phase 2/Development Partner Performance/donor_less.cda";
+first_bar_chart.chartDefinition.stacked = false;
+first_bar_chart.chartDefinition.title = function() { return "Development Partners involved in 5 or less sectors " + " (" + startYear + "-" + endYear + ")"};
+first_bar_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","0"],["xAxisLabel_font","12px sans-serif"],["yAxisLabel_font","12px sans-serif"], ["legendLabel_text", function(d){return formatLabel(d)}], [ "bar_fillStyle", "rgba(0, 255, 0, 0.4)"], [ "bar_strokeStyle", "rgba(0, 0, 0, 0.3)"]];
+first_bar_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+  formatCurrencyValue(currency, value)};
+first_bar_chart.chartDefinition.clickable = true;
+first_bar_chart.chartDefinition.clickAction = function(s,c,v){processClickAction(s,c,v);};
 first_bar_chart.parameters = parameters_first;
-first_bar_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ formatCurrencyValue(currency, value)};
+first_bar_chart.listeners = listeners_first;
+first_bar_chart.postFetch = postExecutionSort;
 first_bar_chart.preExecution = processParameters;
+
+
+
+var first_data_table = jQuery.extend(true, {}, seminal_data_table);
+first_data_table.chartDefinition.path = "/AMP Dashboards Phase 2/Development Partner Performance/donor_less.cda";
+first_data_table.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
+first_data_table.htmlObject = "first_chart_data";
+first_data_table.name = "first_data_table";
+first_data_table.parameters = parameters_first;
+first_data_table.listeners = listeners_first;
+first_data_table.chartDefinition.colTypes = [];
+first_data_table.chartDefinition.colFormats = [];
+first_data_table.chartDefinition.colHeaders = ["Donor Group", "Percentage"];
+
 
 var first_line_chart = jQuery.extend(true, {}, seminal_chart);
 first_line_chart.type = "cccLineChart";
 first_line_chart.htmlObject = "first_chart_line";
-first_line_chart.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
-first_line_chart.title = function() { return Dashboards.i18nSupport.prop("msg_oda_by_type_of_funding")};
-first_line_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+ formatCurrencyValue(currency, value)};
+first_line_chart.chartDefinition.dataAccessId =  function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
+first_line_chart.chartDefinition.title = function() { return "Development Partners involved in 5 or less sectors (" + startYear + "-" + endYear + ")"};
+first_line_chart.chartDefinition.path = "/AMP Dashboards Phase 2/Development Partner Performance/donor_less.cda";
+first_line_chart.chartDefinition.crosstabMode = false;
+first_line_chart.chartDefinition.seriesInRows = false;
+first_line_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","-.5"],["xAxisLabel_font","10px sans-serif"],["xAxisLabel_textAlign","right"],["yAxisLabel_font","10px sans-serif"]];
+first_line_chart.chartDefinition.xAxisSize = 50;
+first_line_chart.chartDefinition.yAxisSize = 50;
+first_line_chart.chartDefinition.showDots = true;
+first_line_chart.chartDefinition.height = 450;
+first_line_chart.parameters = parameters_first;
+first_line_chart.listeners = listeners_first;
+first_line_chart.chartDefinition.clickable = true;
+first_line_chart.chartDefinition.clickAction = function(s,c,v){processClickAction(c,s,v);};
 first_line_chart.preExecution = processParameters;
 
-var first_data_table = jQuery.extend(true, {}, seminal_data_table);
-first_data_table.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "first_chart_mdx" : "first_chart_mdx_params"};
-first_data_table.chartDefinition.path = "/AMP Dashboards Phase 2/Align Aid with National Priorities/Dashboard_CCC.cda";
-first_data_table.htmlObject = "first_chart_data";
-first_data_table.name = "first_data_table";
-first_data_table.chartDefinition.colTypes = [];
-first_data_table.chartDefinition.colFormats = [];
-first_data_table.listeners = listeners_first;
-first_data_table.parameters = parameters_first;
 
+var second_bar_chart = jQuery.extend(true, {}, seminal_chart);
+second_bar_chart.type = "cccBarChart";
+second_bar_chart.name = "secondChart";
+second_bar_chart.listeners = listeners_second;
+second_bar_chart.parameters = parameters_second;
+second_bar_chart.htmlObject = "second_chart_bar";
+second_bar_chart.chartDefinition.dataAccessId = function(){return (getParameters() == "" ? "second_chart_mdx" : "second_chart_mdx_params")};
+second_bar_chart.chartDefinition.crosstabMode = false;
+second_bar_chart.chartDefinition.seriesInRows = true;
+second_bar_chart.chartDefinition.orientation = "horizontal";
+second_bar_chart.chartDefinition.valueFormat = function f(value){return (value);};
+second_bar_chart.chartDefinition.path = "/AMP Dashboards Phase 2/Development Partner Performance/donor_less.cda";
+second_bar_chart.chartDefinition.stacked = true;
+second_bar_chart.chartDefinition.title = function() {return Dashboards.i18nSupport.prop("msg_disaggregation_by_year")};//"Disaggregation by Year";
+second_bar_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","0"],["xAxisLabel_font","12px sans-serif"],["yAxisLabel_font","12px sans-serif"]];
+second_bar_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","0"],["xAxisLabel_font","10px sans-serif"],["yAxisLabel_font","10px sans-serif"], ["legendLabel_text", function(d){return formatLabel(d)}]];
+second_bar_chart.chartDefinition.legendSize = 100;
+second_bar_chart.chartDefinition.legendPosition  = "bottom";
+second_bar_chart.chartDefinition.yAxisSize = 240;
+second_bar_chart.chartDefinition.height = 450;
+second_bar_chart.chartDefinition.panelSizeRatio  = 0.9;
+second_bar_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+  formatCurrencyValue(currency, value)};
+second_bar_chart.chartDefinition.clickable = true;// 
+second_bar_chart.chartDefinition.clickAction = function(s,c,v){ Dashboards.fireChange('donorGroup',formatLabel(s)) };
+
+var second_line_chart = jQuery.extend(true, {}, seminal_chart);
+second_line_chart.chartDefinition.title = function(){return (donorGroupParameter == "" ? Dashboards.i18nSupport.prop("msg_percentage_by_year") + "" : "Sector count by year for " + donorGroup +" ")};
+//second_line_chart.chartDefinition.title = "Title";
+second_line_chart.chartDefinition.path = "/AMP Dashboards Phase 2/Development Partner Performance/donor_less.cda";
+second_line_chart.listeners = listeners_second;
+second_line_chart.parameters = parameters_second;
+second_line_chart.type = "cccLineChart";
+second_line_chart.htmlObject = "second_chart_line";
+second_line_chart.chartDefinition.dataAccessId = function(){return (getParameters() == "" ? "second_chart_mdx" : "second_chart_mdx_params")};
+second_line_chart.chartDefinition.yAxisSize = 100;
+second_line_chart.chartDefinition.height = 450;
+second_line_chart.chartDefinition.legend = false;
+second_line_chart.chartDefinition.stacked = false;
+second_line_chart.chartDefinition.valueFormat = function f(value){return value;};
+//second_line_chart.chartDefinition.extensionPoints = [["xAxisLabel_textAngle","-.5"],["xAxisLabel_font","10px sans-serif"],["yAxisLabel_font","10px sans-serif"], ["legendLabel_text", function(d){return formatLabel(d)}]];
+second_line_chart.chartDefinition.crosstabMode = false;
+second_line_chart.chartDefinition.seriesInRows = false;
+//second_line_chart.chartDefinition.tooltipFormat = function f(series, name, value){return name + ", " + formatLabel(series) + ", "+  formatCurrencyValue(currency, value)};
+second_line_chart.chartDefinition.showDots = true;
+
+var second_data_table = jQuery.extend(true, {}, seminal_data_table);
+second_data_table.chartDefinition.path = "/AMP Dashboards Phase 2/Development Partner Performance/donor_less.cda";
+second_data_table.chartDefinition.dataAccessId = function() {return getParameters() == "" ? "second_chart_mdx" : "second_chart_mdx_params"};
+second_data_table.htmlObject = "second_chart_data";
+second_data_table.name = "second_data_table";
+second_data_table.parameters = parameters_second;
+second_data_table.listeners = listeners_second;
+second_data_table.chartDefinition.colTypes = [];
+second_data_table.chartDefinition.colFormats = [];
+second_data_table.chartDefinition.colHeaders = [];
 
 
 </script>
 
 <script language="javascript">
-    var cType = "bar";
-		$("#firstChartTypeSelector").buttonset();
+    var cType1 = "bar";
+    var cType2 = "line";
+	$("#firstChartTypeSelector").buttonset();
     $("#first_chart_line").hide();
     $("#first_chart_data").hide();
 	$("#firstChartTypeSelector").click(function (){
-	var oldCType = cType;
-	cType = $("#firstChartTypeSelector :radio:checked").val();
-	$("#first_chart_" + oldCType).fadeOut('fast', function(){$("#first_chart_" + cType).fadeIn();});
-		});
+        var oldCType = cType1;
+        cType1 = $("#firstChartTypeSelector :radio:checked").val();
+        $("#first_chart_" + oldCType).fadeOut('fast', function(){$("#first_chart_" + cType1).fadeIn();});
+	});
+	$("#secondChartTypeSelector").buttonset();
+    $("#second_chart_bar").hide();
+    $("#second_chart_data").hide();
+	$("#secondChartTypeSelector").click(function (){
+        var oldCType = cType2;
+        cType2 = $("#secondChartTypeSelector :radio:checked").val();
+        $("#second_chart_" + oldCType).fadeOut('fast', function(){$("#second_chart_" + cType2).fadeIn();});
+	});
 
-  var resizeLayout = function() {
+
+	var resizeLayout = function() {
 		$("#dashboard").height($(window).height()-30);
 		$("#dashboard").width($(document.body).width()-5);
-		$("#first_section").width($("#dashboard").width()*0.7);
+		if (donorGroupParameter == ""){
+			$("#first_section").width($("#dashboard").width()*0.9);
+			$("#first_chart_data").width($("#dashboard").width()*0.5);
+		}
+		else{
+			$("#first_section").width($("#dashboard").width()*0.6);
+			$("#first_chart_data").width($("#dashboard").width()*0.5);
+		}
+		$("#second_section").width($("#dashboard").width()*0.4);
 
-    
 		first_line_chart.chartDefinition.width = $("#first_section").width()-20;
 		first_bar_chart.chartDefinition.width = $("#first_section").width()-20;
 		first_data_table.chartDefinition.width = $("#first_section").width()-20;
-    }
+		second_line_chart.chartDefinition.width = $("#second_section").width()-20;
+		second_bar_chart.chartDefinition.width = $("#second_section").width()-20;
+		second_data_table.chartDefinition.width = $("#second_section").width()-20;
+	}
 	var initialized = false;
-$(window).resize(resizeLayout);
-$(window).ready(function() {
-  var components = [regionSelect, sectorSelect, programSelect, startYearSelect, endYearSelect, first_bar_chart, first_data_table];
-  Dashboards.init(components);
-  resizeLayout();
-  initialized = true;
-  setTimeout(applyDateRange, 500);
-  
-});	
+	
+	$(window).resize(resizeLayout);
+
+	$(window).ready(function() {
+		var components = [regionSelect, programSelect, startYearSelect, endYearSelect, first_bar_chart, first_line_chart, first_data_table, second_line_chart, second_data_table];
+		Dashboards.init(components);
+		resizeLayout();
+		initialized = true;
+		setTimeout(applyDateRange, 500);
+	});	
 
 $("#apply").click(function () {
   regionParameter = "";
-  sectorParameter = "";
   programParameter = "";
-  aidTypeParameter = "";
+  donorGroupParameter = "";
   startYear = startYearConfig;
   endYear = endYearConfig;    
   first_data_table.chartDefinition.colTypes = [];
   first_data_table.chartDefinition.colFormats = [];
   first_data_table.chartDefinition.colHeaders = [];
+  second_data_table.chartDefinition.colTypes = [];
+  second_data_table.chartDefinition.colFormats = [];
+  second_data_table.chartDefinition.colHeaders = [];
   Dashboards.resetAll();
   setTimeout(applyDateRange, 500);
 });
@@ -214,6 +336,9 @@ var applyDateRange = function() {
                   first_data_table.chartDefinition.colTypes = [];
                   first_data_table.chartDefinition.colFormats = [];
                   first_data_table.chartDefinition.colHeaders = [];
+				  second_data_table.chartDefinition.colTypes = [];
+				  second_data_table.chartDefinition.colFormats = [];
+				  second_data_table.chartDefinition.colHeaders = [];
                   Dashboards.processChange(updateComponent);
                   }, 1000);
             }

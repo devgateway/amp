@@ -32,9 +32,6 @@
       <BandedMode>compact</BandedMode>
       <Columns/>
       <Parameters>
-         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
-         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
-         <Parameter default="USD" name="currency" type="String"/>
          <Parameter default="2000" name="startYear" type="String"/>
          <Parameter default="2009" name="endYear" type="String"/>
       </Parameters>

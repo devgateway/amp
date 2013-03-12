@@ -334,6 +334,8 @@
 																		<c:set target="${urlParams}" property="returnPage">teamDesktopTabList</c:set>
 																	</c:if>	
 																	
+																	<c:set target="${urlParams}" property="tempNumResults">${aimTeamReportsForm.tempNumResults}</c:set>
+																	
 																	<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
 																		<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this team-visible</digi:trn>" src= "/repository/contentrepository/view/images/make_private.gif" border="0">
 																	</digi:link>

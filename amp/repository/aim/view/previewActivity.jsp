@@ -423,6 +423,22 @@ function collapseAll() {
 		         </c:if>
 			<hr/>
 			</c:if>
+			<c:if test="${aimEditActivityForm.funding.showActual}">
+			<digi:trn>Unallocated Disbursements</digi:trn>:<br/>
+				<c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
+	                <b>
+	                 <bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> 
+	                 <bean:write name="aimEditActivityForm" property="currCode" />
+	                </b>		          
+		         </c:if>
+		          <c:if test="${empty aimEditActivityForm.funding.unDisbursementsBalance}">
+			         <b>
+			         0
+			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         </b>
+		         </c:if>
+			<hr/>
+			</c:if>
 			<c:if test="${aimEditActivityForm.funding.showPlanned}">
 			<digi:trn>Total Planned Expenditures</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">

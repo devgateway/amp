@@ -83,7 +83,22 @@ function select(title){
 }  
 
 function resetKeyword(){
-	document.getElementById("selected").value='';
+	document.getElementById('selected').value='';
+	$('#livesearch').hide();
+	xmlHttp=GetXmlHttpObject()
+	if (xmlHttp==null){
+ 			alert ("Browser does not support HTTP Request")
+ 		return
+ 	}
+
+var actionUrl = '<%=helpActionUrl%>';
+	var key= 'getting started';//reset to start of the helper
+	var urls = actionUrl + '?actionType=searchHelpTopicNew&key='+key;
+	
+    xmlHttp.open("GET",urls,true)
+    
+	xmlHttp.onreadystatechange=stChang
+	xmlHttp.send(null)
 }
 
 function search(){

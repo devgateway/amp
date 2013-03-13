@@ -21,6 +21,7 @@ BASE_YEAR	= <globalsettings:value name="Year Range Start" />;
 var helpBody=' <digi:trn jsFriendly="true"> to open all reports on one page, please enter the digit "0"</digi:trn>';
 var helpBodyAct=' <digi:trn jsFriendly="true"> Please enter a number greater than "1"</digi:trn>';
 var helpTitle='<digi:trn jsFriendly="true">Report Sheet</digi:trn>';
+var helpNumberPages = '<digi:trn>Wrong number of pages to display in paginator. The number should be greater than 1.</digi:trn>';
 function validade(){
 	var defReportsPerPage = document.getElementById("defRecsPerPage");
   	if(parseInt(defReportsPerPage.value)<=1){
@@ -30,7 +31,7 @@ function validade(){
 
   	var numberOfPagesToDisplay = document.getElementById("numberOfPagesToDisplay");
   	if(parseInt(numberOfPagesToDisplay.value)<=1){
-	  alert(helpBodyAct);
+	  alert(helpNumberPages);
 	  return false;
   	}
   	var  reportsperPage = document.getElementById("repsPerPage").value;
@@ -220,6 +221,9 @@ function loadShareRules(){
 				                </td>
                 				<td class="inside">
 									<html:text property="numberOfPagesToDisplay" size="5"  styleClass="inputx insidex" styleId="numberOfPagesToDisplay"/>
+									<a style="cursor:pointer;color:#006699" onmouseover="stm([helpTitle,helpBodyAct],Style[15])" onmouseout="htm()">
+										<img src="../ampTemplate/images/help.gif" alt="" width="10" height=10 border="0">
+                 					 </a>
 								</td>
 							</tr>
 

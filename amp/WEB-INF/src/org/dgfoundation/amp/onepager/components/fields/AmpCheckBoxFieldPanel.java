@@ -52,6 +52,7 @@ public class AmpCheckBoxFieldPanel extends AmpFieldPanel<Boolean> {
 		checkBox = new AjaxCheckBox("checkbox", model){
 			@Override
 			protected void onUpdate(AjaxRequestTarget arg0) {
+                onAjaxOnUpdate(arg0);
 			}
 		};
 		add(checkBox);

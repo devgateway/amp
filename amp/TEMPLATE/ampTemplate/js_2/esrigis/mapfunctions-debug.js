@@ -207,10 +207,6 @@ function createMapAddLayers(myService1, myService2) {
 	*/
 	});
 	
-	navToolbar = new esri.toolbars.Navigation(map);
-	dojo.connect(navToolbar, "onExtentHistoryChange",
-			extentHistoryChangeHandler);
-
 	dojo.connect(map, "onClick", doBuffer);
 	dojo.connect(map, "onMouseMove", selectionFunction);
 
@@ -232,6 +228,9 @@ function createMapAddLayers(myService1, myService2) {
 	createBasemapGallery();
 	maxExtent = map.extent;
 	searchactive = false;
+	navToolbar = new esri.toolbars.Navigation(map);
+	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
+
 }
 
 /**
@@ -278,9 +277,9 @@ function togglenational() {
 }
 
 function extentHistoryChangeHandler() {
-	dijit.byId("zoomprev").disabled = navToolbar.isFirstExtent();
-	dijit.byId("zoomnext").disabled = navToolbar.isLastExtent();
-}
+	  dijit.byId("zoomprev").disabled = navToolbar.isFirstExtent();
+	  dijit.byId("zoomnext").disabled = navToolbar.isLastExtent();
+	}
 
 /**
  * show map on load

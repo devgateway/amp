@@ -288,6 +288,9 @@
 		document.datadispatcherform[1].submit();
 	}
 	
+	function replacehtml(text){
+		return text.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+	}
 </script>
 
  	<!-- Filter Styles -->
@@ -406,7 +409,11 @@
         	<table>
         		<c:forEach  var="structureType" items="${requestScope.structureTypesList}">
 	          	<tr>
-	            	<td>${structureType.name} </td>
+	          		<td>
+	          			<script type="text/javascript">
+	          				replacehtml('${structureType.name}');
+	          			</script>
+	          		</td>
 	            	<td align="center">
 	            		<img id="imgPlaceholder" src="/esrigis/mainmap.do~action=displayIcon~id=${structureType.typeId}" style="border:1px solid black;width: 20px;height: 20px;"/>
 	            	</td>
@@ -522,7 +529,7 @@
         	</table>
         </div>
         </feature:display>	
-        <div id="navToolbar" dojoType="dijit.Toolbar" region="leading" style="z-Index:999;display: none;">
+        <div id="navToolbar" style="z-Index:999;display: none;" dojoType="dijit.Toolbar" region="left" >
         <div class="toolscontainer" style="margin:5px 0px 0px 0px;">
         	<div class="gisBoxHeader">
 			  	<h3><digi:trn>Tools panel</digi:trn></h3><a href="#"></a>

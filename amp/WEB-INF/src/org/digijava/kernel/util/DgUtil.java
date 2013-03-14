@@ -349,6 +349,19 @@ public class DgUtil {
                 }
 
             }
+            
+            if(request.getParameter("language")!=null){
+            	language = getSupportedLanguage(request.getParameter("language"),
+                        currentSite,
+                        isLocalTranslatorForSite(request));
+            }
+            
+            if (language != null) {
+                logger.debug("Language, determined from request parameter: " +
+                             language.getCode());
+                return language;
+            }
+            
             // Determine language using cookies
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {

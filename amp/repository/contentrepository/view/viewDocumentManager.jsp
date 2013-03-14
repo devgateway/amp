@@ -131,6 +131,10 @@ padding-left: 0px;
     font-weight: bold;
 } 	
 
+div#addDocumentDiv td {
+	text-align:left;
+}
+
 
 
 .yui-skin-sam span.yui-pg-first,
@@ -502,28 +506,28 @@ border-right: 1px solid rgb(208, 208, 208);
 					<input type="hidden" name="uuid" id="nodeUUID"/>					
 					<table cellpadding="3" cellspacing="3" border="0">						
 						<tr>
-							<td align="left">
+							<td>
 								<div class="t_sm"><b><digi:trn>Title</digi:trn>:</b><font color="red">*</font></div>
 							</td>
 							<td><html:text property="docTitle" size="5" styleClass="inputx" style="width:300px;" /></td>
 						</tr>
 						<tr>							
-							<td align="left">
+							<td>
 								<div class="t_sm"><b><digi:trn>Description</digi:trn>:</b></div>
 							</td>
 							<td><html:textarea property="docDescription" cols="" rows="" style="width:300px; height:70px;" styleClass="inputx"/></td>
 						</tr>
 						<tr>
-							<td align="left">
+							<td>
 								<div class="t_sm"><b><digi:trn>Notes</digi:trn>:</b></div>
 							</td>
 							<td><html:textarea property="docNotes" cols="" rows="" style="width:300px; height:70px;" styleClass="inputx"/></td>
 						</tr>
 						<tr>
-		                    <td align="left">
+		                    <td>
 		                    	<div class="t_sm"><b><digi:trn>Year Of Publication</digi:trn>:</b></div>
 		                    </td>
-		                    <td align="left">		
+		                    <td>		
 		                        <html:select property="yearOfPublication" styleClass="dropdwn_sm">
 		                        	<html:option value="-1"><digi:trn>select...</digi:trn></html:option>
 		                        	<c:forEach var="year" items="${crDocumentManagerForm.years}">
@@ -534,14 +538,14 @@ border-right: 1px solid rgb(208, 208, 208);
 		                </tr>
 					<field:display name="Resource Index" feature="Resource Columns">
 						<tr>
-							<td align="left">
+							<td>
 								<div class="t_sm">
 									<b><span title="<digi:trn>Document Index</digi:trn>">
 										<digi:trn>Index</digi:trn>
 									</span></b>
 								</div>
 							</td>
-							<td align="left">
+							<td>
 								<a title="<digi:trn>Document Index</digi:trn>">
 									<html:textarea property="docIndex" cols="" rows="" style="width:300px; height:30px;" styleClass="inputx" />
 								</a>
@@ -550,14 +554,14 @@ border-right: 1px solid rgb(208, 208, 208);
 					</field:display>								
 					<field:display name="Resource Category" feature="Resource Columns">
 						<tr>
-							<td align="left">
+							<td>
 								<div class="t_sm">
 									<b><span title="<digi:trn>Document Category</digi:trn>">
 										<digi:trn>Category</digi:trn>
 									</span></b>
 								</div>
 							</td>
-							<td align="left">
+							<td>
 								<span title="<digi:trn>Document Category</digi:trn>">
 									<html:textarea property="docCategory" cols="" rows="" style="width:300px; height:30px;" styleClass="inputx"/>
 								</span>
@@ -565,10 +569,10 @@ border-right: 1px solid rgb(208, 208, 208);
 						</tr>
 					</field:display>						
 						<tr>
-							<td align="left">
+							<td>
 								<div class="t_sm"><b><digi:trn>Type</digi:trn>:</b></div>
 							</td>
-							<td align="left">
+							<td>
 								<c:set var="translation">
 									<digi:trn>Please select a type from below</digi:trn>
 								</c:set>
@@ -576,27 +580,27 @@ border-right: 1px solid rgb(208, 208, 208);
 							</td>
 						</tr>						
 						<tr id="tr_path">
-							<td align="left">
+							<td>
 								<div class="t_sm"><b><digi:trn>Path</digi:trn>:</b><font color="red">*</font></div>
 							</td>
-							<td align="left">
+							<td>
 				                <div class="fileinputs"> 
 									<input id="fileData" name="fileData" type="file" class="file">
 			                	</div>
 			                </td>
 						</tr>
 						<tr id="tr_url" style="display: none">
-							<td align="left">
+							<td>
 								<div class="t_sm"><b><digi:trn>URL (ex. http://www.example.com)</digi:trn>:</b><font color="red">*</font></div>
 							</td>
-							<td align="left"><html:text property="webLink" size="32"></html:text></td>
+							<td><html:text property="webLink" size="32"></html:text></td>
 						</tr>
 						<tr><td colspan="2"><hr/></td> </tr>						
 						<tr>
-							<td align="right">
+							<td style="text-align:right;">
 								<html:submit styleClass="buttonx" style="padding-bottom: 2px; padding-top: 2px;" onclick="return validateAddDocumentLocal()"><digi:trn>Submit</digi:trn></html:submit>&nbsp;
 							</td>
-							<td align="left">&nbsp;
+							<td>&nbsp;
 								<button class="buttonx" type="button" style="padding-bottom: 1px; padding-top: 1px;"  onClick="hidePanel(0)">
 									<digi:trn>Cancel</digi:trn>
 								</button>

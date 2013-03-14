@@ -161,12 +161,12 @@ public class StructureTypeManager extends DispatchAction {
 		} else {
 			structureType = new AmpStructureType();
 		}
-
 		structureType.setName(structureTypeForm.getName());
-		structureType.setGraphicType(structureTypeForm.getGraphicType());
-		structureType.setIconFile(structureTypeForm.getIconFile().getFileData());
-		structureType.setIconFileContentType(structureTypeForm.getIconFile().getContentType());
-		
+		if(structureTypeForm.getIconFile().getFileData().length!=0){
+			structureType.setGraphicType(structureTypeForm.getGraphicType());
+			structureType.setIconFile(structureTypeForm.getIconFile().getFileData());
+			structureType.setIconFileContentType(structureTypeForm.getIconFile().getContentType());
+		}
 //		contentItem.setContentThumbnails(StructureTypeForm.getContentThumbnails());
 //		if (StructureTypeForm.getContentThumbnailsRemoved() != null
 //				&& StructureTypeForm.getContentThumbnailsRemoved().size() > 0)

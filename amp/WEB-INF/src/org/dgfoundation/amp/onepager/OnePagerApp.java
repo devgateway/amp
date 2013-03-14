@@ -3,22 +3,24 @@
  */
 package org.dgfoundation.amp.onepager;
 
+import net.ftlines.wicketsource.WicketSource;
+
 import org.apache.log4j.Logger;
+import org.apache.wicket.Application;
 import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.Session;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.resource.AbstractResource.ResourceResponse;
-import org.apache.wicket.util.file.File;
-import org.apache.wicket.core.request.handler.PageProvider;
-import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
-import org.apache.wicket.Session;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
-import org.apache.wicket.markup.html.WebPage;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
 import org.dgfoundation.amp.onepager.util.FMComponentResolver;
 import org.dgfoundation.amp.onepager.util.JspResolver;
@@ -26,7 +28,6 @@ import org.dgfoundation.amp.onepager.web.pages.AmpExceptionPage;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.springframework.security.AuthenticationManager;
-import org.apache.wicket.devutils.inspector.RenderPerformanceListener;
 
 /**
  * @author mihai
@@ -54,6 +55,13 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 	 @Override
 	 public void init() {
 		 super.init();
+		 
+		 RuntimeConfigurationType configurationType=Application.get().getConfigurationType();
+		 
+		 if(RuntimeConfigurationType.DEVELOPMENT.equals(configurationType)) {
+			//enable Wicket-Source if we are in development mode
+			 WicketSource.configure(this);
+		 }
 		 
 		 //getResourceSettings().setStripJavaScriptCommentsAndWhitespace(true);
 		 //getResourceSettings().setAddLastModifiedTimeToResourceReferenceUrl(true);

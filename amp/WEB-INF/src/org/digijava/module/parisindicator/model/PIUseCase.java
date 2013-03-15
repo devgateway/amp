@@ -9,18 +9,14 @@ import java.util.List;
 import java.util.Set;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.ar.util.ReportsUtil;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -31,7 +27,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ApplicationSettings;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -64,6 +59,9 @@ import org.digijava.module.parisindicator.util.PIConstants;
 import org.digijava.module.parisindicator.util.PIUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
 public class PIUseCase {
@@ -367,9 +365,13 @@ public class PIUseCase {
 			session = PersistenceManager.getRequestDBSession();
 			// Set the query to return AmpAhSurvey objects.
 			Criteria criteria = session.createCriteria(AmpAhsurvey.class);
+			//criteria.setMaxResults(500);
 			
 			// Link to amp_activity view to use only the last version of an activity.
-			criteria.createAlias("ampActivityId", "activityTable");	
+			//criteria.createAlias("ampActivityId", "activityTable");
+			
+			DetachedCriteria liveActivityVersions = DetachedCriteria.forClass(AmpActivity.class).setProjection(Projections.property("ampActivityId"));				    
+			criteria.add(Property.forName("ampActivityId").in(liveActivityVersions));
 			
 			criteria.createAlias("pointOfDeliveryDonor", "podd1");
 			// Explanation: Hibernate will automatically detect prior alias 'podd1' to amp_organisation 

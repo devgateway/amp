@@ -749,7 +749,7 @@ function adminHelp(){
                                         
                                         <module:display name="Map Module">
                                         <li class="yuiampmenuitem_drop">
-                                        	<a class="yuiampmenuitemlabel" href="/esrigis/mainmap.do" target="_blank">
+                                        	<a class="yuiampmenuitemlabel" href="/esrigis/mainmap.do?reset=true" target="_blank">
 			                                	<digi:trn>Advanced GIS</digi:trn>
 			                                </a>
 			                            </li> 

@@ -4,7 +4,6 @@ dojo.require("dijit.layout.ContentPane");
 dojo.require("esri.map");
 dojo.require("dojox.grid.DataGrid");
 dojo.require("dojo.data.ItemFileReadStore");
-dojo.require("esri.toolbars.navigation");
 dojo.require("dijit.form.Button");
 dojo.require("dijit.Toolbar");
 dojo.require("esri.tasks.find");
@@ -20,7 +19,7 @@ dojo.require("dojo.io.script");
 //dojo.require("esri.dijit.Print");
 
 /*----variables---------*/
-var map, navToolbar, geometryService, findTask, findParams;
+var map,geometryService, findTask, findParams;
 var totallocations = 0;
 var features = new Array();
 var structures = new Array();
@@ -228,9 +227,6 @@ function createMapAddLayers(myService1, myService2) {
 	createBasemapGallery();
 	maxExtent = map.extent;
 	searchactive = false;
-	navToolbar = new esri.toolbars.Navigation(map);
-	dojo.connect(navToolbar, "onExtentHistoryChange",extentHistoryChangeHandler);
-
 }
 
 /**
@@ -276,10 +272,6 @@ function togglenational() {
 	}
 }
 
-function extentHistoryChangeHandler() {
-	  dijit.byId("zoomprev").disabled = navToolbar.isFirstExtent();
-	  dijit.byId("zoomnext").disabled = navToolbar.isLastExtent();
-	}
 
 /**
  * show map on load

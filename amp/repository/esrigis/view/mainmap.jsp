@@ -72,12 +72,7 @@
 			}
      	});
 	});
-	$(function(){
-  		$('#toolsbtn').click(function(){
-     		$('#navToolbar').toggle();
-     	});
-	});
-
+	
 	$(function(){
   		$('#search').click(function(){
      		$('#distancediv').toggle();
@@ -332,7 +327,6 @@
       	<table cellspacing="5px" cellpadding="5px" style="height: 100%;">
 				<tbody>
 					<tr>
-						<td id="toolsbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Navigation</digi:trn></td>
 						<td id="filterbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Filter</digi:trn></td>
 						
 						<field:display name="Use Esri Online Maps" feature="Select Base Map">
@@ -529,20 +523,7 @@
         	</table>
         </div>
         </feature:display>	
-        <div id="navToolbar" style="z-Index:999;display: none;" dojoType="dijit.Toolbar" region="left" >
-        <div class="toolscontainer" style="margin:5px 0px 0px 0px;">
-        	<div class="gisBoxHeader">
-			  	<h3><digi:trn>Tools panel</digi:trn></h3><a href="#"></a>
-            </div>
-			<div class="mapButton" dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);"><digi:trn>Zoom In</digi:trn></div>
-			<div class="mapButton" dojoType="dijit.form.Button" id="zoomout" iconClass="zoomoutIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_OUT);"><digi:trn>Zoom Out</digi:trn></div>
-			<div class="mapButton" dojoType="dijit.form.Button" id="zoomfullext" iconClass="zoomfullextIcon" onClick="navToolbar.zoomToFullExtent();"><digi:trn>Full Extent</digi:trn></div>
-		    <div class="mapButton" dojoType="dijit.form.Button" id="zoomprev" iconClass="zoomprevIcon" onClick="navToolbar.zoomToPrevExtent();"><digi:trn>Prev Extent</digi:trn></div>
-		    <div class="mapButton" dojoType="dijit.form.Button" id="zoomnext" iconClass="zoomnextIcon" onClick="navToolbar.zoomToNextExtent();"><digi:trn>Next Extent</digi:trn></div>
-		    <div class="mapButton" dojoType="dijit.form.Button" id="pan" iconClass="panIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.PAN);"><digi:trn>Pan</digi:trn></div>
-		    <div class="mapButton" dojoType="dijit.form.Button" id="deactivate" iconClass="deactivateIcon" onClick="navToolbar.deactivate()"><digi:trn>Deactivate</digi:trn></div>
-		</div></div>
-    </div>  
+        
 	<div class="tooltip" style="position: absolute; display: block;z-index:100;" id="tooltipHolder"></div>
 	<digi:form action="/datadispatcher.do" method="post">
 		<html:hidden name="datadispatcherform" property="structures"  styleId="st"/>

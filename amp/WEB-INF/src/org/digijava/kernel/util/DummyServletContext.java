@@ -26,11 +26,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.EventListener;
+import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
+import javax.servlet.*;
+import javax.servlet.descriptor.JspConfigDescriptor;
 
 
 public class DummyServletContext implements ServletContext {
@@ -57,6 +58,17 @@ public class DummyServletContext implements ServletContext {
         /**@todo Implement this javax.servlet.ServletContext method*/
         throw new java.lang.UnsupportedOperationException("Method getMinorVersion() not yet implemented.");
     }
+
+    @Override
+    public int getEffectiveMajorVersion() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public int getEffectiveMinorVersion() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public String getMimeType(String parm1) {
         /**@todo Implement this javax.servlet.ServletContext method*/
         throw new java.lang.UnsupportedOperationException("Method getMimeType() not yet implemented.");
@@ -126,6 +138,12 @@ public class DummyServletContext implements ServletContext {
         /**@todo Implement this javax.servlet.ServletContext method*/
         throw new java.lang.UnsupportedOperationException("Method getInitParameterNames() not yet implemented.");
     }
+
+    @Override
+    public boolean setInitParameter(String s, String s2) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public Object getAttribute(String parm1) {
         /**@todo Implement this javax.servlet.ServletContext method*/
         throw new java.lang.UnsupportedOperationException("Method getAttribute() not yet implemented.");
@@ -147,7 +165,122 @@ public class DummyServletContext implements ServletContext {
         throw new java.lang.UnsupportedOperationException("Method getServletContextName() not yet implemented.");
     }
 
-	public String getContextPath() {
+    @Override
+    public ServletRegistration.Dynamic addServlet(String s, String s2) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ServletRegistration.Dynamic addServlet(String s, Servlet servlet) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ServletRegistration.Dynamic addServlet(String s, Class<? extends Servlet> aClass) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public <T extends Servlet> T createServlet(Class<T> tClass) throws ServletException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ServletRegistration getServletRegistration(String s) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Map<String, ? extends ServletRegistration> getServletRegistrations() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public FilterRegistration.Dynamic addFilter(String s, String s2) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public FilterRegistration.Dynamic addFilter(String s, Filter filter) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public FilterRegistration.Dynamic addFilter(String s, Class<? extends Filter> aClass) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public <T extends Filter> T createFilter(Class<T> tClass) throws ServletException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public FilterRegistration getFilterRegistration(String s) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public SessionCookieConfig getSessionCookieConfig() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void setSessionTrackingModes(Set<SessionTrackingMode> sessionTrackingModes) throws IllegalStateException, IllegalArgumentException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void addListener(Class<? extends EventListener> aClass) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void addListener(String s) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public <T extends EventListener> void addListener(T t) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public <T extends EventListener> T createListener(Class<T> tClass) throws ServletException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void declareRoles(String... strings) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public JspConfigDescriptor getJspConfigDescriptor() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public String getContextPath() {
 		/**@todo Implement this javax.servlet.ServletContext method*/
 		throw new java.lang.UnsupportedOperationException("Method getContextPath() not yet implemented.");
 	}

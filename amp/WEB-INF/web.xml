@@ -321,10 +321,6 @@
 		<taglib-location>/WEB-INF/fn.tld</taglib-location>
 	</taglib>
 	<taglib>
-		<taglib-uri>/taglib/tags-fckeditor</taglib-uri>
-		<taglib-location>/WEB-INF/FCKeditor.tld</taglib-location>
-	</taglib>
-	<taglib>
 		<taglib-uri>http://www.tonbeller.com/wcf</taglib-uri>
 		<taglib-location>/WEB-INF/wcf/wcf-tags.tld</taglib-location>
 	</taglib>

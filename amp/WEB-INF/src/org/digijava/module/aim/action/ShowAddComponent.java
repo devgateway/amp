@@ -269,7 +269,7 @@ public class ShowAddComponent extends Action {
 			compFund.setType_Id(eaForm.getComponents().getSelectedType());
 			
 			
-			Enumeration<Object> paramNames = request.getParameterNames();
+			Enumeration<String> paramNames = request.getParameterNames();
 			String param = "";
 			String val = "";
 			Map<Integer, FundingDetail> comm = new HashMap<Integer, FundingDetail>();

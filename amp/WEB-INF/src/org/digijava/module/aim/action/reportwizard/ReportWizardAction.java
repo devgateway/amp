@@ -233,7 +233,8 @@ public class ReportWizardAction extends MultiAction {
 		}
 		if (myForm.getReportType().equalsIgnoreCase("pledge") && typereport != ArConstants.PLEDGES_TYPE){
 			typereport = ArConstants.PLEDGES_TYPE;
-			request.getParameterMap().put("type", "5");
+            String[] tmp = {"5"};
+			request.getParameterMap().put("type", tmp);
 		}
 		
 		request.getSession().setAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE, Boolean.toString(typereport == ArConstants.PLEDGES_TYPE)); //WARNING: When merging with 2.4, using ReportContextData attribute instead of storing in the session		

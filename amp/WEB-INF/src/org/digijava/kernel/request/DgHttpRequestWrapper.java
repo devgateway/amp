@@ -23,6 +23,7 @@
 package org.digijava.kernel.request;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -31,11 +32,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import org.digijava.kernel.Constants;
 
@@ -155,6 +153,31 @@ public class DgHttpRequestWrapper
 
     public boolean isRequestedSessionIdFromUrl() {
         return request.isRequestedSessionIdFromUrl();
+    }
+
+    @Override
+    public boolean authenticate(HttpServletResponse httpServletResponse) throws IOException, ServletException {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void login(String s, String s2) throws ServletException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void logout() throws ServletException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Collection<Part> getParts() throws IOException, IllegalStateException, ServletException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Part getPart(String s) throws IOException, IllegalStateException, ServletException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public Object getAttribute(String name) {
@@ -312,7 +335,42 @@ public class DgHttpRequestWrapper
 		return request.getLocalPort();
 	}
 
-	public int getRemotePort() {
+    @Override
+    public ServletContext getServletContext() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public AsyncContext startAsync() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean isAsyncStarted() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean isAsyncSupported() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public AsyncContext getAsyncContext() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public DispatcherType getDispatcherType() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int getRemotePort() {
 		return request.getRemotePort();
 	}
 

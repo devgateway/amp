@@ -477,8 +477,7 @@ public class DataDispatcher extends MultiAction {
 
 		// List<AmpCategoryValueLocations> locations =
 		// DbHelper.getRegions(filter);
-		List<AmpCategoryValueLocations> locations = DbHelper.getLocations(
-				filter, implementationLevel,request);
+		List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel,request);
 		Iterator<AmpCategoryValueLocations> locationsIt = locations.iterator();
 
 		while (locationsIt.hasNext()) {
@@ -508,9 +507,11 @@ public class DataDispatcher extends MultiAction {
 					implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
 					if (location.getParentCategoryValue().getValue().equals(implLocation)) {
 						keyName = "Regional";
+						geocode = location.getGeoCode();
 					} else {
 						AmpCategoryValueLocations parent = LocationUtil.getTopAncestor(location, implLocation);
 						keyName = parent.getName();
+						geocode = parent.getGeoCode();
 					}
 				} else {
 					if (implementationLevel.equalsIgnoreCase("Region")){

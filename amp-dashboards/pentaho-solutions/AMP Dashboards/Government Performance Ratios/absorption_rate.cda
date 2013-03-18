@@ -1,84 +1,175 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CDADescriptor>
    <DataSources>
-      <Connection id="first_chart_mdx" type="mondrian.jndi">
-         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+      <Connection id="first_chart_sql" type="sql.jndi">
          <Jndi>AMPNepal</Jndi>
       </Connection>
-      <Connection id="first_chart_mdx_params" type="mondrian.jndi">
-         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+	  <Connection id="first_data_sql" type="sql.jndi">
          <Jndi>AMPNepal</Jndi>
       </Connection>
-   </DataSources>
-   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx"
-               id="first_chart_mdx"
-               type="mdx">
-      <BandedMode>compact</BandedMode>
+	  <Connection id="second_chart_sql" type="sql.jndi">
+         <Jndi>AMPNepal</Jndi>
+      </Connection>
+	  <Connection id="second_data_sql" type="sql.jndi">
+         <Jndi>AMPNepal</Jndi>
+      </Connection>
+	  <Connection id="third_chart_sql" type="sql.jndi">
+         <Jndi>AMPNepal</Jndi>
+      </Connection>
+	  	  
+    </DataSources>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_sql"
+               id="first_bar_sql"
+               type="sql">
       <Columns/>
       <Parameters>
-         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
-         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
-         <Parameter default="USD" name="currency" type="String"/>
-         <Parameter default="2000" name="startYear" type="String"/>
-         <Parameter default="2009" name="endYear" type="String"/>
-      </Parameters>
-      <Query>With
-Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Financing Instrument],[*BASE_MEMBERS_Donor Dates])'
-Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Dates].CurrentMember.OrderKey,BDESC)'
-Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Financing Instrument].CurrentMember.OrderKey,BASC)'
-Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
-Set [*BASE_MEMBERS_Measures] as '{[Measures].[${type_of_funding_translation} ${currency}]}'
-Set [*BASE_MEMBERS_Financing Instrument] as '[Financing Instrument].[Financing Instrument].Members'
-Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Dates].currentMember)})'
-Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Financing Instrument].currentMember)})'
-Member [Measures].[${type_of_funding_translation} ${currency}] as '[Measures].[${type_of_funding} ${currency}]', FORMAT_STRING = '$#,##0.00', SOLVE_ORDER=400
-Select
-CrossJoin([*SORTED_COL_AXIS],[*BASE_MEMBERS_Measures]) on columns,
-Non Empty [*SORTED_ROW_AXIS] on rows
-From [Donor Funding]
-</Query>
-   </DataAccess>
-   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx_params"
-               id="first_chart_mdx_params"
-               type="mdx">
-      <BandedMode>compact</BandedMode>
-      <Columns/>
-      <Parameters>
-         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
-         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
-         <Parameter default="USD" name="currency" type="String"/>
-         <Parameter default="[Regions].Members" name="regionParameter" type="String"/>
-         <Parameter default="[Primary Sector].Members" name="sectorParameter" type="String"/>
-         <Parameter default="[National Program Level 1].Members" name="programParameter" type="String"/>
-         <Parameter default="2000" name="startYear" type="String"/>
-         <Parameter default="2009" name="endYear" type="String"/>
+         
       </Parameters>
       <Query>
-With
-Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Financing Instrument],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Dates],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_National Program],[*BASE_MEMBERS_Primary Sector]))))'
-Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Dates].CurrentMember.OrderKey,BDESC)'
-Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Financing Instrument].CurrentMember.OrderKey,BASC)'
-Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
-Set [*BASE_MEMBERS_Measures] as '{[Measures].[${type_of_funding_translation} ${currency}]}'
-Set [*BASE_MEMBERS_Financing Instrument] as '[Financing Instrument].[Financing Instrument].Members'
-Set [*BASE_MEMBERS_National Program] as '{${programParameter}}'
-Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Financing Instrument].currentMember)})'
-Set [*NATIVE_MEMBERS_National Program] as 'Generate([*NATIVE_CJ_SET], {[National Program Level 1].CurrentMember})'
-Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
-Set [*NATIVE_MEMBERS_Regions] as 'Generate([*NATIVE_CJ_SET], {[Regions].CurrentMember})'
-Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
-Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Dates].currentMember)})'
-Set [*BASE_MEMBERS_Primary Sector] as '{${sectorParameter}}'
-Member [National Program].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_National Program])', SOLVE_ORDER=-400
-Member [Regions].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Regions])', SOLVE_ORDER=-400
-Member [Primary Sector].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Primary Sector])', SOLVE_ORDER=-400
-Member [Measures].[${type_of_funding_translation} ${currency}] as '[Measures].[${type_of_funding} ${currency}]', FORMAT_STRING = '$#,##0.00', SOLVE_ORDER=400
-Select
-CrossJoin([*SORTED_COL_AXIS],[*BASE_MEMBERS_Measures]) on columns,
-Non Empty [*SORTED_ROW_AXIS] on rows
-From [Donor Funding]
-Where ([Regions].[*SLICER_MEMBER], [National Program].[*SLICER_MEMBER], [Primary Sector].[*SLICER_MEMBER])
+	  <![CDATA[
+		 SELECT
+			'Rate' AS RATE,
+			ministry_name AS SERIES,
+			((SUM (expenditure_ministry_value)/SUM (measure_value))*100) AS RATE
+			FROM pentaho_absorption_rate 
+			GROUP BY ministry_name
+	]]>
 	</Query>
    </DataAccess>
    
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_sql"
+               id="first_line_sql"
+               type="sql">
+      <Columns/>
+      <Parameters>
+         
+      </Parameters>
+      <Query>
+	  <![CDATA[
+		 SELECT
+			ministry_name AS SERIES,
+			year_value,
+			COALESCE(((SUM (expenditure_ministry_value)/SUM (measure_value))*100),0) AS RATE
+			FROM pentaho_absorption_rate 
+			GROUP BY year_value, ministry_name
+			ORDER BY ministry_name, year_value
+	]]>
+	</Query>
+   </DataAccess>
+   
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_data_sql"
+               id="first_data_sql"
+               type="sql">
+      <Columns/>
+      <Parameters>
+         
+      </Parameters>
+      <Query>
+	  <![CDATA[
+		 SELECT 
+			ministry_name AS "Ministry",
+			year_value AS "Year",
+			COALESCE(((SUM (expenditure_ministry_value)/SUM (measure_value))*100),0) AS "Rate"
+			FROM pentaho_absorption_rate
+			GROUP BY year_value, ministry_name
+			ORDER BY ministry_name, year_value
+	]]>
+	</Query>
+   </DataAccess>
+   
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="second_chart_sql"
+               id="second_bar_sql"
+               type="sql">
+      <Columns/>
+      <Parameters>
+         
+      </Parameters>
+      <Query>
+	  <![CDATA[
+		 SELECT 
+			'Expenditures' AS SERIES,
+			ministry_name,
+			expenditure_ministry_value AS BUDGET,
+			ministry_id AS ID
+			FROM pentaho_absorption_rate
+			
+		UNION
+			SELECT 
+				'Actual Disbursements' AS SERIES,
+				ministry_name,
+				measure_value AS BUDGET,
+				ministry_id AS ID
+			FROM pentaho_absorption_rate
+			ORDER BY SERIES
+	]]>
+	</Query>
+   </DataAccess>
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="second_chart_sql"
+               id="second_data_sql"
+               type="sql">
+      <Columns/>
+      <Parameters>
+         
+      </Parameters>
+      <Query>
+	  <![CDATA[
+		 SELECT 
+			ministry_name AS "Ministry",
+			expenditure_ministry_value AS "Expenditures",
+			measure_value AS "Actual Disbursements"
+			FROM pentaho_absorption_rate
+			ORDER BY ministry_name
+	]]>
+	</Query>
+   </DataAccess>
+   
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="third_chart_sql"
+               id="third_chart_sql"
+               type="sql">
+      <Columns/>
+      <Parameters>
+         <Parameter default="" name="ministryNameParameter" type="String"/>
+         
+      </Parameters>
+      <Query>
+	  <![CDATA[
+		 SELECT 
+			'Expenditures' AS SERIES,
+			year_value,
+			expenditure_ministry_value AS BUDGET
+			FROM pentaho_absorption_rate
+			WHERE ministry_name = ${ministryNameParameter}
+		UNION 
+		SELECT
+			'Actual Disbursements' AS SERIES,
+			year_value,
+			measure_value AS BUDGET
+			FROM pentaho_absorption_rate
+			WHERE ministry_name = ${ministryNameParameter}
+			ORDER BY year_value
+
+	]]>
+	</Query>
+   </DataAccess>
+   
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="third_chart_sql"
+               id="third_data_sql"
+               type="sql">
+      <Columns/>
+      <Parameters>
+         <Parameter default="" name="ministryNameParameter" type="String"/>
+      </Parameters>
+      <Query>
+	  <![CDATA[
+		 SELECT 
+			year_value AS "Year",
+			expenditure_ministry_value AS "Expenditures",
+			measure_value AS "Actual Disbursements"
+			FROM pentaho_absorption_rate
+			WHERE ministry_name = ${ministryNameParameter}
+			ORDER BY year_value
+	]]>
+	</Query>
+   </DataAccess>
+      
 </CDADescriptor>

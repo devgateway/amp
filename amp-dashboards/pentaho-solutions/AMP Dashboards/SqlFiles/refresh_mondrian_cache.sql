@@ -730,3 +730,23 @@ FROM cached_v_m_donor_funding cvmdf
 INNER JOIN pentaho_external_data ped ON cvmdf.ro_id = ped.amp_org_id
 GROUP BY cvmdf.ro_id, ped.value_date, year_value, ped.budget_value, cvmdf.ro_name, ped.amp_org_id
 );
+
+DROP TABLE IF EXISTS pentaho_absorption_rate;
+CREATE TABLE pentaho_absorption_rate AS (
+SELECT cvmdf.ro_id AS ministry_id,
+cvmdf.ro_name AS ministry_name,
+(SELECT EXTRACT(YEAR FROM ped.value_date)) AS year_value,
+ped.expenditure_ministry_value,
+(SELECT 
+	SUM ((1/getExchangeWithFixed(cvmdf2.currency_code,cvmdf2.transaction_date,cvmdf2.fixed_exchange_rate))* cvmdf2.transaction_amount *getExchange('USD',cvmdf2.transaction_date)) AS suma 
+	FROM cached_v_m_donor_funding cvmdf2 
+	WHERE cvmdf2.ro_id = ped.amp_org_id 
+	AND (SELECT EXTRACT(YEAR FROM ped.value_date))=(SELECT EXTRACT(YEAR FROM cvmdf2.transaction_date))
+	AND cvmdf2.adjustment_type = getCategoryValueId('Actual') 
+	AND cvmdf2.transaction_type = 1	
+) AS measure_value
+FROM cached_v_m_donor_funding cvmdf 
+INNER JOIN pentaho_external_data ped ON cvmdf.ro_id = ped.amp_org_id
+GROUP BY cvmdf.ro_id, ped.value_date, year_value, ped.expenditure_ministry_value, cvmdf.ro_name, ped.amp_org_id
+);
+

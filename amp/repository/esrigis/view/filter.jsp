@@ -186,7 +186,7 @@ function initializeTranslations(){
 														class="buttonx" value="&gt;&gt;" />
 												</div>
 											</div>
-											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;" id="orgGrpDivList">
+											<div style="height: 180px; width:400px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;" id="orgGrpDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
 													<li>
 														<input type="radio" value="-1" id="org_grp_check_all" name="org_grp_check"

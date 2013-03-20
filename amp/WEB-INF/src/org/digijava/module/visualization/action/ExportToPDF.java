@@ -80,7 +80,6 @@ public class ExportToPDF extends Action {
 	String pageTrn = "";
 	String filtersTrn = "";
 	String filtersAllTrn = "";
-	String filtersAmountsInTrn = "";
 	String filtersCurrencyTypeTrn = "";
 	String filtersStartYearTrn = "";
 	String filtersEndYearTrn = "";
@@ -169,10 +168,15 @@ public class ExportToPDF extends Action {
         	String filtersTrn = TranslatorWorker.translateText("Filters");
 			String filtersAllTrn = TranslatorWorker.translateText("All");
 			String filtersAmountsInTrn = "";
-			if(vForm.getFilter().shouldShowAmountsInThousands())
+			String filtersMagnitudeTrn = "";
+			if(vForm.getFilter().getShowAmountsInThousands() != null && vForm.getFilter().getShowAmountsInThousands()){
 				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in thousands");
-			else
+				filtersMagnitudeTrn = TranslatorWorker.translateText("Thousands");
+			}
+			else{
 				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions");
+				filtersMagnitudeTrn = TranslatorWorker.translateText("Millions");
+			}
 			String filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type");
 			String filtersStartYearTrn = TranslatorWorker.translateText("Start Year");
 			String filtersEndYearTrn = TranslatorWorker.translateText("End Year");
@@ -531,12 +535,13 @@ public class ExportToPDF extends Action {
 		    doc.add(filtersTbl);
             doc.add(new Paragraph(" "));
             
+            String amountsDescription =  " (" + filtersMagnitudeTrn + " " + currName + ")";
           //Summary table.
             if (summaryOpt.equals("1")) {
 				PdfPTable summaryTbl = null;
 	            summaryTbl = new PdfPTable(7);
 	            summaryTbl.setWidthPercentage(100);
-	            PdfPCell sumamaryTitleCell = new PdfPCell(new Paragraph(summaryTrn + " (" + currName + ")", HEADERFONT));
+	            PdfPCell sumamaryTitleCell = new PdfPCell(new Paragraph(summaryTrn + amountsDescription, HEADERFONT));
 	            sumamaryTitleCell.setColspan(7);
 	            summaryTbl.addCell(sumamaryTitleCell);
 	            cell = new PdfPCell(new Paragraph(totalCommsTrn, HEADERFONT));
@@ -601,7 +606,7 @@ public class ExportToPDF extends Action {
             Paragraph subTitle = null;
           //Top projects table.
             if (vForm.getFilter().getShowProjectsRanking()==null || vForm.getFilter().getShowProjectsRanking()){
-            	 subTitle = new Paragraph(topPrjTrn + " (" + currName + ")", SUBTITLEFONT);
+            	 subTitle = new Paragraph(topPrjTrn +  amountsDescription, SUBTITLEFONT);
                  subTitle.setAlignment(Element.ALIGN_LEFT);
                  doc.add(subTitle);
                  doc.add(new Paragraph(" "));
@@ -638,31 +643,31 @@ public class ExportToPDF extends Action {
 				AmpDashboardGraph ampDashboardGraph = (AmpDashboardGraph) iterator.next();
 				AmpGraph ampGraph = ampDashboardGraph.getGraph();
 				if (ampGraph.getContainerId().equals("Fundings"))
-					getFundingTable(fundingOpt, doc, vForm, request);
+					getFundingTable(fundingOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("AidPredictability"))
-					getAidPredictabilityTable(aidPredicOpt, doc, vForm, request);
+					getAidPredictabilityTable(aidPredicOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("AidType"))
-					getAidTypeTable(aidTypeOpt, doc, vForm, request);
+					getAidTypeTable(aidTypeOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("AidModality"))
-					getAidModalityTable(financingInstOpt, doc, vForm, request);
+					getAidModalityTable(financingInstOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("SectorProfile"))
-					getSectorProfileTable(sectorOpt, doc, vForm, request);
+					getSectorProfileTable(sectorOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("RegionProfile"))
-					getRegionProfileTable(regionOpt, doc, vForm, request);
+					getRegionProfileTable(regionOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("OrganizationProfile"))
-					getOrganizationProfileTable(organizationOpt, doc, vForm, request);
+					getOrganizationProfileTable(organizationOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("ODAGrowth"))
-					getODAGrowthTable(ODAGrowthOpt, doc, vForm, request);
+					getODAGrowthTable(ODAGrowthOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("NPOProfile"))
-					getNPOProfileTable(NPOOpt, doc, vForm, request);
+					getNPOProfileTable(NPOOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("ProgramProfile"))
-					getProgramProfileTable(programOpt, doc, vForm, request);
+					getProgramProfileTable(programOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("AidPredictabilityQuarter"))
-					getAidPredictabilityQuarterTable(aidPredicQuarterOpt, doc, vForm, request);
+					getAidPredictabilityQuarterTable(aidPredicQuarterOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("BudgetBreakdown"))
-					getBudgetBreakdownTable(budgetBreakdownOpt, doc, vForm, request);
+					getBudgetBreakdownTable(budgetBreakdownOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("BeneficiaryAgencyProfile"))
-					getBeneficiaryAgencyProfileTable(beneficiaryAgencyOpt, doc, vForm, request);
+					getBeneficiaryAgencyProfileTable(beneficiaryAgencyOpt, doc, vForm, request, amountsDescription);
 				
 			}
 			
@@ -684,11 +689,11 @@ public class ExportToPDF extends Action {
     }
     
   
-    private void getFundingTable(String fundingOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getFundingTable(String fundingOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Funding Table.
     	if (!fundingOpt.equals("0")){
 	    	doc.newPage();
-	    	Paragraph subTitle = new Paragraph(fundingTrn + " (" + currName + ")", SUBTITLEFONT);
+	    	Paragraph subTitle = new Paragraph(fundingTrn + amountDesc, SUBTITLEFONT);
 	        subTitle.setAlignment(Element.ALIGN_LEFT);
 	        doc.add(subTitle);
 	        doc.add(new Paragraph(" "));
@@ -737,11 +742,11 @@ public class ExportToPDF extends Action {
 	    }
     }
     
-    private void getAidPredictabilityTable(String aidPredicOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getAidPredictabilityTable(String aidPredicOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Aid Predictability Table.
 		if (!aidPredicOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(aidPredTrn + " (" + currName + ")", SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(aidPredTrn + amountDesc, SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -789,11 +794,11 @@ public class ExportToPDF extends Action {
         }
     }
     
-    private void getAidTypeTable(String aidTypeOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getAidTypeTable(String aidTypeOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Aid Type Table.
 		if (!aidTypeOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(aidTypeTrn + " (" + currName + ")", SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(aidTypeTrn + amountDesc, SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -841,11 +846,11 @@ public class ExportToPDF extends Action {
         }
     }
     
-    private void getAidModalityTable(String financingInstOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getAidModalityTable(String financingInstOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Financing Instrument Table.
 	    if (!financingInstOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(finInstTrn + " (" + currName + ")", SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(finInstTrn + amountDesc, SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -893,11 +898,11 @@ public class ExportToPDF extends Action {
         }
     }
     
-    private void getSectorProfileTable(String sectorOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getSectorProfileTable(String sectorOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Sector Profile Table.
         if (!sectorOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(sectorProfTrn + " (" + currName + ")", SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(sectorProfTrn + amountDesc, SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -945,11 +950,11 @@ public class ExportToPDF extends Action {
         }
     }
     
-    private void getRegionProfileTable(String regionOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getRegionProfileTable(String regionOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Region Profile Table.
         if (!regionOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(regionProfTrn + " (" + currName + ")", SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(regionProfTrn + amountDesc, SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -998,11 +1003,11 @@ public class ExportToPDF extends Action {
         }
     }
     
-    private void getOrganizationProfileTable(String organizationOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getOrganizationProfileTable(String organizationOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Organization Profile Table.
         if (!organizationOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(organizationProfTrn + " (" + currName + ")", SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(organizationProfTrn + amountDesc, SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -1050,11 +1055,11 @@ public class ExportToPDF extends Action {
         }
     }
     
-    private void getODAGrowthTable(String ODAGrowthOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getODAGrowthTable(String ODAGrowthOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
 
 	if (!ODAGrowthOpt.equals("0")){
 	  		doc.newPage();
-	  		Paragraph subTitle = new Paragraph(ODAGrowthTrn + " (" + currName + ")", SUBTITLEFONT);
+	  		Paragraph subTitle = new Paragraph(ODAGrowthTrn + amountDesc, SUBTITLEFONT);
 	  		subTitle.setAlignment(Element.ALIGN_LEFT);
 	  		doc.add(subTitle);
 	  		doc.add(new Paragraph(" "));
@@ -1102,11 +1107,11 @@ public class ExportToPDF extends Action {
          
     }
     
-    private void getNPOProfileTable(String NPOOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getNPOProfileTable(String NPOOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//NPO Profile Table.
 		if (!NPOOpt.equals("0")){
 			doc.newPage();
-			Paragraph subTitle = new Paragraph(NPOProfTrn + " (" + currName + ")", SUBTITLEFONT);
+			Paragraph subTitle = new Paragraph(NPOProfTrn + amountDesc, SUBTITLEFONT);
 		    subTitle.setAlignment(Element.ALIGN_LEFT);
 		    doc.add(subTitle);
 		    doc.add(new Paragraph(" "));
@@ -1154,11 +1159,11 @@ public class ExportToPDF extends Action {
 		}
     }
     
-    private void getProgramProfileTable(String programOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getProgramProfileTable(String programOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Program Profile Table.
 		if (!programOpt.equals("0")){
 			doc.newPage();
-			Paragraph subTitle = new Paragraph(programProfTrn + " (" + currName + ")", SUBTITLEFONT);
+			Paragraph subTitle = new Paragraph(programProfTrn + amountDesc, SUBTITLEFONT);
 		    subTitle.setAlignment(Element.ALIGN_LEFT);
 		    doc.add(subTitle);
 		    doc.add(new Paragraph(" "));
@@ -1206,10 +1211,10 @@ public class ExportToPDF extends Action {
 		}
     }
     
-    private void getAidPredictabilityQuarterTable(String aidPredicQuarterOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getAidPredictabilityQuarterTable(String aidPredicQuarterOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
 		if (!aidPredicQuarterOpt.equals("0")){
 			doc.newPage();
-			Paragraph subTitle = new Paragraph(aidPredQuarterTrn + " (" + currName + ")", SUBTITLEFONT);
+			Paragraph subTitle = new Paragraph(aidPredQuarterTrn + amountDesc, SUBTITLEFONT);
 			subTitle.setAlignment(Element.ALIGN_LEFT);
 			doc.add(subTitle);
 			doc.add(new Paragraph(" "));
@@ -1257,11 +1262,11 @@ public class ExportToPDF extends Action {
       	}
     }
     
-    private void getBudgetBreakdownTable(String budgetBreakdownOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getBudgetBreakdownTable(String budgetBreakdownOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Budget breakdown Table.
 		if (!budgetBreakdownOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(budgetBreakdownTrn + " (" + currName + ")", SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(budgetBreakdownTrn + amountDesc, SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));
@@ -1309,11 +1314,11 @@ public class ExportToPDF extends Action {
         }
     }
     
-    private void getBeneficiaryAgencyProfileTable(String beneficiaryAgencyOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getBeneficiaryAgencyProfileTable(String beneficiaryAgencyOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Beneficiary Agency Profile Table.
         if (!beneficiaryAgencyOpt.equals("0")){
         	doc.newPage();
-        	Paragraph subTitle = new Paragraph(beneficiaryAgencyProfTrn + " (" + currName + ")", SUBTITLEFONT);
+        	Paragraph subTitle = new Paragraph(beneficiaryAgencyProfTrn + amountDesc, SUBTITLEFONT);
             subTitle.setAlignment(Element.ALIGN_LEFT);
             doc.add(subTitle);
             doc.add(new Paragraph(" "));

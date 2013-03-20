@@ -1198,11 +1198,12 @@ function refreshAsync(){
 	}	
 }
 function refreshBoxes(o){
-
+	var isThousands = document.getElementById("show_amounts_in_thousands").checked;
 	var dashboardType = document.getElementById("dashboardType").value;
 	var results = YAHOO.lang.JSON.parse(o.responseText);
 	var inner = "";
 	var inner2 = "";
+	var valTotalCommits="";
 	var valTotalDisbs="";
 	var valNumOfProjs="";
 	var valNumOfSecs="";
@@ -1473,6 +1474,8 @@ function refreshBoxes(o){
 				div.innerHTML = inner;
 				var bla = getSelectedValue("show_amounts_in_thousands");
 				var textAmounts = bla == 1 ? trnAllAmountsInThousands:trnAllAmountsInMillions;
+				valTotalCommits = child.value + " " + (isThousands ? trnThousands : trnMillions) + " "  + child.curr;
+				var textAmounts = isThousands ? trnAllAmountsInThousands:trnAllAmountsInMillions;
 				
 				inner = "<i><font size='2' color='red'>" + textAmounts + " - " + child.curr + "</font></i>";
 				document.getElementById("currencyCode").value = child.curr;
@@ -1484,7 +1487,7 @@ function refreshBoxes(o){
 				
 				break;
 			case "TotalDisbs":
-				valTotalDisbs = child.value;
+				valTotalDisbs = child.value + " " + (isThousands ? trnThousands : trnMillions) + " "  + child.curr;
 				break;
 			case "NumberOfProjs":
 				valNumOfProjs = child.value;
@@ -1499,7 +1502,7 @@ function refreshBoxes(o){
 				valNumOfRegs = child.value;
 				break;
 			case "AvgProjSize":
-				valAvgProjSize = child.value;
+				valAvgProjSize = child.value + " " + (isThousands ? trnThousands : trnMillions) + " "  + child.curr;
 				break;
 			case "SelOrgContact":
 				if (child.list.length ==1) {
@@ -1649,7 +1652,16 @@ function refreshBoxes(o){
 				
 		}
 	}
-	inner = "<a title='" + trnTotalDisbsDescription + "' style='color: black;'>" + trnTotalDisbs + "</a> <b>" + valTotalDisbs + "</b><span class='breadcrump_sep'>|</span>";
+	inner = "<a title='" + trnTotalCommitsDescription + "' style='color: black;'>" + trnTotalCommitments + "</a> <b class='dashboard_total_num'>" + valTotalCommits + "</b><span class='breadcrump_sep'>|</span>";
+	
+	inner = inner + "<a title='" + trnTotalDisbsDescription + "' style='color: black;'>" + trnTotalDisbs + "</a> <b class='dashboard_total_num'>" + valTotalDisbs + "</b><br />";
+	
+	
+/*	inner = trnTotalCommitments + " <b class='dashboard_total_num'>" + valTotalCommits + "</b>";
+	inner = inner + trnTotalDisbs + " <b class='dashboard_total_num'>" + valTotalDisbs + "</b>";
+	var div = document.getElementById("divTotals");
+	div.innerHTML = inner;*/
+	
 	inner = inner + "<a title='" + trnNumOfProjsDescription + "' style='color: black;'>" + trnNumOfProjs + "</a> <b>" + valNumOfProjs + "</b><span class='breadcrump_sep'>|</span>";
 	//if (dashboardType!=1) {
 		inner = inner + "<a title='" + trnNumOfDonsDescription + "' style='color: black;'>" + trnNumOfDons + "</a> <b>" + valNumOfDons + "</b><span class='breadcrump_sep'>|</span>";
@@ -1658,9 +1670,9 @@ function refreshBoxes(o){
 		inner = inner + "<a title='" + trnNumOfSecsDescription + "' style='color: black;'>" + trnNumOfSecs + "</a> <b>" + valNumOfSecs + "</b><span class='breadcrump_sep'>|</span>";
 	//}
 	//if (dashboardType!=2) {
-		inner = inner + "<a title='" + trnNumOfRegsDescription + "' style='color: black;'>" + trnNumOfRegs + "</a> <b>" + valNumOfRegs + "</b><span class='breadcrump_sep'>|</span>";
+		inner = inner + "<a title='" + trnNumOfRegsDescription + "' style='color: black;'>" + trnNumOfRegs + "</a> <b>" + valNumOfRegs + "</b>";
 	//}
-	inner = inner + "<a title='" + trnAvgProjSizeDescription + "' style='color: black;'>" + trnAvgProjSize + "</a> <b>" + valAvgProjSize;
+	inner = inner + "<br /><a title='" + trnAvgProjSizeDescription + "' style='color: black;'>" + trnAvgProjSize + "</a> <b>" + valAvgProjSize + "</b>";
 	var div = document.getElementById("divSummaryInfo");
 	div.innerHTML = inner;
 

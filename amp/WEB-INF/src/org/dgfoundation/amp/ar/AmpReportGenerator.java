@@ -847,11 +847,13 @@ public class AmpReportGenerator extends ReportGenerator {
 		rawColumns.getItems().clear();
 		rawColumns = null;
 		report.removeEmptyChildren();
-		report.removeChildrenWithoutActivities(); //postProcess might have left some more empty children
-		
-		// ugly hack for recursive elimination of empty hierarchies... we have a hier depth of at most 5
-		for(int i = 0; i < 5; i++)
-			report.removeEmptyChildren(); //removeChildrenWithoutActivities might have left empty GroupReportData instances
+		if (!reportMetadata.getDrilldownTab())
+		{	
+			report.cleanActivitiesWithoutFunding();
+			// ugly hack for recursive elimination of empty hierarchies... we have a hier depth of at most 5
+			for(int i = 0; i < 5; i++)
+				report.removeEmptyChildren(); //removeChildrenWithoutActivities might have left empty GroupReportData instances
+		}
 	}
 
 	/**
@@ -960,7 +962,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			}
 
 		}
-		// now we can create the hiearchy tree
+		// now we can create the hierarchy tree
 		for (AmpReportHierarchy element:orderedHierarchies) {
 			// TODO: the set is NOT a list, so the hierarchies are unordered.
 			AmpColumns c = element.getColumn();

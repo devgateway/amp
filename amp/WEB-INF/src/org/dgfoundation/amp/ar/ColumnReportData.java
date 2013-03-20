@@ -280,16 +280,16 @@ public class ColumnReportData extends ReportData<Column> {
 			while ( iter.hasNext() ) {
 				Entry<Long, Double> e		= iter.next();
 				Double parentPercentage		= 100.0;
-				if ( this.getSplitterCell() != null ) {
-					try {
-						parentPercentage	= ARUtil.retrieveParentPercetage(e.getKey(), this.getSplitterCell() );
-					} catch (Exception e1) {
-						logger.warn (e1.getMessage() );
-					}
-				}
+//				if ( this.getSplitterCell() != null ) { // percentages are applied by multiplication further down the line , so no need to subtract - just multiple by remaining
+//					try {
+//						parentPercentage	= ARUtil.retrieveParentPercetage(e.getKey(), this.getSplitterCell() );
+//					} catch (Exception e1) {
+//						logger.warn (e1.getMessage() );
+//					}
+//				}
 				if ( e.getValue() < 100.0 ) {
 					fakeCell		= AmpReportGenerator.generateFakeCell(this, e.getKey(), keyCol);
-					fakeCell		= AmpReportGenerator.generateFakeMetaTextCell((TextCell)fakeCell, parentPercentage-e.getValue() );
+					fakeCell		= AmpReportGenerator.generateFakeMetaTextCell((TextCell)fakeCell, parentPercentage - e.getValue());
 					metaFakeCell	= (MetaTextCell)fakeCell;
 					( (CellColumn)keyCol ).addCell(fakeCell);
 				}

@@ -10,7 +10,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <style>
 table.inside, td.inside,td.report_inside {border-color: #CCC; border-style: solid; font-size:11px;}
@@ -35,7 +35,7 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border="0">
 	<tr>	
 		<td vAlign="top">
-		
+	<c:if test="${fn:length(visualizationform.itemProjectsList) gt 0}">	
 	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="inside" style="margin-bottom:15px;">
 		<c:forEach items="${visualizationform.itemProjectsList}" var="item"> 
 			<tr bgcolor=#555555>
@@ -65,6 +65,16 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 		  </tr>
 		</c:forEach>
 	</table>
+	</c:if>
+	<c:if test="${fn:length(visualizationform.itemProjectsList) eq 0}">
+		<div align="center">
+			<br />
+			<br />
+			<digi:trn>No activities to show</digi:trn>
+		</div>
+		<br />
+		<br />
+	</c:if>	
 	<center><input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()"></center>
 	</td>
 	</tr>

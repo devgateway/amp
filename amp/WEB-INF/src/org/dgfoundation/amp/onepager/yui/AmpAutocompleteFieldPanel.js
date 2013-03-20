@@ -94,6 +94,8 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
     this.autoComplete.filterResults = function(q, entries, resultObj, cb) {		
 		if(!q || q=='')
 			return resultObj;
+
+        q = decodeURIComponent(q);
 		
 		resultObj = YAHOO.widget.AutoComplete._cloneObject(resultObj);
 		

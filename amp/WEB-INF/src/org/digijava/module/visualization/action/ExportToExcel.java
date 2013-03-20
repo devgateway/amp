@@ -78,7 +78,6 @@ public class ExportToExcel extends Action {
 	String pageTrn = "";
 	String filtersTrn = "";
 	String filtersAllTrn = "";
-	String filtersAmountsInTrn = "";
 	String filtersCurrencyTypeTrn = "";
 	String filtersStartYearTrn = "";
 	String filtersEndYearTrn = "";
@@ -192,10 +191,17 @@ public class ExportToExcel extends Action {
 			String filtersTrn = TranslatorWorker.translateText("Filters");
 			String filtersAllTrn = TranslatorWorker.translateText("All");
 			String filtersAmountsInTrn = ""; 
-			if(vForm.getFilter().shouldShowAmountsInThousands())
+			String filtersMagnitudeTrn = "";
+			if(vForm.getFilter().getShowAmountsInThousands() != null && vForm.getFilter().getShowAmountsInThousands()){
 				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in thousands");
-			else
+				filtersMagnitudeTrn = TranslatorWorker.translateText("Thousands");
+			}
+				filtersMagnitudeTrn = TranslatorWorker.translateText("Thousands", langCode, siteId);
+			}
+			else{
 				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in millions");
+				filtersMagnitudeTrn = TranslatorWorker.translateText("Millions");
+			}
 			String filtersCurrencyTypeTrn = TranslatorWorker.translateText("Currency Type");
 			String filtersStartYearTrn = TranslatorWorker.translateText("Start Year");
 			String filtersEndYearTrn = TranslatorWorker.translateText("End Year");
@@ -661,12 +667,14 @@ public class ExportToExcel extends Action {
             //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             
             rowNum++;
+            
+            String amountDescription = " (" + filtersMagnitudeTrn + " " + currName + ")";  
 	        //Summary table.
 	        if (summaryOpt.equals("1")) {
 	        	headerText = null;
 	        	row = sheet.createRow(rowNum++);
 	        	cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(summaryTrn + " (" + currName + ")");
+	            headerText = new HSSFRichTextString(summaryTrn + amountDescription);
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(subHeaderCS);
 	            
@@ -758,7 +766,7 @@ public class ExportToExcel extends Action {
            	 	headerText = null;
 	        	row = sheet.createRow(rowNum++);
 	        	cell = row.createCell(cellNum++);
-	            headerText = new HSSFRichTextString(topPrjTrn + " (" + currName + ")");
+	            headerText = new HSSFRichTextString(topPrjTrn + amountDescription);
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(subHeaderCS);
 	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -810,31 +818,31 @@ public class ExportToExcel extends Action {
 				AmpDashboardGraph ampDashboardGraph = (AmpDashboardGraph) iterator.next();
 				AmpGraph ampGraph = ampDashboardGraph.getGraph();
 				if (ampGraph.getContainerId().equals("Fundings"))
-					getFundingTable(fundingOpt, wb, vForm, request);
+					getFundingTable(fundingOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("AidPredictability"))
-					getAidPredictabilityTable(aidPredicOpt, wb, vForm, request);
+					getAidPredictabilityTable(aidPredicOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("AidType"))
-					getAidTypeTable(aidTypeOpt, wb, vForm, request);
+					getAidTypeTable(aidTypeOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("AidModality"))
-					getAidModalityTable(financingInstOpt, wb, vForm, request);
+					getAidModalityTable(financingInstOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("SectorProfile"))
-					getSectorProfileTable(sectorOpt, wb, vForm, request);
+					getSectorProfileTable(sectorOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("RegionProfile"))
-					getRegionProfileTable(regionOpt, wb, vForm, request);
+					getRegionProfileTable(regionOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("OrganizationProfile"))
-					getOrganizationProfileTable(organizationOpt, wb, vForm, request);
+					getOrganizationProfileTable(organizationOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("ODAGrowth"))
-					getODAGrowthTable(ODAGrowthOpt, wb, vForm, request);
+					getODAGrowthTable(ODAGrowthOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("NPOProfile"))
-					getNPOProfileTable(NPOOpt, wb, vForm, request);
+					getNPOProfileTable(NPOOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("ProgramProfile"))
-					getProgramProfileTable(programOpt, wb, vForm, request);
+					getProgramProfileTable(programOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("AidPredictabilityQuarter"))
-					getAidPredictabilityQuarterTable(aidPredicQuarterOpt, wb, vForm, request);
+					getAidPredictabilityQuarterTable(aidPredicQuarterOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("BudgetBreakdown"))
-					getBudgetBreakdownTable(budgetBreakdownOpt, wb, vForm, request);
+					getBudgetBreakdownTable(budgetBreakdownOpt, wb, vForm, request, amountDescription);
 				if (ampGraph.getContainerId().equals("BeneficiaryAgencyProfile"))
-					getBeneficiaryAgencyProfileTable(beneficiaryAgencyOpt, wb, vForm, request);
+					getBeneficiaryAgencyProfileTable(beneficiaryAgencyOpt, wb, vForm, request, amountDescription);
 				
 			}
 		    
@@ -916,7 +924,7 @@ public class ExportToExcel extends Action {
 
     }
     
-    private void getFundingTable(String fundingOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getFundingTable(String fundingOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Funding Table.
         if (!fundingOpt.equals("0")){
 	    	sheet2 = wb.createSheet(fundingTrn);
@@ -930,7 +938,7 @@ public class ExportToExcel extends Action {
 	        cell = row.createCell(cellNum++);
         	String[] fundingRows = vForm.getExportData().getFundingTableData().split("<");
             
-        	headerText = new HSSFRichTextString(fundingTrn + " (" + currName + ")");
+        	headerText = new HSSFRichTextString(fundingTrn + amountDesc);
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -992,7 +1000,7 @@ public class ExportToExcel extends Action {
 	    }
     }
     
-    private void getAidPredictabilityTable(String aidPredicOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getAidPredictabilityTable(String aidPredicOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Aid Predictability Table.
 		if (!aidPredicOpt.equals("0")){
 	    	sheet3 = wb.createSheet(aidPredTrn);
@@ -1007,7 +1015,7 @@ public class ExportToExcel extends Action {
         	cell = row.createCell(cellNum++);
         	String[] aidPredRows = vForm.getExportData().getAidPredicTableData().split("<");
             
-        	headerText = new HSSFRichTextString(aidPredTrn + " (" + currName + ")");
+        	headerText = new HSSFRichTextString(aidPredTrn + amountDesc);
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1070,7 +1078,7 @@ public class ExportToExcel extends Action {
 	    }
     }
     
-    private void getAidTypeTable(String aidTypeOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getAidTypeTable(String aidTypeOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Aid Type Table.
 		if (!aidTypeOpt.equals("0")){
 	    	sheet4 = wb.createSheet(aidTypeTrn);
@@ -1085,7 +1093,7 @@ public class ExportToExcel extends Action {
         	cell = row.createCell(cellNum++);
         	String[] aidTypeRows = vForm.getExportData().getAidTypeTableData().split("<");
             
-        	headerText = new HSSFRichTextString(aidTypeTrn + " (" + currName + ")");
+        	headerText = new HSSFRichTextString(aidTypeTrn + amountDesc);
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1146,7 +1154,7 @@ public class ExportToExcel extends Action {
 	    }
     }
     
-    private void getAidModalityTable(String financingInstOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getAidModalityTable(String financingInstOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	 //Financing Instrument Table.
         if (!financingInstOpt.equals("0")){
 	    	sheet5 = wb.createSheet(finInstTrn);
@@ -1161,7 +1169,7 @@ public class ExportToExcel extends Action {
         	cell = row.createCell(cellNum++);
         	String[] finInstRows = vForm.getExportData().getFinancingInstTableData().split("<");
             
-        	headerText = new HSSFRichTextString(finInstTrn + " (" + currName + ")");
+        	headerText = new HSSFRichTextString(finInstTrn + amountDesc);
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1222,7 +1230,7 @@ public class ExportToExcel extends Action {
 	    }
     }
     
-    private void getSectorProfileTable(String sectorOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getSectorProfileTable(String sectorOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Sector Profile Table.
         if (!sectorOpt.equals("0")){
 	    	sheet6 = wb.createSheet(sectorProfTrn);
@@ -1237,7 +1245,7 @@ public class ExportToExcel extends Action {
         	cell = row.createCell(cellNum++);
         	String[] sectorProfRows = vForm.getExportData().getSectorTableData().split("<");
             
-        	headerText = new HSSFRichTextString(sectorProfTrn + " (" + currName + ")");
+        	headerText = new HSSFRichTextString(sectorProfTrn + amountDesc);
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1297,7 +1305,7 @@ public class ExportToExcel extends Action {
 	    }
     }
     
-    private void getRegionProfileTable(String regionOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getRegionProfileTable(String regionOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Region Profile Table.
         if (!regionOpt.equals("0")){
 	    	sheet7 = wb.createSheet(regionProfTrn);
@@ -1312,7 +1320,7 @@ public class ExportToExcel extends Action {
         	cell = row.createCell(cellNum++);
         	String[] regionProfRows = vForm.getExportData().getRegionTableData().split("<");
             
-        	headerText = new HSSFRichTextString(regionProfTrn + " (" + currName + ")");
+        	headerText = new HSSFRichTextString(regionProfTrn + amountDesc);
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1373,7 +1381,7 @@ public class ExportToExcel extends Action {
 	    }
     }
     
-    private void getOrganizationProfileTable(String organizationOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getOrganizationProfileTable(String organizationOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Organization Profile Table.
 	    if (!organizationOpt.equals("0")){
 	    	sheet8 = wb.createSheet(organizationProfTrn);
@@ -1388,7 +1396,7 @@ public class ExportToExcel extends Action {
         	cell = row.createCell(cellNum++);
         	String[] organizationProfRows = vForm.getExportData().getOrganizationTableData().split("<");
             
-        	headerText = new HSSFRichTextString(organizationProfTrn + " (" + currName + ")");
+        	headerText = new HSSFRichTextString(organizationProfTrn + amountDesc);
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1449,7 +1457,7 @@ public class ExportToExcel extends Action {
 	    }
     }
     
-    private void getODAGrowthTable(String ODAGrowthOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getODAGrowthTable(String ODAGrowthOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//ODA Growth Table.
 	    if (!ODAGrowthOpt.equals("0")){
 	    	sheet1 = wb.createSheet(ODAGrowthTrn);
@@ -1462,7 +1470,7 @@ public class ExportToExcel extends Action {
 	    	cell = row.createCell(cellNum++);
 	    	String[] ODAGrowthRows = vForm.getExportData().getODAGrowthTableData().split("<");
 
-	    	headerText = new HSSFRichTextString(ODAGrowthTrn + " (" + currName + ")");
+	    	headerText = new HSSFRichTextString(ODAGrowthTrn + amountDesc);
 	    	cell.setCellValue(headerText);
 	    	cell.setCellStyle(subHeaderCS);
 	            
@@ -1517,7 +1525,7 @@ public class ExportToExcel extends Action {
         }
     }
     
-    private void getNPOProfileTable(String NPOOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getNPOProfileTable(String NPOOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//NPO Profile Table.
 		    if (!NPOOpt.equals("0")){
 		    	sheet9 = wb.createSheet(NPOProfTrn);
@@ -1532,7 +1540,7 @@ public class ExportToExcel extends Action {
 	        	cell = row.createCell(cellNum++);
 	        	String[] NPOProfRows = vForm.getExportData().getNPOTableData().split("<");
 	            
-	        	headerText = new HSSFRichTextString(NPOProfTrn + " (" + currName + ")");
+	        	headerText = new HSSFRichTextString(NPOProfTrn + amountDesc);
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(subHeaderCS);
 	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1593,7 +1601,7 @@ public class ExportToExcel extends Action {
 		    }
     }
     
-    private void getProgramProfileTable(String programOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getProgramProfileTable(String programOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Program Profile Table.
 		    if (!programOpt.equals("0")){
 		    	sheet10 = wb.createSheet(programProfTrn);
@@ -1608,7 +1616,7 @@ public class ExportToExcel extends Action {
 	        	cell = row.createCell(cellNum++);
 	        	String[] programProfRows = vForm.getExportData().getProgramTableData().split("<");
 	            
-	        	headerText = new HSSFRichTextString(programProfTrn + " (" + currName + ")");
+	        	headerText = new HSSFRichTextString(programProfTrn + amountDesc);
 	            cell.setCellValue(headerText);
 	            cell.setCellStyle(subHeaderCS);
 	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1669,7 +1677,7 @@ public class ExportToExcel extends Action {
 		    }
     }
     
-    private void getAidPredictabilityQuarterTable(String aidPredicQuarterOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getAidPredictabilityQuarterTable(String aidPredicQuarterOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Aid Predictability Quarter Table.
 		if (!aidPredicQuarterOpt.equals("0")){
 	    	sheet11 = wb.createSheet(aidPredQuarterTrn);
@@ -1684,7 +1692,7 @@ public class ExportToExcel extends Action {
         	cell = row.createCell(cellNum++);
         	String[] aidPredQuarterRows = vForm.getExportData().getAidPredicQuarterTableData().split("<");
             
-        	headerText = new HSSFRichTextString(aidPredQuarterTrn + " (" + currName + ")");
+        	headerText = new HSSFRichTextString(aidPredQuarterTrn + amountDesc);
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1747,7 +1755,7 @@ public class ExportToExcel extends Action {
 	    }
     }
     
-    private void getBudgetBreakdownTable(String budgetBreakdownOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getBudgetBreakdownTable(String budgetBreakdownOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Budget Breakdown Table.
 		if (!budgetBreakdownOpt.equals("0")){
 	    	sheet12 = wb.createSheet(budgetBreakdownTrn);
@@ -1762,7 +1770,7 @@ public class ExportToExcel extends Action {
         	cell = row.createCell(cellNum++);
         	String[] budgetBreakdownRows = vForm.getExportData().getBudgetTableData().split("<");
             
-        	headerText = new HSSFRichTextString(budgetBreakdownTrn + " (" + currName + ")");
+        	headerText = new HSSFRichTextString(budgetBreakdownTrn + amountDesc);
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
@@ -1823,7 +1831,7 @@ public class ExportToExcel extends Action {
 	    }
     }
     
-    private void getBeneficiaryAgencyProfileTable(String beneficiaryAgencyOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request) throws Exception{
+    private void getBeneficiaryAgencyProfileTable(String beneficiaryAgencyOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Beneficiary Agency Profile Table.
 	    if (!beneficiaryAgencyOpt.equals("0")){
 	    	sheet13 = wb.createSheet(beneficiaryAgencyProfTrn);
@@ -1838,7 +1846,7 @@ public class ExportToExcel extends Action {
         	cell = row.createCell(cellNum++);
         	String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
             
-        	headerText = new HSSFRichTextString(beneficiaryAgencyProfTrn + " (" + currName + ")");
+        	headerText = new HSSFRichTextString(beneficiaryAgencyProfTrn + amountDesc);
             cell.setCellValue(headerText);
             cell.setCellStyle(subHeaderCS);
             //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));

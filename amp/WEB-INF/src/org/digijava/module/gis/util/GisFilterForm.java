@@ -24,7 +24,7 @@ public class GisFilterForm {
     private int mapLevel;
     private String filterStartYear;
     private String filterEndYear;
-    private boolean filterAllSectors;
+    private Boolean filterAllSectors;
     private boolean curWorkspaceOnly;
 /*    private boolean childWorkspacesToo;
 */  
@@ -63,11 +63,11 @@ public class GisFilterForm {
         this.curWorkspace = curWorkspace;
     }
 
-    public boolean isFilterAllSectors() {
+    public Boolean isFilterAllSectors() {
         return filterAllSectors;
     }
 
-    public void setFilterAllSectors(boolean filterAllSectors) {
+    public void setFilterAllSectors(Boolean filterAllSectors) {
         this.filterAllSectors = filterAllSectors;
     }
 
@@ -181,5 +181,12 @@ public class GisFilterForm {
 
     public void setSelectedNatPlanObj(Long[] selectedNatPlanObj) {
         this.selectedNatPlanObj = selectedNatPlanObj;
+    }
+    
+    public boolean shouldFilterBySectors()
+    {
+    	if (this.isFilterAllSectors() == null)
+    		return true;
+    	return !this.isFilterAllSectors();
     }
 }

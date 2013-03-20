@@ -26,10 +26,9 @@
        * TooltipDialog
        ****************/
       
-      function showMapInTooltipDialog(node) {
-        if (!tooltipDialog) {
-          var htmlFragment = '<div></div>';
-          htmlFragment += '<div id="map" style="width:400px; height:350px; border: 1px solid #A8A8A8;"></div>';
+      function showMapInTooltipDialog(node,hide) {
+        if (!tooltipDialog && !hide) {
+          var htmlFragment = '<div id="map" style="width:400px; height:350px; border: 1px solid #A8A8A8;"></div>';
 
           // CREATE TOOLTIP DIALOG
           tooltipDialog = new dijit.TooltipDialog({
@@ -47,15 +46,17 @@
           createMap();
         }
         else {
-          if (tooltipDialog.opened_) {
+          if (tooltipDialog && tooltipDialog.opened_) {
             dijit.popup.close(tooltipDialog);
             tooltipDialog.opened_ = false;
             node.innerHTML = '<digi:trn>Show Map</digi:trn>';
           }
-          else {
+          else if(tooltipDialog && !hide) {
             dijit.popup.open({ popup: tooltipDialog, around: node });
             tooltipDialog.opened_ = true;
-            node.innerHTML = "Hide";
+            node.innerHTML = '<digi:trn>Hide Map</digi:trn>';
+          }else{
+        	  node.innerHTML = '<digi:trn>Show Map</digi:trn>'; 
           }
         }
       }
@@ -157,6 +158,6 @@
 </head>
   
   <body class="claro" style="font-family: Arial Unicode MS,Arial,sans-serif;">
-   	<a onclick="showMapInTooltipDialog(this);" style="cursor: pointer;"><digi:trn>Show Map</digi:trn></a>
+   	<a id="ashowmap" onclick="showMapInTooltipDialog(this,false);" style="cursor: pointer;"><digi:trn>Show Map</digi:trn></a>
   </body>
 </html>

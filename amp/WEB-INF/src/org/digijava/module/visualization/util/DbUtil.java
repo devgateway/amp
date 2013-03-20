@@ -346,7 +346,7 @@ public class DbUtil {
 	            logger.error(e);
 	            throw new DgException("Cannot load regions from db", e);
 	        }
-	        return DashboardUtil.getTopLevelLocationList(locations);
+	        return locations;
 		}
      }
     
@@ -1039,7 +1039,7 @@ public class DbUtil {
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			organizationRoleQuery = true;
     	
-        oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name";
+        oql = "select distinct fd, f.ampActivityId.ampActivityId, f.ampActivityId.name";
         if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
         	oql += ", actProg.programPercentage ";
         if (locationCondition)
@@ -1349,22 +1349,14 @@ public class DbUtil {
         	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-            oql += DashboardUtil.getTeamQueryManagement();
-        else
-        	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
-        		oql += DashboardUtil.getTeamQuery(tm);
-        	else
-        		oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
-        		
-
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
 
         if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
         	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        else
+        	oql += "  and act.team is not null ";
+        	
+        oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
+    	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
@@ -1469,7 +1461,7 @@ public class DbUtil {
         return map;
     }
 	
-	public static Map<AmpCategoryValueLocations, BigDecimal> getFundingByRegionList(Collection<AmpCategoryValueLocations> regList, AmpCategoryValueLocations natLoc, String currCode,  Date startDate,
+	public static Map<AmpCategoryValueLocations, BigDecimal> getFundingByRegionList(Collection<AmpCategoryValueLocations> regListChildren, Collection<AmpCategoryValueLocations> regListParent, AmpCategoryValueLocations natLoc, String currCode,  Date startDate,
             Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter, HttpServletRequest request) throws DgException {
         
 		Map<AmpCategoryValueLocations, BigDecimal> map = new HashMap<AmpCategoryValueLocations, BigDecimal>();
@@ -1515,7 +1507,13 @@ public class DbUtil {
         
         oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
-        oql += " and loc.id in (" + DashboardUtil.getInStatement(regList) + ")";
+        oql += " and loc.id in (" + DashboardUtil.getInStatement(regListChildren) + ")";
+        
+        //Mapping the locations with their parents
+        HashMap<Long, Long> locationMap = new HashMap<Long, Long>();
+        for(AmpCategoryValueLocations currentLocation : regListChildren ){
+        	locationMap.put(currentLocation.getId(), DashboardUtil.getTopLevelLocation(currentLocation).getId());
+        }
 
        
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
@@ -1535,21 +1533,14 @@ public class DbUtil {
         	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-            oql += DashboardUtil.getTeamQueryManagement();
-        else
-        	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
-        		oql += DashboardUtil.getTeamQuery(tm);
-        	else
-        		oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
-
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
 
         if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
         	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        else
+        	oql += "  and act.team is not null ";
+        	
+        oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
+    	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
@@ -1566,7 +1557,7 @@ public class DbUtil {
             fundingDets = query.list();
 
             HashMap<Long, AmpCategoryValueLocations> locationParentList = new HashMap<Long, AmpCategoryValueLocations>();
-            Iterator iter = regList.iterator();
+            Iterator iter = regListParent.iterator();
             while (iter.hasNext()) {
             	AmpCategoryValueLocations loc = (AmpCategoryValueLocations)iter.next();
             	if (loc.getId()!=natLoc.getId()){
@@ -1580,13 +1571,23 @@ public class DbUtil {
             Iterator it = fundingDets.iterator();
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
-            	
-            	AmpFundingDetail currentFd = (AmpFundingDetail) item[0];
+            	AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	if (item.length==4) 
+            		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
+            	if (item.length==5) 
+            		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            	if (item.length==6) 
+            		currentFd.setTransactionAmount(((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
             	String name = (String) item[2];
+
             	if (natLoc != null && id.equals(new Long(natLoc.getId()))){
             		name = natLoc.getName();
             	} else if (!locationCondition) {
+            		if(locationParentList.get(id) == null){
+            			id = locationMap.get(id);
+            		}
             		name = locationParentList.get(id).getName();
             		id = locationParentList.get(id).getId();
             	}
@@ -1727,13 +1728,13 @@ public class DbUtil {
         	else
         		oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
 
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
-
         if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
         	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
-        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        else
+        	oql += "  and act.team is not null ";
+        	
+        oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
+    	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();

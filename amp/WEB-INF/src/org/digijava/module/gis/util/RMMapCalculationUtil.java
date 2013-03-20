@@ -40,7 +40,7 @@ public class RMMapCalculationUtil {
     public static Object[] getAllFundingsFiltered (GisFilterForm filter, boolean isRegional, boolean isPublic) {
 
         Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
-//        Collection<Long> secondarySectors = null;//longArrayToColl(filter.getSelectedSecondarySectors());
+        Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
 //        Collection<Long> tertiarySectors = null;//longArrayToColl(filter.getSelectedTertiarySectors());
         Collection<Long> typeOfAssistanceIds = longArrayToColl(filter.getSelectedTypeOfAssistance());
 
@@ -97,6 +97,7 @@ public class RMMapCalculationUtil {
             
             // activityFundings[0] = List<Object[7]>
             activityFundings = DbUtil.getActivityFundings(sectorCollector,
+            											   secondarySectors,
                                                            programsIds,
                                                            donnorAgencyIds,
                                                            donorGroupIds,
@@ -108,7 +109,8 @@ public class RMMapCalculationUtil {
                                                            fStartDate.getTime(),
                                                            fEndDate.getTime(),
                                                            isPublic,
-                                                           false);
+                                                           false,
+                                                           filter.shouldFilterBySectors());
             }
 
             if (isRegional == GisUtil.GIS_REGIONAL_FUNDINGS) {
@@ -153,23 +155,23 @@ public class RMMapCalculationUtil {
 
     public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isRegional, boolean isPublic) {
 
-        Collection<Long> primartSectors = longArrayToColl(filter.getSelectedSectors());
-        //Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
-        Collection<Long> secondarySectors = null;
+        Collection<Long> primarySectors = longArrayToColl(filter.getSelectedSectors());
+        Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
+        //Collection<Long> secondarySectors = null;
         //Collection<Long> tertiarySectors = longArrayToColl(filter.getSelectedTertiarySectors());
-        Collection<Long> tertiarySectors = null;
+       // Collection<Long> tertiarySectors = null;
 
         Set sectorCollector = new HashSet();
 
-        if (primartSectors != null) {
-            sectorCollector.addAll(primartSectors);
+        if (primarySectors != null) {
+            sectorCollector.addAll(primarySectors);
         }
-        if (secondarySectors != null) {
-            sectorCollector.addAll(secondarySectors);
-        }
-        if (tertiarySectors != null) {
-            sectorCollector.addAll(tertiarySectors);
-        }
+//        if (secondarySectors != null) {
+//            sectorCollector.addAll(secondarySectors);
+//        }
+//        if (tertiarySectors != null) {
+//            sectorCollector.addAll(tertiarySectors);
+//        }
 
 
         Collection<Long> donorTypeIds = longArrayToColl(filter.getSelectedDonorTypes());
@@ -214,6 +216,7 @@ public class RMMapCalculationUtil {
         if (!isRegional) {
         	// activityFundings[0] = List<Object[7]>
             activityFundings = DbUtil.getActivityFundings(sectorCollector,
+	            											   secondarySectors,
                                                                programsIds,
                                                                donnorAgencyIds,
                                                                donorGroupIds,
@@ -221,7 +224,7 @@ public class RMMapCalculationUtil {
                                                                includeCildLocations,
                                                                locations,
                                                                workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), 
-                                                               isPublic, true);
+                                                               isPublic, true, filter.getSelectedSecondarySectors() != null);
         } else {
             activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,
@@ -239,10 +242,9 @@ public class RMMapCalculationUtil {
     }
 
     private static Collection <Long> longArrayToColl(Long[] arrToAdd) {
-        Collection retVal = null;
-        new ArrayList();
+        Collection<Long> retVal = null;
         if (arrToAdd != null) {
-            retVal = new ArrayList();
+            retVal = new ArrayList<Long>();
             for (Long id : arrToAdd) {
                 retVal.add(id);
             }
@@ -332,12 +334,17 @@ public class RMMapCalculationUtil {
             Map <Long, Map<Long, Float>> sectorPercentageMap = (Map <Long, Map<Long, Float>>) data[1];
             Map <Long, Map<Long, Float>> programPercentageMap = (Map <Long, Map<Long, Float>>) data[2];
             Map <Long, Map<Long, Float>> locationPercentageMap = (Map <Long, Map<Long, Float>>) data[3];
+            Map <Long, Map<Long, Float>> secondarySectorPercentageMap = data.length >= 5 ? (Map <Long, Map<Long, Float>>) data[4] : null;
 
 
             if (sectorPercentageMap != null) {
                 applySectorOrProgramPercentages (fundings, sectorPercentageMap);
             }
 
+            if (secondarySectorPercentageMap != null){
+            	applySectorOrProgramPercentages(fundings, secondarySectorPercentageMap);
+            }
+            
             if (programPercentageMap != null) {
                 applySectorOrProgramPercentages (fundings, programPercentageMap);
             }

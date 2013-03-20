@@ -2102,10 +2102,11 @@ public class DbUtil {
      * @return
      */
     public static Object[] getActivityFundings (Collection<Long> sectorIds,
+            									Collection<Long> secondarySectorIds,
                                                 Collection<Long> programIds,
                                                 Collection<Long> donorIds,
                                                 Collection<Long> donorGroupIds,
-                                                Collection<Long> donorTypeIds,
+                                                Collection<Long> donorTypeIds, 
                                                 boolean includeCildLocations,
                                                 Collection<AmpCategoryValueLocations> locations,
                                                 List <AmpTeam> workspaces,
@@ -2113,28 +2114,32 @@ public class DbUtil {
                                                 java.util.Date startDate,
                                                 java.util.Date endDate,
                                                 boolean isPublic,
-                                                boolean filterByLocations) {
+                                                boolean filterByLocations,
+                                                boolean filterBySecondarySectors) {
     		
         	Map<Long, Map<Long, Float>> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds, null) : null;
+        	Map<Long, Map<Long, Float>> secondarySectorPercentageMap = (secondarySectorIds != null && !secondarySectorIds.isEmpty()) ? getActivitySecondarySectorPercentages(secondarySectorIds) : null;
         	Map<Long, Map<Long, Float>> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
         	Map<Long, Map<Long, Float>> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations, includeCildLocations) : null;
 
-    		return getActivityFundings(sectorPercentageMap, programPercentageMap, donorIds, donorGroupIds, donorTypeIds, locationPercentageMap, workspaces, typeOfAssistanceIds, startDate, endDate, isPublic, session, filterByLocations);    		
+    		return getActivityFundings(sectorPercentageMap, secondarySectorPercentageMap, programPercentageMap, donorIds, donorGroupIds, donorTypeIds, locationPercentageMap, workspaces, typeOfAssistanceIds, startDate, endDate, isPublic, session, filterByLocations, filterBySecondarySectors);    		
     	}
     
     public static Object[] getActivityFundings (Map<Long, Map<Long, Float>> sectorPercentageMap,
-			    			Map<Long, Map<Long, Float>> programPercentageMap,
-			    			Collection<Long> donorIds,
-			    			Collection<Long> donorGroupIds,
-			    			Collection<Long> donorTypeIds,
-			    			Map<Long, Map<Long, Float>> locationPercentageMap,
-			    			List <AmpTeam> workspaces,
-			    			Collection <Long> typeOfAssistanceIds,
-			    			java.util.Date startDate,
-			    			java.util.Date endDate,
-			    			boolean isPublic,
-			    			HttpSession session,
-			    			boolean filterByLocations) 
+    											Map<Long, Map<Long, Float>> secondarySectorPercentageMap,
+    											Map<Long, Map<Long, Float>> programPercentageMap,
+    											Collection<Long> donorIds,
+    											Collection<Long> donorGroupIds,
+    											Collection<Long> donorTypeIds,
+    											Map<Long, Map<Long, Float>> locationPercentageMap,
+    											List <AmpTeam> workspaces,
+    											Collection <Long> typeOfAssistanceIds,
+    											java.util.Date startDate,
+    											java.util.Date endDate,
+    											boolean isPublic,
+    											HttpSession session,
+    											boolean filterByLocations,
+    											boolean filterBySecondarySectors) 
     {
         Object[] retVal = null;
 
@@ -2172,9 +2177,13 @@ public class DbUtil {
         if (filterByLocations && (locationPercentageMap != null))
         	allActivityIdsSet.retainAll(locationPercentageMap.keySet());
         
-        Set<Long> secActIds = null;
+        //Set<Long> secActIds = null;
         if (sectorPercentageMap != null) {
         	allActivityIdsSet.retainAll(sectorPercentageMap.keySet());
+        }
+        
+        if (filterBySecondarySectors && secondarySectorPercentageMap != null){
+        	allActivityIdsSet.retainAll(secondarySectorPercentageMap.keySet());
         }
 
         if (programPercentageMap != null) {
@@ -2189,6 +2198,7 @@ public class DbUtil {
        // intersectWithWorkspaceFilter(session, allActivityIdsSet);
         
         cleanUpMap(sectorPercentageMap, allActivityIdsSet);
+        cleanUpMap(secondarySectorPercentageMap, allActivityIdsSet);
         cleanUpMap(programPercentageMap, allActivityIdsSet);
         cleanUpMap(locationPercentageMap, allActivityIdsSet);
 
@@ -2202,7 +2212,7 @@ public class DbUtil {
         try
         {
             List<Object[]> queryResults = fetchFundingInformation(view_prefix, allActivityIdsSet, donorIdsWhereclause, donorGroupIdsWhereclause, donorTypeIdsWhereclause, workspaceIdsWhereclause, typeOfAssistanceWhereclause, startDate, endDate);
-        	return new Object[] {queryResults, sectorPercentageMap, programPercentageMap, locationPercentageMap};
+        	return new Object[] {queryResults, sectorPercentageMap, programPercentageMap, locationPercentageMap, secondarySectorPercentageMap};
         }
         catch(SQLException ex)
         {
@@ -2360,6 +2370,55 @@ public class DbUtil {
         }
     }
 
+    public static Map<Long, Map<Long, Float>> getActivitySecondarySectorPercentages (Collection<Long> sectorsIds) {
+        String sectorWhereclause = generateWhereclause(sectorsIds, new GenericIdGetter());
+        Connection conn = null;
+        try {
+        	conn = PersistenceManager.getJdbcConnection();
+        	StringBuilder queryStr = new StringBuilder("SELECT amp_activity_id, amp_sector_id, sector_percentage FROM v_secondary_sectors");
+            if (sectorWhereclause != null) {
+                queryStr.append(" WHERE amp_sector_id IN ");
+                queryStr.append(sectorWhereclause);
+            }
+            ResultSet resultSet = conn.createStatement().executeQuery(queryStr.toString());
+            Map<Long, Map<Long, Float>> retVal = new HashMap<Long, Map<Long, Float>>();
+            while (resultSet.next())
+            {
+            	long ampActivityId = resultSet.getLong(1);
+            	long ampSectorId = resultSet.getLong(2);
+            	float sectorPercentage = resultSet.getFloat(3);
+            	addPercentageToSubdivision(retVal, ampActivityId, ampSectorId, sectorPercentage);
+            }
+            return retVal;
+        } catch (SQLException ex) {
+          logger.error("Error getting activity sectors from database " + ex);
+          return null;
+        }
+        finally
+        {
+        	closeConnection(conn);
+        }
+    }
+    
+    /**
+     * safely closes a connection without ever throwing an exception
+     * @param conn
+     */
+    public static void closeConnection(Connection conn)
+    {
+    	if (conn != null)
+    	{
+    		try
+    		{
+    			conn.close();
+    		}
+    		catch(SQLException ex)
+    		{
+    			// ignore
+    		}
+    	}
+    }
+    
     private static void addPercentageToSubdivision(Map<Long, Map<Long, Float>> retVal, Long actId, Long subId, Float percentage)
     {
         if (!retVal.containsKey(actId))
@@ -2372,6 +2431,12 @@ public class DbUtil {
         retVal.get(actId).put(subId, newValue);
     }
     
+    /**
+     * returns Map<AmpActivityId, Map<SectorId, Percentage>>
+     * @param sess
+     * @param queryStr
+     * @return
+     */
     private static Map<Long, Map<Long, Float>> fetchListAsPercentageMap(Session sess, String queryStr)
     {
     	Map<Long, Map<Long, Float>> retVal = null;

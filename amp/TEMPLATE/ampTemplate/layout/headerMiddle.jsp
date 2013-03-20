@@ -560,12 +560,12 @@ function adminHelp(){
 	                                          			<ul>	                                          		
 															<li class="yuiampmenuitem_drop" title='<digi:trn>Create Report</digi:trn>'>
 					                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false&reset=true&onlyFavourites=false"  onclick="return canExit()">
-					                                                <b><digi:trn>All Reports</digi:trn></b>
+					                                                <digi:trn>All Reports</digi:trn>
 					                                            </a>
 					                                    	</li>
 					                                    	<li class="yuiampmenuitem_drop" title='<digi:trn>Create Report</digi:trn>'>
 					                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false&reset=true&onlyFavourites=true"  onclick="return canExit()">
-					                                                <b><digi:trn>Favourite Reports</digi:trn></b>
+					                                                <digi:trn>Favourite Reports</digi:trn>
 					                                            </a>
 					                                    	</li>
 														  </ul>
@@ -575,14 +575,14 @@ function adminHelp(){
                                         <module:display  name="Report Generator" parentModule="REPORTING">
 	                                        <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true"  onclick="return canExit()">
-	                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
+	                                                <digi:trn key="aim:reportGenerator">Report Generator</digi:trn>
 	                                            </a>
 	                                        </li>
 	                                    </module:display>
 	                                      <module:display name="Donor Profile Report" parentModule="REPORTING">
 	                                        <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 	                                            <a class="yuiampmenuitemlabel" href="/organizationReportWizard.do?reset=true"  onclick="return canExit()">
-	                                                <b><digi:trn>Donor Report Generator</digi:trn></b>
+	                                                <digi:trn>Donor Report Generator</digi:trn>
 	                                            </a>
 	                                        </li>
 	                                     </module:display>
@@ -596,14 +596,14 @@ function adminHelp(){
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
                                                 <li class="yuiampmenuitem_drop" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
                                                     <a class="yuiampmenuitemlabel" href="/parisindicator/parisindicator.do?reportId=3&reset=true&header=true"  onclick="return canExit()">
-                                                        <b><digi:trn>Paris Indicator</digi:trn></b>
+                                                        <digi:trn>Paris Indicator</digi:trn>
                                                     </a>
                                                 </li>
                                         </feature:display>
                                         <feature:display name="Pledges Default Reports" module="Pledge Reports">
                                         	<li class="yuiampmenuitem_drop" title='<digi:trn>Click here to view Pledges Reports</digi:trn>'>
                                             	<a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true&type=5"  onclick="return canExit()">
-                                                	<b><digi:trn key="aim:parisIndicator">Pledges Reports</digi:trn></b>
+                                                	<digi:trn key="aim:parisIndicator">Pledges Reports</digi:trn>
 												</a>
                                            </li>
                                         </feature:display>

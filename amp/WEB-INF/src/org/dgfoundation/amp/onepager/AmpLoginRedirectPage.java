@@ -17,7 +17,7 @@ public class AmpLoginRedirectPage extends RedirectPage{
 	}
 	
 	public AmpLoginRedirectPage(CharSequence url) {
-		super("/showLayout.do?layout=login");
+		super("/aim");
 	}
 
 }

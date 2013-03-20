@@ -6,7 +6,7 @@
 				xmlns:Examples="Examples.*"
 				backgroundGradientColors="[0xDDDDDD,0xF5F5F5]"
 				layout="absolute"
-				creationComplete="application1_creationCompleteHandler(event);" viewSourceURL="srcview/index.html" xmlns:debug="org.axiis.debug.*" >
+				creationComplete="application1_creationCompleteHandler(event);" xmlns:debug="org.axiis.debug.*" >
 	
 	<mx:HTTPService id="service" result="service_resultHandler(event)" fault="service_faultHandler(event)" method="POST">
 		<mx:request>
@@ -171,7 +171,7 @@
 				messageLoadingPanel.visible = false;
 				sizeLoadingPanel(0, 0);
 				//dc.visible = true;
-				printLabel.text = trnYears + ": " + startYear + " to " + endYear +" - " + trnCurrency + ": " + currCode;
+				printLabel.text = trnYears + ": " + sliderYear.values[0] + " to " + sliderYear.values[1] +" - " + trnCurrency + ": " + currCode;
 				sliderYear.setVisible(true);
 			}
 			private function sizeLoadingPanel(w:uint, h:uint):void {
@@ -180,7 +180,7 @@
 			}			
 			private function captureSnapshot():void
 			{
-				//sliderYear.visible = false;
+				sliderYear.visible = false;
 				printLabel.visible = true;
 				var curUrl:String =  String( ExternalInterface.call(" function(){ return document.location.href.toString();}"));
 				var strUrl:String ="/visualization/dataDispatcher.do?action=setChartImageFromSnapshot";
@@ -198,7 +198,7 @@
 				var idContainer:String = LoaderInfo(Application.application.systemManager.stage.loaderInfo).parameters.id;
 				FlexExporter.ExportToImage(mxc1,"png", strProtocol + "//" + strDomain + strUrl, idContainer);
 				printLabel.visible = false;
-				//sliderYear.visible = true;
+				sliderYear.visible = true;
 			}
 			//Used to rotate wedge labels 180 degrees for readability
 			private function transposeLabel1(wedge:Object):Boolean
@@ -376,6 +376,7 @@
 				}
 				params["startYear"] = sliderYear.values[0];
 				params["endYear"] = sliderYear.values[1];
+				printLabel.text = trnYears + ": " + sliderYear.values[0] + " to " + sliderYear.values[1] +" - " + trnCurrency + ": " + currCode;
 				messageLoadingPanel.visible = true;
 				sizeLoadingPanel(300, 200);
 				dc.visible = false;

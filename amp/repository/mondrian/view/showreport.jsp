@@ -1,4 +1,4 @@
-<%@ page session="true" contentType="text/html; charset=ISO-8859-1" %>
+<%@ page session="true" contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://www.tonbeller.com/jpivot" prefix="jp" %>
 <%@ taglib uri="http://www.tonbeller.com/wcf" prefix="wcf" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
@@ -37,7 +37,7 @@ function go()
 <html>
  <jsp:include page="saveReport.jsp"  />
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body bgcolor=white>
 <digi:form action="/showreport.do"  method="post">

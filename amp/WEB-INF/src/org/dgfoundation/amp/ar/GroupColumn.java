@@ -772,5 +772,12 @@ public class GroupColumn extends Column {
 			((Column) obj).getAllCells(src);
 		return src;
 	}
+	
+	@Override
+	public void deleteByOwnerId(Set<Long> ownerId)
+	{
+		for(Object columnObj:items)
+			((Column) columnObj).deleteByOwnerId(ownerId);
+	}
 }
 

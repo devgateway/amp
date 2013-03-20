@@ -847,9 +847,13 @@ public class AmpReportGenerator extends ReportGenerator {
 		rawColumns.getItems().clear();
 		rawColumns = null;
 		report.removeEmptyChildren();
-		if (!reportMetadata.getDrilldownTab())
+		
+		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+
+		if (dateFilterHidesProjects && !reportMetadata.getDrilldownTab())
 		{	
 			report.cleanActivitiesWithoutFunding();
+			//report.cleanActivitiesWithoutFunding();
 			// ugly hack for recursive elimination of empty hierarchies... we have a hier depth of at most 5
 			for(int i = 0; i < 5; i++)
 				report.removeEmptyChildren(); //removeChildrenWithoutActivities might have left empty GroupReportData instances

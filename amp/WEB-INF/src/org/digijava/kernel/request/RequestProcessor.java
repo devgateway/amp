@@ -308,9 +308,8 @@ public class RequestProcessor
             			commonURL += "?" + request.getQueryString();
             		if (checkForIdInQuery(commonURL)){
             			if (!bypassRefererCheck) {
-            				request.getSession().invalidate();
-            			}
-	        			response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
+                            throw new RuntimeException("Access denied for url: " + request.getRequestURL());
+                        }
             		}
         		}
         	}
@@ -319,7 +318,7 @@ public class RequestProcessor
         		if (request.getQueryString() != null)
         			commonURL += "?" + request.getQueryString();
         		if (!bypassRefererCheck && checkForIdInQuery(commonURL)){
-        			throw new RuntimeException("Access denied!!!!");
+        			throw new RuntimeException("Access denied for url: " + request.getRequestURL());
         			//response.sendRedirect(response.encodeRedirectURL(headCommonURL + oldCommonURL));
         		}
         	}

@@ -115,7 +115,7 @@ if (typeof DOMParser == "undefined") {
 			</digi:secure>
             tree.setDragBehavior("complex");
             tree.setOnClickHandler(tonclick);
-            var xml ='<?xml version="1.0" encoding="iso-8859-1"?>';
+            var xml ='<?xml version="1.0" encoding="UTF-8"?>';
 			    xml+='<tree id="0" radio="1">';
 			    xml+='<%=HelpUtil.renderTopicTree(topic,request,false) %>';
 			    xml+='</tree>';

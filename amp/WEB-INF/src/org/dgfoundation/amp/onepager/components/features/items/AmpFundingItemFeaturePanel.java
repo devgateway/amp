@@ -30,13 +30,16 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Represents visually one funding item {@link AmpFunding} The model here is
@@ -51,12 +54,6 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 	private AmpDonorFundingInfoSubsectionFeature fundingInfo;
 	private AmpDonorDisbursementsSubsectionFeature disbursements;
 
-	/**
-	 * @param id
-	 * @param fmName
-	 * @param ampDonorFundingFormSectionFeature 
-	 * @throws Exception
-	 */
 	public AmpFundingItemFeaturePanel(String id, String fmName,
 			final IModel<AmpFunding> fundingModel,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent) throws Exception {
 		super(id, fundingModel, fmName, true);
@@ -65,7 +62,11 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			fundingModel.getObject().setFundingDetails(new TreeSet<AmpFundingDetail>());
 		
 		
-		final Label orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
+		Label orgLabel;
+        if ("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_FUNDING_GROUP_ID)))
+            orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
+        else
+            orgLabel = new TrnLabel("donorOrg", "Funding Item");
 		orgLabel.setOutputMarkupId(true);
 		add(orgLabel);
 		

@@ -412,5 +412,21 @@ public class CellColumn extends Column {
 			src.add((Cell) obj);
 		return src;
 	}
+	
+	@Override
+	public void deleteByOwnerId(Set<Long> ownerId)
+	{
+		// pay attention when merging with AMP2.4, as the way cells are kept there has been slightly changed
+		for(Long id:ownerId)
+			itemsMap.remove(id);
+		
+		Iterator<Cell> iter = (Iterator<Cell>) items.iterator();
+		while (iter.hasNext())
+		{
+			Cell cell = iter.next();
+			if (ownerId.contains(cell.getOwnerId()))
+				iter.remove();
+		}
+	}
 }
 

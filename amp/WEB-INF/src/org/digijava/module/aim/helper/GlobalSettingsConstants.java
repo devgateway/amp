@@ -116,5 +116,6 @@ public class GlobalSettingsConstants {
 	public static final String GIS_FUNDING_TYPE = "GIS Funding Type";
 	
 	public static final String FILTER_REPORTS_BY_MONTH = "Filter reports by month";
-	
+
+    public static final String SHOW_FUNDING_GROUP_ID = "Show funding group id";
 }

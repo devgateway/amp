@@ -466,5 +466,11 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	
 	
 	public abstract List<Cell> getAllCells(List<Cell> src);
+	/**
+	 * remove any sign of existence of any data with given ownerId's
+	 * @param ownerId
+	 */
+	public abstract void deleteByOwnerId(Set<Long> ownerId);
+	
 }
 

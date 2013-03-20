@@ -2294,17 +2294,14 @@ public class AmpARFilter extends PropertyListable {
 		this.tagSectorsAndAncestors = tagSectorsAndAncestors;
 	}
 
-	/*
-	 * FIELD NOT USED, but cannot delete it because of serialized instances
-	 */
+	/*THIS IS USED FOR PLEDGES IN ORDER TO SHOW ONLY PLEDGES ASSOCIATED TO THE ACTIVITIES THAT BELONG TO THE WORKSPACE
+	 PLEASE DON'T DELETE IT AGAIN*/
 	public Set getAmpTeamsforpledges() {
 		return ampTeamsforpledges;
 	}
 
-	/**
-	 *
-	 * FIELD NOT USED, but cannot delete it because of serialized instances
-	 **/
+	/*THIS IS USED FOR PLEDGES IN ORDER TO SHOW ONLY PLEDGES ASSOCIATED TO THE ACTIVITIES THAT BELONG TO THE WORKSPACE
+	 PLEASE DON'T DELETE IT AGAIN*/
 	public void setAmpTeamsforpledges(Set ampTeamsforpledges) {
 		this.ampTeamsforpledges = ampTeamsforpledges;
 	}

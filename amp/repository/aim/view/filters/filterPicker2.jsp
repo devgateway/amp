@@ -163,7 +163,6 @@ StopWatch.next("Filters", true);
 		</div>
 	</div>
 </div>
-<logic:notEqual name="is_pledge_report" value="true" scope="request">
 <div class="clrfix" style="height: 15%;">
 	<div style="width:60%; float:left; font-size: 12px;text-align: center;">
 			<c:set var="tooltip_translation">
@@ -184,7 +183,12 @@ StopWatch.next("Filters", true);
 		<html:checkbox property="justSearch" value="true" />&nbsp;
 		<digi:trn>Use filter as advanced search</digi:trn>
 	</div>
-	
+	<logic:equal name="is_pledge_report" value="true" scope="request">
+    	<div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
+			<html:checkbox property="workspaceonly" styleId="workspace_only"/>&nbsp;
+			<digi:trn>Show Only Activities From This Workspace</digi:trn>
+		</div>
+    </logic:equal>
 	<div style="clear:both;text-align:center;padding:2px 0px 0px 0px;margin-top: 20px;">
 					<html:hidden property="ampReportId" />
 	
@@ -196,16 +200,6 @@ StopWatch.next("Filters", true);
 					</html:button>
     </div>
 </div>
-</logic:notEqual>
-<%AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");%>
-<%if ((arf != null) && (arf.isPublicView()==false)){%>
-	<c:if test="${aimReportsFilterPickerForm.reporttype eq '5'}">
-		<div style="display: block; overflow:hidden;width:40%; float:left; font-size: 12px">
-			<html:checkbox property="workspaceonly" styleId="workspace_only"/>&nbsp;
-			<digi:trn>Show Only Activities From This Workspace</digi:trn>
-		</div>
-	</c:if>
-<%} %>
 
 <html:hidden property="workspaceonly" styleId="workspaceOnly"/>
 </digi:form>

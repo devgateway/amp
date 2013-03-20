@@ -108,6 +108,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private String fromActivityStartDate;
 	private String toActivityStartDate;
 	
+	private String fromProposedApprovalDate;
+	private String toProposedApprovalDate;
+	
 	private String fromActivityActualCompletionDate;
 	private String toActivityActualCompletionDate;
 	
@@ -1186,6 +1189,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 	 */
 	public void setFromActivityStartDate(String fromActivityStartDate) {
 		this.fromActivityStartDate = fromActivityStartDate;
+	}
+
+	public String getFromProposedApprovalDate(){
+		return fromProposedApprovalDate;
+	}
+
+	public String getToProposedApprovalDate(){
+		return toProposedApprovalDate;
+	}
+
+	public void setFromProposedApprovalDate(String fromProposedApprovalDate){
+		this.fromProposedApprovalDate = fromProposedApprovalDate;
+	}
+
+	public void setToProposedApprovalDate(String toProposedApprovalDate){
+		this.toProposedApprovalDate = toProposedApprovalDate;
 	}
 
 	/**

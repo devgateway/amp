@@ -923,6 +923,35 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getOtherCriteriaElements().add(lineMinRankElement);
 		}
 		
+		if (FeaturesUtil.isVisibleField("Proposed Approval Date", ampContext) ) {
+			
+			Collection<DateListableImplementation> children		= 
+					new ArrayList<DateListableImplementation>();
+			DateListableImplementation fromDate			= new DateListableImplementation();	
+			fromDate.setLabel("From");
+			fromDate.setUniqueId("fromProposedApprovalDate");
+			fromDate.setActionFormProperty("fromProposedApprovalDate");
+			fromDate.setTranslateable(true);
+			children.add(fromDate);
+			
+			DateListableImplementation toDate			= new DateListableImplementation();	
+			toDate.setLabel("To");
+			toDate.setUniqueId("toProposedApprovalDate");
+			toDate.setActionFormProperty("toProposedApprovalDate");
+			toDate.setTranslateable(true);
+			children.add(toDate);
+			
+			DateListableImplementation rootDate			= new DateListableImplementation();
+			rootDate.setLabel("Proposed Approval Date");
+			rootDate.setTranslateable(true);
+			rootDate.setUniqueId("0");
+			rootDate.setChildren(children);
+			GroupingElement<HierarchyListableImplementation> filterByTransactionDate	= 
+					new GroupingElement<HierarchyListableImplementation>("Proposed Approval Date", "filter_proposed_approval_date_div", rootDate, "");
+			
+			filterForm.getOtherCriteriaElements().add(filterByTransactionDate);
+		}
+		
 		if (FeaturesUtil.isVisibleField("Actual Start Date", ampContext) ) {
 			
 			Collection<DateListableImplementation> children		= 
@@ -1425,6 +1454,8 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		arf.setToActivityStartDate(filterForm.getToActivityStartDate() );
 		arf.setFromActivityStartDate(filterForm.getFromActivityStartDate() );
+		arf.setFromProposedApprovalDate(filterForm.getFromProposedApprovalDate());
+		arf.setToProposedApprovalDate(filterForm.getToProposedApprovalDate());
 		
 		arf.setToActivityActualCompletionDate(filterForm.getToActivityActualCompletionDate() );
 		arf.setFromActivityActualCompletionDate(filterForm.getFromActivityActualCompletionDate());

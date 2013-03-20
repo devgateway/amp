@@ -116,12 +116,22 @@ public class UpdateAppSettings extends Action {
 			}
 			// added by mouhamad for burkina on 21/02/08
 			session = request.getSession();
-			String name = "- " + ampAppSettings.getCurrency().getCurrencyName();
+            String name = null;
+            if (ampAppSettings.getCurrency() != null) {
+                name = "- "+ ampAppSettings.getCurrency().getCurrencyName();
+            } else {
+                name = "- USD";
+            }
 			session.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 
 			// AMP-3168 Currency conversion in team workspace setup
-			session.setAttribute("reportCurrencyCode", ampAppSettings.getCurrency().getCurrencyCode());
-			AmpARFilter filter = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+            if (ampAppSettings.getCurrency() != null) {
+			    session.setAttribute("reportCurrencyCode", ampAppSettings.getCurrency().getCurrencyCode());
+            } else {
+                session.setAttribute("reportCurrencyCode", "USD");
+            }
+
+            AmpARFilter filter = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 			if (filter != null) {
 				filter.setCurrency(ampAppSettings.getCurrency());
 				session.setAttribute(ArConstants.REPORTS_FILTER, filter);
@@ -155,7 +165,9 @@ public class UpdateAppSettings extends Action {
 				uForm.setReportEndYear(reportEndYear);
 				uForm.setLanguage(ampAppSettings.getLanguage());
 				uForm.setValidation(ampAppSettings.getValidation());
-				uForm.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
+                if (ampAppSettings.getCurrency() != null) {
+				    uForm.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
+                }
                 if(ampAppSettings.getFiscalCalendar()!=null){
 				uForm.setFisCalendarId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
                 }
@@ -325,7 +337,12 @@ public class UpdateAppSettings extends Action {
 				session.setAttribute("filterCurrentReport", ampAppSettings.getDefaultTeamReport());
 				// this.updateAllTeamMembersDefaultReport( tm.getTeamId(), ampReport);
 				// added by mouhamad for burkina on 21/02/08
-				String name = "- "+ ampAppSettings.getCurrency().getCurrencyName();
+                String name = null;
+                if (ampAppSettings.getCurrency() != null) {
+				    name = "- "+ ampAppSettings.getCurrency().getCurrencyName();
+                } else {
+                    name = "- USD";
+                }
 				session.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 				// end
 				if (uForm.getType().equals("userSpecific")) {
@@ -471,8 +488,11 @@ public class UpdateAppSettings extends Action {
 		appSettings.setReportEndYear(ampAppSettings.getReportEndYear());
 
 		appSettings.setDefReportsPerPage(ampAppSettings.getDefaultReportsPerPage());
-		appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
-		appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
+        if (ampAppSettings.getCurrency() != null) {
+		    appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
+        }
+
+        appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
 		appSettings.setLanguage(ampAppSettings.getLanguage());
 		appSettings.setValidation(ampAppSettings.getValidation());
 		appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());

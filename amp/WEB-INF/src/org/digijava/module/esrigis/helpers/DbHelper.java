@@ -298,7 +298,7 @@ public class DbHelper {
 			}
 
 			if (filter.isModeexport()) {
-				String inactivities = "";
+				inactivities = "";
 				ArrayList<BigInteger> filteractivities = getInActivities(filter
 						.getReportfilterquery());
 				for (Iterator iterator = filteractivities.iterator(); iterator

@@ -114,9 +114,7 @@ public class SourceSettingDAO {
                 PersistenceManager.releaseSession(session);
             } catch (HibernateException e) {
                 e.printStackTrace();
-            } catch (SQLException e) {
-				e.printStackTrace();
-			}
+            }
         }
         return result;
 	}

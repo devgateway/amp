@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
+import org.apache.regexp.RE;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -49,8 +50,11 @@ public class OnePager extends AmpHeaderFooter {
 	private static Logger logger = Logger.getLogger(OnePager.class);
 	//for test purposes, it will be removed !!
 	private final static boolean DEBUG_ACTIVITY_LOCK = false;
-	 
-	protected AmpActivityModel am;
+    public static final String DONOR_FUNDING_SECTION_NAME = "Donor Funding";
+    public static final String REGIONAL_FUNDING_SECTION_NAME = "Regional Funding";
+    public static final String COMPONENTS_SECTION_NAME = "Components";
+
+    protected AmpActivityModel am;
 //	protected AmpActivityModel activityModelForSave;
 
 	static OnepagerSection[] test = {
@@ -61,10 +65,10 @@ public class OnePager extends AmpHeaderFooter {
 		new OnepagerSection("Program", "org.dgfoundation.amp.onepager.components.features.sections.AmpProgramFormSectionFeature", 5, false),
 		new OnepagerSection("Cross Cutting Issues", "org.dgfoundation.amp.onepager.components.features.sections.AmpCrossCuttingIssuesFormSectionFeature", 6, false),
 		new OnepagerSection("Sectors", "org.dgfoundation.amp.onepager.components.features.sections.AmpSectorsFormSectionFeature", 7, false),
-		new OnepagerSection("Donor Funding", "org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature", 8, false),
-		new OnepagerSection("Regional Funding", "org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature", 9, false),
+		new OnepagerSection(DONOR_FUNDING_SECTION_NAME, "org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature", 8, false),
+		new OnepagerSection(REGIONAL_FUNDING_SECTION_NAME, "org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature", 9, false),
 		new OnepagerSection("Related Organizations", "org.dgfoundation.amp.onepager.components.features.sections.AmpRelatedOrganizationsFormSectionFeature", 10, false),
-		new OnepagerSection("Components", "org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature", 11, false),
+		new OnepagerSection(COMPONENTS_SECTION_NAME, "org.dgfoundation.amp.onepager.components.features.sections.AmpComponentsFormSectionFeature", 11, false),
 		new OnepagerSection("Structures", "org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature", 12, false),
 		new OnepagerSection("Issues Section", "org.dgfoundation.amp.onepager.components.features.sections.AmpIssuesFormSectionFeature", 13, false),
 		new OnepagerSection("Regional Observations", "org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalObservationsFormSectionFeature", 14, false),

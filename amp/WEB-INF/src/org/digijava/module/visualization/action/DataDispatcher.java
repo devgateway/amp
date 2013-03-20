@@ -99,7 +99,6 @@ public class DataDispatcher extends DispatchAction {
 
 		VisualizationForm visualizationForm = (VisualizationForm)form;
 		HttpSession session = request.getSession();
-<<<<<<< .working
 		
 		AmpTeam currentTeam = null;
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
@@ -119,20 +118,6 @@ public class DataDispatcher extends DispatchAction {
         	visualizationForm.getFilter().setActivityComputedList(null);
         	visualizationForm.getFilter().setTeamMember(null);
         }
-=======
-
-		if(visualizationForm.getFilter().getWorkspaceOnly()){
-    		String sqlQuery = WorkspaceFilter.getWorkspaceFilterQuery(session);
-    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(sqlQuery);
-    		visualizationForm.getFilter().setActivityComputedList(activityList);
-		}
-		else
-		{
-    		visualizationForm.getFilter().setActivityComputedList(null);
-		}
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");	
-		visualizationForm.getFilter().setTeamMember(tm);
->>>>>>> .merge-right.r20165
 		
 		// Parameters coming from queryString for the list of Organization Groups/Organizations, Regions/Zones, Sector/Sub-sector
 		if (request.getParameter("orgGroupIds")!=null && !request.getParameter("orgGroupIds").equals("null"))
@@ -2354,8 +2339,8 @@ public class DataDispatcher extends DispatchAction {
 				newFilter.setSelCVIds(selCVIds);
 				yearGrandTotal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getValue();
 				yearUnallocatedTotal = yearGrandTotal.subtract(yearAllocatedTotal);
-				xmlString.append("<dataField category=\"" +TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" id=\"-1\" amount=\""+ yearUnallocatedTotal.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
-				budgetData += ">" + TranslatorWorker.translateText("Unallocated",locale, siteId) + ">" + yearUnallocatedTotal.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
+				xmlString.append("<dataField category=\"" +TranslatorWorker.translateText("Unallocated") + "\" id=\"-1\" amount=\""+ yearUnallocatedTotal.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
+				budgetData += ">" + TranslatorWorker.translateText("Unallocated") + ">" + yearUnallocatedTotal.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 				if (!hasValues){
 					xmlString.append("<dataField category=\"Category\" id=\"0\" amount=\"0.00\" year=\"" + yearName + "\"/>\n");
 				}
@@ -2381,6 +2366,12 @@ public class DataDispatcher extends DispatchAction {
 					int i = 0;
 					BigDecimal total = hm.get(acGrandTotal);
 					BigDecimal unallocated = hm.get(acUnallocated);
+					filter.setBudgetCVIds(budgetCVIds);
+	                newFilter = filter.getCopyFilterForFunding();
+					Long[] selCVIds = {-1l};
+					newFilter.setSelCVIds(selCVIds);
+					DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+
 					while (it.hasNext()){
 						AmpCategoryValue value = it.next();
 						BigDecimal currentCVvalue = hm.get(value);
@@ -2389,18 +2380,10 @@ public class DataDispatcher extends DispatchAction {
 	                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText(value.getValue()) + "\" id=\"" + value.getId() + "\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText(value.getValue()) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 	                	}
 					}
-					filter.setBudgetCVIds(budgetCVIds);
-	                DashboardFilter newFilter = filter.getCopyFilterForFunding();
-					Long[] selCVIds = {-1l};
-					newFilter.setSelCVIds(selCVIds);
-					DecimalWraper funding = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-					BigDecimal percentage = getPercentage(funding.getValue(), amtTotal);
-	                if(percentage.compareTo(new BigDecimal(1)) == 1){
-                		xmlString.append("<dataField name=\""  +TranslatorWorker.translateText("Unallocated") + "\" id=\"-1\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ funding.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText("Unallocated") + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
-                	}
+					
 					BigDecimal percentage = getPercentage(unallocated, total);
 					if(percentage.compareTo(new BigDecimal(1)) == 1)
-						xmlString.append("<dataField name=\""  +TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" id=\"-1\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ unallocated.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText("Unallocated",locale, siteId) + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
+						xmlString.append("<dataField name=\""  +TranslatorWorker.translateText("Unallocated") + "\" id=\"-1\" startYear=\"" + (startDate.getYear() + 1900) + "\" endYear=\"" + (endDate.getYear() + 1900) + "\" value=\""+ unallocated.divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" yearLabels=\"" + yearLabels + "\" label=\"" + TranslatorWorker.translateText("Unallocated") + "\" percentage=\"" + percentage.toPlainString() + "\"/>\n");
 				} else {
 					xmlString.append("<dataField name=\"\">\n");
 					xmlString.append("</dataField>\n");

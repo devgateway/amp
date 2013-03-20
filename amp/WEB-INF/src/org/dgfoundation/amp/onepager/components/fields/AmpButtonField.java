@@ -70,7 +70,7 @@ public abstract class AmpButtonField extends AmpFieldPanel<Void> {
 	}
 
 	public AmpButtonField(String id, String fmName, boolean hideLabel) {
-		this(id, fmName, hideLabel, false);
+		this(id, fmName, hideLabel, true);
 	}
 
 	public AmpButtonField(String id, String fmName, boolean hideLabel, boolean hideNewLine) {

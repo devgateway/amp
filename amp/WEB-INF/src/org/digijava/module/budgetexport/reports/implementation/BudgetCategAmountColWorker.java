@@ -13,11 +13,11 @@ import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 
 /**
  * @author Alex Gartner
- *
+ *	this class has a per-column insider and they are recalculated (cached in BudgetExportMapper)!
  */
 public class BudgetCategAmountColWorker extends CategAmountColWorker {
 
-	ColWorkerInsider insider;
+	HttpSession session;
 	
 	/**
 	 * @param condition
@@ -27,18 +27,17 @@ public class BudgetCategAmountColWorker extends CategAmountColWorker {
 	 */
 	public BudgetCategAmountColWorker(String condition, String viewName,
 			String columnName, ReportGenerator generator) {
-		super(condition, viewName, columnName, generator);
-		
-		this.insider	= new ColWorkerInsider(condition, viewName, columnName, generator);
+		super(condition, viewName, columnName, generator);	
 	}
 
 	@Override
-	protected String retrieveValueFromRS ( ResultSet rs, String columnName ) throws SQLException {
-		return this.insider.encoder.encode( rs.getString(columnName) );
+	protected String retrieveValueFromRS ( ResultSet rs, String tableColumnName ) throws SQLException {
+		ColWorkerInsider insider = ColWorkerInsider.getOrBuildInsider(this.getViewName(), tableColumnName, this.session);
+		return insider.encoder.encode( rs.getString(tableColumnName) );
 	}
 	
 	@Override
 	public void setSession(HttpSession session) {
-		this.insider.setSession( session );
+		this.session = session;
 	}
 }

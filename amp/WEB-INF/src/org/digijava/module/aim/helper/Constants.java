@@ -276,11 +276,14 @@ public class Constants
 	public static final String CURRENT_TAB_REPORT	= "current_tab_report";
 	
 	public static final String MY_REPORTS 		= "myReports";
+	public static final String LAST_VIEWED_REPORTS 		= "lastViewedReports"; // BoundedList
 	public static final String MY_ACTIVE_TABS 	= "myActiveTabs";
 	public static final String MY_TABS 			= "myTabs";
 	public static final String MY_TASKS = "myTasks";
 	public static final String MY_MESSAGES = "myMessages";
 	public static final String MY_LINKS = "myLinks";
+	//public static final String MOST_RECENT_RESOURCES_UUIDS = "recentResources_uuid"; // BoundedList of most-recently-visited-resources
+	public static final String MOST_RECENT_RESOURCES = "recentResources"; // BoundedList of most-recently-visited-resources
 	public static final String MY_TEAM_MEMBERS = "myTeamMembers";
 	public static final String MY_DOCUMENTS = "myDocuments";
 	public static final String MY_LAST_VERSIONS = "lastVersions";

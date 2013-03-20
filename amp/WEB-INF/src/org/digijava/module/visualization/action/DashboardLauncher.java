@@ -61,9 +61,10 @@ public class DashboardLauncher extends Action {
 		dForm.setFilter(filter);
 		HttpSession session = request.getSession();
 	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (tm == null) {
+		if (tm == null)
 			filter.setFromPublicView(true);
-		}
+		else
+			filter.setFromPublicView(false);
 		dForm.setDashboardList(org.digijava.module.visualization.util.DbUtil.getAllDashboards());
 		return mapping.findForward("forward");
 

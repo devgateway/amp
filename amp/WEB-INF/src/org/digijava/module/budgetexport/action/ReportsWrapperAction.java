@@ -18,6 +18,7 @@ public class ReportsWrapperAction extends MultiAction {
 		// TODO Auto-generated method stub
 		request.getSession().setAttribute(BudgetExportConstants.BUDGET_EXPORT_TYPE, "sometype");
 		request.getSession().setAttribute(BudgetExportConstants.BUDGET_EXPORT_PROJECT_ID, request.getParameter("projectId"));
+		request.getSession().removeAttribute("BUDGET_EXPORTED_MAPPER");
 		return mapping.findForward("forward");
 	}
 

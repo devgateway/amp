@@ -148,6 +148,15 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
             }
         };
         form.add(submit);
+        AmpAjaxLinkField cancel = new AmpAjaxLinkField("cancel", "Cancel", "Cancel") {
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
+                panel.setVisibilityAllowed(false);
+                target.add(panel.getParent());
+            }
+        };
+        form.add(cancel);
         
         webLinkFeedbackContainer = new WebMarkupContainer("webLinkFeedbackContainer");
         webLinkFeedbackLabel = new Label("webLinkFeedbackLabel", new Model(defaultMsg));

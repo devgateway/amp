@@ -22,7 +22,7 @@ var loginFailed = function(data, status) {
 
 function ajaxLogin() {
 $(".error").remove();
-
+$('#result').before("<div class='error'><img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif' style='vertical-align:middle;'></div>");
 
 
 $.ajax({
@@ -98,11 +98,12 @@ $.ajax({
             	<p class="userfield">
 					<label><digi:trn>Username</digi:trn>:</label> <input
 						name="j_username" type="text" id="user"/>
-						<div id="result"></div>
+						
 				</p>
 				<p class="passfield">
 					<label><digi:trn>Password</digi:trn>:</label> <input name="j_password" type="password" id="pass">
 				</p>
+				<div id="result"></div>
                 <input type="submit" id="amplogin" value="Login"/>
 				<div class="utils">
 				<c:set var="trn1">

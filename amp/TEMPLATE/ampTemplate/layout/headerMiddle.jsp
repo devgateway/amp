@@ -66,7 +66,7 @@ ${fn:replace(message,quote,escapedQuote)}
       	 <ul class="first-of-type">
       	 	<module:display name="Home Page Menu Entry" parentModule="PUBLIC VIEW">
 	            <li class="yuiampmenuitem">
-	                <a class="yuiampmenuitemlabel" href="/" module="aim" title="${trn3}">
+	                <a class="yuiampmenuitemlabel" href="/aim" title="${trn3}">
 	                	<digi:trn>Home Page</digi:trn>
 		            </a>
 	            </li>
@@ -445,7 +445,7 @@ function adminHelp(){
                                   <div class="bd bd_drop">
                                       <ul>
                                   		<li class="yuiampmenuitem_drop">
-                                            <a class="yuiampmenuitemlabel" href="/">
+                                            <a class="yuiampmenuitemlabel" href="/aim">
                                             	<digi:trn>My Desktop</digi:trn>
                                             </a>
                                        	</li>

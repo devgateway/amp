@@ -329,9 +329,9 @@ public class RMMapCalculationUtil {
 
         if (data != null && data instanceof Object[] && data.length > 0) {
             List<Object[]> fundings = (List<Object[]>)data[0];
-            Map <Long, Map> sectorPercentageMap = (Map <Long, Map>) data[1];
-            Map <Long, Map> programPercentageMap = (Map <Long, Map>) data[2];
-            Map <Long, Map> locationPercentageMap = (Map <Long, Map>) data[3];
+            Map <Long, Map<Long, Float>> sectorPercentageMap = (Map <Long, Map<Long, Float>>) data[1];
+            Map <Long, Map<Long, Float>> programPercentageMap = (Map <Long, Map<Long, Float>>) data[2];
+            Map <Long, Map<Long, Float>> locationPercentageMap = (Map <Long, Map<Long, Float>>) data[3];
 
 
             if (sectorPercentageMap != null) {
@@ -361,8 +361,8 @@ public class RMMapCalculationUtil {
 
         if (data != null && data instanceof Object[] && data.length > 0) {
             List fundings = (List)data[0];
-            Map <Long, Map> sectorPercentageMap = (Map <Long, Map>) data[1];
-            Map <Long, Map> programPercentageMap = (Map <Long, Map>) data[2];
+            Map <Long, Map<Long, Float>> sectorPercentageMap = (Map <Long, Map<Long, Float>>) data[1];
+            Map <Long, Map<Long, Float>> programPercentageMap = (Map <Long, Map<Long, Float>>) data[2];
 
 
 
@@ -437,13 +437,12 @@ public class RMMapCalculationUtil {
      * @param fundings either Object[6] or Object[7], depending on source.
      * @param sectorOrProgramPercentageMap
      */
-    private static void applySectorOrProgramPercentages (List<Object[]> fundings, Map <Long, Map> sectorOrProgramPercentageMap) {
-        for (Object fundingInfoObj: fundings) {
-            Object[] fundingInfo = (Object[]) fundingInfoObj;
+    public static void applySectorOrProgramPercentages (List<Object[]> fundings, Map <Long, Map<Long, Float>> sectorOrProgramPercentageMap) {
+        for (Object[] fundingInfo: fundings) {
             BigDecimal ammount = new BigDecimal((Double)fundingInfo[0]);
             Long activityId = (Long)fundingInfo[5];
 
-            Map sectorOrProgramPercentageMapItem = sectorOrProgramPercentageMap.get(activityId);
+            Map<Long, Float> sectorOrProgramPercentageMapItem = sectorOrProgramPercentageMap.get(activityId);
 
             if (sectorOrProgramPercentageMapItem != null) {
                 Collection <Float> values = sectorOrProgramPercentageMapItem.values();
@@ -465,7 +464,7 @@ public class RMMapCalculationUtil {
     public final static String UNALLOCATED_REGION_NAME = "Region Unallocated";
     public final static Set<Long> UNALLOCATED_REGION_LOC_KEY_SET = Collections.unmodifiableSet(new HashSet<Long>(){{this.add(UNALLOCATED_REGION_KEY);}});
 
-    private static Map<String, Set<AmpFundingDetail>> groupFundingsByLocationAndApplyPercentages (List<Object[]> fundings, Map <Long, Map> locationPercentageMap, Map<Long, String> locationIdNameMap, Map<Long, Long> locationParentMap) {
+    private static Map<String, Set<AmpFundingDetail>> groupFundingsByLocationAndApplyPercentages (List<Object[]> fundings, Map <Long, Map<Long, Float>> locationPercentageMap, Map<Long, String> locationIdNameMap, Map<Long, Long> locationParentMap) {
         Map <String, Set<AmpFundingDetail>> retVal = new HashMap <String, Set<AmpFundingDetail>> ();
         Map<String, AmpCurrency> currencyCodeObjectMap = getCurrencyCodeObjectMap();
 
@@ -480,7 +479,7 @@ public class RMMapCalculationUtil {
             if ((fixedExchangeRate != null) && fixedExchangeRate <= 1e-10)
             	fixedExchangeRate = null;
             
-            Map locationPercentageMapItem = locationPercentageMap.get(activityId);
+            Map<Long, Float> locationPercentageMapItem = locationPercentageMap.get(activityId);
             Set<Long> locKeySet;
             
             if (locationPercentageMapItem != null) {

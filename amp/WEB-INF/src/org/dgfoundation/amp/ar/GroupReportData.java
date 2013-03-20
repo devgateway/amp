@@ -437,6 +437,10 @@ public class GroupReportData extends ReportData<ReportData> {
 		while (i.hasNext())
 		{
 			ReportData element = i.next();
+			if ((element instanceof ColumnReportData) &&
+					((ColumnReportData) element).shouldBeRemoved())
+				i.remove();
+			else
 			if (element.getOwnerIds().size() == 0)
 				i.remove();
 			else

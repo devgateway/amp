@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -19,6 +20,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DocumentUtil;
@@ -59,14 +61,14 @@ public class GetDesktopLinks extends TilesAction {
 				}
 			}
 				
-			session.setAttribute(Constants.MY_LINKS,reducedList);	
+			session.setAttribute(Constants.MY_LINKS,reducedList);
 			DocumentManagerUtil.logoutJcrSessions(request.getSession());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-
+	
 	private Collection<DocumentData> getPrivateDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
 		Node userNode;
 		try {

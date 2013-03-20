@@ -63,8 +63,8 @@ function popup(mylink, windowname)
 						<digi:trn key="aim:noPublicReports">No public reports</digi:trn>
 				</logic:empty>
 			</logic:notPresent>
-			<logic:notEmpty name="myReports" scope="session">
-			<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
+			<logic:notEmpty name="lastViewedReports" scope="session">
+			<logic:iterate name="lastViewedReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
 				<li class="tri">
 					<digi:link  title="${report.name}" href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
 						<c:choose>
@@ -78,7 +78,7 @@ function popup(mylink, windowname)
 					</digi:link>
 				</li>
 			</logic:iterate>
-			<bean:size id="repCount" name="myReports" scope="session" />
+			<bean:size id="repCount" name="lastViewedReports" scope="session" />
                    <div style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom: 7px" title="<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>">
                   
                     	 <digi:link href="/viewTeamReports.do?tabs=false&reset=true&onlyFavourites=true">
@@ -87,7 +87,7 @@ function popup(mylink, windowname)
                     </div>
            	</logic:notEmpty>
 			<logic:present name="currentMember" scope="session">
-            	<logic:empty name="myReports" scope="session">
+            	<logic:empty name="lastViewedReports" scope="session">
                 	<digi:trn key="aim:noReportHaveBeenViewed">No reports have been viewed.</digi:trn>
                  </logic:empty>
 			</logic:present> 

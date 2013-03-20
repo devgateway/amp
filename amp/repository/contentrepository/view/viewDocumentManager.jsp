@@ -535,9 +535,11 @@ border-right: 1px solid rgb(208, 208, 208);
 					<field:display name="Resource Index" feature="Resource Columns">
 						<tr>
 							<td>
-								<a title="<digi:trn>Document Index</digi:trn>">
-									<digi:trn>Index</digi:trn>
-								</a>
+								<div class="t_sm">
+									<b><span title="<digi:trn>Document Index</digi:trn>">
+										<digi:trn>Index</digi:trn>
+									</span></b>
+								</div>
 							</td>
 							<td>
 								<a title="<digi:trn>Document Index</digi:trn>">
@@ -549,14 +551,16 @@ border-right: 1px solid rgb(208, 208, 208);
 					<field:display name="Resource Category" feature="Resource Columns">
 						<tr>
 							<td>
-								<a title="<digi:trn>Document Category</digi:trn>">
-									<digi:trn>Category</digi:trn>
-								</a>
+								<div class="t_sm">
+									<b><span title="<digi:trn>Document Category</digi:trn>">
+										<digi:trn>Category</digi:trn>
+									</span></b>
+								</div>
 							</td>
 							<td>
-								<a title="<digi:trn>Document Category</digi:trn>">
+								<span title="<digi:trn>Document Category</digi:trn>">
 									<html:textarea property="docCategory" cols="" rows="" style="width:300px; height:30px;" styleClass="inputx"/>
-								</a>
+								</span>
 							</td>
 						</tr>
 					</field:display>						
@@ -584,7 +588,7 @@ border-right: 1px solid rgb(208, 208, 208);
 						</tr>
 						<tr id="tr_url" style="display: none">
 							<td>
-								<div class="t_sm"><b><digi:trn>URL (ex. www.exemple.com)</digi:trn>:</b><font color="red">*</font></div>
+								<div class="t_sm"><b><digi:trn>URL (ex. http://www.example.com)</digi:trn>:</b><font color="red">*</font></div>
 							</td>
 							<td><html:text property="webLink" size="32"></html:text></td>
 						</tr>

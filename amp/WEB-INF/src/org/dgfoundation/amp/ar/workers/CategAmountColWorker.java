@@ -147,10 +147,12 @@ public class CategAmountColWorker extends ColumnWorker {
 		return rs.getString(columnName);
 	}
 	
-	protected void addMetaIfExists(ResultSet rs, CategAmountCell acc, String columnName, String metaKeyName, String defaultValue) throws SQLException
+	protected void addMetaIfExists(ResultSet rs, CategAmountCell acc, String columnName, String metaKeyName, String defaultValue, boolean retrieveDirectly) throws SQLException
 	{
 		if (columnsMetaData.containsKey(columnName)) {
-			String fundingStatus = rs.getString(columnsMetaData.get(columnName) );
+			
+			String fundingStatus = retrieveDirectly ? rs.getString(columnsMetaData.get(columnName) ) :
+													retrieveValueFromRS(rs, columnsMetaData.get(columnName));
 			
 			if (fundingStatus == null && defaultValue != null)
 				fundingStatus = defaultValue;
@@ -244,14 +246,14 @@ public class CategAmountColWorker extends ColumnWorker {
 			}
 		} -- not used anymore */
 		
-		addMetaIfExists(rs, acc, "terms_assist_name", ArConstants.TERMS_OF_ASSISTANCE, null);
-		addMetaIfExists(rs, acc, "financing_instrument_name", ArConstants.FINANCING_INSTRUMENT, null);
-		addMetaIfExists(rs, acc, "mode_of_payment_name", ArConstants.MODE_OF_PAYMENT, ArConstants.MODE_OF_PAYMENT_UNALLOCATED);
-		addMetaIfExists(rs, acc, "funding_status_name", ArConstants.FUNDING_STATUS, null);
-		addMetaIfExists(rs, acc, "related_project", ArConstants.RELATED_PROJECTS, null);
-		addMetaIfExists(rs, acc, "agreement_code", ArConstants.AGREEMENT_CODE, null);
-		addMetaIfExists(rs, acc, "agreement_title_code", ArConstants.AGREEMENT_TITLE_CODE, null);
-		addMetaIfExists(rs, acc, "component_type", ArConstants.COMPONENT, null);
+		addMetaIfExists(rs, acc, "terms_assist_name", ArConstants.TERMS_OF_ASSISTANCE, null, false);
+		addMetaIfExists(rs, acc, "financing_instrument_name", ArConstants.FINANCING_INSTRUMENT, null, false);
+		addMetaIfExists(rs, acc, "mode_of_payment_name", ArConstants.MODE_OF_PAYMENT, ArConstants.MODE_OF_PAYMENT_UNALLOCATED, false);
+		addMetaIfExists(rs, acc, "funding_status_name", ArConstants.FUNDING_STATUS, null, false);
+		addMetaIfExists(rs, acc, "related_project", ArConstants.RELATED_PROJECTS, null, false);
+		addMetaIfExists(rs, acc, "agreement_code", ArConstants.AGREEMENT_CODE, null, false);
+		addMetaIfExists(rs, acc, "agreement_title_code", ArConstants.AGREEMENT_TITLE_CODE, null, false);
+		addMetaIfExists(rs, acc, "component_type", ArConstants.COMPONENT, null, true);
 		
 		MetaInfo headMeta=null;
 		
@@ -267,6 +269,7 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		if("donor_name".equals(headMetaName)){
 			String donorName = retrieveValueFromRS(rs,columnsMetaData.get(  "donor_name") );
+			//System.out.println("donor name is " + donorName);
 			headMeta = this.getCachedMetaInfo(ArConstants.DONOR, (donorName != null) ? donorName.trim() : donorName);			
 		}
 

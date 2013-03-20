@@ -847,7 +847,11 @@ public class AmpReportGenerator extends ReportGenerator {
 		rawColumns.getItems().clear();
 		rawColumns = null;
 		report.removeEmptyChildren();
-		report.removeChildrenWithoutActivities(); //postProcess might have created some more empty children
+		report.removeChildrenWithoutActivities(); //postProcess might have left some more empty children
+		
+		// ugly hack for recursive elimination of empty hierarchies... we have a hier depth of at most 5
+		for(int i = 0; i < 5; i++)
+			report.removeEmptyChildren(); //removeChildrenWithoutActivities might have left empty GroupReportData instances
 	}
 
 	/**

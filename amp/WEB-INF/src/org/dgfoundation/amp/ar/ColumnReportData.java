@@ -82,12 +82,33 @@ public class ColumnReportData extends ReportData<Column> {
 
 	}
 
-	@Override
-	public void removeChildrenWithoutActivities()
-	{
-		// do nothing - the children are columns and we never remove columns 
-	}
-	
+    @Override
+    public void removeChildrenWithoutActivities()
+    {
+    	// do nothing - the children are columns and we never remove columns 
+    }        
+	 	
+    /**
+     * calculates whether this ColumnReportData is useless and should not appear in a report
+     * at the moment, "useless" means that ALL of the conditions below hold:
+     * 1) one of the columns is FUNDING
+     * 2) the FUNDING column has no activities inside
+     * 
+     * This is used for multi-hierarchy reports (see AMP-14836)
+     * @return
+     */
+    public boolean shouldBeRemoved()
+    {
+    	Column fundingColumn = getColumn(ArConstants.COLUMN_FUNDING);
+    	if (fundingColumn == null)
+    		fundingColumn = getColumn(ArConstants.COLUMN_TOTAL);
+    	if (fundingColumn == null)
+    		fundingColumn = getColumn(ArConstants.COSTING_GRAND_TOTAL);  	
+    	if (fundingColumn == null)
+    		return false;
+    	return fundingColumn.getOwnerIds().isEmpty();
+    }
+    
 	public void addColumns(Collection col) {
 		Iterator i = col.iterator();
 		while (i.hasNext()) {

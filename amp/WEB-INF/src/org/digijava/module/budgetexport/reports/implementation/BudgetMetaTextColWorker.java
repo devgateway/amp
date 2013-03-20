@@ -28,8 +28,6 @@ public class BudgetMetaTextColWorker extends MetaTextColWorker {
 	public BudgetMetaTextColWorker(String condition, String viewName,
 			String columnName, ReportGenerator generator) {
 		super(condition, viewName, columnName, generator);
-		
-		this.insider	= new ColWorkerInsider(condition, viewName, columnName, generator);
 	}
 
 	@Override
@@ -39,7 +37,7 @@ public class BudgetMetaTextColWorker extends MetaTextColWorker {
 	
 	@Override
 	public void setSession(HttpSession session) {
-		this.insider.setSession( session );
+		this.insider = ColWorkerInsider.getOrBuildInsider(viewName, columnName, session);
 	}
 	
 	@Override

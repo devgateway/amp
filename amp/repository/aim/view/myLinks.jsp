@@ -20,8 +20,8 @@
 	</div>
 	<div class="right_menu_box">
 		<div class="right_menu_cont">
-			<logic:notEmpty name="myLinks" scope="session">
-				<logic:iterate name="myLinks" id="doc" scope="session" type="org.digijava.module.contentrepository.helper.DocumentData"> 
+			<logic:notEmpty name="recentResources" scope="session">
+				<logic:iterate name="recentResources" id="doc" scope="session" type="org.digijava.module.contentrepository.helper.DocumentData"> 
 					<c:if test="${doc.webLink == null}" >
 			        	<a  href="/contentrepository/downloadFile.do?uuid=<bean:write name='doc' property='uuid'/>">
 			        		<li class="tri"><bean:write name='doc' property='title'/></li>
@@ -39,9 +39,10 @@
 				</a>	 	
 				</div>
 	      </logic:notEmpty>    
-	      <logic:empty name="myLinks" scope="session">
-          	<digi:trn key="aim:noResources">No Resources</digi:trn></div>
+	      <logic:empty name="recentResources" scope="session">
+          	<digi:trn key="aim:noResources">No Resources Viewed</digi:trn>
           </logic:empty>       		
+          </div>
 		</div>
 	</div>
 </module:display>

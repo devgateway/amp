@@ -7,8 +7,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
@@ -35,6 +37,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gis.util.DbUtil;
+import org.digijava.module.gis.util.GenericIdGetter;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.helper.ActivitySectorDonorFunding;
@@ -547,7 +550,7 @@ public class WidgetUtil {
             
         }
 
-    public static Collection<ActivitySectorDonorFunding> getDonorSectorFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
+    public static Collection<ActivitySectorDonorFunding> getDonorSectorFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, HttpSession httpSession) throws DgException {
         Map<Long, ActivitySectorDonorFunding> activityFundingInfos = new HashMap<Long, ActivitySectorDonorFunding>();
         if (sectorIds != null) {
             for (Long sectId : sectorIds) {
@@ -560,7 +563,7 @@ public class WidgetUtil {
                 Long[] sectIds = new Long[ids.size()];
                 ids.toArray(sectIds);
                 // get all findings...
-                List result = getFunding(donorIDs, fromDate, toDate, sectIds);
+                List result = getFunding(donorIDs, fromDate, toDate, sectIds, httpSession);
                 //Process grouped data
                 if (result != null) {
 
@@ -606,7 +609,7 @@ public class WidgetUtil {
         return activityFundingInfos.values();
 
     }
-      public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds) throws DgException {
+      public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, HttpSession httpSession) throws DgException {
           AmpCategoryClass catClass = null;
           Long actualCommitmentCatValId = null;
           try {
@@ -627,9 +630,12 @@ public class WidgetUtil {
           lastVersionsQry.append(" as actGroup");
           Query actGrpupQuery = session.createQuery(lastVersionsQry.toString());
           List lastVersions = actGrpupQuery.list();
-          String lasVersionsWhereclause = org.digijava.module.gis.util.DbUtil.generateWhereclause(lastVersions, new DbUtil.GenericIdGetter());
-
-
+          //String lasVersionsWhereclause = org.digijava.module.gis.util.DbUtil.generateWhereclause(lastVersions, new DbUtil.GenericIdGetter());
+          
+          
+          Set<Long> allActivityIdsSet = DbUtil.getAllLegalAmpActivityIds(httpSession);
+          String activityWhereclause = DbUtil.generateWhereclause(allActivityIdsSet, new GenericIdGetter());
+          
         String oql = "select  actSec, f.ampDonorOrgId ";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
@@ -646,8 +652,7 @@ public class WidgetUtil {
         oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
         oql += " and sec.ampSectorId in (:sectors) ";
         oql += " and config.name='Primary' ";
-        oql += "  and act.team is not null ";
-        oql += "  and act.ampActivityId in" + lasVersionsWhereclause;
+        oql += "  and act.ampActivityId in" + activityWhereclause;
 
         oql += " order by actSec";
 

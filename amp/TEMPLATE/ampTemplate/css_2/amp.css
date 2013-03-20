@@ -45,6 +45,7 @@ legend {background-color:#4A687A; color:#FFFFFF; font-size:12px; font-weight:bol
 html.ie .legend_label {line-height:22px;display:block;white-space:normal;}
 .mand {color:#FF0000;}
 table.inside, td.inside,td.report_inside {border:1px solid #b8b7b7;  font-size:11px;}
+td.inside ul{padding-left: 1.3em;}
 table.inside1, td.inside1 {background:#fff;padding:0px 5px ;}
 table.inside, td.inside_zebra {}
 td.tdInsideHeader{background:url(/TEMPLATE/ampTemplate/img_2/ins_bg.gif) repeat-x;padding:3px;text-align:center;}
@@ -121,9 +122,12 @@ html.chrome .bd_drop{margin-top:-15px;}
 .menu_item_cont_sel {color:#FFFFFF; padding-left:7px; padding-right:7px; padding-top:3px; padding-bottom:3px; font-size:12px; font-weight:bold; text-transform:uppercase;}
 .menu_item_cont a {text-decoration:none; color:#376091;}
 .menu_arr {margin-left:5px; margin-bottom:2px;}
-#usr_menu_logged {width:300px;float:right;text-align:right;}
-
-html.ie #usr_menu_logged {width:250px;float:right;text-align:right;}
+#usr_menu_logged2 {width:300px;float:right;text-align:right;}
+#usr_menu_logged2, #usr_menu_logged2 a {
+    color: #FFFFFF;
+    font-size: 12px;
+}
+#usr_menu_logged2 a{text-decoration:none;}
 
 /* BREADCRUMP */
 .breadcrump { height:40px; display:none; background:#f0f0f0; margin:5px 0px 5px 0px;border:1px solid red;}
@@ -659,7 +663,7 @@ div.adminicon{float:right;}
 .admin_landing_page_box_cont {padding:10px;}
 .admin_landing_page_box_title {font-size:12px; color:#000000; font-weight:bold; border-bottom:1px solid #CCCCCC; padding-bottom:5px; margin-bottom:10px;}
 .admin_landing_page_box_cont table a {font-size:11px; font-weight:bold;}
-.admin_box_label {}
+.admin_box_label {text-align: left;}
 .admin_landing_page_tbl {margin-top:10px;}
 .yui-panel {
     border-collapse: separate;

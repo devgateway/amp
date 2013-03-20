@@ -50,6 +50,8 @@ public class CreateSourceForm extends ActionForm {
 	
 	private Long sourceId;
 	
+	private boolean errorName = false;
+	
 	//holds attached files	
 	private Sdm sdmDocument;
 	
@@ -381,6 +383,14 @@ public class CreateSourceForm extends ActionForm {
 
 	public void setModuleAOW(String [] moduleAOW) {
 		this.moduleAOW = moduleAOW;
+	}
+
+	public boolean isErrorName() {
+		return errorName;
+	}
+
+	public void setErrorName(boolean errorName) {
+		this.errorName = errorName;
 	}
 	
 }

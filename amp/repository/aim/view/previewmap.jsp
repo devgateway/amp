@@ -9,7 +9,7 @@
     <style type="text/css"> a { color: blue; } </style>
 
     
-    <script type="text/javascript">
+<script type="text/javascript">
     if( typeof dojo != 'undefined' )
     	{
     	  dojo.require("esri.map");

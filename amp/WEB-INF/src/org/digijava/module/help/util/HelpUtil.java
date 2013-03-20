@@ -1222,7 +1222,7 @@ System.out.println("lang:"+lang);
 			finally {
 				if (session != null) {
 					try {
-						PersistenceManager.releaseSession(session);
+						session.close();
 					} catch (Exception rsf) {
 						logger.error("Release session failed :" + rsf.getMessage());
 					}

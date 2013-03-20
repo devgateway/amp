@@ -259,7 +259,7 @@ public class ActivityUtil {
 		//setting activity status....
 		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
 		boolean teamLeadFlag    = role.isApprover() ;
-		if(teamLeadFlag && activityTeamId.equals(teamMemberTeamId)){
+		if(teamLeadFlag/* && activityTeamId.equals(teamMemberTeamId)*/){
 			if(draft){
 				a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
 			}

@@ -130,7 +130,7 @@ table tr td {font-size:11px;}
 		</table>
 		</div>
 		
-		<div id="usr_menu_logged">
+		<div id="usr_menu_logged2">
 			<a href="javascript:showUserProfile(${teamMember.memberId})">${teamMember.memberName}</a>			
 			<a>${userLogged.name}</a>			
 			<img src="/TEMPLATE/ampTemplate/img_2/top_sep.gif" class="top_sep">		

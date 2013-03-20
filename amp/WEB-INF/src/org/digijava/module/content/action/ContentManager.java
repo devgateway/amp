@@ -42,7 +42,7 @@ public class ContentManager extends DispatchAction {
 	 * list of extensions of files which are safe to be imported/exported for direct inclusion as a <src> file
 	 * a lame, poor man's, way of checking that a file is an image
 	 */
-	private static Set<String> imageFileExtensions = new HashSet<String>(){{add("jpg"); add("jpeg"); add("gif"); add("png");}};
+	public static Set<String> imageFileExtensions = new HashSet<String>(){{add("jpg"); add("jpeg"); add("gif"); add("png");}};
 
 	
 	public ActionForward upload(ActionMapping mapping, ActionForm form,

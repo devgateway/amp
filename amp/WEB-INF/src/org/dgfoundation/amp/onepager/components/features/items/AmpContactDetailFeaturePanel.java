@@ -50,7 +50,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 	 * @throws Exception
 	 */
 	
-	final String  EXPRESSION = "^\\+?[\\s\\d\\-\\/]*\\d+[\\s\\d\\-\\/]*";
+	final String  EXPRESSION = "^\\+?\\d?(\\([\\d]{1,3}\\))?[\\s\\d\\-\\/]*\\d+[\\s\\d\\-\\/]*";
 	
 	private WebMarkupContainer detailFeedbackContainer;
 	private Label detailFeedbackLabel;

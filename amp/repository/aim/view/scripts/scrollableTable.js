@@ -34,9 +34,15 @@ function scrollableTable(tableId,height){
 				}
 			}
 			
-			
 			//check scroll % or px
-			var scrollSize=(this.usePercentage)?(16*100)/this.table.offsetWidth:16;
+			var scrollSize = height ? 16 : 0;
+			if (this.usePercentage) {
+				scrollSize = (16*100)/this.table.offsetWidth;
+			}
+			
+			// the lines below were commented out to take into consideration height parameter
+			//check scroll % or px
+			//var scrollSize=(this.usePercentage)?(16*100)/this.table.offsetWidth:16;
 			//set the body cells width =offsetWidth  set the last one =offsetWidth-scrollSize
 		
 			//get the body rows

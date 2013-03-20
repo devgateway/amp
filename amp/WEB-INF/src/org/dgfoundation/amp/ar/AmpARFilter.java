@@ -100,6 +100,7 @@ public class AmpARFilter extends PropertyListable {
 														this.add(Constants.EDITED_STATUS);
 														this.add(Constants.STARTED_APPROVED_STATUS);
 														this.add(Constants.STARTED_STATUS);
+														this.add(Constants.NOT_APPRVED);
 														}});
 	
 	public final static Set<String> validatedActivityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
@@ -1508,8 +1509,8 @@ public class AmpARFilter extends PropertyListable {
 				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
 				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
 				 */
-				String allValidatedActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE draft<> true AND approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) +")";				
-				queryAppend(allValidatedActivitiesInTheDatabaseQuery);
+				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE draft<> true AND approval_status IN (" + Util.toCSString(AmpARFilter.activityStatus) +")";				
+				queryAppend(allActivitiesInTheDatabaseQuery);
 				generatedFilterQuery += " OR amp_activity_id IN (" + TEAM_FILTER + ")";
 			}
 			else

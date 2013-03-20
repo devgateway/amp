@@ -139,6 +139,8 @@
 		%>						
 				<c:set var="reqSelectorHeaderSize" scope="request" value="" />
 				</logic:notEqual>
+				<%-- See details in https://jira.dgfoundation.org/browse/AMP-14926. --%>
+				<feature:display name="Actual Approval Year" module="Filter Section">
 				<logic:notEqual name="is_pledge_report" value="true" scope="request">
 				<div style="width: 17%; height: 30%; padding: 10px; float: left;">
 					<span style="white-space: nowrap"><b><digi:trn>Actual Approval Year</digi:trn> </b></span>
@@ -150,6 +152,7 @@
 						</div>
 					</div>
 				</logic:notEqual>
+				</feature:display>
 				<feature:display name="Computed Columns Filters" module="Filter Section">
 					<div style="margin-left: 80%;width: 20%; height: 30%; padding: 10px; ">
 						<span style="white-space: nowrap"><b><digi:trn>Computed Columns</digi:trn> </b></span>

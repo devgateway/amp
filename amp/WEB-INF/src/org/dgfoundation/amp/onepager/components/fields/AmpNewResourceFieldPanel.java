@@ -119,7 +119,9 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                     	td.setObject(new TemporaryDocument());
                 	}
             	}
-            	
+
+                AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
+                panel.setVisibilityAllowed(false);
             }
         };
         //form.setMaxSize(Bytes.megabytes(1));
@@ -145,6 +147,8 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
             	target.add(form);
             	target.add(resourcesList);
             	target.add(webLinkFeedbackContainer);
+                AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
+                target.add(panel.getParent());
             }
         };
         form.add(submit);

@@ -23,6 +23,16 @@
 			$("div#show_login_pop_box").mouseup(function() {
 				return false
 			});
+			
+			// AMP-14908: IE 8/9 fix in standards mode
+			$("form#loginForm").live("keyup", function(ev){				
+				if (ev.keyCode == 13)
+				{
+					$("form#loginForm").submit();
+				}
+	        });
+			
+			
 			$(document).mouseup(function(e) {
 				if($(e.target).parent("a#show_login_pop").length==0) {
 					$("#show_login_pop").removeClass("menu-open");

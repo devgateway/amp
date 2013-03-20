@@ -97,7 +97,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 			 jslist.add(new ResourceSpec(AbstractDefaultAjaxBehavior.class, "wicket-ajax-debug.js"));
 			 jslist.add(new ResourceSpec(AmpAjaxBehavior.class, "translationsOnDocumentReady.js"));
 			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "previewLogframe.js"));
-			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "draftSaveNavigationPanel.js"));
+			 jslist.add(new ResourceSpec(AmpActivityFormFeature.class, "saveNavigationPanel.js"));
 			 
 			 mount.clone()
 			 	.setPath("/style/all-23.css")
@@ -160,7 +160,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 //getStoreSettings().setFileStoreFolder(new File("/mnt/ssd/wicket"));
 		 //turn this on in order to view rendering times for wicket pages
 		 //getComponentInstantiationListeners().add(new RenderPerformanceListener());
-		 
+         /*
 		 // Error handling
 		 getRequestCycleListeners().add(new AbstractRequestCycleListener() {
 
@@ -170,7 +170,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 	              return new RenderPageRequestHandler(new PageProvider(new AmpExceptionPage(e)));  
 					}
 				});
-		 
+		 */
 
 		 
 		 

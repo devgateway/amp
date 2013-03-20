@@ -225,12 +225,19 @@ function trim1 (str) {
 			 return false;
 		 }		 
 	 }
+	 if(document.getElementById('attachment')!=null)
+		 return true;
+	 if(document.getElementById('fileUploaded').files.length == 0){
+		var msg = "<digi:trn>Please select an attachment first</digi:trn>";
+		alert(msg);
+		return false;
+	 }
 	 return true;
  }
 </script>
 
 <digi:instance property="createSourceForm" />
-
+<html:hidden property="errorName" name="createSourceForm" styleId="errorName"/>
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <!-- MAIN CONTENT PART START -->
 <digi:form action="/createEditSource.do?action=saveSource" styleId="form" method="post" enctype="multipart/form-data">
@@ -259,7 +266,7 @@ function trim1 (str) {
 					    	<fieldset>
 								<legend><span class=legend_label><digi:trn>General Details</digi:trn></span></legend>								
 								<b><digi:trn>Name</digi:trn>:</b> 
-								<html:text property="name" styleClass="inputx"/>
+								<html:text property="name" styleClass="inputx" style="width:95%;"/>
 								<br /><br />
 								
 								<b><digi:trn>Please choose the projects' hierarchy(s) to be imported</digi:trn>:</b><br />
@@ -321,7 +328,7 @@ function trim1 (str) {
 													<c:set target="${urlParamsSort}" property="documentId" value="${createSourceForm.sdmDocument.id}"/>
 												</c:if>																					
 												<digi:link module="sdm" href="/showFile.do~activeParagraphOrder=${attachedDoc.paragraphOrder}" name="urlParamsSort">
-													<img src="/repository/message/view/images/attachment.png" border="0" />
+													<img src="/repository/message/view/images/attachment.png" border="0" id="attachment" />
 													${attachedDoc.contentTitle}
 												</digi:link>
 												<a href="javascript:removeAttachment(${attachedDoc.paragraphOrder})" title="Click Here To Remove Attachment" >

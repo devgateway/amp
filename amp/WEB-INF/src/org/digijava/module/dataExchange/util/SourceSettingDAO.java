@@ -97,6 +97,30 @@ public class SourceSettingDAO {
 		}
 	}
 	
+	public static DESourceSetting getSourceSettingByName(String name){
+		  Session session = null;
+	      Query qry = null;
+	      DESourceSetting result=null;
+		try{
+			session = PersistenceManager.getSession();
+			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss where ss.name=:name";
+			qry = session.createQuery(queryString);
+			qry.setString("name", name);
+			result = (DESourceSetting)qry.uniqueResult();
+		}catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                PersistenceManager.releaseSession(session);
+            } catch (HibernateException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+				e.printStackTrace();
+			}
+        }
+        return result;
+	}
+	
 	public void deleteObject(Long id) {
 		try{
 //beginTransaction();

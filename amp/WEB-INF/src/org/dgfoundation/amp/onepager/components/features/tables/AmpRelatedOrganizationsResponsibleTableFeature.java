@@ -53,19 +53,21 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 				AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel, "percentage",percentageValidationField);
 				item.add(percentageField);
 				
-				boolean disableBudgetCode = true;
-				AmpOrgRole orole = item.getModelObject();
-				String orgCode = orole.getOrganisation().getBudgetOrgCode();
-				item.add(new Label("budgetCodeLabel", orgCode));
-				
-				AmpTextFieldPanel<Long> budgetCode = new AmpTextFieldPanel<Long>("budgetCodeEdit", new PropertyModel<Long>(item.getModel(), "budgetCode"), "Budget Code", true, true);
-				budgetCode.getTextContainer().add(new AttributeModifier("style", "width: 40px;"));
-				budgetCode.getTextContainer().add(new AttributeModifier("maxlength", "3"));
-				budgetCode.getTextContainer().add(new RangeValidator<Long>(null, 1000L));
-				if (disableBudgetCode){
+				AmpOrgRole oRole = item.getModelObject();
+				String orgCode = oRole.getOrganisation().getBudgetOrgCode();
+
+                PropertyModel<String> bcModel = new PropertyModel<String>(item.getModel(), "budgetCode");
+                if (bcModel.getObject() == null || "".equals(bcModel.getObject().trim()))
+                    bcModel.setObject(orgCode); //if budget code not entered yet, add the first part from the org budget code
+
+                AmpTextFieldPanel<String> budgetCode = new AmpTextFieldPanel<String>("budgetCodeEdit", bcModel, "Budget Code", true, true);
+				budgetCode.getTextContainer().add(new AttributeModifier("style", "width: 80px;"));
+				budgetCode.getTextContainer().add(new AttributeModifier("maxlength", "6"));
+
+				/*if (disableBudgetCode){
 					budgetCode.setIgnorePermissions(true);
 					budgetCode.setEnabled(false);
-				}
+				}*/
 				item.add(budgetCode);
 				
 				AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField("delRelOrg", "Delete Related Organisation") {

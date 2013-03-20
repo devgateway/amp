@@ -96,6 +96,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		return featureList;
 	}
 
+    private static final String DISBURSEMENTS_BIGGER_ERROR =
+            TranslatorUtil.getTranslatedText("The sum of disbursements is greater than the sum of commitments");
+    private static final String EXPENDITURES_BIGGER_ERROR =
+            TranslatorUtil.getTranslatedText("The sum of expenditures is greater than the sum of disbursements");
+	
+
 	/**
 	 * Toggles the validation of semantic validators. 
 	 * @param enabled whether these validators are enabled
@@ -184,6 +190,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		};
 		activityForm.setOutputMarkupId(true);
+        activityForm.setMultiPart(true);
 		
 		String actNameStr = am.getObject().getName();
         if (actNameStr != null && !actNameStr.trim().isEmpty()) {

@@ -83,7 +83,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
         /**
          * on merge - prepare is gone :)
 		try {
-			FilterUtil.prepare(request, af);
+			FilterUtil.prepare(request, af, false);
 		} catch (Exception e) {
 			logger.error("Error while preparing filter:", e);
 		}

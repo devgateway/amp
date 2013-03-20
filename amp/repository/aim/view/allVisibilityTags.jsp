@@ -355,7 +355,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact Email"></field:display> 
 <field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact First Name"></field:display> 
 <field:display feature="Sectors" name="Level 1 Sectors List"></field:display> 
-<field:display name="A.C. Chapter" feature="Identification"></field:display> 
+<field:display name="A.C. Chapter" feature="Identification"></field:display>
+<field:display name="Budget Code Project Id" feature="Identification"></field:display>
 <field:display name="AMP ID" feature="Identification"></field:display> 
 <field:display name="Procurement System" feature="Identification"></field:display> 
 <field:display name="Reporting System" feature="Identification"></field:display> 

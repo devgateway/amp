@@ -113,6 +113,8 @@ public class RequestProcessor
         bypassRefererCheckActions.add("/aim/xlsExport.do");
         bypassRefererCheckActions.add("/aim/viewNewAdvancedReport.do");
         bypassRefererCheckActions.add("/exception/showExceptionReport.do");
+        bypassRefererCheckActions.add("/aim/viewActivityPreview.do");
+        bypassRefererCheckActions.add("/aim/default/previewActivity.do");
     }
     
 

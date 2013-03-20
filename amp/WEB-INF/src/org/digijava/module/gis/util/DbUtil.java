@@ -2139,7 +2139,7 @@ public class DbUtil {
         	Map<Long, Map<Long, Float>> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
         	Map<Long, Map<Long, Float>> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations, includeCildLocations) : null;
 
-    		return getActivityFundings(sectorPercentageMap, secondarySectorPercentageMap, programPercentageMap, donorIds, donorGroupIds, donorTypeIds, locationPercentageMap, workspaces, typeOfAssistanceIds, startDate, endDate, isPublic, session, filterByLocations, filterBySecondarySectors);    		
+    		return getActivityFundings(sectorPercentageMap, secondarySectorPercentageMap, programPercentageMap, donorIds, donorGroupIds, donorTypeIds, locationPercentageMap, workspaces, typeOfAssistanceIds, startDate, endDate, isPublic, filterByLocations, filterBySecondarySectors);    		
     	}
     
     public static Object[] getActivityFundings (Map<Long, Map<Long, Float>> sectorPercentageMap,
@@ -2154,7 +2154,6 @@ public class DbUtil {
     											java.util.Date startDate,
     											java.util.Date endDate,
     											boolean isPublic,
-    											HttpSession session,
     											boolean filterByLocations,
     											boolean filterBySecondarySectors) 
     {

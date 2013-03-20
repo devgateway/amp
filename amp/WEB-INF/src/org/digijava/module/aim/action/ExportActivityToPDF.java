@@ -2560,7 +2560,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell agreementCell1=new PdfPCell();
 							agreementCell1.setBackgroundColor(new Color(221,221,221));
 							agreementCell1.setBorder(0);
-							p1=new Paragraph(TranslatorWorker.translateText("Agreement Title",locale,siteId)+":",plainFont);
+							p1=new Paragraph(TranslatorWorker.translateText("Agreement Title")+":",plainFont);
 							agreementCell1.addElement(p1);
 							fundingTable.addCell(agreementCell1);							
 							//meaning
@@ -2573,7 +2573,7 @@ public class ExportActivityToPDF extends Action {
 							agreementCell1=new PdfPCell();
 							agreementCell1.setBackgroundColor(new Color(221,221,221));
 							agreementCell1.setBorder(0);
-							p1=new Paragraph(TranslatorWorker.translateText("Agreement Code",locale,siteId)+":",plainFont);
+							p1=new Paragraph(TranslatorWorker.translateText("Agreement Code")+":",plainFont);
 							agreementCell1.addElement(p1);
 							fundingTable.addCell(agreementCell1);							
 							//meaning

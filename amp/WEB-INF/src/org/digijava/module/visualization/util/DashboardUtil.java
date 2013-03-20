@@ -191,7 +191,7 @@ public class DashboardUtil {
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear);
 		} 
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
+		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 		for (Iterator<AmpCategoryValueLocations> iterator = regionList.iterator(); iterator.hasNext();) {
 			AmpCategoryValueLocations location = (AmpCategoryValueLocations) iterator.next();
 			Long[] ids = {location.getId()};

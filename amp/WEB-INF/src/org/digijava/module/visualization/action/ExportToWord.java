@@ -180,7 +180,7 @@ public class ExportToWord extends Action {
 			String filtersAllTrn = TranslatorWorker.translateText("All");
 			String filtersAmountsInTrn = "";
 			String filtersMagnitudeTrn = "";
-			if(vForm.getFilter().getShowAmountsInThousands() != null && vForm.getFilter().getShowAmountsInThousands()){
+			if(vForm.getFilter().shouldShowAmountsInThousands()){
 				filtersAmountsInTrn = TranslatorWorker.translateText("All amounts in thousands");
 				filtersMagnitudeTrn = TranslatorWorker.translateText("Thousands");
 			}

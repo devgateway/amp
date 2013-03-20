@@ -578,7 +578,7 @@ public class ChartWidgetUtil {
     	List<Long> donorIds = donorIDs == null ? null : Arrays.asList(donorIDs);
     	
     	Map<Long, Map<Long, Float>> sectorPercentageMap = org.digijava.module.gis.util.DbUtil.getActivitySectorPercentages(null, "Primary");
-    	Object[] allFundings = org.digijava.module.gis.util.DbUtil.getActivityFundings(null /*sectorPercentageMap*/, null /* secondarySectorPercentageMap */, null, donorIds, null, null, null, null, null, fromDate, toDate, isPublic, session, false, false);
+    	Object[] allFundings = org.digijava.module.gis.util.DbUtil.getActivityFundings(null /*sectorPercentageMap*/, null /* secondarySectorPercentageMap */, null, donorIds, null, null, null, null, null, fromDate, toDate, isPublic, false, false);
     	// partial copy-paste from RMMapCalclation.getFundingsByLocation coming
     	List<Object[]> fundings = (List<Object[]>) allFundings[0];
 

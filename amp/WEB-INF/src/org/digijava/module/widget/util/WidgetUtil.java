@@ -633,7 +633,7 @@ public class WidgetUtil {
           //String lasVersionsWhereclause = org.digijava.module.gis.util.DbUtil.generateWhereclause(lastVersions, new DbUtil.GenericIdGetter());
           
           
-          Set<Long> allActivityIdsSet = DbUtil.getAllLegalAmpActivityIds(httpSession);
+          Set<Long> allActivityIdsSet = DbUtil.getAllLegalAmpActivityIds();
           String activityWhereclause = DbUtil.generateWhereclause(allActivityIdsSet, new GenericIdGetter());
           
         String oql = "select  actSec, f.ampDonorOrgId ";

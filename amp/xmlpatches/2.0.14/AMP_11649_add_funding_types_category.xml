@@ -19,7 +19,7 @@
     <script>
       <lang delimiter=";" type="postgres">
     INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered)
-    values ( select nextval('amp_category_class_seq') , 'Adjustment Type' , 'adjustment_type', '', 'f', 'f');
+    values ( nextval('amp_category_class_seq') , 'Adjustment Type' , 'adjustment_type', '', 'f', 'f');
     
    
     INSERT INTO amp_category_value(

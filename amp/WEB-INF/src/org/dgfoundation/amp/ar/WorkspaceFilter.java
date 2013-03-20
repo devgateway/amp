@@ -103,28 +103,34 @@ public class WorkspaceFilter
 						Util.toCSString(AmpARFilter.activityStatus)	// other workspaces: all kinds of activities
 				);
 		
-		if("Management".equals(this.getAccessType()))
+		if("Management".equals(this.getAccessType())) {
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+used_approval_status+") AND draft<>true AND " +
-					"amp_team_id IS NOT NULL AND amp_team_id IN ("
+					"amp_team_id IS NOT NULL ";
+        if (ampTeams != null) {
+        TEAM_FILTER += " AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
-				+ ") ";
+				+ ") "; } }
 				// + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				//+ Util.toCSString(ampTeams) + ") ) AND draft<>true "; 
 		else{
 			
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
-				+ Util.toCSString(ampTeams)
-				+ ") ";
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL ";
+			        if (ampTeams != null) {
+			        TEAM_FILTER += " AND amp_team_id IN ("
+							+ Util.toCSString(ampTeams)
+							+ ") "; }
 				//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				//+ Util.toCSString(ampTeams) + ") )" ;
 		}
-		NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
-			+ Util.toCSString(ampTeams)
-			+ ") ";
+		NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL ";
+		        if (ampTeams != null) {
+		        TEAM_FILTER += " AND amp_team_id IN ("
+						+ Util.toCSString(ampTeams)
+						+ ") "; }
 			//+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 			//+ Util.toCSString(ampTeams) + ") )" ;
 			
-		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false )";
+		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft is false ) ";
 		if (hideDraft)
 			TEAM_FILTER += "AND amp_activity_id IN (" + DRAFT_FILTER + ") ";		
 		
@@ -172,9 +178,9 @@ public class WorkspaceFilter
 	 * @param draft
 	 * @return
 	 */
-	private static String generateWorkspaceFilterQuery(Long teamMemberId, String accessType, boolean approved, boolean draft, boolean publicView)
+	private static String generateWorkspaceFilterQuery(Long teamMemberId, String accessType, boolean approved, boolean hideDraft, boolean publicView)
 	{
-		return new WorkspaceFilter(teamMemberId, accessType, approved, draft, publicView).getGeneratedQuery();
+		return new WorkspaceFilter(teamMemberId, accessType, approved, hideDraft, publicView).getGeneratedQuery();
 	}
 	
 	/**
@@ -211,21 +217,22 @@ public class WorkspaceFilter
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if (forcedTeamMemberId != null && forcedTeamMemberId != AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES)
 			tm = TeamMemberUtil.getTeamMember(forcedTeamMemberId);
-		
-		if (tm == null)
+
+        //Hotfix for timor budget integration report
+		if (tm == null || tm.getMemberName().equalsIgnoreCase("AMP Admin"))
 		{
 			//public view
-			boolean draft = true;
+			boolean hideDraft = true;
 			boolean approved = true;
 			String accessType = Constants.ACCESS_TYPE_MNGMT;
-			String onlineQuery = generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType, approved, draft, publicView);
+			String onlineQuery = generateWorkspaceFilterQuery(AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, accessType, approved, hideDraft, publicView);
 			String offlineQuery = AmpARFilter.getOffLineQuery(onlineQuery);
 			return offlineQuery;
 		}
 		else
 		{
-			boolean draft = Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) || "Donor".equalsIgnoreCase(tm.getTeamType());
-			boolean approved = draft;
+			boolean hideDraft = Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) || "Donor".equalsIgnoreCase(tm.getTeamType());
+			boolean approved = hideDraft;
 			
 			/**
 			 * Checks if the team is a computed workspace and in case it is
@@ -234,10 +241,10 @@ public class WorkspaceFilter
 			if (tm.getComputation() != null && tm.getComputation() ) {
 				Workspace wrksp	= TeamUtil.getWorkspace( tm.getTeamId() );
 				if ( wrksp != null && wrksp.getHideDraftActivities() != null && wrksp.getHideDraftActivities() )
-					draft = true;
+					hideDraft = true;
 			}
 			String accessType = tm.getTeamAccessType();
-			return generateWorkspaceFilterQuery(tm.getMemberId(), accessType, approved, draft, publicView);
+			return generateWorkspaceFilterQuery(tm.getMemberId(), accessType, approved, hideDraft, publicView);
 		}
 	}
 	

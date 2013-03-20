@@ -19,7 +19,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_g_settings_resource_columns AS SELECT util_global_settings_possible_.value_id AS id, util_global_settings_possible_.value_shown AS value FROM util_global_settings_possible_ WHERE ((util_global_settings_possible_.setting_name)::text = 'Resources Columns'::text);;;
+			    	CREATE OR REPLACE VIEW v_g_settings_resource_columns AS 
+			    	  SELECT u.value_id AS id, u.value_shown AS value 
+			    	   FROM util_global_settings_possible_ u
+			    	   WHERE ((u.setting_name)::text = 'Resources Columns'::text) ORDER BY u.id; 
         		</lang>
 		</script>
 	</apply>

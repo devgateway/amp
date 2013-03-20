@@ -361,41 +361,55 @@ function initializeGlobalVariables(){
 				</ul>
 				</div>
 				<div style="float:right; width:450px;border:1px solid #fff;">
-				<ul>
-					<li>
-						<html:checkbox property="filter.showProjectsRanking" styleId="show_projects_ranking">
-							<digi:trn>Show Projects Ranking</digi:trn>
-						</html:checkbox>
-					</li>
-					<li>
-						<html:checkbox property="filter.showOrganizationsRanking" styleId="show_organizations_ranking">
-							<digi:trn>Show Organizations Ranking</digi:trn>
-						</html:checkbox>
-					</li>
-					<li>
-						<html:checkbox property="filter.showSectorsRanking" styleId="show_sectors_ranking">
-							<digi:trn>Show Sectors Ranking</digi:trn>
-						</html:checkbox>
-					</li>
-					<li>
-						<html:checkbox property="filter.showRegionsRanking" styleId="show_regions_ranking">
-							<digi:trn>Show Regions Ranking</digi:trn>
-						</html:checkbox>
-					</li>
-					<li>
-						<html:checkbox property="filter.showNPORanking" styleId="show_NPO_ranking">
-							<digi:trn>Show NPO Ranking</digi:trn>
-						</html:checkbox>
-					</li>
-					<li>
-						<html:checkbox property="filter.showProgramsRanking" styleId="show_programs_ranking">
-							<digi:trn>Show Programs Ranking</digi:trn>
-						</html:checkbox>
-					</li>
-					
-				</ul>
+				<feature:display name="Ranking Categories" module="Dashboard Generator">
+					<ul>
+						<field:display name="Projects Ranking" feature="Ranking Categories">
+							<li>
+								<html:checkbox property="filter.showProjectsRanking" styleId="show_projects_ranking">
+									<digi:trn>Show Projects Ranking</digi:trn>
+								</html:checkbox>
+							</li>
+						</field:display>
+						<field:display name="Organizations Ranking" feature="Ranking Categories">	
+							<li>
+							<html:checkbox property="filter.showOrganizationsRanking" styleId="show_organizations_ranking">
+								<digi:trn>Show Organizations Ranking</digi:trn>
+							</html:checkbox>
+							</li>
+						</field:display>
+						<field:display name="Sectors Ranking" feature="Ranking Categories">		
+							<li>
+							<html:checkbox property="filter.showSectorsRanking" styleId="show_sectors_ranking">
+								<digi:trn>Show Sectors Ranking</digi:trn>
+							</html:checkbox>
+							</li>
+						</field:display>	
+						<field:display name="Regions Ranking" feature="Ranking Categories">
+							<li>
+								<html:checkbox property="filter.showRegionsRanking" styleId="show_regions_ranking">
+									<digi:trn>Show Regions Ranking</digi:trn>
+								</html:checkbox>
+							</li>
+						</field:display>
+						<field:display name="NPO Ranking" feature="Ranking Categories">
+							<li>
+								<html:checkbox property="filter.showNPORanking" styleId="show_NPO_ranking">
+									<digi:trn>Show NPO Ranking</digi:trn>
+								</html:checkbox>
+							</li>
+						</field:display>
+						<field:display name="Programs Ranking" feature="Ranking Categories">
+							<li>
+								<html:checkbox property="filter.showProgramsRanking" styleId="show_programs_ranking">
+									<digi:trn>Show Programs Ranking</digi:trn>
+								</html:checkbox>
+							</li>
+						</field:display>
+					</ul>
+				</feature:display>	
 				</div>
 				<div style="clear:both;"></div>
+				
 			</div>
 
 		</div>

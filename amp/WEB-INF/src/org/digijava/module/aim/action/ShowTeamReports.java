@@ -171,6 +171,8 @@ public class ShowTeamReports extends Action {
         
         
 		Boolean favourites = rf.getOnlyFavourites();
+		if (favourites != null && favourites)
+			request.setAttribute("onlyFavourites", true);
         
 		if (tm == null) {
 			List<AmpReports> reports = null;

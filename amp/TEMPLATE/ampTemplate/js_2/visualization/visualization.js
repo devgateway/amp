@@ -2412,12 +2412,18 @@ function launchDashboard(){
 			document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
 		}
 	}
-	document.getElementById("showProjectsRanking").value = document.getElementById("show_projects_ranking").checked;
-	document.getElementById("showOrganizationsRanking").value = document.getElementById("show_organizations_ranking").checked;
-	document.getElementById("showSectorsRanking").value = document.getElementById("show_sectors_ranking").checked;
-	document.getElementById("showRegionsRanking").value = document.getElementById("show_regions_ranking").checked;
-	document.getElementById("showNPORanking").value = document.getElementById("show_NPO_ranking").checked;
-	document.getElementById("showProgramsRanking").value = document.getElementById("show_programs_ranking").checked;
+	if (document.getElementById("show_projects_ranking")!=null)
+		document.getElementById("showProjectsRanking").value = document.getElementById("show_projects_ranking").checked;
+	if (document.getElementById("show_organizations_ranking")!=null)
+		document.getElementById("showOrganizationsRanking").value = document.getElementById("show_organizations_ranking").checked;
+	if (document.getElementById("show_sectors_ranking")!=null)
+		document.getElementById("showSectorsRanking").value = document.getElementById("show_sectors_ranking").checked;
+	if (document.getElementById("show_regions_ranking")!=null)
+		document.getElementById("showRegionsRanking").value = document.getElementById("show_regions_ranking").checked;
+	if (document.getElementById("show_NPO_ranking")!=null)
+		document.getElementById("showNPORanking").value = document.getElementById("show_NPO_ranking").checked;
+	if (document.getElementById("show_programs_ranking")!=null)
+		document.getElementById("showProgramsRanking").value = document.getElementById("show_programs_ranking").checked;
 	
 	var params = "";
 	if (document.getElementById("org_grp_check_all").checked!=true){

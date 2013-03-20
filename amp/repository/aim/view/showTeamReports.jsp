@@ -435,6 +435,12 @@ $(document).ready(function() {
 					                  					<table>
 					                    					<tr>                    
 					                     						<td>
+					                     							<logic:present name="onlyFavourites" scope="request">
+					                     								<div style="font-weight: bold; font-size: 115%; margin: 4px;">
+					                     									<digi:trn>Only favourite reports shown</digi:trn>
+					                     								</div>
+					                     							</logic:present>
+					                     							
 					                        						<table class="inside" style="font-size:11px; font-family: Arial,sans-serif; background-color: white;" width="950px">
 					                          							<tr>
 					                          								<td align="center" class="inside_header">&nbsp;

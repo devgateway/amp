@@ -14,7 +14,7 @@
             <lang  delimiter=";" type="postgres">
 
 INSERT INTO amp_category_class(id, category_name,is_multiselect,is_ordered, keyName) 
-	VALUES(select nextval('amp_category_class_seq'), 'Workspace Group', false, false, 'workspace_group');
+	VALUES(nextval('amp_category_class_seq'), 'Workspace Group', false, false, 'workspace_group');
 
 insert into amp_category_value (id, category_value, amp_category_class_id, index_column) 
 select (nextval('amp_category_value_seq')) as id2, 'Government', id, '0' 

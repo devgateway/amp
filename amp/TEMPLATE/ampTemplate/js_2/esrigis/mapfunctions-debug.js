@@ -260,7 +260,7 @@ function createMapAddLayers(myService1, myService2) {
 	map.addLayer(myService1);
 	map.addLayer(myService2);
 	
-	if (bordermap){
+	if (nationalborderurl){
 		map.addLayer(bordermap);
 	}
 	for(var idx = 0; idx < indicatorMapArray.length; idx++){

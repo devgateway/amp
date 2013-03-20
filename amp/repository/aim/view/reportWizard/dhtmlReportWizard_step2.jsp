@@ -29,8 +29,11 @@
 <!-- 										<form name="searchBoxForm" onsubmit="searchFunction();return false;"> -->
 
 <b><digi:trn key="fm:search:searchTitle">Search</digi:trn></b> 
+<c:set var="no_match_message">
+	<digi:trn>No match</digi:trn>
+</c:set>
 <input type="Text" id="searchCriteria"/> 
-<input type="button" class="buttonx" src="#" value="<digi:trn key="fm:search:search">Search</digi:trn>" onclick="searchFunction(); return false;" />
+<input type="button" class="buttonx" src="#" value="<digi:trn key="fm:search:search">Search</digi:trn>" onclick="searchFunction('${no_match_message}'); return false;" />
 <input type="button" class="buttonx" onclick="resetSearch()" value="<digi:trn key="fm:search:reset">Reset</digi:trn>" />
 
 <input type="button" id="prevSearchButton" class="buttonx" onclick="prevResult()" value="<<" disabled="true" style="display:none;"/>

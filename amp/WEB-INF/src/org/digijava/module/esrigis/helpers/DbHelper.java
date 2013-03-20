@@ -8,6 +8,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.exception.AdminException;
@@ -184,15 +185,26 @@ public class DbHelper {
 			}
 
 			oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)";
-
+			
+			ArrayList<BigInteger> workSpaceactivityList = new ArrayList<BigInteger>();
 			if (filter.getFromPublicView() != null
 					&& filter.getFromPublicView() == true) {
-				oql += QueryUtil.getTeamQueryManagement();
-			} else {
-				if (!isfilteredworkspace){
-					oql += QueryUtil.getTeamQuery(teamMember);
+				String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
+				workSpaceactivityList = getInActivities(workSpacequery);
+			} else if(!filter.isModeexport()){
+				String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMember.getMemberId(), false);
+				workSpaceactivityList = getInActivities(workSpacequery);
+			}
+			String inactivities= "";
+			for (Iterator iterator = workSpaceactivityList.iterator(); iterator.hasNext();) {
+				BigInteger id = (BigInteger) iterator.next();
+				if (inactivities ==""){
+					inactivities += id.toString();
+				}else{
+					inactivities +="," + id.toString();
 				}
 			}
+			oql += " and act.ampActivityId in("+ inactivities +")";
 
 			// locations filter
 
@@ -301,20 +313,6 @@ public class DbHelper {
 				oql += " and act.ampActivityId in(" + inactivities + ")";
 			}
 			
-			if (isfilteredworkspace){
-				String inactivities= "";
-				AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
-				ArrayList<BigInteger> filteractivities = getInActivities(teamFilter.getGeneratedFilterQuery());
-				for (Iterator iterator = filteractivities.iterator(); iterator.hasNext();) {
-					BigInteger id = (BigInteger) iterator.next();
-					if (inactivities ==""){
-						inactivities += id.toString();
-					}else{
-						inactivities +="," + id.toString();
-					}
-				}
-				oql += " and act.ampActivityId in("+ inactivities +")";
-			}
 			
 			Session session = PersistenceManager.getRequestDBSession();
 			Query query = session.createQuery(oql);
@@ -417,13 +415,27 @@ public class DbHelper {
 	            }
 	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 	            
-	            if(filter.getFromPublicView() != null && filter.getFromPublicView() == true){
-	                oql += QueryUtil.getTeamQueryManagement();
-	            }else{
-	            	if (!isfilteredworkspace){
-						oql += QueryUtil.getTeamQuery(teamMember);
-					}
-	            }
+	            
+	            ArrayList<BigInteger> workSpaceactivityList = new ArrayList<BigInteger>();
+	            String inactivities= "";
+	            if (filter.getFromPublicView() != null && filter.getFromPublicView() == true) {
+	    			String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
+	    			workSpaceactivityList = getInActivities(workSpacequery);
+	    		} else if(!filter.isModeexport()){
+	    			String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMember.getMemberId(), false);
+	    			workSpaceactivityList = getInActivities(workSpacequery);
+	    		}
+	    		for (Iterator iterator = workSpaceactivityList.iterator(); iterator.hasNext();) {
+	    			BigInteger id = (BigInteger) iterator.next();
+	    			if (inactivities ==""){
+	    				inactivities += id.toString();
+	    			}else{
+	    				inactivities +="," + id.toString();
+	    			}
+	    		}
+	    		oql += " and act.ampActivityId in("+ inactivities +")";
+	            
+	            
 	            if (sectorCondition) {
 	                oql += " and sec.id in ("+QueryUtil.getInStatement(sectorIds)+") ";
 	            }
@@ -460,7 +472,6 @@ public class DbHelper {
 	            }
 	           
 	            if (filter.isModeexport()){
-					String inactivities= "";
 					ArrayList<BigInteger> filteractivities = getInActivities(filter.getReportfilterquery());
 					for (Iterator iterator = filteractivities.iterator(); iterator.hasNext();) {
 						BigInteger id = (BigInteger) iterator.next();
@@ -476,21 +487,6 @@ public class DbHelper {
 	            if (filter.getTransactionType() < 2) { // the option comm&disb is not selected
 	                query.setLong("transactionType", transactionType);
 	            }
-	            
-	            if (isfilteredworkspace){
-					String inactivities= "";
-					AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
-					ArrayList<BigInteger> filteractivities = getInActivities(teamFilter.getGeneratedFilterQuery());
-					for (Iterator iterator = filteractivities.iterator(); iterator.hasNext();) {
-						BigInteger id = (BigInteger) iterator.next();
-						if (inactivities ==""){
-							inactivities += id.toString();
-						}else{
-							inactivities +="," + id.toString();
-						}
-					}
-					oql += " and act.ampActivityId in("+ inactivities +")";
-				}
 	            locations = query.list();
 	        }
 	        catch (Exception e) {
@@ -712,23 +708,28 @@ public class DbHelper {
 		if (filter.getShowOnlyApprovedActivities() != null && filter.getShowOnlyApprovedActivities()) {
 			oql += ActivityUtil.getApprovedActivityQueryString("act");
 		}
-        if(filter.getFromPublicView() != filter.getFromPublicView()){
-            oql += QueryUtil.getTeamQueryManagement();
-        }else{
-        	if(!isfilteredworkspace){
-        		oql += QueryUtil.getTeamQuery(tm);
-        	}
-        }
         
-        if (ActivityVersionUtil.isVersioningEnabled()){
-			oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
-			oql += " and (act.deleted = false or act.deleted is null)";
+        ArrayList<BigInteger> workSpaceactivityList = new ArrayList<BigInteger>();
+        String inactivities= "";
+        if (filter.getFromPublicView() != null && filter.getFromPublicView() == true) {
+			String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES, false);
+			workSpaceactivityList = getInActivities(workSpacequery);
+		} else if(!filter.isModeexport()){
+			String workSpacequery = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), tm.getMemberId(), false);
+			workSpaceactivityList = getInActivities(workSpacequery);
 		}
+		for (Iterator iterator = workSpaceactivityList.iterator(); iterator.hasNext();) {
+			BigInteger id = (BigInteger) iterator.next();
+			if (inactivities ==""){
+				inactivities += id.toString();
+			}else{
+				inactivities +="," + id.toString();
+			}
+		}
+		oql += " and act.ampActivityId in("+ inactivities +")";
         
-        if (isfilteredworkspace){
-			String inactivities= "";
-			AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
-			ArrayList<BigInteger> filteractivities = getInActivities(teamFilter.getGeneratedFilterQuery());
+		if (filter.isModeexport()){
+			ArrayList<BigInteger> filteractivities = getInActivities(filter.getReportfilterquery());
 			for (Iterator iterator = filteractivities.iterator(); iterator.hasNext();) {
 				BigInteger id = (BigInteger) iterator.next();
 				if (inactivities ==""){
@@ -739,6 +740,12 @@ public class DbHelper {
 			}
 			oql += " and act.ampActivityId in("+ inactivities +")";
 		}
+		
+		if (ActivityVersionUtil.isVersioningEnabled()){
+			oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
+			oql += " and (act.deleted = false or act.deleted is null)";
+		}
+        
         
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;

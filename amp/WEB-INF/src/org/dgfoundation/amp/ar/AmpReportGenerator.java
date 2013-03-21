@@ -821,10 +821,8 @@ public class AmpReportGenerator extends ReportGenerator {
 			createHierarchies();
 
 		report.setTotalActualCommitments(this.getTotalActualCommitments());
-		// perform postprocessing - cell grouping and other tasks
-		report.postProcess();
-		report.removeChildrenWithoutActivities(); //postProcess might have left some more empty children
 		
+		report.removeChildrenWithoutActivities();
 		report.removeEmptyChildren();
 		
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
@@ -837,6 +835,10 @@ public class AmpReportGenerator extends ReportGenerator {
 			for(int i = 0; i < 5; i++)
 				report.removeEmptyChildren(); //removeChildrenWithoutActivities might have left empty GroupReportData instances
 		}
+
+		// perform postprocessing - cell grouping and other tasks		
+		report.postProcess();
+		report.removeChildrenWithoutActivities(); //postProcess might have left some more empty children
 	}
 
 	/**

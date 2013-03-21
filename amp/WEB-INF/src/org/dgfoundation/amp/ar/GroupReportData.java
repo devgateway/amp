@@ -24,7 +24,9 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.dgfoundation.amp.exprlogic.Values;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * complex report (e.g. non-flat, e.g. non-ColumnReportData)
@@ -192,7 +194,6 @@ public class GroupReportData extends ReportData<ReportData> {
 			ReportData element = (ReportData) i.next();
 			element.postProcess();
 		}
-		
 	
 		// create trail cells
 		try {			

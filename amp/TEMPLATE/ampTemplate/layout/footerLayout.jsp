@@ -6,9 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <!-- FOOTER START -->
-
 	<div class="footer">
-		
 			AMP <b><tiles:getAsString name="version"/></b> build <b><tiles:getAsString name="build_version"/></b> - <digi:trn>Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF</digi:trn>
 			<logic:notEmpty name="currentMember" scope="session">
 				<digi:secure actions="ADMIN">

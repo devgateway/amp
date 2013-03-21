@@ -110,8 +110,8 @@ public class GlossaryUtil {
 			int c = 0;
 			for (int i=0;i<keyWords.size();i++){
 				if (c>0) oql += " or ";
-				oql += " lower(ht.topicKey) like :KEY_WORD_"+c;
-				oql += " or lower(e.body) like :KEY_WORD_"+c;
+				oql += " lower(unaccent(ht.topicKey)) LIKE unaccent(:KEY_WORD_"+c + ")";
+				oql += " or lower(unaccent(e.body)) LIKE unaccent(:KEY_WORD_"+c + ")";
 				c++;
 			}
 			oql+=" )";
@@ -173,8 +173,7 @@ public class GlossaryUtil {
 				if (c>0) {
                     queryStr.append(" or ");
                 }
-				queryStr.append("trn.message like :KEY_WORD_");
-                queryStr.append(c);
+				queryStr.append("lower(unaccent(trn.message)) like lower(unaccent(:KEY_WORD_" + c + "))");
 				c++;
 			}
 			queryStr.append(" )");

@@ -176,7 +176,7 @@ public class ReportWizardAction extends MultiAction {
 		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
 		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
 		request.getSession().setAttribute( ArConstants.REPORTS_FILTER, null );
-		request.getSession().setAttribute("reportMeta", null); //VERY important for pledge reports recognisation. For porting to AMP 2.4: put null in RCD.reportMeta
+		//request.getSession().setAttribute("reportMeta", null); //VERY important for pledge reports recognisation. For porting to AMP 2.4: put null in RCD.reportMeta
 
 		/**
 		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard

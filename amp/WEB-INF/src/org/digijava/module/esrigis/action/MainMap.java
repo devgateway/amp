@@ -18,6 +18,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.ecs.storage.Array;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -124,6 +126,18 @@ public class MainMap extends Action {
 					.getAttribute("ReportsFilter");
 			filter.setReportfilterquery(reportfilter.getGeneratedFilterQuery());
 			filter.setCurrencyId(reportfilter.getCurrency().getAmpCurrencyId());
+			filter.setStartYear(reportfilter.getRenderStartYear().longValue());
+			filter.setEndYear(reportfilter.getRenderEndYear().longValue());
+			Collection<AmpCategoryValueLocations> locs = reportfilter.getLocationSelected();
+			Long[] sellocs= new Long[locs.size()];
+			int i=0;
+			for (Iterator iterator2 = locs.iterator(); iterator2.hasNext();) {
+				AmpCategoryValueLocations loc = (AmpCategoryValueLocations) iterator2.next();
+				sellocs[i]=loc.getId();
+				i++;
+			}
+			filter.setSelLocationIds(sellocs);
+			
 		} else {
 			filter.setModeexport(false);
 		}

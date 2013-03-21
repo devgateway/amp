@@ -136,7 +136,7 @@ addLoadEvent(addpanel);
 <style>
 <!--
 .toolbar{
-	width: 115px;
+	width: 140px;
 	background: #f2f2f2; 
 	background-color: #f2f2f2f; 
 	padding: 3px 3px 3px 3px; 

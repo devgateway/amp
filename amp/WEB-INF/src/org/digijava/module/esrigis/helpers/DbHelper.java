@@ -68,6 +68,7 @@ public class DbHelper {
 		TeamMember teamMember = filter.getTeamMember();
 		// apply calendar filter
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
+	
 		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
         Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 		Long[] locationIds = filter.getSelLocationIds();
@@ -167,14 +168,16 @@ public class DbHelper {
 					inactivities +="," + id.toString();
 				}
 			}
-			oql += " and act.ampActivityId in("+ inactivities +")";
+			if (inactivities.length()>0){
+				oql += " and act.ampActivityId in("+ inactivities +")";
+			}
 			
 			//locations filter
 			
 			if (locationCondition) {
             	locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
             	filter.setSelLocationIds(locationIds);
-            	if (zonesids.length>0){
+            	if (zonesids!=null && zonesids.length>0){
             		zonesids = getAllDescendantsLocation(zonesids, DbUtil.getAmpLocations());
             		Long[] both = (Long[]) ArrayUtils.addAll(locationIds, zonesids);
             		filter.setSelLocationIds(both);

@@ -190,6 +190,7 @@ public class ReportsFilterPicker extends MultiAction {
 					if (filterForm.getCurrency() == null){
 						filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
 					}
+					request.getSession().removeAttribute("applyFormat");
 				}
 		} else
 		{

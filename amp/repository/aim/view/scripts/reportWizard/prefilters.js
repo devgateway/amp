@@ -172,7 +172,11 @@ SaveFilters.prototype.saveFilters	= function (e, obj) {
 	var formName	= "aimReportsFilterPickerForm" + (this.showSettings?"3":"");
 	YAHOO.util.Connect.setForm( document.getElementsByName(formName)[0] );
 	var additionalParams	= this.showSettings?"&sourceIsReportWizard=true":"";
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true&applyFormat=Apply%20Format" + avoidIECacheParam + additionalParams, obj);
+	if ( this.showSettings ) 
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true&applyFormat=Apply%20Format" + avoidIECacheParam + additionalParams, obj);
+	else
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportsFilterPicker.do?apply=true" + avoidIECacheParam + additionalParams, obj);
+	
 	
 	if ( this.showSettings ) {
 		

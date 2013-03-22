@@ -418,12 +418,11 @@ public class ReportsFilterPickerForm extends ActionForm {
 		 *if ( request.getParameter("renderStartYear") != null && !request.getParameter("renderStartYear").equals("-1"))  
 		 *	return;
 		 */
-		if (request.getParameter("apply") != null && request.getAttribute("apply") == null || isnewreport) {
+		if (request.getParameter("apply") != null || isnewreport) {
 			// this.selectedDonors = null;
 			// if applyFormat is clicked, the content of the filter was deleting not only the sectors...
 			//AMP-5249
-			if (request.getParameter("applyFormat")!=null){
-				this.customUseGrouping=false;
+			if (request.getParameter("applyFormat")!=null && request.getParameter("applyFormat").equals("Apply Format")){
 				this.amountinthousands=false;
 				this.amountinmillions=false;
 			}else{
@@ -470,10 +469,6 @@ public class ReportsFilterPickerForm extends ActionForm {
 				this.toActivityFinalContractingDate = null;
 			}
 		}
-		
-			
-		
-	
 	}
 
 	
@@ -1281,6 +1276,5 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.toActivityFinalContractingDate = toActivityFinalContractingDate;
 	}
 
-	
 	
 }

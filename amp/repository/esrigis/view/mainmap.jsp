@@ -405,7 +405,8 @@
 	          	<tr>
 	          		<td>
 	          			<script type="text/javascript">
-	          				replacehtml('${structureType.name}');
+	          				name = replacehtml('${structureType.name}');
+	          				document.write(name);
 	          			</script>
 	          		</td>
 	            	<td align="center">

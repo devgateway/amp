@@ -182,7 +182,7 @@ saveReportEngine	= null;
 </script>
 
 <script type="text/javascript">
-		dateFilterErrorMsg = "<digi:trn>From must be before than To date </digi:trn>";
+		dateFilterErrorMsg = "<digi:trn>'From' date must be on or before 'To' date</digi:trn>";
 		var currentReportId	= -1;
 		<logic:present name="reportMeta" scope="session">
 			currentReportId	= ${reportObject.ampReportId};

@@ -256,6 +256,7 @@ public class PIUtils {
 			
 			//if we have questions above no 13 that have non-null answers it means we use the new calculated type of questions for 5a and 5b
 			if(answers[13]!=null) {
+				//for questions inside indicator 5a
 				// IF((SUM(siblings)>=3);"Y";"N")
 				int sum4=convTxtBolToNum(answers[13])+convTxtBolToNum(answers[14])+
 						convTxtBolToNum(answers[15])+convTxtBolToNum(answers[16]);
@@ -271,7 +272,11 @@ public class PIUtils {
 					int sum6_2=convTxtBolToNum(answers[21])+convTxtBolToNum(answers[22]);
 					if(sum6_2>=1) answers[6]="Yes"; else answers[6]="No";
 				} else answers[6]="No";
-						
+				
+				//for the question inside 5b
+				//=IF(((C28+C29)=2);"Y";"N")
+				int sum7=convTxtBolToNum(answers[23])+convTxtBolToNum(answers[24]);
+				if(sum7==2) answers[7]="Yes"; else answers[7]="No";
 			}
 			
 			columns[0] = ("Yes".equalsIgnoreCase(answers[0]) && "Yes".equalsIgnoreCase(answers[4]));

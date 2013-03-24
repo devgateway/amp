@@ -8,16 +8,32 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Set;
 
 public class AmpAhsurveyQuestion implements Serializable{
 
 	private Long ampQuestionId;
 	private String questionText;
+	private AmpAhsurveyQuestion parentQuestion;
 	private AmpAhsurveyIndicator ampIndicatorId;
 	private Integer questionNumber;
 	private AmpAhsurveyQuestionType ampTypeId;
 	private String status;
+	private Set<AmpAhsurveyQuestion> questions;
 	
+
+	public AmpAhsurveyQuestion getParentQuestion() {
+		return parentQuestion;
+	}
+	public void setParentQuestion(AmpAhsurveyQuestion parentQuestion) {
+		this.parentQuestion = parentQuestion;
+	}
+	public Set<AmpAhsurveyQuestion> getQuestions() {
+		return questions;
+	}
+	public void setQuestions(Set<AmpAhsurveyQuestion> questions) {
+		this.questions = questions;
+	}
 	public static class AhsurveyQuestionComparator implements Comparator<AmpAhsurveyQuestion>, Serializable {
 
 		/**

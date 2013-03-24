@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.RadioChoice;
@@ -62,7 +63,23 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 				Set<AmpAhsurveyQuestion> set = (Set<AmpAhsurveyQuestion>)surveyIndicator.getObject().getQuestions();
 				ArrayList<AmpAhsurveyQuestion> list = new ArrayList<AmpAhsurveyQuestion>(set);
 				Collections.sort(list, new AmpAhsurveyQuestion.AhsurveyQuestionComparator());
-				return list;
+				
+				ArrayList<AmpAhsurveyQuestion> listOrderedByParent = new ArrayList<AmpAhsurveyQuestion>();
+				
+				//now sort the question after their parent, iterate each question, find siblings and move them below				
+				for (AmpAhsurveyQuestion parent : list) {
+					if (parent.getParentQuestion() != null)
+						continue;
+					listOrderedByParent.add(parent);
+
+					for (AmpAhsurveyQuestion sibling : list) 
+						if (parent.equals(sibling.getParentQuestion()))
+							listOrderedByParent.add(sibling);
+					
+
+				}
+		
+				return listOrderedByParent;
 			}
 		};
 		
@@ -70,6 +87,7 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 		ListView<AmpAhsurveyQuestion> list = new ListView<AmpAhsurveyQuestion>("list", listModel) {
 			@Override
 			protected void populateItem(final ListItem<AmpAhsurveyQuestion> item) {
+				
 				Set<AmpAhsurveyResponse> responses = survey.getObject().getResponses();
 				
 				AmpAhsurveyResponse response = null;
@@ -92,7 +110,10 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 				IModel<AmpAhsurveyResponse> responseModel = PersistentObjectModel.getModel(response);
 				
 				Label indName = new TrnLabel("qtext", new PropertyModel<String>(item.getModelObject(), "questionText"));
+				if(item.getModelObject().getParentQuestion()!=null) 
+					indName.add(new AttributeModifier("style", "padding-left:5em;font-style:italic"));
 				item.add(indName);
+		
 
                 AmpTextFieldPanel<String> references = new AmpTextFieldPanel<String>("references", new PropertyModel<String>(responseModel, "references"), "References", false, true);
                 item.add(references);

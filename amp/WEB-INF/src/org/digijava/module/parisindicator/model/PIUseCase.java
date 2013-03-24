@@ -58,6 +58,7 @@ import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
 import org.digijava.module.parisindicator.util.PIConstants;
 import org.digijava.module.parisindicator.util.PIUtils;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
@@ -365,6 +366,9 @@ public class PIUseCase {
 			session = PersistenceManager.getRequestDBSession();
 			// Set the query to return AmpAhSurvey objects.
 			Criteria criteria = session.createCriteria(AmpAhsurvey.class);
+			criteria.setFetchMode("ampActivityId.funding", FetchMode.JOIN)
+			.setFetchMode("ampActivityId.funding.fundingDetails", FetchMode.JOIN);
+			
 			//criteria.setMaxResults(500);
 			
 			// Link to amp_activity view to use only the last version of an activity.

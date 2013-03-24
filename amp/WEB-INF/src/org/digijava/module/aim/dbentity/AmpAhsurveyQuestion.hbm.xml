@@ -15,6 +15,9 @@
 
 		<many-to-one name="ampIndicatorId" column="amp_indicator_id"
 			class="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator" cascade="none" not-null="true" />
+			
+		<many-to-one name="parentQuestion" column="parent_question_id"
+			class="org.digijava.module.aim.dbentity.AmpAhsurveyQuestion" cascade="none" not-null="false" />			
 
 		<property name="questionNumber" column="question_number" type="java.lang.Integer" />
 
@@ -22,6 +25,13 @@
 			class="org.digijava.module.aim.dbentity.AmpAhsurveyQuestionType" cascade="none" not-null="true" />
 
 		<property name="status" column="status" type="java.lang.String" />
+		
+		<set name="questions" table="AMP_AHSURVEY_QUESTION" inverse="true" lazy="true"
+			cascade="none">
+			<cache usage="read-write" />
+			<key column="amp_question_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurveyQuestion" />
+		</set>
 
 	</class>
 </hibernate-mapping>

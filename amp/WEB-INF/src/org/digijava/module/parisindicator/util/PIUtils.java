@@ -20,6 +20,16 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 public class PIUtils {
+	
+	/**
+	 * Converts a textual representation of boolean to numeric 1 for yes/true, 0 for rest
+	 * @param text
+	 * @return
+	 */
+	public static int convTxtBolToNum(String text) {
+		if("Yes".equalsIgnoreCase(text) || "true".equalsIgnoreCase(text)) return 1;
+		return 0;
+	}
 
 	public final static boolean containSectors(Collection<AmpSector> sectors1, Collection<AmpActivitySector> sectors2)
 			throws Exception {
@@ -243,6 +253,27 @@ public class PIUtils {
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_4.equals(reportCode)) {
 			columns[0] = ("Yes".equalsIgnoreCase(answers[2]));
 		} else if (PIConstants.PARIS_INDICATOR_REPORT_5a.equals(reportCode)) {
+			
+			//if we have questions above no 13 that have non-null answers it means we use the new calculated type of questions for 5a and 5b
+			if(answers[13]!=null) {
+				// IF((SUM(siblings)>=3);"Y";"N")
+				int sum4=convTxtBolToNum(answers[13])+convTxtBolToNum(answers[14])+
+						convTxtBolToNum(answers[15])+convTxtBolToNum(answers[16]);
+				if(sum4>=3) answers[4]="Yes"; else answers[4]="No";
+				
+				//IF((SUM(siblings)=2);"Y";"N")
+				int sum5=convTxtBolToNum(answers[17])+convTxtBolToNum(answers[18]);
+				if(sum5==2) answers[5]="Yes"; else answers[5]="No";
+				
+				//IF(  ((C21+C22)=2);   IF( ((C23+C24)>=1);"Y";"N")  ;"N")
+				int sum6_1=convTxtBolToNum(answers[19])+convTxtBolToNum(answers[20]);
+				if(sum6_1==2) {
+					int sum6_2=convTxtBolToNum(answers[21])+convTxtBolToNum(answers[22]);
+					if(sum6_2>=1) answers[6]="Yes"; else answers[6]="No";
+				} else answers[6]="No";
+						
+			}
+			
 			columns[0] = ("Yes".equalsIgnoreCase(answers[0]) && "Yes".equalsIgnoreCase(answers[4]));
 			columns[1] = ("Yes".equalsIgnoreCase(answers[0]) && "Yes".equalsIgnoreCase(answers[5]));
 			columns[2] = ("Yes".equalsIgnoreCase(answers[0]) && "Yes".equalsIgnoreCase(answers[6]));

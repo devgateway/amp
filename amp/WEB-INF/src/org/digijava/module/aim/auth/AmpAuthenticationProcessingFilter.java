@@ -18,7 +18,10 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.springframework.security.Authentication;
@@ -49,7 +52,6 @@ public class AmpAuthenticationProcessingFilter
         Subject subject = UserUtils.getUserSubject(currentUser);
         boolean siteAdmin = DgSecurityManager.permitted(subject, site,
             ResourcePermission.INT_ADMIN);
-
         /*
          * if the member is part of multiple teams the below collection contains more than one element.
          * Otherwise it will have only one element.
@@ -75,8 +77,7 @@ public class AmpAuthenticationProcessingFilter
             if (ampAppSettings == null)	//if the user hasn't got the personalized settings
             	throw new InvalidUserException(currentUser.getEmail());
         }
-        
-
+        AuditLoggerUtil.logUserLogin(request,currentUser, Constants.LOGIN_ACTION);
         return authResult;
     }
 

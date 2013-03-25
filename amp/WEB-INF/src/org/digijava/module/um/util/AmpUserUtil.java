@@ -2,6 +2,7 @@ package org.digijava.module.um.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.ObjectNotFoundException;
@@ -17,6 +18,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.exception.AimException;
@@ -285,5 +287,31 @@ public class AmpUserUtil {
         return users;
     }
 
+       public static List<String> getUserReminder(Date lastActivity){
+    	Session session = null;
+   		Query qry = null;
+   		List<String> usersEmailAddr = new ArrayList<String>();
+
+   		try {
+   			session = PersistenceManager.getRequestDBSession();
+   			String queryString = " select al.authorEmail from "+ AmpAuditLogger.class.getName() +" al where al.action='login' and al.loggedDate>:startDate" +
+   					" and al.authorEmail not in (Select aal.authorEmail from "+ AmpAuditLogger.class.getName() +" aal " +
+   					"where aal.action='login' and aal.loggedDate>:compareDate group by aal.authorEmail) group by al.authorEmail";
+   			/*String queryString = "select u from " + User.class.getName() + " u"
+   					+ " where u.email not in(select al.authorEmail from " 
+   					+ AmpAuditLogger.class.getName() +" al where al.action='login' and al.loggedDate>:date"
+   					+" group by al.authorEmail)";*/
+   			qry = session.createQuery(queryString);
+   			Date startDate = new Date(112, 2, 1);//March,2013
+   			qry.setDate("startDate", startDate);
+   			qry.setDate("compareDate", lastActivity);
+   			usersEmailAddr = qry.list();
+   		} catch (Exception e) {
+   			logger.error("Unable to get list of emails");
+   			logger.error("Exception " + e);
+   			e.printStackTrace();
+   		}
+   		return usersEmailAddr;
+       }
 
 }

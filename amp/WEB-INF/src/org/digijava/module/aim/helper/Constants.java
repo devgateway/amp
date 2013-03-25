@@ -394,4 +394,7 @@ public class Constants
     //Pagination for Reports and Tabs
      public static final int DRAFRT_GO_TO_DESKTOP=1;
      public static final int DRAFRT_STAY_TO_ACTIVITY_PAGE=2;
+     //Action type loggers
+     public static final String LOGIN_ACTION="login";
+     public static final String SENT_REMINDER="sentReminder";
 }

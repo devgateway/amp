@@ -1131,3 +1131,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Dashboard Generator in public view" parentModule="Visualization Dashboards"></module:display>
 <module:display name="Dashboard Manager" parentModule="Visualization Dashboards"></module:display>
 
+<module:display name="Dashboard Org. Info" parentModule="Visualization Dashboards"></module:display>
+<feature:display name="Background of organization" module="Dashboard Org. Info"></feature:display> 
+<feature:display name="Org. Description" module="Dashboard Org. Info"></feature:display> 
+<feature:display name="Key Areas of Focus" module="Dashboard Org. Info"></feature:display> 
+
+

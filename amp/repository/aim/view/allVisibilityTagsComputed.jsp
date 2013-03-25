@@ -848,3 +848,9 @@
 <feature:display name="Region Dashboard - Financing Instrument chart" module="Region Dashboard"></feature:display> 
 <feature:display name="Region Dashboard - Donor Profile chart" module="Region Dashboard"></feature:display> 
 <feature:display name="Region Dashboard - Sector Profile chart" module="Region Dashboard"></feature:display> 
+
+
+<module:display name="Dashboard Org. Info" parentModule="Visualization Dashboards"></module:display>
+<feature:display name="Background of organization" module="Dashboard Org. Info"></feature:display> 
+<feature:display name="Org. Description" module="Dashboard Org. Info"></feature:display> 
+<feature:display name="Key Areas of Focus" module="Dashboard Org. Info"></feature:display> 

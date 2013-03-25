@@ -1593,32 +1593,39 @@ function refreshBoxes(o){
 					disabledInfo = (urlSaveAdditional != "") ? "": "disabled='disabled'";
 					var infoMarkup = new Array();
 					infoMarkup.push("<div id=\"saveResultMsg\"></div><table class=\"inside\"><tbody>");
-					infoMarkup.push("<tr>");
-					infoMarkup.push("<td class=\"inside\">" + trnBackground +":</td>");
-					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"background\" " + disabledInfo + ">");
-					infoMarkup.push(info.background);
-					infoMarkup.push("</textarea>");
-					infoMarkup.push("</td>");
-					infoMarkup.push("</tr>");
-
-					infoMarkup.push("<tr>");
-					infoMarkup.push("<td class=\"inside\">" + trnDescription + ":</td>");
-					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"description\" " + disabledInfo + ">");
-					infoMarkup.push(info.description);
-					infoMarkup.push("</textarea>");
-					infoMarkup.push("</td>");
-					infoMarkup.push("</tr>");
-
-					infoMarkup.push("<tr>");
-					infoMarkup.push("<td class=\"inside\">" + trnKeyAreas + ":</td>");
-					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"keyAreas\" " + disabledInfo + ">");
-					infoMarkup.push(info.keyAreas);
-					infoMarkup.push("</textarea>");
-					infoMarkup.push("</td>");
-					infoMarkup.push("</tr>");
+					
+					if (document.getElementById("BackgroundOrganizationVisible")!=null){
+						infoMarkup.push("<tr>");
+						infoMarkup.push("<td class=\"inside\">" + trnBackground +":</td>");
+						infoMarkup.push("<td class=\"inside\">");
+						infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"background\" " + disabledInfo + ">");
+						infoMarkup.push(info.background);
+						infoMarkup.push("</textarea>");
+						infoMarkup.push("</td>");
+						infoMarkup.push("</tr>");
+					}
+					
+					if (document.getElementById("OrgDescriptionVisible")!=null){
+						infoMarkup.push("<tr>");
+						infoMarkup.push("<td class=\"inside\">" + trnDescription + ":</td>");
+						infoMarkup.push("<td class=\"inside\">");
+						infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"description\" " + disabledInfo + ">");
+						infoMarkup.push(info.description);
+						infoMarkup.push("</textarea>");
+						infoMarkup.push("</td>");
+						infoMarkup.push("</tr>");
+					}
+					
+					if (document.getElementById("KeyAreasFocusVisible")!=null){
+						infoMarkup.push("<tr>");
+						infoMarkup.push("<td class=\"inside\">" + trnKeyAreas + ":</td>");
+						infoMarkup.push("<td class=\"inside\">");
+						infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"keyAreas\" " + disabledInfo + ">");
+						infoMarkup.push(info.keyAreas);
+						infoMarkup.push("</textarea>");
+						infoMarkup.push("</td>");
+						infoMarkup.push("</tr>");
+					}
 					
 					infoMarkup.push("<tr>");
 					if (urlSaveAdditional != ""){

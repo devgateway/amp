@@ -1,6 +1,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <html:hidden property="filter.currencyCode" styleId="currencyCode" />
 <html:hidden property="filter.topLists" styleId="topLists" />
@@ -26,6 +29,16 @@
 <html:hidden property="filter.decimalSeparator" styleId="decimalSeparator" />
 <html:hidden property="filter.fromPublicView" styleId="fromPublicView" />
 <html:hidden property="filter.fromGenerator" styleId="fromGenerator" />
+
+<feature:display name="Background of organization" module="Dashboard Org. Info">
+	<input type="hidden" id="BackgroundOrganizationVisible" value="true" />
+</feature:display>
+<feature:display name="Org. Description" module="Dashboard Org. Info">
+	<input type="hidden" id="OrgDescriptionVisible" value="true" />
+</feature:display>
+<feature:display name="Key Areas of Focus" module="Dashboard Org. Info">
+	<input type="hidden" id="KeyAreasFocusVisible" value="true" />
+</feature:display>
 
 <!--  Start Global variables for all flash files -->
 <input type="hidden" id="GlobalFontSize" value="11" />

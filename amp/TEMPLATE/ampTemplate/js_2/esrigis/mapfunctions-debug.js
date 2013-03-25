@@ -780,25 +780,25 @@ function drawpoints() {
 				new esri.symbol.SimpleLineSymbol(
 						esri.symbol.SimpleLineSymbol.STYLE_SOLID,
 						new dojo.Color([ 0, 0, 0, 1 ]), 1), new dojo.Color([
-						255, 215, 0, 1 ]));
+						9, 75, 5, 1 ]));
 		pointSymbolBank["less30"] = new esri.symbol.SimpleMarkerSymbol(
 				esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 30,
 				new esri.symbol.SimpleLineSymbol(
 						esri.symbol.SimpleLineSymbol.STYLE_NULL,
 						new dojo.Color([ 0, 0, 0, 0 ]), 1), new dojo.Color([
-						100, 149, 237, .85 ]));
+						74, 9, 33, .85 ]));
 		pointSymbolBank["less50"] = new esri.symbol.SimpleMarkerSymbol(
 				esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 30,
 				new esri.symbol.SimpleLineSymbol(
 						esri.symbol.SimpleLineSymbol.STYLE_NULL,
 						new dojo.Color([ 0, 0, 0, 0 ]), 1), new dojo.Color([
-						65, 105, 225, .85 ]));
+						8, 2, 63, .90 ]));
 		pointSymbolBank["over50"] = new esri.symbol.SimpleMarkerSymbol(
 				esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 45,
 				new esri.symbol.SimpleLineSymbol(
 						esri.symbol.SimpleLineSymbol.STYLE_NULL,
-						new dojo.Color([ 0, 0, 0 ]), 0), new dojo.Color([ 255,
-						69, 0, 0.65 ]));
+						new dojo.Color([ 0, 0, 0 ]), 0), new dojo.Color([ 45,
+						45, 40, 0.65 ]));
 		var symbolBank = pointSymbolBank;
 		
 		if (map.getLayer('activitiesMap')){

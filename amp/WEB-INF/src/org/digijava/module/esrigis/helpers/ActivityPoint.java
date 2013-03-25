@@ -30,8 +30,8 @@ public class ActivityPoint {
 	private String id;
 	private String ampactivityid;
 	private String activityname;
-	//private String commitments;
-	//private String disbursements;
+	private String commitments;
+	private String disbursements;
 	//private String expenditures;
 	private ArrayList<SimpleLocation> locations;
 	private ArrayList<Structure> structures;
@@ -44,6 +44,22 @@ public class ActivityPoint {
     public ActivityPoint() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public String getCommitments() {
+		return commitments;
+	}
+
+	public void setCommitments(String commitments) {
+		this.commitments = commitments;
+	}
+
+	public String getDisbursements() {
+		return disbursements;
+	}
+
+	public void setDisbursements(String disbursements) {
+		this.disbursements = disbursements;
 	}
 
 	public String getActivityname() {

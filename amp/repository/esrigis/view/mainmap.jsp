@@ -88,7 +88,7 @@
 	
 	$(function(){
   		$('#nationalp').click(function(){
-     		$('#sourcediv').toggle();
+     		$('#natsourcediv').toggle();
      		filldatasourcetablenational();
      	});
 	});
@@ -275,6 +275,8 @@
         return text;
     	}
 	
+
+	
 	function ExportStructures() {
 		<digi:context name="action" property="context/module/moduleinstance/excelexporter.do" />
 		document.datadispatcherform[1].action = "<%= action %>";
@@ -284,11 +286,12 @@
 	}
 	
 	function replacehtml(text){
-		return text.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+		replaced = text.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+		//ret = "<digi:trn>"+replaced+"</digi:trn>";
+		return replaced ;
 	}
 </script>
-
- 	<!-- Filter Styles -->
+	<!-- Filter Styles -->
    	<digi:ref href="/TEMPLATE/ampTemplate/css_2/visualization_yui_tabs.css" type="text/css" rel="stylesheet" />
    	<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/visualization.css" type="text/css" />
    	<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
@@ -404,10 +407,7 @@
         		<c:forEach  var="structureType" items="${requestScope.structureTypesList}">
 	          	<tr>
 	          		<td>
-	          			<script type="text/javascript">
-	          				name = replacehtml('${structureType.name}');
-	          				document.write(name);
-	          			</script>
+	          			<digi:trn>${structureType.name}</digi:trn>
 	          		</td>
 	            	<td align="center">
 	            		<img id="imgPlaceholder" src="/esrigis/mainmap.do~action=displayIcon~id=${structureType.typeId}" style="border:1px solid black;width: 20px;height: 20px;"/>
@@ -480,6 +480,34 @@
         	</table>
         	<div style="overflow-y: scroll;height: 350px;">
         	<table id="sourcecontent" width="97%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
+        		
+        	</table>
+        	</div>
+        </div>
+        
+        <div id="natsourcediv" class="legendContent" style="top:55px;left:30px;width: 75%;display:none;height: 400px;"> 
+        	<div onclick="$('#natsourcediv').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
+        	<div class="legendHeader"><digi:trn>Data Source</digi:trn><br/><hr/></div>
+        	<table id="natsourceheader" width="95%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
+        		<tbody>
+					<tr>
+						<td valign="top" style="font-weight: bolder;width: 52%;">
+							<digi:trn>Activity Name</digi:trn>
+						</td>
+						<td valign="top" style="font-weight: bolder;width: 15%;">
+							<digi:trn>Commitment</digi:trn>
+						</td>
+						<td valign="top" style="font-weight: bolder;width: 15%;">
+							<digi:trn>Disbursement</digi:trn>
+						</td>
+						<td valign="top" style="font-weight: bolder;">
+							<digi:trn>Donors</digi:trn>
+						</td>
+					</tr>
+				</tbody>
+        	</table>
+        	<div style="overflow-y: scroll;height: 350px;">
+        	<table id="natsourcecontent" width="97%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
         		
         	</table>
         	</div>

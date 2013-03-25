@@ -144,8 +144,8 @@ public class DataDispatcher extends MultiAction {
 				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 				ap.getDonors().add(donor);
 			}
-			//ap.setCommitments(calculations.getTotalCommitments().toString());
-			//ap.setDisbursements(calculations.getTotActualDisb().toString());
+			ap.setCommitments(calculations.getTotalCommitments().toString());
+			ap.setDisbursements(calculations.getTotActualDisb().toString());
 			//ap.setExpenditures(calculations.getTotPlannedExp().toString());
 			//ap.setSectors(SectorsToJson(aA));
 			//ap.setCurrecycode(maphelperform.getFilter().getCurrencyCode());

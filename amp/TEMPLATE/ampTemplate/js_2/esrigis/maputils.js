@@ -204,7 +204,7 @@ function filldatasourcetable(){
 }
 
 function filldatasourcetablenational(){
-	deleteRow("sourcecontent");
+	deleteRow("natsourcecontent");
 	var table = document.getElementById("natsourcecontent");
 	var rowCount = table.rows.length;
     var cell;

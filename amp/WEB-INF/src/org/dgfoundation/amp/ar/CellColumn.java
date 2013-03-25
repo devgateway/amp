@@ -86,7 +86,6 @@ public class CellColumn extends Column {
 		return cells.get(0); // return the first one since the caller doesn't care
 	}
 
-	//BOZO: delete
 	static long calls = 0;
 	static long iterations = 0;
 	

@@ -2029,6 +2029,7 @@ public class DbUtil {
             Date date = (Date)fundingInfo[3];
             String currencyCode = (String)fundingInfo[4];
             Long activityId = (Long)fundingInfo[5];
+            Double fixed_exchange_rate = (Double) fundingInfo[6]
      * @return
      */
     public static List<Object[]> fetchFundingInformation(String view_prefix, Set<Long> allActivityIdsSet, String donorIdsWhereclause, String donorGroupIdsWhereclause,
@@ -2077,7 +2078,7 @@ public class DbUtil {
         	
         	List<Object[]> result = new ArrayList<Object[]>();
         	int nrColumns = resultSet.getMetaData().getColumnCount();
-        	if (nrColumns != 6)
+        	if (nrColumns != 7)
         		throw new RuntimeException("invalid Funding SQL query");
         	while (resultSet.next())
         	{
@@ -2088,6 +2089,7 @@ public class DbUtil {
         		item[3] = resultSet.getDate(4);
         		item[4] = resultSet.getString(5);
         		item[5] = resultSet.getLong(6);
+        		item[6] = resultSet.getDouble(7);
         		result.add(item);
         	}
         	return result;
@@ -2103,6 +2105,7 @@ public class DbUtil {
     
     /**
      * fetches all funding info which matches given filters. Null in any of the filter column means "no filtering by it"
+     * result[0] = List<Object[7]>
      * @param sectorIds
      * @param programIds
      * @param donorIds
@@ -2227,6 +2230,7 @@ public class DbUtil {
         }
         try
         {
+        	// Object[7]
             List<Object[]> queryResults = fetchFundingInformation(view_prefix, allActivityIdsSet, donorIdsWhereclause, donorGroupIdsWhereclause, donorTypeIdsWhereclause, workspaceIdsWhereclause, typeOfAssistanceWhereclause, startDate, endDate);
         	return new Object[] {queryResults, sectorPercentageMap, programPercentageMap, locationPercentageMap, secondarySectorPercentageMap};
         }
@@ -2557,6 +2561,23 @@ public class DbUtil {
 
 
     //For pledges
+    /**
+     * fixedExchangeRate NOT implemented for pledges, so even if it will return a list of Object[7], the last element will always be null
+     * Constantin: this function seems broken, because it returns the fundings as a list of Object[5], so further down the line ArrayOutOfBounds should happen
+     * @param sectorIds
+     * @param programIds
+     * @param donorIds
+     * @param donorGroupIds
+     * @param donorTypeIds
+     * @param includeCildLocations
+     * @param locations
+     * @param workspaces
+     * @param typeOfAssistanceIds
+     * @param startDate
+     * @param endDate
+     * @param isPublic
+     * @return
+     */
     public static Object[] getPledgeFundings (Collection<Long> sectorIds,
                                                     Collection<Long> programIds,
                                                     Collection<Long> donorIds,

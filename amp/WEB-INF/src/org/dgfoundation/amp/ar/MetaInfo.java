@@ -63,7 +63,6 @@ public class MetaInfo<T extends Comparable<? super T>> implements Comparable<Met
 		return category+": "+value;
 	}
 	
-	//BOZO: remove	
 	static long calls = 0;
 	static long iterations = 0;
 	

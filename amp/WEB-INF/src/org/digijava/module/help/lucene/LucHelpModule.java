@@ -183,7 +183,7 @@ public class LucHelpModule implements LucModule<HelpTopicHelper> {
 
 	@Override
 	public List<HelpTopicHelper> getItemsToIndex() throws DgException {
-		Site site = SiteCache.lookupByName("amp"); //TODO-Constantin: source of bugs if we ever move to multisite installs
+		Site site = SiteCache.lookupByName("amp"); // hack, but there are other places in AMP which assume "amp" too
 		List<HelpTopicHelper> topicHelpers = null;
 		EnumSet<LangSupport> langs = null;
 		boolean exclude = false;

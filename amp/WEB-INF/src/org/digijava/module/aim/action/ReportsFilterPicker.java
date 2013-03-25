@@ -1184,9 +1184,7 @@ public class ReportsFilterPicker extends Action {
 		
 		//custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);
 
-		arf.setAmountinthousand(filterForm.getAmountinthousands());
-		//arf.setAmountinmillion(filterForm.getAmountinmillions()); TODO-Constantin: field not used anymore, to be removed in 2.4
-		
+		arf.setAmountinthousand(filterForm.getAmountinthousands());		
 		
 		Integer maximumDecimalPlaces	= filterForm.getCustomDecimalPlaces();
 		if ( maximumDecimalPlaces == -2 ) {//CUSTOM

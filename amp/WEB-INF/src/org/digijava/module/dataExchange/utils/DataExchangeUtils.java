@@ -1318,7 +1318,7 @@ public class DataExchangeUtils {
 			ExportBuilder eBuilder = null;
 			AmpActivity ampActivity = (AmpActivity) iterator.next();
 
-			Site site = SiteCache.lookupByName("amp"); //TODO:Constantin: bugs galore
+			Site site = SiteCache.lookupByName("amp"); // hack, but there are other places in AMP which assume "amp" too
 			eBuilder = new ExportBuilder(ampActivity, site);
 			AmpColumnEntry columns = new AmpColumnEntry();
 			columns.setKey("activityTree.select");

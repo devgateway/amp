@@ -25,8 +25,8 @@
 			});
 			
 			// AMP-14908: IE 8/9 fix in standards mode
-			$("form#loginForm").live("keyup", function(ev){				
-				if (ev.keyCode == 13)
+			$("form#loginForm").live("keyup", function(ev){
+				if ((navigator.appName == 'Microsoft Internet Explorer') && (ev.keyCode == 13))
 				{
 					$("form#loginForm").submit();
 				}

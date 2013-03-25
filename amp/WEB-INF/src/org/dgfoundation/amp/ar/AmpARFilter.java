@@ -380,8 +380,8 @@ public class AmpARFilter extends PropertyListable {
 	private Integer yearTo;
 	private Collection<AmpCategoryValueLocations> locationSelected;
 	
-	//@PropertyListableIgnore
-	//private Collection<AmpCategoryValueLocations> relatedLocations;
+	@PropertyListableIgnore
+	private Collection<AmpCategoryValueLocations> relatedLocations;
 	
 	private Collection<AmpCategoryValueLocations> pledgesLocations;
 	private Boolean unallocatedLocation = null;
@@ -1304,7 +1304,7 @@ public class AmpARFilter extends PropertyListable {
 				
 			}
 			*/
-		// BOZO - ALREADY DAMN SLOW HERE
+
 		/*
 		 * if (fromYear==null) fromYear = 0;
 		 * 
@@ -2659,21 +2659,21 @@ public class AmpARFilter extends PropertyListable {
 		return getAmountinthousand();
 	}
 	
-//	/**
-//	 * @return the relatedLocations
-//	 */
-//	@PropertyListableIgnore
-//	public Collection<AmpCategoryValueLocations> getRelatedLocations() {
-//		return relatedLocations;
-//	}
-//
-//	/**
-//	 * @param relatedLocations the relatedLocations to set
-//	 */
-//	public void setRelatedLocations(
-//			Collection<AmpCategoryValueLocations> relatedLocations) {
-//		this.relatedLocations = relatedLocations;
-//	}
+	/**
+	 * @return the relatedLocations
+	 */
+	@PropertyListableIgnore
+	public Collection<AmpCategoryValueLocations> getRelatedLocations() {
+		return relatedLocations;
+	}
+
+	/**
+	 * @param relatedLocations the relatedLocations to set
+	 */
+	public void setRelatedLocations(
+			Collection<AmpCategoryValueLocations> relatedLocations) {
+		this.relatedLocations = relatedLocations;
+	}
 	
 	public Collection<AmpCategoryValueLocations> getPledgesLocations() {
 		return pledgesLocations;

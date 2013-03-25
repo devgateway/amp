@@ -508,7 +508,7 @@ public class ChartWidgetUtil {
         if (fundings != null) {
             Double otherFunding = new Double(0);
             List<Long> otherIds = new ArrayList<Long>();
-            int totalAdded = 0;
+            //int totalAdded = 0;
             for (DonorSectorFundingHelper funding : fundings) {
             	sumA += funding.getFounding();
             	sumB += funding.getDisbFunding();
@@ -516,13 +516,13 @@ public class ChartWidgetUtil {
                 // the sectors which percent is less then 5% should be group in "Other"
                 AmpSector sector = funding.getSector();
 
-                if (percent >= 0.05) { //BOZO
+                if (percent >= 0.05) {
                     SectorHelper secHelper = new SectorHelper();
                     secHelper.setName(sector.getName());
                     secHelper.setIds(new ArrayList<Long>());
                     secHelper.getIds().add(sector.getAmpSectorId());
                     ds.setValue(secHelper, Math.round(funding.getFounding()));
-                    totalAdded ++;
+                    //totalAdded ++;
                 } else {
                     otherFunding += funding.getFounding();
                     otherIds.add(sector.getAmpSectorId());
@@ -592,6 +592,10 @@ public class ChartWidgetUtil {
 
     	Map<Long, AmpCategoryValue> adjustementIdTypeMap = new HashMap <Long, AmpCategoryValue> ();    	
     	Map<Long, SectorInfo> fundingsByTopLevelSectorId = new HashMap<Long, SectorInfo>();
+    	
+    	Map<Long, Long> topLevelSectorIds = new HashMap<Long, Long>();
+    	Map<String, AmpCurrency> currencyByCode = new HashMap<String, AmpCurrency>();
+    	
     	for(Object[] fundingInfo:fundings)
     	{
     		// fundingInfo = Object[7];
@@ -623,12 +627,19 @@ public class ChartWidgetUtil {
         	}
         	for(Long sectorId:fundingPercentBySectors.keySet())
         	{
-        		AmpSector topLevelSector = SectorUtil.getTopLevelParent(SectorUtil.getAmpSector(sectorId));        		
-//        		if (!topLevelSector.getAmpSectorId().equals(sectorId))
-//        			continue; // percentages are inclusive, so we would double count if we wouldn't ignore subsectors from v_sectors
+        		if (!topLevelSectorIds.containsKey(sectorId))
+        		{
+        			topLevelSectorIds.put(sectorId, SectorUtil.getTopLevelParent(SectorUtil.getAmpSector(sectorId)).getAmpSectorId());
+        		}
+        		Long storeSectorId = topLevelSectorIds.get(sectorId);
+        		
+        		if (!currencyByCode.containsKey(currencyCode))
+        		{
+        			currencyByCode.put(currencyCode, CurrencyUtil.getCurrencyByCode(currencyCode));
+        		}        		
+        		AmpCurrency currency = currencyByCode.get(currencyCode);
         		
               	AmpFundingDetail forCalculations = new AmpFundingDetail();
-               	AmpCurrency currency = CurrencyUtil.getCurrencyByCode(currencyCode);
             	forCalculations.setAmpCurrencyId(currency);
             	forCalculations.setTransactionAmount(ammount * fundingPercentBySectors.get(sectorId) * 0.01);
             	forCalculations.setAdjustmentType(adjTypeCatVal);
@@ -636,7 +647,6 @@ public class ChartWidgetUtil {
             	forCalculations.setTransactionType(type);
             	forCalculations.setFixedExchangeRate(fixedExchangeRate);
             	
-            	Long storeSectorId = topLevelSector.getAmpSectorId();
             	if (!fundingsByTopLevelSectorId.containsKey(storeSectorId))
             	{
             		fundingsByTopLevelSectorId.put(storeSectorId, new SectorInfo(storeSectorId));

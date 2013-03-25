@@ -471,6 +471,14 @@ public class RMMapCalculationUtil {
     public final static String UNALLOCATED_REGION_NAME = "Region Unallocated";
     public final static Set<Long> UNALLOCATED_REGION_LOC_KEY_SET = Collections.unmodifiableSet(new HashSet<Long>(){{this.add(UNALLOCATED_REGION_KEY);}});
 
+    /**
+     * 
+     * @param fundings either Object[6] or Object[7], depending on source.
+     * @param locationPercentageMap
+     * @param locationIdNameMap
+     * @param locationParentMap
+     * @return
+     */
     private static Map<String, Set<AmpFundingDetail>> groupFundingsByLocationAndApplyPercentages (List<Object[]> fundings, Map <Long, Map<Long, Float>> locationPercentageMap, Map<Long, String> locationIdNameMap, Map<Long, Long> locationParentMap) {
         Map <String, Set<AmpFundingDetail>> retVal = new HashMap <String, Set<AmpFundingDetail>> ();
         Map<String, AmpCurrency> currencyCodeObjectMap = getCurrencyCodeObjectMap();

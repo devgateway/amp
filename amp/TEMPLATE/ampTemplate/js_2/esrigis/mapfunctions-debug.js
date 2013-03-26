@@ -363,6 +363,7 @@ function findbydistance(evt) {
 		for ( var int = 0; int < structurespoint.length; int++) {
 			distParams.distanceUnit = esri.tasks.GeometryService.UNIT_KILOMETER;
 			distParams.geometry1 = evt.mapPoint;
+			delete structurespoint[int].geometry.attributes;
 			distParams.geometry2 = structurespoint[int].geometry;
 			distParams.geodesic = true;
 
@@ -400,7 +401,7 @@ function showStInfoWindow() {
 		map.infoWindow.hide();
 	}
 	map.infoWindow.setTitle("Structures");
-	for ( var int = 0; int < foundstr.length; int += 2) {
+	for ( var int = 0; int < foundstr.length; int++) {
 		content = content
 				+ "<tr><td style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 3px;'>"
 				+ foundstr[int].attributes["Structure Name"] + "</a></td>";

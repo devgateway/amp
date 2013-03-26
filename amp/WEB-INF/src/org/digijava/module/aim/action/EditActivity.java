@@ -1422,7 +1422,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           }
           else{
               	//actual
-      		  eaForm.getFunding().setTotalCommitments(calculations.getTotalCommitments().toString());
+      		  eaForm.getFunding().setTotalCommitments(calculations.getTotActualComm().toString());
         	  eaForm.getFunding().setTotalDisbursements(calculations.getTotActualDisb().toString());
         	  eaForm.getFunding().setTotalExpenditures(calculations.getTotActualExp().toString());
         	  eaForm.getFunding().setTotalActualDisbursementsOrders(calculations.getTotActualDisbOrder().toString());

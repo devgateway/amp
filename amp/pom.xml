@@ -10,7 +10,7 @@
 		<wicketVersion>6.0.0</wicketVersion>
 		<tomcatVersion>6.0.35</tomcatVersion>
 	</properties>
-	<repositories>
+ <repositories>
 		<repository>
           <snapshots>
             <enabled>false</enabled>
@@ -80,8 +80,7 @@
 			<name>Maven Plugin Repository</name>
 			<url>http://repo1.maven.org/maven2</url>
 		</pluginRepository>
-	</pluginRepositories>
-	-->
+	</pluginRepositories> -->
 	
 	<dependencies>
 		<dependency>

@@ -1199,6 +1199,7 @@ function toggleView(elementId, iconId, isMinus) {
 }
 /* Configures the form with id typeId */
 function configPanel(panelNum, title, description, optionId, uuid, isAUrl,yearOfPublication, index, category) {
+	//debugger;
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML = '';
 	if (optionId == null)
 		optionId	= 0;
@@ -1542,6 +1543,7 @@ function getCallbackForTemplates (panel) {
 }
 
 function addFromTemplate(ownType) {
+	debugger;
 	if ( YAHOO.amp.tempPanels == null ) {
 		YAHOO.amp.tempPanels	= new Object;
 	}
@@ -1567,6 +1569,7 @@ function addFromTemplate(ownType) {
 }
 
 function templateNameSelected(){
+	debugger;
 	var templateId=document.getElementById('selTempName').value;
 	var myDiv=document.getElementById('tempLoadingDiv');
 	myDiv.style.display="block";
@@ -1576,6 +1579,7 @@ function templateNameSelected(){
 }
 
 function validateDocFromTemp(){
+	debugger;
 	var docName=document.getElementById('docName');
 	if(docName==null || docName.value==''){
 		alert('Please fill in document name');

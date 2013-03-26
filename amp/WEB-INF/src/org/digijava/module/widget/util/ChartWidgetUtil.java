@@ -59,6 +59,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledgesDetails;
+import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.gis.util.RMMapCalculationUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.PieChartCustomLabelGenerator;
@@ -575,10 +576,11 @@ public class ChartWidgetUtil {
     public static List<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding, HttpSession session) throws DgException {
 
     	boolean isPublic = session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER) == null;
+    	Set<Long> allActivityIds = DbUtil.getAllLegalAmpActivityIds(session);
     	List<Long> donorIds = donorIDs == null ? null : Arrays.asList(donorIDs);
     	
     	Map<Long, Map<Long, Float>> sectorPercentageMap = org.digijava.module.gis.util.DbUtil.getActivitySectorPercentages(null, "Primary");
-    	Object[] allFundings = org.digijava.module.gis.util.DbUtil.getActivityFundings(null /*sectorPercentageMap*/, null /* secondarySectorPercentageMap */, null, donorIds, null, null, null, null, null, fromDate, toDate, isPublic, session, false, false);
+    	Object[] allFundings = org.digijava.module.gis.util.DbUtil.getActivityFundings(null /*sectorPercentageMap*/, null /* secondarySectorPercentageMap */, null, donorIds, null, null, null, null, null, fromDate, toDate, isPublic, allActivityIds, false, false);
     	// partial copy-paste from RMMapCalclation.getFundingsByLocation coming
     	List<Object[]> fundings = (List<Object[]>) allFundings[0];
 

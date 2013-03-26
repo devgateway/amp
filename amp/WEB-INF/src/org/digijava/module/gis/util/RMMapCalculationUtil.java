@@ -152,7 +152,7 @@ public class RMMapCalculationUtil {
         return fundingList;
     }
 
-    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isRegional, boolean isPublic, HttpSession session) {
+    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isRegional, boolean isPublic, boolean filterBySecondarySectors, HttpSession session) {
 
         Collection<Long> primarySectors = longArrayToColl(filter.getSelectedSectors());
         Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
@@ -223,7 +223,7 @@ public class RMMapCalculationUtil {
             												includeCildLocations,
             												locations,
             												workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), 
-            												isPublic, session, true, filter.getSelectedSecondarySectors() != null);
+            												isPublic, session, true, filterBySecondarySectors);
         } else {
             activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,

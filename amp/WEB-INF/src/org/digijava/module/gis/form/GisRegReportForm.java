@@ -41,6 +41,11 @@ public class GisRegReportForm extends ActionForm {
 
     private boolean filterAllSectors;
     private boolean fromPublicView;
+    
+    private boolean allPrimarySectors;
+    private boolean allSecondarySectors;
+    private boolean allTertiarySectors;
+    
 
     public boolean isFromPublicView() {
 		return fromPublicView;
@@ -199,5 +204,35 @@ public class GisRegReportForm extends ActionForm {
 
     public void setPlannedDisbursementsStr(String plannedDisbursementsStr) {
         this.plannedDisbursementsStr = plannedDisbursementsStr;
+    }
+    
+    public boolean getAllPrimarySectors()
+    {
+    	return allPrimarySectors;
+    }
+        
+    public boolean getAllSecondarySectors()
+    {
+    	return allSecondarySectors;
+    }
+    
+    public boolean getAllTertiarySectors()
+    {
+    	return allTertiarySectors;
+    }
+    
+    public void setAllPrimarySectors(boolean allPrimarySectors)
+    {
+    	this.allPrimarySectors = allPrimarySectors;
+    }
+        
+    public void setAllSecondarySectors(boolean allSecondarySectors)
+    {
+    	this.allSecondarySectors = allSecondarySectors;
+    }
+    
+    public void setAllTertiarySectors(boolean allTertiarySectors)
+    {
+    	this.allTertiarySectors = allTertiarySectors;
     }
 }

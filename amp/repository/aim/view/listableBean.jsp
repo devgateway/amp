@@ -62,7 +62,6 @@
 			value="Boolean">
 			<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
 		</logic:notEqual>
-
 	</logic:iterate>
 </logic:equal>
 
@@ -71,13 +70,13 @@
 	<logic:iterate id="prop" name="pMap">
     	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
             <digi:trn key="${prefix}:${prop.key}"><i>${prop.key}</i></digi:trn>:
-            <c:if test="${prop.key == 'teamAssignedOrgs'}">
+            <c:if test="${prop.key == 'teamAssignedOrgs' ||  prop.key == 'locationSelected' }">
             	${prop.value}
             </c:if>
-            <c:if test="${prop.key != 'teamAssignedOrgs'}">
-            <digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
+            <c:if test="${prop.key != 'teamAssignedOrgs' &&  prop.key != 'locationSelected'}">
+            	<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
             </c:if>
             |
-        </c:if>
+        </c:if>${prop.key}
 	</logic:iterate>
 </logic:equal>

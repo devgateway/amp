@@ -613,11 +613,11 @@ border-right: 1px solid rgb(208, 208, 208);
 <!-- POPUPS END-->
 
 <!-- MAIN CONTENT PART START -->
-<table border="0" cellspacing="0" cellpadding="0" width="1000" align="center">	
+<table border="0" cellspacing="0" cellpadding="0" width="1100" align="center">	
 	<tbody>
 		<tr>
 		<td align=left valign="top">
-			<div style="width:1000px;" class="yui-skin-sam" id="content"> 
+			<div style="width:1100px;" class="yui-skin-sam" id="content"> 
 				<div id="demo" class="yui-navset">			
 				<ul class="yui-nav">
 						<feature:display name="My Resources" module="Content Repository">

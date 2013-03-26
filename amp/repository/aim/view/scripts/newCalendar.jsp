@@ -221,6 +221,30 @@
 		var textboxEl= document.getElementById(objectId);
 		textboxEl.value = "";
 	}
+	
+	function positionHelper (buttonId) {
+		if (buttonId != null) {
+			var buttonEl	= document.getElementById(buttonId);
+			var parent		= buttonEl.parentNode;
+			while ( parent != null && !YAHOO.util.Dom.hasClass(parent, 'yui-panel-container') ) {
+				parent	= parent.parentNode;
+			}
+			if ( parent != null ) {
+				var parentRegion 	= YAHOO.util.Dom.getRegion(parent);
+				var parentTop		= parentRegion.top;
+				var parentBottom	= parentRegion.bottom;
+				var buttonY			= YAHOO.util.Dom.getY(buttonEl);
+				if ( parentTop < buttonY && buttonY < parentBottom ) {
+					if ( buttonY - parentTop > parentBottom - buttonY ) 
+						return true;
+					else 
+						return false;
+				}
+			}
+		}
+		
+		return true;
+	}
 
 	function pickDateById(buttonId,objectId){
 		pickDateById2(buttonId, objectId, true);
@@ -228,6 +252,16 @@
 	
 	function pickDateById2(buttonId,objectId,calendarUp)
 	{
+		var localCalendarUp	= true;
+		var calendarCorner = "bl";
+		var objectCorner = "tr";
+		if (calendarUp != null)  {
+			if ( calendarUp instanceof Function ) {
+				localCalendarUp	= calendarUp(buttonId);
+			} 
+			else 
+				localCalendarUp = calendarUp;
+		}
 		
 		textboxEl= document.getElementById(objectId);
 		
@@ -247,12 +281,12 @@
 			}
 			if ( renderDiv == null )
 				renderDiv	= document.body;
-			if(calendarUp == true){
-				var calendarCorner = "bl";
-				var objectCorner = "tr";
+			if(localCalendarUp == true){
+				calendarCorner = "bl";
+				objectCorner = "tr";
 			}else{
-				var calendarCorner = "tl";
-				var objectCorner = "br";
+				calendarCorner = "tl";
+				objectCorner = "br";
 			}
 			dialog		= new YAHOO.widget.Dialog(dialogId, {
 		        visible:false,

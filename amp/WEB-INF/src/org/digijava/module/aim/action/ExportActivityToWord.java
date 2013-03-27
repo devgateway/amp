@@ -512,8 +512,9 @@ public class ExportActivityToWord extends Action {
             ServletOutputStream out = response.getOutputStream();
             baos.writeTo(out);
             out.flush();
-		} catch (Exception e) {
+		} catch (Exception e) {			
 			logger.error(e);
+			e.printStackTrace();
 		}
         
         

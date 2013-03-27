@@ -588,8 +588,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         if (ampCategoryValue != null)
         	eaForm.getIdentification().setAcChapter(new Long(ampCategoryValue.getId()));
 
-        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
-            CategoryConstants.PROCUREMENT_SYSTEM_NAME, activity.getCategories());
+        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+            CategoryConstants.PROCUREMENT_SYSTEM_KEY, activity.getCategories());
         if (ampCategoryValue != null)
           eaForm.getIdentification().setProcurementSystem(new Long(ampCategoryValue.getId()));
 

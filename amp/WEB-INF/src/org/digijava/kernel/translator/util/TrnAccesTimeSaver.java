@@ -22,6 +22,8 @@ import org.hibernate.Transaction;
  */
 public class TrnAccesTimeSaver implements Runnable {
 
+	public static boolean SKIP_ALL_UPDATES = false;
+	
 	private static Logger logger = Logger.getLogger(TrnAccesTimeSaver.class);
 	private TrnAccessUpdateQueue queue = TrnAccessUpdateQueue.getQueue();
 	private int priority;
@@ -46,7 +48,8 @@ public class TrnAccesTimeSaver implements Runnable {
 			try {
 				message = queue.get();//will block here if there are no messages in queue
 				if (message != null) {
-					save(message);
+					if (!SKIP_ALL_UPDATES)
+						save(message);
 				}
 			} catch (Exception e) {
 				logger.error(e);

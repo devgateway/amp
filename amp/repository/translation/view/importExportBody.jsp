@@ -332,9 +332,11 @@ function checkSelectedLanguages(){
 					</tr>
 							<tr>
 								<td align="center">
-									<digi:trn key="aim:translationManagerLangFoundMsg">
-									<b>The following languages where found on this site:</b><br />
-									</digi:trn>
+									<b>
+										<digi:trn key="aim:translationManagerLangFoundMsg">
+											The following languages were found on this site:
+										</digi:trn>
+									</b><br />
 								</td>
 							</tr>
 						<c:forEach items="${importExportForm.languages}" var="lang">
@@ -407,7 +409,7 @@ function checkSelectedLanguages(){
 							<tr>
 								<td colspan="2">
 									<digi:trn key="aim:translationManagerLangFoundImportMsg">
-									The following languages where found in the file you imported
+									The following languages were found in the file you imported
 									</digi:trn>
 									<br/>
 								</td>

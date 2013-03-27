@@ -233,19 +233,20 @@ public class ExportActivityToPDF extends Action {
 			
 			//objective comments
 			HashMap allComments = new HashMap();
-			if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments", ampContext)){ //Objective Comments shouldn't show up on Publc View
-				ArrayList<AmpComments> colAux	= null;
-	            Collection ampFields = DbUtil.getAmpFields();
-	            
-	            if (ampFields!=null) {
-	            	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
-	                    AmpField field = (AmpField) itAux.next();
-	                    colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
-	                    allComments.put(field.getFieldName(), colAux);
-	                  }
-	            }
-	            
-	            PdfPTable objTable=new PdfPTable(2);
+			ArrayList<AmpComments> colAux	= null;
+            Collection ampFields = DbUtil.getAmpFields();
+            
+            if (ampFields!=null) {
+            	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
+                    AmpField field = (AmpField) itAux.next();
+                    colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
+                    allComments.put(field.getFieldName(), colAux);
+                  }
+            }
+            
+            if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments", ampContext)){ //Objective Comments shouldn't show up on Publc View
+				
+				PdfPTable objTable=new PdfPTable(2);
 	            objTable.getDefaultCell().setBorder(0);
 	            for (Object commentKey : allComments.keySet()) {            	
 					String key=(String)commentKey;

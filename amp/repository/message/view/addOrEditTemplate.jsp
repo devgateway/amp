@@ -11,6 +11,9 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/scripts/templateScripts.js"/>"></script>
 <script langauage="JavaScript">
+
+var submmited = false;
+
   function MyremoveUserOrTeam(){
   	var orphands=new Array();
     var list = document.getElementById('selreceivers');
@@ -61,10 +64,11 @@
 		if(!validate()){
 			return false;
 		}
-		if(selectUsers()){
+		if(selectUsers() && !submmited){
 			messageForm.action="${contextPath}/message/templatesManager.do?actionType=saveTemplate";
   			messageForm.target = "_self";
-  			messageForm.submit();		
+  			messageForm.submit();	
+  			submmited = true;	
 		}	 		
 	}
 	

@@ -186,7 +186,7 @@ public class SearchUtil {
 		filter.readRequestData(request, AmpARFilter.FILTER_SECTION_ALL, null); // init teamAO and other auxiliary info
 
 		filter.setIndexText(keyword);
-		filter.generateFilterQuery(request, false);
+		filter.generateFilterQuery(request, false, true);
 
 		String hsqlQuery = filter.getGeneratedFilterQuery().replaceAll(
 				"FROM amp_activity", "FROM " + AmpActivity.class.getName());

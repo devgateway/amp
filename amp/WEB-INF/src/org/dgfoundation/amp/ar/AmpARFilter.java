@@ -883,8 +883,12 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter) {
+		generateFilterQuery(request, workspaceFilter, false);
+	}
+	
+	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter, boolean skipPledgeCheck) {
 		initFilterQuery(); //reinit filters or else they will grow indefinitely
-		if ((!workspaceFilter) && ReportContextData.getFromRequest().isPledgeReport()){
+		if ( !skipPledgeCheck &&  !workspaceFilter && ReportContextData.getFromRequest().isPledgeReport()){
 			this.pledgeFilter = true;
 			indexedParams=new ArrayList<FilterParam>();
 			

@@ -91,7 +91,7 @@ ActionsMenu.prototype.render=function (){
 		divEl.appendChild(hr2);
 		}
 		
-		debugger;
+		// debugger;
 			//create from template link
 		if(createfromtemplateenable){
 			var createFromTemplateLinkEl="<a style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\">";

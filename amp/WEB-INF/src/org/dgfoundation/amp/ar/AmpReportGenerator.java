@@ -733,7 +733,8 @@ public class AmpReportGenerator extends ReportGenerator {
 			GroupColumn nestedCol2 = (GroupColumn) GroupColumn.verticalSplitByCategs((CellColumn)nestedCol, cat,
 					true, reportMetadata);
 
-			newcol.replaceColumn(nestedCol.getName(), nestedCol2);
+			if (nestedCol2 != null)
+				newcol.replaceColumn(nestedCol.getName(), nestedCol2);
 			
 		}
 		

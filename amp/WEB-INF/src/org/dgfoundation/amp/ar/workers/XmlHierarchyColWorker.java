@@ -120,7 +120,9 @@ public class XmlHierarchyColWorker extends ColumnWorker {
 				}
 				if ( "date".equals(n.getNodeName() ) ){
 					try {
-						Date date 	= xmlSimpleDateFormat.parse(n.getTextContent());
+						String dateText = n.getTextContent().trim();
+						Date date = dateText.isEmpty() ? null : 
+							xmlSimpleDateFormat.parse(dateText);
 						item.setDate(date);
 					} catch (Exception e) {
 						e.printStackTrace();

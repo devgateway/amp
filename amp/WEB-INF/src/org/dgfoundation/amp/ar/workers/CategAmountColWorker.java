@@ -182,7 +182,7 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		acc.setId(id);
 
-		AmpARFilter filter=(AmpARFilter) generator.getFilter();
+		AmpARFilter filter = generator.getFilter();
 		
 		
 		int tr_type = -1;
@@ -301,6 +301,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.setCurrencyCode(currencyCode);
 		//put toExchangeRate
 		acc.setToExchangeRate(1);
+		
         MetaInfo adjMs = this.getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE, adj_type);
 		String trStr = null;
 

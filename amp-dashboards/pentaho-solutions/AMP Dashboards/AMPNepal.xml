@@ -40,7 +40,18 @@
 				</Level>
 			</Hierarchy>
 		</Dimension>
-		<Dimension visible="true" highCardinality="false" name="Responsible Organization">
+		<Dimension visible="true" highCardinality="false" name="Responsible Agency">
+			<Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Responsible_Agency#" allLevelName="All Responsible Agency" caption="#Responsible_Agency#">
+				<Level name="Responsible Agency" visible="true" column="ro_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+					<NameExpression>
+						<SQL dialect="generic">
+							<![CDATA[COALESCE(ro_name,'#No_Data#')]]>
+						</SQL>
+					</NameExpression>
+				</Level>
+			</Hierarchy>
+		</Dimension>
+<!--		<Dimension visible="true" highCardinality="false" name="Responsible Organization">
 			<Hierarchy visible="true" hasAll="true" allMemberCaption="All Responsible Organizations" allLevelName="All Responsible Organizations" caption="Responsible Organization">
 				<Level name="Responsible Organization" visible="true" column="ro_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
 					<NameExpression>
@@ -61,7 +72,7 @@
 					</NameExpression>
 				</Level>
 			</Hierarchy>
-		</Dimension>
+		</Dimension>-->
 		<Dimension visible="true" highCardinality="false" name="Implementing Agency">
 			<Hierarchy visible="true" hasAll="true" allMemberCaption="#All_Implementing_Agency#" allLevelName="All Implementing Agency" caption="#Implementing_Agency#">
 				<Level name="Implementing Agency" visible="true" column="ia_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
@@ -140,7 +151,18 @@
 				</Level>
 			</Hierarchy>
 		</Dimension>
-		<Dimension visible="true" highCardinality="false" name="Primary Program">
+		<Dimension visible="true" highCardinality="false" name="Zones">
+			<Hierarchy visible="true" hasAll="true" allMemberName="All Zones" allMemberCaption="#All_Zones#" primaryKey="amp_activity_id" caption="#Zones#">
+				<Level name="Zone" visible="true" column="zone" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+					<NameExpression>
+						<SQL dialect="generic">
+							<![CDATA[COALESCE(zone,'#No_Data#')]]>
+						</SQL>
+					</NameExpression>
+				</Level>
+			</Hierarchy>
+		</Dimension>
+<!--		<Dimension visible="true" highCardinality="false" name="Primary Program">
 			<Hierarchy visible="true" hasAll="true" allMemberName="All Programs" allMemberCaption="#All_Programs#" primaryKey="amp_activity_id" caption="#Primary_Program#">
 				<Level name="Primary Program" visible="true" column="primary_program_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
 					<NameExpression>
@@ -172,18 +194,19 @@
 					</NameExpression>
 				</Level>
 			</Hierarchy>
-		</Dimension>
+		</Dimension>-->
 		<Dimension visible="true" highCardinality="false" name="National Program Level 1">
 			<Hierarchy visible="true" hasAll="true" allMemberName="All Programs" allMemberCaption="#All_Programs#" primaryKey="amp_activity_id" caption="#National_Program#">
 				<Level name="National Program Level 1" visible="true" column="npl1_name" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
 					<NameExpression>
 						<SQL dialect="generic">
-							<![CDATA[COALESCE(npl1_name,'#No_Data#')]]>
+							<![CDATA[COALESCE(npl1_name,'Info not filled in')]]>
 						</SQL>
 					</NameExpression>
 				</Level>
 			</Hierarchy>
 		</Dimension>
+		<!--
 		<Dimension visible="true" highCardinality="false" name="Sub-Sector">
 			<Hierarchy visible="true" hasAll="true" allMemberName="All Sub-Sectors" allMemberCaption="#All Sub-Sectors#" primaryKey="amp_activity_id" caption="#Sub-Sectors#">
 				<Level name="sub-sector" visible="true" column="s_sub_sectorname" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
@@ -194,7 +217,7 @@
 					</NameExpression>
 				</Level>
 			</Hierarchy>
-		</Dimension>
+		</Dimension>-->
 		<DimensionUsage source="Activity" name="Activity" visible="true" foreignKey="amp_activity_id" highCardinality="false"/>
 		<DimensionUsage source="Donor Dates" name="Donor Dates" visible="true" foreignKey="amp_fund_detail_id" highCardinality="false"/>
 		<DimensionUsage source="Status" name="Status" visible="true" foreignKey="amp_activity_id" highCardinality="false"/>

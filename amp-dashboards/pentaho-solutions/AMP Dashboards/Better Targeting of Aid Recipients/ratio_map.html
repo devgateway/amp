@@ -1,46 +1,133 @@
-<style type="text/css"> @import "http://serverapi.arcgisonline.com/jsapi/arcgis/2.6/js/dojo/dijit/themes/tundra/tundra.css";
-@import "/arcgis/rest/static/jsapi.css";
-</style>
+<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.4/js/dojo/dijit/themes/claro/claro.css">
+<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.4/js/esri/css/esri.css">
 <script type="text/javascript"> 
 var djConfig = { parseOnLoad: true };
 </script>
-<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.6"> </script>
+<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.4/"></script>
+<style>
+      html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        padding:0;
+      }
+	  .pointer {
+		border:0px !important;
+		padding: 0px !important;
+	  }
+</style>
+<script type="text/javascript">
 
-    <script type="text/javascript">
-		dojo.require("dijit.layout.ContentPane");
-		dojo.require("esri.map");
-		var map;
-		function init() {
-			basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://gis.devgateway.org/arcgis/rest/services/World_Street_Map/MapServer");
-			countrymap = new esri.layers.ArcGISDynamicMapServiceLayer("http://gis.devgateway.org/arcgis/rest/services/Nepal/Nepal/MapServer", {opacity : 0.50});
-			var layerLoadCount = 0;
-			if (basemap.loaded) {
+	dojo.require("dijit.layout.BorderContainer");
+	dojo.require("dijit.layout.ContentPane");
+	dojo.require("esri.map");
+	dojo.require("esri.layers.FeatureLayer");
+	dojo.require("dojox.charting.Chart2D");
+	dojo.require("dojox.charting.plot2d.Pie");
+	dojo.require("dojox.charting.action2d.Highlight");
+	dojo.require("dojox.charting.action2d.MoveSlice");
+	dojo.require("dojox.charting.action2d.Tooltip");
+	dojo.require("dojo.number");
+	dojo.require("dijit.layout.TabContainer");
+
+	var map;
+	var theme = 'Wetland';
+	dojo.require("dojox.charting.themes." + theme);
+
+	var locations = new Array();
+	var implementationLevel = [ {
+		name : "Region",
+		mapId : "0",
+		mapField : "ADM1_NAME"
+	}, {
+		name : "Zone",
+		mapId : "1",
+		mapField : "ADM2_NAME"
+	} ];
+
+	function init() {
+		basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://gis.devgateway.org/arcgis/rest/services/World_Street_Map/MapServer", {id: 'baseMap'});
+		countrymap = new esri.layers.ArcGISDynamicMapServiceLayer("http://gis.devgateway.org/arcgis/rest/services/Nepal/Nepal/MapServer", {opacity : 0.50, id: 'countryMap'});
+		var layerLoadCount = 0;
+		if (basemap.loaded) {
+			layerLoadCount += 1;
+			if (layerLoadCount === 2) {
+				createMapAddLayers(basemap, countrymap);
+			}
+		} else {
+			dojo.connect(basemap, "onLoad", function(service) {
 				layerLoadCount += 1;
 				if (layerLoadCount === 2) {
 					createMapAddLayers(basemap, countrymap);
 				}
-			} else {
-				dojo.connect(basemap, "onLoad", function(service) {
-					layerLoadCount += 1;
-					if (layerLoadCount === 2) {
-						createMapAddLayers(basemap, countrymap);
-					}
-					});
-			}
-			if (countrymap.loaded) {
-				layerLoadCount += 1;
-				if (layerLoadCount === 2) {
-					createMapAddLayers(basemap, countrymap);
-				}
-				} else {
-					dojo.connect(countrymap, "onLoad", function(service) {
-						layerLoadCount += 1;
-						if (layerLoadCount === 2) {
-						createMapAddLayers(basemap, countrymap);
-						}
-					});
-			}
+				});
 		}
+		if (countrymap.loaded) {
+			layerLoadCount += 1;
+			if (layerLoadCount === 2) {
+				createMapAddLayers(basemap, countrymap);
+			}
+		} else {
+			dojo.connect(countrymap, "onLoad", function(service) {
+				layerLoadCount += 1;
+				if (layerLoadCount === 2) {
+					createMapAddLayers(basemap, countrymap);
+				}
+			});
+		}
+		
+	}
+var regionData;
+var regionDataProcessed;
+var totalAmount = 0;
+function loadRegionData() {
+	var url = "/pentaho/content/cda/doQuery?path=AMP+Dashboards+Phase+2%2FBetter+Targeting+of+Aid+Recipients%2Fratio_map.cda&dataAccessId=region_chart_sql"
+	$.getJSON(url, function(data) {
+		regionData = data;
+		regionDataProcessed = JSON.parse(JSON.stringify(data));
+		var newResultset = new Array(regionData.resultset.length);
+		for (var idx = 0; idx < regionData.resultset.length; idx++) {
+			totalAmount += regionData.resultset[idx][1];
+		}
+		console.log("loadTotalAmount:" + totalAmount);
+		for (var idx = 0; idx < regionData.resultset.length; idx++) {
+			var currentRegion = regionData.resultset[idx][0].split(" ")[0];
+			console.log("loadRegion:" + currentRegion);
+			var currentPercentage = (regionData.resultset[idx][1]*100/totalAmount);
+			console.log("loadAmount:" + regionData.resultset[idx][1]);
+			console.log("loadPercentage:" +currentPercentage);
+			var currentRatio = regionData.resultset[idx][2]/currentPercentage;
+			console.log("loadRatio:" +currentRatio);
+//			var currentRatio = currentPercentage;
+			newResultset[idx] = new Array(currentRegion, currentRatio); 
+		}
+		regionDataProcessed.resultset = newResultset;
+	}).success(function(){});
+}
+var zoneData;
+
+function loadZoneData() {
+	var url = "/pentaho/content/cda/doQuery?path=AMP+Dashboards+Phase+2%2FBetter+Targeting+of+Aid+Recipients%2Fratio_map.cda&dataAccessId=zone_chart_sql"
+	$.getJSON(url, function(data) {
+		zoneData = data;
+	}).success(function(){activateAdministrative(1);});
+}
+
+	function MapFindLocation(level) {
+		var queryTask = new esri.tasks.QueryTask('http://gis.devgateway.org/arcgis/rest/services/Nepal/Nepal/MapServer/' + level.mapId);
+		var query = new esri.tasks.Query();
+		query.where = level.mapField + " <> ''";
+		query.outSpatialReference = {
+			wkid : map.spatialReference.wkid
+		};
+		query.returnGeometry = true;
+		query.outFields = [ COUNT, level.mapField, GEO_ID ];
+		currentLevel = level;
+		queryTask.execute(query, addResultsToMap);
+	}
 
 	function createMapAddLayers(myService1, myService2) {
 		customLods = [
@@ -58,41 +145,171 @@ var djConfig = { parseOnLoad: true };
 			{"level" : 11,"resolution" : 4.77731426794937,"scale" : 18055.954822} ];
 		map = new esri.Map("first_chart_map",{
 			lods : customLods,
-			extent : esri.geometry.geographicToWebMercator(myService2.fullExtent),
+			extent : new esri.geometry.Extent({xmin:8207501.924499082,ymin:2935508.280996761,xmax:10522626.637199875,ymax:3669303.752534255,spatialReference:{wkid:102100}}),
 			"fadeOnZoom": true,
 			"force3DTransforms": true,
 			"navigationMode": "css-transforms"
 			});
 		dojo.connect(map, 'onLoad', function(map) {
-		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
-		dojo.byId('first_chart_map_zoom_slider').style.top = '95px';
-		dojo.byId('first_chart_map_zoom_slider').style.width = '80px';
-		});
+			dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+			loadRegionData();
+			loadZoneData();
+			});
 		map.addLayer(myService1);
 		map.addLayer(myService2);
 	}
-		dojo.addOnLoad(init);
-    </script>
+var rendererBreak;
+	function activateAdministrative(layerNumber) {
+		var template = new esri.InfoTemplate();
+        template.setTitle("<b>${ADM1_NAME}</b>");
+        template.setContent(getWindowContent);
+		
+        var zoneLayer = new esri.layers.FeatureLayer("http://gis.devgateway.org/arcgis/rest/services/Nepal/Nepal/MapServer/"+layerNumber, 
+		{
+          mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+          infoTemplate: template,
+          outFields: ["*"],
+		  id: "administrativeLayer"
+        });
+		var graphAttributeName = (layerNumber == 0) ? "ADM1_NAME":"ADM2_NAME" ;
+		dojo.connect(zoneLayer, "onGraphicAdd", function(graphic) {
+			if (graphAttributeName == "ADM1_NAME"){
+				var datei = regionData.resultset.filter(function (el) { return el[0].indexOf(graphic.attributes[graphAttributeName]) == 0;})
+				graphic.attributes['AMOUNT'] = datei[0][1];
+				graphic.attributes['POVERTY'] = datei[0][2];
+				var amountPercentage = (datei[0][1]*100/totalAmount);
+				graphic.attributes['PERCENTAGE'] = amountPercentage;
+				graphic.attributes['RATIO'] = datei[0][2]/amountPercentage;
+				console.log("mapTotalAmount:" + totalAmount);
+				console.log("mapRegion:" + graphic.attributes[graphAttributeName]);
+				console.log("mapAmount:" + datei[0][1]);
+				console.log("mapPercentage:" +amountPercentage);
+				console.log("mapRatio:" +datei[0][2]/amountPercentage);
+				map.getLayer("administrativeLayer").redraw();
+			}
+			else
+			{
+				var datei = zoneData.resultset.filter(function (el) { return el[1].indexOf(graphic.attributes[graphAttributeName]) >= 0;});
+				var totalRegion = 0;
+				var regionDatei = zoneData.resultset.filter(function (el) { return el[0].indexOf(datei[0][0]) == 0;}).forEach(function(val){totalRegion += val[2];})
+				graphic.attributes["ADM1_NAME"] = datei[0][0];
+				graphic.attributes['AMOUNT'] = datei[0][2];
+				graphic.attributes['POVERTY'] = datei[0][3];
+				var amountPercentage = (datei[0][2]*100/totalRegion);
+				graphic.attributes['PERCENTAGE'] = amountPercentage;
+				graphic.attributes['RATIO'] = datei[0][3]/amountPercentage;
+				console.log("mapTotalAmount:" + totalRegion);
+				console.log("mapRegion:" + graphic.attributes[graphAttributeName]);
+				console.log("mapAmount:" + datei[0][2]);
+				console.log("mapPercentage:" +amountPercentage);
+				console.log("mapRatio:" +datei[0][3]/amountPercentage);
+				map.getLayer("administrativeLayer").redraw();
+			}
+		});
+
+		var border = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([ 0, 0, 0 ]), 1);
+		var symbolDefault = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([255, 0, 0, 0.2 ]));
+		var symbol1 = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([253, 208, 162, 0.8 ]));
+		var symbol2 = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([253, 174, 107, 0.8 ]));
+		var symbol3 = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([253, 141, 60, 0.8 ]));
+		var symbol4 = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([241, 105, 19, 0.8 ]));
+		var symbol5 = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, border, new dojo.Color([217, 72, 1, 0.8 ]));
+		rendererBreak = new esri.renderer.ClassBreaksRenderer(symbolDefault, "RATIO");
+		rendererBreak.addBreak(0, 0.8, symbol1);
+		rendererBreak.addBreak(0.8, 0.9, symbol2);
+		rendererBreak.addBreak(0.9, 1.0, symbol3);
+		rendererBreak.addBreak(1.0, 1.1, symbol4);
+		rendererBreak.addBreak(1.1, 1.3, symbol5);
+		rendererBreak.addBreak(1.3, 1.4, symbol4);
+		rendererBreak.addBreak(1.4, 1.5, symbol3);
+		rendererBreak.addBreak(1.5, 1.7, symbol2);
+		rendererBreak.addBreak(1.7, 3, symbol1);
+        zoneLayer.setRenderer(rendererBreak);
+
+        map.addLayer(zoneLayer);
+        map.infoWindow.resize(450, 300);
+	}
+
+	function deactivateAdministrative(){
+		map.removeLayer(map.getLayer("administrativeLayer"));
+	}
+
+	dojo.addOnLoad(init);
+	  
+	var currentRegion = "";
+      function getWindowContent(graphic) {
+		currentRegion = graphic.attributes['ADM1_NAME'];
+		var returnHtml = "<div id=\"dynamic_chart\"></div>" + "<div>Total amount for the Region: USD " + Math.round(graphic.attributes['AMOUNT']) + "</div>"+ "<div>Percentage: " + Math.round(graphic.attributes['PERCENTAGE']) + "%</div>" + "<div>Poverty rate: " + graphic.attributes['POVERTY'] + "</div>" + "<div>Calculated Ratio for the whole region: " + Math.round((graphic.attributes['POVERTY']/graphic.attributes['PERCENTAGE'])*100)/100 + "</div>";
+		setTimeout(initGraph, 500);
+        return returnHtml;
+      }
+	  var zoneDataProcessed;
+	  function initGraph() {
+		var totalZoneAmount = 0;
+		var zoneResultSet = zoneData.resultset.filter(function (el) { return el[0].indexOf(currentRegion) == 0;});
+		zoneDataProcessed = JSON.parse(JSON.stringify(zoneData));
+		var newResultset = new Array(zoneResultSet.length);
+		for (var idx = 0; idx < zoneResultSet.length; idx++) {
+			totalZoneAmount += zoneResultSet[idx][2];
+		}
+		console.log("loadZoneTotalAmount:" + totalZoneAmount);
+		for (var idx = 0; idx < zoneResultSet.length; idx++) {
+			var currentZone = zoneResultSet[idx][1];
+			console.log("loadZone:" + currentZone);
+			var currentPercentage = (zoneResultSet[idx][2]*100/totalZoneAmount);
+			console.log("loadAmount:" + zoneResultSet[idx][2]);
+			console.log("loadPercentage:" +currentPercentage);
+			var currentRatio = zoneResultSet[idx][3]/currentPercentage;
+			console.log("loadRatio:" +currentRatio);
+//			var currentRatio = currentPercentage;
+			newResultset[idx] = new Array(currentZone, currentRatio); 
+		}
+		zoneDataProcessed.resultset = newResultset;
+		zoneDataProcessed.queryInfo.totalRows = newResultset.length + "";
+		zoneDataProcessed.metadata = [{"colIndex":0,"colType":"String","colName":"region"},{"colIndex":1,"colType":"Numeric","colName":"amount"}];
+		var myChart = new pvc.BarChart({
+			canvas: "dynamic_chart",
+			width:  400,
+			height: 220,
+			orientation: 'vertical',
+			xAxisSize: 40,
+			animate:    false,
+			selectable: true,
+			hoverable:  true,
+			valuesVisible: false			
+		})
+		myChart.setData(zoneDataProcessed, { crosstabMode: true });
+		myChart.render();
+	  }
+</script>
 
 <!-- The dashboard layout -->
 <div id="dashboard" style="width:100%;">
       <div id="filter_object_container">
       <div id="filter_object" style="width:1300px;height:40px;padding:5px 5px 5px 5px;border-bottom: 1px solid black;margin: 0px auto;">
+		<div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">Administrative Level</div> <div style="float:left;" id="adminLevelSelect_object">
+			<input type="radio" id="region" name="radioGroup" /><label for="region">Region</label>
+			<input type="radio" id="zone" name="radioGroup" CHECKED/><label for="zone">Zone</label>
+		</div>
+<!--
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_sector")</div> <div style="float:left;" id="sectorSelect_object"></div>
         <div style="float:left;padding:5px 10px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;">CDF.i18n("msg_program")</div> <div style="float:left;" id="programSelect_object"></div>
         <div style="float:left;padding:0px 2px 2px 12px;font-family:Verdana,Arial,sans-serif;font-size: 8pt;font-weight:bold;"><button id="apply" style="font-size:10pt;font-weight:bold;padding:0px;float:right;">CDF.i18n("msg_reset")</div>
+-->
       </div>
     </div>
     <div id="first_section" style="border:2px solid #ebebeb;">
       <div id="first_chart_map" class="tundra" style="height:600px" dojotype="dijit.layout.ContentPane" region="center"></div>
     </div>
-    <div id="dateRangeSelector" style="clear:both;">
+    <div id="dateRangeSelector" style="clear:both;display:none">
       <div id="startYearSelect_object" style="padding:10px 10px 10px 10px">
       </div>
       <div id="endYearSelect_object" style="padding:10px 10px 10px 10px">
       </div>
     </div>
 </div>
+
+
 <script language="javascript" type="text/javascript">
 
 //Filter criteria
@@ -200,14 +417,6 @@ first_data_table.parameters = parameters_first;
 </script>
 
 <script language="javascript">
-    var cType = "bar";
-    $("#first_chart_bar").hide();
-	$("#firstChartTypeSelector").click(function (){
-	var oldCType = cType;
-	cType = $("#firstChartTypeSelector :radio:checked").val();
-	$("#first_chart_" + oldCType).fadeOut('fast', function(){$("#first_chart_" + cType).fadeIn();});
-		});
-
   var resizeLayout = function() {
 		$("#dashboard").height($(window).height()-30);
 		$("#dashboard").width($(document.body).width()-5);
@@ -215,56 +424,68 @@ first_data_table.parameters = parameters_first;
 		$("#first_map_chart").width($("#dashboard").width()-5);
     }
 	var initialized = false;
-$(window).resize(resizeLayout);
-$(window).ready(function() {
-  var components = [sectorSelect, programSelect, startYearSelect, endYearSelect];
-  Dashboards.init(components);
-  resizeLayout();
-  initialized = true;
-  setTimeout(applyDateRange, 500);
-  
-});	
 
-$("#apply").click(function () {
-  sectorParameter = "";
-  programParameter = "";
-  aidTypeParameter = "";
-  startYear = startYearConfig;
-  endYear = endYearConfig;    
-  first_data_table.chartDefinition.colTypes = [];
-  first_data_table.chartDefinition.colFormats = [];
-  first_data_table.chartDefinition.colHeaders = [];
-  Dashboards.resetAll();
-  setTimeout(applyDateRange, 500);
-});
-  
-var applyDateRange = function() {
-    console.log("applyDateRange");
-    if (dateRangeInitialized){
-      $("#dateRangeSelector > div > select").selectToUISlider(
-        {
-          labels: $("#startYearSelect_object option").length,
-          sliderOptions: {
-            stop: function(e,ui) {
-                setTimeout(function() {
-                  var updateComponent = (ui.handle.id == "handle_endYear") ? endYearSelect : startYearSelect;
-                  first_data_table.chartDefinition.colTypes = [];
-                  first_data_table.chartDefinition.colFormats = [];
-                  first_data_table.chartDefinition.colHeaders = [];
-                  Dashboards.processChange(updateComponent);
-                  }, 1000);
-            }
-          }
-        }
-      ).hide();
-    }
-    else
-      setTimeout(applyDateRange, 500);
-};
+	$(window).resize(resizeLayout);
 
+	$(window).ready(function() {
+		var components = [sectorSelect, programSelect, startYearSelect, endYearSelect];
+		Dashboards.init(components);
+		resizeLayout();
+		initialized = true;
+		$('#adminLevelSelect_object').buttonset();
+		$('#adminLevelSelect_object :radio').on("click", function(evt){
+				console.log("clicked");
+				var selectLayer = $('#adminLevelSelect_object :radio:checked').attr("id");
+				var layerId = 1;
+				deactivateAdministrative();
+				if (selectLayer == "region") {
+					layerId = 0;
+				}
+				activateAdministrative(layerId);
+			});
+		
+		setTimeout(applyDateRange, 500);
+	});	
+
+	$("#apply").click(function () {
+		sectorParameter = "";
+		programParameter = "";
+		aidTypeParameter = "";
+		startYear = startYearConfig;
+		endYear = endYearConfig;    
+		first_data_table.chartDefinition.colTypes = [];
+		first_data_table.chartDefinition.colFormats = [];
+		first_data_table.chartDefinition.colHeaders = [];
+		Dashboards.resetAll();
+		setTimeout(applyDateRange, 500);
+	});
+  
+	var applyDateRange = function() {
+		console.log("applyDateRange");
+		if (dateRangeInitialized){
+		  $("#dateRangeSelector > div > select").selectToUISlider(
+			{
+			  labels: $("#startYearSelect_object option").length,
+			  sliderOptions: {
+				stop: function(e,ui) {
+					setTimeout(function() {
+					  var updateComponent = (ui.handle.id == "handle_endYear") ? endYearSelect : startYearSelect;
+					  first_data_table.chartDefinition.colTypes = [];
+					  first_data_table.chartDefinition.colFormats = [];
+					  first_data_table.chartDefinition.colHeaders = [];
+					  Dashboards.processChange(updateComponent);
+					  }, 1000);
+				}
+			  }
+			}
+		  ).hide();
+		}
+		else
+		  setTimeout(applyDateRange, 500);
+	};
 </script>
-	<style>
-    .ui-button-text { font-size:8pt;}
-    .ui-state-active { font-weight:bold;}
-    .ui-widget { font-size:8pt;}
-    </style>
+<style>
+.ui-button-text { font-size:8pt;}
+.ui-state-active { font-weight:bold;}
+.ui-widget { font-size:8pt;}
+</style>

@@ -1,84 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CDADescriptor>
    <DataSources>
-      <Connection id="first_chart_mdx" type="mondrian.jndi">
-         <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
+      <Connection id="region_chart_sql" type="sql.jndi">
          <Jndi>AMPNepal</Jndi>
       </Connection>
-      <Connection id="first_chart_mdx_params" type="mondrian.jndi">
+      <Connection id="zone_chart_sql" type="sql.jndi">
+         <Jndi>AMPNepal</Jndi>
+      </Connection>
+       <Connection id="region_chart_mdx" type="mondrian.jndi">
          <Catalog>AMP Dashboards Phase 2/AMPNepal.xml</Catalog>
          <Jndi>AMPNepal</Jndi>
       </Connection>
    </DataSources>
-   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx"
-               id="first_chart_mdx"
-               type="mdx">
-      <BandedMode>compact</BandedMode>
+    <DataAccess access="public" cache="true" cacheDuration="3600" connection="region_chart_sql"
+               id="region_chart_sql"
+               type="sql">
       <Columns/>
       <Parameters>
          <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
          <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
          <Parameter default="USD" name="currency" type="String"/>
-         <Parameter default="2000" name="startYear" type="String"/>
-         <Parameter default="2009" name="endYear" type="String"/>
-      </Parameters>
-      <Query>With
-Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Financing Instrument],[*BASE_MEMBERS_Donor Dates])'
-Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Dates].CurrentMember.OrderKey,BDESC)'
-Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Financing Instrument].CurrentMember.OrderKey,BASC)'
-Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
-Set [*BASE_MEMBERS_Measures] as '{[Measures].[${type_of_funding_translation} ${currency}]}'
-Set [*BASE_MEMBERS_Financing Instrument] as '[Financing Instrument].[Financing Instrument].Members'
-Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Dates].currentMember)})'
-Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Financing Instrument].currentMember)})'
-Member [Measures].[${type_of_funding_translation} ${currency}] as '[Measures].[${type_of_funding} ${currency}]', FORMAT_STRING = '$#,##0.00', SOLVE_ORDER=400
-Select
-CrossJoin([*SORTED_COL_AXIS],[*BASE_MEMBERS_Measures]) on columns,
-Non Empty [*SORTED_ROW_AXIS] on rows
-From [Donor Funding]
-</Query>
-   </DataAccess>
-   <DataAccess access="public" cache="true" cacheDuration="3600" connection="first_chart_mdx_params"
-               id="first_chart_mdx_params"
-               type="mdx">
-      <BandedMode>compact</BandedMode>
-      <Columns/>
-      <Parameters>
-         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
-         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
-         <Parameter default="USD" name="currency" type="String"/>
-         <Parameter default="[Regions].Members" name="regionParameter" type="String"/>
-         <Parameter default="[Primary Sector].Members" name="sectorParameter" type="String"/>
-         <Parameter default="[National Program Level 1].Members" name="programParameter" type="String"/>
          <Parameter default="2000" name="startYear" type="String"/>
          <Parameter default="2009" name="endYear" type="String"/>
       </Parameters>
       <Query>
-With
-Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Financing Instrument],NonEmptyCrossJoin([*BASE_MEMBERS_Donor Dates],NonEmptyCrossJoin([*BASE_MEMBERS_Regions],NonEmptyCrossJoin([*BASE_MEMBERS_National Program],[*BASE_MEMBERS_Primary Sector]))))'
-Set [*SORTED_ROW_AXIS] as 'Order([*CJ_ROW_AXIS],[Donor Dates].CurrentMember.OrderKey,BDESC)'
-Set [*SORTED_COL_AXIS] as 'Order([*CJ_COL_AXIS],[Financing Instrument].CurrentMember.OrderKey,BASC)'
-Set [*BASE_MEMBERS_Donor Dates] as '{[Donor Dates].[${startYear}]:[Donor Dates].[${endYear}]}'
-Set [*BASE_MEMBERS_Measures] as '{[Measures].[${type_of_funding_translation} ${currency}]}'
-Set [*BASE_MEMBERS_Financing Instrument] as '[Financing Instrument].[Financing Instrument].Members'
-Set [*BASE_MEMBERS_National Program] as '{${programParameter}}'
-Set [*CJ_COL_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Financing Instrument].currentMember)})'
-Set [*NATIVE_MEMBERS_National Program] as 'Generate([*NATIVE_CJ_SET], {[National Program Level 1].CurrentMember})'
-Set [*BASE_MEMBERS_Regions] as '{${regionParameter}}'
-Set [*NATIVE_MEMBERS_Regions] as 'Generate([*NATIVE_CJ_SET], {[Regions].CurrentMember})'
-Set [*NATIVE_MEMBERS_Primary Sector] as 'Generate([*NATIVE_CJ_SET], {[Primary Sector].CurrentMember})'
-Set [*CJ_ROW_AXIS] as 'Generate([*NATIVE_CJ_SET], {([Donor Dates].currentMember)})'
-Set [*BASE_MEMBERS_Primary Sector] as '{${sectorParameter}}'
-Member [National Program].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_National Program])', SOLVE_ORDER=-400
-Member [Regions].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Regions])', SOLVE_ORDER=-400
-Member [Primary Sector].[*SLICER_MEMBER] as 'Aggregate ([*NATIVE_MEMBERS_Primary Sector])', SOLVE_ORDER=-400
-Member [Measures].[${type_of_funding_translation} ${currency}] as '[Measures].[${type_of_funding} ${currency}]', FORMAT_STRING = '$#,##0.00', SOLVE_ORDER=400
-Select
-CrossJoin([*SORTED_COL_AXIS],[*BASE_MEMBERS_Measures]) on columns,
-Non Empty [*SORTED_ROW_AXIS] on rows
-From [Donor Funding]
-Where ([Regions].[*SLICER_MEMBER], [National Program].[*SLICER_MEMBER], [Primary Sector].[*SLICER_MEMBER])
+	  <![CDATA[
+SELECT region, 
+SUM ((1/getExchangeWithFixed(cvmdf2.currency_code,cvmdf2.transaction_date,cvmdf2.fixed_exchange_rate))* cvmdf2.transaction_amount *getExchange('USD',cvmdf2.transaction_date)) AS amount,
+(select  round(avg(percentage))
+from pentaho_poverty_data ppd
+where ppd.region = cvmdf2.region
+group by country, region
+order by country, region
+)
+as poverty
+FROM cached_v_m_donor_funding cvmdf2 
+WHERE 
+cvmdf2.adjustment_type = getCategoryValueId('Planned') 
+AND cvmdf2.transaction_type = 1	
+and region <> ''
+group by region;
+	  ]]>
 	</Query>
+   </DataAccess>  
+    <DataAccess access="public" cache="true" cacheDuration="3600" connection="zone_chart_sql"
+               id="zone_chart_sql"
+               type="sql">
+      <Columns/>
+      <Parameters>
+         <Parameter default="Actual Disbursements" name="type_of_funding_translation" type="String"/>
+         <Parameter default="Actual Disbursements" name="type_of_funding" type="String"/>
+         <Parameter default="USD" name="currency" type="String"/>
+         <Parameter default="2000" name="startYear" type="String"/>
+         <Parameter default="2009" name="endYear" type="String"/>
+      </Parameters>
+      <Query>
+	  <![CDATA[
+SELECT region, zone, 
+SUM ((1/getExchangeWithFixed(cvmdf2.currency_code,cvmdf2.transaction_date,cvmdf2.fixed_exchange_rate))* cvmdf2.transaction_amount *getExchange('USD',cvmdf2.transaction_date)) AS amount,
+(select  round(avg(percentage))
+from pentaho_poverty_data ppd
+where ppd.zone = cvmdf2.zone
+group by country, zone
+order by country, zone
+)
+as poverty
+FROM cached_v_m_donor_funding cvmdf2 
+WHERE 
+cvmdf2.adjustment_type = getCategoryValueId('Planned') 
+AND cvmdf2.transaction_type = 1	
+and zone <> ''
+group by region, zone
+order by region, zone;
+	  ]]>
+	</Query>
+   </DataAccess>  
+   <DataAccess access="public" cache="true" cacheDuration="3600" connection="region_chart_mdx"
+               id="region_chart_mdx"
+               type="mdx">
+      <BandedMode>compact</BandedMode>
+      <Columns/>
+      <Parameters>
+         <Parameter default="[Regions].[Central (Madhyamanchal)]" name="regionSelected" type="String"/>
+      </Parameters>
+      <Query>
+SELECT
+NON EMPTY {Hierarchize({[Measures].[Actual Disbursements]})} ON COLUMNS,
+NON EMPTY {Hierarchize({[Zones].[Zone].Members})} ON ROWS
+FROM [Donor Funding]
+WHERE {Hierarchize({${regionSelected}})}
+
+</Query>
    </DataAccess>
-   
 </CDADescriptor>

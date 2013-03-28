@@ -19,7 +19,7 @@
             <input type="radio" id="first_data" name="first_chart_type" value="data"/><label for="first_data">Data</label>
         </span>
       </div>
-      <div id="first_chart_heatgrid"></div>
+      <div id="first_chart_heatgrid" style="width:1000px;margin:0px auto;"></div>
       <div id="first_chart_bar"></div>
       <div id="first_chart_data" style="width:400px;"></div>
     </div>
@@ -141,20 +141,18 @@ var pfetch = function(data) {
   data.resultset = notNullRows;
   return data;
 };
-		var formatLabel = function(arraytext) {
-          var formattedLabel = arraytext.label.split("/")[0];
-          arraytext.label = formattedLabel;
-          if(formattedLabel.length > 20) 
-            formattedLabel = formattedLabel.substring(0,17) + "...";
-          arraytext.value = formattedLabel;
-				return arraytext;
-			}
+var formatLabelHG = function(arraytext) {
+	var formattedLabel = arraytext.label.split("/")[0];
+	arraytext.label = formattedLabel;
+	arraytext.value = formattedLabel;
+	return arraytext;
+}
 
 var first_heatgrid_chart = {
 	type: "cccHeatGridChart",
 	name: "render_grid",
 	chartDefinition: {
-		width: 1300,
+		width: 1000,
 		height: 400,
 		dataAccessId:  function() {return getParameters() == "" ? "first_datasource" : "first_datasource_params"},
     path: "/AMP Dashboards Phase 2/Division of Labor/fragmentation_by_PRSP_ccc.cda",
@@ -172,18 +170,18 @@ var first_heatgrid_chart = {
 		titlePosition: "top",
 		titleSize: 25,
 		showXScale: true,
-		xAxisSize: 100,
+		xAxisSize: 120,
 		xAxisPosition: "top",
 		showYScale: true,
 		yAxisPosition: "left",
-		yAxisSize: 200,
+		yAxisSize: 230,
 		xAxisFullGrid: true,
 		yAxisFullGrid: true,
 		orthoAxisOrdinal: false,
 		scalingType: "discrete",
 		numSD: 2,
     nullColor: "#FFFFFF",
-		extensionPoints: [["xAxisLabel_font", "10px sans-serif"],["xAxisLabel_textAngle", -1.575],["xAxisLabel_textAlign", "left"],["xAxisLabel_text", function(d){return formatLabel(d);}]],
+		extensionPoints: [["xAxisLabel_font", "10px sans-serif"],["xAxisLabel_textAngle", -1.575],["xAxisLabel_textAlign", "left"],["xAxisLabel_text", function(d){return formatLabelHG(d);}]],
     valuesAnchor: "right",
     normPerBaseCategory: false,
     useShapes: false,
@@ -195,12 +193,18 @@ var first_heatgrid_chart = {
 },
 	parameters: [],
   postFetch: pfetch,
+  postExecution : function(){
+	wrapXAxis();
+  },
 	executeAtStart: true,
 	htmlObject: "first_chart_heatgrid",
 	listeners: []
 
 };
 
+function wrapXAxis() {
+	$("#first_chart_heatgridprotovis > svg > g:eq(3) text").each(function(index, obj) { create_multiline($(obj));});
+}
 first_heatgrid_chart.listeners = listeners;
 first_heatgrid_chart.parameters = parameters;
 first_heatgrid_chart.preExecution = processParameters;
@@ -216,6 +220,44 @@ first_data_table.postFetch = pfetch;
 </script>
 
 <script language="javascript">
+    var svgNS = "http://www.w3.org/2000/svg";
+    var widthX = 100;
+
+//	create_multiline("Whatever text you want here.", text_element);
+
+    function create_multiline(text_element) {
+        var words = text_element.text().split(' ');                        
+		text_element.text("");
+        var tspan_element = document.createElementNS(svgNS, "tspan");   // Create first tspan element
+        var text_node = document.createTextNode(words[0]);           // Create text in tspan element
+
+        tspan_element.appendChild(text_node);                           // Add tspan element to DOM
+        text_element.append(tspan_element);                        // Add text to tspan element
+
+        for(var i=1; i<words.length; i++)
+        {
+            var len = tspan_element.firstChild.data.length;             // Find number of letters in string
+            tspan_element.firstChild.data += " " + words[i];            // Add next word
+
+			console.log("length:" +tspan_element.getComputedTextLength());
+            if (tspan_element.getComputedTextLength() > widthX)
+            {
+                tspan_element.firstChild.data = tspan_element.firstChild.data.slice(0, len);    // Remove added word
+
+                var tspan_element = document.createElementNS(svgNS, "tspan");       // Create new tspan element
+                tspan_element.setAttributeNS(null, "x", 3);
+                tspan_element.setAttributeNS(null, "dy", 15);
+                text_node = document.createTextNode(words[i]);
+                tspan_element.appendChild(text_node);
+                text_element.append(tspan_element);
+            }
+        }
+
+
+    }
+
+
+
     var cType = "heatgrid";
 		$("#firstChartTypeSelector").buttonset();
     $("#first_chart_data").hide();

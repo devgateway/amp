@@ -17,8 +17,8 @@
       <Columns/>
       <Parameters>
          <Parameter default="USD" name="currency" type="String"/>
-         <Parameter default="2000" name="startYear" type="String"/>
-         <Parameter default="2009" name="endYear" type="String"/>
+         <Parameter default="2006" name="startYear" type="String"/>
+         <Parameter default="2012" name="endYear" type="String"/>
       </Parameters>
       <Query>
 With
@@ -52,8 +52,8 @@ Where ([Donor Dates].[*SLICER_MEMBER])
          <Parameter default="USD" name="currency" type="String"/>
          <Parameter default="[Regions].Members" name="regionParameter" type="String"/>
          <Parameter default="[Primary Sector].Members" name="sectorParameter" type="String"/>
-         <Parameter default="2000" name="startYear" type="String"/>
-         <Parameter default="2009" name="endYear" type="String"/>
+         <Parameter default="2006" name="startYear" type="String"/>
+         <Parameter default="2012" name="endYear" type="String"/>
       </Parameters>
       <Query>
 With

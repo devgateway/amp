@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    <input type="file" multiple="true"/>
+    <div role="fileUploadedMsg"></div>
+    <!-- The global progress information -->
+    <div class="span5 fileupload-progress fade">
+        <!-- The global progress bar -->
+        <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+            <div class="bar" style="width:0%;"></div>
+        </div>
+        <!-- The extended global progress information -->
+        <div class="progress-extended"></div>
+    </div>
+    <!-- The loading indicator is shown during file processing -->
+    <div class="fileupload-loading"></div>
+</wicket:panel>
+</html>

@@ -179,7 +179,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			}
 		};
 		activityForm.setOutputMarkupId(true);
-        activityForm.setMultiPart(true);
 
 		String actNameStr = am.getObject().getName();
         if (actNameStr != null && !actNameStr.trim().isEmpty()) {
@@ -620,6 +619,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						if (!component.isValid()) {
 							target.appendJavaScript("$('#"+ component.getMarkupId() +"').parents().show();");
 							target.appendJavaScript("$(window).scrollTop($('#"+component.getParent().getMarkupId()+"').position().top)");
+                            logger.error("Component is invalid, adding to target: " + component.getLabel().getObject());
 							target.add(component);
 							
 							//some of the fields that need to show errors are HiddenFieldS. These are cumulative error fields, that show error for groups of other fields
@@ -776,4 +776,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		activityForm.add(list);
 	}
 
+    public Form<AmpActivityVersion> getActivityForm() {
+        return activityForm;
+    }
 }

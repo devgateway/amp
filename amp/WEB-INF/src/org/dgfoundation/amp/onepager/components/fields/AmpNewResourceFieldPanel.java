@@ -4,31 +4,32 @@
  */
 package org.dgfoundation.amp.onepager.components.fields;
 
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpResourcesFormTableFeature;
+import org.dgfoundation.amp.onepager.components.upload.FileUploadPanel;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
-import org.dgfoundation.amp.onepager.models.AmpFileUploadModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011
@@ -47,26 +48,33 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 	
 	static final private String defaultMsg = "*" + TranslatorUtil.getTranslatedText("Please enter title");
 	static final private String urlNotSelected = "*" + TranslatorUtil.getTranslatedText("URL not selected");
-	static final private String filePathNotSelected = "*" + TranslatorUtil.getTranslatedText("File path not selected");
+	static final private String filePathNotSelected = "*" + TranslatorUtil.getTranslatedText("File not submited or upload has not finished");
 	static final private String wrongUrlFormat = "*" + TranslatorUtil.getTranslatedText("Wrong url format. Please enter valid url");
 	boolean webLinkFormatCorrect;
 
-	public AmpNewResourceFieldPanel(String id, IModel model, String fmName, final AmpResourcesFormTableFeature resourcesList, boolean newResourceIsWebLink) throws Exception {
+    public AmpNewResourceFieldPanel(String id, final IModel<AmpActivityVersion> model, String fmName, final AmpResourcesFormTableFeature resourcesList, boolean newResourceIsWebLink) throws Exception {
 		super(id, model, fmName, true);
 		
 		final IModel<TemporaryDocument> td = new Model(new TemporaryDocument());
 		
-		AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle", new PropertyModel<String>(td, "title"), "Title",AmpFMTypes.MODULE,Boolean.TRUE);
+		final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("docTitle", new PropertyModel<String>(td, "title"), "Title",AmpFMTypes.MODULE,Boolean.TRUE);
 		name.setTextContainerDefaultMaxSize();
 		name.setOutputMarkupId(true);
 		AmpTextAreaFieldPanel<String> desc = new AmpTextAreaFieldPanel<String>("docDesc", new PropertyModel<String>(td, "description"), "Description", false, false, false);
 		AmpTextAreaFieldPanel<String> note = new AmpTextAreaFieldPanel<String>("docNote", new PropertyModel<String>(td, "note"), "Note", false, false, false);
 		AmpCategorySelectFieldPanel type = new AmpCategorySelectFieldPanel("docType", CategoryConstants.DOCUMENT_TYPE_KEY, new PropertyModel<AmpCategoryValue>(td, "type"), "Type", true, true);
-		FileUploadField file = new FileUploadField("file", new AmpFileUploadModel(new PropertyModel<FileUpload>(td, "file")));
-		file.setOutputMarkupId(true);
+		//FileUploadField file = new FileUploadField("file", new AmpFileUploadModel(new PropertyModel<FileUpload>(td, "file")));
+		//file.setOutputMarkupId(true);
+
+        String activityId = "new";
+        if (model.getObject().getAmpActivityId() != null)
+            activityId = Long.toString(model.getObject().getAmpActivityId());
+        final Model<FileItem> fileItemModel = new Model<FileItem>();
+        FileUploadPanel fileUpload = new FileUploadPanel("file",activityId, fileItemModel);
+
 		AmpTextFieldPanel<String> webLink = new AmpTextFieldPanel<String>("webLink", new PropertyModel<String>(td, "webLink"), "Web Link", true, false);
 		webLink.setTextContainerDefaultMaxSize();
-		webLink.setVisible(false);
+		webLink.setVisibilityAllowed(false);
 		webLink.setOutputMarkupId(true);
 		
 		
@@ -89,7 +97,8 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
             protected void onSubmit() {
             	boolean addTmp = true;
             	TemporaryDocument tmp = td.getObject();
-            	
+                if (fileItemModel.getObject() != null)
+                    tmp.setFile(new FileUpload(fileItemModel.getObject()));
 //            	if (tmp.getFile() == null && tmp.getWebLink() == null)
 //            		return;
 //            	
@@ -117,47 +126,55 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                     	}
                     	newItemsSet.add(tmp);
                     	td.setObject(new TemporaryDocument());
+                        fileItemModel.setObject(null);
                 	}
+
+
             	}
 
-                AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
-                panel.setVisibilityAllowed(false);
+                //AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
+                //panel.setVisibilityAllowed(false);
             }
         };
         //form.setMaxSize(Bytes.megabytes(1));
         add(form);
 
         if (newResourceIsWebLink){
-        	file.setVisible(false);
-        	webLink.setVisible(true);
+        	fileUpload.setVisible(false);
+        	webLink.setVisibilityAllowed(true);
         }
         
 		form.add(name);
 		form.add(desc);
 		form.add(note);
 		form.add(type);
-		form.add(file);
+		form.add(fileUpload);
+        //form.add(new UploadProgressBar("progressBar", form, file));
 		form.add(resourceLabel);
 		form.add(webLink);
 		
         // create the ajax button used to submit the form
 		AmpButtonField submit = new AmpButtonField("ajaxSubmit", "Add", true){
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form){
-            	target.add(form);
-            	target.add(resourcesList);
-            	target.add(webLinkFeedbackContainer);
-                AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
-                target.add(panel.getParent());
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                TemporaryDocument tmp = td.getObject();
+                if (fileItemModel.getObject() != null)
+                    tmp.setFile(new FileUpload(fileItemModel.getObject()));
+                target.add(name);
+                target.add(resourcesList);
+                target.add(webLinkFeedbackContainer);
+                if (updateVisibility(td, resourceIsURL))
+                    target.appendJavaScript("$('#addNewDocumentH').hide();$('#addNewWebResourceH').hide();");
+//                target.add(form);
+//                AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
+//                target.add(panel.getParent());
             }
         };
         form.add(submit);
         AmpAjaxLinkField cancel = new AmpAjaxLinkField("cancel", "Cancel", "Cancel") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
-                panel.setVisibilityAllowed(false);
-                target.add(panel.getParent());
+                target.appendJavaScript("$('#addNewDocumentH').hide();$('#addNewWebResourceH').hide();");
             }
         };
         form.add(cancel);
@@ -205,7 +222,6 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 			}
 		}
 			
-		
 		if(titleSelected && ((pathSelected && ! newResourceIsWebLink) || (newResourceIsWebLink && urlSelected && urlFormatValid)) ){
 			webLinkFeedbackContainer.setVisible(false);
 		}else{

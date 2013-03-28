@@ -224,7 +224,8 @@ public final class FMUtil {
 				colection = currentTemplate.getFeatures();
 			
 			//for admin user fields will be visible
-			if("yes".compareTo(session.getIsAdmin()) ==0 ) return true;
+			if("yes".equals(session.getIsAdmin()))
+                return true;
 			
 			if(colection != null){
 				Iterator it = colection.iterator();

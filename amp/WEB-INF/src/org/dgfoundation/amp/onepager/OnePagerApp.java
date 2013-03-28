@@ -10,20 +10,23 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.protocol.http.servlet.ResponseIOException;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.core.request.handler.PageProvider;
-import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
 import org.dgfoundation.amp.onepager.translation.TranslationComponentResolver;
 import org.dgfoundation.amp.onepager.util.FMComponentResolver;
 import org.dgfoundation.amp.onepager.util.JspResolver;
-import org.dgfoundation.amp.onepager.web.pages.AmpExceptionPage;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.dgfoundation.amp.permissionmanager.web.pages.PermissionManager;
 import org.springframework.security.AuthenticationManager;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.SocketException;
 
 /**
  * @author mihai
@@ -32,7 +35,7 @@ import org.springframework.security.AuthenticationManager;
 public class OnePagerApp extends AuthenticatedWebApplication {
 
 	private static Logger logger = Logger.getLogger(OnePagerApp.class);
-	
+
 	// To be injected by Spring
     private AuthenticationManager authenticationManager;
 	
@@ -158,8 +161,8 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 				});
 		 */
 
-		 
-		 
+
+
 	 }
 
 
@@ -186,8 +189,33 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 	 public void setAuthenticationManager(AuthenticationManager authenticationManager) {
 		 this.authenticationManager = authenticationManager;
 	 }
-	 
 
-	
+    @Override
+    protected WebResponse newWebResponse(WebRequest webRequest, HttpServletResponse httpServletResponse) {
+        return new ServletWebResponse((ServletWebRequest)webRequest, httpServletResponse){
+            @Override
+            public void flush() {
+                try {
+                    getContainerResponse().flushBuffer();
+                } catch (SocketException e) {
+                    logger.warn("Socket exception encountered, ignoring", e);
+                } catch (IOException e) {
+                    // Socket Exception can be wrapped by a container specific exception.
+                    // So we check the cause of the container exception
+                    Throwable rootCause = null != e.getCause() ? e.getCause() : e;
+                    if (rootCause instanceof SocketException) {
+                        logger.warn("Socket exception encountered, ignoring.", rootCause);
+                        return;
+                    }
+                    else{
+                        logger.warn("Root Cause not instance of SocketException");
+                    }
+                    throw new ResponseIOException(e);
+                }
+            }
+        };
+    }
+
+
 
 }

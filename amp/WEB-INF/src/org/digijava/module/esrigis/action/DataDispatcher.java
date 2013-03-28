@@ -140,7 +140,7 @@ public class DataDispatcher extends MultiAction {
 				calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
 				SimpleDonor donor = new SimpleDonor(); 
 				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
-				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
+				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
 				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 				ap.getDonors().add(donor);
 			}
@@ -316,7 +316,7 @@ public class DataDispatcher extends MultiAction {
 			calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
 			SimpleDonor donor = new SimpleDonor(); 
 			donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
-			donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
+			donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
 			donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 			ct.getDonors().add(donor);
 		}
@@ -385,7 +385,7 @@ public class DataDispatcher extends MultiAction {
 				Collection fundDetails = ampFunding.getFundingDetails();
 				SimpleDonor donor = new SimpleDonor(); 
 				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
-				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
+				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
 				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 				ap.getDonors().add(donor);
 			}

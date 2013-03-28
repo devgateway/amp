@@ -100,7 +100,12 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			throws java.lang.Exception {
 		
 		AmpReports report = ARUtil.getReferenceToReport();
-
+		if(session==null){
+			session = request.getSession();
+		}
+		if(site==null){
+			site = RequestUtils.getSite(request);
+		}
 	    boolean initFiltersFromDB = false;
 	    //BOZO: no support for reload filters in PDF, but present in XLS and CSV?
 	    
@@ -166,7 +171,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
                 response.setContentType("application/pdf");
 				response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll(" ","_") + ".pdf");	   	       
                 //
-				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());										                                
+				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());		
                 //
                 writer.setPageEvent(new PDFExportAction(session,locale,site,rd,arf,r,response,request));
 				//noteFromSession=AmpReports.getNote(request.getSession());    

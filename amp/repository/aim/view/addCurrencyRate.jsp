@@ -193,7 +193,7 @@
 </script>
 <script language="JavaScript">
 
-function validate() {
+function validateFields() {
 	if (isEmpty(document.aimCurrencyRateFormPop.updateCRateCode.value) == true) {
 		alert('<digi:trn jsFriendly="true" key="aim:currencyCodenotEntered">Currency code not entered</digi:trn>');
 		document.aimCurrencyRateFormPop.updateCRateCode.focus();
@@ -204,7 +204,7 @@ function validate() {
 		document.aimCurrencyRateFormPop.updateCRateCode.focus();
 		return false;
 	}
-
+	
 	if (isEmpty(document.aimCurrencyRateFormPop.updateCRateDate.value) == true) {
 		alert('<digi:trn jsFriendly="true" key="aim:exchangeRateDateNotEntered">Exchange rate date not entered</digi:trn>');
 		document.aimCurrencyRateFormPop.updateCRateDate.focus();
@@ -227,8 +227,8 @@ function validate() {
 }
 
 function saveRate() {
-	var valid = validate();
-
+	var valid = validateFields();
+	
 	var callbackImpl	= {
 		success: function () {
 			myclose();
@@ -241,7 +241,7 @@ function saveRate() {
 	
 	if (valid == true) {
 		var postString		= generateFields(2);
-
+		
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/saveCurrencyRate.do" />
 		var url = "<%=addExchangeRate %>";
 		YAHOOAmp.util.Connect.asyncRequest("POST", url, callbackImpl, postString);

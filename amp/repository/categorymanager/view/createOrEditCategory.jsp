@@ -253,7 +253,7 @@
 					<digi:trn>Should</digi:trn> <strong><digi:trn>multiselect</digi:trn></strong> <digi:trn>be allowed for this category</digi:trn>
 					<br />
 					<html:checkbox property="isOrdered" />
-					<digi:trn">Should the values be presented in</digi:trn> <strong><digi:trn>alphabetical order</digi:trn></strong> 
+					<digi:trn>Should the values be presented in</digi:trn> <strong><digi:trn>alphabetical order</digi:trn></strong> 
 				</td>
 				</tr>
 				<tr>

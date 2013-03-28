@@ -1450,7 +1450,10 @@ public class ExportActivityToWord extends Action {
 	//                allComponents.addAll(f.getFundingDetails());
 	//            }
 	//        }
-	        String currencyCode = myForm.getFunding().getProProjCost().getCurrencyCode();
+	        String currencyCode = null;
+	        if(myForm.getFunding().getProProjCost()!=null){
+	        	currencyCode = myForm.getFunding().getProProjCost().getCurrencyCode();
+	        }
 	        if(currencyCode == null) {
 	            currencyCode = Constants.DEFAULT_CURRENCY;
 	        }

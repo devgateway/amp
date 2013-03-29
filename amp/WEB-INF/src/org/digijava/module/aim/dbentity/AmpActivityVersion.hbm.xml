@@ -137,8 +137,9 @@
 		
 		<many-to-one name="ampActivityGroup" column="amp_activity_group_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityGroup" cascade="none" />
-		<many-to-one name="ampActivityGroupCached" column="amp_activity_group_id"
-			class="org.digijava.module.aim.dbentity.AmpActivityGroupCached" cascade="none" insert="false" update="false"/>
+			
+	
+	
 		<many-to-one name="ampActivityPreviousVersion" column="amp_activity_previous_version_id"
 			class="org.digijava.module.aim.dbentity.AmpActivityVersion" cascade="none" />
 		<property name="modifiedDate" column="modified_date" type="java.util.Date" />

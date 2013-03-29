@@ -422,24 +422,7 @@ public class EditOrganisation extends DispatchAction {
               return mapping.findForward("forward");
           }
 
-          for (Iterator<AmpAhsurvey> it = org.getSurvey().iterator(); it.hasNext();) {
-              AmpAhsurvey ahsurvey = it.next();
-              org.getSurvey().remove(ahsurvey);
-              for (Iterator<AmpAhsurveyResponse> jt = ahsurvey.getResponses().iterator(); jt.hasNext();) {
-                  AmpAhsurveyResponse ahsurveyResponse = (AmpAhsurveyResponse) jt.next();
-                  ParisUtil.deleteAhResponse(ahsurveyResponse.getAmpReponseId());
-              }
-              ParisUtil.deleteAhSurvey(ahsurvey.getAmpAHSurveyId());
-          }
-          
-//          if(org.getOrganizationContacts() != null){
-//        	  for (AmpOrganisationContact orgCont : org.getOrganizationContacts()) {
-//				ContactInfoUtil.deleteOrgContact(orgCont);
-//			}
-//          }
 
-
-          //org.setSurvey(null);
           try {          	            	
               DbUtil.deleteOrg(org);
           } catch (JDBCException e) {

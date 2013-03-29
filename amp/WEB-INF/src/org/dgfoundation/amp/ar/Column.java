@@ -376,6 +376,14 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 		return names;
 	}
 
+    public Collection getAbsoluteColumnAsList(){
+        List cols=new ArrayList();
+        if (parent!=null && parent instanceof Column)
+            cols.addAll(((Column)parent).getAbsoluteColumnAsList()) ;
+        cols.add(this);
+        return cols;
+    }
+
 	
 	/**
 	 * @param contentCategory The contentCategory to set.

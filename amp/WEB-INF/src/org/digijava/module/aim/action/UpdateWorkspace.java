@@ -112,7 +112,7 @@ public class UpdateWorkspace extends Action {
 			newTeam.setHideDraftActivities(uwForm.getHideDraftActivities());
                 newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
             
-            if(!uwForm.getUseFilter()){
+            if(uwForm.getUseFilter()==null || !uwForm.getUseFilter()){
 				if (uwForm.getOrganizations() != null) {
 					TreeSet s = new TreeSet();
 					s.addAll(uwForm.getOrganizations());

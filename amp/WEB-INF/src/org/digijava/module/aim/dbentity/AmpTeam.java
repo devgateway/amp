@@ -80,7 +80,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 
 		/* The prepare function needs to have the filter (af) already populated */
 		try {
-			FilterUtil.prepare(request, af, false);
+			FilterUtil.prepare(request, af, false,new Long(ArConstants.DONOR_TYPE));
 		} catch (Exception e) {
 			logger.error("Error while preparing filter:", e);
 		}

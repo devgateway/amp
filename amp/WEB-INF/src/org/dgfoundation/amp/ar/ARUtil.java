@@ -243,7 +243,7 @@ public final class ARUtil {
 		if ( initFilter!=null && "true".equals(initFilter) ) {
 			FilterUtil.populateFilter(r, af);
 			/* The prepare function needs to have the filter (af) already populated */
-			FilterUtil.prepare(request, af, true);
+			FilterUtil.prepare(request, af, true,r.getType());
 			httpSession.setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, af);
 		}
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, af);

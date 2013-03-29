@@ -45,7 +45,7 @@ public class FilterUtil {
 	 * @param storeIntoSession
 	 * @throws Exception
 	 */
-	public static void prepare(HttpServletRequest request, AmpARFilter arf, boolean storeIntoSession) throws Exception {
+	public static void prepare(HttpServletRequest request, AmpARFilter arf, boolean storeIntoSession,Long type) throws Exception {
 		HttpSession httpSession = request.getSession();
 
 		request.setAttribute("apply", "apply");
@@ -55,40 +55,46 @@ public class FilterUtil {
 
 		// for each sector we have also to add the subsectors
 
-		if (arf.getSelectedSectors() != null && arf.getSelectedSectors().size() > 0) {
+		if (arf.getSelectedSectors() != null && arf.getSelectedSectors().size() > 0 && !(type==ArConstants.PLEDGES_TYPE)) {
 
 			arf.setSectors(SectorUtil.getSectorDescendents( arf.getSelectedSectors() ));
 			
 			arf.setSectorsAndAncestors( new HashSet<AmpSector>() );
 			arf.getSectorsAndAncestors().addAll( arf.getSectors() );
 			arf.getSectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors( arf.getSelectedSectors() ) );
-		} else {
+		} else if(type==ArConstants.PLEDGES_TYPE && arf.getSelectedSectors() !=null) {
+			arf.setSectors(SectorUtil.getSectorDescendents( arf.getSelectedSectors() ));
+		}else {
 			arf.setSectors(null);
 			arf.setSectorsAndAncestors(null);
 		}
 
-		if (arf.getSelectedSecondarySectors() != null && arf.getSelectedSecondarySectors().size() > 0) {
+		if (arf.getSelectedSecondarySectors() != null && arf.getSelectedSecondarySectors().size() > 0 && !(type==ArConstants.PLEDGES_TYPE)) {
 			arf.setSecondarySectors(SectorUtil.getSectorDescendents( arf.getSelectedSecondarySectors() ));
 			
 			arf.setSecondarySectorsAndAncestors( new HashSet<AmpSector>() );
 			arf.getSecondarySectorsAndAncestors().addAll( arf.getSecondarySectors() );
 			arf.getSecondarySectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(arf.getSelectedSecondarySectors()) );
+		}else if(type==ArConstants.PLEDGES_TYPE && arf.getSelectedSecondarySectors()!=null) {
+			arf.setSecondarySectors(SectorUtil.getSectorDescendents( arf.getSelectedSecondarySectors() ));
 		} else {
 			arf.setSecondarySectors(null);
 			arf.setSecondarySectorsAndAncestors(null);
 		}
-        if (arf.getSelectedTertiarySectors() != null && arf.getSelectedTertiarySectors().size() > 0) {
+        if (arf.getSelectedTertiarySectors() != null && arf.getSelectedTertiarySectors().size() > 0 && !(type==ArConstants.PLEDGES_TYPE)) {
 			arf.setTertiarySectors(SectorUtil.getSectorDescendents( arf.getSelectedTertiarySectors() ));
 
 			arf.setTertiarySectorsAndAncestors( new HashSet<AmpSector>() );
 			arf.getTertiarySectorsAndAncestors().addAll( arf.getTertiarySectors() );
 			arf.getTertiarySectorsAndAncestors().addAll( SectorUtil.getAmpParentSectors(arf.getSelectedTertiarySectors()) );
+        }else if(type==ArConstants.PLEDGES_TYPE && arf.getSelectedTertiarySectors() != null) {
+        	arf.setTertiarySectors(SectorUtil.getSectorDescendents( arf.getSelectedTertiarySectors() ));
 		} else {
 			arf.setTertiarySectors(null);
 			arf.setTertiarySectorsAndAncestors(null);
 		}
         
-    	if (arf.getSelectedTagSectors() != null && arf.getSelectedTagSectors().size() > 0) {
+    	if (arf.getSelectedTagSectors() != null && arf.getSelectedTagSectors().size() > 0 && !(type==ArConstants.PLEDGES_TYPE)) {
 			arf.setTagSectors(SectorUtil.getSectorDescendents( arf.getSelectedTagSectors() ));
 			arf.setTagSectorsAndAncestors( new HashSet<AmpSector>() );
 			arf.getTagSectorsAndAncestors().addAll( arf.getTagSectors() );

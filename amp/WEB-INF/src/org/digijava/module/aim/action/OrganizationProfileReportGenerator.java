@@ -226,9 +226,11 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 									}
 
 									StringBuilder values = new StringBuilder();
-									for (String val : helper.getValues().get(i)) {
-										values.append(val);
-										values.append('\n');
+									if(helper.getValues().get(i)!=null && helper.getValues().get(i).size()>0){
+										for (String val : helper.getValues().get(i)) {
+											values.append(val);
+											values.append('\n');
+										}
 									}
 									HSSFCell cell = row.createCell(cellIndex++);
 									cell.setCellStyle(cs);

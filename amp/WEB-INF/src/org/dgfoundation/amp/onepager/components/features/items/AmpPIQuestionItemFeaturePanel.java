@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -109,9 +110,22 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 				
 				IModel<AmpAhsurveyResponse> responseModel = PersistentObjectModel.getModel(response);
 				
-				Label indName = new TrnLabel("qtext", new PropertyModel<String>(item.getModelObject(), "questionText"));
-				if(item.getModelObject().getParentQuestion()!=null) 
-					indName.add(new AttributeModifier("style", "padding-left:5em;font-style:italic"));
+
+				
+				
+				Label indName = new TrnLabel("qtext", new Model<String>() {
+					PropertyModel<String> pm=new PropertyModel<String>(item.getModelObject(), "questionText");					
+					@Override
+					public String getObject() {
+						return (item.getModelObject().getParentQuestion()!=null?"- ":"")+pm.getObject(); 		
+					}					
+				});
+				
+				
+				if(item.getModelObject().getParentQuestion()!=null) { 				
+					indName.add(new AttributeModifier("style", "padding-left:4em;font-style:italic"));					
+				}
+								
 				item.add(indName);
 		
 

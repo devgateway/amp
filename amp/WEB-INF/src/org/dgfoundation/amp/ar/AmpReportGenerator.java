@@ -840,8 +840,9 @@ public class AmpReportGenerator extends ReportGenerator {
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
 		report.removeChildrenWithoutActivities(); //postProcess might have created some more empty children
-		deleteMetadata(report.getAllCells(new ArrayList<Cell>()));
-		deleteMetadata(rawColumns.getAllCells(new ArrayList<Cell>()));
+		List<Cell> listOfCells = new ArrayList<Cell>();
+		report.getAllCells(listOfCells);
+		rawColumns.getAllCells(listOfCells);
 		
 		rawColumnsByName.clear();
 		rawColumnsByName = null;
@@ -863,6 +864,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		// perform postprocessing - cell grouping and other tasks		
 		report.postProcess();
 		report.removeChildrenWithoutActivities(); //postProcess might have left some more empty children
+		deleteMetadata(listOfCells);
 	}
 
 	/**

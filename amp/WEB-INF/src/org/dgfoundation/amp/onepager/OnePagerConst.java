@@ -39,9 +39,9 @@ public final class OnePagerConst {
 
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_DELETED_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};
-	
-	
-	/**
+
+
+    /**
 	 * {@linkplain http://community.jboss.org/wiki/OpenSessionInView}
 	 * manual session-per-conversation model
 	 * We do not use Wicket MetaDatKeyS because we want to store this in the big {@link HttpSession} 
@@ -49,9 +49,6 @@ public final class OnePagerConst {
 	 * @see AmpSessionListener
 	 */
 	public static final String ONE_PAGER_HIBERNATE_SESSION_KEY =  "onePagerHibernateSessionKey";
-
-	
-
 
 	/**
 	 * NOTICE: please load this as a JS resource, DO NOT PUT JS scripts in java unless they only invoke a function

@@ -4,7 +4,6 @@ dojo.require("dijit.layout.ContentPane");
 dojo.require("esri.map");
 dojo.require("dojox.grid.DataGrid");
 dojo.require("dojo.data.ItemFileReadStore");
-dojo.require("esri.toolbars.navigation");
 dojo.require("dijit.form.Button");
 dojo.require("dijit.Toolbar");
 dojo.require("esri.tasks.find");
@@ -20,7 +19,7 @@ dojo.require("dojo.io.script");
 dojo.require("esri.dijit.Print");
 
 /*----variables---------*/
-var map, navToolbar, geometryService, findTask, findParams;
+var map,geometryService, findTask, findParams;
 var totallocations = 0;
 var features = new Array();
 var structures = new Array();
@@ -250,10 +249,6 @@ function createMapAddLayers(myService1, myService2) {
 	*/
 	});
 	
-	navToolbar = new esri.toolbars.Navigation(map);
-	dojo.connect(navToolbar, "onExtentHistoryChange",
-			extentHistoryChangeHandler);
-
 	dojo.connect(map, "onClick", doBuffer);
 	dojo.connect(map, "onMouseMove", selectionFunction);
 
@@ -312,10 +307,6 @@ function togglenational() {
 	}
 }
 
-function extentHistoryChangeHandler() {
-	dijit.byId("zoomprev").disabled = navToolbar.isFirstExtent();
-	dijit.byId("zoomnext").disabled = navToolbar.isLastExtent();
-}
 
 /**
  * show map on load
@@ -409,8 +400,9 @@ function findbydistance(evt) {
 			distParams.geometry1 = evt.mapPoint;
 			distParams.geometry2 = dojo.clone(structurespoint[int].geometry);
 
+            delete structurespoint[int].geometry.attributes;
 			//speed up request data removing not needed elements,Sebas
-			distParams.geometry2.attributes={};
+			distParams.geometry2.attributes={};			
 			distParams.geodesic = true;
 
 			geometryService.distance(distParams, function(distance) {
@@ -447,7 +439,7 @@ function showStInfoWindow() {
 		map.infoWindow.hide();
 	}
 	map.infoWindow.setTitle("Structures");
-	for ( var int = 0; int < foundstr.length; int += 2) {
+	for ( var int = 0; int < foundstr.length; int++) {
 		content = content
 				+ "<tr><td style='border-right: 1px solid gray;border-bottom: 1px solid gray;padding: 3px;'>"
 				+ foundstr[int].attributes["Structure Name"] + "</a></td>";
@@ -827,25 +819,25 @@ function drawpoints() {
 				new esri.symbol.SimpleLineSymbol(
 						esri.symbol.SimpleLineSymbol.STYLE_SOLID,
 						new dojo.Color([ 0, 0, 0, 1 ]), 1), new dojo.Color([
-						255, 215, 0, 1 ]));
+						9, 75, 5, 1 ]));
 		pointSymbolBank["less30"] = new esri.symbol.SimpleMarkerSymbol(
 				esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 30,
 				new esri.symbol.SimpleLineSymbol(
 						esri.symbol.SimpleLineSymbol.STYLE_NULL,
 						new dojo.Color([ 0, 0, 0, 0 ]), 1), new dojo.Color([
-						100, 149, 237, .85 ]));
+						74, 9, 33, .85 ]));
 		pointSymbolBank["less50"] = new esri.symbol.SimpleMarkerSymbol(
 				esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 30,
 				new esri.symbol.SimpleLineSymbol(
 						esri.symbol.SimpleLineSymbol.STYLE_NULL,
 						new dojo.Color([ 0, 0, 0, 0 ]), 1), new dojo.Color([
-						65, 105, 225, .85 ]));
+						8, 2, 63, .90 ]));
 		pointSymbolBank["over50"] = new esri.symbol.SimpleMarkerSymbol(
 				esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 45,
 				new esri.symbol.SimpleLineSymbol(
 						esri.symbol.SimpleLineSymbol.STYLE_NULL,
-						new dojo.Color([ 0, 0, 0 ]), 0), new dojo.Color([ 255,
-						69, 0, 0.65 ]));
+						new dojo.Color([ 0, 0, 0 ]), 0), new dojo.Color([ 45,
+						45, 40, 0.65 ]));
 		var symbolBank = pointSymbolBank;
 		
 		if (map.getLayer('activitiesMap')){

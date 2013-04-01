@@ -79,7 +79,8 @@ public class DynamicLocationManager extends MultiAction {
 				errors.add("title", new ActionMessage("error.aim.dynRegionManager.implLocationCategMissing" ) );
 			}
 			
-			rootLocations						= DynLocationManagerUtil.getHighestLayerLocations(implLocClass, myForm, errors);		
+			rootLocations						= DynLocationManagerUtil.getHighestLayerLocations(implLocClass, myForm, errors);
+//			myForm.setFirstLevelLocations(rootLocations);
 			myForm.setFirstLevelLocations(
 					this.correctStructure(rootLocations, implLocClass.getPossibleValues(), 0, myForm.getHideEmptyCountries() )
 			);

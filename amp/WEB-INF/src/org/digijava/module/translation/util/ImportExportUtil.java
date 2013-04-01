@@ -32,7 +32,9 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.CachedTranslatorWorker;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.translator.util.TrnAccesTimeSaver;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.exception.AimException;
@@ -44,6 +46,7 @@ import org.digijava.module.translation.importexport.TranslationSearcher;
 import org.digijava.module.translation.jaxb.Language;
 import org.digijava.module.translation.jaxb.Translations;
 import org.digijava.module.translation.jaxb.Trn;
+import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -83,9 +86,21 @@ public class ImportExportUtil {
 		List<Trn> groups = translations.getTrn();
 		Session session = null;
 		Transaction tx = null;
+		TranslatorWorker worker = TranslatorWorker.getInstance("");
+		if (worker instanceof CachedTranslatorWorker)
+		{
+			CachedTranslatorWorker ctw = (CachedTranslatorWorker) worker;
+			ctw.cleanMessageCache();			
+		}
+		worker.cleanTimeStampQueue();
+		TrnAccesTimeSaver.SKIP_ALL_UPDATES = true;
+		TranslatorWorker.FREEZE_TIMESTAMP_UPDATING = true;
 		if (groups!=null && groups.size() > 0){
 			try {
-				session = PersistenceManager.getRequestDBSession();
+				session = PersistenceManager.openNewSession();
+				session.setFlushMode(FlushMode.MANUAL);
+				tx = session.beginTransaction();
+				
 				//set session in parameter
 				option.setDbSession(session);
 				//set list of affected messages 
@@ -98,21 +113,19 @@ public class ImportExportUtil {
 				//tx.commit();
 				
 				//update translation cache after commit is success.
-				refreshWorker(option);
-			} catch (HibernateException e) {
-				logger.error(e);
-				if (tx!=null){
-					try {
-						tx.rollback();
-					} catch (HibernateException e1) {
-						logger.error(e1);
-						throw new DgException("Cannot rollback translation import changes!",e1);
-					}
-				}
-				throw new DgException("Cannot commit translation import changes",e);
-			} catch (WorkerException e) {
-				logger.error(e);
-				throw new DgException("Couldnot refresh cache after successfull import. you will need restart",e);
+				//refreshWorker(option);
+				tx.commit();
+				session.flush();
+				session.close();
+			}
+//			catch (WorkerException e) {
+//				logger.error(e);
+//				throw new DgException("Couldnot refresh cache after successfull import. you will need restart",e);
+//			}
+			finally
+			{
+				TrnAccesTimeSaver.SKIP_ALL_UPDATES = false;
+				TranslatorWorker.FREEZE_TIMESTAMP_UPDATING = false;
 			}
 		}
 	}

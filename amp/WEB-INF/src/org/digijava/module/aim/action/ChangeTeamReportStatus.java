@@ -89,6 +89,11 @@ public class ChangeTeamReportStatus extends Action {
 		}else{ //if("teamDesktopTabList".equals(request.getParameter("returnPage"))){
 			returnPage = "/aim/teamDesktopTabList.do";
 		}
+
+        String tempNumResultsParam = request.getParameter("tempNumResults");
+        if (tempNumResultsParam != null && tempNumResultsParam.length() > 0) {
+        	returnPage += "?tempNumResults=" + tempNumResultsParam;
+        }
 		
 		url += returnPage;
 		response.sendRedirect(url);

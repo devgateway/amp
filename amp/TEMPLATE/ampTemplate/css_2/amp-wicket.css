@@ -408,4 +408,5 @@ div.tabpanel div.tab-row a:hover {
     position: absolute;
     font-size: small;
 }
+.wicketHidden{display: none;}
 /* -- ONE PAGER END -- */

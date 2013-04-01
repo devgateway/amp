@@ -859,6 +859,10 @@ public class AmpReportGenerator extends ReportGenerator {
 			for(int i = 0; i < 5; i++)
 				report.removeEmptyChildren(); //removeChildrenWithoutActivities might have left empty GroupReportData instances
 		}
+
+		// perform postprocessing - cell grouping and other tasks		
+		report.postProcess();
+		report.removeChildrenWithoutActivities(); //postProcess might have left some more empty children
 	}
 
 	/**

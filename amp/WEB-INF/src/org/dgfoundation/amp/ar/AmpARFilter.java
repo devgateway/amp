@@ -374,6 +374,10 @@ public class AmpARFilter extends PropertyListable {
 	private String dynActivityFinalContractingFilterOperator;
 	private String dynActivityFinalContractingFilterXPeriod;
 	
+
+	private String fromProposedApprovalDate;	// view: v_actual_proposed_date, column name: [Proposed Approval Date], translated in Nepal as [Date of Agreement]
+	private String toProposedApprovalDate;		// view: v_actual_proposed_date, column name: [Proposed Approval Date], translated in Nepal as [Date of Agreement]
+
 	private Integer fromMonth;
 	private Integer yearFrom;
 	private Integer toMonth;
@@ -1231,6 +1235,12 @@ public class AmpARFilter extends PropertyListable {
 		if ( ACTIVITY_FINAL_CONTRACTING_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_FINAL_CONTRACTING_DATE_FILTER = "SELECT ctrd.amp_activity_id from v_contracting_date ctrd WHERE " + ACTIVITY_FINAL_CONTRACTING_DATE_FILTER;
 			queryAppend(ACTIVITY_FINAL_CONTRACTING_DATE_FILTER);
+		}
+		
+		String ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER	 	= this.createDateCriteria(this.toProposedApprovalDate, fromProposedApprovalDate, "apsd.proposed_approval_date");
+		if ( ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER.length() > 0 ) {
+			ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER = "SELECT apsd.amp_activity_id from v_actual_proposed_date apsd WHERE " + ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER;
+			queryAppend(ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER);
 		}
 		
 		/*
@@ -2280,6 +2290,22 @@ public class AmpARFilter extends PropertyListable {
 		this.fromActivityStartDate = fromActivityStartDate;
 	}
 
+	public String getFromProposedApprovalDate() {
+		return fromProposedApprovalDate;
+	}
+
+	public void setFromProposedApprovalDate(String fromProposedApprovalDate) {
+		this.fromProposedApprovalDate = fromProposedApprovalDate;
+	}
+	
+	public String getToProposedApprovalDate() {
+		return toProposedApprovalDate;
+	}
+
+	public void setToProposedApprovalDate(String toProposedApprovalDate) {
+		this.toProposedApprovalDate = toProposedApprovalDate;
+	}
+
 	/**
 	 * @return the toActivityStartDate
 	 */
@@ -2795,17 +2821,14 @@ public class AmpARFilter extends PropertyListable {
 		this.tagSectorsAndAncestors = tagSectorsAndAncestors;
 	}
 
-	/*
-	 * FIELD NOT USED, but cannot delete it because of serialized instances
-	 */
+	/*THIS IS USED FOR PLEDGES IN ORDER TO SHOW ONLY PLEDGES ASSOCIATED TO THE ACTIVITIES THAT BELONG TO THE WORKSPACE
+	 PLEASE DON'T DELETE IT AGAIN*/
 	public Set getAmpTeamsforpledges() {
 		return ampTeamsforpledges;
 	}
 
-	/**
-	 *
-	 * FIELD NOT USED, but cannot delete it because of serialized instances
-	 **/
+	/*THIS IS USED FOR PLEDGES IN ORDER TO SHOW ONLY PLEDGES ASSOCIATED TO THE ACTIVITIES THAT BELONG TO THE WORKSPACE
+	 PLEASE DON'T DELETE IT AGAIN*/
 	public void setAmpTeamsforpledges(Set ampTeamsforpledges) {
 		this.ampTeamsforpledges = ampTeamsforpledges;
 	}

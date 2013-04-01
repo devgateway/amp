@@ -109,8 +109,8 @@
 	    <fail message="Wrong JVM - ${ant.java.version}. JVM version has to be ${jvm.version}. Please change your JDK accordingly and rebuild."/>
 	  </target>
 	
-	
-  <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+
+<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
     <classpath refid="xjc.classpath" />
   </taskdef>
 
@@ -123,7 +123,8 @@
     </target>
 
   <!--compile Java source files-->
-   <target name="jaxb" description="Compile all Java source files">
+	
+  <target name="jaxb" description="Compile all Java source files">
     <echo message="Compiling the schema..." />
     <mkdir dir="${gen-src}" />   	
     <xjc destdir="${gen-src}" schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb">
@@ -634,7 +635,7 @@
 			<transaction>INSERT INTO amp_category_class (SELECT * from clean.amp_category_class)</transaction>
 			<transaction>INSERT INTO amp_category_value (SELECT * from clean.amp_category_value)</transaction>
 			<transaction>INSERT INTO amp_category_value_location (SELECT * from clean.amp_category_value_location)</transaction>
-			<transaction>INSERT INTO amp_columns (SELECT * from clean.amp_columns)</transaction>
+			<transaction>INSERT INTO amp_columns  (SELECT columnid,columnname, aliasname,celltype, extractorview, tokenexpression, totalexpression, relatedcontentpersisterclass, filterretrievable, showrowcalculations, description from clean.amp_columns)</transaction>
 			<transaction>INSERT INTO amp_columns_order (SELECT * from clean.amp_columns_order)</transaction>
 			<transaction>INSERT INTO amp_columns_filters (SELECT * from clean.amp_columns_filters)</transaction>
 			<transaction>INSERT INTO amp_currency (SELECT * from clean.amp_currency)</transaction>
@@ -662,19 +663,19 @@
 			<transaction>INSERT INTO amp_fields_visibility (SELECT * from clean.amp_fields_visibility)</transaction>
 			<transaction>INSERT INTO dg_site_trans_lang_map (SELECT * from clean.dg_site_trans_lang_map)</transaction>
 			<transaction>INSERT INTO dg_site_user_lang_map (SELECT * from clean.dg_site_user_lang_map)</transaction>
-			<transaction>INSERT INTO amp_team_member_roles (SELECT * from clean.amp_team_member_roles)</transaction>
+			<transaction>INSERT INTO amp_team_member_roles (SELECT amp_team_mem_role_id, role, description, team_head, approver from clean.amp_team_member_roles)</transaction>
 			<transaction>INSERT INTO amp_fields_templates (SELECT * from clean.amp_fields_templates)</transaction>
 			<transaction>INSERT INTO amp_features_templates (SELECT * from clean.amp_features_templates)</transaction>
 			<transaction>INSERT INTO amp_modules_templates (SELECT * from clean.amp_modules_templates)</transaction>
 			<transaction>INSERT INTO amp_sector_scheme (SELECT * from clean.amp_sector_scheme)</transaction>
-			<transaction>INSERT INTO AMP_CLASSIFICATION_CONFIG (SELECT * from clean.AMP_CLASSIFICATION_CONFIG)</transaction>
-			<transaction>INSERT INTO dg_user (SELECT * from clean.dg_user WHERE email='admin@amp.org')</transaction>
+			<transaction>INSERT INTO AMP_CLASSIFICATION_CONFIG (SELECT id, name, description, multisector, is_primary_sector, classification_id from clean.AMP_CLASSIFICATION_CONFIG)</transaction>
+			<transaction>INSERT INTO dg_user (SELECT id, creation_date, creation_ip, last_modified, modifying_ip, first_names, last_name, email, email_verified, email_bouncing, no_alerts_until, password, salt, pass_question, pass_answer, url, active, banned, referral, organization_type_other, address, country_iso, region_id, assigned_org_id, image_id, organization_type_id, registration_language, global_admin, registered_through, pledger from clean.dg_user WHERE email='admin@amp.org')</transaction>
 			<transaction>INSERT INTO dg_group (SELECT * from clean.dg_group WHERE id IN (SELECT ug.group_id FROM  clean.dg_user_group ug,  clean.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>
 			<transaction>INSERT INTO dg_user_group (SELECT * from clean.dg_user_group WHERE user_id IN (SELECT ug.user_id FROM  clean.dg_user_group ug,  clean.dg_user u WHERE u.id=ug.user_id and u.email='admin@amp.org'))</transaction>
 			<transaction>INSERT INTO dg_user_preferences (SELECT * from clean.dg_user_preferences WHERE user_id IN (SELECT up.user_id FROM  clean.dg_user_preferences up,  clean.dg_user u where u.id=up.user_id and u.email='admin@amp.org'))</transaction>
 			<transaction>INSERT INTO dg_user_lang_preferences (SELECT * from clean.dg_user_lang_preferences WHERE user_id IN (SELECT up.user_id FROM clean.dg_user_lang_preferences up, clean.dg_user u where u.id=up.user_id and u.email='admin@amp.org'))</transaction>
 			<transaction>INSERT INTO amp_fiscal_calendar (SELECT * from clean.amp_fiscal_calendar WHERE amp_fiscal_cal_id IN (SELECT settingsValue::text::int FROM  clean.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>
-			<transaction>INSERT INTO amp_application_settings (SELECT * from clean.amp_application_settings WHERE fis_cal_id IN (SELECT id FROM  clean.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>
+			<transaction>INSERT INTO amp_application_settings (SELECT amp_app_settings_id, def_rec_per_page, num_pages_to_display, def_rep_per_page, report_start_year, report_end_year, language, validation, use_default, default_team_ampreport_id, team_id, currency_id, fis_cal_id, member, allow_add_team_res, allow_share_res_globally, allow_publishing_resources FROM clean.amp_application_settings WHERE fis_cal_id IN (SELECT id FROM  clean.amp_global_settings WHERE settingsName='Default Calendar'))</transaction>
 			<transaction>INSERT INTO amp_theme (SELECT * from clean.amp_theme WHERE amp_theme_id IN (SELECT at.amp_theme_id FROM  clean.amp_theme at,  clean.amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarchy=2))</transaction>
 			<transaction>INSERT INTO amp_program_settings (SELECT * from clean.amp_program_settings WHERE default_hierarchy=2)</transaction>
 			<transaction>INSERT INTO amp_field (SELECT * from clean.amp_field)</transaction>
@@ -707,7 +708,7 @@
 			<transaction>CREATE TABLE cached_v_secondary_sector (LIKE clean.cached_v_secondary_sector)</transaction>
 			<transaction>CREATE TABLE cached_v_status (LIKE clean.cached_v_status)</transaction>
 			<transaction>CREATE TABLE cached_v_sub_sector (LIKE clean.cached_v_sub_sector)</transaction>
-			<transaction>INSERT INTO off_line_reports (SELECT * from clean.off_line_reports)</transaction>
+			<transaction>INSERT INTO off_line_reports (SELECT id, name, query, teamid, ispublic, measures, columns, creationdate, type, ownerid FROM clean.off_line_reports)</transaction>
 			
 			<!-- mandatory custom indexes -->
 			<transaction>CREATE INDEX cv_index ON amp_category_value(category_value)</transaction>
@@ -724,6 +725,10 @@
 			<transaction>DROP TABLE amp_activity CASCADE</transaction>
 			<transaction>DROP SCHEMA clean CASCADE </transaction>
 			<transaction>select fn_triggerall(true);</transaction>
+			<transaction>CREATE TYPE table_count AS (table_name text, record_count integer);</transaction>
+			<transaction>CREATE OR REPLACE FUNCTION comma_concat(text, text) RETURNS text AS 'BEGIN return "a"; END; ' LANGUAGE plpgsql VOLATILE; </transaction> <!-- dummy function! run the manual_sql_queries.sql file after that! -->
+			<!-- <transaction src="manual_sql_queries.sql" /> -->
+			<transaction>CREATE AGGREGATE textagg(text) ( SFUNC=comma_concat, STYPE=text, INITCOND='');</transaction>
 		</sql>
 		<echo message="Importing functions and views into ${clean.db}..."/>
 			<sql driver="${jdbc.driverClassName}" password="${jdbc.password}" url="${jdbc.url}/${clean.db}?${jdbc.paramsClean}" userid="${jdbc.user}" print="true" delimiter=";;">

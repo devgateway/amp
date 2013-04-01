@@ -38,7 +38,6 @@ public class AuditLoggerManager extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		AuditLoggerManagerForm vForm = (AuditLoggerManagerForm) form;
-
 		if (request.getParameter("clean") != null) {
 			if (vForm.getUseraction().equalsIgnoreCase("delete")) {
 				AuditLoggerUtil.DeleteLogsByPeriod(vForm.getFrecuency());
@@ -58,7 +57,16 @@ public class AuditLoggerManager extends MultiAction {
 			}
 		}
 		
-		Collection<AmpAuditLogger> logs=AuditLoggerUtil.getLogObjects();
+		if(request.getParameter("withLogin") != null){
+			if(((String)request.getParameter("withLogin")).compareToIgnoreCase("true")==0){
+				vForm.setWithLogin(true);
+			}
+			if(((String)request.getParameter("withLogin")).compareToIgnoreCase("false")==0){
+				vForm.setWithLogin(false);
+			}
+				
+		}
+		Collection<AmpAuditLogger> logs=AuditLoggerUtil.getLogObjects(vForm.isWithLogin());
 		
 		if (request.getParameter("sortBy")!=null){
 			vForm.setSortBy(request.getParameter("sortBy"));

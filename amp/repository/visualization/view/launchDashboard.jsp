@@ -292,14 +292,14 @@ function initializeGlobalVariables(){
 										<div class="grouping_selector_wrapper"
 											style="float: left; width: 40%; padding: 0px; height: 98%;">
 											<div
-												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside">
 													<b class="ins_header"><digi:trn>Grouping Selector</digi:trn>
 													</b>
 												</div>
 											</div>
 											<div
-												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;">
+												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;">
 												<table style="width: 95%; margin-top: 15px;" align="center"
 													class="inside">
 													<tr style="cursor: pointer;">
@@ -336,14 +336,14 @@ function initializeGlobalVariables(){
 										<div class="member_selector_wrapper"
 											style="margin-left: 40%; padding: 0px; height: 98%;" id="generalInfoId">
 											<div
-												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Options Selector</digi:trn>
 													</b>
 												</div>
 											</div>
 											<div
-												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
+												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
 												id="generalDivList">
 												<c:if test="${!visualizationform.filter.fromPublicView}">
 													<html:checkbox property="filter.workspaceOnly"
@@ -414,7 +414,7 @@ function initializeGlobalVariables(){
 										<div class="member_selector_wrapper" id="orgGrpContent"
 											style="margin-left: 40%; padding: 0px; height: 98%; display:none">
 											<div
-												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
 													</b>
@@ -430,7 +430,7 @@ function initializeGlobalVariables(){
 
 											</div>
 											<div
-												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
+												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
 												id="orgGrpDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
 													<li>
@@ -473,7 +473,7 @@ function initializeGlobalVariables(){
 										<div class="member_selector_wrapper" id="regionDivContent"
 											style="margin-left: 40%; padding: 0px; height: 98%; display:none">
 											<div
-												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32; border: 1px solid #CCCCCC; border-bottom: 0px;">
+												style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 												<div class="inside" style="float: left">
 													&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
 													</b>
@@ -489,7 +489,7 @@ function initializeGlobalVariables(){
 												</div>
 											</div>
 											<div
-												style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
+												style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
 												id="regionDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
 													<li>
@@ -528,7 +528,7 @@ function initializeGlobalVariables(){
 										<div class="member_selector_wrapper" id="sectorDivContent"
 												style="margin-left: 40%; padding: 0px; height: 98%; display:none">
 												<div
-													style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32; border: 1px solid #CCCCCC; border-bottom: 0px;">
+													style="background-image: url(/TEMPLATE/ampTemplate/img_2/ins_header.gif); margin: 0px; color: white; padding: 2px; height: 32px; border: 1px solid #CCCCCC; border-bottom: 0px;">
 													<div class="inside" style="float: left">
 														&nbsp; <b class="ins_header"> <digi:trn>Member Selector</digi:trn>
 														</b>
@@ -545,7 +545,7 @@ function initializeGlobalVariables(){
 
 												</div>
 												<div
-													style="height: 180; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180; padding: 20px;"
+													style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
 													id="sectorDivList">
 													<ul style="list-style-type: none;margin-left: 0px;">
 														<c:forEach

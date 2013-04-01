@@ -153,7 +153,7 @@ public class RMMapCalculationUtil {
         return fundingList;
     }
 
-    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isRegional, boolean isPublic) {
+    public static Object[] getFundingsFilteredForRegReport (GisFilterForm filter, Long locId, boolean isRegional, boolean isPublic, boolean filterBySecondarySectors) {
 
         Collection<Long> primarySectors = longArrayToColl(filter.getSelectedSectors());
         Collection<Long> secondarySectors = longArrayToColl(filter.getSelectedSecondarySectors());
@@ -216,15 +216,15 @@ public class RMMapCalculationUtil {
         if (!isRegional) {
         	// activityFundings[0] = List<Object[7]>
             activityFundings = DbUtil.getActivityFundings(sectorCollector,
-	            											   secondarySectors,
-                                                               programsIds,
-                                                               donnorAgencyIds,
-                                                               donorGroupIds,
-                                                               donorTypeIds,
-                                                               includeCildLocations,
-                                                               locations,
-                                                               workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), 
-                                                               isPublic, true, filter.getSelectedSecondarySectors() != null);
+            												secondarySectors,
+            												programsIds,
+            												donnorAgencyIds,
+            												donorGroupIds,
+            												donorTypeIds,
+            												includeCildLocations,
+            												locations,
+            												workspaces, typeOfAssistanceIds, fStartDate.getTime(), fEndDate.getTime(), 
+            												isPublic, true, filterBySecondarySectors);
         } else {
             activityRegionalFundings = DbUtil.getActivityRegionalFundings(sectorCollector,
                                                                                programsIds,

@@ -74,8 +74,11 @@
 <script type="text/javascript">
 	
 	YAHOO.namespace("YAHOO.amptab");
+	var tabView = null;
 	YAHOO.amptab.init = function() {
-		var tabView = new YAHOO.widget.TabView('tabview_container');
+		if (tabView == null) {
+			tabView = new YAHOO.widget.TabView('tabview_container');
+		}
 	};
 
 	YAHOO.amptab.handleClose = function() {
@@ -189,15 +192,17 @@
         }
     }
 
+	var elementIsSet = false;
 	function showFilter() {
 		//alert('showFilter');
 		YAHOO.amptab.init();
-		var element = document.getElementById("filterContainer");
-		//var element = document.getElementById("myFilter");
-		element.style.display = "inline";
-		//alert(element.innerHTML);
-		gisPanel.setBody(element);
-		gisPanel.center();
+		if (!elementIsSet) {
+			elementIsSet = true;
+			var element = document.getElementById("filterContainer");
+			element.style.display = "inline";
+			gisPanel.setBody(element);
+			gisPanel.center();
+		}
 		gisPanel.show();
 	}
 

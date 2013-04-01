@@ -299,6 +299,30 @@ public class DbUtil {
         }
         return item;
     }
+    
+    public static Editor getEditorForUpdate(String siteId, String editorKey,String language) throws EditorException {
+
+        Session session = null;
+        Editor item = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            try {
+            	Query q = session.createQuery("from " + Editor.class.getName() +" e where e.siteId=:siteId and e.editorKey=:editorKey and e.language=:language");
+            		q.setString("siteId", siteId);
+            		q.setString("editorKey", editorKey);
+            		q.setString("language", language);
+            		item = (Editor)q.uniqueResult();
+            }
+            catch (ObjectNotFoundException ex1) {
+                logger.error("DbUtil:getEditor:Unable to get Editor item", ex1);
+            }
+        }
+        catch (Exception ex) {
+            logger.debug("Unable to get editor item from database ", ex);
+            item = null;
+        }
+        return item;
+    }
 
 
     public static Editor getEditor(Site site, int orderIndex) throws EditorException {

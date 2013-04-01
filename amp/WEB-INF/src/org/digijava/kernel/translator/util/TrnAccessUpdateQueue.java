@@ -75,6 +75,11 @@ public class TrnAccessUpdateQueue {
 		return null;*/
 	}
 	
+	public void clear()
+	{
+		this.queue.clear();
+	}
+	
 	/**
 	 * Removes message from save queue.
 	 * This may be needed when normal save routine is executed from user actions. In such case 

@@ -167,12 +167,12 @@ public class DataDispatcher extends MultiAction {
 				calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
 				SimpleDonor donor = new SimpleDonor(); 
 				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
-				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
+				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
 				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 				ap.getDonors().add(donor);
 			}
-			//ap.setCommitments(calculations.getTotalCommitments().toString());
-			//ap.setDisbursements(calculations.getTotActualDisb().toString());
+			ap.setCommitments(calculations.getTotalCommitments().toString());
+			ap.setDisbursements(calculations.getTotActualDisb().toString());
 			//ap.setExpenditures(calculations.getTotPlannedExp().toString());
 			//ap.setSectors(SectorsToJson(aA));
 			//ap.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
@@ -343,7 +343,7 @@ public class DataDispatcher extends MultiAction {
 			calculations.doCalculations(fundDetails, maphelperform.getFilter().getCurrencyCode());
 			SimpleDonor donor = new SimpleDonor(); 
 			donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
-			donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
+			donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
 			donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 			ct.getDonors().add(donor);
 		}
@@ -413,7 +413,7 @@ public class DataDispatcher extends MultiAction {
 				Collection fundDetails = ampFunding.getFundingDetails();
 				SimpleDonor donor = new SimpleDonor(); 
 				donor.setDonorname(ampFunding.getAmpDonorOrgId().getName());
-				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getOrgCode());
+				donor.setDonorCode(ampFunding.getAmpDonorOrgId().getAcronym());
 				donor.setDonorgroup(ampFunding.getAmpDonorOrgId().getOrgGroup());
 				ap.getDonors().add(donor);
 			}
@@ -535,9 +535,11 @@ public class DataDispatcher extends MultiAction {
 					implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
 					if (location.getParentCategoryValue().getValue().equals(implLocation)) {
 						keyName = "Regional";
+						geocode = location.getGeoCode();
 					} else {
 						parent = LocationUtil.getTopAncestor(location, implLocation);
 						keyName = parent.getName();
+						geocode = parent.getGeoCode();
 					}
 				} else {
 					if (implementationLevel.equalsIgnoreCase("Region")){

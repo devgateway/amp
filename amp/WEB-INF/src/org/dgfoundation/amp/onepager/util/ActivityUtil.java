@@ -669,57 +669,60 @@ public class ActivityUtil {
 				tdd.setYearofPublication(temp.getYear());
 				
 				if (temp.getWebLink() == null || temp.getWebLink().length() == 0){
-					tdd.setFileSize(temp.getFile().getSize());
-					
-					final FileUpload file = temp.getFile();
-					/**
-					 * For Document Manager compatibility purposes
-					 */
-					final FormFile formFile = new FormFile() {
-						
-						@Override
-						public void setFileSize(int arg0) {
-						}
-						
-						@Override
-						public void setFileName(String arg0) {
-						}
-						
-						@Override
-						public void setContentType(String arg0) {
-						}
-						
-						@Override
-						public InputStream getInputStream() throws FileNotFoundException,
-						IOException {
-							return file.getInputStream();
-						}
-						
-						@Override
-						public int getFileSize() {
-							return (int) file.getSize();
-						}
-						
-						@Override
-						public String getFileName() {
-							return file.getClientFileName();
-						}
-						
-						@Override
-						public byte[] getFileData() throws FileNotFoundException, IOException {
-							return file.getBytes();
-						}
-						
-						@Override
-						public String getContentType() {
-							return file.getContentType();
-						}
-						
-						@Override
-						public void destroy() {
-						}
-					};
-					tdd.setFormFile(formFile);
+                    if (temp.getFile() != null){
+
+                        tdd.setFileSize(temp.getFile().getSize());
+
+                        final FileUpload file = temp.getFile();
+                        /**
+                         * For Document Manager compatibility purposes
+                         */
+                        final FormFile formFile = new FormFile() {
+
+                            @Override
+                            public void setFileSize(int arg0) {
+                            }
+
+                            @Override
+                            public void setFileName(String arg0) {
+                            }
+
+                            @Override
+                            public void setContentType(String arg0) {
+                            }
+
+                            @Override
+                            public InputStream getInputStream() throws FileNotFoundException,
+                                    IOException {
+                                return file.getInputStream();
+                            }
+
+                            @Override
+                            public int getFileSize() {
+                                return (int) file.getSize();
+                            }
+
+                            @Override
+                            public String getFileName() {
+                                return file.getClientFileName();
+                            }
+
+                            @Override
+                            public byte[] getFileData() throws FileNotFoundException, IOException {
+                                return file.getBytes();
+                            }
+
+                            @Override
+                            public String getContentType() {
+                                return file.getContentType();
+                            }
+
+                            @Override
+                            public void destroy() {
+                            }
+                        };
+                        tdd.setFormFile(formFile);
+                    }
 				}
 				
 				tdd.setWebLink(temp.getWebLink());

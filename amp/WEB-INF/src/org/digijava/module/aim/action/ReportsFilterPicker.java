@@ -12,6 +12,7 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -380,7 +381,7 @@ public class ReportsFilterPicker extends Action {
 
  	 	StopWatch.next("Filters", true, "before sectors");
 // 		private void addSectorElement(ReportsFilterPickerForm filterForm, String featureName, String sectorName, String rootLabel, String filterDiv, String selectId, ServletContext ampContext)
- 	 	addSectorElement(filterForm, "Sector",           AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME,   "Primary Sectors",   "filter_sectors_div",           "selectedSectors");
+ 	 	addSectorElement(filterForm, "Sector", AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME, "Primary Sectors", "filter_sectors_div", "selectedSectors");
  	 	addSectorElement(filterForm, "Secondary Sector", AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, "Secondary Sectors", "filter_secondary_sectors_div", "selectedSecondarySectors");
  	 	addSectorElement(filterForm, "Tertiary Sector",  AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,  "Tertiary Sectors",  "filter_tertiary_sectors_div",  "selectedTertiarySectors");
  	 	addSectorElement(filterForm, "Sector Tag",      AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,  "Tag Sector",              "filter_tag_sectors_div",       "selectedTagSectors");
@@ -437,14 +438,14 @@ public class ReportsFilterPicker extends Action {
  	 	HierarchyListableImplementation rootOrgType = new HierarchyListableImplementation();
  	 	rootOrgType.setLabel("All Donor Types");
  	 	rootOrgType.setUniqueId("0");
- 	 	rootOrgType.setChildren( donorTypes );
+ 	 	rootOrgType.setChildren(donorTypes);
  	 	GroupingElement<HierarchyListableImplementation> donorTypeElement = new GroupingElement<HierarchyListableImplementation>("Donor Types", "filter_donor_types_div", rootOrgType, "selectedDonorTypes");
  	 	filterForm.getDonorElements().add(donorTypeElement);
  	 	
  	 	HierarchyListableImplementation rootOrgGroup = new HierarchyListableImplementation();
  	 	rootOrgGroup.setLabel("All Donor Groups");
  	 	rootOrgGroup.setUniqueId("0");
- 	 	rootOrgGroup.setChildren( donorGroups );
+ 	 	rootOrgGroup.setChildren(donorGroups);
  	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
  	 	filterForm.getDonorElements().add(donorGroupElement);
  	 	
@@ -453,7 +454,7 @@ public class ReportsFilterPicker extends Action {
  	 	HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
  	 	rootDonors.setLabel("All Donors");
  	 	rootDonors.setUniqueId("0");
- 	 	rootDonors.setChildren( donors );
+ 	 	rootDonors.setChildren(donors);
  	 	GroupingElement<HierarchyListableImplementation> donorsElement  = new GroupingElement<HierarchyListableImplementation>("Donor Agencies", "filter_donor_agencies_div", rootDonors, "selectedDonnorAgency");
  	 	filterForm.getDonorElements().add(donorsElement);
  	 	
@@ -476,12 +477,12 @@ public class ReportsFilterPicker extends Action {
  	 	HierarchyListableImplementation rootContractingAgenciesGroup = new HierarchyListableImplementation();
  	 	rootContractingAgenciesGroup.setLabel("All Contracting Agency Groups");
  	 	rootContractingAgenciesGroup.setUniqueId("0");
- 	 	rootContractingAgenciesGroup.setChildren( contractingAgencyGroups );
+ 	 	rootContractingAgenciesGroup.setChildren(contractingAgencyGroups);
  	 	GroupingElement<HierarchyListableImplementation> contractingAgencyGroupElement = new GroupingElement<HierarchyListableImplementation>("Contracting Agency Groups", "filter_contracting_agency_groups_div", rootContractingAgenciesGroup, "selectedContractingAgencyGroups");
  	 	filterForm.getRelatedAgenciesElements().add(contractingAgencyGroupElement);
 
 		
-		filterForm.setFinancingLocationElements( new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
+		filterForm.setFinancingLocationElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
 		StopWatch.next("Filters", true, "Agency stuff");
 		
 		//private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
@@ -518,6 +519,7 @@ public class ReportsFilterPicker extends Action {
 							rootProjCategory, "selectedProjectCategory");
 			filterForm.getFinancingLocationElements().add(projCategoryElement);
 		}
+		addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory");
 		
 		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
@@ -1318,6 +1320,8 @@ public class ReportsFilterPicker extends Action {
 		arf.setDynActivityStartFilterAmount(filterForm.getDynamicActivityStartFilter().getAmount());
 		arf.setDynActivityStartFilterOperator(filterForm.getDynamicActivityStartFilter().getOperator());
 		arf.setDynActivityStartFilterXPeriod(filterForm.getDynamicActivityStartFilter().getxPeriod());
+		arf.setFromProposedApprovalDate(filterForm.getFromProposedApprovalDate());
+		arf.setToProposedApprovalDate(filterForm.getToProposedApprovalDate());
 		
 		arf.setToActivityActualCompletionDate(filterForm.getToActivityActualCompletionDate() );
 		arf.setFromActivityActualCompletionDate(filterForm.getFromActivityActualCompletionDate());
@@ -1507,12 +1511,13 @@ public class ReportsFilterPicker extends Action {
 		
 		arf.setWorkspaceonly(filterForm.getWorkspaceonly()==null?false:filterForm.getWorkspaceonly());
 		
-//		NOT USED
-//		if(arf.isWorkspaceonly()){
-//			arf.setAmpTeamsforpledges(arf.getAmpTeams());
-//		}else{
-//			arf.setAmpTeamsforpledges(null);
-//		}
+		/*THIS IS USED FOR PLEDGES IN ORDER TO SHOW ONLY PLEDGES ASSOCIATED TO THE ACTIVITIES THAT BELONG TO THE WORKSPACE
+		 PLEASE DON'T DELETE IT AGAIN*/
+		if(arf.isWorkspaceonly()){
+			arf.setAmpTeamsforpledges(WorkspaceFilter.getAmpTeamsSet(arf.getTeamMemberId(), arf.getAccessType(), true, true, arf.isPublicView()));
+		}else{
+			arf.setAmpTeamsforpledges(null);
+		}
 		
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency()));
 		arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency()));

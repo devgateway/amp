@@ -39,6 +39,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.User;
 
 import com.lowagie.text.Row;
 /**
@@ -143,6 +144,69 @@ public class AuditLoggerUtil {
 		}
 		return null;
 	}
+	
+	public static void logUserLogin(HttpServletRequest request,User currentUser,String action){
+		Session session = null;
+		Transaction tx = null;
+		HttpSession hsession = request.getSession();
+		String browser=request.getHeader("user-agent");
+		try {
+			session = PersistenceManager.getRequestDBSession();
+
+//beginTransaction();
+			AmpAuditLogger aal = new AmpAuditLogger();
+			long time = System.currentTimeMillis();
+			Timestamp ts = new Timestamp(time);
+			aal.setAuthorName(currentUser.getName());
+			aal.setAuthorEmail(currentUser.getEmail());
+			aal.setLoggedDate(ts);
+			aal.setEditorEmail(currentUser.getEmail());
+			aal.setEditorName(currentUser.getName());
+			aal.setAction(action);
+			aal.setModifyDate(ts);
+			aal.setBrowser(browser);
+			aal.setIp(request.getRemoteAddr());
+			aal.setObjectId("");
+			aal.setObjectType(".|||User Login ");
+			aal.setTeamName("");
+			aal.setObjectName(Constants.LOGIN_ACTION);
+			aal.setDetail("");
+			
+			session.save(aal);
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("Cannot save audit logger :", ex);
+		} 
+	}
+	
+	public static void logSentReminderEmails(Session session,User user){
+		try {
+
+//beginTransaction();
+			AmpAuditLogger aal = new AmpAuditLogger();
+			long time = System.currentTimeMillis();
+			Timestamp ts = new Timestamp(time);
+			aal.setAuthorName(user.getName());
+			aal.setAuthorEmail(user.getEmail());
+			aal.setLoggedDate(ts);
+			aal.setEditorEmail(user.getEmail());
+			aal.setEditorName(user.getName());
+			aal.setAction(Constants.LOGIN_ACTION);
+			aal.setModifyDate(ts);
+			aal.setBrowser("");
+			aal.setIp("");
+			aal.setObjectId("");
+			aal.setObjectType(".|||Sent Email ");
+			aal.setTeamName("");
+			aal.setObjectName("");
+			aal.setDetail(Constants.SENT_REMINDER);
+			
+			session.save(aal);
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			logger.error("Cannot save audit logger :", ex);
+		} 
+	}
 
 	public static void logActivityUpdate(HttpServletRequest request, AmpActivityVersion activity, List<String> details){
 		Session session = null;
@@ -212,7 +276,7 @@ public class AuditLoggerUtil {
 	/**
 	 * @author dan
 	 */
-	public static Collection getLogObjects() {
+	public static Collection getLogObjects(boolean withLogin) {
 		Session session = null;
 		Collection<AmpAuditLogger> col = new ArrayList<AmpAuditLogger>();
 		String qryStr = null;
@@ -220,7 +284,11 @@ public class AuditLoggerUtil {
 		
 		try {
 			session = PersistenceManager.getSession();
-			qryStr = "select f from " + AmpAuditLogger.class.getName() + " f order by loggedDate desc";
+			if(!withLogin){
+				qryStr = "select f from " + AmpAuditLogger.class.getName() + " f where action<>'"+Constants.LOGIN_ACTION+"' order by loggedDate desc";
+			}else{
+				qryStr = "select f from " + AmpAuditLogger.class.getName() + " f order by loggedDate desc";
+			}
 			qry = session.createQuery(qryStr);
 			col = qry.list();
 		} catch (Exception ex) {
@@ -415,7 +483,7 @@ public class AuditLoggerUtil {
 			session = PersistenceManager.getSession();
 			qryStr = "delete from "
 				+ AmpAuditLogger.class.getName()
-				+ " where loggedDate <= :dateParam or loggedDate=null";
+				+ " where action<>'login' and (loggedDate <= :dateParam or loggedDate=null)";
 			
 			qry = session.createQuery(qryStr);
 			qry.setParameter("dateParam",getDateRange(Integer.parseInt(interval)),Hibernate.DATE);

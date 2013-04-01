@@ -17,7 +17,10 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.ecs.storage.Array;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -30,6 +33,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -40,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -128,6 +133,34 @@ public class MainMap extends Action {
 			AmpARFilter reportfilter = ReportContextData.getFromRequest().getFilter();
 			filter.setReportfilterquery(reportfilter.getGeneratedFilterQuery());
 			filter.setCurrencyId(reportfilter.getCurrency() == null ? null : reportfilter.getCurrency().getAmpCurrencyId());
+			if (reportfilter.getRenderStartYear()!=null && reportfilter.getRenderStartYear()!=0){
+				filter.setStartYear(reportfilter.getRenderStartYear().longValue());
+			}else{
+				Integer defaultStart = getDefaultStartYear(request);
+				if (defaultStart!=-1){
+					filter.setStartYear(defaultStart.longValue());
+				}
+			}
+			if (reportfilter.getRenderStartYear()!=null && reportfilter.getRenderStartYear()!=0){
+				filter.setEndYear(reportfilter.getRenderEndYear().longValue());
+			}else{
+				Integer defaultEnd = getDefaultEndYear(request);
+				if (defaultEnd!=-1){
+					filter.setEndYear(defaultEnd.longValue());
+				}
+			}
+				
+			Collection<AmpCategoryValueLocations> locs = reportfilter.getLocationSelected();
+			if (locs!=null && locs.size() > 0){
+				Long[] sellocs= new Long[locs.size()];
+				int i=0;
+				for (Iterator iterator2 = locs.iterator(); iterator2.hasNext();) {
+					AmpCategoryValueLocations loc = (AmpCategoryValueLocations) iterator2.next();
+					sellocs[i]=loc.getId();
+					i++;
+				}
+				filter.setSelLocationIds(sellocs);
+			}
 		} else {
 			filter.setModeexport(false);
 		}
@@ -144,7 +177,50 @@ public class MainMap extends Action {
 
 		return mapping.findForward("forward");
 	}
+	
+	
+	
+	private Integer getDefaultStartYear(HttpServletRequest request) {
+		AmpApplicationSettings tempSettings = getAppSetting(request);
+		Integer rStart = -1;
+		if (tempSettings != null && tempSettings.getReportStartYear() != null && tempSettings.getReportStartYear().intValue() != 0) {
+			rStart = tempSettings.getReportStartYear();
+		} else {
+			String gvalue = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
+			if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
+				rStart = Integer.parseInt(gvalue);
+			}
+		}
 
+		return rStart;
+	}
+
+	private Integer getDefaultEndYear(HttpServletRequest request) {
+		AmpApplicationSettings tempSettings = getAppSetting(request);
+		Integer rEnd = -1;
+		if (tempSettings != null && tempSettings.getReportEndYear() != null && tempSettings.getReportEndYear().intValue() != 0) {
+			rEnd = tempSettings.getReportEndYear();
+		} else {
+			String gvalue = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
+			if (gvalue != null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0) {
+				rEnd = Integer.parseInt(gvalue);
+			}
+		}
+		return rEnd;
+	}
+	
+	
+	public static AmpApplicationSettings getAppSetting(HttpServletRequest request) {
+		HttpSession httpSession = request.getSession();
+		TeamMember teamMember = (TeamMember) httpSession.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+		AmpApplicationSettings tempSettings = null;
+		if (teamMember != null) {
+			tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+		}
+		return tempSettings;
+	}
+
+	
 	/**
 	 * 
 	 * @param filter

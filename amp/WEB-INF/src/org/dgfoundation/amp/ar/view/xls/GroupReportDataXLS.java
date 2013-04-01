@@ -162,6 +162,10 @@ public class GroupReportDataXLS extends XLSExporter {
 				   
 				    // ajout de l'image sur l'ancre ( lig, col )  
 				    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
+				    
+				    //Quick fix for the logo position 
+				    colId.reset();
+				    rowId.reset();
 				    ancreImg.setCol1(colId.shortValue());
 				    ancreImg.setRow1(rowId.shortValue());
 				    HSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 

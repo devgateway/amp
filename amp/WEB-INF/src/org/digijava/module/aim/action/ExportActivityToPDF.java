@@ -235,19 +235,20 @@ public class ExportActivityToPDF extends Action {
 			
 			//objective comments
 			HashMap allComments = new HashMap();
-			if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments", ampContext)){ //Objective Comments shouldn't show up on Publc View
-				ArrayList<AmpComments> colAux	= null;
-	            Collection ampFields = DbUtil.getAmpFields();
-	            
-	            if (ampFields!=null) {
-	            	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
-	                    AmpField field = (AmpField) itAux.next();
-	                    colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
-	                    allComments.put(field.getFieldName(), colAux);
-	                  }
-	            }
-	            
-	            PdfPTable objTable=new PdfPTable(2);
+			ArrayList<AmpComments> colAux	= null;
+            Collection ampFields = DbUtil.getAmpFields();
+            
+            if (ampFields!=null) {
+            	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
+                    AmpField field = (AmpField) itAux.next();
+                    colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
+                    allComments.put(field.getFieldName(), colAux);
+                  }
+            }
+            
+            if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments", ampContext)){ //Objective Comments shouldn't show up on Publc View
+				
+				PdfPTable objTable=new PdfPTable(2);
 	            objTable.getDefaultCell().setBorder(0);
 	            for (Object commentKey : allComments.keySet()) {            	
 					String key=(String)commentKey;
@@ -1416,12 +1417,20 @@ public class ExportActivityToPDF extends Action {
 				String startTagStr = "<"+tag;
 				String endTagStr = "</"+tag+">";
 				
+				String startTagStrClosed = "<"+tag+">";
+				String startTagStrOpened = "<"+tag+" ";
+				
 				int endTagLength = endTagStr.length();
 				
-				
-				while(text.contains(startTagStr)){
+				while(text.contains(startTagStrOpened) || text.contains(startTagStrClosed)){
+					int firstIndexOfStartTag=0;
+					int firstIndexO = text.indexOf(startTagStrOpened);
+					int firstIndexC = text.indexOf(startTagStrClosed);
+					if((firstIndexO > -1 && firstIndexC < 0)||(firstIndexO >-1 && firstIndexO < firstIndexC))
+						firstIndexOfStartTag = firstIndexO;
+					else
+						firstIndexOfStartTag = firstIndexC;
 					
-					int firstIndexOfStartTag = text.indexOf(startTagStr);
 					int beginIndex = text.indexOf(">", firstIndexOfStartTag)+1;
 					int firstIndexOfEndTag = text.indexOf(endTagStr, beginIndex);
 					
@@ -1430,6 +1439,7 @@ public class ExportActivityToPDF extends Action {
 					String text3 = text.length()==firstIndexOfEndTag + endTagLength? "" : text.substring(firstIndexOfEndTag + endTagLength);
 					text = text1 + text2 + text3;
 				}
+				
 			}
 						
 			text = text.replaceAll("\\<.*?>","");

@@ -187,6 +187,20 @@ public class WorkspaceFilter
 	}
 	
 	/**
+	 * This method return a set with the teams needed for pledges related activities column filter.
+	 * @param teamMemberId
+	 * @param accessType
+	 * @param approved
+	 * @param hideDraft
+	 * @param publicView
+	 * @return
+	 */
+	public static Set getAmpTeamsSet(Long teamMemberId, String accessType, boolean approved, boolean hideDraft, boolean publicView)
+	{
+		return new WorkspaceFilter(teamMemberId, accessType, approved, hideDraft, publicView).getAmpTeams();
+	}
+	
+	/**
 	 * entry point for getting "current user's workspace filter"
 	 * @param session
 	 * @return

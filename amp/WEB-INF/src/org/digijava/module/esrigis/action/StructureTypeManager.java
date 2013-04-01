@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
+import org.dgfoundation.amp.harvest.DBUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.exception.AdminException;
@@ -151,6 +152,24 @@ public class StructureTypeManager extends DispatchAction {
 
 		StructureTypeForm structureTypeForm = (StructureTypeForm) form;
 		AmpStructureType structureType;
+		boolean nameExists=false;
+		AmpStructureType structure = DbHelper.getStructureTypesByName(structureTypeForm.getName());
+		if(structureTypeForm.getAmpStructureFormId() != null
+				&& structureTypeForm.getAmpStructureFormId() > 0){
+			if(structure !=null && structure.getTypeId()!=structureTypeForm.getAmpStructureFormId())
+				nameExists=true;
+		}else{
+			if(structure!=null)
+				nameExists=true;
+		}
+		
+ 	 	if(nameExists){
+ 	 		ActionMessages errors= new ActionMessages();
+ 	 		errors.add("structure not unique", new ActionMessage("error.admin.structureNameMustBeUnique",TranslatorWorker.translateText("Structure with the given name already exists") ));
+ 	 		saveErrors(request, errors);
+        return mapping.findForward("addEdit");
+        }
+ 	 	
 		if (structureTypeForm.getAmpStructureFormId() != null
 				&& structureTypeForm.getAmpStructureFormId() > 0) {
 			structureType = DbHelper.getStructureType(structureTypeForm
@@ -158,12 +177,12 @@ public class StructureTypeManager extends DispatchAction {
 		} else {
 			structureType = new AmpStructureType();
 		}
-
 		structureType.setName(structureTypeForm.getName());
-		structureType.setGraphicType(structureTypeForm.getGraphicType());
-		structureType.setIconFile(structureTypeForm.getIconFile().getFileData());
-		structureType.setIconFileContentType(structureTypeForm.getIconFile().getContentType());
-		
+		if(structureTypeForm.getIconFile().getFileData().length!=0){
+			structureType.setGraphicType(structureTypeForm.getGraphicType());
+			structureType.setIconFile(structureTypeForm.getIconFile().getFileData());
+			structureType.setIconFileContentType(structureTypeForm.getIconFile().getContentType());
+		}
 //		contentItem.setContentThumbnails(StructureTypeForm.getContentThumbnails());
 //		if (StructureTypeForm.getContentThumbnailsRemoved() != null
 //				&& StructureTypeForm.getContentThumbnailsRemoved().size() > 0)

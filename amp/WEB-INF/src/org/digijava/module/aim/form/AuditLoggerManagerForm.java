@@ -19,6 +19,7 @@ public class AuditLoggerManagerForm extends ActionForm implements Serializable{
 	private int offset;
 	private String useraction;
 	private String frecuency;
+	private boolean withLogin;
 	
 	public String getUseraction() {
 		return useraction;
@@ -92,5 +93,13 @@ public class AuditLoggerManagerForm extends ActionForm implements Serializable{
 	}
 	public void setSortBy(String sortBy) {
 		this.sortBy = sortBy;
+	}
+
+	public boolean isWithLogin() {
+		return withLogin;
+	}
+
+	public void setWithLogin(boolean withLogin) {
+		this.withLogin = withLogin;
 	}
 }

@@ -284,13 +284,20 @@ function validateForm(){
 	if($("input[name=name]").val() == "" || isnumeric ){
 		strError = "<digi:trn jsFriendly='true'>Name (Non Numeric Characteres)</digi:trn>\n";
 	}
-	if($("input[name=iconFile]").val() == ""){
-		if (strError==""){
-			strError = "<digi:trn jsFriendly='true'>Icon</digi:trn>\n";
-		}else{
-			strError = strError +  "<digi:trn jsFriendly='true'>Icon</digi:trn>\n";
+
+	var srcImg = $('#imgPlaceholder').attr('src');
+	var n = srcImg.indexOf("~id=");
+	var srcLength = srcImg.length;
+	if(srcLength<=n+4){
+		if($("input[name=iconFile]").val() == ""){
+			if (strError==""){
+				strError = "<digi:trn jsFriendly='true'>Icon</digi:trn>\n";
+			}else{
+				strError = strError +  "<digi:trn jsFriendly='true'>Icon</digi:trn>\n";
+			}
 		}
 	}
+	
 	if (strError != ""){
 		alert("<digi:trn jsFriendly='true'>Please complete the following fields:</digi:trn>\n" + strError);
 		return false;

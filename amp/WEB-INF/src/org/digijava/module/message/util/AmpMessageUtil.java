@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.admin.util.hibernate.SeparateSessionManager;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Constants;
@@ -862,12 +863,34 @@ public class AmpMessageUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
+			
+			return loadSentEmails(session);
+			
+		} catch (Exception e) {
+			logger.error("couldn't load Emails" + e.getMessage());	
+		}
+		return emails;
+	}
+	
+	/**
+	 * @return AmpEmails that were sent by Quartz to all AmpEmailReceivers
+	 */
+	public static List<AmpEmail> loadSentEmails(Session session){
+		List<AmpEmail> emails=null;
+		String queryString =null;
+		Query query=null;
+		try {
 			//select a1.email_id,count(a1.receiver_id) as delivered,(select count(receiver_id) from amp_email_receiver a2 where a1.email_id=a2.email_id group by a2.email_id) as totalReceivers
 			//from amp_email_receiver a1 where a1.status="sent" group by a1.email_id having totalReceivers=delivered
-			queryString="select rec1.email from " +AmpEmailReceiver.class.getName()+" rec1 where "
-			+" rec1.status like '"+MessageConstants.SENT_STATUS+"' group by rec1.email having count(rec1.id)=(select count(rec2.id) from "+AmpEmailReceiver.class.getName()
-			+" rec2 where rec2.email=rec1.email group by rec2.email)";			
+//			queryString="select rec1.email from " +AmpEmailReceiver.class.getName()+" rec1 where "
+//			+" rec1.status like '"+MessageConstants.SENT_STATUS 
+//			+ "' group by rec1.email having count(rec1.id)=(select count(rec2.id) from "+AmpEmailReceiver.class.getName()
+//			+" rec2 where rec2.email=rec1.email group by rec2.email)";		
+			queryString	= "SELECT email from " + AmpEmail.class.getName() +  " email WHERE ( email.receiver.size = " + 
+					" (SELECT count(rec) from " +AmpEmailReceiver.class.getName() + " rec " +
+							"WHERE rec.email=email AND rec.status like :sentStatus ))" ;
 			query=session.createQuery(queryString);
+			query.setString("sentStatus", MessageConstants.SENT_STATUS );
 			emails=query.list();
 		} catch (Exception e) {
 			logger.error("couldn't load Emails" + e.getMessage());	
@@ -926,7 +949,16 @@ public class AmpMessageUtil {
 		AmpEmailReceiver email=null;
 		Session session=null;
 		try {
-			session=PersistenceManager.getRequestDBSession();
+			session	= PersistenceManager.getRequestDBSession();
+			email	= getAmpEmailReceiverUsingSession(id, session); 
+		} catch (Exception e) {
+			logger.error("couldn't load Email Receiver" + e.getMessage());	
+		}
+		return email;
+	}
+	public static AmpEmailReceiver getAmpEmailReceiverUsingSession(Long id, Session session){
+		AmpEmailReceiver email=null;
+		try {
 			email=(AmpEmailReceiver)session.load(AmpEmailReceiver.class, id);
 		} catch (Exception e) {
 			logger.error("couldn't load Email Receiver" + e.getMessage());	

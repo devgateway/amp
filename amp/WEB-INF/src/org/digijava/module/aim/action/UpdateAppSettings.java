@@ -146,7 +146,9 @@ public class UpdateAppSettings extends Action {
 				uForm.setReportEndYear(reportEndYear);
 				uForm.setLanguage(ampAppSettings.getLanguage());
 				uForm.setValidation(ampAppSettings.getValidation());
-				uForm.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
+                if (ampAppSettings.getCurrency() != null) {
+				    uForm.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
+                }
                 if(ampAppSettings.getFiscalCalendar()!=null){
 				uForm.setFisCalendarId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
                 }
@@ -463,8 +465,11 @@ public class UpdateAppSettings extends Action {
 		appSettings.setReportEndYear(ampAppSettings.getReportEndYear());
 
 		appSettings.setDefReportsPerPage(ampAppSettings.getDefaultReportsPerPage());
-		appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
-		appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
+        if (ampAppSettings.getCurrency() != null) {
+		    appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
+        }
+
+        appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
 		appSettings.setLanguage(ampAppSettings.getLanguage());
 		appSettings.setValidation(ampAppSettings.getValidation());
 		appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());

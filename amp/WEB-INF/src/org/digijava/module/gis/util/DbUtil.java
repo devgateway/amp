@@ -2137,12 +2137,14 @@ public class DbUtil {
                                                 boolean filterByLocations,
                                                 boolean filterBySecondarySectors) {
     		
+    		Set<Long> allActivityIdsSet = getAllLegalAmpActivityIds();
+    		
         	Map<Long, Map<Long, Float>> sectorPercentageMap = (sectorIds != null && !sectorIds.isEmpty()) ? getActivitySectorPercentages(sectorIds, null) : null;
         	Map<Long, Map<Long, Float>> secondarySectorPercentageMap = (secondarySectorIds != null && !secondarySectorIds.isEmpty()) ? getActivitySecondarySectorPercentages(secondarySectorIds) : null;
         	Map<Long, Map<Long, Float>> programPercentageMap = (programIds != null && !programIds.isEmpty()) ? getActivityProgramPercentages(programIds) : null;
-        	Map<Long, Map<Long, Float>> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations, includeCildLocations) : null;
+        	Map<Long, Map<Long, Float>> locationPercentageMap = (locations != null && !locations.isEmpty()) ? getActivityLocationPercentages(locations, includeCildLocations, allActivityIdsSet) : null;
 
-    		return getActivityFundings(sectorPercentageMap, secondarySectorPercentageMap, programPercentageMap, donorIds, donorGroupIds, donorTypeIds, locationPercentageMap, workspaces, typeOfAssistanceIds, startDate, endDate, isPublic, filterByLocations, filterBySecondarySectors);    		
+    		return getActivityFundings(sectorPercentageMap, secondarySectorPercentageMap, programPercentageMap, donorIds, donorGroupIds, donorTypeIds, locationPercentageMap, workspaces, typeOfAssistanceIds, startDate, endDate, isPublic, allActivityIdsSet, filterByLocations, filterBySecondarySectors);    		
     	}
     
     public static Object[] getActivityFundings (Map<Long, Map<Long, Float>> sectorPercentageMap,
@@ -2157,6 +2159,7 @@ public class DbUtil {
     											java.util.Date startDate,
     											java.util.Date endDate,
     											boolean isPublic,
+    											Set<Long> allActivityIdsSet,
     											boolean filterByLocations,
     											boolean filterBySecondarySectors) 
     {
@@ -2191,7 +2194,7 @@ public class DbUtil {
             workspaceIdsWhereclause = "SELECT amp_activity_id FROM " + view_prefix + "amp_activity WHERE amp_team_id IN " + generateWhereclause(workspaces, new WorkspaceIdGetter());
         }
 
-        Set<Long> allActivityIdsSet = getAllLegalAmpActivityIds();
+        allActivityIdsSet = getAllLegalAmpActivityIds();
 
         if (filterByLocations && (locationPercentageMap != null))
         	allActivityIdsSet.retainAll(locationPercentageMap.keySet());
@@ -2201,6 +2204,8 @@ public class DbUtil {
         	allActivityIdsSet.retainAll(sectorPercentageMap.keySet());
         }
         
+        //BOZO - REMOVE THIS LINE!!!
+        //filterBySecondarySectors = false;
         if (filterBySecondarySectors && secondarySectorPercentageMap != null){
         	allActivityIdsSet.retainAll(secondarySectorPercentageMap.keySet());
         }
@@ -2518,7 +2523,7 @@ public class DbUtil {
     }
 
 
-    private static Map<Long, Map<Long, Float>> getActivityLocationPercentages (Collection<AmpCategoryValueLocations> locations, boolean inculedChildLocations) {
+    private static Map<Long, Map<Long, Float>> getActivityLocationPercentages (Collection<AmpCategoryValueLocations> locations, boolean inculedChildLocations, Collection<Long> allActivityIds) {
 
         if (inculedChildLocations) {
             locations = appenChildLocations(locations);
@@ -2531,12 +2536,13 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getRequestDBSession();
 
-            StringBuilder lastVersionsQry = new StringBuilder("select actGroup.ampActivityLastVersion.ampActivityId from ");
-            lastVersionsQry.append(AmpActivityGroup.class.getName());
-            lastVersionsQry.append(" as actGroup");
-            Query actGrpupQuery = sess.createQuery(lastVersionsQry.toString());
-            List lastVersions = actGrpupQuery.list();
-            String lasVersionsWhereclause = generateWhereclause(lastVersions, new GenericIdGetter());
+//            StringBuilder lastVersionsQry = new StringBuilder("select actGroup.ampActivityLastVersion.ampActivityId from ");
+//            lastVersionsQry.append(AmpActivityGroup.class.getName());
+//            lastVersionsQry.append(" as actGroup");
+//            Query actGrpupQuery = sess.createQuery(lastVersionsQry.toString());
+//            List lastVersions = actGrpupQuery.list();
+//            String lasVersionsWhereclause = generateWhereclause(lastVersions, new GenericIdGetter());
+            String lasVersionsWhereclause = generateWhereclause(allActivityIds, new GenericIdGetter());
 
             StringBuilder queryStr = new StringBuilder("select actLoc.activity.ampActivityId, actLoc.location.regionLocation.id, actLoc.locationPercentage from ");
             queryStr.append(AmpActivityLocation.class.getName());

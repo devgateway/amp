@@ -75,6 +75,8 @@ public class GlobalSettingsConstants {
 	
 	public static final String ACTIVITY_LIFE = "Activity version life time in days";
 	
+	public static final String REMINDER_TIME = "Reminder email period in days";
+	
 	public static final String REPORT_GENERATOR_ONE_PAGER = "Report Generator - One Pager";
 
     public static final String DATE_FILTER_HIDES_PROJECTS = "Filter by date hides projects";

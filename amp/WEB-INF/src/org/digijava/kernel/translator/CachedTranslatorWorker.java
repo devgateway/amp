@@ -269,4 +269,9 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         }
 
     }
+	
+	public void cleanMessageCache()
+	{
+		this.messageCache.clear();
+	}
 }

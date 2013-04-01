@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+    <entry key="Required">Champ est nécessaire!</entry>
 	<entry key="nullValid">Choisir Une Option</entry>
 	<entry key="null">Choisir Une Option</entry>
 	<entry key="ContactEmailValidator">Le format d'adresse e-mail est incorrecte!</entry>

@@ -412,8 +412,12 @@ dojo.declare('esri.ux.layers.ClusterLayer', esri.layers.GraphicsLayer, {
                                 //this may be an isolated issue.  more testing needed.
                                 //it should work fine for IE7, FF, Chrome
                                 var font = new esri.symbol.Font("10pt", esri.symbol.Font.STYLE_NORMAL, esri.symbol.Font.VARIANT_NORMAL, esri.symbol.Font.WEIGHT_NORMAL, "Trebuchet MS");
-                                this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length,font,new dojo.Color("#000000")).setOffset(0, -5)));
-
+                                if (col.length <= 4 && this._type==1) {
+                                	this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length,font,new dojo.Color("#000000")).setOffset(0, -5)));
+                                }else{
+                                	this.add(new esri.Graphic(new esri.geometry.Point(tileCenterPoint.x, tileCenterPoint.y), new esri.symbol.TextSymbol(col.length,font,new dojo.Color("#FFFFFF")).setOffset(0, -5)));
+                                }
+                                
                             } else { //single graphic
                                 dojo.forEach(col, function(point) {
                                 	var currentSymbol;

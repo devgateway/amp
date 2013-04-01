@@ -289,7 +289,7 @@ div.fakefile2 input{
 							<tr>
 								<td>
 									<digi:trn key="aim:translationManagerLangFoundMsg">
-									The following languages where found on this site:
+									The following languages were found on this site:
 									</digi:trn>
 								</td>
 							</tr>
@@ -348,7 +348,7 @@ div.fakefile2 input{
 							<tr>
 								<td colspan="2">
 									<digi:trn key="aim:translationManagerLangFoundImportMsg">
-									The following languages where found in the file you imported:
+									The following languages were found in the file you imported:
 									</digi:trn>
 									<br/>
 								</td>

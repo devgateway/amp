@@ -8,6 +8,9 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
+
 <script type="text/javascript">
 //Global declaration
 	trnPrimary = "";
@@ -41,6 +44,7 @@ function initializeTranslations(){
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-contains-ignorecase.js"/>"></script>
 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/esrigis/filter.js"></script>
 <digi:instance property="datadispatcherform" />
 <digi:form action="/mainmap.do">
 	<table>
@@ -187,7 +191,7 @@ function initializeTranslations(){
 														class="buttonx" value="&gt;&gt;" />
 												</div>
 											</div>
-											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;" id="orgGrpDivList">
+											<div style="height: 180px; width:400px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;" id="orgGrpDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
 													<li>
 														<input type="radio" value="-1" id="org_grp_check_all" name="org_grp_check"
@@ -323,9 +327,11 @@ function initializeTranslations(){
 													</li>
 													<c:forEach items="${datadispatcherform.filter.structureTypes}" var="item">
 														<li>
-															<input type="checkbox" name="structures_check" title="${item.name}"
-																	value="${item.typeId}">
-															<span><c:out value="${item.name}"/></span> 
+															<input type="checkbox" name="structures_check" title="${item.name}" value="${item.typeId}">
+															<c:set var="translation">
+																<digi:trn>${item.name}</digi:trn>
+															</c:set>
+															<span><c:out value="${translation}"/></span> 
 															<br/>
 														</li>
 													</c:forEach>
@@ -355,9 +361,11 @@ function initializeTranslations(){
 													</li>
 													<c:forEach items="${datadispatcherform.filter.financingInstruments}" var="item">
 														<li>
-															<input type="checkbox" name="aidmodality_check" title="${item.value}"
-																	value="${item.id}">
-															<span><c:out value="${item.value}"/></span> 
+															<input type="checkbox" name="aidmodality_check" title="${item.value}" value="${item.id}">
+															<c:set var="translation">
+																<digi:trn>${item.value}</digi:trn>
+															</c:set>
+															<span><c:out value="${translation}"/></span>  
 															<br/>
 														</li>
 													</c:forEach>
@@ -387,9 +395,11 @@ function initializeTranslations(){
 													</li>
 													<c:forEach items="${datadispatcherform.filter.typeofassistences}" var="item">
 														<li>
-															<input type="checkbox" name="typeofassis_check" title="${item.value}"
-																	value="${item.id}">
-															<span><c:out value="${item.value}"/></span> 
+															<input type="checkbox" name="typeofassis_check" title="${item.value}" value="${item.id}">
+															<c:set var="translation">
+																<digi:trn>${item.value}</digi:trn>
+															</c:set>
+															<span><c:out value="${translation}"/></span>  
 															<br/>
 														</li>
 													</c:forEach>
@@ -419,9 +429,11 @@ function initializeTranslations(){
 													</li>
 													<c:forEach items="${datadispatcherform.filter.projectstatus}" var="item">
 														<li>
-															<input type="checkbox" name="projectst_check" title="${item.value}"
-																	value="${item.id}">
-															<span><c:out value="${item.value}"/></span> 
+															<input type="checkbox" name="projectst_check" title="${item.value}" value="${item.id}">
+															<c:set var="translation">
+																<digi:trn>${item.value}</digi:trn>
+															</c:set>
+															<span><c:out value="${translation}"/></span> 
 															<br/>
 														</li>
 													</c:forEach>

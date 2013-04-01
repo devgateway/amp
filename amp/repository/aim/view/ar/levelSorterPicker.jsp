@@ -42,10 +42,20 @@
 					<logic:iterate name="generatedReport" property="trailCells"  id="iter1">
 						<c:if test="${not empty iter1.column.absoluteColumnName}">
 						<html:option value="${iter1.column.absoluteColumnName}">
-							<c:set var="key1" value="aim:popsort:hierarchy:${iter1.column.absoluteColumnName}"/>
-							<digi:trn key="${key1}">
-							${iter1.column.absoluteColumnName}
-						</digi:trn>
+							<logic:iterate name="iter1" property="column.absoluteColumnAsList" id="col" indexId="idxId">
+								<c:choose>
+								  <c:when test="${col.contentCategory eq 'Year'}">
+								    ${col.name}
+								  </c:when>
+								  <c:when test="${col.contentCategory eq 'Quarter'}">
+								    ${col.name}
+								  </c:when>
+								  <c:otherwise>
+								    <digi:trn>${col.name}</digi:trn>
+								  </c:otherwise>
+								</c:choose>
+								&nbsp;
+							</logic:iterate>
 						</html:option>
 						</c:if>
 					</logic:iterate>

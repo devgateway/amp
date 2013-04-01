@@ -75,6 +75,8 @@ import org.hibernate.Transaction;
  */
 public class TranslatorWorker {
 
+	public static boolean FREEZE_TIMESTAMP_UPDATING = false;
+	
     private static Logger logger =
         Logger.getLogger(TranslatorWorker.class);
 
@@ -1105,7 +1107,8 @@ public class TranslatorWorker {
      * @see TrnAccesTimeSaver
      */
 	protected void updateTimeStamp(Message message) {
-		timeStampQueue.put(message);
+		if (!FREEZE_TIMESTAMP_UPDATING)
+			timeStampQueue.put(message);
 	}
     
     /**
@@ -1810,6 +1813,7 @@ public class TranslatorWorker {
 		return newString;
 	}
 	
+	
 	public boolean deleteMessages(Date date) throws WorkerException {
 
 		Session ses = null;
@@ -1830,6 +1834,12 @@ public class TranslatorWorker {
 			throw new WorkerException("Error getting translations", e);
 		}
 		return recreateLuceneIndex;
+	}
+	
+	
+	public void cleanTimeStampQueue()
+	{
+		this.timeStampQueue.clear();
 	}
 
 }

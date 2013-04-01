@@ -13,19 +13,23 @@
 		<td align="center">
 			<table class="inside" width="100%" cellpadding="0" cellspacing="0">
 				<tr><td align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside">
-                    <span wicket:id="newDocLink"/>
+                    <a href="#" class="slider" onclick="$('#addNewDocumentH').slideToggle();">
+                        <wicket:trn>Add New Document</wicket:trn>
+                    </a>
 				</td></tr>
 				<tr><td class="inside" align="left">
-					<div id="addNewDocumentH">
+					<div id="addNewDocumentH" class="invisible-item">
 						<span wicket:id="addNewDocument" />
 					</div>
 				</td></tr>
 				
 				<tr><td align="center" background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside">
-                    <span wicket:id="newWebLink"/>
+                    <a href="#" class="slider" onclick="$('#addNewWebResourceH').slideToggle();">
+                        <wicket:trn>Add New WebLink</wicket:trn>
+                    </a>
 				</td></tr>
 				<tr><td class="inside">
-					<div id="addNewWebResourceH">
+					<div id="addNewWebResourceH" class="invisible-item">
 						<span wicket:id="addNewWebLink" />
 					</div>
 				</td></tr>

@@ -90,6 +90,8 @@ ActionsMenu.prototype.render=function (){
 		hr2.height = '1px';
 		divEl.appendChild(hr2);
 		}
+		
+		// debugger;
 			//create from template link
 		if(createfromtemplateenable){
 			var createFromTemplateLinkEl="<a style=\"cursor:pointer; color: black; font-size: 11px;text-decoration:none;background: none\">";

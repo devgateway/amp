@@ -388,17 +388,13 @@ function selectLocationCaller(currentLocation){
 	var callerButton = $(window.opener.callerGisObject).parent().parent();
 	//Lat
     var element = callerButton.find('input').eq(1);
-    element.focus();
     element.val(esri.geometry.webMercatorToGeographic(currentLocation).y);
-    element.change();
-    element.blur();
-	//Long
+    window.opener.postvaluesy(element);
+    //Long
     element = callerButton.find('input').eq(2);
-    element.focus();
     element.val(esri.geometry.webMercatorToGeographic(currentLocation).x);
-    element.change();
-    element.blur();
-
+    window.opener.postvaluesx(element);
+    
     $(window.opener.callerGisObject).blur();
     $(window.opener.callerGisObject).focus();
 	//Very experimental, storing the point as Json Object
@@ -449,6 +445,11 @@ function selectLocationCallerShape(selectedGraphic){
 		callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2].value = esri.geometry.webMercatorToGeographic(selectedGraphic.geometry).x;
 	}
 	
+	element = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];
+	window.opener.postvaluesy(element);
+    element = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2];
+    window.opener.postvaluesx(element);
+    
 	window.close();
 }
 

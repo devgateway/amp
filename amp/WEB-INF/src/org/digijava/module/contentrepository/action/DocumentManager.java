@@ -147,7 +147,7 @@ public class DocumentManager extends Action {
 		String source	= null;
 		if ( myForm.getOtherUsername() != null && myForm.getOtherTeamId() != null ) {
 			source		= DocumentFilter.SOURCE_PRIVATE_DOCUMENTS;
-			myForm.setType("private");
+			myForm.setType("private"); //BOZO BOZO COPY SOURCE
 		}else if ( myForm.getOtherUsername() == null && myForm.getOtherTeamId() != null ) {
 			source		= DocumentFilter.SOURCE_TEAM_DOCUMENTS;
 			myForm.setType("team");
@@ -309,6 +309,10 @@ public class DocumentManager extends Action {
 				}
 			} else {
 				myForm.setType(httpSession.getAttribute("resourcesTab").toString());
+				if (myForm.getType().equals("shared") && (!myForm.getSharedDocsTabVisible()))
+				{
+					myForm.setType("private");
+				}
 				httpSession.removeAttribute("resourcesTab");
 			}
 						

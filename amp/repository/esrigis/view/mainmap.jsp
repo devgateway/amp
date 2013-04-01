@@ -137,12 +137,7 @@
 			}
      	});
 	});
-	$(function(){
-  		$('#toolsbtn').click(function(){
-     		$('#navToolbar').toggle();
-     	});
-	});
-
+	
 	$(function(){
   		$('#search').click(function(){
      		$('#distancediv').toggle();
@@ -158,7 +153,7 @@
 	
 	$(function(){
   		$('#nationalp').click(function(){
-     		$('#sourcediv').toggle();
+     		$('#natsourcediv').toggle();
      		filldatasourcetablenational();
      	});
 	});
@@ -345,6 +340,8 @@
         return text;
     	}
 	
+
+	
 	function ExportStructures() {
 		<digi:context name="action" property="context/module/moduleinstance/excelexporter.do" />
 		document.datadispatcherform[1].action = "<%= action %>";
@@ -353,11 +350,13 @@
 		document.datadispatcherform[1].submit();
 	}
 	
-	
-	
+	function replacehtml(text){
+		replaced = text.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+		//ret = "<digi:trn>"+replaced+"</digi:trn>";
+		return replaced ;
+	}
 </script>
-
- 	<!-- Filter Styles -->
+	<!-- Filter Styles -->
    	<digi:ref href="/TEMPLATE/ampTemplate/css_2/visualization_yui_tabs.css" type="text/css" rel="stylesheet" />
    	<link rel="stylesheet" href="/TEMPLATE/ampTemplate/css_2/visualization.css" type="text/css" />
    	<link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/tabview/assets/skins/sam/tabview.css">
@@ -396,7 +395,6 @@
       	<table cellspacing="5px" cellpadding="5px" style="height: 100%;">
 				<tbody>
 					<tr>
-						<td id="toolsbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Navigation</digi:trn></td>
 						<td id="filterbtn" class="mapMenuItem" valign="middle" align="left" style="cursor: pointer;"><digi:trn>Filter</digi:trn></td>
 						
 						<field:display name="Use Esri Online Maps" feature="Select Base Map">
@@ -504,7 +502,9 @@
         	<table>
         		<c:forEach  var="structureType" items="${requestScope.structureTypesList}">
 	          	<tr>
-	            	<td>${structureType.name} </td>
+	          		<td>
+	          			<digi:trn>${structureType.name}</digi:trn>
+	          		</td>
 	            	<td align="center">
 	            		<img id="imgPlaceholder" src="/esrigis/mainmap.do~action=displayIcon~id=${structureType.typeId}" style="border:1px solid black;width: 20px;height: 20px;"/>
 	            	</td>
@@ -577,6 +577,34 @@
         	</table>
         	</div>
         </div>
+        
+        <div id="natsourcediv" class="legendContent" style="top:55px;left:30px;width: 75%;display:none;height: 400px;"> 
+        	<div onclick="$('#natsourcediv').hide('slow');" style="color:white;float:right;cursor:pointer;">X</div>
+        	<div class="legendHeader"><digi:trn>Data Source</digi:trn><br/><hr/></div>
+        	<table id="natsourceheader" width="95%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
+        		<tbody>
+					<tr>
+						<td valign="top" style="font-weight: bolder;width: 52%;">
+							<digi:trn>Activity Name</digi:trn>
+						</td>
+						<td valign="top" style="font-weight: bolder;width: 15%;">
+							<digi:trn>Commitment</digi:trn>
+						</td>
+						<td valign="top" style="font-weight: bolder;width: 15%;">
+							<digi:trn>Disbursement</digi:trn>
+						</td>
+						<td valign="top" style="font-weight: bolder;">
+							<digi:trn>Donors</digi:trn>
+						</td>
+					</tr>
+				</tbody>
+        	</table>
+        	<div style="overflow-y: scroll;height: 350px;">
+        	<table id="natsourcecontent" width="97%" cellspacing="0" cellpadding="0" border="0" style="font-size:11px;font-family:Arial,Helvetica,sans-serif;padding-right: 5px;">
+        		
+        	</table>
+        	</div>
+        </div>
         <!-- Search Structures-->
         <div id="distancediv" class="searchContent">
         	<table>
@@ -617,20 +645,7 @@
         	</table>
         </div>
         </feature:display>	
-        <div id="navToolbar" dojoType="dijit.Toolbar" region="leading" style="z-Index:999;display: none;">
-        <div class="toolscontainer" style="margin:5px 0px 0px 0px;">
-        	<div class="gisBoxHeader">
-			  	<h3><digi:trn>Tools panel</digi:trn></h3><a href="#"></a>
-            </div>
-			<div class="mapButton" dojoType="dijit.form.Button" id="zoomin" iconClass="zoominIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_IN);"><digi:trn>Zoom In</digi:trn></div>
-			<div class="mapButton" dojoType="dijit.form.Button" id="zoomout" iconClass="zoomoutIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.ZOOM_OUT);"><digi:trn>Zoom Out</digi:trn></div>
-			<div class="mapButton" dojoType="dijit.form.Button" id="zoomfullext" iconClass="zoomfullextIcon" onClick="navToolbar.zoomToFullExtent();"><digi:trn>Full Extent</digi:trn></div>
-		    <div class="mapButton" dojoType="dijit.form.Button" id="zoomprev" iconClass="zoomprevIcon" onClick="navToolbar.zoomToPrevExtent();"><digi:trn>Prev Extent</digi:trn></div>
-		    <div class="mapButton" dojoType="dijit.form.Button" id="zoomnext" iconClass="zoomnextIcon" onClick="navToolbar.zoomToNextExtent();"><digi:trn>Next Extent</digi:trn></div>
-		    <div class="mapButton" dojoType="dijit.form.Button" id="pan" iconClass="panIcon" onClick="navToolbar.activate(esri.toolbars.Navigation.PAN);"><digi:trn>Pan</digi:trn></div>
-		    <div class="mapButton" dojoType="dijit.form.Button" id="deactivate" iconClass="deactivateIcon" onClick="navToolbar.deactivate()"><digi:trn>Deactivate</digi:trn></div>
-		</div></div>
-    </div>  
+        
 	<div class="tooltip" style="position: absolute; display: block;z-index:100;" id="tooltipHolder"></div>
 	<digi:form action="/datadispatcher.do" method="post">
 		<html:hidden name="datadispatcherform" property="structures"  styleId="st"/>

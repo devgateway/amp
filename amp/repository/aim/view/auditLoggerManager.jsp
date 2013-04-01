@@ -67,6 +67,14 @@ function submitClean(){
 	document.aimAuditLoggerManagerForm.submit();
 }
 
+function toggleLoggs(){
+	log = document.getElementById("login").checked;
+	<digi:context name="cleanurl" property="context/module/moduleinstance/auditLoggerManager.do?withLogin=" />
+	document.aimAuditLoggerManagerForm.action = "<%=cleanurl%>"+log;
+	document.aimAuditLoggerManagerForm.target = "_self";
+	document.aimAuditLoggerManagerForm.submit();
+}
+
 function show_hide(divID){
 	var divArea = document.getElementById(divID)
 	
@@ -141,6 +149,7 @@ function toggleSettings(){
 <jsp:include page="teamPagesHeader.jsp"  />
 <!-- End of Logo -->
 <digi:form action="/auditLoggerManager.do" method="post">
+<input type="hidden" name="withLogin">
 <center>
 <div id="auditloggermanagercontainer">
 <table cellpadding="0" cellspacing="0">
@@ -176,6 +185,16 @@ function toggleSettings(){
 				  	<%}
 				  	}%>
 				  </span>
+				  <c:set var="loginTr">
+							<digi:trn>Show logins</digi:trn>
+						</c:set>
+				  <c:if test="${aimAuditLoggerManagerForm.withLogin==true }">
+						<input type="checkbox" id="login" onchange="toggleLoggs()" checked="checked">${loginTr}
+					</c:if>
+					<c:if test="${aimAuditLoggerManagerForm.withLogin==false }">
+						<input type="checkbox" id="login" onchange="toggleLoggs()">${loginTr}
+					</c:if>
+				  
 				  <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn key="aim:Showcleanupoptions">Show cleanup options</digi:trn> &gt;&gt;</span>
                                 &nbsp;<br>
 								<div style="display:none;background-color:#ffffff;padding:2px" id="currentDisplaySettings" >
@@ -394,7 +413,9 @@ function toggleSettings(){
 											<digi:trn key="admin:add">Add</digi:trn>
 										</logic:equal> <logic:equal value="update" property="action" name="log">
 											<digi:trn key="admin:update">Update</digi:trn>
-										</logic:equal>								  
+										</logic:equal>	<logic:equal value="login" property="action" name="log">
+											<digi:trn key="admin:delete">Login</digi:trn>
+										</logic:equal>							  
 									</td>
 									<td align="center">
 									<c:if test="${not empty log.detail}">
@@ -420,6 +441,7 @@ function toggleSettings(){
 							<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
 							<c:set target="${urlParamsFirst}" property="page" value="1"/>
 							<c:set target="${urlParamsFirst}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
+							<c:set target="${urlParamsFirst}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
 							<c:set var="translation">
 								<digi:trn key="aim:firstpage">First Page</digi:trn>
 							</c:set>
@@ -429,6 +451,7 @@ function toggleSettings(){
 							<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
 							<c:set target="${urlParamsPrevious}" property="page" value="${aimAuditLoggerManagerForm.currentPage -1}"/>
 							<c:set target="${urlParamsPrevious}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
+							<c:set target="${urlParamsPrevious}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
 							<c:set var="translation">
 								<digi:trn key="aim:previouspage">Previous Page</digi:trn>
 							</c:set>|
@@ -444,6 +467,7 @@ function toggleSettings(){
 						<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 						<c:set target="${urlParams1}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 						<c:set target="${urlParams1}" property="page"><%=pages%></c:set>
+						<c:set target="${urlParams1}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
 						<c:if test="${aimAuditLoggerManagerForm.currentPage == pages && aimAuditLoggerManagerForm.pagesSize > 1}">
 							<font color="#FF0000"><%=pages%></font>
 							|	
@@ -462,6 +486,7 @@ function toggleSettings(){
 							<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap" />
 							<c:set target="${urlParamsNext}" property="page" value="${aimAuditLoggerManagerForm.currentPage+1}"/>
 							<c:set target="${urlParamsNext}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
+							<c:set target="${urlParamsNext}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
 							<c:set var="translation"> <digi:trn key="aim:nextpage">Next Page</digi:trn></c:set>
 							<digi:link  href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsNext" title="${translation}">
 								<digi:trn key="aim:next"><span style="font-size: 8pt; font-family: Tahoma;">Next</span></digi:trn>
@@ -471,11 +496,13 @@ function toggleSettings(){
 						<c:if test="${aimAuditLoggerManagerForm.pagesSize > aimAuditLoggerManagerForm.pagesToShow}">
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
+							<c:set target="${urlParamsLast}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
 						</c:if>
 						
 						<c:if test="${aimAuditLoggerManagerForm.pagesSize < aimAuditLoggerManagerForm.pagesToShow}">
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="page" value="${aimAuditLoggerManagerForm.pagesSize}" />
+							<c:set target="${urlParamsLast}" property="withLogin" value="${aimAuditLoggerManagerForm.withLogin}" />
 						</c:if>
 						<c:set var="translation"><digi:trn key="aim:lastpage">Last Page</digi:trn></c:set>
 						<digi:link href="/auditLoggerManager.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">

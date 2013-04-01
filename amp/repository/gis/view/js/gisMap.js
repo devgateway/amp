@@ -1436,37 +1436,62 @@
 		return retVal;
 	}
 	
+	function bool2String(bool)
+	{
+		if (bool)
+			return "true";
+		return "false";
+	}
+	
 	//Region popup report
 	function showRegionReport(regCode, regName, regLocId) {
-		
+		debugger;
 		if (!showDevinfo) {
 			var popup = window.open("about:blank", "regReportWnd", "height=500,width=850,status=yes,resizable=yes,toolbar=no,menubar=no,location=no");
 			var filterForm = $("#gisFilterForm");
+			
+			var allPrimarySectors = false;
+			var allSecondarySectors = false;
+			var allTertiarySectors = false;
+			
+			if ($("input[name='selectedSectors']:checked").length == 0)
+			{
+				allPrimarySectors = true;
+				$("input[name='selectedSectors']").attr("checked", "true");
+			}
+			
+			if ($("input[name='selectedSecondarySectors']:checked").length == 0)
+			{
+				allSecondarySectors = true;
+				$("input[name='selectedSecondarySectors']").attr("checked", "true");
+			}
+			
+			if ($("input[name='selectedTertiarySectors']:checked").length == 0)
+			{
+				allTertiarySectors = true;
+				$("input[name='selectedTertiarySectors']").attr("checked", "true");
+			}
+
+			var selectedSectorsString = "&allPrimarySectors=" + bool2String(allPrimarySectors) + "&allSecondarySectors=" + bool2String(allSecondarySectors) + "&allTertiarySectors=" + bool2String(allTertiarySectors);
 			filterForm.attr("method", "post");
 			if (isPublic) {
-				filterForm.attr("action", "/gis/ShowRegionReport.do?isPublic=true&regLocId=" + regLocId);
+				filterForm.attr("action", "/gis/ShowRegionReport.do?isPublic=true&regLocId=" + regLocId + selectedSectorsString);
 			} else {
-				filterForm.attr("action", "/gis/ShowRegionReport.do?regLocId=" + regLocId);
+				filterForm.attr("action", "/gis/ShowRegionReport.do?regLocId=" + regLocId + selectedSectorsString);
 			}
 			filterForm.attr("target", "regReportWnd");
 			
-			var allSectors = false;
-			if ($("input[name='selectedSectors']:checked").length + 
-					$("input[name='selectedSecondarySectors']:checked").length + 
-					$("input[name='selectedTertiarySectors']:checked").length == 0) {
-				$("input[name='selectedSectors']").attr("checked", "true");
-				$("input[name='selectedSecondarySectors']").attr("checked", "true");
-				$("input[name='selectedTertiarySectors']").attr("checked", "true");
-				allSectors = true;
-			}
-			
 			filterForm[0].submit();
 			
-	    if (allSectors) {
-	    	$("input[name='selectedSectors']").removeAttr("checked");
+			if (allPrimarySectors)
+				$("input[name='selectedSectors']").removeAttr("checked");
+	    
+			if (allSecondarySectors)
 				$("input[name='selectedSecondarySectors']").removeAttr("checked");
+	    
+			if (allTertiarySectors)
 				$("input[name='selectedTertiarySectors']").removeAttr("checked");
-	    }
+			
 			popup.focus();
 		} else {
 		

@@ -84,8 +84,18 @@ public class GetTeamReports extends Action {
             	raForm.setTempNumResults(defReportsPerPage==0?-1:defReportsPerPage);
             	raForm.setKeyword(null);
             }
+            
             if(raForm.getTempNumResults()!=-1){
             	defReportsPerPage = raForm.getTempNumResults();
+            }
+            
+            String tempNumResultsParam = request.getParameter("tempNumResults");
+            if (tempNumResultsParam != null && tempNumResultsParam.length() > 0) {
+            	try {
+            		defReportsPerPage = Integer.parseInt(tempNumResultsParam);
+            	} catch (NumberFormatException e) {
+            		
+            	}
             }
 		}
 

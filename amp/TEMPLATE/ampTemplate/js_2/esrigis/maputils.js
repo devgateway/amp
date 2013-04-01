@@ -204,8 +204,8 @@ function filldatasourcetable(){
 }
 
 function filldatasourcetablenational(){
-	deleteRow("sourcecontent");
-	var table = document.getElementById("sourcecontent");
+	deleteRow("natsourcecontent");
+	var table = document.getElementById("natsourcecontent");
 	var rowCount = table.rows.length;
     var cell;
     var strlength = 100;  // set to the number of characters you want to keep
@@ -229,18 +229,20 @@ function filldatasourcetablenational(){
     	var url = '<a title="'+nationalactivitiesarray[int].activityname+'"href="/aim/viewActivityPreview.do~pageId=2~activityId='+nationalactivitiesarray[int].id+'~isPreview=1" target="_blank" style="text-decoration:none;">'+trimmedPathname+'...</a>'
     	cell.innerHTML= url;
     	cell.setAttribute("width","350px");
+    	
     	cell0 = row.insertCell(1);
-    	cell0.innerHTML= nationalactivitiesarray[int].ampactivityid;
+    	cell0.innerHTML= nationalactivitiesarray[int].commitments;
     	cell0.setAttribute("width","100px");
     	
     	cell1 = row.insertCell(2);
-    	cell1.innerHTML= donors;
-    	cell1.setAttribute("width","120px");
+    	cell1.innerHTML= nationalactivitiesarray[int].disbursements;
+    	cell1.setAttribute("width","100px");
     	
-    	//cell1 = row.insertCell(3);
-    	//cell1.innerHTML= nationalactivitiesarray[int].commitments;
-    	//cell3 = row.insertCell(4);
-    	//cell3.innerHTML= nationalactivitiesarray[int].disbursements;
+    	cell2 = row.insertCell(3);
+    	cell2.innerHTML= donors;
+    	cell2.setAttribute("width","120px");
+    	
+    	
     }
 }
 

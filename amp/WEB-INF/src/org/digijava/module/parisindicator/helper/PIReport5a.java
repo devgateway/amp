@@ -80,6 +80,15 @@ public class PIReport5a extends PIAbstractReport implements PIOperationsFor5 {
 				AmpOrganisation auxOrganisation = auxAmpAhsurvey.getAmpDonorOrgId();
 				AmpOrganisation auxPoDD = auxAmpAhsurvey.getPointOfDeliveryDonor();
 
+				
+
+				// Check survey answers for this
+				// AmpAhsurvey.
+				boolean[] showColumn = PIUtils.getSurveyAnswers(
+						PIConstants.PARIS_INDICATOR_REPORT_5a, auxAmpAhsurvey);
+
+		
+				
 				// Filter by sectors. If sectorsFilter is not null then filter
 				// by the sectors in that list.
 				if (sectorsFilter != null && !PIUtils.containSectors(sectorsFilter, auxActivity.getSectors())) {
@@ -117,6 +126,7 @@ public class PIReport5a extends PIAbstractReport implements PIOperationsFor5 {
 							}
 						}
 
+						
 						// Iterate the collection of funding details.
 						Iterator<AmpFundingDetail> iterFundingDetails = auxFunding.getFundingDetails().iterator();
 						while (iterFundingDetails.hasNext()) {
@@ -136,12 +146,7 @@ public class PIReport5a extends PIAbstractReport implements PIOperationsFor5 {
 								if (auxFundingDetail.getAdjustmentType().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 									auxRow = new PIReport5aRow();
 
-									// Check survey answers for this
-									// AmpAhsurvey.
-									boolean[] showColumn = PIUtils.getSurveyAnswers(
-											PIConstants.PARIS_INDICATOR_REPORT_5a, auxAmpAhsurvey);
-
-									// Calculate exchange rates.
+										// Calculate exchange rates.
 									fromExchangeRate = Util.getExchange(auxFundingDetail.getAmpCurrencyId()
 											.getCurrencyCode(), new java.sql.Date(auxFundingDetail.getTransactionDate()
 											.getTime()));

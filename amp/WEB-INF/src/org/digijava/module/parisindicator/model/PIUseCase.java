@@ -59,11 +59,14 @@ import org.digijava.module.parisindicator.util.PIConstants;
 import org.digijava.module.parisindicator.util.PIUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.LongType;
+import org.hibernate.type.Type;
 
 public class PIUseCase {
 
@@ -366,7 +369,7 @@ public class PIUseCase {
 			session = PersistenceManager.getRequestDBSession();
 			// Set the query to return AmpAhSurvey objects.
 			Criteria criteria = session.createCriteria(AmpAhsurvey.class);
-			criteria.setFetchMode("ampActivityId.funding", FetchMode.JOIN)
+			criteria.setFetchMode("ampActivityId.funding", FetchMode.JOIN)		
 			.setFetchMode("ampActivityId.funding.fundingDetails", FetchMode.JOIN);
 			
 			//criteria.setMaxResults(500);
@@ -377,6 +380,20 @@ public class PIUseCase {
 			DetachedCriteria liveActivityVersions = DetachedCriteria.forClass(AmpActivity.class).setProjection(Projections.property("ampActivityId"));				    
 			criteria.add(Property.forName("ampActivityId").in(liveActivityVersions));
 			
+					
+			//TODO: we need Hibernate 4 to use Criteria Queries for this (needs nested subqueries with multiple params)
+			SQLQuery latestSurveysOnlySQL = session.createSQLQuery("SELECT s.amp_ahsurvey_id AS survey_ids FROM "
+					+ "(select max(survey_date) AS max_date,amp_activity_id from amp_ahsurvey group by amp_activity_id) AS r "
+					+ "INNER JOIN amp_ahsurvey s ON s.amp_activity_id=r.amp_activity_id AND s.survey_date=r.max_date"
+					+ " UNION "
+					+ "select amp_ahsurvey_id AS survey_ids from amp_ahsurvey where survey_date is null and amp_activity_id "
+					+ "not in (select amp_activity_id from amp_ahsurvey where survey_date is not null);");
+			latestSurveysOnlySQL.addScalar("survey_ids",LongType.INSTANCE);
+			
+			List<Long> latestSurveysOnlyList = latestSurveysOnlySQL.list();
+			
+			criteria.add(Property.forName("ampAHSurveyId").in(latestSurveysOnlyList));
+
 			criteria.createAlias("pointOfDeliveryDonor", "podd1");
 			// Explanation: Hibernate will automatically detect prior alias 'podd1' to amp_organisation 
 			// and use it to link with amp_org_group to create alias 'podd2', then using the same logic
@@ -399,6 +416,7 @@ public class PIUseCase {
 			commonData = criteria.list();
 		} catch (Exception e) {
 			logger.error(e);
+			e.printStackTrace();
 		}
 		return commonData;
 	}

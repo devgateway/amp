@@ -164,10 +164,11 @@ public class GroupColumn extends Column {
             Categorizable element = (Categorizable) i.next();
             if(!element.isShow()) continue;
             MetaInfo minfo = MetaInfo.getMetaInfo(element.getMetaData(),category);
-            if(minfo==null || minfo.getValue()==null) return null;
+            if (minfo == null || minfo.getValue() == null) 
+            	return null;
             	//if the year is not renderizable just not add it to minfo
            
-            if (generateTotalCols || element.isRenderizable()) {
+            if (generateTotalCols || true/*element.isRenderizable()*/) { // eliminating "renderizable" elements is now a postprocessing step, this isRenderizable() function has been eliminated, so assuming it is true
         	    metaSet.add(minfo);
         	    
             	String unspecified = "";
@@ -457,14 +458,13 @@ public class GroupColumn extends Column {
      */
     public GroupColumn(String name) {
         super(name);
-        // TODO Auto-generated constructor stub
     }
-
+    
+    
     public GroupColumn() {
         super();
-        // TODO Auto-generated constructor stub
     }
-
+    
     
     /**
      * Adds a Column to this GroupColumn. The Parent property of the added Column will be set to this GroupColumn.
@@ -632,6 +632,15 @@ public class GroupColumn extends Column {
 		return null;
 	}
 
+	protected boolean fundingYearPassesFilter(Column column, AmpARFilter filter)
+	{
+		String yearStr = column.getName();
+		Integer year = AmpReportGenerator.getInteger(yearStr);
+		if (year == null)
+			return true;
+		return filter.passesYearRangeFilter(year);
+	}		
+	
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#getTrailCells()
 	 */
@@ -640,7 +649,10 @@ public class GroupColumn extends Column {
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
-			ret.addAll(element.getTrailCells());
+			boolean passesFilter = this.getName().equals(ArConstants.COLUMN_FUNDING) && fundingYearPassesFilter(element, this.getReportGenerator().getFilter());
+			passesFilter |= (!this.getName().equals(ArConstants.COLUMN_FUNDING));
+			if (passesFilter)
+				ret.addAll(element.getTrailCells());
 		}
 		return ret;
 	}

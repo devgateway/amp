@@ -113,25 +113,25 @@ public class CategAmountColWorker extends ColumnWorker {
 	}
 
 	
-	public boolean isRenderizable(CategAmountCell cac) {
-		boolean renderizable=true;
-		
-	
-		AmpARFilter filter=(AmpARFilter) generator.getFilter();
-		
-		
-		//we now check if the year filtering is used - we do not want items from other years to be shown
-		if((filter.getRenderStartYear()!=null && filter.getRenderStartYear()> 0) || (filter.getRenderEndYear()!=null && filter.getRenderEndYear() > 0  )) {
-			Integer itemYear=(Integer) MetaInfo.getMetaInfo(cac.getMetaData(),ArConstants.YEAR).getValue();
-			
-			if(filter.getRenderStartYear()!=null &&  filter.getRenderStartYear() > 0 &&
-				itemYear.intValue() < filter.getRenderStartYear().intValue()) renderizable=false;
-			
-			if(filter.getRenderEndYear()!=null &&  filter.getRenderEndYear()>0 &&
-				itemYear.intValue() > filter.getRenderEndYear().intValue()) renderizable=false;
-		}
-		return renderizable;
-	}
+//	public boolean isRenderizable(CategAmountCell cac) {
+//		boolean renderizable=true;
+//		
+//	
+//		AmpARFilter filter=(AmpARFilter) generator.getFilter();
+//		
+//		
+//		//we now check if the year filtering is used - we do not want items from other years to be shown
+//		if((filter.getRenderStartYear()!=null && filter.getRenderStartYear()> 0) || (filter.getRenderEndYear()!=null && filter.getRenderEndYear() > 0  )) {
+//			Integer itemYear=(Integer) MetaInfo.getMetaInfo(cac.getMetaData(),ArConstants.YEAR).getValue();
+//			
+//			if(filter.getRenderStartYear()!=null &&  filter.getRenderStartYear() > 0 &&
+//				itemYear.intValue() < filter.getRenderStartYear().intValue()) renderizable=false;
+//			
+//			if(filter.getRenderEndYear()!=null &&  filter.getRenderEndYear()>0 &&
+//				itemYear.intValue() > filter.getRenderEndYear().intValue()) renderizable=false;
+//		}
+//		return renderizable;
+//	}
 	
 	protected boolean isCummulativeShowable(CategAmountCell cac) {
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
@@ -438,7 +438,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		//set the showable flag, based on selected measures - THIS NEEDS TO BE MOVED OUT
 		//TODO: move this to postProcess!!
 		acc.setShow(isShowable(td));
-		acc.setRenderizable(isRenderizable(acc));
+		//acc.setRenderizable(isRenderizable(acc));
 		acc.setCummulativeShow(isCummulativeShowable(acc));
 		
 		

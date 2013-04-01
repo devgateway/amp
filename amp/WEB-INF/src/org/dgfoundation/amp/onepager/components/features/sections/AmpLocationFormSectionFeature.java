@@ -123,8 +123,8 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                 null, locationsTable);
 	}
 
-    private boolean checkDefaultCountry(AmpCategorySelectFieldPanel implementationLevel,
-                                        AmpCategorySelectFieldPanel implementationLocation){
+    private boolean checkInternationalCountry(AmpCategorySelectFieldPanel implementationLevel,
+                                              AmpCategorySelectFieldPanel implementationLocation){
         AmpCategoryValue implLevel = null;
         AmpCategoryValue implLocValue = null;
         if (implementationLevel.getChoiceModel() != null){
@@ -143,6 +143,26 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
         return defaultCountryCheck;
     }
 
+    private boolean checkNationalCountry(AmpCategorySelectFieldPanel implementationLevel,
+                                              AmpCategorySelectFieldPanel implementationLocation){
+        AmpCategoryValue implLevel = null;
+        AmpCategoryValue implLocValue = null;
+        if (implementationLevel.getChoiceModel() != null){
+            Set<AmpCategoryValue> tmp = implementationLevel.getChoiceModel().getObject();
+            if (tmp.size() == 1)
+                implLevel = tmp.iterator().next();
+        }
+        if (implementationLocation.getChoiceModel() != null){
+            Set<AmpCategoryValue> tmp = implementationLocation.getChoiceModel().getObject();
+            if (tmp.size() == 1)
+                implLocValue = tmp.iterator().next();
+        }
+
+        boolean defaultCountryCheck = CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL) &&
+                CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
+        return defaultCountryCheck;
+    }
+
     private void defaultCountryChecks(AmpCategorySelectFieldPanel implementationLevel,
                                       AmpCategorySelectFieldPanel implementationLocation,
                                       Model<Boolean> disablePercentagesForInternational,
@@ -153,11 +173,12 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
          * we need to set the percentage for the default country to 100% and the rest of the
          * percentages to 0%
          */
-        boolean defaultCountryCheck = checkDefaultCountry(implementationLevel, implementationLocation);
-        if (!"true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES)) && defaultCountryCheck)
+        boolean internationalCountryCheck = checkInternationalCountry(implementationLevel, implementationLocation);
+        boolean nationalCountryCheck = checkNationalCountry(implementationLevel, implementationLocation);
+        if (!"true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ALLOW_PERCENTAGES_FOR_ALL_COUNTRIES)) && internationalCountryCheck)
             disablePercentagesForInternational.setObject(true);
 
-        if (defaultCountryCheck){
+        if (nationalCountryCheck){
             AmpCategoryValueLocations defaultCountry = null;
             try {
                 defaultCountry = DynLocationManagerUtil.getLocationByIso(

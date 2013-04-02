@@ -378,9 +378,11 @@ public final class FMUtil {
 	}
 	
 	public static void switchFmVisible(Component c) {
-		FMFormCache.getInstance().clear();
+		FMFormCache.getInstance().disable(true);
 		Boolean isVisible = isFmVisible(c);
+		
 		changeFmVisible(c, !isVisible);
+		FMFormCache.getInstance().enable(true);
 	}
 	
 	public static void changeFmVisible(Component c, boolean visible) {

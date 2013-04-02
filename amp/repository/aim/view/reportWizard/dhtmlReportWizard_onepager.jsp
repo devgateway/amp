@@ -185,6 +185,11 @@
 <c:if test="${!empty aimReportWizardForm.reportId}">
 	<c:set var="disableFundingType">true</c:set>
 </c:if>
+<c:set var="pledges_type_const"><%=ArConstants.PLEDGES_TYPE%></c:set>
+<c:set var="pledgedReport">false</c:set>
+<c:if test="${param.type==null || param.type!=pledges_type_const}">
+	<c:set var="pledgedReport">true</c:set>
+</c:if>
 
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp.reportwizard");
@@ -225,6 +230,7 @@
 				previewTotalCostTrn: "${previewTotalCostTrn}",
 				previewReportTotalsTrn: "${previewReportTotalsTrn}",
 				previewUnselectedMeasureTrn: "${previewUnselectedMeasureTrn}",
+				pledgedReport: "${pledgedReport}",
 				monthNames:["${january}","${february}","${march}","${april}","${may}","${june}","${july}","${august}","${september}","${october}","${november}","${december}"],
 				validationMsgs:[equalSymbolMsg, badSymbolEmptyMsg, badSymbolNumberMsg, badGorupSize, badYearRange]						
 			};

@@ -11,6 +11,7 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 	this.validationMsgs = validationMsgs;
         this.settingsPanelName=settingsPanelName;
         this.filterPanelName=filterPanelName;
+    this.additionalParameter="";
 	
 	this.resetString				= "&doreset=true";
 	if ( !doReset )
@@ -86,7 +87,7 @@ Filters.prototype.showFilters	= function(reportContextId) {
         this.settingsPanel.setHeader(this.filterPanelName);
 	this.filterPanel.center();
 	this.filterPanel.show();
-	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true&reportContextId=" + reportContextId + avoidIECacheParam +this.resetString, this);
+	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true&reportContextId=" + reportContextId + avoidIECacheParam +this.resetString+this.additionalParameter, this);
 	this.resetString		= "";
 };
 

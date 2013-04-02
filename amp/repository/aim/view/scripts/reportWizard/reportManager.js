@@ -159,6 +159,9 @@ function continueInitialization( e, rmParams ){
 											rmParams.loadingDataMessage, rmParams.savingDataMessage, rmParams.cannotSaveFiltersMessage, !rmParams.reportUsesFilters, rmParams.settingsPanelName,
 											rmParams.validationMsgs) ;
 		
+		if(rmParams.pledgedReport == true){
+			repFilters.additionalParameter = "&pledged=true";
+		}
 		saveReportEngine			= new SaveReportEngine(rmParams.savingRepTabMessage,rmParams.failureMessage);
 											
 		var dg			= document.getElementById("DHTMLSuite_treeNode1");

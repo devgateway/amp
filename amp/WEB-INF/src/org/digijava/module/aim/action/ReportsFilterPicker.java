@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.exception.DgException;
@@ -68,6 +69,18 @@ public class ReportsFilterPicker extends Action {
 		
 		Long longAmpReportId = ampReportId == null ? null : Long.parseLong(ampReportId);
 		
+		if(ampReportId==null){
+			ampReportId = request.getParameter("reportContextId");
+			if ( "".equals(ampReportId) )
+				ampReportId		= null;
+			longAmpReportId = ampReportId == null ? null : Long.parseLong(ampReportId);
+		}
+		if(longAmpReportId==null){
+			String pledged = request.getParameter("pledged");
+			if(pledged!=null){
+				filterForm.setPledged(Boolean.valueOf(pledged));
+			}
+		}
 		String sourceIsReportWizard			= request.getParameter("sourceIsReportWizard");
 		if ("true".equals(sourceIsReportWizard) ) {
 			filterForm.setSourceIsReportWizard(true);
@@ -94,9 +107,13 @@ public class ReportsFilterPicker extends Action {
 		{
 			Session session = PersistenceManager.getSession();
 			AmpReports report = (AmpReports) session.get(AmpReports.class, longAmpReportId);
-			if (report != null &&  report.getType() != null )
+			if (report != null &&  report.getType() != null ){
 				filterForm.setReporttype(report.getType());
-			
+				if(report.getType() == ArConstants.PLEDGES_TYPE)
+					filterForm.setPledged(true);
+				else
+					filterForm.setPledged(false);
+			}
 			if (ampReportId.length() > 0 && report != null && report.getDrilldownTab())
 				request.getSession().setAttribute(Constants.CURRENT_TAB_REPORT, report);
 		}
@@ -488,39 +505,15 @@ public class ReportsFilterPicker extends Action {
 		//private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
 		addFinancingLocationElement(filterForm, null, "All Financing Instrument Values", CategoryConstants.FINANCING_INSTRUMENT_KEY, "Financing Instrument", "filter_financing_instr_div", "selectedFinancingInstruments");
 		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance");
-		addFinancingLocationElement(filterForm, "Mode of Payment", "All Mode of Payment Values", CategoryConstants.MODE_OF_PAYMENT_KEY, "Mode of Payment", "filter_mode_of_payment_div", "selectedModeOfPayment");
-		addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory");
-		
-						
-		// do NOT add nullguards in the request.getAttribute - it should always be set and if it is null, then it is a bug elsewhere
-		if (FeaturesUtil.isVisibleField("Mode of Payment") && "false".equals(TLSUtils.getRequest().getAttribute(PLEDGE_REPORT_REQUEST_ATTRIBUTE))) {
-			Collection<AmpCategoryValue> modeOfPaymentValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MODE_OF_PAYMENT_KEY, true);
-			HierarchyListableImplementation rootModeOfPayment	= new HierarchyListableImplementation();
-			rootModeOfPayment.setLabel("All Mode of Payment Values");
-			rootModeOfPayment.setUniqueId("0");
-			rootModeOfPayment.setChildren( modeOfPaymentValues );
-			GroupingElement<HierarchyListableImplementation> modeOfPaymentElement	=
-					new GroupingElement<HierarchyListableImplementation>("Mode of Payment", "filter_mode_of_payment_div", 
-							rootModeOfPayment, "selectedModeOfPayment");
-			filterForm.getFinancingLocationElements().add(modeOfPaymentElement);
-		} else
-			removeElementByName(filterForm.getFinancingLocationElements(), "Mode of Payment"); 
-		
-		if (FeaturesUtil.isVisibleField("Project Category")) {
-			Collection<AmpCategoryValue> projCategoryValues	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.PROJECT_CATEGORY_KEY, true);
-			HierarchyListableImplementation rootProjCategory	= new HierarchyListableImplementation();
-			rootProjCategory.setLabel("All Project Category Values");
-			rootProjCategory.setUniqueId("0");
-			rootProjCategory.setChildren( projCategoryValues );
-			GroupingElement<HierarchyListableImplementation> projCategoryElement	=
-					new GroupingElement<HierarchyListableImplementation>("Project Category", "filter_project_category_div", 
-							rootProjCategory, "selectedProjectCategory");
-			filterForm.getFinancingLocationElements().add(projCategoryElement);
+		if (FeaturesUtil.isVisibleField("Mode of Payment") && filterForm.getPledged()==false) {
+			addFinancingLocationElement(filterForm, "Mode of Payment", "All Mode of Payment Values", CategoryConstants.MODE_OF_PAYMENT_KEY, "Mode of Payment", "filter_mode_of_payment_div", "selectedModeOfPayment");
+		}else{
+			removeElementByName(filterForm.getFinancingLocationElements(), "Mode of Payment");
 		}
-		addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory");
-		
+		if (FeaturesUtil.isVisibleField("Project Category")) {
+			addFinancingLocationElement(filterForm, "Project Category", "All Project Category Values", CategoryConstants.PROJECT_CATEGORY_KEY, "Project Category", "filter_project_category_div", "selectedProjectCategory");
+		}
+						
 		filterForm.setOtherCriteriaElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> activityStatusValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true);	
@@ -596,7 +589,7 @@ public class ReportsFilterPicker extends Action {
 							rootDisbursementOrders, "disbursementOrders");
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
-		if (true && "false".equals(TLSUtils.getRequest().getAttribute(PLEDGE_REPORT_REQUEST_ATTRIBUTE))) { //Here needs to be a check to see if the field/feature is enabled
+		if (true && filterForm.getPledged()==false) {//Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> budgetCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY, true);	
 			HierarchyListableImplementation rootBudgetCategory	= new HierarchyListableImplementation();
 			rootBudgetCategory.setLabel("All");

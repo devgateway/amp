@@ -136,6 +136,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long[] selectedBudgets = null;
 	private Boolean justSearch = null;
 	
+	private Boolean pledged;
 	private Boolean unallocatedLocation = null;
 
 	// to keep the default currency after user changues
@@ -1208,5 +1209,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public DynamicDateFilter getDynamicActivityFinalContractingFilter() {
 		return dynamicActivityFinalContractingFilter;
+	}
+
+	public Boolean getPledged() {
+		return pledged;
+	}
+
+	public void setPledged(Boolean pledged) {
+		this.pledged = pledged;
 	}
 }

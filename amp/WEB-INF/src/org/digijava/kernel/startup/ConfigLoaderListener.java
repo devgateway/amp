@@ -285,8 +285,10 @@ public class ConfigLoaderListener
      * contextDestroyed method call when ServletContextListener object destroy
      * see ServletContextListener form more details.
      */
-    public void contextDestroyed(ServletContextEvent sce) {
+    public void contextDestroyed(ServletContextEvent sce) {    	
     	
+    	//shut down translation thread
+    	tats.shutdown();         
     	
         ServiceManager.getInstance().shutdown(1);
         try {
@@ -319,7 +321,7 @@ public class ConfigLoaderListener
 			exec.shutdownNow();
             ServiceManager.getInstance().shutdown(0);
          
-            
+         
      
         }
     }

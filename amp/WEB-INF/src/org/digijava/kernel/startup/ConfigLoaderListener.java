@@ -287,6 +287,8 @@ public class ConfigLoaderListener
      */
     public void contextDestroyed(ServletContextEvent sce) {
     	
+    	//shut down translation thread
+    	tats.shutdown();
     	
         ServiceManager.getInstance().shutdown(1);
         try {

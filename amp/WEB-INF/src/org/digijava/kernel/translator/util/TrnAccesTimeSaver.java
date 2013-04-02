@@ -116,6 +116,9 @@ public class TrnAccesTimeSaver implements Runnable {
 	public void shutdown(){
 		logger.info("Shutting down translation access time saver thread...");
 		this.loop=false;
-		//queue.notify();//saver may be waiting on queue
+		
+		synchronized(queue) {
+			queue.notify();//saver may be waiting on queue
+		}
 	}
 }

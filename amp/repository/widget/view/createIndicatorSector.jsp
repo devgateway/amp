@@ -179,11 +179,12 @@
                         </td>
                     </tr>
                     <tr>
+                    	<c:set var="trnCancel"><digi:trn key="aim:btn:cancel">Cancel</digi:trn></c:set>
                         <td colspan="3" align="center">
                              <input type="button" onclick="validate()" value="<digi:trn>Save</digi:trn>"/>
                             <input type="button" value="${trnCancel}" onclick="cancel()">
                         </td>
-                        <c:set var="trnCancel"><digi:trn key="aim:btn:cancel">Cancel</digi:trn></c:set>                    </tr>
+                                            </tr>
                 </table>
                 
             </td>

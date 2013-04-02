@@ -20,5 +20,5 @@ public interface Categorizable {
 	public boolean hasMetaInfo(MetaInfo m);
 	
 	public boolean isShow();
-	public boolean isRenderizable();
+	//public boolean isRenderizable();
 }

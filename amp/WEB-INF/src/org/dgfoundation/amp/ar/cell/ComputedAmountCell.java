@@ -143,7 +143,7 @@ public class ComputedAmountCell extends CategAmountCell {
 		this.setColumnPercent(categ.getColumnPercent());
 		this.setCummulativeShow(categ.isCummulativeShow());
 		this.setShow(categ.isShow());
-		this.setRenderizable(categ.isRenderizable());
+		//this.setRenderizable(categ.isRenderizable());
 		this.setCummulativeShow(categ.isCummulativeShow());
 		this.setMetaData(categ.getMetaData());
 

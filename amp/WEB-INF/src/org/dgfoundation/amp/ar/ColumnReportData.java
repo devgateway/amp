@@ -18,6 +18,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.MetaTextCell;
@@ -412,7 +413,7 @@ public class ColumnReportData extends ReportData<Column> {
 		for (Column element:items) {
 			List<AmountCell> l = element.getTrailCells();
 			if (l != null){
-				trailCells.addAll(l);
+				trailCells.addAll(filterTrailCells(l, element));
 			}else{
 				if ((ctbr!=null)&& (!ctbr.contains(element.getName()))){
 				//add just to keep the space
@@ -446,6 +447,22 @@ public class ColumnReportData extends ReportData<Column> {
 		return null;
 	}
 		
+	protected List<AmountCell> filterTrailCells(List<AmountCell> input, Column column)
+	{
+		if (!column.getName().equals(ArConstants.COLUMN_FUNDING))
+			return input;
+		
+		List<AmountCell> result = new ArrayList<AmountCell>();
+		for(AmountCell cell:input)
+		{
+			if (cell instanceof CategAmountCell)
+			{
+				CategAmountCell cac = (CategAmountCell) cell;
+			}
+		}
+		return input;
+	}
+	
 	/**
 	 * removes all rows whose funding columns have no data
 	 */

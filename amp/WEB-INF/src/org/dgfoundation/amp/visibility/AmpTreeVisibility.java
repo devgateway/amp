@@ -246,9 +246,11 @@ public class AmpTreeVisibility implements Serializable{
 	}
 
 	public AmpModulesVisibility getModuleByNameFromRoot(String moduleName) {
-		if (this.getItems().containsKey(moduleName))
-			return (AmpModulesVisibility) ((AmpTreeVisibility) this.getItems()
-					.get(moduleName)).getRoot();
+		
+		AmpTreeVisibility atv	= (AmpTreeVisibility) this.getItems().get( moduleName );
+		if ( atv != null ) {
+			return (AmpModulesVisibility)atv.getRoot();
+		}
 		return null;
 	}
 

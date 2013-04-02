@@ -2427,7 +2427,7 @@ public class FeaturesUtil {
 			List list = session.createQuery("from " +
 					AmpModulesVisibility.class.getName() ). list();
 
-			TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
+			TreeSet<AmpModulesVisibility> mySet=new TreeSet<AmpModulesVisibility>(FeaturesUtil.ALPHA_ORDER);
 			mySet.addAll(list);
 			ft.setAllItems(mySet);
 		}

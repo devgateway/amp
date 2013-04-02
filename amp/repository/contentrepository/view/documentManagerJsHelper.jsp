@@ -76,7 +76,16 @@ font-weight : bold;
 }
 
 #show_legend_pop_box_private, #show_legend_pop_box_team  {display:none; margin-top:13px; position:absolute; width:300px; padding:8px; border:1px solid #CCCCCC; background-color:#FDFFE3;}
+#show_legend_pop_box_private {text-align: left;}
+
 </style>
+
+<style>
+	#show_legend_pop_box_private {
+		margin-top: 17px;
+	}
+</style>
+
 
 <!-- this is style for labels -->
 <style>

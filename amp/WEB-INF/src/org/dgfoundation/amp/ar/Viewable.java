@@ -138,6 +138,14 @@ public abstract class Viewable implements Cloneable {
 	 */
 	public abstract String getCurrentView();
 
-
+	public ReportGenerator getReportGenerator()
+	{
+		ReportData rd = getNearestReportData();
+		if (rd.getSplitterCell() != null)
+		{
+			return rd.getSplitterCell().getColumn().getWorker().getGenerator();
+		}		
+		return rd.getParent().getReportGenerator();
+	}
 	
 }

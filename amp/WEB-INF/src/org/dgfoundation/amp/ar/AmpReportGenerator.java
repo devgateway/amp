@@ -865,8 +865,67 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.postProcess();
 		report.removeChildrenWithoutActivities(); //postProcess might have left some more empty children
 		deleteMetadata(listOfCells);
+		removeUnrenderizableData(report); // apply year range filter from settings and any other "non-displaying" filtering which SHOULD NOT affect the report except rendering
 	}
 
+	protected void applyYearRangeSettings(GroupReportData report)
+	{
+		AmpARFilter filter = this.getFilter();
+		for(ReportData item:report.getItems())
+		{
+			if (item instanceof GroupReportData)
+				applyYearRangeSettings((GroupReportData) item);
+			if (item instanceof ColumnReportData)
+			{
+				ColumnReportData crd = (ColumnReportData) item;
+				for(Column column:crd.getItems())
+				{
+					if (column.getColumnId().equals(ArConstants.COLUMN_FUNDING))
+						applyYearRangeSettings((GroupColumn)column);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * returns null IFF z is non-parseable as an Integer
+	 * @param z
+	 * @return
+	 */
+	public final static Integer getInteger(String z)
+	{
+		try
+		{
+			return Integer.parseInt(z);
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
+	}	
+	
+	protected void applyYearRangeSettings(GroupColumn column)
+	{
+		Iterator it = column.iterator();
+		while (it.hasNext())
+		{
+			Object item = it.next();
+			if (item instanceof Column)
+			{
+				String yearStr = ((Column) item).getName();
+				Integer year = getInteger(yearStr);
+				if (year != null)
+					if (!filter.passesYearRangeFilter(year))
+						it.remove();
+			}
+		}
+	}
+		
+	protected void removeUnrenderizableData(GroupReportData report)
+	{
+		applyYearRangeSettings(report);
+	}
+	
 	/**
 	 * returns total number of MetaData instances deleted
 	 * @param cell

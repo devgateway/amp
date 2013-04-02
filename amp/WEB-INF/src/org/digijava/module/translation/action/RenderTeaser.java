@@ -56,11 +56,7 @@ public class RenderTeaser
             generateRoots = Boolean.valueOf(rootPathesParam).booleanValue();
         }
 
-        boolean donorDashVisible = FeaturesUtil.isVisibleModule("Org. Dashboard", request.getSession().getServletContext());
-        boolean regionDashVisible = FeaturesUtil.isVisibleModule("Region Dashboard", request.getSession().getServletContext());
-        boolean sectorDashVisible = FeaturesUtil.isVisibleModule("Sector Dashboard", request.getSession().getServletContext());
-
-        Collection<AmpDashboard> dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu(donorDashVisible, regionDashVisible, sectorDashVisible);
+        Collection<AmpDashboard> dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
 		request.getSession().setAttribute(Constants.MENU_DASHBOARDS, dashboards);
         
 		TranslationManager.generateLanguages(generateRoots, request, formBean);

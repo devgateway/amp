@@ -2769,6 +2769,28 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	/**
+	 * modified copy-paste from (now-deleted) CategAmountColWorker::isRenderizable()
+	 * @param year
+	 * @return
+	 */
+	public boolean passesYearRangeFilter(int year)
+	{
+		boolean renderizable=true;
+		
+		//we now check if the year filtering is used - we do not want items from other years to be shown
+		if((this.getRenderStartYear()!=null && this.getRenderStartYear()> 0) || (this.getRenderEndYear()!=null && this.getRenderEndYear() > 0  )) {
+			Integer itemYear = year;
+			
+			if (this.getRenderStartYear() != null && this.getRenderStartYear() > 0 &&
+				itemYear.intValue() < this.getRenderStartYear().intValue()) renderizable=false;
+			
+			if (this.getRenderEndYear() != null && this.getRenderEndYear() > 0 &&
+				itemYear.intValue() > this.getRenderEndYear().intValue()) renderizable=false;
+		}
+		return renderizable;
+	}
+	
+	/**
 	 * @return the groupingsize
 	 */
 	public Integer getGroupingsize() {

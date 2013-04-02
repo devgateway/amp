@@ -83,12 +83,8 @@ public class ViewAmp
         Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
         session.setAttribute(Constants.USER_WORKSPACES, members);
         
-        
-        boolean donorDashVisible = FeaturesUtil.isVisibleModule("Org. Dashboard", request.getSession().getServletContext());
-        boolean regionDashVisible = FeaturesUtil.isVisibleModule("Region Dashboard", request.getSession().getServletContext());
-        boolean sectorDashVisible = FeaturesUtil.isVisibleModule("Sector Dashboard", request.getSession().getServletContext());
-        
-        Collection<AmpDashboard> dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu(donorDashVisible, regionDashVisible, sectorDashVisible);
+       
+        Collection<AmpDashboard> dashboards = org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
         
         session.setAttribute(Constants.MENU_DASHBOARDS, dashboards);
         

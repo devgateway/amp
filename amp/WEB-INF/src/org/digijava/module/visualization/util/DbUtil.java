@@ -2317,7 +2317,7 @@ public class DbUtil {
 		}
 	}
 	
-	public static List<AmpDashboard> getDashboardsToShowInMenu(boolean donorDashVisible, boolean regionDashVisible, boolean sectorDashVisible) {
+	public static List<AmpDashboard> getDashboardsToShowInMenu() {
         Session session = null;
         List<AmpDashboard> dashs = null;
         Iterator itr = null;
@@ -2332,27 +2332,6 @@ public class DbUtil {
         } catch (Exception ex) {
             logger.error("Unable to get dashboards from database", ex);
         }
-        
-        Collection<AmpDashboard> noVisibleDashboards = new ArrayList<AmpDashboard>();
-        
-        for(AmpDashboard d : dashs){
-        	
-        	if (org.digijava.module.visualization.util.Constants.DashboardType.DONOR ==  d.getBaseType() &&
-        			! donorDashVisible){
-        		noVisibleDashboards.add(d);
-        	}
-        	if (org.digijava.module.visualization.util.Constants.DashboardType.REGION ==  d.getBaseType() &&
-        			! regionDashVisible){
-        		noVisibleDashboards.add(d);
-        	}
-        	if (org.digijava.module.visualization.util.Constants.DashboardType.SECTOR ==  d.getBaseType() &&
-        			! sectorDashVisible){
-        		noVisibleDashboards.add(d);
-        	}
-        }
-        dashs.removeAll(noVisibleDashboards);
-        
-        
         
         return dashs;
     }

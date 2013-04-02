@@ -84,16 +84,21 @@ div.fakefile input {
 }
 div.fakefile2 {
 	position: absolute;
-	top: 2px;
+	top: 0px;
 	left: 178px;
 	width: 300px;
-	padding: 0;
-	margin: 0;
+	padding-left: 3px;
+	margin: 0px;
 	z-index: 1;
 	line-height: 90%;
 }
 div.fakefile2 input {
 	width: 83px;
+}
+
+#thumbnails_table tr td {
+	text-align : left;
+	
 }
 -->
 </style>
@@ -397,7 +402,8 @@ div.fakefile2 input {
                     </table>
                     <br />
                     <br />
-					<table cellpadding="3" cellspacing="3" style="font-size:12px;">
+                    
+					<table id="thumbnails_table" cellpadding="3" cellspacing="3" style="font-size:12px;">
 						<tr id="tr_path_thumbnail">
 						<td><digi:trn>Select Thumbnail to upload:</digi:trn><font color="red">*</font></td>
 						<td>

@@ -35,6 +35,9 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	protected String properName;
 	protected Boolean hasLevel;
 	protected String description;
+	
+	
+	private TreeSet<AmpObjectVisibility> sortedItems	= null;
 
 	public String getDescription() {
 		return description;
@@ -131,12 +134,16 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	    return id; 
 	}
 	
-	public TreeSet getSortedAlphaItems()
+	public TreeSet<AmpObjectVisibility> getSortedAlphaItems()
 	{
 		if(this.getItems()==null) return null;
-		 TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
-		 mySet.addAll(this.getItems());
-		 return mySet;
+		
+		if (this.sortedItems == null || this.sortedItems.size() != this.items.size() ) {
+			 TreeSet<AmpObjectVisibility> mySet=new TreeSet<AmpObjectVisibility>(FeaturesUtil.ALPHA_ORDER);
+			 mySet.addAll(this.getItems());
+			 this.sortedItems	= mySet;
+		}
+		return this.sortedItems;
 	}
 
 	public String getProperName() throws IOException {

@@ -5,6 +5,7 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -34,6 +35,8 @@ public class AmpStructuresFormSectionFeature extends
 		AmpFormSectionFeaturePanel {
 
 	private static final long serialVersionUID = -6654390083754446344L;
+	
+	protected Collection<AmpStructureType> structureTypes;
 
 	public AmpStructuresFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
@@ -43,6 +46,7 @@ public class AmpStructuresFormSectionFeature extends
 			setModel.setObject(new TreeSet<AmpStructure>());
 		final ListEditor<AmpStructure> list;
 
+		this.structureTypes	= 	StructuresUtil.getAmpStructureTypes();
 		
 		IModel<List<AmpStructure>> listModel = new AbstractReadOnlyModel<List<AmpStructure>>() {
 			private static final long serialVersionUID = 3706184421459839220L;
@@ -56,7 +60,10 @@ public class AmpStructuresFormSectionFeature extends
 			}
 		};
 		
+		
 		list = new ListEditor<AmpStructure>("list", setModel) {
+			
+			
 			@Override
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpStructure> item) {
@@ -67,7 +74,7 @@ public class AmpStructuresFormSectionFeature extends
 		
 							@Override
 							protected List<AmpStructureType> load() {
-								return new ArrayList<AmpStructureType>(StructuresUtil.getAmpStructureTypes());
+								return new ArrayList<AmpStructureType>(AmpStructuresFormSectionFeature.this.structureTypes);
 							}		
 						}, 
 						"Structure Type",true, false,  new ChoiceRenderer<AmpStructureType>("name","typeId")) ;

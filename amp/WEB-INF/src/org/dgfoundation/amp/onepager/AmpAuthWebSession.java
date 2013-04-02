@@ -4,6 +4,9 @@
 */
 package org.dgfoundation.amp.onepager;
 
+import java.util.HashMap;
+import java.util.Hashtable;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +15,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
+import org.dgfoundation.amp.onepager.util.FMFormCache;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.util.SiteCache;
@@ -42,6 +46,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	private Site site;
 	private String isAdmin;
 	
+	FMFormCache formCache	= null;
 	
 	public String getIsAdmin() {
 		if (isAdmin == null){
@@ -145,6 +150,16 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 	public void switchFMMode(){
 		this.fmMode = !fmMode;
 	}
+	
+
+	public FMFormCache getFormCache() {
+		return formCache;
+	}
+
+	public void setFormCache(FMFormCache formCache) {
+		this.formCache = formCache;
+	}
+
 	/**
      * Attempts to authenticate a user that has provided the given username and password.
      * @param username current username

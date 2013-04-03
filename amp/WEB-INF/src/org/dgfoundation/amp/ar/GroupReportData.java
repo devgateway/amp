@@ -175,7 +175,25 @@ public class GroupReportData extends ReportData<ReportData> {
 		return null;
 	}
 
+	protected AmpReportGenerator reportGenerator;
+	
+	public void setReportGenerator(AmpReportGenerator generator)
+	{
+		this.reportGenerator = generator;
+	}
 
+	public AmpReportGenerator getReportGenerator()
+	{
+		return this.reportGenerator;
+	}
+	
+	public AmpReportGenerator getArchReportGenerator()
+	{
+		if (getReportGenerator() != null)
+			return getReportGenerator();
+		return getParent().getArchReportGenerator();
+	}
+	
 	public GroupReportData horizSplitByCateg(String columnName)
 			throws UnidentifiedItemException, IncompatibleColumnException {
 		GroupReportData dest = new GroupReportData(this);

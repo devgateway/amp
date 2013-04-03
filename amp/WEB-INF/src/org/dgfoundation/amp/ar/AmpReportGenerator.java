@@ -793,6 +793,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		report = new GroupReportData(reportMetadata.getName());
 		report.setReportMetadata(this.reportMetadata);
+		report.setReportGenerator(this);
 		report.setSourceColsCount(new Integer(extractableCount - 1));
 		report.setColumnsToBeRemoved(columnsToBeRemoved);
 		// ensure acess to the report metadata from the raw columns. we should

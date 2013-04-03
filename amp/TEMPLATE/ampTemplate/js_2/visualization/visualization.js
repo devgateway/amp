@@ -1469,11 +1469,6 @@ function refreshBoxes(o){
 				//}
 				break;
 			case "TotalComms":
-				inner = "<b class='dashboard_total_num'>" + child.value + "</b><br />" + trnTotalCommitments;
-				var div = document.getElementById("divTotalComms");
-				div.innerHTML = inner;
-				var bla = getSelectedValue("show_amounts_in_thousands");
-				var textAmounts = bla == 1 ? trnAllAmountsInThousands:trnAllAmountsInMillions;
 				valTotalCommits = child.value + " " + (isThousands ? trnThousands : trnMillions) + " "  + child.curr;
 				var textAmounts = isThousands ? trnAllAmountsInThousands:trnAllAmountsInMillions;
 				

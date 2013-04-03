@@ -1169,7 +1169,7 @@ function collapseAll() {
 		<hr>
 		<field:display name="Duration of Project" feature="Planning"> 
 			<digi:trn>Duration of project</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.projectPeriod }</b>
+			<b>${aimEditActivityForm.planning.projectPeriod }</b>&nbsp; </b><digi:trn>Months</digi:trn>
 		</field:display>
 		</div>
 </fieldset>

@@ -1,13 +1,7 @@
-<!--
-
 /*
-
  DHTML tip message version 1.2 copyright Essam Gamal 2003 (http://migoicons.tripod.com, migoicons@hotmail.com)
-
  All modifications are done in the style.js. Created on : 06/03/2003
-
  Script featured on SimplytheBest Scripts at http://simplythebest.net/scripts/)
-
 */
 
 
@@ -465,14 +459,3 @@ function htm() {
 	}
 
 }
-
-
-
-
-
-//-->
-
-
-
-
-

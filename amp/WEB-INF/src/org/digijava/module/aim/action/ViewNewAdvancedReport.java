@@ -133,7 +133,7 @@ public class ViewNewAdvancedReport extends Action {
 				if (AmpMath.isLong(ampReportId))
 				{
 					AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, Long.parseLong(ampReportId));
-					if (!report.getDrilldownTab())
+					if ((report != null) && (!report.getDrilldownTab()))
 						bList.add(report);
 				}
 			}
@@ -202,7 +202,12 @@ public class ViewNewAdvancedReport extends Action {
 			progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
 			ReportContextData.getFromRequest().setProgressValue(progressValue);
 	
-			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+			ar = null;
+			if (ampReportId != null)
+			{
+				ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+			}
+			
 			if (ar == null) {
 				ar = ReportContextData.getFromRequest().getReportMeta();
 			}

@@ -165,7 +165,14 @@ public class ReportsFilterPicker extends Action {
 		}
 
 		FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);
-		modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL);
+		try
+		{
+			modeRefreshDropdowns(filterForm, AmpARFilter.FILTER_SECTION_ALL);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return mapping.findForward("forward");
 		/*AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_FILTERS);
 		return decideNextForward(mapping, filterForm, request, arf);*/
@@ -365,6 +372,13 @@ public class ReportsFilterPicker extends Action {
 		StopWatch.next("Filters-Settings", true, "Settings part dropdowns END");
 	}
 	
+    public static boolean isFalse(Boolean b)
+    {
+    	if (b == null)
+    		return true;
+    	return (b.booleanValue() == false);
+    }
+    
 	/**
 	 * populate all the non-setting fields in a form, like drop-down lists, checkbox lists etc etc etc
 	 * <b>Always</b> call this function after populateForm, because it corrects some fields spoiled by it (fromYear, for example)
@@ -505,7 +519,7 @@ public class ReportsFilterPicker extends Action {
 		//private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
 		addFinancingLocationElement(filterForm, null, "All Financing Instrument Values", CategoryConstants.FINANCING_INSTRUMENT_KEY, "Financing Instrument", "filter_financing_instr_div", "selectedFinancingInstruments");
 		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance");
-		if (FeaturesUtil.isVisibleField("Mode of Payment") && filterForm.getPledged()==false) {
+		if (FeaturesUtil.isVisibleField("Mode of Payment") && isFalse(filterForm.getPledged())) {
 			addFinancingLocationElement(filterForm, "Mode of Payment", "All Mode of Payment Values", CategoryConstants.MODE_OF_PAYMENT_KEY, "Mode of Payment", "filter_mode_of_payment_div", "selectedModeOfPayment");
 		}else{
 			removeElementByName(filterForm.getFinancingLocationElements(), "Mode of Payment");
@@ -589,7 +603,7 @@ public class ReportsFilterPicker extends Action {
 							rootDisbursementOrders, "disbursementOrders");
 			filterForm.getFinancingLocationElements().add(disbOrdersElement);
 		}
-		if (true && filterForm.getPledged()==false) {//Here needs to be a check to see if the field/feature is enabled
+		if (true && isFalse(filterForm.getPledged())) {//Here needs to be a check to see if the field/feature is enabled
 			Collection<AmpCategoryValue> budgetCategoryValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_BUDGET_KEY, true);	
 			HierarchyListableImplementation rootBudgetCategory	= new HierarchyListableImplementation();
 			rootBudgetCategory.setLabel("All");

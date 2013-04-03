@@ -171,7 +171,8 @@ public class SelectTeam extends Action {
 			session.removeAttribute(Constants.MY_ACTIVE_TABS);
 			session.removeAttribute(Constants.TEAM_ID);
             session.removeAttribute(Constants.MY_REPORTS_PER_PAGE);
-
+            session.removeAttribute(Constants.LAST_VIEWED_REPORTS);
+            
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }

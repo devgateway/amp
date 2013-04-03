@@ -276,7 +276,7 @@ public class Constants
 	public static final String CURRENT_TAB_REPORT	= "current_tab_report";
 	
 	public static final String MY_REPORTS 		= "myReports";
-	public static final String LAST_VIEWED_REPORTS 		= "lastViewedReports"; // BoundedList
+	public static final String LAST_VIEWED_REPORTS          = "lastViewedReports"; // BoundedList
 	public static final String MY_ACTIVE_TABS 	= "myActiveTabs";
 	public static final String MY_TABS 			= "myTabs";
 	public static final String MY_TASKS = "myTasks";

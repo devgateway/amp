@@ -9,6 +9,7 @@ package org.digijava.module.aim.action;
 
 import java.awt.image.renderable.RenderContext;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -54,6 +56,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.AdvancedReportUtil;
+import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -111,6 +114,29 @@ public class ViewNewAdvancedReport extends Action {
 		{
 			//ReportContextData.cleanContextData();
 			ReportContextData.cleanCurrentReportCaches();
+			
+			if ( ampReportId != null )
+			{
+				if (request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS) == null)
+				{
+					Comparator<AmpReports> ampReportsComparator = new Comparator<AmpReports>()
+					{
+						public int compare(AmpReports a, AmpReports b)
+						{
+							return a.getAmpReportId().compareTo(b.getAmpReportId());
+						}
+					};
+					request.getSession().setAttribute(Constants.LAST_VIEWED_REPORTS, new BoundedList<AmpReports>(5, ampReportsComparator));
+				}
+				
+				BoundedList<AmpReports> bList = (BoundedList<AmpReports>) request.getSession().getAttribute(Constants.LAST_VIEWED_REPORTS);
+				if (AmpMath.isLong(ampReportId))
+				{
+					AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, Long.parseLong(ampReportId));
+					if (!report.getDrilldownTab())
+						bList.add(report);
+				}
+			}
 		}
 
 		request.setAttribute("widget", request.getParameter("widget"));
@@ -168,7 +194,7 @@ public class ViewNewAdvancedReport extends Action {
 		}
 		
 		if (shouldRegenerateReport) 
-		{			
+		{
 			progressValue = progressValue + 20;// 20 is the weight of this process on the progress bar
 			ReportContextData.getFromRequest().setProgressValue(progressValue);
 

@@ -9,6 +9,12 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.StringHeaderItem;
+import org.apache.wicket.markup.html.DecoratingHeaderResponse;
+import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.servlet.ResponseIOException;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -147,8 +153,30 @@ public class OnePagerApp extends AuthenticatedWebApplication {
 		 
 		 //set UTF-8 as the default encoding for all requests
 		 getRequestCycleSettings().setResponseRequestEncoding("UTF-8");
-		 getMarkupSettings().setDefaultMarkupEncoding("UTF-8"); 
-		 
+		 getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+
+         setHeaderResponseDecorator(new IHeaderResponseDecorator() {
+             @Override
+             public IHeaderResponse decorate(IHeaderResponse response) {
+                 return new DecoratingHeaderResponse(response) {
+                     @Override
+                     public void render(HeaderItem item) {
+                         if (item instanceof StringHeaderItem) {
+                             StringHeaderItem stringHeaderItem = (StringHeaderItem) item;
+
+                             // make specific header item coming from <wicket:head> a priority one
+                             if (stringHeaderItem.getString().toString().contains("X-UA-Compatible")) {
+                                 super.render(new PriorityHeaderItem(stringHeaderItem));
+                             } else {
+                                 super.render(item);
+                             }
+                         } else {
+                             super.render(item);
+                         }
+                     }
+                 };
+             }
+         });
          /*
 		 // Error handling
 		 getRequestCycleListeners().add(new AbstractRequestCycleListener() {

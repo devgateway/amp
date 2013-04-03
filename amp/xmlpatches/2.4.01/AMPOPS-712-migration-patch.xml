@@ -5,8 +5,9 @@
 	<jira>AMPOPS-712</jira>
 	<keyword>migration</keyword>
 	<author>apopescu</author>
-	<trigger type="all">
+	<trigger type="any">
 		<condition type="dbName">amp_ethiopia_production</condition>
+		<condition type="dbName">amp_ethiopia_staging</condition>
 	</trigger>
 	<apply>
 		<script>

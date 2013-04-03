@@ -3,8 +3,9 @@
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
 	<jira>AMPOPS-712</jira>
+	<jira>AMP-15036</jira>
 	<keyword>migration</keyword>
-	<author>apopescu</author>
+	<author>mpostelnicu</author>
 	<trigger type="any">
 		<condition type="dbName">amp_ethiopia_production</condition>
 		<condition type="dbName">amp_ethiopia_staging</condition>

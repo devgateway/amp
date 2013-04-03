@@ -47,18 +47,24 @@
 			</tr>
 			<c:if test="${not empty measure.actors }">
 			<tr>
-			<td colspan="2" bgcolor="#F0F0F0">
-				<digi:trn>Actors</digi:trn>
-			</td>
-			</tr>
-				<logic:iterate name="measure" id="actor" property="actors">
-				<tr>
-				<td>	
-				
-					<c:out value="${actor.name}"/>
+				<td bgcolor="#F0F0F0">
+					<digi:trn>Actors</digi:trn>
 				</td>
-				</tr>
-				</logic:iterate>
+				<td bgcolor="#F0F0F0">
+					<table style="border-collapse:collapse" cellpadding="0" cellspacing="0" widht="100%">
+						<logic:iterate name="measure" id="actor" property="actors">
+							<tr>
+							<td bgcolor="#F0F0F0">	
+							
+								<c:out value="${actor.name}"/>
+							</td>
+							</tr>
+							</logic:iterate>
+						</table>	
+				</td>
+			</tr>
+				
+				
 			</c:if>	
 			</logic:iterate>
 			</table>		

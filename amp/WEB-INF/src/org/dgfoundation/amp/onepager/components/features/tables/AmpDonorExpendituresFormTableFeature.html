@@ -1,12 +1,13 @@
 <wicket:extend>
 	<tr wicket:id="tableHeading" class="invisible-item">
 	</tr>
-	<tr wicket:id="listExp">
-		<td class="inside">
-            <div class="wicketMargin5">
-                <span class="wicketMargin5" wicket:id="adjustmentType"/> <br/>
-                <span class="wicketMargin5" wicket:id="fundingAmount"/> <br/>
-                <span class="wicketMargin5" wicket:id="classification"/>
+	<tr class="wicketFundingRowItem" wicket:id="listExp">
+		<td>
+            <div>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="adjustmentType"/>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="fundingAmount"/>
+                <br><br>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="classification"/>
             </div>
         </td>
 		<td>

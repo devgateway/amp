@@ -409,4 +409,16 @@ div.tabpanel div.tab-row a:hover {
     font-size: small;
 }
 .wicketHidden{display: none;}
+.wicketFundingBoxItem{
+    min-height: 50px;
+    min-width: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.wicketFundingRowItem{
+    border-right: 1px solid #B8B7B7;
+    border-bottom: 1px solid #B8B7B7;
+}
+tr.wicketFundingRowItem:nth-child(even) {}
+tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 /* -- ONE PAGER END -- */

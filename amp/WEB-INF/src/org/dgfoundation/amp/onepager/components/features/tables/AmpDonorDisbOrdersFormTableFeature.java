@@ -48,7 +48,7 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 				AmpTextFieldPanel<String> disbOrderId = new AmpTextFieldPanel<String>(
 						"disbOrderId", new PropertyModel<String>(
 								item.getModel(), "disbOrderId"),
-						"Disbursement Order ID",false, true);
+						"Disbursement Order ID",false, false);
 				disbOrderId.setEnabled(false);
 				disbOrderId.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
 				item.add(disbOrderId);
@@ -64,11 +64,11 @@ public class AmpDonorDisbOrdersFormTableFeature extends
 						new PropertyModel<IPAContract>(item.getModel(),
 								"contract"),
                         new WildcardListModel<IPAContract>(contractList),
-						"Contract", false, true, null, true));
+						"Contract", false, true, null, false));
 
 				AmpCheckBoxFieldPanel rejected = new AmpCheckBoxFieldPanel(
 						"rejected", new PropertyModel<Boolean>(item.getModel(),
-								"disbursementOrderRejected"), "Rejected", false);
+								"disbursementOrderRejected"), "Rejected", false, false);
 				item.add(rejected);
 
 				item.add(new ListEditorRemoveButton("delDisbOrder", "Delete Disbursement Order"){

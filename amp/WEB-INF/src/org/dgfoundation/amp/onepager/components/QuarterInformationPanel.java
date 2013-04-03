@@ -8,6 +8,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -26,7 +27,7 @@ import java.util.Calendar;
  * @author aartimon@developmentgateway.org
  * @since 04 Feb 2013
  */
-public class QuarterInformationPanel extends AmpComponentPanel{
+public class QuarterInformationPanel extends AmpFieldPanel {
     private static final JavaScriptResourceReference JS_FILE = new JavaScriptResourceReference(QuarterInformationPanel.class, "QuarterInformationPanel.js");
 
     @Override
@@ -77,6 +78,6 @@ public class QuarterInformationPanel extends AmpComponentPanel{
     }
 
     public QuarterInformationPanel(String id, String fmName) {
-        super(id, fmName);
+        super(id, fmName, true, false);
     }
 }

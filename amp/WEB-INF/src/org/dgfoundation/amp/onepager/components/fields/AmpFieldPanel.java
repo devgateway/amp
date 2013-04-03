@@ -201,9 +201,6 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 		super(id, model,fmName, AmpFMTypes.MODULE);
 		this.fmType = AmpFMTypes.MODULE;
 
-        if (hideLabel) //doesn't make sense (yet) to show the new line when the label is hidden
-            hideNewLine = true;
-		
 		setOutputMarkupId(true);
 		this.fmName = fmName;
 		

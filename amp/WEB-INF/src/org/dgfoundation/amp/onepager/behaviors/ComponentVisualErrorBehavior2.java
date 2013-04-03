@@ -58,6 +58,7 @@ public class ComponentVisualErrorBehavior2 extends Behavior implements IAjaxRegi
 				logger.error("Rendered error: " + message.getMessage().toString());
 				message.markRendered();
 			}
+            r.write("</ul>");
 		}
 		r.write("</span>");
 	}

@@ -108,7 +108,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 				"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
 						new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
 						CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
-						 false, false, false, dependantModel, true);
+						 false, false, false, dependantModel, false);
 			adjustmentTypes.getChoiceContainer().setRequired(true);
 			return adjustmentTypes;
 		}catch(Exception e)

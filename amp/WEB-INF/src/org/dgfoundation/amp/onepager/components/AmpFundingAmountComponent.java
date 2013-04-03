@@ -60,7 +60,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		super(id, model);
 
         boolean hideLabel = fundingComponentTableMode;
-        boolean hideNewLine = true;
+        boolean hideNewLine = false;
 
 		amount = new AmpTextFieldPanel<Double>("amount",
 				new PropertyModel<Double>(model, propertyAmount), fmAmount, hideLabel, hideNewLine) {

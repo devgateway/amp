@@ -60,7 +60,7 @@ public class AmpMTEFProjectionFormTableFeature extends
 							new PropertyModel<AmpCategoryValue>(
 									item.getModel(), "projected"),
 							CategoryConstants.MTEF_PROJECTION_NAME, true,
-							false, false, null, true);
+							false, false, null, false);
 					projected.getChoiceContainer().setRequired(true);
 					item.add(projected);
 				} catch (Exception e) {

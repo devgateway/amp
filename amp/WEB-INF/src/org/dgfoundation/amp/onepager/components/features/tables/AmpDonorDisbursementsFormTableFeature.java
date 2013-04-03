@@ -32,8 +32,6 @@ import java.util.List;
 public class AmpDonorDisbursementsFormTableFeature extends
 		AmpDonorFormTableFeaturePanel {
 	private static final long serialVersionUID = 1L;
-	private boolean alertIfExpenditureBiggerDisbursment = false;  
-	private boolean alertIfDisbursmentBiggerCommitments = false;
 	private final static int SELECTOR_SIZE = 80;
 	/**
 	 * @param id
@@ -66,7 +64,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 
                 AmpTextFieldPanel<Float> capitalSpendingPercentage = new AmpTextFieldPanel<Float>(
                                         "capitalSpendingPercentage",
-                                        new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage", false, true);
+                                        new PropertyModel<Float>(item.getModel(), "capitalSpendingPercentage"), "Capital Spending Percentage", false, false);
                 capitalSpendingPercentage.getTextContainer().add(new RangeValidator<Float>(0f, 100f));
                 capitalSpendingPercentage.getTextContainer().add(new AttributeModifier("size", new Model<String>("5")));
                 item.add(capitalSpendingPercentage);
@@ -75,7 +73,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						new PropertyModel<String>(item.getModel(),
 								"disbOrderId")
 								,disbOrderIdModel,
-						"Disbursement Order Id", false, true, null, true);
+						"Disbursement Order Id", false, true, null, false);
                 disbOrdIdSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
 				item.add(disbOrdIdSelector);
 				
@@ -89,7 +87,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						new PropertyModel<IPAContract>(item.getModel(),
 								"contract"),
 						new Model<ArrayList<IPAContract>>(contractList),
-						"Contract", false, true, null, true);
+						"Contract", false, true, null, false);
 				
 				contractSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
 				item.add(contractSelector);
@@ -110,7 +108,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 							public Object getDisplayValue(FundingPledges arg0) {
 								return arg0.getTitle();
 							}
-						}, true);
+						}, false);
 				pledgeSelector.getChoiceContainer().add(new AttributeAppender("style", new Model<String>("width: "+SELECTOR_SIZE+"px")));
 				item.add(pledgeSelector);
 				item.add(new ListEditorRemoveButton("delDisbursement", "Delete Disbursement"){

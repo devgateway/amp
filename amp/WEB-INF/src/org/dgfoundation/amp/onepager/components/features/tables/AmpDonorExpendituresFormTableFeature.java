@@ -47,7 +47,7 @@ public class AmpDonorExpendituresFormTableFeature extends
 				AmpTextFieldPanel<String> classification = new AmpTextFieldPanel<String>(
 						"classification", new PropertyModel<String>(
 								item.getModel(), "expCategory"),
-						"Expenditure Classification", false, true);
+						"Expenditure Classification", false, false);
 				classification.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 				classification.setTextContainerDefaultMaxSize();
 				item.add(classification);

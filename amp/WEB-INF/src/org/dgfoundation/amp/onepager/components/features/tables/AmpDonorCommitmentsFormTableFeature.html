@@ -1,18 +1,19 @@
 <wicket:extend>
 	<tr wicket:id="tableHeading" class="invisible-item">
 	</tr>
-	<tr wicket:id="listCommitments">
-		<td class="inside">
-            <div class="wicketMargin5">
-                <span class="wicketMargin5" wicket:id="adjustmentType"/> <br/>
-                <span class="wicketMargin5" wicket:id="fundingAmount"/> <br/>
-                <span class="wicketMargin5" wicket:id="enableFixedRate"/>
-                <span class="wicketMargin5" wicket:id="fixedExchangeRate"/> <br/>
-                <span class="wicketMargin5" wicket:id="pledge"/>
+	<tr class="wicketFundingRowItem" wicket:id="listCommitments">
+		<td>
+            <div>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="adjustmentType"/>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="fundingAmount"/>
+                <br><br>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="enableFixedRate"/>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="fixedExchangeRate"/>
+                <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="pledge"/>
             </div>
         </td>
 		<td>
-			<span wicket:id="delCommitment"/>
+			<span class="wicketPadding2" wicket:id="delCommitment"/>
 		</td>
 	</tr>
 </wicket:extend>

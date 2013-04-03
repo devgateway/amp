@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -83,7 +84,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
                 };
 
                 final AmpTextFieldPanel<Double> exchangeRate = new AmpTextFieldPanel<Double>("fixedExchangeRate",
-                        fixedExchangeRateModel, "Exchange Rate", false, true);
+                        fixedExchangeRateModel, "Exchange Rate", false, false);
                 exchangeRate.getTextContainer().add(new RangeValidator<Double>(0.001d, null));
                 exchangeRate.getTextContainer().add(new AttributeModifier("size", new Model<String>("6")));
                 exchangeRate.setOutputMarkupId(true);
@@ -92,7 +93,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
                 item.add(exchangeRate);
 
                 AmpCheckBoxFieldPanel enableFixedRate = new AmpCheckBoxFieldPanel(
-                        "enableFixedRate", fixedRate, "Fixed exchange rate", false){
+                        "enableFixedRate", fixedRate, "Fixed exchange rate", false, false){
                     @Override
                     protected void onAjaxOnUpdate(AjaxRequestTarget target) {
                         Boolean state = this.getModel().getObject();
@@ -115,7 +116,7 @@ public class AmpDonorCommitmentsFormTableFeature extends
 					public Object getDisplayValue(FundingPledges arg0) {
 						return arg0.getTitle();
 					}
-				}, true));
+				}, false));
 				item.add(new ListEditorRemoveButton("delCommitment", "Delete Commitment"){
 					protected void onClick(org.apache.wicket.ajax.AjaxRequestTarget target) {
 						AmpFundingItemFeaturePanel parent = this.findParent(AmpFundingItemFeaturePanel.class);

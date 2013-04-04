@@ -343,10 +343,10 @@ function setHoveredTable(tableId, hasHeaders) {
 function validateForm(){
 	var strError = "";
 	//Check Title and pageCode
-	var isnumeric = IsNumeric($("input[name=name]").val());
+	/* var isnumeric = IsNumeric($("input[name=name]").val());
 	if($("input[name=name]").val() == "" || isnumeric ){
 		strError = "<digi:trn jsFriendly='true'>Name (Non Numeric Characteres)</digi:trn>\n";
-	}
+	} */
 	if($("input[name=iconFile]").val() == ""){
 		if (strError==""){
 			strError = "<digi:trn jsFriendly='true'>Icon</digi:trn>\n";
@@ -356,6 +356,10 @@ function validateForm(){
 	}
 	if (strError != ""){
 		alert("<digi:trn jsFriendly='true'>Please complete the following fields:</digi:trn>\n" + strError);
+		return false;
+	}
+	if(!validateUrl($("input[name=url]").val())){
+		alert("<digi:trn>Wrong format URL</digi:trn>\n");
 		return false;
 	}
 	return true;
@@ -444,5 +448,50 @@ $(document).ready(
 		}
 );
 
+function checkDot(str, cnt)
+{
+	var count = 0, index=0, flag;
+	for (i = 0;  i < str.length;  i++)
+	{
+		if(str.charAt(i) == ".")
+			count = count + 1;
+		if(count == 2)
+		{
+			index = i + 1;
+			break;
+		}
+			
+	}
+	var diff = str.length - index;
+	if(count >= cnt && diff > 1)
+		flag =  true;
+	else
+	{
+		flag =  false;
+	}
+	return flag;
+}
+
+function validateUrl(str)
+{
+	str = trim(str);
+	var flag;
+	var temp="";
+	if(str.substr(0,3) == "www")
+		flag = checkDot(str, 2);
+	else if(str.substr(0,7) == "http://")
+	{
+		temp = str.substring(7,10);
+		if(temp == "www")
+			flag = checkDot(str, 2);
+		else
+			flag = checkDot(str, 1);	
+	}
+	else
+	{
+		flag = false;
+	}
+	return flag;
+}
 </script>
 </digi:form>

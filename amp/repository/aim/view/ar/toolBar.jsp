@@ -166,15 +166,20 @@ addLoadEvent(addpanel);
 	
 	String ampReportId = request.getAttribute("ampReportId").toString();
 				
-   String viewParam="";
-   if("reset".equals(request.getParameter("view"))) viewParam="?view=reset";
-   String viewParamXLS="/xlsExport.do";
-   String viewParamPlainXLS="/xlsExport.do?plainReport=true";
-   String viewParamPDF="/pdfExport.do";
-   String viewParamCSV="/csvExport.do"+viewParam;
-   String viewParamTree="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=tree";
-   String viewParamPrint="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=print";
+	String viewParam="";
+	if("reset".equals(request.getParameter("view")))
+	viewParam="?view=reset";
+	
+	String rcidParam = "&reportContextId=" + ReportContextData.getCurrentReportContextId(request, true);
+				
+	String viewParamXLS="/xlsExport.do";
+	String viewParamPlainXLS="/xlsExport.do?plainReport=true";
+	String viewParamPDF="/pdfExport.do";
+	String viewParamCSV="/csvExport.do"+viewParam;
+	String viewParamTree="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=tree" + rcidParam;
+	String viewParamPrint="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=print" + rcidParam;
 %>
+
 <script type="text/javascript">
 	function toggleActionForm(type) {
 		var options = false;

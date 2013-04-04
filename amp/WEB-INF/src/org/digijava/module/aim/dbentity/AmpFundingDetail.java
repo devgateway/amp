@@ -95,7 +95,7 @@ public class AmpFundingDetail implements Serializable, Cloneable {
 	private String expCategory;
         private String disbOrderId;
         private IPAContract contract;
-        private Double transactionAmountInBaseCurrency;
+        
         
         public AmpFundingDetail(){}
         
@@ -172,30 +172,13 @@ public class AmpFundingDetail implements Serializable, Cloneable {
         public AmpFundingDetail(Long ampFundDetailId, Integer transactionType,AmpCategoryValue adjustmentType,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
         	this.ampFundDetailId=ampFundDetailId;
         	this.transactionType=transactionType;
-            this.adjustmentType=adjustmentType;
+             this.adjustmentType=adjustmentType;
             this.transactionDate=transactionDate;
             this.ampCurrencyId=ampCurrencyId;
             this.fixedExchangeRate=fixedExchangeRate;
             
         }
         
-
-        /**
-		 * @return the transactionAmountInBaseCurrency
-		 */
-		public Double getTransactionAmountInBaseCurrency() {
-			return transactionAmountInBaseCurrency;
-		}
-
-
-		/**
-		 * @param transactionAmountInBaseCurrency the transactionAmountInBaseCurrency to set
-		 */
-		public void setTransactionAmountInBaseCurrency(
-				Double transactionAmountInBaseCurrency) {
-			this.transactionAmountInBaseCurrency = transactionAmountInBaseCurrency;
-		}
-
 
 		public IPAContract getContract() {
             return contract;

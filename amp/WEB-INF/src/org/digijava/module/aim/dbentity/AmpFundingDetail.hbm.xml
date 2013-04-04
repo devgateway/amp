@@ -40,7 +40,9 @@
 		<many-to-one name="adjustmentType" column="adjustment_type" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 	
 	
+	<!-- 
 		<property name="transactionAmountInBaseCurrency" type="java.lang.Double" formula="gettransactionamountinbasecurr(amp_fund_detail_id)" not-null="true"/>
+	-->
 	<many-to-one name="fixedRateBaseCurrency" column="fixed_base_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" not-found="ignore" not-null="false"  />
 	</class>
 </hibernate-mapping>

@@ -144,8 +144,12 @@ public abstract class Viewable implements Cloneable {
 		if (rd.getSplitterCell() != null)
 		{
 			return rd.getSplitterCell().getColumn().getWorker().getGenerator();
-		}		
-		return rd.getParent().getReportGenerator();
+		}
+		if (rd instanceof GroupReportData)
+			return ((GroupReportData) rd).getArchReportGenerator();
+		
+		return rd.getParent().getArchReportGenerator();
 	}
 	
 }
+

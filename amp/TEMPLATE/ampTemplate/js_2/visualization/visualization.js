@@ -1579,6 +1579,7 @@ function refreshBoxes(o){
 							myPanel.setHeader("\n" + trnOrgGrpInfo);
 							break;
 					}
+					disabledInfo = (urlSaveAdditional != "") ? "": "disabled='disabled'";
 					var infoMarkup = new Array();
 					infoMarkup.push("<div id=\"saveResultMsg\"></div><table class=\"inside\"><tbody>");
 					infoMarkup.push("<tr>");

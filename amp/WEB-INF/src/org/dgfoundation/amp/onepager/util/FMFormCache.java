@@ -14,6 +14,8 @@ public class FMFormCache {
 	private Hashtable<String, Boolean> editPermCache = null;
 	private Hashtable<String, Boolean> viewPermCache = null;
 	
+	private boolean disabled 	= false;
+	
 	public static FMFormCache getInstance() {
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		if ( session.getFormCache() == null ) {
@@ -28,6 +30,9 @@ public class FMFormCache {
 	}
 	
 	public void insertInCache(boolean value, String action, String componentName, AmpFMTypes type) {
+		
+		if ( disabled ) return;
+		
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		Map scope=PermissionUtil.getScope(session.getHttpSession());
 		
@@ -36,6 +41,9 @@ public class FMFormCache {
 	}
 	
 	public void insertInCache(boolean value, String action, Map scope, String componentName, AmpFMTypes type) {
+		
+		if ( disabled ) return;
+		
 		/*
 		 * In case scope contains exactly: team member, activity and permissabe object (AmpObjectVisibility)
 		 */
@@ -66,6 +74,9 @@ public class FMFormCache {
 	}
 	
 	public Boolean checkCache(String action, String componentName, AmpFMTypes type) {
+		
+		if ( disabled ) return null;
+		
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		Map scope=PermissionUtil.getScope(session.getHttpSession());
 		
@@ -73,6 +84,9 @@ public class FMFormCache {
 	}
 	
 	public Boolean checkCache(String action, Map scope, String componentName, AmpFMTypes type) {
+		
+		if ( disabled ) return null;
+		
 		/*
 		 * In case scope contains exactly: team member, activity and permissabe object (AmpObjectVisibility)
 		 */
@@ -119,6 +133,17 @@ public class FMFormCache {
 		this.viewPermCache.clear();
 	}
 
+	public void disable (boolean withClear) {
+		this.disabled	= true;
+		if ( withClear )
+			this.clear();
+	}
+	
+	public void enable (boolean withClear) {
+		this.disabled	= false;
+		if ( withClear )
+			this.clear();
+	}
 	
 	public Hashtable<String, Boolean> getEditPermCache() {
 		return this.editPermCache;

@@ -136,6 +136,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 		add(base);
 		
 		final AmpIndicatorGroupField target = new AmpIndicatorGroupField("target", new PropertyModel(targetVal, "value"), new PropertyModel(targetVal, "valueDate"), new PropertyModel(targetVal, "comment"), "Target Value", "Target");
+        target.setIgnorePermissions(true);
 		if (valuesSet.getObject()){
 			target.setEnabled(false);
 		}
@@ -146,9 +147,9 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
 		final AmpIndicatorGroupField revised = new AmpIndicatorGroupField("revised", new PropertyModel(revisedVal, "value"), new PropertyModel(revisedVal, "valueDate"), new PropertyModel(revisedVal, "comment"), "Revised Value", "Revised");
 		if (valuesSet.getObject())
-			revised.setVisible(true);
+			revised.setVisibilityAllowed(true);
 		else
-			revised.setVisible(false);
+			revised.setVisibilityAllowed(false);
 		revised.setOutputMarkupId(true);
 		add(revised);
 
@@ -204,7 +205,7 @@ public class AmpMEItemFeaturePanel extends AmpFeaturePanel<IndicatorActivity> {
 
 				if (!valuesSet.getObject()){
 					target.setEnabled(false);
-					revised.setVisible(true);
+					revised.setVisibilityAllowed(true);
 					valuesSet.setObject(true);
 					art.add(target);
 				}

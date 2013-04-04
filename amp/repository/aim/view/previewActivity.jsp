@@ -1786,9 +1786,9 @@ function collapseAll() {
 						</tr>
 					</c:if>
 					</module:display>
-					<module:display name="/Activity Form/Components/Component/Components Expeditures" 
-							parentModule="/Activity Form/Components/Component/">
 					
+					<module:display name="/Activity Form/Components/Component/Components Expenditures" 
+							parentModule="/Activity Form/Components/Component/">
 					<c:if test="${!empty comp.expenditures}">
 						<tr>
 							<td class="prv_right">
@@ -1809,20 +1809,20 @@ function collapseAll() {
 														</digi:trn>													
 													</td>
 												</module:display>
-												<module:display name="/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Amount"
-													parentModule="/Activity Form/Components/Component/Components Expeditures/Expenditure Table">
+												<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount"
+													parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 													<td align="right" width="100" bgcolor="#f0f0f0">
 														<b><c:out value="${fd.transactionAmount}"/></b>				
 													</td>
 												</module:display>
-												<module:display name="/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Currency"
-													parentModule="/Activity Form/Components/Component/Components Expeditures/Expenditure Table">
+												<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency"
+													parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 													<td class="prv_right">
 														<b><c:out value="${fd.currencyCode}"/></b>
 													</td>
 												</module:display>
-												<module:display name="/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Transaction Date"
-													parentModule="/Activity Form/Components/Component/Components Expeditures/Expenditure Table">
+												<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"
+													parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 													<td bgcolor="#f0f0f0" width="70">
 														<b><c:out value="${fd.transactionDate}"/></b>
 													</td>

@@ -3153,7 +3153,7 @@ function collapseAll() {
 	if (chartAreas != null) {
 		$.each(chartAreas, function (idx, val) {
 				//console.log (val.href);
-				val.href = "javascript:showIndicatorValsPopin(\"" + val.href + "\")";
+				val.href = "javascript:showIndicatorValsPopin(\"" + encodeURIComponent(val.href) + "\")";
 			});
 	}
 	
@@ -3161,7 +3161,7 @@ function collapseAll() {
 	if (chartAreasRisk != null) {
 		$.each(chartAreasRisk, function (idx, val) {
 				//console.log (val.href);
-				val.href = "javascript:showIndicatorValsPopin(\"" + val.href + "\")";
+				val.href = "javascript:showIndicatorValsPopin(\"" + encodeURIComponent(val.href) + "\")";
 			});
 	}
 	

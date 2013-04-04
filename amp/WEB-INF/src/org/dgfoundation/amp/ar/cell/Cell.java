@@ -6,6 +6,7 @@
 package org.dgfoundation.amp.ar.cell;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -84,12 +85,55 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 	public abstract Class<? extends ColumnWorker> getWorker();
 	
 
-	public int compareTo(C o) {
-		if(this.getValue()!=null && o.getValue()!=null)
-			return ((Comparable)this.getValue()).compareTo(o.getValue());
-		else
-			return 0;
+	/**
+	 * compares two lists, first by length, then element by element
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	protected int compareLists(Object a, Object b)
+	{
+		List l1 = (List) a;
+		List l2 = (List) b;
+		if (l1.size() != l2.size())
+			return l1.size() - l2.size();
+		for(int i = 0; i < l1.size(); i++)
+		{
+			int z = (((Comparable) l1.get(i)).compareTo((Comparable) l2.get(i)));
+			if (z != 0)
+				return z;
+		}
+		return 0;
 	}
+	
+	
+	public int compareTo(C o) {
+		if (this.getValue() == null)
+		{
+			if (o.getValue() == null)
+				return 0;
+			return -1;
+		}
+		if (o.getValue() == null)
+			return 1;
+		
+		// got till here -> no nulls
+		if (this.getValue() instanceof List)
+		{
+			if (o.getValue() instanceof List)
+				return compareLists(this.getValue(), o.getValue());
+			
+			return 1;
+		}
+		if (o.getValue() instanceof List)
+		{
+			// the first one is not a list -> return -1
+			return -1;
+		}
+		
+		return ((Comparable)this.getValue()).compareTo(o.getValue());
+	}
+	
 	
 	public abstract Comparable comparableToken();
 		

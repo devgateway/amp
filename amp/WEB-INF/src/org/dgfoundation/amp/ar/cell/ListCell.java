@@ -72,7 +72,7 @@ public class ListCell extends Cell {
 		 * @author dan
 		 * to avoid the lists with the same elements such as...."Japan Japan Japan"
 		 */
-		TreeSet aux=new TreeSet();
+		TreeSet<Object> aux=new TreeSet<Object>(/*new CellContentsComparator()*/);
 		aux.addAll(value);
 		aux.add(c);
 		value.clear();

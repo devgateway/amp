@@ -130,7 +130,8 @@ public class MapsConfigurationForm extends ActionForm {
 			this.admin2 = null;
 			this.geoId = null;
 			this.legend = null;
-			this.configName = null;			
+			this.configName = null;
+			this.count=null;
 		}
 	}
 	public void setReset(boolean reset) {

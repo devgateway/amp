@@ -57,6 +57,19 @@ public class ReportsFilterPicker extends Action {
 
     public final static String PLEDGE_REPORT_REQUEST_ATTRIBUTE = "is_pledge_report";
 
+    
+    public final static Long tryParseLong(String input)
+    {
+    	try
+    	{
+    		return Long.parseLong(input);
+    	}
+    	catch(Exception e)
+    	{
+    		return null;
+    	}
+    }
+    
     @Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception{
 	
@@ -67,13 +80,13 @@ public class ReportsFilterPicker extends Action {
 		if ( "".equals(ampReportId) )
 			ampReportId		= null;
 		
-		Long longAmpReportId = ampReportId == null ? null : Long.parseLong(ampReportId);
+		Long longAmpReportId = ampReportId == null ? null : tryParseLong(ampReportId);
 		
 		if(ampReportId==null){
 			ampReportId = request.getParameter("reportContextId");
 			if ( "".equals(ampReportId) )
 				ampReportId		= null;
-			longAmpReportId = ampReportId == null ? null : Long.parseLong(ampReportId);
+			longAmpReportId = ampReportId == null ? null : tryParseLong(ampReportId);
 		}
 		if(longAmpReportId==null){
 			String pledged = request.getParameter("pledged");
@@ -103,7 +116,7 @@ public class ReportsFilterPicker extends Action {
 //			request.getSession().setAttribute(ArConstants.REPORTS_Z_FILTER,arf);
 //		}
 		
-		if (ampReportId != null)
+		if (longAmpReportId != null)
 		{
 			Session session = PersistenceManager.getSession();
 			AmpReports report = (AmpReports) session.get(AmpReports.class, longAmpReportId);

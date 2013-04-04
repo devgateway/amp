@@ -98,10 +98,10 @@ public class AmpIndicatorValue implements Serializable, Cloneable{
 		this.valueDate = valueDate;
 	}
 	public Double getValue() {
-		return FeaturesUtil.applyThousandsForVisibility(value);
+		return value;
 	}
 	public void setValue(Double value) {
-		this.value = FeaturesUtil.applyThousandsForEntry(value);
+		this.value = value;
 	}
 	public int getValueType() {
 		return valueType;

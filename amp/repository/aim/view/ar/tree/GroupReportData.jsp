@@ -30,12 +30,12 @@
 </logic:notPresent>
 <logic:present name="groupReport" property="parent">
 <c:if test="${!(groupReport.name == groupReport.parent.name)}">
-<div style='position:relative;display:none;' id='<bean:write name="groupReport" property="absoluteReportName"/>'> 
+<div style='position:relative;display:none;' id='<bean:write name="groupReport" property="absoluteReportNameMD5"/>'> 
 <bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
 <jsp:include page="/repository/aim/view/ar/print/TrailCells.jsp"/>
 </div>
 <li noDrag="true">
-<a onMouseOver="stm(['Totals for <bean:write name="groupReport" property="name"/>',document.getElementById('<bean:write name="groupReport" property="absoluteReportName"/>').innerHTML],Style[0])" onMouseOut="htm()"><bean:write name="groupReport" property="name"/></a>
+<a onMouseOver="stm(['Totals for <bean:write name="groupReport" property="name"/>',document.getElementById('<bean:write name="groupReport" property="absoluteReportNameMD5"/>').innerHTML],Style[0])" onMouseOut="htm()"><bean:write name="groupReport" property="name"/></a>
 <bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
 <jsp:include page="subtotalsNodeLine.jsp"/>
 <ul>

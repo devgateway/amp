@@ -16,7 +16,7 @@
 
 
 <li noDrag="true">
-<a onMouseOver="stm(['Totals for <bean:write name="columnReport" property="name"/>',document.getElementById('<bean:write name="columnReport" property="absoluteReportName"/>').innerHTML],Style[0])" onMouseOut="htm()"><bean:write name="columnReport" property="name"/></a>
+<a onMouseOver="stm(['Totals for <bean:write name="columnReport" property="name"/>',document.getElementById('<bean:write name="columnReport" property="absoluteReportNameMD5"/>').innerHTML],Style[0])" onMouseOut="htm()"><bean:write name="columnReport" property="name"/></a>
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="subtotalsNodeLine.jsp"/>
 <ul>
@@ -50,7 +50,7 @@
 </ul>
 </li>
 
-<div style='position:relative;display:none;' id='<bean:write name="columnReport" property="absoluteReportName"/>'> 
+<div style='position:relative;display:none;' id='<bean:write name="columnReport" property="absoluteReportNameMD5"/>'> 
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.ColumnReportData" scope="page" toScope="request"/>
 <jsp:include page="/repository/aim/view/ar/print/TrailCells.jsp"/>
 </div>

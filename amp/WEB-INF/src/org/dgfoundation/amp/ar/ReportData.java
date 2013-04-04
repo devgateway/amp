@@ -6,13 +6,18 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import mondrian.util.Base64;
+
 import org.apache.log4j.Logger;
+import org.bouncycastle.util.encoders.Base64Encoder;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
@@ -184,6 +189,31 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	public abstract void removeColumnsByName(String name);
 
 	public abstract String getAbsoluteReportName();
+	
+	protected MessageDigest messageDigest = getMD5Digester();
+	protected MessageDigest getMD5Digester()
+	{
+		try
+		{
+			return MessageDigest.getInstance("MD5");
+		}
+		catch(NoSuchAlgorithmException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public String getAbsoluteReportNameMD5()
+	{
+		byte[] hash = messageDigest.digest(this.getAbsoluteReportName().getBytes());
+		// Convert to hex string
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < hash.length; i++) {
+		    sb.append(Integer.toHexString(0xff & hash[i]));
+		}
+		String md5 = sb.toString();
+		return md5;
+	}
 	
 	public abstract void applyLevelSorter();
 	

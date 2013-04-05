@@ -21,6 +21,7 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.module.aim.dbentity.OnepagerSection;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.FMFormCache;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.exception.DgException;
@@ -151,9 +152,11 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		visibleFmButton=new IndicatingAjaxLink("visibleFmButton") {	
 			@Override
 			public void onClick(AjaxRequestTarget target) {
+				FMFormCache.getInstance().disable(true);
 				switchFmVisible(target);
 				if(cascadeFmToChildren.getModelObject()!=null && cascadeFmToChildren.getModelObject()) 
-					OnePagerUtil.cascadeFmVisible(target,FMUtil.isFmVisible(AmpComponentPanel.this), AmpComponentPanel.this);				
+					OnePagerUtil.cascadeFmVisible(target,FMUtil.isFmVisible(AmpComponentPanel.this), AmpComponentPanel.this);
+				FMFormCache.getInstance().enable(true);
 			}
 		};
 		visibleFmButton.setOutputMarkupId(true);

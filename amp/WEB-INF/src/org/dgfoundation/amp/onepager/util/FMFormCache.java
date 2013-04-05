@@ -87,8 +87,8 @@ public class FMFormCache {
 		
 		if ( disabled ) return null;
 		
-		/*
-		 * In case scope contains exactly: team member, activity and permissabe object (AmpObjectVisibility)
+		/* 
+		 * In  case scope contains exactly: team member, activity and permissabe object (AmpObjectVisibility)
 		 */
 		if ( scope != null && scope.size() == 3 ) {
 			Map<String,Boolean> cache	= null;

@@ -1505,6 +1505,8 @@ public class TeamUtil {
     	{
     		Map<Long, List<AmpActivityDocument>> result = new java.util.TreeMap<Long, List<AmpActivityDocument>>();
     		
+    		if(activityIds.size()==0) return result;
+    		
     		String queryString = "select doc, doc.ampActivity.ampActivityId FROM " + AmpActivityDocument.class.getName() + " doc WHERE doc.ampActivity.ampActivityId IN (" + getCommaSeparatedList(activityIds) + ")";
     		
             Session session = PersistenceManager.getRequestDBSession();

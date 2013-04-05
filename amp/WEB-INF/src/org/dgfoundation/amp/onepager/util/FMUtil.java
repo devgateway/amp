@@ -289,14 +289,18 @@ public final class FMUtil {
 		}
 	}
 	
-	public static AmpModulesVisibility getModuleByNameFromRoot(Collection<AmpModulesVisibility> list, String moduleName) {
+	public static AmpModulesVisibility getModuleByNameFromRoot(Collection<Object> list, String moduleName) {
 		if (list == null || list.size()<1)
 			return null;
 		//logger.error("Searching for:" + moduleName);
-		Iterator<AmpModulesVisibility> it = list.iterator();
+		Iterator<Object> it = list.iterator();
 		while (it.hasNext()) {
-			AmpModulesVisibility module	= it.next();
-			
+			AmpModulesVisibility module;
+			Object obj = it.next();
+			if (obj instanceof AmpTreeVisibility)
+				module = (AmpModulesVisibility) ((AmpTreeVisibility)obj).getRoot();
+			else
+				module = (AmpModulesVisibility) obj;
 			if (module.getName().compareTo(moduleName) == 0)
 				return module;
 		}

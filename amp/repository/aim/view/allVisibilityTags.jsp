@@ -483,12 +483,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Ministry Of Finance Contact Phone" feature="Reports Contact Information"></field:display>
 <field:display name="Ministry Of Finance Contact Fax" feature="Reports Contact Information"></field:display>
 <field:display name="Ministry Of Finance Contact Title" feature="Reports Contact Information"></field:display>
-<field:display name="Sector Ministry Contact Name" feature="Reports Contact Information"></field:display>
-<field:display name="Sector Ministry Contact Email" feature="Reports Contact Information"></field:display>
-<field:display name="Sector Ministry Contact Organization" feature="Reports Contact Information"></field:display>
-<field:display name="Sector Ministry Contact Phone" feature="Reports Contact Information"></field:display>
-<field:display name="Sector Ministry Contact Fax" feature="Reports Contact Information"></field:display>
-<field:display name="Sector Ministry Contact Title" feature="Reports Contact Information"></field:display>
+<%-- 
+deleted 6 fields, do not reinsert
+--%>
 <field:display name="Project Coordinator Contact Name" feature="Reports Contact Information"></field:display>
 <field:display name="Project Coordinator Contact Email" feature="Reports Contact Information"></field:display>
 <field:display name="Project Coordinator Contact Organization" feature="Reports Contact Information"></field:display>

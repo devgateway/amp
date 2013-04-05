@@ -877,12 +877,18 @@ public class AmpReportGenerator extends ReportGenerator {
 			if (item instanceof GroupReportData)
 				applyYearRangeSettings((GroupReportData) item);
 			if (item instanceof ColumnReportData)
-			{
+			{ 
 				ColumnReportData crd = (ColumnReportData) item;
-				for(Column column:crd.getItems())
+				Iterator<Column> columns = crd.iterator();
+				while (columns.hasNext())
 				{
+					Column column = columns.next();
 					if (column.getColumnId().equals(ArConstants.COLUMN_FUNDING))
+					{
 						applyYearRangeSettings((GroupColumn)column);
+						if (column.items.isEmpty())
+							columns.remove();
+					}
 				}
 			}
 		}
@@ -919,7 +925,7 @@ public class AmpReportGenerator extends ReportGenerator {
 					if (!filter.passesYearRangeFilter(year))
 						it.remove();
 			}
-		}
+		} 
 	}
 		
 	protected void removeUnrenderizableData(GroupReportData report)

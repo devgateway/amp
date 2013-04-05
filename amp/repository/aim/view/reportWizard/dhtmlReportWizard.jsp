@@ -370,7 +370,7 @@ body {
 						</button>
 						&nbsp;&nbsp;&nbsp;
 					</div>
-				</div>
+				</div>	</
 			</tr>
 		</table>
 	</div>

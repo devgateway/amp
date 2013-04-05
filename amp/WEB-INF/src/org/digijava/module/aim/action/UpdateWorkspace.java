@@ -170,7 +170,7 @@ public class UpdateWorkspace extends Action {
 					return mapping.getInputForward();
 				}
 
-                if(uwForm.getUseFilter()){
+                if(uwForm.getUseFilter()!=null && uwForm.getUseFilter()){
                     AmpARFilter filter = ReportContextData.getFromRequest().getFilter();
                     if ( filter != null) {
                         if ( newTeam.getAmpTeamId()!=null )

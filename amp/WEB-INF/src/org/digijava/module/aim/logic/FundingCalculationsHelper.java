@@ -134,11 +134,14 @@ public class FundingCalculationsHelper {
 				frmExRt = fundDet.getFixedExchangeRate();
 			}
 			
-
+			double toExRt;
 			if (userCurrencyCode != null)
 				toCurrCode = userCurrencyCode;
-
-			double toExRt = Util.getExchange(toCurrCode, dt);
+			if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(toCurrCode)){
+				toExRt=frmExRt;
+			}else{
+				toExRt = Util.getExchange(toCurrCode, dt);
+			}
 			DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
 
 			if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {

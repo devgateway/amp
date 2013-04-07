@@ -227,17 +227,33 @@ addLoadEvent(addpanel);
 				<digi:img hspace="2" vspace="2" src="module/aim/images/xls_plain_icon.jpg" border="0" alt="Export to Excel as Plain Report" />
 			</a>
 		</td>
+		
+		<c:set var="downloadAsCsv">
+			<digi:trn>Download as CSV</digi:trn>
+		</c:set>
 
+		<c:set var="exportToCsv">
+			<digi:trn>Export to CSV</digi:trn>
+		</c:set>
+
+		<c:set var="printTrn">
+			<digi:trn>Print</digi:trn>
+		</c:set>
+
+		<c:set var="printerFriendly">
+			<digi:trn>Printer Friendly</digi:trn>
+		</c:set>
+								
 		<td noWrap align=left valign="center">
-			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank" title="Download as CSV">
-				<digi:img style="margin-bottom:5px" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="Export to CSV" />
+			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank" title="${downloadAsCsv}">
+				<digi:img style="margin-bottom:5px" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="${exportToCsv}" />
 			</digi:link>
 		</td>
 		
 		<feature:display name="Show Printer Friendly option" module="Public Reports">
 			<td noWrap align=left valign="center">
-				<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;" title="Print">
-					<digi:img width="17" height="20" hspace="2" vspace="2" src="img_2/ico-print.png" border="0" alt="Printer Friendly" />
+				<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;" title="${printTrn}">
+					<digi:img width="17" height="20" hspace="2" vspace="2" src="img_2/ico-print.png" border="0" alt="${printerFriendly}" />
 				</digi:link>
 			</td>
 		</feature:display>

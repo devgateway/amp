@@ -2254,7 +2254,8 @@ public class AmpARFilter extends PropertyListable {
 		int pos = genFilter.indexOf(initialFilterQuery);
 		genFilter = genFilter.substring(pos + initialFilterQuery.length());
 		pos = genFilter.indexOf("AND");
-		genFilter = genFilter.substring(pos + 3);
+		if (pos >= 0)
+			genFilter = genFilter.substring(pos + 3);
 		return genFilter;
 	}
 	

@@ -48,7 +48,7 @@ public class MondrianQuery {
 		AmpARFilter filter = new AmpARFilter();
 		filter.readRequestData(request, AmpARFilter.FILTER_SECTION_ALL, null);
 	
-		filter.generateFilterQuery(request, false);
+		filter.generateFilterQuery(request, false,true);
 		generatedFilterQuery = filter.getGeneratedFilterQuery();
 		
 		/*Prepare thread local to process the schema*/

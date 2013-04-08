@@ -86,7 +86,10 @@ public class ActivityVersionUtil {
 					 * auxOutput.getValue()[i]); ret += date; } else {
 					 */
 					if (auxOutput.getValue()[i]!=null){
-						ret = ret + DbUtil.filter(auxOutput.getValue()[i].toString());
+                        String text = auxOutput.getValue()[i].toString();
+                        if (auxOutput.getTranslateValue())
+                            text = TranslatorWorker.translateText(text, langCode, site.getId());
+                        ret = ret + DbUtil.filter(text);
 					}
 					// }
 				}
@@ -112,7 +115,10 @@ public class ActivityVersionUtil {
 								formatter.setMaximumFractionDigits(0);
 								ret += formatter.format(auxOutput2.getValue()[i]);
 							} else {
-								ret = ret + DbUtil.filter(auxOutput2.getValue()[i].toString());
+                                String text = auxOutput2.getValue()[i].toString();
+                                if (auxOutput2.getTranslateValue())
+                                    text = TranslatorWorker.translateText(text, langCode, site.getId());
+                                ret = ret + DbUtil.filter(text);
 							}
 						}
 					}

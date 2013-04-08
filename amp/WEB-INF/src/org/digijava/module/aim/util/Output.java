@@ -9,6 +9,8 @@ public class Output {
 	private Object[] value;
 
 	private List<Output> outputs;
+
+    private Boolean translateValue = Boolean.FALSE;
 	
 	public String[] getTitle() {
 		return title;
@@ -34,14 +36,26 @@ public class Output {
 		this.outputs = outputs;
 	}
 
-	public Output(List<Output> outputs, String[] title, Object[] value) {
+    public Boolean getTranslateValue() {
+        return translateValue;
+    }
+
+    public void setTranslateValue(Boolean translateValue) {
+        this.translateValue = translateValue;
+    }
+
+    public Output(List<Output> outputs, String[] title, Object[] value, Boolean translateValue) {
 		super();
 		this.outputs = outputs;
 		this.title = title;
 		this.value = value;
+        this.translateValue = translateValue;
 	}
+    public Output(List<Output> outputs, String[] title, Object[] value) {
+        this(outputs, title, value, Boolean.FALSE);
+    }
 
-	public Output() {
+    public Output() {
 		super();
 	}
 }

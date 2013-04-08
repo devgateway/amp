@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.util.HierarchyListable;
@@ -159,9 +160,10 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	public Output getOutput() {
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
-		out.getOutputs().add(
-				new Output(null, new String[] { "Class:&nbsp;" }, new Object[] { this.ampCategoryClass.getName() }));
-		out.getOutputs().add(new Output(null, new String[] { " Value:&nbsp;" }, new Object[] { this.value }));
+
+        out.getOutputs().add(
+				new Output(null, new String[] { "Class:&nbsp;" }, new Object[] { this.ampCategoryClass.getName() }, true));
+		out.getOutputs().add(new Output(null, new String[] { " Value:&nbsp;" }, new Object[] { this.value }, true));
 		return out;
 	}
 	

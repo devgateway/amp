@@ -37,8 +37,6 @@ public class AmountCell extends Cell {
 		return columnPercent;
 	}
 
-	
-
 	/**
 	 * @return the columnCellValue
 	 */
@@ -148,6 +146,10 @@ public class AmountCell extends Cell {
 	 * @see org.dgfoundation.amp.ar.cell.Cell#toString()
 	 */
 	public String toString() {
+		
+		if (getFrozenValue() != null)
+			return getFrozenValue();
+		
 		// mf.setMaximumFractionDigits(2);
 		double am = getAmount();
 		if (am == 0)
@@ -614,5 +616,17 @@ public class AmountCell extends Cell {
 		return this.originalAmount;
 	}
 	
+	protected String frozenValue = null;
+
+	public void freeze()
+	{
+		frozenValue = toString();
+	}	 
+
+	public String getFrozenValue()
+	{
+		return frozenValue;
+	}
 
 }
+

@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -405,10 +406,14 @@ public class CellColumn extends Column {
 	}
 	
 	@Override
-	public List<Cell> getAllCells(List<Cell> src)
+	public List<Cell> getAllCells(List<Cell> src, boolean freeze)
 	{
 		for(Object obj:this.getItems())
+		{
 			src.add((Cell) obj);
+			if (obj instanceof AmountCell)
+				((AmountCell) obj).freeze();
+		}
 		return src;
 	}
 	

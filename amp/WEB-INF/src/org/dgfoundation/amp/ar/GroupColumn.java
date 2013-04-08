@@ -778,10 +778,10 @@ public class GroupColumn extends Column {
 	}
 	
 	@Override
-	public List<Cell> getAllCells(List<Cell> src)
+	public List<Cell> getAllCells(List<Cell> src, boolean freeze)
 	{
 		for(Object obj:items)
-			((Column) obj).getAllCells(src);
+			((Column) obj).getAllCells(src, freeze);
 		return src;
 	}
 	

@@ -756,12 +756,12 @@ public class ColumnReportData extends ReportData<Column> {
 	
 
 	@Override
-	public List<Cell> getAllCells(List<Cell> src)
+	public List<Cell> getAllCells(List<Cell> src, boolean freeze)
 	{
 		for(Object obj:items)
 		{
 			Column col = (Column) obj;
-			col.getAllCells(src);
+			col.getAllCells(src, freeze);
 		}
 		return src;
 	}

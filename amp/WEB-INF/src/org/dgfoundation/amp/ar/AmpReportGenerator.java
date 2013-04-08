@@ -841,9 +841,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
 		report.removeChildrenWithoutActivities(); //postProcess might have created some more empty children
+		
 		List<Cell> listOfCells = new ArrayList<Cell>();
-		report.getAllCells(listOfCells);
-		rawColumns.getAllCells(listOfCells);
+		report.getAllCells(listOfCells, true);
+		rawColumns.getAllCells(listOfCells, true);
 		
 		rawColumnsByName.clear();
 		rawColumnsByName = null;
@@ -865,8 +866,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		// perform postprocessing - cell grouping and other tasks		
 		report.postProcess();
 		report.removeChildrenWithoutActivities(); //postProcess might have left some more empty children
-		deleteMetadata(listOfCells);
 		removeUnrenderizableData(report); // apply year range filter from settings and any other "non-displaying" filtering which SHOULD NOT affect the report except rendering
+		
+		report.getAllCells(listOfCells, true); //repeatedly fetch cells, as some might have been added in the meantime (postprocessing)
+		deleteMetadata(listOfCells);
 	}
 
 	protected void applyYearRangeSettings(GroupReportData report)
@@ -972,12 +975,31 @@ public class AmpReportGenerator extends ReportGenerator {
 		return mergedCellsSum;
 	}
 	
+	protected void freezeCell(Cell cell)
+	{
+		if (cell instanceof AmountCell)
+			((AmountCell) cell).freeze();
+		
+		if (cell instanceof ListCell)
+		{
+			Iterator it = ((ListCell) cell).iterator();
+			while (it.hasNext())
+				freezeCell((Cell) it.next());
+		}
+	}
+	
 	protected void deleteMetadata(List<Cell> cells)
 	{
 		logger.warn("going to clean up " + cells.size() + " cells...");
 		int cl = 0;
 		for(Cell cell:cells)
+		{
+			freezeCell(cell);
+		}
+		for(Cell cell:cells)
+		{
 			cl += clearCellMetadata(cell);
+		}
 		logger.warn("cleaned up " + cl + " metadata instances");
 	}
 	

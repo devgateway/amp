@@ -523,12 +523,19 @@ public class GroupReportData extends ReportData<ReportData> {
 	}
 
 	@Override
-	public List<Cell> getAllCells(List<Cell> src)
+	public List<Cell> getAllCells(List<Cell> src, boolean freeze)
 	{
 		for(ReportData rd:this.getItems())
 		{
-			rd.getAllCells(src);
+			rd.getAllCells(src, freeze);
+			
+			for(Object cell:rd.getTrailCells()) // trailsCells are not part of items()
+				if (cell instanceof Cell)
+					src.add( (Cell) cell);
 		}
+		for(AmountCell cell:this.getTrailCells())
+			src.add(cell);
+		
 		return src;
 	}
 	

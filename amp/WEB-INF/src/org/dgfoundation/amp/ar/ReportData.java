@@ -34,12 +34,12 @@ import org.digijava.module.aim.helper.KeyValue;
  */
 public abstract class ReportData<K extends Viewable> extends Viewable {
     	
-    	/**
-    	 * This property is set with the cell that is responsible of creating the reportdata (in hierarchy).
-    	 * a hierarchy is created based on a unique set of cells coming from a column. each cell in this column creates a new sub-report
-    	 * to be able to keep track of dimensions, we remember this cell as the "splitterCell"
-    	 */
-    	protected Cell splitterCell=null;
+    /**
+     * This property is set with the cell that is responsible of creating the reportdata (in hierarchy).
+     * a hierarchy is created based on a unique set of cells coming from a column. each cell in this column creates a new sub-report
+     * to be able to keep track of dimensions, we remember this cell as the "splitterCell"
+     */
+	protected Cell splitterCell=null;
     
 	protected static Logger logger = Logger.getLogger(ReportData.class);
 	
@@ -472,7 +472,7 @@ public abstract class ReportData<K extends Viewable> extends Viewable {
 	 * @param src
 	 * @return
 	 */
-	public abstract List<Cell> getAllCells(List<Cell> src);
+	public abstract List<Cell> getAllCells(List<Cell> src, boolean freeze);
 	
 	/**
 	 * encodes the name of this reportdata if it is unallocated

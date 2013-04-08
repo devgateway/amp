@@ -473,7 +473,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	public abstract void filterByIds(Set<Long> idsToRetain);
 	
 	
-	public abstract List<Cell> getAllCells(List<Cell> src);
+	public abstract List<Cell> getAllCells(List<Cell> src, boolean freeze);
 	/**
 	 * remove any sign of existence of any data with given ownerId's
 	 * @param ownerId

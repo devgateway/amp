@@ -2,14 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.form.CompareActivityVersionsForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -154,6 +148,8 @@ public class CompareActivityVersions extends DispatchAction {
 						// implements
 						// Versionable.
 						Class auxReturnType = auxMethod.getReturnType();
+
+
 						if (auxReturnType.getName().equals("java.util.Date")
 								|| auxReturnType.getName().equals("java.sql.Date")
 								|| auxReturnType.getName().equals("java.lang.String")
@@ -164,8 +160,20 @@ public class CompareActivityVersions extends DispatchAction {
 								|| auxReturnType.getName().equals("java.lang.Float")
 								|| auxReturnType.getName().equals("java.lang.Boolean")
 								|| auxReturnType.getName().equals("java.math.BigDecimal")) {
-							output.setStringOutput(new String[] { auxResult1 != null ? auxResult1.toString() : "",
-									auxResult2 != null ? auxResult2.toString() : "" });
+
+
+                            String aux1String = auxResult1.toString();
+                            String aux2String = auxResult2.toString();
+                            if (auxReturnType.getName().equals("java.util.Date")
+                                    || auxReturnType.getName().equals("java.sql.Date")){
+                                Date date1 = (Date) auxResult1;
+                                Date date2 = (Date) auxResult2;
+                                aux1String = FormatHelper.formatDate(date1);
+                                aux2String = FormatHelper.formatDate(date2);
+                            }
+
+                            output.setStringOutput(new String[]{auxResult1 != null ? aux1String : "",
+                                    auxResult2 != null ? aux2String : ""});
 							output.setOriginalValueOutput(new Object[] { auxResult1, auxResult2 });
 						} else if (ActivityVersionUtil.implementsVersionable(auxReturnType.getInterfaces())) {
 							Versionable auxVersionable1 = Versionable.class.cast(auxMethod.invoke(vForm

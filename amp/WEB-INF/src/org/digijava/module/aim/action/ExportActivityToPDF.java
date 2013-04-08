@@ -2595,7 +2595,7 @@ public class ExportActivityToPDF extends Action {
 						
 						
 						
-						if(funding.getFundingDetails()!=null){
+							if(funding.getFundingDetails()!=null){
 							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 								if(fd.getTransactionType()== Constants.COMMITMENT){
 									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
@@ -2627,8 +2627,31 @@ public class ExportActivityToPDF extends Action {
 							}
 							
 							createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL COMMITMENTS:", funding.getSubtotalActualCommitments(), locale, siteId, currencyCode);
+							
+							//pipeline commitments
+							output=TranslatorWorker.translateText("PIPELINE COMMITMENTS",locale,siteId);
+							if(myForm.getFunding().isFixerate() && visibleCommitmentsExchRate){
+								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
+							}
+							PdfPCell plCommCell2=new PdfPCell(new Paragraph(output,titleFont));
+							plCommCell2.setBorder(0);
+							plCommCell2.setBackgroundColor(new Color(255,255,204));
+							plCommCell2.setColspan(3);
+							fundingTable.addCell(plCommCell2);
+						
+							if(funding.getFundingDetails()!=null){
+							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+								if(fd.getTransactionType()== Constants.COMMITMENT){
+									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+										buildFundingInfoInnerTable(fundingTable, fd,fundingCommitmentsFMfields,locale,siteId,ampContext);
+									}
+								}
+							}
+
+							createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE COMMITMENTS:", funding.getSubtotalPipelineCommitments(), locale, siteId, currencyCode);
+							}
 						}
-						}
+					}
 						//DISBURSEMENTS
 
 						if(visibleModuleDisbursements){
@@ -2678,6 +2701,27 @@ public class ExportActivityToPDF extends Action {
 									}
 									
 									createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL DISBURSEMENT:", funding.getSubtotalDisbursements(), locale, siteId, currencyCode);
+									
+									//pipeline disbursement
+									output=TranslatorWorker.translateText("PIPELINE DISBURSEMENT:",locale,siteId);
+									if(myForm.getFunding().isFixerate()){
+										output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
+									}
+									PdfPCell actDisbCell2=new PdfPCell(new Paragraph(output,titleFont));
+									actDisbCell2.setBorder(0);
+									actDisbCell2.setBackgroundColor(new Color(255,255,204));
+									actDisbCell2.setColspan(3);
+									fundingTable.addCell(actDisbCell2);
+									
+									for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+										if(fd.getTransactionType()== Constants.DISBURSEMENT){
+											if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+												buildFundingInfoInnerTable(fundingTable, fd,fundingDisbursementsFMfields,locale,siteId,ampContext);													
+											}
+										}
+									}
+									
+									createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE DISBURSEMENT:", funding.getSubtotalPipelineDisbursements(), locale, siteId, currencyCode);
 								}
 							}
 							
@@ -2725,13 +2769,56 @@ public class ExportActivityToPDF extends Action {
 									}
 								}								
 								createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL EXPENDITURES:", funding.getSubtotalExpenditures(), locale, siteId, currencyCode);
+								
+								//pipeline expenditures
+								output=TranslatorWorker.translateText("PIPELINE EXPENDITURES:",locale,siteId);
+								if(myForm.getFunding().isFixerate()){
+									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
+								}
+								PdfPCell actExpCell2=new PdfPCell(new Paragraph(output,titleFont));
+								actExpCell2.setBorder(0);
+								actExpCell2.setBackgroundColor(new Color(255,255,204));
+								actExpCell2.setColspan(3);
+								fundingTable.addCell(actExpCell2);
+								
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.EXPENDITURE){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingExpendituresFMfields,locale,siteId,ampContext);
+										}
+									}
+								}								
+								createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE EXPENDITURES:", funding.getSubtotalPipelineExpenditures(), locale, siteId, currencyCode);
 							}
 							
 						}
 						
-						//ACTUAL DISBURSMENT ORDERS
+						//DISBURSMENT ORDERS
 						
 						if(visibleModuleDisbOrders){
+							//planned disb orders
+							output=TranslatorWorker.translateText("PLANNED DISBURSMENT ORDERS:",locale,siteId);
+							if(myForm.getFunding().isFixerate()){
+								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
+							}
+							PdfPCell actDisbOrdCell=new PdfPCell(new Paragraph(output,titleFont));
+							actDisbOrdCell.setBorder(0);
+							actDisbOrdCell.setBackgroundColor(new Color(255,255,204));
+							actDisbOrdCell.setColspan(3);
+							fundingTable.addCell(actDisbOrdCell);
+							
+							if(funding.getFundingDetails()!=null){
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.DISBURSEMENT_ORDER){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingDisbOrdersFMfields,locale,siteId,ampContext);											
+										}
+									}
+								}
+							}
+							createSubtotalRow(fundingTable, "SUBTOTAL PLANNED DISBURSMENT ORDERS:", funding.getSubtotalPlannedDisbursementsOrders(), locale, siteId, currencyCode);
+							
+							//actual disb orders
 							output=TranslatorWorker.translateText("ACTUAL DISBURSMENT ORDERS:",locale,siteId);
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
@@ -2751,7 +2838,29 @@ public class ExportActivityToPDF extends Action {
 									}
 								}
 							}
-							createSubtotalRow(fundingTable, "SUBTOTAL DISBURSMENT ORDERS:", funding.getSubtotalActualDisbursementsOrders(), locale, siteId, currencyCode);
+							createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL DISBURSMENT ORDERS:", funding.getSubtotalActualDisbursementsOrders(), locale, siteId, currencyCode);
+							
+							//pipeline disb orders
+							output=TranslatorWorker.translateText("PIPELINE DISBURSMENT ORDERS:",locale,siteId);
+							if(myForm.getFunding().isFixerate()){
+								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate",locale,siteId);
+							}
+							PdfPCell actDisbOrdCell2=new PdfPCell(new Paragraph(output,titleFont));
+							actDisbOrdCell2.setBorder(0);
+							actDisbOrdCell2.setBackgroundColor(new Color(255,255,204));
+							actDisbOrdCell2.setColspan(3);
+							fundingTable.addCell(actDisbOrdCell2);
+							
+							if(funding.getFundingDetails()!=null){
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.DISBURSEMENT_ORDER){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingDisbOrdersFMfields,locale,siteId,ampContext);											
+										}
+									}
+								}
+							}
+							createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE DISBURSMENT ORDERS:", funding.getSubtotalPipelineDisbursementsOrders(), locale, siteId, currencyCode);
 						}
 						
 						//UNDISBURSED BALANCE

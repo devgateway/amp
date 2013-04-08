@@ -100,16 +100,17 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			throws java.lang.Exception {
 		
 		AmpReports report = ARUtil.getReferenceToReport();
-		if(session==null){
-			session = request.getSession();
-		}
-		if(site==null){
-			site = RequestUtils.getSite(request);
-		}
+		
+		Site siteInExec = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+				
+		String localeInExec=navigationLanguage.getCode();
+		HttpSession sessionInExec = request.getSession();
+		
 	    boolean initFiltersFromDB = false;
 	    //BOZO: no support for reload filters in PDF, but present in XLS and CSV?
 	    
-	    TeamMember tm = (TeamMember) session.getAttribute("currentMember");    
+	    TeamMember tm = (TeamMember) sessionInExec.getAttribute("currentMember");    
 //		if (tm == null){
 //			initFiltersFromDB = "true".equals(request.getParameter("resetFilter"));
 //		}	
@@ -126,7 +127,6 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		ARUtil.cleanReportOfHtmlCodes(rd);
 		
 		rd.setCurrentView(GenericViews.PDF);
-		HttpSession session = request.getSession();
 		
 		AmpReports r =  ReportContextData.getFromRequest().getReportMeta();
 		AmpARFilter arf = ReportContextData.getFromRequest().getFilter();
@@ -135,7 +135,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		 * String pageSize=formBean.getPdfPageSize();
 		 */
 		//use the session to get the existing filters
-		if (session.getAttribute("currentMember")!=null || arf.isPublicView()){
+		if (sessionInExec.getAttribute("currentMember")!=null || arf.isPublicView()){
 			String pageSize=null;
 			if ( arf != null )
 				pageSize=arf.getPageSize();//use the page size set in the filters 
@@ -173,7 +173,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
                 //
 				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());		
                 //
-                writer.setPageEvent(new PDFExportAction(session,locale,site,rd,arf,r,response,request));
+                writer.setPageEvent(new PDFExportAction(sessionInExec,localeInExec,siteInExec,rd,arf,r,response,request));
 				//noteFromSession=AmpReports.getNote(request.getSession());    
 				Map<Long, MetaInfo<String>> sorters = ReportContextData.getFromRequest().getReportSorters();
 				
@@ -213,7 +213,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
                 document.close();
                 return null;
 		}else{
-			session.setAttribute("sessionExpired", true);
+			sessionInExec.setAttribute("sessionExpired", true);
 			response.setContentType("text/html");	
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);

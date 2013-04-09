@@ -330,11 +330,13 @@ public class ExportActivityToWord extends Action {
 	 	            	for (AmpClassificationConfiguration config : (List<AmpClassificationConfiguration>)sectors.getClassificationConfigs()) {
 	 	            		if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors/"+config.getName()+" Sectors", ampContext)){
 	 	            			boolean hasSectors=false;
-	 	            			for (ActivitySector actSect : sectors.getActivitySectors()) {
-									if(actSect.getConfigId().equals(config.getId())){
-										hasSectors=true;
-									}									
-								}
+	 	            			if (sectors.getActivitySectors() != null) {
+		 	            			for (ActivitySector actSect : sectors.getActivitySectors()) {
+										if(actSect.getConfigId().equals(config.getId())){
+											hasSectors=true;
+										}									
+									}
+	 	            			}
 	 	            			if(hasSectors){
 									cell = new RtfCell();
 									cell.setBorder(0);
@@ -342,7 +344,7 @@ public class ExportActivityToWord extends Action {
 									sectorsTbl.addCell(cell);
 									sectorsTbl.addCell(new RtfCell());
 								}
-								if(sectors.getActivitySectors() !=null){
+								if(sectors.getActivitySectors() != null){
 									for (ActivitySector actSect : sectors.getActivitySectors()) {
 										if(actSect.getConfigId().equals(config.getId())){
 											cell = new RtfCell();
@@ -511,12 +513,23 @@ public class ExportActivityToWord extends Action {
             ServletOutputStream out = response.getOutputStream();
             baos.writeTo(out);
             out.flush();
+		} catch (IOException e) {
+			handleExportException("File data write exception", e);
+		} catch (com.lowagie.text.DocumentException e) {
+			handleExportException("Exception while building the document tree", e);
+		} catch (WorkerException e) {
+			handleExportException("Translation worker exception", e);
 		} catch (Exception e) {
-			logger.error(e);
+			handleExportException("Exception", e);
 		}
         
-        
 		return null;
+	}
+	
+
+	
+	private void handleExportException(String message, Exception e) {
+		logger.error(message, e);
 	}
 
 	private List<Table> getActivityRiskTables(HttpServletRequest request,
@@ -2171,7 +2184,8 @@ public class ExportActivityToWord extends Action {
         return retVal;
     }
     
-	private void generateIdentificationPart(HttpServletRequest request,	ServletContext ampContext, Paragraph p1,Table identificationSubTable1) throws WorkerException, Exception {
+	private void generateIdentificationPart(HttpServletRequest request,	ServletContext ampContext, Paragraph p1, Table identificationSubTable1) 
+		throws WorkerException, Exception {
 		AmpCategoryValue catVal;
 		String columnName;
 		String columnVal;
@@ -2578,7 +2592,10 @@ public class ExportActivityToWord extends Action {
 					p1=new Paragraph(TranslatorWorker.translateText("Activity is on ",request)+identification.getBudgetCV(),PLAINFONT) ;
 				}
 			}
-			cell.add(p1);
+			
+			if (p1 != null) {
+				cell.add(p1);
+			}
 			
 			if (identification.getChapterForPreview() !=null){
 				cell.add(new Paragraph(TranslatorWorker.translateText("Code Chapitre",request)+": ",PLAINFONT));
@@ -2860,7 +2877,9 @@ public class ExportActivityToWord extends Action {
 		generateOverAllTableRows(additionalInfoSubTable,TranslatorWorker.translateText("Activity created on",request)+": ",columnVal,CELLCOLORGRAY);
 		
 		columnVal = "";
-		if(identification.getTeam().getTeamLead()!=null){
+		if (identification.getTeam() != null 
+				&& identification.getTeam().getTeamLead() != null 
+				&& identification.getTeam().getTeamLead().getUser() != null) {
 			columnVal += identification.getTeam().getTeamLead().getUser().getFirstNames();
 			columnVal += identification.getTeam().getTeamLead().getUser().getLastName();
 			columnVal += identification.getTeam().getTeamLead().getUser().getEmail();

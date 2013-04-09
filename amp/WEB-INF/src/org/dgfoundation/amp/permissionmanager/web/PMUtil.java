@@ -851,7 +851,11 @@ public final class PMUtil {
 			String userInfo		 = "";
 			String workspaceInfo = "";
 			for (Iterator<Permission> it = cp.getPermissions().iterator(); it.hasNext();) {
-				GatePermission pGate = (GatePermission) it.next();
+				
+				Permission pp = (Permission) it.next();
+				if(!(pp instanceof GatePermission)) continue;
+				
+				GatePermission pGate = (GatePermission) pp;
 				
 				if(pGate.hasParameter(StrategyPermSelectGate.class.getName()+"("+PMUtil.PERM_ROLE+")"))
 					userInfo+=buildInfoLogicalGate(pGate);
@@ -876,7 +880,11 @@ public final class PMUtil {
 			boolean permRole 	= false;
 			boolean wrkRole		= false;
 			for (Iterator<Permission> it = cp.getPermissions().iterator(); it.hasNext();) {
-				GatePermission pGate = (GatePermission) it.next();
+				
+				Permission pp = (Permission) it.next();
+				if(!(pp instanceof GatePermission)) continue;
+				
+				GatePermission pGate=(GatePermission) pp;
 				
 				if(pGate.hasParameter(StrategyPermSelectGate.class.getName()+"("+PMUtil.PERM_ROLE+")"))
 					{

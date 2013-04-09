@@ -9,6 +9,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.regexp.RE;
 import org.apache.wicket.Component;
@@ -147,11 +149,17 @@ public class OnePager extends AmpHeaderFooter {
 			}
 			
 			am = new AmpActivityModel(Long.valueOf(activityId), key);
+			
+			//check the permissions					
+			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
+			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
+
+			boolean canDo = am.getObject().canDo(GatePermConst.Actions.EDIT, PermissionUtil.getScope(session.getHttpSession()));
+			if(!canDo)  throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));			
 		}
 		
 		
-		PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
-		PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
+
 
 		try {
 			initializeFormComponents(am);

@@ -274,6 +274,26 @@ function collapseAll() {
 	     </tr>
 	</table>
 </logic:present>
+
+<logic:present scope="request" parameter="editPermissionError">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
+	     <tr>
+		     <td align="center">
+		        <font color="red" size="3">
+		                <digi:trn key="aim:noPermissionToEDit">You do not have permissions to edit this activity.</digi:trn>
+		        </font>
+		     </td>
+	     </tr>           
+	     <tr>
+	         <td>&nbsp;
+	             
+	         </td>
+	     </tr>
+	</table>
+</logic:present>
+
+
+
 <c:if test="${aimEditActivityForm.activityExists=='no'}">
 	<div class="activity_preview_header" style="font-size: 12px;text-align: center;color:red">
 		<ul style="padding-top: 5px;font-size: 12px">

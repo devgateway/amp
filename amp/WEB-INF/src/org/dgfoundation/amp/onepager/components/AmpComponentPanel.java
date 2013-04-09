@@ -5,14 +5,18 @@ package org.dgfoundation.amp.onepager.components;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
@@ -270,6 +274,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		if (ignoreFmVisibility){
 			visibleFmButton.setEnabled(false);
 		}
+		
+		
 	}
 	
 	public AmpComponentPanel(String id, IModel<T> model,String fmName) {
@@ -304,17 +310,36 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 	@Override
 	protected void onConfigure() {
 		boolean fmMode = ((AmpAuthWebSession)getSession()).isFmMode();
+
+
+        final Model<Boolean> foundEnabledChild = new Model<Boolean>(Boolean.FALSE);
+        //Check if any child is enabled
+        this.visitChildren(AmpComponentPanel.class, new IVisitor<Component, Object>() {
+            @Override
+            public void component(Component object, IVisit<Object> visit) {
+                if (foundEnabledChild.getObject()){
+                    visit.stop();
+                    return;
+                }
+                if (object.isEnabled()){
+                    foundEnabledChild.setObject(Boolean.TRUE);
+                    visit.stop();
+                    return;
+                }
+                //visit only direct children
+                //visit.dontGoDeeper();
+            }
+        });
+
 		/**
 		 * Do not reverse the order of fmEnabled and fmVisible
 		 */
-		boolean fmEnabled = FMUtil.isFmEnabled(this);
+		boolean fmEnabled = (foundEnabledChild.getObject() || FMUtil.isFmEnabled(this));
 		boolean fmVisible = FMUtil.isFmVisible(this);
 		if (!ignorePermissions)
 			setEnabled(fmMode?true:fmEnabled);
 		if (!ignoreFmVisibility)
 			setVisible(fmMode?true:fmVisible);
-		
-
 		
 		if (this instanceof AmpFormSectionFeaturePanel && fmMode){
 			OnepagerSection tmpos = OnePager.findByName(this.getClass().getName());

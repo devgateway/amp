@@ -602,25 +602,36 @@ public class ReportsFilterPicker extends MultiAction {
  	 	filterForm.setRelatedAgenciesElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	
  	 	// 	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filderDivId, String selectId, ServletContext ampContext)
- 	 	addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY, ampContext);
- 	 	addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY, ampContext);
- 	 	addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY, ampContext);
- 	 	addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg", ampContext);
-		addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY, ampContext);
-		
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency", ampContext)){
+ 	 		addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY, ampContext);
+ 	 	}
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency", ampContext)){
+ 	 		addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY, ampContext);
+ 	 	}
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency", ampContext)){
+ 	 		addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY, ampContext);
+ 	 	}
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization", ampContext)){
+			addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg", ampContext);
+ 	 	}
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency", ampContext)){
+			addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY, ampContext);
+ 	 	}
 
 		// Contracting Agency Groups, based off Donor Groups
-		// stimate domnule GARTNER, ce face filterDonorGroups in afara de a exclude grupurile cu "guv" si "gouv" in nume din lista? E nevoie de ei aici? 
-		Collection<AmpOrgGroup> contractingAgencyGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllContractingAgencyGroupsOfPortfolio()/*)*/;
- 	 	HierarchyListableUtil.changeTranslateable(contractingAgencyGroups, false);
-
- 	 	HierarchyListableImplementation rootContractingAgenciesGroup = new HierarchyListableImplementation();
- 	 	rootContractingAgenciesGroup.setLabel("All Contracting Agency Groups");
- 	 	rootContractingAgenciesGroup.setUniqueId("0");
- 	 	rootContractingAgenciesGroup.setChildren( contractingAgencyGroups );
- 	 	GroupingElement<HierarchyListableImplementation> contractingAgencyGroupElement = new GroupingElement<HierarchyListableImplementation>("Contracting Agency Groups", "filter_contracting_agency_groups_div", rootContractingAgenciesGroup, "selectedContractingAgencyGroups");
- 	 	filterForm.getRelatedAgenciesElements().add(contractingAgencyGroupElement);
-
+ 	 	
+ 	 	if(FeaturesUtil.isVisibleField("Contracting Agency Groups", ampContext)){
+ 			// stimate domnule GARTNER, ce face filterDonorGroups in afara de a exclude grupurile cu "guv" si "gouv" in nume din lista? E nevoie de ei aici? 
+			Collection<AmpOrgGroup> contractingAgencyGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllContractingAgencyGroupsOfPortfolio()/*)*/;
+	 	 	HierarchyListableUtil.changeTranslateable(contractingAgencyGroups, false);
+	
+	 	 	HierarchyListableImplementation rootContractingAgenciesGroup = new HierarchyListableImplementation();
+	 	 	rootContractingAgenciesGroup.setLabel("All Contracting Agency Groups");
+	 	 	rootContractingAgenciesGroup.setUniqueId("0");
+	 	 	rootContractingAgenciesGroup.setChildren( contractingAgencyGroups );
+	 	 	GroupingElement<HierarchyListableImplementation> contractingAgencyGroupElement = new GroupingElement<HierarchyListableImplementation>("Contracting Agency Groups", "filter_contracting_agency_groups_div", rootContractingAgenciesGroup, "selectedContractingAgencyGroups");
+	 	 	filterForm.getRelatedAgenciesElements().add(contractingAgencyGroupElement);
+ 	 	}
 		
 		filterForm.setFinancingLocationElements( new ArrayList<GroupingElement<HierarchyListableImplementation>>() );
 		StopWatch.next("Filters", true, "BEFORE CATEGORY VALUES");

@@ -123,7 +123,7 @@
     
     function validateText(){
     	var catValueKeys = $('input[id^="field"]');
-    	var regexp = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&'/\ ()]+");
+    	var regexp = new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&'/\ ()-:]+");
     	for (var i=0;i<catValueKeys.length;i++){    		
     		if(catValueKeys[i].value!='' && regexp.exec(catValueKeys[i].value)!=catValueKeys[i].value){
     			alert("${translation9}");

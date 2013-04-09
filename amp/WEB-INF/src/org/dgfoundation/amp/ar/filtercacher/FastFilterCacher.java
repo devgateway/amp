@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.ar.filtercacher;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -54,7 +55,11 @@ public class FastFilterCacher extends FilterCacher {
 			return; //nothing to delete
 		try
 		{
-			Statement statement = getConnection().createStatement();
+			Connection conn = getConnection();
+			if (conn == null)
+				return; //shouldn't happen, but let's guard against it
+			
+			Statement statement = conn.createStatement();
 			String stat = "DROP TABLE IF EXISTS" + tempTableName;
 			statement.executeQuery(stat);
 			statement.close();

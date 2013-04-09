@@ -82,7 +82,7 @@ public class ComputedTeamActivityGate extends Gate {
 		
 		Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 		if (oo instanceof AmpActivityVersion)
-			ampa = (AmpActivity) oo;
+			ampa =  (AmpActivityVersion) oo;
 //		if (oo instanceof Activity)
 //			a = (Activity) oo;
 

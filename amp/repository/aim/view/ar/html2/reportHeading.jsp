@@ -158,26 +158,28 @@
         	<c:choose>
         		<c:when test="${subColumn.width!=1 || subColumn.contentCategory==categoryYear || subColumn.columnSpan != 0 }">
         		<%
-        			if(subColumn.getName().length()<5){%>
+        			if(subColumn.getName().length()<5){%>        			
         				<td style="margin-left: 2px; margin-right: 2px;" class="reportHeader" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-						<c:choose>
-							<c:when test="${empty column.contentCategory}">
-						    <c:out value="${reportHeading}"/>
-						  </c:when>
-						  <c:when test="${column.contentCategory eq 'Year'}">
-						    <c:out value="${reportHeading}"/>
-						  </c:when>
-						  <c:when test="${column.contentCategory eq 'Quarter'}">
-						    <c:out value="${reportHeading}"/>
-						  </c:when>
-						  <c:otherwise>
-						    <digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
-						  </c:otherwise>
-						</c:choose>
+        				        					
+ 					<c:choose>
+						<c:when test="${empty column.contentCategory}">
+							<digi:trn>${reportHeading}</digi:trn>
+						</c:when>
+						<c:when test="${column.contentCategory eq 'Year'}">
+							<c:out value="${reportHeading}"/>
+						</c:when>
+						<c:when test="${column.contentCategory eq 'Quarter'}">
+							<digi:trn>${reportHeading}</digi:trn>
+						</c:when>
+						<c:otherwise>
+							<digi:trn>${reportHeading}</digi:trn>
+						</c:otherwise>
+					</c:choose>
+						
 							
 					<%}else{%>
 						<td class="reportHeader" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-						<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>	
+						<digi:trn>${reportHeading}</digi:trn>
           		<%}%>
           		</c:when>
           		<c:otherwise>

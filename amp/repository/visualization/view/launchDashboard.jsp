@@ -1083,7 +1083,9 @@ function initializeGlobalVariables(){
 				<html:select property="filter.transactionTypeQuickFilter" styleId="transactionType_dropdown" styleClass="dropdwn_sm" style="width:145px;" onchange="callbackApplyFilter()">
 					<html:option value="0"><digi:trn>Commitments</digi:trn></html:option>
 					<html:option value="1"><digi:trn>Disbursements</digi:trn></html:option>
-					<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
+					<feature:display module="Funding" name="Expenditures">
+						<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
+					</feature:display>
 				</html:select>
 		 	</td>
 		</tr>

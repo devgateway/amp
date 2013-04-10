@@ -654,15 +654,24 @@ public class ShowActivityPrintPreview
                   		  Funding currFunding = iterFunding.next();
                             FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper(); 
                                 if(currFunding.getAmpFundingDetails()!=null){
-                                calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
-                                 currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
-                  		  currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
-                  		  currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
-                  		  currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
-                  		  currFunding.setSubtotalPlannedExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue()));
-                  		  currFunding.setSubtotalExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
-                  		  currFunding.setSubtotalActualDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
-                  		  currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
+                                	calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
+                                  	currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
+                                  	currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
+                                  	currFunding.setSubtotalPipelineCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue()));
+                                  
+                                  	currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
+                                  	currFunding.setSubtotalPipelineDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineDisb().doubleValue()));
+		                  		  	currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
+		                  		  
+		                  		  	currFunding.setSubtotalPlannedExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue()));
+		                  		  	currFunding.setSubtotalPipelineExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineExp().doubleValue()));
+		                  		  	currFunding.setSubtotalExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
+		                  		  
+		                  		  	currFunding.setSubtotalActualDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
+		                  			currFunding.setSubtotalPlannedDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedDisbOrder().doubleValue()));
+		                  			currFunding.setSubtotalPipelineDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineDisbOrder().doubleValue()));
+		                  		  
+		                  			currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
                                 }
                   		 
                   		  currFunding.setAmpFundingDetails(null);

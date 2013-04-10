@@ -44,10 +44,14 @@ public class Funding implements Serializable
 	private String subtotalPlannedCommitments;
 	private String subtotalPipelineCommitments;
 	private String subtotalPlannedDisbursements;
+	private String subtotalPipelineDisbursements;
 	private String subtotalDisbursements;
 	private String subtotalPlannedExpenditures;
+	private String subtotalPipelineExpenditures;
 	private String subtotalExpenditures;
 	private String subtotalActualDisbursementsOrders;
+	private String subtotalPlannedDisbursementsOrders;
+	private String subtotalPipelineDisbursementsOrders;
 	private String undisbursementbalance;
 	private String title;
 	private String code;
@@ -263,6 +267,41 @@ public class Funding implements Serializable
 
 	public String getSubtotalActualDisbursementsOrders() {
 		return this.subtotalActualDisbursementsOrders;
+	}
+
+	public String getSubtotalPlannedDisbursementsOrders() {
+		return subtotalPlannedDisbursementsOrders;
+	}
+
+	public void setSubtotalPlannedDisbursementsOrders(
+			String subtotalPlannedDisbursementsOrders) {
+		this.subtotalPlannedDisbursementsOrders = subtotalPlannedDisbursementsOrders;
+	}
+
+	public String getSubtotalPipelineDisbursementsOrders() {
+		return subtotalPipelineDisbursementsOrders;
+	}
+
+	public void setSubtotalPipelineDisbursementsOrders(
+			String subtotalPipelineDisbursementsOrders) {
+		this.subtotalPipelineDisbursementsOrders = subtotalPipelineDisbursementsOrders;
+	}
+
+	public String getSubtotalPipelineDisbursements() {
+		return subtotalPipelineDisbursements;
+	}
+
+	public void setSubtotalPipelineDisbursements(
+			String subtotalPipelineDisbursements) {
+		this.subtotalPipelineDisbursements = subtotalPipelineDisbursements;
+	}
+
+	public String getSubtotalPipelineExpenditures() {
+		return subtotalPipelineExpenditures;
+	}
+
+	public void setSubtotalPipelineExpenditures(String subtotalPipelineExpenditures) {
+		this.subtotalPipelineExpenditures = subtotalPipelineExpenditures;
 	}
 
 	public void setAmpFundingDetails(Collection fundDetails) {

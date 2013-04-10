@@ -131,9 +131,9 @@
 			</tr>
 			<tr>
 				<td nowrap style="color:#5E5E5E;font-weight:bold" class="tableHeader">
-					<digi:trn>Plannet Disbursements</digi:trn>
+					<digi:trn>Planned Disbursements</digi:trn>
 				</td>
-				<td>&nbsp;<bean:write name="gisRegReportForm" property="actualDisbursementsStr"/></td>
+				<td>&nbsp;<bean:write name="gisRegReportForm" property="plannedDisbursementsStr"/></td>
 			</tr>
 			<tr>
 				<td nowrap colspan="2" align="center">

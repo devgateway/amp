@@ -255,18 +255,18 @@ public class ExportActivityToPDF extends Action {
 					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
 					if(key.equalsIgnoreCase("Objective Assumption") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Assumption", ampContext)){
 						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption", locale, siteId)+" :",titleFont));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption")+" :",titleFont));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
 						}					
 					}else if(key.equalsIgnoreCase("Objective Verification") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Verification", ampContext)){
 						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Verification", locale, siteId)+" :",titleFont));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Verification")+" :",titleFont));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
 						}					
 					}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Objectively Verifiable Indicators", ampContext)) {
 						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators")+" :",titleFont));
+							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
 						}
 					}
 				}
@@ -367,18 +367,18 @@ public class ExportActivityToPDF extends Action {
 					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
 					if(key.equalsIgnoreCase("Purpose Assumption") && visiblePurposeAssumtion){
 						for (AmpComments value : values) {
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Assumption", locale, siteId)+" :",titleFont));
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Assumption")+" :",titleFont));
+							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
 						}					
 					}else if(key.equalsIgnoreCase("Purpose Verification") && visiblePurposeVerification){
 						for (AmpComments value : values) {
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Verification", locale, siteId)+" :",titleFont));
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Verification")+" :",titleFont));
+							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
 						}					
 					}else if (key.equalsIgnoreCase("Purpose Objectively Verifiable Indicators") && visiblePurposeIndicators) {
 						for (AmpComments value : values) {
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Objectively Verifiable Indicators")+" :",titleFont));
+							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
 						}
 					}
 				}
@@ -413,20 +413,20 @@ public class ExportActivityToPDF extends Action {
 
 					if(key.equalsIgnoreCase("Results Assumption") && visibleResultsAssumption){
 						for (AmpComments value : values) {
-							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Assumption", locale, siteId)+" :",titleFont));
-							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Assumption")+" :",titleFont));
+							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
 						}					
 					} else {
 						if(key.equalsIgnoreCase("Results Verification") && visibleResultsVerification){
 							for (AmpComments value : values) {
-								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Verification", locale, siteId)+" :",titleFont));
-								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));
+								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Verification")+" :",titleFont));
+								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
 							}					
 						} else {
 							if (key.equalsIgnoreCase("Results Objectively Verifiable Indicators")&& visibleResultsIndicators) {
 								for (AmpComments value : values) {
-									resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Objectively Verifiable Indicators", locale, siteId)+" :",titleFont));
-									resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment(), locale, siteId),plainFont));						
+									resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Objectively Verifiable Indicators")+" :",titleFont));
+									resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));						
 								}
 							}
 						}
@@ -723,7 +723,7 @@ public class ExportActivityToPDF extends Action {
 				String outputValue="";
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank", ampContext)){
-					outputValue=TranslatorWorker.translateText("Line Ministry Rank", locale, siteId)+ "\t: ";
+					outputValue=TranslatorWorker.translateText("Line Ministry Rank")+ "\t: ";
 					if(activity.getLineMinRank()!=null && activity.getLineMinRank().intValue()>0){
                                                outputValue+=(activity.getLineMinRank())+"\n";
                                              
@@ -734,7 +734,7 @@ public class ExportActivityToPDF extends Action {
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Ministry of Planning Rank", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Ministry of Planning Rank", locale, siteId)+ "\t: ";
+					outputValue+=TranslatorWorker.translateText("Ministry of Planning Rank")+ "\t: ";
 					if(activity.getPlanMinRank()!=null && activity.getPlanMinRank().intValue()>0){
                                             outputValue+=(activity.getPlanMinRank())+"\n";	    
 					}else{
@@ -743,39 +743,39 @@ public class ExportActivityToPDF extends Action {
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Proposed Start Date", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalStartDate()+"\n";
+					outputValue+=TranslatorWorker.translateText("Proposed Start Date")+ "\t: " + myForm.getPlanning().getOriginalStartDate()+"\n";
 				}
 
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Actual Start Date ", locale, siteId)+ "\t: " +myForm.getPlanning().getRevisedStartDate() +"\n";
+					outputValue+=TranslatorWorker.translateText("Actual Start Date ")+ "\t: " +myForm.getPlanning().getRevisedStartDate() +"\n";
 				}
 
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Proposed Approval Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalAppDate()+"\n";
+					outputValue+=TranslatorWorker.translateText("Proposed Approval Date ")+ "\t: " + myForm.getPlanning().getOriginalAppDate()+"\n";
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Actual Approval Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getRevisedAppDate()+"\n";
+					outputValue+=TranslatorWorker.translateText("Actual Approval Date ")+ "\t: " + myForm.getPlanning().getRevisedAppDate()+"\n";
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Final Date for Contracting ", locale, siteId)+ "\t: " + myForm.getPlanning().getContractingDate()+"\n";
+					outputValue+=TranslatorWorker.translateText("Final Date for Contracting ")+ "\t: " + myForm.getPlanning().getContractingDate()+"\n";
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Final Date for Disbursements ", locale, siteId)+ "\t: " + myForm.getPlanning().getDisbursementsDate()+"\n";
+					outputValue+=TranslatorWorker.translateText("Final Date for Disbursements ")+ "\t: " + myForm.getPlanning().getDisbursementsDate()+"\n";
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)+ "\t: " +myForm.getPlanning().getProposedCompDate() +"\n";
+					outputValue+=TranslatorWorker.translateText("Proposed Completion Date ")+ "\t: " +myForm.getPlanning().getProposedCompDate() +"\n";
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Actual Completion Date", locale, siteId)+ "\t: " +myForm.getPlanning().getCurrentCompDate() +"\n";
+					outputValue+=TranslatorWorker.translateText("Actual Completion Date")+ "\t: " +myForm.getPlanning().getCurrentCompDate() +"\n";
 				}		
 				if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
 					String durationStr = myForm.getPlanning().getProjectPeriod() != null ? myForm.getPlanning().getProjectPeriod().toString(): "";
-					outputValue+=TranslatorWorker.translateText("Duration of Project", locale, siteId)+ "\t: " + durationStr +"\n";
+					outputValue+=TranslatorWorker.translateText("Duration of Project")+ "\t: " + durationStr +"\n";
 				}
 				
 				columnName=TranslatorWorker.translateText("Planning");
@@ -1046,7 +1046,7 @@ public class ExportActivityToPDF extends Action {
 			 */
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations", ampContext)){
 				PdfPCell relOrgCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Related Organizations", locale, siteId)+":",titleFont);
+				p1=new Paragraph(TranslatorWorker.translateText("Related Organizations")+":",titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				relOrgCell1.setBorder(0);
 				relOrgCell1.addElement(p1);
@@ -1220,7 +1220,7 @@ public class ExportActivityToPDF extends Action {
 //						PdfPCell customFields1=new PdfPCell();
 //						customFields1.setBorder(0);
 //						customFields1.setBackgroundColor(new Color(244,244,242));
-//						Paragraph customFields1P=new Paragraph(TranslatorWorker.translateText(customField.getName(), locale, siteId),titleFont);
+//						Paragraph customFields1P=new Paragraph(TranslatorWorker.translateText(customField.getName()),titleFont);
 //						customFields1P.setAlignment(Element.ALIGN_RIGHT);
 //						customFields1.addElement(customFields1P);
 //						mainLayout.addCell(customFields1);
@@ -1273,7 +1273,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell actPerformanceCell1=new PdfPCell();
 				actPerformanceCell1.setBorder(0);
 				actPerformanceCell1.setBackgroundColor(new Color(244,244,242));
-				p1=new Paragraph(TranslatorWorker.translateText("Activity Performance", locale, siteId),titleFont);
+				p1=new Paragraph(TranslatorWorker.translateText("Activity Performance"),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				actPerformanceCell1.addElement(p1);			
 				mainLayout.addCell(actPerformanceCell1);
@@ -1321,7 +1321,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell riskCell1=new PdfPCell();
 				riskCell1.setBorder(0);
 				riskCell1.setBackgroundColor(new Color(244,244,242));
-				p1=new Paragraph(TranslatorWorker.translateText("Activity Risk", locale, siteId),titleFont);
+				p1=new Paragraph(TranslatorWorker.translateText("Activity Risk"),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				riskCell1.addElement(p1);
 				mainLayout.addCell(riskCell1);
@@ -2611,7 +2611,7 @@ public class ExportActivityToPDF extends Action {
 						
 						
 						
-						if(funding.getFundingDetails()!=null){
+							if(funding.getFundingDetails()!=null){
 							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
 								if(fd.getTransactionType()== Constants.COMMITMENT){
 									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
@@ -2643,8 +2643,31 @@ public class ExportActivityToPDF extends Action {
 							}
 							
 							createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL COMMITMENTS:", funding.getSubtotalActualCommitments(), currencyCode);
+							
+							//pipeline commitments
+							output=TranslatorWorker.translateText("PIPELINE COMMITMENTS");
+							if(myForm.getFunding().isFixerate() && visibleCommitmentsExchRate){
+								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+							}
+							PdfPCell plCommCell2=new PdfPCell(new Paragraph(output,titleFont));
+							plCommCell2.setBorder(0);
+							plCommCell2.setBackgroundColor(new Color(255,255,204));
+							plCommCell2.setColspan(3);
+							fundingTable.addCell(plCommCell2);
+						
+							if(funding.getFundingDetails()!=null){
+							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+								if(fd.getTransactionType()== Constants.COMMITMENT){
+									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+										buildFundingInfoInnerTable(fundingTable, fd,fundingCommitmentsFMfields,ampContext);
+									}
+								}
+							}
+
+							createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE COMMITMENTS:", funding.getSubtotalPipelineCommitments(), currencyCode);
+							}
 						}
-						}
+					}
 						//DISBURSEMENTS
 
 						if(visibleModuleDisbursements){
@@ -2694,6 +2717,27 @@ public class ExportActivityToPDF extends Action {
 									}
 									
 									createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL DISBURSEMENT:", funding.getSubtotalDisbursements(), currencyCode);
+									
+									//pipeline disbursement
+									output=TranslatorWorker.translateText("PIPELINE DISBURSEMENT:");
+									if(myForm.getFunding().isFixerate()){
+										output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+									}
+									PdfPCell actDisbCell2=new PdfPCell(new Paragraph(output,titleFont));
+									actDisbCell2.setBorder(0);
+									actDisbCell2.setBackgroundColor(new Color(255,255,204));
+									actDisbCell2.setColspan(3);
+									fundingTable.addCell(actDisbCell2);
+									
+									for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+										if(fd.getTransactionType()== Constants.DISBURSEMENT){
+											if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+												buildFundingInfoInnerTable(fundingTable, fd,fundingDisbursementsFMfields,ampContext);
+											}
+										}
+									}
+									
+									createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE DISBURSEMENT:", funding.getSubtotalPipelineDisbursements(), currencyCode);
 								}
 							}
 							
@@ -2741,13 +2785,56 @@ public class ExportActivityToPDF extends Action {
 									}
 								}								
 								createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL EXPENDITURES:", funding.getSubtotalExpenditures(), currencyCode);
+								
+								//pipeline expenditures
+								output=TranslatorWorker.translateText("PIPELINE EXPENDITURES:");
+								if(myForm.getFunding().isFixerate()){
+									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+								}
+								PdfPCell actExpCell2=new PdfPCell(new Paragraph(output,titleFont));
+								actExpCell2.setBorder(0);
+								actExpCell2.setBackgroundColor(new Color(255,255,204));
+								actExpCell2.setColspan(3);
+								fundingTable.addCell(actExpCell2);
+								
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.EXPENDITURE){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingExpendituresFMfields,ampContext);
+										}
+									}
+								}								
+								createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE EXPENDITURES:", funding.getSubtotalPipelineExpenditures(), currencyCode);
 							}
 							
 						}
 						
-						//ACTUAL DISBURSMENT ORDERS
+						//DISBURSMENT ORDERS
 						
 						if(visibleModuleDisbOrders){
+							//planned disb orders
+							output=TranslatorWorker.translateText("PLANNED DISBURSMENT ORDERS:");
+							if(myForm.getFunding().isFixerate()){
+								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+							}
+							PdfPCell actDisbOrdCell=new PdfPCell(new Paragraph(output,titleFont));
+							actDisbOrdCell.setBorder(0);
+							actDisbOrdCell.setBackgroundColor(new Color(255,255,204));
+							actDisbOrdCell.setColspan(3);
+							fundingTable.addCell(actDisbOrdCell);
+							
+							if(funding.getFundingDetails()!=null){
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.DISBURSEMENT_ORDER){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingDisbOrdersFMfields,ampContext);
+										}
+									}
+								}
+							}
+							createSubtotalRow(fundingTable, "SUBTOTAL PLANNED DISBURSMENT ORDERS:", funding.getSubtotalPlannedDisbursementsOrders(), currencyCode);
+							
+							//actual disb orders
 							output=TranslatorWorker.translateText("ACTUAL DISBURSMENT ORDERS:");
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
@@ -2767,7 +2854,29 @@ public class ExportActivityToPDF extends Action {
 									}
 								}
 							}
-							createSubtotalRow(fundingTable, "SUBTOTAL DISBURSMENT ORDERS:", funding.getSubtotalActualDisbursementsOrders(), currencyCode);
+							createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL DISBURSMENT ORDERS:", funding.getSubtotalActualDisbursementsOrders(), currencyCode);
+							
+							//pipeline disb orders
+							output=TranslatorWorker.translateText("PIPELINE DISBURSMENT ORDERS:");
+							if(myForm.getFunding().isFixerate()){
+								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+							}
+							PdfPCell actDisbOrdCell2=new PdfPCell(new Paragraph(output,titleFont));
+							actDisbOrdCell2.setBorder(0);
+							actDisbOrdCell2.setBackgroundColor(new Color(255,255,204));
+							actDisbOrdCell2.setColspan(3);
+							fundingTable.addCell(actDisbOrdCell2);
+							
+							if(funding.getFundingDetails()!=null){
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.DISBURSEMENT_ORDER){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingDisbOrdersFMfields,ampContext);
+										}
+									}
+								}
+							}
+							createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE DISBURSMENT ORDERS:", funding.getSubtotalPipelineDisbursementsOrders(), currencyCode);
 						}
 						
 						//UNDISBURSED BALANCE

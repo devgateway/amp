@@ -36,10 +36,14 @@ public class FundingCalculationsHelper {
 	DecimalWraper totPlannedDisbOrder = new DecimalWraper();
 
 	DecimalWraper totActualComm = new DecimalWraper();
-	DecimalWraper totPipelineComm = new DecimalWraper();
 	DecimalWraper totActualDisb = new DecimalWraper();
 	DecimalWraper totActualExp = new DecimalWraper();
 	DecimalWraper totActualDisbOrder = new DecimalWraper();
+
+	DecimalWraper totPipelineDisb = new DecimalWraper();
+	DecimalWraper totPipelineComm = new DecimalWraper();
+	DecimalWraper totPipelineExp = new DecimalWraper();
+	DecimalWraper totPipelineDisbOrder = new DecimalWraper();
 
 	DecimalWraper totalCommitments =  new DecimalWraper();
 
@@ -89,6 +93,30 @@ public class FundingCalculationsHelper {
 
 	public DecimalWraper getTotActualDisbOrder() {
 		return totActualDisbOrder;
+	}
+
+	public DecimalWraper getTotPipelineDisb() {
+		return totPipelineDisb;
+	}
+
+	public void setTotPipelineDisb(DecimalWraper totPipelineDisb) {
+		this.totPipelineDisb = totPipelineDisb;
+	}
+
+	public DecimalWraper getTotPipelineExp() {
+		return totPipelineExp;
+	}
+
+	public void setTotPipelineExp(DecimalWraper totPipelineExp) {
+		this.totPipelineExp = totPipelineExp;
+	}
+
+	public DecimalWraper getTotPipelineDisbOrder() {
+		return totPipelineDisbOrder;
+	}
+
+	public void setTotPipelineDisbOrder(DecimalWraper totPipelineDisbOrder) {
+		this.totPipelineDisbOrder = totPipelineDisbOrder;
 	}
 
 	public void doCalculations(Collection<AmpFundingDetail> details, String userCurrencyCode) {
@@ -204,7 +232,18 @@ public class FundingCalculationsHelper {
                 if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
                 	totPipelineComm.setValue(totPipelineComm.getValue().add(amt.getValue()));
                     totPipelineComm.setCalculations(totPipelineComm.getCalculations() + " + " + amt.getCalculations());
-                }
+                } else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+					totPipelineDisb.setValue(totPipelineDisb.getValue().add(amt.getValue()));
+					totPipelineDisb.setCalculations(totPipelineDisb.getCalculations() + " + " + amt.getCalculations());
+
+				} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+					totPipelineExp.setValue(totPipelineExp.getValue().add(amt.getValue()));
+					totPipelineExp.setCalculations(totPipelineExp.getCalculations() + " + " + amt.getCalculations());
+
+				} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
+					totPipelineDisbOrder.setValue(totPipelineDisbOrder.getValue().add(amt.getValue()));
+					totPipelineDisbOrder.setCalculations(totPipelineDisbOrder.getCalculations() + " + " + amt.getCalculations());
+				}
             }
 
 			fundDetailList.add(fundingDetail);
@@ -321,7 +360,18 @@ public class FundingCalculationsHelper {
 	                if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
 	                	totPipelineComm.setValue(totPipelineComm.getValue().add(amt.getValue()));
 	                    totPipelineComm.setCalculations(totPipelineComm.getCalculations() + " + " + amt.getCalculations());
-	                }
+	                } else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+						totPipelineDisb.setValue(totPipelineDisb.getValue().add(amt.getValue()));
+						totPipelineDisb.setCalculations(totPipelineDisb.getCalculations() + " + " + amt.getCalculations());
+
+					} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+						totPipelineExp.setValue(totPipelineExp.getValue().add(amt.getValue()));
+						totPipelineExp.setCalculations(totPipelineExp.getCalculations() + " + " + amt.getCalculations());
+
+					} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
+						totPipelineDisbOrder.setValue(totPipelineDisbOrder.getValue().add(amt.getValue()));
+						totPipelineDisbOrder.setCalculations(totPipelineDisbOrder.getCalculations() + " + " + amt.getCalculations());
+					}
 	            }
 
 				fundDetailList.add(fundingDetail);

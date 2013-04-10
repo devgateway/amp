@@ -792,6 +792,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				rawColumns.removeEmptyChildren(true);
 
 		report = new GroupReportData(reportMetadata.getName());
+		report.setReportGenerator(this);
 		report.setReportMetadata(this.reportMetadata);
 		report.setReportGenerator(this);
 		report.setSourceColsCount(new Integer(extractableCount - 1));

@@ -506,25 +506,35 @@ public class ReportsFilterPicker extends Action {
  	 	
 		StopWatch.next("Filters", true, "Donor stuff");
  	 	// 	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filderDivId, String selectId, ServletContext ampContext)
- 	 	addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY);
- 	 	addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY);
- 	 	addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY);
- 	 	addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg");
-		addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY);
-		
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency")){
+ 	 		addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY);
+ 	 	}
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency")){
+ 	 		addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY);
+ 	 	}
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency")){
+ 	 		addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY);
+ 	 	}
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization")){
+			addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg");
+ 	 	}
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency")){
+			addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY);
+ 	 	}
 
 		// Contracting Agency Groups, based off Donor Groups
 		// stimate domnule GARTNER, ce face filterDonorGroups in afara de a exclude grupurile cu "guv" si "gouv" in nume din lista? E nevoie de ei aici? 
-		Collection<AmpOrgGroup> contractingAgencyGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllContractingAgencyGroupsOfPortfolio()/*)*/;
- 	 	HierarchyListableUtil.changeTranslateable(contractingAgencyGroups, false);
-
- 	 	HierarchyListableImplementation rootContractingAgenciesGroup = new HierarchyListableImplementation();
- 	 	rootContractingAgenciesGroup.setLabel("All Contracting Agency Groups");
- 	 	rootContractingAgenciesGroup.setUniqueId("0");
- 	 	rootContractingAgenciesGroup.setChildren(contractingAgencyGroups);
- 	 	GroupingElement<HierarchyListableImplementation> contractingAgencyGroupElement = new GroupingElement<HierarchyListableImplementation>("Contracting Agency Groups", "filter_contracting_agency_groups_div", rootContractingAgenciesGroup, "selectedContractingAgencyGroups");
- 	 	filterForm.getRelatedAgenciesElements().add(contractingAgencyGroupElement);
-
+        if(FeaturesUtil.isVisibleField("Contracting Agency Groups")){
+            Collection<AmpOrgGroup> contractingAgencyGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllContractingAgencyGroupsOfPortfolio()/*)*/;
+            HierarchyListableUtil.changeTranslateable(contractingAgencyGroups, false);
+    
+            HierarchyListableImplementation rootContractingAgenciesGroup = new HierarchyListableImplementation();
+            rootContractingAgenciesGroup.setLabel("All Contracting Agency Groups");
+            rootContractingAgenciesGroup.setUniqueId("0");
+            rootContractingAgenciesGroup.setChildren(contractingAgencyGroups);
+            GroupingElement<HierarchyListableImplementation> contractingAgencyGroupElement = new GroupingElement<HierarchyListableImplementation>("Contracting Agency Groups", "filter_contracting_agency_groups_div", rootContractingAgenciesGroup, "selectedContractingAgencyGroups");
+            filterForm.getRelatedAgenciesElements().add(contractingAgencyGroupElement);
+        }
 		
 		filterForm.setFinancingLocationElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
 		StopWatch.next("Filters", true, "Agency stuff");

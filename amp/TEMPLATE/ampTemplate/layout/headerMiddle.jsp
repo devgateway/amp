@@ -811,7 +811,7 @@ function adminHelp(){
    
                                       	<feature:display name="Workspace Info" module="Tools">
                                         <li class="yuiampmenuitem_drop">
-	                                        <a class="yuiampmenuitemlabel" onclick="return teamWorkspaceSetup('-1');" href="#">
+	                                        <a class="yuiampmenuitemlabel" onclick="return teamWorkspaceSetup('-1');" href="/aim/workspaceOverview.do~tId=-1~dest=teamLead">
 	                                        	<digi:trn key="aim:workspaceinfo">Workspace Info</digi:trn>
 	                                        </a>
                                         </li>

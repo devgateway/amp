@@ -3,6 +3,7 @@
  */
 package org.digijava.module.contentrepository.jcrentity;
 
+import java.io.Serializable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  * @author Alex Gartner
  *
  */
-public class Label {
+public class Label implements Serializable{
 	
 	private String name;
 	

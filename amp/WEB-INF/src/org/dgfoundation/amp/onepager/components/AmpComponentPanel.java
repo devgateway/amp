@@ -307,33 +307,27 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		this.ignoreFmButtonsVisibility = ignoreFmButtonsVisibility;
 	}
 
-	@Override
+
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();    //To change body of overridden methods use File | Settings | File Templates.
+
+        final Model<Boolean> foundEnabledChild = new Model<Boolean>(Boolean.FALSE);
+        searchForEnabledChild(foundEnabledChild);
+        if (foundEnabledChild.getObject())
+            setEnabled(true);
+    }
+
+    @Override
 	protected void onConfigure() {
 		boolean fmMode = ((AmpAuthWebSession)getSession()).isFmMode();
 
-
         final Model<Boolean> foundEnabledChild = new Model<Boolean>(Boolean.FALSE);
-        //Check if any child is enabled
-        this.visitChildren(AmpComponentPanel.class, new IVisitor<Component, Object>() {
-            @Override
-            public void component(Component object, IVisit<Object> visit) {
-                if (foundEnabledChild.getObject()){
-                    visit.stop();
-                    return;
-                }
-                if (object.isEnabled()){
-                    foundEnabledChild.setObject(Boolean.TRUE);
-                    visit.stop();
-                    return;
-                }
-                //visit only direct children
-                //visit.dontGoDeeper();
-            }
-        });
+        searchForEnabledChild(foundEnabledChild);
 
-		/**
-		 * Do not reverse the order of fmEnabled and fmVisible
-		 */
+        /**
+         * Do not reverse the order of fmEnabled and fmVisible
+         */
 		boolean fmEnabled = (foundEnabledChild.getObject() || FMUtil.isFmEnabled(this));
 		boolean fmVisible = FMUtil.isFmVisible(this);
 		if (!ignorePermissions)
@@ -368,4 +362,26 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 		}
 		super.onConfigure();
 	}
+
+    private void searchForEnabledChild(final Model<Boolean> foundEnabledChild) {
+        //Check if any child is enabled
+        this.visitChildren(AmpComponentPanel.class, new IVisitor<Component, Object>() {
+            @Override
+            public void component(Component child, IVisit<Object> visit) {
+                if (foundEnabledChild.getObject()){
+                    visit.stop();
+                    return;
+                }
+                //run onConfigure for direct child
+                child.configure();
+                if (child.isEnabled()){
+                    foundEnabledChild.setObject(Boolean.TRUE);
+                    visit.stop();
+                    return;
+                }
+                //visit only direct children
+                visit.dontGoDeeper();
+            }
+        });
+    }
 }

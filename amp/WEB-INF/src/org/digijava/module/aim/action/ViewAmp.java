@@ -163,6 +163,7 @@ public class ViewAmp
                 tm.setMemberName(usr.getName());
                 tm.setMemberId(usr.getId());
                 tm.setTeamName(TranslatorWorker.translateText("AMP Administrator"));
+                tm.setEmail(usr.getEmail());
                 session.setAttribute("currentMember", tm);
                 PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
                 // show the index page with the admin toolbar at the bottom

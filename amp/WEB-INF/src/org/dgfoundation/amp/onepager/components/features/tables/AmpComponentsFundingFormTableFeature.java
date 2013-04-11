@@ -13,6 +13,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.AmpTableFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -69,13 +70,14 @@ public class AmpComponentsFundingFormTableFeature extends
 			protected void populateItem(final ListItem<AmpComponentFunding> item) {
 				IModel<AmpComponentFunding> model = item.getModel();
                 try{
-                    AmpCategoryGroupFieldPanel adjustmentTypes = new AmpCategoryGroupFieldPanel(
-                        "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
-                                new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
-                                CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
-                                 false, false, true);
+                    AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
+                            "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
+                            new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
+                            CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
+                            false, false, true, null, true);
                     adjustmentTypes.getChoiceContainer().setRequired(true);
                     item.add(adjustmentTypes);
+
                 } catch(Exception e)
                 {
                     logger.error("AmpCategoryGroupFieldPanel initialization failed");

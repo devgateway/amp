@@ -60,7 +60,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		super(id, model);
 
         boolean hideLabel = fundingComponentTableMode;
-        boolean hideNewLine = false;
+        boolean hideNewLine = fundingComponentTableMode;
 
 		amount = new AmpTextFieldPanel<Double>("amount",
 				new PropertyModel<Double>(model, propertyAmount), fmAmount, hideLabel, hideNewLine) {
@@ -141,7 +141,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		}
 		add(date);
 
-        QuarterInformationPanel quarterInfo = new QuarterInformationPanel("quarterInfo", "Quarter Information Panel");
+        QuarterInformationPanel quarterInfo = new QuarterInformationPanel("quarterInfo", "Quarter Information Panel", hideNewLine);
         add(quarterInfo);
 
 		setRenderBodyOnly(true);

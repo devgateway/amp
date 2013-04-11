@@ -77,7 +77,7 @@ public class QuarterInformationPanel extends AmpFieldPanel {
         response.render(JavaScriptReferenceHeaderItem.forScript("initializeQuarter(" + params + ");", "QuarterInformationPanelData"));
     }
 
-    public QuarterInformationPanel(String id, String fmName) {
-        super(id, fmName, true, false);
+    public QuarterInformationPanel(String id, String fmName, boolean hideNewLine) {
+        super(id, fmName, true, hideNewLine);
     }
 }

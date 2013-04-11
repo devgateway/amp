@@ -62,7 +62,7 @@ public abstract class AmpRegionalFormTableFeaturePanel extends
 				"adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
 						new PropertyModel<AmpCategoryValue>(model,"adjustmentType"),
 						CategoryConstants.ADJUSTMENT_TYPE_NAME, //fmname
-						 false, false, true);
+						 false, false, true, null, true);
 		adjustmentTypes.getChoiceContainer().setRequired(true);
 		return adjustmentTypes;
 		}catch(Exception e)

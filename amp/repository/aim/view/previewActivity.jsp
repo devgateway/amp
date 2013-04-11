@@ -1978,7 +1978,7 @@ function collapseAll() {
 <!-- END COMPONENTS -->
 <!-- ISSUES SECTION -->
 <module:display name="/Activity Form/Issues Section" parentModule="/Activity Form">
-<module:display name="/Activity Form/Issues Section/Issue Field" parentModule="/Activity Form/Issues Section">
+<module:display name="/Activity Form/Issues Section/Issue" parentModule="/Activity Form/Issues Section">
 <fieldset>
 	<legend>
 		<span class=legend_label id="issueslink" style="cursor: pointer;">

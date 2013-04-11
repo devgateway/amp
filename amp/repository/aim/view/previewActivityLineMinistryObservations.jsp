@@ -15,7 +15,7 @@
 		<c:if test="${not empty aimEditActivityForm.lineMinistryObservations.issues}">
 		<logic:iterate name="aimEditActivityForm" id="lineMinistryObs" property="lineMinistryObservations.issues">
 			<table style="width: 100%;">
-			<module:display name="/Activity Form/Line Ministry Observations/Regional Obsevation Field" parentModule="/Activity Form/Line Ministry Observations">
+			<module:display name="/Activity Form/Line Ministry Observations/Observation" parentModule="/Activity Form/Line Ministry Observations">
 				<tr bgcolor="#F0F0F0">
 				<td width="20%;">
 					<b><digi:trn>Observation</digi:trn>:</b>
@@ -25,7 +25,7 @@
 				</td>	
 				</tr>	
 			</module:display>
-			<module:display name="/Activity Form/Line Ministry Observations/Regional Obsevation Field/Date" parentModule="/Activity Form/Line Ministry Observations/Regional Obsevation Field">
+			<module:display name="/Activity Form/Line Ministry Observations/Observation/Date" parentModule="/Activity Form/Line Ministry Observations/Observation">
 				<tr bgcolor="#F0F0F0">
 				<td>
 					<digi:trn>Observation Date</digi:trn>:

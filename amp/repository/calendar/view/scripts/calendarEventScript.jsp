@@ -75,7 +75,7 @@
 		}
 		myPanel1.center();
 		myPanel1.show();
-		initCalendar();
+//		initCalendar();
 		disableInputs();
 	}
 	

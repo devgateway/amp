@@ -275,8 +275,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			protected void respond(final AjaxRequestTarget target) {
 				String selectedString = getRequestCycle().getRequest().getRequestParameters().getParameterValue("selectedString").toString();
 				// hide loading icon:
-				target.appendJavaScript("YAHOO.util.Dom.get('"
-						+ indicator.getMarkupId() + "').style.display = 'none';");
+				target.appendJavaScript("$('#" + indicator.getMarkupId() + "').hide();");
 				CHOICE choice = getSelectedChoice(DbUtil.deFilter(selectedString, false));
 				
 				onSelect(target, choice);

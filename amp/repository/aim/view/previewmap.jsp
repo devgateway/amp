@@ -8,6 +8,8 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
     <style type="text/css"> a { color: blue; } </style>
 
+<script type="text/javascript" src="<c:out value="${aimEditActivityForm.esriapiurl}"/>/jsapi/arcgis/?v=2.2"></script>
+
     
 <script type="text/javascript">
     if( typeof dojo != 'undefined' )

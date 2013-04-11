@@ -101,8 +101,10 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 	 */
 	public int compareTo(AmpComponent o) {
 		return AmpComponentComparator.staticCompare(this, o);
-	}	
-	
+	}
+    /**
+     * If overriding is really needed please fully comment on the reason!
+     *
 	@Override
 	public boolean equals(Object obj) {
 		AmpComponent target=(AmpComponent) obj;
@@ -110,14 +112,10 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 			return super.equals(obj);
 		
 		if (target!=null && this.ampComponentId!=null){
-			return (target.getAmpComponentId().doubleValue()==this.getAmpComponentId().doubleValue());
+			return (this.getAmpComponentId().equals(target.getAmpComponentId()));
 		}
 		return false;
-		
 	}
-	/**
-	 * If overriding is really needed please fully comment on the reason!
-	 *
 	@Override
 	public int hashCode() {
 		if( this.ampComponentId ==null) return 0;

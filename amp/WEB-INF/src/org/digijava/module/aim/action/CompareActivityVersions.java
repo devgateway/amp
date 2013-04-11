@@ -162,8 +162,8 @@ public class CompareActivityVersions extends DispatchAction {
 								|| auxReturnType.getName().equals("java.math.BigDecimal")) {
 
 
-                            String aux1String = auxResult1.toString();
-                            String aux2String = auxResult2.toString();
+                            String aux1String = auxResult1==null?"":auxResult1.toString();
+                            String aux2String = auxResult2==null?"":auxResult2.toString();
                             if (auxReturnType.getName().equals("java.util.Date")
                                     || auxReturnType.getName().equals("java.sql.Date")){
                                 Date date1 = (Date) auxResult1;

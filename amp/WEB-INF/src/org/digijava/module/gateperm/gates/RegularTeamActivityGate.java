@@ -28,7 +28,7 @@ public class RegularTeamActivityGate extends Gate {
 
 	public static final MetaInfo[] PARAM_INFO = new MetaInfo[] {};
 	
-	private static final String DESCRIPTION = "This gate returns true if the CURRENT_MEMBER belongs to the workspace with the Id given as parameter";
+	private static final String DESCRIPTION = "This gate allows access on activities that have their workspace same as the current member workspace";
 
 	/**
 	 * @param scope

@@ -36,12 +36,16 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.SiteCache;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.hibernate.Criteria;
 import org.hibernate.EntityMode;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 public class CachedTranslatorWorker extends TranslatorWorker {
 
@@ -52,6 +56,24 @@ public class CachedTranslatorWorker extends TranslatorWorker {
     CachedTranslatorWorker() {
         super();
         messageCache = DigiCacheManager.getInstance().getCache("org.digijava.kernel.entity.Message.id_cache");
+        
+        //cache the first 5000 entries based on their access date     
+        logger.info("Caching the last accessed 5000 translation entries...");
+       	Session session = PersistenceManager.openNewSession();
+       	Criteria criteria = session.createCriteria(Message.class);
+       	criteria.setMaxResults(5000);
+       	criteria.addOrder(Order.desc("lastAccessed"));
+       	criteria.add(Restrictions.isNotNull("lastAccessed"));
+       	
+       	List<Message> lastAccessedMessages=criteria.list();
+       	for (Message message : lastAccessedMessages) messageCache.put(message, message);
+			
+		
+       	
+       	session.close();
+
+       	logger.info("Caching done.");
+
     }
 
     /**

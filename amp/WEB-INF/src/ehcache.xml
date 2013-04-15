@@ -44,7 +44,7 @@
         -->
 
     <defaultCache
-        maxElementsInMemory="1000"
+        maxElementsInMemory="10000"
         eternal="false"
         overflowToDisk="false"
         timeToIdleSeconds="1800"
@@ -59,7 +59,7 @@
 	-->
 	<cache
 		name="org.digijava.kernel.entity.Message.id_cache"
-		maxElementsInMemory="1000"
+		maxElementsInMemory="5000"
 		eternal="true"
 		overflowToDisk="false"
 		diskPersistent="false"

@@ -6,6 +6,7 @@
 package org.dgfoundation.amp.visibility;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.dgfoundation.amp.onepager.util.FMFormCache;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
@@ -24,9 +26,18 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
  */
 public class AmpTreeVisibility implements Serializable{
 
-	/**
-	 * 
-	 */
+
+	private ConcurrentHashMap<String,AmpObjectVisibility> itemsCache=null;
+	
+	public ConcurrentHashMap<String, AmpObjectVisibility> getItemsCache() {
+		return itemsCache;
+	}
+
+	public void setItemsCache(
+			ConcurrentHashMap<String, AmpObjectVisibility> itemsCache) {
+		this.itemsCache = itemsCache;
+	}
+
 	private AmpObjectVisibility root;
 
 	// key-> name
@@ -58,6 +69,13 @@ public class AmpTreeVisibility implements Serializable{
 		this.root = root;
 	}
 
+	public void initializeItemsCache(Collection<AmpObjectVisibility> items) {		
+		itemsCache = new ConcurrentHashMap<String, AmpObjectVisibility>(items.size());
+		for (AmpObjectVisibility ampObjectVisibility : items) {
+			itemsCache.put(ampObjectVisibility.getName(), ampObjectVisibility);
+		}
+	}
+	
 	public AmpTreeVisibility() {
 		super();
 		items = new ConcurrentHashMap();
@@ -137,6 +155,9 @@ public class AmpTreeVisibility implements Serializable{
 	public void buildAmpTreeVisibility(AmpObjectVisibility ampObjVis) {
 		// buildAmpTreeVisibilityMultiLevel(ampObjVis);
 		this.root = ampObjVis;
+		
+		initializeItemsCache(root.getItems());
+		
 		this.setItems(new ConcurrentHashMap());
 		if (ampObjVis.getAllItems() != null)
 			if (ampObjVis.getAllItems().iterator() != null)

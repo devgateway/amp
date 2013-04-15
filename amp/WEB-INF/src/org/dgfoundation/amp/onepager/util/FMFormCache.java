@@ -1,7 +1,9 @@
 package org.dgfoundation.amp.onepager.util;
 
-import java.util.Hashtable;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
@@ -11,10 +13,11 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 
 public class FMFormCache {
 	
-	private Hashtable<String, Boolean> editPermCache = null;
-	private Hashtable<String, Boolean> viewPermCache = null;
+	private ConcurrentHashMap<String, Boolean> editPermCache = null;
+	private ConcurrentHashMap<String, Boolean> viewPermCache = null;
+
 	
-	private boolean disabled 	= false;
+	private boolean disabled 	= true;
 	
 	public static FMFormCache getInstance() {
 		AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
@@ -25,9 +28,14 @@ public class FMFormCache {
 	}
 	
 	private FMFormCache () {
-		this.editPermCache	= new Hashtable<String, Boolean>();
-		this.viewPermCache	= new Hashtable<String, Boolean>();
+		this.editPermCache	= new ConcurrentHashMap<String, Boolean>();
+		this.viewPermCache	= new ConcurrentHashMap<String, Boolean>();
+		
 	}
+	
+	
+
+
 	
 	public void insertInCache(boolean value, String action, String componentName, AmpFMTypes type) {
 		
@@ -145,19 +153,19 @@ public class FMFormCache {
 			this.clear();
 	}
 	
-	public Hashtable<String, Boolean> getEditPermCache() {
+	public ConcurrentHashMap<String, Boolean> getEditPermCache() {
 		return this.editPermCache;
 	}
 
-	public void setEditPermCache(Hashtable<String, Boolean> editPermCache) {
+	public void setEditPermCache(ConcurrentHashMap<String, Boolean> editPermCache) {
 		this.editPermCache = editPermCache;
 	}
 	
-	public Hashtable<String, Boolean> getViewPermCache() {
+	public ConcurrentHashMap<String, Boolean> getViewPermCache() {
 		return this.viewPermCache;
 	}
 
-	public void setViewPermCache(Hashtable<String, Boolean> viewPermCache) {
+	public void setViewPermCache(ConcurrentHashMap<String, Boolean> viewPermCache) {
 		this.viewPermCache = viewPermCache;
 	}
 	

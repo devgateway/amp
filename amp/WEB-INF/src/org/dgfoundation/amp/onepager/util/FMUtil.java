@@ -204,6 +204,13 @@ public final class FMUtil {
 			//for admin user fields will be visible
 			if("yes".compareTo(session.getIsAdmin()) ==0 ) return true;
 			
+			if (type == AmpFMTypes.MODULE) {
+				
+				AmpObjectVisibility item =  atv.getItemsCache().get(name);
+				if(item!=null) return item.canDo(GatePermConst.Actions.VIEW, scope);
+				
+			} else 
+			
 			if(colection != null){
 				Iterator it = colection.iterator();
 				while (it.hasNext()) {
@@ -237,6 +244,12 @@ public final class FMUtil {
 			//for admin user fields will be visible
 			if("yes".equals(session.getIsAdmin()))
                 return true;
+			if (type == AmpFMTypes.MODULE) {
+				
+				AmpObjectVisibility item = atv.getItemsCache().get(name);
+				if(item!=null) return item.canDo(GatePermConst.Actions.EDIT, scope);
+				
+			} else 
 			
 			if(colection != null){
 				Iterator it = colection.iterator();

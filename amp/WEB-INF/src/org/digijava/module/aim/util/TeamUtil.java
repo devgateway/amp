@@ -2413,7 +2413,9 @@ public class TeamUtil {
         Query qry = null;
         List<AmpTeam> teams = null;
         boolean computed = type != null && type.equals("computed");
-        String accessType = (type != null && type.equals("management")) ? "Management" : "Team";
+        String accessType=null;
+        if(!type.equalsIgnoreCase("all"))
+        	accessType = (type != null && type.equals("management")) ? "Management" : "Team";
         
         try {
             session = PersistenceManager.getSession();

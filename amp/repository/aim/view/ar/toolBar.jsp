@@ -215,6 +215,14 @@ addLoadEvent(addpanel);
 		}
 	}
 </script>
+<style>
+@-moz-document url-prefix() {
+
+    .imagecsv{margin-bottom:5px;}
+
+}
+
+</style>
 <div class="toolbar" align="center">
 <table border="0" align="center">
 	<tr>
@@ -264,7 +272,7 @@ addLoadEvent(addpanel);
 								
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank" title="${downloadAsCsv}">
-				<digi:img style="margin-bottom:5px" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="${exportToCsv}" />
+				<digi:img styleClass="imagecsv" hspace="2" vspace="2" src="module/aim/images/csv_icon.png" border="0" alt="${exportToCsv}" />
 			</digi:link>
 		</td>
 		

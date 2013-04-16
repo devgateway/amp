@@ -56,6 +56,9 @@ var GEO_ID;
 var basemapsarray = new Array();
 var indicatorLayerArray = new Array();
 var indicatorMapArray = new Array();
+donorfix="";
+//donorfix = "BID,BM,BCIE,ACDI,UE,USAID,UNDP/PNUD,AECID,GIZ,JICA";
+fixeddonorlist = donorfix.split(",");
 
 
 
@@ -679,14 +682,14 @@ function MapFind(activity) {
 			dojo.forEach(activity.donors, function(donor) {
 				if (!containsDonor(donor, donorArray)) {
 					donorArray.push(donor);
-
 				}
 				if (donorname == null) {
 					donorname = donor.donorname;
 					donorCode = donor.donorCode;
 				} else {
-					donorname = donorname + ","
-							+ donor.donorname;
+					if (donorname!=donor.donorname){
+						donorname = donorname + "," + donor.donorname;
+					}
 				}
 			});
 			pgraphic.setAttributes({
@@ -783,23 +786,21 @@ function drawpoints() {
 		}
 		// Create palette for individual donors
 		var pointSymbolBank = new Array();
+		var colorsused = 0;
 		for ( var i = 0; i < donorArray.length; i++) {
 			var pointObject;
-			   if(i < colorsCualitative.length)
-			   {
-			    pointObject = new esri.symbol.SimpleMarkerSymbol(
+			   if(colorsused < colorsCualitative.length && ($.inArray(donorArray[i].donorCode, fixeddonorlist)>=0 || fixeddonorlist.length==1)){
+				   pointObject = new esri.symbol.SimpleMarkerSymbol(
+				   esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+			       new esri.symbol.SimpleLineSymbol(
+			       esri.symbol.SimpleLineSymbol.STYLE_SOLID,colorsCualitative[colorsused], 1), colorsCualitative[colorsused]);
+				   colorsused++;
+			   }else{
+				  pointObject = new esri.symbol.SimpleMarkerSymbol(
 			      esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
 			      new esri.symbol.SimpleLineSymbol(
-			        esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-			        colorsCualitative[i], 1), colorsCualitative[i]);
-			   }
-			   else
-			   {
-			    pointObject = new esri.symbol.SimpleMarkerSymbol(
-			      esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
-			      new esri.symbol.SimpleLineSymbol(
-			        esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-			        colorsCualitative[i], 1), new dojo.Color([255, 255, 255, 1]));
+			      esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+			      colorsCualitative[i], 1), new dojo.Color([255, 255, 255, 1]));
 			   }
 			   
 			   pointSymbolBank[donorArray[i].donorCode] = pointObject;
@@ -1533,7 +1534,20 @@ function showLegendClusterDonor(pointSymbolBank) {
 					+ "<div class='legendContentLabel' title='"+donorArray[i].donorname+"'>"
 					+ donorArray[i].donorCode + " </div><br/>";
 		}
-	} else {
+	} else if(fixeddonorlist.length>1){
+		for ( var int = 0; int < fixeddonorlist.length; int++) {
+			for ( var int2 = 0; int2 < donorArray.length; int2++) {
+				if (donorArray[int2].donorCode==fixeddonorlist[int]){
+					htmlDiv += "<div class='legendContentContainer'>"
+						+ "<div class='legendContentValue' style='background-color:rgba("
+						+ pointSymbolBank[donorArray[int2].donorCode].color.toRgba()
+						+ ");' ></div>" + "</div>"
+						+ "<div class='legendContentLabel' title='"+donorArray[int2].donorname+"'>"
+						+ donorArray[int2].donorCode + " </div><br/>";
+				}
+			}
+		}
+	}else{
 		for ( var i = 0; i < 10; i++) {
 			htmlDiv += "<div class='legendContentContainer'>"
 					+ "<div class='legendContentValue' style='background-color:rgba("
@@ -1612,8 +1626,9 @@ function getContent(graphicAttributes, baseGraphic) {
     					donorname = donor.donorname;
     					donorCode = donor.donorCode;
     				} else {
-    					donorname = donorname + ","
-    							+ donor.donorname;
+    					if (donorname!=donor.donorname){
+    						donorname = donorname + "," + donor.donorname;
+    					}
     				}
     			});
                 attr=({

@@ -82,7 +82,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		while (it.hasNext()) {
 			AmpFunding funding = (AmpFunding) it.next();
 			AmpOrganisation org = funding.getAmpDonorOrgId();
-			if (missing.getAmpOrgId() == org.getAmpOrgId()){
+			if (missing.getAmpOrgId().equals(org.getAmpOrgId())){
 				found = true;
 				break;
 			}
@@ -94,7 +94,7 @@ public class AmpDonorFundingFormSectionFeature extends
 			for (int i = 0; i < list.size(); i++){
 				ListItem<AmpOrganisation> item = (ListItem<AmpOrganisation>) list.get(i);
 				AmpOrganisation org = item.getModelObject();
-				if (missing.getAmpOrgId() == org.getAmpOrgId()){
+				if (missing.getAmpOrgId().equals(org.getAmpOrgId())){
 					idx = item.getIndex();
 					delItem = item;
 				}

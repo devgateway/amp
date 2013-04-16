@@ -104,7 +104,7 @@ public class GetTeamReports extends Action {
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
             Double totalPages=null;
             Collection col =null;
-            if(defReportsPerPage!=0){
+            if(defReportsPerPage>0){
                 int curPage=raForm.getCurrentPage()-1;
                 col= TeamUtil.getTeamReportsCollection(id, curPage * defReportsPerPage, defReportsPerPage, tabs, raForm.getKeyword());
                 int size=TeamUtil.getTeamReportsCollectionSize(id,tabs,raForm.getKeyword());

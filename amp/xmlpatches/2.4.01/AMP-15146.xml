@@ -14,8 +14,8 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 			update amp_org_role s SET percentage=100/j.cnt FROM 
-			(select activity, role, count(*) as cnt from amp_org_role where percentage is null group by activity,role) j 
-			WHERE j.activity=s.activity;
+			(select activity, role, count(*) as cnt from amp_org_role group by activity,role) j 
+			WHERE j.activity=s.activity and j.role=s.role;
 			</lang>
 		</script>
 	</apply>

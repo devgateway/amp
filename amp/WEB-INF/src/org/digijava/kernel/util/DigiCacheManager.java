@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.cache.CacheManager;
 import org.digijava.kernel.cache.ehcache.CacheManagerImpl;
+import org.digijava.module.aim.action.GetAvailableUsersForWorkspaceJSON;
 
 public class DigiCacheManager {
 
@@ -85,5 +86,6 @@ public class DigiCacheManager {
      * Perform clean shutdown of all caches
      */
     public static synchronized void shutdown() {
+    	 net.sf.ehcache.CacheManager.getInstance().shutdown();    	
     }
 }

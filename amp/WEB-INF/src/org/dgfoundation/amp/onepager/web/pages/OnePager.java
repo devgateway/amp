@@ -127,6 +127,10 @@ public class OnePager extends AmpHeaderFooter {
 			am = new AmpActivityModel();
 			newActivity = true;
 			
+			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
+			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
+
+			
 			am.getObject().setActivityCreator(session.getAmpCurrentMember());
 			am.getObject().setTeam(session.getAmpCurrentMember().getAmpTeam());
 			

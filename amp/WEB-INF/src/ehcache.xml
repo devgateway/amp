@@ -1,4 +1,4 @@
-<ehcache maxBytesOnHeap="150m" maxBytesOffHeap="300m" maxBytesOnDisk="500m" >
+<ehcache maxBytesOnHeap="200m" maxBytesOffHeap="300m" maxBytesOnDisk="500m" >
 
 
 	 <!-- Sets the path to the directory where cache .data files are created.
@@ -51,7 +51,7 @@
         diskPersistent="false"
         maxElementsOnDisk="100000"
         memoryStoreEvictionPolicy="LRU"     
-        
+        statistics="true"
     />
 	
 	<!-- 
@@ -64,7 +64,7 @@
 		overflowToDisk="false"
 		diskPersistent="false"
 		maxElementsOnDisk="50000"
-		
+		statistics="true"
 		/>
 
 	<!-- 
@@ -73,7 +73,7 @@
 	<cache
 		name="org.digijava.kernel.caches.application_scope"
 		maxElementsInMemory="2000"
-		eternal="true"		
+		eternal="true" statistics="true"	 
 		overflowToDisk="false"/>
 		
 	<!-- 
@@ -82,7 +82,7 @@
 	<cache
 		name="org.digijava.kernel.persistence.PersistenceManager.precache_region"
 		maxElementsInMemory="1000"
-		eternal="true"
+		eternal="true" statistics="true"
 		overflowToDisk="false"
 		diskPersistent="false"
 		maxElementsOnDisk="50000"
@@ -94,7 +94,7 @@
 	<cache
 		name="org.digijava.kernel.login_region"
 		maxElementsInMemory="1000"
-		eternal="true"		
+		eternal="true" statistics="true"		
 		overflowToDisk="false"/>
 		
 	<!-- 
@@ -106,7 +106,8 @@
 		maxElementsInMemory="50000"
 		overflowToDisk="false"
 		diskPersistent="false"
-		maxElementsOnDisk="1000000"			
+		maxElementsOnDisk="1000000"
+		statistics="true"			
 		/>
 
 	<cache
@@ -114,7 +115,8 @@
 		maxElementsInMemory="100"
 		overflowToDisk="false"
 		diskPersistent="false"
-		maxElementsOnDisk="1000"		
+		maxElementsOnDisk="1000"
+		statistics="true"		
 		/>
 		
     <!-- See http://ehcache.sourceforge.net/documentation/#mozTocId258426 for how to configure caching for your objects -->

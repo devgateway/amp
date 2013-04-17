@@ -297,7 +297,16 @@ public class FundingCalculationsHelper {
 				if (userCurrencyCode != null)
 					toCurrCode = userCurrencyCode;
 
-				double toExRt = Util.getExchange(toCurrCode, dt);
+				//double toExRt = Util.getExchange(toCurrCode, dt);
+				double toExRt;
+				if (userCurrencyCode != null)
+					toCurrCode = userCurrencyCode;
+				if (fundDet.getAmpCurrencyId().getCurrencyCode().equalsIgnoreCase(toCurrCode)){
+					toExRt=frmExRt;
+				}else{
+					toExRt = Util.getExchange(toCurrCode, dt);
+				}
+				
 				DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount().doubleValue(), frmExRt, toExRt, dt);
 
 				if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {

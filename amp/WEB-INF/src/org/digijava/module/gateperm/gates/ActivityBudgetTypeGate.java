@@ -24,7 +24,7 @@ import org.digijava.module.gateperm.core.GatePermConst;
  */
 public class ActivityBudgetTypeGate extends Gate {
 
-	public static final MetaInfo[] SCOPE_KEYS = new MetaInfo[] { GatePermConst.ScopeKeys.ACTIVITY };
+	public static final MetaInfo[] SCOPE_KEYS = new MetaInfo[] {  };
 
 	private static final MetaInfo[] PARAM_INFO=new MetaInfo[] { new MetaInfo("on budget","true for on budget, false for off budget")};
 	
@@ -56,7 +56,8 @@ public class ActivityBudgetTypeGate extends Gate {
 		
 		AmpActivityVersion activity = (AmpActivityVersion) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 		
-		if(activity==null) throw new RuntimeException("Null activity is not allowed! Check scope."); 
+		//this is needed because field permissions are also checked in the report manager
+		if(activity==null) return true;
 	 
 	
         AmpCategoryValue ampCategoryValue =

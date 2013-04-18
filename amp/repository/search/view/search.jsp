@@ -20,22 +20,27 @@
 		keyword.focus();
 	}
 
+	
 	function popup(mylink, windowname) {
 		if (!window.focus)
 			return true;
-		var href;
-		if (typeof (mylink) == 'string')
-			href = mylink;
-		else
-			href = mylink.href;
-		window
-				.open(
-						href,
-						windowname,
-						'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+
+		if (navigator.appName.indexOf('Microsoft Internet Explorer') > -1) { //Workaround to allow HTTP REFERER to be sent in IE 
+			var referLink = document.createElement('a');
+			referLink.href = mylink;
+			referLink.target = 'blank_';
+			document.body.appendChild(referLink);
+			referLink.click();
+		} else {
+			myWindow = window.open(mylink,windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+			myWindow.location = mylink;
+		}
+
 		return false;
 	}
-	function checkKeyWord(){
+	
+	
+	function checkKeyWord() {
 		var keyword = document.getElementsByName("keyword");
 		if (keyword) {
 			keyword = keyword[0];
@@ -46,17 +51,17 @@
 
 		}
 		return true;
-		
+
 	}
-	
+
 	function downloadFile(uuid) {
-		if(navigator.appName.indexOf('Microsoft Internet Explorer') > -1){ 
+		if (navigator.appName.indexOf('Microsoft Internet Explorer') > -1) {
 			var referLink = document.createElement('a');
-			referLink.href='/contentrepository/downloadFile.do?uuid='+uuid;
+			referLink.href = '/contentrepository/downloadFile.do?uuid=' + uuid;
 			document.body.appendChild(referLink);
 			referLink.click();
 		} else {
-			window.location='/contentrepository/downloadFile.do?uuid='+uuid;
+			window.location = '/contentrepository/downloadFile.do?uuid=' + uuid;
 		}
 	}
 </script>

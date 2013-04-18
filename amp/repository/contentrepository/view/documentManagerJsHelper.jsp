@@ -295,7 +295,7 @@ font-weight : bold;
 </c:set>
 
 <c:set var="translation_validation_title_chars">
-			<digi:trn>Please only use letters, digits, '_', () and space !</digi:trn>
+			<digi:trn>Please only use letters, digits, '_!@#$%^&', () and space !</digi:trn>
 </c:set>
 <c:set var="translation_validation_filedata">
 			<digi:trn>Please select a file path !</digi:trn>
@@ -1323,13 +1323,14 @@ function setType(typeValue) {
 
 
 function validateAddDocument() {
-	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
+	// This code was commented. See https://jira.dgfoundation.org/browse/AMP-15171 for details
+	// var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ()]+");
+	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü!@#$%^&' ()]+");
 	var urlFormat = new RegExp('(http|ftp|https)://[a-z0-9\-_]+(\.[a-z0-9\-_]+)+([a-z0-9\-\.,@\?^=%&;:/~\+#]*[a-z0-9\-@\?^=%&;/~\+#])?', 'i');
 	var msg	= '';	
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '') {
 		msg = msg + "${translation_validation_title}"+'<br>';
 	}	
-	/*	This code was commented out. See https://jira.dgfoundation.org/browse/AMP-15171 for details
 	else {
 		var title	= document.forms['crDocumentManagerForm'].docTitle.value;
 		var found	= regexp.exec(title);
@@ -1337,7 +1338,7 @@ function validateAddDocument() {
 			msg = msg + "${translation_validation_title_chars}"+'<br>' ;
 		}
 		
-	}*/
+	}
 
 	var webUrlVisible=document.getElementById('tr_url');
 	if(webUrlVisible.style.display=='none' && document.forms['crDocumentManagerForm'].fileData.value == ''){ //adding document

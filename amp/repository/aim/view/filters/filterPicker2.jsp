@@ -31,7 +31,7 @@
 <link href="/TEMPLATE/ampTemplate/css_2/yui_popins.css" rel="stylesheet" type="text/css"></link>
 <link rel="stylesheet" type="text/css" href="/TEMPLATE/ampTemplate/js_2/yui/container/assets/container.css"> 
 <digi:instance property="aimReportsFilterPickerForm" />
-<digi:form action="/reportsFilterPicker.do">
+<digi:form action="/reportsFilterPicker.do" style="height: 100%">
 <bean:define id="reqBeanSetterObject" toScope="request" name="aimReportsFilterPickerForm"/>
 
 <% 
@@ -57,8 +57,8 @@
 	<% 
 		StopWatch.next("Filters", true, "donor tab begin");
 	%>
-		<div id="donorsTab" style="height: 91%;">
-			<div class="grayBorder">
+		<div id="donorsTab" class="clrfix" style="height: 91%;">
+			<div class="grayBorder clrfix">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="donorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="donorsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="donorsTab_search" />
@@ -69,8 +69,8 @@
 		StopWatch.next("Filters", true, "related agencies tab begin");
 	%>
         <logic:notEqual name="is_pledge_report" value="true" scope="request">
-            <div id="relAgenciesTab" class="yui-hidden" style="height: 91%;">
-                <div class="grayBorder">
+            <div id="relAgenciesTab" class="yui-hidden clrfix" style="height: 91%;">
+                <div class="grayBorder clrfix">
                     <bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="relatedAgenciesElements" />
                     <bean:define id="reqPropertyObj" toScope="request" value="relAgenciesPropertyObj" />
                     <bean:define id="reqSearchManagerId" toScope="request" value="relAgenciesTab_search" />
@@ -81,8 +81,8 @@
 	<% 
 		StopWatch.next("Filters", true, "sectors tab begin");
 	%>		
-		<div id="sectorsTab" class="yui-hidden"  style="height: 91%;">
-			<div class="grayBorder">
+		<div id="sectorsTab" class="yui-hidden clrfix"  style="height: 91%;">
+			<div class="grayBorder clrfix">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="sectorElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="sectorsPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="sectorsTab_search" />
@@ -93,8 +93,8 @@
 		<% 
 			StopWatch.next("Filters", true, "programs tab begin");
 		%>
-			<div id="programsTab" class="yui-hidden"  style="height: 91%;" >
-				<div class="grayBorder">
+			<div id="programsTab" class="yui-hidden clrfix"  style="height: 91%;" >
+				<div class="grayBorder clrfix">
 					<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="programElements" />
 					<bean:define id="reqPropertyObj" toScope="request" value="programsPropertyObj" />
 					<bean:define id="reqSearchManagerId" toScope="request" value="programsTab_search" />
@@ -108,8 +108,8 @@
 		<% 
 			StopWatch.next("Filters", true, "financing location tab begin");
 		%>		
-		<div id="financingLocTab" class="yui-hidden"  style="height: 91%;" >
-			<div class="grayBorder" style="width: 95%; float: left;">
+		<div id="financingLocTab" class="yui-hidden clrfix"  style="height: 91%;" >
+			<div class="grayBorder clrfix" style="width: 95%; float: left;">
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="financingLocationElements" />
 				<bean:define id="reqPropertyObj" toScope="request" value="financingLocPropertyObj" />
 				<bean:define id="reqSearchManagerId" toScope="request" value="financingLocTab_search" />
@@ -121,8 +121,8 @@
 		<% 
 			StopWatch.next("Filters", true, "financing location tab end");
 		%>				
-		<div id="otherCriteriaTab" class="yui-hidden"  style="height: 91%;">
-			<div class="grayBorder">
+		<div id="otherCriteriaTab" class="yui-hidden clrfix"  style="height: 91%;">
+			<div class="grayBorder clrfix">
 				<logic:notEqual name="is_pledge_report" value="true" scope="request">
 				<c:set var="reqSelectorHeaderSize" scope="request" value="13" />
 				<bean:define id="reqElements" toScope="request" name="aimReportsFilterPickerForm" property="otherCriteriaElements" />
@@ -168,6 +168,7 @@
 		</div>
 	</div>
 </div>
+<div class="clrfix" style="height: 15%;">
 <logic:notEqual name="is_pledge_report" value="true" scope="request">
 	<div style="width:60%; float:left; font-size: 12px;text-align: center;">
 		<c:set var="tooltip_translation">
@@ -211,6 +212,7 @@
 				<html:button onclick="resetFilter('${reportCD.contextId}')" styleClass="buttonx_sm" property="reset" styleId="filterPickerResetButton">
 					<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
 				</html:button>
+</div>
 </div>
 
 <html:hidden property="workspaceonly" styleId="workspaceOnly"/>

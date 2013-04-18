@@ -40,6 +40,19 @@ input.memberSelectorTextbox {
 	height: 17px;
 }
 
+
+.clrfix:before,
+.clrfix:after {
+  content: "";
+  display: table;
+}
+.clrfix:after {
+  clear: both;
+}
+.clrfix {
+  *zoom: 1;
+}
+
 .yui-panel {
     border-collapse: separate;
     font-family:arial;

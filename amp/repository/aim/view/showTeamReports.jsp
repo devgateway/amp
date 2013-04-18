@@ -305,7 +305,7 @@ $(document).ready(function() {
 					                				<td>
 					                					<c:set var="reportNumber" value="${fn:length(aimTeamReportsForm.reports)}"></c:set>
 					                  					<c:if test="${reportNumber != 0}">
-					                  						<table>
+					                  						
 					                  							<logic:present name="isUserLogged" scope="session">
 																	<c:if test="${!aimTeamReportsForm.showTabs}">
 																		<div class="filtered"style="float: right; font-size: 11px;">
@@ -332,6 +332,7 @@ $(document).ready(function() {
 										                       			</div>
 																	</c:if>
 					           									</logic:present>
+					           									<table>
 					                    						<tr style="font-size: 11px; font-family: Aria, sans-serif;">
 					                      							<td>                                     
 												                        <%

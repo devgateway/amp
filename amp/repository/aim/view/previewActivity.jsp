@@ -3100,6 +3100,7 @@ function collapseAll() {
 		  $("div#ipadiv").toggle('slow', function() {
 		  });
 	});
+	jQuery.fn.exists = function(){return this.length>0;}
 	$("#collapseall").click(function() {
 		var showOrHide;  
 			  if($("#collapseall").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
@@ -3111,7 +3112,9 @@ function collapseAll() {
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		showOrHide=true;
 		  	  }
-			showMapInTooltipDialog(ashowmap,true);
+		  	if($("#ashowmap").exists()){
+				showMapInTooltipDialog(ashowmap,true);
+		  	}
 		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv").toggle(showOrHide);
 	});
 	

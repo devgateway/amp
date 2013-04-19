@@ -94,6 +94,7 @@
 		<!--
 			tanzania adds
 		-->
+        <property name="indirectOnBudget" column="indirect_on_budget" type="java.lang.Boolean" />
 		<property name="FY" column="FY" type="java.lang.String" />
 		<property name="vote" column="vote" type="java.lang.String" />
 		<property name="subVote" column="subVote" type="java.lang.String" />

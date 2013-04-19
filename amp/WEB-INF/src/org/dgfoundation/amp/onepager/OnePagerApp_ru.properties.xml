@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="Required">Поле необходимо заполнить!</entry>
+	<entry key="nullValid">Выбрать один</entry>
+	<entry key="null">Выбрать один</entry>
+	<entry key="ContactEmailValidator">неправильных формат электронной почты!</entry>
+	<entry key="not_unique">электронная почта должна быть уникальной!</entry>
+	<entry key="AmpMinSizeCollectionValidator">Пожалуйста, добавьте по крайней мере ${minimum} товар (ов) здесь!</entry>
+	<entry key="AmpPercentageCollectionValidator">Сумма все проценты ${label}, она должна быть 100!</entry>
+	<entry key="AmpUniqueCollectionValidator">Следующие элементы повторяются не реже одного раза: ${label}</entry>
+	<entry key="AmpTreeCollectionValidator">Обоих родителей и ребенка предметы имеются в наличии: ${label}</entry>
+	<entry key="AmpUniqueActivityTitleValidator">Деятельности с таким названием существует внутри рабочего пространства ${workspace}.</entry>
+	<entry key="AmpUniqueComponentTitleValidator">Компонент с таким названием уже существует.</entry>
+	<entry key="CoordinatesValidator">Координаты не в правильном формате.</entry>
+	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Выплаты больше, чем сумма обязательств</entry>
+	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Расходы больше, чем сумма выплат</entry>
+</properties>

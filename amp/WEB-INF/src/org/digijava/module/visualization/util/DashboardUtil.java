@@ -787,6 +787,7 @@ public class DashboardUtil {
 		//In this method, divideThousands holds the individual chart information if it's going to be divided again
 
 		BigDecimal divideByDenominator;
+		if (divideThousands == null) divideThousands = false;
 		if(isProfile){ //The profile already divide in the preload of data in method getSummaryAndRankInformation(VisualizationForm, HttpServletRequest)
 			//return new BigDecimal(1);
 			if (divideThousands)
@@ -796,10 +797,10 @@ public class DashboardUtil {
 		}
 		else
 		{
-	        if (divideThousands == null) divideThousands = false;
 	        long divideThousandsMultiplier = divideThousands ? 1000 : 1;
-	        long showInThousandsMultiplier = showInThousands ? 1 : 1000;
-	        long unitsMultiplier = 1000000 / Math.max(1000000, FeaturesUtil.getAmountMultiplier());
+	        long showInThousandsMultiplier = showInThousands ? 1000 : 1000000; //if show in thousands is set then divide by 1000, else, it divides by 1000000 and show in millions
+	        //long unitsMultiplier = 1000000 / Math.max(1000000, FeaturesUtil.getAmountMultiplier());
+	        double unitsMultiplier = 1d/FeaturesUtil.getAmountMultiplier();// this is to get the value in units because in AmpFundingDetail.java is being applied the multiplier
 			divideByDenominator = new BigDecimal(unitsMultiplier * showInThousandsMultiplier * divideThousandsMultiplier);
 		}
 		return divideByDenominator;

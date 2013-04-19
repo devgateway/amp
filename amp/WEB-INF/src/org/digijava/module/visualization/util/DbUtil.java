@@ -1086,13 +1086,13 @@ public class DbUtil {
             	Object[] item = (Object[])it.next();
             	
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
-            		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
+            		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
-            		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
             	if (item.length==6) 
-            		currentFd.setTransactionAmount(((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if(hm.containsKey(id)){
@@ -1215,13 +1215,13 @@ public class DbUtil {
             	Object[] item = (Object[])it.next();
             	
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4 && item[3] != null) 
-            		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
+            		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
-            		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
             	if (item.length==6) 
-            		currentFd.setTransactionAmount(((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if(hm.containsKey(id)){
@@ -1403,13 +1403,13 @@ public class DbUtil {
             	Object[] item = (Object[])it.next();
             	
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
-            		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
+            		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
-            		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
             	if (item.length==6) 
-            		currentFd.setTransactionAmount(((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
             	String name = (String) item[2];
             	if (!sectorCondition) {
@@ -1596,13 +1596,13 @@ public class DbUtil {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
-            		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
+            		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
-            		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
             	if (item.length==6) 
-            		currentFd.setTransactionAmount(((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
             	String name = (String) item[2];
 
@@ -1796,13 +1796,13 @@ public class DbUtil {
             	Object[] item = (Object[])it.next();
             	
             	AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
             	if (item.length==4) 
-            		currentFd.setTransactionAmount(currentFd.getTransactionAmount()*(Float)item[3]/100);
+            		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
-            		currentFd.setTransactionAmount((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
             	if (item.length==6) 
-            		currentFd.setTransactionAmount(((currentFd.getTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
             	String name = programParentList.get(id).getName();
             	id = programParentList.get(id).getAmpThemeId();

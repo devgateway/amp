@@ -245,6 +245,13 @@ public class AmpFundingDetail implements Serializable, Cloneable {
 		/**
 		 * @return
 		 */
+		public Double getAbsoluteTransactionAmount() {
+			return transactionAmount;
+		}
+
+		/**
+		 * @return
+		 */
 		public Date getTransactionDate() {
 			return transactionDate;
 		}

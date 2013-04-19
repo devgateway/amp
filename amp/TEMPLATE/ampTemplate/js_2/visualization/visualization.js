@@ -1198,7 +1198,11 @@ function refreshAsync(){
 	}	
 }
 function refreshBoxes(o){
-	var isThousands = document.getElementById("show_amounts_in_thousands").checked;
+	var isThousands = false;
+	if (document.getElementById("showAmountsInThousands").value=="1")
+		isThousands = true;
+	else
+		isThousands = false;
 	var dashboardType = document.getElementById("dashboardType").value;
 	var results = YAHOO.lang.JSON.parse(o.responseText);
 	var inner = "";
@@ -1885,13 +1889,13 @@ function updateTitles(){
 			var divide =  document.getElementById(id.substr(0,id.indexOf("TitleLegend"))+"Divide").checked;
 			var inThousands =  document.getElementById("showAmountsInThousands").value;
 			var anmtIn = trnInMillions;
-			if (divide && inThousands=="true")
+			if (divide && inThousands=="1")
 				anmtIn = trnInMillions;
-			if (!divide && inThousands=="true")
+			if (!divide && inThousands=="1")
 				anmtIn = trnInThousands;
-			if (divide && inThousands=="false")
+			if (divide && inThousands=="2")
 				anmtIn = trnInBillions;
-			if (!divide && inThousands=="false")
+			if (!divide && inThousands=="2")
 				anmtIn = trnInMillions;
 			var input = document.getElementById(id.substr(0,id.indexOf("Legend")));
 			var trnTitle = document.getElementById(id+"Trn").value + " - " + fundType + " (" + anmtIn + ")";
@@ -2084,20 +2088,20 @@ function updateGraph(e, chartName){
 	var divide =  document.getElementById(chartName+"Divide").checked;
 	var inThousands =  document.getElementById("showAmountsInThousands").value;
 	var anmtIn = trnInMillions;
-	if (divide && inThousands=="true")
+	if (divide && inThousands=="1")
 		anmtIn = trnInMillions;
-	if (!divide && inThousands=="true")
+	if (!divide && inThousands=="1")
 		anmtIn = trnInThousands;
-	if (divide && inThousands=="false")
+	if (divide && inThousands=="2")
 		anmtIn = trnInBillions;
-	if (!divide && inThousands=="false")
+	if (!divide && inThousands=="2")
 		anmtIn = trnInMillions;
 	
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		// Get flash object and refresh it by calling internal
 		if(allGraphs[idx].children[0].id.toLowerCase() == chartName.toLowerCase()){
 			var trnTitle = document.getElementById(chartName+"TitleLegendTrn").value + " - " + fundType + " (" + anmtIn + ")";
-			//document.getElementById(chartName + "Title").value = trnTitle;
+			document.getElementById(chartName + "Title").value = trnTitle;
 			//document.getElementById(chartName + "TitleLegend").innerHTML = document.getElementById(chartName + "Title").value; 
 			document.getElementById(chartName + "TitleLegend").innerHTML = trnTitle;
 			allGraphs[idx].children[0].refreshGraph();

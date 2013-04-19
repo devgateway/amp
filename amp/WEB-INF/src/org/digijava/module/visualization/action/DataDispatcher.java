@@ -596,12 +596,8 @@ public class DataDispatcher extends DispatchAction {
         
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		if(divide){
-			filter.setDivideThousands(true);
-		}
-
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), true);//IsProfile determines if the amounts were already divided
+		divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), true);//IsProfile determines if the amounts were already divided
 
 		Long startYear, endYear;
 		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
@@ -782,7 +778,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("Year,");
 			sectorData += "<Year";
 	        HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
-	        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+	        divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), false);
 	        for (Long i = startYear; i <= endYear; i++) {
 	        	sectorData += ">" + i;
 	        }
@@ -964,12 +960,8 @@ public class DataDispatcher extends DispatchAction {
 		String othersTitle = TranslatorWorker.translateText("Other");
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		if(divide){
-			filter.setDivideThousands(true);
-		}
-
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), true);//IsProfile determines if the amounts were already divided
+		divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), true);//IsProfile determines if the amounts were already divided
 
 		Long startYear, endYear;
 		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
@@ -1142,7 +1134,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("Year,");
 			programData += "<Year";
 	        HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
-	        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+	        divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), false);
 	        for (Long i = startYear; i <= endYear; i++) {
 	        	programData += ">" + i;
 	        }
@@ -1318,11 +1310,8 @@ public class DataDispatcher extends DispatchAction {
 		
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		if(divide){
-			filter.setDivideThousands(true);
-		}
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), true);
+		divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), true);
 
 		Long startYear, endYear;
 		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
@@ -1490,7 +1479,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("Year,");
             organizationData += "<Year";
             HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
-	        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+	        divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), false);
             for (Long i = startYear; i <= endYear; i++) {
 	        	organizationData += ">" + i;
 	        }
@@ -1659,11 +1648,8 @@ public class DataDispatcher extends DispatchAction {
 		
 		boolean divide = request.getParameter("divide") != null ? Boolean.parseBoolean(request.getParameter("divide")) : false;
 
-		if(divide){
-			filter.setDivideThousands(true);
-		}
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), true);
+		divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), true);
 
 		Long startYear, endYear;
 		if(request.getParameter("startYear") != null && request.getParameter("endYear") != null 
@@ -1825,7 +1811,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("Year,");
             organizationData += "<Year";
             HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
-	        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+	        divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), false);
             for (Long i = startYear; i <= endYear; i++) {
 	        	organizationData += ">" + i;
 	        }
@@ -2001,13 +1987,10 @@ public class DataDispatcher extends DispatchAction {
 			endYear = filter.getEndYear();
 		}
 		
-		if(divide){
-			filter.setDivideThousands(true);
-		}
 
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         BigDecimal divideByDenominator;
-        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+        divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), false);
 
         Date startDate = null;
         Date endDate = null;
@@ -2234,13 +2217,9 @@ public class DataDispatcher extends DispatchAction {
 			endYear = filter.getEndYear();
 		}
 		
-		if(divide){
-			filter.setDivideThousands(true);
-		}
-
         DefaultCategoryDataset result = new DefaultCategoryDataset();
         BigDecimal divideByDenominator;
-        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+        divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), false);
 
         Date startDate = null;
         Date endDate = null;
@@ -2512,12 +2491,8 @@ public class DataDispatcher extends DispatchAction {
 			endYear = filter.getEndYear();
 		}
 
-		if(divide){
-			filter.setDivideThousands(true);
-		}
-
 		BigDecimal divideByDenominator;
-        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+        divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), false);
 
 		Long currId = filter.getCurrencyId();
 		String currCode;
@@ -2658,12 +2633,8 @@ public class DataDispatcher extends DispatchAction {
 			endYear = filter.getEndYear();
 		}
 
-		if(divide){
-			filter.setDivideThousands(true);
-		}
-
 		BigDecimal divideByDenominator;
-        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+        divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), false);
 
 		Long currId = filter.getCurrencyId();
 		String currCode;
@@ -2908,12 +2879,8 @@ public class DataDispatcher extends DispatchAction {
 			endYear = filter.getEndYear();
 		}
 
-		if(divide){
-			filter.setDivideThousands(true);
-		}
-
 		BigDecimal divideByDenominator;
-        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+        divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), false);
 
 		Long currId = filter.getCurrencyId();
 		String currCode;
@@ -3371,12 +3338,8 @@ public class DataDispatcher extends DispatchAction {
 			endYear = filter.getEndYear();
 		}
 		
-		if(divide){
-			filter.setDivideThousands(true);
-		}
-
 		BigDecimal divideByDenominator;
-		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), true);
+		divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), true);
 
 		String othersTitle = TranslatorWorker.translateText("Other");
         
@@ -3536,7 +3499,7 @@ public class DataDispatcher extends DispatchAction {
 			csvString.append("Year,");
 			regionData += "<Year";
 	        HashMap<Long, BigDecimal[]> allData = new HashMap<Long, BigDecimal[]>();
-	        divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
+	        divideByDenominator = DashboardUtil.getDividingDenominator(divide, filter.shouldShowAmountsInThousands(), false);
 	        for (Long i = startYear; i <= endYear; i++) {
 	        	regionData += ">" + i;
 	        }

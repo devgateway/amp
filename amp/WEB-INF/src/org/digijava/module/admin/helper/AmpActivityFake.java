@@ -108,7 +108,7 @@ public class AmpActivityFake implements LoggerIdentifiable{
 	@Override
 	public String getObjectName() {
 		// TODO Auto-generated method stub
-		return this.getAmpId()+" "+this.getName();
+		return "("+this.getAmpId()+") "+this.getName();
 	}
          @Override
         public String getObjectFilteredName() {

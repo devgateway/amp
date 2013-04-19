@@ -107,6 +107,12 @@ public class AmpCategoryGroupFieldPanel extends
 			boolean ordered, Boolean nullValid, boolean hideLabel, 
 			IModel<Set<AmpCategoryValue>> dependantModel) throws Exception {
 		super(id,categoryKey,fmName,ordered,false,dependantModel,hideLabel);
+        if (choices.getObject() != null && choices.getObject().size() == 1){
+            AmpCategoryValue defValue = choices.getObject().get(0);
+            if (model.getObject() == null){
+                model.setObject(defValue);
+            }
+        }
 		choiceContainer = new RadioChoice<AmpCategoryValue>(
 				"choice",model, choices, new TranslatedChoiceRenderer<AmpCategoryValue>())
 				.setNullValid(nullValid);

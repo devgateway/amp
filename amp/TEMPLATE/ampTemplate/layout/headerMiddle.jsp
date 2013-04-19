@@ -679,6 +679,9 @@ function adminHelp(){
 						  	if(FeaturesUtil.isVisibleModule("Map Module", request.getSession().getServletContext())) {
 						  		showDashboard = true;
 						  	}
+                            if(FeaturesUtil.isVisibleModule("Visualization Dashboards", request.getSession().getServletContext())) {
+                                showDashboard = true;
+                            }
 						  							  	
 						%>
 						<%if (showDashboard) {%>

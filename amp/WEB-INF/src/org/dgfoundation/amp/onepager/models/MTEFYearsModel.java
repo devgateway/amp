@@ -1,28 +1,76 @@
 package org.dgfoundation.amp.onepager.models;
 import java.util.Calendar;
 import java.util.Date;
-import org.apache.wicket.model.IModel;
 
-public class MTEFYearsModel implements IModel<String> {
+import org.apache.wicket.Session;
+import org.apache.wicket.model.IModel;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
+
+public class MTEFYearsModel implements IModel<KeyValue> {
 	private static final long serialVersionUID = 1L;
 	private IModel<Date> sourceModel;
-	
+    private boolean fiscal;
+
+
+    public static boolean getFiscal(){
+        boolean fiscal = true;
+
+        TeamMember tm = ((AmpAuthWebSession) Session.get()).getCurrentMember();
+        if (tm != null){
+            AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+            if (tempSettings == null)
+                tempSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+            Long defaultCalendarId=null;
+            if (tempSettings!=null && tempSettings.getFiscalCalendar()!=null){
+                defaultCalendarId=tempSettings.getFiscalCalendar().getAmpFiscalCalId();
+            }else{
+                defaultCalendarId=Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
+            }
+            AmpFiscalCalendar ampFiscalCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
+            if (!ampFiscalCalendar.getIsFiscal())
+                fiscal = false;
+        }
+        return fiscal;
+    }
+
+    public static KeyValue convert(Date date, boolean fiscal){
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int year = c.get(Calendar.YEAR);
+
+        String key = Integer.toString(year);
+        String value = Integer.toString(year);
+        if (fiscal)
+            value += "/"+Integer.toString(year+1);
+        return new KeyValue(key, value);
+    }
+
 	public MTEFYearsModel(IModel<Date> sourceModel) {
 		this.sourceModel = sourceModel;
+        this.fiscal = getFiscal();
 	}
 	
 	@Override
-	public void setObject(String object) {
-		//value is not modifiable 
+	public void setObject(KeyValue object) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_YEAR, 1);
+        calendar.set(Calendar.YEAR, Integer.parseInt(object.getKey()));
+        sourceModel.setObject(calendar.getTime());
 	}
 	
 	@Override
-	public String getObject() {
-		Date date = sourceModel.getObject();
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		int year = c.get(Calendar.YEAR);	
-		return Integer.toString(year)+"/"+Integer.toString(year+1);
+	public KeyValue getObject() {
+        Date date = sourceModel.getObject();
+        return convert(date, fiscal);
 	}
 
 	@Override

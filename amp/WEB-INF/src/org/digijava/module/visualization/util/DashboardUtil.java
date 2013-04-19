@@ -751,10 +751,14 @@ public class DashboardUtil {
 		}
 		else
 		{
-			SimpleDateFormat shortSimpleDateformat=new SimpleDateFormat("yy");
-			startYear = shortSimpleDateformat.format(startDate);
-			endYear = shortSimpleDateformat.format(endDate);
-			result = headingFY + " " + startYear + "-" + endYear;
+			if (calendar.getIsFiscal()){
+				SimpleDateFormat shortSimpleDateformat=new SimpleDateFormat("yy");
+				startYear = shortSimpleDateformat.format(startDate);
+				endYear = shortSimpleDateformat.format(endDate);
+				result = headingFY + " " + startYear + "-" + endYear;
+			} else {
+				result = startYear;
+			}
 		}
 		return result;
 	}

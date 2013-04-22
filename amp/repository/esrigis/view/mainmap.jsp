@@ -39,6 +39,7 @@
     <!-- Map Scripts -->
     <script type="text/javascript" src="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/?v=3.0"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/DecimalFormat.js"/>"></script>
+   	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/latinise.min_.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-debug.js"/>"></script>
    	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>

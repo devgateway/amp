@@ -58,6 +58,7 @@ var povertyratesurl;
 var population;
 donorfix="";
 //donorfix = "BID,BM,BCIE,ACDI,UE,USAID,UNDP/PNUD,AECID,GIZ,JICA";
+donorfix = "UE,USAID,JICA,,AECID,AFD,BM-EXTFUND,ACDI,Ambassade de Norvege,BID,Ambassade du Venezuela";
 fixeddonorlist = donorfix.split(",");
 
 function init() {
@@ -751,7 +752,8 @@ function drawpoints() {
 		var colorsused = 0;
 		for ( var i = 0; i < donorArray.length; i++) {
 			var pointObject;
-			   if(colorsused < colorsCualitative.length && ($.inArray(donorArray[i].donorCode, fixeddonorlist)>=0 || fixeddonorlist.length==1)){
+			var acronym = donorArray[i].donorCode.latinise();
+			   if(colorsused < colorsCualitative.length && ($.inArray(acronym, fixeddonorlist)>=0 || fixeddonorlist.length==1)){
 				   pointObject = new esri.symbol.SimpleMarkerSymbol(
 				   esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
 			       new esri.symbol.SimpleLineSymbol(
@@ -1426,7 +1428,8 @@ function showLegendClusterDonor(pointSymbolBank) {
 	} else if(fixeddonorlist.length>1){
 		for ( var int = 0; int < fixeddonorlist.length; int++) {
 			for ( var int2 = 0; int2 < donorArray.length; int2++) {
-				if (donorArray[int2].donorCode==fixeddonorlist[int]){
+				var acronym =donorArray[int2].donorCode.latinise();
+				if (acronym==fixeddonorlist[int]){
 					htmlDiv += "<div class='legendContentContainer'>"
 						+ "<div class='legendContentValue' style='background-color:rgba("
 						+ pointSymbolBank[donorArray[int2].donorCode].color.toRgba()

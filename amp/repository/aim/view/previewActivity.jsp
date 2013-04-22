@@ -1451,7 +1451,7 @@ function collapseAll() {
 <!-- END SECTORS SECTION -->
 
 <!-- FUNDING SECTION -->
-<logic:present name="currentMember" scope="session">
+
 	<module:display name="/Activity Form/Donor Funding" parentModule="/Activity Form">
 		<fieldset>
 			<legend>
@@ -1465,7 +1465,7 @@ function collapseAll() {
 			</div>
 		</fieldset>
 	</module:display>
-</logic:present>
+
 
 <!-- END FUNDING SECTION -->
 

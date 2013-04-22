@@ -269,19 +269,21 @@
                         </tr>
                         </c:if>
                         <c:if test="${aimEditActivityForm.funding.showPipeline}">
-						<tr>
-                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase"><digi:trn
-                                key='aim:totalactualcommittment'> TOTAL PIPELINE COMMITMENTS </digi:trn>:
-                            </td>
-                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
-                                <c:if test="${not empty aimEditActivityForm.funding.totalPipelineCommitments}">
-                                     <b>
-                                     <bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /> 
-                                     <bean:write name="aimEditActivityForm" property="currCode" />
-                                     </b>
-                                </c:if>&nbsp;        
-                            </td>
-                        </tr>
+	                        <field:display name="Pipeline" feature="Commitments">
+								<tr>
+		                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
+		                            	<digi:trn key='aim:totalactualcommittment'> TOTAL PIPELINE COMMITMENTS </digi:trn>:
+		                            </td>
+		                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
+		                                <c:if test="${not empty aimEditActivityForm.funding.totalPipelineCommitments}">
+		                                     <b>
+		                                     <bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /> 
+		                                     <bean:write name="aimEditActivityForm" property="currCode" />
+		                                     </b>
+		                                </c:if>&nbsp;        
+		                            </td>
+		                        </tr>
+	                        </field:display>
                         </c:if>
                         </module:display>
                         <module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements" 

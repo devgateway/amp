@@ -20,7 +20,8 @@ import org.digijava.kernel.lucene.analyzers.SpanishAnalyzer;
 public enum LangSupport {
 	ENGLISH ("en"), 
 	FRENCH ("fr"), 
-	SPANISH ("es");
+	SPANISH ("es"),
+	ROMANIAN ("ro");
 	
 	private String languageCode;
 	
@@ -60,7 +61,7 @@ public enum LangSupport {
 		//P.S. please do not think this is stupid implementation and I missed ENGLISH.
 		//We do not need ENGLISH because all unsupported languages go 
 		//together with ENGLISH which is kind of default language. 
-		return EnumSet.of(LangSupport.FRENCH, LangSupport.SPANISH);
+		return EnumSet.of(LangSupport.FRENCH, LangSupport.SPANISH, LangSupport.ROMANIAN);
 	}
 
 	/**

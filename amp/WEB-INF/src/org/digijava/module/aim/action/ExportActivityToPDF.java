@@ -1121,9 +1121,9 @@ public class ExportActivityToPDF extends Action {
 				String costOutput="";
 				columnName=TranslatorWorker.translateText("Proposed Project Cost",locale,siteId);
 				if(myForm.getFunding().getProProjCost()!=null){
-					costOutput="Cost \t";
+					//costOutput="Cost \t";
 					if(myForm.getFunding().getProProjCost().getFunAmount()!=null){
-						costOutput+="*"+myForm.getFunding().getProProjCost().getFunAmount();
+						costOutput+=" "+myForm.getFunding().getProProjCost().getFunAmount();
 					}
 					if(myForm.getFunding().getProProjCost().getCurrencyCode()!=null){
 						costOutput+=" "+myForm.getFunding().getProProjCost().getCurrencyCode();

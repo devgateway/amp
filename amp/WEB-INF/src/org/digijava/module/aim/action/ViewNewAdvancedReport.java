@@ -115,7 +115,7 @@ public class ViewNewAdvancedReport extends Action {
 			if (AmpMath.isLong(ampReportId))
 			{
 				AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, Long.parseLong(ampReportId));
-				if (!report.getDrilldownTab())
+				if (report!=null && !report.getDrilldownTab())
 					bList.add(report);
 			}
 			request.getSession().setAttribute("LAST_REPORT_ID", ampReportId);

@@ -38,6 +38,15 @@ function submitForm(mode) {
 				<div class="wht">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		  				<tr>
+		  				<td>
+
+									<b><digi:trn>Permissions</digi:trn></b><br>
+									&nbsp;&nbsp; <digi:link href="/managePerm.do?list" title="EDIT PERMISSIONS"><digi:trn>Edit Permissions</digi:trn></digi:link>								
+						</td>
+						</tr>
+		  				
+		  				
+		  				<tr>
 		    				<td valign="top" width="712">
 								<table class="inside" width="712" cellpadding="0" cellspacing="0" border="1">
 						
@@ -46,6 +55,7 @@ function submitForm(mode) {
 	    								<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" width=50% align="center"><b class="ins_header" style="font-size:11px;"><digi:trn>Assign a global permission to the entire class</digi:trn></b>
 	    								</td>
 	    							</tr>
+	    					    				
 	    							<tr>
 	    								<td class="inside" align="center">
 	    									<html:select styleClass="dropdwn_sm" property="permissibleCategory" onchange="submitForm('permissibleCategoryPicked')">
@@ -78,15 +88,16 @@ function submitForm(mode) {
 									<input type="button" name="import" class="buttonx" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>' onclick="javascript:window.location.href='<%=importperm%>'" />
 									<hr />
 								</div>
-								<logic:notEmpty name="permissionMapForm" property="permissibleCategory">
-									<b><digi:trn>Permissions</digi:trn></b><br>
-									&nbsp;&nbsp; <digi:link href="/managePerm.do?list" title="EDIT PERMISSIONS"><digi:trn>Edit Permissions</digi:trn></digi:link>
-								</logic:notEmpty>
+								
+																
 							</td>
 	  						</tr>
+		  		
 						</table>
 					</div>
 				</td>
   		</tr>
 	</table>
+
+
  </digi:form>

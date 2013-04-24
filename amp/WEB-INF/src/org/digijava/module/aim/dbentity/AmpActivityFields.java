@@ -1465,7 +1465,7 @@ contactName = string;
 
 	@Override
 	public Class getPermissibleCategory() {
-		return AmpActivity.class;
+		return AmpActivityVersion.class;
 	}
 
 	public Set getReferenceDocs() {

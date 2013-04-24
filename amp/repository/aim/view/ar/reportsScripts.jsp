@@ -236,6 +236,7 @@ saveReportEngine	= null;
 		    draggable:true} );
 		
 		var myPanel2 = new YAHOO.widget.Panel("new2", {
+			width:"400px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"shadow",
@@ -460,9 +461,11 @@ saveReportEngine	= null;
 		myPanel1.hide();
 	}
 	function showSorter() {
-		if ( myPanel2EmptyBody ) {
-			var element2 = document.getElementById("mySorter");
+		var element2 = document.getElementById("mySorter");
+		if ( element2 != null ) {
+			element2.parentNode.removeChild(element2);
 			element2.style.display 	= "inline";
+			element2.id		= null;
 			myPanel2.setBody(element2);
 			myPanel2EmptyBody		= false;
 		}

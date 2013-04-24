@@ -10,7 +10,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.MetaInfo;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
@@ -32,7 +32,7 @@ public final class GatePermConst {
 	 * through reflection is not supported by Java, we need a list with them
 	 * All Permissibles must extend the Permissible class
 	 */
-	public static final Class[] availablePermissibles = new Class[] {AmpActivity.class,
+	public static final Class[] availablePermissibles = new Class[] {AmpActivityVersion.class,
 		AmpModulesVisibility.class,
 		AmpFeaturesVisibility.class, 
 		AmpFieldsVisibility.class };

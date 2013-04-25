@@ -107,6 +107,7 @@ import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -120,6 +121,7 @@ import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationN
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.budget.helper.BudgetDbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -132,6 +134,7 @@ import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.message.jobs.ActivityVersionDeletionJob;
 import org.hibernate.Session;
 
 
@@ -194,6 +197,14 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     if(request.getParameter("ampActivityId")!=null) actIdParam = new Long(request.getParameter("ampActivityId"));
     if(actIdParam != null && actIdParam !=0L ) 
     	activityId=actIdParam;
+    eaForm.setWarningMessges(new ArrayList<String>());
+    try{
+    	activityId	= this.getCorrectActivityVersionIdToUse(activityId, eaForm);
+    }
+    catch(CannotGetLastVersionForVersionException e) {
+    	e.printStackTrace();
+    }
+   
     
     String resetMessages = request.getParameter("resetMessages");
     if(resetMessages != null && resetMessages.equals("true")) {
@@ -246,7 +257,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                     hasTeamLead = false;
                 }
             }
-            eaForm.setWarningMessges(new ArrayList<String>());
+            
             if (activity.getDraft() != null && activity.getDraft()) {
                 eaForm.getWarningMessges().add("This is a draft activity");
             } else {
@@ -2221,7 +2232,17 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     return mapping.findForward("forward");
   }
   
-  private void setLineMinistryObservationsToForm(AmpActivityVersion activity, EditActivityForm eaForm){
+  private Long getCorrectActivityVersionIdToUse(Long activityId, EditActivityForm form) {
+	  Long lastVersionId	= ActivityVersionUtil.getLastVersionForVersion(activityId);
+	  if ( lastVersionId != null && !lastVersionId.equals(activityId) ) {
+		  form.getWarningMessges().add("Requested activity version was not the latest version. Preview switched to showing the last version!");
+		  return lastVersionId;
+	  } 
+	  return activityId;
+}
+
+
+private void setLineMinistryObservationsToForm(AmpActivityVersion activity, EditActivityForm eaForm){
 	    if(activity.getLineMinistryObservations() != null && activity.getLineMinistryObservations().size()>0){
 				ArrayList issueList = new ArrayList();
 				

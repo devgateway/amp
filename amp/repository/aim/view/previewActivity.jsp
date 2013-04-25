@@ -577,6 +577,7 @@ function collapseAll() {
   <tr>
       <td colspan="2" style="color:red;text-align: center">
           <c:forEach var="element" items="${aimEditActivityForm.warningMessges}">
+              <br />
               <digi:trn>${element}</digi:trn>
           </c:forEach>
       </td>

@@ -61,7 +61,7 @@
 
 </div>
 <div class="message_body">
-	<c:out value="${messageForm.description}"/>
+	${messageForm.description}
 </div>
 <c:if test="${not empty messageForm.sdmDocument}">
 		<%--

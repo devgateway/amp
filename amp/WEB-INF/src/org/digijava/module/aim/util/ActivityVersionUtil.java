@@ -33,6 +33,8 @@ import org.digijava.module.aim.dbentity.Versionable;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -194,6 +196,22 @@ public class ActivityVersionUtil {
 		Session session = PersistenceManager.getSession();
 		auxActivity = ((AmpActivityGroup) session.load(AmpActivityGroup.class, groupId)).getAmpActivityLastVersion();
 		return auxActivity;
+	}
+	
+	public static Long getLastVersionForVersion(Long oldActivity) throws CannotGetLastVersionForVersionException {
+		try {
+			Session session	= PersistenceManager.getSession();
+			String queryStr	= "SELECT v.ampActivityGroup.ampActivityLastVersion.ampActivityId  FROM " +AmpActivityVersion.class.getName() +
+					" v  WHERE v.ampActivityId=:oldActivityId";
+			Query query		= session.createQuery(queryStr);
+			query.setLong("oldActivityId", oldActivity);
+			Long id		= (Long)query.uniqueResult();
+			return id;
+		} catch (Exception e) {
+			logger.error(e.getMessage() );
+			e.printStackTrace();
+			throw new CannotGetLastVersionForVersionException(e);
+		}
 	}
 
 	public static void updateActivityView() {

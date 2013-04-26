@@ -108,7 +108,16 @@ public class LaunchDashboard extends Action {
 			dForm.getFilter().setShowOrganizationsRanking(true);
 		}
         dForm.getFilter().setDashboardType(dashboard.getBaseType());
-		
+        String sliderLabels = "";
+		for (Long i = dForm.getFilter().getStartYear(); i <= dForm.getFilter().getEndYear(); i++) {
+			Long fiscalCalendarId = dForm.getFilter().getFiscalCalendarId();
+			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+            String headingFY = TranslatorWorker.translateText("FY");
+			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+			sliderLabels = sliderLabels + yearName + ",";
+		}
+		dForm.getFilter().setFlashSliderLabels(sliderLabels);
         switch (dashboard.getBaseType()) {
 		case 0:
 			dForm.setDashboardTitle(dashboard.getName());

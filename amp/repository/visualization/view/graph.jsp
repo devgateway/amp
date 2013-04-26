@@ -29,6 +29,7 @@
 <html:hidden property="filter.decimalSeparator" styleId="decimalSeparator" />
 <html:hidden property="filter.fromPublicView" styleId="fromPublicView" />
 <html:hidden property="filter.fromGenerator" styleId="fromGenerator" />
+<html:hidden property="filter.flashSliderLabels" styleId="flashSliderLabels" />
 
 <feature:display name="Background of organization" module="Dashboard Org. Info">
 	<input type="hidden" id="BackgroundOrganizationVisible" value="true" />

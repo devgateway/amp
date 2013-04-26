@@ -926,7 +926,17 @@ public class DashboardUtil {
 			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
 			filter.getYears().put(yearName,i);
 		}
-
+		String sliderLabels = "";
+		for (Long i = filter.getStartYear(); i <= filter.getEndYear(); i++) {
+			Long fiscalCalendarId = filter.getFiscalCalendarId();
+			Date startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+			Date endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+            String headingFY = TranslatorWorker.translateText("FY");
+			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+			sliderLabels = sliderLabels + yearName + ",";
+		}
+		filter.setFlashSliderLabels(sliderLabels);
+		
 		Collection calendars = org.digijava.module.aim.util.DbUtil.getAllFisCalenders();
 		if (calendars != null) {
 			filter.setFiscalCalendars(new ArrayList(calendars));

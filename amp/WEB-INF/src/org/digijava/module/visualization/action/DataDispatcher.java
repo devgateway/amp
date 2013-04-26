@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
@@ -867,7 +868,12 @@ public class DataDispatcher extends DispatchAction {
 	      //Put headers
 	        if (!allData.isEmpty()){
 		        for (Long i = startYear; i <= endYear.intValue(); i++) {
-		        	csvString.append(i);
+		        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+        			endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+        	        headingFY = TranslatorWorker.translateText("FY");
+        			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+        			csvString.append(yearName);
+        			//csvString.append(i);
 		        	if (list.size()>0){
 			        	csvString.append(",");
 			            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
@@ -1221,7 +1227,12 @@ public class DataDispatcher extends DispatchAction {
 	      //Put headers
 	        if (!allData.isEmpty()){
 		        for (Long i = startYear; i <= endYear.intValue(); i++) {
-		        	csvString.append(i);
+		        	startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+        			endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+        	        headingFY = TranslatorWorker.translateText("FY");
+        			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+        			csvString.append(yearName);
+        			//csvString.append(i);
 		        	if (list.size()>0){
 			        	csvString.append(",");
 			            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
@@ -1566,7 +1577,12 @@ public class DataDispatcher extends DispatchAction {
           //Put headers
 	        if (!allData.isEmpty()){
                 for (Long i = startYear; i <= endYear; i++) {
-		        	csvString.append(i);
+                	startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+        			endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+        	        headingFY = TranslatorWorker.translateText("FY");
+        			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+        			csvString.append(yearName);
+        			//csvString.append(i);
 		        	if (list.size()>0){
 			        	csvString.append(",");
 			            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
@@ -1898,7 +1914,12 @@ public class DataDispatcher extends DispatchAction {
           //Put headers
 	        if (!allData.isEmpty()){
                 for (Long i = startYear; i <= endYear; i++) {
-		        	csvString.append(i);
+                	startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+        			endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+        	        headingFY = TranslatorWorker.translateText("FY");
+        			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+        			csvString.append(yearName);
+        			//csvString.append(i);
 		        	if (list.size()>0){
 			        	csvString.append(",");
 			            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());
@@ -3165,6 +3186,7 @@ public class DataDispatcher extends DispatchAction {
 			
 		} else if (parentId != null && objectType != null && (objectType.equals("FiscalCalendar"))){
 			Long calendarId = Long.parseLong(parentId);
+			visualizationForm.getFilter().setYears(new TreeMap<String, Integer>());
 			int yearFrom = Integer.parseInt(FeaturesUtil
 					.getGlobalSettingValue(Constants.GlobalSettings.YEAR_RANGE_START));
 			int countYear = Integer.parseInt(FeaturesUtil
@@ -3178,6 +3200,7 @@ public class DataDispatcher extends DispatchAction {
 				Date endDate = DashboardUtil.getEndDate(calendarId, i);
 				String headingFY = TranslatorWorker.translateText("FY");
 				String yearName = DashboardUtil.getYearName(headingFY, calendarId, startDate, endDate);
+				visualizationForm.getFilter().getYears().put(yearName,i);
 				JSONObject child = new JSONObject();
 				child.put("value", i);
 				child.put("key",yearName);
@@ -3588,7 +3611,12 @@ public class DataDispatcher extends DispatchAction {
             //Put headers
 	        if (!allData.isEmpty()){
                 for (Long i = startYear; i <= endYear; i++) {
-		        	csvString.append(i);
+                	startDate = DashboardUtil.getStartDate(fiscalCalendarId, i.intValue());
+        			endDate = DashboardUtil.getEndDate(fiscalCalendarId, i.intValue());
+        	        headingFY = TranslatorWorker.translateText("FY");
+        			String yearName = DashboardUtil.getYearName(headingFY, fiscalCalendarId, startDate, endDate);
+        			csvString.append(yearName);
+		        	//csvString.append(i);
 		        	if (list.size()>0){
 			        	csvString.append(",");
 			            csvString.append(allData.get(i)[0].compareTo(BigDecimal.ZERO) == 0 ? "0" : allData.get(i)[0].toPlainString());

@@ -772,6 +772,7 @@ var callbackChildrenCall = {
 			    		var startYearQuickFilterDropdown = document.getElementById("startYearQuickFilter_dropdown");
 			    		var endYearQuickFilterDropdown = document.getElementById("endYearQuickFilter_dropdown");
 			    		var startYearDropdown = document.getElementById("startYear_dropdown");
+			    		var flashSliderLabels = "";
 			    		var endYearDropdown = document.getElementById("endYear_dropdown");
 			    		if (startYearQuickFilterDropdown!=null)
 			    			startYearQuickFilterDropdown.options.length = 0;
@@ -786,7 +787,9 @@ var callbackChildrenCall = {
 				    			endYearQuickFilterDropdown.options[endYearQuickFilterDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
 			    			startYearDropdown.options[startYearDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
 			    			endYearDropdown.options[endYearDropdown.options.length] = new Option(results.children[i].key, results.children[i].value);
+			    			flashSliderLabels = flashSliderLabels+results.children[i].key+",";
 			    		}
+					    //document.getElementById("flashSliderLabels").value = flashSliderLabels;
 					    if (startYearQuickFilterDropdown!=null)
 			    			startYearQuickFilterDropdown.selectedIndex = startYearSelectedIndex;
 					    if (endYearQuickFilterDropdown!=null)
@@ -947,6 +950,14 @@ function callbackApplyFilter(e){
 		alert(alertBadDate);	
 		return;
 	}
+	var startYearSelectedIndex = document.getElementById("startYear_dropdown").selectedIndex;
+	var endYearSelectedIndex = document.getElementById("endYear_dropdown").selectedIndex;
+	var flashSliderLabels = "";
+	for ( var i=startYearSelectedIndex; i<=endYearSelectedIndex; i++) {
+		var label = document.getElementById("startYear_dropdown").options[i].text;
+		flashSliderLabels = flashSliderLabels+label+",";
+	}
+	document.getElementById("flashSliderLabels").value = flashSliderLabels;
 	
 	if(document.getElementById("org_group_dropdown_id")!=null && document.getElementById("org_group_dropdown_id").value!=-1)
 		document.getElementById("org_grp_check_"+document.getElementById("org_group_dropdown_id").value).checked = true;
@@ -1107,6 +1118,14 @@ function applyFilterPopin(e){
 		alert(alertBadDate);	
 		return;
 	}
+	var startYearSelectedIndex = document.getElementById("startYear_dropdown").selectedIndex;
+	var endYearSelectedIndex = document.getElementById("endYear_dropdown").selectedIndex;
+	var flashSliderLabels = "";
+	for ( var i=startYearSelectedIndex; i<=endYearSelectedIndex; i++) {
+		var label = document.getElementById("startYear_dropdown").options[i].text;
+		flashSliderLabels = flashSliderLabels+label+",";
+	}
+	document.getElementById("flashSliderLabels").value = flashSliderLabels;
 	
 	loadingPanel.show();
 	YAHOO.util.Connect.setForm('visualizationform');
@@ -1182,6 +1201,7 @@ function refreshAsync(){
 				currentMovie.scrollIntoView(true);
 			}
 			currentMovie.refreshGraph();
+			
 //			console.log("success: " + currentMovie.id);
 		}
 		catch(e)
@@ -2047,6 +2067,9 @@ function getValueToFlash(idContainer, field){
 	}
 	if (field == 'DecimalsToShow'){
 		return document.getElementById("decimalsToShow").value;
+	}
+	if (field == 'SliderLabels'){
+		return document.getElementById("flashSliderLabels").value;
 	}
 	if (field == 'sliderThumbCount'){ //hardcode to show only one thumb in slider year selector for quarter graph
 		if (idContainer == 'AidPredictabilityQuarter') {

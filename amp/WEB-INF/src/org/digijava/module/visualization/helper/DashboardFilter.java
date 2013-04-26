@@ -114,7 +114,8 @@ public class DashboardFilter {
     private ArrayList<AmpSector> allSectorList;
     private ArrayList<AmpCategoryValueLocations> allLocationsList;
     private int topLists = 5;
-
+    private String flashSliderLabels = "";
+    
 	public int getTopLists() {
 		return topLists;
 	}
@@ -926,6 +927,14 @@ public class DashboardFilter {
 	}
 	public ArrayList<BigInteger> getActivityComputedList() {
 		return this.activityList;
+	}
+
+	public String getFlashSliderLabels() {
+		return flashSliderLabels;
+	}
+
+	public void setFlashSliderLabels(String flashSliderLabels) {
+		this.flashSliderLabels = flashSliderLabels;
 	}
 	
 }

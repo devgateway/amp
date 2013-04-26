@@ -86,7 +86,7 @@
 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/visualization/visualization.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/flash/swfobject.js"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/amp/common.js"></script>
 
 </head>
 <body style="background:none;">

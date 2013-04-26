@@ -119,6 +119,14 @@
 
 	function page(val) {
 		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do" />
+		<c:set var="unarchivedTab"><%=GetTeamActivities.UNARCHIVED_SUB_TAB %></c:set>
+		<c:set var="archivedTab"><%=GetTeamActivities.ARCHIVED_SUB_TAB %></c:set>
+		<c:if test="${selectedSubTab==unarchivedTab}">
+		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do~showArchivedActivities=false~dest=teamLead~tId=-1~subtab=0" />	
+    	</c:if>
+    	<c:if test="${selectedSubTab==archivedTab}">
+		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do~showArchivedActivities=true~dest=teamLead~tId=-1~subtab=0" />	
+    	</c:if>
 			url = "<%= sel %>?page=" + val ;
 			document.aimTeamActivitiesForm.action = url;
 			document.aimTeamActivitiesForm.submit();

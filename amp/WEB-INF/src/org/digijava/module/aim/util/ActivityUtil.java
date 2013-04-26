@@ -4080,6 +4080,26 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     	  session.delete(compRep);
       }
   }
+  
+  public static List<AmpActivity> getActivityById(Set<Long> ampActIds ,Session session){
+	  List<AmpActivity> act = null;
+	  try {
+	      Query qry = null;
+	      String queryString = "select a from "
+	          + AmpActivity.class.getName()
+	          + " a where a.ampActivityId in(:ampActIds) ";
+	          //+ " where (phyCompReport.ampActivityId=:ampActId)";
+	      qry = session.createQuery(queryString);
+	      qry.setParameterList("ampActIds", ampActIds);
+	      qry.setCacheable(false);
+	      act = qry.list();
+	  }
+	    catch (Exception e1) {
+	      logger.error("Could not retrieve the activities ");
+	      e1.printStackTrace(System.out);
+	    }
+      return act;
+  }
 
   public static void deleteActivityPhysicalComponentReport(Collection
       phyCompReport, Session session) throws Exception{

@@ -55,7 +55,8 @@ function indicatorsCallBack(status, statusText, responseText, responseXML){
 
 function getSelectedIndicators(){
 	var res = [];
-	var localIndicators=$('input:[type=checkbox][name="selIndicators"]:checked').each(function() {
+	debugger;
+	var localIndicators=$('input[type=checkbox][name="selIndicators"]:checked').each(function() {
 		res.push($(this).val());
     }); 
 	return res;
@@ -63,7 +64,7 @@ function getSelectedIndicators(){
 
 function getSelectedYears(){
 	var res = [];
-	var localYears =$('input:[type=checkbox][name="selYears"]:checked').each(function() {
+	var localYears =$('input[type=checkbox][name="selYears"]:checked').each(function() {
 		res.push($(this).val());
     }); 
 	return res;

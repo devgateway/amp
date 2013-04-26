@@ -4,15 +4,7 @@
  */
 package org.dgfoundation.amp.onepager.web.pages;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
-import org.apache.regexp.RE;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,13 +12,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.request.flow.RedirectToUrlException;
-import org.apache.wicket.request.http.WebResponse;
-import org.apache.wicket.request.flow.RedirectToUrlException;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
@@ -34,19 +21,23 @@ import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpFormSectionFeaturePanel;
-import org.digijava.module.aim.dbentity.OnepagerSection;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.OnepagerSection;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 22, 2010
@@ -64,7 +55,7 @@ public class OnePager extends AmpHeaderFooter {
     protected AmpActivityModel am;
 //	protected AmpActivityModel activityModelForSave;
 
-	static OnepagerSection[] test = {
+	static OnepagerSection[] staticOnepagerSectionList = {
 		new OnepagerSection("Identification", "org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature", 1, false),
 		new OnepagerSection("Activity Internal IDs", "org.dgfoundation.amp.onepager.components.features.sections.AmpInternalIdsFormSectionFeature", 2, false),
 		new OnepagerSection("Planning", "org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature", 3, false),
@@ -86,8 +77,8 @@ public class OnePager extends AmpHeaderFooter {
 		new OnepagerSection("Related Documents", "org.dgfoundation.amp.onepager.components.features.sections.AmpResourcesFormSectionFeature", 19, false),
 		new OnepagerSection("Line Ministry Observations", "org.dgfoundation.amp.onepager.components.features.sections.AmpLineMinistryObservationsFormSectionFeature", 20, false)
 		};
-	public static final LinkedList<OnepagerSection> fList = new LinkedList<OnepagerSection>(Arrays.asList(test));
     public static final AtomicBoolean savedSections = new AtomicBoolean(false);
+    public static final List<OnepagerSection> sectionsList = Collections.synchronizedList(loadPositions());
 	protected AbstractReadOnlyModel<List<AmpComponentPanel>> listModel;
 	private Component editLockRefresher;
 
@@ -96,7 +87,7 @@ public class OnePager extends AmpHeaderFooter {
 	}
 
 	public static OnepagerSection findByName(String name){
-		Iterator<OnepagerSection> it = fList.iterator();
+		Iterator<OnepagerSection> it = sectionsList.iterator();
 		while (it.hasNext()) {
 			OnepagerSection os = it.next();
 			if (os.getClassName().compareTo(name) == 0)
@@ -106,7 +97,7 @@ public class OnePager extends AmpHeaderFooter {
 	}
 	
 	public static OnepagerSection findByPosition(int pos){
-		Iterator<OnepagerSection> it = fList.iterator();
+		Iterator<OnepagerSection> it = sectionsList.iterator();
 		while (it.hasNext()) {
 			OnepagerSection os = it.next();
 			if (os.getPosition() == pos)
@@ -162,9 +153,6 @@ public class OnePager extends AmpHeaderFooter {
 			if(!canDo)  throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));			
 		}
 		
-		
-
-
 		try {
 			initializeFormComponents(am);
 			AmpActivityFormFeature formFeature= new AmpActivityFormFeature("activityFormFeature", am, "Activity Form", newActivity, listModel);
@@ -270,19 +258,10 @@ public class OnePager extends AmpHeaderFooter {
 	}
 	
 	public void initializeFormComponents(final IModel<AmpActivityVersion> am) throws Exception {
-        loadPositions(fList);
-        checkOrder(fList);
-        saveOnce(fList);
-		Collections.sort(fList, new Comparator<OnepagerSection>() {
-			@Override
-			public int compare(OnepagerSection o1, OnepagerSection o2) {
-				return o1.getPosition() - o2.getPosition();
-			}
-		});
 		listModel = new AbstractReadOnlyModel<List<AmpComponentPanel>>() {
 			private static final long serialVersionUID = 1L;
 			private List<AmpComponentPanel> list = null;
-			private AmpComponentPanel initObject(OnepagerSection os, LinkedList<OnepagerSection> features, HashMap<String, AmpComponentPanel> temp){
+			private AmpComponentPanel initObject(OnepagerSection os, List<OnepagerSection> features, HashMap<String, AmpComponentPanel> temp){
 				AmpComponentPanel existing = temp.get(os.getClassName());
 				if (existing != null)
 					return existing;
@@ -337,13 +316,13 @@ public class OnePager extends AmpHeaderFooter {
 			}
 			
 			public List<AmpComponentPanel> initObjects(){
-				Iterator<OnepagerSection> it = fList.iterator();
+				Iterator<OnepagerSection> it = sectionsList.iterator();
 				LinkedList<AmpComponentPanel> ret = new LinkedList<AmpComponentPanel>();
 				HashMap<String, AmpComponentPanel> temp = new HashMap<String, AmpComponentPanel>();
 				while (it.hasNext()) {
 					OnepagerSection os = it
 							.next();
-					AmpComponentPanel fet = initObject(os, fList, temp);
+					AmpComponentPanel fet = initObject(os, sectionsList, temp);
 					ret.add(fet);
 				}
 				return ret;
@@ -359,22 +338,17 @@ public class OnePager extends AmpHeaderFooter {
 		};
 	}
 
-    private void saveOnce(List<OnepagerSection> fList) {
+    private static void saveOnce(Session session, List<OnepagerSection> list) {
         //Only update the whole collection one time at startup in order to save new sections
         if (savedSections.compareAndSet(false, true)){
-            try {
-                Session session = PersistenceManager.getRequestDBSession();
-                for (OnepagerSection os : fList)
-                    session.saveOrUpdate(os);
-            } catch (DgException e) {
-                logger.error("Can't save onepager sections: ", e);
-            }
+            for (OnepagerSection os : list)
+                session.saveOrUpdate(os);
         }
     }
 
-    private void checkOrder(List<OnepagerSection> fList) {
+    private static void checkOrder(List<OnepagerSection> list) {
         TreeSet<Integer> positions = new TreeSet<Integer>();
-        for (OnepagerSection os : fList){
+        for (OnepagerSection os : list){
             if (positions.contains(os.getPosition())){
                 Integer newPosition = positions.last() + 1;
                 positions.add(newPosition);
@@ -385,33 +359,49 @@ public class OnePager extends AmpHeaderFooter {
         }
     }
 
-    private void loadPositions(LinkedList<OnepagerSection> fList) {
+    public static void sortSections(List<OnepagerSection> list){
+        Collections.sort(list, new Comparator<OnepagerSection>() {
+            @Override
+            public int compare(OnepagerSection o1, OnepagerSection o2) {
+                return o1.getPosition() - o2.getPosition();
+            }
+        });
+    }
+
+    private static List<OnepagerSection> loadPositions() {
         Session session = null;
         try {
-            session = PersistenceManager.getRequestDBSession();
-        } catch (DgException e) {
-            logger.error("Can't load onepager section positions:", e);
-            return;
-        }
-        Criteria c = session.createCriteria(OnepagerSection.class);
-        c.setCacheable(true);
-        List<OnepagerSection> results = c.list();
-        List<OnepagerSection> returnList = new LinkedList<OnepagerSection>();
-        for (OnepagerSection localOs : fList) {
-            boolean found = false;
-            for (OnepagerSection savedOs : results){
-                if (localOs.getClassName().equals(savedOs.getClassName())){
-                    //load transient fields
-                    savedOs.load(localOs);
-                    found = true;
-                    returnList.add(savedOs);
-                    break;
+            session = PersistenceManager.openNewSession();
+            Criteria c = session.createCriteria(OnepagerSection.class);
+            c.setCacheable(true);
+            List<OnepagerSection> results = c.list();
+            List<OnepagerSection> returnList = new LinkedList<OnepagerSection>();
+            for (OnepagerSection localOs : staticOnepagerSectionList) {
+                boolean found = false;
+                for (OnepagerSection savedOs : results){
+                    if (localOs.getClassName().equals(savedOs.getClassName())){
+                        //load transient fields
+                        savedOs.load(localOs);
+                        found = true;
+                        returnList.add(savedOs);
+                        break;
+                    }
                 }
+                if (!found)
+                    returnList.add(localOs);
             }
-            if (!found)
-                returnList.add(localOs);
+
+            checkOrder(returnList);
+            saveOnce(session, returnList);
+            sortSections(returnList);
+
+            return returnList;
+        } catch (Exception e) {
+            logger.error("Can't load onepager section positions:", e);
+            return null;
+        } finally {
+            if (session != null)
+                session.close();
         }
-        fList.clear();
-        fList.addAll(returnList);
     }
 }

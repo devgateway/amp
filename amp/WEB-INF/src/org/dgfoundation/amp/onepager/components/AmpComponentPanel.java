@@ -211,7 +211,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
                 } catch (DgException e) {
                     logger.error("Can't save onepager sections:", e);
                 }
-
+                OnePager.sortSections(OnePager.sectionsList);
                 target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 			}
 		};
@@ -235,6 +235,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
                 } catch (DgException e) {
                     logger.error("Can't save onepager sections:", e);
                 }
+                OnePager.sortSections(OnePager.sectionsList);
                 target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 			}
 		};

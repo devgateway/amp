@@ -317,10 +317,17 @@
 				thumbCount = Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'sliderThumbCount')}")));
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
 				var labelArray:Array = new Array();
-				for(var year:int = startYear; year <= endYear; year++){
-					labelArray.push(year);
-				} 
+				if (sliderLabels==null || sliderLabels.length==0){
+					for(var year:int = startYear; year <= endYear; year++){
+						labelArray.push(year);
+					} 
+				} else {
+					for(var year:int = 0 ; year < sliderLabels.split(",").length-1; year++){
+						labelArray.push(sliderLabels.split(",")[year]);
+					}
+				}
 				if (thumbCount==1){
 					showTrackHighlight = false;
 					sliderYear.labels = labelArray;
@@ -412,10 +419,17 @@
 				thumbCount = Number(String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'sliderThumbCount')}")));
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
 				var labelArray:Array = new Array();
-				for(var year:int = startYear; year <= endYear; year++){
-					labelArray.push(year);
-				} 
+				if (sliderLabels==null || sliderLabels.length==0){
+					for(var year:int = startYear; year <= endYear; year++){
+						labelArray.push(year);
+					} 
+				} else {
+					for(var year:int = 0 ; year < sliderLabels.split(",").length-1; year++){
+						labelArray.push(sliderLabels.split(",")[year]);
+					}
+				}
 				if (thumbCount==1){
 					showTrackHighlight = false;
 					sliderYear.labels = labelArray;

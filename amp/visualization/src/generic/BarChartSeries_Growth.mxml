@@ -61,9 +61,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 			import mx.utils.ArrayUtil;
 			
 			import org.axiis.charts.groupings.BarCluster;
-			import org.axiis.data.DataSet;
 			import org.axiis.core.AxiisSprite;
-			import flash.events.MouseEvent;
+			import org.axiis.data.DataSet;
 
 			private var xS:int; 
 			private var yS:int;
@@ -72,9 +71,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 			private var groupSeparator:String = null;
 			private var decimalSeparator:String = null;
 			private var palette:Array = new Array();
-			private var yearsArray:Array = new Array();
-			private var yearsToCompareArray:Array = new Array();
-
+			public var previousYearCol:ArrayCollection = new ArrayCollection();
+			public var currentYearCol:ArrayCollection = new ArrayCollection();
+			
 			//Variables for translated messages
 			private var trnMessagePanel:String = "";
 			private var trnMessageEmpty:String = "";
@@ -281,24 +280,29 @@ OTHER DEALINGS IN THE SOFTWARE.
 				service.url = strProtocol + "//" + strDomain + strUrl;
 				
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
-				startYear = endYear-20; //it will show in the dropdown the 20 previous years to current end year.
-				for(var year:int = endYear; year > startYear; year--){
-					yearsArray.push(year);
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
+				var cnt = 0;
+				for(var year:int = startYear; year <= endYear; year++){
+					currentYearCol.addItem ({label: sliderLabels.split(",")[cnt++], data: ""+year});
 				}
-				startYear = endYear-10; //it will show in the dropdown the 10 previous years to selected year.
-				for(var year:int = endYear-1; year > startYear; year--){
-					yearsToCompareArray.push(year);
+				currentYear.dataProvider = currentYearCol;
+				
+				var cnt = 0;
+				for(var year:int = startYear; year < endYear; year++){
+					previousYearCol.addItem ({label: sliderLabels.split(",")[cnt++], data: ""+year});
 				}
-				previousYear.selectedIndex = 0;
-				currentYear.selectedIndex = 0;
+				previousYear.dataProvider = previousYearCol;
+				previousYear.selectedIndex = previousYearCol.length-1;
+				currentYear.selectedIndex = currentYearCol.length-1;
 				
 				var params:Object = {
 					"format" : "xml",
 					"typeofaid" : "true",
 					"action": dataAction
 				};
-				params["previousYear"] = previousYear.selectedLabel;
-				params["currentYear"] = currentYear.selectedLabel;
+				params["previousYear"] = previousYear.selectedItem.data;
+				params["currentYear"] = currentYear.selectedItem.data;
 				
 				if(start == "true")
 					messageLoadingPanel.visible = true;
@@ -356,23 +360,29 @@ OTHER DEALINGS IN THE SOFTWARE.
 				
 				var idContainer:String = LoaderInfo(this.root.loaderInfo).parameters.id;
 				var ignore:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Ignore')}"));
-				while(yearsArray.length > 0) {
-					yearsArray.pop();//remove the last item:
+				
+				for (var i:int=currentYearCol.length-1; i>=0; i--){
+					currentYearCol.removeItemAt(i);
 				}
-				while(yearsToCompareArray.length > 0) {
-					yearsToCompareArray.pop();//remove the last item:
+				for (var i:int=previousYearCol.length-1; i>=0; i--){
+					previousYearCol.removeItemAt(i);
 				}
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
-				startYear = endYear-20; //it will show in the dropdown the 20 previous years to current end year.
-				for(var year:int = endYear; year > startYear; year--){
-					yearsArray.push(year);
+				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
+				var cnt = 0;
+				for(var year:int = startYear; year <= endYear; year++){
+					currentYearCol.addItem ({label: sliderLabels.split(",")[cnt++], data: ""+year});
 				}
-				startYear = endYear-10; //it will show in the dropdown the 10 previous years to selected year.
-				for(var year:int = endYear-1; year > startYear; year--){
-					yearsToCompareArray.push(year);
+				currentYear.dataProvider = currentYearCol;
+				
+				var cnt = 0;
+				for(var year:int = startYear; year < endYear; year++){
+					previousYearCol.addItem ({label: sliderLabels.split(",")[cnt++], data: ""+year});
 				}
-				previousYear.selectedIndex = 0;
-				currentYear.selectedIndex = 0;
+				previousYear.dataProvider = previousYearCol;
+				previousYear.selectedIndex = previousYearCol.length-1;
+				currentYear.selectedIndex = currentYearCol.length-1;
 				
 				var params = {
 					"format" : "xml",
@@ -380,8 +390,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 					"ignore" : ignore,
 					"action":dataAction
 				};
-				params["previousYear"] = previousYear.selectedLabel;
-				params["currentYear"] = currentYear.selectedLabel;
+				params["previousYear"] = previousYear.selectedItem.data;
+				params["currentYear"] = currentYear.selectedItem.data;
 				service.send(params);
 			}
 			public function refreshGraphNoData():void
@@ -433,29 +443,33 @@ OTHER DEALINGS IN THE SOFTWARE.
 			{
 				if (cmb==2){
 					//endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
-					endYear = Number(currentYear.selectedLabel);//this fill the combo of current year with all posible values
-					while(yearsToCompareArray.length > 0) {
-						yearsToCompareArray.pop();//remove the last item:
+					endYear = Number(currentYear.selectedItem.data);//this fill the combo of current year with all posible values
+					startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
+					var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
+					for (var i:int=previousYearCol.length-1; i>=0; i--){
+						previousYearCol.removeItemAt(i);
 					}
-					for(var year:int = endYear-1; year > endYear-10; year--){
-						yearsToCompareArray.push(year);
+					var cnt = 0;
+					for(var year:int = startYear; year < endYear; year++){
+						previousYearCol.addItem ({label: sliderLabels.split(",")[cnt++], data: ""+year});
 					}
-					previousYear.selectedIndex = 0;
+					previousYear.dataProvider = previousYearCol;
+					previousYear.selectedIndex = previousYearCol.length-1;
+					
 				}
 				var params:Object = {
 					"format" : "xml",
 					"typeofaid" : "true",
 					"action":dataAction
 				};
-				params["previousYear"] = previousYear.selectedLabel;
-				params["currentYear"] = currentYear.selectedLabel;
+				params["previousYear"] = previousYear.selectedItem.data;
+				params["currentYear"] = currentYear.selectedItem.data;
 				service.send(params);
 				messageLoadingPanel.visible = true;
 				sizeLoadingPanel(300, 200);
 				dc.visible = false;
 			}
-			
-			
+
 		]]>
 	</mx:Script>
 	
@@ -584,9 +598,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 		</axiis:layouts>
 		
 	</axiis:DataCanvas>
-	<mx:ComboBox dataProvider="{yearsToCompareArray}" id="previousYear" width="90" x="480" y="420" change="combo_change(1)"> 
+	<mx:ComboBox id="previousYear" width="90" x="480" y="420" change="combo_change(1)"> 
 	</mx:ComboBox>
-	<mx:ComboBox dataProvider="{yearsArray}" id="currentYear" width="90" x="130" y="420" change="combo_change(2)"> 
+	<mx:ComboBox id="currentYear" width="90" x="130" y="420" change="combo_change(2)"> 
 	</mx:ComboBox>
 	<mx:Label mouseMove="mouseOverHandler(event);" x="10" y="10" id="chartLabel" height="36" fontSize="12"/>
 	<mx:Label x="280" y="420" id="previousComboLabel" height="36" fontSize="12"/>

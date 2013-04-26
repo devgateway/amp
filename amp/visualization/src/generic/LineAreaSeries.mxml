@@ -415,10 +415,17 @@
 				else
 					hideYearMessage();
 				
+				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
 				var labelArray:Array = new Array();
-				for(var year:int = startYear; year <= endYear; year++){
-					labelArray.push(year);
-				} 
+				if (sliderLabels==null || sliderLabels.length==0){
+					for(var year:int = startYear; year <= endYear; year++){
+						labelArray.push(year);
+					} 
+				} else {
+					for(var year:int = 0 ; year < sliderLabels.split(",").length-1; year++){
+						labelArray.push(sliderLabels.split(",")[year]);
+					}
+				}
 				sliderYear.labels = labelArray;
 				sliderYear.values[0] = startYear;
 				sliderYear.values[1] = endYear;
@@ -473,10 +480,17 @@
 				var divide:String = String(ExternalInterface.call("function(){ return getValueToFlash('" + idContainer + "', 'Divide')}"));
 				startYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'startYear')}")));
 				endYear = Number(String(ExternalInterface.call("function(){ return getValueToFlash('', 'endYear')}")));
+				var sliderLabels:String = String(ExternalInterface.call("function(){ return getValueToFlash('', 'SliderLabels')}"));
 				var labelArray:Array = new Array();
-				for(var year:int = startYear; year <= endYear; year++){
-					labelArray.push(year);
-				} 
+				if (sliderLabels==null || sliderLabels.length==0){
+					for(var year:int = startYear; year <= endYear; year++){
+						labelArray.push(year);
+					} 
+				} else {
+					for(var year:int = 0 ; year < sliderLabels.split(",").length-1; year++){
+						labelArray.push(sliderLabels.split(",")[year]);
+					}
+				}
 				sliderYear.labels = labelArray;
 				sliderYear.values[0] = startYear;
 				sliderYear.values[1] = endYear;

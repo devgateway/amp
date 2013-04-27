@@ -25,6 +25,8 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
+import com.sun.research.ws.wadl.Request;
+
 
 /**
  * @author dan
@@ -124,53 +126,78 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	   
 		return EVAL_BODY_BUFFERED;//super.doStartTag();
 	}
+	
+	public boolean shouldDisplayFeature() throws JspTagException
+	{
+		try 
+		{
+			ServletContext ampContext=pageContext.getServletContext();
+			AmpTreeVisibility ampTreeVisibility = (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	    	   /* name, feature, enable
+	    	    * 
+	    	    * if feature is not in the db, error! it has to be already added this feature
+	    	    * 
+	    	    *if field is not in db insert it with feature as parent
+	    	    *
+	    	    * is this feature the correct parent? if not -> error!
+	    	    * 
+	    	    * if field is active then display the content
+	    	    */
+	   		   
+			ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+			if (ampTreeVisibility!=null)
+				if (isFeatureActive(ampTreeVisibility))
+				{
+					HttpSession session = pageContext.getSession();
+					Map scope=PermissionUtil.getScope(pageContext.getSession());
+					AmpFeaturesVisibility ampFeatureFromTree=ampTreeVisibility.getFeatureByNameFromRoot(getName());
+					TeamMember teamMember 	= (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+					if (teamMember!=null && !teamMember.getTeamHead())
+					{
+						PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+						ServletRequest request = pageContext.getRequest();
+						String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
+						if (ampFeatureFromTree != null && ampFeatureFromTree.getPermission(false) != null &&
+	   	   			    	PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
+	   	   			    	!ampFeatureFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode) ? 
+	   	   			    			actionMode:GatePermConst.Actions.VIEW,scope))
+	   	   			    {
+	   	   			    	return false;
+	   	   			    }
+	   				}
+					return true;
+				}
+	       }
+	       catch (Exception e) {	    	   
+	    	   e.printStackTrace();
+	    	   throw new JspTagException(e.getMessage());
+	       }
+		return false;
+	}
+	
 	public int doEndTag() throws JspException 
     {
 	   if (bodyContent==null) return  SKIP_BODY;
-	   if(bodyContent.getString()==null) return SKIP_BODY;
+	   if (bodyContent.getString()==null) return SKIP_BODY;
+	   String featureString = "feature_visibility_" + this.getModule() + "###" + this.getName();
+	   Boolean shouldDisplay = (Boolean) pageContext.getRequest().getAttribute(featureString); 
        String bodyText = bodyContent.getString();
-       try {
-    	   ServletContext ampContext=pageContext.getServletContext();
-    	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-    	   /* name, feature, enable
-    	    * 
-    	    * if feature is not in the db, error! it has to be already added this feature
-    	    * 
-    	    *if field is not in db insert it with feature as parent
-    	    *
-    	    * is this feature the correct parent? if not -> error!
-    	    * 
-    	    * if field is active then display the content
-    	    */
-   		   
-   		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-   		    if(ampTreeVisibility!=null)
-   			   if(isFeatureActive(ampTreeVisibility)){
-                               HttpSession session		= pageContext.getSession();
-                               Map scope=PermissionUtil.getScope(pageContext.getSession());
-                               AmpFeaturesVisibility ampFeatureFromTree=ampTreeVisibility.getFeatureByNameFromRoot(getName());
-                               TeamMember teamMember 	= (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-   				if (teamMember!=null && !teamMember.getTeamHead()){
-   	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
-   	   			    ServletRequest request = pageContext.getRequest();
-   	   			    String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
-   	   			    if(ampFeatureFromTree!=null && ampFeatureFromTree.getPermission(false)!=null &&
-   	   			    	PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
-   	   			    	!ampFeatureFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?
-   	   			    			actionMode:GatePermConst.Actions.VIEW,scope))
-   	   			    {
-   	   			    	return SKIP_BODY;
-   	   			    }
-   				}
-   				   pageContext.getOut().print(bodyText);
-   			   }
-    	   
+       try 
+       {
+           if (shouldDisplay == null)
+           {
+        	   shouldDisplay = shouldDisplayFeature();
+        	   pageContext.getRequest().setAttribute(featureString, shouldDisplay);
+           }
+           if (!shouldDisplay)
+        	   return SKIP_BODY;
+           pageContext.getOut().print(bodyText);
+           return EVAL_PAGE; //SKIP_BODY
        }
        catch (Exception e) {
     	   e.printStackTrace();
-       	throw new JspTagException(e.getMessage());
-       }
-       return EVAL_PAGE;//SKIP_BODY 
+    	   throw new JspTagException(e.getMessage());
+       }       
     }
 	
 	public boolean isFeatureActive(AmpTreeVisibility atv)

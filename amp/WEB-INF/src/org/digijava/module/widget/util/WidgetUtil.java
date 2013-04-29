@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -14,12 +15,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
@@ -46,6 +49,8 @@ import org.digijava.module.widget.helper.WidgetPlaceHelper;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * Widgets utilities.
@@ -550,20 +555,24 @@ public class WidgetUtil {
             
         }
 
-    public static Collection<ActivitySectorDonorFunding> getDonorSectorFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, HttpSession httpSession) throws DgException {
-        Map<Long, ActivitySectorDonorFunding> activityFundingInfos = new HashMap<Long, ActivitySectorDonorFunding>();
+        
+    public static Collection<ActivitySectorDonorFunding> getDonorSectorFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, HttpSession httpSession) throws DgException 
+    {
+        Map<Long, ActivitySectorDonorFunding> globalActivityFundingInfos = new HashMap<Long, ActivitySectorDonorFunding>();
+        
         if (sectorIds != null) {
+        	
+            Map<Long, ActivitySectorDonorFunding> activityFundingInfos = new HashMap<Long, ActivitySectorDonorFunding>();            
+            Set<Long> allActivityIdsSet = DbUtil.getAllLegalAmpActivityIds();
+            
             for (Long sectId : sectorIds) {
-                List<Long> ids = new ArrayList<Long>();
+                Set<Long> ids = new HashSet<Long>();
                 ids.add(sectId);
-                List<AmpSector> sectors = SectorUtil.getAllDescendants(sectId);
-                for (AmpSector sector : sectors) {
-                    ids.add(sector.getAmpSectorId());
-                }
+                ids = SectorUtil.getRecursiveChildrenOfSectors(ids);
                 Long[] sectIds = new Long[ids.size()];
                 ids.toArray(sectIds);
-                // get all findings...
-                List result = getFunding(donorIDs, fromDate, toDate, sectIds, httpSession);
+                // get all fundings...
+                List result = getFunding(donorIDs, fromDate, toDate, sectIds, httpSession, allActivityIdsSet);
                 //Process grouped data
                 if (result != null) {
 
@@ -596,22 +605,33 @@ public class WidgetUtil {
                             activityFundngObj.getDonorOrgs().add(org);
                         }
                     }
-                    for (Iterator<ActivitySectorDonorFunding> it = activityFundingInfos.values().iterator(); it.hasNext();) {
-                        ActivitySectorDonorFunding actSectDonFund = it.next();
-                        // get funding for particular activity
-                        getFunding(actSectDonFund, fromDate, toDate);
-                    }
+                    System.out.format("\t-->for sector %d, I have %d activities\n", sectId, activityFundingInfos.values().size());
+                    getFunding(activityFundingInfos.values(), fromDate, toDate, sectIds);                    
+//                    for (Iterator<ActivitySectorDonorFunding> it = activityFundingInfos.values().iterator(); it.hasNext();) {
+//                        ActivitySectorDonorFunding actSectDonFund = it.next();
+//                        //System.out.format("\t->activity %d has %d donorIds\n", actSectDonFund.getActivity().getAmpActivityId(), actSectDonFund.getDonorOrgs().size());
+//                        // get funding for particular activity
+//                        //getFunding(actSectDonFund, fromDate, toDate); // BOZO
+//                    }
                 }
-
+                globalActivityFundingInfos.putAll(activityFundingInfos);
             }
         }
 
-        return activityFundingInfos.values();
-
+        return globalActivityFundingInfos.values();
     }
-      public static List getFunding(Long[] donorIDs, Date fromDate, Date toDate, Long[] sectorIds, HttpSession httpSession) throws DgException {
-          AmpCategoryClass catClass = null;
-          Long actualCommitmentCatValId = null;
+    
+      
+    public static List getFunding(Long[] donorIDs, Date fromDate, 
+    		Date toDate, Long[] sectorIds, 
+    		HttpSession httpSession, Set<Long> allActivityIdsSet) throws DgException 
+    {
+    	long aaa = System.currentTimeMillis();
+    	
+    	AmpCategoryClass catClass = null;
+    	Long actualCommitmentCatValId = null;
+        String activityWhereclause = DbUtil.generateWhereclause(allActivityIdsSet, new GenericIdGetter());
+
           try {
               catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
               for (AmpCategoryValue val : catClass.getPossibleValues()) {
@@ -625,17 +645,14 @@ public class WidgetUtil {
           }
 
           Session session = PersistenceManager.getRequestDBSession();
-          StringBuilder lastVersionsQry = new StringBuilder("select actGroup.ampActivityLastVersion.ampActivityId from ");
-          lastVersionsQry.append(AmpActivityGroup.class.getName());
-          lastVersionsQry.append(" as actGroup");
-          Query actGrpupQuery = session.createQuery(lastVersionsQry.toString());
-          List lastVersions = actGrpupQuery.list();
+//          StringBuilder lastVersionsQry = new StringBuilder("select actGroup.ampActivityLastVersion.ampActivityId from ");
+//          lastVersionsQry.append(AmpActivityGroup.class.getName());
+//          lastVersionsQry.append(" as actGroup");
+          //Query actGrpupQuery = session.createQuery(lastVersionsQry.toString());
+          //List lastVersions = actGrpupQuery.list();
           //String lasVersionsWhereclause = org.digijava.module.gis.util.DbUtil.generateWhereclause(lastVersions, new DbUtil.GenericIdGetter());
           
-          
-          Set<Long> allActivityIdsSet = DbUtil.getAllLegalAmpActivityIds();
-          String activityWhereclause = DbUtil.generateWhereclause(allActivityIdsSet, new GenericIdGetter());
-          
+                    
         String oql = "select  actSec, f.ampDonorOrgId ";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
@@ -672,12 +689,84 @@ public class WidgetUtil {
         } catch (Exception e) {
             throw new DgException("Cannot load sector fundings by donors from db", e);
         }
+        long timeSpent = System.currentTimeMillis() - aaa;
+        System.out.format("\t%d milliseconds spent while fetching funding for sectors %s\n", timeSpent, Util.toCSString(Arrays.asList(sectorIds)));
         return result;
     }
 
-    @SuppressWarnings("unchecked")
-    public static void getFunding(ActivitySectorDonorFunding activityFundngObj, Date fromDate, Date toDate) throws DgException {
+//    @SuppressWarnings("unchecked")
+//    public static void getFunding(ActivitySectorDonorFunding activityFundngObj, Date fromDate, Date toDate) throws DgException 
+//    {
+//        AmpCategoryClass catClass = null;
+//        Long actualCommitmentCatValId = null;
+//        try {
+//            catClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getCategoryKey());
+//            for (AmpCategoryValue val : catClass.getPossibleValues()) {
+//                if (val.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+//                    actualCommitmentCatValId = val.getId();
+//                    break;
+//                }
+//            }
+//        } catch (NoCategoryClassException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
+//
+//        AmpActivityVersion activity = activityFundngObj.getActivity();
+//        List<AmpSector> sectors = activityFundngObj.getSectors();
+//        List<AmpOrganisation> donors = activityFundngObj.getDonorOrgs();
+//        Long[] sectorIDs = new Long[sectors.size()];
+//        Long[] donorIDs = new Long[donors.size()];
+//        int index = 0;
+//        for (AmpSector sector : sectors) {
+//            sectorIDs[index] = sector.getAmpSectorId();
+//            index++;
+//        }
+//        index = 0;
+//        for (AmpOrganisation organisation : donors) {
+//            donorIDs[index] = organisation.getAmpOrgId();
+//            index++;
+//        }
+//
+//        long aaa = System.currentTimeMillis();
+//        String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate) ";
+//        oql += " from ";
+//        oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
+//        oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec ";
+//        oql += " inner join actSec.sectorId sec ";
+//        oql += " inner join actSec.activityId act ";
+//        oql += " inner join actSec.classificationConfig config ";
+//        oql += " where  fd.adjustmentType = " + actualCommitmentCatValId.toString();
+//        oql += " and (f.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(donorIDs) + ") ) ";
+//        oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
+//        oql += " and actSec.sectorId in (" + ChartWidgetUtil.getInStatment(sectorIDs) + ") ";
+//        oql += " and act=:actId ";
+//        oql += " and config.name='Primary' ";
+//        oql += " order by actSec";
+//        Session session = PersistenceManager.getRequestDBSession();
+//        Query query = session.createQuery(oql);
+//        if (fromDate != null && toDate != null) {
+//            query.setDate("fDate", fromDate);
+//            query.setDate("eDate", toDate);
+//            query.setLong("actId", activity.getAmpActivityId());
+//        }
+//
+//        List<AmpFundingDetail> fundingDets = query.list();
+//        FundingCalculationsHelper cal = new FundingCalculationsHelper();
+//        String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+//        if (baseCurr == null) {
+//            baseCurr = "USD";
+//        }
+//        cal.doCalculations(fundingDets, baseCurr);
+//        long delta = System.currentTimeMillis() - aaa;
+//        System.out.format("\tgetFunding() for activity %d took %d milliseconds\n", activity.getAmpActivityId(), delta);
+//        activityFundngObj.setCommitment(cal.getTotActualComm());
+//        activityFundngObj.setDisbursement(cal.getTotActualDisb());
+//        activityFundngObj.setExpenditure(cal.getTotActualExp());
+//    }
 
+    @SuppressWarnings("unchecked")
+    public static void getFunding(Collection<ActivitySectorDonorFunding> activityFundngObjs, Date fromDate, Date toDate, Long[] sectorIDs) throws DgException 
+    {
         AmpCategoryClass catClass = null;
         Long actualCommitmentCatValId = null;
         try {
@@ -692,23 +781,42 @@ public class WidgetUtil {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-        AmpActivityVersion activity = activityFundngObj.getActivity();
-        List<AmpSector> sectors = activityFundngObj.getSectors();
-        List<AmpOrganisation> donors = activityFundngObj.getDonorOrgs();
-        Long[] sectorIDs = new Long[sectors.size()];
-        Long[] donorIDs = new Long[donors.size()];
-        int index = 0;
-        for (AmpSector sector : sectors) {
-            sectorIDs[index] = sector.getAmpSectorId();
-            index++;
-        }
-        index = 0;
-        for (AmpOrganisation organisation : donors) {
-            donorIDs[index] = organisation.getAmpOrgId();
-            index++;
-        }
+        //Set<Long> activityIds = new HashSet<Long>();
+        Map<Long, ActivitySectorDonorFunding> fundingsItems = new HashMap<Long, ActivitySectorDonorFunding>(); // Map<activityId, funding_item>
+        //Set<Long> donorIds = new HashSet<Long>();
+        
+        // preprocess activity list so that we don't have to make a fetch for each activity
+        Map<Long, Set<Long>> acceptableDonorIds = new HashMap<Long, Set<Long>>(); // Map<activity_id,Set<DonorIds>> 
+        for(ActivitySectorDonorFunding asdf:activityFundngObjs)
+        {
+        	long activityId = asdf.getActivity().getAmpActivityId();
+        	fundingsItems.put(activityId, asdf);
+        	if (!acceptableDonorIds.containsKey(activityId))
+        		acceptableDonorIds.put(activityId, new HashSet<Long>());
 
-        String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate) ";
+        	for(AmpOrganisation donor:asdf.getDonorOrgs())
+        		acceptableDonorIds.get(activityId).add(donor.getAmpOrgId());
+        }
+        
+        Long[] allActivityIds = new Long[fundingsItems.keySet().size()];
+        int index = 0;
+        for(Long aid:fundingsItems.keySet())
+        {
+        	allActivityIds[index] = aid;
+        	index ++;
+        }
+        //AmpActivityVersion activity = activityFundngObj.getActivity();
+        //List<AmpOrganisation> donors = activityFundngObj.getDonorOrgs();
+        //Long[] donorIDs = new Long[donors.size()];
+        //int index = 0;
+        //for (AmpOrganisation organisation : donors) {
+        //    donorIDs[index] = organisation.getAmpOrgId();
+        //    index++;
+        //}
+
+        long aaa = System.currentTimeMillis();
+        //String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate), f.ampDonorOrgId, act ";
+        String oql = "select fd.transactionType, fd.adjustmentType, fd.transactionAmount, fd.transactionDate, fd.ampCurrencyId, actSec.sectorPercentage, fd.fixedExchangeRate, f.ampDonorOrgId.ampOrgId, act.ampActivityId ";
         oql += " from ";
         oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act " + " inner join act.sectors actSec ";
@@ -716,10 +824,10 @@ public class WidgetUtil {
         oql += " inner join actSec.activityId act ";
         oql += " inner join actSec.classificationConfig config ";
         oql += " where  fd.adjustmentType = " + actualCommitmentCatValId.toString();
-        oql += " and (f.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(donorIDs) + ") ) ";
+        // oql += " and (f.ampDonorOrgId in (" + ChartWidgetUtil.getInStatment(donorIDs) + ") ) ";
         oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
         oql += " and actSec.sectorId in (" + ChartWidgetUtil.getInStatment(sectorIDs) + ") ";
-        oql += " and act=:actId ";
+        oql += " and act in (" + ChartWidgetUtil.getInStatment(allActivityIds) + ") ";
         oql += " and config.name='Primary' ";
         oql += " order by actSec";
         Session session = PersistenceManager.getRequestDBSession();
@@ -727,20 +835,53 @@ public class WidgetUtil {
         if (fromDate != null && toDate != null) {
             query.setDate("fDate", fromDate);
             query.setDate("eDate", toDate);
-            query.setLong("actId", activity.getAmpActivityId());
+            //query.setLong("actId", activity.getAmpActivityId());
         }
 
-        List<AmpFundingDetail> fundingDets = query.list();
-        FundingCalculationsHelper cal = new FundingCalculationsHelper();
+        List<Object[]> allData = query.list();
+        Map<Long, List<AmpFundingDetail>> filteredFundingDets = new HashMap<Long, List<AmpFundingDetail>>(); //Map<ampActivityId>
+        
+        for(Object[] fundingData:allData)
+        {
+        	AmpFundingDetail detail = new AmpFundingDetail(
+        			(Integer) fundingData[0],			// transactionType
+        			(AmpCategoryValue) fundingData[1],	// adjustmentType
+        			(Double) fundingData[2],			// transactionAmount
+        			(Date) fundingData[3],				// transactionDate
+        			(AmpCurrency) fundingData[4],		// ampCurrencyId
+        			(Float) fundingData[5],				// percentage
+        			(Double) fundingData[6]				// Double.parseDouble(fundingData[6].toString()) //fixedExchangeRate
+        		);
+        	Long donorOrgId = (Long) fundingData[7];
+        	Long activityId = (Long) fundingData[8];
+        	
+        	if (acceptableDonorIds.get(activityId).contains(donorOrgId))
+        	{
+        		if (!filteredFundingDets.containsKey(activityId))
+        			filteredFundingDets.put(activityId, new ArrayList<AmpFundingDetail>());
+        		filteredFundingDets.get(activityId).add(detail);
+        	}
+        }
+        
         String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
         if (baseCurr == null) {
             baseCurr = "USD";
         }
-        cal.doCalculations(fundingDets, baseCurr);
-        activityFundngObj.setCommitment(cal.getTotActualComm());
-        activityFundngObj.setDisbursement(cal.getTotActualDisb());
-        activityFundngObj.setExpenditure(cal.getTotActualExp());
+        
+        long delta = System.currentTimeMillis() - aaa;
+        System.out.format("\tgetFunding() for %d activities took %d milliseconds\n", activityFundngObjs.size(), delta);
+        for(long ampActivityId:filteredFundingDets.keySet())
+        {
+        	List<AmpFundingDetail> msh = filteredFundingDets.get(ampActivityId);
+            FundingCalculationsHelper cal = new FundingCalculationsHelper();
+        	cal.doCalculations(msh, baseCurr);
+        	ActivitySectorDonorFunding activityFundngObj = fundingsItems.get(ampActivityId);
+        	activityFundngObj.setCommitment(cal.getTotActualComm());
+        	activityFundngObj.setDisbursement(cal.getTotActualDisb());
+        	activityFundngObj.setExpenditure(cal.getTotActualExp());        	
+        }
     }
+
     @SuppressWarnings("unchecked")
 	public static List<TopDonorGroupHelper> getTopTenDonorGroups(Integer fromYear,Integer toYear) throws DgException {
         AmpCategoryClass catClass = null;

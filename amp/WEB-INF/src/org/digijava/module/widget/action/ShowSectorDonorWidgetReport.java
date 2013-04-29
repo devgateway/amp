@@ -4,6 +4,9 @@ package org.digijava.module.widget.action;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,10 +17,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -30,6 +35,8 @@ import org.digijava.module.widget.form.SectorDonorWidgetReportForm;
 import org.digijava.module.widget.helper.ActivitySectorDonorFunding;
 import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class ShowSectorDonorWidgetReport extends Action {
 
@@ -72,7 +79,7 @@ public class ShowSectorDonorWidgetReport extends Action {
         //we need data including the last day of toYear,this is till the first day of toYear+1
         int MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
         Date toDate = new Date(ChartWidgetUtil.getStartOfYear(toYear.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
-        Collection<ActivitySectorDonorFunding> actSectorDonorFundingInfo=WidgetUtil.getDonorSectorFunding(donorIDs, fromDate, toDate, sectorIDs, request.getSession());
+        Collection<ActivitySectorDonorFunding> actSectorDonorFundingInfo = WidgetUtil.getDonorSectorFunding(donorIDs, fromDate, toDate, sectorIDs, request.getSession());
         cForm.setActSectorDonorFundingInfo(actSectorDonorFundingInfo);
         double comm = 0;
         double disb = 0;
@@ -108,4 +115,5 @@ public class ShowSectorDonorWidgetReport extends Action {
 
         return mapping.findForward("forward");
     }
+    
 }

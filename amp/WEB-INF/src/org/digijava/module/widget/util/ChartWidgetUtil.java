@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -517,7 +518,7 @@ public class ChartWidgetUtil {
                 // the sectors which percent is less then 5% should be group in "Other"
                 AmpSector sector = funding.getSector();
 
-                if (percent >= 0.05) {
+                if (percent >= 0.05) { // BOZO BOZO BOZO
                     SectorHelper secHelper = new SectorHelper();
                     secHelper.setName(sector.getName());
                     secHelper.setIds(new ArrayList<Long>());
@@ -706,12 +707,14 @@ public class ChartWidgetUtil {
         Long[] sectIds = null;
         if (sectorIds != null) {
             for (Long sectId : sectorIds) {
-                List<Long> ids = new ArrayList<Long>();
+                Set<Long> ids = new HashSet<Long>();
                 ids.add(sectId);
-                List<AmpSector> sectors = SectorUtil.getAllDescendants(sectId);
-                for (AmpSector sector : sectors) {
-                    ids.add(sector.getAmpSectorId());
-                }
+                
+                ids = SectorUtil.getRecursiveChildrenOfSectors(ids);
+//                List<AmpSector> sectors = SectorUtil.getAllDescendants(sectId);
+//                for (AmpSector sector : sectors) {
+//                    ids.add(sector.getAmpSectorId());
+//                }
                 sectIds = new Long[ids.size()];
                 ids.toArray(sectIds);
 

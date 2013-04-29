@@ -1,5 +1,8 @@
 package org.digijava.module.aim.util;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -1766,23 +1769,84 @@ public class SectorUtil {
 		return topLevelSector;
 	}
 
-	// TODO replace with recursive method
-	public static List<AmpSector> getAllDescendants(Long parentId) {
-		// we have only three levels of sectors...
-		List<AmpSector> sectors = new ArrayList<AmpSector>();
-		sectors.add(getAmpSector(parentId));
-		List<AmpSector> childrenSectors = getAmpSubSectors(parentId);
-		if (childrenSectors != null) {
-			sectors.addAll(childrenSectors);
-			for (AmpSector sector : childrenSectors) {
-				List<AmpSector> grandChildren = getAmpSubSectors(sector
-						.getAmpSectorId());
-				if (grandChildren != null) {
-					sectors.addAll(grandChildren);
-				}
-			}
+	/**
+	 * returns set of all (recursive) descendants' ids of a given set of locations
+	 * @param locations
+	 * @return
+	 */
+	public static Set<Long> populateWithDescendantsIds(Collection<AmpSector> sectors)
+	{
+		Set<Long> allInputLocations = new HashSet<Long>();
+		
+		for(AmpSector acvl:sectors)
+			allInputLocations.add(acvl.getAmpSectorId());
+		
+		Set<Long> allOutputLocations = getRecursiveChildrenOfSectors(allInputLocations);
+		return allOutputLocations;
+	}
+	
+//	/**
+//	 * returns set of all (recursive) descendants of a given set of locations
+//	 * @param destCollection
+//	 * @param locations
+//	 */
+//	public static void populateWithDescendants(Set<AmpSector> destCollection, Collection<AmpSector> locations ) 
+//	{
+//		Set<Long> allOutputLocations = populateWithDescendantsIds(locations);
+//		for(Long outputId:allOutputLocations)
+//			destCollection.add(getAmpSector(outputId, false));
+//	}
+	
+	/**
+	 * recursively get all children of a set of AmpCategoryValueLocations, by a wave algorithm
+	 * @param inIds
+	 * @return
+	 */
+	public static Set<Long> getRecursiveChildrenOfSectors(Collection<Long> inIds)
+	{
+		Set<Long> result = new HashSet<Long>();
+		if (inIds == null)
+			return result;
+		Set<Long> currentWave = new HashSet<Long>();
+		currentWave.addAll(inIds);
+		while (currentWave.size() > 0)
+		{
+			result.addAll(currentWave);
+			currentWave = getChildrenOfSectors(currentWave);
+			currentWave.removeAll(result); // in case there is a cycle somewhere in the DB, do not cycle forever
 		}
-		return sectors;
+		return result;
+	}
+	
+	/*
+	 * returns the list of all the children of all the AmpSector given by ids
+	 * NON-RECURSIVE
+	 */
+	private static Set<Long> getChildrenOfSectors(Collection<Long> inIds)
+	{
+		Set<Long> result = new HashSet<Long>();
+		if (inIds == null)
+			return result;
+		Connection conn = null;
+		try
+		{
+			conn = PersistenceManager.getJdbcConnection();
+			String query = "SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN (" + org.dgfoundation.amp.Util.toCSString(inIds) + ")";
+			ResultSet rs = conn.createStatement().executeQuery(query);
+			while (rs.next())
+				result.add(rs.getLong(1));
+			rs.close();
+			return result;
+		}
+		catch(SQLException e)
+		{
+			throw new RuntimeException(e);
+		}
+		finally
+		{
+			try {conn.close();}
+			catch(Exception e){};
+		}
 	}
 
 	public static List<AmpActivityVersion> getActivitiesForSector(Long id) {

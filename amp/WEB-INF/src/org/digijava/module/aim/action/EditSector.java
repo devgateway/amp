@@ -67,20 +67,8 @@ public class EditSector extends Action {
 								{
 									if(event.equalsIgnoreCase("update2LevelSector"))
 								  {
-
-										
-										
-										
 										AmpSector ampSector = SectorUtil.getAmpSector(secId);
-										editSectorForm.setSectorId(secId);
-										ampSector.setDescription(editSectorForm.getDescription());
-										ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);
-										String curSectorCodeOfficial = ampSector.getSectorCodeOfficial();
-										String curName = ampSector.getName();
-										ampSector.setName(editSectorForm.getSectorName());
-										ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
-										String secSchemeCode = ampSector.getAmpSecSchemeId().getSecSchemeCode();
-										String secSchemename = ampSector.getAmpSecSchemeId().getSecSchemeName();
+										
 										Collection sectors = SectorUtil.getSectorLevel1(ampSector.getAmpSecSchemeId().getAmpSecSchemeId().intValue());
 										if(checkSectorNameCodeIsNull(editSectorForm)){								
 											request.setAttribute("event", "view");
@@ -93,6 +81,17 @@ public class EditSector extends Action {
 											refreshFirstLevelSectors(editSectorForm, sectors, ampSector);
 											return mapping.findForward("editedSecondLevelSector");
 										}
+										
+										editSectorForm.setSectorId(secId);
+										ampSector.setDescription(editSectorForm.getDescription());
+										ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);
+										String curSectorCodeOfficial = ampSector.getSectorCodeOfficial();
+										String curName = ampSector.getName();
+										ampSector.setName(editSectorForm.getSectorName());
+										ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
+										String secSchemeCode = ampSector.getAmpSecSchemeId().getSecSchemeCode();
+										String secSchemename = ampSector.getAmpSecSchemeId().getSecSchemeName();
+										
 										if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 											request.setAttribute("event", "view");
 											ActionMessages errors = new ActionMessages();
@@ -134,13 +133,6 @@ public class EditSector extends Action {
 								else if(event.equalsIgnoreCase("update3LevelSector"))
 								 {
 									AmpSector ampSector = SectorUtil.getAmpSector(secId);
-									editSectorForm.setSectorId(secId);
-									ampSector.setDescription(editSectorForm.getDescription());
-									ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);
-									String curSectorCodeOfficial = ampSector.getSectorCodeOfficial();
-									String curName = ampSector.getName();
-									ampSector.setName(editSectorForm.getSectorName());
-									ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
 									Collection sectors = SectorUtil.getAllChildSectors(ampSector.getParentSectorId().getAmpSectorId());
 									if(checkSectorNameCodeIsNull(editSectorForm)){
 										request.setAttribute("event", "view");
@@ -154,6 +146,15 @@ public class EditSector extends Action {
 										refreshSubSectors(ampSector, sectors, editSectorForm);
 										return mapping.findForward("editedThirdLevelSector");
 									}
+									
+									editSectorForm.setSectorId(secId);
+									ampSector.setDescription(editSectorForm.getDescription());
+									ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);
+									String curSectorCodeOfficial = ampSector.getSectorCodeOfficial();
+									String curName = ampSector.getName();
+									ampSector.setName(editSectorForm.getSectorName());
+									ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
+									
 									if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 										request.setAttribute("event", "view");
 										ActionMessages errors = new ActionMessages();
@@ -205,14 +206,6 @@ public class EditSector extends Action {
 							 if(event.equalsIgnoreCase("update3LevelSector"))
 							 	{
 									AmpSector ampSector = SectorUtil.getAmpSector(secId);
-									editSectorForm.setSectorId(secId);
-									ampSector.setDescription(editSectorForm.getDescription());
-									ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);
-									String curSectorCodeOfficial = ampSector.getSectorCodeOfficial();
-									String curName = ampSector.getName();
-									ampSector.setName(editSectorForm.getSectorName());
-									ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
-									
 									Collection sectors = SectorUtil.getAllChildSectors(ampSector.getParentSectorId().getAmpSectorId());
 									if(checkSectorNameCodeIsNull(editSectorForm)){
 										request.setAttribute("event", "view");
@@ -226,6 +219,14 @@ public class EditSector extends Action {
 										refreshSubSectors1(ampSector, sectors,editSectorForm);
 										return mapping.findForward("editedThirdLevelSectorPlusOne");
 									}
+									editSectorForm.setSectorId(secId);
+									ampSector.setDescription(editSectorForm.getDescription());
+									ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);
+									String curSectorCodeOfficial = ampSector.getSectorCodeOfficial();
+									String curName = ampSector.getName();
+									ampSector.setName(editSectorForm.getSectorName());
+									ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
+									
 									if(existSectorForUpdate(editSectorForm,secId, sectors) == 1){
 										request.setAttribute("event", "view");
 										ActionMessages errors = new ActionMessages();

@@ -1961,37 +1961,41 @@ function collapseAll() {
 		</span>	
 	</legend>
 	<div id="documnetsdiv">
-	<c:if test="${ (!empty aimEditActivityForm.documents.documentList) || (!empty aimEditActivityForm.documents.crDocuments)}">
+	<c:if test="${ (!empty aimEditActivityForm.documents.documents) || (!empty aimEditActivityForm.documents.crDocuments)}">
 		<table width="100%" cellSpacing="0" cellPadding="0">
-			<logic:iterate name="aimEditActivityForm" property="documents.documents" id="docs" type="org.digijava.module.aim.helper.Documents">
-				<c:if test="${docs.isFile == true}">
-					<tr>
-						<td>
-						<table width="100%" class="box-border-nopadding">
-							<tr bgcolor="#f0f0f0">
-								<td vAlign="center" align="left">&nbsp;
-									<b><c:out value="${docs.title}"/></b> - &nbsp;&nbsp;&nbsp;<i>
-									<c:out value="${docs.fileName}"/></i> 
-									<logic:notEqual name="docs" property="docDescription" value=" ">
-										<br/>&nbsp;
-										<b><digi:trn>Description</digi:trn>:</b>
-										&nbsp;<bean:write name="docs" property="docDescription" />
-									</logic:notEqual> 
-									<logic:notEmpty name="docs" property="date">
-										<br />&nbsp;
-										<b><digi:trn>Date</digi:trn>:</b>
-										&nbsp;<c:out value="${docs.date}" />
-									</logic:notEmpty> 
-									<logic:notEmpty name="docs" property="docType">
-										<br />&nbsp;
-										<b><digi:trn>Document Type</digi:trn>:</b>&nbsp;
-										<bean:write name="docs" property="docType" />
-									</logic:notEmpty>								</td>
-							</tr>
-						</table>						</td>
-					</tr>
-				</c:if>
-			</logic:iterate>
+			<logic:notEmpty name="aimEditActivityForm" property="documents.documents" >
+				<logic:iterate name="aimEditActivityForm" property="documents.documents" id="docs" type="org.digijava.module.aim.helper.Documents">
+					<c:if test="${docs.isFile == true}">
+						<tr>
+							<td>
+								<table width="100%" class="box-border-nopadding">
+									<tr bgcolor="#f0f0f0">
+										<td vAlign="center" align="left">&nbsp;
+											<b><c:out value="${docs.title}"/></b> - &nbsp;&nbsp;&nbsp;<i>
+											<c:out value="${docs.fileName}"/></i> 
+											<logic:notEqual name="docs" property="docDescription" value=" ">
+												<br/>&nbsp;
+												<b><digi:trn>Description</digi:trn>:</b>
+												&nbsp;<bean:write name="docs" property="docDescription" />
+											</logic:notEqual> 
+											<logic:notEmpty name="docs" property="date">
+												<br />&nbsp;
+												<b><digi:trn>Date</digi:trn>:</b>
+												&nbsp;<c:out value="${docs.date}" />
+											</logic:notEmpty> 
+											<logic:notEmpty name="docs" property="docType">
+												<br />&nbsp;
+												<b><digi:trn>Document Type</digi:trn>:</b>&nbsp;
+												<bean:write name="docs" property="docType" />
+											</logic:notEmpty>								
+										</td>
+									</tr>
+								</table>						
+							</td>
+						</tr>
+					</c:if>
+				</logic:iterate>
+			</logic:notEmpty>
 			<logic:notEmpty name="aimEditActivityForm" property="documents.crDocuments" >
 				<tr>
 					<td>

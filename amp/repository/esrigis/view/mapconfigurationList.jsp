@@ -136,9 +136,6 @@ $(document).ready(function(){
                         <td align="center" class="inside"><digi:trn>No map configuration found</digi:trn>
                         </td>
 						<td class="inside">&nbsp;</td>
-						
-                      </tr>
-                      <tr>
                         <td class="inside">&nbsp;</td>
 						<td class="inside">&nbsp;</td>
                       </tr>

@@ -4083,6 +4083,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
   
   public static List<AmpActivity> getActivityById(Set<Long> ampActIds ,Session session){
 	  List<AmpActivity> act = null;
+      if (ampActIds != null && !ampActIds.isEmpty()) {
 	  try {
 	      Query qry = null;
 	      String queryString = "select a from "
@@ -4098,6 +4099,9 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	      logger.error("Could not retrieve the activities ");
 	      e1.printStackTrace(System.out);
 	    }
+      } else {
+          act = new ArrayList<AmpActivity> ();
+      }
       return act;
   }
 

@@ -103,17 +103,14 @@ public class DashboardUtil {
 		}
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        AmpCategoryValueLocations tempLocation = getTopLevelLocation((AmpCategoryValueLocations)regListChildren.toArray()[0]);
-        AmpCategoryValueLocations natLevelLocation = new AmpCategoryValueLocations();
-        if (tempLocation != null)
-        	if (tempLocation.getParentLocation()!=null) {
-        		natLevelLocation = tempLocation.getParentLocation();
-			} else {
-				natLevelLocation = tempLocation;
+        
+        AmpCategoryValueLocations natLevelLocation = null;
+        for (AmpCategoryValueLocations ampCategoryValueLocations : regListChildren) {
+			if (ampCategoryValueLocations.getParentLocation()!=null){
+				natLevelLocation = getTopLevelLocation(ampCategoryValueLocations).getParentLocation();
 			}
-        else if(regListChildren.size() > 1)
-        	natLevelLocation = getTopLevelLocation((AmpCategoryValueLocations)regListChildren.toArray()[1]).getParentLocation();
-
+		}
+                
         AmpCategoryValueLocations tempLoc = new AmpCategoryValueLocations();
 		if (request!=null) {
 			String locale = RequestUtils.getNavigationLanguage(request).getCode();

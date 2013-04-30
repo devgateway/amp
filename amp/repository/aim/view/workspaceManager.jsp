@@ -507,7 +507,7 @@
         checkErrorAndClose();
     }
     
-    function checkErrorAndClose(){
+    function checkErrorAndClose() {
         var error = document.getElementById("someError");
         if (checkAndClose == "true" || checkAndClose) {
             if(error != null && YAHOO.lang.trim(error.innerHTML) != '') {

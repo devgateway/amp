@@ -133,12 +133,12 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 					target.add(regionalFundingFeature);
 					target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(regionalFundingFeature));
 					
-					percentageValidationField.reloadValidationField(target);							
-					uniqueCollectionValidationField.reloadValidationField(target);
-                    minSizeCollectionValidationField.reloadValidationField(target);
-                    treeCollectionValidatorField.reloadValidationField(target);
 				}
-				setModel.getObject().remove(model.getObject());
+                percentageValidationField.reloadValidationField(target);
+                uniqueCollectionValidationField.reloadValidationField(target);
+                minSizeCollectionValidationField.reloadValidationField(target);
+                treeCollectionValidatorField.reloadValidationField(target);
+                setModel.getObject().remove(model.getObject());
 				target.add(list.getParent());
 				list.removeAll();
 			}

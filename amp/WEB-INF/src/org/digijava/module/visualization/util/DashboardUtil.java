@@ -581,8 +581,10 @@ public class DashboardUtil {
         DateTime dt = null;
         String calendarType = fiscalCalendar.getBaseCal();
         if (calendarType.equals("ETH-CAL")) {
-        	DateTime dtEth = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,EthiopicChronology.getInstance());
-        	dt = dtEth.withChronology(GregorianChronology.getInstance());
+        	DateTime dtEth = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,GregorianChronology.getInstance());
+        	DateTime dt1 = dtEth.withChronology(EthiopicChronology.getInstance());
+        	dt = new DateTime();
+        	dt = dt.withDate(dt1.getYear(), dt1.getMonthOfYear(), dt1.getDayOfMonth());
         } else {
             if (calendarType.equals("NEP-CAL")) {
             	dt = new DateTime(year, fiscalCalendar.getStartMonthNum(), fiscalCalendar.getStartDayNum(),0,0,0,0,GregorianChronology.getInstance());

@@ -206,7 +206,7 @@ background-color:#FFFFFF;
 		<div class="dashboard_tab_opt" style="visibility:hidden">
 		<div class="tab_opt_cont" style="background-color:#F2F2F2;">
 		<div class="show_hide_setting"><digi:link
-			href="/reportWizard.do" styleClass="l_sm">
+			href="/reportWizard.do?tabs=false&reset=true" styleClass="l_sm">
 			<digi:trn>Reports</digi:trn>
 		</digi:link></div>
 		<a class="l_sm" href="#"><img

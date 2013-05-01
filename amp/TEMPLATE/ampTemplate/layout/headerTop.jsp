@@ -89,7 +89,7 @@ ${fn:replace(message,quote,escapedQuote)}
 				</td>
 				<td style="padding-left:10px;">
             		<a href="/aim" style="text-decoration: none">
-            		<div class="amp_label" style="padding-top:0px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
+            		<div class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
             		</a>
 				</td>
 			</tr>

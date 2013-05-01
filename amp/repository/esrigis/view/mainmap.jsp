@@ -323,7 +323,7 @@
        <div class="headerBackground"> </div>
        <div class="header"style="float:left;">
 	 		<div style="margin-left:-85px;padding:8px 0px 0px 0px;">
-				<img src="/TEMPLATE/ampTemplate/img_2/amp_trans.png" align=left>
+				<img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px" align=left>
 				<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
 			</div>
         </div>

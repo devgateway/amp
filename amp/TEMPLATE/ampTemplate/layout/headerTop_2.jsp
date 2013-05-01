@@ -86,7 +86,7 @@
 
 <!-- Prevent Skype Highlighter -->
 <META name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
-<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=8">
 <style>
 #components_dots table tr td {font-size:11px;}
 table tr td {font-size:11px;}

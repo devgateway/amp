@@ -123,7 +123,8 @@ div.membersSelector div.memsearch {
 
 div.innerTab {
 	height: 115px;
-	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: scroll;
 	margin: 2px;
 	width: 99%;
 }
@@ -175,6 +176,11 @@ label {
 }
 li table{
 	visibility:visible; 
+}
+
+#status_sector_search, #donorTab_search, #financingsInsTab_search
+{
+	width: 150px;
 }
 
 -->

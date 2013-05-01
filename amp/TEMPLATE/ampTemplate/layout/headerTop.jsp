@@ -58,7 +58,9 @@
 #components_dots table tr td {font-size:11px;}
 table tr td {font-size:11px;}
 </style>
-<meta http-equiv="X-UA-Compatible" content="chrome=1">
+ 
+<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=8">
+
 <digi:context name="displayFlag" property="context/aim/default/displayFlag.do" />
 <c:set var="message">
 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>

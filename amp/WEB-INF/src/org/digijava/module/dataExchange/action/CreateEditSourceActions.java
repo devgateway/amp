@@ -94,6 +94,7 @@ public class CreateEditSourceActions extends DispatchAction {
 		myform.setName(ss.getName());
 		myform.setApprovalStatus(ss.getApprovalStatus());
 		myform.setImportStrategy(ss.getImportStrategy());
+		myform.setTeamId(ss.getImportWorkspace().getAmpTeamId());
 		if(ss.getLanguageId() != null){
 			myform.setSelectedLanguages(ss.getLanguageId().split("\\"+ss.getUniqueIdentifierSeparator()));
 		}		

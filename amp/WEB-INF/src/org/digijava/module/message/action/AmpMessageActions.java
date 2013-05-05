@@ -1,5 +1,6 @@
 package org.digijava.module.message.action;
 
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -124,11 +125,9 @@ public class AmpMessageActions extends DispatchAction {
 	    return null;
 	}
     
-    public ActionForward searchActivitiesName (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-    	
-    	String srchStr = request.getParameter("srchStr");
+    private void writeListToOutput(String srchStr, List<String> srcResArray, HttpServletResponse response) throws IOException
+    {
     	StringBuffer retVal = new StringBuffer();
-    	List<String> srcResArray = DataExchangeUtils.getAllActivitiesName(srchStr);
     	String newValue = "Add New(-1)";
     	if(newValue.toLowerCase().startsWith(srchStr.toLowerCase())){
     		retVal.append(newValue);
@@ -147,7 +146,54 @@ public class AmpMessageActions extends DispatchAction {
     	response.setCharacterEncoding("UTF-8");
         ServletOutputStream sos = response.getOutputStream();
         sos.write(retVal.toString().getBytes("UTF-8"));
-        sos.close();
+        sos.close();    	
+    }
+        
+    public ActionForward searchActivitiesStatus(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
+    {    	
+    	String srchStr = request.getParameter("srchStr");
+    	List<String> srcResArray = DataExchangeUtils.getAllActivitiesStatus(srchStr);
+    	writeListToOutput(srchStr, srcResArray, response);
+    	return null;
+    }
+    
+    public ActionForward searchActivitiesName (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
+    {    	
+    	String srchStr = request.getParameter("srchStr");
+    	List<String> srcResArray = DataExchangeUtils.getAllActivitiesName(srchStr);
+    	writeListToOutput(srchStr, srcResArray, response);
+    	return null;
+    }
+    
+    public ActionForward searchActivitiesOrganization(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
+    {    	
+    	String srchStr = request.getParameter("srchStr");
+    	List<String> srcResArray = DataExchangeUtils.getAllActivitiesOrganizations(srchStr);
+    	writeListToOutput(srchStr, srcResArray, response);
+    	return null;
+    }
+
+    public ActionForward searchActivitiesOrganizationType(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
+    {    	
+    	String srchStr = request.getParameter("srchStr");
+    	List<String> srcResArray = DataExchangeUtils.getAllActivitiesOrganizationsType(srchStr);
+    	writeListToOutput(srchStr, srcResArray, response);
+    	return null;
+    }
+
+    public ActionForward searchSectors(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
+    {    	
+    	String srchStr = request.getParameter("srchStr");
+    	List<String> srcResArray = DataExchangeUtils.getAllSectorNameCodeScheme(srchStr);
+    	writeListToOutput(srchStr, srcResArray, response);
+    	return null;
+    }
+
+    public ActionForward searchSectorSchemes(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception 
+    {    	
+    	String srchStr = request.getParameter("srchStr");
+    	List<String> srcResArray = DataExchangeUtils.getAllSectorSchemes(srchStr);
+    	writeListToOutput(srchStr, srcResArray, response);
     	return null;
     }
 

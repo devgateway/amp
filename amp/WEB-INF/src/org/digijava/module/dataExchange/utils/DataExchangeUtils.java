@@ -45,6 +45,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -1565,6 +1566,153 @@ public class DataExchangeUtils {
             session = PersistenceManager.getSession();
             String queryString = "select f.name, f.ampActivityGroup from " + AmpActivity.class.getName()
                 + " f where lower(f.name) like lower('"+str+"%') order by f.name asc";
+            qry = session.createQuery(queryString);
+            Iterator iter = qry.list().iterator();
+            while (iter.hasNext()) {
+            	Object[] item = (Object[])iter.next();
+                AmpActivityGroup actGroup = (AmpActivityGroup) item[1];
+                if(actGroup!=null){
+                	result.put(actGroup.getAmpActivityGroupId(),(String)item[0]);
+                	//result1.add((String)item[0]+"!<>!"+actGroup.getAmpActivityGroupId());
+                	//result1.add("[\""+(String)item[0]+"\",\""+actGroup.getAmpActivityGroupId()+"\"]");
+                	result1.add((String)item[0]+"("+actGroup.getAmpActivityGroupId()+")");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        	PersistenceManager.releaseSession(session);
+        }
+        return result1;
+    }
+    
+    public static List<String> getAllActivitiesOrganizations(String str){
+    	Session session = null;
+        Query qry = null;
+        TreeMap<Long,String> result = new TreeMap<Long,String>();
+        List<String> result1 = new ArrayList<String>();
+        try {
+            session = PersistenceManager.getSession();
+    		//String orgIds = "SELECT DISTINCT(organisation) from amp_org_role";
+            String queryString = "select role.organisation.name, role.organisation.ampOrgId FROM " + AmpOrgRole.class.getName()
+                + " role WHERE lower(role.organisation.name) like lower('"+str+"%') ORDER BY role.organisation.name ASC";
+            qry = session.createQuery(queryString);
+            Iterator iter = qry.list().iterator();
+            while (iter.hasNext()) {
+            	Object[] item = (Object[])iter.next();
+            	Long orgId = (Long) item[1];
+            	if (!result.containsKey(orgId))
+            	{
+            		result.put(orgId, (String) item[0]);
+            		result1.add((String)item[0] + "(" + orgId + ")");
+            	}
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        	PersistenceManager.releaseSession(session);
+        }
+        return result1;
+    }    
+    
+    public static List<String> getAllActivitiesOrganizationsType(String str){
+    	Session session = null;
+        Query qry = null;
+        TreeMap<Long,String> result = new TreeMap<Long,String>();
+        List<String> result1 = new ArrayList<String>();
+        try {
+            session = PersistenceManager.getSession();
+    		//String orgIds = "SELECT DISTINCT(organisation) from amp_org_role";
+            String queryString = "select role.organisation.orgType, role.organisation.ampOrgId FROM " + AmpOrgRole.class.getName()
+                + " role WHERE lower(role.organisation.orgType) like lower('"+str+"%') ORDER BY role.organisation.orgType ASC";
+            qry = session.createQuery(queryString);
+            Iterator iter = qry.list().iterator();
+            while (iter.hasNext()) {
+            	Object[] item = (Object[])iter.next();
+            	Long orgId = (Long) item[1];
+            	if (!result.containsKey(orgId))
+            	{
+            		result.put(orgId, (String) item[0]);
+            		result1.add((String)item[0] + "(" + orgId + ")");
+            	}
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        	PersistenceManager.releaseSession(session);
+        }
+        return result1;
+    }    
+   
+    
+    public static List<String> getAllSectorNameCodeScheme(String str){
+    	Session session = null;
+        Query qry = null;
+        //TreeMap<Long,String> result = new TreeMap<Long,String>();
+        List<String> result1 = new ArrayList<String>();
+        try {
+            session = PersistenceManager.getSession();
+    		//String orgIds = "SELECT DISTINCT(organisation) from amp_org_role";
+            String queryString = "select sec.ampSectorId, sec.ampSecSchemeId.secSchemeName, sec.name, sec.sectorCode FROM " + AmpSector.class.getName()
+                + " sec WHERE lower(sec.name) like lower('"+str+"%') ORDER BY sec.sectorCode ASC";
+            qry = session.createQuery(queryString);
+            Iterator iter = qry.list().iterator();
+            while (iter.hasNext()) {
+            	Object[] item = (Object[])iter.next();
+            	Object secId = item[0];
+            	Object schemeName = item[1];
+            	Object sectorName = item[2];
+            	Object sectorCode = item[3];
+           		result1.add((String)sectorName + ", code " + sectorCode + " (" + secId + ")");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        	PersistenceManager.releaseSession(session);
+        }
+        return result1;
+    }    
+    
+    public static List<String> getAllSectorSchemes(String str){
+    	Session session = null;
+        Query qry = null;
+        //TreeMap<Long,String> result = new TreeMap<Long,String>();
+        List<String> result1 = new ArrayList<String>();
+        try {
+            session = PersistenceManager.getSession();
+
+            String queryString = "select scheme.ampSecSchemeId, scheme.secSchemeName FROM " + AmpSectorScheme.class.getName()
+                + " scheme WHERE lower(scheme.secSchemeName) like lower('"+str+"%') ORDER BY scheme.secSchemeName ASC";
+            qry = session.createQuery(queryString);
+            Iterator iter = qry.list().iterator();
+            while (iter.hasNext()) {
+            	Object[] item = (Object[])iter.next();
+            	Object secId = item[0];
+            	Object schemeName = item[1];
+           		result1.add((String) schemeName + " (" + secId + ")");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        	PersistenceManager.releaseSession(session);
+        }
+        return result1;
+    }    
+    
+    public static List<String> getAllActivitiesStatus(String str){
+    	Session session = null;
+        Query qry = null;
+        TreeMap<Long,String> result = new TreeMap<Long,String>();
+        List<String> result1 = new ArrayList<String>();
+        try {
+            session = PersistenceManager.getSession();
+            String queryString = "select f.approvalStatus, f.ampActivityGroup from " + AmpActivity.class.getName()
+                + " f where lower(f.approvalStatus) like lower('"+str+"%') order by f.approvalStatus asc";
             qry = session.createQuery(queryString);
             Iterator iter = qry.list().iterator();
             while (iter.hasNext()) {

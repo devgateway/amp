@@ -429,7 +429,28 @@ span.extContactDropdownEmail {
 								      </div>
 								      <script type="text/javascript">
 										var relatedActDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", ";"]);
-										relatedActDataSource.scriptQueryAppend = "actionType=searchActivitiesName";
+										
+										var selectedFilterBy = document.getElementById("filterAmpClass").value;
+										var DUMMY_ACTION_TYPE = "###dummy###";
+										var actionTypeString = DUMMY_ACTION_TYPE;
+										if (selectedFilterBy == "Activity")
+											actionTypeString = "searchActivitiesName";
+										else if (selectedFilterBy == "Activity Status")
+											actionTypeString = "searchActivitiesStatus";
+										else if (selectedFilterBy == "Organization")
+											actionTypeString = "searchActivitiesOrganization";
+										else if (selectedFilterBy == "Organization Type")
+											actionTypeString = "searchActivitiesOrganizationType";
+										else if (selectedFilterBy == "Sector")
+											actionTypeString = "searchSectors";
+										else if (selectedFilterBy == "Sector Scheme")
+											actionTypeString = "searchSectorSchemes";
+										else
+											alert("nothing");
+										//debugger;
+										
+										
+										relatedActDataSource.scriptQueryAppend = "actionType=" + actionTypeString;;
 										relatedActDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 										relatedActDataSource.queryMatchContains = true;
 										relatedActDataSource.scriptQueryParam  = "srchStr";

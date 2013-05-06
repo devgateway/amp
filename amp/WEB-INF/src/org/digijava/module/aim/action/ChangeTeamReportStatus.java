@@ -92,9 +92,12 @@ public class ChangeTeamReportStatus extends Action {
 
         String tempNumResultsParam = request.getParameter("tempNumResults");
         if (tempNumResultsParam != null && tempNumResultsParam.length() > 0) {
-        	returnPage += "?tempNumResults=" + tempNumResultsParam;
+        	returnPage += "~tempNumResults=" + tempNumResultsParam;
         }
-		
+		String currentPage = request.getParameter("currentPage");
+		if (currentPage != null && currentPage.length() > 0) {
+        	returnPage += "~currentPage=" + currentPage;
+        }
 		url += returnPage;
 		response.sendRedirect(url);
 

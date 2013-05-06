@@ -1931,9 +1931,9 @@ public class ExportActivityToWord extends Action {
     				boolean visibleModuleRegExpenditures = FeaturesUtil.isVisibleModule(
     						"/Activity Form/Regional Funding/Region Item/Expenditures", ampContext);
     				
-    				ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
                     
     				for (AmpRegionalFunding regFnd : regFnds) {
+    					ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
         				// validating module visibility
     					// Commitments
     					if ((regFnd.getTransactionType() == Constants.COMMITMENT && visibleModuleRegCommitments)

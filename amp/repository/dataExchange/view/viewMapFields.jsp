@@ -112,20 +112,28 @@ div.fakefile2 input{
 
 <script type="text/javascript">
 function saveRecord(id) {
+	alert('NOP');
+	return;
+	debugger;
 	var loadingImgDiv = document.getElementById("loadingImg");
 	loadingImgDiv.style.display="block";
-		 var el = document.getElementById("ampValues["+id+"]");
-		 var txt = el.options[el.selectedIndex].innerHTML;
-		 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
-		 url = "<%= saveRecord %>?actionType=saveRecord&id="+id+"&ampId="+el.value+"&mappedValue="+txt;
-		 mapFieldsForm.action =url;
-		 //alert(url);
-		 mapFieldsForm.submit();
-		 return true;
+	
+	var el = document.getElementById("map_fields_value_" + id);
+	var txt = el.innerHTML;
+	
+	/*var el = document.getElementById("ampValues["+id+"]");
+	var txt = el.options[el.selectedIndex].innerHTML;*/
+	<digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
+	url = "<%= saveRecord %>?actionType=saveRecord&id="+id+"&ampId=" + txt + "&mappedValue="+txt;
+	mapFieldsForm.action =url;
+	//alert(url);
+	mapFieldsForm.submit();
+	return true;
 }
 
 function saveAll() {
-
+	return;
+	debugger;
 	 var checks = document.getElementsByName("selectedFields");
 	 var isChecked = false;
 
@@ -162,6 +170,29 @@ function saveAll() {
      
 	 return true;
 }
+
+
+function get_action_type(selectedFilterBy)
+{
+	var DUMMY_ACTION_TYPE = "###dummy###";
+	var actionTypeString = DUMMY_ACTION_TYPE;
+	if (selectedFilterBy == "Activity")
+		actionTypeString = "searchActivitiesName";
+	else if (selectedFilterBy == "Activity Status")
+		actionTypeString = "searchActivitiesStatus";
+	else if (selectedFilterBy == "Organization")
+		actionTypeString = "searchActivitiesOrganization";
+	else if (selectedFilterBy == "Organization Type")
+		actionTypeString = "searchActivitiesOrganizationType";
+	else if (selectedFilterBy == "Sector")
+		actionTypeString = "searchSectors";
+	else if (selectedFilterBy == "Sector Scheme")
+		actionTypeString = "searchSectorSchemes";
+	else
+		alert("nothing");
+	return actionTypeString;
+}
+
 
 function checksAll() {
 	 var check = document.getElementById("checkAll");
@@ -387,7 +418,9 @@ span.extContactDropdownEmail {
 								    </td>
 								    <td bgcolor="#FFFFFF" class="inside"><div class="t_sm">${field.ampField.iatiItems}</div></td>
 								    <td bgcolor="#FFFFFF" class="inside"><div class="t_sm">${field.ampField.iatiValues}</div></td>
-								    <td bgcolor="#FFFFFF" class="inside"><div class="t_sm">${field.ampField.ampValues}</div></td>
+								    <td bgcolor="#FFFFFF" class="inside">
+								    	<div class="t_sm" id="map_fields_value_${field.ampField.id}">${field.ampField.ampValues}</div>
+								    </td>
 								    <td bgcolor="#FFFFFF" class="inside">
 								    	<div class="t_sm" align="center">
 								    	<c:if test="${field.ampField.ampValues== null }">
@@ -431,22 +464,7 @@ span.extContactDropdownEmail {
 										var relatedActDataSource = new YAHOO.widget.DS_XHR("/message/messageActions.do", ["\n", ";"]);
 										
 										var selectedFilterBy = document.getElementById("filterAmpClass").value;
-										var DUMMY_ACTION_TYPE = "###dummy###";
-										var actionTypeString = DUMMY_ACTION_TYPE;
-										if (selectedFilterBy == "Activity")
-											actionTypeString = "searchActivitiesName";
-										else if (selectedFilterBy == "Activity Status")
-											actionTypeString = "searchActivitiesStatus";
-										else if (selectedFilterBy == "Organization")
-											actionTypeString = "searchActivitiesOrganization";
-										else if (selectedFilterBy == "Organization Type")
-											actionTypeString = "searchActivitiesOrganizationType";
-										else if (selectedFilterBy == "Sector")
-											actionTypeString = "searchSectors";
-										else if (selectedFilterBy == "Sector Scheme")
-											actionTypeString = "searchSectorSchemes";
-										else
-											alert("nothing");
+										var actionTypeString = get_action_type(selectedFilterBy);
 										//debugger;
 										
 										
@@ -461,14 +479,15 @@ span.extContactDropdownEmail {
 
 										//define your itemSelect handler function:
 										var itemSelectHandler = function(sType, aArgs) {
+											//debugger;
 											YAHOO.log(sType); // this is a string representing the event;
 														      // e.g., "itemSelectEvent"
 											var oMyAcInstance = aArgs[0]; // your AutoComplete instance
 											var elListItem = aArgs[1]; // the <li> element selected in the suggestion
 											   					       // container
 											var oData = String(aArgs[2]); // object literal of data for the result
-											var ampId = oData.substring (oData.indexOf('(') + 1, oData.indexOf(')'));
-											var value = oData.substring (0, oData.indexOf('('));
+											var ampId = oData.substring (oData.lastIndexOf('(') + 1, oData.lastIndexOf(')')).trim();
+											var value = oData.substring (0, oData.lastIndexOf('(')).trim();
 											var loadingImgDiv = document.getElementById("loadingImg");
 											loadingImgDiv.style.display="block";
 												 var el = document.getElementById("ampValues["+${field.ampField.id}+"]");

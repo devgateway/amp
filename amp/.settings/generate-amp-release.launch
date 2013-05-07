@@ -7,7 +7,7 @@
 <stringAttribute key="M2_PROFILES" value=""/>
 <listAttribute key="M2_PROPERTIES">
 <listEntry value="serverName=local"/>
-<listEntry value="jdbc.db=amp_drc_24"/>
+<listEntry value="jdbc.db=amp_ethiopia_24"/>
 <listEntry value="jdbc.user=amp"/>
 <listEntry value="jdbc.password=amp"/>
 </listAttribute>

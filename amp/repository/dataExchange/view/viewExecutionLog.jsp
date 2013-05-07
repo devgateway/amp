@@ -21,6 +21,7 @@ function toggleGroup(group_id){
 }
 
 function importAll() {
+	debugger;
 	 var checks = document.getElementsByName("selectedActivities");
 	 //alert(checks);
 	 var isChecked = false
@@ -56,6 +57,7 @@ function checkLog(sourceId) {
 }
 
 function importItem(id){
+	debugger;
 	//var actName = document.getElementById("check"+id)
 	var loadingImgDiv = document.getElementById("loadingImg");
 	loadingImgDiv.style.display="block";

@@ -224,7 +224,7 @@ public final class ArConstants {
 	public final static String ACTUAL_COMMITMENTS="Actual Commitments";
 	public final static String UNCOMMITTED_BALANCE="Uncommitted Balance";
 	public final static String TOTAL_COMMITMENTS="Total Commitments";
-	public final static String TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS="Percentage Of Total Disbursements";
+	//public final static String TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS="Percentage Of Total Disbursements";
 	public final static String EXECUTION_RATE = "Execution Rate";
 	
 //maldives only:

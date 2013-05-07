@@ -335,7 +335,7 @@ public class MathExpressionRepository {
 	 */
 	private static void buildPercentageDisbursement() {
 		try {
-			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.ACTUAL_DISBURSEMENT);
+			MathExpression x1 = new MathExpression(MathExpression.Operation.DIVIDE, ArConstants.ACTUAL_DISBURSEMENT_FILTERED, ArConstants.TOTAL_ACTUAL_DISBURSEMENT);
 			MathExpression x2 = new MathExpression(MathExpression.Operation.MULTIPLY, x1, new BigDecimal(100d));
 			expresions.put(PERCENTAGE_DISBURSEMENT, x2);
 		} catch (Exception e) {

@@ -392,11 +392,6 @@ LoggerIdentifiable, Cloneable {
 	protected AmpActivityGroup ampActivityGroup;
 	
 	/**
-	 * Fields for activity versioning cached for public view.
-	 */
-	protected AmpActivityGroupCached ampActivityGroupCached;
-
-	/**
 	 * @deprecated
 	 * Using the field has no benefit yet, but it's high maintenance
 	 * so it's deprecated for now!
@@ -411,8 +406,6 @@ LoggerIdentifiable, Cloneable {
 	protected AmpActivityVersion mergeSource1;
 	protected AmpActivityVersion mergeSource2;
 	
-
-
 	//protected Set <AmpActivityContact> activityContacts;
 
 	public Boolean getMergedActivity() {
@@ -1867,13 +1860,6 @@ contactName = string;
 
 	public AmpActivityGroup getAmpActivityGroup() {
 		return ampActivityGroup;
-	}
-
-	public void setAmpActivityGroupCached(AmpActivityGroupCached ampActivityGroup) {
-		this.ampActivityGroupCached = ampActivityGroup;
-	}
-	public AmpActivityGroup getAmpActivityGroupCached() {
-		return ampActivityGroupCached;
 	}
 
 	public void setAmpActivityGroup(AmpActivityGroup ampActivityGroup) {

@@ -782,10 +782,17 @@ public class AmpARFilter extends PropertyListable {
 			Long ampReportIdLong = forcedAmpReportId == null ? getAttachedAmpReportId(request) : forcedAmpReportId;
 			fillWithDefaultsFilter(ampReportIdLong);
 		}
+		initWidget();
+	}
 
+	public void initWidget()
+	{
+		HttpServletRequest request = TLSUtils.getRequest();
+		if (request == null)
+			return;
         String widget = (String) request.getAttribute("widget");
 		if (widget != null)
-			this.setWidget(new Boolean(widget));		
+			this.setWidget(new Boolean(widget));
 	}
 	
 	/**

@@ -295,10 +295,14 @@ public class ReportContextData
 		if (initFromDB)
 		{
 			initFilters(source);
-			return getFilter();
+			AmpARFilter result = getFilter();
+			result.initWidget();
+			return result;
 		}
 		
-		return FilterUtil.getOrCreateFilter(null, source);
+		AmpARFilter result = FilterUtil.getOrCreateFilter(null, source);
+		result.initWidget();
+		return result;
 	}
 	
 	/**

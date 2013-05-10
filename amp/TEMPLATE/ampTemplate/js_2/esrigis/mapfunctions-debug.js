@@ -57,8 +57,10 @@ var basemapsarray = new Array();
 var povertyratesurl;
 var population;
 donorfix="";
+//Honduras
 //donorfix = "BID,BM,BCIE,ACDI,UE,USAID,UNDP/PNUD,AECID,GIZ,JICA";
-donorfix = "UE,USAID,JICA,,AECID,AFD,BM-EXTFUND,ACDI,Ambassade de Norvege,BID,Ambassade du Venezuela";
+//Haiti
+//donorfix = "UE,USAID,Ambassade du Japon,AECID,AFD,BM-EXTFUND,ACDI,Ambassade de Norvege,BID,Ambassade du Venezuela";
 fixeddonorlist = donorfix.split(",");
 
 function init() {
@@ -1055,7 +1057,7 @@ function updateLocationAttributes(graphicLayer, typeFunding) {
 			var currentLocation = locations[j];
 			if (g.attributes["GEO_ID"] == currentLocation.geoId) {
 
-				g.attributes["COUNT"] = currentLocation[typeFunding];
+				g.attributes[COUNT] = currentLocation[typeFunding];
 				g.attributes["COMMITMENTSFMT"] = df
 						.format(currentLocation.commitments)
 						+ " " + currentLocation.amountsCurrencyCode;

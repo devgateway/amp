@@ -13,8 +13,8 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			update amp_activity_location s SET location_percentage=100/j.cnt FROM 
-			(select amp_activity_id, count(*) as cnt from amp_Activity_location where location_percentage is null group by amp_activity_id) j 
+			update amp_activity_location s SET location_percentage=100::float/j.cnt FROM 
+			(select amp_activity_id, count(*) as cnt from amp_Activity_location group by amp_activity_id) j 
 			WHERE j.amp_activity_id=s.amp_activity_id;
 			</lang>
 		</script>

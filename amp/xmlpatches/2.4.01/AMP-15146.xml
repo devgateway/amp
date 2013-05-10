@@ -13,7 +13,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			update amp_org_role s SET percentage=100/j.cnt FROM 
+			update amp_org_role s SET percentage=100::float/j.cnt FROM 
 			(select activity, role, count(*) as cnt from amp_org_role group by activity,role) j 
 			WHERE j.activity=s.activity and j.role=s.role;
 			</lang>

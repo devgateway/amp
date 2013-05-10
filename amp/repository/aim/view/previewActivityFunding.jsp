@@ -83,7 +83,7 @@
 																		<td width="1">:</td>
 																		<td align="left">
 																		<logic:notEmpty name="funding" property="typeOfAssistance">
-																			<b><bean:write name="funding" property="typeOfAssistance.value"/></b>
+																			<b><digi:trn><bean:write name="funding" property="typeOfAssistance.value"/></digi:trn></b>
 																		</logic:notEmpty></td>
 																	</tr>
 																</module:display>
@@ -98,7 +98,7 @@
 																		<td width="1">:</td>
 																		<td align="left">
 																		<logic:notEmpty name="funding" property="financingInstrument">
-																			<b><bean:write name="funding" property="financingInstrument.value"/></b>
+																			<b><digi:trn><bean:write name="funding" property="financingInstrument.value"/></digi:trn></b>
 																		</logic:notEmpty></td>
 																	</tr>
 																</module:display>
@@ -112,7 +112,7 @@
 																		<td width="1">:</td>
 																		<td align="left">
 																			<logic:notEmpty name="funding" property="fundingStatus">
-																				<b><bean:write name="funding" property="fundingStatus.value" /></b>
+																				<b><digi:trn><bean:write name="funding" property="fundingStatus.value" /></digi:trn></b>
 																			</logic:notEmpty>
 																		</td>
 																	</tr>
@@ -127,7 +127,7 @@
 																		<td width="1">:</td>
 																		<td align="left">
 																			<logic:notEmpty name="funding" property="modeOfPayment">
-																				<b><bean:write name="funding" property="modeOfPayment.value"/></b>
+																				<b><digi:trn><bean:write name="funding" property="modeOfPayment.value"/></digi:trn></b>
 																			</logic:notEmpty>
 																		</td>
 																	</tr>

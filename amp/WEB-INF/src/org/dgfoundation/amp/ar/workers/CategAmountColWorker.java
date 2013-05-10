@@ -176,7 +176,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		if ( baseCurrCode == null ) 
 			baseCurrCode	= "USD";
 		
-		Long ownerId = rs.getLong(1);	
+		Long ownerId = rs.getLong(1);
 		Long id = rs.getLong(3);
 		CategAmountCell acc = new CategAmountCell(ownerId);
 

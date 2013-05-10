@@ -170,8 +170,8 @@ public class WorkspaceFilter
 		//return "2435, 1163, 2498, 1301";
 		//return "1163, 2498, 1301";
 		//return "2498, 1301";
-		return "849";
-		//return TEAM_FILTER;
+		//return "849";
+		return TEAM_FILTER;
 	}
 	
 	/**

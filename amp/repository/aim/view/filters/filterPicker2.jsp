@@ -115,7 +115,7 @@ StopWatch.next("Filters", true);
 						<tr>
 							<td align="left">
 							<digi:trn key="rep:filer:From"> From </digi:trn> <html:text  property="fromDate" size="10" styleId="fromDate" styleClass="inp-text" readonly="true" />
-							<a id="date1" style="background-color: #F6FAFF;" href='javascript:pickDateById2("date1","fromDate", positionHelper)'>
+							<a id="date1" style="background-color: #F6FAFF;" href='javascript:pickDateById2("date1","fromDate", positionHelper("date1"))'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
 							<a id="clearDate1" style="background-color: #F6FAFF;" href='javascript:clearDate("fromDate")' title="<digi:trn>Clear</digi:trn>">
@@ -124,7 +124,7 @@ StopWatch.next("Filters", true);
 							</td>
 							<td align="left">&nbsp;&nbsp;
 							<digi:trn key="rep:filer:To"> To </digi:trn> <html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" />
-							<a id="date2" style="background-color: #F6FAFF;" href='javascript:pickDateById2("date2","toDate", positionHelper)'>
+							<a id="date2" style="background-color: #F6FAFF;" href='javascript:pickDateById2("date2","toDate", positionHelper("date2"))'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border="0">
 							</a>
 							<a id="clearDate2" style="background-color: #F6FAFF;" href='javascript:clearDate("toDate")' title="<digi:trn>Clear</digi:trn>">

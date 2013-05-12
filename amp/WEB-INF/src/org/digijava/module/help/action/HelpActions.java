@@ -273,7 +273,7 @@ public class HelpActions extends DispatchAction {
 			for (HelpTopicHelper topic : topics) {
 				if (onlyCurrentLang && !currentLang.equals(topic.getLangIso())) continue;
                 buf.append("<div class=\"searchResult\">  \n");
-				buf.append("<div class=\"bo1dyTitle\" style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link resultTitle\"><b>");
+				buf.append("<div class=\"bodyTitle\" style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link resultTitle\"><b>");
 				String translatedTitle = HelpUtil.getTrn(topic.getTitle(), request);
 				buf.append(translatedTitle);
 				buf.append("</b></a></div> \n");

@@ -96,7 +96,6 @@ public class ShowDashboard extends Action {
 			initializeFilter(filter, request);
 		}
 		filter.setFromPublicView(fromPublicView);
-		filter.setShowOnlyNonDraftActivities(true);
 	}
 
 	private void prepareDonorDashboard(VisualizationForm visualizationForm,boolean fromPublicView, HttpServletRequest request) {
@@ -120,8 +119,6 @@ public class ShowDashboard extends Action {
 		}
 		filter.setFromPublicView(fromPublicView);
 		
-		filter.setShowOnlyNonDraftActivities(true);
-
 		// Get Summary Information
 		//DashboardUtil.getSummaryAndRankInformation(visualizationForm);
 
@@ -338,7 +335,6 @@ public class ShowDashboard extends Action {
 			initializeFilter(filter, request);
 		}
 		filter.setFromPublicView(fromPublicView);
-		filter.setShowOnlyNonDraftActivities(true);
 	}
 
 }

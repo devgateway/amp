@@ -787,6 +787,8 @@ public class DbUtil {
 		oql += AmpFundingDetail.class.getName()
                 + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
+
+        //Join  for Organization/Organization Groups and their role
         if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
@@ -794,26 +796,34 @@ public class DbUtil {
         if (specialInner!=null && specialInner.length()>0)
         	oql += specialInner;
 
+        //If it doesn't come from public view, then it joins to the regual amp_activity_group
         if(!(filter.getFromPublicView() !=null&& filter.getFromPublicView()))
         	oql += " inner join act.ampActivityGroup actGroup ";
         	
+        //Join for locations filter
         if (locationCondition) {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         }
+
+        //Join for National/NNNN Programs
         if (programCondition) {
         	oql += " inner join act.actPrograms actProg ";
             oql += " inner join actProg.program prog ";
 		}
 
+        //Join for Category Values, where the on/off budget is stored
         if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
         	oql += " inner join act.categories categ ";
 		}
 
+        //Join for the Sectors (actsec) and the sector scheme (config)
         if (sectorCondition) {
             oql += "  inner join act.sectors actsec ";
             oql += "  inner join actsec.classificationConfig config  ";
             oql += " inner join actsec.sectorId sec ";
         }
+
+        // Get only for one adjustment/transaction type combo, like "actual" "disbursements". The "else" gets all the fundings for some calls that need all different adjustment/transaction types.
         if(fundingTypeSpecified)
         	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         else
@@ -822,21 +832,26 @@ public class DbUtil {
         if (specialCondition!=null && specialCondition.length()>0)
         	oql += specialCondition;
         
+        // Filter to get only the sector scheme (classification config) selected
         if (sectorCondition) {
         	oql += " and config.id=:config ";
         }
-        
+
+        // Filter for the selected programs
         if (programCondition && filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
         	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
 		}
 
-        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
+        // Filter for the Organizations/Organization Groups and their roles (Donor, Executing or Beneficiary)
+        if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) { // If there are any individual organizations selected, goes through the else and adds them to the query. If not, checks if there are organization groups selected. If none of those are selected, then nothing is added.
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) {
                 oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds,filter.getAgencyType());
             }
         } else {
             oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
         }
+
+        //Filter for locations. If there's a location selected, it adds that location as well as all child locations. Null is used for unallocated locations on the Activities.
         if (locationCondition && locationIds != null && locationIds.length > 0) {
         	if (locationIds[0].equals(0l)) {
         		oql += " and actloc is NULL "; //Unallocated condition
@@ -846,11 +861,13 @@ public class DbUtil {
 			}
         }
 
+        //Filter for sectors. If there's a sector selected, it adds that sector as well as all children.
         if (sectorCondition && sectorIds != null && sectorIds.length > 0) {
         	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
 
+        //Filter for On/Off Budget
         if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
         	if (filter.getSelCVIds()[0]==-1) {
         		oql += " and categ.id NOT in ("+DashboardUtil.getInStatement(filter.getBudgetCVIds())+") ";
@@ -859,46 +876,49 @@ public class DbUtil {
 			}
 		}
 
+        //Filter for individual activity information (used for the list of projects that appear when you click on a line/bar/pie slice.
         if (filter.getActivityId()!=null) {
             oql += " and act.ampActivityId =:activityId ";
         }
 
+        //Filter for the Fiscal Year Start and End
         oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+
+        //Filter for the aid type (assistance type) usually Grant/Loan/In Kind. It varies with the AMP configuration
         if (assistanceTypeId != null) {
             oql += "  and f.typeOfAssistance=:assistanceTypeId ";
         }
+
+        //Filter for the Aid Modality (Financing Instrument) usually Project support/Pool fund/etc.
         if (financingInstrumentId != null) {
             oql += "   and f.financingInstrument=:financingInstrumentId  ";
         }
         
+        //If this comes from the public view, it gets the query for Management workspaces (since that's the information shown in Public View)
+        //and links it to the cached version of amp_activity_group (since public view information should also come from cached views)
+        //If it's not public view (the else) and links it to the non cached version of the amp_activity_group
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
             oql += DashboardUtil.getTeamQueryManagement();
             oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
         }
         else
         {
+        	//Checks if the list of activities already filtered is available.
         	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
         		oql += DashboardUtil.getTeamQuery(tm);
-        	else
-        		oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
-
+        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         }
 
-        if (filter.getShowOnlyNonDraftActivities() != null && filter.getShowOnlyNonDraftActivities()) {
-			oql += ActivityUtil.getNonDraftActivityQueryString("act");
-		}
-
+        //The getActivityComputedList holds the list of activities that the workspace has, it could come from a computed workspace that has a filter instead of children organizations.
         if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
         	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
         else
         	oql += "  and act.team is not null ";
         	
+        // This restricts to only show activities that are non draft, non deleted and validated
         oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
-        
-        if(!(filter.getFromPublicView() !=null&& filter.getFromPublicView()))
-        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-        
         oql += " and (act.deleted = false or act.deleted is null)";
+        
 		return oql;
 	}
 	/**
@@ -1360,19 +1380,23 @@ public class DbUtil {
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
 
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
+            oql += DashboardUtil.getTeamQueryManagement();
+            oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
+        }
+        else
+        {
+        	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
+        		oql += DashboardUtil.getTeamQuery(tm);
+        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        }
+
         if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
         	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
         else
         	oql += "  and act.team is not null ";
         	
         oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
-    	
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
-        else            
-        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion ";	
-        
-        
         oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
@@ -1553,19 +1577,24 @@ public class DbUtil {
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
 
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
+            oql += DashboardUtil.getTeamQueryManagement();
+            oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
+        }
+        else
+        {
+        	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
+        		oql += DashboardUtil.getTeamQuery(tm);
+        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        }
+
         if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
         	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
         else
         	oql += "  and act.team is not null ";
         	
         oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
-        
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-            oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
-        else
-        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-        
-    	oql += " and (act.deleted = false or act.deleted is null)";
+        oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
@@ -1746,13 +1775,17 @@ public class DbUtil {
         	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
             oql += DashboardUtil.getTeamQueryManagement();
+            oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
+        }
         else
+        {
         	if (filter.getActivityComputedList() == null || filter.getActivityComputedList().size() == 0)
         		oql += DashboardUtil.getTeamQuery(tm);
-        	else
-        		oql += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
+        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        }
 
         if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
         	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
@@ -1760,14 +1793,8 @@ public class DbUtil {
         	oql += "  and act.team is not null ";
         	
         oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
-    	
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-            oql += " and grpLink.ampActivityLastVersion=act.ampActivityId ";
-        else
-        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
-    	
         oql += " and (act.deleted = false or act.deleted is null)";
-
+        
         Session session = PersistenceManager.getRequestDBSession();
         List<AmpFundingDetail> fundingDets = null;
         try {

@@ -8,6 +8,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -1666,7 +1668,7 @@ public class DataExchangeUtils {
             	Object schemeName = item[1];
             	Object sectorName = item[2];
             	Object sectorCode = item[3];
-           		result1.add((String)sectorName + ", code " + sectorCode + " (" + secId + ")");
+            	result1.add((String)sectorName + ", code " + sectorCode + " (" + secId + ")");
             }
 
         } catch (Exception e) {
@@ -1705,31 +1707,25 @@ public class DataExchangeUtils {
     }    
     
     public static List<String> getAllActivitiesStatus(String str){
-    	Session session = null;
-        Query qry = null;
+    	Connection connection = null;
         TreeMap<Long,String> result = new TreeMap<Long,String>();
         List<String> result1 = new ArrayList<String>();
         try {
-            session = PersistenceManager.getSession();
-            String queryString = "select f.approvalStatus, f.ampActivityGroup from " + AmpActivity.class.getName()
-                + " f where lower(f.approvalStatus) like lower('"+str+"%') order by f.approvalStatus asc";
-            qry = session.createQuery(queryString);
-            Iterator iter = qry.list().iterator();
-            while (iter.hasNext()) {
-            	Object[] item = (Object[])iter.next();
-                AmpActivityGroup actGroup = (AmpActivityGroup) item[1];
-                if(actGroup!=null){
-                	result.put(actGroup.getAmpActivityGroupId(),(String)item[0]);
-                	//result1.add((String)item[0]+"!<>!"+actGroup.getAmpActivityGroupId());
-                	//result1.add("[\""+(String)item[0]+"\",\""+actGroup.getAmpActivityGroupId()+"\"]");
-                	result1.add((String)item[0]+"("+actGroup.getAmpActivityGroupId()+")");
-                }
+            connection = PersistenceManager.getJdbcConnection();
+            String queryString = "SELECT category_value, id FROM amp_category_value WHERE amp_category_class_id = (SELECT id from amp_category_class WHERE category_name='Activity Status') ORDER BY category_value ASC";
+            ResultSet resultSet = connection.createStatement().executeQuery(queryString);
+            while (resultSet.next())
+            {
+            	String name = resultSet.getString(1);
+            	Integer id = resultSet.getInt(2);
+               	result1.add(name + "(" + id + ")");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-        	PersistenceManager.releaseSession(session);
+        	try{connection.close();}
+        	catch(SQLException ex){}
         }
         return result1;
     }

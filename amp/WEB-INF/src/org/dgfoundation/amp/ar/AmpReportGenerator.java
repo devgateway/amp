@@ -791,6 +791,9 @@ public class AmpReportGenerator extends ReportGenerator {
 				( reportMetadata.getAllowEmptyFundingColumns() == null || !reportMetadata.getAllowEmptyFundingColumns() ) )
 				rawColumns.removeEmptyChildren(true);
 
+		AmountCell.getPercentageCalls = AmountCell.getPercentageIterations = 0;
+		AmountCell.merged_cells_get_amount_calls = AmountCell.merged_cells_get_amount_iterations = 0;
+		
 		report = new GroupReportData(reportMetadata.getName());
 		report.setReportGenerator(this);
 		report.setReportMetadata(this.reportMetadata);
@@ -871,6 +874,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		report.getAllCells(listOfCells, true); //repeatedly fetch cells, as some might have been added in the meantime (postprocessing)
 		deleteMetadata(listOfCells);
+		System.out.format("AmpReportGenerator: AmountCell.getPercentage calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.getPercentageCalls, AmountCell.getPercentageIterations, 1.0 * AmountCell.getPercentageIterations / (0.01 + AmountCell.getPercentageCalls));
+		System.out.format("AmpReportGenerator: AmountCell.getAmountWithMergedCells calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.merged_cells_get_amount_calls, AmountCell.merged_cells_get_amount_iterations, 1.0 * AmountCell.merged_cells_get_amount_iterations / (0.01 + AmountCell.merged_cells_get_amount_calls));
 	}
 
 	protected void applyYearRangeSettings(GroupReportData report)
@@ -951,8 +956,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			AmountCell amCell = (AmountCell) cell;
 			amCell.setCurrencyDate(null); // unused anymore, eats 120b per instance
 			
-			if (amCell.getMergedCells().isEmpty())
-				amCell.setNullMergedCells(); // unused at this point, eats 136b per instance
+			amCell.setNullMergedCellsIfEmpty(); // unused at this point, eats 136b per instance
 			
 			for(Object obj:amCell.getMergedCells())
 				mergedCellsSum += clearCellMetadata((AmountCell) obj);
@@ -993,10 +997,15 @@ public class AmpReportGenerator extends ReportGenerator {
 	{
 		logger.warn("going to clean up " + cells.size() + " cells...");
 		int cl = 0;
+		int i = 0;
+		int sz = cells.size();
+		long a = System.currentTimeMillis();
 		for(Cell cell:cells)
 		{
 			freezeCell(cell);
+			i++;
 		}
+		System.out.format("\t---->deleting %d cells took %d milliseconds\n", sz, System.currentTimeMillis() - a);
 		for(Cell cell:cells)
 		{
 			cl += clearCellMetadata(cell);

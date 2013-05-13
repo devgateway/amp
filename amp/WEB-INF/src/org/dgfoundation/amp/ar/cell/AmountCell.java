@@ -245,6 +245,9 @@ public class AmountCell extends Cell {
 		System.out.println("=== DONE ===");
 	}
 	
+	public static long merged_cells_get_amount_calls = 0;
+	public static long merged_cells_get_amount_iterations = 0;
+	
 	/**
 	 * @return Returns the amount.
 	 */
@@ -272,6 +275,9 @@ public class AmountCell extends Cell {
 		
 		if (mergedCells != null)
 		{
+			merged_cells_get_amount_calls ++;
+			merged_cells_get_amount_iterations += mergedCells.size();
+			
 			for(AmountCell element:mergedCells)
 			{					
 				if ( element instanceof CategAmountCell && ((CategAmountCell)element).getColumnPercent() == null ) {
@@ -335,9 +341,10 @@ public class AmountCell extends Cell {
 		return mergedCells == null ? new HashSet<AmountCell>() : mergedCells;
 	}
 
-	public void setNullMergedCells()
+	public void setNullMergedCellsIfEmpty()
 	{
-		this.mergedCells = null;
+		if ((mergedCells != null) && (mergedCells.isEmpty()))
+			this.mergedCells = null;
 	}
 	
 	/**
@@ -453,11 +460,16 @@ public class AmountCell extends Cell {
 		return new Double(getAmount());
 	}
 
+	public static long getPercentageCalls = 0;
+	public static long getPercentageIterations = 0;
+	
 	public double getPercentage() {
 		double ret = 100;
+		getPercentageCalls ++;
 		if(columnPercent!=null)
 		for (Double perc : columnPercent.values()) {
 			ret *= perc / 100;
+			getPercentageIterations ++;
 		}
 		return ret;
 	}

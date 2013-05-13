@@ -344,7 +344,8 @@ LoggerIdentifiable, Cloneable {
 	/*
 	 * Tanzania adds
 	 */
-
+    @VersionableFieldSimple(fieldTitle = "Indirect On Budget")
+    protected Boolean indirectOnBudget;
 	@VersionableFieldSimple(fieldTitle = "FY")
 	protected String FY;
 	@VersionableFieldSimple(fieldTitle = "Vote")
@@ -406,8 +407,6 @@ LoggerIdentifiable, Cloneable {
 	protected AmpActivityVersion mergeSource1;
 	protected AmpActivityVersion mergeSource2;
 	
-
-
 	//protected Set <AmpActivityContact> activityContacts;
 
 	public Boolean getMergedActivity() {
@@ -2003,7 +2002,15 @@ contactName = string;
 		this.lineMinistryObservations = lineMinistryObservations;
 	}
 
-	@Override
+    public Boolean getIndirectOnBudget() {
+        return indirectOnBudget;
+    }
+
+    public void setIndirectOnBudget(Boolean indirectOnBudget) {
+        this.indirectOnBudget = indirectOnBudget;
+    }
+
+    @Override
 	public Object clone() throws CloneNotSupportedException {
 		try {
 			return (AmpActivityVersion) super.clone();

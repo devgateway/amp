@@ -144,15 +144,14 @@ import org.hibernate.Session;
  *
  * @author Priyajith
  */
-public class EditActivity
-    extends Action {
+public class EditActivity extends Action {
 
   private ServletContext ampContext = null;
 
   private static Logger logger = Logger.getLogger(EditActivity.class);
 
   @SuppressWarnings("unchecked")
-public ActionForward execute(ActionMapping mapping, ActionForm form,
+  public ActionForward execute(ActionMapping mapping, ActionForm form,
                                HttpServletRequest request,
                                HttpServletResponse response) throws Exception {
 
@@ -186,10 +185,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     // if user is not logged in, forward him to the home page
     if (session.getAttribute("currentMember") == null &&
         request.getParameter("edit") != null)
-      if ("true".compareTo(request.getParameter("public")) != 0)
+    	
+    if ("true".compareTo(request.getParameter("public")) != 0)
         return mapping.findForward("index");
 
-    boolean isPublicView = (request.getParameter("public")==null)?false:request.getParameter("public").equals("true");
     EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
     Long activityId = null;
     activityId = eaForm.getActivityId();
@@ -672,8 +671,14 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             
 
         /* End - Insert Categories */ 
-
+        
         /* Injecting documents into session */
+        
+        // Since this action is used for previews only
+        // We can set this flag to true
+        String[] tmp = {"true"};
+        request.getParameterMap().put("viewAllRights", tmp);
+        
         SelectDocumentDM.clearContentRepositoryHashMap(request);
         
         //Added because of a problem with the save as draft and redirect.
@@ -685,10 +690,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			e.printStackTrace();
 		}
 		
-        if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0 )
-        		ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());
+        if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0) {
+        	ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());
+        }		
         
-        eaForm.getDocuments().setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) );
+        eaForm.getDocuments().setCrDocuments(DocumentManagerUtil.createDocumentDataCollectionFromSession(request));
         /* END - Injecting documents into session */
 
         DocumentManagerUtil.logoutJcrSessions(request.getSession());
@@ -696,10 +702,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         String action = request.getParameter("action");
         if (action != null && action.trim().length() != 0) {
           if ("edit".equals(action)) {
-        	if (eaForm.getComments().getCommentsCol() != null)
-        			eaForm.getComments().getCommentsCol().clear();
-        	else
+        	if (eaForm.getComments().getCommentsCol() != null) {
+        		eaForm.getComments().getCommentsCol().clear();
+        	} else {
         		eaForm.getComments().setCommentsCol(new ArrayList<AmpComments>());
+        	}	
             eaForm.getComments().setCommentFlag(false);
             /**
              * The commentColInSession session attribute is a map of lists.

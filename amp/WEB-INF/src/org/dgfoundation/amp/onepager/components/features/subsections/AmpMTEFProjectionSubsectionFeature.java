@@ -55,23 +55,30 @@ public class AmpMTEFProjectionSubsectionFeature extends
 				projection.setAmpFunding(model.getObject());
 				//projection.setAmount(0d);
 //				projection.setProjectionDate(new Date(System.currentTimeMillis()));
-				Calendar calendar = Calendar.getInstance();
-				int currentYear = calendar.get(Calendar.YEAR) - 1;
+
+                String currentFiscalYear = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CURRENT_SYSTEM_YEAR);
+                Calendar calendar = Calendar.getInstance();
+
+                int currentYear;
+                if (currentFiscalYear != null)
+                    currentYear = Integer.parseInt(currentFiscalYear);
+                else
+                    currentYear = calendar.get(Calendar.YEAR);
 
 				Set<AmpFundingMTEFProjection> mtefSet = setModel.getObject();
-				if (mtefSet != null){
+                if (mtefSet != null){
 					Iterator<AmpFundingMTEFProjection> it = mtefSet.iterator();
 					while (it.hasNext()) {
 						AmpFundingMTEFProjection mtefItem = (AmpFundingMTEFProjection) it
 								.next();
 						calendar.setTime(mtefItem.getProjectionDate());
 						int mtefItemYear = calendar.get(Calendar.YEAR);
-						if (mtefItemYear > currentYear)
-							currentYear = mtefItemYear;
+						if (mtefItemYear + 1 > currentYear)
+							currentYear = mtefItemYear + 1;
 					}
 				}
 				calendar.set(Calendar.DAY_OF_YEAR, 1);
-				calendar.set(Calendar.YEAR, currentYear + 1);
+				calendar.set(Calendar.YEAR, currentYear);
 				projection.setProjectionDate(calendar.getTime());
 				projection.setReportingDate(new Date(System.currentTimeMillis()));
 				projection.setAmpCurrency(CurrencyUtil.getWicketWorkspaceCurrency());

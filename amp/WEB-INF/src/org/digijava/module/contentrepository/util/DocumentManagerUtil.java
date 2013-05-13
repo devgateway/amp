@@ -155,12 +155,16 @@ public class DocumentManagerUtil {
 			if (jcrSession == null) {
 				try {
 					TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+					/* Commented out this check. See https://jira.dgfoundation.org/browse/AMP-15251 for details
+					 * It should not hurt since we're only reading email from it
 					if (teamMember == null) {
 						throw new Exception("No TeamMember found in HttpSession !");
 					}
-					   /* From add organization the user is always admin and this user has not email*/
+					*/
+					
+					/* From add organization the user is always admin and this user has not email*/
 					String userName;
-					if (teamMember.getEmail() != null) {
+					if (teamMember != null && teamMember.getEmail() != null) {
 					   userName = teamMember.getEmail();
 					} else {
 					   userName = "admin@amp.org";
@@ -479,22 +483,20 @@ public class DocumentManagerUtil {
 	
 	
 	public static Collection<DocumentData> createDocumentDataCollectionFromSession(HttpServletRequest request) {
-		Collection<String> UUIDs		= SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
-		if ( UUIDs == null )
+		Collection<String> UUIDs = SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
+		if ( UUIDs == null ) {
 			return null;
+		}	
 		try {
-			DocumentManager dm				= new DocumentManager();
-			Collection<DocumentData> ret	= dm.getDocuments(UUIDs, request,null,false,true);
-			ret.addAll(
-					TemporaryDocumentData.retrieveTemporaryDocDataList(request)
-				);
+			DocumentManager dm = new DocumentManager();
+			Collection<DocumentData> ret = dm.getDocuments(UUIDs, request, null, false, true);
+			ret.addAll(TemporaryDocumentData.retrieveTemporaryDocDataList(request));
 			return ret;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
-		
 	}
 	
 //	public static boolean checkFileSize(FormFile formFile, ActionMessages errors) {

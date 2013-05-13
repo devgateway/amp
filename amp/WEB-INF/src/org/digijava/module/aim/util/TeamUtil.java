@@ -1649,8 +1649,7 @@ public class TeamUtil {
         
         List<AmpActivity> res = new ArrayList<AmpActivity>();
         Session session = PersistenceManager.getSession();
-        for(Long id:ids)
-        	res.add((AmpActivity)session.load(AmpActivity.class, id));
+        	res.addAll(ActivityUtil.getActivityById(ids, session));
         return res;
         
     } catch(Exception e) {

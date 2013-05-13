@@ -492,10 +492,11 @@
     var responseFailure = function(o){ 
         alert("Connection Failure!"); 
     }  
-    var callback = 
-        { 
+    
+    var callback = { 
         success:responseSuccess, 
-        failure:responseFailure 
+        failure:responseFailure,
+        cache: false
     };
 
     function showContent(){
@@ -505,20 +506,25 @@
         }
         checkErrorAndClose();
     }
-    function checkErrorAndClose(){
-            var error=document.getElementById("someError");
-            if(checkAndClose=="true"||checkAndClose){
-                if(error!=null&&YAHOO.lang.trim(error.innerHTML)!=''){checkAndClose=false; return }          
-                else{
-                    if(document.getElementsByName("someError")[0]==null || document.getElementsByName("someError")[0].value=="false" ){
-                        myPanel.hide();
-                        refreshPage();
-                    }
+    
+    function checkErrorAndClose() {
+        var error = document.getElementById("someError");
+        if (checkAndClose == "true" || checkAndClose) {
+            if(error != null && YAHOO.lang.trim(error.innerHTML) != '') {
+            	checkAndClose=false; 
+            	return; 
+            } else {
+            	var someErrorVar = document.getElementsByName("someError")[0];
+                if (someErrorVar == null || typeof someErrorVar.value == 'undefined' || someErrorVar.value == "false") {
+                    myPanel.hide();
+                    refreshPage();
                 }
-                			
             }
-            checkAndClose=false;
+            			
         }
+        checkAndClose=false;
+    }
+    
     function refreshPage(){
         if(lastFunction==="showDetails"){
             showDetails();
@@ -549,12 +555,13 @@
         myPanel.setBody(bodymsg);
         showContent();
     }
+    
     function addNewUser()	{
         var msg='\n<digi:trn>AMP View Settings</digi:trn>';
         showPanelLoading(msg);
             <digi:context name="commentUrl" property="context/module/moduleinstance/addUser.do"/>  
             var url = "<%=commentUrl %>";
-        YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
+        YAHOO.util.Connect.asyncRequest("POST", url, callback, '');
     }
 
     -->
@@ -568,6 +575,7 @@
         var flag = confirm('<digi:trn key="admin:workSpaceManager.deleteQuestion">Delete this workspace?</digi:trn>');
         return flag;
     }
+    
     function openNpdSettingsWindow(ampTeamId){
         var msg='\n<digi:trn>AMP View Settings</digi:trn>';
         myPanel.cfg.setProperty("width","450px");
@@ -578,12 +586,14 @@
         url+='?actionType=viewCurrentSettings&ampTeamId='+ampTeamId
         YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
     }
+    
     function addActionToURL(actionName){
         var fullURL=document.URL;
         var lastSlash=fullURL.lastIndexOf("/");
         var partialURL=fullURL.substring(0,lastSlash);
         return partialURL+"/"+actionName;
     }
+    
     function getParams(){
         ret = "";
         ret += "keyword="+document.getElementsByName('keyword')[0].value+"&workspaceType="+document.getElementsByName('workspaceType')[0].value+"&workspaceGroup="+document.getElementsByName('workspaceGroup')[0].value;
@@ -699,9 +709,8 @@
         tmp.innerHTML = html.join('');
 
         demo.replaceChild(tmp.getElementsByTagName('table')[0], tbl);
-    
-       
     }
+    
     function memberAction(action, id){
         var msg='<digi:trn>Delete Member</digi:trn>';
         if(action==='edit'){
@@ -713,8 +722,9 @@
             <digi:context name="commentUrl" property="context/module/moduleinstance/getTeamMemberDetailsJSON.do"/>;  
         var url = "<%=commentUrl %>";
         url += "?action="+action+"&id="+id;
-        YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
+        YAHOO.util.Connect.asyncRequest("POST", url, callback, '');
     }
+    
     function confirmActionMember(){
         if(validateAction()){
             checkAndClose=true;
@@ -727,7 +737,7 @@
                 "&userId="+document.getElementsByName('userId')[0].value+
                 "&name="+document.getElementsByName('name')[0].value+
                 "&role="+document.getElementsByName('role')[0].value;
-            YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
+            YAHOO.util.Connect.asyncRequest("POST", url, callback, '');
         }	
     }
 
@@ -738,6 +748,7 @@
         }
         return true;			
     }
+    
     function updateTableActivities(members){
         var demo       = YAHOO.util.Dom.get('demo'),
         tbl        = demo.getElementsByTagName('table')[0],
@@ -796,10 +807,8 @@
         html[j] = "</table>";
         tmp.innerHTML = html.join('');
         demo.replaceChild(tmp.getElementsByTagName('table')[0], tbl);
-      
-    
-        
     }
+    
     function showPageContent(k){
     	if(k!=activityCurrentPage){
     		$("tbody[class='act_pages_"+activityCurrentPage+"']").hide('fast');
@@ -824,6 +833,7 @@
     	}
     	return false;
     }
+    
     function removeActivity(id){
     	YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
         YAHOO.util.Dom.replaceClass('loadingDetailsIcon', 'invisibleTable','visibleTable');
@@ -868,8 +878,7 @@
         YAHOO.util.Dom.replaceClass('loadingDetailsIcon', 'invisibleTable','visibleTable');
         YAHOO.util.Dom.replaceClass('addNew','visibleTable','invisibleTable');
 
-        YAHOO.util.Connect.asyncRequest('GET','/aim/teamMembersJSON.do?teamId='+id+"&timestamp="+timestamp,{
-
+        YAHOO.util.Connect.asyncRequest('GET','/aim/teamMembersJSON.do?teamId='+id, {
             success : function (res) {
     		document.getElementById('ws_go').disabled=true;
                 var members;
@@ -891,10 +900,11 @@
             },
             failure : function () {
                 alert("<digi:trn jsFriendly='true'>Error getting members data</digi:trn>");
-            }
-        
+            },
+        	cache: false
         });
     }
+    
     function showActivities(id, description){
         YAHOO.util.Dom.replaceClass('loadedDetails', 'visibleTable','invisibleTable');
         YAHOO.util.Dom.replaceClass('loadingDetailsIcon', 'invisibleTable','visibleTable');
@@ -956,6 +966,7 @@
         document.aimWorkspaceForm.target="_self";
         document.aimWorkspaceForm.submit();	
     }
+    
     function saveAddedMember(){
         if(validateAddedMember()){
             checkAndClose=true;
@@ -967,6 +978,7 @@
             YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
         }	
     }
+    
     function validateAddedMember(){
         if(document.getElementsByName('role')[0].selectedIndex==0){
             alert("<digi:trn>Role not entered</digi:trn>");
@@ -974,6 +986,7 @@
         }
         return true;
     }
+    
     function addActivities(id){
         var msg='<digi:trn>Assign Activities</digi:trn>';
         myPanel.cfg.setProperty("width","500px");
@@ -986,10 +999,9 @@
 	
 
         YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
-
     }
 
-    function showDetails(){
+    function showDetails() {
         id = document.getElementsByName('teamId')[0].value;
         desc = document.getElementsByName('teamName')[0].value;
         if(id===""||desc===""){
@@ -1005,6 +1017,7 @@
             showActivities(document.getElementsByName('teamId')[0].value, document.getElementById('teamTitle').value);		
         }
     }
+    
     function showTeamDetails(id, description){
     	value = document.getElementById('showdataWs').options[document.getElementById('showdataWs').selectedIndex].value;
     	if(value==0){

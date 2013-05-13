@@ -126,11 +126,11 @@ public class Values extends HashMap<String, BigDecimal> {
 		this.addValue(ArConstants.PLANNED_COMMITMENT, (TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(cell)));
 		this.addValue(ArConstants.PLANNED_DISBURSEMENT, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(cell));
 
-		this.addValue(ArConstants.TOTAL_ACTUAL_COMMITMENT, TokenRepository.buildActualCommitmentsLogicalToken().evaluateOriginalvalue(cell));
-		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT, TokenRepository.buildActualDisbursementsLogicalToken().evaluateOriginalvalue(cell));
+		this.addValue(ArConstants.TOTAL_ACTUAL_COMMITMENT, TokenRepository.buildActualCommitmentsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT, TokenRepository.buildActualDisbursementsLogicalToken().evaluate(cell));
 
-		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, TokenRepository.buildPLannedCommitmentsLogicalToken().evaluateOriginalvalue(cell));
-		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluateOriginalvalue(cell));
+		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, TokenRepository.buildPLannedCommitmentsLogicalToken().evaluate(cell));
+		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, TokenRepository.buildPLannedDisbursementsLogicalToken().evaluate(cell));
 		//this.addValue(ArConstants.ACTUAL_PLEDGE_COMMITMENT, TokenRepository.buildPledgesCommitmentsLogicalToken().evaluateOriginalvalue(cell));
 		
 		// no filtered, affected by %

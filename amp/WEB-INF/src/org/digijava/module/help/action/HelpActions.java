@@ -166,41 +166,41 @@ public class HelpActions extends DispatchAction {
    public ActionForward vewSearchKey(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		  	OutputStreamWriter os = null;	
 		    PrintWriter out = null;
-		    String loadStatus =request.getParameter("loadKey");
+		    String loadStatus = request.getParameter("loadKey");
 		    Editor item = new Editor();
-		    String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
+		    String	lange = RequestUtils.getNavigationLanguage(request).getCode();
 		    Site site = RequestUtils.getSite(request);
 		    String moduleInstance = request.getParameter("instance");
 		    
 			 try {
 				 os = new OutputStreamWriter(response.getOutputStream());
 				 out = new PrintWriter(os, true);	 
-				 if(loadStatus != null){
-						 List<Editor> data =  HelpUtil.getAllHelpKey(lange);
+				 if (loadStatus != null) {
+						 List<Editor> data = HelpUtil.getAllHelpKey(lange);
 						 
 						 for(Iterator iter = data.iterator(); iter.hasNext(); ) {
 							  item = (Editor) iter.next();
 				 			
 					          HelpTopic helptopic = HelpUtil.getHelpTopicByBodyEditKey(item.getEditorKey(), site, moduleInstance);
-					          if(helptopic!=null){
+					          if (helptopic != null) {
 					              String title = helptopic.getTopicKey();
 					              String xs = HelpUtil.getTrn(title,request);
 					              String encodeTitle = HelpUtil.HTMLEntityEncode(xs);
-						           if(encodeTitle.length()>=loadStatus.length()){
-					                if(loadStatus.toLowerCase().equals(encodeTitle.toLowerCase().substring(0,loadStatus.length()))){
+						          if (encodeTitle.length() >= loadStatus.length()) {
+						        	  if (loadStatus.toLowerCase().equals(encodeTitle.toLowerCase().substring(0,loadStatus.length()))) {
 					            	
-					            	String removerSpacedtitle = HelpUtil.removeSpaces(encodeTitle);
-					            	
-									out
-									.println("<div id="
-										+ removerSpacedtitle
-										+ " onclick=\"select("
-										+ removerSpacedtitle
-										+ ")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"
-										+ encodeTitle + "</div>");
-					             }
-					          }
-						}
+						            	String removerSpacedtitle = HelpUtil.removeSpaces(encodeTitle);
+						            	
+										out
+										.println("<div id="
+											+ removerSpacedtitle
+											+ " onclick=\"select("
+											+ removerSpacedtitle
+											+ ")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"
+											+ encodeTitle + "</div>");
+						        	  }
+						          }
+					         }
 					    //else{
 						//	break;
 						//}
@@ -220,6 +220,8 @@ public class HelpActions extends DispatchAction {
 	 }
 	 return null;
 }
+   
+
 	
    /**
     * Search help topics using new Lucene code.
@@ -273,7 +275,8 @@ public class HelpActions extends DispatchAction {
 				if (onlyCurrentLang && !currentLang.equals(topic.getLangIso())) continue;
                 buf.append("<div class=\"searchResult\">  \n");
 				buf.append("<div class=\"bodyTitle\" style=\"font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;\"><a class=\"link resultTitle\"><b>");
-				buf.append(topic.getTitle());
+				String translatedTitle = HelpUtil.getTrn(topic.getTitle(), request);
+				buf.append(translatedTitle);
 				buf.append("</b></a></div> \n");
 				//short body
 //				buf.append("  <div class=\"bodyShort\"  style=\"display:block;\">");

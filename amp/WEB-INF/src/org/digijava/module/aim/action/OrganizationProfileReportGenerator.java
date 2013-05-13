@@ -184,7 +184,7 @@ public class OrganizationProfileReportGenerator extends DispatchAction {
 						if (helper.getSubHeaders() == null
 								|| helper.getSubHeaders().isEmpty()) {
 							row.createCell(cellIndex++).setCellValue(
-									helper.getColumnName());
+									TranslatorWorker.translateText(helper.getColumnName(), locale, siteId));
 							if (helper.getValues() != null
 									&& !helper.getValues().isEmpty()) {
 								HSSFCell cell = row.createCell(cellIndex++);

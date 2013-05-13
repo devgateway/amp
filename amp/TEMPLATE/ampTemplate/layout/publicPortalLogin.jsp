@@ -74,10 +74,11 @@ $.ajax({
 				<div class="logo">
 					<table width="480" border="0" cellspacing="0" cellpadding="0">
 						<tr>
-							<td width="50" style="vertical-align: middle;"><a href="/"
-								style="text-decoration: none"> <img
-									src="/aim/default/displayFlag.do" border="0" width="50px"
-									height="34px"><br /></a></td>
+							<td width="50" style="vertical-align: middle;">
+								<a href="/" style="text-decoration: none"> 
+									<img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br />
+								</a>
+							</td>
 							<td style="padding-left: 10px;text-align: left;"><a href="/"
 								style="text-decoration: none">
 									<div class="amp_label" style="padding-top: 0px;">

@@ -38,7 +38,10 @@ public class AmpActivityBudgetExtrasPanel extends AmpFieldPanel<AmpActivityVersi
 			years.add("" + i);
 		}
 
-        final AmpSelectFieldPanel fy = new AmpSelectFieldPanel("fy", new ActivityFYModel(new PropertyModel<String>(model, "FY")), years, "FY", false, true, false);
+        AmpCheckBoxFieldPanel indirectOnBudget = new AmpCheckBoxFieldPanel("indirectOnBudget", "Indirect On Budget", new PropertyModel<Boolean>(model, "indirectOnBudget"));
+        add(indirectOnBudget);
+
+        final AmpSelectFieldPanel fy = new AmpSelectFieldPanel<String>("fy", new ActivityFYModel(new PropertyModel<String>(model, "FY")), years, "FY", false, true, false);
 		fy.getChoiceContainer().setOutputMarkupId(true);
 		fy.setOutputMarkupId(true);
 		fy.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange"){
@@ -50,14 +53,14 @@ public class AmpActivityBudgetExtrasPanel extends AmpFieldPanel<AmpActivityVersi
 		// add(new AmpTextFieldPanel<String>("fy", new PropertyModel(model,
 		// "FY"), "FY", false, false));
 		add(fy);
-		final AmpTextFieldPanel<String> projectCode = new AmpTextFieldPanel<String>("projectCode", new PropertyModel(model, "projectCode"), "Project Code", false, false); 
+		final AmpTextFieldPanel<String> projectCode = new AmpTextFieldPanel<String>("projectCode", new PropertyModel<String>(model, "projectCode"), "Project Code", false, false);
 		projectCode.setTextContainerDefaultMaxSize();
 		add(projectCode);
 		
-		final AmpTextFieldPanel<String> vote = new AmpTextFieldPanel<String>("vote", new PropertyModel(model, "vote"), "Vote", false, false); 
-		final AmpTextFieldPanel<String> subVote = new AmpTextFieldPanel<String>("subVote", new PropertyModel(model, "subVote"), "Sub-Vote", false, false); 
-		final AmpTextFieldPanel<String> subProgram = new AmpTextFieldPanel<String>("subProgram", new PropertyModel(model, "subProgram"), "Sub-Program", false, false); 
-		final AmpTextFieldPanel<String> ministryCode = new AmpTextFieldPanel<String>("ministryCode", new PropertyModel(model, "ministryCode"), "Ministry Code", false, false);
+		final AmpTextFieldPanel<String> vote = new AmpTextFieldPanel<String>("vote", new PropertyModel<String>(model, "vote"), "Vote", false, false);
+		final AmpTextFieldPanel<String> subVote = new AmpTextFieldPanel<String>("subVote", new PropertyModel<String>(model, "subVote"), "Sub-Vote", false, false);
+		final AmpTextFieldPanel<String> subProgram = new AmpTextFieldPanel<String>("subProgram", new PropertyModel<String>(model, "subProgram"), "Sub-Program", false, false);
+		final AmpTextFieldPanel<String> ministryCode = new AmpTextFieldPanel<String>("ministryCode", new PropertyModel<String>(model, "ministryCode"), "Ministry Code", false, false);
 		add(new AmpComponentPanel("requiredField", "Validator Required Fields") {
 			@Override
 			protected void onConfigure() {

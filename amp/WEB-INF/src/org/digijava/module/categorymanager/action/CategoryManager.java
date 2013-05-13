@@ -493,7 +493,7 @@ public class CategoryManager extends Action {
 				}
 			}
 		} catch (Exception ex) {
-			logger.error("Unable to save or update the AmpCategoryClass: " + ex);
+			logger.error("Unable to save or update the AmpCategoryClass: ", ex);
 			ActionMessage error1	= new ActionMessage("error.aim.categoryManager.cannotSaveOrUpdate");
 			errors.add("title",error1);
 			if (tx != null)

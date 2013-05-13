@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -1192,7 +1193,12 @@ public class DynLocationManagerUtil {
 		catch (IllegalStateException e) {
 			logger.error("file is not ok", e);
 			return ErrorCode.INCORRECT_CONTENT;
-		} catch (Exception e) {
+		}
+		catch(IOException e){
+			logger.error("file is not ok", e);
+			return ErrorCode.INCORRECT_CONTENT;
+		}
+		catch (Exception e) {
 			logger.error(e);
 			throw new AimException("Cannot import regions", e);
 		}

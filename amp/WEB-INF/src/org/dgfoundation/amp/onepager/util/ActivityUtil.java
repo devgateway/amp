@@ -757,7 +757,7 @@ public class ActivityUtil {
 					while (it2.hasNext()) {
 						IndicatorActivity newind = (IndicatorActivity) it2
 								.next();
-						if (newind.getId().compareTo(oldInd.getId()) == 0){
+						if ((newind.getId() != null) && (newind.getId().compareTo(oldInd.getId()) == 0)){
 							found=true;
 							break;
 						}

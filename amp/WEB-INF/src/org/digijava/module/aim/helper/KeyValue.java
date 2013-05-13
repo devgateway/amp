@@ -1,8 +1,9 @@
 package org.digijava.module.aim.helper;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class KeyValue {
+public class KeyValue implements Serializable {
 	String key;
 	String value;
 	

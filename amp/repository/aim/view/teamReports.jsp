@@ -323,6 +323,7 @@
 															</c:set>
 															<logic:equal name="reports" property="teamView" value="false">
 																<c:set target="${urlParams}" property="status" value="team" />
+																<c:set target="${urlParams}" property="currentPage" value="${aimTeamReportsForm.currentPage}" />
 																	<c:set var="translation">
 																		<digi:trn key="aim:clickToMakeThisPublic">Click here to make this team-visible</digi:trn>
 																	</c:set>
@@ -343,6 +344,7 @@
 															
 															<logic:equal name="reports" property="teamView" value="true">
 																<c:set target="${urlParams}" property="status" value="member" />
+																<c:set target="${urlParams}" property="currentPage" value="${aimTeamReportsForm.currentPage}" />
 																	<c:set var="translation">
 																		<digi:trn key="aim:clickToMakeThisPrivate">Click here to make this private</digi:trn>
 																	</c:set>

@@ -172,9 +172,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		if(!filter.isJustSearch())
 		{
 		    this.columnsToBeRemoved = ColumnFilterGenerator.appendFilterRetrievableColumns(extractable, filter);
-		   // extractableCount += this.columnsToBeRemoved.size();
-		    
+		   // extractableCount += this.columnsToBeRemoved.size();		    
 		}
+		else
+			this.columnsToBeRemoved = new ArrayList<String>();
 		
 		if (extractable.size() > 0) {
 			createDataForColumns(extractable);

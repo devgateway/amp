@@ -1488,7 +1488,7 @@ function collapseAll() {
 <!-- END SECTORS SECTION -->
 
 <!-- FUNDING SECTION -->
-<logic:present name="currentMember" scope="session">
+
 <!-- PROPOSED PROJECT COST -->
 <module:display name="/Activity Form/Donor Funding/Proposed Project Cost" parentModule="/Activity Form/Donor Funding">
 <fieldset>
@@ -1541,7 +1541,7 @@ function collapseAll() {
 			</div>
 		</fieldset>
 	</module:display>
-</logic:present>
+
 
 <!-- END FUNDING SECTION -->
 
@@ -2039,37 +2039,41 @@ function collapseAll() {
 		</span>	
 	</legend>
 	<div id="documnetsdiv">
-	<c:if test="${ (!empty aimEditActivityForm.documents.documentList) || (!empty aimEditActivityForm.documents.crDocuments)}">
+	<c:if test="${ (!empty aimEditActivityForm.documents.documents) || (!empty aimEditActivityForm.documents.crDocuments)}">
 		<table width="100%" cellSpacing="0" cellPadding="0">
-			<logic:iterate name="aimEditActivityForm" property="documents.documents" id="docs" type="org.digijava.module.aim.helper.Documents">
-				<c:if test="${docs.isFile == true}">
-					<tr>
-						<td>
-						<table width="100%" class="box-border-nopadding">
-							<tr bgcolor="#f0f0f0">
-								<td vAlign="center" align="left">&nbsp;
-									<b><c:out value="${docs.title}"/></b> - &nbsp;&nbsp;&nbsp;<i>
-									<c:out value="${docs.fileName}"/></i> 
-									<logic:notEqual name="docs" property="docDescription" value=" ">
-										<br/>&nbsp;
-										<b><digi:trn>Description</digi:trn>:</b>
-										&nbsp;<bean:write name="docs" property="docDescription" />
-									</logic:notEqual> 
-									<logic:notEmpty name="docs" property="date">
-										<br />&nbsp;
-										<b><digi:trn>Date</digi:trn>:</b>
-										&nbsp;<c:out value="${docs.date}" />
-									</logic:notEmpty> 
-									<logic:notEmpty name="docs" property="docType">
-										<br />&nbsp;
-										<b><digi:trn>Document Type</digi:trn>:</b>&nbsp;
-										<bean:write name="docs" property="docType" />
-									</logic:notEmpty>								</td>
-							</tr>
-						</table>						</td>
-					</tr>
-				</c:if>
-			</logic:iterate>
+			<logic:notEmpty name="aimEditActivityForm" property="documents.documents" >
+				<logic:iterate name="aimEditActivityForm" property="documents.documents" id="docs" type="org.digijava.module.aim.helper.Documents">
+					<c:if test="${docs.isFile == true}">
+						<tr>
+							<td>
+								<table width="100%" class="box-border-nopadding">
+									<tr bgcolor="#f0f0f0">
+										<td vAlign="center" align="left">&nbsp;
+											<b><c:out value="${docs.title}"/></b> - &nbsp;&nbsp;&nbsp;<i>
+											<c:out value="${docs.fileName}"/></i> 
+											<logic:notEqual name="docs" property="docDescription" value=" ">
+												<br/>&nbsp;
+												<b><digi:trn>Description</digi:trn>:</b>
+												&nbsp;<bean:write name="docs" property="docDescription" />
+											</logic:notEqual> 
+											<logic:notEmpty name="docs" property="date">
+												<br />&nbsp;
+												<b><digi:trn>Date</digi:trn>:</b>
+												&nbsp;<c:out value="${docs.date}" />
+											</logic:notEmpty> 
+											<logic:notEmpty name="docs" property="docType">
+												<br />&nbsp;
+												<b><digi:trn>Document Type</digi:trn>:</b>&nbsp;
+												<bean:write name="docs" property="docType" />
+											</logic:notEmpty>								
+										</td>
+									</tr>
+								</table>						
+							</td>
+						</tr>
+					</c:if>
+				</logic:iterate>
+			</logic:notEmpty>
 			<logic:notEmpty name="aimEditActivityForm" property="documents.crDocuments" >
 				<tr>
 					<td>
@@ -3137,6 +3141,7 @@ function collapseAll() {
 		  $("div#ipadiv").toggle('slow', function() {
 		  });
 	});
+	jQuery.fn.exists = function(){return this.length>0;}
 	$("#collapseall").click(function() {
 		var showOrHide;  
 			  if($("#collapseall").attr('value')== '<digi:trn>Collapse All</digi:trn>'){ 
@@ -3148,7 +3153,9 @@ function collapseAll() {
 			  		$("#collapseall_1").attr('value','<digi:trn>Collapse All</digi:trn>');
 			  		showOrHide=true;
 		  	  }
-			showMapInTooltipDialog(ashowmap,true);
+		  	if($("#ashowmap").exists()){
+				showMapInTooltipDialog(ashowmap,true);
+		  	}
 		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv").toggle(showOrHide);
 	});
 	

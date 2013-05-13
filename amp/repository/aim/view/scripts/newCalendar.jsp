@@ -223,6 +223,7 @@
 	}
 	
 	function positionHelper (buttonId) {
+		var retVal = true;
 		if (buttonId != null) {
 			var buttonEl	= document.getElementById(buttonId);
 			var parent		= buttonEl.parentNode;
@@ -234,16 +235,17 @@
 				var parentTop		= parentRegion.top;
 				var parentBottom	= parentRegion.bottom;
 				var buttonY			= YAHOO.util.Dom.getY(buttonEl);
+				
 				if ( parentTop < buttonY && buttonY < parentBottom ) {
 					if ( buttonY - parentTop > parentBottom - buttonY ) 
-						return true;
+						retVal = true;
 					else 
-						return false;
+						retVal = false;
 				}
 			}
 		}
 		
-		return true;
+		return retVal;
 	}
 
 	function pickDateById(buttonId,objectId){
@@ -252,6 +254,7 @@
 	
 	function pickDateById2(buttonId,objectId,calendarUp)
 	{
+		
 		var localCalendarUp	= true;
 		var calendarCorner = "bl";
 		var objectCorner = "tr";
@@ -271,7 +274,8 @@
 		var dialogId		= objectId + '_dialog';
 		var calDivWrapper	= objectId + '_calDivWrapper';
 		var dialog		= calendarWrapperDialogs[dialogId];
-		if ( dialog == null ) {
+
+		//if ( dialog == null ) {
 			var renderDiv	= document.getElementById(buttonId).parentNode;
 			while ( renderDiv != null ) {
 				var yuiEl 	= new YAHOO.util.Element(renderDiv);
@@ -354,7 +358,7 @@
                 dialog.hide();
             });
             
-		}
+		//}
 		dialog.show();
 		dialog.align(calendarCorner, objectCorner);
 	}

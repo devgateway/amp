@@ -40,6 +40,7 @@
     <script type="text/javascript"  src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
     <script type="text/javascript" src="<c:out value="${datadispatcherform.apiurl}"/>/jsapi/arcgis/?v=3.0"></script>
    	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/DecimalFormat.js"/>"></script>
+    <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/latinise.min_.js"/>"></script>
    	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
    	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-debug.js"/>"></script>
    	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
@@ -387,7 +388,7 @@
        <div class="headerBackground"> </div>
        <div class="header"style="float:left;">
 	 		<div style="margin-left:-85px;padding:8px 0px 0px 0px;">
-				<img src="/TEMPLATE/ampTemplate/img_2/amp_trans.png" align=left>
+				<img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px" align=left>
 				<div class="amp_label">&nbsp;<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
 			</div>
         </div>

@@ -157,8 +157,7 @@ public class ComputedAmountCell extends CategAmountCell {
 				values.collectCellVariables((CategAmountCell) i.next());
 			}
 		}
-		
-		
+				
 		return values;
 	}
 

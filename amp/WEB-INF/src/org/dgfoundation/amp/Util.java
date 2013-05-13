@@ -404,7 +404,10 @@ public final class Util {
 			logger.error(e);
 			e.printStackTrace();
 		}
-
+		
+		//BOZO SHMOZO CHANGE GETEXCHANGE FUNCTION IN POSTGRES
+		//select * from amp_currency_rate where to_currency_code='EUR' and date_trunc('day', exchange_rate_date)<='2010-12-31' order by exchange_rate_date desc 
+		
 		try {
 			PersistenceManager.releaseSession(sess);
 		} catch (HibernateException e) {

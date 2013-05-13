@@ -151,8 +151,11 @@ div.fakefile2 input{
 				<digi:trn key="aim:InUse">In use</digi:trn>
 			</c:set>	
 			
-			<td width="70%" class="inside"> <digi:link href="/visibilityManager.do" name="urlParams10" 
-				title="${translation}"><bean:write name="template" property="name"/></digi:link> &nbsp;&nbsp;&nbsp; 
+			<td width="70%" class="inside"> 
+				<digi:link href="/visibilityManager.do" name="urlParams10" title="${translation}">
+					<bean:write name="template" property="name"/>
+				</digi:link> 
+				&nbsp;&nbsp;&nbsp; 
 				
 				<%if (template.isDefault()){%>
 					${translation1}

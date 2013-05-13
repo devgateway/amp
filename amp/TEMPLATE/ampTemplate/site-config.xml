@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE page [
-<!ENTITY ampVersion "2.4.3">
-<!ENTITY buildDate "01.05.2013">
+<!ENTITY ampVersion "2.4.4">
+<!ENTITY buildDate "13.05.2013">
 ]>
 <site-config>
 	<site-layout>
@@ -134,7 +134,7 @@
 
 		<layout name="headerMiddleLayout2" file="headerMiddle2.jsp">
 		<put name="version">1.14</put>
- 	 	<put name="build_version">01.05.2013</put>
+ 	 	<put name="build_version">13.05.2013</put>
 	    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>

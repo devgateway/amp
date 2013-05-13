@@ -70,10 +70,10 @@
 	<logic:iterate id="prop" name="pMap">
     	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
             <digi:trn key="${prefix}:${prop.key}"><i>${prop.key}</i></digi:trn>:
-            <c:if test="${prop.key == 'teamAssignedOrgs' ||  prop.key == 'locationSelected' }">
+            <c:if test="${prop.key != 'donorTypes' &&  prop.key != 'statuses' }">
             	${prop.value}
             </c:if>
-            <c:if test="${prop.key != 'teamAssignedOrgs' &&  prop.key != 'locationSelected'}">
+            <c:if test="${prop.key == 'donorTypes' ||  prop.key == 'statuses'}">
             	<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
             </c:if>
             |

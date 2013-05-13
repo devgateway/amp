@@ -40,10 +40,11 @@ $(document).ready(function(){
       $("#addDataBtn").click(function () {
           $(this).attr('disabled', 'disabled');
            <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=addIndValue" />
-          document.forms[0].action = "<%=addEditIndicator%>";
-          document.forms[0].submit();
+           aimThemeForm.action = "<%=addEditIndicator%>";
+       	   aimThemeForm.submit();
       });
   });
+
 
 function deleteData(ind){
   var flag = confirm("Delete this data?");

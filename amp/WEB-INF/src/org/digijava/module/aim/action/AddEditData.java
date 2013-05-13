@@ -87,11 +87,15 @@ public class AddEditData
                   themeForm.getValueType()!=null){
             for(ListIterator iter = indValues.listIterator(); iter.hasNext(); ) {
                 AmpPrgIndicatorValue item = (AmpPrgIndicatorValue) iter.next();
-                
+                if(iter.nextIndex()>themeForm.getCreationDate().length){
+                	item.setCreationDate(null);
+                	item.setValAmount(new Double(0));
+                	item.setValueType(1);
+                }else{
                 item.setCreationDate(themeForm.getCreationDate()[iter.nextIndex() - 1]);
                 item.setValAmount(themeForm.getValAmount()[iter.nextIndex() - 1]);
                 item.setValueType(themeForm.getValueType()[iter.nextIndex() - 1]);
-               
+                }
             }
         }
 

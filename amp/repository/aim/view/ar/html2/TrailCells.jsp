@@ -15,7 +15,7 @@
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportCD" property="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" toScope="page"/>
 
-<!-- generate total row -->
+<!-- generate total row 2 -->
 
 	<c:if test="${reportData.levelDepth == 1}">
 		<td nowrap="nowrap" style="border-bottom:black 1px solid;border-right:#E2E2E2 1px solid;" height="18px" >

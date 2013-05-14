@@ -703,7 +703,7 @@ public class ColumnReportData extends ReportData<Column> {
 
 	@Override
 	public void computeRowSpan(int numOfPreviousRows, int startRow, int endRow) {
-		this.setRowSpan(1);
+		this.setRowSpan(0);
 		int realStartRow	= startRow+1;
 		int realEndRow		= endRow+1;
 		//RANGE is [realStartRow, realEndRow]

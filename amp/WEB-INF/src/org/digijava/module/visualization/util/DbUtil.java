@@ -1161,7 +1161,7 @@ public class DbUtil {
                         }
                 }
                 AmpActivityVersion aav = new AmpActivityVersion(activityId, hmName.get(activityId), "");
-                map.put(aav, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(aav, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {
@@ -1291,7 +1291,7 @@ public class DbUtil {
                 AmpOrganisation aorg = new AmpOrganisation();
                 aorg.setAmpOrgId(orgId);
                 aorg.setName(hmName.get(orgId));
-                map.put(aorg, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(aorg, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {
@@ -1490,7 +1490,7 @@ public class DbUtil {
                 AmpSector asec = new AmpSector();
                 asec.setAmpSectorId(secId);
                 asec.setName(hmName.get(secId));
-                map.put(asec, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(asec, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {
@@ -1691,7 +1691,7 @@ public class DbUtil {
                 AmpCategoryValueLocations aloc = new AmpCategoryValueLocations();
                 aloc.setId(locId);
                 aloc.setName(hmName.get(locId));
-                map.put(aloc, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(aloc, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {
@@ -1880,7 +1880,7 @@ public class DbUtil {
                 AmpTheme aprog = new AmpTheme();
                 aprog.setAmpThemeId(progId);
                 aprog.setName(hmName.get(progId));
-                map.put(aprog, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(aprog, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {

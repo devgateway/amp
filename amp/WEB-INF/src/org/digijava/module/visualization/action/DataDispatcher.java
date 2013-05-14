@@ -2362,7 +2362,7 @@ public class DataDispatcher extends DispatchAction {
 				}
 				if(amtTotal.compareTo(BigDecimal.ZERO) == 1){
 					Iterator<AmpCategoryValue> it = categoryValues.iterator();
-					budgetCVIds = new Long[categoryValues.size()];
+					//budgetCVIds = new Long[categoryValues.size()];
 					int i = 0;
 					BigDecimal total = hm.get(acGrandTotal);
 					BigDecimal unallocated = hm.get(acUnallocated);

@@ -4,7 +4,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@taglib uri="/taglib/digijava" prefix="digi"%>
 <script type="text/javascript">
-function getActivities(){
+
+	function getActivities(){
 		if (curProgId == null) {
 			alert('${noProgSelected}');
 			return;
@@ -361,33 +362,34 @@ function getActivities(){
 		getActivities();
 		//return false;
 	}
-	 function getFilterSettings(){
-			var url=addActionToURL('getNPDFilters.do');
-	                url+=getURL()+'&timestamp=' +new Date().getTime();
-			var async=new Asynchronous();
-			async.complete=filterSettingsCallBack;
-			async.call(url);
-		}
+	
+	function getFilterSettings(){
+		var url=addActionToURL('getNPDFilters.do');
+                url+=getURL()+'&timestamp=' +new Date().getTime();
+		var async=new Asynchronous();
+		async.complete=filterSettingsCallBack;
+		async.call(url);
+	}
 
-	    function getURL(){
-	        var url='';
-	         if (curProgId != null ){
-				url+=p1d+'programId='+curProgId;
-			}
-	        if (selActStatus != null && selActStatus != '0'&& selActStatus != ''){
-				url += pd + 'statusId='+ selActStatus;
-			}
-			if(selActDonors !=null && selActDonors.match('-1') == null){
-				url+= pd+ 'donorIds='+selActDonors;
-			}
-			if (selActYearTo != null && selActYearTo != -1){
-				url+= pd + 'endYear='+selActYearTo;
-			}
-			if (selActYearFrom != null && selActYearFrom != -1){
-				url+= pd + 'startYear='+selActYearFrom;
-			}
-	        return url;
-	    }
+    function getURL(){
+        var url='';
+         if (curProgId != null ){
+			url+=p1d+'programId='+curProgId;
+		}
+        if (selActStatus != null && selActStatus != '0'&& selActStatus != ''){
+			url += pd + 'statusId='+ selActStatus;
+		}
+		if(selActDonors !=null && selActDonors.match('-1') == null){
+			url+= pd+ 'donorIds='+selActDonors;
+		}
+		if (selActYearTo != null && selActYearTo != -1){
+			url+= pd + 'endYear='+selActYearTo;
+		}
+		if (selActYearFrom != null && selActYearFrom != -1){
+			url+= pd + 'startYear='+selActYearFrom;
+		}
+        return url;
+    }
 
 	  
 
@@ -442,42 +444,43 @@ function getActivities(){
 			selActDonors = donors.value;
 			getActivities();
 		}
-	        function applyFilter(){
-	            selActStatus="";
-	            selActDonors="";
-	            var stat = document.getElementsByName('selectedStatuses')[0];
-	            var donors = document.getElementsByName('selectedDonors')[0];
-	            var from = document.getElementById('yearFrom');
-	            selActYearFrom = from.value;
-	            var to= document.getElementById('yearTo');
-	            selActYearTo = to.value;
-	            if( selActYearTo!=-1 && selActYearFrom > selActYearTo){
-	            	var msg='<digi:trn>Please choose correct year range</digi:trn>';
-	            	alert(msg);
-	            	return false;
-	            }
-	            for (var i=0; i<stat.length; i++) {
-	                       if(stat.options[i].selected ){
-	                           if(stat.options[i].value=='0'){
-	                               selActStatus='0'+',';
-	                               break;
-	                           }
-	                           selActStatus+=stat.options[i].value+',';
-	                       }
-	             } 
-	              for (var j=0; j<donors.length; j++) {
-	               
-	                       if(donors.options[j].selected ){
-	                           selActDonors+=donors.options[j].value+',';
-	                       }
-	             } 
-	             if(selActStatus.length>1){
-	                 selActStatus=selActStatus.substring(0,selActStatus.length-1)
-	             }
-	              if(selActDonors.length>1){
-	                 selActDonors=selActDonors.substring(0,selActDonors.length-1)
-	             }
-	            getActivities();             
-	            
-	        }
-	        </script>
+		
+        function applyFilter(){
+            selActStatus="";
+            selActDonors="";
+            var stat = document.getElementsByName('selectedStatuses')[0];
+            var donors = document.getElementsByName('selectedDonors')[0];
+            var from = document.getElementById('yearFrom');
+            selActYearFrom = from.value;
+            var to= document.getElementById('yearTo');
+            selActYearTo = to.value;
+            if( selActYearTo!=-1 && selActYearFrom > selActYearTo){
+            	var msg='<digi:trn>Please choose correct year range</digi:trn>';
+            	alert(msg);
+            	return false;
+            }
+            for (var i=0; i<stat.length; i++) {
+                       if(stat.options[i].selected ){
+                           if(stat.options[i].value=='0'){
+                               selActStatus='0'+',';
+                               break;
+                           }
+                           selActStatus+=stat.options[i].value+',';
+                       }
+             } 
+              for (var j=0; j<donors.length; j++) {
+               
+                       if(donors.options[j].selected ){
+                           selActDonors+=donors.options[j].value+',';
+                       }
+             } 
+             if(selActStatus.length>1){
+                 selActStatus=selActStatus.substring(0,selActStatus.length-1)
+             }
+              if(selActDonors.length>1){
+                 selActDonors=selActDonors.substring(0,selActDonors.length-1)
+             }
+            getActivities();             
+            
+        }
+    </script>

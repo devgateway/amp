@@ -68,23 +68,68 @@ public class PersistenceManager {
 		"org.digijava.kernel.persistence.PersistenceManager.precache_region";
 
 
-	public static HashMap<Session,StackTraceElement[]> sessionStackTraceMap= new HashMap<Session,StackTraceElement[]>();
+	/**
+	 * The maximum allowed life for an opened hibernate session, in miliseconds
+	 */
+	public static final long MAX_HIBERNATE_SESSION_LIFE_MILLIS=60*60*1000;
+			
+	public static HashMap<Session,Object[]> sessionStackTraceMap= new HashMap<Session,Object[]>();
 
 	/**
 	 * Invoked at the end of each request. Iterates and removes Hibernate closed sessions from the trace map.
+	 * It also checks the long running sessions and forces closure on ones that are longer than 
 	 * The {@link HashMap} is synchronized to prevent concurrency issues between HTTP threads 
 	 */
-	public static  void removeClosedSessionsFromTraceMap() {
-		  //remove closed sessions
+	public static void checkClosedOrLongSessionsFromTraceMap() {
+		// remove closed sessions
 		synchronized (sessionStackTraceMap) {
-			Iterator<Session> iterator = PersistenceManager.sessionStackTraceMap.keySet().iterator();
+			Iterator<Session> iterator = PersistenceManager.sessionStackTraceMap
+					.keySet().iterator();
 			while (iterator.hasNext()) {
 				Session session = (Session) iterator.next();
-				if(!session.isOpen()) iterator.remove();
+
+			
+				// force closure of long running sessions
+				Long millis = (Long) sessionStackTraceMap.get(session)[0];
+				if (session.isOpen() && ( System.currentTimeMillis() - millis > MAX_HIBERNATE_SESSION_LIFE_MILLIS )) {
+					StackTraceElement[] stackTrace = (StackTraceElement[]) sessionStackTraceMap
+							.get(session)[1];
+					logger.info("Forcing closure and removal of hibernate session "
+							+ session.hashCode()
+							+ " because it ran for longer than "
+							+ MAX_HIBERNATE_SESSION_LIFE_MILLIS
+							/ 1000
+							+ " seconds");
+					logger.info("Please review the code that generated the following recorded stack trace and ensure this session is closed properly: "
+							+ stackTrace.toString());
+
+					try {
+						session.getTransaction().commit();
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+
+					try {
+						session.clear();
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+
+					
+					try {
+						session.close();
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+				}
+				
+				// remove closed sessions
+				if (!session.isOpen()) iterator.remove();
+
+
 			}
-        }
+		}
 	}
-	
 	
 	/**
 	 * Opens a new Hibernate session. Use this with caucion. 
@@ -141,9 +186,10 @@ public class PersistenceManager {
 				Session session = (Session) iterator.next();
 				if(session.isOpen()) {
 					found=true;
-					StackTraceElement[] stackTraceElements = sessionStackTraceMap.get(session);
+					Object o[] = sessionStackTraceMap.get(session);
+					StackTraceElement[] stackTraceElements = (StackTraceElement[]) o[1];
 					for (int i = 3; i < stackTraceElements.length && i < 8; i++) 
-						logger.error(stackTraceElements[i].toString());					
+						logger.error("Session opened "+(System.currentTimeMillis()-(Long)o[0])+" miliseconds ago is still open. Will force closure, recorded stack trace: "+stackTraceElements[i].toString());					
 					logger.info("Forcing Hibernate session close...");
 					try  {
 						session.clear();
@@ -741,7 +787,7 @@ public class PersistenceManager {
 	public static void addSessionToStackTraceMap(Session sess) {
 		synchronized (sessionStackTraceMap){			
 			if(sessionStackTraceMap.get(sess)==null) 
-				sessionStackTraceMap.put(sess,Thread.currentThread().getStackTrace());
+				sessionStackTraceMap.put(sess,new Object[] {new Long(System.currentTimeMillis()),Thread.currentThread().getStackTrace()});
 		}
 	}
 

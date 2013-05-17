@@ -101,7 +101,7 @@ public class PersistenceManager {
 							/ 1000
 							+ " seconds");
 					logger.info("Please review the code that generated the following recorded stack trace and ensure this session is closed properly: ");
-					for (int i = 0; i < stackTrace.length; i++) logger.info(stackTrace[i].toString());
+					for (int i = 0; i < stackTrace.length && i < 8; i++) logger.info(stackTrace[i].toString());
 					
 
 					try {
@@ -189,8 +189,8 @@ public class PersistenceManager {
 					found=true;
 					Object o[] = sessionStackTraceMap.get(session);
 					StackTraceElement[] stackTraceElements = (StackTraceElement[]) o[1];
-					for (int i = 3; i < stackTraceElements.length && i < 8; i++) 
-						logger.error("Session opened "+(System.currentTimeMillis()-(Long)o[0])+" miliseconds ago is still open. Will force closure, recorded stack trace: "+stackTraceElements[i].toString());					
+					logger.info("Session opened "+(System.currentTimeMillis()-(Long)o[0])+" miliseconds ago is still open. Will force closure, recorded stack trace: ");
+					for (int i = 3; i < stackTraceElements.length && i < 8; i++) logger.info(stackTraceElements[i].toString());					
 					logger.info("Forcing Hibernate session close...");
 					try  {
 						session.clear();

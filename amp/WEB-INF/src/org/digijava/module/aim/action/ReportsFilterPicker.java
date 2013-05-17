@@ -1187,6 +1187,7 @@ public class ReportsFilterPicker extends Action {
 		if ((subsection & AmpARFilter.FILTER_SECTION_SETTINGS) > 0)
 			arf.fillWithDefaultsSettings();
 		
+		arf.postprocess();
 		return arf;
 	}
 	/**
@@ -1567,7 +1568,8 @@ public class ReportsFilterPicker extends Action {
 				arf.setShowArchived(false);
 			else
 				arf.setShowArchived(true);
-		}	
+		}
+		arf.postprocess();
 	}
 	
 }

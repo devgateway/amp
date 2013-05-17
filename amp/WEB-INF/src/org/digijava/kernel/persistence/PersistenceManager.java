@@ -100,8 +100,9 @@ public class PersistenceManager {
 							+ MAX_HIBERNATE_SESSION_LIFE_MILLIS
 							/ 1000
 							+ " seconds");
-					logger.info("Please review the code that generated the following recorded stack trace and ensure this session is closed properly: "
-							+ stackTrace.toString());
+					logger.info("Please review the code that generated the following recorded stack trace and ensure this session is closed properly: ");
+					for (int i = 0; i < stackTrace.length; i++) logger.info(stackTrace[i].toString());
+					
 
 					try {
 						session.getTransaction().commit();

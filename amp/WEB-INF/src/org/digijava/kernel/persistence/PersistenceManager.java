@@ -90,39 +90,39 @@ public class PersistenceManager {
 
 			
 				// force closure of long running sessions
-				Long millis = (Long) sessionStackTraceMap.get(session)[0];
-				if (session.isOpen() && ( System.currentTimeMillis() - millis > MAX_HIBERNATE_SESSION_LIFE_MILLIS )) {
-					StackTraceElement[] stackTrace = (StackTraceElement[]) sessionStackTraceMap
-							.get(session)[1];
-					logger.info("Forcing closure and removal of hibernate session "
-							+ session.hashCode()
-							+ " because it ran for longer than "
-							+ MAX_HIBERNATE_SESSION_LIFE_MILLIS
-							/ 1000
-							+ " seconds");
-					logger.info("Please review the code that generated the following recorded stack trace and ensure this session is closed properly: ");
-					for (int i = 0; i < stackTrace.length && i < 8; i++) logger.info(stackTrace[i].toString());
-					
-
-					try {
-						session.getTransaction().commit();
-					} catch (Throwable e) {
-						e.printStackTrace();
-					}
-
-					try {
-						session.clear();
-					} catch (Throwable e) {
-						e.printStackTrace();
-					}
-
-					
-					try {
-						session.close();
-					} catch (Throwable e) {
-						e.printStackTrace();
-					}
-				}
+//				Long millis = (Long) sessionStackTraceMap.get(session)[0];
+//				if (session.isOpen() && ( System.currentTimeMillis() - millis > MAX_HIBERNATE_SESSION_LIFE_MILLIS )) {
+//					StackTraceElement[] stackTrace = (StackTraceElement[]) sessionStackTraceMap
+//							.get(session)[1];
+//					logger.info("Forcing closure and removal of hibernate session "
+//							+ session.hashCode()
+//							+ " because it ran for longer than "
+//							+ MAX_HIBERNATE_SESSION_LIFE_MILLIS
+//							/ 1000
+//							+ " seconds");
+//					logger.info("Please review the code that generated the following recorded stack trace and ensure this session is closed properly: ");
+//					for (int i = 0; i < stackTrace.length && i < 8; i++) logger.info(stackTrace[i].toString());
+//					
+//
+//					try {
+//						session.getTransaction().commit();
+//					} catch (Throwable e) {
+//						e.printStackTrace();
+//					}
+//
+//					try {
+//						session.clear();
+//					} catch (Throwable e) {
+//						e.printStackTrace();
+//					}
+//
+//					
+//					try {
+//						session.close();
+//					} catch (Throwable e) {
+//						e.printStackTrace();
+//					}
+//				}
 				
 				// remove closed sessions
 				if (!session.isOpen()) iterator.remove();

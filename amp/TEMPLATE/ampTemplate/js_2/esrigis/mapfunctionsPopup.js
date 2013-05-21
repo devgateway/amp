@@ -25,6 +25,7 @@ function init() {
 	//This have to be replaced with Global Settings values
 	loading = dojo.byId("loadingImg");
 	loading.hidden = true;
+	initializeTranslations();
 	
 	var xhrArgs = {
 			url : "/esrigis/datadispatcher.do?getconfig=true",
@@ -237,40 +238,40 @@ function createGraphicsMenu() {
 	    }
 	  }));
   ctxMenuForGraphics.addChild(new dijit.MenuItem({ 
-    label: "Edit",
+    label: trnEdit,
     onClick: function() {
       if(selected.geometry.type !== "point"){
         editToolbar.activate(esri.toolbars.Edit.EDIT_VERTICES, selected);
       }
       else{
-        alert("Not implemented");
+        alert(trnNotImplemented);
       }
     } 
   }));
 
 
   ctxMenuForGraphics.addChild(new dijit.MenuItem({ 
-    label: "Move",
+    label: trnMove,
     onClick: function() {
       editToolbar.activate(esri.toolbars.Edit.MOVE, selected);
     } 
   }));
 
   ctxMenuForGraphics.addChild(new dijit.MenuItem({ 
-    label: "Rotate/Scale",
+    label: trnRotateScale,
     onClick: function() {
     if(selected.geometry.type !== "point"){
         editToolbar.activate(esri.toolbars.Edit.ROTATE | esri.toolbars.Edit.SCALE, selected);
       }
       else{
-        alert("Not implemented");
+        alert(trnNotImplemented);
       }
     }
   }));
 
   ctxMenuForGraphics.addChild(new dijit.MenuSeparator());
   ctxMenuForGraphics.addChild(new dijit.MenuItem({ 
-    label: "Delete",
+    label: trnDelete,
     onClick: function() {
       map.graphics.remove(selected);
     }

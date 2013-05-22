@@ -858,6 +858,7 @@ public class ActivityUtil {
                                     newProperty.setContact(formProperty.getContact());
                                     newProperty.setName(formProperty.getName());
                                     newProperty.setValue(formProperty.getValue());
+                                    newProperty.setExtensionValue(formProperty.getExtensionValue());
                                     //session.save(newProperty);
                                     ampContact.getProperties().add(newProperty);
 

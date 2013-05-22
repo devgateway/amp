@@ -190,13 +190,19 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                     } else {
                         try {
                             IModel<String> valueModel = new PropertyModel<String>(item.getModel(), "actualValue");
+                            IModel<String> extensionValueModel = new PropertyModel<String>(item.getModel(),"extensionValue");
                             IModel<AmpCategoryValue> catValueModel = new PropertyModel<AmpCategoryValue>(item.getModel(), "categoryValue");
                             Fragment frg2 = new Fragment("detailPanel", "frag2",this);
                             AmpTextFieldPanel<String> phn = new AmpTextFieldPanel<String>("phone", valueModel, fmName, true,true);
                             TextField<String> detailTextField=phn.getTextContainer();
                         	detailTextField.setRequired(true);
                         	detailTextField.add(new PatternValidator(EXPRESSION));
-                        	detailTextField.add(new AttributeModifier("size", "50"));
+                        	detailTextField.add(new AttributeModifier("size", "20"));
+                        	AmpTextFieldPanel<String> phnExt = new AmpTextFieldPanel<String>("phoneExt", extensionValueModel, fmName, true,true);
+                            TextField<String> detailTextFieldExt=phnExt.getTextContainer();
+                        	detailTextFieldExt.setRequired(false);
+                        	detailTextFieldExt.add(new PatternValidator(EXPRESSION));
+                        	detailTextFieldExt.add(new AttributeModifier("size", "5"));
                             AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true);
                             AbstractChoice<?, AmpCategoryValue> choiceContainer = phoneTitle.getChoiceContainer();
                         	List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
@@ -205,6 +211,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 							//choiceContainer.setRequired(true);
                             frg2.add(phoneTitle);
                             frg2.add(phn);
+                            frg2.add(phnExt);
                             frg2.add(propertyDeleteLink);
                             item.add(frg2);
                         } //item.add(new Label("detail", item.getModelObject().getValue()));

@@ -10,6 +10,7 @@ public class AmpContactProperty  implements Comparable, Serializable {
 	private AmpContact contact;
 	private String name;
 	private String value;
+	private String extensionValue;
         /*this value is not saved in db, let's hope
          somebody will refactor phone and use this*/
         private AmpCategoryValue categoryValue;
@@ -70,7 +71,13 @@ public class AmpContactProperty  implements Comparable, Serializable {
 	public void setValue(String value) {
 		this.value = value;
 	}
+	public String getExtensionValue() {
+		return extensionValue;
+	}
 
+	public void setExtensionValue(String extensionValue) {
+		this.extensionValue = extensionValue;
+	}
 	@Override
 	public int compareTo(Object o) {
 		// TODO Auto-generated method stub
@@ -104,5 +111,6 @@ public class AmpContactProperty  implements Comparable, Serializable {
 		}
 		return this.getId().compareTo(a.getId());
 	}
+
 	
 }

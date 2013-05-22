@@ -113,7 +113,7 @@ public class NodeWrapper{
 					contentType				= formFile.getContentType();
 					int uploadedFileSize	= formFile.getFileSize(); // This is in bytes
 					
-					newNode.setProperty( CrConstants.PROPERTY_NAME, new String(formFile.getFileName().getBytes("iso-8859-1"), "UTF8"));
+					newNode.setProperty( CrConstants.PROPERTY_NAME, new String(formFile.getFileName().getBytes("UTF8"), "UTF8"));
 					newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize );
 				}
 			}
@@ -168,7 +168,7 @@ public class NodeWrapper{
 			newNode.setProperty(CrConstants.PROPERTY_DATA, pdfOrWordFile.getContent());
 			int uploadedFileSize	= pdfOrWordFile.getFileSize();
 			String fileName = pdfOrWordFile.getDocTitle()+"."+pdfOrWordFile.getFileType();
-			newNode.setProperty( CrConstants.PROPERTY_NAME, new String(fileName.getBytes("iso-8859-1"), "UTF8"));
+			newNode.setProperty( CrConstants.PROPERTY_NAME, new String(fileName.getBytes("UTF8"), "UTF8"));
 			newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize );
 			
 			//TODO: ask Garty whether these 2 fields should be null or fetched off pdfOrWordFile
@@ -383,7 +383,7 @@ public class NodeWrapper{
 						contentType				= formFile.getContentType();
 						int uploadedFileSize	= formFile.getFileSize(); // This is in bytes
 						//AMP-3468
-						newNode.setProperty( CrConstants.PROPERTY_NAME, new String(formFile.getFileName().getBytes("iso-8859-1"), "UTF8") );
+						newNode.setProperty( CrConstants.PROPERTY_NAME, new String(formFile.getFileName().getBytes("UTF8"), "UTF8") );
 						newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize );
 					}
 				}

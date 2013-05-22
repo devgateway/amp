@@ -66,7 +66,7 @@ public class TemporaryDocumentData extends DocumentData {
 			FormFile formFile	= dmForm.getFileData();
 			if ( DocumentManagerUtil.checkFileSize(formFile, errors) ) {
 				try {
-					this.setName( new String(formFile.getFileName().getBytes("iso-8859-1"), "UTF8"));
+					this.setName( new String(formFile.getFileName().getBytes("UTF8"), "UTF8"));
 				} catch (UnsupportedEncodingException e) {
 					logger.error(e);
 				}

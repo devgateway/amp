@@ -142,14 +142,9 @@ public class ReportsFilterPicker extends Action {
 		String applyFormatValue = request.getParameter("applyFormat");
 		if (applyFormatValue != null)
 		{
-			if (applyFormatValue.equals("Apply Format"))
+			if (applyFormatValue.equals("Reset"))
 			{
-				// apply tab/report settings
-				AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
-				return decideNextForward(mapping, filterForm, request, arf);
-			}
-			else if (applyFormatValue.equals("Reset"))
-			{
+				// BOZO: reset is now done client-side. If done server-side, should handle non-english translations of "Reset" here!
 				// reset tab/report settings
 				AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
 				return decideNextForward(mapping, filterForm, request, arf);
@@ -160,7 +155,13 @@ public class ReportsFilterPicker extends Action {
 				return decideNextForward(mapping, filterForm, request, arf); // an AMP-y-hacky way of saying "please redraw the report without changing anything"
 			}
 			else
-				throw new RuntimeException("unknown applyformat setting: " + applyFormatValue);
+			{
+				if (!applyFormatValue.equals("Apply Format"))
+					logger.warn("unknown applyformat setting, assuming it is 'Apply Format': " + applyFormatValue);
+				// apply tab/report settings
+				AmpARFilter arf = createOrFillFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
+				return decideNextForward(mapping, filterForm, request, arf);
+			}				
 		}
 		
 		// gone till here -> Apply or Reset Filters form

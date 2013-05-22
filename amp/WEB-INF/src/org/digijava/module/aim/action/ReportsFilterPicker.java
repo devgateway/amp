@@ -183,7 +183,7 @@ public class ReportsFilterPicker extends MultiAction {
 					filterForm.setCurrency(existingFilter.getCurrency()==null ? tempSettings.getCurrency().getAmpCurrencyId() : existingFilter.getCurrency().getAmpCurrencyId());
 				}
 			} else 
-				if ( !"Apply Format".equals(applyFormat) ) {
+				if ( applyFormat != null ) {
 					if (filterForm.getCalendar() == null){
 						filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
 					}

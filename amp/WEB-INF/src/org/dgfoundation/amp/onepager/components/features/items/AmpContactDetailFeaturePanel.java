@@ -197,7 +197,7 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                         	detailTextField.setRequired(true);
                         	detailTextField.add(new PatternValidator(EXPRESSION));
                         	detailTextField.add(new AttributeModifier("size", "50"));
-                            AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true);
+                            AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true,null,true);
                             AbstractChoice<?, AmpCategoryValue> choiceContainer = phoneTitle.getChoiceContainer();
                         	List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
                         	collectionByKey.addAll(CategoryManagerUtil

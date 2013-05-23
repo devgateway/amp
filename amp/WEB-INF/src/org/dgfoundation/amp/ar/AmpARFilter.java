@@ -676,6 +676,14 @@ public class AmpARFilter extends PropertyListable {
 		return dateCriteria;
 	}
 
+	public boolean wasDateFilterUsed()
+	{
+		return (
+				((fromDate != null) && (fromDate.length() > 0)) ||
+				((toDate != null) && (toDate.length() > 0))
+				);
+	}
+	
 	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter) {
 		if (request.getSession().getAttribute(ArConstants.PLEDGES_REPORT) != null && 
 				request.getSession().getAttribute(ArConstants.PLEDGES_REPORT).toString().equalsIgnoreCase("true")){

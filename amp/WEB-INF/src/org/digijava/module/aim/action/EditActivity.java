@@ -5,6 +5,8 @@
 
 package org.digijava.module.aim.action;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -1445,8 +1447,9 @@ public class EditActivity extends Action {
         	  eaForm.getFunding().setTotalActualDisbursementsOrders(calculations.getTotActualDisbOrder().getCalculations());
         	  eaForm.getFunding().setTotalPlannedDisbursementsOrders(calculations.getTotPlannedDisbOrder().getCalculations());
         	  eaForm.getFunding().setUnDisbursementsBalance(calculations.getUnDisbursementsBalance().getCalculations());
+        	  
           }
-          else{
+          else {
               	//actual
       		  eaForm.getFunding().setTotalCommitments(calculations.getTotActualComm().toString());
         	  eaForm.getFunding().setTotalDisbursements(calculations.getTotActualDisb().toString());
@@ -1461,6 +1464,23 @@ public class EditActivity extends Action {
               //pipeline
               eaForm.getFunding().setTotalPipelineCommitments(calculations.getTotPipelineComm().toString());
           }
+          
+          // calculate consumption and delivery rates 
+		  if (calculations.getTotActualExp() != null && calculations.getTotActualExp().doubleValue() != 0 
+					&& calculations.getTotActualDisb() != null && calculations.getTotActualDisb().doubleValue() != 0) {
+			  double consumptionRate = calculations.getTotActualExp().doubleValue() / calculations.getTotActualDisb().doubleValue();
+			  NumberFormat formatter = DecimalFormat.getPercentInstance();
+			  eaForm.getFunding().setConsumptionRate(formatter.format(consumptionRate));
+		  }
+		  
+		  if (calculations.getTotActualComm() != null && calculations.getTotActualComm().doubleValue() != 0
+				    && calculations.getTotActualDisb() != null && calculations.getTotActualDisb().doubleValue() !=0) {
+			  double deliveryRate = calculations.getTotActualDisb().doubleValue() / calculations.getTotActualComm().doubleValue();
+			  NumberFormat formatter = DecimalFormat.getPercentInstance();
+			  eaForm.getFunding().setDeliveryRate(formatter.format(deliveryRate));
+		  }		  
+          
+          
           ArrayList regFunds = new ArrayList(); 
           Iterator rItr = activity.getRegionalFundings().iterator();
 

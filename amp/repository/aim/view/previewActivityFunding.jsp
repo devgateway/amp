@@ -414,7 +414,7 @@
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
                                 <digi:trn>Delivery Rate</digi:trn>: </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
-                                <c:if test="${not empty aimEditActivityForm.funding.consumptionRate}">
+                                <c:if test="${not empty aimEditActivityForm.funding.deliveryRate}">
                                 <b>${aimEditActivityForm.funding.deliveryRate}</b>
                                 </c:if>
                                 &nbsp;

@@ -238,7 +238,7 @@ addLoadEvent(addpanel);
 
 		<td noWrap align=left valign="center">		
 			<a href="#" target="_blank" onclick="toggleActionForm('pdf'); return false;" title="<digi:trn>Download as PDF</digi:trn>">
-				<digi:img hspace="2" vspace="2"src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
+				<digi:img hspace="2" vspace="2" src="module/aim/images/pdf_icon.gif" border="0" alt="Export to PDF" />
 			</a>
 		</td>
 

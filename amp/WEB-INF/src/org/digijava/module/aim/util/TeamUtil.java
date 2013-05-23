@@ -2446,8 +2446,11 @@ public class TeamUtil {
             AmpTeam ampTeam = null;
             LinkedList list = new LinkedList();
             list.addAll(qry.list());
+            HashSet<Long> visitedTeams = new HashSet<Long>();
+            visitedTeams.add(ampTeamId); //add current team to the visited set
             while(list.size() > 0) {
                 ampTeam = (AmpTeam) list.removeFirst();
+                visitedTeams.add(ampTeam.getAmpTeamId());
                 //if(ampTeam.getAccessType().equals("Team") || ampTeam.getAccessType().equals("Computed") )
                 if(ampTeam.getAccessType().equals("Team") || 
                 			(ampTeam.getComputation()!=null && ampTeam.getComputation()==true) )
@@ -2457,7 +2460,13 @@ public class TeamUtil {
                         + " t " + "where (t.parentTeamId.ampTeamId="
                         + ampTeam.getAmpTeamId() + ")";
                     qry = session.createQuery(queryString);
-                    list.addAll(qry.list());
+                    List<AmpTeam> tempList = qry.list();
+                    Iterator<AmpTeam> it = tempList.iterator();
+                    while (it.hasNext()){
+                        AmpTeam tt = it.next();
+                        if (!visitedTeams.contains(tt.getAmpTeamId()))
+                            list.add(tt);
+                    }
                 }
 
                 // ampTeam = (AmpTeam) itrTemp.next();

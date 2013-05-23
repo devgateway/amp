@@ -307,8 +307,8 @@
                         <c:if test="${aimEditActivityForm.funding.showActual}">
                         <tr>
                             <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #BBBBBB"><digi:trn
-                                key='aim:totalActualdisbursement'>Total Actual Disbursement </digi:trn>:
+                                style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
+                                <digi:trn key='aim:totalActualdisbursement'>Total Actual Disbursement</digi:trn>:
                             </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB">

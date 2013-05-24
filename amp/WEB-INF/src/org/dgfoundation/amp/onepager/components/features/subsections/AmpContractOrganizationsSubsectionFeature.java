@@ -62,7 +62,7 @@ public class AmpContractOrganizationsSubsectionFeature extends
 	 */
 	public AmpContractOrganizationsSubsectionFeature(String id,
 			IModel<IPAContract> model, String fmName){
-		super(id, fmName, model);
+		super(id, fmName, model, false, true);
 
 		final IModel<Set<AmpOrganisation>> orgs = new PropertyModel<Set<AmpOrganisation>>(model, "organizations");
 		

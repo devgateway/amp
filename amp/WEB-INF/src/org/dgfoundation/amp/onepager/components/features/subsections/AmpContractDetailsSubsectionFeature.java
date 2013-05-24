@@ -30,7 +30,7 @@ public class AmpContractDetailsSubsectionFeature extends
 	 */
 	public AmpContractDetailsSubsectionFeature(String id,
 			IModel<IPAContract> model, String fmName){
-		super(id, fmName, model);
+		super(id, fmName, model, false, true);
 
 		try {
 			AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel("status", CategoryConstants.IPA_STATUS_KEY, new PropertyModel(model, "status"), "Status", true, true);

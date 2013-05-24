@@ -45,7 +45,7 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 	 */
 	public AmpDonorFundingInfoSubsectionFeature(String id,
 			final IModel<AmpFunding> model, String fmName) throws Exception {
-		super(id, fmName, model);
+		super(id, fmName, model, false, true);
 		financingInstrument = new AmpCategorySelectFieldPanel(
 				"financingInstrument",
 				CategoryConstants.FINANCING_INSTRUMENT_KEY,

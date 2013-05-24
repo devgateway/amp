@@ -34,7 +34,7 @@ public class AmpContractBasicSubsectionFeature extends
 	 */
 	public AmpContractBasicSubsectionFeature(String id,
 			IModel<IPAContract> model, String fmName, final Label contractNameLabel){
-		super(id, fmName, model);
+		super(id, fmName, model, false, true);
 		
 		
 		AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(model, "contractName"), "Contract Name");

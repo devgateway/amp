@@ -104,13 +104,18 @@ public class DashboardUtil {
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.getShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
         
-        AmpCategoryValueLocations natLevelLocation = null;
+        AmpCategoryValueLocations natLevelLocation = null, nativeNationalLevelLocation = null;
         for (AmpCategoryValueLocations ampCategoryValueLocations : regListChildren) {
 			if (ampCategoryValueLocations.getParentLocation()!=null){
 				natLevelLocation = getTopLevelLocation(ampCategoryValueLocations).getParentLocation();
 			}
+			else
+				nativeNationalLevelLocation = ampCategoryValueLocations;
 		}
                 
+        if (natLevelLocation == null)
+        	natLevelLocation = nativeNationalLevelLocation;
+        
         AmpCategoryValueLocations tempLoc = new AmpCategoryValueLocations();
 		if (request!=null) {
 			String locale = RequestUtils.getNavigationLanguage(request).getCode();

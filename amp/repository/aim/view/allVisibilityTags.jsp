@@ -325,6 +325,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Identification" name="Data Source"></field:display> 
 <field:display feature="Identification" name="Computation"></field:display>
 <field:display feature="Identification" name="Project Description"></field:display>
+<field:display feature="Identification" name="Contracting Arrangements"></field:display>
 <field:display name="Project Impact" feature="Identification"></field:display> 
 <field:display feature="Identification" name="Project Comments"></field:display> 
 <field:display feature="Identification" name="Objective Assumption"></field:display> 

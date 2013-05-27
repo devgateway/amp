@@ -113,7 +113,7 @@ public class TrailCellsPDF extends PDFExporter {
 				Integer sourceColsCount=grd.getSourceColsCount();
 				if( sourceColsCount!=null&&sourceColsCount>1){
 					//When a column becomes hierarchy we have to subtract it from source columns.
-					int span = sourceColsCount-grd.getReportMetadata().getHierarchies().size();
+					int span = sourceColsCount-grd.getReportMetadata().getHierarchies().size() - grd.getReportMetadata().getExtraTotalsCount();
 					if (span!=0){
 						pdfc.setColspan(span);
 					}

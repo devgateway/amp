@@ -476,6 +476,8 @@ public class AmpReportGenerator extends ReportGenerator {
 				tempRC.setColumn(clonedCol);
 				
 				ColumnFilterGenerator.attachHardcodedFilters(clonedCol);
+
+                reportMetadata.incrementExtraColumnsCount();
 			}
 		}
 	}

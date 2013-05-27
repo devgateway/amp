@@ -103,7 +103,11 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	
 	private AmpCategoryValue reportCategory;
 
-	// public static final String NOTE="NOTE: All shown funding items are in USD
+    // Some fields (say MTEF) may have totals too.
+    // And we need to calculate (track them) as well
+    private int extraTotalsCount;
+
+    // public static final String NOTE="NOTE: All shown funding items are in USD
 	// currency. All calendaristic date cells are shown using DD/MM/YYYY format.
 	// All amounts are in thousands.";
 	// private static SimpleDateFormat dateFormat = new
@@ -281,6 +285,18 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	public Set<AmpReportHierarchy> getHierarchies() {
 		return hierarchies;
 	}
+
+    /**
+     * Some of the columns should have total information. This must be taken into account when spans for the total row is calculated
+     * @return number of columns that have additional total information.
+     */
+    public int getExtraTotalsCount() {
+        return this.extraTotalsCount;
+    }
+
+    public void incrementExtraColumnsCount() {
+        extraTotalsCount++;
+    }
 
 	/**
 	 * @param hierarchies the hierarchies to set
@@ -601,4 +617,6 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	{
 		this.reportGenerator = generator;
 	}
+
+
 }

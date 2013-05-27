@@ -81,6 +81,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]= new Array(
                 , 'Contracting Agency'
                 , 'Contracting Agency Acronym'                
                 , 'Contracting Agency Groups'
+                , 'Project Implementing Unit'
 			);
 
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
@@ -193,7 +194,7 @@ function getColDbId( liEl ) {
 
 function generateHierarchies(e) {
 	checkSelectedHierarchies();
-	
+	//debugger;
 	var newDDObj		= new MyDragAndDropObject("source_hierarchies_ul","dest_hierarchies_ul");
 	var ulEl			= document.getElementById("dest_col_ul") ;
 	var hierUlEl		= document.getElementById("source_hierarchies_ul") ;

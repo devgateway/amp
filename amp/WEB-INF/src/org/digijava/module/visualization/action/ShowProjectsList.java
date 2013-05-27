@@ -264,13 +264,13 @@ public class ShowProjectsList extends Action {
 			try {
 				switch (Integer.parseInt(id)) {
 				case Constants.COMMITMENT:
-					itemName = TranslatorWorker.translateText("ODA Historical Trend - Commitments", locale, siteId);		
+					itemName = TranslatorWorker.translateText("ODA Historical Trend", locale, siteId) + " - " + TranslatorWorker.translateText("Commitments", locale, siteId);		
 					break;
 				case Constants.DISBURSEMENT:
-					itemName = TranslatorWorker.translateText("ODA Historical Trend - Disbursements", locale, siteId);
+					itemName = TranslatorWorker.translateText("ODA Historical Trend", locale, siteId) + " - " + TranslatorWorker.translateText("Disbursements", locale, siteId);
 					break;
 				case Constants.EXPENDITURE:
-					itemName = TranslatorWorker.translateText("ODA Historical Trend - Expenditures", locale, siteId);
+					itemName = TranslatorWorker.translateText("ODA Historical Trend", locale, siteId) + " - " + TranslatorWorker.translateText("Expenditures", locale, siteId);
 					break;
 				default:
 					break;

@@ -1717,10 +1717,10 @@ public class ExportActivityToWord extends Action {
 				"/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency",
 				"/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date" };
 		final String[] componentExpendituresFMfields = {
-				"/Activity Form/Components/Component/Components Expeditures",
-				"/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Amount",
-				"/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Currency",
-				"/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Transaction Date" };
+				"/Activity Form/Components/Component/Components Expenditures",
+				"/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount",
+				"/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency",
+				"/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date" };
 
 
         List<Table> retVal = new ArrayList<Table>();
@@ -1891,17 +1891,17 @@ public class ExportActivityToWord extends Action {
 						compFnd.getAdjustmentTypeNameTrimmed(), true);
 			}
 			if (FeaturesUtil.isVisibleModule(componentFMfields[1], ampContext)) {
-				sectionHelper.addRowData(compFnd.getTransactionDate());
-			}
-			if (FeaturesUtil.isVisibleModule(componentFMfields[2], ampContext)) {
 				String output = compFnd.getTransactionAmount().toString();
-				if (FeaturesUtil.isVisibleModule(componentFMfields[3],
+				if (FeaturesUtil.isVisibleModule(componentFMfields[2],
 						ampContext)) {
 					output += compFnd.getCurrencyCode();
 				}
 				sectionHelper.addRowData(output);
 			}
-
+			if (FeaturesUtil.isVisibleModule(componentFMfields[3], ampContext)) {
+				sectionHelper.addRowData(compFnd.getTransactionDate());
+			}
+			
 			sectionHelper
 					.addRowData(compFnd.getFormattedRate() != null ? compFnd
 							.getFormattedRate() : "");

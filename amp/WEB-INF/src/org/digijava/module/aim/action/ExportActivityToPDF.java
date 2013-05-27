@@ -126,7 +126,7 @@ public class ExportActivityToPDF extends Action {
 	
 	private static final String [] componentCommitmentsFMfields={"/Activity Form/Components/Component/Components Commitments","/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount","/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency","/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"};
 	private static final String [] componentDisbursementsFMfields={"/Activity Form/Components/Component/Components Disbursements","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"};
-	private static final String [] componentExpendituresFMfields={"/Activity Form/Components/Component/Components Expeditures","/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Amount","/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Currency","/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Transaction Date"};
+	private static final String [] componentExpendituresFMfields={"/Activity Form/Components/Component/Components Expenditures","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"};
 	private static final Chunk BULLET_SYMBOL = new Chunk("\u2022");
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)	throws Exception {
@@ -3246,19 +3246,11 @@ public class ExportActivityToPDF extends Action {
 					fdTable.addCell(cell);
 				}			
 				
-				if(FeaturesUtil.isVisibleModule(fmFields[1], ampContext)){
-					cell=new PdfPCell();
-					paragraph=new Paragraph(fd.getTransactionDate(),plainFont);
-					cell.addElement(paragraph);
-					cell.setBorder(0);
-					fdTable.addCell(cell);
-				}
-				
 				String output="";
-				if(FeaturesUtil.isVisibleModule(fmFields[2], ampContext)){
+				if(FeaturesUtil.isVisibleModule(fmFields[1], ampContext)){
 					output+=fd.getTransactionAmount();
 				}
-				if(FeaturesUtil.isVisibleModule(fmFields[3], ampContext)){
+				if(FeaturesUtil.isVisibleModule(fmFields[2], ampContext)){
 					output+= " " + fd.getCurrencyCode();
 				}
 				cell=new PdfPCell();
@@ -3266,6 +3258,14 @@ public class ExportActivityToPDF extends Action {
 				cell.addElement(paragraph);
 				cell.setBorder(0);
 				fdTable.addCell(cell);
+				
+				if(FeaturesUtil.isVisibleModule(fmFields[3], ampContext)){
+					cell=new PdfPCell();
+					paragraph=new Paragraph(fd.getTransactionDate(),plainFont);
+					cell.addElement(paragraph);
+					cell.setBorder(0);
+					fdTable.addCell(cell);
+				}
 				
 				cell=new PdfPCell();
 				paragraph=new Paragraph(fd.getFormattedRate()!=null?fd.getFormattedRate():" ",plainFont);

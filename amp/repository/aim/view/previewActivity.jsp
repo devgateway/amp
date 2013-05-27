@@ -1809,7 +1809,7 @@ function collapseAll() {
 					</module:display>
 					
 					<module:display name="/Activity Form/Components/Component/Components Expenditures" 
-							parentModule="/Activity Form/Components/Component/">
+							parentModule="/Activity Form/Components/Component">
 					<c:if test="${!empty comp.expenditures}">
 						<tr>
 							<td class="prv_right">
@@ -1823,10 +1823,10 @@ function collapseAll() {
 										<c:forEach var="fd" items="${comp.expenditures}">
 											<tr bgcolor="#f0f0f0">
 												<module:display name="/Activity Form/Components/Component/Components Expeditures" 
-													parentModule="/Activity Form/Components/Component/">
+													parentModule="/Activity Form/Components/Component">
 													<td width="50" bgcolor="#f0f0f0">
 														<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
-															<b><c:out value="${fd.adjustmentTypeName.value}" /></b>
+															<b><c:out value="${fd.adjustmentTypeName}" /></b>
 														</digi:trn>													
 													</td>
 												</module:display>

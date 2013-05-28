@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%
+
 	if (ReportContextData.contextIdExists())
 	{
 		pageContext.setAttribute("reportCD", ReportContextData.getFromRequest());
@@ -302,9 +303,9 @@ saveReportEngine	= null;
 		myPanel3.setBody("");
 		myPanel3.render(document.body);
 		
-		
+		//alert('param.queryEngine: ' + '${param.queryEngine}');
 		<c:choose>
-		<c:when test="${param.queryEngine!='true' }">
+		<c:when test="${param.is_a_tab =='true' }">
 			var msgP4='\n<digi:trn jsFriendly="true">Please select tab settings</digi:trn>';
 		</c:when>
 		<c:otherwise>
@@ -604,10 +605,19 @@ function changeFormat(){
 	
 	var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;
 	
+	var amountDivisor = 1.0;
 	
-	var num=Number(123456789.928);
+	var selectedValue = document.aimReportsFilterPickerForm3.amountinthousands.value;
+	if (selectedValue == '1')
+		amountDivisor = 1000.0;
+	
+	if (selectedValue == '2')
+		amountDivisor = 1000.0 * 1000.0;
+	
+	
+	var num=Number(123456789.928 / amountDivisor);
 
-
+	//debugger;
 	var format=new Format(decimalSymbol,customDecimalPlaces,customUseGrouping,customGroupCharacter,customGroupSize);
 	document.getElementById("number").innerHTML="<B>"+num.format(format)+"</B>";
 	//alert(num.format(format));

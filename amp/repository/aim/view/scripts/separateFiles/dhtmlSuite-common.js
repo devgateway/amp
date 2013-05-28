@@ -70,7 +70,11 @@ DHTMLSuite.createStandardObjects = function()
 	DHTMLSuite.variableStorage = new DHTMLSuite.globalVariableStorage();;	// Create configuration object.
 	DHTMLSuite.commonObj.init();
 	DHTMLSuite.domQueryObj = new DHTMLSuite.domQuery();
-	window.onunload = function() { DHTMLSuite.commonObj.__clearMemoryGarbage(); }
+	window.onunload = function() { 
+		if (DHTMLSuite.commonObj == undefined) // Checks if the objects were initiated.
+			DHTMLSuite.createStandardObjects(); 
+		DHTMLSuite.commonObj.__clearMemoryGarbage(); 
+	}
 	
 	standardObjectsCreated = true;
 

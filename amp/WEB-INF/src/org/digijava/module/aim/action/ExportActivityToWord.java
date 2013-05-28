@@ -1931,17 +1931,11 @@ public class ExportActivityToWord extends Action {
     				boolean visibleModuleRegExpenditures = FeaturesUtil.isVisibleModule(
     						"/Activity Form/Regional Funding/Region Item/Expenditures", ampContext);
     				
-                    
     				for (AmpRegionalFunding regFnd : regFnds) {
-    					ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-        				// validating module visibility
+    					// validating module visibility
     					// Commitments
-    					if ((regFnd.getTransactionType() == Constants.COMMITMENT && visibleModuleRegCommitments)
-    							// Disbursements
-    							|| (regFnd.getTransactionType() == Constants.DISBURSEMENT && visibleModuleRegDisbursements)
-    							// Expenditures
-    							|| (regFnd.getTransactionType() == Constants.EXPENDITURE && visibleModuleRegExpenditures)) {
-
+    					if (regFnd.getTransactionType() == Constants.COMMITMENT && visibleModuleRegCommitments) {
+    						ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
     						eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd
     												.getTransactionType()), null,null, true))
     										.addRowData(regFnd.getRegionLocation().getName())
@@ -1949,8 +1943,38 @@ public class ExportActivityToWord extends Action {
     										.addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
     										.addRowData(regFnd.getTransactionAmount().toString())
     										.addRowData(regFnd.getCurrency().getCurrencyCode()));
+    						retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
     					}
-    					retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
+    				}
+    				for (AmpRegionalFunding regFnd : regFnds) {
+    					// validating module visibility
+    					// Disbursements
+    					if (regFnd.getTransactionType() == Constants.DISBURSEMENT && visibleModuleRegDisbursements) {
+    						ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+    						eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd
+    												.getTransactionType()), null,null, true))
+    										.addRowData(regFnd.getRegionLocation().getName())
+    										.addRowData(regFnd.getAdjustmentType().getLabel(), true)
+    										.addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
+    										.addRowData(regFnd.getTransactionAmount().toString())
+    										.addRowData(regFnd.getCurrency().getCurrencyCode()));
+    						retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
+    					}
+    				}
+    				for (AmpRegionalFunding regFnd : regFnds) {
+    					// validating module visibility
+    					// Expenditures
+    					if (regFnd.getTransactionType() == Constants.EXPENDITURE && visibleModuleRegExpenditures) {
+    						ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+    						eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd
+    												.getTransactionType()), null,null, true))
+    										.addRowData(regFnd.getRegionLocation().getName())
+    										.addRowData(regFnd.getAdjustmentType().getLabel(), true)
+    										.addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
+    										.addRowData(regFnd.getTransactionAmount().toString())
+    										.addRowData(regFnd.getCurrency().getCurrencyCode()));
+    						retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
+    					}
     				}
     			}
     		}

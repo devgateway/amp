@@ -85,10 +85,10 @@ public class AmpActivityReferenceDoc implements Serializable, Versionable, Clone
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { " Comment:&nbsp;" }, new Object[] { this.comment != null ? this.comment
+				new Output(null, new String[] { "Comment" }, new Object[] { this.comment != null ? this.comment
 						: "Empty Comment" }));
 		if (this.lastEdited != null) {
-			out.getOutputs().add(new Output(null, new String[] { " Last Edited:&nbsp;" }, new Object[] { this.lastEdited }));
+			out.getOutputs().add(new Output(null, new String[] { "Last Edited" }, new Object[] { this.lastEdited }));
 		}
 		return null;
 	}

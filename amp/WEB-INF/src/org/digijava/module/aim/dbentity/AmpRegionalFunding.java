@@ -205,29 +205,29 @@ public class AmpRegionalFunding implements Versionable, Serializable, Cloneable 
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { "Region: " }, new Object[] { this.regionLocation.getName() }));
+				new Output(null, new String[] { "Region" }, new Object[] { this.regionLocation.getName() }));
 		String transactionType = "";
 		switch (this.transactionType.intValue()) {
 		case 0:
-			transactionType = "Commitments: ";
+			transactionType = "Commitments";
 
 			break;
 		case 1:
-			transactionType = " Disbursements: ";
+			transactionType = "Disbursements";
 			break;
 		case 2:
-			transactionType = " Expenditures: ";
+			transactionType = "Expenditures";
 			break;
 		case 3:
-			transactionType = " Disbursement Orders: ";
+			transactionType = "Disbursement Orders";
 			break;
 		case 4:
-			transactionType = " MTEF Projection: ";
+			transactionType = "MTEF Projection";
 			break;
 		}
-		out.getOutputs().add(new Output(null, new String[] { " Trn: " }, new Object[] { transactionType }));
+		out.getOutputs().add(new Output(null, new String[] { "Trn" }, new Object[] { transactionType }));
 		out.getOutputs().add(
-				new Output(null, new String[] { " Value: " }, new Object[] {
+				new Output(null, new String[] { "Value" }, new Object[] {
 						" " + this.adjustmentType.getValue() + " - ", this.transactionAmount,
 						" ", this.currency, " - ", this.transactionDate }));
 		return out;

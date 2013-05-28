@@ -521,40 +521,40 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 	public Output getOutput() {
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
-		out.getOutputs().add(new Output(null, new String[] { "Contract Name:&nbsp;" }, new Object[] { this.contractName }));
+		out.getOutputs().add(new Output(null, new String[] { "Contract Name" }, new Object[] { this.contractName }));
 		if (this.description != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Description:&nbsp;" }, new Object[] { this.description }));
+					new Output(null, new String[] { "Description" }, new Object[] { this.description }));
 		}
 		if (this.activityCategory != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Category:&nbsp;" }, new Object[] { this.activityCategory
+					new Output(null, new String[] { "Category" }, new Object[] { this.activityCategory
 							.getValue() }));
 		}
 		if (this.contractType != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Type:&nbsp;" }, new Object[] { this.contractType
+					new Output(null, new String[] { "Type" }, new Object[] { this.contractType
 							.getEncodedValue() }));
 		}
 		if (this.status != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Status:&nbsp;" }, new Object[] { this.status
+					new Output(null, new String[] { "Status" }, new Object[] { this.status
 							.getEncodedValue() }));
 		}
 
 		if (this.startOfTendering != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Start of Tendering:&nbsp;" },
+					new Output(null, new String[] { "Start of Tendering" },
 							new Object[] { this.startOfTendering }));
 		}
 		if (this.signatureOfContract != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Signature of Contract:&nbsp;" },
+					new Output(null, new String[] { "Signature of Contract" },
 							new Object[] { this.signatureOfContract }));
 		}
 		if (this.contractValidity != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Contract Validity Date:&nbsp;" },
+					new Output(null, new String[] { "Contract Validity Date" },
 							new Object[] { this.contractValidity }));
 		}
 		if (this.organizations != null) {
@@ -562,77 +562,77 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 			while (iterOrgs.hasNext()) {
 				AmpOrganisation auxOrg = iterOrgs.next();
 				out.getOutputs().add(
-						new Output(null, new String[] { "<br />", "Contract Organization:&nbsp;" }, new Object[] { auxOrg
+						new Output(null, new String[] { "Contract Organization" }, new Object[] { auxOrg
 								.getAcronymAndName() }));
 			}
 		}
 		if (this.contractingOrganizationText != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Contractor Name:&nbsp;" },
+					new Output(null, new String[] { "Contractor Name" },
 							new Object[] { this.contractingOrganizationText }));
 		}
 		if (this.contractCompletion != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Contract Completion:&nbsp;" },
+					new Output(null, new String[] { "Contract Completion" },
 							new Object[] { this.contractCompletion }));
 		}
 		if (this.totalAmount != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total Amount:&nbsp;" }, new Object[] { this.totalAmount,
+					new Output(null, new String[] { "Total Amount" }, new Object[] { this.totalAmount,
 							" - ", (this.totalAmountCurrency != null ? this.totalAmountCurrency.getCurrencyCode() : "")}));
 		}
 		if (this.contractTotalValue != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Contract Total Value:&nbsp;" },
+					new Output(null, new String[] { "Contract Total Value" },
 							new Object[] { this.contractTotalValue }));
 		}
 		if (this.totalECContribIBAmount != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total EC Contribution IB:&nbsp;" }, new Object[] {
+					new Output(null, new String[] { "Total EC Contribution IB" }, new Object[] {
 							this.totalECContribIBAmount, " - ", this.totalECContribIBAmountDate }));
 		}
 		if (this.totalECContribINVAmount != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total EC Contribution INV:&nbsp;" }, new Object[] {
+					new Output(null, new String[] { "Total EC Contribution INV" }, new Object[] {
 							this.totalECContribINVAmount, " - ", this.totalECContribINVAmountDate }));
 		}
 		if (this.totalNationalContribCentralAmount != null) {
 			out.getOutputs()
 					.add(
-							new Output(null, new String[] { "<br />", "Total National Central Contribution:&nbsp;" },
+							new Output(null, new String[] { "Total National Central Contribution" },
 									new Object[] { this.totalNationalContribCentralAmount, " - ",
 											this.totalNationalContribCentralAmountDate }));
 		}
 		if (this.totalNationalContribIFIAmount != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total National IFIs Contribution:&nbsp;" }, new Object[] {
+					new Output(null, new String[] { "Total National IFIs Contribution" }, new Object[] {
 							this.totalNationalContribIFIAmount, " - ", this.totalNationalContribIFIAmountDate }));
 		}
 		if (this.totalNationalContribRegionalAmount != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total National Regional Contribution:&nbsp;" },
+					new Output(null, new String[] { "Total National Regional Contribution" },
 							new Object[] { this.totalNationalContribRegionalAmount, " - ",
 									this.totalNationalContribRegionalAmountDate }));
 		}
 		if (this.totalPrivateContribAmount != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total Private Contribution:&nbsp;" }, new Object[] {
+					new Output(null, new String[] { "Total Private Contribution" }, new Object[] {
 							this.totalPrivateContribAmount, " - ", this.totalPrivateContribAmountDate }));
 		}
 		if (this.totalDisbursements != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total Disbursements:&nbsp;" },
+					new Output(null, new String[] { "Total Disbursements" },
 							new Object[] { this.totalDisbursements }));
 		}
 		if (this.executionRate != null) {
 			out.getOutputs()
 					.add(
-							new Output(null, new String[] { "<br />", "Execution Rate:&nbsp;" },
+							new Output(null, new String[] { "Execution Rate" },
 									new Object[] { this.executionRate }));
 		}
 		if (this.fundingTotalDisbursements != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Total Funding Disbursements:&nbsp;" },
+					new Output(null, new String[] { "Total Funding Disbursements" },
 							new Object[] { this.fundingTotalDisbursements }));
 		}
 		if (this.disbursements != null) {
@@ -642,7 +642,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 			while (iterDisb.hasNext()) {
 				IPAContractDisbursement auxDisb = iterDisb.next();
 				out.getOutputs().add(
-						new Output(null, new String[] { "<br />", "Disbursements:&nbsp;" }, new Object[] {
+						new Output(null, new String[] { "Disbursements" }, new Object[] {
 								auxDisb.getAdjustmentType().getValue(), " - ", auxDisb.getAmount(),
 								" - ", auxDisb.getCurrency(), " - ", auxDisb.getDate() }));
 			}

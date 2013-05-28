@@ -76,8 +76,11 @@ public class ActivityVersionUtil {
 			while (iter.hasNext()) {
 				Output auxOutput = iter.next();
 				for (int i = 0; i < auxOutput.getTitle().length; i++) {
-					ret = ret + "<b>" + TranslatorWorker.translateText(auxOutput.getTitle()[i], langCode, site.getId())
-							+ "</b>";
+                    String title = auxOutput.getTitle()[i];
+                    if (!title.trim().isEmpty()) {
+					    ret = ret + "<br/><b>" + TranslatorWorker.translateText(auxOutput.getTitle()[i], langCode, site.getId())
+							+ ":</b>&nbsp;";
+                    }
 				}
 				for (int i = 0; i < auxOutput.getValue().length; i++) {
 					/*

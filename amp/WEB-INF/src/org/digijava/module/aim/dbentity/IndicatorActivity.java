@@ -96,16 +96,16 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { " Name:&nbsp;" }, new Object[] { this.getIndicator() != null ? this.getIndicator().getName()
+				new Output(null, new String[] { "Name" }, new Object[] { this.getIndicator() != null ? this.getIndicator().getName()
 						: "Empty Name" }));
 		if (risk != null)
-			out.getOutputs().add(new Output(null, new String[] {" Risk rating:&nbsp;"}, new Object[] {risk.getRatingName()}));
+			out.getOutputs().add(new Output(null, new String[] {" Risk rating"}, new Object[] {risk.getRatingName()}));
 		if (values != null){
 			Iterator<AmpIndicatorValue> it = values.iterator();
 			while (it.hasNext()) {
 				AmpIndicatorValue ind = (AmpIndicatorValue) it
 						.next();
-				String typeString = "<br/>";
+				String typeString = "";
 				switch (ind.getValueType()) {
 				case AmpIndicatorValue.BASE:
 					typeString += "Base Value";
@@ -123,7 +123,7 @@ public class IndicatorActivity extends IndicatorConnection implements Versionabl
 					typeString += "Unknown Value";
 					break;
 				}
-				typeString += ":&nbsp;";
+				//typeString += ":&nbsp;";
 				out.getOutputs().add(
 						new Output(null, new String[] {typeString}, new Object[]{ind.getValue()}));
 			}

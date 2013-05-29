@@ -66,6 +66,7 @@ public class ComputedAmountCell extends CategAmountCell {
 			if ((expression != null) && (totalExpression == null || showRowCalculation)) {
 				
 				getValues().prepareCountValues();
+				getValues().importValues(this.getColumn().getParent());
 				BigDecimal result = expression.result(getValues());
 				if (result != null) {
 					return result.doubleValue() * (getPercentage() / 100);

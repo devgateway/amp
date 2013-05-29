@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +38,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * 
  */
 public class ColumnReportData extends ReportData<Column> {
+	
+	protected Map<String, Double> subReportTotals = new HashMap<String, Double>();
 	
 	/**
 	 * Returns the visible rows for the column report. 
@@ -422,6 +425,8 @@ public class ColumnReportData extends ReportData<Column> {
 			}
 		}
 		
+		buildComputedTotals();
+		
 		//remove columns to be removed		
 		
 		if(ctbr!=null) 
@@ -433,6 +438,42 @@ public class ColumnReportData extends ReportData<Column> {
 		}
 	}
 
+	
+	protected void buildComputedTotals()
+	{
+		subReportTotals.clear();//instanceof totalamountcolumn "Actual Commitments"
+		double actualCommitments = 0, actualDisbursements = 0, plannedCommitments = 0, plannedDisbursements = 0;
+		
+		for(AmountCell caca:this.getTrailCells())
+		{
+			if ((caca != null) && (caca.getColumn() instanceof TotalAmountColumn))
+				if ((caca.getColumn().getParent() != null) && (caca.getColumn().getParent() instanceof GroupColumn))
+					if (((GroupColumn) caca.getColumn().getParent()).getName().equals(ArConstants.COLUMN_TOTAL))
+					{
+						String columnName = caca.getColumn().getName();
+
+						if (ArConstants.ACTUAL_COMMITMENTS.equals(columnName))
+							actualCommitments += caca.getAmount();
+				
+						if ("Actual Disbursements".equals(columnName))
+							actualDisbursements += caca.getAmount();
+				
+						if ("Planned Commitments".equals(columnName))
+							plannedCommitments += caca.getAmount();
+				
+						if ("Planned Disbursements".equals(columnName))
+							plannedDisbursements += caca.getAmount();
+				
+						//System.out.println("THE COLUMN NAME IS:" + columnName);
+					}
+		}
+		subReportTotals.put(ArConstants.TOTAL_ACTUAL_COMMITMENT, actualCommitments);
+		subReportTotals.put(ArConstants.TOTAL_ACTUAL_DISBURSEMENT, actualDisbursements);
+		subReportTotals.put(ArConstants.TOTAL_PLANNED_COMMITMENT, plannedCommitments);
+		subReportTotals.put(ArConstants.TOTAL_PLANNED_DISBURSEMENT, plannedDisbursements);
+	}
+	
+	
 	protected List<AmountCell> filterTrailCells(List<AmountCell> input, Column column)
 	{
 		if (!column.getName().equals(ArConstants.COLUMN_FUNDING))
@@ -725,7 +766,15 @@ public class ColumnReportData extends ReportData<Column> {
 		else return null;
 	}
 	
-
+	public double retrieveSubReportDataValue(String val)
+	{
+		Double d = subReportTotals.get(val);
+		
+		if (d == null)
+			return 0.0;
+		
+		return d;
+	}
 
 	
 }

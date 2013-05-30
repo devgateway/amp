@@ -18,6 +18,8 @@ import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.action.ExportActivityToPDF;
+import org.digijava.module.aim.action.PDFExportAction;
 
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -59,7 +61,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 	public void generate() {
 		ColumnReportData columnReport = (ColumnReportData) item;
 
-		Font titleFont = new Font(Font.COURIER, Font.DEFAULTSIZE, Font.BOLD);
+		Font titleFont = new Font(ExportActivityToPDF.basefont, Font.DEFAULTSIZE, Font.BOLD);
 		
 		
 		ReportData parent=(ReportData)columnReport.getParent();
@@ -105,16 +107,16 @@ public class ColumnReportDataPDF extends PDFExporter {
 			
 			PdfPCell pdfc; 
 			if(translatedName.compareTo("")==0)
-				pdfc= new PdfPCell(new Paragraph(columnReport.getName(),titleFont));
+				pdfc= new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(columnReport.getName()),titleFont));
 			else 
-				pdfc=new PdfPCell(new Paragraph(translatedName,titleFont));
+				pdfc=new PdfPCell(new Paragraph((ExportActivityToPDF.postprocessText(translatedName)),titleFont));
 			pdfc.setColspan(columnReport.getTotalDepth());
 			table.addCell(pdfc);
 		}
 		
 		
 		// headings
-		Font font = new Font(Font.COURIER, 9, Font.BOLD);
+		Font font = new Font(ExportActivityToPDF.basefont, 9, Font.BOLD);
 		font.setColor(new Color(255,255,255));
 		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false)  {
 			PDFExporter.headingCells=new ArrayList();
@@ -154,13 +156,13 @@ public class ColumnReportDataPDF extends PDFExporter {
 						    if(cellValue!=null && cellValue.length() < 18){
 							font.setSize(12);
 						    }
-						    pdfc = new PdfPCell(new Paragraph(cellValue,font));
+						    pdfc = new PdfPCell(new Paragraph((ExportActivityToPDF.postprocessText(cellValue)),font));
 						   	
 						}else{
 						    if(translatedCellValue.length() < 18){
 							font.setSize(12);
 						    }
-						    pdfc = new PdfPCell(new Paragraph(translatedCellValue,font));
+						    pdfc = new PdfPCell(new Paragraph((ExportActivityToPDF.postprocessText(translatedCellValue)),font));
 						   }
 						
 						pdfc.setHorizontalAlignment(Element.ALIGN_CENTER);

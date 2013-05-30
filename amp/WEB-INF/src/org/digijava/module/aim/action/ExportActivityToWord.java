@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -122,9 +123,10 @@ public class ExportActivityToWord extends Action {
     private static final Chunk BULLET_SYMBOL = new Chunk("\u2022");    
     private Identification identification = null;
     private Planning planning = null;
-    private org.digijava.module.aim.form.EditActivityForm.Location location =null;
-    private Programs programs =null;
-    org.digijava.module.aim.form.EditActivityForm.Sector sectors =null;
+    private org.digijava.module.aim.form.EditActivityForm.Location location = null;
+    private Programs programs = null;
+    org.digijava.module.aim.form.EditActivityForm.Sector sectors = null;
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat();
 
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
@@ -2075,12 +2077,22 @@ public class ExportActivityToWord extends Action {
 										|| (fndDet.getTransactionType() == Constants.EXPENDITURE && visibleModuleExpenditures)
 										// DisbOrders
 										|| (fndDet.getTransactionType() == Constants.DISBURSEMENT_ORDER && visibleModuleDisbOrders)) {
-	
-		                                eshDonorFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true)).
+
+                                        ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true);
+
+                                        ExportSectionHelperRowData currentRowData = sectionHelperRowData.
 		                                        addRowData(fndDet.getAdjustmentType().getLabel(), true).
 		                                        addRowData(DateConversion.ConvertDateToString(fndDet.getTransactionDate())).
 		                                        addRowData(FormatHelper.formatNumber(fndDet.getTransactionAmount())).
-		                                        addRowData(fndDet.getAmpCurrencyId().getCurrencyCode()));
+		                                        addRowData(fndDet.getAmpCurrencyId().getCurrencyCode());
+
+                                        if (fndDet.getFixedExchangeRate() != null) {
+                                            String exchangeRateStr = TranslatorWorker.translateText("Exchange Rate: ");
+                                            exchangeRateStr += DECIMAL_FORMAT.format(fndDet.getFixedExchangeRate());
+                                            currentRowData.addRowData(exchangeRateStr);
+                                        }
+
+                                        eshDonorFundingDetails.addRowData(sectionHelperRowData);
 									}
 	                            }
 	

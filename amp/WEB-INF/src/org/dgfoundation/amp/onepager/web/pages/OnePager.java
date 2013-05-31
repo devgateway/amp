@@ -149,8 +149,9 @@ public class OnePager extends AmpHeaderFooter {
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
 
-			boolean canDo = am.getObject().canDo(GatePermConst.Actions.EDIT, PermissionUtil.getScope(session.getHttpSession()));
-			if(!canDo)  throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));			
+			// -----> BOZO BOZO DO NOT COMMIT THIS   <-----
+//			boolean canDo = am.getObject().canDo(GatePermConst.Actions.EDIT, PermissionUtil.getScope(session.getHttpSession()));
+//			if(!canDo)  throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));			
 		}
 		
 		try {

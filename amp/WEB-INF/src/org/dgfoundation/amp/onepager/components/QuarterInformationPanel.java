@@ -7,6 +7,7 @@ package org.dgfoundation.amp.onepager.components;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -48,14 +49,13 @@ public class QuarterInformationPanel extends AmpFieldPanel {
             fiscalCalendar = DbUtil.getFiscalCalendar(fiscalCalId);
         }
 
-        String currentFiscalYear = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CURRENT_SYSTEM_YEAR);
+        Integer currentFiscalYear = Util.getCurrentFiscalYear();
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MONTH, fiscalCalendar.getStartMonthNum() - 1);//January is 0
         cal.set(Calendar.DAY_OF_MONTH, fiscalCalendar.getStartDayNum());
-        if (currentFiscalYear != null){
-            Integer val = Integer.parseInt(currentFiscalYear);
-            cal.set(Calendar.YEAR, val);
+        if (currentFiscalYear != null){            
+            cal.set(Calendar.YEAR, currentFiscalYear);
         }
         String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
         pattern = pattern.replace('m', 'M');

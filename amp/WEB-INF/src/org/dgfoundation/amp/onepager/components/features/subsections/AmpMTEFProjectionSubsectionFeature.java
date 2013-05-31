@@ -13,6 +13,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMTEFProjectionFormTableFeature;
@@ -56,14 +57,9 @@ public class AmpMTEFProjectionSubsectionFeature extends
 				//projection.setAmount(0d);
 //				projection.setProjectionDate(new Date(System.currentTimeMillis()));
 
-                String currentFiscalYear = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CURRENT_SYSTEM_YEAR);
                 Calendar calendar = Calendar.getInstance();
 
-                int currentYear;
-                if (currentFiscalYear != null)
-                    currentYear = Integer.parseInt(currentFiscalYear);
-                else
-                    currentYear = calendar.get(Calendar.YEAR);
+                int currentYear = Util.getCurrentFiscalYear();
 
 				Set<AmpFundingMTEFProjection> mtefSet = setModel.getObject();
                 if (mtefSet != null){

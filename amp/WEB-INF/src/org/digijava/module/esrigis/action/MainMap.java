@@ -26,6 +26,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
@@ -280,12 +281,8 @@ public class MainMap extends Action {
 		}
 		
 		if (filter.getStartYear() == null) {
-			Long year = null;
-			try {
-				year = Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CURRENT_SYSTEM_YEAR));
-			} catch (NumberFormatException ex) {
-				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
-			}
+			long year = (long) Util.getCurrentFiscalYear();
+
 			filter.setDefaultStartYear(year - 3);
 			filter.setStartYear(year - 3);
 			filter.setStartYearFilter(year - 3);

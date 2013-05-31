@@ -472,6 +472,18 @@ public final class Util {
 		return gc.get(Calendar.YEAR);
 	}
 
-	
+
+	public static int getCurrentFiscalYear()
+	{
+		String yearGS			= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.CURRENT_SYSTEM_YEAR );
+		Integer year;
+		
+		if ( yearGS.equals(GlobalSettingsConstants.SYSTEM_YEAR) )
+			year		= Util.getSystemYear();
+		else
+			year		= Integer.parseInt( yearGS );
+		
+		return year;
+	}
 
 }

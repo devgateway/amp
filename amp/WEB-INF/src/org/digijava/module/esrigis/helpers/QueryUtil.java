@@ -15,6 +15,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.dgfoundation.amp.Util;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -329,12 +330,8 @@ public class QueryUtil {
 			}
 		
 		if (filter.getStartYear() == null) {
-			Long year = null;
-			try {
-				year = Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CURRENT_SYSTEM_YEAR));
-			} catch (NumberFormatException ex) {
-				year = new Long(Calendar.getInstance().get(Calendar.YEAR));
-			}
+			long year = (long) Util.getCurrentFiscalYear();
+			
 			filter.setDefaultStartYear(year - 3);
 			filter.setStartYear(year - 3);
 			filter.setStartYearFilter(year - 3);

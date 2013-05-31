@@ -146,12 +146,7 @@ public class AddFunding extends Action {
 	public static String getFYDate(Integer numOfAddedYears, Integer year) {
 
 		if ( year == null ) {
-			String yearGS			= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.CURRENT_SYSTEM_YEAR );
-			
-			if ( yearGS.equals(GlobalSettingsConstants.SYSTEM_YEAR) )
-				year		= Util.getSystemYear();
-			else
-				year		= Integer.parseInt( yearGS );
+			year = Util.getCurrentFiscalYear();
 		}
 		year			+= numOfAddedYears;
 		// String date		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.FISCAL_YEAR_END_DATE ) + "/" + year;

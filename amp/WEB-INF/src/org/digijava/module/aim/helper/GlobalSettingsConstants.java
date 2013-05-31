@@ -122,4 +122,6 @@ public class GlobalSettingsConstants {
     public static final String SHOW_FUNDING_GROUP_ID = "Show funding group id";
     
     public static final String SHOW_MOST_RECENT_ACTIVITIES_ON_TOP = "Show Most Recent Activities on Top";
+
+    public static final String SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES = "Show Workspace Filter In Team Workspace";
 }

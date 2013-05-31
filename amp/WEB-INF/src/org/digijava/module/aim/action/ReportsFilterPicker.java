@@ -24,6 +24,7 @@ import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.*;
 import org.digijava.module.aim.util.caching.AmpCaching;
@@ -75,7 +76,21 @@ public class ReportsFilterPicker extends Action {
 	
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		//filterForm.setAmpReportId(ReportContextData.getFromRequest().getAmp);
-					
+
+        boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
+        boolean showWorkspaceFilter = true;
+        TeamMember teamMember = (TeamMember) request.getSession().getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+        AmpTeam ampTeam = null;
+        if (teamMember != null) {
+            ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
+        }
+
+        if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM) && !showWorkspaceFilterInTeamWorkspace) {
+            showWorkspaceFilter = false;
+        }
+        filterForm.setShowWorkspaceFilter(showWorkspaceFilter);
+
+
  	 	String ampReportId 	= request.getParameter("ampReportId");
 		if ( "".equals(ampReportId) )
 			ampReportId		= null;

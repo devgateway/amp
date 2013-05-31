@@ -193,7 +193,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long reporttype;
 	
 	private Boolean workspaceonly;
-	
+
+    private boolean showWorkspaceFilter;
+
 	
 	public Boolean getWorkspaceonly() {
 		return workspaceonly;
@@ -1218,4 +1220,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setPledged(Boolean pledged) {
 		this.pledged = pledged;
 	}
+
+    public boolean isShowWorkspaceFilter() {
+        return showWorkspaceFilter;
+    }
+
+    public void setShowWorkspaceFilter(boolean showWorkspaceFilter) {
+        this.showWorkspaceFilter = showWorkspaceFilter;
+    }
 }

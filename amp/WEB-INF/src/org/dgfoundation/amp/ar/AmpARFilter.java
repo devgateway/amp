@@ -993,8 +993,23 @@ public class AmpARFilter extends PropertyListable {
 		String STATUS_FILTER = "SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("
 				+ Util.toCSString(statuses) + ")";
 
+
+
+        boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
+        Set<AmpTeam> checkedWorkspaces = null;
+
+        if (loggedInTeamMember != null &&
+                loggedInTeamMember.getTeamAccessType().equals(Constants.ACCESS_TYPE_TEAM) &&
+                !showWorkspaceFilterInTeamWorkspace) {
+            checkedWorkspaces = new HashSet<AmpTeam>();
+            AmpTeam selTeam = TeamUtil.getTeamByName(loggedInTeamMember.getTeamName());
+            checkedWorkspaces.add(selTeam);
+        } else {
+            checkedWorkspaces = workspaces;
+        }
+
 		String WORKSPACE_FILTER = "select amp_activity_id from amp_activity where amp_team_id IN ("
-			+ Util.toCSString(workspaces) + ")";
+			+ Util.toCSString(checkedWorkspaces) + ")";
 
 		// String ORG_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE
 		// amp_org_grp_id IN ("+Util.toCSString(donors,true)+")";

@@ -18,6 +18,7 @@
 	<bean:define id="searchFieldWidth" toScope="page">${reqSearchFieldWidth}</bean:define>
 </logic:notEmpty>	
 
+
 <c:set var="selectorHeaderSize" scope="page" value="11" />
 <logic:notEmpty scope="request" name="reqSelectorHeaderSize">
 	<c:set var="selectorHeaderSize" scope="page" value="${reqSelectorHeaderSize}" />
@@ -31,20 +32,44 @@
 		<div style="border: 1px solid #CCCCCC; height: ${100-selectorHeaderSize}%; width: 100%; background: white; overflow-y:scroll;" class="grouping_selector_wrapper_body">		
 				<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 					<logic:iterate id="element" name="elements" scope="page">
-						<tr style="cursor: pointer;"
-							onclick="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
-							onMouseover="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).markRow(false)" 
-							onMouseout="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).unmarkRow(false)">
-							<td class="inside">
-								<div class="selector_type_cont">
-									<span style="float:left;"><digi:trn>${element.name}</digi:trn></span>
-									<span style="float: right;">
-										(${element.rootHierarchyListable.countDescendants-1})
-										<button type="button" onclick="getRowSelectorInstance(this.parentNode, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
-										style="display: none;">Fake</button>
-									</span>
-								</div>
-							</td>
+						
+						<%--
+						${element.name}Workspace
+						--%>
+						
+						
+						<%-- AMP-15117 --%>
+						
+						<c:choose>
+							<c:when test="${(reqBeanSetterObject.showWorkspaceFilter == false && element.name eq 'Workspace')}">
+								<c:set var="hideCurrentFilter" value="true" scope="page" />
+							</c:when>
+							<c:otherwise>
+								<c:set var="hideCurrentFilter" value="false" scope="page" />
+							</c:otherwise>
+						</c:choose>
+						
+						${hideCurrentFilter}
+							
+							
+						<c:if test="${!hideCurrentFilter}">
+						
+							<tr style="cursor: pointer;"
+								onclick="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
+								onMouseover="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).markRow(false)" 
+								onMouseout="getRowSelectorInstance(this, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).unmarkRow(false)">
+								<td class="inside">
+									<div class="selector_type_cont">
+										<span style="float:left;"><digi:trn>${element.name}</digi:trn></span>
+										<span style="float: right;">
+											(${element.rootHierarchyListable.countDescendants-1})
+											<button type="button" onclick="getRowSelectorInstance(this.parentNode, ${propertyObj}, new DivManager('${element.htmlDivId}', ${propertyObj}), true).toggleRow()" 
+											style="display: none;">Fake</button>
+										</span>
+									</div>
+								</td>
+								
+							</c:if>
 							
 						</tr>
 					</logic:iterate>

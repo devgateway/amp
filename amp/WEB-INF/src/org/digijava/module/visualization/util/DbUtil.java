@@ -851,7 +851,7 @@ public class DbUtil {
 
         if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
         	if (filter.getSelCVIds()[0]==-1) {
-        		oql += " and categ.id NOT in ("+DashboardUtil.getInStatement(filter.getBudgetCVIds())+") ";
+        		oql += " and act.ampActivityId NOT in ( "+ getActivitiesIdByCategoryRelated(DashboardUtil.getInStatement(filter.getBudgetCVIds()))+" )";
 			} else {
 				oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelCVIds())+") ";
 			}
@@ -878,6 +878,35 @@ public class DbUtil {
     	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 		return oql;
+	}
+	
+	private static String getActivitiesIdByCategoryRelated (String catList){
+		String ret = "";
+		Session session = null;
+		Query q = null;
+		String queryString = null;
+		Iterator<AmpActivityVersion> iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			queryString = " select act from "
+					+ AmpActivityVersion.class.getName()
+					+ " act inner join act.categories categ where categ.id in ("+catList+")";
+			q = session.createQuery(queryString);
+			iter = q.list().iterator();
+
+			while (iter.hasNext()) {
+				AmpActivityVersion act = (AmpActivityVersion) iter.next();
+				ret += act.getAmpActivityId().toString();
+				if (iter.hasNext())
+					ret += ",";
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get activities from database "
+					+ ex.getMessage());
+		}
+		return ret;
 	}
 	/**
      * Returns funding amount

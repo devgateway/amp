@@ -5391,7 +5391,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 				conn = PersistenceManager.getJdbcConnection();
 			
 			String query = "SELECT a.amp_activity_id FROM amp_activity_version a WHERE a.amp_activity_id IN (" + TeamUtil.getCommaSeparatedList(activityIds) + ") " +
-				"AND (a.approval_status = 'started' OR a.approval_status='edited') AND (a.draft IS NULL OR a.draft IS FALSE) AND (a.amp_team_id = " + tm.getTeamId() + ")";
+				"AND (a.approval_status = 'started' OR a.approval_status='edited') AND (a.draft IS NULL OR a.draft IS FALSE)"; // AND (a.amp_team_id = " + tm.getTeamId() + ")";
 			
 			Set<Long> result = new HashSet<Long>();
 			ResultSet resultSet = conn.createStatement().executeQuery(query);
@@ -5436,7 +5436,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 					if (draft == null)
 						draft = false;
 					
-					if ( tm.getTeamId().equals(teamId) ) {
+					if (true || tm.getTeamId().equals(teamId) ) {
 						if ( !draft && ("started".equals(status)||"edited".equals(status)) )
 							returnValue = true;
 					}

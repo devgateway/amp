@@ -5,6 +5,16 @@
     <keyword>contracting-arrangements</keyword>
     <author>Dolghier Constantin</author>
     <description>insert contracting-arrangements as a new column</description>
+    <trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT COUNT(*) FROM amp_columns WHERE columnname='Contracting Arrangements';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("0)</test>
+		</condition>
+	</trigger> 
        <apply>
         <script>
 			<lang delimiter=";" type="postgres">

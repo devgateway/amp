@@ -5407,7 +5407,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 					if (draft == null)
 						draft = false;
 					
-					if ( tm.getTeamId().equals(teamId) ) {
+					if (true || tm.getTeamId().equals(teamId) ) {
 						if ( !draft && ("started".equals(status)||"edited".equals(status)) )
 							returnValue = true;
 					}

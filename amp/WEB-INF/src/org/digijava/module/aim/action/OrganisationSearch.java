@@ -35,7 +35,7 @@ public class OrganisationSearch extends Action {
 			////System.out.println("Inside ELSE");  //
 		}
 
-		int page = 0;
+		int page;
 		if (request.getParameter("page") == null) {
 			page = 1;
 		} else {

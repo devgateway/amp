@@ -3,6 +3,7 @@ package org.digijava.module.contentrepository.util;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -91,6 +92,24 @@ public class DocumentManagerUtil {
 		}
 		return repository;
 	}
+
+    public static String getUUIDByPublicVersionUUID (String publicVersionUUID) {
+        String retVal = null;
+        org.hibernate.Session session = null;
+        try {
+            session	= PersistenceManager.getSession();
+            StringBuilder queryStr = new StringBuilder("select obj.uuid from ").
+                    append(CrDocumentNodeAttributes.class.getName()).
+                    append(" obj where obj.publicVersionUUID=:publicVersionUUID");
+            Query query = session.createQuery(queryStr.toString());
+            query.setString("publicVersionUUID", publicVersionUUID);
+            retVal = (String) query.uniqueResult();
+            session.flush();
+        } catch (SQLException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return retVal;
+    }
 	
 	public static Session getReadSession(HttpServletRequest request) {
 		return getReadSession(request.getSession());

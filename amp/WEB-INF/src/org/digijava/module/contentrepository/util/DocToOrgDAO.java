@@ -70,15 +70,24 @@ public class DocToOrgDAO {
 			result.add(org.getAmpOrgId());
 		return result;
 	}
-	
+
 	public static List<AmpOrganisation> getOrgsObjByUuid(String uuid) {
 		Session hbSession;
 		try{
+            String uuidForPublicUUID = DocumentManagerUtil.getUUIDByPublicVersionUUID(uuid);
+
+
 			hbSession	= PersistenceManager.getRequestDBSession();
 			String queryString 	= "select dto.ampOrganisation from "	+ CrDocumentsToOrganisations.class.getName() + " dto where " +
 					"dto.uuid=:uuid";
+            if (uuidForPublicUUID != null) {
+                queryString += " or dto.uuid=:uuidForPublic";
+            }
 			Query query			= hbSession.createQuery(queryString);
 			query.setString("uuid", uuid );
+            if (uuidForPublicUUID != null) {
+                query.setString("uuidForPublic", uuidForPublicUUID );
+            }
 			List<AmpOrganisation> resultList	=  query.list();
 			return resultList;
 		}

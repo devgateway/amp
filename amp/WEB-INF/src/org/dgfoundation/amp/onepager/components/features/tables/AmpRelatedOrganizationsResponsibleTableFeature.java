@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpEditLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
@@ -34,8 +35,8 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 	 * @throws Exception
 	 */
 	public AmpRelatedOrganizationsResponsibleTableFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am, final String roleName) throws Exception {
-		super(id, fmName, am, roleName);
+			final IModel<AmpActivityVersion> am, final String roleName,AmpDonorFundingFormSectionFeature donorFundingSection) throws Exception {
+		super(id, fmName, am, roleName, donorFundingSection);
 		setTitleHeaderColSpan(5);
 		list.setObject(new ListView<AmpOrgRole>("list", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
@@ -79,6 +80,7 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 						uniqueCollectionValidationField.reloadValidationField(target);
 						list.getObject().removeAll();
 						target.add(listParent);
+						roleRemoved(target,item.getModelObject());
 					}
 				};
 				item.add(delRelOrg);

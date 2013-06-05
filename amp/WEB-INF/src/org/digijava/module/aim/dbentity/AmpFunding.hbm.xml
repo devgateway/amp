@@ -44,6 +44,9 @@
 
 		<many-to-one name="ampDonorOrgId" column="amp_donor_org_id"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />
+			
+		<many-to-one name="sourceRole" column="source_role_id"
+			class="org.digijava.module.aim.dbentity.AmpRole" cascade="none" />				
 
 		<!--  <many-to-one name="modalityId" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>	 -->
 

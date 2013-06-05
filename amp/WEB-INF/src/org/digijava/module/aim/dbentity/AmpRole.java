@@ -2,7 +2,7 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
-public class AmpRole implements Serializable
+public class AmpRole implements Serializable, Comparable<AmpRole>
 {
 	private Long ampRoleId ;
 	private String roleCode ;
@@ -96,4 +96,15 @@ public class AmpRole implements Serializable
 		type = string;
 	}
 
+	@Override
+	public String toString() {	
+		return name;
+	}
+
+	@Override
+	public int compareTo(AmpRole o) {
+		if(this.getAmpRoleId()!=null && o.getAmpRoleId()!=null) return this.getAmpRoleId().compareTo(o.getAmpRoleId());
+		return -1;
+	}
+	
 }	

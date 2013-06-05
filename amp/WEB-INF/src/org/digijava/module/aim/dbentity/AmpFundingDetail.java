@@ -56,6 +56,23 @@ public class AmpFundingDetail implements Serializable, Cloneable {
 	
 	private AmpCategoryValue adjustmentType ;
 
+	public AmpOrganisation getRecipientOrg() {
+		return recipientOrg;
+	}
+
+	public void setRecipientOrg(AmpOrganisation recipientOrg) {
+		this.recipientOrg = recipientOrg;
+	}
+
+	public AmpRole getRecipientRole() {
+		return recipientRole;
+	}
+
+	public void setRecipientRole(AmpRole recipientRole) {
+		this.recipientRole = recipientRole;
+	}
+
+
 	private Date transactionDate ;
 	private Date transactionDate2 ;
 	private Date reportingDate;
@@ -74,6 +91,9 @@ public class AmpFundingDetail implements Serializable, Cloneable {
 	private FundingPledges pledgeid;
     private Float capitalSpendingPercentage;
 
+	private AmpOrganisation recipientOrg;
+	private AmpRole recipientRole;
+    
     public Float getCapitalSpendingPercentage() {
         return capitalSpendingPercentage;
     }

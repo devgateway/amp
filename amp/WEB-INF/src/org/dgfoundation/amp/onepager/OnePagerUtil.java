@@ -12,16 +12,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.SetModel;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
@@ -29,6 +25,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 
 /**
  * Various utility methods for the {@link OnePager}
@@ -204,4 +205,25 @@ public final class OnePagerUtil {
 	public static String getClickToggle2JS(Component c){
 		return String.format(OnePagerConst.clickToggle2JS, c.getMarkupId());
 	}
+	
+	
+	/**
+	 * Gets the {@link AmpOrganisation} {@link AmpRole}S from DB
+	 * @return a {@link List} of {@link AmpRole}S
+	 */
+	public static List<AmpRole> getOrgRoles() {
+		Session session = null;
+		List<AmpRole> list=null;
+		ArrayList<AmpRole> currency = new ArrayList<AmpRole>();
+		try {
+				session = PersistenceManager.getRequestDBSession();
+				Criteria criteria = session.createCriteria(AmpRole.class);
+				 list = criteria.list();					
+		} catch (Exception ex) {
+			logger.error("Unable to get roles " + ex);
+		}
+		return list;	
+	}
+
+
 }

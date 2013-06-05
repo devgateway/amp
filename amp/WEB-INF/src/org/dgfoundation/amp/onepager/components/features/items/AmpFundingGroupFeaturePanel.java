@@ -4,19 +4,24 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpFundingItemsModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -29,7 +34,8 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation> {
 	private static final long serialVersionUID = 1L;
 	private ListEditor<AmpFunding> list;
-	private IModel<AmpOrganisation> fundingOrgModel; 
+	private IModel<AmpOrganisation> fundingOrgModel;
+
 	
 	public ListEditor<AmpFunding> getList() {
 		return list;
@@ -75,5 +81,10 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 		};
 		add(list);
 		
+
+		
+		
+		
+
 	}
 }

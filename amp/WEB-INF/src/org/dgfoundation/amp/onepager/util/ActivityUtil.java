@@ -93,7 +93,7 @@ public class ActivityUtil {
 		AmpActivityVersion oldA = a;
 		boolean newActivity = false;
 		try {
-			saveFundingOrganizationRole(a);
+			//saveFundingOrganizationRole(a);
             AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
 		
 			if (a.getAmpActivityId() == null){

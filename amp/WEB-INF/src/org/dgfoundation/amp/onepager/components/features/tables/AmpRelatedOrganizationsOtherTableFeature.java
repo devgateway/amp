@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -31,8 +32,8 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 	 * @throws Exception
 	 */
 	public AmpRelatedOrganizationsOtherTableFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am, final String roleName) throws Exception {
-		super(id, fmName, am, roleName);
+			final IModel<AmpActivityVersion> am, final String roleName,AmpDonorFundingFormSectionFeature donorFundingSection) throws Exception {
+		super(id, fmName, am, roleName, donorFundingSection);
 		list.setObject(new ListView<AmpOrgRole>("list", listModel) {
 			private static final long serialVersionUID = 7218457979728871528L;
 			@Override
@@ -54,6 +55,7 @@ public class AmpRelatedOrganizationsOtherTableFeature extends AmpRelatedOrganiza
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
+						roleRemoved(target,item.getModelObject());
 						setModel.getObject().remove(item.getModelObject());
 						uniqueCollectionValidationField.reloadValidationField(target);
 						list.getObject().removeAll();

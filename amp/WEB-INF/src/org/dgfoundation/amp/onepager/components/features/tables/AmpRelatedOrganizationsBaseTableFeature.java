@@ -22,9 +22,11 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValidationField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
@@ -56,6 +58,29 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	protected IModel<Set<AmpOrgRole>> setModel;
 	private TransparentWebMarkupContainer updateColSpan1;
 	private TransparentWebMarkupContainer updateColSpan2;
+	private AmpDonorFundingFormSectionFeature donorFundingSection;
+	
+	
+	/**
+	 * Override to notify of newly added roles, if you need to refresh/change other sections of the form
+	 * @param target 
+	 * @param ampOrgRole
+	 */
+	public void roleAdded(AjaxRequestTarget target, AmpOrgRole ampOrgRole) {
+	    target.add(donorFundingSection);
+        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
+
+	}
+	
+	/**
+	 * Override to notify of newly removed roles, if you need to refresh/change other sections of the form
+	 * @param ampOrgRole
+	 */
+	public void roleRemoved(AjaxRequestTarget target,AmpOrgRole ampOrgRole) {
+	    target.add(donorFundingSection);
+        target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));	
+	}
+	
 	/**
 	 * @param id
 	 * @param fmName
@@ -63,9 +88,10 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 	 * @throws Exception
 	 */
 	protected AmpRelatedOrganizationsBaseTableFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am, final String roleName) throws Exception {
+			final IModel<AmpActivityVersion> am, final String roleName,AmpDonorFundingFormSectionFeature donorFundingSection) throws Exception {
 		super(id, am, fmName);
 		setModel=new PropertyModel<Set<AmpOrgRole>>(am,"orgrole");
+		this.donorFundingSection=donorFundingSection;
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpOrgRole>());
 		
@@ -206,7 +232,8 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 				setModel.getObject().add(ampOrgRole);
 				uniqueCollectionValidationField.reloadValidationField(target);
 				list.getObject().removeAll();
-				target.add(list.getObject().getParent());
+				target.add(list.getObject().getParent());				
+				roleAdded(target,ampOrgRole);
 			}
 
 			@Override

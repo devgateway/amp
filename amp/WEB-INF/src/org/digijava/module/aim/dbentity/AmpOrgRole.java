@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.digijava.module.aim.util.Output;
 
 
-public class AmpOrgRole implements Serializable, Versionable, Cloneable
+public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Versionable, Cloneable
 {
     private Long ampOrgRoleId;
     private AmpActivityVersion activity;
@@ -136,5 +136,12 @@ public class AmpOrgRole implements Serializable, Versionable, Cloneable
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
 		return super.clone();
+	}
+	
+	@Override
+	public int compareTo(AmpOrgRole arg0) {
+		if(this.getAmpOrgRoleId()!=null)
+		return this.getAmpOrgRoleId().compareTo(arg0.getAmpOrgRoleId());
+		else return -1;
 	}
 }	

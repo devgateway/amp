@@ -4,10 +4,19 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.model.*;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
@@ -16,15 +25,17 @@ import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
+import org.dgfoundation.amp.onepager.models.AmpRelatedRolesModel;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author mpostelnicu@dgateway.org since Nov 8, 2010
@@ -122,10 +133,47 @@ public class AmpDonorDisbursementsFormTableFeature extends
 						updateModel();
 					};
 				});
+				
+				//read the list of roles from Related Organizations page, and create a unique Set with the roles chosen
+				AbstractReadOnlyModel<List<AmpRole>> rolesList = new AmpRelatedRolesModel(new PropertyModel<AmpActivityVersion>(model,"ampActivityId"));
+				
+				AmpSelectFieldPanel<AmpRole> roleSelect = new AmpSelectFieldPanel<AmpRole>("roleSelect",
+						new PropertyModel<AmpRole>(item.getModel(),"recipientRole"), rolesList, "Recipient Org Role", false, false,
+								null, false);
+				
+				
+				AbstractReadOnlyModel<List<AmpOrganisation>> orgsList = new AmpRelatedOrgsModel(
+						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), roleSelect.getChoiceContainer());
+
+
+				final AmpSelectFieldPanel<AmpOrganisation> orgSelect = new AmpSelectFieldPanel<AmpOrganisation>("orgSelect",
+						new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"), orgsList, "Recipient Organization", false,
+						true, null, false);
+
+						// when the role select changes, refresh the org selector
+						roleSelect.getChoiceContainer().add(
+								new AjaxFormComponentUpdatingBehavior("onchange") {
+									private static final long serialVersionUID = 7592988148376828926L;
+
+									@Override
+									protected void onUpdate(AjaxRequestTarget target) {
+										target.add(orgSelect);
+									}
+
+								});
+
+						item.add(roleSelect);
+						item.add(orgSelect);
+
+				
+				
+				
 			}
 		};
 		add(list);
-
+		
+		
+		
 	}
 
 }

@@ -35,13 +35,14 @@
 			<TR>
 				<TD align="right"><B><digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn>
 				:</B></TD>
-				<TD><logic:equal name="prop" property="value.class.simpleName"
-					value="Boolean">
-					<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
-				</logic:equal> <logic:notEqual name="prop"
-					property="value.class.simpleName" value="Boolean">
-					<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
-				</logic:notEqual></TD>
+				<TD>
+					<logic:equal name="prop" property="value.class.simpleName" value="Boolean">
+						<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
+					</logic:equal> 
+					<logic:notEqual name="prop" property="value.class.simpleName" value="Boolean">
+						<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
+					</logic:notEqual>
+				</TD>
 
 
 			</TR>
@@ -71,12 +72,17 @@
     	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
             <digi:trn key="${prefix}:${prop.key}"><i>${prop.key}</i></digi:trn>:
             <c:if test="${prop.key != 'donorTypes' &&  prop.key != 'statuses' }">
-            	${prop.value}
+            	<c:forEach var="val" items="${prop.value}" varStatus="itStatus">
+            		${val}<c:if test="${itStatus.last==false}">,</c:if>
+							</c:forEach>
             </c:if>
             <c:if test="${prop.key == 'donorTypes' ||  prop.key == 'statuses'}">
-            	<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
+            	<c:forEach var="val" items="${prop.value}" varStatus="itStatus">
+            		<digi:trn key="${prefix}:${val}">${val}</digi:trn><c:if test="${itStatus.last==false}">,</c:if>
+							</c:forEach>
+            	
             </c:if>
             |
-        </c:if>${prop.key}
+        </c:if>
 	</logic:iterate>
 </logic:equal>

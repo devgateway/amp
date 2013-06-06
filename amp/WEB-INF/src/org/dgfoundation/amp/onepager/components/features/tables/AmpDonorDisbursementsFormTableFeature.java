@@ -20,6 +20,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
@@ -134,39 +135,11 @@ public class AmpDonorDisbursementsFormTableFeature extends
 					};
 				});
 				
-				//read the list of roles from Related Organizations page, and create a unique Set with the roles chosen
-				AbstractReadOnlyModel<List<AmpRole>> rolesList = new AmpRelatedRolesModel(new PropertyModel<AmpActivityVersion>(model,"ampActivityId"));
 				
-				AmpSelectFieldPanel<AmpRole> roleSelect = new AmpSelectFieldPanel<AmpRole>("roleSelect",
-						new PropertyModel<AmpRole>(item.getModel(),"recipientRole"), rolesList, "Recipient Org Role", false, false,
-								null, false);
+				AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("orgRoleSelector", 
+						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(item.getModel(),"recipientRole"), new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"));
 				
-				
-				AbstractReadOnlyModel<List<AmpOrganisation>> orgsList = new AmpRelatedOrgsModel(
-						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), roleSelect.getChoiceContainer());
-
-
-				final AmpSelectFieldPanel<AmpOrganisation> orgSelect = new AmpSelectFieldPanel<AmpOrganisation>("orgSelect",
-						new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"), orgsList, "Recipient Organization", false,
-						true, null, false);
-
-						// when the role select changes, refresh the org selector
-						roleSelect.getChoiceContainer().add(
-								new AjaxFormComponentUpdatingBehavior("onchange") {
-									private static final long serialVersionUID = 7592988148376828926L;
-
-									@Override
-									protected void onUpdate(AjaxRequestTarget target) {
-										target.add(orgSelect);
-									}
-
-								});
-
-						item.add(roleSelect);
-						item.add(orgSelect);
-
-				
-				
+				item.add(orgRoleSelector);
 				
 			}
 		};

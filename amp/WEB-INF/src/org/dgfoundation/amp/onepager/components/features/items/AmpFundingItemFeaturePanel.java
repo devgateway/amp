@@ -9,6 +9,7 @@ import java.util.TreeSet;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -16,6 +17,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
@@ -117,66 +119,107 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		AmpTextAreaFieldPanel<String> donorObjective = new AmpTextAreaFieldPanel<String>("donorObjective", new PropertyModel<String>(fundingModel,"donorObjective"), "Donor Objective", false);
 		add(donorObjective);
 		
-		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true, AmpOrganisationSearchModel.class) {			
-			private static final long serialVersionUID = 1L;
-			@Override
-			protected String getChoiceValue(AmpOrganisation choice) {
-				return DbUtil.filter(choice.getName());
-			}
-			
-			@Override
-			protected boolean showAcronyms() {
-				return true;
-			}
-			
-			@Override
-			protected String getAcronym(AmpOrganisation choice) {
-				return choice.getAcronym();
-			}
-
-			@Override
-			public void onSelect(AjaxRequestTarget target,
-					AmpOrganisation choice) {
-				this.getParent().setVisible(false);
-				
-				ListItem listItem = findParent(ListItem.class);
-				AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
-				AmpFunding funding = fundingModel.getObject();
-				AmpOrganisation oldOrg = funding.getAmpDonorOrgId();
-				fundingSection.switchOrg(listItem, funding, choice, target);
-				fundingSection.updateFundingGroups(oldOrg, target);
-			}
-			@Override
-			public Integer getChoiceLevel(AmpOrganisation choice) {
-				return null;
-			}
-		};
+//		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true, AmpOrganisationSearchModel.class) {			
+//			private static final long serialVersionUID = 1L;
+//			@Override
+//			protected String getChoiceValue(AmpOrganisation choice) {
+//				return DbUtil.filter(choice.getName());
+//			}
+//			
+//			@Override
+//			protected boolean showAcronyms() {
+//				return true;
+//			}
+//			
+//			@Override
+//			protected String getAcronym(AmpOrganisation choice) {
+//				return choice.getAcronym();
+//			}
+//
+//			@Override
+//			public void onSelect(AjaxRequestTarget target,
+//					AmpOrganisation choice) {
+//				this.getParent().setVisible(false);
+//				
+//				ListItem listItem = findParent(ListItem.class);
+//				AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
+//				AmpFunding funding = fundingModel.getObject();
+//				AmpOrganisation oldOrg = funding.getAmpDonorOrgId();
+//				fundingSection.switchOrg(listItem, funding, choice, target);
+//				fundingSection.updateFundingGroups(oldOrg, target);
+//			}
+//			@Override
+//			public Integer getChoiceLevel(AmpOrganisation choice) {
+//				return null;
+//			}
+//		};
 //		newOrgSelect.setIgnoreFmVisibility(true);
 //		newOrgSelect.setVisible(false);
 //		newOrgSelect.setOutputMarkupId(true);
 		
 		
-		final AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchFundingOrgs", new Model<String> (),
-				"Replace Funding Organizations", newOrgSelect);
-		searchOrganization.setIgnoreFmVisibility(true);
-		searchOrganization.setVisible(false);
-		searchOrganization.setOutputMarkupId(true);
-
+//		final AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchFundingOrgs", new Model<String> (),
+//				"Replace Funding Organizations", newOrgSelect);
+//		searchOrganization.setIgnoreFmVisibility(true);
+//		searchOrganization.setVisible(false);
+//		searchOrganization.setOutputMarkupId(true);
+//		add(searchOrganization);
+	
 		
-		add(searchOrganization);
-
-		AmpAjaxLinkField changeFundingOrg= new AmpAjaxLinkField("newOrgButton","Change Funding Organisation","Change Funding Organisation") {			
+		final AmpOrgRoleSelectorComponent orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am);
+		add(orgRoleSelector);
+		
+		// button used to add funding based on the selected organization and
+		// role
+		final AmpAjaxLinkField changeOrg = new AmpAjaxLinkField("changeOrg",
+				"Change Org", "Change Org") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				searchOrganization.setVisible(true);
-				MarkupContainer tmpParent = searchOrganization.getParent();
-				target.add(tmpParent);
-				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(tmpParent));
+				
+				ListItem listItem = findParent(ListItem.class);
+				AmpDonorFundingFormSectionFeature fundingSection = findParent(AmpDonorFundingFormSectionFeature.class);
+				AmpFunding funding = fundingModel.getObject();
+				AmpOrganisation oldOrg = funding.getAmpDonorOrgId();
+				fundingSection.switchOrg(listItem, funding, (AmpOrganisation) orgRoleSelector.getOrgSelect().getChoiceContainer()
+						.getModelObject(),  (AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject(), target);
+				fundingSection.updateFundingGroups(oldOrg, target);
+						
 			}
 		};
-		add(changeFundingOrg);
+
+		// by default this button is disabled, when the form first loads
+		changeOrg.getButton().setEnabled(false);
+		add(changeOrg);
+
+		
+		orgRoleSelector.getOrgSelect().getChoiceContainer().add(
+				new AjaxFormComponentUpdatingBehavior("onchange") {
+					private static final long serialVersionUID = 2964092433905217073L;
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						if (orgRoleSelector.getOrgSelect().getChoiceContainer().getModelObject() == null)
+							changeOrg.getButton().setEnabled(false);
+							else
+								changeOrg.getButton().setEnabled(true);
+						target.add(changeOrg);
+					}
+				});
+
+
+		
+//		AmpAjaxLinkField changeFundingOrg= new AmpAjaxLinkField("newOrgButton","Change Funding Organisation","Change Funding Organisation") {			
+//			private static final long serialVersionUID = 1L;
+//			@Override
+//			protected void onClick(AjaxRequestTarget target) {
+//				orgRoleSelector.setVisible(true);
+//				MarkupContainer tmpParent = orgRoleSelector.getParent();
+//				target.add(tmpParent);
+//				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(tmpParent));
+//			}
+//		};
+//		add(changeFundingOrg);
 		
 		
 		AmpCheckBoxFieldPanel active = new AmpCheckBoxFieldPanel("active",

@@ -16,18 +16,15 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
-import org.dgfoundation.amp.onepager.models.AmpRelatedOrgsModel;
-import org.dgfoundation.amp.onepager.models.AmpRelatedRolesModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -50,9 +47,8 @@ public class AmpDonorFundingFormSectionFeature extends
 	private IModel<Set<AmpOrganisation>> setModel;
 	private AbstractReadOnlyModel<List<AmpFunding>> listModel;
 	private PropertyModel<Set<AmpFunding>> fundingModel;
-	private AmpSelectFieldPanel<AmpRole> roleSelect;
-	private AmpSelectFieldPanel<AmpOrganisation> orgSelect;
 	private AmpAjaxLinkField addNewFunding;
+	private AmpOrgRoleSelectorComponent orgRoleSelector;
 
 	public ListEditor<AmpOrganisation> getList() {
 		return list;
@@ -62,13 +58,15 @@ public class AmpDonorFundingFormSectionFeature extends
 		return setModel;
 	}
 	
-	public void switchOrg(ListItem item, AmpFunding funding, AmpOrganisation newOrg, AjaxRequestTarget target){
+	public void switchOrg(ListItem item, AmpFunding funding, AmpOrganisation newOrg, AmpRole role, AjaxRequestTarget target) {
+		
 		AmpFundingGroupFeaturePanel existingFundGrp = listItems.get(funding.getAmpDonorOrgId());
 			
 		existingFundGrp.getList().remove(item);
 		existingFundGrp.getList().updateModel();
 		
 		funding.setAmpDonorOrgId(newOrg);
+		funding.setSourceRole(role);
 		
 		if (listItems.containsKey(newOrg)){
 			AmpFundingGroupFeaturePanel fg = listItems.get(newOrg);
@@ -156,8 +154,8 @@ public class AmpDonorFundingFormSectionFeature extends
 			@Override
 			public void addItem(AmpOrganisation org) {
 				AmpFunding funding = new AmpFunding();
-				if(roleSelect.getChoiceContainer().getModelObject()!=null)
-					funding.setSourceRole((AmpRole)roleSelect.getChoiceContainer().getModelObject());
+				if(orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject()!=null)
+					funding.setSourceRole((AmpRole)orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject());
 				funding.setAmpDonorOrgId(org);
 				funding.setAmpActivityId(am.getObject());
 				funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());
@@ -217,57 +215,28 @@ public class AmpDonorFundingFormSectionFeature extends
 //				"Search Funding Organizations",   searchOrgs );
 //		wmc.add(searchOrganization);
 
-		//read the list of roles from Related Organizations page, and create a unique Set with the roles chosen
-		AbstractReadOnlyModel<List<AmpRole>> rolesList = new AmpRelatedRolesModel(am);
-
-		// selector for organization role
-		roleSelect = new AmpSelectFieldPanel<AmpRole>("roleSelect",
-				new Model<AmpRole>(), rolesList, "Org Role", false, false,
-				null, true);
-
 		
-		//read the list of organizations from related organizations page, and create a unique set with the orgs chosen
-		AbstractReadOnlyModel<List<AmpOrganisation>> orgsList = new AmpRelatedOrgsModel(am, roleSelect.getChoiceContainer());
+		orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am);
+		add(orgRoleSelector);
 		
-
-		// when the role select changes, refresh the org selector
-		roleSelect.getChoiceContainer().add(
-				new AjaxFormComponentUpdatingBehavior("onchange") {
-					private static final long serialVersionUID = 7592988148376828926L;
-
-					@Override
-					protected void onUpdate(AjaxRequestTarget target) {
-						target.add(orgSelect);
-					}
-
-				});
-
-		// organization drop down - shows ONLY orgs entered as Related
-		// Organizations and with role=roleSelect
-		orgSelect = new AmpSelectFieldPanel<AmpOrganisation>("orgSelect",
-				new Model<AmpOrganisation>(), orgsList, "Organization", false,
-				true, null, true);
-
 		// when the org select changes, update the status of the addNewFunding
 		// button, enable it if there is a selection made, disable it otherwise
-		orgSelect.getChoiceContainer().add(
+		orgRoleSelector.getOrgSelect().getChoiceContainer().add(
 				new AjaxFormComponentUpdatingBehavior("onchange") {
 
 					private static final long serialVersionUID = 2964092433905217073L;
 
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
-						if (orgSelect.getChoiceContainer().getModelObject() == null)
+						if (orgRoleSelector.getOrgSelect().getChoiceContainer().getModelObject() == null)
 							addNewFunding.getButton().setEnabled(false);
 						else
 							addNewFunding.getButton().setEnabled(true);
 						target.add(addNewFunding);
 					}
-
 				});
 
-		add(roleSelect);
-		add(orgSelect);
+		
 
 		// button used to add funding based on the selected organization and
 		// role
@@ -277,7 +246,7 @@ public class AmpDonorFundingFormSectionFeature extends
 
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				list.addItem((AmpOrganisation) orgSelect.getChoiceContainer()
+				list.addItem((AmpOrganisation) orgRoleSelector.getOrgSelect().getChoiceContainer()
 						.getModelObject());
 				target.appendJavaScript(OnePagerUtil
 						.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
@@ -288,7 +257,6 @@ public class AmpDonorFundingFormSectionFeature extends
 		// by default this button is disabled, when the form first loads
 		addNewFunding.getButton().setEnabled(false);
 		add(addNewFunding);
-
 	}
 
 }

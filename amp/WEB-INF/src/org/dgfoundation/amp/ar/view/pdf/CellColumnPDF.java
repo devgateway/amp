@@ -43,9 +43,14 @@ public class CellColumnPDF extends PDFExporter {
 	public void generate() {
 		CellColumn col=(CellColumn) item;
 		 Cell c=col.getByOwner(ownerId);
-		 if(c!=null)
-		 c.invokeExporter(this);
-		 else table.addCell(new PdfPCell(new Paragraph(" ",new Font(Font.COURIER, 10))));
+		 if (c!=null)
+		 {
+			 c.invokeExporter(this);
+		 }
+		 else
+		 {
+			 table.addCell(new PdfPCell(new Paragraph(" ",new Font(Font.COURIER, 10))));
+		 }
 	}
 
 }

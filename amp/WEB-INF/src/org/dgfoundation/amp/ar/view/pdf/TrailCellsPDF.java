@@ -8,13 +8,17 @@ package org.dgfoundation.amp.ar.view.pdf;
 
 import java.awt.Color;
 import java.util.Iterator;
+import java.util.List;
 
+import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
+import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.dbentity.AmpReports;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
@@ -48,6 +52,20 @@ public class TrailCellsPDF extends PDFExporter {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * counts the number of columns to be drawn in the PDF export table
+	 * @param ar
+	 * @return
+	 */
+	public final static int countDrawnColumns(AmpReports ar)
+	{
+		int res = 0;
+		res = ar.getColumns().size() + ar.getMeasures().size() - ar.getHierarchies().size();
+		if (res < 0)
+			System.err.println("the report will come out with a corrupted layout");
+		return res;
+	}
+		
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Exporter#generate()
 	 */
@@ -56,12 +74,14 @@ public class TrailCellsPDF extends PDFExporter {
 		ReportData grd=(ReportData) item;
 		Font totalFont = new Font(Font.COURIER, 10, Font.BOLD);
 		
-		if(grd.getParent()!=null) {
-			
+		if(grd.getParent()!=null) 
+		{
 			ReportData parent=(ReportData)grd.getParent();
+			//int depthToIgnore = 0;
 			while (parent.getReportMetadata()==null)
 			{
 				parent=parent.getParent();
+				//depthToIgnore ++;
 			}
 			//when we get to the top of the hierarchy we have access to AmpReports
 			
@@ -71,6 +91,10 @@ public class TrailCellsPDF extends PDFExporter {
 			Long siteId = parent.getReportMetadata().getSiteId();
 			String locale = parent.getReportMetadata().getLocale();
 			String totalsFor = "Totals For";
+			
+			int totalNrOfDrawnColumns = countDrawnColumns(parent.getReportMetadata());
+					
+
 			//String translatedName=grd.getName();
 			
 			//AMP-6253 grd.getName()is (field : Name) for report hierarchies simplename hold only the field name until it's translated 
@@ -110,24 +134,40 @@ public class TrailCellsPDF extends PDFExporter {
 				pdfc2.setBackgroundColor(currentBackColor);
 			}else{
 				pdfc = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
-				Integer sourceColsCount=grd.getSourceColsCount();
-				if( sourceColsCount!=null&&sourceColsCount>1){
-					//When a column becomes hierarchy we have to subtract it from source columns.
-					int span = sourceColsCount-grd.getReportMetadata().getHierarchies().size() - grd.getReportMetadata().getExtraTotalsCount();
-					if (span!=0){
-						pdfc.setColspan(span);
-					}
-				}
+//				Integer sourceColsCount=grd.getSourceColsCount();
+//				if( sourceColsCount!=null&&sourceColsCount>1){
+//					//When a column becomes hierarchy we have to subtract it from source columns.
+//					int span = sourceColsCount-grd.getReportMetadata().getHierarchies().size() - grd.getReportMetadata().getExtraTotalsCount();
+//					if (span!=0){
+//						pdfc.setColspan(span);
+//					}
+//				}
 				currentBackColor=new  Color(235,235,235);
 				pdfc.setBackgroundColor(currentBackColor);
 				table.addCell(pdfc);
 			}
 			
-			Iterator i=grd.getTrailCells().iterator();
-			while (i.hasNext()) {
-				Cell element = (Cell) i.next();
-				if (element!=null)
+			List<Cell> allTrailCells = grd.getTrailCells();
+			
+			// +1 is because we use the first column for title
+			// trailCells which should be drawn: [n - totalNrOfDrawnColumns + 1, n-1]
+			
+			int firstRelevantTrailCell = allTrailCells.size() - totalNrOfDrawnColumns + 1; 
+			
+			for(int i = firstRelevantTrailCell; i < allTrailCells.size(); i++)
+			{
+				Cell element = allTrailCells.get(i);
+				if (element == null)
+				{						
+					PdfPCell emptyCell = new PdfPCell(new Paragraph(" ", totalFont));
+					emptyCell.setBackgroundColor(currentBackColor);
+					table.addCell(emptyCell);
+				}
+				else
+				{
+					// non-null cell
 					element.invokeExporter(this);
+				}
 			}
 			
 			currentBackColor=null;

@@ -124,6 +124,7 @@ public class FundingAdded extends Action {
 			newFund.setFundingStatus( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getFundingStatus()) );
 			newFund.setModeOfPayment( CategoryManagerUtil.getAmpCategoryValueFromDb(currentFunding.getModeOfPayment()) );
 			newFund.setOrgFundingId(currentFunding.getOrgFundingId());
+			newFund.setSourceRole(currentFunding.getSourceRole());
 			newFund.setConditions(currentFunding.getFundingConditions());
 			newFund.setActStartDate(currentFunding.getActualStartDate());
 			newFund.setActCloseDate(currentFunding.getActualCompletionDate());

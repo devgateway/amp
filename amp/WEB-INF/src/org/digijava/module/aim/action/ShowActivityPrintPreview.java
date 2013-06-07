@@ -589,6 +589,7 @@ public class ShowActivityPrintPreview
                         fund.setFundingId(ampFunding.getAmpFundingId().
                                           longValue());
                         fund.setOrgFundingId(ampFunding.getFinancingId());
+                        if(ampFunding.getSourceRole()!=null) fund.setSourceRole(ampFunding.getSourceRole().getName());
                         //fund.setModality(ampFunding.getModalityId());
                         fund.setConditions(ampFunding.getConditions());
                         Collection<AmpFundingDetail> fundDetails = ampFunding.getFundingDetails();

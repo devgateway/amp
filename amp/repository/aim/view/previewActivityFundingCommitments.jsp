@@ -18,8 +18,8 @@
 <!--start commitments-->
 
 
-<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments" 
-														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 	<c:if test="${aimEditActivityForm.funding.showPlanned}">
 	
 <c:if test="${!empty funding.plannedCommitmentsDetails}">
@@ -46,28 +46,28 @@
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">
 						<tr bgcolor="#ffffff">
 							<td height="18" width="40%" align="right" bgcolor="#ffffff">
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type" parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type" parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 								<digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
 								</digi:trn>
 								</module:display>
 							</td>
 							<td height="18" align="right">
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date" parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table
+								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date" parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table
 								">
 									<b><bean:write name="fundingDetail" property="transactionDate"/></b>
 								</module:display>
 							</td>
 							<td height="18" align="right" bgcolor="#ffffff">
-							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount" parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount" parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 								<!-- <font color="blue">*</font> -->
 								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
 							</module:display> 
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency" parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency" parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="currencyCode"/></b>
 								</module:display> &nbsp;</td>
 							<td height="18">
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate" parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate" parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 								</module:display>
 							</td>
@@ -113,33 +113,33 @@
 			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Actual">
 						<tr bgcolor="#ffffff">
 							<td width="40%" align="right"  bgcolor="#FFFFFF">
-							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type"
-								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type"
+								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 								<digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
 								</digi:trn>
 							</module:display>
 							</td>
 							<td height="18" align="right">
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date"
-									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date"
+									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="transactionDate" /></b>
 								</module:display>
 							</td>
 							<td height="18" align="right">
-							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount" 
-								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount" 
+								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
 							</module:display>
-							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency"
-								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency"
+								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 								<b><bean:write name="fundingDetail" property="currencyCode" /></b>
 							</module:display> &nbsp;
 							</td>
 							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
 							<td height="18">
-							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/exchangeRate"
-								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/exchangeRate"
+								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 							</module:display>
 							</td>
@@ -189,33 +189,33 @@
                         <logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Pipeline">
 						<tr bgcolor="#ffffff">
 							<td width="40%" align="right"  bgcolor="#FFFFFF">
-							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type"
-								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type"
+								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 								<digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b>
 								</digi:trn>
 							</module:display>
 							</td>
 							<td height="18" align="right">
-								<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date"
-									parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date"
+									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="transactionDate" /></b>
 								</module:display>
 							</td>
 							<td height="18" align="right">
-							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount" 
-								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount" 
+								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
 							</module:display>
-							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency"
-								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency"
+								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 								<b><bean:write name="fundingDetail" property="currencyCode" /></b>
 							</module:display> &nbsp;
 							</td>
 							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
 							<td height="18">
-							<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table/exchangeRate"
-								parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments/Commitments Table">
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/exchangeRate"
+								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 							</module:display>
 							</td>

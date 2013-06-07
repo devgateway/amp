@@ -357,8 +357,8 @@ function collapseAll() {
 			</span>		
 		</legend>
 		<div class="field_text_big">
-			<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments" 
-														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Actual Commitment</digi:trn>:<br/> 
 				<c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
@@ -393,8 +393,8 @@ function collapseAll() {
 		         </c:if>
 		       </module:display>
 			
-			<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements" 
-														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Actual Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
@@ -428,8 +428,8 @@ function collapseAll() {
 			<hr/>
 			</c:if>
 			</module:display>
-			<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures" 
-														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Total Expenditures</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
@@ -1490,7 +1490,7 @@ function collapseAll() {
 <!-- FUNDING SECTION -->
 
 <!-- PROPOSED PROJECT COST -->
-<module:display name="/Activity Form/Donor Funding/Proposed Project Cost" parentModule="/Activity Form/Donor Funding">
+<module:display name="/Activity Form/Funding/Proposed Project Cost" parentModule="/Activity Form/Funding">
 <fieldset>
 	<legend>
 		<span class=legend_label id="proposedcostlink" style="cursor: pointer;">
@@ -1528,11 +1528,11 @@ function collapseAll() {
 </fieldset>
 </module:display>
 <!-- END PROPOSED PROJECT COST -->	
-	<module:display name="/Activity Form/Donor Funding" parentModule="/Activity Form">
+	<module:display name="/Activity Form/Funding" parentModule="/Activity Form">
 		<fieldset>
 			<legend>
 				<span class=legend_label id="fundinglink" style="cursor: pointer;">
-					<digi:trn>Donor Funding</digi:trn>
+					<digi:trn>Funding</digi:trn>
 				</span>			
 			</legend>
 			<div id="fundingdiv">

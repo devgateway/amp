@@ -36,21 +36,22 @@
 										<tr>
 											<td>
 											<table cellspacing="1" cellpadding="0" border="0" width="100%">
-												<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification" 
-													parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+												<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification" 
+													parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 												<tr>
 													<td>
 													<table cellspacing="1" cellpadding="0" border="0" width="100%">
 														<tr>
 															<td>
 															<table width="100%" border="0" cellpadding="0" bgcolor="#dddddd" cellspacing="1" style="font-size:11px;">
-																<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id"
-																	parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id"
+																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																<tr>
 																	<td align="left" width="150">
 																		<a title='<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
-																			<digi:trn key="aim:fundingOrgId">Funding Organization Id</digi:trn>
+																			<digi:trn key="aim:orgId">Organization Id</digi:trn>
 																		</a>
+																		
 																	</td>
 																	<td width="1">:</td>
 																	<td align="left">
@@ -58,12 +59,12 @@
 																	</td>
 																</tr>
 																</module:display>
-																<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Donor Organisation" 
-																	parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Organisation" 
+																	parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 																<tr>
 																	<td align="left" width="150">
 																		<a title='<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>'>
-																			<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>
+																			<digi:trn key="aim:OrgName">Organization Name</digi:trn>
 																		</a>
 																	</td>
 																	<td width="1">:</td>
@@ -71,10 +72,24 @@
 																		<b>${fundingOrganization.orgName}</b>
 																	</td>
 																</tr>
+																<logic:present name="funding" property="sourceRole">
+																<tr>
+																	<td align="left" width="150">
+																		<a title='<digi:trn key="aim:orgRole">Organization Role</digi:trn>'>
+																			<digi:trn key="aim:OrgRole">Organization Role</digi:trn>
+																		</a>
+																	</td>
+																	<td width="1">:</td>
+																	<td align="left">
+																			<b><bean:write name="funding" property="sourceRole"/></b>
+																	</td>
+																</tr>
+																</logic:present>
+																
 																</module:display>
 																<!-- type of assistance -->
-																<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence"
-																	parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence"
+																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>'>
@@ -88,8 +103,8 @@
 																	</tr>
 																</module:display>
 																
-																<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument"
-																	parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument"
+																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>'>
@@ -102,8 +117,8 @@
 																		</logic:notEmpty></td>
 																	</tr>
 																</module:display>
-																<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Funding Status"
-																	parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status"
+																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn>Funding Status</digi:trn>'>
@@ -117,8 +132,8 @@
 																		</td>
 																	</tr>
 																</module:display>
-																<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment"
-																	parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment"
+																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn>Mode of Payment</digi:trn>'>
@@ -134,7 +149,7 @@
 																</module:display>
 																
 																<!-- MISSING FIELD IN THE NEW FM STRUCTURE -->
-																<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Donor Objective" parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Donor Objective" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:donorobjective">Donor Objective</digi:trn>'>
@@ -146,8 +161,8 @@
 																		</td>
 																	</tr>
 																</module:display>
-																<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Agreement"
-																	parentModule="/Activity Form/Donor Funding/Funding Group/Funding Classification">
+																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
+																	parentModule="/Activity Form/Funding/Funding Group/Funding Classification">
 																	<tr>
 																		<td align="left" width="150">
 																			<a title='<digi:trn>Agreement Title</digi:trn>'>
@@ -185,17 +200,17 @@
 													<bean:define id="funding" name="funding" scope="page" toScope="request"
 														type="org.digijava.module.aim.helper.Funding">
 													</bean:define>
-													<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments" 
-														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingCommitments.jsp" />
 													</module:display>
-													<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements" 
-							 							parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
+							 							parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingDisbursement.jsp" />
 													</module:display>
 
-													<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures" 
-														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingExpenditures.jsp" />
 													</module:display>
 
@@ -231,8 +246,8 @@
                     <tr>
                         <td>
                         <table cellspacing="1" cellpadding="0" border="0" style="font-size:11px;" width="100%">
-                        	<module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Commitments" 
-														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+                        	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 							<c:if test="${aimEditActivityForm.funding.showPlanned}">
 	                        <tr>
 	                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase;">
@@ -284,8 +299,8 @@
 	                        </field:display>
                         </c:if>
                         </module:display>
-                        <module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursements" 
-														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+                        <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 						<c:if test="${aimEditActivityForm.funding.showPlanned}">
                         <tr>
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
@@ -322,8 +337,8 @@
                         </tr>
                         </c:if>
                         </module:display>
-                         <module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Expenditures" 
-														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+                         <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 						<c:if test="${aimEditActivityForm.funding.showPlanned}">
                         <tr>
                             <td bgcolor="#eeeeee"
@@ -360,8 +375,8 @@
                         </tr>
                         </c:if>
                         </module:display>
-                          <module:display name="/Activity Form/Donor Funding/Funding Group/Funding Item/Disbursement Orders" 
-														parentModule="/Activity Form/Donor Funding/Funding Group/Funding Item">
+                          <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
    
                         <tr>
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase;">

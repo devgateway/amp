@@ -25,6 +25,7 @@ public class Funding implements Serializable
     private AmpCategoryValue modeOfPayment;
     
 	private String orgFundingId;
+	private String sourceRole;
 	private String signatureDate;
 	//private AmpModality modality;
 	private Collection fundingDetails;	// Collection of Funding Details
@@ -547,6 +548,20 @@ public class Funding implements Serializable
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	/**
+	 * @return the orgRole
+	 */
+	public String getSourceRole() {
+		return sourceRole;
+	}
+
+	/**
+	 * @param orgRole the orgRole to set
+	 */
+	public void setSourceRole(String orgRole) {
+		this.sourceRole = orgRole;
 	}
 	
 }

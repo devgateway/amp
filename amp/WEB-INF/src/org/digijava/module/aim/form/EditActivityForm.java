@@ -2572,6 +2572,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private List<KeyValue> availableMTEFProjectionYears;
 		private Collection projections;
 		private String orgFundingId;
+		private String sourceRole;
 		private int numComm;
 		private int numDisb;
 		private int numExp;
@@ -3382,6 +3383,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		 */
 		public void setModeOfPayment(Long modeOfPayment) {
 			this.modeOfPayment = modeOfPayment;
+		}
+
+		/**
+		 * @return the sourceRole
+		 */
+		public String getSourceRole() {
+			return sourceRole;
+		}
+
+		/**
+		 * @param sourceRole the sourceRole to set
+		 */
+		public void setSourceRole(String sourceRole) {
+			this.sourceRole = sourceRole;
 		}	
 		
 	}

@@ -4,21 +4,16 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
-import java.util.List;
 import java.util.TreeSet;
 
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
-import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
@@ -28,25 +23,22 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDis
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorDisbursementsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorExpendituresSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpDonorFundingInfoSubsectionFeature;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpEstimatedDonorDisbursementsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpMTEFProjectionSubsectionFeature;
+import org.dgfoundation.amp.onepager.components.features.subsections.AmpReleaseOfFundsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
-import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
-import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -248,7 +240,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		add(commitments);
 		
 		
-		 disbursements = new AmpDonorDisbursementsSubsectionFeature(
+		disbursements = new AmpDonorDisbursementsSubsectionFeature(
 				"disbursements", fundingModel,"Disbursements",Constants.DISBURSEMENT);
 		add(disbursements);
 		
@@ -257,6 +249,15 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		disbOrders.setDisbursements(disbursements);
 		add(disbOrders);
 		
+		AmpEstimatedDonorDisbursementsSubsectionFeature edd = new AmpEstimatedDonorDisbursementsSubsectionFeature(
+					"estimatedDisbursements", fundingModel,"Estimated Disbursements",Constants.ESTIMATED_DONOR_DISBURSEMENT);
+			add(edd);
+		
+		AmpReleaseOfFundsSubsectionFeature rof = new AmpReleaseOfFundsSubsectionFeature(
+					"releaseOfFunds", fundingModel,"Release of Funds",Constants.RELEASE_OF_FUNDS);
+			add(rof);
+		
+			
 		AmpDonorExpendituresSubsectionFeature expenditures = new AmpDonorExpendituresSubsectionFeature(
 				"expenditures", fundingModel,"Expenditures",Constants.EXPENDITURE);
 		add(expenditures);

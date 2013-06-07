@@ -1271,6 +1271,8 @@ public class EditActivity extends Action {
 			                              longValue());
 			            fund.setGroupVersionedFunding(ampFunding.getGroupVersionedFunding());
 			            fund.setOrgFundingId(ampFunding.getFinancingId());
+			            if(ampFunding.getSourceRole()!=null) fund.setSourceRole(ampFunding.getSourceRole().getName());
+			            
 			            fund.setConditions(ampFunding.getConditions());
 			            fund.setDonorObjective(ampFunding.getDonorObjective());
                         fund.setCapitalSpendingPercentage(ampFunding.getCapitalSpendingPercentage());

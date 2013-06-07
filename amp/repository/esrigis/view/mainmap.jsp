@@ -67,6 +67,7 @@
   		$('#filterbtn').click(function(){
 			if (filterenable()){
      			//$('#filterdiv').toggle();
+     			debugger;
      			showPopin();
 			}else{
 				alert('If you click filters, you will lose all your previus filter from reports - Filter is disable');

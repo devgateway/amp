@@ -7,10 +7,19 @@ function checkUncheckRelatedEntities(option,name,id){
 	checkRelatedEntities(option,name,id);
 }
 function allOptionChecked(option,name,subname){
-	if(option.checked){
-		var options=$("input[name='"+name+"']").removeAttr('checked');
-		var options=$("input[name='"+subname+"']").removeAttr('checked');
+	if(option.checked)
+	{
+		// set all
+		$("input[name='"+name+"']").attr('checked', 'checked');
+		$("input[name='"+subname+"']").attr('checked', 'checked');
 		option.checked=true;
+	}
+	else
+	{
+		// remove all
+		$("input[name='"+name+"']").removeAttr('checked');
+		$("input[name='"+subname+"']").removeAttr('checked');
+		option.checked = false;
 	}
 }
 

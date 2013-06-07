@@ -176,10 +176,6 @@ public class XmlPatcherService extends AbstractServiceImpl {
 		logger.info(scheduledPatches.size()+" patches scheduled for execution...");
 		while (iterator.hasNext()) {
 			AmpXmlPatch ampPatch = iterator.next();
-			if (ampPatch.getPatchId().equals("v_contracting_arrangements.xml"))
-			{
-				System.out.println("what is happenning?");
-			}
 			long timeStart = System.currentTimeMillis();
 			AmpXmlPatchLog log = new AmpXmlPatchLog(ampPatch);
 			logger.debug("Reading patch: "+ampPatch.getPatchId());

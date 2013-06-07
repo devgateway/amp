@@ -800,12 +800,17 @@ public class ExportActivityToPDF extends Action {
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)+ "\t: " +myForm.getPlanning().getProposedCompDate() +"\n";
+					outputValue+=TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getProposedCompDate() +"\n";
 				}
-				
+
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext)){
+                    outputValue+=TranslatorWorker.translateText("Original Completion Date", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalCompDate() +"\n";
+                }
+
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Actual Completion Date", locale, siteId)+ "\t: " +myForm.getPlanning().getCurrentCompDate() +"\n";
-				}		
+					outputValue+=TranslatorWorker.translateText("Actual Completion Date", locale, siteId)+ "\t: " + myForm.getPlanning().getCurrentCompDate() +"\n";
+				}
+
 				if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
 					String durationStr = myForm.getPlanning().getProjectPeriod() != null ? myForm.getPlanning().getProjectPeriod().toString(): "";
 					outputValue+=TranslatorWorker.translateText("Duration of Project", locale, siteId)+ "\t: " + durationStr +"\n";

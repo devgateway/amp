@@ -1380,65 +1380,71 @@ public class ExportActivityToWord extends Action {
 	}
 
 
-	private void processPlanningPart(HttpServletRequest request,
-			ServletContext ampContext, Table planningSubTable1)
-			throws WorkerException, Exception {
+	private void processPlanningPart(HttpServletRequest request, ServletContext ampContext, Table planningSubTable1)
+			throws Exception {
+
 		String columnName;
 		String columnVal;
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank", ampContext)){
-			columnName=TranslatorWorker.translateText("Line Ministry Rank",request)+": ";
+
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank", ampContext)) {
+			columnName=TranslatorWorker.translateText("Line Ministry Rank", request)+": ";
 			columnVal = planning.getLineMinRank().equals("-1")?"":planning.getLineMinRank();
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Ministry of Planning Rank", ampContext)){
-			columnName=TranslatorWorker.translateText("Ministry of Planning Rank",request)+": ";
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Ministry of Planning Rank", ampContext) ){
+			columnName=TranslatorWorker.translateText("Ministry of Planning Rank", request)+": ";
 			columnVal = planning.getPlanMinRank().equals("-1")?"":planning.getPlanMinRank();
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext)){
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Start Date", ampContext)){
 			columnName=TranslatorWorker.translateText("Proposed Start Date", request) + ":";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalStartDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Actual Start Date",request) +": ";
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Start Date", ampContext)) {
+			columnName=TranslatorWorker.translateText("Actual Start Date", request) +": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedStartDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Proposed Approval Date",request) +": ";
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Approval Date", ampContext)) {
+			columnName=TranslatorWorker.translateText("Proposed Approval Date", request) +": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getOriginalAppDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Actual Approval Date",request)+": "; 
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Approval Date", ampContext)) {
+			columnName=TranslatorWorker.translateText("Actual Approval Date", request)+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getRevisedAppDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext)){
-			columnName=TranslatorWorker.translateText("Final Date for Contracting",request)+": ";
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Contracting", ampContext)) {
+			columnName=TranslatorWorker.translateText("Final Date for Contracting", request)+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getContractingDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements", ampContext)){
-			columnName=TranslatorWorker.translateText("Final Date for Disbursements",request)+": ";
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Final Date for Disbursements", ampContext)) {
+			columnName=TranslatorWorker.translateText("Final Date for Disbursements", request)+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getDisbursementsDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Proposed Completion Date",request)+": ";
-			generateOverAllTableRows(planningSubTable1,columnName,planning.getProposedCompDate(),null);
-		}
-		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
-			columnName=TranslatorWorker.translateText("Actual Completion Date",request)+": ";
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)) {
+            columnName=TranslatorWorker.translateText("Proposed Completion Date", request)+": ";
+            generateOverAllTableRows(planningSubTable1,columnName,planning.getProposedCompDate(),null);
+        }
+
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext)) {
+            columnName = TranslatorWorker.translateText("Original Completion Date", request)+": ";
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null);
+        }
+
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)) {
+			columnName=TranslatorWorker.translateText("Actual Completion Date", request)+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getCurrentCompDate(),null);
 		}
 		
-		if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
-			columnName=TranslatorWorker.translateText("Duration of Project",request)+": ";
+		if (FeaturesUtil.isVisibleField("Duration of Project", ampContext)) {
+			columnName=TranslatorWorker.translateText("Duration of Project", request)+": ";
 			columnVal = planning.getProjectPeriod()!=null?planning.getProjectPeriod().toString():"";
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}

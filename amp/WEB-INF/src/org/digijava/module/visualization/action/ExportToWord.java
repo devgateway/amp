@@ -35,6 +35,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.visualization.dbentity.AmpDashboardGraph;
 import org.digijava.module.visualization.dbentity.AmpGraph;
 import org.digijava.module.visualization.form.VisualizationForm;
@@ -198,6 +199,7 @@ public class ExportToWord extends Action {
 			String filtersSubSectorsTrn = TranslatorWorker.translateText("Sub-Sectors");
 			String filtersRegionsTrn = TranslatorWorker.translateText("Regions");
 			String filtersZonesTrn = TranslatorWorker.translateText("Zones");
+			String filtersStatusTrn = TranslatorWorker.translateText("Status");
 			String fundingTrn = TranslatorWorker.translateText("Funding");
             String topPrjTrn = TranslatorWorker.translateText("Top Projects");
             String ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth");
@@ -518,6 +520,7 @@ public class ExportToWord extends Action {
             cell.setBackgroundColor(CELLCOLOR);
             filtersTbl.addCell(cell);
             String itemList = "";
+            
             Long[] orgGroupIds = vForm.getFilter().getSelOrgGroupIds();
             if (orgGroupIds != null && orgGroupIds.length != 0 && orgGroupIds[0]!=-1) {
 				for (int i = 0; i < orgGroupIds.length; i++) {
@@ -562,6 +565,18 @@ public class ExportToWord extends Action {
 			}
             cell = new RtfCell(new Paragraph(filtersLocationsTrn + ": " + itemList));
             cell.setBackgroundColor(CELLCOLOR);
+            filtersTbl.addCell(cell);
+            
+            itemList = "";
+            Long[] statusIds = vForm.getFilter().getSelStatusIds();
+            if (statusIds != null && statusIds.length != 0 && statusIds[0]!=-1) {
+				for (int i = 0; i < statusIds.length; i++) {
+					itemList = itemList + CategoryManagerUtil.getAmpCategoryValueFromDb(statusIds[i]).getValue() + "; ";
+				}
+			} else {
+				itemList = filtersAllTrn;
+			}
+            cell = new RtfCell(new Paragraph(filtersStatusTrn + ": " + itemList));
             filtersTbl.addCell(cell);
             
 		    doc.add(filtersTbl);

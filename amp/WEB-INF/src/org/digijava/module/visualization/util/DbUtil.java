@@ -503,7 +503,7 @@ public class DbUtil {
     public static List getActivities(DashboardFilter filter, Date startDate,
             Date endDate, Long assistanceTypeId,
             Long financingInstrumentId,
-            int transactionType,HardCodedCategoryValue adjustmentTypeActual) throws DgException {
+            int transactionType,String adjustmentTypeActual) throws DgException {
         Long[] orgGroupIds = filter.getSelOrgGroupIds();
         List activities = null;
         Long[] orgIds= filter.getSelOrgIds();
@@ -548,7 +548,7 @@ public class DbUtil {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
             query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentTypeActual.getValueKey());
+            query.setString("adjustmentType",adjustmentTypeActual);
             
             activities = query.list();
         }
@@ -648,7 +648,7 @@ public class DbUtil {
     public static DecimalWraper getFunding(DashboardFilter filter, Date startDate,
             Date endDate, Long assistanceTypeId,
             Long financingInstrumentId,
-            int transactionType, HardCodedCategoryValue adjustmentTypeActual) throws DgException {
+            int transactionType, String adjustmentTypeActual) throws DgException {
         DecimalWraper total = null;
         String oql = "";
         String currCode = "USD";
@@ -727,7 +727,7 @@ public class DbUtil {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
             query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentTypeActual.getValueKey());
+            query.setString("adjustmentType",adjustmentTypeActual);
             
             if (filter.getActivityId()!=null) {
                 query.setLong("activityId", filter.getActivityId());
@@ -742,24 +742,30 @@ public class DbUtil {
             or actual Disbursement or  */
             switch (transactionType) {
                 case Constants.EXPENDITURE:
-                    if (adjustmentTypeActual.getValueKey().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                    if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
                         total = cal.getTotActualExp();
-                    } else {
+                    } else if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
                         total = cal.getTotPlannedExp();
+                    } else {
+                        total = cal.getTotPipelineExp();
                     }
                     break;
                 case Constants.DISBURSEMENT:
-                    if (adjustmentTypeActual.getValueKey().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                    if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
                         total = cal.getTotActualDisb();
-                    } else {
+                    } else if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
                         total = cal.getTotPlanDisb();
+                    } else {
+                        total = cal.getTotPipelineDisb();
                     }
                     break;
                 default:
-                    if (adjustmentTypeActual.getValueKey().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                    if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
                         total = cal.getTotActualComm();
-                    } else {
+                    } else if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
                         total = cal.getTotPlannedComm();
+                    } else {
+                        total = cal.getTotPipelineComm();
                     }
             }
 
@@ -811,8 +817,8 @@ public class DbUtil {
             oql += " inner join actProg.program prog ";
 		}
 
-        //Join for Category Values, where the on/off budget is stored
-        if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
+        //Join for Category Values
+        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) ) {
         	oql += " inner join act.categories categ ";
 		}
 
@@ -874,6 +880,11 @@ public class DbUtil {
 			} else {
 				oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelCVIds())+") ";
 			}
+		}
+
+        //Filter for Activity Status
+        if (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) {
+			oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelStatusIds())+") ";
 		}
 
         //Filter for individual activity information (used for the list of projects that appear when you click on a line/bar/pie slice.
@@ -1006,35 +1017,41 @@ public class DbUtil {
     }
 
     public static DecimalWraper calculateDetails(DashboardFilter filter, List<AmpFundingDetail> fundingDets,
-            int transactionType,AmpCategoryValue adjustmentType){
+            int transactionType,String adjustmentType){
         DecimalWraper total = null;
         String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
         	currCode = CurrencyUtil.getCurrency(filter.getCurrencyId()).getCurrencyCode();
 		} 
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
-        cal.doCalculations(fundingDets, currCode, transactionType, adjustmentType);
+        cal.doCalculations(fundingDets, currCode);
         switch (transactionType) {
-            case Constants.EXPENDITURE:
-                if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValue()) ) {
-                    total = cal.getTotActualExp();
-                } else {
-                    total = cal.getTotPlannedExp();
-                }
-                break;
-            case Constants.DISBURSEMENT:
-                if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValue())) {
-                    total = cal.getTotActualDisb();
-                } else {
-                    total = cal.getTotPlanDisb();
-                }
-                break;
-            default:
-                if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValue())) {
-                    total = cal.getTotActualComm();
-                } else {
-                    total = cal.getTotPlannedComm();
-                }
+	        case Constants.EXPENDITURE:
+	            if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                total = cal.getTotActualExp();
+	            } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                total = cal.getTotPlannedExp();
+	            } else {
+	                total = cal.getTotPipelineExp();
+	            }
+	            break;
+	        case Constants.DISBURSEMENT:
+	            if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                total = cal.getTotActualDisb();
+	            } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                total = cal.getTotPlanDisb();
+	            } else {
+	                total = cal.getTotPipelineDisb();
+	            }
+	            break;
+	        default:
+	            if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                total = cal.getTotActualComm();
+	            } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                total = cal.getTotPlannedComm();
+	            } else {
+	                total = cal.getTotPipelineComm();
+	            }
         }
         return total;
     }
@@ -1042,7 +1059,7 @@ public class DbUtil {
     public static Map<AmpActivityVersion, BigDecimal> getFundingByActivityList(Collection<Long> actList, DashboardFilter filter, Date startDate,
             Date endDate, Long assistanceTypeId,
             Long financingInstrumentId,
-            int transactionType,HardCodedCategoryValue adjustmentType,
+            int transactionType,String adjustmentType,
             int decimalsToShow, BigDecimal divideByDenominator) throws DgException {
         
 		Map<AmpActivityVersion, BigDecimal> map = new HashMap<AmpActivityVersion, BigDecimal>();
@@ -1086,7 +1103,7 @@ public class DbUtil {
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
             query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentType.getValueKey());
+            query.setString("adjustmentType",adjustmentType);
             if (assistanceTypeId != null) {
                 query.setLong("assistanceTypeId", assistanceTypeId);
             }
@@ -1139,26 +1156,32 @@ public class DbUtil {
                 we should return either actual commitments
                 or actual Disbursement or  */
                 switch (transactionType) {
-                    case Constants.EXPENDITURE:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualExp();
-                        } else {
-                            total = cal.getTotPlannedExp();
-                        }
-                        break;
-                    case Constants.DISBURSEMENT:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualDisb();
-                        } else {
-                            total = cal.getTotPlanDisb();
-                        }
-                        break;
-                    default:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualComm();
-                        } else {
-                            total = cal.getTotPlannedComm();
-                        }
+	                case Constants.EXPENDITURE:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualExp();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlannedExp();
+	                    } else {
+	                        total = cal.getTotPipelineExp();
+	                    }
+	                    break;
+	                case Constants.DISBURSEMENT:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualDisb();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlanDisb();
+	                    } else {
+	                        total = cal.getTotPipelineDisb();
+	                    }
+	                    break;
+	                default:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualComm();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlannedComm();
+	                    } else {
+	                        total = cal.getTotPipelineComm();
+	                    }
                 }
                 AmpActivityVersion aav = new AmpActivityVersion(activityId, hmName.get(activityId), "");
                 map.put(aav, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
@@ -1174,7 +1197,7 @@ public class DbUtil {
         return map;
     }
 	public static Map<AmpOrganisation, BigDecimal> getFundingByAgencyList(Collection<Long> orgList, String currCode,  Date startDate,
-            Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
+            Date endDate, int transactionType,String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
         
 		Map<AmpOrganisation, BigDecimal> map = new HashMap<AmpOrganisation, BigDecimal>();
 		Long[] orgIds = new Long[orgList.size()];
@@ -1221,7 +1244,7 @@ public class DbUtil {
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
             query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentType.getValueKey());
+            query.setString("adjustmentType",adjustmentType);
             if (sectorCondition) {
             	query.setLong("config", filter.getSelSectorConfigId());
             }
@@ -1267,26 +1290,32 @@ public class DbUtil {
                 we should return either actual commitments
                 or actual Disbursement or  */
                 switch (transactionType) {
-                    case Constants.EXPENDITURE:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualExp();
-                        } else {
-                            total = cal.getTotPlannedExp();
-                        }
-                        break;
-                    case Constants.DISBURSEMENT:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualDisb();
-                        } else {
-                            total = cal.getTotPlanDisb();
-                        }
-                        break;
-                    default:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualComm();
-                        } else {
-                            total = cal.getTotPlannedComm();
-                        }
+	                case Constants.EXPENDITURE:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualExp();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlannedExp();
+	                    } else {
+	                        total = cal.getTotPipelineExp();
+	                    }
+	                    break;
+	                case Constants.DISBURSEMENT:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualDisb();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlanDisb();
+	                    } else {
+	                        total = cal.getTotPipelineDisb();
+	                    }
+	                    break;
+	                default:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualComm();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlannedComm();
+	                    } else {
+	                        total = cal.getTotPipelineComm();
+	                    }
                 }
                 AmpOrganisation aorg = new AmpOrganisation();
                 aorg.setAmpOrgId(orgId);
@@ -1303,7 +1332,7 @@ public class DbUtil {
     }
 	
 	public static Map<AmpSector, BigDecimal> getFundingBySectorList(Collection<AmpSector> secListChildren, Collection<AmpSector> secListParent, String currCode,  Date startDate,
-            Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
+            Date endDate, int transactionType,String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
         
 		Map<AmpSector, BigDecimal> map = new HashMap<AmpSector, BigDecimal>();
 		Long[] orgIds = filter.getSelOrgIds();
@@ -1335,7 +1364,10 @@ public class DbUtil {
     	
     	if(!(filter.getFromPublicView() !=null&& filter.getFromPublicView()))
         	oql += " inner join act.ampActivityGroup actGroup ";
-    	
+    	//Join for Category Values
+        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) ) {
+        	oql += " inner join act.categories categ ";
+		}
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
@@ -1379,7 +1411,10 @@ public class DbUtil {
         	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
-
+        //Filter for Activity Status
+        if (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) {
+			oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelStatusIds())+") ";
+		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
             oql += DashboardUtil.getTeamQueryManagement();
             oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
@@ -1406,7 +1441,7 @@ public class DbUtil {
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
             query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentType.getValueKey());
+            query.setString("adjustmentType",adjustmentType);
             //if (sectorCondition) {
             	query.setLong("config", filter.getSelSectorConfigId());
             //}
@@ -1466,26 +1501,32 @@ public class DbUtil {
                 we should return either actual commitments
                 or actual Disbursement or  */
                 switch (transactionType) {
-                    case Constants.EXPENDITURE:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualExp();
-                        } else {
-                            total = cal.getTotPlannedExp();
-                        }
-                        break;
-                    case Constants.DISBURSEMENT:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualDisb();
-                        } else {
-                            total = cal.getTotPlanDisb();
-                        }
-                        break;
-                    default:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualComm();
-                        } else {
-                            total = cal.getTotPlannedComm();
-                        }
+	                case Constants.EXPENDITURE:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualExp();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlannedExp();
+	                    } else {
+	                        total = cal.getTotPipelineExp();
+	                    }
+	                    break;
+	                case Constants.DISBURSEMENT:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualDisb();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlanDisb();
+	                    } else {
+	                        total = cal.getTotPipelineDisb();
+	                    }
+	                    break;
+	                default:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualComm();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlannedComm();
+	                    } else {
+	                        total = cal.getTotPipelineComm();
+	                    }
                 }
                 AmpSector asec = new AmpSector();
                 asec.setAmpSectorId(secId);
@@ -1502,7 +1543,7 @@ public class DbUtil {
     }
 	
 	public static Map<AmpCategoryValueLocations, BigDecimal> getFundingByRegionList(Collection<AmpCategoryValueLocations> regListChildren, Collection<AmpCategoryValueLocations> regListParent, AmpCategoryValueLocations natLoc, String currCode,  Date startDate,
-            Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter, HttpServletRequest request) throws DgException {
+            Date endDate, int transactionType,String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter, HttpServletRequest request) throws DgException {
         
 		Map<AmpCategoryValueLocations, BigDecimal> map = new HashMap<AmpCategoryValueLocations, BigDecimal>();
 		Long[] orgIds = filter.getSelOrgIds();
@@ -1536,7 +1577,11 @@ public class DbUtil {
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
-        //if (locationCondition) 
+    	//Join for Category Values
+        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) ) {
+        	oql += " inner join act.categories categ ";
+		}
+    	//if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         if (sectorCondition) {
             oql += "  inner join act.sectors actsec ";
@@ -1576,7 +1621,10 @@ public class DbUtil {
         	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
-
+        //Filter for Activity Status
+        if (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) {
+			oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelStatusIds())+") ";
+		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
             oql += DashboardUtil.getTeamQueryManagement();
             oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
@@ -1603,7 +1651,7 @@ public class DbUtil {
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
             query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentType.getValueKey());
+            query.setString("adjustmentType",adjustmentType);
             if (sectorCondition) {
             	query.setLong("config", filter.getSelSectorConfigId());
             }
@@ -1667,26 +1715,32 @@ public class DbUtil {
                 we should return either actual commitments
                 or actual Disbursement or  */
                 switch (transactionType) {
-                    case Constants.EXPENDITURE:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualExp();
-                        } else {
-                            total = cal.getTotPlannedExp();
-                        }
-                        break;
-                    case Constants.DISBURSEMENT:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualDisb();
-                        } else {
-                            total = cal.getTotPlanDisb();
-                        }
-                        break;
-                    default:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualComm();
-                        } else {
-                            total = cal.getTotPlannedComm();
-                        }
+                case Constants.EXPENDITURE:
+                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                        total = cal.getTotActualExp();
+                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+                        total = cal.getTotPlannedExp();
+                    } else {
+                        total = cal.getTotPipelineExp();
+                    }
+                    break;
+                case Constants.DISBURSEMENT:
+                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                        total = cal.getTotActualDisb();
+                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+                        total = cal.getTotPlanDisb();
+                    } else {
+                        total = cal.getTotPipelineDisb();
+                    }
+                    break;
+                default:
+                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+                        total = cal.getTotActualComm();
+                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+                        total = cal.getTotPlannedComm();
+                    } else {
+                        total = cal.getTotPipelineComm();
+                    }
                 }
                 AmpCategoryValueLocations aloc = new AmpCategoryValueLocations();
                 aloc.setId(locId);
@@ -1703,7 +1757,7 @@ public class DbUtil {
     }
 	
 	public static Map<AmpTheme, BigDecimal> getFundingByProgramList(Collection<AmpTheme> progList, String currCode,  Date startDate,
-            Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
+            Date endDate, int transactionType, String adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, DashboardFilter filter) throws DgException {
         
 		Map<AmpTheme, BigDecimal> map = new HashMap<AmpTheme, BigDecimal>();
 		Long[] orgIds = filter.getSelOrgIds();
@@ -1743,6 +1797,10 @@ public class DbUtil {
             oql += "  inner join actsec.classificationConfig config  ";
             oql += " inner join actsec.sectorId sec ";
         }
+        //Join for Category Values
+        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) ) {
+        	oql += " inner join act.categories categ ";
+		}
         if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
@@ -1775,7 +1833,10 @@ public class DbUtil {
         	sectorIds = getAllDescendants(sectorIds, filter.getAllSectorList());
             oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
         }
-
+        //Filter for Activity Status
+        if (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) {
+			oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelStatusIds())+") ";
+		}
         if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
             oql += DashboardUtil.getTeamQueryManagement();
             oql += " and grpLink.ampActivityLastVersion=act.ampActivityId "; 
@@ -1802,7 +1863,7 @@ public class DbUtil {
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
             query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentType.getValueKey());
+            query.setString("adjustmentType",adjustmentType);
             if (sectorCondition) {
             	query.setLong("config", filter.getSelSectorConfigId());
             }
@@ -1856,26 +1917,32 @@ public class DbUtil {
                 we should return either actual commitments
                 or actual Disbursement or  */
                 switch (transactionType) {
-                    case Constants.EXPENDITURE:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualExp();
-                        } else {
-                            total = cal.getTotPlannedExp();
-                        }
-                        break;
-                    case Constants.DISBURSEMENT:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualDisb();
-                        } else {
-                            total = cal.getTotPlanDisb();
-                        }
-                        break;
-                    default:
-                        if (CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey().equals(adjustmentType.getValueKey())) {
-                            total = cal.getTotActualComm();
-                        } else {
-                            total = cal.getTotPlannedComm();
-                        }
+	                case Constants.EXPENDITURE:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualExp();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlannedExp();
+	                    } else {
+	                        total = cal.getTotPipelineExp();
+	                    }
+	                    break;
+	                case Constants.DISBURSEMENT:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualDisb();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlanDisb();
+	                    } else {
+	                        total = cal.getTotPipelineDisb();
+	                    }
+	                    break;
+	                default:
+	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+	                        total = cal.getTotActualComm();
+	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+	                        total = cal.getTotPlannedComm();
+	                    } else {
+	                        total = cal.getTotPipelineComm();
+	                    }
                 }
                 AmpTheme aprog = new AmpTheme();
                 aprog.setAmpThemeId(progId);

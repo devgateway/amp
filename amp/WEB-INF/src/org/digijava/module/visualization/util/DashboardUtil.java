@@ -76,7 +76,7 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
-        map = DbUtil.getFundingByAgencyList(orgList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
+        map = DbUtil.getFundingByAgencyList(orgList, currCode, startDate, endDate, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map, null);
 	}
 	
@@ -89,7 +89,7 @@ public class DashboardUtil {
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
         if (secListChildren!=null && secListChildren.size()!=0)
-        	map = DbUtil.getFundingBySectorList(secListChildren, secListParent, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
+        	map = DbUtil.getFundingBySectorList(secListChildren, secListParent, currCode, startDate, endDate, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map, null);
 	}
 	
@@ -116,7 +116,7 @@ public class DashboardUtil {
 		tempLoc.setName(TranslatorWorker.translateText("National"));
 		tempLoc.setId(natLevelLocation.getId());
 //		regList.add(natLevelLocation); // add national location to list
-        map = DbUtil.getFundingByRegionList(regListChildren, regListParent, tempLoc, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter, request);
+        map = DbUtil.getFundingByRegionList(regListChildren, regListParent, tempLoc, currCode, startDate, endDate, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, filter, request);
       //Unallocated values   
         AmpCategoryValueLocations tempLoc2 = new AmpCategoryValueLocations();
         tempLoc2.setName(TranslatorWorker.translateText("Unallocated"));
@@ -124,7 +124,7 @@ public class DashboardUtil {
         Long[] ids2 = {0l};
         DashboardFilter newFilter = filter.getCopyFilterForFunding();
 		newFilter.setSelLocationIds(ids2);
-		DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+		DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType());
 		BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 		if (total.compareTo(BigDecimal.ZERO) == 1)
 			map.put(tempLoc2, total);
@@ -140,7 +140,7 @@ public class DashboardUtil {
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
         String currCode = filter.getCurrencyCode();
         if (progList!=null && progList.size()!=0)
-        	map = DbUtil.getFundingByProgramList(progList, currCode, startDate, endDate, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator, filter);
+        	map = DbUtil.getFundingByProgramList(progList, currCode, startDate, endDate, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator, filter);
 		return sortByValue (map, null);
 	}
 	
@@ -152,7 +152,7 @@ public class DashboardUtil {
 		BigDecimal divideByDenominator;
 		divideByDenominator = DashboardUtil.getDividingDenominator(filter.getDivideThousands(), filter.shouldShowAmountsInThousands(), false);
 		if (actList!=null && actList.size()!=0)
-        	map = DbUtil.getFundingByActivityList(actList, filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, filter.getDecimalsToShow(),divideByDenominator);
+        	map = DbUtil.getFundingByActivityList(actList, filter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType(), filter.getDecimalsToShow(),divideByDenominator);
         return sortByValue (map, null);
 	}
 	
@@ -172,7 +172,7 @@ public class DashboardUtil {
 			Long[] ids = {sector.getAmpSectorId()};
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelSectorIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType());
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(sector, total);
 		}
@@ -194,7 +194,7 @@ public class DashboardUtil {
 			Long[] ids = {location.getId()};
 			DashboardFilter newFilter = filter.getCopyFilterForFunding();
 			newFilter.setSelLocationIds(ids);
-            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+            DecimalWraper fundingCal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, newFilter.getTransactionType(), filter.getAdjustmentType());
 	        BigDecimal total = fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
 	        map.put(location, total);
 		}
@@ -271,7 +271,7 @@ public class DashboardUtil {
         ArrayList<AmpCategoryValueLocations> allLocationsList = DbUtil.getAmpLocations();
 		filter.setAllLocationsList(allLocationsList);
 		//long startTime = System.currentTimeMillis();
-		Collection activityListReduced = DbUtil.getActivities(filter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+		Collection activityListReduced = DbUtil.getActivities(filter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType());
 		//long endTime = System.currentTimeMillis();
 		//System.out.println("Total elapsed time in execution: "+ (endTime-startTime));
        
@@ -334,17 +334,10 @@ public class DashboardUtil {
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep2);
 	        List<AmpFundingDetail> preloadFundingDetails = DbUtil.getFundingDetails(filter, startDate, endDate, null, null);
 			DecimalWraper fundingCal = null;
-			AmpCategoryValue adjustmentType = null;
-			try {
-				adjustmentType = CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				logger.error("AdjustmenType is unknown.");
-			}
-			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, adjustmentType);
+			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, filter.getAdjustmentType());
 			form.getSummaryInformation().setTotalCommitments(fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 	        request.getSession().setAttribute(VISUALIZATION_PROGRESS_SESSION, trnStep3);
-			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, adjustmentType);
+			fundingCal = DbUtil.calculateDetails(filter, preloadFundingDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, filter.getAdjustmentType());
 			form.getSummaryInformation().setTotalDisbursements(fundingCal.getValue().divide(divideByDenominator).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP));
 			form.getSummaryInformation().setNumberOfProjects(activityList.size());
 			form.getSummaryInformation().setNumberOfSectors(sectorList.size());
@@ -1026,6 +1019,11 @@ public class DashboardUtil {
 				filter.setCurrencyIdQuickFilter(tempSettings.getCurrency().getAmpCurrencyId());
 			}
 		}
+		List<CategoryConstants.HardCodedCategoryValue> adjustmentTypeList = new ArrayList<CategoryConstants.HardCodedCategoryValue>();
+		adjustmentTypeList.add(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL);
+		adjustmentTypeList.add(CategoryConstants.ADJUSTMENT_TYPE_PLANNED);
+        filter.setAdjustmentTypeList(adjustmentTypeList);
+        filter.setStatusList(new ArrayList<AmpCategoryValue>(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY)));
 	}
 
 

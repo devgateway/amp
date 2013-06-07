@@ -30,6 +30,7 @@
 <html:hidden property="filter.fromPublicView" styleId="fromPublicView" />
 <html:hidden property="filter.fromGenerator" styleId="fromGenerator" />
 <html:hidden property="filter.flashSliderLabels" styleId="flashSliderLabels" />
+<html:hidden property="filter.adjustmentType" styleId="adjustmentType" />
 
 <feature:display name="Background of organization" module="Dashboard Org. Info">
 	<input type="hidden" id="BackgroundOrganizationVisible" value="true" />

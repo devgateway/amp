@@ -254,7 +254,7 @@ function initializeGlobalVariables(){
 
 		.leftbox{float:left;width:465px;border:1px solid #fff;}
 
-		.rightbox{ float:right;width:465px;border:1px solid #fff;}
+		.rightbox{float:right;width:465px;border:1px solid #fff;}
 
 		.boxes{background:url(/TEMPLATE/ampTemplate/img_2/split.gif) repeat-y center;border:1px solid #d0d0d0;background-color:#FFFFFF;}
 
@@ -340,25 +340,41 @@ function initializeGlobalVariables(){
     	<div id="step2" class="stepsbox" >
 			<div class="boxes">
 				<div style="float:left;width:450px;border:1px solid #fff;">
-				<ul>
-					<li>
-						<html:radio property="filter.transactionTypeFilter" styleId="transaction_type_0" value="0">
-							<digi:trn>Commitments</digi:trn>
-						</html:radio>
-					</li>
-					<li>
-						<html:radio property="filter.transactionTypeFilter" styleId="transaction_type_1" value="1">
-							<digi:trn>Disbursements</digi:trn>
-						</html:radio>
-					</li>
-					<li>
-						<feature:display module="Funding" name="Expenditures">
-							<html:radio property="filter.transactionTypeFilter" styleId="transaction_type_2" value="2">
-								<digi:trn>Expenditures</digi:trn>
+					<table>
+					<tr><td>
+					<ul>
+						<li>
+							<html:radio property="filter.transactionTypeFilter" styleId="transaction_type_0" value="0">
+								<digi:trn>Commitments</digi:trn>
 							</html:radio>
-						</feature:display>
-					</li>
-				</ul>
+						</li>
+						<li>
+							<html:radio property="filter.transactionTypeFilter" styleId="transaction_type_1" value="1">
+								<digi:trn>Disbursements</digi:trn>
+							</html:radio>
+						</li>
+						<li>
+							<feature:display module="Funding" name="Expenditures">
+								<html:radio property="filter.transactionTypeFilter" styleId="transaction_type_2" value="2">
+									<digi:trn>Expenditures</digi:trn>
+								</html:radio>
+							</feature:display>
+						</li>
+					</ul>
+					</td></tr>
+					<tr><td><hr/></td></tr>
+					<tr><td>
+					<ul>
+						<c:forEach items="${visualizationform.filter.adjustmentTypeList}" var="item">
+							<li>
+								<html:radio property="filter.adjustmentType" styleId="adjustment_type" value="${item.valueKey}">
+									<digi:trn><c:out value='${item.valueKey}'/></digi:trn>
+								</html:radio>
+							</li>
+						</c:forEach>
+					</ul>
+					</td></tr>
+					</table>
 				</div>
 				<div style="float:right; width:450px;border:1px solid #fff;">
 				<feature:display name="Ranking Categories" module="Dashboard Generator">
@@ -431,7 +447,7 @@ function initializeGlobalVariables(){
 								                </ul>
 								             </div>
 										</div>
-										<div class="rightbox" id="generalInfoId" style="display: none;">
+										<div  class="rightbox" id="generalInfoId" style="display: none;">
 											<h3><digi:trn>Options Selector</digi:trn></h3>
 												<div class="innerbox" id="generalDivList">
 												<c:if test="${!visualizationform.filter.fromPublicView}">
@@ -478,8 +494,23 @@ function initializeGlobalVariables(){
 															</module:display>
 														</li>
 													</ul>
-												
-												<hr />
+													<br />
+													<digi:trn>Select activity Status</digi:trn>
+													<c:set var="translation">
+														<digi:trn>Select the activity status that you want to show on dashboard, if none is selected, then show all.</digi:trn>
+													</c:set>
+													<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/>
+													<br />
+													<br />
+													<ul>
+													<c:forEach items="${visualizationform.filter.statusList}" var="item">
+														<li>
+														<input type="checkbox" id="status_check_${item.id}" name="status_check" title="<c:out value='${item.value}'/>" value="${item.id}" /> 
+														<span><c:out value="${item.value}"/></span>
+														</li>
+													</c:forEach>
+													</ul>
+												<br />
 											</div>
 										</div>
 										<div class="rightbox" id="orgGrpContent" style="display: none;">

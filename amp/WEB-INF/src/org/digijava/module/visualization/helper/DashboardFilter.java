@@ -19,6 +19,8 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class DashboardFilter {
     
@@ -115,6 +117,11 @@ public class DashboardFilter {
     private ArrayList<AmpCategoryValueLocations> allLocationsList;
     private int topLists = 5;
     private String flashSliderLabels = "";
+    private String adjustmentType = "Actual";
+    private String adjustmentTypeQuickFilter = "Actual";
+    private List<CategoryConstants.HardCodedCategoryValue>adjustmentTypeList;
+    private Long[] selStatusIds;
+    private List<AmpCategoryValue>statusList;
     
 	public int getTopLists() {
 		return topLists;
@@ -148,6 +155,7 @@ public class DashboardFilter {
     	newFilter.setDivideThousands(this.getDivideThousands());
     	newFilter.setShowAmountsInThousands(this.getShowAmountsInThousands());
     	newFilter.setActivityComputedList(this.getActivityComputedList());
+    	newFilter.setAdjustmentType(this.getAdjustmentType());
     	return newFilter;
     }
 	
@@ -926,6 +934,48 @@ public class DashboardFilter {
 
 	public void setFlashSliderLabels(String flashSliderLabels) {
 		this.flashSliderLabels = flashSliderLabels;
+	}
+
+	public String getAdjustmentType() {
+		return adjustmentType;
+	}
+
+	public void setAdjustmentType(String adjustmentType) {
+		this.adjustmentType = adjustmentType;
+		this.adjustmentTypeQuickFilter = adjustmentType;
+	}
+
+	public String getAdjustmentTypeQuickFilter() {
+		return adjustmentTypeQuickFilter;
+	}
+
+	public void setAdjustmentTypeQuickFilter(String adjustmentTypeQuickFilter) {
+		this.adjustmentTypeQuickFilter = adjustmentTypeQuickFilter;
+	}
+
+	public List<CategoryConstants.HardCodedCategoryValue> getAdjustmentTypeList() {
+		return adjustmentTypeList;
+	}
+
+	public void setAdjustmentTypeList(
+			List<CategoryConstants.HardCodedCategoryValue> adjustmentTypeList) {
+		this.adjustmentTypeList = adjustmentTypeList;
+	}
+
+	public Long[] getSelStatusIds() {
+		return selStatusIds;
+	}
+
+	public void setSelStatusIds(Long[] selStatusIds) {
+		this.selStatusIds = selStatusIds;
+	}
+
+	public List<AmpCategoryValue> getStatusList() {
+		return statusList;
+	}
+
+	public void setStatusList(List<AmpCategoryValue> statusList) {
+		this.statusList = statusList;
 	}
 	
 }

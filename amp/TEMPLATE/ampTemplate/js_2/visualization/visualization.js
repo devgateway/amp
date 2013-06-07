@@ -582,11 +582,7 @@ function resetToDefaults(){
 	}
 	
 	
-	document.getElementById("transaction_type_0").checked = false;
-	document.getElementById("transaction_type_1").checked = true;
-	if (document.getElementById("transaction_type_2")!=null){
-		document.getElementById("transaction_type_2").checked = false;
-	}
+	document.getElementById("transaction_type").selectedIndex = 1;
 	document.getElementById("org_group_dropdown_id").selectedIndex = 0;
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
 	document.getElementById("sector_dropdown_id").selectedIndex = 0;
@@ -933,6 +929,8 @@ function callbackApplyFilter(e){
 		document.getElementById("workspace_only").checked = document.getElementById("workspaceOnlyQuickFilter").checked;
 	}
 	document.getElementById("currencyId").value = document.getElementById("currencyQuickFilter_dropdown").value;
+	document.getElementById("adjustmentType").value = document.getElementById("adjustment_type_quick").value;
+	document.getElementById("adjustment_type").value = document.getElementById("adjustment_type_quick").options[document.getElementById("adjustment_type").selectedIndex].value;
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("startYear").value = document.getElementById("startYearQuickFilter_dropdown").value;
 	document.getElementById("endYear").value = document.getElementById("endYearQuickFilter_dropdown").value;
@@ -985,6 +983,7 @@ function callbackApplyFilter(e){
 	params = params + "&selSectorConfigId=" + getQueryParameter("selSectorConfigId");
 	params = params + "&sectorIds=" + getQueryParameter("sectorIds");
 	params = params + "&subSectorIds=" + getQueryParameter("subSectorIds");
+	params = params + "&statusIds=" + getQueryParameter("statusIds");
 
 	loadingPanel.show();
 
@@ -1076,6 +1075,8 @@ function applyFilterPopin(e){
 	//document.getElementById("yearToCompare").value = document.getElementById("yearToCompare_dropdown").options[document.getElementById("yearToCompare_dropdown").selectedIndex].value;
 	document.getElementById("currencyId").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
 	document.getElementById("currencyQuickFilter_dropdown").value = document.getElementById("currencies_dropdown_ids").options[document.getElementById("currencies_dropdown_ids").selectedIndex].value;
+	document.getElementById("adjustmentType").value = document.getElementById("adjustment_type").options[document.getElementById("adjustment_type").selectedIndex].value;
+	document.getElementById("adjustment_type_quick").value = document.getElementById("adjustment_type").options[document.getElementById("adjustment_type").selectedIndex].value;
 	document.getElementById("fiscalCalendarId").value = document.getElementById("fiscalCalendar_dropdown_Id").options[document.getElementById("fiscalCalendar_dropdown_Id").selectedIndex].value;
 	document.getElementById("commitmentsVisible").value = document.getElementById("commitments_visible").checked;
 	document.getElementById("disbursementsVisible").value = document.getElementById("disbursements_visible").checked;
@@ -1092,18 +1093,9 @@ function applyFilterPopin(e){
 	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
 	document.getElementById("showMonochrome").value = document.getElementById("show_monochrome").checked;
 	
-	if (document.getElementById("transaction_type_0").checked == true) {
-		document.getElementById("transactionType").value = document.getElementById("transaction_type_0").value;
-	}
-	if (document.getElementById("transaction_type_1").checked == true) {
-		document.getElementById("transactionType").value = document.getElementById("transaction_type_1").value;
-	}
-	if (document.getElementById("transaction_type_2")!=null){
-		if (document.getElementById("transaction_type_2").checked == true) {
-			document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
-		}
-	}
+	document.getElementById("transactionType").value = document.getElementById("transaction_type").options[document.getElementById("transaction_type").selectedIndex].value;
 	document.getElementById("transactionType_dropdown").value = document.getElementById("transactionType").value;
+	document.getElementById("adjustment_type_quick").value = document.getElementById("adjustmentType").value;
 	
 	var params = "";
 	params = params + "&orgGroupIds=" + getSelectionsFromElement("org_grp_check",false);
@@ -1113,6 +1105,7 @@ function applyFilterPopin(e){
 	params = params + "&selSectorConfigId=" + getSelectionsFromElement("sector_config_check",false);
 	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
 	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);
+	params = params + "&statusIds=" + getSelectionsFromElement("status_check",false);
 
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
@@ -1431,6 +1424,17 @@ function refreshBoxes(o){
 						document.getElementById("zone_dropdown_id").style.display = "";
 					}
 				//}
+				break;
+			case "SelStatusList":
+				if (child.list.length > 0) {
+					inner2 = "";
+					for(var i = 0; i < child.list.length; i++){
+						inner2 = inner2 + child.list[i].name + " - ";
+						if (fromGenerator=="true")
+							checkOptionByNameAndValue("status_check",child.list[i].id);
+					}
+					document.getElementById("filterStatus").innerHTML = inner2;
+				}
 				break;
 			case "SelSectorConfig":
 					if (child.list.length > 0) {
@@ -1891,16 +1895,21 @@ function refreshBoxes(o){
 }
 
 function updateTitles(){
+	var adjType = document.getElementById("adjustmentType").value;
+	var fundType = "Actual ";
+	if (adjType == 'Actual')
+		fundType = ""+trnActual+" ";
+	else if (adjType == 'Planned')
+		fundType = ""+trnPlanned+" ";
 	var type = document.getElementById("transactionType").value;
-	var fundType = "";
 	if (type==0) {
-		fundType = trnCommitments;
+		fundType += trnCommitments;
 	}
 	if (type==1) {
-		fundType = trnDisbursements;
+		fundType += trnDisbursements;
 	}
 	if (type==2) {
-		fundType = trnExpenditures;
+		fundType += trnExpenditures;
 	}
 	var titlesObj = getTitlesObjects();
 	for ( var i = 0; i < titlesObj.length; i++) {
@@ -2094,16 +2103,21 @@ function getValueToFlash(idContainer, field){
 
 function updateGraph(e, chartName){
 
+	var adjType = document.getElementById("adjustmentType").value;
+	var fundType = "Actual ";
+	if (adjType == 'Actual')
+		fundType = ""+trnActual+" ";
+	else if (adjType == 'Planned')
+		fundType = ""+trnPlanned+" ";
 	var type = document.getElementById("transactionType").value;
-	var fundType = "";
 	if (type==0) {
-		fundType = trnCommitments;
+		fundType += trnCommitments;
 	}
 	if (type==1) {
-		fundType = trnDisbursements;
+		fundType += trnDisbursements;
 	}
 	if (type==2) {
-		fundType = trnExpenditures;
+		fundType += trnExpenditures;
 	}
 	//Get array of graphs
 	var allGraphs = getElementsByName_iefix("div", "flashContent");
@@ -2481,6 +2495,14 @@ function launchDashboard(){
 			document.getElementById("transactionType").value = document.getElementById("transaction_type_2").value;
 		}
 	}
+	
+	var adTypes = document.getElementById("adjustment_type");
+	for ( var i = 0; i < adTypes.length; i++) {
+		if (adTypes[i].checked == true){
+			document.getElementById("adjustmentType").value = adTypes[i].value;
+		}
+	}
+
 	if (document.getElementById("show_projects_ranking")!=null)
 		document.getElementById("showProjectsRanking").value = document.getElementById("show_projects_ranking").checked;
 	if (document.getElementById("show_organizations_ranking")!=null)
@@ -2504,6 +2526,7 @@ function launchDashboard(){
 	params = params + "&selSectorConfigId=" + getSelectionsFromElement("sector_config_check",false);
 	params = params + "&sectorIds=" + getSelectionsFromElement("sector_check",false);
 	params = params + "&subSectorIds=" + getSelectionsFromElement("sub_sector_check",false);
+	params = params + "&statusIds=" + getSelectionsFromElement("status_check",false);
 
 	if(document.getElementById("endYear").value < document.getElementById("startYear").value){
 		alert(alertBadDate);	
@@ -2524,7 +2547,7 @@ function getQueryParameter ( parameterName ) {
 	      begin += parameterName.length;
 	      end = queryString.indexOf ( "&" , begin );
 	        if ( end == -1 ) {
-	        end = queryString.length
+	        end = queryString.length;
 	      }
 	      return unescape ( queryString.substring ( begin, end ) );
 	    }

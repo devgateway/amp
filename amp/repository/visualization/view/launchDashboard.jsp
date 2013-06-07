@@ -144,6 +144,8 @@ var urlSaveAdditional = "";
 var urlShowList = "";
 var trnKeyAreas = "";
 var trnBackgroundOrganizationGroup = "";
+var trnActual = "";
+var trnPlanned = "";
 
 //Section for all translation as global so included javascript can use them
 function initializeTranslations(){
@@ -230,6 +232,8 @@ function initializeTranslations(){
 	trnOrgInfo="<digi:trn>Organization Info</digi:trn>";
 	trnOrgGrpInfo="<digi:trn>Organization Group Info</digi:trn>";
 	trnKeyAreas="<digi:trn>Key Areas of focus</digi:trn>";
+	trnActual="<digi:trn>Actual</digi:trn>";
+	trnPlanned="<digi:trn>Planned</digi:trn>";
 }
 function initializeGlobalVariables(){
 	//Other global variables
@@ -391,24 +395,46 @@ function initializeGlobalVariables(){
 													<digi:trn>What type of funding the dashboard should use.</digi:trn>
 												</c:set>
 												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/><br />
-												<html:radio property="filter.transactionTypeFilter"
-													styleId="transaction_type_0" value="0">
-													<digi:trn>Commitments</digi:trn>
-												</html:radio>
 												<br />
-												<html:radio property="filter.transactionTypeFilter"
-													styleId="transaction_type_1" value="1">
-													<digi:trn>Disbursements</digi:trn>
-												</html:radio>
-												<br />
-												<feature:display module="Funding" name="Expenditures">
-													<html:radio property="filter.transactionTypeFilter"
-														styleId="transaction_type_2" value="2">
-														<digi:trn>Expenditures</digi:trn>
-													</html:radio>
-													<br />
-												</feature:display>
+												<table>
+													<tr>
+														<td><digi:trn>Funding Type</digi:trn>:</td>
+														<td>
+															<html:select property="filter.transactionTypeFilter" styleId="transaction_type" styleClass="dropdwn_sm" style="width:150px;">
+																<html:option value="0"><digi:trn>Commitments</digi:trn></html:option>
+																<html:option value="1"><digi:trn>Disbursements</digi:trn></html:option>
+																<feature:display module="Funding" name="Expenditures">
+																	<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
+																</feature:display>
+															</html:select>
+														</td>
+													</tr>
+													<tr>
+														<td><digi:trn>Adjustment Type</digi:trn>:</td>
+														<td>
+															<html:select property="filter.adjustmentType"
+																styleId="adjustment_type" styleClass="dropdwn_sm"
+																style="width:150px;">
+																<html:optionsCollection property="filter.adjustmentTypeList" value="valueKey" label="valueKey" />
+															</html:select>
+														</td>
+													</tr>
+												</table>
 												<hr />
+												<br />
+												<digi:trn>Select activity Status</digi:trn>
+												<c:set var="translation">
+													<digi:trn>Select the activity status that you want to show on dashboard, if none is selected, then show all.</digi:trn>
+												</c:set>
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/>
+												<br />
+												<br />
+												<c:forEach items="${visualizationform.filter.statusList}" var="item">
+												<input type="checkbox" id="status_check_${item.id}" name="status_check" title="<c:out value='${item.value}'/>" value="${item.id}" /> 
+													<span><c:out value="${item.value}"/></span>
+												<br />
+												</c:forEach>
+												<br />
 											</div>
 										</div>
 										<div class="member_selector_wrapper" id="orgGrpContent"
@@ -804,6 +830,7 @@ function initializeGlobalVariables(){
 	   <i><digi:trn>SubSectors</digi:trn>: </i><label id="filterSubSectors"><digi:trn>All</digi:trn></label> |
 	   <i><digi:trn>Regions</digi:trn>: </i><label id="filterRegions"><digi:trn>All</digi:trn></label> |
 	   <i><digi:trn>Zones</digi:trn>: </i><label id="filterZones"><digi:trn>All</digi:trn></label> |
+	   <i><digi:trn>Status</digi:trn>: </i><label id="filterStatus"><digi:trn>All</digi:trn></label> |
 	</td>
 	</tr>
 	<tr>
@@ -1078,6 +1105,15 @@ function initializeGlobalVariables(){
 				</html:select>
 		 	</td>
 		</tr>
+		<tr>
+			<td><b><digi:trn>Adjustment Type</digi:trn>:</b>
+		 	</td>
+			<td align="right">
+				<html:select property="filter.adjustmentTypeQuickFilter" styleId="adjustment_type_quick" styleClass="dropdwn_sm" style="width:145px;" onchange="callbackApplyFilter()">
+					<html:optionsCollection property="filter.adjustmentTypeList" value="valueKey" label="valueKey" />
+				</html:select>
+			</td>
+		</tr>	
 		<c:if test="${visualizationform.filter.dashboardType==1}">
 			<tr>
 				<td><b><digi:trn>Type of Agency</digi:trn>:</b>

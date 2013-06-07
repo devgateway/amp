@@ -46,6 +46,7 @@ import org.digijava.module.visualization.util.DbUtil;
 import javax.servlet.ServletContext;
 
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 import com.lowagie.text.Element;
 import com.lowagie.text.Image;
@@ -94,6 +95,7 @@ public class ExportToExcel extends Action {
 		public String filtersSubSectorsTrn;
 		public String filtersRegionsTrn;
 		public String filtersZonesTrn;
+		public String filtersStatusTrn;
 		public String filtersLocationsTrn;
 		public String fundingTrn;
 		public String ODAGrowthTrn;
@@ -200,6 +202,7 @@ public class ExportToExcel extends Action {
 			filtersSubSectorsTrn = TranslatorWorker.translateText("Sub-Sectors");
 			filtersRegionsTrn = TranslatorWorker.translateText("Regions");
 			filtersZonesTrn = TranslatorWorker.translateText("Zones");
+			filtersStatusTrn = TranslatorWorker.translateText("Status");
 			ODAGrowthTrn = TranslatorWorker.translateText("ODA Growth");
 			fundingTrn = TranslatorWorker.translateText("Funding");
 	        topPrjTrn = TranslatorWorker.translateText("Top Projects");
@@ -637,6 +640,22 @@ public class ExportToExcel extends Action {
             cell.setCellValue(headerText);
             cell.setCellStyle(data.cellStyleLeft);
             String itemList = "";
+            Long[] statusIds = vForm.getFilter().getSelStatusIds();
+            if (statusIds != null && statusIds.length != 0 && statusIds[0]!=-1) {
+				for (int i = 0; i < statusIds.length; i++) {
+					itemList = itemList + CategoryManagerUtil.getAmpCategoryValueFromDb(statusIds[i]).getValue() + "; ";
+				}
+			} else {
+				itemList = data.filtersAllTrn;
+			}
+            //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
+            row = sheet.createRow(rowNum++);
+            cell = row.createCell(cellNum);
+            headerText = new HSSFRichTextString(data.filtersStatusTrn + ": " + itemList);
+            cell.setCellValue(headerText);
+            cell.setCellStyle(data.cellStyleLeft);
+            itemList = "";
+            
             Long[] orgGroupIds = vForm.getFilter().getSelOrgGroupIds();
             if (orgGroupIds != null && orgGroupIds.length != 0 && orgGroupIds[0]!=-1) {
 				for (int i = 0; i < orgGroupIds.length; i++) {

@@ -1,10 +1,9 @@
 function changeOptions(indics,years,locations){
-        selIndicatorIDs=indics;
-		selYear=years;
-        hideGridTable();
-		getNewGraph();
-		
-	}
+    selIndicatorIDs=indics;
+    selYear=years;
+    hideGridTable();
+    getNewGraph();
+}
 
 function getIndicators(){
 	if (curProgId == null) {
@@ -18,6 +17,7 @@ function getIndicators(){
 	async.complete=indicatorsCallBack;
 	async.call(url);
 }
+
 function getIndicatorsURL(){
 	var result = addActionToURL('getProgramIndicators.do');
 	result+=p1d+'programId='+curProgId;
@@ -52,10 +52,9 @@ function indicatorsCallBack(status, statusText, responseText, responseXML){
 	
 }
 
-
 function getSelectedIndicators(){
 	var res = [];
-	var localIndicators=$('input:[type=checkbox][name="selIndicators"]:checked').each(function() {
+	var localIndicators=$('input[type=checkbox][name="selIndicators"]:checked').each(function() {
 		res.push($(this).val());
     }); 
 	return res;
@@ -63,7 +62,7 @@ function getSelectedIndicators(){
 
 function getSelectedYears(){
 	var res = [];
-	var localYears =$('input:[type=checkbox][name="selYears"]:checked').each(function() {
+	var localYears =$('input[type=checkbox][name="selYears"]:checked').each(function() {
 		res.push($(this).val());
     }); 
 	return res;
@@ -80,6 +79,7 @@ function doChanges(){
 	async.call(url);
 	changeOptions(ins,yrs,null);
 }
+
 function getYearsForUrl(url){
 	var locYears = document.getElementsByName('selYears');		
 	var result=url;
@@ -107,4 +107,3 @@ function checkYearsRules(){
 	if (cou > 5) return false;
 	return true;
 }
-

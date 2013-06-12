@@ -21,20 +21,31 @@ import org.digijava.module.aim.dbentity.AmpRole;
 public class AmpRelatedRolesModel extends AbstractReadOnlyModel<List<AmpRole>> {
 	
 	private IModel<AmpActivityVersion> am;
+	private String[] roleFilter;
 
-	public AmpRelatedRolesModel(IModel<AmpActivityVersion> am) {
+	public AmpRelatedRolesModel(IModel<AmpActivityVersion> am, String[] roleFilter) {
 		this.am=am;
+		this.roleFilter=roleFilter;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.apache.wicket.model.AbstractReadOnlyModel#getObject()
 	 */
 	@Override
-		public List<AmpRole> getObject() {
-			Set<AmpRole> set=new TreeSet<AmpRole>();
-			Set<AmpOrgRole> orgroles=am.getObject().getOrgrole();
-			if(orgroles==null || orgroles.size()==0) new ArrayList<AmpRole>(set);
-			for (AmpOrgRole orgrole  : orgroles) set.add(orgrole.getRole());
-			return new ArrayList<AmpRole>(set);
+	public List<AmpRole> getObject() {
+		Set<AmpRole> set = new TreeSet<AmpRole>();
+		Set<AmpOrgRole> orgroles = am.getObject().getOrgrole();
+		if (orgroles == null || orgroles.size() == 0)
+			new ArrayList<AmpRole>(set);
+		for (AmpOrgRole orgrole : orgroles) {
+			if (roleFilter != null)
+				for (int i = 0; i < roleFilter.length; i++) {
+					if (roleFilter[i].equals(orgrole.getRole().getRoleCode()))
+						set.add(orgrole.getRole());
+				}
+			else
+				set.add(orgrole.getRole());
 		}
+		return new ArrayList<AmpRole>(set);
+	}
 }

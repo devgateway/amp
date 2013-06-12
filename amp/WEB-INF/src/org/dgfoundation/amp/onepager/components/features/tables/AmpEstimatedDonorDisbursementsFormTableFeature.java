@@ -133,8 +133,10 @@ public class AmpEstimatedDonorDisbursementsFormTableFeature extends
 				
 				
 				AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("orgRoleSelector", 
-						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(item.getModel(),"recipientRole"), new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"));
-				
+						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(item.getModel(),"recipientRole"), new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"),new String[] {Constants.EXECUTING_AGENCY});
+				orgRoleSelector.getRoleSelect().getChoiceContainer().setRequired(true);
+				orgRoleSelector.getOrgSelect().getChoiceContainer().setRequired(true);
+	
 				item.add(orgRoleSelector);
 				
 			}

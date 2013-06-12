@@ -29,25 +29,27 @@ public class AmpOrgRoleSelectorComponent extends Panel {
 	private AmpSelectFieldPanel<AmpOrganisation> orgSelect;
 	private boolean recipientMode = true;
 
-	public AmpOrgRoleSelectorComponent(String id, IModel<AmpActivityVersion> am) {
-		this(id, am, new Model<AmpRole>(), new Model<AmpOrganisation>(), false);
+	
+	
+	public AmpOrgRoleSelectorComponent(String id, IModel<AmpActivityVersion> am,String [] roleFilter) {
+		this(id, am, new Model<AmpRole>(), new Model<AmpOrganisation>(), false,roleFilter);
 	}
 
 	public AmpOrgRoleSelectorComponent(String id,
 			IModel<AmpActivityVersion> am, IModel<AmpRole> roleModel,
-			IModel<AmpOrganisation> orgModel) {
-		this(id, am, roleModel, orgModel, true);
+			IModel<AmpOrganisation> orgModel,String [] roleFilter) {
+		this(id, am, roleModel, orgModel, true,roleFilter);
 	}
 
 	public AmpOrgRoleSelectorComponent(String id,
 			IModel<AmpActivityVersion> am, IModel<AmpRole> roleModel,
-			IModel<AmpOrganisation> orgModel, boolean recipientMode) {
+			IModel<AmpOrganisation> orgModel, boolean recipientMode, String [] roleFilter) {
 		super(id, am);
 
 		// read the list of roles from Related Organizations page, and create a
 		// unique Set with the roles chosen
 		AbstractReadOnlyModel<List<AmpRole>> rolesList = new AmpRelatedRolesModel(
-				am);	
+				am,roleFilter);	
 		// selector for organization role
 		roleSelect = new AmpSelectFieldPanel<AmpRole>("roleSelect", roleModel,
 				rolesList,(recipientMode?"Recipient ":"")+"Org Role", false, false, null, true);

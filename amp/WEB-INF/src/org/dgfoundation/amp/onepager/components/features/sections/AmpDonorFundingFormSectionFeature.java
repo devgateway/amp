@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * The donor funding section of the activity form. Includes selecting an org,
@@ -216,7 +217,7 @@ public class AmpDonorFundingFormSectionFeature extends
 //		wmc.add(searchOrganization);
 
 		
-		orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am);
+		orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, new String[]{Constants.FUNDING_AGENCY});
 		add(orgRoleSelector);
 		
 		// when the org select changes, update the status of the addNewFunding

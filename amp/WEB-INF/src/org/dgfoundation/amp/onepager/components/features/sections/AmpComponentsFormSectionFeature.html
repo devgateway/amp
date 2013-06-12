@@ -6,6 +6,10 @@
 		</tr>
 		<tr>
 			<td colspan="2">
+				<div style="position: relative; top: -30px; float: right;">
+					<a id="expandComponentItems" onclick="$(this).parents('div:eq(2)').find('.invisible-item').show();$('#expandComponentItems').hide();$('#collapseComponentItems').show();"><wicket:trn>Expand all</wicket:trn></a>
+					<a style="display: none;" id="collapseComponentItems" onclick="$(this).parents('div:eq(2)').find('.invisible-item').hide();$('#expandComponentItems').show();$('#collapseComponentItems').hide();"><wicket:trn>Collapse all</wicket:trn></a>
+				</div>
 				<div wicket:id="list">
 					<div class="organization_box">
 						<div class="organization_box_content">

@@ -2,9 +2,13 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+@TranslatableClass
 public class AmpLineMinistryObservationActor implements Serializable, Cloneable {
 
 	private Long ampLineMinistryObservationActorId;
+	@TranslatableField
 	private String name;
 	private String nameTrimmed;
 	private AmpLineMinistryObservationMeasure measure;

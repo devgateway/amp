@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 
+@TranslatableClass
 public class AmpDashboard implements Serializable {
 	
 	/**
@@ -12,6 +15,7 @@ public class AmpDashboard implements Serializable {
 	 */
 	private static final long serialVersionUID = 8072077407917128711L;
 	private Long id;
+	@TranslatableField
 	private String name;
 	private List<AmpDashboardGraph> graphList;
 	private int baseType;

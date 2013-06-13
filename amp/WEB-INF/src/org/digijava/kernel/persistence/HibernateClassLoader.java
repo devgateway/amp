@@ -22,11 +22,6 @@
 
 package org.digijava.kernel.persistence;
 
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.DigiConfig;
@@ -34,13 +29,17 @@ import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.util.I18NHelper;
-import org.dom4j.Element;
+import org.digijava.module.translation.hibernate.TranslatorInterceptor;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.dialect.function.ClassicAvgFunction;
 import org.hibernate.dialect.function.ClassicCountFunction;
 import org.hibernate.dialect.function.ClassicSumFunction;
+
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Hibernate Class loader, see digi.xml file for more details.
@@ -186,11 +185,13 @@ public class HibernateClassLoader {
 		InputStream inp = HibernateClassLoader.class.getResourceAsStream(
 				HIBERNATE_CFG_XML);
 		try {
-			if (inp == null) {
-				sessionFactory = cfg.buildSessionFactory();
+            if (inp == null) {
+                cfg.setInterceptor(new TranslatorInterceptor());
+                sessionFactory = cfg.buildSessionFactory();
 			}
 			else {
 				Configuration newConfig = cfg.configure(HIBERNATE_CFG_XML);
+                newConfig.setInterceptor(new TranslatorInterceptor());
 				sessionFactory = newConfig.buildSessionFactory();
 			}
 		}

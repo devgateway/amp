@@ -3,12 +3,15 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.SectorUtil;
-
+@TranslatableClass
 public class AmpSectorScheme implements Serializable
 {
 	private Long ampSecSchemeId ;
 	private String secSchemeCode ;
+	@TranslatableField
 	private String secSchemeName ;
 
     private Boolean showInRMFilters;

@@ -2,10 +2,15 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+
+@TranslatableClass
 public class AmpActor  implements Serializable, Cloneable
 {
 
 	private Long ampActorId ;
+	@TranslatableField
 	private String name;
 	private String nameTrimmed;
 	private AmpMeasure measure;

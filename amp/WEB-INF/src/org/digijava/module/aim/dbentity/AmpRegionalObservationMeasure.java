@@ -5,8 +5,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+@TranslatableClass
 public class AmpRegionalObservationMeasure implements Serializable, Cloneable {
 	private Long ampRegionalObservationMeasureId;
+	@TranslatableField
 	private String name;
 	private AmpRegionalObservation regionalObservation;
 	private Set<AmpRegionalObservationActor> actors;

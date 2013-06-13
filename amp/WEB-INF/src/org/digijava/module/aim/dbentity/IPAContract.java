@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -21,6 +23,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  * @author mihai
  *
  */
+@TranslatableClass
 public class IPAContract implements Serializable, Versionable, Cloneable {
 
 	/**
@@ -32,7 +35,9 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
 	
     private static final long serialVersionUID = 2485772788422409800L;
     private Long id;
+    @TranslatableField
     private String contractName;
+    @TranslatableField
     private String description;
     private String contractingOrganizationText;
     private transient AmpCategoryValue activityCategory;

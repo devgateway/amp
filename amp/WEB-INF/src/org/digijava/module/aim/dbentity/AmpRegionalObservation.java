@@ -8,11 +8,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
-
+@TranslatableClass
 public class AmpRegionalObservation implements Serializable, Versionable, Cloneable {
 
 	private Long ampRegionalObservationId;
+	@TranslatableField
 	private String name;
 	private AmpActivityVersion activity;
 	private Set<AmpRegionalObservationMeasure> regionalObservationMeasures;

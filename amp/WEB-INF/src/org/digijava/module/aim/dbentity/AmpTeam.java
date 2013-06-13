@@ -6,7 +6,6 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,21 +15,24 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-public class AmpTeam  implements Serializable, Comparable, Identifiable, Versionable, FilterDataSetInterface {
+
+@TranslatableClass
+public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface {
 	private static final Logger logger = Logger.getLogger(AmpTeam.class);
 	private Long ampTeamId;
-
+	@TranslatableField
 	private String name;
 	
 	private Boolean addActivity;
 	private Boolean computation;
 	private Boolean hideDraftActivities;
 	private Boolean useFilter;
-
+	@TranslatableField
 	private String description;
 
 	private AmpTeamMember teamLead; // Denotes the Team Leader
@@ -326,7 +328,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	public void setHideDraftActivities(Boolean hideDraftActivities) {
 		this.hideDraftActivities = hideDraftActivities;
 	}
-	
+	/*
 	@Override
 	public Object getValue() {
 		// TODO Auto-generated method stub
@@ -336,7 +338,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 	@Override
 	public Output getOutput() {
 		return new Output(null, new String[] { this.name }, new Object[] { "" });
-	}
+	}*/
 	public void setWorkspaceGroup(AmpCategoryValue workspaceGroup) {
 		this.workspaceGroup = workspaceGroup;
 	}
@@ -354,7 +356,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 		this.useFilter = useFilter;
 	}
 
-	@Override
+	/*@Override
 	public boolean equalsForVersioning(Object obj) {
 		return this.equals(obj);
 	}
@@ -364,5 +366,5 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, Version
 		this.activityList = new HashSet<AmpActivityVersion>();
 		this.activityList.add(newActivity);
 		return this;
-	}
+	}*/
 }

@@ -1,4 +1,3 @@
-
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
@@ -8,6 +7,8 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorGroupDimension;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.HierarchyListable;
@@ -15,10 +16,11 @@ import org.digijava.module.aim.util.Identifiable;
 
 import com.rc.retroweaver.runtime.Arrays;
 
-
+@TranslatableClass
 public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,OrgProfileValue
 {
 	private Long ampOrgGrpId;
+	@TranslatableField
 	private String orgGrpName;
 	private String orgGrpCode;
 	private AmpLevel levelId;	// defunct

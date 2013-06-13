@@ -25,11 +25,14 @@ package org.digijava.module.translation.action;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DgUtil;
 
 /**
@@ -43,6 +46,7 @@ import org.digijava.kernel.util.DgUtil;
 
 public class SwitchLanguage
     extends Action {
+	private static final Logger logger = Logger.getLogger(SwitchLanguage.class);
 
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm form,
@@ -67,9 +71,20 @@ public class SwitchLanguage
         else
             referrerUrl = "";
 
+        //are we going back to the activity form?
+        String actFormPath = "wicket/onepager/activity/"; //hardcoded :(
+        if (referrerUrl.contains(actFormPath)){ 
+        	//get activity id
+        	String actId = referrerUrl.substring(referrerUrl.indexOf(actFormPath) + actFormPath.length());
+        	//free lock
+        	ActivityGatekeeper.pageModeChange(actId);
+        }
+        
         //String localeKey=(String)request.getParameter("lang");
         Locale locale = new Locale();
         locale.setCode(localeKey);
+        logger.debug("Forcing locale update: " + locale.getCode());
+        TLSUtils.forceLocaleUpdate(locale);
         DgUtil.switchLanguage(locale, request, response);
 
         if(referrerUrl.equals("/translation/default/showAdvancedTranslation.do")) {

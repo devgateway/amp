@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.SectorDimension;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
@@ -18,16 +20,19 @@ import com.rc.retroweaver.runtime.Arrays;
 
 import edu.emory.mathcs.backport.java.util.TreeSet;
 
+@TranslatableClass
 public class AmpSector implements Serializable, Comparable, Identifiable,
 		ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
 		Cloneable, OrgProfileValue {
 	private Long ampSectorId;
 	private AmpSector parentSectorId;
 	private String sectorCode;
+	@TranslatableField
 	private String name;
 	private String type;
 	private AmpOrganisation ampOrgId;
 	private AmpSectorScheme ampSecSchemeId;
+	@TranslatableField
 	private String description;
 	private String language;
 	private String version;

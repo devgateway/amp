@@ -4,12 +4,16 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 
+@TranslatableClass
 public class AmpStructureType implements ARDimensionable, Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	private Long typeId;
+	@TranslatableField
 	private String name;
 	private String graphicType;
 	private byte[] iconFile;

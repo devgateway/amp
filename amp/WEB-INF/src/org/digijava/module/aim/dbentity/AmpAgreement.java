@@ -3,11 +3,17 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.springframework.transaction.annotation.Transactional;
+
+@TranslatableClass
 public class AmpAgreement implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
 	private String code;
+	@TranslatableField
 	private String title;
 	private Date effectiveDate;
 	private Date signatureDate;

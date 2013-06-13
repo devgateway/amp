@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.NPODimension;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.HierarchyListable;
@@ -14,7 +16,7 @@ import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import edu.emory.mathcs.backport.java.util.TreeSet;
-
+@TranslatableClass
 public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable
 {
 	private static final long serialVersionUID = 1L;
@@ -24,11 +26,13 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 	private String themeCode ;
 	private String budgetProgramCode ;
 	private Integer isbudgetprogram;
+	@TranslatableField
 	private String name ;
 	private String encodeName;
 	//private String type ;
 	private AmpCategoryValue typeCategoryValue;
 	private Integer indlevel;
+	@TranslatableField
 	private String description ;
 	private String language ;
 	private String version ;

@@ -14,7 +14,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.message.dbentity.AmpMessageState;
 
-public class AmpTeamMember implements Serializable, Versionable {
+public class AmpTeamMember implements Serializable/*, Versionable*/ {
 
 	private Long ampTeamMemId;
 	private User user;
@@ -29,7 +29,7 @@ public class AmpTeamMember implements Serializable, Versionable {
 
 	// added for donor access
 	private Set editableFundingOrgs;	// in case of donor - allowed organisations whose funding details this TM can edit
-	
+
 	private Set<AmpDesktopTabSelection> desktopTabSelections;
 
 	public void setReports(Set reports) {
@@ -96,7 +96,7 @@ public class AmpTeamMember implements Serializable, Versionable {
 		this.user = user;
 	}
 
-	
+
 
 	public Set<AmpActivityVersion> getActivities() {
 		return activities;
@@ -106,7 +106,7 @@ public class AmpTeamMember implements Serializable, Versionable {
 		this.activities = activities;
 	}
 
-  
+
 
     /**
      * @return Returns the links.
@@ -164,25 +164,27 @@ public class AmpTeamMember implements Serializable, Versionable {
 
 	public void setPublishDocPermission(Boolean publishDocPermission) {
 		this.publishDocPermission = publishDocPermission;
-	}	
+	}
 
+	/*
+	@Override
 	public boolean equalsForVersioning(Object obj) {
 		return this.equals(obj);
 	}
-
+    @Override
 	public Object getValue() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+    @Override
 	public Output getOutput() {
 		return new Output(null, new String[] { user.getLastName(), ", ", user.getFirstNames() }, new Object[] { "" });
 	}
-	
+
 	@Override
 	public Object prepareMerge(AmpActivityVersion newActivity) {
 		this.activities = new HashSet<AmpActivityVersion>();
 		this.activities.add(newActivity);
 		return this;
-	}
+	}*/
 }

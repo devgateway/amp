@@ -6,8 +6,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.FieldResult;
+
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.LocationsDimension;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
@@ -21,10 +25,12 @@ import com.rc.retroweaver.runtime.Arrays;
  * 
  * @author medea
  */
+@TranslatableClass
 public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCategoryValueLocations>, 
 		HierarchyListable, ARDimensionable, Serializable, AmpAutoCompleteDisplayable,OrgProfileValue {
 
 	private Long id;
+	@TranslatableField
 	private String name;
 	private AmpCategoryValue parentCategoryValue;
 	private AmpCategoryValueLocations parentLocation;

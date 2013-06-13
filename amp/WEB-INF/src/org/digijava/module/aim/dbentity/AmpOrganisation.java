@@ -9,6 +9,8 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.DonorDimension;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrganizationReportColumn;
 import org.digijava.module.aim.helper.donorReport.PropertyType;
 import org.digijava.module.aim.util.HierarchyListable;
@@ -17,9 +19,11 @@ import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
+@TranslatableClass
 public class AmpOrganisation implements Comparable, Serializable, Identifiable, ARDimensionable, HierarchyListable
 {
 	private Long ampOrgId;
+	@TranslatableField
 	private String name ;
 	/**
 	 * @deprecated
@@ -27,6 +31,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private String orgType;  // defunct
 	private String dacOrgCode ;
 	private String orgIsoCode;
+	@TranslatableField
 	private String description ;
 	private String orgCode;
 	private String orgGroup;  // defunct

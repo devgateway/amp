@@ -1,14 +1,16 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
-
-import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Identifiable;
 
+@TranslatableClass
 public class AmpCurrency implements Serializable,Comparable, Identifiable
 {
 	private Long ampCurrencyId;
 	private String currencyCode;
+	@TranslatableField
 	private String countryName;
 	private String currencyName;
 	private AmpCategoryValueLocations countryLocation;

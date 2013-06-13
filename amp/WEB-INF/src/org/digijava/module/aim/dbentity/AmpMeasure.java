@@ -3,10 +3,15 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
+
+@TranslatableClass
 public class AmpMeasure  implements Serializable, Cloneable
 {
 
 	private Long ampMeasureId ;
+	@TranslatableField
 	private String name ;
 	private AmpIssues issue;
 	private Set actors;

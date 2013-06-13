@@ -118,7 +118,7 @@ public class JspResolver implements IComponentResolver {
 					
 					request.setAttribute(Constants.DIGI_CONTEXT, request.getContextPath() + siteDomain.getSitePath());
 					request.setAttribute(Constants.CURRENT_SITE, siteDomain);
-					
+					/*
 		    		AmpAuthWebSession webSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		    		if (webSession != null){
 		    			java.util.Locale locale = webSession.getLocale();
@@ -128,6 +128,7 @@ public class JspResolver implements IComponentResolver {
 		    			lang.setCode(locale.getLanguage());
 		    			request.setAttribute(Constants.NAVIGATION_LANGUAGE, lang);
 		    		}
+		    		*/
 				} catch (DgException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

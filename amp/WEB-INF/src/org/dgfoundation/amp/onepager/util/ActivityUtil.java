@@ -31,9 +31,11 @@ import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -68,6 +70,7 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -88,8 +91,13 @@ public class ActivityUtil {
 	public static void saveActivity(AmpActivityModel am, boolean draft){
 		Session session = AmpActivityModel.getHibernateSession();	
 		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-		
-		AmpActivityVersion a = (AmpActivityVersion) am.getObject();
+		if (!wicketSession.getLocale().getLanguage().equals(TLSUtils.getLangCode())){
+			logger.debug("WRONG LANGUAGE: TLSUtils(" + TLSUtils.getLangCode() + ") vs Wicket(" + wicketSession.getLocale().getLanguage() + ")");
+			org.digijava.kernel.entity.Locale tmpLocale = new org.digijava.kernel.entity.Locale();
+			tmpLocale.setCode(wicketSession.getLocale().getLanguage());
+			TLSUtils.forceLocaleUpdate(tmpLocale);
+		}
+		AmpActivityVersion a = am.getObject();
 		AmpActivityVersion oldA = a;
 		boolean newActivity = false;
 		try {
@@ -107,10 +115,12 @@ public class ActivityUtil {
 				a.setDraft(false);
 			boolean draftChange = draft != a.getDraft();
 			a.setDraft(draft);
-			
+
 			a.setDeleted(false);
+            ContentTranslationUtil.cloneTranslations(a);
 			//is versioning activated?
-			if (a != null && (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
+            boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
+			if (createNewVersion){
 				try {
 					AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 					
@@ -146,13 +156,13 @@ public class ActivityUtil {
 			saveIndicators(a, session);
 			
 			setCreationTimeOnStructureImages(a);
-			
-			if ((draft == draftChange) && ActivityVersionUtil.isVersioningEnabled()){
+			if (createNewVersion){
 				//a.setAmpActivityId(null); //hibernate will save as a new version
 				session.save(a);
 			}
 			else{
-				session.saveOrUpdate(a);
+				//session.saveOrUpdate(a);
+				session.update(a);
 			}
 				
 			
@@ -183,7 +193,7 @@ public class ActivityUtil {
 			
 			
 			saveResources(a); 
-			saveEditors(session); 
+			saveEditors(session, createNewVersion); 
 			saveComments(a, session,draft); 
 			saveAgreements(session);
 			
@@ -222,7 +232,9 @@ public class ActivityUtil {
 			}
 		}
 	}
-	
+
+    /*
+     * not used anymore
 	private static void saveFundingOrganizationRole(AmpActivityVersion activity) {
 		//Added for AMP-11544, taken from SaveActivity.java, line 1046-1064. 
 		if(activity.getOrgrole() != null) {
@@ -250,6 +262,7 @@ public class ActivityUtil {
 			activity.setOrgrole(orgRole);
 		}
 	}
+	*/
 
 	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity) {
 		Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
@@ -316,9 +329,9 @@ public class ActivityUtil {
 
 	/**
 	 * Method used to load the last version of an object
-	 * @param id 
-	 * @param ampActivityModel
-	 * @return
+	 * @param am
+     * @param id
+     * @return activity loaded
 	 */
 	public static AmpActivityVersion load(AmpActivityModel am, Long id) {
 		if (id == null){
@@ -337,11 +350,7 @@ public class ActivityUtil {
 
 		//check the activity group for the last version of an activity
 		AmpActivityGroup group = act.getAmpActivityGroup();
-		if (group == null){
-			//Activity created previous to the versioning system?
-			if (act == null) //inexistent?
-				return null;
-			
+		if (group == null){ //Activity created previous to the versioning system?
 			//we need to create a group for this activity
 			group = new AmpActivityGroup();
 			group.setAmpActivityLastVersion(act);
@@ -349,16 +358,6 @@ public class ActivityUtil {
 			session.save(group);
 		}
 
-		
-		/**
-		 * TODO:
-		 * 
-		 * Temporary
-		 * REMOVE COMMENT!
-		 */
-		//last version
-		//act = group.getAmpActivityLastVersion();
-		
 		if (act.getDraft() == null)
 			act.setDraft(false);
 		act.setAmpActivityGroup(group);
@@ -438,36 +437,61 @@ public class ActivityUtil {
 		}
 	}
 
-	private static void saveEditors(Session session) {
+	private static void saveEditors(Session session, boolean createNewVersion) {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
-		HashMap<String, String> editors = s.getMetaData(OnePagerConst.EDITOR_ITEMS);
+		EditorStore editorStore = s.getMetaData(OnePagerConst.EDITOR_ITEMS);
+		HashMap<String, String> editors = editorStore.getValues();
 		
 		AmpAuthWebSession wicketSession = ((AmpAuthWebSession)org.apache.wicket.Session.get());
 		
+		String currentLanguage = TLSUtils.getLangCode();
 		if (editors == null || editors.keySet() == null)
 			return;
 		Iterator<String> it = editors.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
+			String oldKey = editorStore.getOldKey().get(key);
+			String value = editors.get(key);
 			
-			Editor editor = null;
+			if (value == null || value.trim().length() == 0)
+				continue; //we don't save empty editors
+			
 			try {
-				editor = DbUtil.getEditor(wicketSession.getSite(), key, wicketSession.getLocale().getLanguage());
-				if (editor != null){
-					editor.setBody(editors.get(key));
-				}
-				else{
-					editor = new Editor();
-					editor.setBody(editors.get(key));
-					editor.setSite(wicketSession.getSite());
-					editor.setLanguage(wicketSession.getLocale().getLanguage());
-					editor.setEditorKey(key);
+				boolean editorFound = false;
+				List<Editor> edList = DbUtil.getEditorList(oldKey, wicketSession.getSite());
+				Iterator<Editor> it2 = edList.iterator();
+				while (it2.hasNext()) {
+					Editor editor = (Editor) it2.next();
+					if (editor.getLanguage().equals(currentLanguage)){
+						editor.setBody(value);
+						editorFound = true;
+					}
+					//create a new editor and copy the old values
+					Editor toSaveEditor = new Editor();
+					toSaveEditor.setBody(editor.getBody());
+					toSaveEditor.setSiteId(editor.getSiteId());
+					toSaveEditor.setLanguage(editor.getLanguage());
+					toSaveEditor.setEditorKey(key);
+					session.save(toSaveEditor);
+					
+					if (!createNewVersion){
+						//we need to delete the old editor since this is not a new activity version
+						session.delete(editor);
+					}
 				}
 				
-				session.saveOrUpdate(editor);
+				if (!editorFound){
+					//add new editor
+					Editor editor = new Editor();
+					editor.setBody(value);
+					editor.setSite(wicketSession.getSite());
+					editor.setLanguage(currentLanguage);
+					editor.setEditorKey(key);
+					session.saveOrUpdate(editor);
+				}
+
 			} catch (EditorException e) {
 				logger.error("Can't get editor:", e);
-				continue;
 			}
 		}
 	}
@@ -489,7 +513,7 @@ public class ActivityUtil {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		
 		if (a.getActivityDocuments() == null)
-			a.setActivityDocuments(new HashSet());
+			a.setActivityDocuments(new HashSet<AmpActivityDocument>());
 
 		HashSet<TemporaryDocument> newResources = s.getMetaData(OnePagerConst.RESOURCES_NEW_ITEMS);
 		HashSet<AmpActivityDocument> deletedResources = s.getMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS);

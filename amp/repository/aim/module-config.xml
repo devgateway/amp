@@ -178,7 +178,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpStructureImg</hibernate-class>
 
         <hibernate-class>org.digijava.module.aim.dbentity.OnepagerSection</hibernate-class>
-		
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpContentTranslation</hibernate-class>
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

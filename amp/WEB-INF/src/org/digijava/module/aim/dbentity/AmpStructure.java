@@ -6,16 +6,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
 
 /**
  * Persister class for Structures
  * @author fferreyra
  */
+@TranslatableClass
 public class AmpStructure implements Serializable,Comparable, Versionable, Cloneable {
 	private static Logger logger = Logger.getLogger(AmpStructure.class);
 	private Long ampStructureId;
+	@TranslatableField
 	private String title;
+	@TranslatableField
 	private String description;
 	private String latitude;
 	private String longitude;

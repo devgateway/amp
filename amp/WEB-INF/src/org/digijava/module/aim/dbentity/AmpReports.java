@@ -19,6 +19,8 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -26,6 +28,7 @@ import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
+@TranslatableClass
 public class AmpReports implements Comparable, LoggerIdentifiable, Serializable, FilterDataSetInterface {
 
 	private Long ampReportId;
@@ -35,12 +38,13 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	//private AmpARFilter defaultFilter;
 	
 	private transient ReportGenerator reportGenerator;
-
+	@TranslatableField
 	private String name;
 	
 	private String nametrimed;
 
 	// private String description;
+	@TranslatableField
 	private String reportDescription;
 
 	private String options;

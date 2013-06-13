@@ -2,6 +2,7 @@ package org.digijava.kernel.request;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.util.RequestUtils;
 
@@ -11,6 +12,7 @@ import org.digijava.kernel.util.RequestUtils;
  *
  */
 public class TLSUtils {
+	private static final Logger logger = Logger.getLogger(TLSUtils.class);
 	private static ThreadLocal<TLSUtils> threadLocalInstance = new ThreadLocal<TLSUtils>();
 	
 	public Site site;
@@ -24,7 +26,6 @@ public class TLSUtils {
 			return null;
 		if (instance.locale == null)
 			return null;
-		
 		return instance.locale.getCode();
 	}
 	
@@ -57,12 +58,19 @@ public class TLSUtils {
 		return res;
 	}
 	
-	public static void populate(HttpServletRequest request)
-	{
+	public static void populate(HttpServletRequest request){
 		SiteDomain siteDomain = RequestUtils.getSiteDomain(request);
 		TLSUtils.getThreadLocalInstance().request = request;
         TLSUtils.getThreadLocalInstance().site = siteDomain == null ? null : siteDomain.getSite();
+        if (TLSUtils.getThreadLocalInstance().locale != null)
+        	logger.debug("TLSUtils -> Populate Locale Update from " + TLSUtils.getThreadLocalInstance().locale.getCode() + " to " + RequestUtils.getNavigationLanguage(request).getCode());
         TLSUtils.getThreadLocalInstance().locale = RequestUtils.getNavigationLanguage(request);
-
 	}
+	
+	public static void forceLocaleUpdate(Locale locale){
+		logger.debug("TLSUtils -> Force Locale Update from " + (TLSUtils.getThreadLocalInstance().locale!=null?TLSUtils.getThreadLocalInstance().locale.getCode():"null") + " to " + locale.getCode());
+		TLSUtils.getThreadLocalInstance().locale = locale;
+	}
+	
+	
 }

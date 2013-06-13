@@ -11,16 +11,21 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.Output;
 
 /**
  * Persister class for Components
  * @author Priyajith
  */
+@TranslatableClass
 public class AmpComponent implements Serializable,Comparable<AmpComponent>, Versionable, Cloneable {
 	private static Logger logger = Logger.getLogger(AmpComponent.class);
 	private Long ampComponentId;
+	@TranslatableField
 	private String title;
+	@TranslatableField
 	private String description;
 	private java.sql.Timestamp creationdate;
 	private String code;

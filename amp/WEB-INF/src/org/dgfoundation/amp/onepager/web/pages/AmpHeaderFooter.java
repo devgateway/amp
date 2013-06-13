@@ -22,6 +22,7 @@ import org.dgfoundation.amp.onepager.behaviors.DocumentReadyBehavior;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.translation.AmpAjaxBehavior;
 import org.dgfoundation.amp.onepager.util.UrlEmbederComponent;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
@@ -39,14 +40,21 @@ public class AmpHeaderFooter extends WebPage {
 				if (cookie.getName().equals("digi_language")) {
                 	String languageCode = cookie.getValue();
                 	Session.get().setLocale(new Locale(languageCode));
+                	org.digijava.kernel.entity.Locale newLocale = new org.digijava.kernel.entity.Locale();
+                	newLocale.setCode(languageCode);
+                	TLSUtils.forceLocaleUpdate(newLocale);
                     if (languageCode != null) {
                     	localeSet = true;
                         break;
                     }
                 }
 			}
-            if (!localeSet)
+            if (!localeSet){
             	Session.get().setLocale(new Locale(TranslatorWorker.getDefaultLocalCode()));
+            	org.digijava.kernel.entity.Locale newLocale = new org.digijava.kernel.entity.Locale();
+            	newLocale.setCode(TranslatorWorker.getDefaultLocalCode());
+            	TLSUtils.forceLocaleUpdate(newLocale);
+            }
         }
 		
 		add(new DocumentReadyBehavior());

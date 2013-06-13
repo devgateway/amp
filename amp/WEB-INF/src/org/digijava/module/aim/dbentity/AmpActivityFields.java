@@ -11,6 +11,8 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -19,6 +21,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 
+@TranslatableClass
 public abstract class AmpActivityFields extends Permissible implements Comparable<AmpActivityVersion>, Serializable,
 LoggerIdentifiable, Cloneable {
 
@@ -74,7 +77,7 @@ LoggerIdentifiable, Cloneable {
 	protected String ampId ;
 
 	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
-	@VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true)
+	@VersionableFieldSimple(fieldTitle = "Name", mandatoryForSingleChange = true) @TranslatableField
 	protected String name ;
 	@VersionableFieldTextEditor(fieldTitle = "Activity Description")
 	protected String description ;

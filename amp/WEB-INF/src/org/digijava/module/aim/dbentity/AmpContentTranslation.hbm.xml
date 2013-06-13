@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpContentTranslation" table="AMP_CONTENT_TRANSLATION" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_CONTENT_TRANSLATION_seq</param>
+			</generator>
+		</id>
+
+		<property name="objectClass" column="object_class" type="java.lang.String" not-null="true" />
+		<property name="objectId" column="object_id" type="java.lang.Long" not-null="true" />
+		<property name="fieldName" column="field_name" type="java.lang.String" not-null="true" />
+        <property name="locale" column="locale" type="java.lang.String" not-null="true" />
+		<property name="translation" column="translation" type="java.lang.String" not-null="true"/>
+	</class>
+</hibernate-mapping>

@@ -22,7 +22,7 @@ public class DateRangeLogicalToken extends LogicalToken {
 
 	@Override
 	public boolean evaluate(CategAmountCell c) {
-		MetaInfo m = MetaInfo.getMetaInfo(c.getMetaData(), ArConstants.TRANSACTION_DATE);
+		MetaInfo m = MetaInfo.getMetaInfo((java.util.Set) c.getMetaData(), ArConstants.TRANSACTION_DATE);
 		if ( m != null) {
 			Date date = (Date) m.getValue();
 			if ((d1 != null) && (d2 != null)) {

@@ -26,7 +26,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
  */
 public class CategAmountCell extends AmountCell implements Categorizable {
 
-	protected Set metaData;
+	protected Set<MetaInfo> metaData;
 
 	@Override
 	public AmountCell merge(Cell c) {
@@ -72,7 +72,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	/**
 	 * @return Returns the metaData.
 	 */
-	public Set getMetaData() {
+	public Set<MetaInfo> getMetaData() {
 		return metaData;
 	}
 
@@ -80,12 +80,12 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	 * @param metaData
 	 *            The metaData to set.
 	 */
-	public void setMetaData(Set metaData) {
+	public void setMetaData(Set<MetaInfo> metaData) {
 		this.metaData = metaData;
 	}
 
 	public String getMetaValueString(String category) {
-		MetaInfo mi = MetaInfo.getMetaInfo(metaData,category);
+		MetaInfo mi = MetaInfo.getMetaInfo((Set) metaData,category);
 		if (mi == null || mi.getValue()==null)
 			return null;
 		return  mi.getValue().toString();
@@ -93,7 +93,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 
 	
 	public boolean existsMetaString(String category) {
-		MetaInfo mi = MetaInfo.getMetaInfo(metaData,category);
+		MetaInfo mi = MetaInfo.getMetaInfo((Set) metaData,category);
 		if(mi!=null) return true;
 		return false;
 		
@@ -137,21 +137,26 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 		return null;
 	}
 
+	public final static MetaInfo<Boolean> disablePercentMetaInfo = new MetaInfo<Boolean>(ArConstants.DISABLE_PERCENT, Boolean.TRUE);
 	
-public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret, boolean hierarchyPurpose) {
+public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret, boolean hierarchyPurpose, boolean disablePercentage) {
 	
 	if(metaCell.getColumn().getName().equals(columnName) ) {
+		if (disablePercentage)
+			ret.getMetaData().add(disablePercentMetaInfo); // mark transaction as "dedicated" so that it doesn't get ignored in AmountCell::getAmount()
+		
 		//we need to get the percentage, it is stored in the MetaText of related to the owner of the current cell
 		CellColumn c = (CellColumn) metaCell.getColumn();
 		Cell temp	= c.getByOwnerAndValue(this.getOwnerId(), metaCell.getValue());
 		if ( temp instanceof MetaTextCell) {
 			MetaTextCell relatedHierarchyCell=(MetaTextCell) temp;
-			if(relatedHierarchyCell!=null) { 
-			MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedHierarchyCell.getMetaData(),ArConstants.PERCENTAGE);
-			if(percentMeta!=null) {
-				Double percentage=(Double) percentMeta.getValue() ;
-				ret.setPercentage(percentage.doubleValue(), relatedHierarchyCell, hierarchyPurpose);			
-			}
+			if ((relatedHierarchyCell != null) && (!disablePercentage)) 
+			{ 
+				MetaInfo percentMeta = MetaInfo.getMetaInfo(relatedHierarchyCell.getMetaData(), ArConstants.PERCENTAGE);
+				if(percentMeta != null) {
+					Double percentage = (Double) percentMeta.getValue() ;
+					ret.setPercentage(percentage.doubleValue(), relatedHierarchyCell, hierarchyPurpose);			
+				}
 			}
 		}
 	}
@@ -226,7 +231,28 @@ public Cell filter(Cell metaCell,Set ids) {
 				if(retZoneName!=null&&!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.ZONE)))
 					return null;
 			}
-            
+    
+	boolean disablePercentage = false; // whether this cell should NOT have percentages applied to its value when filtering - this is for transactions towards an organisation
+	if (mergedCells.isEmpty() && ArConstants.COLUMN_ANY_RELATED_ORGS.contains(metaCell.getColumn().getName()))
+	{
+		// only apply the test for "basic" CategAmountCell's, as merged ones merge all the metadata from all the merged cells and we might filter out unneedingly
+		// if column by which we are doing the hierarchy is one of the related organisations' column
+		String relatedOrgRole = this.getMetaValueString(ArConstants.RECIPIENT_ROLE);
+		String relatedOrgName = this.getMetaValueString(ArConstants.RECIPIENT_NAME);
+		if (metaCell.getColumn().getName().equals(relatedOrgRole))
+		{
+			// doing hierarchy by "Implementing Agency" and this is a transaction towards an Implementing Agency org
+			if (relatedOrgName != null)
+			{
+				// this funding is directed to a certain organisation only
+				String currentOrgName = metaCell.getValue().toString();
+				if (!currentOrgName.equals(relatedOrgName))
+					return null; // filter out
+				disablePercentage = true;
+			}
+		}
+	}
+	
     //apply metatext filters
 	if(metaCell instanceof MetaTextCell) {
 			//apply metatext filters for column Sector
@@ -247,7 +273,7 @@ public Cell filter(Cell metaCell,Set ids) {
 					continue;
 			//column is needed to get the tokenExpression on computed fields
 			ret.setColumn(this.getColumn());
-			applyMetaFilter(col.getColumn().getColumnName(), metaCell, ret, true);
+			applyMetaFilter(col.getColumn().getColumnName(), metaCell, ret, true, disablePercentage);
 		}
 	}
 		
@@ -262,7 +288,7 @@ public Cell filter(Cell metaCell,Set ids) {
 	 * @see org.dgfoundation.amp.ar.Categorizable#hasMeta(org.dgfoundation.amp.ar.MetaInfo)
 	 */
 public boolean hasMetaInfo(MetaInfo m) {
-	MetaInfo internal = MetaInfo.getMetaInfo(metaData,m.getCategory());
+	MetaInfo internal = MetaInfo.getMetaInfo((Set) metaData, m.getCategory());
 	if (internal == null)
 		return false;
 	if (internal.equals(m))

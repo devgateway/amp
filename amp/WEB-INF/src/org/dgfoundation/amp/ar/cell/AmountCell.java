@@ -29,7 +29,7 @@ public class AmountCell extends Cell {
 
 	protected double originalAmount;
 	
-	protected double percentage = 100;
+	//protected double percentage = 100;
 
 	protected Set<AmountCell> mergedCells;
 
@@ -303,8 +303,12 @@ public class AmountCell extends Cell {
 		for(Long ownerId:percentagefulIds)
 			if (percentageless.containsKey(ownerId))
 			{
-				double toDecrease = percentageless.get(ownerId).getAmount(); 
-				ret -= toDecrease;
+				CategAmountCell cell = percentageless.get(ownerId);
+				if (!cell.hasMetaInfo(CategAmountCell.disablePercentMetaInfo))
+				{
+					double toDecrease = percentageless.get(ownerId).getAmount(); 
+					ret -= toDecrease;
+				}
 			}
 		
 		// logger.info("******total amount for owner
@@ -446,6 +450,9 @@ public class AmountCell extends Cell {
 			if (filtered != null)
 			{
 				realRet.merge(realRet, filtered);
+				//aici se caca la merge 111111 cu 277777.5
+				double d = realRet.getAmount();
+				System.out.format("jopa = %.2f\n", d);
 				mergedAnything = true;
 			}
 		}

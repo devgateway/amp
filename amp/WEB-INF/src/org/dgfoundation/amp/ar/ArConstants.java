@@ -73,6 +73,8 @@ public final class ArConstants {
 	public final static String AGREEMENT_CODE = "Agreement Code";
 	public final static String AGREEMENT_TITLE_CODE = "Agreement Title + Code";
 	
+	public final static String DISABLE_PERCENT = "Disable_Percent";
+	
 	/**
 	 * @deprecated use COLUMN_COUNTRY if it's related to the column
 	 */
@@ -91,6 +93,8 @@ public final class ArConstants {
 	public final static String ZONE="Zone";
 	
 	public final static String COMPONENT="Component Type";
+	public final static String RECIPIENT_NAME = "Recipient Name";
+	public final static String RECIPIENT_ROLE = "Recipient Role";
 
 	public final static String UNALLOCATED="Unallocated";
 	

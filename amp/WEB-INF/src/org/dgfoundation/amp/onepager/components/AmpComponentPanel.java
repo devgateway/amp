@@ -329,7 +329,8 @@ public abstract class AmpComponentPanel<T> extends Panel implements
         /**
          * Do not reverse the order of fmEnabled and fmVisible
          */
-		boolean fmEnabled = (foundEnabledChild.getObject() || FMUtil.isFmEnabled(this));
+        boolean isEnabledInFm = FMUtil.isFmEnabled(this); //be sure to run this assures that module inserted in FM
+        boolean fmEnabled = (foundEnabledChild.getObject() || isEnabledInFm);
 		boolean fmVisible = FMUtil.isFmVisible(this);
 		if (!ignorePermissions)
 			setEnabled(fmMode?true:fmEnabled);

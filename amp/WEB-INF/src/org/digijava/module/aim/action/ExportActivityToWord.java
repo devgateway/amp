@@ -2843,7 +2843,8 @@ public class ExportActivityToWord extends Action {
 			rowAmountForCell1++;
 		}
 		
-		if(FeaturesUtil.isVisibleField("Delivery rate", ampContext)){
+		//if(FeaturesUtil.isVisibleField("Delivery rate", ampContext))
+		{
 			if(myForm.getFunding().getDeliveryRate()!=null){
 				columnVal =  myForm.getFunding().getDeliveryRate();
 			}else{
@@ -2853,7 +2854,8 @@ public class ExportActivityToWord extends Action {
 			rowAmountForCell1++;
 		}
 		
-		if(FeaturesUtil.isVisibleField("Consumption rate", ampContext)){
+		//if(FeaturesUtil.isVisibleField("Consumption rate", ampContext))
+		{
 			if(myForm.getFunding().getConsumptionRate()!=null){
 				columnVal =  myForm.getFunding().getConsumptionRate();
 			}else{

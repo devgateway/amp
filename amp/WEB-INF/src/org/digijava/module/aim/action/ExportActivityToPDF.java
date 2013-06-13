@@ -2860,8 +2860,8 @@ public class ExportActivityToPDF extends Action {
 							undisbursedBalanceCell1.setBackgroundColor(new Color(255,255,204));
 							undisbursedBalanceCell1.setColspan(3);
 							fundingTable.addCell(undisbursedBalanceCell1);
-						}							
-						
+						}	
+												
 						int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
 						
 						//amounts in thousands
@@ -2975,6 +2975,29 @@ public class ExportActivityToPDF extends Action {
 					} 
 					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
 				}
+				
+				//Consumption Rate
+				/*if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext))*/
+				{
+					totalAmountType=TranslatorWorker.translateText("Consumption Rate")+":";
+					totalsOutput="";
+					if(myForm.getFunding().getConsumptionRate()!=null && myForm.getFunding().getConsumptionRate().length()>0){
+						totalsOutput=myForm.getFunding().getConsumptionRate();
+					} 
+					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
+				}
+				
+				// Delivery Rate
+				/*if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext))*/
+				{
+					totalAmountType=TranslatorWorker.translateText("Delivery Rate")+":";
+					totalsOutput="";
+					if(myForm.getFunding().getDeliveryRate()!=null && myForm.getFunding().getDeliveryRate().length()>0){
+						totalsOutput=myForm.getFunding().getDeliveryRate();
+					} 
+					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
+				}	
+
 				
 			}				
 		}

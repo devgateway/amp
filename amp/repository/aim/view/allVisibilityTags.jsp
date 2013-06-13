@@ -407,7 +407,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Physical Progress Link" feature="Physical Progress"></field:display> 
 <field:display name="Add Programs Button - National Plan Objective" feature="Program"></field:display> 
 <field:display name="Add Programs Button - Primary Programs" feature="Program"></field:display> 
-<field:display name="Add Programs Button - Secondary Programs" feature="Program"></field:display> 
+<field:display name="Add Programs Button - Secondary Programs" feature="Program"></field:display>
+<field:display name="Add Programs Button - Tertiary Programs" feature="Program"></field:display> 
 <field:display name="Add Projection" feature ="MTEF Projections"></field:display> 
 <field:display name="Add Projection" feature="MTEF Projections"></field:display> 
 <field:display name="Add Regional Funding Link" feature="Regional Funding"></field:display> 
@@ -754,7 +755,16 @@ deleted 6 fields, do not reinsert
 <field:display name="Secondary Program Level 5" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 6" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Program Level 7" feature="NPD Programs"></field:display> 
-<field:display name="Secondary Program Level 8" feature="NPD Programs"></field:display> 
+<field:display name="Secondary Program Level 8" feature="NPD Programs"></field:display>
+
+<field:display name="Tertiary Program Level 1" feature="NPD Programs"></field:display> 
+<field:display name="Tertiary Program Level 2" feature="NPD Programs"></field:display> 
+<field:display name="Tertiary Program Level 3" feature="NPD Programs"></field:display> 
+<field:display name="Tertiary Program Level 4" feature="NPD Programs"></field:display> 
+<field:display name="Tertiary Program Level 5" feature="NPD Programs"></field:display> 
+<field:display name="Tertiary Program Level 6" feature="NPD Programs"></field:display> 
+<field:display name="Tertiary Program Level 7" feature="NPD Programs"></field:display> 
+<field:display name="Tertiary Program Level 8" feature="NPD Programs"></field:display>  
 
 
 <field:display name="Parent National Planning Objectives" feature="NPD Programs"></field:display> 
@@ -852,7 +862,8 @@ deleted 6 fields, do not reinsert
 <field:display name="Remove Physical Progress Link" feature="Physical Progress"></field:display> 
 <field:display name="Remove Program Button - National Plan Objective" feature="Program"></field:display> 
 <field:display name="Remove Program Button - Primary Programs" feature="Program"></field:display> 
-<field:display name="Remove Program Button - Secondary Programs" feature="Program"></field:display> 
+<field:display name="Remove Program Button - Secondary Programs" feature="Program"></field:display>
+<field:display name="Remove Program Button - Tertiary Programs" feature="Program"></field:display> 
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display> 
 
 <field:display name="Responsible Organization" feature="Responsible Organization"></field:display> 
@@ -873,6 +884,7 @@ deleted 6 fields, do not reinsert
 <field:display name="Secondary Sector Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Secondary Sector" feature="Sectors"></field:display>
 <field:display name="Validate Mandatory Secondary Sector" feature="Sectors"></field:display>
+<field:display name="Tertiary Program" feature="NPD Programs"></field:display>
 <field:display name="Tertiary Sector Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Tertiary Sector" feature="Sectors"></field:display>

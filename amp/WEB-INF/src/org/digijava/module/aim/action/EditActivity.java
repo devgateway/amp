@@ -362,9 +362,11 @@ public class EditActivity extends Action {
       List nationalPlanObjectivePrograms=new ArrayList();
       List primaryPrograms=new ArrayList();
       List secondaryPrograms=new ArrayList();
+      List tertiaryPrograms = new ArrayList();
       eaForm.getPrograms().setNationalPlanObjectivePrograms(nationalPlanObjectivePrograms);
       eaForm.getPrograms().setPrimaryPrograms(primaryPrograms);
       eaForm.getPrograms().setSecondaryPrograms(secondaryPrograms);
+      eaForm.getPrograms().setTertiaryPrograms(tertiaryPrograms);
 
       if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
           .getCurrencyId() != null) {
@@ -767,12 +769,15 @@ public class EditActivity extends Action {
                        List activityNPO=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
                        List activityPP=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.PRIMARY_PROGRAM);
                        List activitySP=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.SECONDARY_PROGRAM);
+                       List activityTP=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.TERTIARY_PROGRAM);
                        eaForm.getPrograms().setNationalPlanObjectivePrograms(activityNPO);
                        eaForm.getPrograms().setPrimaryPrograms(activityPP);
                        eaForm.getPrograms().setSecondaryPrograms(activitySP);
+                       eaForm.getPrograms().setTertiaryPrograms(activityTP);
                        eaForm.getPrograms().setNationalSetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE));
                        eaForm.getPrograms().setPrimarySetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM));
                        eaForm.getPrograms().setSecondarySetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM));
+                       eaForm.getPrograms().setTertiarySetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.TERTIARY_PROGRAM));
             }
 
 

@@ -959,6 +959,15 @@ public class ExportActivityToPDF extends Action {
 						createGeneralInfoRow(mainLayout,columnName,result);
 					}
 				}
+				
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs", ampContext)){
+					//tertiary Programs
+					if(myForm.getPrograms().getTertiaryPrograms()!=null){
+						columnName=TranslatorWorker.translateText("Tertiary Programs");
+						String result= buildProgramsOutput(myForm.getPrograms().getTertiaryPrograms());
+						createGeneralInfoRow(mainLayout,columnName,result);
+					}
+				}
 			}
 			
 			/**

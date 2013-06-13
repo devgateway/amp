@@ -1405,6 +1405,21 @@ function collapseAll() {
 					</table>
 				</c:forEach>
 			</module:display>
+			<module:display name="/Activity Form/Program/Tertiary Programs" parentModule="/Activity Form/Program">
+				<digi:trn>Tertiary Programs</digi:trn><br/>
+				<c:forEach var="program" items="${aimEditActivityForm.programs.tertiaryPrograms}">
+					<table width="100%" cellSpacing="2" cellPadding="1" style="font-size:11px;">
+				  		<tr>
+					  	<td width=85%>
+					  		<b><c:out value="${program.hierarchyNames}"/></b>
+					  	</td>
+						<td width="15%" align=right valign=top>
+							<b><c:out value="${program.programPercentage}"/>%</b>
+						</td>
+					</tr>
+					</table>
+				</c:forEach>
+			</module:display>
 		</div>
 	</fieldset>
 </module:display>

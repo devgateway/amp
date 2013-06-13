@@ -71,6 +71,7 @@ public class ProgramUtil {
                 public static final String NATIONAL_PLAN_OBJECTIVE ="National Plan Objective";
                 public static final String PRIMARY_PROGRAM = "Primary Program";
                 public static final String SECONDARY_PROGRAM = "Secondary Program";
+                public static final String TERTIARY_PROGRAM = "Tertiary Program";
                 public static final int NATIONAL_PLAN_OBJECTIVE_KEY = 1;
                 public static final int PRIMARY_PROGRAM_KEY = 2;
                 public static final int SECONDARY_PROGRAM_KEY = 3;

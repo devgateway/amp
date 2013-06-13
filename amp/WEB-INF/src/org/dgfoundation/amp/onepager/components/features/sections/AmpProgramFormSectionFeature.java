@@ -47,6 +47,13 @@ public class AmpProgramFormSectionFeature extends
 			add(new EmptyPanel("spTable"));
 		else
 			add(spTable);
+		AmpActivityProgramSettings  tp=ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.TERTIARY_PROGRAM);
+		AmpProgramFormTableFeature tpTable = new AmpProgramFormTableFeature(
+				"tpTable", "Tertiary Programs", am, ProgramUtil.TERTIARY_PROGRAM);
+		if(tp==null)
+			add(new EmptyPanel("tpTable"));
+		else
+			add(tpTable);
 		add(new AmpTextAreaFieldPanel<String>("description",
 				new PropertyModel<String>(am, "programDescription"),
 				"Program Description", true, AmpFMTypes.MODULE));

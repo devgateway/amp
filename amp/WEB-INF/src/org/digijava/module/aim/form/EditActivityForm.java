@@ -2344,7 +2344,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private AmpActivityProgramSettings primarySetting;
 		private List primaryPrograms;
 		private List secondaryPrograms;
+		private List tertiaryPrograms;
 		private AmpActivityProgramSettings secondarySetting;
+		private AmpActivityProgramSettings tertiarySetting;
 
 		private String visibleProgram = null;
 
@@ -2395,7 +2397,23 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setSecondaryPrograms(List secondaryPrograms) {
 			this.secondaryPrograms = secondaryPrograms;
 		}
+        
+		public List getTertiaryPrograms() {
+			return tertiaryPrograms;
+		}
 
+		public void setTertiaryPrograms(List tertiaryPrograms) {
+			this.tertiaryPrograms = tertiaryPrograms;
+		}
+		
+		public AmpActivityProgramSettings getTertiarySetting() {
+			return tertiarySetting;
+		}
+
+		public void setTertiarySetting(AmpActivityProgramSettings tertiarySetting) {
+			this.tertiarySetting = tertiarySetting;
+		}
+		
 		public Long getProgram() {
 			return program;
 		}
@@ -2491,6 +2509,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setSelectedSPrograms(Long[] selectedSPrograms) {
 			this.selectedSPrograms = selectedSPrograms;
 		}
+
+		
 
 	}
 
@@ -4891,6 +4911,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.getPrograms().setNationalPlanObjectivePrograms(null);
 			this.getPrograms().setPrimaryPrograms(null);
 			this.getPrograms().setSecondaryPrograms(null);
+			this.getPrograms().setTertiaryPrograms(null);
 			this.crossIssues = null;
 			this.funding = null;
 			this.oldFunding = null;
@@ -5211,6 +5232,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public AmpActivityProgram getSecondaryPrograms(int index) {
 		return (AmpActivityProgram) (programs.secondaryPrograms.toArray()[index]);
+	}
+	
+	public AmpActivityProgram getTertiaryPrograms(int index) {
+		return (AmpActivityProgram) (programs.tertiaryPrograms.toArray()[index]);
 	}
 
 	public FundingDetail getFundingDetail(int index) {

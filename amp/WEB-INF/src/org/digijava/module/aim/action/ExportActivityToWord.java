@@ -437,6 +437,20 @@ public class ExportActivityToWord extends Action {
 								programsTbl.addCell(cell);
 							}
 			            }
+			            if(FeaturesUtil.isVisibleModule("/Activity Form/Program/Tertiary Programs", ampContext)){		           
+				            if(programs.getNationalPlanObjectivePrograms()!=null){
+								cell = new RtfCell();
+								cell.setBorder(0);
+								cell.add(new Paragraph(TranslatorWorker.translateText("Tertiary Programs").toUpperCase(), BOLDFONT));						
+								programsTbl.addCell(cell);
+								programsTbl.addCell(new RtfCell());
+								columnVal= buildProgramsOutput(programs.getTertiaryPrograms());
+								cell = new RtfCell();
+								cell.setBorder(0);
+								cell.add(new Paragraph(columnVal,PLAINFONT));
+								programsTbl.addCell(cell);
+							}
+			            }
 		            } 
 		            
 		            doc.add(programsTbl);

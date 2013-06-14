@@ -112,9 +112,9 @@ div.fakefile2 input{
 
 <script type="text/javascript">
 function saveRecord(id) {
-	alert('NOP');
+	//alert('NOP');
 	return;
-	debugger;
+	//debugger;
 	var loadingImgDiv = document.getElementById("loadingImg");
 	loadingImgDiv.style.display="block";
 	
@@ -133,7 +133,7 @@ function saveRecord(id) {
 
 function saveAll() {
 	return;
-	debugger;
+	//debugger;
 	 var checks = document.getElementsByName("selectedFields");
 	 var isChecked = false;
 

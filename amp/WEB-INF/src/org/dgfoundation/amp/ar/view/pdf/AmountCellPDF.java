@@ -9,6 +9,7 @@ package org.dgfoundation.amp.ar.view.pdf;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.digijava.module.aim.action.ExportActivityToPDF;
 
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -46,7 +47,7 @@ public class AmountCellPDF extends PDFExporter {
 		
 		
 		AmountCell ac=(AmountCell) item;
-		PdfPCell pdfc = new PdfPCell(new Paragraph(ac.toString(),new Font(Font.COURIER, 9, Font.NORMAL)));
+		PdfPCell pdfc = new PdfPCell(new Paragraph(ac.toString(),new Font(ExportActivityToPDF.basefont, 9, Font.NORMAL)));
 		pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
 		pdfc.setHorizontalAlignment(Element.ALIGN_RIGHT);
 		if (currentBackColor!=null){

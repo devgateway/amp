@@ -66,14 +66,14 @@ public class AmpActivityDocument extends ObjectReferringDocument implements Seri
 		if (this.getUuid() != null){
 			out.getOutputs()
 			.add(
-					new Output(null, new String[] { "Document UUID:&nbsp;" },
+					new Output(null, new String[] { "Document UUID" },
 							new Object[] { this.getUuid() }));
 		}
 		
 		if (this.documentType != null) {
 			out.getOutputs()
 					.add(
-							new Output(null, new String[] { "<br/>Document Type:&nbsp;" },
+							new Output(null, new String[] { "Document Type" },
 									new Object[] { this.documentType }));
 		}
 

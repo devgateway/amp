@@ -13,3 +13,7 @@
 .sel_sm_b {color:#FF6000; font-size:11px; font-weight:bold;}
 
 
+li.all_checkbox
+{
+	margin-left: -25px;
+}

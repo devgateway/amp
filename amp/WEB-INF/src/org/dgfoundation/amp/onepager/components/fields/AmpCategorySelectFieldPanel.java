@@ -129,4 +129,28 @@ public class AmpCategorySelectFieldPanel extends AmpCategoryFieldPanel{
 		this(id, categoryKey, model, fmName, ordered, nullValid, isMultiselect, relatedChoicesModel);
 		this.fmType = fmType;
 	}
+
+    /**
+     * Creates a category select field panel for use as a singleselect
+     * @param id
+     * @param categoryKey
+     * @param model
+     * @param fmName
+     * @param ordered
+     * @param nullValid
+     * @throws Exception
+     *
+     * MERGE: shoudn't be merged
+     */
+    public AmpCategorySelectFieldPanel(String id, String categoryKey,
+                                       IModel<AmpCategoryValue> model, String fmName,
+                                       boolean ordered, Boolean nullValid, boolean hideLabel,
+                                       IModel<Set<AmpCategoryValue>> relatedChoicesModel) throws Exception {
+        super(id,categoryKey,fmName,ordered,false,relatedChoicesModel,hideLabel);
+        choiceContainer = new DropDownChoice<AmpCategoryValue>(
+                "choice",model, choices, new TranslatedChoiceRenderer<AmpCategoryValue>())
+                .setNullValid(nullValid);
+        choiceContainer.setOutputMarkupId(true);
+        addFormComponent(choiceContainer);
+    }
 }

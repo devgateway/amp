@@ -146,21 +146,21 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { " Title:&nbsp;" }, new Object[] { this.title != null ? this.title
+				new Output(null, new String[] { "Title" }, new Object[] { this.title != null ? this.title
 						: "Empty Title" }));
 		if (this.description != null && !this.description.trim().equals("")) {
 			out.getOutputs()
-					.add(new Output(null, new String[] { " Description:&nbsp;" }, new Object[] { this.description }));
+					.add(new Output(null, new String[] { "Description" }, new Object[] { this.description }));
 		}
 		if (this.code != null && !this.code.trim().equals("")) {
-			out.getOutputs().add(new Output(null, new String[] { " Code:&nbsp;" }, new Object[] { this.code }));
+			out.getOutputs().add(new Output(null, new String[] { "Code" }, new Object[] { this.code }));
 		}
 		if (this.creationdate != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { " Creation Date:&nbsp;" }, new Object[] { this.creationdate }));
+					new Output(null, new String[] { "Creation Date" }, new Object[] { this.creationdate }));
 		}
 		if (this.Url != null && !this.Url.trim().equals("")) {
-			out.getOutputs().add(new Output(null, new String[] { " URL:&nbsp;" }, new Object[] { this.Url }));
+			out.getOutputs().add(new Output(null, new String[] { "URL" }, new Object[] { this.Url }));
 		}
 		/*if (this.activity != null ) {
 			out.getOutputs().add(new Output(null, new String[] { " Activity: " }, new Object[] { this.activity }));

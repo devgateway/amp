@@ -2775,7 +2775,7 @@ function collapseAll() {
 													<tr>
 														<module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
 														<td align="left" valign="top">
-														<b><digi:trn>${disbursement.adjustmentType}</digi:trn></b>
+														<b><digi:trn>${disbursement.adjustmentType.value}</digi:trn></b>
 <%-- 															<c:if test="${disbursement.adjustmentType==0}"> --%>
 <%-- 																<b><digi:trn key="aim:actual">Actual</digi:trn></b> --%>
 <%-- 															</c:if>  --%>

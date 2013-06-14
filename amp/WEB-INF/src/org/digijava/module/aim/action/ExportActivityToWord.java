@@ -1381,9 +1381,9 @@ public class ExportActivityToWord extends Action {
 	}
 
 
-	private void processPlanningPart(HttpServletRequest request,
-			ServletContext ampContext, Table planningSubTable1)
-			throws WorkerException, Exception {
+	private void processPlanningPart(HttpServletRequest request, ServletContext ampContext, Table planningSubTable1)
+			throws Exception {
+
 		String columnName;
 		String columnVal;
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank", ampContext)){
@@ -1432,6 +1432,11 @@ public class ExportActivityToWord extends Action {
 			columnName=TranslatorWorker.translateText("Proposed Completion Date")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getProposedCompDate(),null);
 		}
+
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext)) {
+            columnName = TranslatorWorker.translateText("Original Completion Date")+": ";
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null);
+        }
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
 			columnName=TranslatorWorker.translateText("Actual Completion Date")+": ";
@@ -1933,8 +1938,9 @@ public class ExportActivityToWord extends Action {
     				boolean visibleModuleRegExpenditures = FeaturesUtil.isVisibleModule(
     						"/Activity Form/Regional Funding/Region Item/Expenditures", ampContext);
     				
+                    
     				for (AmpRegionalFunding regFnd : regFnds) {
-    					// validating module visibility
+        				// validating module visibility
     					// Commitments
     					if (regFnd.getTransactionType() == Constants.COMMITMENT && visibleModuleRegCommitments) {
     						ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");

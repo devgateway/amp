@@ -239,7 +239,7 @@ function initializeTranslations(){
 											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
 												id="regionDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li>
+													<li class="all_checkbox">
 														<input type="checkbox" id="region_check_all" name="region_check" value="-1"
 																onClick="allOptionChecked(this,'region_check','zone_check')" />
 														<span><digi:trn>All</digi:trn></span>
@@ -320,9 +320,9 @@ function initializeTranslations(){
 											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
 												id="structuresDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li>
+													<li class="all_checkbox">
 														<input type="checkbox" id="st_check_all" name="st_check" value="-1"
-																onClick="allOptionChecked(this,'region_check','zone_check')" />
+																onClick="allOptionChecked(this,'structures_check','structures_check')" />
 														<span><digi:trn>All</digi:trn></span>
 													</li>
 													<c:forEach items="${datadispatcherform.filter.structureTypes}" var="item">
@@ -354,9 +354,9 @@ function initializeTranslations(){
 											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
 												id="aidmodalityDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li>
+													<li class="all_checkbox">
 														<input type="checkbox" id="aid_check_all" name="aid_check" value="-1"
-																onClick="allOptionChecked(this,'region_check','zone_check')" />
+																onClick="allOptionChecked(this,'aidmodality_check','aidmodality_check')" />
 														<span><digi:trn>All</digi:trn></span>
 													</li>
 													<c:forEach items="${datadispatcherform.filter.financingInstruments}" var="item">
@@ -388,9 +388,9 @@ function initializeTranslations(){
 											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
 												id="typeofassisDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li>
+													<li class="all_checkbox">
 														<input type="checkbox" id="typeofassis_check_all" name="assis_check" value="-1"
-																onClick="allOptionChecked(this,'region_check','zone_check')" />
+																onClick="allOptionChecked(this,'typeofassis_check','typeofassis_check')" />
 														<span><digi:trn>All</digi:trn></span>
 													</li>
 													<c:forEach items="${datadispatcherform.filter.typeofassistences}" var="item">
@@ -422,9 +422,9 @@ function initializeTranslations(){
 											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
 												id="projectstDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li>
+													<li class="all_checkbox">
 														<input type="checkbox" id="typeofassis_check_all" name="assis_check" value="-1"
-																onClick="allOptionChecked(this,'region_check','zone_check')" />
+																onClick="allOptionChecked(this,'projectst_check','projectst_check')" />
 														<span><digi:trn>All</digi:trn></span>
 													</li>
 													<c:forEach items="${datadispatcherform.filter.projectstatus}" var="item">
@@ -456,9 +456,9 @@ function initializeTranslations(){
 											<div style="height: 180px; border: 1px solid #CCCCCC; overflow: auto; background: white; maxHeight: 180px; padding: 20px;"
 												id="orgtypeDivList">
 												<ul style="list-style-type: none;margin-left: 0px;">
-													<li>
+													<li class="all_checkbox">
 														<input type="checkbox" id="typeofassis_check_all" name="assis_check" value="-1"
-																onClick="allOptionChecked(this,'region_check','zone_check')" />
+																onClick="allOptionChecked(this,'orgtypes_check','orgtypes_check')" />
 														<span><digi:trn>All</digi:trn></span>
 													</li>
 													<c:forEach items="${datadispatcherform.filter.organizationsType}" var="item">

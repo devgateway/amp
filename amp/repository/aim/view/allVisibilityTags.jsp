@@ -334,6 +334,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Identification" name="Data Source"></field:display> 
 <field:display feature="Identification" name="Computation"></field:display>
 <field:display feature="Identification" name="Project Description"></field:display>
+<field:display feature="Identification" name="Contracting Arrangements"></field:display>
 <field:display name="Project Impact" feature="Identification"></field:display> 
 <field:display feature="Identification" name="Project Comments"></field:display> 
 <field:display feature="Identification" name="Objective Assumption"></field:display> 
@@ -377,7 +378,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display> 
 <field:display name="Actors" feature="Issues"></field:display>
 <field:display name="Actual Approval Date" feature="Planning" ></field:display>
-<field:display name="Actual Completion Date" feature="Planning"></field:display> 
+<field:display name="Actual Completion Date" feature="Planning"></field:display>
+<field:display name="Original Completion Date" feature="Planning"></field:display>
 <field:display name="Final Date for Disbursements Comments" feature="Planning"></field:display>
 <field:display name="Current Completion Date Comments" feature="Planning"></field:display> 
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display> 

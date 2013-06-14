@@ -83,18 +83,18 @@
 <c:set var="previewUnselectedMeasureTrn">
 	<digi:trn>UNSELECTED MEASURE</digi:trn>
 </c:set>
-<c:set var="january">January</c:set>
-<c:set var="february">February</c:set>
-<c:set var="march">March</c:set>
-<c:set var="april">April</c:set>
-<c:set var="may">May</c:set>
-<c:set var="june">June</c:set>
-<c:set var="july">July</c:set>
-<c:set var="august">August</c:set>
-<c:set var="september">September</c:set>
-<c:set var="october">October</c:set>
-<c:set var="november">November</c:set>
-<c:set var="december">December</c:set>
+<c:set var="january"><digi:trn>January</digi:trn></c:set>
+<c:set var="february"><digi:trn>February</digi:trn></c:set>
+<c:set var="march"><digi:trn>March</digi:trn></c:set>
+<c:set var="april"><digi:trn>April</digi:trn></c:set>
+<c:set var="may"><digi:trn>May</digi:trn></c:set>
+<c:set var="june"><digi:trn>June</digi:trn></c:set>
+<c:set var="july"><digi:trn>July</digi:trn></c:set>
+<c:set var="august"><digi:trn>August</digi:trn></c:set>
+<c:set var="september"><digi:trn>September</digi:trn></c:set>
+<c:set var="october"><digi:trn>October</digi:trn></c:set>
+<c:set var="november"><digi:trn>November</digi:trn></c:set>
+<c:set var="december"><digi:trn>December</digi:trn></c:set>
 <c:set var="reportUsesFilters">false</c:set>
 <c:if test="${myForm.useFilters!=null && myForm.useFilters}">
 	<c:set var="reportUsesFilters">true</c:set>

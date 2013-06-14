@@ -47,6 +47,7 @@
 					}
 				}
 				var arrHeader:Array; 
+				datagrid_id.columns = new Array();
 				if(datagrid_id.columns.length == 0){
 					arrHeader = arr[0].split('","');
 					for (var i2:int=0; i2<arrHeader.length; i2++) {
@@ -112,7 +113,8 @@
 			public function refreshGraph():void
 			{
 				service.send();
-//				start();
+				datagrid_id.columns.length=0;
+				start();
 			}
 			
 		]]>

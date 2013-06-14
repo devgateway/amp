@@ -8,6 +8,7 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.cell.XmlHierarchyCell;
 import org.dgfoundation.amp.ar.helper.HierarchycalItem;
+import org.digijava.module.aim.action.ExportActivityToPDF;
 
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Font;
@@ -42,7 +43,7 @@ public class XmlHierarchyCellPDF extends PDFExporter {
 		XmlHierarchyCell xmlCell=(XmlHierarchyCell) item;
 		PdfPCell pdfc;
 		if (xmlCell.getRootItems() == null || xmlCell.getRootItems().size() == 0 ) {
-			pdfc	= new PdfPCell(new Paragraph("",new Font(Font.COURIER, 9)));
+			pdfc	= new PdfPCell(new Paragraph("",new Font(ExportActivityToPDF.basefont, 9, Font.NORMAL)));
 		}
 		else {
 			List list		= new List(false);
@@ -56,8 +57,8 @@ public class XmlHierarchyCellPDF extends PDFExporter {
 
 	private void populateList(List pdfList, java.util.List<HierarchycalItem> srcList) {
 		for (HierarchycalItem srcItem: srcList) {
-			Chunk nameChunk			= new Chunk(srcItem.getDateString()+ " " + srcItem.getName() + ": ", new Font(Font.COURIER, 9, Font.BOLD) );
-			Chunk descriptionChunk	= new Chunk(srcItem.getDescription(), new Font(Font.COURIER, 9) );
+			Chunk nameChunk			= new Chunk(srcItem.getDateString()+ " " + srcItem.getName() + ": ", new Font(ExportActivityToPDF.basefont, 9, Font.BOLD) );
+			Chunk descriptionChunk	= new Chunk(srcItem.getDescription(), new Font(ExportActivityToPDF.basefont, 9) );
 			ListItem listItem		= new ListItem();
 			listItem.add(nameChunk);
 			listItem.add(descriptionChunk);

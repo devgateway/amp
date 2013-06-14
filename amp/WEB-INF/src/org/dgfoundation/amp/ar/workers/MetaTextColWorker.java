@@ -36,10 +36,11 @@ public class MetaTextColWorker extends TextColWorker {
 		TextCell tc=(TextCell) super.getCellFromRow(rs);
 		MetaTextCell mtc=new MetaTextCell(tc);
 		
-		if(columnName.equals("Project Title")){
-				mtc.getMetaData().add(new MetaInfo(ArConstants.DRAFT,rs.getBoolean(4)));
-				mtc.getMetaData().add(new MetaInfo(ArConstants.STATUS,rs.getString(5)));
-			}
+		if(columnName.equals("Project Title") || columnName.equals("Contracting Arrangements") || columnName.equals("AMP ID"))
+		{
+			mtc.getMetaData().add(new MetaInfo(ArConstants.DRAFT,rs.getBoolean(4)));
+			mtc.getMetaData().add(new MetaInfo(ArConstants.STATUS,rs.getString(5)));
+		}
 		else if(columnName.indexOf("National Planning Objectives") > -1){ 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4)));
 		}

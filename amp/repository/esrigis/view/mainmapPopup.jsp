@@ -59,7 +59,25 @@
       .deactivateIcon { background-image:url(/TEMPLATE/ampTemplate/img_2/gis/nav_decline.png); width:16px; height:16px; }
     </style>
     
+
 <script type="text/javascript">
+var trnSelectThisPoint = "";
+var trnSelectThisStructure = "";
+var trnEdit = "";
+var trnMove = "";
+var trnRotateScale = "";
+var trnNotImplemented = "";
+var trnDelete = "";
+
+function initializeTranslations(){
+	trnSelectThisPoint = "<digi:trn jsFriendly='true'>Select this point</digi:trn>";
+	trnSelectThisStructure = "<digi:trn jsFriendly='true'>Select this structure</digi:trn>";
+	trnEdit = "<digi:trn jsFriendly='true'>Edit</digi:trn>";
+	trnMove = "<digi:trn jsFriendly='true'>Move</digi:trn>";
+	trnRotateScale = "<digi:trn jsFriendly='true'>Rotate/Scale</digi:trn>";
+	trnNotImplemented = "<digi:trn jsFriendly='true'>Not Implemented</digi:trn>";
+	trnDelete = "<digi:trn jsFriendly='true'>Delete</digi:trn>";
+}
 	$(function(){
   		$('#toolsbtn').click(function(){
      		$('#navToolbar').toggle('slow');

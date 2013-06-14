@@ -861,8 +861,11 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
 
-		if (dateFilterHidesProjects && !reportMetadata.getDrilldownTab())
-		{	
+		if (dateFilterHidesProjects && !reportMetadata.getDrilldownTab() && 
+				(this.getFilter().wasDateFilterUsed() || (reportMetadata.getHierarchies().size() > 0))
+			)
+		{
+			// activities without funding are removed ONLY WHEN either a date filter was used OR there is a multi-level hierarchy
 			report.cleanActivitiesWithoutFunding();
 			//report.cleanActivitiesWithoutFunding();
 			// ugly hack for recursive elimination of empty hierarchies... we have a hier depth of at most 5

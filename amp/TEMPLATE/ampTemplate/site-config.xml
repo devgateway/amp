@@ -134,7 +134,7 @@
 
 		<layout name="headerMiddleLayout2" file="headerMiddle2.jsp">
 		<put name="version">1.14</put>
- 	 	<put name="build_version">13.05.2013</put>
+ 	 	<put name="build_version">ALPHA</put>
 	    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>

@@ -10,6 +10,7 @@ import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.module.aim.action.ExportActivityToPDF;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
@@ -43,14 +44,12 @@ public class CellColumnPDF extends PDFExporter {
 	public void generate() {
 		CellColumn col=(CellColumn) item;
 		 Cell c=col.getByOwner(ownerId);
-		 if (c!=null)
+		 if(c!=null)
 		 {
 			 c.invokeExporter(this);
 		 }
-		 else
-		 {
-			 table.addCell(new PdfPCell(new Paragraph(" ",new Font(Font.COURIER, 10))));
-		 }
+		 else 
+			 table.addCell(new PdfPCell(new Paragraph(" ",new Font(ExportActivityToPDF.basefont, 10, Font.NORMAL))));
 	}
 
 }

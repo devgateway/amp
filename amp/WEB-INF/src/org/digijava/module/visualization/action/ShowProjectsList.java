@@ -249,13 +249,13 @@ public class ShowProjectsList extends Action {
 		if (type.equals("Fundings")){
 			switch (Integer.parseInt(id)) {
 				case Constants.COMMITMENT:
-					itemName = TranslatorWorker.translateText("ODA Historical Trend - Commitments");		
+					itemName = TranslatorWorker.translateText("ODA Historical Trend") + " - " + TranslatorWorker.translateText("Commitments");		
 					break;
 				case Constants.DISBURSEMENT:
-					itemName = TranslatorWorker.translateText("ODA Historical Trend - Disbursements");
+					itemName = TranslatorWorker.translateText("ODA Historical Trend") + " - " + TranslatorWorker.translateText("Disbursements");
 					break;
 				case Constants.EXPENDITURE:
-					itemName = TranslatorWorker.translateText("ODA Historical Trend - Expenditures");
+					itemName = TranslatorWorker.translateText("ODA Historical Trend") + " - " + TranslatorWorker.translateText("Expenditures");
 					break;
 				default:
 					break;

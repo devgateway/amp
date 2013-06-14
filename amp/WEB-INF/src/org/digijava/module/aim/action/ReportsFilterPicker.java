@@ -131,7 +131,7 @@ public class ReportsFilterPicker extends Action {
 				request.getSession().setAttribute(Constants.CURRENT_TAB_REPORT, report);
 		}
 		
-		// init form
+ 		// init form
 		if (request.getParameter("init") != null)
 		{
 			FilterUtil.populateForm(filterForm, FilterUtil.getOrCreateFilter(longAmpReportId, null), longAmpReportId);

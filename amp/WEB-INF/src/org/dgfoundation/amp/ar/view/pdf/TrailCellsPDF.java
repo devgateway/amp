@@ -19,6 +19,7 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.action.ExportActivityToPDF;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
@@ -72,7 +73,7 @@ public class TrailCellsPDF extends PDFExporter {
 	public void generate() {
 		//generate totals:
 		ReportData grd=(ReportData) item;
-		Font totalFont = new Font(Font.COURIER, 10, Font.BOLD);
+		Font totalFont = new Font(ExportActivityToPDF.basefont, 10, Font.BOLD);
 		
 		if(grd.getParent()!=null) 
 		{
@@ -127,13 +128,13 @@ public class TrailCellsPDF extends PDFExporter {
 			
 			PdfPCell pdfc = null;
 			if (grd.getReportMetadata().getHideActivities()){
-				PdfPCell pdfc2 = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
+				PdfPCell pdfc2 = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(result+" ("+grd.getTotalUniqueRows()+")"),totalFont));
 				pdfc2.setColspan(grd.getTotalDepth());
 				table.addCell(pdfc2);
 				currentBackColor=new  Color(235,235,235);
 				pdfc2.setBackgroundColor(currentBackColor);
 			}else{
-				pdfc = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
+                pdfc = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(result+" ("+grd.getTotalUniqueRows()+")"),totalFont));
 //				Integer sourceColsCount=grd.getSourceColsCount();
 //				if( sourceColsCount!=null&&sourceColsCount>1){
 //					//When a column becomes hierarchy we have to subtract it from source columns.

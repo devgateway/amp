@@ -19,8 +19,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_amp_id AS SELECT amp_activity.amp_activity_id, amp_activity.amp_id FROM amp_activity;;;
-        		</lang>
+				CREATE OR REPLACE VIEW v_amp_id AS 
+				SELECT amp_activity.amp_activity_id, amp_activity.amp_id, amp_activity.amp_activity_id AS act_id, amp_activity.draft, amp_activity.approval_status AS status
+				FROM amp_activity;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

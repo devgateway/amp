@@ -9,6 +9,7 @@ package org.dgfoundation.amp.ar.view.pdf;
 import java.awt.Color;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
@@ -34,6 +35,8 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class TrailCellsPDF extends PDFExporter {
 
+	private static Logger logger = Logger.getLogger(TrailCellsPDF.class);
+	
 	/**
 	 * @param parent
 	 * @param item
@@ -63,7 +66,7 @@ public class TrailCellsPDF extends PDFExporter {
 		int res = 0;
 		res = ar.getColumns().size() + ar.getMeasures().size() - ar.getHierarchies().size();
 		if (res < 0)
-			System.err.println("the report will come out with a corrupted layout");
+			logger.warn("the report will come out with a corrupted layout");
 		return res;
 	}
 		

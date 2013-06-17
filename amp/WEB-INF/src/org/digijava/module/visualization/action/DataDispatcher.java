@@ -2335,8 +2335,7 @@ public class DataDispatcher extends DispatchAction {
 				}
 				filter.setBudgetCVIds(budgetCVIds);
                 newFilter = filter.getCopyFilterForFunding();
-				Long[] selCVIds = {-1l};
-				newFilter.setSelCVIds(selCVIds);
+				newFilter.setSelCVIds(null);
 				yearGrandTotal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getValue();
 				yearUnallocatedTotal = yearGrandTotal.subtract(yearAllocatedTotal);
 				xmlString.append("<dataField category=\"" +TranslatorWorker.translateText("Unallocated") + "\" id=\"-1\" amount=\""+ yearUnallocatedTotal.divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
@@ -2457,8 +2456,7 @@ public class DataDispatcher extends DispatchAction {
     		}
 			filter.setBudgetCVIds(budgetCVIds);
             newFilter = filter.getCopyFilterForFunding();
-			Long[] selCVIds = {-1l};
-			newFilter.setSelCVIds(selCVIds);
+			newFilter.setSelCVIds(null);
 			
 			yearGrandTotal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getValue();
 			yearUnallocatedTotal = yearGrandTotal.subtract(yearAllocatedTotal);

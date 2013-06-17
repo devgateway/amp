@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -22,16 +20,6 @@ public class OrganisationSearch extends Action {
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 		
-		HttpSession session = request.getSession();
-		if (session.getAttribute("ampAdmin") == null) {
-			return mapping.findForward("index");
-		} else {
-					String str = (String)session.getAttribute("ampAdmin");
-					if (str.equals("no")) {
-							  return mapping.findForward("index");
-					}
-		}
-		 
 		logger.debug("In organisation manager action");
 		
 		OrgManagerForm eaForm = (OrgManagerForm) form;
@@ -47,14 +35,18 @@ public class OrganisationSearch extends Action {
 			////System.out.println("Inside ELSE");  //
 		}
 
-		int page = 0;
+		int page;
 		if (request.getParameter("page") == null) {
 			page = 1;
 		} else {
-			page = Integer.parseInt(request.getParameter("page"));
+            try {
+			    page = Integer.parseInt(request.getParameter("page"));
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
 		}
 		////System.out.println("page = " + page); //
-		if (eaForm.getNumResults() == 0 || eaForm.isOrgSelReset() == true) {
+		if (eaForm.getNumResults() == 0 || eaForm.isOrgSelReset()) {
 			eaForm.setTempNumResults(10);
 			//eaForm.setOrgTypes(DbUtil.getAllOrgTypes());
 			//if (eaForm.getAlphaPages() != null)
@@ -88,7 +80,7 @@ public class OrganisationSearch extends Action {
 			}
 
 			eaForm.setPagedCol(tempCol);
-			eaForm.setCurrentPage(new Integer(page));
+			eaForm.setCurrentPage(page);
 		}
 
 		return mapping.findForward("forward");

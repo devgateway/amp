@@ -9,7 +9,7 @@
 <%@page import="org.digijava.kernel.translator.TranslatorWorker"%>
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
 
-<!-- generate total row -->
+<!-- generate total row 3 -->
 	<c:if test="${reportData.levelDepth == 1}">
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid;" height="18px" >
 		<span style="font-family: Arial;color:black; font-weight: bold;font-size: 12px;margin-left: 2px">

@@ -77,9 +77,9 @@ public class AmpActivityProgram implements Versionable, Serializable, Cloneable 
 	public Output getOutput() {
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
-		out.getOutputs().add(new Output(null, new String[] { "Name:&nbsp;" }, new Object[] { this.program.getName() }));
+		out.getOutputs().add(new Output(null, new String[] { "Name" }, new Object[] { this.program.getName() }));
 		out.getOutputs()
-				.add(new Output(null, new String[] { "Percentage:&nbsp;" }, new Object[] { this.programPercentage }));
+				.add(new Output(null, new String[] { "Percentage" }, new Object[] { this.programPercentage }));
 		return out;
 	}
 

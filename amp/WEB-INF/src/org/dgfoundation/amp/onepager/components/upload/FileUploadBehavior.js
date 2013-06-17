@@ -8,6 +8,7 @@ function setupFileUpload(){
             url: '${url}',
             paramName: '${paramName}',
             singleFileUploads: true,
+            minFileSize: 1,
             maxFileSize: 20000000,
             add: function (e, data) {
                 //$.each(data.files, function (index, file) {

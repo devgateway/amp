@@ -112,9 +112,9 @@ div.fakefile2 input{
 
 <script type="text/javascript">
 function saveRecord(id) {
-	alert('NOP');
+	//alert('NOP');
 	return;
-	debugger;
+	//debugger;
 	var loadingImgDiv = document.getElementById("loadingImg");
 	loadingImgDiv.style.display="block";
 	
@@ -133,7 +133,7 @@ function saveRecord(id) {
 
 function saveAll() {
 	return;
-	debugger;
+	//debugger;
 	 var checks = document.getElementsByName("selectedFields");
 	 var isChecked = false;
 
@@ -407,7 +407,9 @@ span.extContactDropdownEmail {
 													</c:if>
 												</a></b></td>
 						    <td background="images/ins_bg.gif" class="inside"><b class="ins_title"><digi:trn>Values from AMP</digi:trn></b></td>
-						    <td width="50" background="images/ins_bg.gif" class="inside" align="center"><b class="ins_title"><digi:trn>Actions</digi:trn></b></td>
+						    <%--
+								<td width="50" background="images/ins_bg.gif" class="inside" align="center"><b class="ins_title"><digi:trn>Actions</digi:trn></b></td>
+							--%>
 						</tr>
 						<logic:notEmpty name="mapFieldsForm" property="mappedFields">
 							<logic:iterate id="field" name="mapFieldsForm" property="mappedFields">
@@ -465,9 +467,28 @@ span.extContactDropdownEmail {
 										
 										var selectedFilterBy = document.getElementById("filterAmpClass").value;
 										var actionTypeString = get_action_type(selectedFilterBy);
-										//debugger;
-										
-										
+										//debugger;										
+										//define your itemSelect handler function:
+										itemSelectHandler = function(sType, aArgs) {
+											//debugger;
+											YAHOO.log(sType); // this is a string representing the event;
+				      						// e.g., "itemSelectEvent"
+											var oMyAcInstance = aArgs[0]; // your AutoComplete instance
+											var elListItem = aArgs[1]; // the <li> element selected in the suggestion
+	   					       				// container
+											var oData = String(aArgs[2]); // object literal of data for the result
+											var ampId = oData.substring (oData.lastIndexOf('(') + 1, oData.lastIndexOf(')')).trim();
+											var value = oData.substring (0, oData.lastIndexOf('(')).trim();
+											var loadingImgDiv = document.getElementById("loadingImg");
+											loadingImgDiv.style.display="block";
+		 									var el = document.getElementById("ampValues["+${field.ampField.id}+"]");
+		 									<digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
+		 									url = "<%= saveRecord %>?actionType=saveRecord&id="+${field.ampField.id}+"&ampId="+ampId+"&mappedValue="+value;
+		 									mapFieldsForm.action =url;
+		 									mapFieldsForm.submit();
+		 									return true;
+										};
+
 										relatedActDataSource.scriptQueryAppend = "actionType=" + actionTypeString;;
 										relatedActDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 										relatedActDataSource.queryMatchContains = true;
@@ -477,42 +498,25 @@ span.extContactDropdownEmail {
 										relatedActAutoComp.queryDelay = 0.5;
 										$("#statesinput").css("position", "static");
 
-										//define your itemSelect handler function:
-										var itemSelectHandler = function(sType, aArgs) {
-											//debugger;
-											YAHOO.log(sType); // this is a string representing the event;
-														      // e.g., "itemSelectEvent"
-											var oMyAcInstance = aArgs[0]; // your AutoComplete instance
-											var elListItem = aArgs[1]; // the <li> element selected in the suggestion
-											   					       // container
-											var oData = String(aArgs[2]); // object literal of data for the result
-											var ampId = oData.substring (oData.lastIndexOf('(') + 1, oData.lastIndexOf(')')).trim();
-											var value = oData.substring (0, oData.lastIndexOf('(')).trim();
-											var loadingImgDiv = document.getElementById("loadingImg");
-											loadingImgDiv.style.display="block";
-												 var el = document.getElementById("ampValues["+${field.ampField.id}+"]");
-												 <digi:context name="saveRecord" property="context/module/moduleinstance/mapFields.do"/>
-												 url = "<%= saveRecord %>?actionType=saveRecord&id="+${field.ampField.id}+"&ampId="+ampId+"&mappedValue="+value;
-												 mapFieldsForm.action =url;
-												 mapFieldsForm.submit();
-												 return true;
-										};
-
 										//subscribe your handler to the event, assuming
 										//you have an AutoComplete instance myAC:
 										relatedActAutoComp.itemSelectEvent.subscribe(itemSelectHandler);
 									 </script>
 								  	</td>
-								    <td bgcolor="#FFFFFF" class="inside" align="center">
+								  	<%--
+								    	<td bgcolor="#FFFFFF" class="inside" align="center">
 								    		<input type="button" value="<digi:trn>Save</digi:trn>" class="buttonx_sm" onclick="saveRecord(${field.ampField.id})" />
-								    </td>
+								    	</td>
+								    --%>
 								</tr>
 							</logic:iterate>
 						</logic:notEmpty>
-						<tr>
-							  <td colspan="6" bgcolor="#FFFFFF" class="inside">&nbsp;</td>
-							  <td bgcolor="#FFFFFF" class="inside" align="center"><input type="button" value="<digi:trn>Save All</digi:trn>" class="buttonx_sm" onclick="saveAll()"/></td>
-						</tr>
+						<%-- 
+							<tr>
+								<td colspan="6" bgcolor="#FFFFFF" class="inside">&nbsp;</td>
+								<td bgcolor="#FFFFFF" class="inside" align="center"><input type="button" value="<digi:trn>Save All</digi:trn>" class="buttonx_sm" onclick="saveAll()"/></td>
+							</tr>
+						--%>
 					</table>
 					<div class="paging" style="font-size:11px;margin:10px;">
 						<b class="ins_title"><digi:trn>Pages :</digi:trn></b>

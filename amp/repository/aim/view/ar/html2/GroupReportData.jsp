@@ -26,7 +26,7 @@
 <c:set var="skipRowTag" scope="request">${skipRowTag}</c:set>
 <c:set var="trailCellsFile">TrailCellsForReportData.jsp</c:set>
 
-<!-- generate total row -->
+<!-- generate total row 1 -->
 <logic:present name="groupReport" property="parent">
 	<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
 	<bean:define id="grandTotal" toScope="request" value="yes" property="java.lang.String" />

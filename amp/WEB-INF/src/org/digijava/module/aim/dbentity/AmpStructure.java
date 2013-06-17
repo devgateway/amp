@@ -147,15 +147,15 @@ public class AmpStructure implements Serializable,Comparable, Versionable, Clone
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { " Title:&nbsp;" }, new Object[] { this.title != null ? this.title
+				new Output(null, new String[] { "Title" }, new Object[] { this.title != null ? this.title
 						: "Empty Title" }));
 		if (this.description != null && !this.description.trim().equals("")) {
 			out.getOutputs()
-					.add(new Output(null, new String[] { " Description:&nbsp;" }, new Object[] { this.description }));
+					.add(new Output(null, new String[] { "Description" }, new Object[] { this.description }));
 		}
 		if (this.creationdate != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { " Creation Date:&nbsp;" }, new Object[] { this.creationdate }));
+					new Output(null, new String[] { "Creation Date" }, new Object[] { this.creationdate }));
 		}
 		return out;
 	}

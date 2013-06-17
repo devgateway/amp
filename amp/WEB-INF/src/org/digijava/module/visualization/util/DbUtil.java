@@ -876,7 +876,7 @@ public class DbUtil {
         //Filter for On/Off Budget
         if (filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) {
         	if (filter.getSelCVIds()[0]==-1) {
-        		oql += " and categ.id NOT in ("+DashboardUtil.getInStatement(filter.getBudgetCVIds())+") ";
+        		oql += " and act.ampActivityId NOT in ( "+ getActivitiesIdByCategoryRelated(DashboardUtil.getInStatement(filter.getBudgetCVIds()))+" )";
 			} else {
 				oql += " and categ.id in ("+DashboardUtil.getInStatement(filter.getSelCVIds())+") ";
 			}
@@ -931,6 +931,35 @@ public class DbUtil {
         oql += " and (act.deleted = false or act.deleted is null)";
         
 		return oql;
+	}
+	
+	private static String getActivitiesIdByCategoryRelated (String catList){
+		String ret = "";
+		Session session = null;
+		Query q = null;
+		String queryString = null;
+		Iterator<AmpActivityVersion> iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			queryString = " select act from "
+					+ AmpActivityVersion.class.getName()
+					+ " act inner join act.categories categ where categ.id in ("+catList+")";
+			q = session.createQuery(queryString);
+			iter = q.list().iterator();
+
+			while (iter.hasNext()) {
+				AmpActivityVersion act = (AmpActivityVersion) iter.next();
+				ret += act.getAmpActivityId().toString();
+				if (iter.hasNext())
+					ret += ",";
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get activities from database "
+					+ ex.getMessage());
+		}
+		return ret;
 	}
 	/**
      * Returns funding amount
@@ -1184,7 +1213,7 @@ public class DbUtil {
 	                    }
                 }
                 AmpActivityVersion aav = new AmpActivityVersion(activityId, hmName.get(activityId), "");
-                map.put(aav, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(aav, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {
@@ -1320,7 +1349,7 @@ public class DbUtil {
                 AmpOrganisation aorg = new AmpOrganisation();
                 aorg.setAmpOrgId(orgId);
                 aorg.setName(hmName.get(orgId));
-                map.put(aorg, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(aorg, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {
@@ -1531,7 +1560,7 @@ public class DbUtil {
                 AmpSector asec = new AmpSector();
                 asec.setAmpSectorId(secId);
                 asec.setName(hmName.get(secId));
-                map.put(asec, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(asec, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {
@@ -1745,7 +1774,7 @@ public class DbUtil {
                 AmpCategoryValueLocations aloc = new AmpCategoryValueLocations();
                 aloc.setId(locId);
                 aloc.setName(hmName.get(locId));
-                map.put(aloc, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(aloc, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {
@@ -1947,7 +1976,7 @@ public class DbUtil {
                 AmpTheme aprog = new AmpTheme();
                 aprog.setAmpThemeId(progId);
                 aprog.setName(hmName.get(progId));
-                map.put(aprog, total.getValue().divide(divideByDenominator).setScale(decimalsToShow, RoundingMode.HALF_UP));
+                map.put(aprog, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
             }
 
         } catch (Exception e) {

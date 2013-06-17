@@ -1,10 +1,9 @@
 function changeOptions(indics,years,locations){
-        selIndicatorIDs=indics;
-		selYear=years;
-        hideGridTable();
-		getNewGraph();
-		
-	}
+    selIndicatorIDs=indics;
+    selYear=years;
+    hideGridTable();
+    getNewGraph();
+}
 
 function getIndicators(){
 	if (curProgId == null) {
@@ -18,6 +17,7 @@ function getIndicators(){
 	async.complete=indicatorsCallBack;
 	async.call(url);
 }
+
 function getIndicatorsURL(){
 	var result = addActionToURL('getProgramIndicators.do');
 	result+=p1d+'programId='+curProgId;
@@ -52,10 +52,8 @@ function indicatorsCallBack(status, statusText, responseText, responseXML){
 	
 }
 
-
 function getSelectedIndicators(){
 	var res = [];
-	debugger;
 	var localIndicators=$('input[type=checkbox][name="selIndicators"]:checked').each(function() {
 		res.push($(this).val());
     }); 
@@ -81,6 +79,7 @@ function doChanges(){
 	async.call(url);
 	changeOptions(ins,yrs,null);
 }
+
 function getYearsForUrl(url){
 	var locYears = document.getElementsByName('selYears');		
 	var result=url;
@@ -108,4 +107,3 @@ function checkYearsRules(){
 	if (cou > 5) return false;
 	return true;
 }
-

@@ -61,8 +61,8 @@ public class AmpActivityInternalId implements Serializable, Versionable, Cloneab
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { "Organization: " }, new Object[] { this.organisation.getName() }));
-		out.getOutputs().add(new Output(null, new String[] { " Internal Id: " }, new Object[] { this.internalId }));
+				new Output(null, new String[] { "Organization" }, new Object[] { this.organisation.getName() }));
+		out.getOutputs().add(new Output(null, new String[] { "Internal Id" }, new Object[] { this.internalId }));
 		return out;
 	}
 

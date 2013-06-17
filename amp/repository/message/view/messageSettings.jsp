@@ -42,8 +42,7 @@ var help="<digi:trn key='message:msgHelp'>Message Settings Help</digi:trn>"
 		return true;
 	}
 
-	function saveRecord(settingType) {
-		debugger;
+	function saveRecord(settingType) {		
 		var record;
 		var minusAccepted=false; //can't enter negative values
 		if(settingType=='refreshTime'){

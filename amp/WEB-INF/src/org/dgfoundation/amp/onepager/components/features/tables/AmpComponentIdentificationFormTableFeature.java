@@ -51,7 +51,7 @@ public class AmpComponentIdentificationFormTableFeature extends AmpSubsectionFea
 	 */
 	public AmpComponentIdentificationFormTableFeature(String id, IModel<AmpActivityVersion> activityModel, 
 			final IModel<AmpComponent> componentModel, final PropertyModel<Set<AmpComponentFunding>> componentsFundingsSetModel, String fmName, final Label componentNameLabel) throws Exception{
-		super(id, fmName, activityModel);
+		super(id, fmName, activityModel, false, true);
 		
 		final IModel<Set<AmpComponent>> setModel = new PropertyModel<Set<AmpComponent>>(activityModel, "components");
 

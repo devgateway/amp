@@ -7,13 +7,17 @@ package org.dgfoundation.amp.onepager.components.features.subsections;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.models.ValueToSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -45,7 +49,7 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 	 */
 	public AmpDonorFundingInfoSubsectionFeature(String id,
 			final IModel<AmpFunding> model, String fmName) throws Exception {
-		super(id, fmName, model);
+		super(id, fmName, model, false, true);
 		financingInstrument = new AmpCategorySelectFieldPanel(
 				"financingInstrument",
 				CategoryConstants.FINANCING_INSTRUMENT_KEY,
@@ -89,19 +93,39 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 		
 		add(typeOfAssistance);
 
-		AmpCategorySelectFieldPanel modeOfPayment = new AmpCategorySelectFieldPanel(
-				"modeOfPayment", CategoryConstants.MODE_OF_PAYMENT_KEY,
-				new PropertyModel<AmpCategoryValue>(model, "modeOfPayment"),
-				CategoryConstants.MODE_OF_PAYMENT_NAME, true, false);
-		modeOfPayment.getChoiceContainer().setRequired(false);
-		add(modeOfPayment);
+		final AmpCategorySelectFieldPanel modeOfPayment;
 
-		AmpCategorySelectFieldPanel fundingStatus = new AmpCategorySelectFieldPanel(
-				"fundingStatus", CategoryConstants.FUNDING_STATUS_KEY,
-				new PropertyModel<AmpCategoryValue>(model, "fundingStatus"),
-				CategoryConstants.FUNDING_STATUS_NAME, true, false);
-		fundingStatus.getChoiceContainer().setRequired(false);
-		add(fundingStatus);
+        PropertyModel<AmpCategoryValue> fundingStatusModel = new PropertyModel<AmpCategoryValue>(model, "fundingStatus");
+        AmpCategorySelectFieldPanel fundingStatus = new AmpCategorySelectFieldPanel(
+                "fundingStatus", CategoryConstants.FUNDING_STATUS_KEY,
+                fundingStatusModel,
+                CategoryConstants.FUNDING_STATUS_NAME, true, false);
+        fundingStatus.getChoiceContainer().setRequired(false);
+        add(fundingStatus);
+
+        if ("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.LINK_MODE_OF_PAYMENT_TO_FUNDING_STATUS))){
+            ((DropDownChoice)fundingStatus.getChoiceContainer()).setNullValid(true);
+            modeOfPayment = new AmpCategorySelectFieldPanel(
+                    "modeOfPayment", CategoryConstants.MODE_OF_PAYMENT_KEY,
+                    new PropertyModel<AmpCategoryValue>(model, "modeOfPayment"),
+                    CategoryConstants.MODE_OF_PAYMENT_NAME, true, true, false,
+                    new ValueToSetModel<AmpCategoryValue>(fundingStatusModel));
+
+            fundingStatus.getChoiceContainer().add(
+                new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(modeOfPayment);
+                    }
+                });
+        } else {
+            modeOfPayment = new AmpCategorySelectFieldPanel(
+                    "modeOfPayment", CategoryConstants.MODE_OF_PAYMENT_KEY,
+                    new PropertyModel<AmpCategoryValue>(model, "modeOfPayment"),
+                    CategoryConstants.MODE_OF_PAYMENT_NAME, true, false);
+        }
+        modeOfPayment.getChoiceContainer().setRequired(false);
+        add(modeOfPayment);
 
 		AmpTextFieldPanel<String> financingId = new AmpTextFieldPanel<String>(
 				"financingId",

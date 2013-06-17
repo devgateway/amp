@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -122,9 +123,10 @@ public class ExportActivityToWord extends Action {
     private static final Chunk BULLET_SYMBOL = new Chunk("\u2022");    
     private Identification identification = null;
     private Planning planning = null;
-    private org.digijava.module.aim.form.EditActivityForm.Location location =null;
-    private Programs programs =null;
-    org.digijava.module.aim.form.EditActivityForm.Sector sectors =null;
+    private org.digijava.module.aim.form.EditActivityForm.Location location = null;
+    private Programs programs = null;
+    org.digijava.module.aim.form.EditActivityForm.Sector sectors = null;
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat();
 
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
@@ -1393,9 +1395,9 @@ public class ExportActivityToWord extends Action {
 	}
 
 
-	private void processPlanningPart(HttpServletRequest request,
-			ServletContext ampContext, Table planningSubTable1)
-			throws WorkerException, Exception {
+	private void processPlanningPart(HttpServletRequest request, ServletContext ampContext, Table planningSubTable1)
+			throws Exception {
+
 		String columnName;
 		String columnVal;
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Line Ministry Rank", ampContext)){
@@ -1444,6 +1446,11 @@ public class ExportActivityToWord extends Action {
 			columnName=TranslatorWorker.translateText("Proposed Completion Date")+": ";
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getProposedCompDate(),null);
 		}
+
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext)) {
+            columnName = TranslatorWorker.translateText("Original Completion Date")+": ";
+            generateOverAllTableRows(planningSubTable1, columnName, planning.getOriginalCompDate(), null);
+        }
 		
 		if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
 			columnName=TranslatorWorker.translateText("Actual Completion Date")+": ";
@@ -1731,10 +1738,10 @@ public class ExportActivityToWord extends Action {
 				"/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency",
 				"/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date" };
 		final String[] componentExpendituresFMfields = {
-				"/Activity Form/Components/Component/Components Expeditures",
-				"/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Amount",
-				"/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Currency",
-				"/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Transaction Date" };
+				"/Activity Form/Components/Component/Components Expenditures",
+				"/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount",
+				"/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency",
+				"/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date" };
 
 
         List<Table> retVal = new ArrayList<Table>();
@@ -1905,17 +1912,17 @@ public class ExportActivityToWord extends Action {
 						compFnd.getAdjustmentTypeNameTrimmed(), true);
 			}
 			if (FeaturesUtil.isVisibleModule(componentFMfields[1], ampContext)) {
-				sectionHelper.addRowData(compFnd.getTransactionDate());
-			}
-			if (FeaturesUtil.isVisibleModule(componentFMfields[2], ampContext)) {
 				String output = compFnd.getTransactionAmount().toString();
-				if (FeaturesUtil.isVisibleModule(componentFMfields[3],
+				if (FeaturesUtil.isVisibleModule(componentFMfields[2],
 						ampContext)) {
 					output += compFnd.getCurrencyCode();
 				}
 				sectionHelper.addRowData(output);
 			}
-
+			if (FeaturesUtil.isVisibleModule(componentFMfields[3], ampContext)) {
+				sectionHelper.addRowData(compFnd.getTransactionDate());
+			}
+			
 			sectionHelper
 					.addRowData(compFnd.getFormattedRate() != null ? compFnd
 							.getFormattedRate() : "");
@@ -1947,15 +1954,10 @@ public class ExportActivityToWord extends Action {
     				
                     
     				for (AmpRegionalFunding regFnd : regFnds) {
-    					ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
         				// validating module visibility
     					// Commitments
-    					if ((regFnd.getTransactionType() == Constants.COMMITMENT && visibleModuleRegCommitments)
-    							// Disbursements
-    							|| (regFnd.getTransactionType() == Constants.DISBURSEMENT && visibleModuleRegDisbursements)
-    							// Expenditures
-    							|| (regFnd.getTransactionType() == Constants.EXPENDITURE && visibleModuleRegExpenditures)) {
-
+    					if (regFnd.getTransactionType() == Constants.COMMITMENT && visibleModuleRegCommitments) {
+    						ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
     						eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd
     												.getTransactionType()), null,null, true))
     										.addRowData(regFnd.getRegionLocation().getName())
@@ -1963,8 +1965,38 @@ public class ExportActivityToWord extends Action {
     										.addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
     										.addRowData(regFnd.getTransactionAmount().toString())
     										.addRowData(regFnd.getCurrency().getCurrencyCode()));
+    						retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
     					}
-    					retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
+    				}
+    				for (AmpRegionalFunding regFnd : regFnds) {
+    					// validating module visibility
+    					// Disbursements
+    					if (regFnd.getTransactionType() == Constants.DISBURSEMENT && visibleModuleRegDisbursements) {
+    						ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+    						eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd
+    												.getTransactionType()), null,null, true))
+    										.addRowData(regFnd.getRegionLocation().getName())
+    										.addRowData(regFnd.getAdjustmentType().getLabel(), true)
+    										.addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
+    										.addRowData(regFnd.getTransactionAmount().toString())
+    										.addRowData(regFnd.getCurrency().getCurrencyCode()));
+    						retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
+    					}
+    				}
+    				for (AmpRegionalFunding regFnd : regFnds) {
+    					// validating module visibility
+    					// Expenditures
+    					if (regFnd.getTransactionType() == Constants.EXPENDITURE && visibleModuleRegExpenditures) {
+    						ExportSectionHelper eshRegFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+    						eshRegFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(regFnd
+    												.getTransactionType()), null,null, true))
+    										.addRowData(regFnd.getRegionLocation().getName())
+    										.addRowData(regFnd.getAdjustmentType().getLabel(), true)
+    										.addRowData(DateConversion.ConvertDateToString(regFnd.getTransactionDate()))
+    										.addRowData(regFnd.getTransactionAmount().toString())
+    										.addRowData(regFnd.getCurrency().getCurrencyCode()));
+    						retVal.add(createSectionTable(eshRegFundingDetails,	request, ampContext));
+    					}
     				}
     			}
     		}
@@ -2065,12 +2097,22 @@ public class ExportActivityToWord extends Action {
 										|| (fndDet.getTransactionType() == Constants.EXPENDITURE && visibleModuleExpenditures)
 										// DisbOrders
 										|| (fndDet.getTransactionType() == Constants.DISBURSEMENT_ORDER && visibleModuleDisbOrders)) {
-	
-		                                eshDonorFundingDetails.addRowData((new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true)).
+
+                                        ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData(getTransactionTypeLable(fndDet.getTransactionType()), null, null, true);
+
+                                        ExportSectionHelperRowData currentRowData = sectionHelperRowData.
 		                                        addRowData(fndDet.getAdjustmentType().getLabel(), true).
 		                                        addRowData(DateConversion.ConvertDateToString(fndDet.getTransactionDate())).
 		                                        addRowData(FormatHelper.formatNumber(fndDet.getTransactionAmount())).
-		                                        addRowData(fndDet.getAmpCurrencyId().getCurrencyCode()));
+		                                        addRowData(fndDet.getAmpCurrencyId().getCurrencyCode());
+
+                                        if (fndDet.getFixedExchangeRate() != null) {
+                                            String exchangeRateStr = TranslatorWorker.translateText("Exchange Rate: ");
+                                            exchangeRateStr += DECIMAL_FORMAT.format(fndDet.getFixedExchangeRate());
+                                            currentRowData.addRowData(exchangeRateStr);
+                                        }
+
+                                        eshDonorFundingDetails.addRowData(sectionHelperRowData);
 									}
 	                            }
 	
@@ -2821,7 +2863,8 @@ public class ExportActivityToWord extends Action {
 			rowAmountForCell1++;
 		}
 		
-		if(FeaturesUtil.isVisibleField("Delivery rate", ampContext)){
+		//if(FeaturesUtil.isVisibleField("Delivery rate", ampContext))
+		{
 			if(myForm.getFunding().getDeliveryRate()!=null){
 				columnVal =  myForm.getFunding().getDeliveryRate();
 			}else{
@@ -2831,7 +2874,8 @@ public class ExportActivityToWord extends Action {
 			rowAmountForCell1++;
 		}
 		
-		if(FeaturesUtil.isVisibleField("Consumption rate", ampContext)){
+		//if(FeaturesUtil.isVisibleField("Consumption rate", ampContext))
+		{
 			if(myForm.getFunding().getConsumptionRate()!=null){
 				columnVal =  myForm.getFunding().getConsumptionRate();
 			}else{

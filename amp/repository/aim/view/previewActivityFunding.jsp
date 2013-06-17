@@ -322,8 +322,8 @@
                         <c:if test="${aimEditActivityForm.funding.showActual}">
                         <tr>
                             <td bgcolor="#eeeeee"
-                                style="border-top: 1px solid #BBBBBB"><digi:trn
-                                key='aim:totalActualdisbursement'>Total Actual Disbursement </digi:trn>:
+                                style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
+                                <digi:trn key='aim:totalActualdisbursement'>Total Actual Disbursement</digi:trn>:
                             </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #BBBBBB">
@@ -429,7 +429,7 @@
                             <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
                                 <digi:trn>Delivery Rate</digi:trn>: </td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
-                                <c:if test="${not empty aimEditActivityForm.funding.consumptionRate}">
+                                <c:if test="${not empty aimEditActivityForm.funding.deliveryRate}">
                                 <b>${aimEditActivityForm.funding.deliveryRate}</b>
                                 </c:if>
                                 &nbsp;

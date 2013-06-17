@@ -15,6 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpMTEFProjectionFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -85,6 +86,7 @@ public class AmpMTEFProjectionSubsectionFeature extends
 				target.add(parent.getFundingInfo());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 				target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+				target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
 			}
 		};
 		add(addMTEF);

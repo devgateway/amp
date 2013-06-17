@@ -252,8 +252,8 @@ function collapseAll() {
 <digi:form action="/saveActivity.do" method="post">
 	<html:hidden property="step" />
 	<html:hidden property="editAct" />
-	<html:hidden property="identification.approvalStatus"styleId="approvalStatus"/>
-	<html:hidden property="workingTeamLeadFlag"styleId="workingTeamLeadFlag"/>
+	<html:hidden property="identification.approvalStatus" styleId="approvalStatus" />
+	<html:hidden property="workingTeamLeadFlag" styleId="workingTeamLeadFlag"/>
 	
 
 <!-- MAIN CONTENT PART START -->
@@ -494,7 +494,7 @@ function collapseAll() {
 			<field:display name="Consumption rate" feature="Funding Information">
 				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Expenditures / Actual Disbursements * 100</digi:trn>" width="10" height=10 border="0">
 				<digi:trn>Consumption rate</digi:trn>:<br/>
-				<b>${aimEditActivityForm.funding.consumptionRate}</b>		</div>
+				<b>${aimEditActivityForm.funding.consumptionRate}</b>		
 			</field:display>
 	</fieldset>	
 	<fieldset>
@@ -1551,7 +1551,7 @@ function collapseAll() {
 				</span>			
 			</legend>
 			<div id="fundingdiv">
-				<bean:define id="aimEditActivityForm" name="aimEditActivityForm"scope="page" toScope="request"/>
+				<bean:define id="aimEditActivityForm" name="aimEditActivityForm" scope="page" toScope="request"/>
 				<jsp:include page="previewActivityFunding.jsp"/>
 			</div>
 		</fieldset>
@@ -1824,7 +1824,7 @@ function collapseAll() {
 					</module:display>
 					
 					<module:display name="/Activity Form/Components/Component/Components Expenditures" 
-							parentModule="/Activity Form/Components/Component/">
+							parentModule="/Activity Form/Components/Component">
 					<c:if test="${!empty comp.expenditures}">
 						<tr>
 							<td class="prv_right">
@@ -1838,10 +1838,10 @@ function collapseAll() {
 										<c:forEach var="fd" items="${comp.expenditures}">
 											<tr bgcolor="#f0f0f0">
 												<module:display name="/Activity Form/Components/Component/Components Expeditures" 
-													parentModule="/Activity Form/Components/Component/">
+													parentModule="/Activity Form/Components/Component">
 													<td width="50" bgcolor="#f0f0f0">
 														<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
-															<b><c:out value="${fd.adjustmentTypeName.value}" /></b>
+															<b><c:out value="${fd.adjustmentTypeName}" /></b>
 														</digi:trn>													
 													</td>
 												</module:display>
@@ -2447,7 +2447,7 @@ function collapseAll() {
 						<div>
 							<b><c:out value="${projCoordinatorContact.contact.name}"/></b> 
 							<b><c:out value="${projCoordinatorContact.contact.lastname}" /></b>- 
-							<c:forEach var="property"items="${projCoordinatorContact.contact.properties}">
+							<c:forEach var="property" items="${projCoordinatorContact.contact.properties}">
 								<c:if test="${property.name=='contact email'}">
 									<b><c:out value="${property.value}" /></b> ;								</c:if>
 							</c:forEach>
@@ -2790,7 +2790,7 @@ function collapseAll() {
 													<tr>
 														<module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
 														<td align="left" valign="top">
-														<b><digi:trn>${disbursement.adjustmentType}</digi:trn></b>
+														<b><digi:trn>${disbursement.adjustmentType.value}</digi:trn></b>
 <%-- 															<c:if test="${disbursement.adjustmentType==0}"> --%>
 <%-- 																<b><digi:trn key="aim:actual">Actual</digi:trn></b> --%>
 <%-- 															</c:if>  --%>

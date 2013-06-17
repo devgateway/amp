@@ -140,11 +140,11 @@ public class AmpAhsurvey implements Versionable, Serializable, Cloneable, Compar
 
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
-		out.getOutputs().add(new Output(null, new String[] {"Donor:&nbsp;" }, new Object[] { this.ampDonorOrgId.getName() }));
-		out.getOutputs().add(new Output(null, new String[] {"<br/>", "PoDD:&nbsp;" },
+		out.getOutputs().add(new Output(null, new String[] {"Donor" }, new Object[] { this.ampDonorOrgId.getName() }));
+		out.getOutputs().add(new Output(null, new String[] {"PoDD" },
                 new Object[] { (this.pointOfDeliveryDonor == null? "" : this.pointOfDeliveryDonor.getName()) }));
 		out.getOutputs().add(
-				new Output(new ArrayList(), new String[] { "<br/>", "Questions:" }, new Object[] { "" }));
+				new Output(new ArrayList(), new String[] { "Questions" }, new Object[] { "" }));
 		Output questions = out.getOutputs().get(out.getOutputs().size() - 1);
 
 		if (this.responses != null) {

@@ -556,7 +556,7 @@ li table{
 									</p>
 								</field:display>
 								
-								<c:if test="${empty param.public}">
+								<logic:present parameter="public">
 									<div class="grouped-paragraphs">
 										<p>
 											<label style="width:230px"><digi:trn>Show data for selected workspace and children only</digi:trn></label>
@@ -568,7 +568,7 @@ li table{
 										</p>
 										-->
 									</div>
-								</c:if>
+								</logic:present>
 							</div>				 
 							
 							<div class="clear"></div>

@@ -2,6 +2,8 @@ package org.digijava.module.aim.action;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -103,6 +106,7 @@ import com.lowagie.text.ListItem;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -116,8 +120,10 @@ import com.lowagie.text.pdf.draw.LineSeparator;
 public class ExportActivityToPDF extends Action {
 	
 	private static Logger logger = Logger.getLogger(ExportActivityToPDF.class);
-	private static final com.lowagie.text.Font plainFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11,Font.NORMAL);
-	private static final com.lowagie.text.Font titleFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11,Font.BOLD);
+	public final static BaseFont basefont = getBaseFont();
+	
+	private static final com.lowagie.text.Font plainFont = new com.lowagie.text.Font(basefont, 11,Font.NORMAL);
+	private static final com.lowagie.text.Font titleFont = new com.lowagie.text.Font(basefont, 11,Font.BOLD);
 
 	private static final String [] fundingCommitmentsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate"};
 	private static final String [] fundingDisbursementsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Currency"};
@@ -126,8 +132,36 @@ public class ExportActivityToPDF extends Action {
 	
 	private static final String [] componentCommitmentsFMfields={"/Activity Form/Components/Component/Components Commitments","/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount","/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency","/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"};
 	private static final String [] componentDisbursementsFMfields={"/Activity Form/Components/Component/Components Disbursements","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Amount","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency","/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"};
-	private static final String [] componentExpendituresFMfields={"/Activity Form/Components/Component/Components Expeditures","/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Amount","/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Currency","/Activity Form/Components/Component/Components Expeditures/Expenditure Table/Transaction Date"};
+	private static final String [] componentExpendituresFMfields={"/Activity Form/Components/Component/Components Expenditures","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Amount","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency","/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"};
 	private static final Chunk BULLET_SYMBOL = new Chunk("\u2022");
+	
+	private static BaseFont getBaseFont()
+	{
+		try
+		{
+			//return BaseFont.createFont("mybasefont", "UTF-8", true);
+			//return BaseFont.createFont("LiberationSans", "WinAnsi", false);
+			//org.apache.commons.io.CopyUtils.copy(byte[], Baos);
+			//Object obj = new Object();
+			//InputStream inputStream = obj.getClass().getResourceAsStream()
+			//String pdfExportFontFileName = "/home/simple/Desktop/Arial.ttf";
+			//InputStream inputStream = new FileInputStream(pdfExportFontFileName);
+			InputStream inputStream = ExportActivityToPDF.class.getResourceAsStream("Arial.ttf");
+			byte[] fontFile = IOUtils.toByteArray(inputStream);
+			
+			//BaseFont result = BaseFont.createFont(pdfExportFontFileName, BaseFont.IDENTITY_H, true);
+			BaseFont result = BaseFont.createFont("Arial.ttf", BaseFont.IDENTITY_H, true, true, fontFile, null);
+			IOUtils.closeQuietly(inputStream);
+			
+			return result;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException(e);
+			//return null;
+		}
+	}
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)	throws Exception {
 		EditActivityForm myForm=(EditActivityForm)form;
@@ -179,8 +213,9 @@ public class ExportActivityToPDF extends Action {
 			Paragraph p1=null;
 			//heading cell
 			PdfPCell titleCell=new PdfPCell();
-			com.lowagie.text.Font headerFont = new com.lowagie.text.Font(com.lowagie.text.Font.COURIER, 11, Font.BOLD, new Color(255, 255, 255));
-			p1=new Paragraph(TranslatorWorker.translateText("Activity Details"),headerFont);
+			
+			com.lowagie.text.Font headerFont = new com.lowagie.text.Font(basefont, 11, Font.BOLD, new Color(255, 255, 255));
+			p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Activity Details",locale,siteId)), headerFont);
 			p1.setAlignment(Element.ALIGN_CENTER);
 			titleCell.addElement(p1);
 			titleCell.setColspan(2);
@@ -255,24 +290,24 @@ public class ExportActivityToPDF extends Action {
 					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
 					if(key.equalsIgnoreCase("Objective Assumption") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Assumption", ampContext)){
 						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Assumption")+" :",titleFont));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
+							objTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Objective Assumption", locale, siteId))+" :",titleFont));
+							objTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText(value.getComment(), locale, siteId)),plainFont));
 						}					
 					}else if(key.equalsIgnoreCase("Objective Verification") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Verification", ampContext)){
 						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Verification")+" :",titleFont));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
+							objTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Objective Verification", locale, siteId))+" :",titleFont));
+							objTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText(value.getComment(), locale, siteId)),plainFont));
 						}					
 					}else if (key.equalsIgnoreCase("Objective Objectively Verifiable Indicators") && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments/Objective Objectively Verifiable Indicators", ampContext)) {
 						for (AmpComments value : values) {
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators")+" :",titleFont));
-							objTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
+							objTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Objective Objectively Verifiable Indicators", locale, siteId))+" :",titleFont));
+							objTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText(value.getComment(), locale, siteId)),plainFont));						
 						}
 					}
 				}
 	            
 	            PdfPCell objectiveCommentsCell1=new PdfPCell();
-	            p1=new Paragraph(TranslatorWorker.translateText("Objective Comments"),titleFont);
+	            p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Objective Comments",locale,siteId)),titleFont);
 	            p1.setAlignment(Element.ALIGN_RIGHT);
 				objectiveCommentsCell1.addElement(p1);
 				objectiveCommentsCell1.setBackgroundColor(new Color(244,244,242));
@@ -348,7 +383,7 @@ public class ExportActivityToPDF extends Action {
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Purpose Comments", ampContext)){
 				//purpose comments
 				PdfPCell purposeCommentsCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Purpose Comments"),titleFont);
+				p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Purpose Comments",locale,siteId)), titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				purposeCommentsCell1.addElement(p1);
 				purposeCommentsCell1.setBackgroundColor(new Color(244,244,242));
@@ -367,18 +402,18 @@ public class ExportActivityToPDF extends Action {
 					List<AmpComments> values=(List<AmpComments>)allComments.get(key);
 					if(key.equalsIgnoreCase("Purpose Assumption") && visiblePurposeAssumtion){
 						for (AmpComments value : values) {
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Assumption")+" :",titleFont));
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
+							purposeTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Purpose Assumption", locale, siteId))+" :",titleFont));
+							purposeTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText(value.getComment(), locale, siteId)),plainFont));
 						}					
 					}else if(key.equalsIgnoreCase("Purpose Verification") && visiblePurposeVerification){
 						for (AmpComments value : values) {
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Verification")+" :",titleFont));
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
+							purposeTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Purpose Verification", locale, siteId))+" :",titleFont));
+							purposeTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText(value.getComment(), locale, siteId)),plainFont));
 						}					
 					}else if (key.equalsIgnoreCase("Purpose Objectively Verifiable Indicators") && visiblePurposeIndicators) {
 						for (AmpComments value : values) {
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText("Purpose Objectively Verifiable Indicators")+" :",titleFont));
-							purposeTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
+							purposeTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Purpose Objectively Verifiable Indicators", locale, siteId))+" :",titleFont));
+							purposeTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText(value.getComment(), locale, siteId)),plainFont));						
 						}
 					}
 				}
@@ -413,27 +448,27 @@ public class ExportActivityToPDF extends Action {
 
 					if(key.equalsIgnoreCase("Results Assumption") && visibleResultsAssumption){
 						for (AmpComments value : values) {
-							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Assumption")+" :",titleFont));
-							resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
+							resultsCommentsTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Results Assumption", locale, siteId))+" :",titleFont));
+							resultsCommentsTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText(value.getComment(), locale, siteId)),plainFont));
 						}					
 					} else {
 						if(key.equalsIgnoreCase("Results Verification") && visibleResultsVerification){
 							for (AmpComments value : values) {
-								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Verification")+" :",titleFont));
-								resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));
+								resultsCommentsTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Results Verification", locale, siteId))+" :",titleFont));
+								resultsCommentsTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText(value.getComment(), locale, siteId)),plainFont));
 							}					
 						} else {
 							if (key.equalsIgnoreCase("Results Objectively Verifiable Indicators")&& visibleResultsIndicators) {
 								for (AmpComments value : values) {
-									resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText("Results Objectively Verifiable Indicators")+" :",titleFont));
-									resultsCommentsTable.addCell(new Paragraph(TranslatorWorker.translateText(value.getComment()),plainFont));						
+									resultsCommentsTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Results Objectively Verifiable Indicators", locale, siteId))+" :",titleFont));
+									resultsCommentsTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText(value.getComment(), locale, siteId)),plainFont));						
 								}
 							}
 						}
 					}
 				}
 				PdfPCell resultsCommentsCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Results Comments"),titleFont);
+				p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Results Comments",locale,siteId)),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				resultsCommentsCell1.addElement(p1);
 				resultsCommentsCell1.setBackgroundColor(new Color(244,244,242));
@@ -588,21 +623,21 @@ public class ExportActivityToPDF extends Action {
 				else{
 					PdfPTable budgetTable =new PdfPTable(2);
 			        budgetTable.getDefaultCell().setBorder(0);
-			        budgetTable.addCell(new Paragraph(TranslatorWorker.translateText("Code Chapitre")+": ",plainFont));
-			        budgetTable.addCell(new Paragraph(identification.getChapterForPreview().getCode() + " - " 
+			        budgetTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Code Chapitre"))+": ",plainFont));
+			        budgetTable.addCell(new Paragraph(postprocessText(identification.getChapterForPreview().getCode()) + " - " 
 							+ identification.getChapterForPreview().getDescription(),titleFont));
-			        budgetTable.addCell(new Paragraph(TranslatorWorker.translateText("Imputations")+": ",plainFont));
+			        budgetTable.addCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Imputations"))+": ",plainFont));
 					
 			        PdfPTable imputationsTable =new PdfPTable(1);
 			        for (AmpImputation imputation : identification.getChapterForPreview().getImputations()) {
-			        	imputationsTable.addCell(new Paragraph(identification.getChapterForPreview().getYear()+" - " +
-								imputation.getCode() +" - "+ imputation.getDescription(),titleFont));
+			        	imputationsTable.addCell(new Paragraph(postprocessText(identification.getChapterForPreview().getYear()+" - " +
+								imputation.getCode() +" - "+ imputation.getDescription()),titleFont));
 					}
 					budgetTable.addCell(imputationsTable);
 			        
 			        
 					PdfPCell cell = new PdfPCell();
-					p1=new Paragraph(TranslatorWorker.translateText("Budget"),titleFont);
+					p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Budget",locale,siteId)),titleFont);
 					p1.setAlignment(Element.ALIGN_RIGHT);
 					cell.addElement(p1);
 					cell.setBackgroundColor(new Color(244,244,242));
@@ -646,28 +681,28 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell cell = new PdfPCell();
 				cell.setColspan(2);
 				cell.setBorder(0);
-				cell.addElement(new Paragraph(TranslatorWorker.translateText("Budget Classification")+": ",plainFont));
+				cell.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText("Budget Classification"))+": ",plainFont));
 				if(identification.getSelectedbudgedsector() !=null){
 					for (AmpBudgetSector budgSect : identification.getBudgetsectors()) {
-						cell.addElement(new Paragraph(BULLET_SYMBOL + budgSect.getCode()+" - "+ budgSect.getSectorname(),titleFont));
+						cell.addElement(new Paragraph(BULLET_SYMBOL + budgSect.getCode()+" - "+ postprocessText(budgSect.getSectorname()),titleFont));
 					}
 				}
 				
 				if(identification.getSelectedorg() !=null ){
 					for (AmpOrganisation budgOrg : identification.getBudgetorgs()) {
-						cell.addElement(new Paragraph(BULLET_SYMBOL + budgOrg.getBudgetOrgCode()+" - "+ budgOrg.getName(),titleFont));
+						cell.addElement(new Paragraph(BULLET_SYMBOL + budgOrg.getBudgetOrgCode()+" - "+ postprocessText(budgOrg.getName()),titleFont));
 					}
 				}
 				
 				if(identification.getSelecteddepartment() !=null ){
 					for (AmpDepartments budgDept : identification.getBudgetdepartments()) {
-						cell.addElement(new Paragraph(BULLET_SYMBOL + budgDept.getCode()+" - "+ budgDept.getName(),titleFont));
+						cell.addElement(new Paragraph(BULLET_SYMBOL + budgDept.getCode()+" - "+ postprocessText(budgDept.getName()),titleFont));
 					}
 				}
 				
 				if(identification.getSelectedprogram() !=null ){
 					for (AmpTheme budgprog : identification.getBudgetprograms()) {
-						cell.addElement(new Paragraph(BULLET_SYMBOL + budgprog.getThemeCode()+" - "+ budgprog.getName(),titleFont));
+						cell.addElement(new Paragraph(BULLET_SYMBOL + budgprog.getThemeCode()+" - "+ postprocessText(budgprog.getName()),titleFont));
 					}
 				}
 				mainLayout.addCell(cell);
@@ -676,7 +711,7 @@ public class ExportActivityToPDF extends Action {
 			//Organizations and Project IDs
 			if(FeaturesUtil.isVisibleField("Organizations and Project ID", ampContext)){
 				PdfPCell orgProjCell1=new PdfPCell();
-	        	p1=new Paragraph(TranslatorWorker.translateText("Organizations and Project IDs"),titleFont);
+	        	p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Organizations and Project IDs",locale,siteId)),titleFont);
 	        	p1.setAlignment(Element.ALIGN_RIGHT);
 				orgProjCell1.addElement(p1);
 				orgProjCell1.setBackgroundColor(new Color(244,244,242));
@@ -767,12 +802,17 @@ public class ExportActivityToPDF extends Action {
 				}
 				
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Proposed Completion Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Proposed Completion Date ")+ "\t: " +myForm.getPlanning().getProposedCompDate() +"\n";
+					outputValue+=TranslatorWorker.translateText("Proposed Completion Date ", locale, siteId)+ "\t: " + myForm.getPlanning().getProposedCompDate() +"\n";
 				}
-				
+
+                if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Original Completion Date", ampContext)){
+                    outputValue+=TranslatorWorker.translateText("Original Completion Date", locale, siteId)+ "\t: " + myForm.getPlanning().getOriginalCompDate() +"\n";
+                }
+
 				if(FeaturesUtil.isVisibleModule("/Activity Form/Planning/Actual Completion Date", ampContext)){
-					outputValue+=TranslatorWorker.translateText("Actual Completion Date")+ "\t: " +myForm.getPlanning().getCurrentCompDate() +"\n";
-				}		
+					outputValue+=TranslatorWorker.translateText("Actual Completion Date", locale, siteId)+ "\t: " + myForm.getPlanning().getCurrentCompDate() +"\n";
+				}
+
 				if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
 					String durationStr = myForm.getPlanning().getProjectPeriod() != null ? myForm.getPlanning().getProjectPeriod().toString(): "";
 					outputValue+=TranslatorWorker.translateText("Duration of Project")+ "\t: " + durationStr +"\n";
@@ -867,7 +907,7 @@ public class ExportActivityToPDF extends Action {
         	if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors", ampContext)){
         		output="";
         		PdfPCell sectorCell1=new PdfPCell();
-            	p1=new Paragraph(TranslatorWorker.translateText("Sectors"),titleFont);
+            	p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Sectors",locale,siteId)),titleFont);
             	p1.setAlignment(Element.ALIGN_RIGHT);
     			sectorCell1.addElement(p1);
     			sectorCell1.setBackgroundColor(new Color(244,244,242));
@@ -914,7 +954,7 @@ public class ExportActivityToPDF extends Action {
     				output+=secondary;
     			}
     			PdfPCell sectorCell2=new PdfPCell();
-    			p1=new Paragraph(output,plainFont);
+    			p1=new Paragraph(postprocessText(output),plainFont);
     			sectorCell2.addElement(p1);
     			sectorCell2.setBorder(0);
     			mainLayout.addCell(sectorCell2);
@@ -983,7 +1023,7 @@ public class ExportActivityToPDF extends Action {
 			 */
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Regional Funding", ampContext)){
 				PdfPCell regFundingCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Regional Funding"),titleFont);
+				p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Regional Funding",locale,siteId)),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				regFundingCell1.addElement(p1);
 				regFundingCell1.setBackgroundColor(new Color(244,244,242));
@@ -1003,7 +1043,7 @@ public class ExportActivityToPDF extends Action {
 						//create first row (Region Name)
 						PdfPCell nestedCell1=new PdfPCell();
 						nestedCell1.setBorder(0);
-						p1=new Paragraph(TranslatorWorker.translateText(regFunf.getRegionName()),titleFont);
+						p1=new Paragraph(postprocessText(TranslatorWorker.translateText(regFunf.getRegionName(),locale,siteId)),titleFont);
 						p1.setAlignment(Element.ALIGN_LEFT);
 						nestedCell1.addElement(p1);
 						regFundingCell1.setBackgroundColor(new Color(255,255,255));
@@ -1055,7 +1095,7 @@ public class ExportActivityToPDF extends Action {
 			 */
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations", ampContext)){
 				PdfPCell relOrgCell1=new PdfPCell();
-				p1=new Paragraph(TranslatorWorker.translateText("Related Organizations")+":",titleFont);
+				p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Related Organizations", locale, siteId))+":",titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				relOrgCell1.setBorder(0);
 				relOrgCell1.addElement(p1);
@@ -1282,7 +1322,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell actPerformanceCell1=new PdfPCell();
 				actPerformanceCell1.setBorder(0);
 				actPerformanceCell1.setBackgroundColor(new Color(244,244,242));
-				p1=new Paragraph(TranslatorWorker.translateText("Activity Performance"),titleFont);
+				p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Activity Performance", locale, siteId)),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				actPerformanceCell1.addElement(p1);			
 				mainLayout.addCell(actPerformanceCell1);
@@ -1330,7 +1370,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell riskCell1=new PdfPCell();
 				riskCell1.setBorder(0);
 				riskCell1.setBackgroundColor(new Color(244,244,242));
-				p1=new Paragraph(TranslatorWorker.translateText("Activity Risk"),titleFont);
+				p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Activity Risk", locale, siteId)),titleFont);
 				p1.setAlignment(Element.ALIGN_RIGHT);
 				riskCell1.addElement(p1);
 				mainLayout.addCell(riskCell1);
@@ -1385,13 +1425,13 @@ public class ExportActivityToPDF extends Action {
 	private void createContractingTblRows(PdfPTable ipaInnerTable, String columnName,String columnValue) throws WorkerException {
 		PdfPCell cell1=new PdfPCell();
 		cell1.setBorder(0);
-		Paragraph descriptionP=new Paragraph(columnName,titleFont);
+		Paragraph descriptionP=new Paragraph(postprocessText(columnName),titleFont);
 		cell1.addElement(descriptionP);
 		ipaInnerTable.addCell(cell1);
 		
 		PdfPCell cell2=new PdfPCell();
 		cell2.setBorder(0);
-		cell2.addElement(new Paragraph(columnValue,plainFont));
+		cell2.addElement(new Paragraph(postprocessText(columnValue),plainFont));
 		ipaInnerTable.addCell(cell2);
 	}
 	
@@ -1468,7 +1508,7 @@ public class ExportActivityToPDF extends Action {
 		PdfPCell issuesCell1=new PdfPCell();
 		issuesCell1.setBackgroundColor(new Color(244,244,242));
 		issuesCell1.setBorder(0);
-		p1=new Paragraph(TranslatorWorker.translateText("Issues"),titleFont);
+		p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Issues")),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		issuesCell1.addElement(p1);			
 		mainLayout.addCell(issuesCell1);
@@ -1513,7 +1553,7 @@ public class ExportActivityToPDF extends Action {
 		PdfPCell costingCell1=new PdfPCell();
 		costingCell1.setBorder(0);
 		costingCell1.setBackgroundColor(new Color(244,244,242));
-		p1=new Paragraph(TranslatorWorker.translateText("Costing"),titleFont);
+		p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Costing")),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		costingCell1.addElement(p1);			
 		mainLayout.addCell(costingCell1);
@@ -1532,21 +1572,21 @@ public class ExportActivityToPDF extends Action {
 		BigDecimal grandCost = new BigDecimal(0);
 		BigDecimal grandContribution = new BigDecimal(0);
 			if(FeaturesUtil.isVisibleField("Costing Activity Name", ampContext)){
-				PdfPCell nameCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText("name"),titleFont));
+				PdfPCell nameCell=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("name")),titleFont));
 				nameCell.setBorder(0);
 				nameCell.setBackgroundColor(new Color(244,244,242));
 				costingInnerTable.addCell(nameCell);
 			}			
 			
 			if(FeaturesUtil.isVisibleField("Costing Total Cost", ampContext)){
-				PdfPCell totalCostCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Total Cost"),titleFont));
+				PdfPCell totalCostCell=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Total Cost")),titleFont));
 				totalCostCell.setBorder(0);
 				totalCostCell.setBackgroundColor(new Color(244,244,242));
 				costingInnerTable.addCell(totalCostCell);
 			}			
 			
 			if(FeaturesUtil.isVisibleField("Costing Total Contribution", ampContext)){
-				PdfPCell totalContrCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText("Total Contribution"),titleFont));
+				PdfPCell totalContrCell=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Total Contribution")),titleFont));
 				totalContrCell.setBorder(0);
 				totalContrCell.setBackgroundColor(new Color(244,244,242));
 				costingInnerTable.addCell(totalContrCell);
@@ -1575,7 +1615,7 @@ public class ExportActivityToPDF extends Action {
 					}
 					//name
 					if(FeaturesUtil.isVisibleField("Costing Activity Name", ampContext)){
-						PdfPCell name=new PdfPCell(new Paragraph(euActivity.getName(),titleFont));
+						PdfPCell name=new PdfPCell(new Paragraph(postprocessText(euActivity.getName()),titleFont));
 						name.setBorder(0);
 						name.setBackgroundColor(new Color(255,255,255));
 						costingInnerTable.addCell(name);
@@ -1620,7 +1660,7 @@ public class ExportActivityToPDF extends Action {
 					if(FeaturesUtil.isVisibleField("Costing Due Date", ampContext) && euActivity.getDueDate()!=null){
 						euInfo+= TranslatorWorker.translateText("Due Date")+":"+ DateConversion.ConvertDateToString(euActivity.getDueDate()) + "\n";
 					}
-					anotherInfo.addElement(new Paragraph(euInfo,plainFont));
+					anotherInfo.addElement(new Paragraph(postprocessText(euInfo),plainFont));
 					costingInnerTable.addCell(anotherInfo);
 				}
 				
@@ -1644,7 +1684,7 @@ public class ExportActivityToPDF extends Action {
 			if(euActs!=null && euActs.size()>0){
 				PdfPCell totals=new PdfPCell();
 				totals.setBorder(0);
-				Paragraph total1=new Paragraph(TranslatorWorker.translateText("Totals")+": ",titleFont);
+				Paragraph total1=new Paragraph(postprocessText(TranslatorWorker.translateText("Totals"))+": ",titleFont);
 				total1.setAlignment(Element.ALIGN_RIGHT);
 				totals.addElement(total1);
 				costingInnerTable.addCell(totals);
@@ -1655,14 +1695,14 @@ public class ExportActivityToPDF extends Action {
 					grandCostCell.setBorder(0);
 					
 					String grTotal=formatter.format(grandCost);
-					Paragraph gc1=new Paragraph(grTotal,plainFont);
+					Paragraph gc1=new Paragraph(postprocessText(grTotal),plainFont);
 					grandCostCell.addElement(gc1);
 					costingInnerTable.addCell(grandCostCell);
 					
 					PdfPCell grandContributionCell=new PdfPCell();
 					grandContributionCell.setBorder(0);
 					String grContTotal=formatter.format(grandContribution) ;
-					Paragraph gtc1=new Paragraph(grContTotal,plainFont);
+					Paragraph gtc1=new Paragraph(postprocessText(grContTotal),plainFont);
 					grandContributionCell.addElement(gtc1);
 					costingInnerTable.addCell(grandContributionCell);
 				}				
@@ -1670,7 +1710,7 @@ public class ExportActivityToPDF extends Action {
 				if(FeaturesUtil.isVisibleField("Costing Contribution Gap", ampContext)){
 					PdfPCell contGap=new PdfPCell();
 					contGap.setBorder(0);
-					Paragraph contGap1=new Paragraph(TranslatorWorker.translateText("Contribution Gap")+": ",titleFont);
+					Paragraph contGap1=new Paragraph(postprocessText(TranslatorWorker.translateText("Contribution Gap"))+": ",titleFont);
 					contGap1.setAlignment(Element.ALIGN_RIGHT);
 					contGap.addElement(contGap1);
 					costingInnerTable.addCell(contGap);
@@ -1678,7 +1718,7 @@ public class ExportActivityToPDF extends Action {
 					PdfPCell contGapCell=new PdfPCell(); 
 					contGapCell.setBorder(0);
 					String contributionGap=formatter.format(grandCost.subtract(grandContribution));
-					Paragraph cg=new Paragraph(contributionGap,plainFont);
+					Paragraph cg=new Paragraph(postprocessText(contributionGap),plainFont);
 					contGapCell.addElement(cg);
 					costingInnerTable.addCell(contGapCell);
 					
@@ -1695,7 +1735,28 @@ public class ExportActivityToPDF extends Action {
 
 		mainLayout.addCell(costingCell2);
 	}
-	
+	   
+    public final static String getLatinLettersEquivalent(String src)// returns text without diacritics should be called with a Printable Equivalent
+    {
+    	src = src.replace('ţ', 'ţ').replace("ț", "ţ").replace('Ţ', 'Ţ').replace('î', 'î').replace('ş', 'ş').replace('Ş', 'Ş').replace("ş", "ş").replace("î", "î").replace("ă", "ă").replace("ţ", "ţ");
+    	src = src.replace("ș", "ş").replace("ț", "ţ").replace('ă', 'ă').replace('Ț', 'Ţ');
+    	
+    	return src;
+    	
+    }
+    
+    /**
+     * entry point for post-processing
+     * @param src
+     * @return
+     */
+    public final static String postprocessText(String src)
+    {
+    	if (src == null)
+    		return null;
+    	return getLatinLettersEquivalent(src);
+    }
+    
 	private void buildContractsPart(EditActivityForm myForm, HttpServletRequest request, PdfPTable mainLayout)throws WorkerException{
 		ServletContext ampContext = getServlet().getServletContext();
 		String columnName="";
@@ -1704,7 +1765,7 @@ public class ExportActivityToPDF extends Action {
 			PdfPCell ipaContract1=new PdfPCell();
 			ipaContract1.setBorder(0);
 			ipaContract1.setBackgroundColor(new Color(244,244,242));
-			Paragraph ipaContractP=new Paragraph(TranslatorWorker.translateText("IPA Contracting"),titleFont);
+			Paragraph ipaContractP=new Paragraph(postprocessText(TranslatorWorker.translateText("IPA Contracting")),titleFont);
 			ipaContractP.setAlignment(Element.ALIGN_RIGHT);
 			ipaContract1.addElement(ipaContractP);
 			mainLayout.addCell(ipaContract1);
@@ -1786,7 +1847,7 @@ public class ExportActivityToPDF extends Action {
 						PdfPCell totalECCont=new PdfPCell();
 						totalECCont.setBorder(0);
 						totalECCont.setColspan(2);
-						Paragraph totalECContP=new Paragraph(TranslatorWorker.translateText("Total EC Contribution")+":",titleFont);
+						Paragraph totalECContP=new Paragraph(postprocessText(TranslatorWorker.translateText("Total EC Contribution"))+":",titleFont);
 						totalECCont.addElement(totalECContP);
 						ipaInnerTable.addCell(totalECCont);
 					}						
@@ -1822,7 +1883,7 @@ public class ExportActivityToPDF extends Action {
 					PdfPCell totalNationalCont=new PdfPCell();
 					totalNationalCont.setBorder(0);
 					totalNationalCont.setColspan(2);
-					Paragraph totalNationalContP=new Paragraph(TranslatorWorker.translateText("Total National Contribution")+":",titleFont);
+					Paragraph totalNationalContP=new Paragraph(postprocessText(TranslatorWorker.translateText("Total National Contribution"))+":",titleFont);
 					totalNationalCont.addElement(totalNationalContP);
 					ipaInnerTable.addCell(totalNationalCont);
 					
@@ -1869,7 +1930,7 @@ public class ExportActivityToPDF extends Action {
 					PdfPCell totalPrivateCont=new PdfPCell();
 					totalPrivateCont.setBorder(0);
 					totalPrivateCont.setColspan(2);
-					Paragraph totalPrivateContP=new Paragraph(TranslatorWorker.translateText("Total Private Contribution")+":",titleFont);
+					Paragraph totalPrivateContP=new Paragraph(postprocessText(TranslatorWorker.translateText("Total Private Contribution"))+":",titleFont);
 					totalPrivateCont.addElement(totalPrivateContP);
 					ipaInnerTable.addCell(totalPrivateCont);
 					
@@ -1916,7 +1977,7 @@ public class ExportActivityToPDF extends Action {
 						//Disbursements
 						PdfPCell disbs1=new PdfPCell();
 						disbs1.setBorder(0);
-						Paragraph disbsP=new Paragraph(TranslatorWorker.translateText("Disbursements")+":",titleFont);
+						Paragraph disbsP=new Paragraph(postprocessText(TranslatorWorker.translateText("Disbursements"))+":",titleFont);
 						disbs1.addElement(disbsP);
 						ipaInnerTable.addCell(disbs1);
 							
@@ -1959,7 +2020,7 @@ public class ExportActivityToPDF extends Action {
 					//Funding Disbursements
 					PdfPCell fundingDisbs1=new PdfPCell();
 					fundingDisbs1.setBorder(0);
-					Paragraph fundDisbsP=new Paragraph(TranslatorWorker.translateText("Funding Disbursements")+":",titleFont);
+					Paragraph fundDisbsP=new Paragraph(postprocessText(TranslatorWorker.translateText("Funding Disbursements"))+":",titleFont);
 					fundingDisbs1.addElement(fundDisbsP);
 					ipaInnerTable.addCell(fundingDisbs1);
 							
@@ -1971,28 +2032,28 @@ public class ExportActivityToPDF extends Action {
 						if (FeaturesUtil.isVisibleModule("/Activity Form/Contracts/Contract Item/Contract Disbursements/Adjustment Type", ampContext)){
 							PdfPCell adjType=new PdfPCell();
 							adjType.setBorder(0);
-							adjType.addElement(new Paragraph(TranslatorWorker.translateText("Adj. Type Disb."),plainFont));
+							adjType.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText("Adj. Type Disb.")),plainFont));
 							fundDisbursmentsInnerTable.addCell(adjType);
 						}
 						
 						if (FeaturesUtil.isVisibleModule("/Activity Form/Contracts/Contract Item/Contract Disbursements/Amount", ampContext)){
 							PdfPCell ampuntDisb=new PdfPCell();
 							ampuntDisb.setBorder(0);
-							ampuntDisb.addElement(new Paragraph(TranslatorWorker.translateText("Amount Disb."),plainFont));
+							ampuntDisb.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText("Amount Disb.")),plainFont));
 							fundDisbursmentsInnerTable.addCell(ampuntDisb);
 						}
 							
 						if (FeaturesUtil.isVisibleModule("/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency", ampContext)){
 							PdfPCell currencyDisb=new PdfPCell();
 							currencyDisb.setBorder(0);
-							currencyDisb.addElement(new Paragraph(TranslatorWorker.translateText("Currency Disb."),plainFont));
+							currencyDisb.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText("Currency Disb.")),plainFont));
 							fundDisbursmentsInnerTable.addCell(currencyDisb);
 						}
 								
 						if (FeaturesUtil.isVisibleModule("/Activity Form/Contracts/Contract Item/Contract Disbursements/Transaction Date", ampContext)){
 							PdfPCell dateDisb=new PdfPCell();
 							dateDisb.setBorder(0);
-							dateDisb.addElement(new Paragraph(TranslatorWorker.translateText("Date Disb."),plainFont));
+							dateDisb.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText("Date Disb.")),plainFont));
 							fundDisbursmentsInnerTable.addCell(dateDisb);
 						}
 						
@@ -2043,7 +2104,7 @@ public class ExportActivityToPDF extends Action {
 		PdfPCell relDocCell1=new PdfPCell();
 		relDocCell1.setBackgroundColor(new Color(244,244,242));
 		relDocCell1.setBorder(0);
-		p1=new Paragraph(TranslatorWorker.translateText("Related Documents"),titleFont);
+		p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Related Documents")),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		relDocCell1.addElement(p1);
 		mainLayout.addCell(relDocCell1);
@@ -2058,7 +2119,7 @@ public class ExportActivityToPDF extends Action {
 			for (Documents doc : (Collection<Documents>)myForm.getDocuments().getDocuments()) {
 				if(doc.getIsFile()){						
 					//document fields						
-					PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(doc.getTitle())+"- \t",plainFont));
+					PdfPCell docTableNameCell1=new PdfPCell(new Paragraph(new Phrase(postprocessText(doc.getTitle()))+"- \t",plainFont));
 					docTableNameCell1.setBackgroundColor(new Color(255,255,255));
 					docTableNameCell1.setBorder(0);
 					relatedDocnested.addCell(docTableNameCell1);
@@ -2071,7 +2132,7 @@ public class ExportActivityToPDF extends Action {
 					docTableDescCell1.setBackgroundColor(new Color(255,255,255));
 					docTableDescCell1.setBorder(0);
 					relatedDocnested.addCell(docTableDescCell1);
-					PdfPCell docTableDescCell2=new PdfPCell(new Paragraph(doc.getDocDescription(),plainFont));
+					PdfPCell docTableDescCell2=new PdfPCell(new Paragraph(postprocessText(doc.getDocDescription()),plainFont));
 					docTableDescCell2.setBackgroundColor(new Color(255,255,255));
 					docTableDescCell2.setBorder(0);
 					relatedDocnested.addCell(docTableDescCell2);
@@ -2436,15 +2497,15 @@ public class ExportActivityToPDF extends Action {
 	private void buildFundingInformationPart(EditActivityForm myForm,PdfPTable mainLayout,ServletContext ampContext) throws WorkerException, DocumentException {
 		Paragraph p1;
 		PdfPCell fundingCell1=new PdfPCell();
-		p1=new Paragraph(TranslatorWorker.translateText("Donor Funding"),titleFont);
+		p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Donor Funding")),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		fundingCell1.addElement(p1);
 		fundingCell1.setBackgroundColor(new Color(244,244,242));
 		fundingCell1.setBorder(0);
 		mainLayout.addCell(fundingCell1);
 		
-		PdfPTable fundingTable=new PdfPTable(3);
-		fundingTable.setWidths(new float[]{2f,2f,1.5f});
+		PdfPTable fundingTable = new PdfPTable(3);
+		fundingTable.setWidths(new float[]{2f, 1.5f, 2f});
 		boolean drawTotals=false; //draw total planned commitment,total actual commitments e.t.c.
 		if(myForm.getFunding().getFundingOrganizations()!=null){	
 			String currencyCode=myForm.getCurrCode()!=null?myForm.getCurrCode():"";
@@ -2486,7 +2547,7 @@ public class ExportActivityToPDF extends Action {
 								foNameCell1.addElement(p1);
 								fundingTable.addCell(foNameCell1);							
 								//meaning
-								PdfPCell foNameCell3=new PdfPCell(new Paragraph(fundingOrganisation.getOrgName(),plainFont));
+								PdfPCell foNameCell3=new PdfPCell(new Paragraph(postprocessText(fundingOrganisation.getOrgName()),plainFont));
 								foNameCell3.setBorder(0);
 								foNameCell3.setColspan(2);
 								foNameCell3.setBackgroundColor(new Color(221,221,221));
@@ -2498,7 +2559,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell foAssitanceCell1=new PdfPCell();
 								foAssitanceCell1.setBackgroundColor(new Color(221,221,221));
 								foAssitanceCell1.setBorder(0);
-								p1=new Paragraph(TranslatorWorker.translateText("Type of Assistance")+":",plainFont);
+								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Type of Assistance"))+":",plainFont);
 								foAssitanceCell1.addElement(p1);
 								fundingTable.addCell(foAssitanceCell1);							
 								//meaning
@@ -2514,7 +2575,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell foInstrumentCell1=new PdfPCell();
 								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
 								foInstrumentCell1.setBorder(0);
-								p1=new Paragraph(TranslatorWorker.translateText("Financial Instrument")+":",plainFont);
+								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Financial Instrument"))+":",plainFont);
 								foInstrumentCell1.addElement(p1);
 								fundingTable.addCell(foInstrumentCell1);							
 								//meaning
@@ -2530,11 +2591,11 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell foInstrumentCell1=new PdfPCell();
 								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
 								foInstrumentCell1.setBorder(0);
-								p1=new Paragraph(TranslatorWorker.translateText("Funding Status")+":",plainFont);
+								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Funding Status"))+":",plainFont);
 								foInstrumentCell1.addElement(p1);
 								fundingTable.addCell(foInstrumentCell1);							
 								//meaning
-								PdfPCell foInstrumentCell2=new PdfPCell(new Paragraph(funding.getFundingStatus()!=null?funding.getFundingStatus().getValue():" ",plainFont));
+								PdfPCell foInstrumentCell2=new PdfPCell(new Paragraph(postprocessText(funding.getFundingStatus()!=null?funding.getFundingStatus().getValue():" "),plainFont));
 								foInstrumentCell2.setBorder(0);
 								foInstrumentCell2.setColspan(2);
 								foInstrumentCell2.setBackgroundColor(new Color(221,221,221));
@@ -2546,11 +2607,11 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell foInstrumentCell1=new PdfPCell();
 								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
 								foInstrumentCell1.setBorder(0);
-								p1=new Paragraph(TranslatorWorker.translateText("Mode of Payment")+":",plainFont);
+								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Mode of Payment"))+":",plainFont);
 								foInstrumentCell1.addElement(p1);
 								fundingTable.addCell(foInstrumentCell1);							
 								//meaning
-								PdfPCell foInstrumentCell2=new PdfPCell(new Paragraph(funding.getModeOfPayment()!=null?funding.getModeOfPayment().getValue():" ",plainFont));
+								PdfPCell foInstrumentCell2=new PdfPCell(new Paragraph(postprocessText(funding.getModeOfPayment()!=null?funding.getModeOfPayment().getValue():" "),plainFont));
 								foInstrumentCell2.setBorder(0);
 								foInstrumentCell2.setColspan(2);
 								foInstrumentCell2.setBackgroundColor(new Color(221,221,221));
@@ -2562,12 +2623,12 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell donorObjCell1=new PdfPCell();
 							donorObjCell1.setBackgroundColor(new Color(221,221,221));
 							donorObjCell1.setBorder(0);
-							p1=new Paragraph(TranslatorWorker.translateText("Donor Objective")+":",plainFont);
+							p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Donor Objective")+":"),plainFont);
 							donorObjCell1.addElement(p1);
 							fundingTable.addCell(donorObjCell1);
 							//meaning
 							PdfPCell donorObjCell2=new PdfPCell();
-							p1=new Paragraph(funding.getDonorObjective(),plainFont);						
+							p1=new Paragraph(postprocessText(funding.getDonorObjective()),plainFont);						
 							donorObjCell2.addElement(p1);
 							donorObjCell2.setBorder(0);
 							donorObjCell2.setColspan(2);
@@ -2579,11 +2640,11 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell agreementCell1=new PdfPCell();
 							agreementCell1.setBackgroundColor(new Color(221,221,221));
 							agreementCell1.setBorder(0);
-							p1=new Paragraph(TranslatorWorker.translateText("Agreement Title")+":",plainFont);
+							p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Agreement Title")+":"),plainFont);
 							agreementCell1.addElement(p1);
 							fundingTable.addCell(agreementCell1);							
 							//meaning
-							PdfPCell agreementCell2=new PdfPCell(new Paragraph(funding.getTitle(),plainFont));
+							PdfPCell agreementCell2=new PdfPCell(new Paragraph(postprocessText(funding.getTitle()),plainFont));
 							agreementCell2.setBorder(0);
 							agreementCell2.setColspan(2);
 							agreementCell2.setBackgroundColor(new Color(221,221,221));
@@ -2592,7 +2653,7 @@ public class ExportActivityToPDF extends Action {
 							agreementCell1=new PdfPCell();
 							agreementCell1.setBackgroundColor(new Color(221,221,221));
 							agreementCell1.setBorder(0);
-							p1=new Paragraph(TranslatorWorker.translateText("Agreement Code")+":",plainFont);
+							p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Agreement Code")+":"),plainFont);
 							agreementCell1.addElement(p1);
 							fundingTable.addCell(agreementCell1);							
 							//meaning
@@ -2604,7 +2665,7 @@ public class ExportActivityToPDF extends Action {
 							
 						}
 											
-						if(visibleModuleCommitments){
+						if (visibleModuleCommitments) {
 							//PLANNED COMITMENTS
 							boolean visibleCommitmentsExchRate = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate", ampContext);
 
@@ -2612,19 +2673,17 @@ public class ExportActivityToPDF extends Action {
 							if(myForm.getFunding().isFixerate() && visibleCommitmentsExchRate){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 							}
-							PdfPCell plCommCell1=new PdfPCell(new Paragraph(output,titleFont));
+							PdfPCell plCommCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							plCommCell1.setBorder(0);
 							plCommCell1.setBackgroundColor(new Color(255,255,204));
 							plCommCell1.setColspan(3);
 							fundingTable.addCell(plCommCell1);
-						
-						
-						
-							if(funding.getFundingDetails()!=null){
+
+							if (funding.getFundingDetails() != null) {
 							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
-								if(fd.getTransactionType()== Constants.COMMITMENT){
-									if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
-										buildFundingInfoInnerTable(fundingTable, fd,fundingCommitmentsFMfields,ampContext);
+								if (fd.getTransactionType() == Constants.COMMITMENT) {
+									if (fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
+										buildFundingInfoInnerTable(fundingTable, fd, fundingCommitmentsFMfields, ampContext);
 									}
 								}
 							}
@@ -2637,7 +2696,7 @@ public class ExportActivityToPDF extends Action {
 							if(myForm.getFunding().isFixerate() && visibleCommitmentsExchRate){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 							}
-							PdfPCell actCommCell1=new PdfPCell(new Paragraph(output,titleFont));
+							PdfPCell actCommCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							actCommCell1.setBorder(0);
 							actCommCell1.setBackgroundColor(new Color(255,255,204));
 							actCommCell1.setColspan(3);
@@ -2658,7 +2717,7 @@ public class ExportActivityToPDF extends Action {
 							if(myForm.getFunding().isFixerate() && visibleCommitmentsExchRate){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 							}
-							PdfPCell plCommCell2=new PdfPCell(new Paragraph(output,titleFont));
+							PdfPCell plCommCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							plCommCell2.setBorder(0);
 							plCommCell2.setBackgroundColor(new Color(255,255,204));
 							plCommCell2.setColspan(3);
@@ -2687,7 +2746,7 @@ public class ExportActivityToPDF extends Action {
 								if(myForm.getFunding().isFixerate()){
 									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 								}
-								PdfPCell plDisbCell1=new PdfPCell(new Paragraph(output,titleFont));
+								PdfPCell plDisbCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 								plDisbCell1.setBorder(0);
 								plDisbCell1.setBackgroundColor(new Color(255,255,204));
 								plDisbCell1.setColspan(3);
@@ -2711,7 +2770,7 @@ public class ExportActivityToPDF extends Action {
 									if(myForm.getFunding().isFixerate()){
 										output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 									}
-									PdfPCell actDisbCell1=new PdfPCell(new Paragraph(output,titleFont));
+									PdfPCell actDisbCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 									actDisbCell1.setBorder(0);
 									actDisbCell1.setBackgroundColor(new Color(255,255,204));
 									actDisbCell1.setColspan(3);
@@ -2732,7 +2791,7 @@ public class ExportActivityToPDF extends Action {
 									if(myForm.getFunding().isFixerate()){
 										output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 									}
-									PdfPCell actDisbCell2=new PdfPCell(new Paragraph(output,titleFont));
+									PdfPCell actDisbCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 									actDisbCell2.setBorder(0);
 									actDisbCell2.setBackgroundColor(new Color(255,255,204));
 									actDisbCell2.setColspan(3);
@@ -2758,7 +2817,7 @@ public class ExportActivityToPDF extends Action {
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 							}
-							PdfPCell plExpCell1=new PdfPCell(new Paragraph(output,titleFont));
+							PdfPCell plExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							plExpCell1.setBorder(0);
 							plExpCell1.setBackgroundColor(new Color(255,255,204));
 							plExpCell1.setColspan(3);
@@ -2780,7 +2839,7 @@ public class ExportActivityToPDF extends Action {
 								if(myForm.getFunding().isFixerate()){
 									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 								}
-								PdfPCell actExpCell1=new PdfPCell(new Paragraph(output,titleFont));
+								PdfPCell actExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 								actExpCell1.setBorder(0);
 								actExpCell1.setBackgroundColor(new Color(255,255,204));
 								actExpCell1.setColspan(3);
@@ -2800,7 +2859,7 @@ public class ExportActivityToPDF extends Action {
 								if(myForm.getFunding().isFixerate()){
 									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 								}
-								PdfPCell actExpCell2=new PdfPCell(new Paragraph(output,titleFont));
+								PdfPCell actExpCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 								actExpCell2.setBorder(0);
 								actExpCell2.setBackgroundColor(new Color(255,255,204));
 								actExpCell2.setColspan(3);
@@ -2826,7 +2885,7 @@ public class ExportActivityToPDF extends Action {
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 							}
-							PdfPCell actDisbOrdCell=new PdfPCell(new Paragraph(output,titleFont));
+							PdfPCell actDisbOrdCell=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							actDisbOrdCell.setBorder(0);
 							actDisbOrdCell.setBackgroundColor(new Color(255,255,204));
 							actDisbOrdCell.setColspan(3);
@@ -2848,7 +2907,7 @@ public class ExportActivityToPDF extends Action {
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 							}
-							PdfPCell actDisbOrdCell1=new PdfPCell(new Paragraph(output,titleFont));
+							PdfPCell actDisbOrdCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							actDisbOrdCell1.setBorder(0);
 							actDisbOrdCell1.setBackgroundColor(new Color(255,255,204));
 							actDisbOrdCell1.setColspan(3);
@@ -2870,7 +2929,7 @@ public class ExportActivityToPDF extends Action {
 							if(myForm.getFunding().isFixerate()){
 								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
 							}
-							PdfPCell actDisbOrdCell2=new PdfPCell(new Paragraph(output,titleFont));
+							PdfPCell actDisbOrdCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							actDisbOrdCell2.setBorder(0);
 							actDisbOrdCell2.setBackgroundColor(new Color(255,255,204));
 							actDisbOrdCell2.setColspan(3);
@@ -2896,8 +2955,8 @@ public class ExportActivityToPDF extends Action {
 							undisbursedBalanceCell1.setBackgroundColor(new Color(255,255,204));
 							undisbursedBalanceCell1.setColspan(3);
 							fundingTable.addCell(undisbursedBalanceCell1);
-						}							
-						
+						}	
+												
 						int amountsUnitCode = Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
 						
 						//amounts in thousands
@@ -3012,6 +3071,29 @@ public class ExportActivityToPDF extends Action {
 					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
 				}
 				
+				//Consumption Rate
+				/*if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext))*/
+				{
+					totalAmountType=TranslatorWorker.translateText("Consumption Rate")+":";
+					totalsOutput="";
+					if(myForm.getFunding().getConsumptionRate()!=null && myForm.getFunding().getConsumptionRate().length()>0){
+						totalsOutput=myForm.getFunding().getConsumptionRate();
+					} 
+					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
+				}
+				
+				// Delivery Rate
+				/*if(FeaturesUtil.isVisibleFeature("Consumption Rate", ampContext))*/
+				{
+					totalAmountType=TranslatorWorker.translateText("Delivery Rate")+":";
+					totalsOutput="";
+					if(myForm.getFunding().getDeliveryRate()!=null && myForm.getFunding().getDeliveryRate().length()>0){
+						totalsOutput=myForm.getFunding().getDeliveryRate();
+					} 
+					addTotalAmountsCellsToFundingTable(fundingTable,totalAmountType,totalsOutput);					
+				}	
+
+				
 			}				
 		}
 		PdfPCell fundingCell=new PdfPCell(fundingTable);
@@ -3042,7 +3124,7 @@ public class ExportActivityToPDF extends Action {
 	}
 	private void addTotalAmountsCellsToFundingTable(PdfPTable fundingTable,String totalAmountType, String totalsOutput) throws WorkerException {
 		Paragraph p1;
-		PdfPCell totalPC=new PdfPCell(new Paragraph(totalAmountType,plainFont));
+		PdfPCell totalPC=new PdfPCell(new Paragraph(postprocessText(totalAmountType),plainFont));
 		totalPC.setColspan(2);
 		totalPC.setBorder(0);
 		totalPC.setBackgroundColor(new Color(221,221,221));
@@ -3050,7 +3132,7 @@ public class ExportActivityToPDF extends Action {
 		PdfPCell totalPCAmount=new PdfPCell();
 		totalPCAmount.setBorder(0);
 		totalPCAmount.setBackgroundColor(new Color(221,221,221));					
-		p1=new Paragraph(totalsOutput,plainFont);
+		p1=new Paragraph(postprocessText(totalsOutput),plainFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		totalPCAmount.addElement(p1);
 		fundingTable.addCell(totalPCAmount);
@@ -3065,7 +3147,7 @@ public class ExportActivityToPDF extends Action {
 		lineCell.setColspan(3);
 		fundingTable.addCell(lineCell);
 	}
-	
+		
 	/**
 	 * Used to create simple two columned row
 	 * @param mainLayout
@@ -3074,7 +3156,7 @@ public class ExportActivityToPDF extends Action {
 	 */
 	private void createGeneralInfoRow(PdfPTable mainLayout,String columnName,String value){
 		PdfPCell cell1=new PdfPCell();
-		Paragraph p1=new Paragraph(columnName,titleFont);
+		Paragraph p1=new Paragraph(postprocessText(columnName),titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		cell1.addElement(p1);
 		cell1.setBackgroundColor(new Color(244,244,242));
@@ -3082,50 +3164,66 @@ public class ExportActivityToPDF extends Action {
 		mainLayout.addCell(cell1);
 		
 		PdfPCell cell2=new PdfPCell();
-		p1=new Paragraph(value,plainFont);
+		p1=new Paragraph(postprocessText(value), plainFont);
 		cell2.addElement(p1);
 		cell2.setBorder(0);
 		mainLayout.addCell(cell2);
 	}
 	
-	private void  buildFundingInfoInnerTable(PdfPTable infoTable, FundingDetail fd,String []fmFields,ServletContext ampContext) throws WorkerException {
-		PdfPCell innerCell=new PdfPCell();
+	private void buildFundingInfoInnerTable(PdfPTable infoTable, FundingDetail fd,String []fmFields,ServletContext ampContext) throws WorkerException {
+		PdfPCell innerCell = new PdfPCell();
 
-		if(FeaturesUtil.isVisibleField(fmFields[0], ampContext)){
+		if (FeaturesUtil.isVisibleModule(fmFields[0], ampContext)) {
 			innerCell.setBorder(0);
-			innerCell=new PdfPCell(new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue()),plainFont));
-			innerCell.setBorder(0);
-			infoTable.addCell(innerCell);
-		}else{
-			addEmptyCell(infoTable);
-		}
-		if(FeaturesUtil.isVisibleField(fmFields[1], ampContext)){
-			innerCell=new PdfPCell(new Paragraph(fd.getTransactionDate(),plainFont));
+			innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue()), plainFont));
 			innerCell.setBorder(0);
 			infoTable.addCell(innerCell);
-		}else{
+		} else {
 			addEmptyCell(infoTable);
 		}
-		if(FeaturesUtil.isVisibleField(fmFields[2], ampContext)){
+
+		if (FeaturesUtil.isVisibleModule(fmFields[1], ampContext)){
+			innerCell = new PdfPCell(new Paragraph(fd.getTransactionDate(), plainFont));
+			innerCell.setBorder(0);
+			infoTable.addCell(innerCell);
+		} else {
+			addEmptyCell(infoTable);
+		}
+
+		if (FeaturesUtil.isVisibleModule(fmFields[2], ampContext)) {
 			String output="";
-			if(fd.getTransactionAmount()!=null && fd.getTransactionAmount().length()>0){
-				output=fd.getTransactionAmount()+" " + fd.getCurrencyCode();
+			if (fd.getTransactionAmount() != null && fd.getTransactionAmount().length() > 0) {
+				output = fd.getTransactionAmount() + " " + fd.getCurrencyCode();
+
+                if (fd.getFormattedRate() != null && FeaturesUtil.isVisibleModule(fmFields[fmFields.length-1], ampContext)) {
+                    output += "\n" + TranslatorWorker.translateText("Exchange Rate: ") + fd.getFormattedRate();
+                }
 			}
-			innerCell=new PdfPCell(new Paragraph(output,plainFont));
+
+            innerCell = new PdfPCell(new Paragraph(output, plainFont));
+            innerCell.setBorder(0);
+            infoTable.addCell(innerCell);
+
+            /*
+            PdfPTable pdfPTable = new PdfPTable(1);
+
+			innerCell = new PdfPCell(new Paragraph(output, plainFont));
 			innerCell.setBorder(0);
-			infoTable.addCell(innerCell);
-		}else{
+            pdfPTable.addCell(innerCell);
+
+            innerCell = new PdfPCell(new Paragraph(fd.getFormattedRate(), plainFont));
+            innerCell.setBorder(0);
+            pdfPTable.addCell(innerCell);
+            */
+
+			//infoTable.addCell(pdfPTable);
+
+
+		} else {
 			addEmptyCell(infoTable);
 		}		
-		String formattedRate="";
-		if(fd.getFormattedRate()!=null){
-			formattedRate=fd.getFormattedRate();
-		}
-		if(fd.getFormattedRate()!=null && FeaturesUtil.isVisibleField(fmFields[fmFields.length-1], ampContext)){
-			innerCell=new PdfPCell(new Paragraph(formattedRate,plainFont));
-			innerCell.setBorder(0);
-			infoTable.addCell(innerCell);
-		}		
+
+
 	}	
 	
 	private void addEmptyCell(PdfPTable infoTable){
@@ -3185,7 +3283,7 @@ public class ExportActivityToPDF extends Action {
 	 * builds all related organizations Info that should be exported to PDF
 	 */
 	private void buildRelatedOrganisationsOutput(PdfPTable relatedOrgsTable, String orgType , Collection<AmpOrganisation> orgs, HashMap<String, String> percentages, ServletContext ampContext) throws WorkerException{
-		Paragraph paragraph=new Paragraph(new Paragraph(new Phrase(TranslatorWorker.translateText(orgType)+":",titleFont)));
+		Paragraph paragraph=new Paragraph(new Paragraph(new Phrase(postprocessText(TranslatorWorker.translateText(orgType))+":",titleFont)));
 		PdfPCell orgTypeCell=new PdfPCell(paragraph);
 		orgTypeCell.setBorder(0);
 		orgTypeCell.setBackgroundColor(new Color(255,255,255));
@@ -3204,7 +3302,7 @@ public class ExportActivityToPDF extends Action {
 				}else{
 					percentage = "";
 				}
-				ListItem item=new ListItem(org.getName() + "  " + percentage, plainFont);
+				ListItem item=new ListItem(postprocessText(org.getName()) + "  " + percentage, plainFont);
 				orgList.add(item);
 			}
 			respOrgCell.addElement(orgList);
@@ -3222,7 +3320,7 @@ public class ExportActivityToPDF extends Action {
 		
 		PdfPCell cell=new PdfPCell();
 		cell.setBorder(0);
-		Paragraph paragraph=new Paragraph(elemntName,plainFont);
+		Paragraph paragraph=new Paragraph(postprocessText(elemntName),plainFont);
 		paragraph.setAlignment(Element.ALIGN_LEFT);
 		cell.addElement(paragraph);
 		cell.setBackgroundColor(new Color(255,255,255));
@@ -3249,32 +3347,32 @@ public class ExportActivityToPDF extends Action {
 			for (FundingDetail fd : listToIterate) {
 				if(FeaturesUtil.isVisibleModule(fmFields[0], ampContext)){
 					cell=new PdfPCell();
-					paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue()),plainFont);
+					paragraph=new Paragraph(postprocessText(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue())),plainFont);
 					cell.addElement(paragraph);
 					cell.setBorder(0);
 					fdTable.addCell(cell);
 				}			
 				
+				String output="";
 				if(FeaturesUtil.isVisibleModule(fmFields[1], ampContext)){
+					output+=fd.getTransactionAmount();
+				}
+				if(FeaturesUtil.isVisibleModule(fmFields[2], ampContext)){
+					output+= " " + fd.getCurrencyCode();
+				}
+				cell=new PdfPCell();
+				paragraph=new Paragraph(postprocessText(output),plainFont);
+				cell.addElement(paragraph);
+				cell.setBorder(0);
+				fdTable.addCell(cell);
+				
+				if(FeaturesUtil.isVisibleModule(fmFields[3], ampContext)){
 					cell=new PdfPCell();
 					paragraph=new Paragraph(fd.getTransactionDate(),plainFont);
 					cell.addElement(paragraph);
 					cell.setBorder(0);
 					fdTable.addCell(cell);
 				}
-				
-				String output="";
-				if(FeaturesUtil.isVisibleModule(fmFields[2], ampContext)){
-					output+=fd.getTransactionAmount();
-				}
-				if(FeaturesUtil.isVisibleModule(fmFields[3], ampContext)){
-					output+= " " + fd.getCurrencyCode();
-				}
-				cell=new PdfPCell();
-				paragraph=new Paragraph(output,plainFont);
-				cell.addElement(paragraph);
-				cell.setBorder(0);
-				fdTable.addCell(cell);
 				
 				cell=new PdfPCell();
 				paragraph=new Paragraph(fd.getFormattedRate()!=null?fd.getFormattedRate():" ",plainFont);
@@ -3295,7 +3393,7 @@ public class ExportActivityToPDF extends Action {
 		//commitment,disbursement,expenditure
 		PdfPCell cell=new PdfPCell();
 		cell.setBorder(0);
-		Paragraph paragraph=new Paragraph(elementName,plainFont);
+		Paragraph paragraph=new Paragraph(postprocessText(elementName),plainFont);
 		paragraph.setAlignment(Element.ALIGN_LEFT);
 		cell.addElement(paragraph);		
 		cell.setBorder(0);
@@ -3307,7 +3405,7 @@ public class ExportActivityToPDF extends Action {
 		for (FundingDetail fd : listToIterate) {			
 
 			cell=new PdfPCell();
-			paragraph=new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue()),plainFont);
+			paragraph=new Paragraph(postprocessText(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue())),plainFont);
 			cell.addElement(paragraph);
 			cell.setBorder(0);
 			fdTable.addCell(cell);

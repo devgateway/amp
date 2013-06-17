@@ -1719,9 +1719,9 @@ public class DbUtil {
 			String queryString = "select role.activity from "
 					+ AmpOrgRole.class.getName()
 					+ " role,"
-					+ AmpActivityGroup.class.getName()
-					+ " apg "
-					+ " where role.activity = apg.ampActivityLastVersion and role.organisation="
+					+ AmpActivity.class.getName()
+					+ " a "
+					+ " where role.activity = a.ampActivityId and role.organisation="
 					+ orgId;
 			qry = session.createQuery(queryString);
 			activities = qry.list();

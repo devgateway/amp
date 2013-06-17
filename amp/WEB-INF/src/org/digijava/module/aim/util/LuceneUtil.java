@@ -454,6 +454,7 @@ public class LuceneUtil implements Serializable {
 				String numcont;
 				String CRIS;
 				String budgetNumber;
+				String contractingArr;
 				ArrayList<String> componentcode=new ArrayList<String>();
 			};
 			
@@ -585,6 +586,20 @@ public class LuceneUtil implements Serializable {
 				isNext = rs.next();
 			}
 			
+			// Moldova's romanian title
+			qryStr = "select * from v_contracting_arrangements where amp_activity_id >= " + chunkStart + " and amp_activity_id < " + chunkEnd + " ";
+			rs = st.executeQuery(qryStr);
+			rs.last();
+			logger.info("Starting iteration of " + rs.getRow() + " contracting arrangements!");
+			isNext = rs.first();
+			while (isNext){
+				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+				x = (Items) list.get(actId);
+				//you can't use "trim(dg_editor.body)" as column name .... 
+				x.contractingArr = rs.getString("body");
+				isNext = rs.next();
+			}
+			
 			//New fields for Senegal.
 			/*qryStr = "select * from v_senegal_cris_budget where amp_activity_id >= " + chunkStart
 					+ " and amp_activity_id < " + chunkEnd + " ";
@@ -607,7 +622,8 @@ public class LuceneUtil implements Serializable {
 			Iterator it = list.values().iterator();
 			while (it.hasNext()) {
 				Items el = (Items) it.next();
-				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, el.results,el.numcont,el.componentcode, el.CRIS, el.budgetNumber);
+				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, 
+						el.results,el.numcont, el.contractingArr, el.componentcode, el.CRIS, el.budgetNumber);
 				if (doc != null)
 					indexWriter.addDocument(doc);
 			}
@@ -643,7 +659,7 @@ public class LuceneUtil implements Serializable {
 	 * @param act the activity that will be added
 	 */
     public static Document activity2Document(String actId, String projectId, String title, String description,
-			String objective, String purpose, String results, String numcont, ArrayList<String> componentcodes,
+			String objective, String purpose, String results, String numcont, String contractingArr, ArrayList<String> componentcodes,
 			String CRIS, String budgetNumber) {
 		Document doc = new Document();
 		String all = new String("");
@@ -689,6 +705,11 @@ public class LuceneUtil implements Serializable {
 		if (budgetNumber != null && budgetNumber.length() > 0) {
 			doc.add(new Field("budgetNumber", budgetNumber, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + budgetNumber);
+		}
+		if (contractingArr != null && contractingArr.length() > 0 ) {
+			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.TOKENIZED));
+			all = all.concat(" " + contractingArr);
+			
 		}
 		
 		int i =0;
@@ -754,6 +775,7 @@ public class LuceneUtil implements Serializable {
 					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getPurpose(), language),
 					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getResults(), language),
 					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getContactName(), language),
+					org.digijava.module.editor.util.DbUtil.getEditorBody(site, newActivity.getContractingArrangements(), language),
 					componentsCode, newActivity.getCrisNumber(), newActivity.getBudgetCodeProjectID());
 
 			if (doc != null) {

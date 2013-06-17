@@ -38,7 +38,6 @@ import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpStructure;
@@ -54,7 +53,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.CustomFieldStep;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.KeyValue;
@@ -62,14 +60,10 @@ import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.SurveyFunding;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.CustomFieldsUtil;
-import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.Step;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
 import org.digijava.module.budget.dbentity.AmpDepartments;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.springframework.beans.BeanWrapperImpl;
@@ -125,6 +119,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private List<AmpStructure> structures;
 	
 	private Issues lineMinistryObservations;
+	
 	/**
 	 * Map Api url for locations map
 	 */
@@ -2574,6 +2569,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private double regionTotalDisb;
 		private Collection orderedFundingOrganizations;
 		private Collection financingBreakdown = null;
+		
+		private String consumptionRate;
+		private String deliveryRate;
 
 		// Add Funding fields
 
@@ -2630,7 +2628,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
         private boolean showActual;
         private boolean showPlanned;
         private boolean showPipeline;
-
+        
+        
         public boolean isShowPipeline() {
 			return showPipeline;
 		}
@@ -2663,83 +2662,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
             this.capitalSpendingPercentage = capitalSpendingPercentage;
         }
 
+        public void setConsumptionRate(String consumptionRate) {
+            this.consumptionRate = consumptionRate;
+        }   
+        
+		public void setDeliveryRate(String deliveryRate) {
+			this.deliveryRate = deliveryRate;
+		}             
+        
 		public String getConsumptionRate() {
-			String formatedConsumptionRate=null;
-			Calendar calendar = GregorianCalendar.getInstance();
-			int currentYear=calendar.get(Calendar.YEAR);
-			if (fundingDetails != null) {
-				List<AmpFundingDetail> actualExpDisbMeasures = new ArrayList<AmpFundingDetail>();
-				for (FundingDetail detail : fundingDetails) {
-					Date transationDate = DateConversion.getDate(detail
-							.getTransactionDate());
-					calendar.setTime(transationDate);
-					int transactionYear=calendar.get(Calendar.YEAR);
-					
-					Double transactionAmount = FormatHelper.parseDouble(detail
-							.getTransactionAmount());
-					AmpCurrency currency = CurrencyUtil.getAmpcurrency(detail
-							.getCurrencyCode());
-					if(detail.getAdjustmentTypeName().toString().equalsIgnoreCase((CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) &&transactionYear==currentYear){
-						if (detail.getTransactionType() == Constants.DISBURSEMENT||detail.getTransactionType() == Constants.EXPENDITURE){
-							AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
-									detail.getTransactionType(),
-									detail.getAdjustmentTypeName(),
-									transactionAmount, transationDate,
-									currency, null);
-							actualExpDisbMeasures.add(actualDisbFundingDet);
-						}
-				}
-				}
-				FundingCalculationsHelper cal = new FundingCalculationsHelper();
-				cal.doCalculations(actualExpDisbMeasures, currCode);
-				DecimalWraper totalActualDisb = cal.getTotActualDisb();
-				DecimalWraper totalActualExp = cal.getTotActualExp();
-				if(totalActualExp!=null&&totalActualExp.doubleValue()!=0&&totalActualDisb!=null&&totalActualDisb.doubleValue()!=0){
-					Double consumptionRate=totalActualExp.doubleValue()/totalActualDisb.doubleValue();
-					NumberFormat formatter=DecimalFormat.getPercentInstance();
-					formatedConsumptionRate=formatter.format(consumptionRate);
-				}
-			}
-			return formatedConsumptionRate;
+			return consumptionRate;
 		}
+		
 		public String getDeliveryRate() {
-			String formatedDeliveryRate=null;
-			Calendar calendar = GregorianCalendar.getInstance();
-			int currentYear=calendar.get(Calendar.YEAR);
-			if (fundingDetails != null) {
-				List<AmpFundingDetail> actualCommDisbMeasures = new ArrayList<AmpFundingDetail>();
-				for (FundingDetail detail : fundingDetails) {
-					Date transationDate = DateConversion.getDate(detail
-							.getTransactionDate());
-					calendar.setTime(transationDate);
-					int transactionYear=calendar.get(Calendar.YEAR);
-					
-					Double transactionAmount = FormatHelper.parseDouble(detail
-							.getTransactionAmount());
-					AmpCurrency currency = CurrencyUtil.getAmpcurrency(detail
-							.getCurrencyCode());
-					if(detail.getAdjustmentTypeName().toString().equalsIgnoreCase((CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) &&transactionYear==currentYear){
-						if (detail.getTransactionType() == Constants.DISBURSEMENT||detail.getTransactionType() == Constants.COMMITMENT){
-							AmpFundingDetail actualDisbFundingDet = new AmpFundingDetail(
-									detail.getTransactionType(),
-									detail.getAdjustmentTypeName(),
-									transactionAmount, transationDate,
-									currency, null);
-							actualCommDisbMeasures.add(actualDisbFundingDet);
-						}
-				}
-				}
-				FundingCalculationsHelper cal = new FundingCalculationsHelper();
-				cal.doCalculations(actualCommDisbMeasures, currCode);
-				DecimalWraper totalActualDisb = cal.getTotActualDisb();
-				DecimalWraper totalActualComm = cal.getTotActualComm();
-				if(totalActualComm!=null&&totalActualComm.doubleValue()!=0&&totalActualDisb!=null&&totalActualDisb.doubleValue()!=0){
-					Double consumptionRate=totalActualDisb.doubleValue()/totalActualComm.doubleValue();
-					NumberFormat formatter=DecimalFormat.getPercentInstance();
-					formatedDeliveryRate=formatter.format(consumptionRate);
-				}
-			}
-			return formatedDeliveryRate;
+			return deliveryRate;
 		}
         
         public List<FundingDetail> getCommitmentsDetails() {

@@ -893,6 +893,14 @@ public class AmpARFilter extends PropertyListable {
 		return dateCriteria;
 	}
 
+	public boolean wasDateFilterUsed()
+	{
+		return (
+				((fromDate != null) && (fromDate.length() > 0)) ||
+				((toDate != null) && (toDate.length() > 0))
+				);
+	}
+	
 	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter) {
 		generateFilterQuery(request, workspaceFilter, false);
 	}
@@ -1102,10 +1110,14 @@ public class AmpARFilter extends PropertyListable {
 			for(AmpCategoryValueLocations ascendant:allAscendingLocations)
 				allSelectedLocations.add(ascendant.getId());
 			
-			String allSelectedLocationString			= Util.toCSString(allSelectedLocations);
+			// blabla BOZO
+			
+			String allDescendantsIdsString			= Util.toCSString(allDescendantsIds);
 			String subSelect			= "SELECT aal.amp_activity_id FROM amp_activity_location aal, amp_location al " +
 					"WHERE ( aal.amp_location_id=al.amp_location_id AND " +
-					"al.location_id IN (" + allSelectedLocationString + ") )";
+					"al.location_id IN (" + allDescendantsIdsString + ") )";
+			
+			this.relatedLocations = DynLocationManagerUtil.loadLocations(allSelectedLocations);
 			
 			if (REGION_SELECTED_FILTER.equals("")) {
 				REGION_SELECTED_FILTER	= subSelect;

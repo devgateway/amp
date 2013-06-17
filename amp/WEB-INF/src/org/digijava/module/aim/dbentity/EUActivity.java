@@ -225,7 +225,7 @@ public class EUActivity implements Serializable, Identifiable, Versionable, Clon
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { " Name:&nbsp;" }, new Object[] { this.name != null ? this.name
+				new Output(null, new String[] { "Name" }, new Object[] { this.name != null ? this.name
 						: "Empty Name" }));
 		return out;
 	}

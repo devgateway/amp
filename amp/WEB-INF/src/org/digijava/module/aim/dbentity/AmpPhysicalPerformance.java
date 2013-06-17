@@ -183,14 +183,14 @@ public class AmpPhysicalPerformance implements Serializable, Versionable, Clonea
 	public Output getOutput() {
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
-		out.getOutputs().add(new Output(null, new String[] { "Title:&nbsp;" }, new Object[] { this.title }));
+		out.getOutputs().add(new Output(null, new String[] { "Title" }, new Object[] { this.title }));
 		if (this.description != null && !this.description.trim().equals("")) {
 			out.getOutputs()
-					.add(new Output(null, new String[] { " - Description:&nbsp;" }, new Object[] { this.description }));
+					.add(new Output(null, new String[] { "Description" }, new Object[] { this.description }));
 		}
 		if (this.reportingDate != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { " - Reporting Date:&nbsp;" }, new Object[] { this.reportingDate }));
+					new Output(null, new String[] { "Reporting Date" }, new Object[] { this.reportingDate }));
 		}
 		return out;
 	}

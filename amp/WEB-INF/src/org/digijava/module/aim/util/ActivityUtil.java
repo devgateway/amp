@@ -2501,8 +2501,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    try {
 	      session = PersistenceManager.getSession();
 	      String queryString = "select count(*) from " + AmpFunding.class.getName() +" f, "
-	    		  + AmpActivityGroup.class.getName()	+ " apg "
-	    		  + "where f.ampActivityId=apg.ampActivityLastVersion and (f.ampDonorOrgId=:orgId)";
+	    		  + AmpActivity.class.getName()	+ " a "
+	    		  + "where f.ampActivityId=a.ampActivityId and (f.ampDonorOrgId=:orgId)";
 	      Query qry = session.createQuery(queryString);
 	      qry.setParameter("orgId", id, Hibernate.LONG);
 	      orgrolesCount = (Integer)qry.uniqueResult();
@@ -5391,7 +5391,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 				conn = PersistenceManager.getJdbcConnection();
 			
 			String query = "SELECT a.amp_activity_id FROM amp_activity_version a WHERE a.amp_activity_id IN (" + TeamUtil.getCommaSeparatedList(activityIds) + ") " +
-				"AND (a.approval_status = 'started' OR a.approval_status='edited') AND (a.draft IS NULL OR a.draft IS FALSE) AND (a.amp_team_id = " + tm.getTeamId() + ")";
+				"AND (a.approval_status = 'started' OR a.approval_status='edited') AND (a.draft IS NULL OR a.draft IS FALSE)"; // AND (a.amp_team_id = " + tm.getTeamId() + ")";
 			
 			Set<Long> result = new HashSet<Long>();
 			ResultSet resultSet = conn.createStatement().executeQuery(query);
@@ -5436,7 +5436,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 					if (draft == null)
 						draft = false;
 					
-					if ( tm.getTeamId().equals(teamId) ) {
+					if (true || tm.getTeamId().equals(teamId) ) {
 						if ( !draft && ("started".equals(status)||"edited".equals(status)) )
 							returnValue = true;
 					}

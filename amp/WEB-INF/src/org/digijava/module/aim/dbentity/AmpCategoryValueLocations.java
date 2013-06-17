@@ -51,7 +51,7 @@ public class AmpCategoryValueLocations implements Identifiable, Comparable<AmpCa
 		this.fullName = fullName;
 	}
 
-	private boolean translateable	= true;
+	private boolean translateable	= false;
 
 	public String getCode() {
 		return code;

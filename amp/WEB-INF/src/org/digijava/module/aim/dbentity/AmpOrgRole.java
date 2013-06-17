@@ -108,15 +108,15 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { "Organization: " }, new Object[] { this.organisation.getName() }));
-		out.getOutputs().add(new Output(null, new String[] { " Role: " }, new Object[] { this.role.getName() }));
+				new Output(null, new String[] { "Organization" }, new Object[] { this.organisation.getName() }));
+		out.getOutputs().add(new Output(null, new String[] { "Role" }, new Object[] { this.role.getName() }));
 		if (this.percentage != null) {
-			out.getOutputs().add(new Output(null, new String[] { " Percentage: " }, new Object[] { this.percentage }));
+			out.getOutputs().add(new Output(null, new String[] { "Percentage" }, new Object[] { this.percentage }));
 		}
 		if (this.additionalInfo != null && this.additionalInfo.trim().length() > 0)
-			out.getOutputs().add(new Output(null, new String[] {" Department/Division:"}, new Object[] {this.additionalInfo}));
+			out.getOutputs().add(new Output(null, new String[] {"Department/Division"}, new Object[] {this.additionalInfo}));
 		if (this.budgetCode != null)
-			out.getOutputs().add(new Output(null, new String[] {" Budget Code:"}, new Object[] {this.budgetCode}));
+			out.getOutputs().add(new Output(null, new String[] {"Budget Code"}, new Object[] {this.budgetCode}));
 		return out;
 	}
 

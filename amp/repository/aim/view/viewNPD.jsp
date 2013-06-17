@@ -111,42 +111,44 @@ background-color:#FFFFFF;
 	var title='<digi:trn key="aim:npd:titl">Title</digi:trn>';
 	var strDate='<digi:trn key="aim:npd:strdate">Start Date</digi:trn>';
 	var donor='<digi:trn key="aim:npd:donor">Donor</digi:trn>';
+	
 	function clearChildren(node){
 		while(node.firstChild!=null){	
 			node.removeChild(node.firstChild);
 		}	
 	}
-    	function addActionToURL(actionName){
-    		var fullURL=document.URL;
-    		var lastSlash=fullURL.lastIndexOf("/");
-    		var partialURL=fullURL.substring(0,lastSlash);
-    		if(partialURL.lastIndexOf("aim")!=(partialURL.length-3)){
-    			partialURL+="/aim";
-    		}
-    		return partialURL+"/"+actionName;
-    	}
-    	function setLoadingImage(parent){
-    		clearChildren(parent);
-    		var div=document.createElement('div');
-    		var img=document.createElement('img');
-    		img.src="/TEMPLATE/ampTemplate/images/amploading.gif";
-    		img.alt="loading...";
-    		div.appendChild(img);
-    		parent.appendChild(div);
-    	}
-    	function resetFilter(){
-    		$("#yearFrom").val("-1");
-    		$("#yearTo").val("-1");
-    		$("#selectedDonorsId").val("-1");
-    		$("#selectedStatusesId").val("-1");
-    		
-    	}
+	
+   	function addActionToURL(actionName){
+   		var fullURL=document.URL;
+   		var lastSlash=fullURL.lastIndexOf("/");
+   		var partialURL=fullURL.substring(0,lastSlash);
+   		if(partialURL.lastIndexOf("aim")!=(partialURL.length-3)){
+   			partialURL+="/aim";
+   		}
+   		return partialURL+"/"+actionName;
+   	}
+   	
+   	function setLoadingImage(parent){
+   		clearChildren(parent);
+   		var div=document.createElement('div');
+   		var img=document.createElement('img');
+   		img.src="/TEMPLATE/ampTemplate/images/amploading.gif";
+   		img.alt="loading...";
+   		div.appendChild(img);
+   		parent.appendChild(div);
+   	}
+   	
+   	function resetFilter(){
+   		$("#yearFrom").val("-1");
+   		$("#yearTo").val("-1");
+   		$("#selectedDonorsId").val("-1");
+   		$("#selectedStatusesId").val("-1");
+   		
+   		applyFilter();
+   	}
     
-    
-   
-    
-    
-    	window.onload=loadInitial;
+    window.onload=loadInitial;
+    	
     </script>
 	<script language="javascript" type="text/javascript">
     	<c:forEach var="theme" items="${aimNPDForm.allThemes}">

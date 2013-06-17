@@ -304,24 +304,23 @@
 	    
 	    
 			<td width="90%">
-				<c:choose>
-			    <c:when test="${empty param.public}">
+			    <logic:present parameter="public">
 		        <html:form action="gis/index.do">
 							<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
 								<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
 								<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
 							</html:select> 
 						</html:form>
-			    </c:when>
-			    <c:otherwise>
+			    </logic:present>
+			    <logic:notPresent parameter="public">
 		        <html:form action="gis/showPublicGis.do?public=true">
 							<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
 								<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
 								<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
 							</html:select> 
 						</html:form>
-			    </c:otherwise>
-				</c:choose>
+			    </logic:notPresent>
+
 			</td>
 		</tr>
 	</feature:display>
@@ -434,24 +433,24 @@
 	      <b><digi:trn>Map Mode</digi:trn>:</b>
 	    </td>
 			<td colspan="2">
-				<c:choose>
-			    <c:when test="${empty param.public}">
+
+			    <logic:present parameter="public">
 		        <html:form action="gis/index.do">
 							<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
 								<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
 								<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
 							</html:select> 
 						</html:form>
-			    </c:when>
-			    <c:otherwise>
+			    </logic:present>
+			    <logic:notPresent parameter="public">
 		        <html:form action="gis/showPublicGis.do?public=true">
 							<html:select style="width:250px" name="gisDashboardForm" property="gisDashboardMode" onchange="this.form.submit()">
 								<html:option value="<%=GisUtil.GIS_MODE_FUNDINGS%>"><digi:trn>Activity Funding Data</digi:trn></html:option>
 								<html:option value="<%=GisUtil.GIS_MODE_DEVINFO%>"><digi:trn>DevInfo Data</digi:trn></html:option>
 							</html:select> 
 						</html:form>
-			    </c:otherwise>
-				</c:choose>
+			    </logic:notPresent>
+
 			</td>
 		</tr>
 	</feature:display>

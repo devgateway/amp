@@ -3,6 +3,13 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@taglib uri="/taglib/digijava" prefix="digi"%>
+
+<style type="text/css">
+	#infoPanel .hd {
+ 		white-space: normal;
+	}
+</style>
+
 <script type="text/javascript">
 function setCurProgData(progId,nodeId){
 		if (curProgId == null || curProgId != progId ){

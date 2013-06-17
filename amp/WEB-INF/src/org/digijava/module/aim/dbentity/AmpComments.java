@@ -162,7 +162,7 @@ public class AmpComments implements Serializable, Cloneable, Versionable {
 	public Output getOutput() {
 		Output out = new Output();
 		out.getOutputs().add(
-				new Output(null, new String[] { " Comment:&nbsp;" },
+				new Output(null, new String[] { "Comment" },
 						new Object[] { this.comment != null ? this.comment : "" }));
 		return out;
 	}

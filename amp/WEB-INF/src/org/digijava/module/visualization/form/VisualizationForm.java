@@ -34,7 +34,7 @@ public class VisualizationForm extends ActionForm {
 	private SummaryInformation summaryInformation;
 	private RanksInformation ranksInformation;
 	private ExportData exportData;
-	private Map<String, Map<AmpActivityVersion, BigDecimal>> itemProjectsList;
+	private Map<String, Map<AmpActivityVersion, String>> itemProjectsList;
 	private List<AmpGraph> graphList;
 	private List<AmpDashboard> dashboardList;
 	private AmpDashboard dashboard;
@@ -60,12 +60,12 @@ public class VisualizationForm extends ActionForm {
 		this.dashboard = dashboard;
 	}
 	
-	public Map<String, Map<AmpActivityVersion, BigDecimal>> getItemProjectsList() {
+	public Map<String, Map<AmpActivityVersion, String>> getItemProjectsList() {
 		return itemProjectsList;
 	}
 
 	public void setItemProjectsList(
-			Map<String, Map<AmpActivityVersion, BigDecimal>> itemProjectsList) {
+			Map<String, Map<AmpActivityVersion, String>> itemProjectsList) {
 		this.itemProjectsList = itemProjectsList;
 	}
 

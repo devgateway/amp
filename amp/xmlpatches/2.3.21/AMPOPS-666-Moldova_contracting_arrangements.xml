@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true" xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+    <jira>AMPOPS-666</jira>
+    <keyword>columns</keyword>
+    <keyword>contracting-arrangements</keyword>
+    <author>Dolghier Constantin</author>
+    <description>insert contracting-arrangements as a new column</description>
+    <trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT COUNT(*) FROM amp_columns WHERE columnname='Contracting Arrangements';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("0")</test>
+		</condition>
+	</trigger> 
+       <apply>
+        <script>
+			<lang delimiter=";" type="postgres">
+INSERT INTO amp_columns(columnid, columnname, aliasname, celltype, extractorview, tokenexpression, totalexpression, relatedcontentpersisterclass, filterretrievable, showrowcalculations, description)
+VALUES
+(nextval('amp_columns_seq'), 'Contracting Arrangements', 'contractingArrangements', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_contracting_arrangements', NULL, NULL, NULL, NULL, NULL, '');;
+      		</lang>
+        </script>
+    </apply>
+</tns:patch>

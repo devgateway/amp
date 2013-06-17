@@ -302,7 +302,10 @@ function toggleSettings(){
 
 
 
-<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
+<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp">
+	<jsp:param name="is_a_tab" value="true" />
+</jsp:include>
+
 <div id="content"  > 
 <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 

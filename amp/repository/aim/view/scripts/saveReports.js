@@ -92,12 +92,21 @@ SaveReportEngine.prototype.success		= function (o) {
 						window.opener.location.replace("/viewTeamReports.do?tabs=false");
 			}
 		}
-			
+		message += "<br />" +
+				"<div align='center'>" +
+				"<digi:trn><input class='buttonx' type='reset' value='OK' onClick='return refresh();'></digi:trn>" +
+				"</div>";	
+		
 		this.panel.setBody( message );
-		this.doneCopyMessage;	
+		this.doneCopyMessage;
 	
 	}
 };
+
+function refresh(){
+	document.forms[0].action = "/showDesktop.do";
+	document.forms[0].submit();
+}
 
 SaveReportEngine.prototype.failure		= function (o) {
 	this.panel.setFooter("");

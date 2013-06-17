@@ -129,7 +129,7 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 				item.add(indName);
 		
 
-                AmpTextFieldPanel<String> references = new AmpTextFieldPanel<String>("references", new PropertyModel<String>(responseModel, "references"), "References", false, true);
+                AmpTextFieldPanel<String> references = new AmpTextFieldPanel<String>("references", new PropertyModel<String>(responseModel, "references"), "References:", false, true);
                 item.add(references);
 				
 				String qtype = item.getModelObject().getAmpTypeId().getName();
@@ -145,7 +145,7 @@ public class AmpPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpAhsurveyIn
 					
 				} else
 					if (qtype.compareTo("calculated") == 0){
-						Label l = new Label("answer", "calculated");
+						Label l = new Label("answer", "");
 						item.add(l);
 						TextField hidden = new TextField("answerInput");
 						hidden.setVisible(false);

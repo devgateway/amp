@@ -138,7 +138,7 @@
 							</td>
 							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
 							<td height="18">
-							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/exchangeRate"
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate"
 								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 							</module:display>
@@ -214,7 +214,7 @@
 							</td>
 							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
 							<td height="18">
-							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/exchangeRate"
+							<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate"
 								parentModule="/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table">
 									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
 							</module:display>

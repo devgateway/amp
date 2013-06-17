@@ -102,6 +102,19 @@ public class DynLocationManagerUtil {
 		return rootLocations;
 	}
 
+	
+	public static List<AmpCategoryValueLocations> loadLocations(Set<Long> allSelectedLocations)
+	{
+		Session dbSession = PersistenceManager.getSession();
+		
+		String queryString = "select loc from "
+				+ AmpCategoryValueLocations.class.getName() + " loc WHERE loc.id IN (" + Util.toCSString(allSelectedLocations) + ")";
+		Query qry = dbSession.createQuery(queryString);
+		List<AmpCategoryValueLocations> locations = qry.list();
+		return locations;
+	}
+	
+	
 	public static void deleteLocation(Long id, ActionMessages errors) {
 		Session dbSession = null;
 		Transaction tx = null;

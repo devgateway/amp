@@ -958,22 +958,43 @@ function callbackApplyFilter(e){
 	document.getElementById("flashSliderLabels").value = flashSliderLabels;
 	
 	if(document.getElementById("org_group_dropdown_id")!=null && document.getElementById("org_group_dropdown_id").value!=-1)
+	{
+		unCheckOptions("org_grp_check");
 		document.getElementById("org_grp_check_"+document.getElementById("org_group_dropdown_id").value).checked = true;
+	}
 	
+/*	
+	unCheckOptions("sector_config_check");
+	*/
 	if(document.getElementById("org_dropdown_id")!=null && document.getElementById("org_dropdown_id").value!=-1)
+	{
+		unCheckOptions("organization_check");
 		document.getElementById("organization_check_"+document.getElementById("org_dropdown_id").value).checked = true;
+	}
 	
 	if(document.getElementById("sector_dropdown_id")!=null && document.getElementById("sector_dropdown_id").value!=-1)
+	{
+		unCheckOptions("sector_check");
 		document.getElementById("sector_check_"+document.getElementById("sector_dropdown_id").value).checked = true;
+	}
 	
 	if(document.getElementById("sub_sector_dropdown_id")!=null && document.getElementById("sub_sector_dropdown_id").value!=-1)
+	{
+		unCheckOptions("sub_sector_check");
 		document.getElementById("sub_sector_check_"+document.getElementById("sub_sector_dropdown_id").value).checked = true;
+	}
 	
 	if(document.getElementById("region_dropdown_id")!=null && document.getElementById("region_dropdown_id").value!=-1)
+	{
+	 	unCheckOptions("region_check");
 		document.getElementById("region_check_"+document.getElementById("region_dropdown_id").value).checked = true;
+	}
 	
 	if(document.getElementById("zone_dropdown_id")!=null && document.getElementById("zone_dropdown_id").value!=-1)
+	{
+		unCheckOptions("zone_check");
 		document.getElementById("zone_check_"+document.getElementById("zone_dropdown_id").value).checked = true;
+	}
 	
 	var params = "";
 	params = params + "&orgGroupIds=" + getQueryParameter("orgGroupIds");
@@ -1610,32 +1631,6 @@ function refreshBoxes(o){
 					disabledInfo = (urlSaveAdditional != "") ? "": "disabled='disabled'";
 					var infoMarkup = new Array();
 					infoMarkup.push("<div id=\"saveResultMsg\"></div><table class=\"inside\"><tbody>");
-					infoMarkup.push("<tr>");
-					infoMarkup.push("<td class=\"inside\">" + trnBackground +":</td>");
-					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"background\">");
-					infoMarkup.push(info.background);
-					infoMarkup.push("</textarea>");
-					infoMarkup.push("</td>");
-					infoMarkup.push("</tr>");
-
-					infoMarkup.push("<tr>");
-					infoMarkup.push("<td class=\"inside\">" + trnDescription + ":</td>");
-					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"description\">");
-					infoMarkup.push(info.description);
-					infoMarkup.push("</textarea>");
-					infoMarkup.push("</td>");
-					infoMarkup.push("</tr>");
-
-					infoMarkup.push("<tr>");
-					infoMarkup.push("<td class=\"inside\">" + trnKeyAreas + ":</td>");
-					infoMarkup.push("<td class=\"inside\">");
-					infoMarkup.push("<textarea cols=\"40\" rows=\"3\" id=\"keyAreas\">");
-					infoMarkup.push(info.keyAreas);
-					infoMarkup.push("</textarea>");
-					infoMarkup.push("</td>");
-					infoMarkup.push("</tr>");
 					
 					if (document.getElementById("BackgroundOrganizationVisible")!=null){
 						infoMarkup.push("<tr>");

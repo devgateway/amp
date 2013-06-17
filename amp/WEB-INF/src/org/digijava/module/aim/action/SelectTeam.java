@@ -65,8 +65,9 @@ public class SelectTeam extends Action {
             
             //AMP Security Issues - AMP-12638
             if (member == null || member.getUser().getId() != user.getId()){
-            	session.invalidate();
-            	return mapping.findForward("forward");
+            	//session.invalidate();
+                throw new RuntimeException("Access denied for url: " + request.getRequestURL());
+            	//return mapping.findForward("forward");
             }
 
             // ----------------------

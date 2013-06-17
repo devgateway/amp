@@ -9,6 +9,7 @@ import java.util.Date;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
+import org.dgfoundation.amp.onepager.components.QuarterInformationPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpDonorCommitmentsFormTableFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
@@ -64,6 +65,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 				target.add(parent.getFundingInfo());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent.getFundingInfo()));
 				target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
+				target.appendJavaScript(QuarterInformationPanel.getJSUpdate(getSession()));
 			}
 		};
 		add(addCommit);

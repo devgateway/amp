@@ -206,6 +206,23 @@ public class GroupReportData extends ReportData<ReportData> {
 		return dest;
 	}
 
+	/**
+	 * decides whether an AmountCell should be part of the current GRD's trailCells. If false is returned, then a null will be inserted  
+	 * @param caca
+	 * @return
+	 */
+	protected boolean shouldDisplayTrailCell(AmountCell caca)
+	{
+		if (caca == null)
+			return false;
+		
+		if (caca.getColumn().getName().equals("Percentage Of Total Disbursements")) // these columns have no trail cells for GroupReportData's
+			return false;
+		
+		return true;
+	}
+	
+	
 	public void postProcess() {
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
@@ -225,7 +242,8 @@ public class GroupReportData extends ReportData<ReportData> {
 				
 				for(AmountCell caca:data.getTrailCells())
 				{
-					if (caca != null){
+					if (shouldDisplayTrailCell(caca))
+					{
 						AmountCell newc = caca.newInstance();
 						newc.setColumn(caca.getColumn());
 						trailCells.add(newc);

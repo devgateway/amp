@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnReportData;
+import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
@@ -21,17 +23,20 @@ public class Values extends HashMap<String, BigDecimal> {
 	private List<AmpColumns> mtefCols	;
 	//private List<AmpMeasures> mtefMeas	;
 
-	public Values(Long ownerID) {
+	public
+	Values(Long ownerID) {
 		this.ownerId = ownerID;
 		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
 		//this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
 	}
 
+	
 	public Values() {
 		this.mtefCols	= DynamicColumnsUtil.getMtefColumns();
 		//this.mtefMeas	= DynamicColumnsUtil.getMtefMeasures();
 	}
 
+	
 	public void addValue(String key, BigDecimal value) {
 		if (value != null) {
 			if (this.containsKey(key) && this.get(key) != null) {
@@ -42,14 +47,32 @@ public class Values extends HashMap<String, BigDecimal> {
 		}
 	}
 
+	
 	public void addValue(String key, double value) {
 		addValue(key, new BigDecimal(value));
 	}
 
+	
 	public void incrementValue(String key) {
 		addValue(key, 1d);
 	}
 
+	public void importValues(Viewable v)
+	{
+		if (!(v instanceof ColumnReportData))
+			return;
+		ColumnReportData crd = (ColumnReportData) v;
+		this.put(ArConstants.TOTAL_ACTUAL_COMMITMENT, 
+				new BigDecimal(crd.retrieveSubReportDataValue(ArConstants.TOTAL_ACTUAL_COMMITMENT)));
+		this.put(ArConstants.TOTAL_ACTUAL_DISBURSEMENT, 
+				new BigDecimal(crd.retrieveSubReportDataValue(ArConstants.TOTAL_ACTUAL_DISBURSEMENT)));
+		this.addValue(ArConstants.TOTAL_PLANNED_COMMITMENT, 
+				new BigDecimal(crd.retrieveSubReportDataValue(ArConstants.TOTAL_PLANNED_COMMITMENT)));
+		this.addValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT, 
+				new BigDecimal(crd.retrieveSubReportDataValue(ArConstants.TOTAL_PLANNED_DISBURSEMENT)));
+	}
+	
+	
 	/**
 	 * 
 	 * @param values

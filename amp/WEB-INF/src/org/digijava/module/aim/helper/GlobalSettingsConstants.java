@@ -120,6 +120,8 @@ public class GlobalSettingsConstants {
 	public static final String FILTER_REPORTS_BY_MONTH = "Filter reports by month";
 
     public static final String SHOW_FUNDING_GROUP_ID = "Show funding group id";
+
+    public static final String LINK_MODE_OF_PAYMENT_TO_FUNDING_STATUS = "Link Mode of Payment to Funding Status";
     
     public static final String SHOW_MOST_RECENT_ACTIVITIES_ON_TOP = "Show Most Recent Activities on Top";
 

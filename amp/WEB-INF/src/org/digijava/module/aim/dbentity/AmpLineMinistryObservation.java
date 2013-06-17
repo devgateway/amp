@@ -80,20 +80,20 @@ public class AmpLineMinistryObservation implements Serializable, Versionable, Cl
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { " Name:&nbsp;" }, new Object[] { this.name != null ? this.name
+				new Output(null, new String[] { "Name" }, new Object[] { this.name != null ? this.name
 						: "" }));
 		if (this.observationDate != null) {
-			out.getOutputs().add(new Output(null, new String[] { " Date:&nbsp;" }, new Object[] { this.observationDate }));
+			out.getOutputs().add(new Output(null, new String[] { "Date" }, new Object[] { this.observationDate }));
 		}
 		
 		if (this.lineMinistryObservationMeasures != null){
-			Output outs = new Output(new ArrayList<Output>(), new String[] {"<br/>", " Measures:" }, new Object[] { "" });
+			Output outs = new Output(new ArrayList<Output>(), new String[] {"Measures" }, new Object[] { "" });
 			outs.setOutputs(new ArrayList<Output>());
 			
 			Iterator<AmpLineMinistryObservationMeasure> it1 = this.lineMinistryObservationMeasures.iterator();
 			while (it1.hasNext()) {
 				AmpLineMinistryObservationMeasure measure = (AmpLineMinistryObservationMeasure) it1.next();
-				outs.getOutputs().add(new Output(null, new String[] {" Name:&nbsp;"}, new Object[] {measure.getName() != null ? measure.getName() : ""}));
+				outs.getOutputs().add(new Output(null, new String[] {"Name"}, new Object[] {measure.getName() != null ? measure.getName() : ""}));
 				
 				if (measure.getActors() != null && measure.getActors().size() > 0){
 					String[] actors = new String[measure.getActors().size()];
@@ -108,7 +108,7 @@ public class AmpLineMinistryObservation implements Serializable, Versionable, Cl
 							i++;
 						}
 					}
-					Output out1 = new Output(new ArrayList<Output>(), new String[] {"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Actors:&nbsp;"}, actors);
+					Output out1 = new Output(new ArrayList<Output>(), new String[] {"Actors"}, actors);
 					
 					outs.getOutputs().add(out1);
 				}

@@ -20,8 +20,7 @@ function toggleGroup(group_id){
 	$('#log_'+group_id).toggle('fast');
 }
 
-function importAll() {
-	debugger;
+function importAll() {	
 	 var checks = document.getElementsByName("selectedActivities");
 	 //alert(checks);
 	 var isChecked = false
@@ -57,7 +56,6 @@ function checkLog(sourceId) {
 }
 
 function importItem(id){
-	debugger;
 	//var actName = document.getElementById("check"+id)
 	var loadingImgDiv = document.getElementById("loadingImg");
 	loadingImgDiv.style.display="block";

@@ -12,6 +12,7 @@ import java.util.Iterator;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.Viewable;
+import org.digijava.module.aim.action.ExportActivityToPDF;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
@@ -51,10 +52,10 @@ public class GroupReportDataPDF extends PDFExporter {
 	public void generate() {
 	  	GroupReportData grd=(GroupReportData) item;
 		Font titleFont;
-		 titleFont = new Font(Font.COURIER, 13, Font.BOLD);
+		 titleFont = new Font(ExportActivityToPDF.basefont, 13, Font.BOLD);
 				
 		if((grd.getParent()!=null)&&(!grd.getName().equalsIgnoreCase(grd.getParent().getName()))) {
-		    	PdfPCell pdfc = new PdfPCell(new Paragraph(grd.getName(),titleFont));
+		    	PdfPCell pdfc = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(grd.getName()),titleFont));
 			pdfc.setColspan(grd.getTotalDepth());
 			pdfc.setPaddingTop(2);
 			pdfc.setPaddingBottom(2);

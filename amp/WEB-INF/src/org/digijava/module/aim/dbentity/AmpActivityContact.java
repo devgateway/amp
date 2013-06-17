@@ -61,7 +61,7 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { "Contact:&nbsp;" }, new Object[] { this.contact.getLastname() + " "
+				new Output(null, new String[] { "Contact" }, new Object[] { this.contact.getLastname() + " "
 						+ this.contact.getName() }));
 		return out;
 	}

@@ -532,51 +532,51 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 		Output out = new Output();
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
-				new Output(null, new String[] { "Organization:&nbsp;" }, new Object[] { this.ampDonorOrgId.getName() }));
+				new Output(null, new String[] { "Organization" }, new Object[] { this.ampDonorOrgId.getName() }));
 		if (this.typeOfAssistance != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Type of Assistance:&nbsp;" },
+					new Output(null, new String[] {"Type of Assistance" },
 							new Object[] { this.typeOfAssistance.getValue() }));
 		}
 		if (this.financingInstrument != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Financing Instrument:&nbsp;" },
+					new Output(null, new String[] {"Financing Instrument" },
 							new Object[] { this.financingInstrument.getValue() }));
 		}
 		if (this.conditions != null && !this.conditions.trim().equals("")) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br/>", " Conditions:&nbsp;" }, new Object[] { this.conditions }));
+					new Output(null, new String[] {"Conditions" }, new Object[] { this.conditions }));
 		}
 		if (this.donorObjective != null && !this.donorObjective.trim().equals("")) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br/>", "Donor Objective:&nbsp;" },
+					new Output(null, new String[] {"Donor Objective" },
 							new Object[] { this.donorObjective }));
 		}
 		if (this.active != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br/>", "Active:&nbsp;" }, new Object[] { this.active.toString() }));
+					new Output(null, new String[] {"Active" }, new Object[] { this.active.toString() }));
 		}
 		if (this.delegatedCooperation != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br/>", "Delegated Cooperation:&nbsp;" }, new Object[] { this.delegatedCooperation.toString() }));
+					new Output(null, new String[] {"Delegated Cooperation" }, new Object[] { this.delegatedCooperation.toString() }));
 		}
 		if (this.delegatedPartner != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br/>", "Delegated Partner:&nbsp;" }, new Object[] { this.delegatedPartner.toString() }));
+					new Output(null, new String[] {"Delegated Partner" }, new Object[] { this.delegatedPartner.toString() }));
 		}
 		if (this.modeOfPayment != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Mode of Payment:&nbsp;" },
+					new Output(null, new String[] {"Mode of Payment" },
 							new Object[] { this.modeOfPayment.getValue() }));
 		}
 		if (this.fundingStatus != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Funding Status:&nbsp;" },
+					new Output(null, new String[] {"Funding Status" },
 							new Object[] { this.fundingStatus.getValue() }));
 		}
 		if (this.financingId != null) {
 			out.getOutputs().add(
-					new Output(null, new String[] { "<br />", "Financing Id:&nbsp;" },
+					new Output(null, new String[] {"Financing Id" },
 							new Object[] { this.financingId }));
 		}
 
@@ -596,17 +596,17 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 			Output auxOutDetail = null;
 			switch (auxDetail.getTransactionType().intValue()) {
 			case Constants.COMMITMENT:
-				transactionType = "Commitments:&nbsp;";
+				transactionType = "Commitments";
 				if (auxDetail.getPledgeid() != null)
 					extraValues = " - " + auxDetail.getPledgeid().getTitle().getValue();
 				if (!trnComm) {
 					out.getOutputs().add(
-							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
+							new Output(new ArrayList<Output>(), new String[] {transactionType }, new Object[] { "" }));
 					trnComm = true;
 				}
 				break;
 			case Constants.DISBURSEMENT:
-				transactionType = " Disbursements:&nbsp;";
+				transactionType = " Disbursements";
 				
 				if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0)
 					extraValues += " - " + auxDetail.getDisbOrderId();
@@ -617,24 +617,24 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 				
 				if (!trnDisb) {
 					out.getOutputs().add(
-							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
+							new Output(new ArrayList<Output>(), new String[] {transactionType }, new Object[] { "" }));
 					trnDisb = true;
 				}
 				break;
 			case Constants.EXPENDITURE:
-				transactionType = " Expenditures:&nbsp;";
+				transactionType = " Expenditures";
 				
 				if (auxDetail.getExpCategory() != null && auxDetail.getExpCategory().trim().length() > 0)
 					extraValues += " - " + auxDetail.getExpCategory();
 				
 				if (!trnExp) {
 					out.getOutputs().add(
-							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
+							new Output(new ArrayList<Output>(), new String[] {transactionType }, new Object[] { "" }));
 					trnExp = true;
 				}
 				break;
 			case Constants.DISBURSEMENT_ORDER:
-				transactionType = " Disbursement Orders:&nbsp;";
+				transactionType = " Disbursement Orders";
 
 				if (auxDetail.getDisbOrderId() != null && auxDetail.getDisbOrderId().trim().length() > 0)
 					extraValues += " - " + auxDetail.getDisbOrderId();
@@ -647,7 +647,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 
 				if (!trnDisbOrder) {
 					out.getOutputs().add(
-							new Output(new ArrayList<Output>(), new String[] {"<br/>", transactionType }, new Object[] { "" }));
+							new Output(new ArrayList<Output>(), new String[] {transactionType }, new Object[] { "" }));
 					trnDisbOrder = true;
 				}
 				break;
@@ -672,7 +672,7 @@ public class AmpFunding implements Serializable, Versionable, Cloneable {
 					.next();
 			if (!trnMTEF) {
 				out.getOutputs().add(
-						new Output(new ArrayList<Output>(), new String[] {"<br/>", " MTEF Projection:&nbsp;" }, new Object[] { "" }));
+						new Output(new ArrayList<Output>(), new String[] {"MTEF Projection" }, new Object[] { "" }));
 				trnMTEF = true;
 			}
 			String adjustment = mtef.getProjected().getValue();

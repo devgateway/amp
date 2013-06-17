@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 
+import org.dgfoundation.amp.oracle.AMPOracleDialect;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -31,6 +34,26 @@ public class FundingDetail implements Serializable, Comparable
 		this.reportingDate = reportingDate;
 	}
 
+	public void setRecipientOrganisation(AmpOrganisation recipientOrganisation)
+	{
+		this.recipientOrganisation = recipientOrganisation;
+	}
+
+	public void setRecipientOrganisationRole(AmpRole recipientRole)
+	{
+		this.recipientOrganisationRole = recipientRole;
+	}
+	
+	public AmpOrganisation getRecipientOrganisation()
+	{
+		return recipientOrganisation;
+	}
+	
+	public AmpRole getRecipientOrganisationRole()
+	{
+		return recipientOrganisationRole;
+	}
+
 	private Date reportingDate;
 	private AmpCategoryValue adjustmentTypeName;
 	private String transactionDate;
@@ -44,6 +67,8 @@ public class FundingDetail implements Serializable, Comparable
 	private boolean useFixedRate;
 	private String fixedExchangeRate;
 	private Long ampComponentFundingId;
+	private AmpOrganisation recipientOrganisation;
+	private AmpRole recipientOrganisationRole;
 	
 
 	private Long fundDetId;

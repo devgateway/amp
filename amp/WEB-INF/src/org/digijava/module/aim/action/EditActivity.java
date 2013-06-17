@@ -55,6 +55,7 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
@@ -1322,7 +1323,7 @@ public class EditActivity extends Action {
 			            fund.setMtefProjections(MTEFProjections);
 			            /* END - Get MTEF Projections */
 
-			            Collection fundDetails = ampFunding.getFundingDetails();
+			            Collection<AmpFundingDetail> fundDetails = ampFunding.getFundingDetails();
 
 			            if (fundDetails != null && fundDetails.size() > 0) {
 			            //  Iterator fundDetItr = fundDetails.iterator();
@@ -1332,10 +1333,10 @@ public class EditActivity extends Action {
                                         
 			            List<FundingDetail> fundDetail = calculations.getFundDetailList();
 			            if(isPreview){
-                        Iterator fundingIterator = fundDetail.iterator();
+                        Iterator<FundingDetail> fundingIterator = fundDetail.iterator();
                          while(fundingIterator.hasNext())
                          {
-                         	FundingDetail currentFundingDetail = (FundingDetail)fundingIterator.next();
+                         	FundingDetail currentFundingDetail = fundingIterator.next();
                          	
                          	currentFundingDetail.getContract();
                          	

@@ -213,7 +213,17 @@
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingExpenditures.jsp" />
 													</module:display>
+													
+<%-- 												<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+														<jsp:include page="previewActivityFundingRoF.jsp" />
+													</module:display>
 
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+														<jsp:include page="previewActivityFundingEDD.jsp" />
+													</module:display>
+--%>													
 													<feature:display module="Funding" name="Undisbursed Balance">
 													<jsp:include page="previewActivityFundingUndisbursedBalance.jsp" />
 													</feature:display>

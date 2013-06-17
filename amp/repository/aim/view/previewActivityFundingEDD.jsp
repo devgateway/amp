@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <digi:instance property="aimEditActivityForm" />
-<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
+<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedDisbursementDetails}">

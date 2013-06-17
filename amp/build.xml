@@ -164,6 +164,7 @@
             		<include name="**/*.js"/>
             		<include name="**/*.css"/>
             		<include name="**/*.html"/>
+            		<include name="**/*.ttf" />
     	        </patternset>
             </fileset>
         </copy>

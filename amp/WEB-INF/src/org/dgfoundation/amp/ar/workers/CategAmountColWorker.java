@@ -329,6 +329,13 @@ public class CategAmountColWorker extends ColumnWorker {
 		case 7:
 			trStr = ArConstants.PLEDGE;
 			break;
+		case 8:
+			trStr = ArConstants.RELEASE_OF_FUNDS; // AMP 2.5-prerelease: has 6
+			break;
+		case 9:
+			trStr = ArConstants.ESTIMATED_DISBURSEMENTS; // AMP 2.5-prerelease: has 5
+			break;
+			
 		}
 
 		if(trStr != null) {

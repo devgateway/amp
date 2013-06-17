@@ -308,32 +308,32 @@ public class CategAmountColWorker extends ColumnWorker {
 		String trStr = null;
 
 		switch (tr_type) {
-		case 0:
+		case Constants.COMMITMENT:
 			trStr = ArConstants.COMMITMENT;
 			break;
-		case 1:
+		case Constants.DISBURSEMENT:
 			trStr = ArConstants.DISBURSEMENT;
 			break;
-		case 2:
+		case Constants.EXPENDITURE:
 			trStr = ArConstants.EXPENDITURE;
 			break;
-		case 4:
+		case Constants.DISBURSEMENT_ORDER:
 			trStr = ArConstants.DISBURSEMENT_ORDERS;
 			break;
-		case 5:
+		case Constants.PLEDGES_COMMITMENT:
 			trStr = ArConstants.PLEDGES_COMMITMENT;
 			break;
-		case 6:
+		case Constants.PLEDGES_DISBURSEMENT:
 			trStr = ArConstants.PLEDGES_DISBURSEMENT;
 			break;
-		case 7:
+		case Constants.PLEDGE:
 			trStr = ArConstants.PLEDGE;
 			break;
-		case 8:
-			trStr = ArConstants.RELEASE_OF_FUNDS; // AMP 2.5-prerelease: has 6
+		case Constants.RELEASE_OF_FUNDS:
+			trStr = ArConstants.RELEASE_OF_FUNDS;
 			break;
-		case 9:
-			trStr = ArConstants.ESTIMATED_DISBURSEMENTS; // AMP 2.5-prerelease: has 5
+		case Constants.ESTIMATED_DONOR_DISBURSEMENT:
+			trStr = ArConstants.ESTIMATED_DISBURSEMENTS;
 			break;
 			
 		}

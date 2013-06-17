@@ -16,14 +16,23 @@ public class Constants
 		public static final String DECIMAL_LOCATION_PERCENTAGES_DIVIDE = "Decimals in Location percentage";
 	};
 
+
+    /**
+     * transaction type correspondence can be found in
+     * CategAmountColWorker.java look for "switch (tr_type) {"
+     *
+     */
 	public static final int COMMITMENT = 0 ;
 	public static final int DISBURSEMENT = 1 ;
 	public static final int EXPENDITURE = 2 ;
-    public static final int DISBURSEMENT_ORDER = 4 ;
     public static final int MTEFPROJECTION = 3 ;
-    public static final int ESTIMATED_DONOR_DISBURSEMENT = 5 ;
-    public static final int RELEASE_OF_FUNDS = 6 ;
-    
+    public static final int DISBURSEMENT_ORDER = 4 ;
+    public static final int PLEDGES_COMMITMENT = 5;
+    public static final int PLEDGES_DISBURSEMENT = 6;
+    public static final int PLEDGE = 7;
+    public static final int RELEASE_OF_FUNDS = 8 ;
+    public static final int ESTIMATED_DONOR_DISBURSEMENT = 9 ;
+
     
 	public static final int PLANNED = 0 ;
 	public static final int ACTUAL = 1 ;

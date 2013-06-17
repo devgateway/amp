@@ -134,7 +134,7 @@ public class AmpReleaseOfFundsFormTableFeature extends
 				
 				AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("orgRoleSelector", 
 						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(item.getModel(),"recipientRole"), new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg")
-						,new String[] {Constants.EXECUTING_AGENCY});
+						,new String[] {Constants.RESPONSIBLE_ORGANISATION});
 				orgRoleSelector.getRoleSelect().getChoiceContainer().setRequired(true);
 				orgRoleSelector.getOrgSelect().getChoiceContainer().setRequired(true);
 				

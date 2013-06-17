@@ -438,8 +438,9 @@ public class AmountCell extends Cell {
 			return ret;
 		
 		// we need to filter the merged cells too...
-		AmountCell realRet = (AmountCell) this.newInstance();
+		AmountCell realRet = (AmountCell) this.newInstance();		
 		realRet.setOwnerId(ret.getOwnerId());
+		
 		// AmountCell realRet=new AmountCell(ret.getOwnerId());
 		Iterator i = ret.getMergedCells().iterator();
 		boolean mergedAnything = false;
@@ -450,9 +451,6 @@ public class AmountCell extends Cell {
 			if (filtered != null)
 			{
 				realRet.merge(realRet, filtered);
-				//aici se caca la merge 111111 cu 277777.5
-				double d = realRet.getAmount();
-				System.out.format("jopa = %.2f\n", d);
 				mergedAnything = true;
 			}
 		}

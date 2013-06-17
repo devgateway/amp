@@ -139,6 +139,11 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 
 	public final static MetaInfo<Boolean> disablePercentMetaInfo = new MetaInfo<Boolean>(ArConstants.DISABLE_PERCENT, Boolean.TRUE);
 	
+	/**
+	 * this is an ugly hack because Real Disbursements + Actual Disbursements are both fetched off the same data source and are basically cloned with somewhat differing metadata
+	 */
+	//public final static MetaInfo<Boolean> isRealDisbursementsColumn = new MetaInfo<Boolean>(ArConstants.IS_REAL_DISBURSEMENTS_COLUMN, Boolean.TRUE);
+	
 public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret, boolean hierarchyPurpose, boolean disablePercentage) {
 	
 	if(metaCell.getColumn().getName().equals(columnName) ) {
@@ -186,9 +191,35 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 		};
 	public final static Set<String> fundingFilteringColumns = new HashSet<String>(Arrays.asList(fundingFilteringColumnsArr));
 	
+	public void cloneMetaData()
+	{
+		this.metaData = new HashSet(this.metaData); // do a distinct, unshared copy with other instances
+		for(AmountCell amCell:mergedCells)
+			if (amCell instanceof CategAmountCell)
+				((CategAmountCell) amCell).cloneMetaData();		
+	}
+	
+	public void removeDirectedFundingMetadata()
+	{		
+		Iterator<MetaInfo> mit = this.metaData.iterator();
+		while(mit.hasNext())
+		{
+			MetaInfo metaInfo = mit.next();
+			if (metaInfo.getCategory().equals(ArConstants.RECIPIENT_NAME) ||
+				metaInfo.getCategory().equals(ArConstants.RECIPIENT_ROLE))
+				mit.remove();
+		}
+		for(AmountCell amCell:mergedCells)
+			if (amCell instanceof CategAmountCell)
+				((CategAmountCell) amCell).removeDirectedFundingMetadata();
+	}
+	
 public Cell filter(Cell metaCell,Set ids) {
 	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);    
 	if(ret==null) return null;
+		
+//	if (this.hasMetaInfo(isRealDisbursementsColumn))
+//		ret.getMetaData().add(isRealDisbursementsColumn); // super.filter does NOT copy metadata except from children 
 		
 	if (fundingFilteringColumns.contains(metaCell.getColumn().getName()))
 	{
@@ -315,13 +346,4 @@ public boolean hasMetaInfo(MetaInfo m) {
 		return 0;
 	}
 	
-//private  boolean render;
-//public void  setRenderizable(boolean prender) {
-//    // TODO Auto-generated method stub
-//     render=prender;
-//}
-//public boolean isRenderizable() {
-//    // TODO Auto-generated method stub
-//    return render;
-//}
 }

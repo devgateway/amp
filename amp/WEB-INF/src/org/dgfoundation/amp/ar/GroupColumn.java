@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.exprlogic.MathExpressionRepository;
 import org.digijava.kernel.persistence.WorkerException;
@@ -132,6 +133,69 @@ public class GroupColumn extends Column {
     	}
     }
     
+    public static boolean isActualDisbursement(Categorizable item)
+    {
+    	Set<MetaInfo> metadata = item.getMetaData();
+    	for(MetaInfo minfo:metadata)
+    	{
+    		if (minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
+    		{
+    			String val = minfo.getValue().toString();
+    			if (val.equals(ArConstants.ACTUAL_DISBURSEMENTS))
+    				return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    /**
+     * clone all cells and detach them
+     * @param column
+     * @return
+     */
+    public static void detachCells(Column column)
+    {
+    	if (column instanceof CellColumn)
+    	{
+    		for(Object cll:column.getItems())
+    		{
+    			if (cll instanceof CategAmountCell)
+    				((CategAmountCell) cll).cloneMetaData();
+    		}
+    	}
+    	
+    	if (column instanceof GroupColumn)
+    	{
+    		GroupColumn gc = (GroupColumn) column;
+    		for(Object item:gc.getItems())
+    			detachCells((Column) item);
+    	}
+    }
+    
+    /**
+     * clone all cells and detach them
+     * @param column
+     * @return
+     */
+    public static void removeDirectFundingMetadata(Column column)
+    {
+    	if (column instanceof CellColumn)
+    	{
+    		for(Object cll:column.getItems())
+    		{
+    			if (cll instanceof CategAmountCell)
+    				((CategAmountCell) cll).removeDirectedFundingMetadata();
+    		}
+    	}
+    	
+    	if (column instanceof GroupColumn)
+    	{
+    		GroupColumn gc = (GroupColumn) column;
+    		for(Object item:gc.getItems())
+    			removeDirectFundingMetadata((Column) item);
+    	}
+    }
+    
     /**
      * Helper method that only uses one category to create a categorized tree. This method is internally used and should not
      * be invoked by the developer directly.
@@ -145,7 +209,7 @@ public class GroupColumn extends Column {
     	
     	HashMap<String,String> yearMapping = new HashMap<String, String>();
     	HashMap<String,String> monthMapping = new HashMap<String, String>();
-    	
+    	    	
     	Column ret = new GroupColumn(src);
         Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
         Iterator<Cell> i = src.iterator();
@@ -288,11 +352,10 @@ public class GroupColumn extends Column {
 				metaSet.add(metaInfo);    		   
     	   }
        }
-        
-        
-
+                
+       
         // iterate the set and create a subColumn for each of the metainfo
-        for (MetaInfo element:metaSet) {        	
+        for (MetaInfo element:metaSet) {
         	//do not consider the Totals subcolumn in years/quarters as a real category
         	//if this category is found inside the grand totals column, ignore it 
             if(element.getCategory().equals(ArConstants.TERMS_OF_ASSISTANCE) && 
@@ -361,10 +424,56 @@ public class GroupColumn extends Column {
     					cc.addCell(item);
     					continue;
     			}
-    			if(item.hasMetaInfo(element)) cc.addCell(item);
+    			
+    			// if now we are creating a REAL DISBURSEMENTS column, we do it by cloning the ACTUAL DISBURSEMENTS cells
+    			// the cloning is followed by a deep copy of metadata, because as a further step, metadata in ACTUAL/REAL disbursements cells is altered and just doing a clone() does not duplicate metaData in deep mergedCells
+    			if (category.equals(ArConstants.FUNDING_TYPE) &&
+    				element.getCategory().equals(ArConstants.FUNDING_TYPE) &&
+    				(element.getValue().toString().equals(ArConstants.REAL_DISBURSEMENTS) || element.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS)) &&
+    				isActualDisbursement(item))
+    			{
+    				try
+    				{
+        				Cell obj = (Cell)(((Cell) item).clone());
+        				if (obj instanceof CategAmountCell)
+        					((CategAmountCell) obj).cloneMetaData();
+    					cc.addCell(obj);
+    				}
+    				catch(Exception e)
+    				{
+    					logger.warn("while generating REAL DISBURSEMENTS, error cloning cell " + item.toString());
+    					// do nothing
+    				}
+    				
+    				continue;
+    			}
+    			if(item.hasMetaInfo(element)) 
+    			{
+    				cc.addCell(item);
+    			}
     		}
+            
         }
         
+        if (category.equals(ArConstants.FUNDING_TYPE))
+        {
+        	// postprocess Funding columns as to detach completely the ACTUAL DISBURSEMENTS and REAL DISBURSEMENTS columns
+        	List<Column> columns = ret.getItems();
+        	for(Column column:columns)
+        	{
+        		System.out.println("column = " + column);
+        		if (column.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS) || column.getName().equals(ArConstants.REAL_DISBURSEMENTS))
+        		{
+        			detachCells(column);
+        		}
+        	}
+        	// these cycles HAVE to be separated, as we can remove metadata from a cell only after it has been throughoutly detached
+        	for(Column column:columns)
+        		if (column.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS))
+        		{
+        			removeDirectFundingMetadata(column);
+        		}
+        }
         
         // Start AMP-2724
         if(category.equals(ArConstants.FUNDING_TYPE)) {

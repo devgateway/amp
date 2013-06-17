@@ -74,6 +74,7 @@ public final class ArConstants {
 	public final static String AGREEMENT_TITLE_CODE = "Agreement Title + Code";
 	
 	public final static String DISABLE_PERCENT = "Disable_Percent";
+	public final static String IS_REAL_DISBURSEMENTS_COLUMN = "Is Real Disbursements";
 	
 	/**
 	 * @deprecated use COLUMN_COUNTRY if it's related to the column
@@ -226,6 +227,8 @@ public final class ArConstants {
 	public static final String GRAND_TOTAL_ACTUAL_COMMITMENTS = "GRAND_TOTAL_ACTUAL_COMMITMENTS";
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
 	public final static String ACTUAL_COMMITMENTS="Actual Commitments";
+	public final static String ACTUAL_DISBURSEMENTS = "Actual Disbursements";
+	public final static String REAL_DISBURSEMENTS = "Real Disbursements";
 	public final static String UNCOMMITTED_BALANCE="Uncommitted Balance";
 	public final static String TOTAL_COMMITMENTS="Total Commitments";
 	//public final static String TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS="Percentage Of Total Disbursements";

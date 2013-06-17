@@ -211,7 +211,7 @@ public class ColumnReportData extends ReportData<Column> {
 		
 		/* flag to see if there are Cells with value unallocated */
 		boolean existsUnallocatedCateg					= false;
-		
+			
 		GroupReportData dest = new GroupReportData(this.getName());
 		dest.setSplitterCell(this.getSplitterCell());
 
@@ -352,9 +352,6 @@ public class ColumnReportData extends ReportData<Column> {
 		Iterator<ColumnReportData> cellIter			= catToIds.keySet().iterator();
 		while ( cellIter.hasNext() ) {
 			ColumnReportData crd	= cellIter.next();
-			//if (crd.toString().equals("Implementing Agency: Global Fund"))
-			if (crd.toString().equals("Implementing Agency: European Union"))
-				System.out.println("breakpoint!");
 			Set<Long> ids			= catToIds.get(crd);
 			Cell cat				= crd.getSplitterCell();
 			

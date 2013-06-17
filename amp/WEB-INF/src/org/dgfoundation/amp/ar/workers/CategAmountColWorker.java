@@ -338,7 +338,7 @@ public class CategAmountColWorker extends ColumnWorker {
 			MetaInfo fundMs = this.getCachedMetaInfo(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(fundMes, order));
 			acc.getMetaData().add(trMs);
 			acc.getMetaData().add(fundMs);
-			acc.getMetaData().add(adjMs);			
+			acc.getMetaData().add(adjMs);
 		}	
 		
 		//Group all pledges without funding year under the same fake year 

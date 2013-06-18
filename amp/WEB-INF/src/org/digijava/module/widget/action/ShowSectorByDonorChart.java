@@ -63,7 +63,7 @@ public class ShowSectorByDonorChart extends Action {
         }
 
         //generate chart
-        JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear,toYear, opt, request.getSession());
+        JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, fromYear,toYear, opt, request.getSession(),cForm.getSelectedCurrency());
         //if no data is available,user should get a message about it.
         Plot plot = chart.getPlot();
         String noDatamessage = TranslatorWorker.translateText("There is no data available for the selected filters. Please adjust the date and/or donor filters",locale,siteId);

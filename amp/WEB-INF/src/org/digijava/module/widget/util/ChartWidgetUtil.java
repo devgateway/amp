@@ -393,12 +393,12 @@ public class ChartWidgetUtil {
      * @throws DgException
      * @throws WorkerException
      */
-    public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt, HttpSession session) throws DgException, WorkerException {
+    public static JFreeChart getSectorByDonorChart(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt, HttpSession session, String calcCurrencyCode) throws DgException, WorkerException {
         JFreeChart result = null;
 		Font titleFont = new Font("Arial", Font.BOLD, 12);
 		Font plainFont = new Font("Arial", Font.PLAIN, 10);
 
-        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt, session);
+        PieDataset ds = getSectorByDonorDataset(donors, fromYear, toYear, opt, session, calcCurrencyCode);
         String titleMsg = TranslatorWorker.translateText("Breakdown by Sector", opt.getLangCode(), opt.getSiteId());
         String title = (opt.isShowTitle()) ? titleMsg : null;
         boolean tooltips = true;
@@ -486,7 +486,7 @@ public class ChartWidgetUtil {
      * @return
      * @throws DgException
      */
-    public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt, HttpSession session) throws DgException {
+    public static PieDataset getSectorByDonorDataset(Long[] donors, Integer fromYear, Integer toYear, ChartOption opt, HttpSession session, String calcCurrencyCode) throws DgException {
         DefaultPieDataset ds = new DefaultPieDataset();
         Date fromDate = null;
         Date toDate = null;
@@ -504,7 +504,7 @@ public class ChartWidgetUtil {
             toDate = new Date(getStartOfYear(toYear.intValue() + 1, calendar.getStartMonthNum() - 1, calendar.getStartDayNum()).getTime() - MILLISECONDS_IN_DAY);
         }
         Double[] allFundingWrapper = {new Double(0)};// to hold whole funding value// to hold whole funding value
-        List<DonorSectorFundingHelper> fundings = getDonorSectorFunding(donors, fromDate, toDate, allFundingWrapper, session);
+        List<DonorSectorFundingHelper> fundings = getDonorSectorFunding(donors, fromDate, toDate, allFundingWrapper, session, calcCurrencyCode);
         double sumA = 0, sumB = 0;
         if (fundings != null) {
             Double otherFunding = new Double(0);
@@ -573,7 +573,7 @@ public class ChartWidgetUtil {
      * @return
      * @throws DgException
      */
-    public static List<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding, HttpSession session) throws DgException {
+    public static List<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[], Date fromDate, Date toDate, Double[] wholeFunding, HttpSession session, String calcCurrencyCode) throws DgException {
 
     	boolean isPublic = session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER) == null;
     	Set<Long> allActivityIds = DbUtil.getAllLegalAmpActivityIds(session);
@@ -586,11 +586,11 @@ public class ChartWidgetUtil {
 
     	//RMMapCalculationUtil.applySectorOrProgramPercentages (fundings, sectorPercentageMap);
     	
-    	String calcCurrencyCode;
     	String baseCurr = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
     	if ( baseCurr == null )
     		baseCurr	= "USD";
-    	calcCurrencyCode = baseCurr;
+    	if (calcCurrencyCode==null || calcCurrencyCode=="")
+    		calcCurrencyCode = baseCurr;
 
     	Map<Long, AmpCategoryValue> adjustementIdTypeMap = new HashMap <Long, AmpCategoryValue> ();    	
     	Map<Long, SectorInfo> fundingsByTopLevelSectorId = new HashMap<Long, SectorInfo>();

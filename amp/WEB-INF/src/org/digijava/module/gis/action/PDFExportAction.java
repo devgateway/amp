@@ -198,7 +198,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		ByteArrayOutputStream outChartByteArray = getChartImage(request,
 				selectedDonor, selectedFromYear, selectedTotYear, showLegends,
-				showLabels);
+				showLabels, null);
 		Image imgChart = Image.getInstance(outChartByteArray.toByteArray());
 
 		// GIS Map parameters
@@ -2036,7 +2036,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 	public ByteArrayOutputStream getChartImage(HttpServletRequest request,
 			Long donorId, Integer fromYear, Integer toYear,
-			Boolean showLegends, Boolean showLabels) throws Exception {
+			Boolean showLegends, Boolean showLabels, String calcCurrencyCode) throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
 		Long[] donorIDs = null;
@@ -2067,7 +2067,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		// generate chart
 		JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs,
-				fromYear, toYear, opt, request.getSession());
+				fromYear, toYear, opt, request.getSession(), calcCurrencyCode);
 		chart.setBackgroundPaint(new Color(206, 226, 251));
 		Plot plot = chart.getPlot();
 		plot.setBackgroundPaint(new Color(206, 226, 251));

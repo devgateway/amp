@@ -31,6 +31,7 @@ function toggleRows(caller,hideId){
 	if(caller.parentNode.parentNode.parentNode.children[3]!=null){
 		amountcell_2 = caller.parentNode.parentNode.parentNode.children[3].children[0];
 	}
+	var tb = document.getElementById('reportTable');
 	var len = tb.rows.length;
 	var found=false;
 	var hideDepth=getRowLevel(title);

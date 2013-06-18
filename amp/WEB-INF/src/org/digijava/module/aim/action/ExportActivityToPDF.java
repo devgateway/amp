@@ -2626,6 +2626,23 @@ public class ExportActivityToPDF extends Action {
 							donorObjCell2.setBackgroundColor(new Color(221,221,221));
 							fundingTable.addCell(donorObjCell2);
 						}
+						//Funding conditions
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Conditions", ampContext)){								
+							PdfPCell condCell1=new PdfPCell();
+							condCell1.setBackgroundColor(new Color(221,221,221));
+							condCell1.setBorder(0);
+							p1=new Paragraph(TranslatorWorker.translateText("Conditions")+":",plainFont);
+							condCell1.addElement(p1);
+							fundingTable.addCell(condCell1);
+							//meaning
+							PdfPCell condCell2=new PdfPCell();
+							p1=new Paragraph(funding.getConditions(),plainFont);						
+							condCell2.addElement(p1);
+							condCell2.setBorder(0);
+							condCell2.setColspan(2);
+							condCell2.setBackgroundColor(new Color(221,221,221));
+							fundingTable.addCell(condCell2);
+						}
 						//Agreement
 						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext)){
 							PdfPCell agreementCell1=new PdfPCell();

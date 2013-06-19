@@ -1159,6 +1159,7 @@ function getStructures(clear) {
 				map.addLayer(structureGraphicLayer);
 				map.setExtent(map.extent.expand(1.01));
 				CluterStructures();
+				//Show Structures link
 				dojo.style('structures', { 'display' : 'block' });
 			},
 			error : function(error) {

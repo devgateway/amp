@@ -422,7 +422,7 @@
 		              		<li  class="mapMenuItem"  id="search" style="cursor: pointer;"><digi:trn>Search  Structures</digi:trn></li>
 		              	</feature:display>
 		              	<feature:display name="Structures" module="Map Module">
-							<li d id="structures" onclick="getStructures(false);" style="cursor: pointer;display: none;"><digi:trn>Structures</digi:trn></li>
+							<li d id="structures" onclick="getStructures(false);" style="cursor: pointer;display: none;"><digi:trn>Structures</digi:trn></li> 
 							<li id="clusterStructures" onclick="resetStructureCluster(false);" style="display:none; cursor: pointer;"><digi:trn>Reset Expanded Structures</digi:trn></li>
 						</feature:display>
 		              	<feature:display name="Highlight regions" module="Map Module">

@@ -1424,6 +1424,14 @@ public class EditActivity extends Action {
                 			currFunding.setSubtotalPlannedDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedDisbOrder().doubleValue()));
                 			currFunding.setSubtotalPipelineDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineDisbOrder().doubleValue()));
                 		  
+                			currFunding.setSubtotalActualRoF(FormatHelper.formatNumber(calculationsSubtotal.getTotalActualRoF().doubleValue()));
+                			currFunding.setSubtotalPlannedRoF(FormatHelper.formatNumber(calculationsSubtotal.getTotalPlannedRoF().doubleValue()));
+                			currFunding.setSubtotalPipelineRoF(FormatHelper.formatNumber(0/*calculationsSubtotal.getTotalPipelineRoF().doubleValue()*/));
+
+                			currFunding.setSubtotalActualEDD(FormatHelper.formatNumber(calculationsSubtotal.getTotalActualEDD().doubleValue()));
+                			currFunding.setSubtotalPlannedEDD(FormatHelper.formatNumber(calculationsSubtotal.getTotalPlannedEDD().doubleValue()));
+                			currFunding.setSubtotalPipelineEDD(FormatHelper.formatNumber(0/*calculationsSubtotal.getTotalPipelineEDD().doubleValue()*/));
+
                 			currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
                 			currFunding.setAmpFundingDetails(null);
 		        		  //TODO:aca se setearia el resto
@@ -1450,6 +1458,8 @@ public class EditActivity extends Action {
         	  eaForm.getFunding().setTotalPlannedDisbursements(calculations.getTotPlanDisb().getCalculations());
         	  eaForm.getFunding().setTotalExpenditures(calculations.getTotPlannedExp().getCalculations());  
         	  eaForm.getFunding().setTotalPlannedCommitments(calculations.getTotPlannedComm().getCalculations());
+        	  eaForm.getFunding().setTotalPlannedReleaseOfFunds(calculations.getTotPlannedRoF().getCalculations());
+        	  eaForm.getFunding().setTotalPlannedEDD(calculations.getTotPlannedEDD().getCalculations());
         	  eaForm.getFunding().setTotalPipelineCommitments(calculations.getTotPipelineComm().getCalculations());
         	  eaForm.getFunding().setTotalPlannedExpenditures(calculations.getTotPlannedExp().getCalculations());
         	  eaForm.getFunding().setTotalActualDisbursementsOrders(calculations.getTotActualDisbOrder().getCalculations());
@@ -1463,11 +1473,15 @@ public class EditActivity extends Action {
         	  eaForm.getFunding().setTotalDisbursements(calculations.getTotActualDisb().toString());
         	  eaForm.getFunding().setTotalExpenditures(calculations.getTotActualExp().toString());
         	  eaForm.getFunding().setTotalActualDisbursementsOrders(calculations.getTotActualDisbOrder().toString());
+        	  eaForm.getFunding().setTotalActualRoF(calculations.getTotalActualRoF().toString());
+        	  eaForm.getFunding().setTotalActualEDD(calculations.getTotalActualEDD().toString());
         	  //planned
         	  eaForm.getFunding().setTotalPlannedDisbursements(calculations.getTotPlanDisb().toString());
         	  eaForm.getFunding().setTotalPlannedCommitments(calculations.getTotPlannedComm().toString());
         	  eaForm.getFunding().setTotalPlannedExpenditures(calculations.getTotPlannedExp().toString());
         	  eaForm.getFunding().setTotalPlannedDisbursementsOrders(calculations.getTotPlannedDisbOrder().toString());
+        	  eaForm.getFunding().setTotalPlannedReleaseOfFunds(calculations.getTotPlannedRoF().toString());
+        	  eaForm.getFunding().setTotalPlannedEDD(calculations.getTotPlannedEDD().toString());
         	  eaForm.getFunding().setUnDisbursementsBalance(calculations.getUnDisbursementsBalance().toString());
               //pipeline
               eaForm.getFunding().setTotalPipelineCommitments(calculations.getTotPipelineComm().toString());

@@ -28,7 +28,7 @@ public class Funding implements Serializable
 	private String sourceRole;
 	private String signatureDate;
 	//private AmpModality modality;
-	private Collection fundingDetails;	// Collection of Funding Details
+	private Collection<FundingDetail> fundingDetails;	// Collection of Funding Details
 	private Collection<MTEFProjection> mtefProjections;
    	private String currentFunding;
    	private String propStartDate;
@@ -53,6 +53,14 @@ public class Funding implements Serializable
 	private String subtotalActualDisbursementsOrders;
 	private String subtotalPlannedDisbursementsOrders;
 	private String subtotalPipelineDisbursementsOrders;
+	private String subtotalActualRoF;
+	private String subtotalPlannedRoF;
+	private String subtotalPipelineRoF;
+	private String subtotalRoF;
+	private String subtotalActualEDD;
+	private String subtotalPlannedEDD;
+	private String subtotalPipelineEDD;
+	private String subtotalEDD;
 	private String undisbursementbalance;
 	private String title;
 	private String code;
@@ -92,7 +100,7 @@ public class Funding implements Serializable
 	public void setSignatureDate(String signatureDate) {
 		this.signatureDate = signatureDate;
 	}
-    public Collection getFundingDetails() {
+    public Collection<FundingDetail> getFundingDetails() {
         return fundingDetails;
     }
     public void setFundingDetails(Collection fundingDetails) {
@@ -373,167 +381,117 @@ public class Funding implements Serializable
 		this.groupVersionedFunding = groupVersionedFunding;
 	}
 	
-	
-	public Collection<FundingDetail> getPlannedCommitmentsDetails() {
+	protected Collection<FundingDetail> filterFundings(int transactionType, String adjustmentType)
+	{
 		if(fundingDetails != null){
 			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.COMMITMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()))
+			for (FundingDetail detail : fundingDetails){
+				if(detail.getTransactionType() == transactionType && detail.getAdjustmentTypeName().getValue().equals( adjustmentType))
 					retDetails.add(detail);
 			}
 			return retDetails;
 		}
-		return fundingDetails;
+		return null;		
+	}
+	
+	protected Collection<FundingDetail> filterFundings(int transactionType)
+	{
+		if(fundingDetails != null){
+			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
+			for (FundingDetail detail : fundingDetails){
+				if(detail.getTransactionType() == transactionType)
+					retDetails.add(detail);
+			}
+			return retDetails;
+		}
+		return null;		
+	}
+	
+	public Collection<FundingDetail> getPlannedCommitmentsDetails() {
+		return filterFundings(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey());
 	}
 
 	public Collection<FundingDetail> getActualCommitmentsDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.COMMITMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()))
-					retDetails.add(detail);
-			}
-			return retDetails;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 	}
 	
 	public Collection<FundingDetail> getPipelineCommitmentsDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.COMMITMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey()))
-					retDetails.add(detail);
-			}
-			return retDetails;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey());
 	}
-	
-	
+
 	public Collection<FundingDetail> getPlannedDisbursementDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.DISBURSEMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()))
-					retDetails.add(detail);
-			}
-			return retDetails;
-		}
-		return fundingDetails;
-	}
+		return filterFundings(Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey());
+	}	
 	
 	public Collection<FundingDetail> getActualDisbursementDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.DISBURSEMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()))
-					retDetails.add(detail);
-			}
-			return retDetails;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 	}
 	
 	public Collection<FundingDetail> getPipelineDisbursementDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.DISBURSEMENT && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey()))
-					retDetails.add(detail);
-			}
-			return retDetails;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey());
 	}
-	
-	
-
+		
 	
 	public Collection<FundingDetail> getPlannedExpendituresDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.EXPENDITURE && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()))
-					retDetails.add(detail);
-			}
-			return retDetails;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey());
 	}
 	
 	public Collection<FundingDetail> getActualExpendituresDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.EXPENDITURE && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()))
-					retDetails.add(detail);
-			}
-			return retDetails;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 	}
 	
 	public Collection<FundingDetail> getPipelineExpendituresDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.EXPENDITURE && detail.getAdjustmentTypeName().getValue().equals( CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey()))
-					retDetails.add(detail);
-			}
-			return retDetails;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.EXPENDITURE, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey());
+	}
+
+	public Collection<FundingDetail> getPlannedRoFDetails() {
+		return filterFundings(Constants.RELEASE_OF_FUNDS, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey());
 	}
 	
+	public Collection<FundingDetail> getActualRoFDetails() {
+		return filterFundings(Constants.RELEASE_OF_FUNDS, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
+	}
 	
+	public Collection<FundingDetail> getPipelineRoFDetails() {
+		return filterFundings(Constants.RELEASE_OF_FUNDS, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey());
+	}
 	
-
+	public Collection<FundingDetail> getPlannedEDDDetails() {
+		return filterFundings(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey());
+	}
+	
+	public Collection<FundingDetail> getActualEDDDetails() {
+		return filterFundings(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
+	}
+	
+	public Collection<FundingDetail> getPipelineEDDDetails() {
+		return filterFundings(Constants.ESTIMATED_DONOR_DISBURSEMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey());
+	}
+	
 	public Collection<FundingDetail> getCommitmentsDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> commitments = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.COMMITMENT) commitments.add(detail);
-			}
-			return commitments;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.COMMITMENT);
 	}
 	
 	public Collection<FundingDetail> getDisbursementsDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> disbursements = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.DISBURSEMENT) disbursements.add(detail);
-			}
-			return disbursements;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.DISBURSEMENT);
 	}
 	
 	public Collection<FundingDetail> getDisbursementOrdersDetails() {
-		
-		if(fundingDetails != null){
-			List<FundingDetail> disbursementOrder = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>)fundingDetails){
-				if(detail.getTransactionType() == Constants.DISBURSEMENT_ORDER) disbursementOrder.add(detail);
-			}
-			return disbursementOrder;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.DISBURSEMENT_ORDER);
 	}
 
 	public Collection<FundingDetail> getExpendituresDetails() {
-		if(fundingDetails != null){
-			List<FundingDetail> expenditures = new ArrayList<FundingDetail>();
-			for (FundingDetail detail : (Collection<FundingDetail>) fundingDetails){
-				if(detail.getTransactionType() == Constants.EXPENDITURE) expenditures.add(detail);
-			}
-			return expenditures;
-		}
-		return fundingDetails;
+		return filterFundings(Constants.EXPENDITURE);
 	}
 
+	public Collection<FundingDetail> getRoFDetails() {
+		return filterFundings(Constants.RELEASE_OF_FUNDS);
+	}
+	
+	public Collection<FundingDetail> getEDDDetails() {
+		return filterFundings(Constants.ESTIMATED_DONOR_DISBURSEMENT);
+	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -564,4 +522,89 @@ public class Funding implements Serializable
 		this.sourceRole = orgRole;
 	}
 	
+	// RoF start
+	public String getSubtotalPlannedRoF(){
+		
+		return this.subtotalPlannedRoF;
+	}
+	
+	public void setSubtotalPlannedRoF(String s){
+		
+		this.subtotalPlannedRoF = s;
+	}
+	
+	public String getSubtotalRoF(){
+		
+		return this.subtotalRoF;
+	}
+	
+	public void setSubtotalRoF(String s){
+		
+		this.subtotalRoF = s;
+	}
+	
+	public String getSubtotalActualRoF(){
+		
+		return this.subtotalActualRoF;
+	}
+	
+	public void setSubtotalActualRoF(String s){
+		
+		this.subtotalActualRoF = s;
+	}
+	
+	public String getSubtotalPipelineRoF(){
+		
+		return this.subtotalPipelineRoF;
+	}
+	
+	public void setSubtotalPipelineRoF(String s){
+		
+		this.subtotalPipelineRoF = s;
+	}
+	
+	// RoF end
+	
+	// EDD start
+	public String getSubtotalPlannedEDD(){
+		
+		return this.subtotalPlannedEDD;
+	}
+	
+	public void setSubtotalPlannedEDD(String s){
+		
+		this.subtotalPlannedEDD = s;
+	}
+	
+	public String getSubtotalEDD(){
+		
+		return this.subtotalEDD;
+	}
+	
+	public void setSubtotalEDD(String s){
+		
+		this.subtotalEDD = s;
+	}
+	
+	public String getSubtotalActualEDD(){
+		
+		return this.subtotalActualEDD;
+	}
+	
+	public void setSubtotalActualEDD(String s){
+		
+		this.subtotalActualEDD = s;
+	}
+	
+	public String getSubtotalPipelineEDD(){
+		
+		return this.subtotalPipelineEDD;
+	}
+	
+	public void setSubtotalPipelineEDD(String s){
+		
+		this.subtotalPipelineEDD = s;
+	}	
 }
+
+

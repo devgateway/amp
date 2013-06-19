@@ -2556,6 +2556,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		private String totalCommitments;
 		private String totalPlannedCommitments;
+		private String totalPlannedRoF;
+		private String totalPlannedEDD;		
+		private String totalActualRoF;
+		private String totalActualEDD;
+		
 		private String totalPipelineCommitments;
 		private double totalCommitmentsDouble;
 		private String totalDisbursements;
@@ -2895,7 +2900,27 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public String getTotalUnDisbursed() {
 			return totalUnDisbursed;
 		}
+		
+		public void setTotalActualRoF(String totalActualRoF)
+		{
+			this.totalActualRoF = totalActualRoF;
+		}
 
+		public void setTotalActualEDD(String totalActualEDD)
+		{
+			this.totalActualEDD = totalActualEDD;
+		}
+		
+		public String getTotalActualRoF()
+		{
+			return this.totalActualRoF;
+		}
+		
+		public String getTotalActualEDD()
+		{
+			return this.totalActualEDD;
+		}
+		
 		public void setTotalUnDisbursed(String totalUnDisbursed) {
 			this.totalUnDisbursed = totalUnDisbursed;
 		}
@@ -2948,6 +2973,22 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.totalPlannedCommitments = totalPlannedCommitments;
 		}
 
+		public String getTotalPlannedReleaseOfFunds() {
+			return totalPlannedRoF;
+		}
+
+		public void setTotalPlannedReleaseOfFunds(String totalPlannedRoF) {
+			this.totalPlannedRoF = totalPlannedRoF;
+		}
+		public String getTotalPlannedEDD() {
+			return totalPlannedEDD;
+		}
+
+		public void setTotalPlannedEDD(String totalPlannedEDD) {
+			this.totalPlannedEDD = totalPlannedEDD;
+		}
+		
+		
 		public double getTotalCommitmentsDouble() {
 			return totalCommitmentsDouble;
 		}

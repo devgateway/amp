@@ -50,8 +50,7 @@
 																	<td align="left" width="150">
 																		<a title='<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
 																			<digi:trn key="aim:orgId">Organization Id</digi:trn>
-																		</a>
-																		
+																		</a>																		
 																	</td>
 																	<td width="1">:</td>
 																	<td align="left">
@@ -214,7 +213,7 @@
 														<jsp:include page="previewActivityFundingExpenditures.jsp" />
 													</module:display>
 													
-<%-- 												<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds" 
+ 												<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingRoF.jsp" />
 													</module:display>
@@ -223,7 +222,7 @@
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingEDD.jsp" />
 													</module:display>
---%>													
+													
 													<feature:display module="Funding" name="Undisbursed Balance">
 													<jsp:include page="previewActivityFundingUndisbursedBalance.jsp" />
 													</feature:display>
@@ -408,6 +407,121 @@
                                 </c:if> &nbsp;
                            </td>
                       	</tr>
+                      	
+ 			<!--  RELEASE OF FUNDS START -->
+                        	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+							<c:if test="${aimEditActivityForm.funding.showPlanned}">
+	                        <tr>
+	                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase;">
+	                            	<digi:trn>Total Planned Release of Funds</digi:trn>:
+	                            </td>
+	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
+	                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedReleaseOfFunds}">
+		                                <b>
+		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedReleaseOfFunds" /> 
+		                                <bean:write name="aimEditActivityForm" property="currCode" />
+		                                </b>
+		                             </c:if>
+		                             &nbsp;
+                        		</td>
+	                        </tr>
+	                        </c:if>
+	                    <c:if test="${aimEditActivityForm.funding.showActual}">
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #BBBBBB; text-transform: uppercase"> <digi:trn>Total Actual Release of Funds</digi:trn> :
+                            </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #BBBBBB">
+                                <c:if test="${not empty aimEditActivityForm.funding.totalActualRoF}">
+	                                <b>
+	                                <bean:write name="aimEditActivityForm" property="funding.totalActualRoF"/> 
+	                                <bean:write name="aimEditActivityForm" property="currCode"/>
+	                                </b>
+	                        	</c:if>&nbsp;        
+	                        </td>
+                        </tr>
+                        </c:if>
+                        <%--
+                        <c:if test="${aimEditActivityForm.funding.showPipeline}">
+	                        <field:display name="Pipeline" feature="Commitments">
+								<tr>
+		                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
+		                            	<digi:trn> Total Pipeline Release of Funds</digi:trn>:
+		                            </td>
+		                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
+		                                <c:if test="${not empty aimEditActivityForm.funding.totalPipelineCommitments}">
+		                                     <b>
+		                                     <bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /> 
+		                                     <bean:write name="aimEditActivityForm" property="currCode" />
+		                                     </b>
+		                                </c:if>&nbsp;        
+		                            </td>
+		                        </tr>
+	                        </field:display>
+                        </c:if>--%>
+                        </module:display>
+			<!--  RELEASE OF FUNDS END -->
+ 
+  			<!--  EDD START -->
+                       	<module:display name="/Activity Form/Funding/Funding Group/Funding Item/EDD" 
+														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+							<c:if test="${aimEditActivityForm.funding.showPlanned}">
+	                        <tr>
+	                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase;">
+	                            	<digi:trn>Total Planned EDD</digi:trn>:
+	                            </td>
+	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
+	                                 <c:if test="${not empty aimEditActivityForm.funding.totalPlannedEDD}">
+		                                <b>
+		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedEDD" /> 
+		                                <bean:write name="aimEditActivityForm" property="currCode" />
+		                                </b>
+		                             </c:if>
+		                             &nbsp;
+                        		</td>
+	                        </tr>
+	                        </c:if>
+	                    <c:if test="${aimEditActivityForm.funding.showActual}">
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #BBBBBB; text-transform: uppercase"> 
+                                <digi:trn>Total Actual EDD</digi:trn> :
+                            </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #BBBBBB">
+                                <c:if test="${not empty aimEditActivityForm.funding.totalActualEDD}">
+	                                <b>
+	                                <bean:write name="aimEditActivityForm" property="funding.totalActualEDD"/> 
+	                                <bean:write name="aimEditActivityForm" property="currCode"/>
+	                                </b>
+	                        	</c:if>&nbsp;        
+	                        </td>
+                        </tr>
+                        </c:if>
+                        <%--
+                        <c:if test="${aimEditActivityForm.funding.showPipeline}">
+	                        <field:display name="Pipeline" feature="Commitments">
+								<tr>
+		                            <td bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB; text-transform: uppercase">
+		                            	<digi:trn key='aim:totalactualcommittment'> Total Pipeline Commitments</digi:trn>:
+		                            </td>
+		                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
+		                                <c:if test="${not empty aimEditActivityForm.funding.totalPipelineCommitments}">
+		                                     <b>
+		                                     <bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /> 
+		                                     <bean:write name="aimEditActivityForm" property="currCode" />
+		                                     </b>
+		                                </c:if>&nbsp;        
+		                            </td>
+		                        </tr>
+	                        </field:display>
+                        </c:if> --%>
+                        </module:display>
+			<!--  EDD END -->
+ 
+                      	
                         </module:display>
                         <feature:display module="Funding" name="Undisbursed Balance">
                       	<tr>

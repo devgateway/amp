@@ -34,17 +34,23 @@ public class FundingCalculationsHelper {
 	DecimalWraper totPlannedComm = new DecimalWraper();
 	DecimalWraper totPlannedExp = new DecimalWraper();
 	DecimalWraper totPlannedDisbOrder = new DecimalWraper();
+	DecimalWraper totPlannedReleaseOfFunds = new DecimalWraper();
+	DecimalWraper totPlannedEDD = new DecimalWraper();
 
 	DecimalWraper totActualComm = new DecimalWraper();
 	DecimalWraper totActualDisb = new DecimalWraper();
 	DecimalWraper totActualExp = new DecimalWraper();
 	DecimalWraper totActualDisbOrder = new DecimalWraper();
+	DecimalWraper totActualReleaseOfFunds = new DecimalWraper();
+	DecimalWraper totActualEDD = new DecimalWraper();	
 
 	DecimalWraper totPipelineDisb = new DecimalWraper();
 	DecimalWraper totPipelineComm = new DecimalWraper();
 	DecimalWraper totPipelineExp = new DecimalWraper();
 	DecimalWraper totPipelineDisbOrder = new DecimalWraper();
-
+	DecimalWraper totPipelineReleaseOfFunds = new DecimalWraper();
+	DecimalWraper totPipelineEDD = new DecimalWraper();
+	
 	DecimalWraper totalCommitments =  new DecimalWraper();
 
 	
@@ -75,6 +81,16 @@ public class FundingCalculationsHelper {
 		return totPlannedExp;
 	}
 
+	public DecimalWraper getTotPlannedRoF()
+	{
+		return totPlannedReleaseOfFunds;
+	}
+	
+	public DecimalWraper getTotPlannedEDD()
+	{
+		return totPlannedEDD;
+	}
+	
 	public DecimalWraper getTotPlannedDisbOrder() {
 		return totPlannedDisbOrder;
 	}
@@ -119,6 +135,26 @@ public class FundingCalculationsHelper {
 		this.totPipelineDisbOrder = totPipelineDisbOrder;
 	}
 
+	public DecimalWraper getTotalActualRoF()
+	{
+		return this.totActualReleaseOfFunds;
+	}
+	
+	public DecimalWraper getTotalActualEDD()
+	{
+		return this.totActualEDD;
+	}
+	
+	public DecimalWraper getTotalPlannedRoF()
+	{
+		return this.totPlannedReleaseOfFunds;
+	}
+	
+	public DecimalWraper getTotalPlannedEDD()
+	{
+		return this.totPlannedEDD;
+	}
+	
 	public void doCalculations(Collection<AmpFundingDetail> details, String userCurrencyCode) {
 		Iterator<AmpFundingDetail> fundDetItr = details.iterator();
 		fundDetailList = new ArrayList<FundingDetail>();
@@ -209,6 +245,13 @@ public class FundingCalculationsHelper {
 				else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
 					totPlannedDisbOrder.setValue(totPlannedDisbOrder.getValue().add(amt.getValue()));
 					totPlannedDisbOrder.setCalculations(totPlannedDisbOrder.getCalculations() + " + " + amt.getCalculations());
+				} 
+				else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
+					totPlannedReleaseOfFunds.setValue(totPlannedReleaseOfFunds.getValue().add(amt.getValue()));
+					totPlannedReleaseOfFunds.setCalculations(totPlannedReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
+				} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
+					totPlannedEDD.setValue(totPlannedEDD.getValue().add(amt.getValue()));
+					totPlannedEDD.setCalculations(totPlannedEDD.getCalculations() + " + " + amt.getCalculations());
 				}
 			} else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 
@@ -228,6 +271,12 @@ public class FundingCalculationsHelper {
 				} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
 					totActualDisbOrder.setValue(totActualDisbOrder.getValue().add(amt.getValue()));
 					totActualDisbOrder.setCalculations(totActualDisbOrder.getCalculations() + " + " + amt.getCalculations());
+				} else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
+					totActualReleaseOfFunds.setValue(totActualReleaseOfFunds.getValue().add(amt.getValue()));
+					totActualReleaseOfFunds.setCalculations(totActualReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
+				} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
+					totActualEDD.setValue(totActualEDD.getValue().add(amt.getValue()));
+					totActualEDD.setCalculations(totActualEDD.getCalculations() + " + " + amt.getCalculations());
 				}
             } else if (adjType.getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
                // fundingDetail.setAdjustmentTypeName("Pipeline");
@@ -245,6 +294,12 @@ public class FundingCalculationsHelper {
 				} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
 					totPipelineDisbOrder.setValue(totPipelineDisbOrder.getValue().add(amt.getValue()));
 					totPipelineDisbOrder.setCalculations(totPipelineDisbOrder.getCalculations() + " + " + amt.getCalculations());
+				} else if (fundDet.getTransactionType().intValue() == Constants.RELEASE_OF_FUNDS) {
+					totPipelineReleaseOfFunds.setValue(totPipelineReleaseOfFunds.getValue().add(amt.getValue()));
+					totPipelineReleaseOfFunds.setCalculations(totPipelineReleaseOfFunds.getCalculations() + " + " + amt.getCalculations());
+				} else if (fundDet.getTransactionType().intValue() == Constants.ESTIMATED_DONOR_DISBURSEMENT) {
+					totPipelineEDD.setValue(totPipelineEDD.getValue().add(amt.getValue()));
+					totPipelineEDD.setCalculations(totPipelineEDD.getCalculations() + " + " + amt.getCalculations());
 				}
             }
 

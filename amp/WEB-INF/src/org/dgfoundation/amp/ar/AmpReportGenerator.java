@@ -926,6 +926,20 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 	}	
 	
+	/** somewhat stupid heuristic: the first number in the "year" name is a year and we can range on that */
+	public final static Integer getYearInteger(String yearStr)
+	{
+		java.util.StringTokenizer tok = new java.util.StringTokenizer(yearStr);
+		while (tok.hasMoreTokens())
+		{
+			String z = tok.nextToken();
+			Integer k = getInteger(z);
+			if (k != null)
+				return k;
+		}
+		return null;
+	}
+	
 	protected void applyYearRangeSettings(GroupColumn column)
 	{
 		Iterator it = column.iterator();
@@ -935,7 +949,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			if (item instanceof Column)
 			{
 				String yearStr = ((Column) item).getName();
-				Integer year = getInteger(yearStr);
+				Integer year = getYearInteger(yearStr);
 				if (year != null)
 					if (!filter.passesYearRangeFilter(year))
 						it.remove();

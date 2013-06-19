@@ -649,7 +649,7 @@ public class GroupColumn extends Column {
 	protected boolean fundingYearPassesFilter(Column column, AmpARFilter filter)
 	{
 		String yearStr = column.getName();
-		Integer year = AmpReportGenerator.getInteger(yearStr);
+		Integer year = AmpReportGenerator.getYearInteger(yearStr);
 		if (year == null)
 			return true;
 		return filter.passesYearRangeFilter(year);

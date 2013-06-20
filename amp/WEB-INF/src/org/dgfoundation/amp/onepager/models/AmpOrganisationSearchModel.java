@@ -28,9 +28,9 @@ public class AmpOrganisationSearchModel extends
 		TYPE_FILTER, GROUP_FILTER
 	};
 
-	public AmpOrganisationSearchModel(String input,
+	public AmpOrganisationSearchModel(String input,String language,
 			Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, params);
+		super(input, language, params);
 		// TODO Auto-generated constructor stub
 	}
 

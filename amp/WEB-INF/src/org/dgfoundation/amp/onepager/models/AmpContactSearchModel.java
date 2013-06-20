@@ -32,9 +32,9 @@ public class AmpContactSearchModel extends
 	 * @param input
 	 * @param params
 	 */
-	public AmpContactSearchModel(String input,
+	public AmpContactSearchModel(String input,String language,
 			Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, params);
+		super(input, language, params);
 		// TODO Auto-generated constructor stub
 	}
 

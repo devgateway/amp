@@ -22,9 +22,9 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 public class AmpResourcesSearchModel extends
 		AbstractAmpAutoCompleteModel<NodeWrapper> {
 
-	public AmpResourcesSearchModel(String input,
+	public AmpResourcesSearchModel(String input,String language,
 			Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, params);
+		super(input, language, params);
 		// TODO Auto-generated constructor stub
 	}
 

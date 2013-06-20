@@ -26,9 +26,9 @@ import org.hibernate.criterion.Restrictions;
 public class AmpMEIndicatorSearchModel extends
 		AbstractAmpAutoCompleteModel<AmpIndicator> {
 
-	public AmpMEIndicatorSearchModel(String input,
+	public AmpMEIndicatorSearchModel(String input,String language,
 			Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, params);
+		super(input, language, params);
 		// TODO Auto-generated constructor stub
 	}
 

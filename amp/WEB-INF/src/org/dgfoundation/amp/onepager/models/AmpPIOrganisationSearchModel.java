@@ -25,9 +25,9 @@ import org.hibernate.criterion.Restrictions;
 public class AmpPIOrganisationSearchModel extends
 		AbstractAmpAutoCompleteModel<AmpOrganisation> {
 
-	public AmpPIOrganisationSearchModel(String input,
+	public AmpPIOrganisationSearchModel(String input,String language,
 			Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, params);
+		super(input, language, params);
 	}
 
 	private static final long serialVersionUID = 8211300754918658812L;

@@ -35,8 +35,8 @@ public class AmpPMObjectVisibilitySearchModel extends AbstractAmpAutoCompleteMod
 	 * @param input
 	 * @param params
 	 */
-	public AmpPMObjectVisibilitySearchModel(String input, Map params) {
-		super(input, params);
+	public AmpPMObjectVisibilitySearchModel(String input,String language, Map params) {
+		super(input, language, params);
 		// TODO Auto-generated constructor stub
 	}
 

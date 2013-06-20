@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.models.AmpContactSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -51,7 +52,10 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 	@Override
 	protected AmpContact getSelectedChoice(String input) {
 		try {
-			AmpContactSearchModel newInstance = new AmpContactSearchModel(input, modelParams);
+			AmpAuthWebSession session = (AmpAuthWebSession) this.getSession();
+			String language=session.getLocale().getLanguage();
+			
+			AmpContactSearchModel newInstance = new AmpContactSearchModel(input, language, modelParams);
 			newInstance.getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, true);
 			Collection<AmpContact> choices = newInstance.getObject();
 			if(choices==null || choices.size()==0) throw new RuntimeException("Cannot find selection object!");

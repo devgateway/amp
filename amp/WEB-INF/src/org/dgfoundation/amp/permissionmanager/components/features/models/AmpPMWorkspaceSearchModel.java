@@ -30,8 +30,8 @@ public class AmpPMWorkspaceSearchModel extends AbstractAmpAutoCompleteModel<AmpT
 	 * @param input
 	 * @param params
 	 */
-	public AmpPMWorkspaceSearchModel(String input, Map params) {
-		super(input, params);
+	public AmpPMWorkspaceSearchModel(String input, String language, Map params) {
+		super(input, language, params);
 		// TODO Auto-generated constructor stub
 	}
 

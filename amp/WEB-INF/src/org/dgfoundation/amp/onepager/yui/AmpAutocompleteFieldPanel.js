@@ -100,7 +100,7 @@ YAHOO.widget.WicketAutoComplete = function(inputId, callbackUrl, containerId, to
 		resultObj = YAHOO.widget.AutoComplete._cloneObject(resultObj);
 		
 	    var matches = [];
-	    var re = new RegExp('\\b'+accent_fold(q), 'i');
+	    var re = new XRegExp('(\\p{Letter}*)'+accent_fold(q), 'i');
 	    var arr =resultObj.results;
 	    
 	    for (var i=0; i<arr.length; i++) {

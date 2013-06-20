@@ -61,6 +61,7 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 
 	protected Map<AmpAutoCompleteModelParam, Object> params;
 	protected String input;
+	private String language;
 
 	public Object getParam(AmpAutoCompleteModelParam p) {
 		if (params == null)
@@ -96,8 +97,6 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 	 *         {@link org.hibernate.Criteria}
 	 */
 	protected Criterion getTextCriterion(String propertyName, String value) {
-		if (isExactMatch())
-			return Restrictions.eq(propertyName, value);
 		return getUnaccentILikeExpression(propertyName, value);
 	}
 
@@ -114,12 +113,18 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 					CriteriaQuery criteriaQuery) throws HibernateException {
 				Dialect dialect = criteriaQuery.getFactory().getDialect();
 				String[] columns = criteriaQuery.findColumns(propertyName, criteria);
-				if (columns.length!=1) throw new HibernateException("ilike may only be used with single-column properties");
+				String entityName = criteriaQuery.getEntityName(criteria);
+				
+				String []ids=criteriaQuery.getIdentifierColumns(criteria);
+				if (columns.length!=1) throw new HibernateException("ilike may only be used with single-column properties"); 
+				if (ids.length!=1) throw new HibernateException("We do not support multiple identifiers just yet!");
 				if ( dialect instanceof PostgreSQLDialect ) {
-					return "unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";
+					 String ret=" "+(ids[0].replaceAll("this_.", ""))+" = any(contentmatch('"+entityName+"','"+(columns[0].replaceAll("this_.", ""))+"','"+language+"', ?)) OR ";
+					 ret+=" unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";
+					 return ret;					
 				}
 				else {
-					return dialect.getLowercaseFunction() + '(' + columns[0] + ") like ?";
+					throw new HibernateException("We do not handle non-postgresql databases yet, sorry!"); 				
 				}
 
 			}
@@ -127,7 +132,8 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 			@Override
 			public TypedValue[] getTypedValues(Criteria criteria,
 					CriteriaQuery criteriaQuery) throws HibernateException {
-				return new TypedValue[] { criteriaQuery.getTypedValue( criteria, propertyName, MatchMode.ANYWHERE.toMatchString(value).toLowerCase() ) };
+				return new TypedValue[] { criteriaQuery.getTypedValue( criteria, propertyName, MatchMode.ANYWHERE.toMatchString(value).toLowerCase() ) , 
+						criteriaQuery.getTypedValue( criteria, propertyName, MatchMode.ANYWHERE.toMatchString(value).toLowerCase() )};
 			}
 			
 			
@@ -213,13 +219,15 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 	 * @param input
 	 *            the search keywords or the exact match (if
 	 *            {@link PARAM#EXACT_MATCH} is provided)
+	 * @param language TODO
 	 * @param params
 	 *            extra parameters to customize the search
 	 */
 	public AbstractAmpAutoCompleteModel(String input,
-			Map<AmpAutoCompleteModelParam, Object> params) {
+			String language, Map<AmpAutoCompleteModelParam, Object> params) {
 		super();
 		this.input = input;
+		this.language=language;
 		this.params = new HashMap<AmpAutoCompleteModelParam, Object>(params);
 		if (params != null && getParam(PARAM.MAX_RESULTS) == null)
 			this.params.put(PARAM.MAX_RESULTS, MAX_RESULTS_VALUE);

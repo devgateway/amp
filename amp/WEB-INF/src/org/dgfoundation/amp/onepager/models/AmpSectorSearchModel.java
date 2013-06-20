@@ -31,9 +31,9 @@ public class AmpSectorSearchModel extends
 		SECTOR_SCHEME
 	};
 
-	public AmpSectorSearchModel(String input,
+	public AmpSectorSearchModel(String input,String language,
 			Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, params);
+		super(input, language, params);
 		// TODO Auto-generated constructor stub
 	}
 

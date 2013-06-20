@@ -29,8 +29,8 @@ public class AmpPMUserSearchModel extends AbstractAmpAutoCompleteModel<User> {
 
 	private Session session;
 	
-	public AmpPMUserSearchModel(String input, Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, params);
+	public AmpPMUserSearchModel(String input,String language, Map<AmpAutoCompleteModelParam, Object> params) {
+		super(input, language, params);
 		// TODO Auto-generated constructor stub
 	}
 

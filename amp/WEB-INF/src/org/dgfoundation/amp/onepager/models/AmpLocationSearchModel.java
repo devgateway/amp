@@ -37,9 +37,9 @@ public class AmpLocationSearchModel extends
 		LAYER, LEVEL
 	};
 
-	public AmpLocationSearchModel(String input,
+	public AmpLocationSearchModel(String input,String language,
 			Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, params);
+		super(input, language, params);
 	}
 
 	private static final long serialVersionUID = -1967371789152747599L;
@@ -101,15 +101,15 @@ public class AmpLocationSearchModel extends
 					String[] strings = input.split(PARENT_DELIMITER);
 					if(strings.length>1) {
 						String locName = strings[strings.length-1].substring(0,strings[strings.length-1].length()-2);
-						junction.add( Restrictions.eq("name",locName));
+						junction.add( getTextCriterion("name", locName));
 						String parentName = null;
 						if(strings.length==2)
 							parentName = strings[0].substring(1);
 						else
 							parentName=strings[strings.length-2];
-						criteria.createCriteria("parentLocation").add(Restrictions.eq("name", parentName));
+						criteria.createCriteria("parentLocation").add(getTextCriterion("name", parentName));
 					} else {
-						junction.add(Restrictions.eq("name", input.substring(1, input.length()-2)));
+						junction.add(getTextCriterion("name",  input.substring(1, input.length()-2)));
 					}
 
 
@@ -118,7 +118,7 @@ public class AmpLocationSearchModel extends
 			criteria.add(junction);
 			criteria.addOrder(Order.asc("name"));
 			if (maxResults != null && maxResults != 0)
-				criteria.setMaxResults(maxResults);
+				criteria.setMaxResults(maxResults);			
 			List<AmpCategoryValueLocations> tempList = criteria.list();
 
             if (assignedRegion != null){

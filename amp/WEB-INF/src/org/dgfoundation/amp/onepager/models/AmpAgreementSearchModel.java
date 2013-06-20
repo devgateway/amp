@@ -33,9 +33,9 @@ public class AmpAgreementSearchModel extends
 	private static final Logger logger = Logger.getLogger(AmpAgreementSearchModel.class);
 	private static final AmpAgreement NEW_AGREEMENT = new AmpAgreement(-1L, TranslatorUtil.getTranslation("Add new agreement"));
 	
-	public AmpAgreementSearchModel(String input,
+	public AmpAgreementSearchModel(String input,String language,
 			Map<AmpAutoCompleteModelParam, Object> params) {
-		super(input, params);
+		super(input, language, params);
 	}
 
 	@Override

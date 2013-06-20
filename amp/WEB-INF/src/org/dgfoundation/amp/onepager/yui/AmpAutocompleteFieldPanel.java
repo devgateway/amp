@@ -32,6 +32,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
@@ -402,11 +403,15 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		if (input != null && input.length() > 0 && input.length() < 1)
 			return Collections.emptyList();
 		Constructor<? extends AbstractAmpAutoCompleteModel<CHOICE>> constructor;
+		
+		AmpAuthWebSession session = (AmpAuthWebSession) this.getSession();
+		String language=session.getLocale().getLanguage();
+		
 		try {
-			constructor = objectListModelClass.getConstructor(String.class,
+			constructor = objectListModelClass.getConstructor(String.class,String.class,
 					Map.class);
 			AbstractAmpAutoCompleteModel<CHOICE> newInstance = constructor
-					.newInstance(input, modelParams);
+					.newInstance(input, language, modelParams);
 			return newInstance.getObject();
 		} catch (SecurityException e) {
 			throw new RuntimeException(e);
@@ -438,10 +443,12 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			if (extraInfoEnd >= 0)
 				input = input.substring(extraInfoEnd + BOLD_DELIMITER_STOP.length());
 			
-			constructor = objectListModelClass.getConstructor(String.class,
+			constructor = objectListModelClass.getConstructor(String.class,String.class,
 					Map.class);
+			AmpAuthWebSession session = (AmpAuthWebSession) this.getSession();
+			String language=session.getLocale().getLanguage();
 			AbstractAmpAutoCompleteModel<CHOICE> newInstance = constructor
-					.newInstance(input, modelParams);
+					.newInstance(input, language, modelParams);
 			newInstance.getParams().put(AbstractAmpAutoCompleteModel.PARAM.EXACT_MATCH, true);
 			Collection<CHOICE> choices = newInstance.getObject();
 			

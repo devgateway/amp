@@ -24,6 +24,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.exception.AdminException;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityGroupCached;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -98,10 +99,7 @@ public class DbHelper {
 			oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
 			oql += " inner join f.ampActivityId act ";
 	        
-			if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-	        	oql += " inner join act.ampActivityGroupCached actGroup ";
-	        else
-	        	oql += " inner join act.ampActivityGroup actGroup ";
+			oql += " inner join act.ampActivityGroup actGroup ";
 			
 			if (locationCondition) {
 				oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
@@ -237,7 +235,10 @@ public class DbHelper {
 			
 			//Additional clause to get the last version
 			if (ActivityVersionUtil.isVersioningEnabled()){
-				oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
+				if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+		        	oql += " and act.ampActivityId = (select agc.ampActivityLastVersion from "+AmpActivityGroupCached.class.getName()+" agc where agc.ampActivityGroup=actGroup.ampActivityGroupId) ";
+		        else
+		        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
 				oql += " and (act.deleted = false or act.deleted is null)";
 			}
 			
@@ -319,10 +320,7 @@ public class DbHelper {
 	                    + " as fd inner join fd.ampFundingId f ";
 	            oql += " inner join f.ampActivityId act ";
 	            
-	            if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-	            	oql += " inner join act.ampActivityGroupCached actGroup ";
-	            else
-	            	oql += " inner join act.ampActivityGroup actGroup ";
+	            oql += " inner join act.ampActivityGroup actGroup ";
 	            
 	            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
 	            oql += " inner join loc.parentCategoryValue parcv ";
@@ -375,7 +373,10 @@ public class DbHelper {
 				}
 	            
 	            if (ActivityVersionUtil.isVersioningEnabled()){
-	    			oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
+	            	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+	                	oql += " and act.ampActivityId = (select agc.ampActivityLastVersion from "+AmpActivityGroupCached.class.getName()+" agc where agc.ampActivityGroup=actGroup.ampActivityGroupId) ";
+	                else
+	                	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
 	    			oql += " and (act.deleted = false or act.deleted is null)";
 	    		}
 	            
@@ -555,10 +556,7 @@ public class DbHelper {
         oql += AmpFundingDetail.class.getName()  + " as fd inner join fd.ampFundingId f ";
         oql += "   inner join f.ampActivityId act ";
         
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
+        oql += " inner join act.ampActivityGroup actGroup ";
         
         if (locationCondition) {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
@@ -633,7 +631,10 @@ public class DbHelper {
 		}
 		
 		if (ActivityVersionUtil.isVersioningEnabled()){
-			oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
+			if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+	        	oql += " and act.ampActivityId = (select agc.ampActivityLastVersion from "+AmpActivityGroupCached.class.getName()+" agc where agc.ampActivityGroup=actGroup.ampActivityGroupId) ";
+	        else
+	        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";	
 			oql += " and (act.deleted = false or act.deleted is null)";
 		}
         

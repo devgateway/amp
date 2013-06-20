@@ -22,6 +22,7 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityGroupCached;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -790,10 +791,7 @@ public class DbUtil {
         if (specialInner!=null && specialInner.length()>0)
         	oql += specialInner;
 
-        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
+        oql += " inner join act.ampActivityGroup actGroup ";
         	
         if (locationCondition) {
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
@@ -875,7 +873,10 @@ public class DbUtil {
         	oql += "  and act.team is not null ";
         	
         oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
-    	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " and act.ampActivityId = (select agc.ampActivityLastVersion from "+AmpActivityGroupCached.class.getName()+" agc where agc.ampActivityGroup=actGroup.ampActivityGroupId) ";
+        else
+        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 		return oql;
 	}
@@ -1315,10 +1316,7 @@ public class DbUtil {
 
         oql += "from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
     	
-    	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
+    	oql += " inner join act.ampActivityGroup actGroup ";
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
@@ -1369,7 +1367,10 @@ public class DbUtil {
         	oql += "  and act.team is not null ";
         	
         oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
-    	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " and act.ampActivityId = (select agc.ampActivityLastVersion from "+AmpActivityGroupCached.class.getName()+" agc where agc.ampActivityGroup=actGroup.ampActivityGroupId) ";
+        else
+        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
@@ -1499,10 +1500,7 @@ public class DbUtil {
         	oql += ", actsec.sectorPercentage ";
         oql += "from org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
     	
-    	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
+    	oql += " inner join act.ampActivityGroup actGroup ";
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
@@ -1553,7 +1551,10 @@ public class DbUtil {
         	oql += "  and act.team is not null ";
         	
         oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
-    	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " and act.ampActivityId = (select agc.ampActivityLastVersion from "+AmpActivityGroupCached.class.getName()+" agc where agc.ampActivityGroup=actGroup.ampActivityGroupId) ";
+        else
+        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
@@ -1690,10 +1691,7 @@ public class DbUtil {
         oql += " inner join act.actPrograms actProg ";
         oql += " inner join actProg.program prog ";
         
-    	if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-        	oql += " inner join act.ampActivityGroupCached actGroup ";
-        else
-        	oql += " inner join act.ampActivityGroup actGroup ";
+    	oql += " inner join act.ampActivityGroup actGroup ";
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         if (sectorCondition) {
@@ -1747,7 +1745,10 @@ public class DbUtil {
         	oql += "  and act.team is not null ";
         	
         oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
-    	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
+        if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
+        	oql += " and act.ampActivityId = (select agc.ampActivityLastVersion from "+AmpActivityGroupCached.class.getName()+" agc where agc.ampActivityGroup=actGroup.ampActivityGroupId) ";
+        else
+        	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();

@@ -1100,14 +1100,16 @@ function collapseAll() {
 	</field:display>
 	
 	<module:display name="/Activity Form/Identification/Humanitarian Aid" parentModule="/Activity Form/Identification">
-		<digi:trn>Humanitarian Aid</digi:trn>:&nbsp;<br />
-		<c:if test="${!aimEditActivityForm.identification.humanitarianAid==true}">
-			<b><digi:trn key="aim:no">No</digi:trn></b>
-		</c:if> 
-		<c:if test="${aimEditActivityForm.identification.humanitarianAid==true}">
-			<b><digi:trn key="aim:yes">Yes</digi:trn></b>
+		<c:if test="${aimEditActivityForm.identification.humanitarianAid!=null}">
+			<digi:trn>Humanitarian Aid</digi:trn>:&nbsp;<br />
+			<c:if test="${aimEditActivityForm.identification.humanitarianAid==false}">
+				<b><digi:trn key="aim:no">No</digi:trn></b>
+			</c:if> 
+			<c:if test="${aimEditActivityForm.identification.humanitarianAid==true}">
+				<b><digi:trn key="aim:yes">Yes</digi:trn></b>
+			</c:if>
+			<hr/>
 		</c:if>
-		<hr/>
 	</module:display>
 	<!-- END INDETIFICATION SECTION 2 -->
 	</div>

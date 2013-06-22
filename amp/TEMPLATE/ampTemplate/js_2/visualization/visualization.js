@@ -2118,9 +2118,18 @@ function updateGraph(e, chartName){
 	for(var idx = 0; idx < allGraphs.length; idx++){
 		// Get flash object and refresh it by calling internal
 		if(allGraphs[idx].children[0].id.toLowerCase() == chartName.toLowerCase()){
-			var trnTitle = document.getElementById(chartName+"TitleLegendTrn").value + " - " + fundType + " (" + anmtIn + ")";
+			var trnTitle = "";
+			var text = document.getElementById(chartName + "Title").value;
+			if (text.indexOf(" (" + trnInThousands + ")")!=-1)
+				text = text.substring(0,text.indexOf(" (" + trnInThousands + ")")) + text.substring((text.indexOf(" (" + trnInThousands + ")")+((" (" + trnInThousands + ")").length)), text.length);
+			if (text.indexOf(" (" + trnInMillions + ")")!=-1)
+				text = text.substring(0,text.indexOf(" (" + trnInMillions + ")")) + text.substring((text.indexOf(" (" + trnInMillions + ")")+((" (" + trnInMillions + ")").length)), text.length);
+			if (text.indexOf(" (" + trnInBillions + ")")!=-1)
+				text = text.substring(0,text.indexOf(" (" + trnInBillions + ")")) + text.substring((text.indexOf(" (" + trnInBillions + ")")+((" (" + trnInBillions + ")").length)), text.length);
+
+			trnTitle = text+ " (" + anmtIn + ")";
+			//alert("trnTitle: "+trnTitle);
 			document.getElementById(chartName + "Title").value = trnTitle;
-			//document.getElementById(chartName + "TitleLegend").innerHTML = document.getElementById(chartName + "Title").value; 
 			document.getElementById(chartName + "TitleLegend").innerHTML = trnTitle;
 			allGraphs[idx].children[0].refreshGraph();
 			break;

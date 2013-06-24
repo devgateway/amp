@@ -54,6 +54,7 @@ public class AmpStructureImgListComponent<T> extends AmpComponentPanel {
             }
         };
         form.setMaxSize(Bytes.megabytes(1));
+        form.setMultiPart(true);
         add(form);
 
         form.add(file);

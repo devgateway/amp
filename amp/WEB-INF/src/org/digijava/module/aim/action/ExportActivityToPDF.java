@@ -811,9 +811,10 @@ public class ExportActivityToPDF extends Action {
 					outputValue+=TranslatorWorker.translateText("Actual Completion Date", locale, siteId)+ "\t: " + myForm.getPlanning().getCurrentCompDate() +"\n";
 				}
 
-				if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
+				if (FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
 					String durationStr = myForm.getPlanning().getProjectPeriod() != null ? myForm.getPlanning().getProjectPeriod().toString(): "";
-					outputValue+=TranslatorWorker.translateText("Duration of Project", locale, siteId)+ "\t: " + durationStr +"\n";
+					outputValue += TranslatorWorker.translateText("Duration of Project", locale, siteId)
+                        + "\t: " + durationStr + " " + TranslatorWorker.translateText("Months", locale, siteId) + "\n";
 				}
 				
 				columnName=TranslatorWorker.translateText("Planning",locale,siteId);

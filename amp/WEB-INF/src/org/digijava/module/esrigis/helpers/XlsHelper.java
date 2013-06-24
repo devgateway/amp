@@ -31,6 +31,8 @@ import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.esrigis.action.DataDispatcher;
 
+import bsh.Console;
+
 public class XlsHelper {
 	private static Logger logger = Logger.getLogger(DataDispatcher.class);
 	public XlsHelper() {
@@ -102,11 +104,45 @@ public class XlsHelper {
 		logger.info("Iteration Starts");
 		
 		startTS=System.currentTimeMillis();
+		FundingCalculationsHelper calculations = new FundingCalculationsHelper();
+		String donors = "";
+		String sectorstr = "";
 		for (Iterator iterator = activitylist.iterator(); iterator.hasNext();) {
 			AmpActivityVersion aA = (AmpActivityVersion) iterator.next();
+			String body = getEditTagValue(request,aA.getDescription());
+			
+			Html2Text h2t = null;
+			if (body != null){
+				h2t = new Html2Text();
+				h2t.parse(body);
+			}
 			if (aA.getStructures().size() >0){
-				for (Iterator iterator2 = aA.getStructures().iterator(); iterator2
-						.hasNext();) {
+				
+				long startActivity=System.currentTimeMillis();
+				for (Iterator iterator3 = aA.getSectors().iterator(); iterator3.hasNext();) {
+					AmpActivitySector sector = (AmpActivitySector) iterator3.next();
+					if (iterator3.hasNext()) {
+						sectorstr = sectorstr+ sector.getSectorId().getName() + " - ";
+					} else {
+						sectorstr = sectorstr+ sector.getSectorId().getName();
+					}
+				}
+				
+				Iterator fundItr = aA.getFunding().iterator();
+				while (fundItr.hasNext()) {
+					AmpFunding ampFunding = (AmpFunding) fundItr.next();
+					Collection fundDetails = ampFunding.getFundingDetails();
+					calculations.doCalculations(fundDetails,filter.getCurrencyCode());
+					if (fundItr.hasNext()) {
+						donors = donors+ ampFunding.getAmpDonorOrgId().getName()+ " - ";
+					} else {
+						donors = donors+ ampFunding.getAmpDonorOrgId().getName();
+					}
+				}
+				
+				
+				long startactivity=System.currentTimeMillis();
+				for (Iterator iterator2 = aA.getStructures().iterator(); iterator2.hasNext();) {
 					AmpStructure st = (AmpStructure) iterator2.next();
 					row = sheet.createRow((short) (i));
 					i++;
@@ -125,35 +161,13 @@ public class XlsHelper {
 					values.add(st.getTitle());
 					values.add(st.getLatitude());
 					values.add(st.getLongitude());
-					String sectorstr = "";
-					for (Iterator iterator3 = aA.getSectors().iterator(); iterator3.hasNext();) {
-						AmpActivitySector sector = (AmpActivitySector) iterator3.next();
-						if (iterator3.hasNext()) {
-							sectorstr = sectorstr+ sector.getSectorId().getName() + " - ";
-						} else {
-							sectorstr = sectorstr+ sector.getSectorId().getName();
-						}
-					}
 					values.add(sectorstr);
-					FundingCalculationsHelper calculations = new FundingCalculationsHelper();
-					String donors = "";
-					Iterator fundItr = aA.getFunding().iterator();
-					while (fundItr.hasNext()) {
-						AmpFunding ampFunding = (AmpFunding) fundItr.next();
-						Collection fundDetails = ampFunding.getFundingDetails();
-						calculations.doCalculations(fundDetails,filter.getCurrencyCode());
-						if (fundItr.hasNext()) {
-							donors = donors+ ampFunding.getAmpDonorOrgId().getName()+ " - ";
-						} else {
-							donors = donors+ ampFunding.getAmpDonorOrgId().getName();
-						}
-					}
 					values.add(donors);
 					values.add("");
 					values.add("");
 					values.add(calculations.getTotalCommitments().toString());
 					values.add(calculations.getTotActualDisb().toString());
-					
+	
 					for (int j = 0; j < columnNames.size(); j++) {
 						HSSFCell cell = row.createCell(j);
 						str = new HSSFRichTextString(values.get(j));
@@ -162,6 +176,10 @@ public class XlsHelper {
 					}
 					
 				}
+				
+				long endTSActivity=System.currentTimeMillis();
+				logger.info("Actiuvity" + aA.getIdentifier() + " in "+(endTSActivity-startActivity)/1000.0+" seconds. Structures = " + aA.getStructures().size());
+				
 			}
 			
 			for (Iterator iterator2 = aA.getLocations().iterator(); iterator2.hasNext();) {
@@ -175,14 +193,13 @@ public class XlsHelper {
 					values.add(alocation.getLocation().getLocation().getParentCategoryValue().getValue());
 					values.add(aA.getAmpId());
 					values.add(aA.getName());
-					String body = getEditTagValue(request,aA.getDescription());
-					if (body != null){
-						Html2Text h2t = new Html2Text();
-						h2t.parse(body);
+					
+					if(h2t !=null){
 						values.add(h2t.getText());
 					}else{
 						values.add("");
 					}
+					
 					if (aA.getApprovalDate()!=null){
 						values.add(aA.getApprovalDate().toString());
 					}else{
@@ -192,29 +209,10 @@ public class XlsHelper {
 					values.add(alocation.getLocation().getLocation().getName());
 					values.add(alocation.getLocation().getLocation().getGsLat());
 					values.add(alocation.getLocation().getLocation().getGsLong());
-					String sectorstr = "";
-					for (Iterator iterator3 = aA.getSectors().iterator(); iterator3.hasNext();) {
-						AmpActivitySector sector = (AmpActivitySector) iterator3.next();
-						if (iterator3.hasNext()) {
-							sectorstr = sectorstr+ sector.getSectorId().getName() + " - ";
-						} else {
-							sectorstr = sectorstr+ sector.getSectorId().getName();
-						}
-					}
+					
 					values.add(sectorstr);
-					FundingCalculationsHelper calculations = new FundingCalculationsHelper();
-					String donors = "";
 					Iterator fundItr = aA.getFunding().iterator();
-					while (fundItr.hasNext()) {
-						AmpFunding ampFunding = (AmpFunding) fundItr.next();
-						Collection fundDetails = ampFunding.getFundingDetails();
-						calculations.doCalculations(fundDetails,filter.getCurrencyCode());
-						if (fundItr.hasNext()) {
-							donors = donors+ ampFunding.getAmpDonorOrgId().getName()+ " - ";
-						} else {
-							donors = donors+ ampFunding.getAmpDonorOrgId().getName();
-						}
-					}
+					
 					values.add(donors);
 					values.add(QueryUtil.getPercentage(calculations.getTotalCommitments().getValue(),new BigDecimal(alocation.getLocationPercentage())));
 					values.add(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(alocation.getLocationPercentage())));
@@ -230,9 +228,6 @@ public class XlsHelper {
 					i++;
 				}
 			}
-			//for (short k = 0; k <= 8; k++)
-			//	sheet.autoSizeColumn(k);
-
 		}
 		endTS=System.currentTimeMillis();
 		logger.info("iteration done in "+(endTS-startTS)/1000.0+" seconds. ");

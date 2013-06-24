@@ -176,6 +176,12 @@
 				{
 					newMaxValue = maxValue;
 				}
+				if(newMaxValue > 9999999) //Allow to show big numbers
+				{
+					dcLeft = 60;
+				} else {
+					dcLeft = 40;
+				}
 				if(newMaxValue >= 80 && newMaxValue < 100) //Special case for maxValues between 80-100
 					newMaxValue = 100;
 				vScale.maxValue = newMaxValue;
@@ -654,6 +660,7 @@
 	<mx:Number id="dataFontSize">12</mx:Number>
 	<mx:String id="dataFontWeight">bold</mx:String>
 	<mx:Resize id="resize" />
+	<mx:Number id="dcLeft">40</mx:Number>
 	<!--   
 	NumericExpression provides a convenient place to store the results of numeric calculations used in multiple places within an MXML document. 
 	By binding the results of a complex numeric computation to a NumericExpression's value property, you allow other objects to bind on that 
@@ -706,7 +713,7 @@
 						  id="dc"
 						  verticalCenter="0"
 						  horizontalCenter="0" 
-						  left="40"
+						  left="{dcLeft}"
 						  right="80"
 						  showDataTips="true"
 						  strokes="{strokes}"

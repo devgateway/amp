@@ -123,6 +123,12 @@
 				{
 					newMaxValue = maxValue;
 				}
+				if(newMaxValue > 9999999) //Allow to show big numbers
+				{
+					dcLeft = 60;
+				} else {
+					dcLeft = 40;
+				}
 				vScale.maxValue = newMaxValue;
 				vScale.minValue = 0;
 				
@@ -519,7 +525,8 @@
 	<mx:String id="dataFontFamily">Arial</mx:String>
 	<mx:Number id="dataFontSize">11</mx:Number>
 	<mx:String id="dataFontWeight">bold</mx:String>
-
+	<mx:Number id="dcLeft">40</mx:Number>
+	
 	<!--  
 	A scale that deals with linear numeric data.
 	-->
@@ -543,7 +550,7 @@
 		bottom="120"
 		width="{this.width*.9}"
 		id="dc"
-		left="40"
+		left="{dcLeft}"
 		right="80"
 		verticalCenter="0"
 		horizontalCenter="0" 

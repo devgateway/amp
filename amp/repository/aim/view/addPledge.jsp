@@ -1173,7 +1173,7 @@ function addFunding() {
 	while (itr2.hasNext()) {
 		AmpCategoryValue type = (AmpCategoryValue) itr2.next();	
 		if (type != null){ %>
-				s += "<option value='<%=type.getId()%>'><%=TranslatorWorker.translateText(type.getValue(),request)%></option>";				  			
+				s += "<option value='<%=type.getId()%>'><%=TranslatorWorker.translateText(type.getValue())%></option>";				  			
 		<% }
 	 }%>
 	 s += "</select> </td>";
@@ -1205,9 +1205,9 @@ function addFunding() {
 			
 			if (year != null){
 				if (year.equals(pledgeForm.getYear())) {%>
-					s += "<option selected='true' value='<%=year%>'><%=TranslatorWorker.translateText(year,request)%></option>";				  			
+					s += "<option selected='true' value='<%=year%>'><%=TranslatorWorker.translateText(year)%></option>";				  			
 			<% } else { %>
-					s += "<option value='<%=year%>'><%=TranslatorWorker.translateText(year,request)%></option>";
+					s += "<option value='<%=year%>'><%=TranslatorWorker.translateText(year)%></option>";
 			<%}
 			}
 		 }%>
@@ -1221,7 +1221,7 @@ function addFunding() {
 	while (itr4.hasNext()) {
 		AmpCategoryValue type = (AmpCategoryValue) itr4.next();	
 		if (type != null){ %>
-				s += "<option value='<%=type.getId()%>'><%=TranslatorWorker.translateText(type.getValue(),request)%></option>";				  			
+				s += "<option value='<%=type.getId()%>'><%=TranslatorWorker.translateText(type.getValue())%></option>";				  			
 		<% }
 	 }%>
 	 s += "</select> </td>";

@@ -117,8 +117,8 @@ public class AmpStructuresFormSectionFeature extends
 				shape.getTextContainer().add(new AttributeAppender("size", new Model("7px"), ";"));
 				item.add(shape);
 				
-				final AmpStructureImgListComponent<AmpStructure> imgList = new AmpStructureImgListComponent<AmpStructure>("structureImgList", "", structureModel);
-				item.add(imgList);
+				//final AmpStructureImgListComponent<AmpStructure> imgList = new AmpStructureImgListComponent<AmpStructure>("structureImgList", "", structureModel, am);
+				//item.add(imgList);
 				
 				
 				ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure");

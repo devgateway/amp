@@ -1444,9 +1444,12 @@ public class ExportActivityToWord extends Action {
 		}
 		
 		if (FeaturesUtil.isVisibleField("Duration of Project", ampContext)) {
-			columnName=TranslatorWorker.translateText("Duration of Project", request)+": ";
-			columnVal = planning.getProjectPeriod()!=null?planning.getProjectPeriod().toString():"";
-			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
+			columnName = TranslatorWorker.translateText("Duration of Project", request) + ": ";
+            columnVal = "";
+            if (planning.getProjectPeriod() != null) {
+                columnVal = planning.getProjectPeriod().toString() + " " + TranslatorWorker.translateText("Months", request);
+            }
+			generateOverAllTableRows(planningSubTable1, columnName, columnVal, null);
 		}
 	}
 
@@ -2803,13 +2806,12 @@ public class ExportActivityToWord extends Action {
 			rowAmountForCell1++;
 		}
 		
-		if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
-			if(myForm.getPlanning().getProjectPeriod()!=null){
-				columnVal =  myForm.getPlanning().getProjectPeriod().toString();
-			}else{
-				columnVal = "";
-			}
-			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Duration of project",request)+": ",columnVal,CELLCOLORGRAY);
+		if (FeaturesUtil.isVisibleField("Duration of Project", ampContext)) {
+            columnVal = "";
+            if (planning.getProjectPeriod() != null) {
+                columnVal = planning.getProjectPeriod().toString() + " " + TranslatorWorker.translateText("Months", request);
+            }
+			generateOverAllTableRows(overAllFundingSubTable,TranslatorWorker.translateText("Duration of project",request) + ": ", columnVal, CELLCOLORGRAY);
 			rowAmountForCell1++;
 		}
 		

@@ -443,9 +443,12 @@ function collapseAll() {
 			</module:display>
 			<field:display name="Duration of Project" feature="Planning">
 				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Completion Date - Actual Start Date</digi:trn>" width="10" height=10 border="0">
-				<digi:trn>Duration of project</digi:trn>: <br/>
-				<b>${aimEditActivityForm.planning.projectPeriod }&nbsp; </b><digi:trn>Months</digi:trn>
-				<hr/>
+				<digi:trn>Duration of project</digi:trn>:
+				<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
+                    <br/>
+                    <b>${aimEditActivityForm.planning.projectPeriod }&nbsp; </b><digi:trn>Months</digi:trn>
+                    <hr/>
+				</c:if>
 			</field:display>
 			<field:display name="Delivery rate" feature="Funding Information">
 				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Disbursements / Actual Commitments * 100</digi:trn>" width="10" height=10 border="0">
@@ -1159,7 +1162,9 @@ function collapseAll() {
 		<hr>
 		<field:display name="Duration of Project" feature="Planning"> 
 			<digi:trn>Duration of project</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.projectPeriod }</b>&nbsp;<digi:trn>Months</digi:trn>
+			<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
+			    <b>${aimEditActivityForm.planning.projectPeriod}</b>&nbsp;<digi:trn>Months</digi:trn>
+			</c:if>
 		</field:display>
 		</div>
 </fieldset>

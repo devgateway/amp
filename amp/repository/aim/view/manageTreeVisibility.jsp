@@ -101,7 +101,7 @@ function showDescriptionToolbox(id){
 	<!-- end table title -->										
 	<!--</td></tr> -->
 	<tr>
-		<td>
+		<td style="white-space:normal;">
 <form name="searchBoxForm" onsubmit="searchFunction();return false;">
 <div id="searchBox" style="background-color:#F2F2F2;  font-size:12px; padding:10px;">
 <digi:trn key="fm:search:searchTitle"><b>Search</b></digi:trn> 

@@ -3,6 +3,7 @@ package org.dgfoundation.amp.onepager.components.upload;
 import org.apache.wicket.ajax.json.JSONArray;
 import org.apache.wicket.ajax.json.JSONException;
 import org.apache.wicket.ajax.json.JSONObject;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -29,7 +30,7 @@ public class FileUploadResourceReference extends ResourceReference
 
     private FileManager fileManager;
 
-    public FileUploadResourceReference(String activityId, Model<FileItem> fileItemModel) {
+    public FileUploadResourceReference(String activityId, IModel<FileItem> fileItemModel) {
         super(FileUploadResourceReference.class, "file-upload-"+System.currentTimeMillis());
 
         this.fileManager = new FileManager(activityId, fileItemModel);

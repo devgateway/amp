@@ -19,7 +19,7 @@
   <table class="layoutTable" border="0">
     <tr>
       <td width="5%"/>
-      <td valign="top" width="60%" style="white-space: pre-wrap;">
+      <td valign="top" width="60%" style="white-space: pre-wrap; text-align: left">
       	<digi:edit key="${param.htmlblock_2}" displayText="Edit HTML"></digi:edit>
       </td>
       <td width="5%"/>

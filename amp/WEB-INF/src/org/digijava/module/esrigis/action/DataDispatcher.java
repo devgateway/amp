@@ -20,8 +20,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,6 +58,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.form.DataDispatcherForm;
 import org.digijava.module.esrigis.helpers.ActivityPoint;
@@ -492,107 +495,25 @@ public class DataDispatcher extends MultiAction {
 		Long fiscalCalendarId = filter.getFiscalCalendarId();
 		Date startDate = QueryUtil.getStartDate(fiscalCalendarId, filter.getStartYear().intValue());
 		Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
+		
+		
 		String implementationLevel = "";
 		if (request.getParameter("level") != null && request.getParameter("level").equals("Region")) { 
 			implementationLevel = "Region";
 		} else {
 			implementationLevel = "Zone";
 		}
-
 		JSONArray jsonArray = new JSONArray();
-
-		// Get list of locations
-
-		// List<AmpCategoryValueLocations> locations =
-		// DbHelper.getRegions(filter);
 		List<AmpCategoryValueLocations> locations = DbHelper.getLocations(filter, implementationLevel, request);
-		Iterator<AmpCategoryValueLocations> locationsIt = locations.iterator();
-		String tq = QueryUtil.getTeamQuery(tm);
-		ArrayList<SimpleLocation> locationsarray = new ArrayList<SimpleLocation>();
-		while (locationsIt.hasNext()) {
-			AmpCategoryValueLocations location = locationsIt.next();
-			Long[] ids = { location.getId() };
-			Long[] allids = DbHelper.getAllDescendantsLocation(ids, DbUtil.getAmpLocations());
-
-			MapFilter newFilter = filter.getCopyFilterForFunding();
-			newFilter.setSelLocationIds(allids);
-			
-			ArrayList<DecimalWraper> amounts;
-			amounts = DbHelper.getFunding(newFilter, startDate, endDate, request, null, null, CategoryManagerUtil.getAmpCategoryValueFromDB(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL).getId());
-			BigDecimal amountCommitments = amounts.get(2).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			BigDecimal amountDisbursements = amounts.get(1).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			BigDecimal amountExpenditures = amounts.get(0).getValue().setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP);
-			
-			String keyName = "";
-			String geocode = "";
-			AmpCategoryValueLocations parent = null;
-			String implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey();
-			if (location.getParentCategoryValue().getValue().equals(implLocation)) {
-				keyName = "National";
-			}else{
-				Long zoneIds[] = filter.getZoneIds();
-				if (zoneIds != null && zoneIds.length > 0 && zoneIds[0] != -1) {
-					implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_REGION.getValueKey();
-					if (location.getParentCategoryValue().getValue().equals(implLocation)) {
-						keyName = "Regional";
-						geocode = location.getGeoCode();
-					} else {
-						parent = LocationUtil.getTopAncestor(location, implLocation);
-						keyName = parent.getName();
-						geocode = parent.getGeoCode();
-					}
-				} else {
-					if (implementationLevel.equalsIgnoreCase("Region")){
-						parent = LocationUtil.getTopAncestor(location, implLocation);
-						keyName = parent.getName();
-						geocode= parent.getGeoCode();
-					}else{
-						implLocation = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE.getValueKey();
-						if (!location.getParentCategoryValue().getValue().equalsIgnoreCase(implLocation)){
-							parent = LocationUtil.getTopAncestor(location, implLocation);
-							keyName = parent.getName();
-							geocode= parent.getGeoCode();
-						}else{
-							keyName = location.getName();
-							geocode= location.getGeoCode();
-						}
-					}
-					
-				}
-
-			}
-			SimpleLocation locationJSON = new SimpleLocation();
-			Boolean exist = false;
-			
-			if (!implLocation.equalsIgnoreCase("zone")){
-				for (Iterator iterator = locationsarray.iterator(); iterator.hasNext();) {
-					SimpleLocation slj = (SimpleLocation) iterator.next();
-					if (slj.getName().equalsIgnoreCase(parent.getName())){
-						exist=true;
-						if (!ArrayUtils.contains(slj.getIds(), location.getIdentifier()) ){
-							BigDecimal existCommitments = new BigDecimal(slj.getCommitments());
-							BigDecimal existDisbursements = new BigDecimal(slj.getDisbursements()); 
-							BigDecimal existExpenditures = new BigDecimal(slj.getExpenditures());
-							slj.setCommitments((existCommitments.add(amountCommitments).toPlainString()));
-							slj.setDisbursements((existDisbursements.add(amountDisbursements).toPlainString()));
-							slj.setExpenditures((existExpenditures.add(amountExpenditures).toPlainString()));
-							break;
-						}
-					}
-				}
-			}
-			if (!exist){
-				locationJSON.setName(keyName);
-				locationJSON.setGeoId(geocode);
-				locationJSON.setCommitments(amountCommitments.toPlainString());
-				locationJSON.setDisbursements(amountDisbursements.toPlainString());
-				locationJSON.setExpenditures(amountExpenditures.toPlainString());
-				locationJSON.setAmountsCurrencyCode(filter.getCurrencyCode());
-				locationJSON.setIds(allids);
-				locationsarray.add(locationJSON);
-			}
-		}
-		jsonArray.addAll(locationsarray);
+		ArrayList<SimpleLocation> mapregions = new ArrayList<SimpleLocation>();
+		
+		
+		
+		mapregions = DbHelper.getFundingByRegionList(locations, DbHelper.getTopLevelLocationList(locations), filter.getCurrencyCode(), startDate, endDate, 
+				filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, 
+				new Integer(3), new BigDecimal(1), filter, request);
+		
+		jsonArray.addAll(mapregions);
 		PrintWriter pw = response.getWriter();
 		pw.write(jsonArray.toString());
 		pw.flush();

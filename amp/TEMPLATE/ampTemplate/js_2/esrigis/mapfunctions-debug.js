@@ -398,8 +398,8 @@ function showBuffer(geometries) {
 function findbydistance(evt) {
 	searchpoint = evt;
 	foundstr = [];
+	var count = 0;
 	if (structurespoint.length > 0) {
-		var count = 0;
 		var distParams = new esri.tasks.DistanceParameters();
 		for ( var int = 0; int < structurespoint.length; int++) {
 			distParams.distanceUnit = esri.tasks.GeometryService.UNIT_KILOMETER;
@@ -413,8 +413,6 @@ function findbydistance(evt) {
 
 			geometryService.distance(distParams, function(distance) {
 				if (distance <= searchdistance) {
-					// console.log("Results: " + distance + " " +
-					// structures[count].attributes.Activity );
 					foundstr.push(structurespoint[count]);
 				}
 				count++;
@@ -423,11 +421,7 @@ function findbydistance(evt) {
 				}
 			});
 		}
-		if (count==0){
-			searchactive = false;
-			hideLoading();
-			hideTooltip();
-		}
+		
 	} else {
 		searchactive = false;
 		hideLoading();

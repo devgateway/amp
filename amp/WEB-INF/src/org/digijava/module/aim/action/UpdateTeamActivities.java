@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.error.CurrentReportContextIdException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -140,9 +141,14 @@ public class UpdateTeamActivities extends Action {
 //			}
 			taForm.setRemoveActivity(null);
 			taForm.setSelActivities(null);
+			try {
+				ReportContextData.getFromRequest().setGeneratedReport(null);
+				ReportContextData.getFromRequest().setReportMeta(null);
+			} catch (CurrentReportContextIdException e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
 			
-			ReportContextData.getFromRequest().setGeneratedReport(null);
-			ReportContextData.getFromRequest().setReportMeta(null);
 			return mapping.findForward("forward");
 		} else if (taForm.getSelActivities() != null && taForm.getRemoveActivity().equals("assign")) {
 			/* add the selected activities to the team list */

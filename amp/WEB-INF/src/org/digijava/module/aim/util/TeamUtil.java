@@ -1077,16 +1077,16 @@ public class TeamUtil {
         Transaction tx = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
+            tx = session.beginTransaction();
 
-            for(int i = 0; i < activities.length; i++) {
-            	AmpActivityVersion activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, activities[i]);                
-                activity.setTeam(null); 
-                activity.setMember(null);
-                session.update(activity);               
-            }
-
-            //tx.commit();
+           	String qs = "update "+ AmpActivityVersion.class.getName()+" set amp_team_id = null where amp_activity_id in (:activity)";
+        	Query query = session.createQuery(qs);
+            query.setParameterList("activity", activities);
+            query.executeUpdate();
+            query = session.createSQLQuery("delete from amp_member_activities where amp_activity_id in (:activity)");
+            query.setParameterList("activity", activities);
+            query.executeUpdate();
+            tx.commit();
         } catch(Exception e) {
             logger.error("Unable to remove activities" + e.getMessage());
             e.printStackTrace(System.out);

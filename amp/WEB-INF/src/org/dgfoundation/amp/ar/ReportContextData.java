@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
+import org.dgfoundation.amp.error.CurrentReportContextIdException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.ar.util.ReportFilterFormUtil;
@@ -358,8 +359,8 @@ public class ReportContextData
 			reportContextId = (String) request.getAttribute("ampReportId");
 		
 		if ((reportContextId == null) && exceptionOnNull)
-			throw new RuntimeException("request does not contain mandatory parameter 'reportContextId'!");
-
+			//throw new RuntimeException("request does not contain mandatory parameter 'reportContextId'!");
+			throw new CurrentReportContextIdException("request does not contain mandatory parameter 'reportContextId'!");
 		return reportContextId;
 	}
 	

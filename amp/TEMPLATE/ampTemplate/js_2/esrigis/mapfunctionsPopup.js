@@ -218,7 +218,7 @@ function createMapMenu() {
   ctxMenuForMap.addChild(new dijit.MenuItem({ 
     label: "Select this point",
     onClick: function(evt) {
-    	selectLocationCaller(currentLocation);
+    		(currentLocation);
     }
   }));
 
@@ -325,7 +325,7 @@ function selectCurrentLocation(){
 	var callerButton = window.opener.callerGisObject;
 	var pgraphic;
 	var sms;
-	var shapeValue = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[4].value;
+	var shapeValue = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[3].value;
 	var typeSelect = callerButton.parentNode.parentNode.getElementsByTagName("SELECT")[0];
 	var typeText = typeSelect.options[typeSelect.selectedIndex].text; 
 	var typeValue = typeSelect.options[typeSelect.selectedIndex].value; 
@@ -429,8 +429,7 @@ function selectLocationCallerShape(selectedGraphic){
 	var callerButton = window.opener.callerGisObject;
 	//This takes an identifier for the element shape (the sibling of the Map button) and replaces shape with latitude and longitude
 	//Very experimental, storing the point as Stringified Json Object
-	var shapeField = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[4]; //this is the "shape" field
-	shapeField.value = JSON.stringify(selectedGraphic.toJson());
+	
 	//Since this is a shape that we have stored, we'll wipe the lat/lon values to avoid confusion
 	//The lat/lon fields can be used if they are known before hand and entered manually
 	//For quicker data entry.
@@ -444,6 +443,9 @@ function selectLocationCallerShape(selectedGraphic){
 	if(selectedGraphic.geometry.type === "point"){
 		callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1].value = esri.geometry.webMercatorToGeographic(selectedGraphic.geometry).y;
 		callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[2].value = esri.geometry.webMercatorToGeographic(selectedGraphic.geometry).x;
+	}else{
+		var shapeField = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[3]; //this is the "shape" field
+		shapeField.value = JSON.stringify(selectedGraphic.toJson());
 	}
 	
 	element = callerButton.parentNode.parentNode.getElementsByTagName("INPUT")[1];

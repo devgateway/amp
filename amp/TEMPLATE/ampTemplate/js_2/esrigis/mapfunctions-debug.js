@@ -423,8 +423,14 @@ function findbydistance(evt) {
 				}
 			});
 		}
+		if (count==0){
+			searchactive = false;
+			hideLoading();
+			hideTooltip();
+		}
 	} else {
 		searchactive = false;
+		hideLoading();
 	}
 }
 
@@ -1156,11 +1162,16 @@ function getStructures(clear) {
 					MapFindStructure(activity, structureGraphicLayer);
 				});
 				
-				map.addLayer(structureGraphicLayer);
-				map.setExtent(map.extent.expand(1.01));
-				CluterStructures();
-				//Show Structures link
-				dojo.style('structures', { 'display' : 'block' });
+				if (structurespoint.length>0){
+					map.addLayer(structureGraphicLayer);
+					map.setExtent(map.extent.expand(1.01));
+					// Show Structures link
+					dojo.style('structures', { 'display' : 'block' });
+					dojo.style('search', { 'display' : 'block' });
+					CluterStructures();
+					
+				}
+				
 			},
 			error : function(error) {
 				console.log(error);
@@ -1367,7 +1378,7 @@ function CluterStructures(){
 				visible : structureVisible,
 				features : structurespoint,
 				onClusterExpand:function(){
-					$("#clusterStructures").show()
+					$("#clusterStructures").show();
 				},
 				infoWindow :{
 					template :

@@ -354,7 +354,7 @@
 													<FONT color=red>*</FONT>
 													<digi:trn key="um:password">Password</digi:trn></td>
 												<td align="left">
-													<html:password styleId="userPassword" property="password"size="20" />
+													<html:password styleId="userPassword" property="password" size="20" />
 												</td>
 											</tr>
 										

@@ -33,7 +33,8 @@ public class StructuresImporter extends Action {
     		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 			ActionMessages errors = new ActionMessages();
 			
-			if(! "text/csv".equals(sform.getUploadedFile().getContentType())){
+			if(!("text/plain".equalsIgnoreCase(sform.getUploadedFile().getContentType()) || ("application/vnd.ms-excel".equalsIgnoreCase(sform.getUploadedFile().getContentType())) ||
+					("text/csv".equalsIgnoreCase(sform.getUploadedFile().getContentType())))){
 				
 				errors.add(
 						ActionErrors.GLOBAL_MESSAGE,

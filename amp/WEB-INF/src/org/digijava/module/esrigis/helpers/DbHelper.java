@@ -400,8 +400,6 @@ public class DbHelper {
 	        Date endDate = QueryUtil.getEndDate(fiscalCalendarId, filter.getEndYear().intValue());
 	        Long[] sectorIds = filter.getSelSectorIds();
 	        boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
-	        Boolean isfilteredworkspace =   TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation()!=null  && TeamUtil.getAmpTeam(teamMember.getTeamId()).getComputation() && TeamUtil.getAmpTeam(teamMember.getTeamId()).getFilterDataSet()!=null
-			&& TeamUtil.getAmpTeam(teamMember.getTeamId()).getFilterDataSet().size()>0;
 	        /*
 	         * We are selecting regions which are funded
 	         * In selected year by the selected organization

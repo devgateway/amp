@@ -60,6 +60,7 @@ var colorsBlue = [ new dojo.Color([ 222, 235, 247, 0.7 ]),
 		new dojo.Color([ 8, 81, 156, 0.7 ]),
 		new dojo.Color([ 8, 48, 107, 0.7 ])];
 
+/*
 var colorsOrange = [ new dojo.Color([ 255, 255, 229, 0.8 ]),
 		new dojo.Color([ 255, 247, 188, 0.8 ]),
 		new dojo.Color([ 254, 227, 145, 0.8 ]),
@@ -70,6 +71,19 @@ var colorsOrange = [ new dojo.Color([ 255, 255, 229, 0.8 ]),
 		new dojo.Color([ 178, 94, 3, 0.8 ]),
 		new dojo.Color([ 153, 52, 4, 0.8 ]),
 		new dojo.Color([ 102, 37, 6, 0.8 ])];
+
+*/
+var colorsOrange = [ new dojo.Color([ 229, 252, 120, 0.8 ]),
+	new dojo.Color([ 224, 231, 102, 0.9 ]),
+	new dojo.Color([ 220, 211, 93, 0.9 ]),
+	new dojo.Color([ 216, 190, 80, 0.9 ]),
+	new dojo.Color([ 212, 170, 66, 0.9 ]),
+	new dojo.Color([ 207, 149, 53, 0.9 ]),
+	new dojo.Color([ 203, 129, 40, 0.9 ]),
+	new dojo.Color([ 199, 109, 26, 0.9 ]),
+	new dojo.Color([ 195, 88, 13, 0.9 ]),
+	new dojo.Color([ 191, 68, 6, 0.9 ])];
+
 
 var colorsDiverge = [new dojo.Color([165, 0, 38, 0.8 ]),
                      new dojo.Color([215, 48, 39, 0.8 ]),

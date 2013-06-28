@@ -20,9 +20,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
-import org.dgfoundation.amp.onepager.components.AmpStructureImgListComponent;
-import org.dgfoundation.amp.onepager.components.ListEditor;
-import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
+import org.dgfoundation.amp.onepager.components.*;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
@@ -45,7 +43,7 @@ public class AmpStructuresFormSectionFeature extends
 		final PropertyModel<Set<AmpStructure>> setModel=new PropertyModel<Set<AmpStructure>>(am,"structures");
 		if (setModel.getObject() == null)
 			setModel.setObject(new TreeSet<AmpStructure>());
-		final ListEditor<AmpStructure> list;
+		final PagingListEditor<AmpStructure> list;
 
 		this.structureTypes	= 	StructuresUtil.getAmpStructureTypes();
 		
@@ -62,7 +60,7 @@ public class AmpStructuresFormSectionFeature extends
 		};
 		
 		
-		list = new ListEditor<AmpStructure>("list", setModel) {
+		list = new PagingListEditor<AmpStructure>("list", setModel) {
 			
 			
 			@Override
@@ -125,9 +123,12 @@ public class AmpStructuresFormSectionFeature extends
 				item.add(delbutton);
 			}
 		};
-		
 		add(list);
-		
+
+        PagingListNavigator<AmpStructure> pln = new PagingListNavigator<AmpStructure>("paging", list);
+        add(pln);
+
+
 		AmpAjaxLinkField addbutton = new AmpAjaxLinkField("addbutton", "Add Structure", "Add Structure") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
@@ -135,6 +136,7 @@ public class AmpStructuresFormSectionFeature extends
 				list.addItem(stru);
 				target.add(this.getParent());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));
+                list.goToLastPage();
 			}
 		};
 		add(addbutton);

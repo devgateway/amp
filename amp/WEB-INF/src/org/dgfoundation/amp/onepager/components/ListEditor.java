@@ -45,25 +45,34 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 		if(items == null)
 			items = new ArrayList<T>();
 		items.add(value);
-		ListItem<T> item = new ListItem<T>(newChildId(), 
-				items.size() - 1);
-		add(item);
-		onPopulateItem(item);
+        renderItem(items.size() - 1);
 		updateModel();
 	}
 
-	protected void onBeforeRender(){
-		if (!hasBeenRendered())	{
-			items = new ArrayList<T>((Set<T>)model.getObject());
-			if (comparator != null)
-				Collections.sort(items, comparator);
-			for (int i = 0; i < items.size(); i++){
-				ListItem<T> li = new ListItem<T>(newChildId(), i);
-				add(li);
-				onPopulateItem(li);
-			}
-		}
-		super.onBeforeRender();
+    protected final void prepareItemsForRendering(){
+        items = new ArrayList<T>((Set<T>)model.getObject());
+        if (comparator != null)
+            Collections.sort(items, comparator);
+    }
+
+    protected final void renderItem(int index){
+        ListItem<T> li = new ListItem<T>(newChildId(), index);
+        add(li);
+        onPopulateItem(li);
+    }
+
+    protected void editorOnBeforeRender(){
+        if (!hasBeenRendered())	{
+            prepareItemsForRendering();
+            for (int i = 0; i < items.size(); i++){
+                renderItem(i);
+            }
+        }
+    }
+
+	protected final void onBeforeRender(){
+        super.onBeforeRender();
+        editorOnBeforeRender();
 	}
 
 	@Override

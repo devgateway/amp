@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-<%@ taglib uri="/taglib/aim"prefix="aim" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <%	
 	ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, false);

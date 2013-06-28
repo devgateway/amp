@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-<%@ taglib uri="/taglib/aim"prefix="aim"%>
+<%@ taglib uri="/taglib/aim" prefix="aim"%>
 
 <digi:context name="digiContext" property="context"/>
 <digi:instance property="aimAddContactForm"/>

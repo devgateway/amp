@@ -109,11 +109,11 @@ public class DataDispatcher extends DispatchAction {
 		
 		if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
 	    	currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
-	    	if((currentTeam.getComputation() != null && currentTeam.getComputation()) || "Management".equals(currentTeam.getAccessType())){
+	    	//if((currentTeam.getComputation() != null && currentTeam.getComputation()) || "Management".equals(currentTeam.getAccessType())){
 	    		AmpARFilter filter = (AmpARFilter)session.getAttribute(ArConstants.TEAM_FILTER);
 	    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(filter.getFilterConditionOnly());
 	    		visualizationForm.getFilter().setActivityComputedList(activityList);
-			}
+			//}
 			visualizationForm.getFilter().setTeamMember(tm);
         } else {
         	visualizationForm.getFilter().setActivityComputedList(null);

@@ -646,7 +646,7 @@ public class DashboardUtil {
                 relatedOrgs += getComputationOrgsQry(tm);
             }
         }
-        qr += " and act.draft=false and act.approvalStatus ='approved' ";
+        //qr += " and act.draft=false and act.approvalStatus ='approved' ";
         qr += " and act.team is not null and (act.team in (select at.ampTeamId from " 
 		+ AmpTeam.class.getName() + " at where parentTeamId is not null) ";
         if (relatedOrgs.length() > 1) {
@@ -665,7 +665,7 @@ public class DashboardUtil {
             getTeams(team, teams);
             String relatedOrgs = "";
             String teamIds = "";
-            qr += " and act.draft=false and act.approvalStatus ='approved' ";
+            //qr += " and act.draft=false and act.approvalStatus ='approved' ";
             qr += " and (";
             for (AmpTeam tm : teams) {
                 if (tm.getComputation() != null && tm.getComputation()) {
@@ -686,7 +686,7 @@ public class DashboardUtil {
             qr += ")";
 
         } else {
-            qr += "  and act.draft=false and act.approvalStatus ='approved' and act.team is not null ";
+            qr += "  and act.draft=false and act.team is not null ";
         }
         return qr;
     }

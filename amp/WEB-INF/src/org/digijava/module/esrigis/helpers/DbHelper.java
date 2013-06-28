@@ -441,6 +441,7 @@ public class DbHelper {
 	            }
 	            oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 	            
+	            oql += " and act.team is not null  and act.draft=false and act.approvalStatus IN ('approved','startedapproved')";
 	            
 	            ArrayList<BigInteger> workSpaceactivityList = new ArrayList<BigInteger>();
 	            String inactivities= "";
@@ -459,7 +460,7 @@ public class DbHelper {
 	    				inactivities +="," + id.toString();
 	    			}
 	    		}
-	    		oql += " and act.ampActivityId in("+ inactivities +")";
+	    		//oql += " and act.ampActivityId in("+ inactivities +")";
 	            
 	            
 	            if (sectorCondition) {
@@ -642,7 +643,7 @@ public class DbHelper {
 	
 	
 	
-	public static ArrayList<SimpleLocation> getFundingByRegionList(Collection<AmpCategoryValueLocations> regListChildren, Collection<AmpCategoryValueLocations> regListParent, String currCode,  Date startDate,
+	public static ArrayList<SimpleLocation> getFundingByRegionList(Collection<AmpCategoryValueLocations> regListChildren, String impLevel, String currCode,  Date startDate,
             Date endDate, int transactionType,HardCodedCategoryValue adjustmentType, int decimalsToShow, BigDecimal divideByDenominator, MapFilter filter, HttpServletRequest request) throws DgException {
         
 		ArrayList<SimpleLocation> map = new ArrayList<SimpleLocation>();
@@ -690,15 +691,15 @@ public class DbHelper {
         else
         	oql += " where 1=1 ";
         
-        //oql += " and  fd.adjustmentType.value =:adjustmentType ";
-        oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
+        oql += " and  fd.adjustmentType.value =:adjustmentType ";
+        //oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
         oql += " and loc.id in (" + DashboardUtil.getInStatement(regListChildren) + ")";
         
         //Mapping the locations with their parents
         HashMap<Long, Long> locationMap = new HashMap<Long, Long>();
         for(AmpCategoryValueLocations currentLocation : regListChildren ){
-        	locationMap.put(currentLocation.getId(), DashboardUtil.getTopLevelLocation(currentLocation).getId());
+        	locationMap.put(currentLocation.getId(), getTopLevelLocation(currentLocation,impLevel).getId());
         }
 
        
@@ -709,14 +710,6 @@ public class DbHelper {
         } else 
         	oql += QueryUtil.getOrganizationQuery(false, orgIds, orgGroupIds);
             //oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds, filter.getAgencyType());
-        if (locationCondition) {
-        	if (locationIds[0].equals(0l)) {
-        		oql += " and actloc is NULL "; //Unallocated condition
-			} else {
-				locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
-	            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
-			}
-        }
         
         if (sectorCondition) {
         	sectorIds = getAllDescendants(filter.getSectorIds(),(ArrayList<AmpSector>) filter.getSectors());
@@ -767,7 +760,6 @@ public class DbHelper {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            query.setLong("transactionType", transactionType);
             query.setString("adjustmentType",adjustmentType.getValueKey());
             if (sectorCondition) {
             	query.setLong("config", filter.getSelSectorConfigId());
@@ -776,14 +768,12 @@ public class DbHelper {
 
             HashMap<Long, AmpCategoryValueLocations> locationParentList = new HashMap<Long, AmpCategoryValueLocations>();
             
-            Iterator iter = regListParent.iterator();
+            Iterator iter = regListChildren.iterator();
             while (iter.hasNext()) {
             	AmpCategoryValueLocations loc = (AmpCategoryValueLocations)iter.next();
-            	if (loc.getParent()!=null){
-            		AmpCategoryValueLocations loc2 = DashboardUtil.getTopLevelLocation(loc);
-            		locationParentList.put(loc.getId(), loc2);
-            	}
-            	
+        		AmpCategoryValueLocations loc2 = getTopLevelLocation(loc,impLevel);
+        		if (locationParentList.get(loc2.getId())==null)
+        			locationParentList.put(loc2.getId(), loc2);
             }
             
             HashMap<Long, ArrayList<AmpFundingDetail>> hm = new HashMap<Long, ArrayList<AmpFundingDetail>>();
@@ -802,14 +792,9 @@ public class DbHelper {
             		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
             	Long id = (Long) item[1];
             	String name = (String) item[2];
+            	id = locationMap.get(id);
+            	name = locationParentList.get(id).getName();
             	
-            	if (!locationCondition) {
-            		if(locationParentList.get(id) == null){
-            			id = locationMap.get(id);
-            		}
-            		name = locationParentList.get(id).getName();
-            		id = locationParentList.get(id).getId();
-            	}
             	if(hm.containsKey(id)){
             		ArrayList<AmpFundingDetail> afda = hm.get(id);
             		afda.add(currentFd);
@@ -824,10 +809,10 @@ public class DbHelper {
             DecimalWraper totaldisbursement = null;
             DecimalWraper totalexpenditures = null;
             DecimalWraper totalcommitment = null;
-            FundingCalculationsHelper cal = new FundingCalculationsHelper();
             Iterator<Long> it2 = hm.keySet().iterator();
             while(it2.hasNext()){
-            	Long locId = it2.next();
+            	FundingCalculationsHelper cal = new FundingCalculationsHelper();
+                Long locId = it2.next();
             	ArrayList<AmpFundingDetail> afda = hm.get(locId);
                 
                 cal.doCalculations(afda, currCode);
@@ -867,6 +852,17 @@ public class DbHelper {
         return map;
     }
 	
+	public static AmpCategoryValueLocations getTopLevelLocation(AmpCategoryValueLocations location, String level) {
+		if (level.equals("Region"))
+			if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Country")) {
+				location = getTopLevelLocation(location.getParentLocation(), level);
+			}
+		if (level.equals("Zone"))
+			if (location.getParentLocation() != null && !location.getParentLocation().getParentCategoryValue().getValue().equals("Region")) {
+				location = getTopLevelLocation(location.getParentLocation(), level);
+			}
+		return location;
+	}
 	
 	@SuppressWarnings("unchecked")
     public static ArrayList<DecimalWraper> getFunding(MapFilter filter, Date startDate,Date endDate,HttpServletRequest request,Long assistanceTypeId,Long financingInstrumentId,

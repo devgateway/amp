@@ -509,7 +509,7 @@ public class DataDispatcher extends MultiAction {
 		
 		
 		
-		mapregions = DbHelper.getFundingByRegionList(locations, DbHelper.getTopLevelLocationList(locations), filter.getCurrencyCode(), startDate, endDate, 
+		mapregions = DbHelper.getFundingByRegionList(locations, implementationLevel, filter.getCurrencyCode(), startDate, endDate, 
 				filter.getTransactionType(), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, 
 				new Integer(3), new BigDecimal(1), filter, request);
 		

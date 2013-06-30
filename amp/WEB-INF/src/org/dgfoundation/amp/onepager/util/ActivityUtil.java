@@ -398,7 +398,7 @@ public class ActivityUtil {
 					break;
 				}
 			}
-			session.update(cf);
+			session.saveOrUpdate(cf);
 		}
 	}
 

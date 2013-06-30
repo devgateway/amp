@@ -18,9 +18,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
-import org.dgfoundation.amp.onepager.models.AmpTransactionTypeDonorFundingDetailModel;
+import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.exception.NoCategoryClassException;
@@ -47,7 +46,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 	}
 
 	public AmpDonorFormTableFeaturePanel(String id,
-			final IModel<AmpFunding> model, String fmName, int transactionType,
+			final IModel<AmpFunding> model, String fmName, final int transactionType,
 			int titleHeaderColSpan) throws Exception {
 		super(id, model, fmName);
 
@@ -57,7 +56,12 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 		parentModel = new PropertyModel<Set<AmpFundingDetail>>(model,
 				"fundingDetails");
 
-		setModel = new AmpTransactionTypeDonorFundingDetailModel(parentModel, transactionType);
+        setModel = new AbstractMixedSetModel<AmpFundingDetail>(parentModel) {
+            @Override
+            public boolean condition(AmpFundingDetail item) {
+                return item.getTransactionType().equals(transactionType);
+            }
+        };
 	}
 
 

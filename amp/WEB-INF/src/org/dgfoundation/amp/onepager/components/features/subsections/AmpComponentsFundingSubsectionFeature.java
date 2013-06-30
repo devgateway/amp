@@ -80,9 +80,10 @@ public class AmpComponentsFundingSubsectionFeature extends
 				cf.setTransactionType(transactionType);
 				cf.setAmpComponentFundingId(null);
 
+
+                tableFeature.getEditorList().addItem(cf);
 				compFundsModel.getObject().add(cf);
-				
-				tableFeature.getList().removeAll();
+
 				target.add(tableFeature);
 			}
 		};

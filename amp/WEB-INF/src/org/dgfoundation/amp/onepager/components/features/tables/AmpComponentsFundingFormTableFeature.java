@@ -12,19 +12,19 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.AmpTableFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author aartimon@dginternational.org 
@@ -32,7 +32,9 @@ import java.util.Set;
  */
 public class AmpComponentsFundingFormTableFeature extends
 		AmpFormTableFeaturePanel {
-	/**
+    private final ListEditor<AmpComponentFunding> editorList;
+
+    /**
 	 */
 	public AmpComponentsFundingFormTableFeature(String id,
 			final IModel<AmpComponent> componentModel,
@@ -42,33 +44,18 @@ public class AmpComponentsFundingFormTableFeature extends
 		super(id, activityModel, fmName);
 		setTitleHeaderColSpan(5);
 
-		AbstractReadOnlyModel<List<AmpComponentFunding>> listModel = new AbstractReadOnlyModel<List<AmpComponentFunding>>() {
-			private static final long serialVersionUID = 3706184421459839210L;
+        AbstractMixedSetModel<AmpComponentFunding> listModel = new AbstractMixedSetModel<AmpComponentFunding>(compFundsModel) {
+            @Override
+            public boolean condition(AmpComponentFunding item) {
+                return (item.getTransactionType().equals(transactionType) &&
+                        item.getComponent().hashCode() == componentModel.getObject().hashCode());
+            }
+        };
 
-			@Override
-			public List<AmpComponentFunding> getObject() {
-				List<AmpComponentFunding> result = new ArrayList<AmpComponentFunding>();
-				Set<AmpComponentFunding> allComp = compFundsModel.getObject();
-				if (allComp != null){
-					Iterator<AmpComponentFunding> iterator = allComp.iterator();
-					while (iterator.hasNext()) {
-						AmpComponentFunding comp = (AmpComponentFunding) iterator
-						.next();
-						if (comp.getTransactionType() == transactionType)
-							if (comp.getComponent().hashCode() == componentModel.getObject().hashCode())
-								result.add(comp);
-					}
-				}
-				
-				return result;
-			}
-		};
-
-		list = new ListView<AmpComponentFunding>("list", listModel) {
-
-			@Override
-			protected void populateItem(final ListItem<AmpComponentFunding> item) {
-				IModel<AmpComponentFunding> model = item.getModel();
+        editorList = new ListEditor<AmpComponentFunding>("list", listModel){
+            @Override
+            protected void onPopulateItem(org.dgfoundation.amp.onepager.components.ListItem<AmpComponentFunding> item) {
+                IModel<AmpComponentFunding> model = item.getModel();
                 try{
                     AmpCategorySelectFieldPanel adjustmentTypes = new AmpCategorySelectFieldPanel(
                             "adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_KEY,
@@ -85,25 +72,21 @@ public class AmpComponentsFundingFormTableFeature extends
                 AmpFundingAmountComponent amountComponent = new AmpTableFundingAmountComponent<AmpComponentFunding>("fundingAmount",
                         model, "Amount", "transactionAmount", "Currency",
                         "currency", "Transaction Date", "transactionDate", false);
-				item.add(amountComponent);
-				 
-				item.add(new AmpDeleteLinkField("delete", "Delete") {
-					@Override
-					public void onClick(AjaxRequestTarget target) {
-						compFundsModel.getObject().remove(item.getModelObject());
-						target.add(AmpComponentsFundingFormTableFeature.this);
-						list.removeAll();
-					}
-				});
-			}
-		};
-		list.setReuseItems(true);
-		add(list);
+                item.add(amountComponent);
+
+                item.add(new ListEditorRemoveButton("delete", "Delete"));
+            }
+        };
+
+		add(editorList);
 
 	}
-	
-	
-	private AbstractReadOnlyModel<List<AmpComponentFunding>> getSubsetModel( final IModel<Set<AmpComponentFunding>> compFundsModel , final int transactionType)
+
+    public ListEditor<AmpComponentFunding> getEditorList() {
+        return editorList;
+    }
+
+    private AbstractReadOnlyModel<List<AmpComponentFunding>> getSubsetModel( final IModel<Set<AmpComponentFunding>> compFundsModel , final int transactionType)
 	{
 		
 		

@@ -7,13 +7,12 @@ package org.dgfoundation.amp.onepager.components.features.items;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
-import org.dgfoundation.amp.onepager.models.AmpFundingItemsModel;
+import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -56,7 +55,12 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 		super(id, model, fmName, true);
 		fundingOrgModel = model;
 		add(new Label("donorOrg", model.getObject().getName()));
-		AmpFundingItemsModel setModel = new AmpFundingItemsModel(fundsModel, model.getObject());
+        AbstractMixedSetModel<AmpFunding> setModel = new AbstractMixedSetModel<AmpFunding>(fundsModel) {
+            @Override
+            public boolean condition(AmpFunding item) {
+                return item.getAmpDonorOrgId().getAmpOrgId().compareTo(model.getObject().getAmpOrgId()) == 0;
+            }
+        };
 		
 		list = new ListEditor<AmpFunding>("listFunding", setModel) {
 			@Override

@@ -329,13 +329,20 @@ public abstract class AmpComponentPanel<T> extends Panel implements
         /**
          * Do not reverse the order of fmEnabled and fmVisible
          */
-		boolean fmEnabled = (foundEnabledChild.getObject() || FMUtil.isFmEnabled(this));
-		boolean fmVisible = FMUtil.isFmVisible(this);
-		if (!ignorePermissions)
-			setEnabled(fmMode?true:fmEnabled);
-		if (!ignoreFmVisibility)
-			setVisible(fmMode?true:fmVisible);
-		
+        boolean fmEnabled = (foundEnabledChild.getObject() || FMUtil.isFmEnabled(this));
+        boolean fmVisible = FMUtil.isFmVisible(this);
+
+        if (fmMode){
+            setEnabled(true);
+            setVisible(true);
+        }
+        else{
+            if (!ignorePermissions)
+                setEnabled(fmEnabled);
+            if (!ignoreFmVisibility)
+                setVisible(fmVisible);
+        }
+
 		if (this instanceof AmpFormSectionFeaturePanel && fmMode){
 			OnepagerSection tmpos = OnePager.findByName(this.getClass().getName());
 			if (tmpos != null){

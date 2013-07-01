@@ -9,9 +9,12 @@
 <module:display name="/Activity Form/Line Ministry Observations" parentModule="/Activity Form">
 	<fieldset>
 	<legend>
-		<span class=legend_label><digi:trn>Line Ministry Observations</digi:trn></span>	</legend>
+		<span class=legend_label id="lineMinistryObsLink" style="cursor: pointer;">
+            <digi:trn>Line Ministry Observations</digi:trn>
+        </span>
+    </legend>
 		
-	<div id="lineMinistryObs">
+	<div id="lineMinistryObsDiv">
 		<c:if test="${not empty aimEditActivityForm.lineMinistryObservations.issues}">
 		<logic:iterate name="aimEditActivityForm" id="lineMinistryObs" property="lineMinistryObservations.issues">
 			<table style="width: 100%;">

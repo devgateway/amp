@@ -1161,7 +1161,9 @@ function getStructures(clear) {
 					map.setExtent(map.extent.expand(1.01));
 					// Show Structures link
 					dojo.style('structures', { 'display' : 'block' });
-					dojo.style('search', { 'display' : 'block' });
+					if (dojo.byId('search')){
+						dojo.style('search', { 'display' : 'block' });
+					}
 					CluterStructures();
 					
 				}
@@ -1170,6 +1172,7 @@ function getStructures(clear) {
 			error : function(error) {
 				console.log(error);
 			}
+			
 		}
 		// Call the asynchronous xhrGet
 		var deferred = dojo.xhrGet(xhrArgs);

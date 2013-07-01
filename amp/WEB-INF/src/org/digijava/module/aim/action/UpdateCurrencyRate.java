@@ -54,6 +54,23 @@ public class UpdateCurrencyRate extends Action {
 	 * @param dateStr
 	 * @return
 	 */
+	public static String malawi_date_swap(String dateStr)
+	{
+		StringTokenizer tok = new StringTokenizer(dateStr, "/");
+		if (tok.countTokens() != 3)
+			return dateStr;
+		
+		String month = tok.nextToken();
+		String day = tok.nextToken();
+		String year = tok.nextToken();
+		return day + "/" + month + "/" + year;
+	}
+	
+	/**
+	 * VERY BASIC SANITY CHECK. DO NOT USE AS AN AUTHORITATIVE FUNCTION FOR TAKING THE DECISION
+	 * @param dateStr
+	 * @return
+	 */
 	public static boolean is_valid_date(String dateStr)
 	{
 		StringTokenizer tok = new StringTokenizer(dateStr, "/");
@@ -67,7 +84,7 @@ public class UpdateCurrencyRate extends Action {
 			Integer yearNr = Integer.parseInt(year);
 			Integer monthNr = Integer.parseInt(month);
 			Integer dayNr = Integer.parseInt(day);
-			Date date = new Date(yearNr, monthNr, dayNr);
+			Date date = new Date(yearNr - 1900, monthNr - 1, dayNr);
 			
 			if (dayNr <= 0 || dayNr > 31)
 				return false;
@@ -77,9 +94,9 @@ public class UpdateCurrencyRate extends Action {
 				return false; // hopefully this code will not be running 987 years from now
 			if (date.getDate() != dayNr)
 				return false;
-			if (date.getMonth() != monthNr)
+			if (date.getMonth() != monthNr - 1)
 				return false;
-			if (date.getYear() != yearNr)
+			if (date.getYear() != yearNr - 1900)
 				return false;
 			
 			return true;
@@ -143,6 +160,7 @@ public class UpdateCurrencyRate extends Action {
 									if (rate == null)
 										throw new RuntimeException("could not parse rate; the erroneous token is: " + rateToken);
 									String date = st.nextToken().trim();
+									//date = malawi_date_swap(date);
 									if (!is_valid_date(date))
 										throw new RuntimeException("invalid date, please use a dd/mm/yyyy format: " + date);
 									currencyRates = new CurrencyRates();

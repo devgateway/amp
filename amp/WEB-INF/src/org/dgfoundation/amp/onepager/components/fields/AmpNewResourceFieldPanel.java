@@ -104,7 +104,8 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
 //            	
             	if (updateVisibility(td, resourceIsURL)) {
             		if (tmp.getFile() != null){
-                		double fSize = tmp.getFile().getSize()/(1024*1024);
+                		double fSize = tmp.getFile().getSize()*100/(1024*1024);
+                        fSize = fSize/100;
                 		tmp.setFileSize(fSize);
                 		tmp.setFileName(tmp.getFile().getClientFileName());
                 		tmp.setContentType(tmp.getFile().getContentType());
@@ -163,8 +164,10 @@ public class AmpNewResourceFieldPanel extends AmpFeaturePanel {
                 target.add(name);
                 target.add(resourcesList);
                 target.add(webLinkFeedbackContainer);
-                if (updateVisibility(td, resourceIsURL))
+                if (updateVisibility(td, resourceIsURL)){
                     target.appendJavaScript("$('#addNewDocumentH').hide();$('#addNewWebResourceH').hide();");
+                    target.appendJavaScript("$('#addNewDocumentH').find('[role=fileUploadedMsg]').html('');");
+                }
 //                target.add(form);
 //                AmpNewResourceFieldPanel panel = this.findParent(AmpNewResourceFieldPanel.class);
 //                target.add(panel.getParent());

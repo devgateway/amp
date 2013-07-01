@@ -3156,6 +3156,15 @@ function collapseAll() {
 		  $("div#ipadiv").toggle('slow', function() {
 		  });
 	});
+    $("#lineMinistryObsLink").click(function() {
+          $("div#lineMinistryObsDiv").toggle('slow', function() {
+          });
+    });
+    $("#referenceslink").click(function() {
+          $("div#referencesdiv").toggle('slow', function() {
+          });
+    });
+
 	jQuery.fn.exists = function(){return this.length>0;}
 	$("#collapseall").click(function() {
 		var showOrHide;  
@@ -3171,7 +3180,7 @@ function collapseAll() {
 		  	if($("#ashowmap").exists()){
 				showMapInTooltipDialog(ashowmap,true);
 		  	}
-		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv").toggle(showOrHide);
+		  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv,div#referencesdiv,div#lineMinistryObsDiv").toggle(showOrHide);
 	});
 	
 	$("#collapseall_1").click(function() {
@@ -3186,7 +3195,7 @@ function collapseAll() {
 			  		showOrHide=true;
 		  	  }
 			  showMapInTooltipDialog(ashowmap,true);
-			  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv").toggle(showOrHide);
+			  $("div#identificationdiv,div#planningdiv,div#locationdiv,div#programdiv,div#sectorsdiv,div#fundingdiv,div#componentdiv,div#issuesdiv,div#documnetsdiv,div#relateorgdiv,div#contactdiv,div#midiv,div#projectriskdiv,div#costingdiv,div#ipadiv,div#proposedcostdiv,div#regionalfundingdiv,div#nationalplandiv,div#referencesdiv,div#lineMinistryObsDiv").toggle(showOrHide);
 			  document.body.scrollTop = document.documentElement.scrollTop = 0;
 	});
 	

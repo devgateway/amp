@@ -32,10 +32,7 @@
 		<div style="border: 1px solid #CCCCCC; height: ${100-selectorHeaderSize}%; width: 100%; background: white; overflow-y:scroll;" class="grouping_selector_wrapper_body">		
 				<table style="width: 95%;margin-top: 15px;" align="center" class="inside" >
 					<logic:iterate id="element" name="elements" scope="page">
-						
-						<%--
-						${element.name}Workspace
-						--%>
+
 						
 						
 						<%-- AMP-15117 --%>
@@ -49,8 +46,6 @@
 							</c:otherwise>
 						</c:choose>
 						
-						${hideCurrentFilter}
-							
 							
 						<c:if test="${!hideCurrentFilter}">
 						

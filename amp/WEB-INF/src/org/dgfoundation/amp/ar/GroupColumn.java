@@ -138,7 +138,7 @@ public class GroupColumn extends Column {
     	Set<MetaInfo> metadata = item.getMetaData();
     	for(MetaInfo minfo:metadata)
     	{
-    		if (minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
+    		if (minfo!=null && minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
     		{
     			String val = minfo.getValue().toString();
     			if (val.equals(ArConstants.ACTUAL_DISBURSEMENTS))

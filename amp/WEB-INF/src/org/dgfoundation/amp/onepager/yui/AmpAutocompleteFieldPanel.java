@@ -32,6 +32,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.resource.TextTemplateResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.template.PackageTextTemplate;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
@@ -230,7 +231,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 		add(new YuiAutoCompleteBehavior(){
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
-				super.renderHead(component, response);
+				super.renderHead(component, response);				
 				response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"));
 				response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"));
 				response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"));
@@ -246,7 +247,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 						return variables;
 					}
 				};
-				response.render(JavaScriptHeaderItem.forReference(new TextTemplateResourceReference(clazz, jsName, variablesModel)));
+				response.render(JavaScriptHeaderItem.forReference(new TextTemplateResourceReference(clazz, jsName, PackageTextTemplate.DEFAULT_CONTENT_TYPE, "UTF-8",variablesModel)));
 				/*
 				 * currently renderOnDomReadyJavaScript doesn't work as expected in IE8
 				 * that is why jquery's $(document).ready has been added here

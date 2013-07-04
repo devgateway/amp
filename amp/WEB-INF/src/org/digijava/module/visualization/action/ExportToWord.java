@@ -238,18 +238,23 @@ public class ExportToWord extends Action {
             String avgPrjZSizeTrn = TranslatorWorker.translateText("Average Project Size");
             String currName = vForm.getFilter().getCurrencyCode();
             String fundTypeTrn = "";
+            if (vForm.getFilter().getAdjustmentType().equals("Actual"))
+            	fundTypeTrn = TranslatorWorker.translateText("Actual");
+            if (vForm.getFilter().getAdjustmentType().equals("Planned"))
+            	fundTypeTrn = TranslatorWorker.translateText("Planned");
+            
             switch (vForm.getFilter().getTransactionType()) {
 				case Constants.COMMITMENT:
-					fundTypeTrn = TranslatorWorker.translateText("Commitments");
+					fundTypeTrn = fundTypeTrn+" "+TranslatorWorker.translateText("Commitments");
 					break;
 				case Constants.DISBURSEMENT:
-					fundTypeTrn = TranslatorWorker.translateText("Disbursements");
+					fundTypeTrn = fundTypeTrn+" "+TranslatorWorker.translateText("Disbursements");
 					break;
 				case Constants.EXPENDITURE:
-					fundTypeTrn = TranslatorWorker.translateText("Expenditures");
+					fundTypeTrn = fundTypeTrn+" "+TranslatorWorker.translateText("Expenditures");
 					break;
 				default:
-					fundTypeTrn = TranslatorWorker.translateText("Values");
+					fundTypeTrn = fundTypeTrn+" "+TranslatorWorker.translateText("Values");
 				break;
 			}
             dashboardTypeTrn = "";
@@ -582,7 +587,7 @@ public class ExportToWord extends Action {
 		    doc.add(filtersTbl);
             doc.add(new Paragraph(" "));
             
-            String amountDescription = " (" + filtersMagnitudeTrn + " " + currName + ")";
+            String amountDescription = " (" + fundTypeTrn + " - " + filtersMagnitudeTrn + " " + currName + ")";
             
           //Summary table.
             if (summaryOpt.equals("1")) {

@@ -56,7 +56,15 @@
 									parentModule="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table">
 										<b><bean:write name="fundingDetail" property="currencyCode" /></b>
 								</module:display>
-								&nbsp;</td>
+								
+								</td>
+								<td align="right">								
+								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Recipient Organization">																
+								<logic:present name="fundingDetail" property="recipientOrganisation">
+									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
+								</logic:present>
+								</module:display>
+								</td>
 							<td height="18">
 							<c:if test="${aimEditActivityForm.funding.fixerate == true}">
 								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/exchangeRate"
@@ -129,9 +137,13 @@
 									<b><bean:write name="fundingDetail" property="currencyCode" /></b>&nbsp;
 								</module:display>
 																
+								<td align="right">								
+								<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Recipient Organization">																
 								<logic:present name="fundingDetail" property="recipientOrganisation">
-									&nbsp;&nbsp;[<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b> as <b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>]&nbsp;
+									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
 								</logic:present>
+								</module:display>
+								</td>
 							</td>
 							<td height="18">
 							<c:if test="${aimEditActivityForm.funding.fixerate == true}">

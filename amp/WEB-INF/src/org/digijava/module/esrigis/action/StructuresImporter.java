@@ -1,10 +1,13 @@
 package org.digijava.module.esrigis.action;
 
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -15,13 +18,22 @@ import org.apache.struts.action.ActionMessages;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.esrigis.form.StructuresImporterForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 import au.com.bytecode.opencsv.CSVReader;
 
 public class StructuresImporter extends Action {
 
+	public static Logger logger	= Logger.getLogger(StructuresImporter.class);
+	@SuppressWarnings("unchecked")
+	public static final List<String> CSV_CONTENT_TYPES	= Collections.unmodifiableList(
+								Arrays.asList("text/plain","text/csv","application/vnd.ms-excel")
+							);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		StructuresImporterForm sform  = (StructuresImporterForm) form;
@@ -31,7 +43,8 @@ public class StructuresImporter extends Action {
     		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 			ActionMessages errors = new ActionMessages();
 			
-			if(!("text/plain".equalsIgnoreCase(sform.getUploadedFile().getContentType()) || "application/vnd.ms-excel".equalsIgnoreCase(sform.getUploadedFile().getContentType()))){
+			logger.info("Importing file of type " + sform.getUploadedFile().getContentType() );
+			if( !isCsvFile(sform.getUploadedFile().getContentType()) ){
 				
 				errors.add(
 						ActionErrors.GLOBAL_MESSAGE,
@@ -48,12 +61,14 @@ public class StructuresImporter extends Action {
 					CSVReader reader = new CSVReader(isr);
 					String [] nextLine;
 					Boolean firstLine = true;
+					
 					while ((nextLine = reader.readNext()) != null) {
 						if(firstLine){
 							firstLine = false;
 						}
 						else
 						{
+							System.out.println("Next: " + Arrays.asList(nextLine).toString() );
 							AmpStructure st = new AmpStructure();
 							st.setTitle(nextLine[1]);
 							st.setLatitude(nextLine[2]);
@@ -81,6 +96,7 @@ public class StructuresImporter extends Action {
 					
 					
 				}catch(Exception e){
+					e.printStackTrace();
 					errors.add(
 							ActionErrors.GLOBAL_MESSAGE,
 							new ActionMessage(
@@ -97,4 +113,13 @@ public class StructuresImporter extends Action {
 		return mapping.findForward("forward");
 		
 	}
+	
+	public boolean isCsvFile(String fileContentType) {
+		if ( fileContentType != null && fileContentType.length() > 0 
+				&& CSV_CONTENT_TYPES.contains(fileContentType) ) {
+			return true;
+		}
+		return false;
+	}
+	
 }

@@ -768,7 +768,7 @@ public class DataDispatcher extends MultiAction {
 		Long[] secsIds =  datadispatcherform.getFilter().getSectorIds();
 		Long[] subSecsIds =  datadispatcherform.getFilter().getSubSectorIds();
 		
-		if (subSecsIds == null && subSecsIds == null){
+		if (secsIds == null && subSecsIds == null){
 			Long[] temp = {-1l};
 			datadispatcherform.getFilter().setSelSectorIds(temp);
 		}else{

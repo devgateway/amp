@@ -158,7 +158,7 @@ public class AmpLocationFormSectionFeature extends AmpFormSectionFeaturePanel {
                 implLocValue = tmp.iterator().next();
         }
 
-        boolean defaultCountryCheck = CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL) &&
+        boolean defaultCountryCheck = (CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_NATIONAL) || CategoryManagerUtil.equalsCategoryValue(implLevel, CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL)) &&
                 CategoryManagerUtil.equalsCategoryValue(implLocValue, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
         return defaultCountryCheck;
     }

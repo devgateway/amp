@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <digi:instance property="aimEditActivityForm" />
-<module:display name="/Activity Form/Funding/Funding Group/Funding Item/EDD" 
+<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedEDDDetails}">
@@ -42,6 +42,11 @@
 								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
 								<b><bean:write name="fundingDetail" property="currencyCode" /></b>
 								&nbsp;
+							</td>
+							<td align="right">									
+								<logic:present name="fundingDetail" property="recipientOrganisation">
+									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
+								</logic:present>
 							</td>
 							<td height="18">
 								<c:if test="${aimEditActivityForm.funding.fixerate == true}">								
@@ -96,8 +101,10 @@
 								
 								<b><bean:write name="fundingDetail" property="currencyCode" /></b>&nbsp;
 																
+							</td>
+							<td align="right">									
 								<logic:present name="fundingDetail" property="recipientOrganisation">
-									&nbsp;&nbsp;[<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b> as <b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>]&nbsp;
+									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
 								</logic:present>
 							</td>
 							<td height="18">

@@ -43,6 +43,11 @@
 								<b><bean:write name="fundingDetail" property="currencyCode" /></b>
 								&nbsp;
 							</td>
+							<td align="right">									
+								<logic:present name="fundingDetail" property="recipientOrganisation">
+									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
+								</logic:present>
+							</td>
 							<td height="18">
 								<c:if test="${aimEditActivityForm.funding.fixerate == true}">								
 									<b><bean:write name="fundingDetail" property="formattedRate" /></b>
@@ -95,9 +100,10 @@
 								<b><bean:write name="fundingDetail" property="transactionAmount" /></b>
 								
 								<b><bean:write name="fundingDetail" property="currencyCode" /></b>&nbsp;
-																
+							</td>
+							<td align="right">									
 								<logic:present name="fundingDetail" property="recipientOrganisation">
-									&nbsp;&nbsp;[<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b> as <b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>]&nbsp;
+									&nbsp;&nbsp;<digi:trn>Recipient:</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><br/><digi:trn>as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;
 								</logic:present>
 							</td>
 							<td height="18">

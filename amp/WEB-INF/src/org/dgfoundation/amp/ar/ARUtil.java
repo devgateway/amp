@@ -241,7 +241,7 @@ public final class ARUtil {
 	 * @param filter - the filter to be used
 	 * @return
 	 */
-	public static GroupReportData generateReport(AmpReports r, AmpARFilter filter, boolean regenerateFilterQuery)  {
+	public static GroupReportData generateReport(AmpReports r, AmpARFilter filter, boolean regenerateFilterQuery, boolean cleanupMetadata)  {
 
 
 		CellColumn.calls = CellColumn.iterations = MetaInfo.calls = MetaInfo.iterations = 0;
@@ -270,6 +270,7 @@ public final class ARUtil {
 //		httpSession.setAttribute(ArConstants.REPORTS_FILTER, af);
 
 		AmpReportGenerator arg = new AmpReportGenerator(r, filter, regenerateFilterQuery);
+		arg.setCleanupMetadata(cleanupMetadata);
 		arg.generate();
 		
 		logger.info(String.format("while generating report, had %d / %d CellColumn calls and %d / %d MetaInfo calls", CellColumn.iterations, CellColumn.calls, MetaInfo.iterations, MetaInfo.calls));

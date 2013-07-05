@@ -66,8 +66,9 @@ public class AmpReportGenerator extends ReportGenerator {
 	List<AmpReportColumn> extractable; // columns extractable while building the report
 	protected int extractableCount; // looks like extractable.size() [need to check!]
 	private List<String> columnsToBeRemoved;
-	private boolean debugMode=false;
-	private boolean pledgereport=false;
+	private boolean debugMode = false;
+	private boolean pledgereport = false;
+	private boolean cleanupMetadata = true;
 	
 	private HttpSession session	= null;
 	private BigDecimal totalac;
@@ -879,7 +880,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		removeUnrenderizableData(report); // apply year range filter from settings and any other "non-displaying" filtering which SHOULD NOT affect the report except rendering
 		
 		report.getAllCells(listOfCells, true); //repeatedly fetch cells, as some might have been added in the meantime (postprocessing)
-		deleteMetadata(listOfCells);
+		if (getCleanupMetadata())
+			deleteMetadata(listOfCells);
 		System.out.format("AmpReportGenerator: AmountCell.getPercentage calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.getPercentageCalls, AmountCell.getPercentageIterations, 1.0 * AmountCell.getPercentageIterations / (0.01 + AmountCell.getPercentageCalls));
 		System.out.format("AmpReportGenerator: AmountCell.getAmountWithMergedCells calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.merged_cells_get_amount_calls, AmountCell.merged_cells_get_amount_iterations, 1.0 * AmountCell.merged_cells_get_amount_iterations / (0.01 + AmountCell.merged_cells_get_amount_calls));
 	}
@@ -1231,4 +1233,13 @@ public class AmpReportGenerator extends ReportGenerator {
 		return fakeC;
 	}
 
+	public boolean getCleanupMetadata()
+	{
+		return cleanupMetadata;
+	}
+	
+	public void setCleanupMetadata(boolean cleanupMetadata)
+	{
+		this.cleanupMetadata = cleanupMetadata;
+	}
 }

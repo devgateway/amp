@@ -88,7 +88,7 @@ public class XLSExportAction extends Action {
 			arf.setPublicView(true);
 			}
 
-		GroupReportData rd = ARUtil.generateReport(report, arf, true);
+		GroupReportData rd = ARUtil.generateReport(report, arf, true, false);
 
 		ARUtil.cleanReportOfHtmlCodes(rd);
 		

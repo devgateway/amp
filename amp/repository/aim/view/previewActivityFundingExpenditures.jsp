@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures" 
-														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+		parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 
 <!-- expenditures -->
 <digi:instance property="aimEditActivityForm" />

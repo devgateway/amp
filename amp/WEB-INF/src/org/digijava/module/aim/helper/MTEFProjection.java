@@ -5,7 +5,10 @@ import java.util.Date;
 
 import org.digijava.module.aim.dbentity.AmpFunding;
 
-public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
+public class MTEFProjection implements Serializable, Comparable<MTEFProjection> {
+
+    public static final int PROJECTION_ID = 108;
+    public static final int PIPELINE_ID = 109;
 
 	private Long projected; 
 	private String amount;

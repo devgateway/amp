@@ -219,8 +219,6 @@
                                                         <jsp:include page="previewMtefProjections.jsp" />
                                                     </module:display>
 
-                                                    <jsp:include page="previewActivityFundingDisbursementOrders.jsp" />
-
  												    <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Release of Funds"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingRoF.jsp" />

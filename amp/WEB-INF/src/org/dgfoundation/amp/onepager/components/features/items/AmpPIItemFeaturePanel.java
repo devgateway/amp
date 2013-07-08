@@ -57,7 +57,7 @@ public class AmpPIItemFeaturePanel extends AmpFeaturePanel<AmpAhsurvey> {
 
         PropertyModel<Date> surveyPropertyModel = new PropertyModel<Date>(survey, "surveyDate");
         AmpSelectFieldPanel<String> yearSelector = new AmpSelectFieldPanel<String>("yearSelect",
-                new DateToYearModel(surveyPropertyModel), CHOICE_LIST, "Year Select", true, true);
+                new DateToYearModel(surveyPropertyModel), CHOICE_LIST, "Year Select", true, true,null,true);
         if (surveyPropertyModel.getObject() != null){
             yearSelector.setIgnorePermissions(true);
             yearSelector.setEnabled(false);

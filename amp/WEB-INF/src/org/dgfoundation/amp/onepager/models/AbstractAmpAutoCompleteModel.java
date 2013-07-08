@@ -100,46 +100,41 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 		return getUnaccentILikeExpression(propertyName, value);
 	}
 
-	
-	protected Criterion getUnaccentILikeExpression(final String propertyName, final String value)
-	{
-		
-		return new Criterion(){
 
-			private static final long serialVersionUID = -8979378752879206485L;
+    protected Criterion getUnaccentILikeExpression(final String propertyName, final String value) {
+        return new Criterion(){
+            private static final long serialVersionUID = -8979378752879206485L;
 
-			@Override
-			public String toSqlString(Criteria criteria,
-					CriteriaQuery criteriaQuery) throws HibernateException {
-				Dialect dialect = criteriaQuery.getFactory().getDialect();
-				String[] columns = criteriaQuery.findColumns(propertyName, criteria);
-				String entityName = criteriaQuery.getEntityName(criteria);
-				
-				String []ids=criteriaQuery.getIdentifierColumns(criteria);
-				if (columns.length!=1) throw new HibernateException("ilike may only be used with single-column properties"); 
-				if (ids.length!=1) throw new HibernateException("We do not support multiple identifiers just yet!");
-				if ( dialect instanceof PostgreSQLDialect ) {
-					 String ret=" "+(ids[0].replaceAll("this_.", ""))+" = any(contentmatch('"+entityName+"','"+(columns[0].replaceAll("this_.", ""))+"','"+language+"', ?)) OR ";
-					 ret+=" unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";
-					 return ret;					
-				}
-				else {
-					throw new HibernateException("We do not handle non-postgresql databases yet, sorry!"); 				
-				}
+            @Override
+            public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
+                Dialect dialect = criteriaQuery.getFactory().getDialect();
+                String[] columns = criteriaQuery.findColumns(propertyName, criteria);
+                String entityName = criteriaQuery.getEntityName(criteria);
 
-			}
+                String []ids=criteriaQuery.getIdentifierColumns(criteria);
+                if (columns.length!=1)
+                    throw new HibernateException("ilike may only be used with single-column properties");
+                if (ids.length!=1)
+                    throw new HibernateException("We do not support multiple identifiers just yet!");
 
-			@Override
-			public TypedValue[] getTypedValues(Criteria criteria,
-					CriteriaQuery criteriaQuery) throws HibernateException {
-				return new TypedValue[] { criteriaQuery.getTypedValue( criteria, propertyName, MatchMode.ANYWHERE.toMatchString(value).toLowerCase() ) , 
-						criteriaQuery.getTypedValue( criteria, propertyName, MatchMode.ANYWHERE.toMatchString(value).toLowerCase() )};
-			}
-			
-			
-		};
-		
-	}
+                if ( dialect instanceof PostgreSQLDialect ) {
+                    //AMP-15628 - the replace of "this_." with "" inside the ids and columns was removed
+                    String ret=" "+ids[0]+" = any(contentmatch('"+entityName+"','"+columns[0]+"','"+language+"', ?)) OR ";
+                    ret+=" unaccent(" + columns[0] + ") ilike " +  "unaccent(?)";
+                    return ret;
+                } else {
+                    throw new HibernateException("We do not handle non-postgresql databases yet, sorry!");
+                }
+            }
+
+            @Override
+            public TypedValue[] getTypedValues(Criteria criteria,
+                                               CriteriaQuery criteriaQuery) throws HibernateException {
+                return new TypedValue[] { criteriaQuery.getTypedValue( criteria, propertyName, MatchMode.ANYWHERE.toMatchString(value).toLowerCase() ) ,
+                        criteriaQuery.getTypedValue( criteria, propertyName, MatchMode.ANYWHERE.toMatchString(value).toLowerCase() )};
+            }
+        };
+    }
 	
 	/**
 	 * This recursive method adds to the sector root tree the given sector. It

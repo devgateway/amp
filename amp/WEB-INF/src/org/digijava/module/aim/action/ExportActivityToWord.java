@@ -2021,6 +2021,10 @@ public class ExportActivityToWord extends Action {
 					"/Activity Form/Funding/Funding Group/Funding Item/Disbursements", ampContext);
 			boolean visibleModuleExpenditures = FeaturesUtil.isVisibleModule(
 					"/Activity Form/Funding/Funding Group/Funding Item/Expenditures", ampContext);
+			boolean visibleModuleRoF = FeaturesUtil.isVisibleModule(
+					"/Activity Form/Funding/Funding Group/Funding Item/Release of Funds", ampContext);
+			boolean visibleModuleEDD = FeaturesUtil.isVisibleModule(
+					"/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements", ampContext);
 			boolean visibleModuleDisbOrders = FeaturesUtil.isVisibleModule(
 							"/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders", ampContext);
         	
@@ -2095,6 +2099,10 @@ public class ExportActivityToWord extends Action {
 										|| (fndDet.getTransactionType() == Constants.DISBURSEMENT && visibleModuleDisbursement)
 										// Expenditures
 										|| (fndDet.getTransactionType() == Constants.EXPENDITURE && visibleModuleExpenditures)
+										// Release of Funds
+										|| (fndDet.getTransactionType() == Constants.RELEASE_OF_FUNDS && visibleModuleRoF)
+										// Estimated Disbursements
+										|| (fndDet.getTransactionType() == Constants.ESTIMATED_DONOR_DISBURSEMENT && visibleModuleEDD)
 										// DisbOrders
 										|| (fndDet.getTransactionType() == Constants.DISBURSEMENT_ORDER && visibleModuleDisbOrders)) {
 
@@ -3321,6 +3329,14 @@ public class ExportActivityToWord extends Action {
 
             case Constants.EXPENDITURE:
                 retVal = "Expenditure";
+                break;
+
+            case Constants.RELEASE_OF_FUNDS:
+                retVal = "Release of Funds";
+                break;
+
+            case Constants.ESTIMATED_DONOR_DISBURSEMENT:
+                retVal = "Estimated Disbursement";
                 break;
 
             case Constants.DISBURSEMENT_ORDER:

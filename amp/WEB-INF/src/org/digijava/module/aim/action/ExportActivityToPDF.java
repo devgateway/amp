@@ -128,6 +128,8 @@ public class ExportActivityToPDF extends Action {
 	private static final String [] fundingCommitmentsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Currency","/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate"};
 	private static final String [] fundingDisbursementsFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Currency"};
 	private static final String [] fundingExpendituresFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Expenditures/Expenditures Table/Currency"};
+	private static final String [] fundingRoFFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Release of Funds/Release of Funds Table/Currency"};
+	private static final String [] fundingEDDFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements/Estimated Disbursements Table/Currency"};
 	private static final String [] fundingDisbOrdersFMfields={"/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Adjustment Type","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Transaction Date","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Amount","/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders/Disbursement Orders Table/Currency"};
 	
 	private static final String [] componentCommitmentsFMfields={"/Activity Form/Components/Component/Components Commitments","/Activity Form/Components/Component/Components Commitments/Commitment Table/Amount","/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency","/Activity Form/Components/Component/Components Commitments/Commitment Table/Transaction Date"};
@@ -2513,6 +2515,8 @@ public class ExportActivityToPDF extends Action {
 			boolean visibleModuleCommitments = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Commitments", ampContext);
 			boolean visibleModuleDisbursements = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursements", ampContext);
 			boolean visibleModuleExpenditures = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Expenditures", ampContext);
+			boolean visibleModuleRoF = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Release of Funds", ampContext);
+			boolean visibleModuleEDD = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements", ampContext);
 			boolean visibleModuleDisbOrders = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders", ampContext);
 			
 			for (FundingOrganization fundingOrganisation : myForm.getFunding().getFundingOrganizations()) {
@@ -2873,6 +2877,142 @@ public class ExportActivityToPDF extends Action {
 									}
 								}								
 								createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE EXPENDITURES:", funding.getSubtotalPipelineExpenditures(), currencyCode);
+							}
+							
+						}
+						
+						//Release of Funds
+						
+						if(visibleModuleRoF){
+							//planned Release of Funds
+							output=TranslatorWorker.translateText("PLANNED RELEASE OF FUNDS:");
+							if(myForm.getFunding().isFixerate()){
+								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+							}
+							PdfPCell plExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+							plExpCell1.setBorder(0);
+							plExpCell1.setBackgroundColor(new Color(255,255,204));
+							plExpCell1.setColspan(3);
+							fundingTable.addCell(plExpCell1);
+							
+							
+							if(funding.getFundingDetails()!=null){
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.RELEASE_OF_FUNDS){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingRoFFMfields,ampContext);
+										}
+									}
+								}
+								createSubtotalRow(fundingTable, "SUBTOTAL PLANNED RELEASE OF FUNDS:", funding.getSubtotalPlannedRoF(), currencyCode);
+								
+								//actual Release of Funds
+								output=TranslatorWorker.translateText("ACTUAL RELEASE OF FUNDS:");
+								if(myForm.getFunding().isFixerate()){
+									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+								}
+								PdfPCell actExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+								actExpCell1.setBorder(0);
+								actExpCell1.setBackgroundColor(new Color(255,255,204));
+								actExpCell1.setColspan(3);
+								fundingTable.addCell(actExpCell1);
+								
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.RELEASE_OF_FUNDS){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingRoFFMfields,ampContext);
+										}
+									}
+								}								
+								createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL RELEASE OF FUNDS:", funding.getSubtotalActualRoF(), currencyCode);
+								
+								//pipeline Release of Funds
+								output=TranslatorWorker.translateText("PIPELINE RELEASE OF FUNDS:");
+								if(myForm.getFunding().isFixerate()){
+									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+								}
+								PdfPCell actExpCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+								actExpCell2.setBorder(0);
+								actExpCell2.setBackgroundColor(new Color(255,255,204));
+								actExpCell2.setColspan(3);
+								fundingTable.addCell(actExpCell2);
+								
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.RELEASE_OF_FUNDS){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingRoFFMfields,ampContext);
+										}
+									}
+								}								
+								createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE RELEASE OF FUNDS:", funding.getSubtotalPipelineRoF(), currencyCode);
+							}
+							
+						}
+						
+						//Estimated Disbursements
+						
+						if(visibleModuleEDD){
+							//planned Release of Funds
+							output=TranslatorWorker.translateText("PLANNED ESTIMATED DISBURSEMENTS:");
+							if(myForm.getFunding().isFixerate()){
+								output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+							}
+							PdfPCell plExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+							plExpCell1.setBorder(0);
+							plExpCell1.setBackgroundColor(new Color(255,255,204));
+							plExpCell1.setColspan(3);
+							fundingTable.addCell(plExpCell1);
+							
+							
+							if(funding.getFundingDetails()!=null){
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.ESTIMATED_DONOR_DISBURSEMENT){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingEDDFMfields,ampContext);
+										}
+									}
+								}
+								createSubtotalRow(fundingTable, "SUBTOTAL PLANNED ESTIMATED DISBURSEMENTS:", funding.getSubtotalPlannedEDD(), currencyCode);
+								
+								//actual Release of Funds
+								output=TranslatorWorker.translateText("ACTUAL ESTIMATED DISBURSEMENTS:");
+								if(myForm.getFunding().isFixerate()){
+									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+								}
+								PdfPCell actExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+								actExpCell1.setBorder(0);
+								actExpCell1.setBackgroundColor(new Color(255,255,204));
+								actExpCell1.setColspan(3);
+								fundingTable.addCell(actExpCell1);
+								
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.ESTIMATED_DONOR_DISBURSEMENT){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingEDDFMfields,ampContext);
+										}
+									}
+								}								
+								createSubtotalRow(fundingTable, "SUBTOTAL ACTUAL ESTIMATED DISBURSEMENTS:", funding.getSubtotalActualEDD(), currencyCode);
+								
+								//pipeline Release of Funds
+								output=TranslatorWorker.translateText("PIPELINE ESTIMATED DISBURSEMENTS:");
+								if(myForm.getFunding().isFixerate()){
+									output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+								}
+								PdfPCell actExpCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
+								actExpCell2.setBorder(0);
+								actExpCell2.setBackgroundColor(new Color(255,255,204));
+								actExpCell2.setColspan(3);
+								fundingTable.addCell(actExpCell2);
+								
+								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
+									if(fd.getTransactionType()== Constants.ESTIMATED_DONOR_DISBURSEMENT){
+										if(fd.getAdjustmentTypeName().getValue().equals(CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey())){
+											buildFundingInfoInnerTable(fundingTable, fd,fundingEDDFMfields,ampContext);
+										}
+									}
+								}								
+								createSubtotalRow(fundingTable, "SUBTOTAL PIPELINE ESTIMATED DISBURSEMENTS:", funding.getSubtotalPipelineEDD(), currencyCode);
 							}
 							
 						}

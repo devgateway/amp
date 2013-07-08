@@ -12,7 +12,7 @@
 					SELECT COUNT(*) FROM amp_columns WHERE columnname='Contracting Arrangements';
 				</lang>
 			</script>
- 			<test>val.equalsIgnoreCase("0")</test>
+ 			<test>val.intValue()==0</test>
 		</condition>
 	</trigger> 
        <apply>

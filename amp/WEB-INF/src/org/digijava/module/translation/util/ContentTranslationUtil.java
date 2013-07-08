@@ -7,6 +7,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.Versionable;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.Type;
@@ -119,13 +120,13 @@ public class ContentTranslationUtil {
             getAllFields(fields, clazz);
             for (Field field : fields) {
                 if (field.getAnnotation(TranslatableField.class) != null) {
-                    //retreive updated translation in the current locale
+                    //retrieve updated translation in the current locale
                     String fieldName = field.getName();
                     Method methGetField = clazz.getMethod("get" + Strings.capitalize(fieldName));
                     String fieldTrnCurrentLocale = (String) methGetField.invoke(obj);
                     //generate FTP with old translations + insert updated translation
                     Long packId = getFieldTrnPack(objClass, objId, fieldName, currentLocale, fieldTrnCurrentLocale);
-                    //replace the value of the field with the identificator for the FTP from the TranslationStore
+                    //replace the value of the field with the identifier for the FTP from the TranslationStore
                     Method methSetField = clazz.getMethod("set" + Strings.capitalize(fieldName), String.class);
                     methSetField.invoke(obj, String.valueOf(packId));
                 } else if (Collection.class.isAssignableFrom(field.getType()) || Set.class.isAssignableFrom(field.getType())) {
@@ -163,12 +164,12 @@ public class ContentTranslationUtil {
      * @param currentState current state of the object
      * @param propertyNames list of field names
      * @param types list of field types
-     * @param isVersionable true if current object is versionable
      * @return true if we altered the object state in any way
      */
     public static boolean prepareTranslations(Object obj, Serializable id, Object[] previousState, Object[] currentState,
-    		String[] propertyNames, Type[] types, boolean isVersionable){
+    		String[] propertyNames, Type[] types){
     	boolean stateModified = false;
+        boolean isVersionable =  obj instanceof Versionable;
     	//get new object id - hibernate already updated it
         Long objectId = (Long)id;
         Class clazz = obj.getClass();
@@ -215,7 +216,7 @@ public class ContentTranslationUtil {
                     	logger.debug("Object without base translation");
                     else{
                     	logger.debug("Updated base translation with: " + baseTranslation + " (currentlocale =" + TLSUtils.getLangCode() + ")");
-                    	if (previousState[i] != null){
+                    	if (previousState != null && previousState[i] != null){
                     		//since we changed the object on load, we need to change the previous state to the db state
                     		Object prevState = loadFieldFromDb(clazz, objectId, fieldName);
                     		previousState[i] = prevState;
@@ -379,8 +380,30 @@ public class ContentTranslationUtil {
         }
     }
 
+    public static void deleteFieldTranslations(Long objectId, Object entity) {
+        Session session = null;
+        try {
+            session = PersistenceManager.openNewSession();
+
+            String objClass = getObjectClass(entity);
+            StringBuilder query = new StringBuilder();
+            query.append("delete from ");
+            query.append(AmpContentTranslation.class.getName());
+            query.append(" t where t.objectClass=:objectClass");
+            query.append(" and t.objectId=:objectId");
+            Query qry = session.createQuery(query.toString());
+            qry.setString("objectClass", objClass);
+            qry.setLong("objectId", objectId);
+            qry.executeUpdate();
+        } catch (Exception e) {
+            logger.error("Can't delete field translations", e);
+        } finally {
+            session.close();
+        }
+    }
+
     /**
-     * @return the base languag for the application
+     * @return the base language for the application
      */
     private static String getBaseLanguage(){
         //TODO:

@@ -481,9 +481,12 @@ function collapseAll() {
 			</module:display>
 			<field:display name="Duration of Project" feature="Planning">
 				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Completion Date - Actual Start Date</digi:trn>" width="10" height=10 border="0">
-				<digi:trn>Duration of project</digi:trn>: <br/>
-				<b>${aimEditActivityForm.planning.projectPeriod }&nbsp; </b><digi:trn>Months</digi:trn>
-				<hr/>
+				<digi:trn>Duration of project</digi:trn>:
+				<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
+                    <br/>
+                    <b>${aimEditActivityForm.planning.projectPeriod }&nbsp; </b><digi:trn>Months</digi:trn>
+                    <hr/>
+				</c:if>
 			</field:display>
 			<field:display name="Delivery rate" feature="Funding Information">
 				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Disbursements / Actual Commitments * 100</digi:trn>" width="10" height=10 border="0">
@@ -1149,28 +1152,32 @@ function collapseAll() {
 		<module:display name="/Activity Form/Planning/Actual Approval Date" parentModule="/Activity Form/Planning">
 			<hr>
 				<digi:trn>Actual Approval Date</digi:trn>:&nbsp;
-				<b>${aimEditActivityForm.planning.revisedAppDate}</b>		</module:display>
-				
-		
+				<b>${aimEditActivityForm.planning.revisedAppDate}</b>
+		</module:display>
+
 		<module:display name="/Activity Form/Planning/Proposed Start Date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Proposed Start Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.originalStartDate}</b>		</module:display>
+			<b>${aimEditActivityForm.planning.originalStartDate}</b>
+		</module:display>
 							
 		<module:display name="/Activity Form/Planning/Actual Start Date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Actual Start Date </digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.revisedStartDate}</b>		</module:display>
+			<b>${aimEditActivityForm.planning.revisedStartDate}</b>
+		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Original Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Original Completion Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.originalCompDate}</b>		</module:display>	
+			<b>${aimEditActivityForm.planning.originalCompDate}</b>
+		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Proposed Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Proposed Completion Date</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.proposedCompDate}</b>		</module:display>
+			<b>${aimEditActivityForm.planning.proposedCompDate}</b>
+		</module:display>
 		
 		<module:display name="/Activity Form/Planning/Actual Completion Date" parentModule="/Activity Form/Planning">
 			<hr>
@@ -1181,18 +1188,22 @@ function collapseAll() {
 		<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Final Date for Contracting</digi:trn>:&nbsp;
-			<b><c:out value="${aimEditActivityForm.planning.contractingDate}"/></b>		</module:display>
+			<b><c:out value="${aimEditActivityForm.planning.contractingDate}"/></b>
+		</module:display>
 					
 		<module:display name="/Activity Form/Planning/Final Date for Disbursements" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;
-			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>		</module:display>
+			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>
+		</module:display>
 		
 		
 		<hr>
 		<field:display name="Duration of Project" feature="Planning"> 
 			<digi:trn>Duration of project</digi:trn>:&nbsp;
-			<b>${aimEditActivityForm.planning.projectPeriod }</b>&nbsp; </b><digi:trn>Months</digi:trn>
+			<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
+			    <b>${aimEditActivityForm.planning.projectPeriod}</b>&nbsp;<digi:trn>Months</digi:trn>
+			</c:if>
 		</field:display>
 		</div>
 </fieldset>

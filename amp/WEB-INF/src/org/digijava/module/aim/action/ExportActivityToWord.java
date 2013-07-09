@@ -1445,7 +1445,10 @@ public class ExportActivityToWord extends Action {
 		
 		if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
 			columnName=TranslatorWorker.translateText("Duration of Project")+": ";
-			columnVal = planning.getProjectPeriod()!=null?planning.getProjectPeriod().toString():"";
+            columnVal = "";
+            if (planning.getProjectPeriod() != null) {
+                columnVal = planning.getProjectPeriod().toString() + " " + TranslatorWorker.translateText("Months");
+            }
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 	}
@@ -2845,7 +2848,7 @@ public class ExportActivityToWord extends Action {
 		
 		if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
 			if(myForm.getPlanning().getProjectPeriod()!=null){
-				columnVal =  myForm.getPlanning().getProjectPeriod().toString();
+				columnVal =  myForm.getPlanning().getProjectPeriod().toString() + " " + TranslatorWorker.translateText("Months");
 			}else{
 				columnVal = "";
 			}

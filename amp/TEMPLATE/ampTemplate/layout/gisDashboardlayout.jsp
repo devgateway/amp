@@ -44,8 +44,11 @@
             var fy=document.getElementsByName('selectedFromYear')[0].value;
             //to year
             var ty=document.getElementsByName('selectedToYear')[0].value;
+            //donors
             var d=document.getElementsByName('selectedDonor')[0].value;
-            var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~timestamp='+lastTimeStamp;
+            //currency
+            var curr=$("#selectedCurrency").val();
+            var myUrl = chartURL+'~selectedFromYear='+fy+'~selectedToYear='+ty+'~selectedDonor='+d+'~selectedCurrency='+curr+'~timestamp='+lastTimeStamp;
             myUrl+=getLegendState();
             myUrl+=getLabelState();
             chartImage.src=myUrl;

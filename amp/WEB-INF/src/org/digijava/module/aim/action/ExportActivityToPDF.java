@@ -814,8 +814,11 @@ public class ExportActivityToPDF extends Action {
 				}
 
 				if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
-					String durationStr = myForm.getPlanning().getProjectPeriod() != null ? myForm.getPlanning().getProjectPeriod().toString(): "";
-					outputValue+=TranslatorWorker.translateText("Duration of Project")+ "\t: " + durationStr +"\n";
+                    outputValue+=TranslatorWorker.translateText("Duration of Project");
+                    BigDecimal duration = myForm.getPlanning().getProjectPeriod();
+                    if (duration != null) {
+                        outputValue += "\t: " + duration.toString() + " " + TranslatorWorker.translateText("Months") + "\n";
+                    }
 				}
 				
 				columnName=TranslatorWorker.translateText("Planning");

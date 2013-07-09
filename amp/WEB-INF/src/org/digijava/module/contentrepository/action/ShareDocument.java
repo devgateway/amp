@@ -26,6 +26,7 @@ import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.jcrentity.Label;
 import org.digijava.module.contentrepository.util.DocToOrgDAO;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.message.triggers.ApprovedResourceShareTrigger;
@@ -43,6 +44,7 @@ public class ShareDocument extends Action {
 		if(shareWith!=null){
 			String nodeBaseUUID=request.getParameter("uuid"); //node's uuid which was requested to be shared
 			Node node=DocumentManagerUtil.getReadNode(nodeBaseUUID, request);
+            NodeWrapper tmpNodeWrapper = new NodeWrapper(node);
 			AmpApplicationSettings sett	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
 			
 			if(shareWith.equals(CrConstants.SHAREABLE_WITH_TEAM)){//user is sharing resource from his private space !
@@ -73,7 +75,16 @@ public class ShareDocument extends Action {
 					NodeWrapper nodeWrapper		= new NodeWrapper(request, teamHomeNode , node,false); //create copy of private node to store as team one
 					
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
-						nodeWrapper.saveNode(jcrWriteSession);
+
+                        nodeWrapper.saveNode(jcrWriteSession);
+                        List<Label> existingLabels	= tmpNodeWrapper.getLabels();
+                        if (existingLabels != null && !existingLabels.isEmpty()) {
+                            for (Label label : existingLabels) {
+                                Node labelNode = DocumentManagerUtil.getWriteNode(label.getUuid(), request);
+                                nodeWrapper.addLabel(labelNode);
+                            }
+                        }
+
 						//if TL approved TM's sharing resource, then new approval should be created
 						if(sharedPrivateNodeVersionUUID!=null){// before becoming team doc,this resource was pending approval
 							new ApprovedResourceShareTrigger(DocumentManagerUtil.getReadNode(nodeBaseUUID, request));
@@ -90,6 +101,7 @@ public class ShareDocument extends Action {
 						}
 						
 						//sharedDoc.setTeamNodeLastAppVersionUUID(lastApprovedNodeVersionUUID);
+
 						DbUtil.saveOrUpdateObject(sharedDoc);
 						String lastApprovedNodeVersionUUID=DocumentManagerUtil.getNodeOfLastVersion(nodeWrapper.getUuid(), request).getUUID(); //es wesit null unda iyos sul !
 						//delete previous approved versionId

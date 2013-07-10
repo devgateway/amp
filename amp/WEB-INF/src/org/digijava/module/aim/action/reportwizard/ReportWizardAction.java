@@ -5,6 +5,7 @@ package org.digijava.module.aim.action.reportwizard;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -12,7 +13,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.PageContext;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -25,14 +27,12 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.taglib.util.TagUtil;
-import org.digijava.module.aim.action.GlobalSettings;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Identificator;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpColumnsOrder;
 import org.digijava.module.aim.dbentity.AmpColumnsVisibility;
@@ -45,7 +45,6 @@ import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.reportwizard.DuplicateReportNameException;
-import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.form.reportwizard.ReportWizardForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -76,6 +75,9 @@ public class ReportWizardAction extends MultiAction {
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
+		if (request.getParameter("repType")!=null && request.getParameter("repType").length()>0)
+			return this.getJSONrepType(mapping, form, request, response);
+		
 		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
 		myForm.setDuplicateName(false);
@@ -242,7 +244,10 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(),typereport,request.getSession()));
 		if (typereport==ArConstants.PLEDGES_TYPE || myForm.getReportType().equalsIgnoreCase("pledge")){
 			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("P"));
-		}else{
+		} else if (myForm.getReportType().equalsIgnoreCase("donor")){
+			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("A") );
+			myForm.getAmpMeasures().addAll(AdvancedReportUtil.getMeasureListbyType("D") );
+		} else {
 			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("A") );
 		}
 		
@@ -262,6 +267,53 @@ public class ReportWizardAction extends MultiAction {
 			return mapping.findForward("showTab" + onePager);
 		else
 			return mapping.findForward("showReport" + onePager);
+	}
+	
+	public ActionForward getJSONrepType(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+
+		ReportWizardForm repForm = (ReportWizardForm)form;
+		
+		String repType = request.getParameter("repType");
+
+        JSONObject root = new JSONObject();
+	    JSONArray children = new JSONArray();
+
+	    if (repType.equalsIgnoreCase("donor")){
+	    	repForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("A") );
+	    	repForm.getAmpMeasures().addAll(AdvancedReportUtil.getMeasureListbyType("D") );
+		} else {
+			repForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("A") );
+		}
+	    
+	    for (Iterator iterator = repForm.getAmpMeasures().iterator(); iterator.hasNext();) {
+			AmpMeasures measure = (AmpMeasures) iterator.next();
+			JSONObject child = new JSONObject();
+			child.put("ID", measure.getMeasureId());
+			child.put("name", measure.getMeasureName());
+			String nameTrn = TranslatorWorker.translateText(measure.getMeasureName());
+			child.put("nameTrn", nameTrn);
+			if (measure.getDescription()!=null)
+				child.put("description", measure.getDescription());
+			else
+				child.put("description", "");
+			children.add(child);
+		}
+	    root.put("children", children);
+	    
+		response.setContentType("text/json-comment-filtered");
+		OutputStreamWriter outputStream = null;
+
+		try {
+			outputStream = new OutputStreamWriter(response.getOutputStream(),"UTF-8");
+			outputStream.write(root.toString());
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+		return null;
 	}
 	
 	public ActionForward modeEdit(ActionMapping mapping, ActionForm form, 

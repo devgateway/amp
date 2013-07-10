@@ -296,6 +296,38 @@ NormalReportManager.prototype.checkSteps	= function () {
 	this.disableSave();
 }
 
+
+NormalReportManager.prototype.callbackRepType = function (type) {
+	var transaction = YAHOO.util.Connect.asyncRequest('GET', "/aim/reportWizard.do?action=getJSONrepType&repType=" + type, callbackRepTypeCall, null);
+}
+
+
+var callbackRepTypeCall = {
+	  success: function(o) {
+		  try {
+			    var results = YAHOO.lang.JSON.parse(o.responseText);
+			    var ulElem = document.getElementById("source_measures_ul");
+				var innerText = "";
+				for(var i = 0; i < results.children.length; i++){
+	    			innerText += "<li class='list1' id='measure_"+results.children[i].ID+"'>";
+	    			innerText += "<input type='checkbox' value='"+results.children[i].name+"' style='line-height:15px; margin-top:6px;'/>";
+	    			innerText += results.children[i].nameTrn;
+					if (results.children[i].description.length > 0){
+	    				innerText += "<img src= '../ampTemplate/images/help.gif' border='0' title='"+results.children[i].description+"'>";
+	    			}
+					innerText += "</li>";
+	    		}
+				ulElem.innerHTML = innerText;
+			}
+			catch (e) {
+			    alert("Invalid respose.");
+			}
+	  },
+	  failure: function(o) {//Fail silently
+		  }
+	};
+
+
 NormalReportManager.prototype.checkReportDetails	= function () {
 	this.enableTab(1);
 	return true;

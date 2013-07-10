@@ -2506,8 +2506,8 @@ public class ExportActivityToPDF extends Action {
 		fundingCell1.setBorder(0);
 		mainLayout.addCell(fundingCell1);
 		
-		PdfPTable fundingTable = new PdfPTable(3);
-		fundingTable.setWidths(new float[]{2f, 1.5f, 2f});
+		PdfPTable fundingTable = new PdfPTable(4);
+		fundingTable.setWidths(new float[]{2f, 1.5f, 2f, 2f});
 		boolean drawTotals=false; //draw total planned commitment,total actual commitments e.t.c.
 		if(myForm.getFunding().getFundingOrganizations()!=null){	
 			String currencyCode=myForm.getCurrCode()!=null?myForm.getCurrCode():"";
@@ -2531,6 +2531,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell foIdCell1=new PdfPCell();
 								foIdCell1.setBackgroundColor(new Color(221,221,221));
 								foIdCell1.setBorder(0);
+								foIdCell1.setColspan(2);
 								p1=new Paragraph(TranslatorWorker.translateText("Funding Organization Id")+":",plainFont);
 								foIdCell1.addElement(p1);
 								fundingTable.addCell(foIdCell1);							
@@ -2547,6 +2548,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell foNameCell1=new PdfPCell();
 								foNameCell1.setBackgroundColor(new Color(221,221,221));
 								foNameCell1.setBorder(0);
+								foNameCell1.setColspan(2);
 								p1=new Paragraph(TranslatorWorker.translateText("Funding Organization Name")+":",plainFont);
 								foNameCell1.addElement(p1);
 								fundingTable.addCell(foNameCell1);							
@@ -2563,6 +2565,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell foAssitanceCell1=new PdfPCell();
 								foAssitanceCell1.setBackgroundColor(new Color(221,221,221));
 								foAssitanceCell1.setBorder(0);
+								foAssitanceCell1.setColspan(2);
 								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Type of Assistance"))+":",plainFont);
 								foAssitanceCell1.addElement(p1);
 								fundingTable.addCell(foAssitanceCell1);							
@@ -2579,6 +2582,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell foInstrumentCell1=new PdfPCell();
 								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
 								foInstrumentCell1.setBorder(0);
+								foInstrumentCell1.setColspan(2);
 								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Financial Instrument"))+":",plainFont);
 								foInstrumentCell1.addElement(p1);
 								fundingTable.addCell(foInstrumentCell1);							
@@ -2595,6 +2599,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell foInstrumentCell1=new PdfPCell();
 								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
 								foInstrumentCell1.setBorder(0);
+								foInstrumentCell1.setColspan(2);
 								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Funding Status"))+":",plainFont);
 								foInstrumentCell1.addElement(p1);
 								fundingTable.addCell(foInstrumentCell1);							
@@ -2611,6 +2616,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell foInstrumentCell1=new PdfPCell();
 								foInstrumentCell1.setBackgroundColor(new Color(221,221,221));
 								foInstrumentCell1.setBorder(0);
+								foInstrumentCell1.setColspan(2);
 								p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Mode of Payment"))+":",plainFont);
 								foInstrumentCell1.addElement(p1);
 								fundingTable.addCell(foInstrumentCell1);							
@@ -2627,6 +2633,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell donorObjCell1=new PdfPCell();
 							donorObjCell1.setBackgroundColor(new Color(221,221,221));
 							donorObjCell1.setBorder(0);
+							donorObjCell1.setColspan(2);
 							p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Donor Objective")+":"),plainFont);
 							donorObjCell1.addElement(p1);
 							fundingTable.addCell(donorObjCell1);
@@ -2644,6 +2651,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell agreementCell1=new PdfPCell();
 							agreementCell1.setBackgroundColor(new Color(221,221,221));
 							agreementCell1.setBorder(0);
+							agreementCell1.setColspan(2);
 							p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Agreement Title")+":"),plainFont);
 							agreementCell1.addElement(p1);
 							fundingTable.addCell(agreementCell1);							
@@ -2657,6 +2665,7 @@ public class ExportActivityToPDF extends Action {
 							agreementCell1=new PdfPCell();
 							agreementCell1.setBackgroundColor(new Color(221,221,221));
 							agreementCell1.setBorder(0);
+							agreementCell1.setColspan(2);
 							p1=new Paragraph(postprocessText(TranslatorWorker.translateText("Agreement Code")+":"),plainFont);
 							agreementCell1.addElement(p1);
 							fundingTable.addCell(agreementCell1);							
@@ -2680,7 +2689,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell plCommCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							plCommCell1.setBorder(0);
 							plCommCell1.setBackgroundColor(new Color(255,255,204));
-							plCommCell1.setColspan(3);
+							plCommCell1.setColspan(4);
 							fundingTable.addCell(plCommCell1);
 
 							if (funding.getFundingDetails() != null) {
@@ -2703,7 +2712,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell actCommCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							actCommCell1.setBorder(0);
 							actCommCell1.setBackgroundColor(new Color(255,255,204));
-							actCommCell1.setColspan(3);
+							actCommCell1.setColspan(4);
 							fundingTable.addCell(actCommCell1);
 							
 							for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
@@ -2724,7 +2733,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell plCommCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							plCommCell2.setBorder(0);
 							plCommCell2.setBackgroundColor(new Color(255,255,204));
-							plCommCell2.setColspan(3);
+							plCommCell2.setColspan(4);
 							fundingTable.addCell(plCommCell2);
 						
 							if(funding.getFundingDetails()!=null){
@@ -2753,7 +2762,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell plDisbCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 								plDisbCell1.setBorder(0);
 								plDisbCell1.setBackgroundColor(new Color(255,255,204));
-								plDisbCell1.setColspan(3);
+								plDisbCell1.setColspan(4);
 								fundingTable.addCell(plDisbCell1);								
 								}
 								
@@ -2777,7 +2786,7 @@ public class ExportActivityToPDF extends Action {
 									PdfPCell actDisbCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 									actDisbCell1.setBorder(0);
 									actDisbCell1.setBackgroundColor(new Color(255,255,204));
-									actDisbCell1.setColspan(3);
+									actDisbCell1.setColspan(4);
 									fundingTable.addCell(actDisbCell1);
 									
 									for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
@@ -2798,7 +2807,7 @@ public class ExportActivityToPDF extends Action {
 									PdfPCell actDisbCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 									actDisbCell2.setBorder(0);
 									actDisbCell2.setBackgroundColor(new Color(255,255,204));
-									actDisbCell2.setColspan(3);
+									actDisbCell2.setColspan(4);
 									fundingTable.addCell(actDisbCell2);
 									
 									for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
@@ -2824,7 +2833,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell plExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							plExpCell1.setBorder(0);
 							plExpCell1.setBackgroundColor(new Color(255,255,204));
-							plExpCell1.setColspan(3);
+							plExpCell1.setColspan(4);
 							fundingTable.addCell(plExpCell1);
 							
 							
@@ -2846,7 +2855,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell actExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 								actExpCell1.setBorder(0);
 								actExpCell1.setBackgroundColor(new Color(255,255,204));
-								actExpCell1.setColspan(3);
+								actExpCell1.setColspan(4);
 								fundingTable.addCell(actExpCell1);
 								
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
@@ -2866,7 +2875,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell actExpCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 								actExpCell2.setBorder(0);
 								actExpCell2.setBackgroundColor(new Color(255,255,204));
-								actExpCell2.setColspan(3);
+								actExpCell2.setColspan(4);
 								fundingTable.addCell(actExpCell2);
 								
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
@@ -2892,7 +2901,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell plExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							plExpCell1.setBorder(0);
 							plExpCell1.setBackgroundColor(new Color(255,255,204));
-							plExpCell1.setColspan(3);
+							plExpCell1.setColspan(4);
 							fundingTable.addCell(plExpCell1);
 							
 							
@@ -2914,7 +2923,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell actExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 								actExpCell1.setBorder(0);
 								actExpCell1.setBackgroundColor(new Color(255,255,204));
-								actExpCell1.setColspan(3);
+								actExpCell1.setColspan(4);
 								fundingTable.addCell(actExpCell1);
 								
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
@@ -2934,7 +2943,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell actExpCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 								actExpCell2.setBorder(0);
 								actExpCell2.setBackgroundColor(new Color(255,255,204));
-								actExpCell2.setColspan(3);
+								actExpCell2.setColspan(4);
 								fundingTable.addCell(actExpCell2);
 								
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
@@ -2960,7 +2969,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell plExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							plExpCell1.setBorder(0);
 							plExpCell1.setBackgroundColor(new Color(255,255,204));
-							plExpCell1.setColspan(3);
+							plExpCell1.setColspan(4);
 							fundingTable.addCell(plExpCell1);
 							
 							
@@ -2982,7 +2991,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell actExpCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 								actExpCell1.setBorder(0);
 								actExpCell1.setBackgroundColor(new Color(255,255,204));
-								actExpCell1.setColspan(3);
+								actExpCell1.setColspan(4);
 								fundingTable.addCell(actExpCell1);
 								
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
@@ -3002,7 +3011,7 @@ public class ExportActivityToPDF extends Action {
 								PdfPCell actExpCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 								actExpCell2.setBorder(0);
 								actExpCell2.setBackgroundColor(new Color(255,255,204));
-								actExpCell2.setColspan(3);
+								actExpCell2.setColspan(4);
 								fundingTable.addCell(actExpCell2);
 								
 								for (FundingDetail fd : (Collection<FundingDetail>)funding.getFundingDetails()) {
@@ -3028,7 +3037,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell actDisbOrdCell=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							actDisbOrdCell.setBorder(0);
 							actDisbOrdCell.setBackgroundColor(new Color(255,255,204));
-							actDisbOrdCell.setColspan(3);
+							actDisbOrdCell.setColspan(4);
 							fundingTable.addCell(actDisbOrdCell);
 							
 							if(funding.getFundingDetails()!=null){
@@ -3050,7 +3059,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell actDisbOrdCell1=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							actDisbOrdCell1.setBorder(0);
 							actDisbOrdCell1.setBackgroundColor(new Color(255,255,204));
-							actDisbOrdCell1.setColspan(3);
+							actDisbOrdCell1.setColspan(4);
 							fundingTable.addCell(actDisbOrdCell1);
 							
 							if(funding.getFundingDetails()!=null){
@@ -3072,7 +3081,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell actDisbOrdCell2=new PdfPCell(new Paragraph(postprocessText(output),titleFont));
 							actDisbOrdCell2.setBorder(0);
 							actDisbOrdCell2.setBackgroundColor(new Color(255,255,204));
-							actDisbOrdCell2.setColspan(3);
+							actDisbOrdCell2.setColspan(4);
 							fundingTable.addCell(actDisbOrdCell2);
 							
 							if(funding.getFundingDetails()!=null){
@@ -3093,7 +3102,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell undisbursedBalanceCell1=new PdfPCell(new Paragraph(TranslatorWorker.translateText("UNDISBURSED BALANCE:")+" \t\t         "+ output+"\n\n",plainFont));
 							undisbursedBalanceCell1.setBorder(0);
 							undisbursedBalanceCell1.setBackgroundColor(new Color(255,255,204));
-							undisbursedBalanceCell1.setColspan(3);
+							undisbursedBalanceCell1.setColspan(4);
 							fundingTable.addCell(undisbursedBalanceCell1);
 						}	
 												
@@ -3104,7 +3113,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell amountsInThousandsCell1 = new PdfPCell(new Paragraph(TranslatorWorker.translateText("The amount entered are in thousands (000)"),plainFont));
 							amountsInThousandsCell1.setBorder(0);
 							amountsInThousandsCell1.setBackgroundColor(new Color(255,255,204));
-							amountsInThousandsCell1.setColspan(3);
+							amountsInThousandsCell1.setColspan(4);
 							//fundingTable.addCell(amountsInThousandsCell1);
 							fundingTable.addCell(amountsInThousandsCell1);
 						}
@@ -3114,7 +3123,7 @@ public class ExportActivityToPDF extends Action {
 							PdfPCell amountsInMillionsCell1 = new PdfPCell(new Paragraph(TranslatorWorker.translateText("The amount entered are in millions (000 000)"),plainFont));
 							amountsInMillionsCell1.setBorder(0);
 							amountsInMillionsCell1.setBackgroundColor(new Color(255,255,204));
-							amountsInMillionsCell1.setColspan(3);
+							amountsInMillionsCell1.setColspan(4);
 							//fundingTable.addCell(amountsInThousandsCell1);
 							fundingTable.addCell(amountsInMillionsCell1);
 						}						
@@ -3122,7 +3131,7 @@ public class ExportActivityToPDF extends Action {
 						PdfPCell empty=new PdfPCell(new Paragraph("\n\n"));
 						empty.setBorder(0);
 						empty.setBackgroundColor(new Color(255,255,255));
-						empty.setColspan(3);
+						empty.setColspan(4);
 						fundingTable.addCell(empty);							
 					}
 				}
@@ -3135,7 +3144,7 @@ public class ExportActivityToPDF extends Action {
 				PdfPCell empty=new PdfPCell(new Paragraph("\n\n"));
 				empty.setBorder(0);
 				empty.setBackgroundColor(new Color(255,255,255));
-				empty.setColspan(3);
+				empty.setColspan(4);
 				fundingTable.addCell(empty);							
 				if(visibleModuleCommitments){
 					//TOTAL PLANNED COMMITMENTS
@@ -3256,6 +3265,7 @@ public class ExportActivityToPDF extends Action {
 		
 		subTotal=new PdfPCell(new Paragraph(output,plainFont));
 		subTotal.setBackgroundColor(new Color(221,221,221));
+		subTotal.setColspan(2);
 		subTotal.setBorderWidthBottom(0);
 		subTotal.setBorderWidthTop(0.5f);
 		subTotal.setBorderWidthLeft(0);
@@ -3271,6 +3281,7 @@ public class ExportActivityToPDF extends Action {
 		fundingTable.addCell(totalPC);
 		PdfPCell totalPCAmount=new PdfPCell();
 		totalPCAmount.setBorder(0);
+		totalPCAmount.setColspan(2);
 		totalPCAmount.setBackgroundColor(new Color(221,221,221));					
 		p1=new Paragraph(postprocessText(totalsOutput),plainFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
@@ -3284,7 +3295,7 @@ public class ExportActivityToPDF extends Action {
 		PdfPCell lineCell;
 		lineCell=new PdfPCell(new Paragraph(0));
 		lineCell.setBorder(0);
-		lineCell.setColspan(3);
+		lineCell.setColspan(4);
 		fundingTable.addCell(lineCell);
 	}
 		
@@ -3362,7 +3373,17 @@ public class ExportActivityToPDF extends Action {
 		} else {
 			addEmptyCell(infoTable);
 		}		
+		
+		if (fd.getRecipientOrganisation() != null && fd.getRecipientOrganisationRole() != null) {
+			String output=TranslatorWorker.translateText("Recipient:") + " ";
+			output += fd.getRecipientOrganisation().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fd.getRecipientOrganisationRole().getName();
 
+            innerCell = new PdfPCell(new Paragraph(output, plainFont));
+            innerCell.setBorder(0);
+            infoTable.addCell(innerCell);
+		} else {
+			addEmptyCell(infoTable);
+		}
 
 	}	
 	

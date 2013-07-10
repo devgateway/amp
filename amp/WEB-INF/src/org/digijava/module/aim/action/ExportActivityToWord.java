@@ -2119,6 +2119,11 @@ public class ExportActivityToWord extends Action {
                                             exchangeRateStr += DECIMAL_FORMAT.format(fndDet.getFixedExchangeRate());
                                             currentRowData.addRowData(exchangeRateStr);
                                         }
+                                        if (fndDet.getRecipientOrg() != null && fndDet.getRecipientRole() != null) {
+                                            String recStr = TranslatorWorker.translateText("Recipient:") + " ";
+                                            recStr += fndDet.getRecipientOrg().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fndDet.getRecipientRole().getName();
+                                            currentRowData.addRowData(recStr);
+                                        }
 
                                         eshDonorFundingDetails.addRowData(sectionHelperRowData);
 									}

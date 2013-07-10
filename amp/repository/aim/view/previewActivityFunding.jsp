@@ -37,7 +37,7 @@
 											<td>
 											<table cellspacing="1" cellpadding="0" border="0" width="100%">
 												<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification" 
-													parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+													     parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 												<tr>
 													<td>
 													<table cellspacing="1" cellpadding="0" border="0" width="100%">
@@ -45,7 +45,7 @@
 															<td>
 															<table width="100%" border="0" cellpadding="0" bgcolor="#dddddd" cellspacing="1" style="font-size:11px;">
 																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id"
-																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
+																	    parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																<tr>
 																	<td align="left" width="150">
 																		<a title='<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
@@ -88,11 +88,11 @@
 																</module:display>
 																<!-- type of assistance -->
 																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence"
-																	parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
+																	    parentModule="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification">
 																	<tr>
 																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>'>
-																		<digi:trn key="aim:typeOfAssist">Type of Assistance </digi:trn>
+																		<digi:trn key="aim:typeOfAssist">Type of Assistance</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
 																		<td align="left">
@@ -209,7 +209,7 @@
 														<jsp:include page="previewActivityFundingDisbursement.jsp" />
 													</module:display>
 
-													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures" 
+													<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Expenditures"
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingExpenditures.jsp" />
 													</module:display>
@@ -228,7 +228,13 @@
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 														<jsp:include page="previewActivityFundingEDD.jsp" />
 													</module:display>
-													
+
+                                                    <%-- Do not display disbursement orders for now --%>
+                                                    <%--module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders"
+                                                        parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+                                                        <jsp:include page="previewActivityFundingDisbursementOrders.jsp" />
+                                                    </module:display--%>
+
 													<feature:display module="Funding" name="Undisbursed Balance">
 													    <jsp:include page="previewActivityFundingUndisbursedBalance.jsp" />
 													</feature:display>

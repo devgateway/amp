@@ -33,6 +33,7 @@ public abstract class Exporter {
 	}
 
 	protected AmpReports metadata; 
+	protected AmpARFilter filter;
 
 	/**
 	 * @return Returns the metadata.
@@ -48,6 +49,16 @@ public abstract class Exporter {
 		this.metadata = metadata;
 	}
 
+	public AmpARFilter getFilter()
+	{
+		return this.filter;
+	}
+	
+	public void setFilter(AmpARFilter filter)
+	{
+		this.filter = filter;
+	}
+	
 	/**
 	 * Constructs a new exporter object as a child of an already instantiated
 	 * Exporter object.
@@ -59,7 +70,11 @@ public abstract class Exporter {
 	public Exporter(Exporter parent, Viewable item) {
 		this.parent = parent;
 		this.item = item;
-		if(parent!=null) this.metadata=parent.getMetadata();
+		if (parent!=null)
+		{
+			this.metadata = parent.getMetadata();
+			this.filter = parent.getFilter();
+		}
 	}
 
 	public Exporter() {

@@ -14,11 +14,20 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <digi:instance property="datadispatcherform" />
 <html>
-  
+ <%
+ 	Integer msieVersion = org.dgfoundation.amp.Util.getIEVersion(request);
+ 	if (msieVersion == null) { %>
+ 		<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+ 	<%} else
+ 	if (msieVersion <= 8) {  %>
+ 		<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=7" />
+ 	<%} else {%>
+ 		<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=9" />
+<% 	}
+ %> 
   <head>
-  	<title><digi:trn>Aid Management Platform - Advanced GIS</digi:trn></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=7" /> 
+	<title><digi:trn>Aid Management Platform - Advanced GIS</digi:trn></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
     <!--The viewport meta tag is used to improve the presentation and behavior of the samples 
       on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>

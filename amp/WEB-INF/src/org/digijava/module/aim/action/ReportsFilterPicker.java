@@ -1724,8 +1724,8 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		arf.setDecimalseparator(decimalSeparator);
 		
-		
-		if (filterForm.getCustomUseGrouping()!=null && filterForm.getCustomUseGrouping().booleanValue() == true) {
+		arf.setCustomusegroupings(filterForm.getCustomUseGrouping());		
+		if (arf.getCustomusegroupings() != null && arf.getCustomusegroupings().booleanValue() == true) {
 			String groupingSeparator = !"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter()) ? 
 					filterForm.getCustomGroupCharacter().substring(0, 1) : filterForm.getCustomGroupCharacterTxt().substring(0, 1);
 			ds.setGroupingSeparator( groupingSeparator.charAt(0) );			
@@ -1734,7 +1734,10 @@ public class ReportsFilterPicker extends MultiAction {
 			custom.setGroupingSize(filterForm.getCustomGroupSize());	
 			
 			arf.setGroupingsize(filterForm.getCustomGroupSize());
-			arf.setCustomusegroupings(filterForm.getCustomUseGrouping());
+		} else
+		{
+			custom.setGroupingUsed(false);
+			custom.setGroupingSize(99); //we might as well have said "infinite"
 		}
 		
 		//custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces() != -1) ? filterForm.getCustomDecimalPlaces() : 99);

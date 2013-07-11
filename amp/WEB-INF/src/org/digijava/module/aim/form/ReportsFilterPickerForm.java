@@ -423,8 +423,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 			// if applyFormat is clicked, the content of the filter was deleting not only the sectors...
 			//AMP-5249
 			if (request.getParameter("applyFormat")!=null && (request.getParameter("applyFormat") != null)){
-				this.amountinthousands=false;
-				this.amountinmillions=false;
+				this.amountinthousands = false;
+				this.amountinmillions = false;
+				this.customUseGrouping = false;
 			}else{
 				this.selectedDonnorAgency=null;
 				this.selectedRisks = null;

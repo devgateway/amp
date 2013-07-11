@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.onepager.components.upload;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.file.Folder;
@@ -21,12 +22,12 @@ import java.util.HashSet;
  */
 public class FileManager {
     private static final Logger logger = Logger.getLogger(FileManager.class);
-    private Model<FileItem> fileItemModel;
+    private IModel<FileItem> fileItemModel;
     private String activityId;
 
     //private final Folder baseFolder;
 
-    public FileManager(String activityId, Model<FileItem> fileItemModel) {
+    public FileManager(String activityId, IModel<FileItem> fileItemModel) {
         //this.baseFolder = new Folder(baseFolder);
         this.activityId=activityId;
         this.fileItemModel=fileItemModel;

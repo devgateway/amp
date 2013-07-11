@@ -160,7 +160,21 @@
 																		</td>
 																	</tr>
 																</module:display>
-																<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
+
+                                                                <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Conditions" parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+                                                                    <tr>
+                                                                        <td align="left" width="150"><a
+                                                                                title='<digi:trn key="aim:donorobjective">Conditions</digi:trn>'>
+                                                                            <digi:trn key="aim:donorobjective">Conditions</digi:trn>
+                                                                        </a></td>
+                                                                        <td width="1">:</td>
+                                                                        <td align="left">
+                                                                            <b><bean:write name="funding" property="conditions" /></b>
+                                                                        </td>
+                                                                    </tr>
+                                                                </module:display>
+
+                                                                <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement"
 																	parentModule="/Activity Form/Funding/Funding Group/Funding Classification">
 																	<tr>
 																		<td align="left" width="150">

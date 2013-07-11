@@ -15,6 +15,8 @@ public class DefaultUnDisbursmentCalculator implements AmountCalculator {
 
 	public double calculateAmount(Set<CategAmountCell> mergedCells) {
 		double ret = 0;
+		if (mergedCells == null)
+			return ret;
 		Iterator<CategAmountCell> i = mergedCells.iterator();
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();

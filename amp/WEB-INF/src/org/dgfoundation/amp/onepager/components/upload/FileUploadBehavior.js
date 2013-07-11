@@ -1,12 +1,12 @@
 Wicket.Event.add(window, "domready", function(event){
-    setupFileUpload();
+    //setupFileUpload('#${componentMarkupId}', '${url}', '${paramName}');
 });
 
-function setupFileUpload(){
+function setupFileUpload(componentId, componentUrl, componentParamName){
     $(function () {
-        $('#${componentMarkupId}').fileupload({
-            url: '${url}',
-            paramName: '${paramName}',
+        $(componentId).fileupload({
+            url: componentUrl,
+            paramName: componentParamName,
             singleFileUploads: true,
             minFileSize: 1,
             maxFileSize: 20000000,

@@ -110,6 +110,9 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		
 		AmpTextAreaFieldPanel<String> donorObjective = new AmpTextAreaFieldPanel<String>("donorObjective", new PropertyModel<String>(fundingModel,"donorObjective"), "Donor Objective", false);
 		add(donorObjective);
+        
+        AmpTextAreaFieldPanel<String> conditions = new AmpTextAreaFieldPanel<String>("conditions", new PropertyModel<String>(fundingModel,"conditions"), "Conditions", false);
+        add(conditions);
 		
 //		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true, AmpOrganisationSearchModel.class) {			
 //			private static final long serialVersionUID = 1L;

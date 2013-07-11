@@ -109,11 +109,11 @@ public class DataDispatcher extends DispatchAction {
 		
 		if (visualizationForm.getFilter().getWorkspaceOnly() != null && visualizationForm.getFilter().getWorkspaceOnly()) {
 	    	currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
-	    	if((currentTeam.getComputation() != null && currentTeam.getComputation()) || "Management".equals(currentTeam.getAccessType())){
+	    	//if((currentTeam.getComputation() != null && currentTeam.getComputation()) || "Management".equals(currentTeam.getAccessType())){
 	    		AmpARFilter filter = (AmpARFilter)session.getAttribute(ArConstants.TEAM_FILTER);
 	    		ArrayList<BigInteger> activityList = DbUtil.getInActivities(filter.getFilterConditionOnly());
 	    		visualizationForm.getFilter().setActivityComputedList(activityList);
-			}
+			//}
 			visualizationForm.getFilter().setTeamMember(tm);
         } else {
         	visualizationForm.getFilter().setActivityComputedList(null);
@@ -2351,8 +2351,7 @@ public class DataDispatcher extends DispatchAction {
 				}
 				filter.setBudgetCVIds(budgetCVIds);
                 newFilter = filter.getCopyFilterForFunding();
-				Long[] selCVIds = {-1l};
-				newFilter.setSelCVIds(selCVIds);
+				newFilter.setSelCVIds(null);
 				yearGrandTotal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType()).getValue();
 				yearUnallocatedTotal = yearGrandTotal.subtract(yearAllocatedTotal);
 				xmlString.append("<dataField category=\"" +TranslatorWorker.translateText("Unallocated") + "\" id=\"-1\" amount=\""+ yearUnallocatedTotal.divide(divideByDenominator, RoundingMode.HALF_UP).setScale(filter.getDecimalsToShow(), RoundingMode.HALF_UP) + "\" year=\"" + yearName + "\"/>\n");
@@ -2473,8 +2472,7 @@ public class DataDispatcher extends DispatchAction {
     		}
 			filter.setBudgetCVIds(budgetCVIds);
             newFilter = filter.getCopyFilterForFunding();
-			Long[] selCVIds = {-1l};
-			newFilter.setSelCVIds(selCVIds);
+			newFilter.setSelCVIds(null);
 			
 			yearGrandTotal = DbUtil.getFunding(newFilter, startDate, endDate, null, null, filter.getTransactionType(), filter.getAdjustmentType()).getValue();
 			yearUnallocatedTotal = yearGrandTotal.subtract(yearAllocatedTotal);

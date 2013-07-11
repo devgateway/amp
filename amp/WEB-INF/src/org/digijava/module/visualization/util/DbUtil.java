@@ -1111,7 +1111,7 @@ public class DbUtil {
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			organizationRoleQuery = true;
     	
-        oql = "select distinct fd, f.ampActivityId.ampActivityId, f.ampActivityId.name";
+        oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name";
         if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
         	oql += ", actProg.programPercentage ";
         if (locationCondition)

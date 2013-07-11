@@ -398,8 +398,8 @@ function showBuffer(geometries) {
 function findbydistance(evt) {
 	searchpoint = evt;
 	foundstr = [];
+	var count = 0;
 	if (structurespoint.length > 0) {
-		var count = 0;
 		var distParams = new esri.tasks.DistanceParameters();
 		for ( var int = 0; int < structurespoint.length; int++) {
 			distParams.distanceUnit = esri.tasks.GeometryService.UNIT_KILOMETER;
@@ -413,8 +413,6 @@ function findbydistance(evt) {
 
 			geometryService.distance(distParams, function(distance) {
 				if (distance <= searchdistance) {
-					// console.log("Results: " + distance + " " +
-					// structures[count].attributes.Activity );
 					foundstr.push(structurespoint[count]);
 				}
 				count++;
@@ -423,8 +421,10 @@ function findbydistance(evt) {
 				}
 			});
 		}
+		
 	} else {
 		searchactive = false;
+		hideLoading();
 	}
 }
 
@@ -1156,13 +1156,23 @@ function getStructures(clear) {
 					MapFindStructure(activity, structureGraphicLayer);
 				});
 				
-				map.addLayer(structureGraphicLayer);
-				map.setExtent(map.extent.expand(1.01));
-				CluterStructures();
+				if (structurespoint.length>0){
+					map.addLayer(structureGraphicLayer);
+					map.setExtent(map.extent.expand(1.01));
+					// Show Structures link
+					dojo.style('structures', { 'display' : 'block' });
+					if (dojo.byId('search')){
+						dojo.style('search', { 'display' : 'block' });
+					}
+					CluterStructures();
+					
+				}
+				
 			},
 			error : function(error) {
 				console.log(error);
 			}
+			
 		}
 		// Call the asynchronous xhrGet
 		var deferred = dojo.xhrGet(xhrArgs);
@@ -1365,7 +1375,7 @@ function CluterStructures(){
 				visible : structureVisible,
 				features : structurespoint,
 				onClusterExpand:function(){
-					$("#clusterStructures").show()
+					$("#clusterStructures").show();
 				},
 				infoWindow :{
 					template :

@@ -104,7 +104,7 @@ public class AmpResourcesFormSectionFeature extends AmpFormSectionFeaturePanel {
 				resourcesList.setRefreshExistingDocs(true);
 				target.add(resourcesList.getParent());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(AmpResourcesFormSectionFeature.this));
-				
+
 			}
 
 			@Override

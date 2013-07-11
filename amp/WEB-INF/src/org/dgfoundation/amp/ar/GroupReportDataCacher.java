@@ -56,7 +56,7 @@ public class GroupReportDataCacher
 	
 	private GroupReportData regenerateGroupReportData(ReportContextData key)
 	{
-		GroupReportData res = ARUtil.generateReport(key.getReportMeta(), key.getFilter(), false);
+		GroupReportData res = ARUtil.generateReport(key.getReportMeta(), key.getFilter(), false, true);
 		
 		if (key.getReportSorters() != null && key.getReportSorters().size() > 0)
 		{

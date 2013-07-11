@@ -144,6 +144,12 @@
 				{
 					newMaxValue = maxValue;
 				}
+				if(newMaxValue > 9999999) //Allow to show big numbers
+				{
+					dcLeft = 60;
+				} else {
+					dcLeft = 40;
+				}
 				vScale.maxValue = newMaxValue;
 				vScale.minValue = 0;
 				dataProvider = service.lastResult.year;
@@ -588,6 +594,7 @@
 	<mx:Number id="dataFontSize">12</mx:Number>
 	<mx:String id="dataFontWeight">bold</mx:String>
 	<mx:Number id="legendOffset">40</mx:Number>
+	<mx:Number id="dcLeft">40</mx:Number>
 	
 
 	<!--  
@@ -613,7 +620,7 @@
 		bottom="80"
 		width="{this.width*.9}"
 		id="dc"
-		left="40"
+		left="{dcLeft}"
 		right="80"
 		horizontalCenter="0" 
 		showDataTips="true"

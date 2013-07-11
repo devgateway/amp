@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +30,7 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.CurrencyRates;
@@ -46,6 +49,64 @@ public class UpdateCurrencyRate extends Action {
 
 	private static Logger logger = Logger.getLogger(UpdateCurrencyRate.class);
 
+	/**
+	 * VERY BASIC SANITY CHECK. DO NOT USE AS AN AUTHORITATIVE FUNCTION FOR TAKING THE DECISION
+	 * @param dateStr
+	 * @return
+	 */
+	public static String malawi_date_swap(String dateStr)
+	{
+		StringTokenizer tok = new StringTokenizer(dateStr, "/");
+		if (tok.countTokens() != 3)
+			return dateStr;
+		
+		String month = tok.nextToken();
+		String day = tok.nextToken();
+		String year = tok.nextToken();
+		return day + "/" + month + "/" + year;
+	}
+	
+	/**
+	 * VERY BASIC SANITY CHECK. DO NOT USE AS AN AUTHORITATIVE FUNCTION FOR TAKING THE DECISION
+	 * @param dateStr
+	 * @return
+	 */
+	public static boolean is_valid_date(String dateStr)
+	{
+		StringTokenizer tok = new StringTokenizer(dateStr, "/");
+		if (tok.countTokens() != 3)
+			return false;
+		try
+		{
+			String day = tok.nextToken();
+			String month = tok.nextToken();
+			String year = tok.nextToken();
+			Integer yearNr = Integer.parseInt(year);
+			Integer monthNr = Integer.parseInt(month);
+			Integer dayNr = Integer.parseInt(day);
+			Date date = new Date(yearNr - 1900, monthNr - 1, dayNr);
+			
+			if (dayNr <= 0 || dayNr > 31)
+				return false;
+			if (monthNr <= 0 || monthNr > 12)
+				return false;
+			if (yearNr <= 1960 || yearNr >= 3000)
+				return false; // hopefully this code will not be running 987 years from now
+			if (date.getDate() != dayNr)
+				return false;
+			if (date.getMonth() != monthNr - 1)
+				return false;
+			if (date.getYear() != yearNr - 1900)
+				return false;
+			
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
+	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 
@@ -81,26 +142,44 @@ public class UpdateCurrencyRate extends Action {
 							BufferedReader in = new BufferedReader(new InputStreamReader(is));
 							String line = null;
 							StringTokenizer st = null;
-				
+							
+							Set<String> allCurrencyCodes = new HashSet<String>(); // set of all currency codes in the to-be-imported file, to be checked against the existing currencies
+							
 							while ((line = in.readLine()) != null)
 							{
 								String separator=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.EXCHANGE_RATE_SEPARATOR);
 								if(separator==null || "".compareTo(separator)==0)
 									st = new StringTokenizer(line,",");
 								else st = new StringTokenizer(line, separator);
+								
 								if(st.countTokens()==3)
 								{
 									String code = st.nextToken().trim();
-									double rate = FormatHelper.parseDouble(st.nextToken().trim());
+									String rateToken = st.nextToken().trim();
+									Double rate = FormatHelper.parseDouble(rateToken);
+									if (rate == null)
+										throw new RuntimeException("could not parse rate; the erroneous token is: " + rateToken);
 									String date = st.nextToken().trim();
+									//date = malawi_date_swap(date);
+									if (!is_valid_date(date))
+										throw new RuntimeException("invalid date, please use a dd/mm/yyyy format: " + date);
 									currencyRates = new CurrencyRates();
 									currencyRates.setCurrencyCode(code);
 									currencyRates.setExchangeRate(new Double(rate));
 									//DateTimeUtil.parseDate(date).toString();
 									currencyRates.setExchangeRateDate(date);
+									allCurrencyCodes.add(currencyRates.getCurrencyCode());
 									col.add(currencyRates);
 								} 
 							}
+							
+							Set<String> allExistingActiveCurrencies = new HashSet<String>();
+							for(AmpCurrency currency:CurrencyUtil.getAllCurrencies(1))
+								allExistingActiveCurrencies.add(currency.getCurrencyCode());
+								
+							for(String currencyCode:allCurrencyCodes)
+								if (!allExistingActiveCurrencies.contains(currencyCode))
+									throw new RuntimeException("Currency code does not exist in the active currencies: " + currencyCode + "; please configure a currency with this code first and then import the file OR please check the currency rates file");
 							CurrencyUtil.saveCurrencyRates(col, baseCurrency);
 				
 							Date toDate = DateConversion.getDate(crForm.getFilterByDateFrom());
@@ -114,7 +193,7 @@ public class UpdateCurrencyRate extends Action {
 								// TODO: handle exception
 						ActionMessages errors = new ActionMessages();
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-								"error.aim.uploadCurrencyRates.fileCorrupted"));
+								"error.aim.uploadCurrencyRates.fileCorrupted", e.getMessage()));
 						HttpSession httpSession = request.getSession();
 						httpSession.setAttribute("CurrencyRateFileUploadError", errors);
 						//saveErrors(request, errors);

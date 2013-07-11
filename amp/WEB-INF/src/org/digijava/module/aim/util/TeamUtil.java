@@ -1098,6 +1098,14 @@ public class TeamUtil {
                 }
             }
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
         }
 
     }
@@ -1731,7 +1739,7 @@ public class TeamUtil {
 
 
     
-    public static Collection<AmpActivityVersion> getAllTeamActivities(Long teamId, String keyword) {
+    public static Collection<AmpActivityVersion> getAllTeamActivities(Long teamId, boolean includedraft, String keyword) {
     	Session session = null;
 		Collection<AmpActivityVersion> col = new ArrayList();
 
@@ -1746,7 +1754,10 @@ public class TeamUtil {
 			}else{
 				queryString+="where act.team is null";
 			}
-            queryString+=" and   (act.draft is null or act.draft=false) and ( act.deleted is null or act.deleted=false )";
+			if(!includedraft){
+	        	queryString+="  and   (act.draft is null or act.draft=false) ";
+	        }
+            queryString+=" and ( act.deleted is null or act.deleted=false )";
             if(keyword!=null){
             	queryString += " and lower(act.name) like lower(:name)" ;
             }

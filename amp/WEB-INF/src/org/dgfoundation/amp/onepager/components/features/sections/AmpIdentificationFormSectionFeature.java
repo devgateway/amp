@@ -17,6 +17,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpBooleanChoiceField;
 import org.dgfoundation.amp.onepager.components.fields.AmpBudgetClassificationField;
@@ -189,7 +190,17 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 					updateExtraFields(target);
 				}
 			});
-			add(activityBudget);
+            add(new AmpComponentPanel("activityBudgetRequired", "Required Validator for " + CategoryConstants.ACTIVITY_BUDGET_NAME) {
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    if (this.isVisible()){
+                        activityBudget.getChoiceContainer().setRequired(true);
+                    }
+                }
+            });
+            add(activityBudget);
+
 
 			AmpCategoryGroupFieldPanel financialInstrument = new AmpCategoryGroupFieldPanel(
 					"financialInstrument",

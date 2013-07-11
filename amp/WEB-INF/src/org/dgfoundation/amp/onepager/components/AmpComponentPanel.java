@@ -331,12 +331,19 @@ public abstract class AmpComponentPanel<T> extends Panel implements
          */
         boolean isEnabledInFm = FMUtil.isFmEnabled(this); //be sure to run this assures that module inserted in FM
         boolean fmEnabled = (foundEnabledChild.getObject() || isEnabledInFm);
-		boolean fmVisible = FMUtil.isFmVisible(this);
-		if (!ignorePermissions)
-			setEnabled(fmMode?true:fmEnabled);
-		if (!ignoreFmVisibility)
-			setVisible(fmMode?true:fmVisible);
-		
+        boolean fmVisible = FMUtil.isFmVisible(this);
+
+        if (fmMode){
+            setEnabled(true);
+            setVisible(true);
+        }
+        else{
+            if (!ignorePermissions)
+                setEnabled(fmEnabled);
+            if (!ignoreFmVisibility)
+                setVisible(fmVisible);
+        }
+
 		if (this instanceof AmpFormSectionFeaturePanel && fmMode){
 			OnepagerSection tmpos = OnePager.findByName(this.getClass().getName());
 			if (tmpos != null){

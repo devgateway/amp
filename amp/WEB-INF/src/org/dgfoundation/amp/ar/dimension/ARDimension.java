@@ -88,7 +88,11 @@ public abstract class ARDimension {
 		translatedTextUnallocated = text;
 	
 	//See AMP-9522
- 	if(childCell.getValue().toString().contains(translatedTextUnallocated)) return true;
+ 	if(childCell.getValue().toString().contains(translatedTextUnallocated)
+ 		// Unallocated cells are fake cells. If this cell has a database ID then this is a real 
+		// cell not a normal "Unallocated" cell
+		&& (childCell.getId() == null || childCell.getId() < 1) )  
+ 		return true;
 	
 	Class relatedContentPersisterClass = childCell.getColumn().getRelatedContentPersisterClass();
 	if(relatedContentPersisterClass==null) return true; // default behavior is to accept anything we have no information about

@@ -23,6 +23,7 @@ import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
 import org.digijava.module.aim.annotations.activityversioning.VersionableCollection;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldTextEditor;
 import org.digijava.module.aim.annotations.activityversioning.VersionableFieldSimple;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -587,7 +588,18 @@ public class CompareActivityVersions extends DispatchAction {
 			auxActivity.setMergeSource1(vForm.getActivityOne());
 			auxActivity.setMergeSource2(vForm.getActivityTwo());
 			session.save(auxActivity);
-
+			
+			AmpActivityContact actCont;
+			Set<AmpActivityContact> contacts = new HashSet<AmpActivityContact>();
+			Iterator<AmpActivityContact> it = auxActivity.getActivityContacts().iterator();
+			while(it.hasNext()){
+				actCont = it.next();
+				actCont.setId(null);
+				actCont.setActivity(auxActivity);
+				session.save(actCont);
+				contacts.add(actCont);
+			}
+			auxActivity.setActivityContacts(contacts);
 			String ampId = ActivityUtil.generateAmpId(member.getUser(), auxActivity.getAmpActivityId(), session);
 			auxActivity.setAmpId(ampId);
 			session.update(auxActivity);

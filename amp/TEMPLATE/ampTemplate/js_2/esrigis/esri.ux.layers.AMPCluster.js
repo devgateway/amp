@@ -495,7 +495,6 @@ dojo.declare('esri.ux.layers.AmpCluster', esri.layers.GraphicsLayer, {
                             } else { //single graphic
                                 dojo.forEach(col, function(point) {
                                 	var currentSymbol = new esri.symbol.PictureMarkerSymbol('/esrigis/structureTypeManager.do~action=displayIcon~id='+ point.attributes.Type_id, 21, 25);
-                                    
                                     this.add(new esri.Graphic(point, currentSymbol, dojo.mixin({ isCluster: false },point.attributes), this._infoTemplate));
                                 }, this);
                             }

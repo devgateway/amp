@@ -122,7 +122,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    	arf.setPublicView(true);
 	    }
 	 
-		GroupReportData rd = ARUtil.generateReport(report, filter, true);
+		GroupReportData rd = ARUtil.generateReport(report, filter, true, false);
 		
 		ARUtil.cleanReportOfHtmlCodes(rd);
 		

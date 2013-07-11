@@ -198,7 +198,7 @@ public class ViewNewAdvancedReport extends Action {
 			progressValue = progressValue + 20;// 20 is the weight of this process on the progress bar
 			ReportContextData.getFromRequest().setProgressValue(progressValue);
 
-			rd = ARUtil.generateReport(report, filter, true);
+			rd = ARUtil.generateReport(report, filter, true, true);
 			progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
 			ReportContextData.getFromRequest().setProgressValue(progressValue);
 	

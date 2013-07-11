@@ -91,6 +91,13 @@ public class AmpSelectFieldPanel<T> extends AmpFieldPanel<T> {
 		this(id, model, new WildcardListModel<T>(choicesList), fmName,
 				hideLabel, nullValid, renderer);
 	}
+	
+	public AmpSelectFieldPanel(String id, IModel<T> model,
+			List<? extends T> choicesList, String fmName, boolean hideLabel,
+			boolean nullValid, IChoiceRenderer<? super T> renderer,boolean hideNewLine) {
+		this(id, model, new WildcardListModel<T>(choicesList), fmName,
+				hideLabel, nullValid, renderer,hideNewLine);
+	}
 
 	/**
 	 * @param id

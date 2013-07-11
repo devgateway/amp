@@ -82,7 +82,7 @@ public class CSVExportAction
     	arf.setPublicView(true);
     }
 
-    GroupReportData rd = ARUtil.generateReport(r, arf, true);
+    GroupReportData rd = ARUtil.generateReport(r, arf, true, false);
 
     rd.setCurrentView(GenericViews.XLS);
 	

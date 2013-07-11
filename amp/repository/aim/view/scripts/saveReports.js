@@ -78,12 +78,12 @@ SaveReportEngine.prototype.success		= function (o) {
 	}
 	else {
 		var message		= null;
-		if ( this.isTab )
+		if ( this.isTab ){
 			if ( this.overwritingReport )
 				message	= SaveReportEngine.tabSavedMessage;
 			else
 				message	= SaveReportEngine.doneCopyMessage + SaveReportEngine.checkTabsMessage;
-		else {
+		} else {
 			if ( this.overwritingReport )
 				message	= SaveReportEngine.reportSavedMessage;
 			else {
@@ -94,7 +94,7 @@ SaveReportEngine.prototype.success		= function (o) {
 		}
 		message += "<br />" +
 				"<div align='center'>" +
-				"<digi:trn><input class='buttonx' type='reset' value='OK' onClick='return refresh();'></digi:trn>" +
+				"<digi:trn><input class='buttonx' type='reset' value='OK' onClick='return refresh("+this.isTab+");'></digi:trn>" +
 				"</div>";	
 		
 		this.panel.setBody( message );
@@ -103,8 +103,9 @@ SaveReportEngine.prototype.success		= function (o) {
 	}
 };
 
-function refresh(){
-	document.forms[0].action = "/showDesktop.do";
+function refresh(isTab){
+	if (isTab)
+		document.forms[0].action = "/showDesktop.do";
 	document.forms[0].submit();
 }
 

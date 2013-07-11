@@ -75,7 +75,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	public static Session getHibernateSession() {
 		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 		Session hibernateSession = (Session) s.getHttpSession().getAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY);
-		if(hibernateSession==null)  {
+		if(hibernateSession==null || !hibernateSession.isOpen())  {
 			try {
 				hibernateSession = PersistenceManager.openNewSession();
 				hibernateSession.setFlushMode(FlushMode.MANUAL);

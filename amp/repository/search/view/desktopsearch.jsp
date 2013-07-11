@@ -28,7 +28,9 @@ function searchEnter(e)
 _big
 </c:if>
 </c:set>
-
+<c:set var="searchDescription">
+				<digi:trn>You can use the * wildcard for matching any character</digi:trn>
+			</c:set>
 
 
 <div class="right_menu">
@@ -44,7 +46,7 @@ _big
 									<div class="search_label"><digi:trn>Keyword</digi:trn>:</div>
 								</td>
 								<td align="left" class="tbl_spacing">
-									<input name="" type="text" class="inputx" style="width:90px;" onkeypress="searchEnter(event)" id="keyword">
+									<input name="" type="text" class="inputx" style="width:90px;" onkeypress="searchEnter(event)" id="keyword" title="${searchDescription}">
 								</td>
 						</tr>
 						<tr>

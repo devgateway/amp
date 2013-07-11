@@ -129,7 +129,7 @@ public class ExportWorkspaceManager2XSL extends Action {
                     activityList =new ArrayList<AmpActivityVersion>(TeamUtil.getManagementTeamActivities(team.getAmpTeamId(),null));
 
                 } else {
-                    activityList = new ArrayList<AmpActivityVersion>(TeamUtil.getAllTeamActivities(team.getAmpTeamId(),null));
+                    activityList = new ArrayList<AmpActivityVersion>(TeamUtil.getAllTeamActivities(team.getAmpTeamId(),true,null));
 
                 }
                 List<TeamMember> teamMembers = new ArrayList<TeamMember>(TeamMemberUtil.getAllTeamMembers(team.getAmpTeamId()));

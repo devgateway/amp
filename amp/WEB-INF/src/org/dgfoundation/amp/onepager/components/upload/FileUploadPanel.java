@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.onepager.components.upload;
 
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.upload.FileItem;
 
@@ -11,7 +12,7 @@ import org.apache.wicket.util.upload.FileItem;
  */
 public class FileUploadPanel extends Panel {
 
-    public FileUploadPanel(String id, String activityId, Model<FileItem> fileItemModel) {
+    public FileUploadPanel(String id, String activityId, IModel<FileItem> fileItemModel) {
         super(id);
         add(new FileUploadBehavior(activityId, fileItemModel));
     }

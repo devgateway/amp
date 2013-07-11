@@ -18,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.digijava.module.aim.helper.FormatHelper;
 
 /**
  * 
@@ -74,7 +75,7 @@ public class AmountCellXLS extends XLSExporter {
 		double tempAm = ac.getAmount();
 		BigDecimal bd = new BigDecimal(tempAm);
 		bd = bd.setScale(2, BigDecimal.ROUND_UP);
-		cell.setCellValue(new Double(bd.doubleValue()));
+		cell.setCellValue(FormatHelper.formatNumber(bd.doubleValue()));
 		colId.inc();
 	}
 

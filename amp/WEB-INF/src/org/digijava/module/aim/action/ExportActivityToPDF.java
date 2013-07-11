@@ -816,8 +816,11 @@ public class ExportActivityToPDF extends Action {
 				}
 
 				if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
-					String durationStr = myForm.getPlanning().getProjectPeriod() != null ? myForm.getPlanning().getProjectPeriod().toString(): "";
-					outputValue+=TranslatorWorker.translateText("Duration of Project")+ "\t: " + durationStr +"\n";
+                    outputValue+=TranslatorWorker.translateText("Duration of Project");
+                    BigDecimal duration = myForm.getPlanning().getProjectPeriod();
+                    if (duration != null) {
+                        outputValue += "\t: " + duration.toString() + " " + TranslatorWorker.translateText("Months") + "\n";
+                    }
 				}
 				
 				columnName=TranslatorWorker.translateText("Planning");
@@ -2645,6 +2648,23 @@ public class ExportActivityToPDF extends Action {
 							donorObjCell2.setColspan(2);
 							donorObjCell2.setBackgroundColor(new Color(221,221,221));
 							fundingTable.addCell(donorObjCell2);
+						}
+						//Funding conditions
+						if(FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Conditions", ampContext)){								
+							PdfPCell condCell1=new PdfPCell();
+							condCell1.setBackgroundColor(new Color(221,221,221));
+							condCell1.setBorder(0);
+							p1=new Paragraph(TranslatorWorker.translateText("Conditions")+":",plainFont);
+							condCell1.addElement(p1);
+							fundingTable.addCell(condCell1);
+							//meaning
+							PdfPCell condCell2=new PdfPCell();
+							p1=new Paragraph(funding.getConditions(),plainFont);						
+							condCell2.addElement(p1);
+							condCell2.setBorder(0);
+							condCell2.setColspan(2);
+							condCell2.setBackgroundColor(new Color(221,221,221));
+							fundingTable.addCell(condCell2);
 						}
 						//Agreement
 						if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext)){

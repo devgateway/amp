@@ -419,10 +419,10 @@
 	            <div id="divmenucontent">
 		            <ul>
 		            	<feature:display name="Search  Structures" module="Map Module">
-		              		<li class="mapMenuItem"  id="search" style="cursor: pointer;"><digi:trn>Search  Structures</digi:trn></li>
+		              		<li  class="mapMenuItem"  id="search" style="cursor: pointer;display: none;"><digi:trn>Search  Structures</digi:trn></li>
 		              	</feature:display>
 		              	<feature:display name="Structures" module="Map Module">
-							<li id="structures" onclick="getStructures(false);" style="cursor: pointer;"><digi:trn>Structures</digi:trn></li>
+							<li id="structures" onclick="getStructures(false);" style="cursor: pointer;display: none;"><digi:trn>Structures</digi:trn></li>
 							<li id="clusterStructures" onclick="resetStructureCluster(false);" style="display:none; cursor: pointer;"><digi:trn>Reset Expanded Structures</digi:trn></li>
 						</feature:display>
 		              	<feature:display name="Highlight regions" module="Map Module">

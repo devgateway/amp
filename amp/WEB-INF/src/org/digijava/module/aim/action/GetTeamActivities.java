@@ -137,15 +137,15 @@ public class GetTeamActivities
                             col = TeamUtil.getManagementTeamActivities(id,taForm.getKeyword());
                             taForm.setDonorFlag(true);
                         } else if(ampTeam.getTeamCategory() != null) {
-                            col = TeamUtil.getAllTeamActivities(id,taForm.getKeyword());
+                            col = TeamUtil.getAllTeamActivities(id,true,taForm.getKeyword());
                             taForm.setDonorFlag(true);
                         } else {
                             //col = TeamUtil.getAllTeamActivities(id);
-                        	col = TeamUtil.getAllTeamAmpActivities(id,true,taForm.getKeyword());
+                        	col = TeamUtil.getAllTeamActivities(id,true,taForm.getKeyword());
                             taForm.setDonorFlag(false);
                         }
                     }else {
-                        col = TeamUtil.getAllTeamActivities(id,taForm.getKeyword());
+                        col = TeamUtil.getAllTeamActivities(id,true,taForm.getKeyword());
                         taForm.setDonorFlag(false);
                     }
                     logger.info("Loaded " + col.size() + " activities for the team " + ampTeam.getName());

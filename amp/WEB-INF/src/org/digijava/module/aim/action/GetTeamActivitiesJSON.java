@@ -117,7 +117,7 @@ public class GetTeamActivitiesJSON
                             col = TeamUtil.getManagementTeamActivities(id,taForm.getKeyword());
                             taForm.setDonorFlag(true);
                         } else if(ampTeam.getTeamCategory() != null) {
-                            col = TeamUtil.getAllTeamActivities(id,null);
+                            col = TeamUtil.getAllTeamActivities(id,true,null);
                             taForm.setDonorFlag(true);
                         } else {
                             //col = TeamUtil.getAllTeamActivities(id);
@@ -125,7 +125,7 @@ public class GetTeamActivitiesJSON
                             taForm.setDonorFlag(false);
                         }
                     }else {
-                        col = TeamUtil.getAllTeamActivities(id,null);
+                        col = TeamUtil.getAllTeamActivities(id,true,null);
                         taForm.setDonorFlag(false);
                     }
                     logger.info("Loaded " + col.size() + " activities for the team " + ampTeam.getName());

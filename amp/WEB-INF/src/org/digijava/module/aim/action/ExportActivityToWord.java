@@ -1459,7 +1459,10 @@ public class ExportActivityToWord extends Action {
 		
 		if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
 			columnName=TranslatorWorker.translateText("Duration of Project")+": ";
-			columnVal = planning.getProjectPeriod()!=null?planning.getProjectPeriod().toString():"";
+            columnVal = "";
+            if (planning.getProjectPeriod() != null) {
+                columnVal = planning.getProjectPeriod().toString() + " " + TranslatorWorker.translateText("Months");
+            }
 			generateOverAllTableRows(planningSubTable1,columnName,columnVal,null);
 		}
 	}
@@ -2067,7 +2070,11 @@ public class ExportActivityToWord extends Action {
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Donor Objective", null, null, true))
 										.addRowData(fnd.getDonorObjective()));
 					}
-					if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext)) {
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Conditions", ampContext)) {
+						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Conditions", null, null, true))
+										.addRowData(fnd.getConditions()));
+					}
+					if (FeaturesUtil.isVisibleModule("/Activity Form/Donor Funding/Funding Group/Funding Item/Funding Classification/Agreement", ampContext)) {
 						String agreementTitle = fnd.getAgreement() != null ? fnd.getAgreement().getTitle() : " ";
 						eshDonorInfo.addRowData((new ExportSectionHelperRowData("Agreement Title", null, null, true))
 										.addRowData(agreementTitle));
@@ -2868,7 +2875,7 @@ public class ExportActivityToWord extends Action {
 		
 		if(FeaturesUtil.isVisibleField("Duration of Project", ampContext)){
 			if(myForm.getPlanning().getProjectPeriod()!=null){
-				columnVal =  myForm.getPlanning().getProjectPeriod().toString();
+				columnVal =  myForm.getPlanning().getProjectPeriod().toString() + " " + TranslatorWorker.translateText("Months");
 			}else{
 				columnVal = "";
 			}

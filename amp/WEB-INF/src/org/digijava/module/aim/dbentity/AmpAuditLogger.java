@@ -213,5 +213,11 @@ public class AmpAuditLogger implements Comparable, Serializable {
 	public void setSmodifydate(String smodifydate) {
 		this.smodifydate = smodifydate;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("[id: %d] %s @%s", this.getId(), this.getAction(), this.getModifyDate().toString());
+	}
 
 }

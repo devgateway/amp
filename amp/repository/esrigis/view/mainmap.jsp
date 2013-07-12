@@ -51,7 +51,7 @@
    	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/amp/DecimalFormat.js"/>"></script>
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/latinise.min_.js"/>"></script>
    	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/maputils.js"/>"></script>
-   	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-debug.js"/>"></script>
+   	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mapfunctions-debug.js?versiondate=20130712"/>"></script>
    	<script type="text/javascript" defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/Ext.util.DelayedTask-nsRemoved.js"/>"></script>
    	
    	<script type="text/javascript"  defer="defer" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/esri.ux.layers.ClusterLayer-debug.js"/>"></script>
@@ -375,15 +375,16 @@
    	<link href="/TEMPLATE/ampTemplate/css_2/desktop_yui_tabs.css" rel="stylesheet" type="text/css"></link>
 	
 	<!-- Filter Scripts-->
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event-min.js"></script>
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
-	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dom/dom-min.js"></script> 
-	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection-min.js"/>"></script> 
-	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container-min.js"/>"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/dom/dom.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/event/event.js"></script>
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/json/json.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector.js"></script> 
+	<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview.js"></script> 
+		
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/connection/connection.js"/>"></script> 
+	<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/yui/container/container.js"/>"></script> 
 	
 		
 	
@@ -658,7 +659,7 @@
         </feature:display>	
         
 	<div class="tooltip" style="position: absolute; display: block;z-index:100;" id="tooltipHolder"></div>
-	<digi:form action="/datadispatcher.do" method="post">
+	<digi:form action="/datadispatcher.do" method="post" styleId="datadispatcherform">
 		<html:hidden name="datadispatcherform" property="structures"  styleId="st"/>
 	</digi:form>
 	

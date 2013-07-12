@@ -478,7 +478,7 @@ function showStInfoWindow() {
 function getSelectedFilter() {
 	$("#sfilterid").html("");
 	var xhrArgs = {
-		url : "/esrigis/datadispatcher.do?selectedfilter=true",
+		url : "/esrigis/datadispatcher.do?selectedfilter=true&rnd=" + new Date().getTime(),
 		handleAs : "json",
 		load : function(jsonData) {
 			
@@ -576,7 +576,7 @@ function getActivities(clear) {
 	}
 
 	var xhrArgs = {
-		url : "/esrigis/datadispatcher.do?showactivities=true",
+		url : "/esrigis/datadispatcher.do?showactivities=true&rnd=" + new Date().getTime(),
 		handleAs : "json",
 		load : function(jsonData) {
 			// For every item we received...
@@ -1149,7 +1149,7 @@ function getStructures(clear) {
 		
 		structureson = true;
 		var xhrArgs = {
-			url : "/esrigis/datadispatcher.do?showstructures=true",
+			url : "/esrigis/datadispatcher.do?showstructures=true&rnd=" + new Date().getTime(),
 			handleAs : "json",
 			load : function(jsonData) {
 				dojo.forEach(jsonData, function(activity) {

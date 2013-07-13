@@ -33,48 +33,12 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpActor;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpImputation;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IPAContract;
-import org.digijava.module.aim.dbentity.IPAContractDisbursement;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.EditActivityForm.Planning;
 import org.digijava.module.aim.form.EditActivityForm.Programs;
-import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.ChartGenerator;
-import org.digijava.module.aim.helper.ChartParams;
-import org.digijava.module.aim.helper.Components;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.Documents;
-import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.GlobalSettings;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.Location;
-import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.PhysicalProgress;
-import org.digijava.module.aim.helper.ReferenceDoc;
-import org.digijava.module.aim.helper.RelatedLinks;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
@@ -86,6 +50,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.aim.helper.GlobalSettings;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -103,6 +68,7 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
+
 
 
 public class ExportActivityToWord extends Action {
@@ -2030,6 +1996,8 @@ public class ExportActivityToWord extends Action {
 					"/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements", ampContext);
 			boolean visibleModuleDisbOrders = FeaturesUtil.isVisibleModule(
 							"/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders", ampContext);
+            boolean visibleModuleMTEFProjections = FeaturesUtil.isVisibleModule(
+                    "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections", ampContext);
         	
         	
             if (act.getFunding() != null && !act.getFunding().isEmpty()) {
@@ -2090,7 +2058,7 @@ public class ExportActivityToWord extends Action {
 
                     Map<String, Map<String, Set<AmpFundingDetail>>> structuredFundings = getStructuredFundings(fndDets);
                     
-                    if (structuredFundings.size() > 0){
+                    if (structuredFundings.size() > 0) {
 	                    ExportSectionHelper eshDonorFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
 	                    for (String transTypeKey : structuredFundings.keySet()) {
 	                        Map<String, Set<AmpFundingDetail>> transTypeGroup = structuredFundings.get(transTypeKey);
@@ -2141,8 +2109,40 @@ public class ExportActivityToWord extends Action {
 	                    }
 	                    retVal.add(createSectionTable(eshDonorFundingDetails, request, ampContext));
                     }
+
+                    // MTEF Projections
+                    if(visibleModuleMTEFProjections && fnd.getMtefProjections() != null && fnd.getMtefProjections().size() > 0) {
+                        ExportSectionHelper mtefProjections = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+                        ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData("Mtef Projections", null, null, true);
+                        mtefProjections.addRowData(sectionHelperRowData);
+
+                        for (AmpFundingMTEFProjection projection : fnd.getMtefProjections()) {
+
+                            String projectedType = "";
+                            if (MTEFProjection.PROJECTION_ID == projection.getProjected().getId()) {
+                                projectedType = "Projection";
+                            }
+
+                            if (MTEFProjection.PIPELINE_ID == projection.getProjected().getId()) {
+                                projectedType = "Pipeline";
+                            }
+
+                            sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType), null, null, true);
+                            sectionHelperRowData.addRowData(DateConversion.ConvertDateToString(projection.getProjectionDate()));
+                            sectionHelperRowData.addRowData(projection.getAmount() + " " + projection.getAmpCurrency().getCurrencyCode());
+                            mtefProjections.addRowData(sectionHelperRowData);
+                        }
+
+                        mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+                        retVal.add(createSectionTable(mtefProjections, request, ampContext));
+                    }
+
                 }
+
             }
+
+
+
 			// TOTALS
 			String currencyCode = act.getCurrencyCode() != null ? act
 					.getCurrencyCode() : "";

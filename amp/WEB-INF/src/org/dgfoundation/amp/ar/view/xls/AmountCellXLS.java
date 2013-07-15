@@ -69,16 +69,31 @@ public class AmountCellXLS extends XLSExporter {
 			amountStyle=this.getAmountStyle();
 		
 		HSSFCell cell=this.getCell(amountStyle);
+		double tempAm = ac.getAmount();
 		
-		cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+
+		
+		{
+			// possibility 1: NUMERIC cell, unformatted (e.g. might output cells with values like 1185797.24891408)		 
+		
+			cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+			cell.setCellValue(((long)(tempAm * 1000)) / 1000.0);
+		}
+		
+		
+//		{
+//			// possibility 2: TEXT cell, formatted according to the report-settings-specified format - DOES NOT REALLY WORK
+//			cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+//			BigDecimal bd = new BigDecimal(tempAm);
+//			bd = bd.setScale(2, BigDecimal.ROUND_UP);
+//			AmpARFilter arf = this.getFilter();
+//			String value = arf.getCurrentFormat().format(bd);
+//			cell.setCellValue(value);
+//		}
 
 		//DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 		//mf.setMaximumFractionDigits(2);
-		double tempAm = ac.getAmount();
-		BigDecimal bd = new BigDecimal(tempAm);
-		bd = bd.setScale(2, BigDecimal.ROUND_UP);
-		AmpARFilter arf = this.getFilter();
-		cell.setCellValue(arf.getCurrentFormat().format(bd));
+
 		colId.inc();
 	}
 

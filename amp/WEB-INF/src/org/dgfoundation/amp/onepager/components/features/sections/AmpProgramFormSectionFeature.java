@@ -28,7 +28,7 @@ public class AmpProgramFormSectionFeature extends
 		this.fmType = AmpFMTypes.MODULE;
 		AmpActivityProgramSettings npd=ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
 		AmpProgramFormTableFeature npdTable = new AmpProgramFormTableFeature(
-				"npoTable", "National Plan Objective", am, ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
+				"npoTable", "National Plan Objective", am, ProgramUtil.NATIONAL_PLAN_OBJECTIVE,true);
 		if(npd==null)
 			add(new EmptyPanel("npoTable"));
 		else

@@ -52,8 +52,14 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 	 * @throws Exception
 	 */
 	public AmpProgramFormTableFeature(String id, String fmName,
-			final IModel<AmpActivityVersion> am, final String programSettingsString) throws Exception {
-		super(id, am, fmName);
+			final IModel<AmpActivityVersion> am, final String programSettingsString) throws Exception{
+		this( id,  fmName,
+				 am,  programSettingsString,false);
+	}
+	
+	public AmpProgramFormTableFeature(String id, String fmName,
+			final IModel<AmpActivityVersion> am, final String programSettingsString,boolean required) throws Exception {
+		super(id, am, fmName,false,required);
 		final IModel<Set<AmpActivityProgram>> setModel=new PropertyModel<Set<AmpActivityProgram>>(am,"actPrograms");
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpActivityProgram>());
@@ -97,6 +103,10 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 		percentageValidationField.setIndicatorAppender(iValidator);
 		add(percentageValidationField);
 		
+		final AmpMinSizeCollectionValidationField<AmpActivityProgram> minSizeCollectionValidationField = new AmpMinSizeCollectionValidationField<AmpActivityProgram>(
+				"minSizeProgramValidator", listModel, "minSizeProgramValidator");
+		minSizeCollectionValidationField.setIndicatorAppender(iValidator);
+		add(minSizeCollectionValidationField);
 		
 		final AmpUniqueCollectionValidatorField<AmpActivityProgram> uniqueCollectionValidationField = new AmpUniqueCollectionValidatorField<AmpActivityProgram>(
 				"uniqueProgramsValidator", listModel, "uniqueProgramsValidator") {
@@ -140,6 +150,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 						list.removeAll();
 						percentageValidationField.reloadValidationField(target);
 						uniqueCollectionValidationField.reloadValidationField(target);
+						minSizeCollectionValidationField.reloadValidationField(target);
                         treeCollectionValidatorField.reloadValidationField(target);
 					}
 				};
@@ -216,6 +227,7 @@ public class AmpProgramFormTableFeature extends AmpFormTableFeaturePanel <AmpAct
 				target.add(list.getParent());
 				percentageValidationField.reloadValidationField(target);
 				uniqueCollectionValidationField.reloadValidationField(target);
+				minSizeCollectionValidationField.reloadValidationField(target);
                 treeCollectionValidatorField.reloadValidationField(target);
 			}
 

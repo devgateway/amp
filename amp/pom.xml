@@ -10,7 +10,8 @@
 		<wicketVersion>6.6.0</wicketVersion>
 		<tomcatVersion>6.0.35</tomcatVersion>
 	</properties>
- <repositories>
+	<!-- 
+ 	<repositories>
 		<repository>
           <snapshots>
             <enabled>false</enabled>
@@ -20,6 +21,8 @@
           <url>http://artifactory.ampdev.net/artifactory/amp</url>
         </repository>
 	</repositories>
+	-->
+	<!--
 	<pluginRepositories>
 		<pluginRepository>
 			<snapshots>
@@ -29,9 +32,9 @@
 			<name>amp</name>
 			<url>http://artifactory.ampdev.net/artifactory/amp</url>
 		</pluginRepository>
-	</pluginRepositories>
+	</pluginRepositories> -->
 	<!--
-	    OLD REPO's in case ampdev.net is down at some point
+	    OLD REPO's in case ampdev.net is down at some point -->
 		<repositories>
 		<repository>
 			<id>AMP Local</id>
@@ -80,7 +83,7 @@
 			<name>Maven Plugin Repository</name>
 			<url>http://repo1.maven.org/maven2</url>
 		</pluginRepository>
-	</pluginRepositories> -->
+	</pluginRepositories>
 	
 	<dependencies>
 		<dependency>
@@ -483,7 +486,8 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.11</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>

@@ -16,6 +16,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.AmountCell;
@@ -53,6 +54,38 @@ public class AmountCellXLS extends XLSExporter {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * returns Object[2]: res[0] = cell.getCellType(), res[1] = either Double or String
+	 * @param amount
+	 * @param format
+	 * @return
+	 */
+	public static Object[] formatCell(double amount, DecimalFormat format)
+	{
+		boolean isNumericFormat = (!format.isGroupingUsed()) && 
+				((format.getDecimalFormatSymbols().getDecimalSeparator() == '.') || (format.getDecimalFormatSymbols().getDecimalSeparator() == ','));
+		
+		if (isNumericFormat)
+		{
+		// possibility 1: NUMERIC cell, unformatted (e.g. might output cells with values like 1185797.24891408)		 
+			long powerOfTen = 1;
+			for(int i = 1; i <= format.getMaximumFractionDigits(); i++)
+				powerOfTen *= 10;
+			
+			return new Object[] {HSSFCell.CELL_TYPE_NUMERIC, Math.round(amount * powerOfTen) / ((double) powerOfTen)};
+		}
+	
+	
+	{
+		// possibility 2: TEXT cell, formatted according to the report-settings-specified format - DOES NOT REALLY WORK
+		BigDecimal bd = new BigDecimal(amount);
+		bd = bd.setScale(format.getMaximumFractionDigits(), BigDecimal.ROUND_HALF_UP);
+		String value = format.format(bd);
+		return new Object[] {HSSFCell.CELL_TYPE_STRING, value};
+	}
+
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Exporter#generate()
 	 */
@@ -68,26 +101,16 @@ public class AmountCellXLS extends XLSExporter {
 			amountStyle=this.getAmountStyle();
 		
 		HSSFCell cell=this.getCell(amountStyle);
-		double tempAm = ac.getAmount();
-			
-		{
-			// possibility 1: NUMERIC cell, unformatted (e.g. might output cells with values like 1185797.24891408)		 
 		
-			cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-			cell.setCellValue(((long)(tempAm * 1000)) / 1000.0);
-		}
+		Object[] formatInfo = formatCell(ac.getAmount(), this.getFilter().getCurrentFormat());
+		cell.setCellType((Integer) formatInfo[0]);
 		
+		if (formatInfo[1] instanceof String)
+			cell.setCellValue((String) formatInfo[1]);
 		
-//		{
-//			// possibility 2: TEXT cell, formatted according to the report-settings-specified format - DOES NOT REALLY WORK
-//			cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-//			BigDecimal bd = new BigDecimal(tempAm);
-//			bd = bd.setScale(2, BigDecimal.ROUND_UP);
-//			AmpARFilter arf = this.getFilter();
-//			String value = arf.getCurrentFormat().format(bd);
-//			cell.setCellValue(value);
-//		}
-
+		if (formatInfo[1] instanceof Double)
+			cell.setCellValue((Double) formatInfo[1]);
+		
 		//DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 		//mf.setMaximumFractionDigits(2);
 

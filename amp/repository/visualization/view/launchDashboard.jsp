@@ -636,9 +636,6 @@ function initializeGlobalVariables(){
 												<td><html:select property="filter.fiscalCalendarId"
 														styleId="fiscalCalendar_dropdown_Id"
 														styleClass="dropdwn_sm" style="width:150px;">
-														<html:option value="-1">
-															<digi:trn>None</digi:trn>
-														</html:option>
 														<html:optionsCollection property="filter.fiscalCalendars"
 															label="name" value="ampFiscalCalId" />
 													</html:select></td>

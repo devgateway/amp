@@ -353,16 +353,16 @@ public class DbUtil {
     
     public static List<AmpSector> getSectors(DashboardFilter filter) throws DgException {
     	List<AmpSector> sectors = new ArrayList<AmpSector>();
-        if (filter.getSelSectorIds()!=null && filter.getSelSectorIds().length > 0 && filter.getSelSectorIds()[0] != -1) {
-			if (filter.getSelSectorIds().length == 1) {
-				List<AmpSector> sector = getSubSectors(filter.getSelSectorIds()[0]);
-				AmpSector parentSector = SectorUtil.getAmpSector(filter.getSelSectorIds()[0]);
+        if (filter.getSectorIds()!=null && filter.getSectorIds().length > 0 && filter.getSectorIds()[0] != -1) {
+			if (filter.getSectorIds().length == 1) {
+				List<AmpSector> sector = getSubSectors(filter.getSectorIds()[0]);
+				AmpSector parentSector = SectorUtil.getAmpSector(filter.getSectorIds()[0]);
 				sector.add(parentSector);
 				sectors.addAll(sector);
 				return sectors;
 			} else {
-				for (int i = 0; i < filter.getSelSectorIds().length; i++) {
-					AmpSector sector = SectorUtil.getAmpSector(filter.getSelSectorIds()[i]);
+				for (int i = 0; i < filter.getSectorIds().length; i++) {
+					AmpSector sector = SectorUtil.getAmpSector(filter.getSectorIds()[i]);
 					sectors.add(sector);
 				}
 				return sectors;
@@ -678,33 +678,33 @@ public class DbUtil {
         if (((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1)) 
         	&& ((filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY))){
 			if (locationCondition && sectorCondition) {
-				oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
+				oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
 	        } else if (locationCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,orole.percentage,fd.fixedExchangeRate) ";
+	        	oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,orole.percentage,fd.fixedExchangeRate) ";
 	        } else if (sectorCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
+	        	oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
 	        } else {
-	            oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,orole.percentage,fd.fixedExchangeRate) ";
+	            oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,orole.percentage,fd.fixedExchangeRate) ";
 	        }
 		} else if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
         	if (locationCondition && sectorCondition) {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
 	        } else if (locationCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
 	        } else if (sectorCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
 	        } else {
-	            oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actProg.programPercentage,fd.fixedExchangeRate) ";
+	            oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actProg.programPercentage,fd.fixedExchangeRate) ";
 	        }
 		} else {
 	        if (locationCondition && sectorCondition) {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,fd.fixedExchangeRate) ";
 	        } else if (locationCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
 	        } else if (sectorCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,fd.fixedExchangeRate) ";
+	        	oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,fd.fixedExchangeRate) ";
 	        } else {
-	            oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate) ";
+	            oql = " select new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate) ";
 	        }
 		}
         oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true);

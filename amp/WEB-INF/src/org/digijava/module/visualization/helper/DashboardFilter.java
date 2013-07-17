@@ -135,6 +135,7 @@ public class DashboardFilter {
     	newFilter.setTeamMember(this.getTeamMember());
     	newFilter.setSelLocationIds(this.getSelLocationIds());
     	newFilter.setSelSectorIds(this.getSelSectorIds());
+    	newFilter.setSectorIds(this.getSectorIds());
     	newFilter.setActivityId(this.getActivityId());
     	newFilter.setShowOnlyApprovedActivities(this.getShowOnlyApprovedActivities());
     	newFilter.setFromPublicView(this.getFromPublicView());

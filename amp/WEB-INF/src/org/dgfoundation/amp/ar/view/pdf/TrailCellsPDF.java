@@ -61,8 +61,11 @@ public class TrailCellsPDF extends PDFExporter {
 	 * @param ar
 	 * @return
 	 */
-	public final static int countDrawnColumns(AmpReports ar)
+	public final static int countDrawnColumns(AmpReports ar, Viewable item)
 	{
+		if (item instanceof ReportData)
+			return ((ReportData) item).getTotalDepth();
+		
 		int res = 0;
 		res = ar.getColumns().size() + ar.getMeasures().size() - ar.getHierarchies().size();
 		if (res < 0)
@@ -96,7 +99,7 @@ public class TrailCellsPDF extends PDFExporter {
 			String locale = parent.getReportMetadata().getLocale();
 			String totalsFor = "Totals For";
 			
-			int totalNrOfDrawnColumns = countDrawnColumns(parent.getReportMetadata());
+			int totalNrOfDrawnColumns = countDrawnColumns(parent.getReportMetadata(), this.getItem());
 					
 
 			//String translatedName=grd.getName();

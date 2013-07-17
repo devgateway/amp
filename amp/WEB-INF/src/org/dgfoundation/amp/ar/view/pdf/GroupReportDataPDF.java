@@ -70,12 +70,12 @@ public class GroupReportDataPDF extends PDFExporter {
 		Iterator i=grd.getItems().iterator();
 		while (i.hasNext()) {
 		    	Viewable element = (Viewable) i.next();
-			element.invokeExporter(this);			
+			element.invokeExporter(this);
 		
 		}
 
 		//add trail cells
-		TrailCellsPDF trails=new TrailCellsPDF(this,grd);
+		TrailCellsPDF trails=new TrailCellsPDF(this, grd);
 		trails.generate();
 
 		//add an empty row

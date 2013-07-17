@@ -667,16 +667,23 @@ public class ExportActivityToPDF extends Action {
 				}
 			}
 
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Classification", ampContext)){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Classification", ampContext)) {
+
 				PdfPCell cell = new PdfPCell();
 				cell.setColspan(2);
 				cell.setBorder(0);
-				cell.addElement(new Paragraph(postprocessText(TranslatorWorker.translateText("Budget Classification"))+": ",plainFont));
-				if(identification.getSelectedbudgedsector() !=null){
-					for (AmpBudgetSector budgSect : identification.getBudgetsectors()) {
-						cell.addElement(new Paragraph(BULLET_SYMBOL + budgSect.getCode()+" - "+ postprocessText(budgSect.getSectorname()),titleFont));
-					}
-				}
+
+                if(identification.getSelectedbudgedsector() != null){
+                    for (AmpBudgetSector budgSect : identification.getBudgetsectors()) {
+                        if (identification.getSelectedbudgedsector().equals(budgSect.getIdsector())) {
+
+                            String classificationColumnName = postprocessText(TranslatorWorker.translateText("Budget Classification"))+": ";
+                            String classificationColumnValue = BULLET_SYMBOL + budgSect.getCode()+ " - " + postprocessText(budgSect.getSectorname());
+
+                            createGeneralInfoRow(mainLayout, classificationColumnName, classificationColumnValue);
+                        }
+                    }
+                }
 				
 				if(identification.getSelectedorg() !=null ){
 					for (AmpOrganisation budgOrg : identification.getBudgetorgs()) {

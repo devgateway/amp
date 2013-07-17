@@ -2717,14 +2717,20 @@ public class ExportActivityToWord extends Action {
 			}
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Classification", ampContext)){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Budget Classification", ampContext)) {
 			cell = new RtfCell();
 			cell.setColspan(2);
 			cell.setBorder(0);
-			cell.add(new Paragraph(TranslatorWorker.translateText("Budget Classification")+": ",PLAINFONT));
-			if(identification.getSelectedbudgedsector() !=null){
+
+			if(identification.getSelectedbudgedsector() != null) {
 				for (AmpBudgetSector budgSect : identification.getBudgetsectors()) {
-					cell.add(new Paragraph(BULLET_SYMBOL + budgSect.getCode()+" - "+ budgSect.getSectorname(),BOLDFONT));
+                    if (identification.getSelectedbudgedsector().equals(budgSect.getIdsector())) {
+
+                        String classificationColumnName = TranslatorWorker.translateText("Budget Classification")+": ";
+                        String classificationColumnValue = BULLET_SYMBOL + budgSect.getCode() + " - " + budgSect.getSectorname();
+
+                        generateOverAllTableRows(identificationSubTable1, classificationColumnName, classificationColumnValue, null);
+                    }
 				}
 			}
 			

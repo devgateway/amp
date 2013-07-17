@@ -630,10 +630,16 @@ public class DataDispatcher extends DispatchAction {
         	startDate = DashboardUtil.getStartDate(fiscalCalendarId, startYear.intValue());
             endDate = DashboardUtil.getEndDate(fiscalCalendarId, endYear.intValue());
         	Map map = null;
+        	Long id = null;
+        	if(filter.getSectorIds()!=null){
+        		if (filter.getSectorIds().length == 1 && filter.getSectorIds()[0] != -1) //If there's a selected sector, get subsectors
+        			id = filter.getSectorIds()[0];
+        	} else if (filter.getSectorId()!=null && filter.getSectorId() != -1){
+        		id = filter.getSectorId();
+        	}
         	//If the startYear/endYear selected is the same as in the general filter, use the stored rank
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
-        		if(sectorId != null && !sectorId.equals("") && !sectorId.equals("-1")){ //If there's a selected sector, get subsectors
-                	Long id = Long.parseLong(sectorId);
+        		if(id!=null){
                 	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), filter, null, null);
                 }
         		else
@@ -644,8 +650,7 @@ public class DataDispatcher extends DispatchAction {
         		DashboardFilter newFilter = filter.getCopyFilterForFunding();
             	newFilter.setStartYear(startYear);
             	newFilter.setEndYear(endYear);
-            	if(sectorId != null && !sectorId.equals("") && !sectorId.equals("-1")){
-	            	Long id = Long.parseLong(sectorId);
+            	if(id!=null){
 	            	map = DashboardUtil.getRankSubSectors(DbUtil.getSubSectors(id), newFilter, startYear.intValue(), endYear.intValue());
 	            } else {
 	            	map = DashboardUtil.getRankSectorsByKey(DbUtil.getSectors(newFilter), DbUtil.getSectors(newFilter), newFilter);
@@ -787,7 +792,7 @@ public class DataDispatcher extends DispatchAction {
 	            Map.Entry entry = (Map.Entry)it.next();
 	            AmpSector sec = (AmpSector) entry.getKey();
 	            if (index <= 4){
-		            csvString.append(sec.getName());
+	            	csvString.append(sec.getName().replace(",", ""));
 		            csvString.append("#");
 		            csvString.append(sec.getAmpSectorId());
 		            csvString.append(",");

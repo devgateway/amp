@@ -137,6 +137,7 @@ public class DashboardFilter {
     	newFilter.setShowOnlyNonDraftActivities(this.getShowOnlyNonDraftActivities());
     	newFilter.setFromPublicView(this.getFromPublicView());
     	newFilter.setSelSectorConfigId(this.getSelSectorConfigId());
+    	newFilter.setSectorIds(this.getSectorIds());
     	newFilter.setAllSectorList(this.getAllSectorList());
     	newFilter.setTransactionType(this.getTransactionType());
     	newFilter.setAgencyType(this.getAgencyType());

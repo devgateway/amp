@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.AmpActivityGroup"
-		table="AMP_ACTIVITY_GROUP">
+		table="AMP_ACTIVITY_GROUP" lazy="false">
 		<id name="ampActivityGroupId" column="amp_activity_group_id" type="java.lang.Long">
 			<generator class="native">
 				<param name="sequence">amp_activity_group_seq

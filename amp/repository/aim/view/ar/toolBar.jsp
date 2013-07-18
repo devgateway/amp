@@ -286,7 +286,7 @@ addLoadEvent(addpanel);
 					
 		<module:display name="Map Module">
 			<td noWrap align=left valign="center">
-				<a href="/esrigis/mainmap.do?exportreport=true" target="_blank" title="<digi:trn>Export to Map</digi:trn>">
+				<a href="/esrigis/mainmap.do?exportreport=true&ampReportId=${ampReportId}" target="_blank" title="<digi:trn>Export to Map</digi:trn>">
 					<img alt="Export to Map" src="module/aim/images/globe-icon_2.png" hspace="2" vspace="2" border="0">
 				</a>
 			</td>

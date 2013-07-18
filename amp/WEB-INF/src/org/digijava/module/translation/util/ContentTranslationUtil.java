@@ -6,6 +6,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.Versionable;
 import org.hibernate.*;
@@ -137,7 +138,9 @@ public class ContentTranslationUtil {
                     Collection collection = (Collection) methGetField.invoke(obj);
                     if (collection != null) {
                         for (Object o : collection) {
-                            if (o.getClass().isAnnotationPresent(TranslatableClass.class))
+                            if (o.getClass().isAnnotationPresent(TranslatableClass.class) &&
+                                    !o.getClass().isAssignableFrom(AmpActivityVersion.class) //not supported
+                                    )
                                 cloneTranslations(o);
                             else {
                                 //we don't have mixed collections, no point in iterating forward through the collection

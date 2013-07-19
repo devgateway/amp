@@ -43,7 +43,12 @@ public class DocToOrgDAO {
 		
 		SortedSet<String> names = new java.util.TreeSet<String>();
 		for(AmpOrganisation org:orgs)
-			names.add(org.getAcronym().trim());
+		{
+			if (org.getAcronym() != null)
+				names.add(org.getAcronym().trim());
+			else
+				logger.error("acronym of organisation " + org.getName() + " is null!");
+		}
 		
 		StringBuilder buf = new StringBuilder();
 		for(String name:names)

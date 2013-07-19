@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -1426,11 +1427,11 @@ public class EditActivity extends Action {
                 		  
                 			currFunding.setSubtotalActualRoF(FormatHelper.formatNumber(calculationsSubtotal.getTotalActualRoF().doubleValue()));
                 			currFunding.setSubtotalPlannedRoF(FormatHelper.formatNumber(calculationsSubtotal.getTotalPlannedRoF().doubleValue()));
-                			currFunding.setSubtotalPipelineRoF(FormatHelper.formatNumber(0/*calculationsSubtotal.getTotalPipelineRoF().doubleValue()*/));
+                			currFunding.setSubtotalPipelineRoF(FormatHelper.formatNumber(calculationsSubtotal.getTotalPipelineRoF().doubleValue()));
 
                 			currFunding.setSubtotalActualEDD(FormatHelper.formatNumber(calculationsSubtotal.getTotalActualEDD().doubleValue()));
                 			currFunding.setSubtotalPlannedEDD(FormatHelper.formatNumber(calculationsSubtotal.getTotalPlannedEDD().doubleValue()));
-                			currFunding.setSubtotalPipelineEDD(FormatHelper.formatNumber(0/*calculationsSubtotal.getTotalPipelineEDD().doubleValue()*/));
+                			currFunding.setSubtotalPipelineEDD(FormatHelper.formatNumber(calculationsSubtotal.getTotalPipelineEDD().doubleValue()));
 
                 			currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
                 			currFunding.setAmpFundingDetails(null);
@@ -2266,7 +2267,7 @@ public class EditActivity extends Action {
 	
 	//structures
     
-    ArrayList<AmpStructure> structures = new ArrayList<AmpStructure>(activity.getStructures());
+    ArrayList<AmpStructure> structures = eager_copy(activity.getStructures());
     Collections.sort(structures);
 	eaForm.setStructures(structures);
 	
@@ -2280,6 +2281,23 @@ public class EditActivity extends Action {
     	return mapping.findForward("forwardDebugFM");
     return mapping.findForward("forward");
   }
+  
+  public final static ArrayList<AmpStructure> eager_copy(Set<AmpStructure> structures) throws CloneNotSupportedException
+  {
+	  ArrayList<AmpStructure> res = new ArrayList<AmpStructure>();
+	  for(AmpStructure struc:structures)
+	  {
+		  AmpStructure z = (AmpStructure) struc.clone();
+		  z.setActivities(new HashSet(z.getActivities()));
+		  z.setImages(new HashSet(struc.getImages()));
+		  /*z.setActivities(new HashSet(struc.getActivities()));
+		  z.setAmpStructureId(struc.getAmpStructureId());
+		  z.setCreationdate(struc.getCreationdate());
+		  z.setDescription(struc.getDescription());*/
+	  }
+	  return res;
+  }
+  
   
   private Long getCorrectActivityVersionIdToUse(Long activityId, EditActivityForm form) {
 	  Long lastVersionId	= ActivityVersionUtil.getLastVersionForVersion(activityId);

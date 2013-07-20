@@ -253,7 +253,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		addMetaIfExists(rs, acc, "related_project", ArConstants.RELATED_PROJECTS, null, false);
 		addMetaIfExists(rs, acc, "agreement_code", ArConstants.AGREEMENT_CODE, null, false);
 		addMetaIfExists(rs, acc, "agreement_title_code", ArConstants.AGREEMENT_TITLE_CODE, null, false);
-		addMetaIfExists(rs, acc, "component_type", ArConstants.COMPONENT, null, true);
+		addMetaIfExists(rs, acc, "component_type", ArConstants.COMPONENT_TYPE_S, null, true);
+		addMetaIfExists(rs, acc, "component_name", ArConstants.COMPONENT_NAME, null, true);
 		addMetaIfExists(rs, acc, "recipient_name", ArConstants.RECIPIENT_NAME, null, false);
 		addMetaIfExists(rs, acc, "recipient_role_name", ArConstants.RECIPIENT_ROLE, null, false);
 		
@@ -266,7 +267,7 @@ public class CategAmountColWorker extends ColumnWorker {
 			
 		if("component_type".equals(headMetaName)){
 			String componentType = rs.getString("component_type");
-			headMeta= this.getCachedMetaInfo(ArConstants.COMPONENT, componentType);			
+			headMeta= this.getCachedMetaInfo(ArConstants.COMPONENT_TYPE_S, componentType);			
 		} else	
 
 		if("donor_name".equals(headMetaName)){
@@ -275,6 +276,12 @@ public class CategAmountColWorker extends ColumnWorker {
 			headMeta = this.getCachedMetaInfo(ArConstants.DONOR, (donorName != null) ? donorName.trim() : donorName);			
 		}
 
+		if ("component_name".equals(headMetaName))
+		{
+			String componentName = rs.getString("component_name");
+			headMeta = this.getCachedMetaInfo(ArConstants.COMPONENT_NAME, componentName);
+		}
+		
 //		if (filter.getAmountinthousand() == null) {
 //			filter.setAmountinthousand(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 //		} 
@@ -413,7 +420,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.getMetaData().add(qMs);
 		acc.getMetaData().add(mMs);	
 		acc.getMetaData().add(faMs);
-		acc.getMetaData().add(fmMs);	
+		acc.getMetaData().add(fmMs);
+		if (headMeta == null)
+			throw new RuntimeException("headMeta is null!");
 		acc.getMetaData().add(headMeta);
 		
 		if(this.getViewName().equals("v_proposed_cost")) {

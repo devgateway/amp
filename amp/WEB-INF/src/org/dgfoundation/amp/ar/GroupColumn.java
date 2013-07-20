@@ -209,7 +209,7 @@ public class GroupColumn extends Column {
     	
     	HashMap<String,String> yearMapping = new HashMap<String, String>();
     	HashMap<String,String> monthMapping = new HashMap<String, String>();
-    	    	
+    	    	    	
     	Column ret = new GroupColumn(src);
         Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
         Iterator<Cell> i = src.iterator();

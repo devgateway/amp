@@ -1445,8 +1445,13 @@ function removeGuest(obj) {
 	
 	//select all handler
 	$("input[type='checkbox'][name='sendToAll']").bind("change", function (e) {
-		var srcObj = $(this);
-		$("div.msg_receivers").find("input[type='checkbox']").attr("checked", srcObj.attr("checked"));
+        var checked = $(this).attr('checked');
+        var childBoxes = $("div.msg_receivers").find("input[type='checkbox']");
+        if (checked || 'checked' == checked) {
+            childBoxes.attr("checked", "checked");
+        } else {
+            childBoxes.attr("checked", false);
+        }
 	});
 	
 	//External contact autocomplite

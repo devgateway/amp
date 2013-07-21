@@ -26,3 +26,6 @@ SELECT {
 	width:350px;
 }
 
+.gis_title:FIRST-LETTER{
+	text-transform: uppercase;
+}

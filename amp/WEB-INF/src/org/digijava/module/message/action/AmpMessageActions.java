@@ -1134,7 +1134,7 @@ public class AmpMessageActions extends DispatchAction {
     		message.setCreationDate(cal.getTime());
     		
     		//save attached files 
-        	Sdm document=messageForm.getSdmDocument();
+        	Sdm document=messageForm.getSdmDocument();  // BOZO HERE
         	Sdm doc=null;
         	if(document!=null){
         		document.setName(message.getName());

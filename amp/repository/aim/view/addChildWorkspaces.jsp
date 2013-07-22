@@ -205,11 +205,11 @@ function childOrgsAdded() {
 						</tr>
 						<tr>
 							<td bgcolor="#ECF3FD"><c:if
-								test="${!empty aimUpdateWorkspaceForm.allChildren}">
+								test="${!empty aimUpdateWorkspaceForm.availChildWorkspaces}">
 								<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top"
 									align="left" border="0">
 									<c:forEach var="workspaces"
-										items="${aimUpdateWorkspaceForm.allChildren}">
+										items="${aimUpdateWorkspaceForm.availChildWorkspaces}">
 										<c:if
 											test="${workspaces.ampTeamId != aimUpdateWorkspaceForm.teamId}">
 											<tr>

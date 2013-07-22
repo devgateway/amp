@@ -107,6 +107,9 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent>, Vers
      *
 	@Override
 	public boolean equals(Object obj) {
+        if (!(obj instanceof AmpComponent))
+            return false;
+
 		AmpComponent target=(AmpComponent) obj;
 		if (this.ampComponentId == null)
 			return super.equals(obj);

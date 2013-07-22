@@ -90,6 +90,53 @@
 	            		</div>
 	        		</td>
 				</tr>
+				
+				<logic:iterate id="groupItem" property="outputCollectionGroupedAsSet" name="aimCompareActivityVersionsForm" type="java.util.Map.Entry">
+					
+					<td rowspan="${groupItem.value.size()}" align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
+							<digi:trn><bean:write property="key" name="groupItem"/></digi:trn>
+					</td>
+						<logic:iterate id="diffItem" name="groupItem" property="value" indexId="iterIdx">
+								
+								<logic:greaterThan name="iterIdx" value="0">
+									<tr>
+								</logic:greaterThan>
+									<td width="50%" align="left" valign="top" style="padding-left: 5px; border-right-width: 0px;" class="inside">
+										<div id="left${diffItem.index}">
+											<logic:empty name="diffItem" property="stringOutput[1]">&nbsp;</logic:empty>
+											<bean:write name="diffItem" property="stringOutput[1]" filter="false"/>
+										</div>
+									</td>
+									<logic:equal value="true" name="aimCompareActivityVersionsForm" property="showMergeColumn">
+										<td align="center" valign="middle" class="inside">
+											<button type="button" onClick="javascript:left(${diffItem.index});" style="border: none; background-color: transparent">
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_right.gif"/>
+											</button>	
+										</td>
+										<td align="left" valign="top" style="padding-left: 5px;" class="inside">
+											<div id="merge${diffItem.index}">&nbsp;</div>
+										</td>
+										<td align="center" valign="middle" class="inside" style="border-right-width: 0px;">
+											<button type="button" onClick="javascript:right(${diffItem.index});" style="border: none; background-color: transparent">
+												<img src="/TEMPLATE/ampTemplate/img_2/ico_arr_left.gif"/>
+											</button>	
+										</td>
+										<input type="hidden" id='mergedValues[${diffItem.index}]' value="" name="mergedValues[${index}]"/>
+									</logic:equal>
+									<td width="50%" align="left" valign="top" style="padding-left: 5px; border-left-width: 0px;" class="inside">
+										<div id="right${diffItem.index}">
+											<logic:empty name="diffItem" property="stringOutput[0]">&nbsp;</logic:empty>
+											<bean:write name="diffItem" property="stringOutput[0]" filter="false"/>
+										</div>
+									</td>
+								<logic:greaterThan name="iterIdx" value="0">
+								</tr>
+								</logic:greaterThan>
+						</logic:iterate>
+
+					</td></tr>
+				</logic:iterate>	
+				<%--
 				<logic:iterate id="iter" property="outputCollection" name="aimCompareActivityVersionsForm" indexId="index">
 					<tr>
 						<td align="left" valign="center" width="8%" class="inside" style="padding-left: 5px; font-size: 12px; border-left-width: 1px;">
@@ -125,6 +172,7 @@
 						</td>
 					</tr>
 				</logic:iterate>
+				--%>
 			</table>
 			<br/>
 			<input type="button" value="<digi:trn>Back to current version of the activity</digi:trn>" onclick="javascript:back()" />

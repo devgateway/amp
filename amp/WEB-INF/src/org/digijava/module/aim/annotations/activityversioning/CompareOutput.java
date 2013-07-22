@@ -11,8 +11,17 @@ public class CompareOutput {
 	private Object[] originalValueOutput;
 	private boolean blockSingleChangeOutput;
 	private boolean mandatoryForSingleChangeOutput;
+    private int index;
 
-	public String[] getStringOutput() {
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public String[] getStringOutput() {
 		return stringOutput;
 	}
 

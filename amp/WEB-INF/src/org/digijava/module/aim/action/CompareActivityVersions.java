@@ -406,9 +406,27 @@ public class CompareActivityVersions extends DispatchAction {
 				}
 			}
 		}
+
+        Map<String, List<CompareOutput>> outputGroupped = groupOutputCollection (vForm.getOutputCollection());
+        vForm.setOutputCollectionGrouped(outputGroupped);
 	
 		return mapping.findForward("forward");
 	}
+
+    private Map<String, List<CompareOutput>> groupOutputCollection (List<CompareOutput> outputCollection) {
+        Map<String, List<CompareOutput>> retVal = new HashMap<String, List<CompareOutput>>();
+        int idx = 0;
+        for (CompareOutput obj: outputCollection) {
+            obj.setIndex(idx);
+            if (!retVal.containsKey(obj.getDescriptionOutput())) {
+                retVal.put(obj.getDescriptionOutput(), new ArrayList<CompareOutput>());
+            }
+            retVal.get(obj.getDescriptionOutput()).add(obj);
+            idx ++;
+        }
+
+        return retVal;
+    }
 
 	public ActionForward enableMerge(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {

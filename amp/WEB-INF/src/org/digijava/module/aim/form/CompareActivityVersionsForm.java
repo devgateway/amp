@@ -1,6 +1,8 @@
 package org.digijava.module.aim.form;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.annotations.activityversioning.CompareOutput;
@@ -30,7 +32,9 @@ public class CompareActivityVersionsForm extends ActionForm {
 	private Long ampActivityId;
 	
 	private boolean advancemode;
-	
+
+    private Map<String, List<CompareOutput>> outputCollectionGrouped;
+
 	public Long getActivityOneId() {
 		return activityOneId;
 	}
@@ -118,4 +122,16 @@ public class CompareActivityVersionsForm extends ActionForm {
 	public void setAdvancemode(boolean advancemode) {
 		this.advancemode = advancemode;
 	}
+
+    public Map<String, List<CompareOutput>> getOutputCollectionGrouped() {
+        return outputCollectionGrouped;
+    }
+
+    public void setOutputCollectionGrouped(Map<String, List<CompareOutput>> outputCollectionGrouped) {
+        this.outputCollectionGrouped = outputCollectionGrouped;
+    }
+
+    public Set<Map.Entry<String, List<CompareOutput>>> getOutputCollectionGroupedAsSet() {
+        return this.outputCollectionGrouped.entrySet();
+    }
 }

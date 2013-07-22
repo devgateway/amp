@@ -476,7 +476,7 @@ function collapseAll() {
 			         <bean:write name="aimEditActivityForm" property="currCode" />
 			         </b>
 		         </c:if>
-			<hr/>
+			    <hr/>
 			</c:if>
 			</module:display>
 			<field:display name="Duration of Project" feature="Planning">
@@ -485,8 +485,8 @@ function collapseAll() {
 				<c:if test="${not empty aimEditActivityForm.planning.projectPeriod}">
                     <br/>
                     <b>${aimEditActivityForm.planning.projectPeriod }&nbsp; </b><digi:trn>Months</digi:trn>
-                    <hr/>
 				</c:if>
+                <hr/>
 			</field:display>
 			<field:display name="Delivery rate" feature="Funding Information">
 				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Disbursements / Actual Commitments * 100</digi:trn>" width="10" height=10 border="0">

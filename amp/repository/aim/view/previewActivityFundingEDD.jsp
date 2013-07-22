@@ -17,12 +17,11 @@
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedEDDDetails}">
 	<tr bgcolor="#ffffff">
-		<td height="20" colspan="4" bgcolor="#FFFFCC"
-			style="text-transform: uppercase"><a
-			title='<digi:trn>Estimated Donor Disbursements</digi:trn>'>
-	
-		<digi:trn>Planned EDD</digi:trn>
-		</a></td>
+		<td height="20" colspan="4" bgcolor="#FFFFCC" style="text-transform: uppercase">
+            <a title='<digi:trn>Estimated Donor Disbursements</digi:trn>'>
+	        	<digi:trn>Planned EDD</digi:trn>
+		    </a>
+        </td>
 	</tr>
 	
 	<!-- Start Planned EDD -->
@@ -79,8 +78,11 @@
 	
 <tr><td colspan="4" height="7px"></td></tr>
 	<tr bgcolor="#ffffff">
-		<td colspan="4" bgcolor="#FFFFCC" 
-			style="text-transform: uppercase; text-transform: uppercase"><digi:trn>Estimated Donor Disbursements</digi:trn>:</td>
+		<td colspan="4" bgcolor="#FFFFCC" style="text-transform: uppercase">
+            <a title="">
+                <digi:trn>Estimated Donor Disbursements</digi:trn>:
+            </a>
+        </td>
 	</tr>
 
 	<!-- Start Actual EDD -->
@@ -118,8 +120,8 @@
 	<!-- End Actual EDD -->
 
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><digi:trn>Subtotal Actual EDD</digi:trn>:
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+            <digi:trn>Subtotal Actual EDD</digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">

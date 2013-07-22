@@ -79,8 +79,11 @@
 	
 <tr><td colspan="4" height="7px"></td></tr>
 	<tr bgcolor="#ffffff">
-		<td colspan="4" bgcolor="#FFFFCC" 
-			style="text-transform: uppercase; text-transform: uppercase"><digi:trn>Release of Funds</digi:trn>:</td>
+		<td colspan="4" bgcolor="#FFFFCC" style="text-transform: uppercase">
+            <a title="">
+                <digi:trn>Release of Funds</digi:trn>:
+            </a>
+        </td>
 	</tr>
 
 	<!-- Start Actual Release of Funds -->
@@ -117,8 +120,8 @@
 	<!-- End Actual RoF -->
 
 	<tr>
-		<td colspan="2" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><digi:trn>Subtotal Actual RoF</digi:trn>:
+		<td colspan="2" bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">
+            <digi:trn>Subtotal Actual RoF</digi:trn>:
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">

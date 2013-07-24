@@ -1278,7 +1278,7 @@ System.out.println("lang:"+lang);
 								newDoc.setSiteId(oldDoc.getSiteId());
 								
 								HashSet<SdmItem> items = new HashSet<SdmItem>();
-								 for (SdmItem sdmItem : (Set<SdmItem>)oldDoc.getItems()) {
+								 for (SdmItem sdmItem : oldDoc.getItems()) {
 									SdmItem newItem = new SdmItem();
 									newItem.setContentType(sdmItem.getContentType());
 									newItem.setRealType(sdmItem.getRealType());

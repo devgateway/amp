@@ -1807,7 +1807,7 @@ public class DataExchangeUtils {
 			 
 			SdmItem item = null;
 			if (attachedFile!=null) {
-				for (SdmItem sdmItem : (Set<SdmItem>)attachedFile.getItems()) {
+				for (SdmItem sdmItem : attachedFile.getItems()) {
 					item = sdmItem;
 					break;
 				}

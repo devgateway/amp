@@ -201,9 +201,9 @@ public class DbUtil {
      */
     public static int getNextParagraph(Sdm document, Long paragraphId) {
 
-        Iterator iter = document.getItems().iterator();
+        Iterator<SdmItem> iter = document.getItems().iterator();
         while (iter.hasNext()) {
-            SdmItem item = (SdmItem) iter.next();
+            SdmItem item = iter.next();
             if (item.getParagraphOrder().longValue() == paragraphId.longValue()) {
                 return ( (SdmItem) iter.next()).getParagraphOrder().intValue();
             }
@@ -217,9 +217,9 @@ public class DbUtil {
      */
     public static int getPrevParagraph(Sdm document, Long paragraphId) {
         SdmItem prevItem = null;
-        Iterator iter = document.getItems().iterator();
+        Iterator<SdmItem> iter = document.getItems().iterator();
         while (iter.hasNext()) {
-            SdmItem item = (SdmItem) iter.next();
+            SdmItem item = iter.next();
             if (item.getParagraphOrder().longValue() == paragraphId.longValue()) {
                 return prevItem.getParagraphOrder().intValue();
             }
@@ -234,9 +234,9 @@ public class DbUtil {
      */
     public static int getLastParagraph(Sdm document, Long paragraphId) {
         SdmItem prevItem = null;
-        Iterator iter = document.getItems().iterator();
+        Iterator<SdmItem> iter = document.getItems().iterator();
         while (iter.hasNext()) {
-            SdmItem item = (SdmItem) iter.next();
+            SdmItem item = iter.next();
             prevItem = item;
         }
         return (prevItem != null) ? prevItem.getParagraphOrder().intValue() : 0;
@@ -260,9 +260,9 @@ public class DbUtil {
 //beginTransaction();
             //item1 = (SdmItem) session.load(SdmItem.class, item1);
             //item2 = (SdmItem) session.load(SdmItem.class, item2);
-            Iterator iter = document.getItems().iterator();
+            Iterator<SdmItem> iter = document.getItems().iterator();
             while (iter.hasNext()) {
-                SdmItem item = (SdmItem) iter.next();
+                SdmItem item = iter.next();
                 if (item.getParagraphOrder().equals(id1)) {
                     item.setParagraphOrder(id2);
                     session.update(item);
@@ -308,9 +308,9 @@ public class DbUtil {
 
             Sdm sdm = item.getDocument();
 
-            Iterator iter = sdm.getItems().iterator();
+            Iterator<SdmItem> iter = sdm.getItems().iterator();
             while (iter.hasNext()) {
-                SdmItem iterItem = (SdmItem) iter.next();
+                SdmItem iterItem = iter.next();
                 if (iterItem.getParagraphOrder().equals(item.getParagraphOrder())) {
                     iter.remove();
                 }
@@ -415,9 +415,9 @@ public class DbUtil {
             if (document.getId() == null) {
 
                 if (document.getItems() != null) {
-                    Iterator iter = document.getItems().iterator();
+                    Iterator<SdmItem> iter = document.getItems().iterator();
                     while (iter.hasNext()) {
-                        SdmItem item = (SdmItem) iter.next();
+                        SdmItem item = iter.next();
                         item.setDocument(document);
                         session.save(item);
                     }
@@ -426,9 +426,9 @@ public class DbUtil {
             } // update
             else {
                 if (document.getItems() != null) {
-                    Iterator iter = document.getItems().iterator();
+                    Iterator<SdmItem> iter = document.getItems().iterator();
                     while (iter.hasNext()) {
-                        SdmItem item = (SdmItem) iter.next();
+                        SdmItem item = iter.next();
                         if (item.getDocument() == null) {
                             item.setDocument(document);
                             session.save(item);
@@ -476,7 +476,7 @@ public class DbUtil {
             	if(document.getItems()!=null){
             		Iterator<SdmItem> iter=document.getItems().iterator();
             		while(iter.hasNext()){
-            			SdmItem oldItem = (SdmItem) iter.next();
+            			SdmItem oldItem = iter.next();
             			oldItem.setDocument(document);
             			//save item
             			 session.save(oldItem);

@@ -68,21 +68,34 @@ public class ActivityVersionUtil {
 		return ret;
 	}
 
-	public static String generateFormattedOutput(HttpServletRequest request, Output out) throws WorkerException {
+    public static String generateFormattedOutput(HttpServletRequest request, Output out) throws WorkerException {
+        return generateFormattedOutput(request, out, null);
+    }
+
+	public static String generateFormattedOutput(HttpServletRequest request, Output out, Output out1) throws WorkerException {
 		Site site = RequestUtils.getSite(request);
 		String langCode = RequestUtils.getNavigationLanguage(request).getCode();
 
-		String ret = "";
+		StringBuilder ret = new StringBuilder();
 		if (out.getOutputs() != null) {
 			// First level.
 			Iterator<Output> iter = out.getOutputs().iterator();
+            int iterIdx = 0;
 			while (iter.hasNext()) {
 				Output auxOutput = iter.next();
+                boolean existsInOtherVersion = true;
+
 				for (int i = 0; i < auxOutput.getTitle().length; i++) {
                     String title = auxOutput.getTitle()[i];
+
+                    if (out1 != null) {
+                        existsInOtherVersion = out1.getOutputByTitle(title) != null;
+                    }
                     if (!title.trim().isEmpty()) {
-					    ret = ret + "<br/><b>" + TranslatorWorker.translateText(auxOutput.getTitle()[i], langCode, site.getId())
-							+ ":</b>&nbsp;";
+                        if (!existsInOtherVersion) ret.append("<font color='red'>");
+					    ret.append("<br/><b>").append(TranslatorWorker.translateText(auxOutput.getTitle()[i], langCode, site.getId())).
+                                append(":</b>&nbsp;");
+                        if (!existsInOtherVersion) ret.append("</font>");
                     }
 				}
 				for (int i = 0; i < auxOutput.getValue().length; i++) {
@@ -95,36 +108,53 @@ public class ActivityVersionUtil {
                         String text = auxOutput.getValue()[i].toString();
                         if (auxOutput.getTranslateValue())
                             text = TranslatorWorker.translateText(text, langCode, site.getId());
-                        ret = ret + DbUtil.filter(text);
+                        if (!existsInOtherVersion) ret.append("<font color='red'>");
+                        ret.append(DbUtil.filter(text));
+                        if (!existsInOtherVersion) ret.append("</font>");
 					}
 					// }
 				}
 				if (auxOutput.getOutputs() != null) {
+
+                    Output output2 = null;
+                    if (out1 != null) {
+                        output2 = out1.getOutputByTitle(auxOutput.getTitle()[0]);
+                    }
+
+
 					// Second level.
 					String tabs = "<br/> &nbsp; &nbsp; &nbsp;";
 					Iterator<Output> iter2 = auxOutput.getOutputs().iterator();
 					while (iter2.hasNext()) {
 						Output auxOutput2 = iter2.next();
-						ret += tabs;
+
+                        Output output3 = null;
+                        if (output2 != null) {
+                            output3 = output2.getOutputByValues(auxOutput2.getValue());
+                        }
+
+						ret.append(tabs);
 						for (int i = 0; i < auxOutput2.getTitle().length; i++) {
-							ret = ret + "<b>"
-									+ TranslatorWorker.translateText(auxOutput2.getTitle()[i], langCode, site.getId())
-									+ "</b>";
+							ret.append("<b>").
+                                    append(TranslatorWorker.translateText(auxOutput2.getTitle()[i], langCode, site.getId())).
+                                    append("</b>");
 						}
 						for (int i = 0; i < auxOutput2.getValue().length; i++) {
 							if (auxOutput2.getValue()[i] instanceof Timestamp) {
 								String date = DateConversion.ConvertDateToString(new Date(((Timestamp) auxOutput2
 										.getValue()[i]).getTime()));
-								ret += date;
+								ret.append(date);
 							} else if (auxOutput2.getValue()[i] instanceof BigDecimal) {
 								NumberFormat formatter = FormatHelper.getDecimalFormat();
 								formatter.setMaximumFractionDigits(0);
-								ret += formatter.format(auxOutput2.getValue()[i]);
+								ret.append(formatter.format(auxOutput2.getValue()[i]));
 							} else {
                                 String text = auxOutput2.getValue()[i].toString();
                                 if (auxOutput2.getTranslateValue())
                                     text = TranslatorWorker.translateText(text, langCode, site.getId());
-                                ret = ret + DbUtil.filter(text);
+                                if (output2 != null && output3 == null) ret.append("<font color='red'>");
+                                ret.append(DbUtil.filter(text));
+                                if (output2 != null && output3 == null) ret.append("</font>");
 							}
 						}
 					}
@@ -132,13 +162,13 @@ public class ActivityVersionUtil {
 			}
 		} else {
 			for (int i = 0; i < out.getTitle().length; i++) {
-				ret = ret + out.getTitle()[i];
+				ret.append(out.getTitle()[i]);
 			}
 			for (int i = 0; i < out.getValue().length; i++) {
-				ret = ret + out.getValue()[i];
+				ret.append(out.getValue()[i]);
 			}
 		}
-		return ret;
+		return ret.toString();
 	}
 
 	public static void deleteOldActivityVersions() throws Exception {

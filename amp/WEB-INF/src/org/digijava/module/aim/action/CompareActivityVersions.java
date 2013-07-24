@@ -334,14 +334,32 @@ public class CompareActivityVersions extends DispatchAction {
 								Object auxValue1 = auxVersionable1.getValue() != null ? auxVersionable1.getValue() : "";
 								Object auxValue2 = auxVersionable2.getValue() != null ? auxVersionable2.getValue() : "";
 								if (!auxValue1.equals(auxValue2)) {
-									CompareOutput auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
-											new String[] {
-													ActivityVersionUtil.generateFormattedOutput(request,
-															auxVersionable1.getOutput()),
-													ActivityVersionUtil.generateFormattedOutput(request,
-															auxVersionable2.getOutput()) }, fields[i], new Object[] {
-													auxObject1, auxObject2 }, false, false);
+                                    CompareOutput auxOutput = null;
 
+                                    if (auxVersionable1.getClass().getName().
+                                            equals("org.digijava.module.aim.dbentity.AmpFunding") &&
+                                            auxVersionable2.getClass().getName().
+                                            equals("org.digijava.module.aim.dbentity.AmpFunding")
+                                            ) {
+                                            auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
+                                                    new String[] {
+                                                            ActivityVersionUtil.generateFormattedOutput(request,
+                                                                    auxVersionable1.getOutput(),
+                                                                    auxVersionable2.getOutput()),
+                                                            ActivityVersionUtil.generateFormattedOutput(request,
+                                                                    auxVersionable2.getOutput(),
+                                                                    auxVersionable1.getOutput()) }, fields[i], new Object[] {
+                                                    auxObject1, auxObject2 }, false, false);
+
+                                    } else {
+                                        auxOutput = new CompareOutput(auxAnnotation.fieldTitle(),
+                                        new String[] {
+                                                ActivityVersionUtil.generateFormattedOutput(request,
+                                                        auxVersionable1.getOutput()),
+                                                ActivityVersionUtil.generateFormattedOutput(request,
+                                                        auxVersionable2.getOutput()) }, fields[i], new Object[] {
+                                                auxObject1, auxObject2 }, false, false);
+                                    }
 									vForm.getOutputCollection().add(auxOutput);
 									auxList.add(auxVersionable1);
 									auxList.add(auxVersionable2);
@@ -408,10 +426,16 @@ public class CompareActivityVersions extends DispatchAction {
 		}
 
         Map<String, List<CompareOutput>> outputGroupped = groupOutputCollection (vForm.getOutputCollection());
+        modifyFundingOutputs (outputGroupped);
         vForm.setOutputCollectionGrouped(outputGroupped);
 	
 		return mapping.findForward("forward");
 	}
+
+    private void modifyFundingOutputs (Map<String, List<CompareOutput>> outputGroupped) {
+
+
+    }
 
     private Map<String, List<CompareOutput>> groupOutputCollection (List<CompareOutput> outputCollection) {
         Map<String, List<CompareOutput>> retVal = new HashMap<String, List<CompareOutput>>();

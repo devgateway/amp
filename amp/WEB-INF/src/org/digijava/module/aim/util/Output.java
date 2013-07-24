@@ -58,4 +58,46 @@ public class Output {
     public Output() {
 		super();
 	}
+
+    public int contains (String title) {
+        int retVal = -1;
+        for (int idx = 0; idx < this.title.length; idx ++) {
+            if (title.equals(this.title[idx])) {
+                retVal = idx;
+                break;
+            }
+        }
+        return retVal;
+    }
+
+    public Output getOutputByTitle(String title) {
+        Output retVal = null;
+        for (Output out : this.outputs) {
+            if (out.contains(title) > -1) {
+                retVal = out;
+                break;
+            }
+        }
+        return retVal;
+    }
+
+    public Output getOutputByValues(Object[] values) {
+        Output retVal = null;
+        for (Output out : this.outputs) {
+            boolean matched = true;
+            if (out.getValue().length == values.length) {
+                for (int idx = 0; idx < out.getValue().length; idx ++) {
+                    if (!out.getValue()[idx].equals(values[idx])) {
+                        matched = false;
+                        break;
+                    }
+                }
+                if (matched) {
+                    retVal = out;
+                    break;
+                }
+            }
+        }
+        return retVal;
+    }
 }

@@ -21,6 +21,7 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.dbentity.FeatureTemplates;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
  
 public class FeatureManager extends MultiAction {
@@ -105,7 +106,7 @@ public class FeatureManager extends MultiAction {
 		Collection features = FeaturesUtil.getAMPFeatures();
 		Collection newToAddFeatures=new ArrayList();
 		Boolean featureOn=new Boolean(true);
-		FeatureTemplates defaultTemplate=FeaturesUtil.getTemplate(FeaturesUtil.getGlobalSettingValue("Feature Template"));
+		FeatureTemplates defaultTemplate=FeaturesUtil.getTemplate(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.FEATURE_TEMPLATE));
 		Long currentTemplateId=new Long(Long.parseLong(session.getAttribute("templateId").toString()));
 		ampContext = getServlet().getServletContext();
 		boolean flag=false;
@@ -335,7 +336,7 @@ public class FeatureManager extends MultiAction {
 	public static void refreshTemplateGlobalSettings1(ActionServlet x)
 	{
 		
-		FeatureTemplates defaultTemplate=FeaturesUtil.getTemplate(FeaturesUtil.getGlobalSettingValue("Feature Template"));
+		FeatureTemplates defaultTemplate=FeaturesUtil.getTemplate(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.FEATURE_TEMPLATE));
 		ServletContext ampContext1 = null;
 		ampContext1 = x.getServletContext();
 		Collection features = FeaturesUtil.getTemplateFeatures(defaultTemplate.getTemplateId());

@@ -26,6 +26,7 @@ import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -133,6 +134,8 @@ public class UpdateWorkspace extends Action {
 			} else {
 				newTeam.setDescription(" ");
 			}
+
+            newTeam.setFmTemplate(FeaturesUtil.getTemplateById(uwForm.getFmTemplate()));
 		}
 
 		if (event != null && event.trim().equalsIgnoreCase("reset")) {
@@ -154,6 +157,7 @@ public class UpdateWorkspace extends Action {
 			if(uwForm.getDeletedChildWorkspaces() != null){
 				uwForm.getDeletedChildWorkspaces().clear();
 			}
+            uwForm.setFmTemplate(null);
 			
 			return mapping.findForward("admin");
 		} else if (event != null && event.trim().equalsIgnoreCase("add")) {

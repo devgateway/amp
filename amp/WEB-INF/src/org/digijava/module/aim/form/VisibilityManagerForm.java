@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 
 public class VisibilityManagerForm extends ActionForm implements Serializable{
 
@@ -40,6 +41,9 @@ public class VisibilityManagerForm extends ActionForm implements Serializable{
 	private Collection allFeatures;
 	private Collection allModules;
 	private FormFile uploadFile = null;
+
+    private Long fmTemplate;
+    private Collection<AmpTemplatesVisibility> fmTemplateList;
 	
 	public FormFile getUploadFile() {
 		return uploadFile;
@@ -181,5 +185,20 @@ public class VisibilityManagerForm extends ActionForm implements Serializable{
 	    this.errors.clear();
 	    this.messages.clear();
 	}
-	
+
+    public Long getFmTemplate() {
+        return fmTemplate;
+    }
+
+    public void setFmTemplate(Long fmTemplate) {
+        this.fmTemplate = fmTemplate;
+    }
+
+    public Collection<AmpTemplatesVisibility> getFmTemplateList() {
+        return fmTemplateList;
+    }
+
+    public void setFmTemplateList(Collection<AmpTemplatesVisibility> fmTemplateList) {
+        this.fmTemplateList = fmTemplateList;
+    }
 }

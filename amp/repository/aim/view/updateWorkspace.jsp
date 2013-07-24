@@ -703,8 +703,42 @@ function cancel()
 														</td>
 														</c:if>
 													</tr>
-													
-													
+
+                                                    <tr>
+                                                        <td width="150" align="right" bgcolor="#f4f4f2">
+                                                            <digi:trn>FM Template</digi:trn>
+                                                        </td>
+                                                        <td align="left" bgcolor="#f4f4f2">
+                                                            <c:set var="translation">
+                                                                <digi:trn>Select, if workspace will use a different FM template</digi:trn>
+                                                            </c:set>
+                                                            <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
+                                                                <b><bean:write name="aimUpdateWorkspaceForm" property="fmTemplate" /></b>
+                                                            </logic:equal>
+                                                            <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="view">
+                                                                <b><bean:write name="aimUpdateWorkspaceForm" property="fmTemplate" /></b>
+                                                            </logic:equal>
+                                                            <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="edit">
+                                                                <html:select property="fmTemplate" styleClass="inp-text">
+                                                                    <html:option value="-1">${translation}</html:option>
+                                                                    <logic:notEmpty name="aimUpdateWorkspaceForm" property="fmTemplateList" >
+                                                                        <html:optionsCollection name="aimUpdateWorkspaceForm" property="fmTemplateList"
+                                                                                                value="id" label="name" styleClass="COLOR: #cc0000;" />
+                                                                    </logic:notEmpty>
+                                                                </html:select>
+                                                            </logic:equal>
+                                                            <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
+                                                                <html:select property="fmTemplate" styleClass="inp-text">
+                                                                    <html:option value="-1">${translation}</html:option>
+                                                                    <logic:notEmpty name="aimUpdateWorkspaceForm" property="fmTemplateList" >
+                                                                        <html:optionsCollection name="aimUpdateWorkspaceForm" property="fmTemplateList"
+                                                                                                value="id" label="name" styleClass="COLOR: #cc0000;" />
+                                                                    </logic:notEmpty>
+                                                                </html:select>
+                                                            </logic:equal>
+                                                        </td>
+                                                    </tr>
+
 													<tr>
 														<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<digi:trn key="aim:description">Description</digi:trn>

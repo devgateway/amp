@@ -62,7 +62,9 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 	private String permissionStrategy;
 	
 	private Set<AmpTeamFilterData> filterDataSet;
-	
+
+    private AmpTemplatesVisibility fmTemplate;
+
 	//Global function to initialize the team filters inside the session
 	public static void initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
 		//Initialize Team Filter
@@ -356,7 +358,15 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 		this.useFilter = useFilter;
 	}
 
-	/*@Override
+    public AmpTemplatesVisibility getFmTemplate() {
+        return fmTemplate;
+    }
+
+    public void setFmTemplate(AmpTemplatesVisibility fmTemplate) {
+        this.fmTemplate = fmTemplate;
+    }
+
+    /*@Override
 	public boolean equalsForVersioning(Object obj) {
 		return this.equals(obj);
 	}

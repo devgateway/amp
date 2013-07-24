@@ -35,6 +35,7 @@ import org.digijava.module.aim.form.VisibilityManagerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.VisibilityManagerExportHelper;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -134,6 +135,8 @@ public class VisibilityManager extends MultiAction {
 		Collection modules=FeaturesUtil.getAMPModulesVisibility();
 		vForm.setMode("addNew");
 		vForm.setModules(modules);
+        vForm.setFmTemplate(null);
+        vForm.setFmTemplateList(FeaturesUtil.getAMPTemplatesVisibility());
 		return mapping.findForward("forward");
 	}
 
@@ -280,7 +283,19 @@ public class VisibilityManager extends MultiAction {
 			//errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.templateExistent"));
 			//saveErrors(request, errors);
 		} else {
-			FeaturesUtil.insertTemplate(request.getParameter("templateName"), hbsession);
+            VisibilityManagerForm vForm = (VisibilityManagerForm) form;
+
+            if (vForm.getFmTemplate() == null) //we're not cloning an existing template
+			    FeaturesUtil.insertTemplate(request.getParameter("templateName"), hbsession);
+            else{
+                //we need to clone an existing template
+                AmpTemplatesVisibility existing = FeaturesUtil.getTemplateById(vForm.getFmTemplate());
+                AmpTemplatesVisibility newT = (AmpTemplatesVisibility) existing.clone();
+                hbsession.evict(existing);
+                newT.setName(vForm.getTemplateName());
+                newT.setId(null); //fool hibernate
+                DbUtil.saveOrUpdateObject(newT);
+            }
 		}
 		//for refreshing the page...
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;

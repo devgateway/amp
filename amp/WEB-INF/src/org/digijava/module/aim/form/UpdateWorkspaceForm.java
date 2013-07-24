@@ -10,6 +10,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionErrors;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.multistepwizard.MultiStepActionForm;
 import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -96,9 +97,10 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private boolean orgPopupReset;
 	
     private Long workspaceGroup;
-	
-	
-	
+
+    private Long fmTemplate;
+    private Collection<AmpTemplatesVisibility> fmTemplateList;
+
 	public Collection getAllChildren() {
 		Collection aux=new TreeSet();
 		if (availChildWorkspaces != null)
@@ -712,4 +714,20 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	public void setUseFilter(Boolean useFilter) {
 		this.useFilter = useFilter;
 	}
+
+    public Long getFmTemplate() {
+        return fmTemplate;
+    }
+
+    public void setFmTemplate(Long fmTemplate) {
+        this.fmTemplate = fmTemplate;
+    }
+
+    public Collection<AmpTemplatesVisibility> getFmTemplateList() {
+        return fmTemplateList;
+    }
+
+    public void setFmTemplateList(Collection<AmpTemplatesVisibility> fmTemplateList) {
+        this.fmTemplateList = fmTemplateList;
+    }
 }

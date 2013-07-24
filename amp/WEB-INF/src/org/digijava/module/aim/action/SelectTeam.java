@@ -12,21 +12,22 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.LoginForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -111,7 +112,7 @@ public class SelectTeam extends Action {
                 tm.setTeamHead(false);
             }
 
-            AmpApplicationSettings ampAppSettings = DbUtil
+            AmpApplicationSettings ampAppSettings =DbUtil
                     .getMemberAppSettings(member.getAmpTeamMemId());
             ApplicationSettings appSettings = new ApplicationSettings();
             appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
@@ -173,7 +174,18 @@ public class SelectTeam extends Action {
 			session.removeAttribute(Constants.TEAM_ID);
             session.removeAttribute(Constants.MY_REPORTS_PER_PAGE);
             session.removeAttribute(Constants.LAST_VIEWED_REPORTS);
-            
+
+            //See if current workspace has a FM Template attached to it
+            AmpTeam currentTeam = member.getAmpTeam();
+            AmpTemplatesVisibility currentTemplate = currentTeam.getFmTemplate();
+            if (currentTemplate == null){
+                currentTemplate = FeaturesUtil.getTemplateVisibility(
+                        FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),
+                        PersistenceManager.getRequestDBSession());
+            }
+            AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
+            ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+            request.getServletContext().setAttribute("ampTreeVisibility", ampTreeVisibility);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }

@@ -13,7 +13,7 @@ import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-public class AmpTemplatesVisibility extends AmpObjectVisibility implements Serializable {
+public class AmpTemplatesVisibility extends AmpObjectVisibility implements Serializable, Cloneable {
 	/**
 	 * 
 	 */
@@ -146,4 +146,27 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	{
 		namesCache = null;
 	}
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        AmpTemplatesVisibility n = (AmpTemplatesVisibility) super.clone();
+
+        //create new sets
+        SortedSet tmp = new TreeSet();
+        for (Object o: n.getFeatures())
+            tmp.add(o);
+        n.setFeatures(tmp);
+
+        tmp = new TreeSet();
+        for (Object o: n.getFields())
+            tmp.add(o);
+        n.setFields(tmp);
+
+        tmp = new TreeSet();
+        for (Object o: n.getItems())
+            tmp.add(o);
+        n.setItems(tmp);
+
+        return n;
+    }
 }

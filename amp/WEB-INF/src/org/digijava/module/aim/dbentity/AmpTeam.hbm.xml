@@ -57,6 +57,9 @@
 			<key column="amp_team_id" />
 			<one-to-many class="org.dgfoundation.amp.ar.dbentity.AmpTeamFilterData" />
 		</set>
-		
+
+        <many-to-one name="fmTemplate" column="fm_template"
+                     class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" cascade="none" lazy="proxy" />
+
 	</class>
 </hibernate-mapping>

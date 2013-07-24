@@ -80,7 +80,7 @@ public class FeaturesUtil {
 	}
 
 	public static boolean isDefault(Long templateId) {
-		String s = FeaturesUtil.getGlobalSettingValue("Feature Template");
+		String s = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.FEATURE_TEMPLATE);
 		if (s != null)
 			if (templateId.compareTo(new Long(Long.parseLong(s))) == 0)
 				return true;
@@ -198,7 +198,7 @@ public class FeaturesUtil {
 	 */
 	public static Collection getActiveFeatures() {
 		FeatureTemplates template = getTemplate(getGlobalSettingValue(
-		"Feature Template"));
+                GlobalSettingsConstants.FEATURE_TEMPLATE));
 		return getTemplateFeatures(template.getTemplateId());
 		/*	Session session = null;
      Collection col = new ArrayList();
@@ -229,7 +229,7 @@ public class FeaturesUtil {
 	}
 	
 	public static FeatureTemplates getActiveTemplate(){
-		FeatureTemplates template = getTemplate(getGlobalSettingValue("Feature Template"));
+		FeatureTemplates template = getTemplate(getGlobalSettingValue(GlobalSettingsConstants.FEATURE_TEMPLATE));
 		return template;
 	}
 

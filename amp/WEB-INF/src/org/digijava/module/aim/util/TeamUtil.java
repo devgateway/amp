@@ -469,6 +469,7 @@ public class TeamUtil {
                 workspace.setUseFilter(team.getUseFilter());
                 workspace.setWorkspaceGroup(team.getWorkspaceGroup());
                 workspace.setHideDraftActivities(team.getHideDraftActivities() );
+                workspace.setFmTemplate(team.getFmTemplate());
                 
                 if(null == team.getRelatedTeamId())
                     workspace.setRelatedTeam(null);
@@ -591,6 +592,7 @@ public class TeamUtil {
                 updTeam.setUseFilter(team.getUseFilter());
                 updTeam.setHideDraftActivities(team.getHideDraftActivities() );
                 updTeam.setWorkspaceGroup(team.getWorkspaceGroup());
+                updTeam.setFmTemplate(team.getFmTemplate());
                 if (updTeam.getFilterDataSet() == null)
                 	updTeam.setFilterDataSet(new HashSet());
                 else

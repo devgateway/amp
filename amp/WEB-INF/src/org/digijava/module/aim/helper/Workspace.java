@@ -6,6 +6,7 @@ package org.digijava.module.aim.helper;
 
 import java.util.Collection;
 
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class Workspace {
@@ -27,6 +28,8 @@ public class Workspace {
 	private Boolean addActivity;
 	private Boolean computation;
 	private Boolean useFilter;
+
+    private AmpTemplatesVisibility fmTemplate;
 	
 	public Boolean getAddActivity() {
 		return addActivity;
@@ -201,7 +204,12 @@ public class Workspace {
 	public AmpCategoryValue getWorkspaceGroup() {
 		return workspaceGroup;
 	}
-	
-	
-	
+
+    public AmpTemplatesVisibility getFmTemplate() {
+        return fmTemplate;
+    }
+
+    public void setFmTemplate(AmpTemplatesVisibility fmTemplate) {
+        this.fmTemplate = fmTemplate;
+    }
 }

@@ -475,6 +475,7 @@ function showStInfoWindow() {
 /**
  * 
  */
+ var filterListDelimiter = " / ";
 function getSelectedFilter() {
 	$("#sfilterid").html("");
 	var xhrArgs = {
@@ -497,27 +498,27 @@ function getSelectedFilter() {
 			if (jsonData[0].projectstatus != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Status')+"</i> : ");
 				dojo.forEach(jsonData[0].projectstatus, function(projectstatus) {
-					$("#sfilterid").append(projectstatus + " ");
+					$("#sfilterid").append(projectstatus + filterListDelimiter);
 				});
 			}
 			if (jsonData[0].sector != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Primary Sector')+"</i> : ");
 				dojo.forEach(jsonData[0].sector, function(sector) {
-					$("#sfilterid").append(sector + " ");
+					$("#sfilterid").append(sector + filterListDelimiter);
 				});
 			}
 
 			if (jsonData[0].financinginstrument != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Financing Instrument')+"</i> : ");
 				dojo.forEach(jsonData[0].financinginstrument, function(financinginstrument) {
-					$("#sfilterid").append(financinginstrument + " ");
+					$("#sfilterid").append(financinginstrument + filterListDelimiter);
 				});
 				
 			}
 			if (jsonData[0].typeofassistance != '') {
 				$("#sfilterid").append(" <i>| "+ translate('Type of Assistance')+"</i> : ");
 				dojo.forEach(jsonData[0].typeofassistance, function(typeofassistance) {
-					$("#sfilterid").append(typeofassistance + " ");
+					$("#sfilterid").append(typeofassistance + filterListDelimiter);
 				});
 			}
 
@@ -542,7 +543,7 @@ function getSelectedFilter() {
 				$("#sfilterid").append(" <i>| "+ translate('Donors')+"</i> : ");
 			}
 			dojo.forEach(jsonData[0].selecteddonors, function(donor) {
-				$("#sfilterid").append(donor.donorname + " ");
+				$("#sfilterid").append(donor.donorname + filterListDelimiter);
 			});
 
 			if (jsonData[0].structuretypes.length > 0) {
@@ -550,7 +551,7 @@ function getSelectedFilter() {
 			}
 
 			dojo.forEach(jsonData[0].structuretypes, function(structures) {
-				$("#sfilterid").append(structures + " ");
+				$("#sfilterid").append(structures + filterListDelimiter);
 			});
 
 		},

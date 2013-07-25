@@ -117,14 +117,28 @@ table tr td {font-size:11px;}
 		<table width="480" border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td width="50" style="vertical-align: middle;">
+					<logic:present name="currentMember" scope="session">
 		            <a href="/aim" style="text-decoration: none">
 		            	<img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br/>
 		            </a>
+		            </logic:present>
+		            <logic:notPresent name="currentMember" scope="session">
+		            <a href="/" style="text-decoration: none">
+		            	<img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br/>
+		            </a>
+		            </logic:notPresent>
 				</td>
 				<td>
-            		<a href="/aim" style="text-decoration: none">
-            		<div class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
-            		</a>
+					<logic:present name="currentMember" scope="session">
+	            		<a href="/aim" style="text-decoration: none">
+	            		<div class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
+	            		</a>
+            		 </logic:present>
+            		 <logic:notPresent name="currentMember" scope="session">
+	            		<a href="/" style="text-decoration: none">
+	            		<div class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
+	            		</a>
+            		 </logic:notPresent>
 				</td>
 			</tr>
 		</table>

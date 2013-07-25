@@ -83,14 +83,28 @@ ${fn:replace(message,quote,escapedQuote)}
 		<table width="480" border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td width="50" style="vertical-align: middle;">
-		            <a href="/aim" style="text-decoration: none">
+				<logic:notPresent name="currentMember" scope="session">
+		            <a href="/" style="text-decoration: none">
 		            <img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br/>
 		            </a>
+		        </logic:notPresent >
+		        <logic:present name="currentMember" scope="session">
+		        	<a href="/aim" style="text-decoration: none">
+		            <img src="/aim/default/displayFlag.do" border="0" width="50px" height="34px"><br/>
+		            </a>
+		        </logic:present>
 				</td>
 				<td style="padding-left:10px;">
-            		<a href="/aim" style="text-decoration: none">
-            		<div class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
-            		</a>
+					<logic:notPresent name="currentMember" scope="session">
+	            		<a href="/" style="text-decoration: none">
+	            		<div class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
+	            		</a>
+            		</logic:notPresent>
+            		<logic:present name="currentMember" scope="session">
+	            		<a href="/aim" style="text-decoration: none">
+	            		<div class="amp_label" style="padding-top:0px;padding-left: 5px;"><digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn></div>
+	            		</a>
+            		</logic:present>
 				</td>
 			</tr>
 		</table>

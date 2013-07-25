@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.sql.Connection;
@@ -20,14 +21,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.jackrabbit.core.query.lucene.MoreLikeThis;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -38,7 +43,9 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.highlight.Fragmenter;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
@@ -50,6 +57,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpLuceneIndexStamp;
@@ -672,7 +680,7 @@ public class LuceneUtil implements Serializable {
 			all = all.concat(" " + projectId);
 		}
 		if (title != null){
-			doc.add(new Field("title", title, Field.Store.NO, Field.Index.TOKENIZED));
+			doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED));
 			all = all.concat(" " + title);
 		}
 		if (description != null && description.length()>0){
@@ -815,16 +823,86 @@ public class LuceneUtil implements Serializable {
     	return LuceneUtil.search(index, field, searchString, MAX_LUCENE_RESULTS, true, searchMode);
     }
     
+
 	/**
-	 * Runs a search in the index and returns the results
+	 * Searches for similar {@link AmpActivityVersion}S based on title
+	 * similarity<br/> 
+	 * The settings are tuned for short text strings (the title), so
+	 * if you adapt this to search on fields like
+	 * {@link AmpActivityFields#getDescription()} make sure to tune
+	 * {@link MoreLikeThis#setMinDocFreq(int)} and
+	 * {@link MoreLikeThis#setMinTermFreq(int)}
 	 * 
-	 * @param index the index where the search will be done
-	 * @param field the field where you do the search
-	 * @param searchString
-	 * @param maxLuceneResults maximum hits in lucene
+	 * @param index
+	 *            the {@link LuceneUtil}{@link #ACTVITY_INDEX_DIRECTORY}
+	 * @param origSearchString
+	 *            the text searched as {@link AmpActivityFields#getName()} which in
+	 *            {@link LuceneUtil#activity2Document(String, String, String, String, String, String, String, String, String, ArrayList, String, String)}
+	 *            is indexed as "title"
+	 * @param maxLuceneResults
+	 *            the maximum number of results returned
+	 * @see MoreLikeThis
+	 * @return a list of similar {@link AmpActivityVersion} titles
 	 * 
-	 * @return a Hits object that contains the results
 	 */
+	public static List<String> findActivitiesMoreLikeThis(String index,
+			String origSearchString, int maxLuceneResults) {
+		Searcher indexSearcher = null;
+		IndexReader ir = null;
+
+		try {
+			ir = IndexReader.open(index);
+			logger.info("Lucene index reader has " + ir.numDocs()
+					+ " docs in it");
+			indexSearcher = new IndexSearcher(index);
+
+			MoreLikeThis mlt = new MoreLikeThis(ir);
+			mlt.setMinDocFreq(1);
+			mlt.setMinTermFreq(1);
+			mlt.setFieldNames(new String[] { "title" });
+
+			Reader reader = new StringReader(origSearchString);
+			Query query = mlt.like(reader);
+			reader.close();
+			TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
+			logger.info("found " + topDocs.totalHits + " topDocs");
+
+			List<String> titles = new ArrayList<String>();
+			for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+
+				Document doc = indexSearcher.doc(scoreDoc.doc);
+
+				// Get the title of the activity
+				String str = doc.get("title");
+				titles.add(str);
+			}
+
+			return titles;
+
+		} catch (CorruptIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				ir.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				indexSearcher.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return null;
+	}
+    
 	public static Hits search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
 		QueryParser parser = new QueryParser(field, analyzer);
 		if (LuceneUtil.SEARCH_MODE_AND.toString().equals(searchMode) ) 

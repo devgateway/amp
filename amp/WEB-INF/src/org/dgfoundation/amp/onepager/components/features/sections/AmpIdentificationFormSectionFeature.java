@@ -8,13 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
+
+import org.apache.wicket.Application;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -28,7 +35,9 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCommentTab;
 import org.dgfoundation.amp.onepager.components.fields.AmpCommentTabsFieldWrapper;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpWarningComponentPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.validators.AmpUniqueActivityTitleValidator;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
@@ -36,6 +45,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -50,6 +60,7 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 	private static final long serialVersionUID = 8568986144567957699L;
 	private AmpTextAreaFieldPanel title;
 	private AmpCategorySelectFieldPanel status;
+	private AmpWarningComponentPanel<String> titleSimilarityWarning;
 
 	public AmpCategorySelectFieldPanel getStatus() {
 		return status;
@@ -76,10 +87,55 @@ public class AmpIdentificationFormSectionFeature extends AmpFormSectionFeaturePa
 			//		"title", m, "Project Title", AmpFMTypes.MODULE);
 			//title.getTextContainer().add(new AmpRequiredFieldValidator<String>(title));
 			title.getTextAreaContainer().setRequired(true);
-			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));
+			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));			
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px"));
+			title.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {		
+					if(!titleSimilarityWarning.isVisible()) return;
+					titleSimilarityWarning.getWarning().modelChanged();
+					target.add(titleSimilarityWarning);					
+				}
+				
+			});
+			
 			add(title);
+			
+		final AbstractReadOnlyModel<String> warningModel = new AbstractReadOnlyModel<String>() {
+			private static final long serialVersionUID = 3706184421459839210L;
+
+			@Override
+			public String getObject() {
+				if (title.getTextAreaContainer().getModelObject() == null)
+					return null;
+
+				ServletContext context = ((WebApplication) Application.get())
+						.getServletContext();
+				List<String> list = LuceneUtil.findActivitiesMoreLikeThis(
+						context.getRealPath("/")
+								+ LuceneUtil.ACTVITY_INDEX_DIRECTORY,
+						(String) title.getTextAreaContainer().getModelObject(),
+						5);
+				if (!list.isEmpty()) {
+					String ret=TranslatorUtil
+							.getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";
+					for (String string : list) 
+						ret+=" - "+string+ "\n";
+					return ret;
+					
+					
+				} else
+					return null;
+
+			}
+		};
+			
+			titleSimilarityWarning=new AmpWarningComponentPanel<String>("titleSimilarityWarning", "Project Title Similarity Warning", warningModel);
+			titleSimilarityWarning.setOutputMarkupId(true);
+			add(titleSimilarityWarning);
+			
 			status = new AmpCategorySelectFieldPanel(
 					"status", CategoryConstants.ACTIVITY_STATUS_KEY,
 					new AmpCategoryValueByKeyModel(

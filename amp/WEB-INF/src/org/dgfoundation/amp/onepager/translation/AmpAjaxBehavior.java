@@ -13,6 +13,7 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.StringHeaderItem;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.template.JavaScriptTemplate;
@@ -24,9 +25,12 @@ import org.dgfoundation.amp.onepager.web.pages.AmpHeaderFooter;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author aartimon@dginternational.org
@@ -50,6 +54,9 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 	protected void respond(AjaxRequestTarget target) {
 		
 		Request request = RequestCycle.get().getRequest();
+        ServletWebRequest servletWebRequest = (ServletWebRequest) request;
+        HttpServletRequest httpServletRequest = servletWebRequest.getContainerRequest();
+        TLSUtils.populate(httpServletRequest);
 		String method = request.getRequestParameters().getParameterValue("method").toString();
         String activityId = request.getRequestParameters().getParameterValue("actId").toString();
 		if ("translate".compareTo(method.toLowerCase()) == 0){
@@ -81,10 +88,10 @@ public class AmpAjaxBehavior extends AbstractDefaultAjaxBehavior{
 			msg = translatorWorker.getByKey(key, locale.getLanguage(), site);
 			if (msg != null) {
 				msg.setMessage(message);
-				msg.setKey(key);
-				msg.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
-				msg.setLocale(locale.getLanguage());
-				msg.setSite(site);
+				//msg.setKey(key);
+				//msg.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
+				//msg.setLocale(locale.getLanguage());
+				//msg.setSite(site);
 				translatorWorker.update(msg);
 				
 			} else {

@@ -64,6 +64,8 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 	private Set<AmpTeamFilterData> filterDataSet;
 
     private AmpTemplatesVisibility fmTemplate;
+    private AmpCategoryValue translationPrefix;
+
 
 	//Global function to initialize the team filters inside the session
 	public static void initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
@@ -364,6 +366,14 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 
     public void setFmTemplate(AmpTemplatesVisibility fmTemplate) {
         this.fmTemplate = fmTemplate;
+    }
+
+    public AmpCategoryValue getTranslationPrefix() {
+        return translationPrefix;
+    }
+
+    public void setTranslationPrefix(AmpCategoryValue translationPrefix) {
+        this.translationPrefix = translationPrefix;
     }
 
     /*@Override

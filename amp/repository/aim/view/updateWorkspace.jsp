@@ -739,7 +739,30 @@ function cancel()
                                                         </td>
                                                     </tr>
 
-													<tr>
+                                                    <tr>
+                                                        <td width="150" align="right" bgcolor="#FFFFFF">
+                                                            <digi:trn key="aim:translationPrefix">Translation Prefix</digi:trn>
+                                                        </td>
+                                                        <td align="left" bgcolor="#FFFFFF">
+                                                            <c:set var="translation">
+                                                                <digi:trn>Select, if workspace will use a different translation set</digi:trn>
+                                                            </c:set>
+                                                            <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
+                                                                <b><bean:write name="aimUpdateWorkspaceForm" property="translationPrefix" /></b>
+                                                            </logic:equal>
+                                                            <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="view">
+                                                                <b><bean:write name="aimUpdateWorkspaceForm" property="translationPrefix" /></b>
+                                                            </logic:equal>
+                                                            <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="edit">
+                                                                <category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="translationPrefix" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TRANSLATION_PREFIX_KEY %>" styleClass="inp-text" />
+                                                            </logic:equal>
+                                                            <logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
+                                                                <category:showoptions firstLine="${translation}" name="aimUpdateWorkspaceForm" property="translationPrefix" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TRANSLATION_PREFIX_KEY %>" styleClass="inp-text" />
+                                                            </logic:equal>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
 														<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<digi:trn key="aim:description">Description</digi:trn>
 														</td>

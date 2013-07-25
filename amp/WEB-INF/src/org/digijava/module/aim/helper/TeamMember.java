@@ -1,5 +1,7 @@
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
 import java.io.Serializable;
 import java.util.Set;
 
@@ -46,6 +48,7 @@ public class TeamMember implements Comparable, Serializable{
 	
 	private Boolean publishDocuments; /*permissions to make docs public*/
 	private boolean approver;
+    private AmpCategoryValue translationPrefix;
 
 	public TeamMember()
 	{
@@ -280,7 +283,15 @@ public class TeamMember implements Comparable, Serializable{
 		return this.useFilters;
 	}
 
-	@Override
+    public AmpCategoryValue getTranslationPrefix() {
+        return translationPrefix;
+    }
+
+    public void setTranslationPrefix(AmpCategoryValue translationPrefix) {
+        this.translationPrefix = translationPrefix;
+    }
+
+    @Override
 	public int compareTo(Object arg0) {
 		// TODO Auto-generated method stub
 		if(arg0!=null || !(arg0 instanceof Long)) return -1;

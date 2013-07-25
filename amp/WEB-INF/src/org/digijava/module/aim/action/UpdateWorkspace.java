@@ -136,6 +136,7 @@ public class UpdateWorkspace extends Action {
 			}
 
             newTeam.setFmTemplate(FeaturesUtil.getTemplateById(uwForm.getFmTemplate()));
+            newTeam.setTranslationPrefix(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getTranslationPrefix()));
 		}
 
 		if (event != null && event.trim().equalsIgnoreCase("reset")) {

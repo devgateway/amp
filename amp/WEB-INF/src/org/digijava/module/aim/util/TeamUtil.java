@@ -470,6 +470,7 @@ public class TeamUtil {
                 workspace.setWorkspaceGroup(team.getWorkspaceGroup());
                 workspace.setHideDraftActivities(team.getHideDraftActivities() );
                 workspace.setFmTemplate(team.getFmTemplate());
+                workspace.setTranslationPrefix(team.getTranslationPrefix());
                 
                 if(null == team.getRelatedTeamId())
                     workspace.setRelatedTeam(null);
@@ -593,6 +594,7 @@ public class TeamUtil {
                 updTeam.setHideDraftActivities(team.getHideDraftActivities() );
                 updTeam.setWorkspaceGroup(team.getWorkspaceGroup());
                 updTeam.setFmTemplate(team.getFmTemplate());
+                updTeam.setTranslationPrefix(team.getTranslationPrefix());
                 if (updTeam.getFilterDataSet() == null)
                 	updTeam.setFilterDataSet(new HashSet());
                 else

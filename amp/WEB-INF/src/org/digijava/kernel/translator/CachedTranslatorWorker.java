@@ -34,9 +34,13 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Criteria;
 import org.hibernate.EntityMode;
 import org.hibernate.HibernateException;
@@ -46,6 +50,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+
+import javax.servlet.http.HttpSession;
 
 public class CachedTranslatorWorker extends TranslatorWorker {
 
@@ -133,33 +139,38 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      */
     public Message getByKey(String key, String body, String keyWords, String locale, Long siteId) throws WorkerException {
     	return getByKey(key, locale, siteId, true, keyWords);
-//        Message message = new Message();
-//        //set up key trio
-//        message.setKey(processKeyCase(key));
-//        message.setLocale(locale);
-//        message.setSiteId(siteId);
-//        //search message
-//        Object obj = messageCache.get(message);
-//        
-//        if (obj == null) {
-//            logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");
-//            message.setCreated(new Timestamp(System.currentTimeMillis()));
-//            message.setLastAccessed(message.getCreated());
-//            message.setMessage(body);
-//            message.setKeyWords(keyWords);
-//            this.save(message);
-//            return message;
-//            return null;
-//        }
-//        else {
-//        	Message foundMessage = (Message)obj;
-//        	foundMessage.setKeyWords(keyWords);
-//        	updateTimeStamp(foundMessage);
-//            return foundMessage;
-//        }
     }
-    
+
+
+    private String getTrnPrefix(){
+        if (TLSUtils.getRequest() != null && TLSUtils.getRequest().getSession() != null){
+            HttpSession session = TLSUtils.getRequest().getSession();
+            TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+            if (tm != null){
+                AmpCategoryValue trnPrefix = tm.getTranslationPrefix();
+                if (trnPrefix != null){
+                    String prefix = trnPrefix.getValue();
+                    return prefix;
+                }
+            }
+        }
+        return null;
+    }
+
+
     public Message getByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) throws WorkerException {
+        String prefix = getTrnPrefix();
+
+        if (prefix != null){
+            String newKey = prefix + key;
+            Message ret = internalGetByKey(newKey, locale, siteId, overwriteKeywords, keywords);
+            if (ret != null)
+                return ret;
+        }
+        return internalGetByKey(key, locale, siteId, overwriteKeywords, keywords);
+    }
+
+    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) throws WorkerException {
     	Message message = new Message();
         //set up key trio
         message.setKey(processKeyCase(key));
@@ -203,6 +214,12 @@ public class CachedTranslatorWorker extends TranslatorWorker {
     
 
     public void save(Message message) throws WorkerException {
+        //add prefix to the message key if we're in the right workspace
+        String prefix = getTrnPrefix();
+        if (prefix != null){
+            message.setKey(prefix+message.getKey());
+        }
+
         saveDb(message); //message key and body will be processed there 
         
         messageCache.put(message, message);
@@ -216,6 +233,16 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      * @throws WorkerException
      */
     public void update(Message message) throws WorkerException {
+        //check if we're updating a prefixed message or a regular one
+        String prefix = getTrnPrefix();
+        if (prefix != null){
+            String key = message.getKey();
+            if (!key.startsWith(prefix)){
+                //we need to save a new translation
+                save(message);
+                return;
+            }
+        }
         updateDb(message);//message key and body will be processed there
 
         messageCache.put(message, message);

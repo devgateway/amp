@@ -30,6 +30,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
@@ -153,7 +154,8 @@ public class SelectTeam extends Action {
             tm.setPledger(member.getUser().getPledger());
             tm.setPublishDocuments(member.getPublishDocPermission());
             tm.setApprover(member.getAmpMemberRole().isApprover());
-			
+			tm.setTranslationPrefix(member.getAmpTeam().getTranslationPrefix());
+
             if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
                 tm.setTranslator(true);
             } else {
@@ -186,6 +188,10 @@ public class SelectTeam extends Action {
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
             request.getServletContext().setAttribute("ampTreeVisibility", ampTreeVisibility);
+
+            //Check if this workspace uses a different translation set
+            AmpCategoryValue trnPrefix = currentTeam.getTranslationPrefix();
+
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }

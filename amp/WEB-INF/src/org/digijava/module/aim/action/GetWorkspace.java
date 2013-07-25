@@ -105,6 +105,7 @@ public class GetWorkspace extends Action {
                 uwForm.setActionEvent("add");
                 uwForm.setAddFlag(true);
                 uwForm.setFmTemplate(null);
+                uwForm.setTranslationPrefix(null);
 
                 return mapping.findForward("showAddWorkspace");
             }
@@ -187,6 +188,10 @@ public class GetWorkspace extends Action {
                     uwForm.setFmTemplate(workspace.getFmTemplate().getId());
                 else
                     uwForm.setFmTemplate(null);
+                if (workspace.getTranslationPrefix() != null)
+                    uwForm.setTranslationPrefix(workspace.getTranslationPrefix().getId());
+                else
+                    uwForm.setTranslationPrefix(null);
 
 
                 if (null == uwForm.getRelatedTeam()) {

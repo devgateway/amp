@@ -100,8 +100,10 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 
     private Long fmTemplate;
     private Collection<AmpTemplatesVisibility> fmTemplateList;
+    private Long translationPrefix;
 
-	public Collection getAllChildren() {
+
+    public Collection getAllChildren() {
 		Collection aux=new TreeSet();
 		if (availChildWorkspaces != null)
 			aux.addAll(availChildWorkspaces);
@@ -729,5 +731,13 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 
     public void setFmTemplateList(Collection<AmpTemplatesVisibility> fmTemplateList) {
         this.fmTemplateList = fmTemplateList;
+    }
+
+    public Long getTranslationPrefix() {
+        return translationPrefix;
+    }
+
+    public void setTranslationPrefix(Long translationPrefix) {
+        this.translationPrefix = translationPrefix;
     }
 }

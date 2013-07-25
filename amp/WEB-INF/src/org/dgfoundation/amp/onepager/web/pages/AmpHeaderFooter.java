@@ -32,6 +32,9 @@ import org.digijava.kernel.translator.TranslatorWorker;
 public class AmpHeaderFooter extends WebPage {
 	public AmpHeaderFooter() {
 		List<Cookie> cookies = ((WebRequest)getRequestCycle().getRequest()).getCookies();
+
+        TLSUtils.populate(getServletRequest());
+
 		if (cookies != null) {
 			boolean localeSet = false;
 			Iterator<Cookie> it = cookies.iterator();

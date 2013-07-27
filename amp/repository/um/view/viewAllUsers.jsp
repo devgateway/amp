@@ -20,12 +20,12 @@
 
 
 function banUser(txt) {
-  var ban=confirm("${translationBan}");
+  var ban=confirm('${translationBan}');
   return ban;
   }
   
  function unbanUser(txt) {
-  var ban=confirm("${translationUnban}");
+  var ban=confirm('${translationUnban}');
   return ban;
   }
   

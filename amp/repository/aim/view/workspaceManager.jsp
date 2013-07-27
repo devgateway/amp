@@ -189,7 +189,7 @@
    
 	    
     function initWorkspaceManagerPopinScript() {
-        var msg='\n<digi:trn>Select Indicator</digi:trn>';
+        var msg='\n<digi:trn jsFriendly="true">Select Indicator</digi:trn>';
         myPanel.setHeader(msg);
         myPanel.setBody("");
         myPanel.beforeHideEvent.subscribe(function() {
@@ -224,9 +224,9 @@
  	
        	    this.formatActions = function(elCell, oRecord, oColumn, sData) {
                 elCell.innerHTML = 
-                    "<a onclick='setViewTemDetails()' href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+" title='<digi:trn>Click here to Edit Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-                    "<a href='javascript:deleteWorkspace(" + oRecord.getData( 'ID' )+ ")' title='<digi:trn>Click here to Delete Workspace</digi:trn>'>" + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-                    "[<a href=\"JavaScript:openNpdSettingsWindow(" +oRecord.getData( 'ID' )+ ");\">"+"<digi:trn>Npd Settings</digi:trn>"+"</a>]"+"<input type='hidden' class='teamsOnpage' value='"+oRecord.getData( 'ID' )+"'/>"
+                    "<a onclick='setViewTemDetails()' href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+' title="<digi:trn>Click here to Edit Workspace</digi:trn>">' + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+                    "<a href='javascript:deleteWorkspace(" + oRecord.getData( 'ID' )+ ")'" + ' title="<digi:trn>Click here to Delete Workspace</digi:trn>">' + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
+                    "[<a href=\"JavaScript:openNpdSettingsWindow(" +oRecord.getData( 'ID' )+ ");\">"+'<digi:trn>Npd Settings</digi:trn>'+"</a>]"+"<input type='hidden' class='teamsOnpage' value='"+oRecord.getData( 'ID' )+"'/>"
             };
         
             this.formatActionsName = function(elCell, oRecord, oColumn, sData) {
@@ -258,15 +258,15 @@
                 }
           
                 var name=oRecord.getData( 'name' ).replace("\'", "'").replace("<", "&lt;").replace(">", "&gt;");
-                var accType = "<digi:trn>"+oRecord.getData( 'accessType' )+"</digi:trn>";
-                var comp = "<digi:trn>"+oRecord.getData( 'computation' )+compOrgs+"</digi:trn>";
+                var accType = "<digi:trn jsFriendly="true">"+oRecord.getData( 'accessType' )+"</digi:trn>";
+                var comp = "<digi:trn jsFriendly="true">"+oRecord.getData( 'computation' )+compOrgs+"</digi:trn>";
                 elCell.innerHTML =
                     name
                     +'<div id="tooltip'+oRecord.getData( 'ID' )+'" style="z-index:1;display:none">'+
                     '<ul>'+
                     '<li>'+accType+'</li>'+ 
                     '<li><digi:trn>Children (Workspaces)</digi:trn>:'+children+'</li>'+
-                   '<li><digi:trn>Computation</digi:trn>:'+comp+'</li>'+ 
+                   '<li><digi:trn>Computation</digi:trn>:'+comp+'</li>'+
                     '</ul>'+
                     '</div>';
             };
@@ -285,8 +285,8 @@
         
         
             var myColumnDefs = [
-                {key:"name", label:"<digi:trn>NAME</digi:trn>", sortable:true, width: 250,formatter:this.formatTeamName},
-                {key:"actions", label:"<digi:trn>ACTIONS</digi:trn>", width: 160, formatter:this.formatActions,className:"ignore"}
+                {key:"name", label:'<digi:trn>NAME</digi:trn>', sortable:true, width: 250,formatter:this.formatTeamName},
+                {key:"actions", label:'<digi:trn>ACTIONS</digi:trn>', width: 160, formatter:this.formatActions,className:"ignore"}
             ];
   
             var div = document.getElementById('errors');
@@ -310,18 +310,18 @@
             	rowsPerPage:10,
 	        	//totalRecords:document.getElementById("totalResults").value,
 	        	containers : ["dt-pag-nav","dt-pag-nav2"], 
-	        	template : "{CurrentPageReport}&nbsp;<span class='l_sm'><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}<br/>{FirstPageLink}{PageLinks}{LastPageLink}", 
-	        	pageReportTemplate		: "<span class='l_sm'><digi:trn>Showing items</digi:trn></span> <span class='txt_sm_b'>{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>", 
-	        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn jsFriendly="true">All</digi:trn>'}],
-	        	firstPageLinkLabel : 	"<digi:trn>first page</digi:trn>", 
-	        	previousPageLinkLabel : "<digi:trn>prev</digi:trn>", 
+	        	template : '{CurrentPageReport}&nbsp;<span class="l_sm"><digi:trn>Results:</digi:trn></span>&nbsp;{RowsPerPageDropdown}<br/>{FirstPageLink}{PageLinks}{LastPageLink}',
+	        	pageReportTemplate		: '<span class="l_sm"><digi:trn>Showing items</digi:trn></span> <span class="txt_sm_b">{startRecord} - {endRecord} <digi:trn>of</digi:trn> {totalRecords}</span>',
+	        	rowsPerPageOptions		: [10,25,50,100,{value:999999,text:'<digi:trn>All</digi:trn>'}],
+	        	firstPageLinkLabel : 	'<digi:trn>first page</digi:trn>',
+	        	previousPageLinkLabel : '<digi:trn>prev</digi:trn>',
 	        	firstPageLinkClass : "yui-pg-first l_sm",
 	        	lastPageLinkClass: "yui-pg-last l_sm",
 	        	nextPageLinkClass: "yui-pg-next l_sm",
 	        	previousPageLinkClass: "yui-pg-previous l_sm",
 	        	rowsPerPageDropdownClass:"l_sm",
-	        	nextPageLinkLabel		: '<digi:trn jsFriendly="true">next</digi:trn>',
-	        	lastPageLinkLabel		: '<digi:trn jsFriendly="true">last page</digi:trn>',
+	        	nextPageLinkLabel		: '<digi:trn>next</digi:trn>',
+	        	lastPageLinkLabel		: '<digi:trn>last page</digi:trn>',
 	        	 // use custom page link labels
 	            pageLabelBuilder: function (page,paginator) {
 	                var curr = paginator.getCurrentPage();
@@ -801,7 +801,7 @@
         }
         actRecordNumbers=pages;
         if(pages>1){
-        	paginator[j++]='<span id="act_page_link_last"><a href="#"  class="yui-pg-page" onclick="return showPageContent('+pages+')"><digi:trn>Last Page</digi:trn></a></span>';	
+        	paginator[j++]='<span id="act_page_link_last"><a href="#"  class="yui-pg-page" onclick="return showPageContent('+pages+')"><digi:trn>Last Page</digi:trn></a></span>';
         }
         
         paginator[j++] ="</span></td></tr></tbody></table>";
@@ -983,7 +983,7 @@
     
     function validateAddedMember(){
         if(document.getElementsByName('role')[0].selectedIndex==0){
-            alert("<digi:trn>Role not entered</digi:trn>");
+            alert('<digi:trn>Role not entered</digi:trn>');
             return false;
         }
         return true;

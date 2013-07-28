@@ -1518,6 +1518,32 @@ public class SectorUtil {
 	}
 
 	/**
+	 * Loads AmpClassificationConfiguration bean which is secondary. 
+	 * @return primary configuration
+	 * @throws DgException
+	 */
+	public static AmpClassificationConfiguration getSecondaryConfigClassification()
+			throws DgException {
+		Session session = PersistenceManager.getRequestDBSession();
+		String queryString = null;
+		Query qry = null;
+		try {
+			queryString = "select config from "
+					+ AmpClassificationConfiguration.class.getName()
+					+ " config inner join config.classification cls "
+					+ " where config.name='Secondary' ";
+			qry = session.createQuery(queryString);
+			// There must be only one primary configuration in database
+			return (AmpClassificationConfiguration) qry.uniqueResult();
+
+		} catch (Exception ex) {
+			logger.error("Unable to save config to database " + ex.getMessage());
+			throw new DgException(ex);
+
+		}
+	}
+
+	/**
 	 * gets id of classification which is selected in primary configuration
 	 * 
 	 * 

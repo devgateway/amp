@@ -123,6 +123,28 @@ public class DashboardFilter {
     private Long[] selStatusIds;
     private List<AmpCategoryValue>statusList;
     
+    //fields for Deal Dashboard
+    
+    private List<AmpOrganisation> donorAgencyList;
+    private List<AmpOrganisation> implementingAgencyList;
+    private List<AmpOrganisation> beneficiaryAgencyList;
+    private List<AmpCategoryValue> peacebuilderMarkerList;
+    private List<AmpCategoryValue> peacebuildingList;
+    private List<AmpSector>secondarySectors;
+    private Long[] donorAgencyIds;
+    private Long donorAgencyId;
+    private Long[] implementingAgencyIds;
+    private Long implementingAgencyId;
+    private Long[] beneficiaryAgencyIds;
+    private Long beneficiaryAgencyId;
+    private Long[] secondarySectorsIds;
+    private Long secondarySectorsId;
+    private Long[] peacebuilderMarkerIds;
+    private Long peacebuilderMarkerId;
+    private Long[] peacebuildingIds;
+    private Long peacebuildingId;
+    
+     
 	public int getTopLists() {
 		return topLists;
 	}
@@ -156,6 +178,11 @@ public class DashboardFilter {
     	newFilter.setShowAmountsInThousands(this.getShowAmountsInThousands());
     	newFilter.setActivityComputedList(this.getActivityComputedList());
     	newFilter.setAdjustmentType(this.getAdjustmentType());
+    	newFilter.setDonorAgencyId(this.getDonorAgencyId());
+    	newFilter.setBeneficiaryAgencyId(this.getBeneficiaryAgencyId());
+    	newFilter.setImplementingAgencyId(this.getImplementingAgencyId());
+    	newFilter.setPeacebuilderMarkerId(this.getPeacebuilderMarkerId());
+    	newFilter.setPeacebuildingId(this.getPeacebuildingId());
     	return newFilter;
     }
 	
@@ -976,6 +1003,162 @@ public class DashboardFilter {
 
 	public void setStatusList(List<AmpCategoryValue> statusList) {
 		this.statusList = statusList;
+	}
+
+	public Boolean getShowOnlyNonDraftActivities() {
+		return showOnlyNonDraftActivities;
+	}
+
+	public void setShowOnlyNonDraftActivities(Boolean showOnlyNonDraftActivities) {
+		this.showOnlyNonDraftActivities = showOnlyNonDraftActivities;
+	}
+	
+	//fields for Deal Dashboard
+    
+	public List<AmpOrganisation> getDonorAgencyList() {
+		return donorAgencyList;
+	}
+
+	public void setDonorAgencyList(List<AmpOrganisation> donorAgencyList) {
+		this.donorAgencyList = donorAgencyList;
+	}
+
+	public List<AmpOrganisation> getImplementingAgencyList() {
+		return implementingAgencyList;
+	}
+
+	public void setImplementingAgencyList(
+			List<AmpOrganisation> implementingAgencyList) {
+		this.implementingAgencyList = implementingAgencyList;
+	}
+
+	public List<AmpOrganisation> getBeneficiaryAgencyList() {
+		return beneficiaryAgencyList;
+	}
+
+	public void setBeneficiaryAgencyList(List<AmpOrganisation> beneficiaryAgencyList) {
+		this.beneficiaryAgencyList = beneficiaryAgencyList;
+	}
+
+	public List<AmpCategoryValue> getPeacebuilderMarkerList() {
+		return peacebuilderMarkerList;
+	}
+
+	public void setPeacebuilderMarkerList(
+			List<AmpCategoryValue> peacebuilderMarkerList) {
+		this.peacebuilderMarkerList = peacebuilderMarkerList;
+	}
+
+	public List<AmpCategoryValue> getPeacebuildingList() {
+		return peacebuildingList;
+	}
+
+	public void setPeacebuildingList(List<AmpCategoryValue> peacebuildingList) {
+		this.peacebuildingList = peacebuildingList;
+	}
+
+	public List<AmpSector> getSecondarySectors() {
+		return secondarySectors;
+	}
+
+	public void setSecondarySectors(List<AmpSector> secondarySectors) {
+		this.secondarySectors = secondarySectors;
+	}
+
+	public Long[] getDonorAgencyIds() {
+		return donorAgencyIds;
+	}
+
+	public void setDonorAgencyIds(Long[] donorAgencyIds) {
+		this.donorAgencyIds = donorAgencyIds;
+	}
+
+	public Long getDonorAgencyId() {
+		return donorAgencyId;
+	}
+
+	public void setDonorAgencyId(Long donorAgencyId) {
+		this.donorAgencyId = donorAgencyId;
+	}
+
+	public Long[] getImplementingAgencyIds() {
+		return implementingAgencyIds;
+	}
+
+	public void setImplementingAgencyIds(Long[] implementingAgencyIds) {
+		this.implementingAgencyIds = implementingAgencyIds;
+	}
+
+	public Long getImplementingAgencyId() {
+		return implementingAgencyId;
+	}
+
+	public void setImplementingAgencyId(Long implementingAgencyId) {
+		this.implementingAgencyId = implementingAgencyId;
+	}
+
+	public Long[] getBeneficiaryAgencyIds() {
+		return beneficiaryAgencyIds;
+	}
+
+	public void setBeneficiaryAgencyIds(Long[] beneficiaryAgencyIds) {
+		this.beneficiaryAgencyIds = beneficiaryAgencyIds;
+	}
+
+	public Long getBeneficiaryAgencyId() {
+		return beneficiaryAgencyId;
+	}
+
+	public void setBeneficiaryAgencyId(Long beneficiaryAgencyId) {
+		this.beneficiaryAgencyId = beneficiaryAgencyId;
+	}
+
+	public Long[] getSecondarySectorsIds() {
+		return secondarySectorsIds;
+	}
+
+	public void setSecondarySectorsIds(Long[] secondarySectorsIds) {
+		this.secondarySectorsIds = secondarySectorsIds;
+	}
+
+	public Long getSecondarySectorsId() {
+		return secondarySectorsId;
+	}
+
+	public void setSecondarySectorsId(Long secondarySectorsId) {
+		this.secondarySectorsId = secondarySectorsId;
+	}
+
+	public Long[] getPeacebuilderMarkerIds() {
+		return peacebuilderMarkerIds;
+	}
+
+	public void setPeacebuilderMarkerIds(Long[] peacebuilderMarkerIds) {
+		this.peacebuilderMarkerIds = peacebuilderMarkerIds;
+	}
+
+	public Long getPeacebuilderMarkerId() {
+		return peacebuilderMarkerId;
+	}
+
+	public void setPeacebuilderMarkerId(Long peacebuilderMarkerId) {
+		this.peacebuilderMarkerId = peacebuilderMarkerId;
+	}
+
+	public Long[] getPeacebuildingIds() {
+		return peacebuildingIds;
+	}
+
+	public void setPeacebuildingIds(Long[] peacebuildingIds) {
+		this.peacebuildingIds = peacebuildingIds;
+	}
+
+	public Long getPeacebuildingId() {
+		return peacebuildingId;
+	}
+
+	public void setPeacebuildingId(Long peacebuildingId) {
+		this.peacebuildingId = peacebuildingId;
 	}
 	
 }

@@ -63,6 +63,12 @@ public class CategoryConstants {
 	public static final String FUNDING_STATUS_NAME				="Funding Status";
 	public static final String FUNDING_STATUS_KEY					="funding_status";
 	
+	public static final String PEACE_MARKERS_NAME				="Peace Markers";
+	public static final String PEACE_MARKERS_KEY					="procurement_system";
+	
+	public static final String PEACEBUILDING_GOALS_NAME				="Peacebuilding and Statebuilding Goals";
+	public static final String PEACEBUILDING_GOALS_KEY					="reporting_system";
+	
 	public static final String MODE_OF_PAYMENT_NAME				="Mode of Payment";
 	public static final String MODE_OF_PAYMENT_KEY					="mode_of_payment";
 	

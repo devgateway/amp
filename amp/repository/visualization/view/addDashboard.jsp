@@ -218,6 +218,7 @@ function validateData(){
 						<html:option value="1"><digi:trn>Organization based</digi:trn></html:option>
 						<html:option value="2"><digi:trn>Region based</digi:trn></html:option>
 						<html:option value="3"><digi:trn>Sector based</digi:trn></html:option>
+						<html:option value="4"><digi:trn>Deal based</digi:trn></html:option>
 					</html:select></td>
 				</tr>
 				<tr>

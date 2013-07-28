@@ -866,6 +866,52 @@ function initializeGlobalVariables(){
 				</td>
 			</tr>
 		</c:if>
+		<c:if test="${visualizationform.filter.dashboardType eq '4' }">
+				<tr>
+				  <td><digi:trn>Peacebuilding Marker</digi:trn>:</td>
+				  	<td align=right>
+				     <html:select property="filter.peacebuilderMarkerId" styleId="peacebuilding_marker_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+				         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+				          <c:forEach var="cat" items="${visualizationform.filter.peacebuilderMarkerList}">
+				         	<html:option value="${cat.id}"><c:out value="${cat.value}"/></html:option>
+				         </c:forEach>
+				     </html:select>
+					</td>
+				</tr>
+				<tr>
+				  <td><digi:trn>Donor Agency</digi:trn>:</td>
+				  	<td align=right>
+				     <html:select property="filter.donorAgencyId" styleId="donor_agency_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+				         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+				          <c:forEach var="org" items="${visualizationform.filter.donorAgencyList}">
+				         	<html:option value="${org.ampOrgId}"><c:out value="${org.name}"/></html:option>
+				         </c:forEach>
+				     </html:select>
+					</td>
+				</tr>
+				<tr>
+				  <td><digi:trn>Implementing Agency</digi:trn>:</td>
+				  	<td align=right>
+				     <html:select property="filter.implementingAgencyId" styleId="implementing_agency_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+				         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+				          <c:forEach var="org" items="${visualizationform.filter.implementingAgencyList}">
+				         	<html:option value="${org.ampOrgId}"><c:out value="${org.name}"/></html:option>
+				         </c:forEach>
+				     </html:select>
+					</td>
+				</tr>
+				<tr>
+				  <td><digi:trn>Beneficiary Agency</digi:trn>:</td>
+				  	<td align=right>
+				     <html:select property="filter.beneficiaryAgencyId" styleId="beneficiary_agency_dropdown_id" styleClass="dropdwn_sm" style="width:145px;">
+				         <html:option value="-1"><digi:trn>All</digi:trn></html:option>
+				          <c:forEach var="org" items="${visualizationform.filter.beneficiaryAgencyList}">
+				         	<html:option value="${org.ampOrgId}"><c:out value="${org.name}"/></html:option>
+				         </c:forEach>
+				     </html:select>
+					</td>
+				</tr>
+		</c:if>
 		<c:if test="${visualizationform.filter.dashboardType eq '1' }">
 				<tr>
 				  <td><b><digi:trn>Organization Group</digi:trn>:</b></td>
@@ -987,6 +1033,7 @@ function initializeGlobalVariables(){
 		 	</td>
 		</tr>
 	<c:if test="${visualizationform.filter.dashboardType ne '1' }">
+		<c:if test="${visualizationform.filter.dashboardType ne '4' }">
 		<tr>
 		  <td><digi:trn>Organization Group</digi:trn>:</td>
 		  	<td align=right>
@@ -1008,6 +1055,7 @@ function initializeGlobalVariables(){
 			   <div id="org_list_id" align="left" style="display:none;max-width:145;width:145px;"></div>
 			</td>
 		</tr>
+		</c:if>
 	</c:if>
 	<c:if test="${visualizationform.filter.dashboardType ne '2' }">
 	  <tr>
@@ -1085,10 +1133,13 @@ function initializeGlobalVariables(){
 	<input type="button" value="<digi:trn>Filter</digi:trn>" class="buttonx" style="margin-top:10px;" id="applyButton">
 	<input type="button" value="<digi:trn>Reset</digi:trn>" onclick="resetToDefaults()" class="buttonx" style="margin-right:10px; margin-top:10px;">
 	<hr />
-	<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm"><digi:trn>Advanced Filters</digi:trn></a></div></div>
+	<c:if test="${visualizationform.filter.dashboardType ne '4' }">
+		<div class="tab_opt"><div class="tab_opt_cont"><a href="javascript:showPopin()" class="l_sm"><digi:trn>Advanced Filters</digi:trn></a></div></div>
+	</c:if>
 	</center>
 </fieldset>
 
+<c:if test="${visualizationform.filter.dashboardType ne '4' }">
 <fieldset>
 	<legend><span class=legend_label><digi:trn>Data Source</digi:trn></span></legend>
 	<table cellspacing="0" cellpadding="0" width="100%"> 
@@ -1102,6 +1153,7 @@ function initializeGlobalVariables(){
 					<feature:display module="Funding" name="Expenditures">
 						<html:option value="2"><digi:trn>Expenditures</digi:trn></html:option>
 					</feature:display>
+					<html:option value="3"><digi:trn>MTEF Projections</digi:trn></html:option>
 				</html:select>
 		 	</td>
 		</tr>
@@ -1130,6 +1182,7 @@ function initializeGlobalVariables(){
 		<tr>
 	</table>
 </fieldset>
+</c:if>
 <c:if test="${visualizationform.filter.dashboardType==1}">
 <fieldset id="additional_info">
 	<legend><span class=legend_label><digi:trn>Additional Info</digi:trn></span></legend>
@@ -1184,6 +1237,7 @@ function initializeGlobalVariables(){
 			</fieldset>
 		</c:if>
 	</field:display>
+	<c:if test="${visualizationform.filter.dashboardType ne '4' }">
 	<field:display name="Organizations Ranking" feature="Ranking Categories">	
 		<c:if test="${visualizationform.filter.showOrganizationsRanking eq 'true'}">
 			<fieldset>
@@ -1212,7 +1266,8 @@ function initializeGlobalVariables(){
 				</div>
 			</fieldset>	
 		</c:if>
-	</field:display>	
+	</field:display>
+	</c:if>	
 	<field:display name="Sectors Ranking" feature="Ranking Categories">	
 		<c:if test="${visualizationform.filter.showSectorsRanking eq 'true'}">
 			<fieldset>
@@ -1328,7 +1383,7 @@ function initializeGlobalVariables(){
 				</div>
 			</fieldset>	
 		</c:if>
-	</field:display>	
+	</field:display>
 </feature:display>
 	</div>
 

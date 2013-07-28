@@ -947,21 +947,28 @@ public class DataDispatcher extends DispatchAction {
             
 	}
 	
+	public ActionForward getSecondaryProgramProfileGraphData(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws java.lang.Exception {
+			
+		return getProgramProfile(2,mapping,form,request,response);
+	}
+	
 	public ActionForward getProgramProfileGraphData(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
 			
-		return getProgramProfile(false,mapping,form,request,response);
+		return getProgramProfile(1,mapping,form,request,response);
 	}
 		
 	public ActionForward getNPOProfileGraphData(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
 			
-		return getProgramProfile(true,mapping,form,request,response);
+		return getProgramProfile(0,mapping,form,request,response);
 	}
 		
-	public ActionForward getProgramProfile(boolean NPO, ActionMapping mapping,
+	public ActionForward getProgramProfile(int programSetting, ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
 
@@ -1018,7 +1025,7 @@ public class DataDispatcher extends DispatchAction {
         	Map map = null;
         	//If the startYear/endYear selected is the same as in the general filter, use the stored rank
         	if(startYear.equals(filter.getStartYear()) && endYear.equals(filter.getEndYear())){
-        		if (NPO) {
+        		if (programSetting==0) {
         			map = visualizationForm.getRanksInformation().getFullNPOs();
 				} else {
 					map = visualizationForm.getRanksInformation().getFullPrograms();
@@ -1027,7 +1034,7 @@ public class DataDispatcher extends DispatchAction {
         		DashboardFilter newFilter = filter.getCopyFilterForFunding();
             	newFilter.setStartYear(startYear);
             	newFilter.setEndYear(endYear);
-            	map = DashboardUtil.getRankProgramsByKey(DbUtil.getPrograms(newFilter,NPO), newFilter);
+            	map = DashboardUtil.getRankProgramsByKey(DbUtil.getPrograms(newFilter,programSetting), newFilter);
         	}
 	        
 	        if (map==null) {
@@ -1276,7 +1283,7 @@ public class DataDispatcher extends DispatchAction {
 		        	csvString.append("\n");
 		        }
 	        }
-	        if (NPO) {
+	        if (programSetting==0) {
 	        	visualizationForm.getExportData().setNPOTableData(programData);
 			} else {
 				visualizationForm.getExportData().setProgramTableData(programData);
@@ -2213,6 +2220,7 @@ public class DataDispatcher extends DispatchAction {
     	return null;
 		
 	}
+	
 	
 	public ActionForward getAidTypeGraphData(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,

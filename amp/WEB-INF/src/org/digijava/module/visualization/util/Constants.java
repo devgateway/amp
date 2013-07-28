@@ -9,6 +9,7 @@ public class Constants {
 	    public static final int DONOR = 1;
 	    public static final int REGION = 2;
 	    public static final int SECTOR = 3;
+	    public static final int DEALDASHBOARD = 4;
 	}
 	//TODO: Remove this constants from the more general aim.Constants class
 	public static class GlobalSettings {

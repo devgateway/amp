@@ -29,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -94,6 +95,26 @@ public class DbUtil {
         Collections.sort(organizations);
         return organizations;
     }	
+	
+	public static List<AmpOrganisation> getOrganisationByRole(String role) {
+        Session session = null;
+        Query q = null;
+        
+        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
+        StringBuilder queryString = new StringBuilder("select distinct org from " + AmpOrgRole.class.getName() + " orgRole inner join orgRole.role role inner join orgRole.organisation org ");
+        queryString.append(" where  role.roleCode='"+role+"' ");
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            q = session.createQuery(queryString.toString());
+
+            organizations = q.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get organization from database ", ex);
+        }
+        Collections.sort(organizations);
+        return organizations;
+    }	
+	
 	public static List<AmpOrganisation> getDonorOrganisationByGroupId(
 			Long orgGroupId, boolean publicView, DashboardFilter filter) {
         Session session = null;
@@ -339,8 +360,11 @@ public class DbUtil {
 	            query.setDate("endDate", endDate);
 	            if (sectorCondition)
 	            	query.setLong("config", filter.getSelSectorConfigId());
-                query.setLong("transactionType", transactionType);
-                query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
+	            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+		            query.setLong("transactionType", transactionType);
+		            query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
+	            }
+                
 	            locations = query.list();
 	        }
 	        catch (Exception e) {
@@ -402,10 +426,11 @@ public class DbUtil {
 	            //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
 	            //    query.setLong("orgGroupId", orgGroupId);
 	            //}
-                query.setLong("transactionType", transactionType);
+	            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+		            query.setLong("transactionType", transactionType);
+		            query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
+	            }
 	            query.setLong("config", filter.getSelSectorConfigId());
-                query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
-	
 	            sectors = query.list();
 	        }
 	        catch (Exception e) {
@@ -416,7 +441,7 @@ public class DbUtil {
     	}
      }
     
-    public static List<AmpTheme> getPrograms(DashboardFilter filter, boolean NPO) throws DgException {
+    public static List<AmpTheme> getPrograms(DashboardFilter filter, int programSetting) throws DgException {
     	List<AmpTheme> programs = new ArrayList<AmpTheme>();
        
 		//Get the selected Organization Groups and Organizations
@@ -452,10 +477,12 @@ public class DbUtil {
             //if ((orgIds == null || orgIds.length==0 || orgIds[0] == -1) && orgGroupId != -1) {
             //    query.setLong("orgGroupId", orgGroupId);
             //}
-            query.setLong("transactionType", transactionType);
+            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+	            query.setLong("transactionType", transactionType);
+	            query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
+            }
             if (sectorCondition)
             	query.setLong("config", filter.getSelSectorConfigId());
-            query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
 
             programs = query.list();
         }
@@ -464,11 +491,21 @@ public class DbUtil {
             throw new DgException("Cannot load sectors from db", e);
         }
         AmpActivityProgramSettings sett = null;
-        if (NPO) {
-        	sett = getProgramSettingByName("National Plan Objective");
-		} else {
+        switch (programSetting) {
+        case 0:
+			sett = getProgramSettingByName("National Plan Objective");
+			break;
+        case 1:
 			sett = getProgramSettingByName("Primary Program");
+			break;
+        case 2:
+			sett = getProgramSettingByName("Secondary Program");
+			break;
+
+		default:
+			break;
 		}
+       
         List<AmpTheme> programs2 = new ArrayList<AmpTheme>();
         for (Iterator iterator = programs.iterator(); iterator.hasNext();) {
 			AmpTheme ampTheme = (AmpTheme) iterator.next();
@@ -547,9 +584,10 @@ public class DbUtil {
             if (financingInstrumentId != null) {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
-            query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentTypeActual);
-            
+            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+	            query.setLong("transactionType", transactionType);
+	            query.setString("adjustmentType",adjustmentTypeActual);
+            }
             activities = query.list();
         }
         catch (Exception e) {
@@ -622,8 +660,11 @@ public class DbUtil {
 	            query.setDate("endDate", endDate);
 	            if (sectorCondition)
 	            	query.setLong("config", filter.getSelSectorConfigId());
-                query.setLong("transactionType", transactionType);
-                query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
+	            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+		            query.setLong("transactionType", transactionType);
+		            query.setString("adjustmentType", CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey());
+	            }
+                
                 agencies = query.list();
 	        }
 	        catch (Exception e) {
@@ -674,42 +715,25 @@ public class DbUtil {
         boolean sectorCondition = sectorIds != null && sectorIds.length > 0 && !sectorIds[0].equals(-1l);
         Long[] programIds = filter.getSelProgramIds();
         boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
+        
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+        	oql = "select fp, act.ampId, act.name ";
+        } else {
+        	oql = "select fd, act.ampId, act.name ";
+        }
+        
+        if (locationCondition)
+        	oql += ", actloc.locationPercentage ";
+        	
+        if (sectorCondition)
+        	oql += ", actsec.sectorPercentage ";
+        
+        if (programCondition)
+        	oql += ", actProg.programPercentage ";
 
-        if (((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1)) 
-        	&& ((filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY))){
-			if (locationCondition && sectorCondition) {
-				oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
-	        } else if (locationCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,orole.percentage,fd.fixedExchangeRate) ";
-	        } else if (sectorCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,orole.percentage,fd.fixedExchangeRate) ";
-	        } else {
-	            oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,orole.percentage,fd.fixedExchangeRate) ";
-	        }
-		} else if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-        	if (locationCondition && sectorCondition) {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
-	        } else if (locationCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
-	        } else if (sectorCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
-	        } else {
-	            oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actProg.programPercentage,fd.fixedExchangeRate) ";
-	        }
-		} else {
-	        if (locationCondition && sectorCondition) {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,fd.fixedExchangeRate) ";
-	        } else if (locationCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
-	        } else if (sectorCondition)  {
-	        	oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,fd.fixedExchangeRate) ";
-	        } else {
-	            oql = " select distinct new AmpFundingDetail(fd.ampFundDetailId, fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate) ";
-	        }
-		}
-        oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true);
+    	oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, true);
         Session session = PersistenceManager.getRequestDBSession();
-        List<AmpFundingDetail> fundingDets = null;
+        List fundings = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
@@ -726,21 +750,51 @@ public class DbUtil {
             if (financingInstrumentId != null) {
                 query.setLong("financingInstrumentId", financingInstrumentId);
             }
-            query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentTypeActual);
+            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+	            query.setLong("transactionType", transactionType);
+	            query.setString("adjustmentType",adjustmentTypeActual);
+            }
             
             if (filter.getActivityId()!=null) {
                 query.setLong("activityId", filter.getActivityId());
             }
-            fundingDets = query.list();
+            fundings = query.list();
+            
+            Iterator it = fundings.iterator();
+            ArrayList<AmpFundingDetail> afda = new ArrayList<AmpFundingDetail>();
+            while(it.hasNext()){
+            	Object[] item = (Object[])it.next();
+            	AmpFundingDetail currentFd = null;
+            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
+            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
+            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            	} else {
+            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+                }
+            	if (item.length==4) 
+            		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
+            	if (item.length==5) 
+            		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            	if (item.length==6) 
+            		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            		
+            	afda.add(currentFd);
+            }
+            
+            
             /*the objects returned by query  and   selected currency
             are passed doCalculations  method*/
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
-            cal.doCalculations(fundingDets, currCode);
+            cal.doCalculations(afda, currCode);
             /*Depending on what is selected in the filter
             we should return either actual commitments
             or actual Disbursement or  */
-            switch (transactionType) {
+            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+            	total = cal.getTotActualComm(); //takes the actual commitments 
+        	} else {
+                switch (transactionType) {
                 case Constants.EXPENDITURE:
                     if (adjustmentTypeActual.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
                         total = cal.getTotActualExp();
@@ -767,6 +821,7 @@ public class DbUtil {
                     } else {
                         total = cal.getTotPipelineComm();
                     }
+                }
             }
 
         } catch (Exception e) {
@@ -786,14 +841,25 @@ public class DbUtil {
 		
 		
 		String oql = "";
-		
-		if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-		oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
-		else oql += " from ";
-		oql += AmpFundingDetail.class.getName()
-                + " as fd inner join fd.ampFundingId f ";
-        oql += "   inner join f.ampActivityId act ";
-
+		boolean donorCondition = (filter.getDonorAgencyId()!=null && filter.getDonorAgencyId()!=-1)? true : false;
+        boolean implementingCondition = (filter.getImplementingAgencyId()!=null && filter.getImplementingAgencyId()!=-1)? true : false;
+        boolean beneficiaryCondition = (filter.getBeneficiaryAgencyId()!=null && filter.getBeneficiaryAgencyId()!=-1)? true : false;
+        boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+        boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
+        
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+	        oql += " from ";
+			oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
+	        oql += "   inner join f.ampActivityId act ";
+        } else {
+        	if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
+        		oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        	} else { 
+        		oql += " from ";
+        	}
+			oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
+	        oql += "   inner join f.ampActivityId act ";
+        }
         //Join  for Organization/Organization Groups and their role
         if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
@@ -816,9 +882,12 @@ public class DbUtil {
         	oql += " inner join act.actPrograms actProg ";
             oql += " inner join actProg.program prog ";
 		}
-
+        //Join  for Organization/Organization Groups and their role
+        if (donorCondition || implementingCondition || beneficiaryCondition)
+    		oql += " inner join act.orgrole orole inner join orole.role role ";
+        
         //Join for Category Values
-        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) ) {
+        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) || peaceMarkerCondition || peacebuildingCondition ) {
         	oql += " inner join act.categories categ ";
 		}
 
@@ -830,7 +899,7 @@ public class DbUtil {
         }
 
         // Get only for one adjustment/transaction type combo, like "actual" "disbursements". The "else" gets all the fundings for some calls that need all different adjustment/transaction types.
-        if(fundingTypeSpecified)
+        if(fundingTypeSpecified && filter.getTransactionType()!=Constants.MTEFPROJECTION)
         	oql += " where fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
         else
         	oql += " where 1 = 1 ";
@@ -856,7 +925,26 @@ public class DbUtil {
         } else {
             oql += DashboardUtil.getOrganizationQuery(false, orgIds, orgGroupIds,filter.getAgencyType());
         }
-
+        
+        // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
+        if (donorCondition) {
+        	oql = " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        } 
+        if (implementingCondition) {
+        	oql = " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        } 
+        if (beneficiaryCondition) {
+        	oql = " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        } 
+        
+        //Filter for Category Values
+        if (peaceMarkerCondition) {
+        	oql += " and categ.id in ("+filter.getPeacebuilderMarkerId()+") ";
+		}
+        if (peacebuildingCondition) {
+        	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
+		}
+        
         //Filter for locations. If there's a location selected, it adds that location as well as all child locations. Null is used for unallocated locations on the Activities.
         if (locationCondition && locationIds != null && locationIds.length > 0) {
         	if (locationIds[0].equals(0l)) {
@@ -893,7 +981,10 @@ public class DbUtil {
         }
 
         //Filter for the Fiscal Year Start and End
-        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        if(filter.getTransactionType()==Constants.MTEFPROJECTION)
+        	oql += " and  (fp.projectionDate>=:startDate and fp.projectionDate<=:endDate)  ";
+        else
+        	oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
 
         //Filter for the aid type (assistance type) usually Grant/Loan/In Kind. It varies with the AMP configuration
         if (assistanceTypeId != null) {
@@ -919,6 +1010,108 @@ public class DbUtil {
         		oql += DashboardUtil.getTeamQuery(tm);
         	oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
         }
+
+        //The getActivityComputedList holds the list of activities that the workspace has, it could come from a computed workspace that has a filter instead of children organizations.
+        if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
+        	oql += " and act.ampActivityId IN (" + DashboardUtil.getInStatement(filter.getActivityComputedList()) + ")";
+        else
+        	oql += "  and act.team is not null ";
+        	
+        // This restricts to only show activities that are non draft, non deleted and validated
+        oql += " and act.draft=false and act.approvalStatus IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") ";
+        oql += " and (act.deleted = false or act.deleted is null)";
+        
+		return oql;
+	}
+	
+private static String getHQLQueryForDD(DashboardFilter filter) {
+		
+		String oql = "";
+		
+		oql += " from ";
+		oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
+        oql += "   inner join f.ampActivityId act ";
+        boolean donorCondition = (filter.getDonorAgencyId()!=null && filter.getDonorAgencyId()!=-1)? true : false;
+        boolean implementingCondition = (filter.getImplementingAgencyId()!=null && filter.getImplementingAgencyId()!=-1)? true : false;
+        boolean beneficiaryCondition = (filter.getBeneficiaryAgencyId()!=null && filter.getBeneficiaryAgencyId()!=-1)? true : false;
+        boolean regionCondition = (filter.getRegionId()!=null && filter.getRegionId()!=-1)? true : false;
+        boolean sectorCondition = (filter.getSectorId()!=null && filter.getSectorId()!=-1)? true : false;
+        boolean secSectorCondition = (filter.getSecondarySectorsId()!=null && filter.getSecondarySectorsId()!=-1)? true : false;
+        boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+        boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
+        
+        //Join  for Organization/Organization Groups and their role
+        if (donorCondition || implementingCondition || beneficiaryCondition)
+    		oql += " inner join act.orgrole orole inner join orole.role role ";
+ 
+        //Join for locations filter
+        if (regionCondition) {
+            oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
+        }
+
+        //Join for Category Values
+        if (peaceMarkerCondition || peacebuildingCondition) {
+        	oql += " inner join act.categories categ ";
+		}
+
+        //Join for the Sectors (actsec) and the sector scheme (config)
+        if (sectorCondition || secSectorCondition) {
+            oql += "  inner join act.sectors actsec ";
+            oql += "  inner join actsec.classificationConfig config  ";
+            oql += " inner join actsec.sectorId sec ";
+        }
+        
+        oql += " where 1 = 1 ";
+
+        // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
+        if (donorCondition) {
+        	oql = " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        } 
+        if (implementingCondition) {
+        	oql = " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        } 
+        if (beneficiaryCondition) {
+        	oql = " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        } 
+        
+
+        //Filter for regions. If there's a location selected, it adds that location as well as all child locations. Null is used for unallocated locations on the Activities.
+        if (regionCondition) {
+            Long[] locationIds = {filter.getRegionId()};
+            locationIds = getAllDescendantsLocation(locationIds, DbUtil.getAmpLocations());
+            oql += " and loc.id in ("+DashboardUtil.getInStatement(locationIds)+") ";
+        }
+
+        //Filter for sectors. If there's a sector selected, it adds that sector as well as all children.
+        if (sectorCondition) {
+        	Long[] sectorIds = {filter.getSectorId()};
+            sectorIds = getAllDescendants(sectorIds, DbUtil.getAmpSectors());
+            oql += " and sec.id in ("+DashboardUtil.getInStatement(sectorIds)+") ";
+        }
+
+        if (secSectorCondition) {
+        	Long[] secSectorIds = {filter.getSecondarySectorsId()};
+            secSectorIds = getAllDescendants(secSectorIds, DbUtil.getAmpSectors());
+            oql += " and sec.id in ("+DashboardUtil.getInStatement(secSectorIds)+") ";
+        }
+
+        //Filter for Category Values
+        if (peaceMarkerCondition) {
+        	oql += " and categ.id in ("+filter.getPeacebuilderMarkerId()+") ";
+		}
+        if (peacebuildingCondition) {
+        	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
+		}
+
+        //Filter for individual activity information (used for the list of projects that appear when you click on a line/bar/pie slice.
+        if (filter.getActivityId()!=null) {
+            oql += " and act.ampActivityId =:activityId ";
+        }
+
+        //Filter for the Fiscal Year Start and End
+        oql += " and  (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+
+        oql += " and act.ampActivityId = actGroup.ampActivityLastVersion";
 
         //The getActivityComputedList holds the list of activities that the workspace has, it could come from a computed workspace that has a filter instead of children organizations.
         if (filter.getActivityComputedList() != null && filter.getActivityComputedList().size() > 0)
@@ -989,30 +1182,25 @@ public class DbUtil {
         Long[] programIds = filter.getSelProgramIds();
         boolean programCondition = programIds != null && programIds.length > 0 && !programIds[0].equals(-1l);
         
-        if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
-        	if (locationCondition && sectorCondition) {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
-	        } else if (locationCondition)  {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
-	        } else if (sectorCondition)  {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,actProg.programPercentage,fd.fixedExchangeRate) ";
-	        } else {
-	            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actProg.programPercentage,fd.fixedExchangeRate) ";
-	        }
-		} else {
-	        if (locationCondition && sectorCondition) {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,actsec.sectorPercentage,fd.fixedExchangeRate) ";
-	        } else if (locationCondition)  {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actloc.locationPercentage,fd.fixedExchangeRate) ";
-	        } else if (sectorCondition)  {
-	        	oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actsec.sectorPercentage,fd.fixedExchangeRate) ";
-	        } else {
-	            oql = " select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate) ";
-	        }
-		}
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+        	oql = "select fp, act.ampId, act.name ";
+        } else {
+        	oql = "select fd, act.ampId, act.name ";
+        }
+        
+        if (locationCondition)
+        	oql += ", actloc.locationPercentage ";
+        	
+        if (sectorCondition)
+        	oql += ", actsec.sectorPercentage ";
+        
+        if (programCondition)
+        	oql += ", actProg.programPercentage ";
+
         oql += getHQLQuery(filter, orgIds, orgGroupIds, locationCondition, sectorCondition, programCondition, locationIds, sectorIds, programIds, assistanceTypeId, financingInstrumentId, tm, false);
 
         Session session = PersistenceManager.getRequestDBSession();
+        List fundings = null;
         List<AmpFundingDetail> fundingDets = null;
         try {
             Query query = session.createQuery(oql);
@@ -1033,8 +1221,31 @@ public class DbUtil {
             if (filter.getActivityId()!=null) {
                 query.setLong("activityId", filter.getActivityId());
             }
-            fundingDets = query.list();
-
+            fundings = query.list();
+            
+            Iterator it = fundings.iterator();
+            fundingDets = new ArrayList<AmpFundingDetail>();
+            while(it.hasNext()){
+            	Object[] item = (Object[])it.next();
+            	AmpFundingDetail currentFd = null;
+            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
+            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
+            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            	} else {
+            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+                }
+            	if (item.length==4) 
+            		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
+            	if (item.length==5) 
+            		currentFd.setTransactionAmount((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100);
+            	if (item.length==6) 
+            		currentFd.setTransactionAmount(((currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100)*(Float)item[4]/100)*(Float)item[5]/100);
+            		
+            	fundingDets.add(currentFd);
+            }
+            
         } catch (Exception e) {
             logger.error(e);
             throw new DgException(
@@ -1111,7 +1322,11 @@ public class DbUtil {
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			organizationRoleQuery = true;
     	
-        oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name";
+		 if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+		 	oql = "select fp, f.ampActivityId.ampActivityId, f.ampActivityId.name";
+		 } else {
+		 	oql = "select fd, f.ampActivityId.ampActivityId, f.ampActivityId.name";
+		 }
         if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
         	oql += ", actProg.programPercentage ";
         if (locationCondition)
@@ -1126,13 +1341,15 @@ public class DbUtil {
         oql += " and f.ampActivityId in (" + DashboardUtil.getInStatement(actList.toArray()) + ")";
 
         Session session = PersistenceManager.getRequestDBSession();
-        List<AmpFundingDetail> fundingDets = null;
+        List fundings = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentType);
+            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+	            query.setLong("transactionType", transactionType);
+	            query.setString("adjustmentType",adjustmentType);
+            }
             if (assistanceTypeId != null) {
                 query.setLong("assistanceTypeId", assistanceTypeId);
             }
@@ -1142,17 +1359,23 @@ public class DbUtil {
             if (sectorCondition) {
             	query.setLong("config", filter.getSelSectorConfigId());
             }
-            fundingDets = query.list();
+            fundings = query.list();
             /*the objects returned by query  and   selected currency
             are passed doCalculations  method*/
             HashMap<Long, ArrayList<AmpFundingDetail>> hm = new HashMap<Long, ArrayList<AmpFundingDetail>>();
             HashMap<Long, String> hmName = new HashMap<Long, String>();
-            Iterator it = fundingDets.iterator();
+            Iterator it = fundings.iterator();
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
-            	
-            	AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	AmpFundingDetail currentFd = null;
+            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
+            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
+            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            	} else {
+            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+                }
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
@@ -1184,7 +1407,10 @@ public class DbUtil {
                 /*Depending on what is selected in the filter
                 we should return either actual commitments
                 or actual Disbursement or  */
-                switch (transactionType) {
+                if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+                	total = cal.getTotActualComm(); //takes the actual commitments 
+            	} else {
+	                switch (transactionType) {
 	                case Constants.EXPENDITURE:
 	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 	                        total = cal.getTotActualExp();
@@ -1211,6 +1437,7 @@ public class DbUtil {
 	                    } else {
 	                        total = cal.getTotPipelineComm();
 	                    }
+	                }
                 }
                 AmpActivityVersion aav = new AmpActivityVersion(activityId, hmName.get(activityId), "");
                 map.put(aav, total.getValue().divide(divideByDenominator, RoundingMode.HALF_UP).setScale(decimalsToShow, RoundingMode.HALF_UP));
@@ -1248,10 +1475,17 @@ public class DbUtil {
 
     	DecimalWraper total = null;
         String oql = "";
-        if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
-        	oql = "select fd, roleOrg.ampOrgId, roleOrg.name";
-        else 
-        	oql = "select fd, f.ampDonorOrgId.ampOrgId, f.ampDonorOrgId.name";
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+        	if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+            	oql = "select fp, roleOrg.ampOrgId, roleOrg.name";
+            else 
+            	oql = "select fp, f.ampDonorOrgId.ampOrgId, f.ampDonorOrgId.name";
+		} else {
+			if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
+	        	oql = "select fd, roleOrg.ampOrgId, roleOrg.name";
+	        else 
+	        	oql = "select fd, f.ampDonorOrgId.ampOrgId, f.ampDonorOrgId.name";
+		}
 		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
 			oql += ", orole.percentage ";
 		if (locationCondition)
@@ -1272,8 +1506,10 @@ public class DbUtil {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentType);
+            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+	            query.setLong("transactionType", transactionType);
+	            query.setString("adjustmentType",adjustmentType);
+            }
             if (sectorCondition) {
             	query.setLong("config", filter.getSelSectorConfigId());
             }
@@ -1286,8 +1522,15 @@ public class DbUtil {
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
             	
-            	AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	AmpFundingDetail currentFd = null;
+            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
+            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
+            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            	} else {
+            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+                }
             	if (item.length==4 && item[3] != null) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
@@ -1376,25 +1619,45 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
 
-        oql = "select fd, sec.ampSectorId, sec.name ";
-        //if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
-        	//oql += ", actProg.programPercentage ";
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+        	oql = "select fp, sec.ampSectorId, sec.name ";
+        } else {
+        	oql = "select fd, sec.ampSectorId, sec.name ";
+        }
+        
         if (locationCondition)
         	oql += ", actloc.locationPercentage ";
-        //if (sectorCondition)
-        	oql += ", actsec.sectorPercentage ";
-
-   		if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-   			oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
-   		else 
-   			oql += " from ";
         	
-        oql += " org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
+        oql += ", actsec.sectorPercentage ";
+
+    	boolean donorCondition = (filter.getDonorAgencyId()!=null && filter.getDonorAgencyId()!=-1)? true : false;
+        boolean implementingCondition = (filter.getImplementingAgencyId()!=null && filter.getImplementingAgencyId()!=-1)? true : false;
+        boolean beneficiaryCondition = (filter.getBeneficiaryAgencyId()!=null && filter.getBeneficiaryAgencyId()!=-1)? true : false;
+        boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+        boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
+        
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+	        oql += " from ";
+			oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
+	        oql += "   inner join f.ampActivityId act ";
+        } else {
+        	if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
+        		oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        	} else { 
+        		oql += " from ";
+        	}
+			oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
+	        oql += "   inner join f.ampActivityId act ";
+        }
     	
     	if(!(filter.getFromPublicView() !=null&& filter.getFromPublicView()))
         	oql += " inner join act.ampActivityGroup actGroup ";
-    	//Join for Category Values
-        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) ) {
+    	
+    	if (donorCondition || implementingCondition || beneficiaryCondition)
+    		oql += " inner join act.orgrole orole inner join orole.role role ";
+        
+        //Join for Category Values
+        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) || peaceMarkerCondition || peacebuildingCondition ) {
         	oql += " inner join act.categories categ ";
 		}
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
@@ -1402,18 +1665,20 @@ public class DbUtil {
     			oql += " inner join act.orgrole orole inner join orole.role role ";
         if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
-        //if (sectorCondition) {
-            oql += "  inner join act.sectors actsec ";
-            oql += "  inner join actsec.classificationConfig config  ";
-            oql += " inner join actsec.sectorId sec ";
-        //}
-        //if (sectorCondition) 
-        	oql += " where config.id=:config  ";
-        //else
-        	//oql += " where 1=1 ";
         
-        oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
-        oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        oql += "  inner join act.sectors actsec ";
+        oql += "  inner join actsec.classificationConfig config  ";
+        oql += " inner join actsec.sectorId sec ";
+        
+    	oql += " where config.id=:config  ";
+    	
+    	//Filter for the Fiscal Year Start and End
+        if(filter.getTransactionType()==Constants.MTEFPROJECTION){
+        	oql += " and  (fp.projectionDate>=:startDate and fp.projectionDate<=:endDate)  ";
+        } else {
+        	oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
+            oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        }
         oql += " and sec.ampSectorId in (" + DashboardUtil.getInStatement(secListChildren) + ")";
         
         //Mapping the subsectors with their parents
@@ -1421,8 +1686,26 @@ public class DbUtil {
         for(AmpSector currentSector : secListChildren ){
         	sectorMap.put(currentSector.getAmpSectorId(), DashboardUtil.getTopLevelParent(currentSector).getAmpSectorId());
         }
-
+        
+        // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
+        if (donorCondition) {
+        	oql = " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        } 
+        if (implementingCondition) {
+        	oql = " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        } 
+        if (beneficiaryCondition) {
+        	oql = " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        } 
        
+        //Filter for Category Values
+        if (peaceMarkerCondition) {
+        	oql += " and categ.id in ("+filter.getPeacebuilderMarkerId()+") ";
+		}
+        if (peacebuildingCondition) {
+        	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
+		}
+        
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) 
                 oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType());
@@ -1464,17 +1747,17 @@ public class DbUtil {
         oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
-        List<AmpFundingDetail> fundingDets = null;
+        List fundings = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentType);
-            //if (sectorCondition) {
-            	query.setLong("config", filter.getSelSectorConfigId());
-            //}
-            fundingDets = query.list();
+            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+	            query.setLong("transactionType", transactionType);
+	            query.setString("adjustmentType",adjustmentType);
+            }
+            query.setLong("config", filter.getSelSectorConfigId());
+            fundings = query.list();
 
             HashMap<Long, AmpSector> sectorParentList = new HashMap<Long, AmpSector>();
             Iterator iter = secListParent.iterator();
@@ -1486,12 +1769,18 @@ public class DbUtil {
             
             HashMap<Long, ArrayList<AmpFundingDetail>> hm = new HashMap<Long, ArrayList<AmpFundingDetail>>();
             HashMap<Long, String> hmName = new HashMap<Long, String>();
-            Iterator it = fundingDets.iterator();
+            Iterator it = fundings.iterator();
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
-            	
-            	AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	AmpFundingDetail currentFd = null;
+            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
+            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
+            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            	} else {
+            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+                }
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
@@ -1529,34 +1818,38 @@ public class DbUtil {
                 /*Depending on what is selected in the filter
                 we should return either actual commitments
                 or actual Disbursement or  */
-                switch (transactionType) {
-	                case Constants.EXPENDITURE:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualExp();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlannedExp();
-	                    } else {
-	                        total = cal.getTotPipelineExp();
-	                    }
-	                    break;
-	                case Constants.DISBURSEMENT:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualDisb();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlanDisb();
-	                    } else {
-	                        total = cal.getTotPipelineDisb();
-	                    }
-	                    break;
-	                default:
-	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-	                        total = cal.getTotActualComm();
-	                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-	                        total = cal.getTotPlannedComm();
-	                    } else {
-	                        total = cal.getTotPipelineComm();
-	                    }
-                }
+                if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+                	total = cal.getTotActualComm(); //takes the actual commitments 
+            	} else {
+	                switch (transactionType) {
+		                case Constants.EXPENDITURE:
+		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+		                        total = cal.getTotActualExp();
+		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+		                        total = cal.getTotPlannedExp();
+		                    } else {
+		                        total = cal.getTotPipelineExp();
+		                    }
+		                    break;
+		                case Constants.DISBURSEMENT:
+		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+		                        total = cal.getTotActualDisb();
+		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+		                        total = cal.getTotPlanDisb();
+		                    } else {
+		                        total = cal.getTotPipelineDisb();
+		                    }
+		                    break;
+		                default:
+		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+		                        total = cal.getTotActualComm();
+		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+		                        total = cal.getTotPlannedComm();
+		                    } else {
+		                        total = cal.getTotPipelineComm();
+		                    }
+	                }
+            	}
                 AmpSector asec = new AmpSector();
                 asec.setAmpSectorId(secId);
                 asec.setName(hmName.get(secId));
@@ -1587,29 +1880,49 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
 
-        oql = "select fd, loc.id, loc.name ";
-        //if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) 
-        //	oql += ", actProg.programPercentage ";
-        //if (locationCondition)
-        	oql += ", actloc.locationPercentage ";
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+        	oql = "select fp, loc.id, loc.name ";
+        } else {
+        	oql = "select fd, loc.id, loc.name ";
+        }
+        oql += ", actloc.locationPercentage ";
         if (sectorCondition)        	
         	oql += ", actsec.sectorPercentage ";
         
-		if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-			oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
-		else oql+= " from ";
-		
-        oql += " org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
-    	
+        boolean donorCondition = (filter.getDonorAgencyId()!=null && filter.getDonorAgencyId()!=-1)? true : false;
+        boolean implementingCondition = (filter.getImplementingAgencyId()!=null && filter.getImplementingAgencyId()!=-1)? true : false;
+        boolean beneficiaryCondition = (filter.getBeneficiaryAgencyId()!=null && filter.getBeneficiaryAgencyId()!=-1)? true : false;
+        boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+        boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
+        
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+	        oql += " from ";
+			oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
+	        oql += "   inner join f.ampActivityId act ";
+        } else {
+        	if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
+        		oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        	} else { 
+        		oql += " from ";
+        	}
+			oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
+	        oql += "   inner join f.ampActivityId act ";
+        }
+        
     	if(!(filter.getFromPublicView() !=null&& filter.getFromPublicView()))
         	oql += " inner join act.ampActivityGroup actGroup ";
     	if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
-    	//Join for Category Values
-        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) ) {
+    	
+    	if (donorCondition || implementingCondition || beneficiaryCondition)
+    		oql += " inner join act.orgrole orole inner join orole.role role ";
+        
+        //Join for Category Values
+        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) || peaceMarkerCondition || peacebuildingCondition ) {
         	oql += " inner join act.categories categ ";
 		}
+    	
     	//if (locationCondition) 
             oql += " inner join act.locations actloc inner join actloc.location amploc inner join amploc.location loc ";
         if (sectorCondition) {
@@ -1622,8 +1935,13 @@ public class DbUtil {
         else
         	oql += " where 1=1 ";
         
-        oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
-        oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+      //Filter for the Fiscal Year Start and End
+        if(filter.getTransactionType()==Constants.MTEFPROJECTION){
+        	oql += " and  (fp.projectionDate>=:startDate and fp.projectionDate<=:endDate)  ";
+        } else {
+        	oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
+            oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        }
         oql += " and loc.id in (" + DashboardUtil.getInStatement(regListChildren) + ")";
         
         //Mapping the locations with their parents
@@ -1632,7 +1950,25 @@ public class DbUtil {
         	locationMap.put(currentLocation.getId(), DashboardUtil.getTopLevelLocation(currentLocation).getId());
         }
 
+        // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
+        if (donorCondition) {
+        	oql = " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        } 
+        if (implementingCondition) {
+        	oql = " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        } 
+        if (beneficiaryCondition) {
+        	oql = " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        } 
        
+        //Filter for Category Values
+        if (peaceMarkerCondition) {
+        	oql += " and categ.id in ("+filter.getPeacebuilderMarkerId()+") ";
+		}
+        if (peacebuildingCondition) {
+        	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
+		}
+        
         if (orgIds == null || orgIds.length == 0 || orgIds[0] == -1) {
             if (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1) 
                 oql += DashboardUtil.getOrganizationQuery(true, orgIds, orgGroupIds, filter.getAgencyType());
@@ -1674,17 +2010,19 @@ public class DbUtil {
         oql += " and (act.deleted = false or act.deleted is null)";
 
         Session session = PersistenceManager.getRequestDBSession();
-        List<AmpFundingDetail> fundingDets = null;
+        List fundings = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentType);
+            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+	            query.setLong("transactionType", transactionType);
+	            query.setString("adjustmentType",adjustmentType);
+            }
             if (sectorCondition) {
             	query.setLong("config", filter.getSelSectorConfigId());
             }
-            fundingDets = query.list();
+            fundings = query.list();
 
             HashMap<Long, AmpCategoryValueLocations> locationParentList = new HashMap<Long, AmpCategoryValueLocations>();
             Iterator iter = regListParent.iterator();
@@ -1698,11 +2036,18 @@ public class DbUtil {
             
             HashMap<Long, ArrayList<AmpFundingDetail>> hm = new HashMap<Long, ArrayList<AmpFundingDetail>>();
             HashMap<Long, String> hmName = new HashMap<Long, String>();
-            Iterator it = fundingDets.iterator();
+            Iterator it = fundings.iterator();
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
-            	AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	AmpFundingDetail currentFd = null;
+            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
+            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
+            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            	} else {
+            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+                }
             	if (item.length==4 && item[3] != null) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5 && item[3] != null && item[4] != null) 
@@ -1743,34 +2088,38 @@ public class DbUtil {
                 /*Depending on what is selected in the filter
                 we should return either actual commitments
                 or actual Disbursement or  */
-                switch (transactionType) {
-                case Constants.EXPENDITURE:
-                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                        total = cal.getTotActualExp();
-                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                        total = cal.getTotPlannedExp();
-                    } else {
-                        total = cal.getTotPipelineExp();
-                    }
-                    break;
-                case Constants.DISBURSEMENT:
-                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                        total = cal.getTotActualDisb();
-                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                        total = cal.getTotPlanDisb();
-                    } else {
-                        total = cal.getTotPipelineDisb();
-                    }
-                    break;
-                default:
-                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
-                        total = cal.getTotActualComm();
-                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
-                        total = cal.getTotPlannedComm();
-                    } else {
-                        total = cal.getTotPipelineComm();
-                    }
-                }
+                if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+                	total = cal.getTotActualComm(); //takes the actual commitments 
+            	} else {
+	                switch (transactionType) {
+		                case Constants.EXPENDITURE:
+		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+		                        total = cal.getTotActualExp();
+		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+		                        total = cal.getTotPlannedExp();
+		                    } else {
+		                        total = cal.getTotPipelineExp();
+		                    }
+		                    break;
+		                case Constants.DISBURSEMENT:
+		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+		                        total = cal.getTotActualDisb();
+		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+		                        total = cal.getTotPlanDisb();
+		                    } else {
+		                        total = cal.getTotPipelineDisb();
+		                    }
+		                    break;
+		                default:
+		                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
+		                        total = cal.getTotActualComm();
+		                    } else if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey())) {
+		                        total = cal.getTotPlannedComm();
+		                    } else {
+		                        total = cal.getTotPipelineComm();
+		                    }
+	                }
+            	}
                 AmpCategoryValueLocations aloc = new AmpCategoryValueLocations();
                 aloc.setId(locId);
                 aloc.setName(hmName.get(locId));
@@ -1801,19 +2150,37 @@ public class DbUtil {
     	DecimalWraper total = null;
         String oql = "";
 
-        oql = "select fd, prog.ampThemeId, prog.name ";
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+        	oql = "select fp, prog.ampThemeId, prog.name ";
+        } else {
+        	oql = "select fd, prog.ampThemeId, prog.name ";
+        }
         oql += ", actProg.programPercentage ";
         if (locationCondition)
         	oql += ", actloc.locationPercentage ";
         if (sectorCondition)
         	oql += ", actsec.sectorPercentage ";
         
-		if(filter.getFromPublicView() !=null&& filter.getFromPublicView())
-			oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
-		else oql += " from ";
+        boolean donorCondition = (filter.getDonorAgencyId()!=null && filter.getDonorAgencyId()!=-1)? true : false;
+        boolean implementingCondition = (filter.getImplementingAgencyId()!=null && filter.getImplementingAgencyId()!=-1)? true : false;
+        boolean beneficiaryCondition = (filter.getBeneficiaryAgencyId()!=null && filter.getBeneficiaryAgencyId()!=-1)? true : false;
+        boolean peaceMarkerCondition = (filter.getPeacebuilderMarkerId()!=null && filter.getPeacebuilderMarkerId()!=-1)? true : false;
+        boolean peacebuildingCondition = (filter.getPeacebuildingId()!=null && filter.getPeacebuildingId()!=-1)? true : false;
         
-        oql += " org.digijava.module.aim.dbentity.AmpFundingDetail as fd inner join fd.ampFundingId f inner join f.ampActivityId act ";
-    	
+        if (filter.getTransactionType()==Constants.MTEFPROJECTION){
+	        oql += " from ";
+			oql += AmpFundingMTEFProjection.class.getName() + " as fp inner join fp.ampFunding f ";
+	        oql += "   inner join f.ampActivityId act ";
+        } else {
+        	if(filter.getFromPublicView() !=null&& filter.getFromPublicView()){
+        		oql += " from "+AmpActivityGroupCached.class.getName()+" grpLink inner join grpLink.ampActivityGroup as actGroup, ";
+        	} else { 
+        		oql += " from ";
+        	}
+			oql += AmpFundingDetail.class.getName() + " as fd inner join fd.ampFundingId f ";
+	        oql += "   inner join f.ampActivityId act ";
+        }
+        
         oql += " inner join act.actPrograms actProg ";
         oql += " inner join actProg.program prog ";
         
@@ -1826,10 +2193,14 @@ public class DbUtil {
             oql += "  inner join actsec.classificationConfig config  ";
             oql += " inner join actsec.sectorId sec ";
         }
+        if (donorCondition || implementingCondition || beneficiaryCondition)
+    		oql += " inner join act.orgrole orole inner join orole.role role ";
+        
         //Join for Category Values
-        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) ) {
+        if ((filter.getSelCVIds()!=null && filter.getSelCVIds().length>0) || (filter.getSelStatusIds()!=null && filter.getSelStatusIds().length>0) || peaceMarkerCondition || peacebuildingCondition ) {
         	oql += " inner join act.categories categ ";
 		}
+    	
         if ((orgIds != null && orgIds.length != 0 && orgIds[0] != -1) || (orgGroupIds != null && orgGroupIds.length > 0 && orgGroupIds[0] != -1))
     		if (filter.getAgencyType() == org.digijava.module.visualization.util.Constants.EXECUTING_AGENCY || filter.getAgencyType() == org.digijava.module.visualization.util.Constants.BENEFICIARY_AGENCY)
     			oql += " inner join act.orgrole orole inner join orole.role role ";
@@ -1838,10 +2209,34 @@ public class DbUtil {
         else
         	oql += " where 1=1 ";
         
-        oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
-        oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+      //Filter for the Fiscal Year Start and End
+        if(filter.getTransactionType()==Constants.MTEFPROJECTION){
+        	oql += " and  (fp.projectionDate>=:startDate and fp.projectionDate<=:endDate)  ";
+        } else {
+        	oql += " and fd.transactionType =:transactionType  and  fd.adjustmentType.value =:adjustmentType ";
+            oql += " and (fd.transactionDate>=:startDate and fd.transactionDate<=:endDate)  ";
+        }
         oql += " and prog.ampThemeId in (" + DashboardUtil.getInStatement(progList) + ")";
 
+        // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
+        if (donorCondition) {
+        	oql = " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        } 
+        if (implementingCondition) {
+        	oql = " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        } 
+        if (beneficiaryCondition) {
+        	oql = " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        } 
+
+        //Filter for Category Values
+        if (peaceMarkerCondition) {
+        	oql += " and categ.id in ("+filter.getPeacebuilderMarkerId()+") ";
+		}
+        if (peacebuildingCondition) {
+        	oql += " and categ.id in ("+filter.getPeacebuildingId()+") ";
+		}
+        
         if (filter.getSelProgramIds()!=null && filter.getSelProgramIds().length>0) {
         	oql += " and prog.ampThemeId in ("+DashboardUtil.getInStatement(DashboardUtil.getProgramsDescendentsIds(filter.getSelProgramIds()))+") ";
 		}
@@ -1886,17 +2281,19 @@ public class DbUtil {
         oql += " and (act.deleted = false or act.deleted is null)";
         
         Session session = PersistenceManager.getRequestDBSession();
-        List<AmpFundingDetail> fundingDets = null;
+        List fundings = null;
         try {
             Query query = session.createQuery(oql);
             query.setDate("startDate", startDate);
             query.setDate("endDate", endDate);
-            query.setLong("transactionType", transactionType);
-            query.setString("adjustmentType",adjustmentType);
+            if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+	            query.setLong("transactionType", transactionType);
+	            query.setString("adjustmentType",adjustmentType);
+            }
             if (sectorCondition) {
             	query.setLong("config", filter.getSelSectorConfigId());
             }
-            fundingDets = query.list();
+            fundings = query.list();
 
             HashMap<Long, AmpTheme> programParentList = new HashMap<Long, AmpTheme>();
             Iterator iter = progList.iterator();
@@ -1908,12 +2305,18 @@ public class DbUtil {
             
             HashMap<Long, ArrayList<AmpFundingDetail>> hm = new HashMap<Long, ArrayList<AmpFundingDetail>>();
             HashMap<Long, String> hmName = new HashMap<Long, String>();
-            Iterator it = fundingDets.iterator();
+            Iterator it = fundings.iterator();
             while(it.hasNext()){
             	Object[] item = (Object[])it.next();
-            	
-            	AmpFundingDetail fd = (AmpFundingDetail) item[0];
-            	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+            	AmpFundingDetail currentFd = null;
+            	if(filter.getTransactionType()==Constants.MTEFPROJECTION){
+            		AmpFundingMTEFProjection fp = (AmpFundingMTEFProjection) item[0];
+            		//Here use a tricky harcode to of transaction/adjustment type and it is set to "actual commitments", this is done to use FundingCalculationsHelper to do calculations for MTEF projections
+            		currentFd = new AmpFundingDetail(Constants.COMMITMENT,null,fp.getAmount(),fp.getProjectionDate(),fp.getAmpCurrency(),0d);
+            	} else {
+            		AmpFundingDetail fd = (AmpFundingDetail) item[0];
+            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+                }
             	if (item.length==4) 
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
             	if (item.length==5) 
@@ -1945,7 +2348,10 @@ public class DbUtil {
                 /*Depending on what is selected in the filter
                 we should return either actual commitments
                 or actual Disbursement or  */
-                switch (transactionType) {
+                if(filter.getTransactionType()!=Constants.MTEFPROJECTION){
+                	total = cal.getTotActualComm(); //takes the actual commitments 
+            	} else {
+	                switch (transactionType) {
 	                case Constants.EXPENDITURE:
 	                    if (adjustmentType.equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 	                        total = cal.getTotActualExp();
@@ -1972,6 +2378,7 @@ public class DbUtil {
 	                    } else {
 	                        total = cal.getTotPipelineComm();
 	                    }
+	                }
                 }
                 AmpTheme aprog = new AmpTheme();
                 aprog.setAmpThemeId(progId);

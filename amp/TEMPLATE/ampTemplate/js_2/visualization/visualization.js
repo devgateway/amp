@@ -581,7 +581,12 @@ function resetToDefaults(){
 		document.getElementById("workspace_only").checked = false;
 	}
 	
-	
+	var dashboardType = document.getElementById("dashboardType").value;
+	if (dashboardType==4){ // if it is a Deal Dashboard
+		document.getElementById("donor_agency_dropdown_id").selectedIndex = 0;
+		document.getElementById("implementing_agency_dropdown_id").selectedIndex = 0;
+		document.getElementById("beneficiary_agency_dropdown_id").selectedIndex = 0;
+	}
 	document.getElementById("transaction_type").selectedIndex = 1;
 	document.getElementById("org_group_dropdown_id").selectedIndex = 0;
 	document.getElementById("region_dropdown_id").selectedIndex = 0;
@@ -737,18 +742,22 @@ var callbackChildrenCall = {
 			    		break;
 				    case "Sector":
 			    		var subSectorDropdown = document.getElementById("sub_sector_dropdown_id");
-			    		subSectorDropdown.options.length = 0;
-			    		subSectorDropdown.options[0] = new Option(trnAll, -1);
-			    		for(var i = 0; i < results.children.length; i++){
-			    			subSectorDropdown.options[subSectorDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+			    		if (subSectorDropdown!=null){
+				    		subSectorDropdown.options.length = 0;
+				    		subSectorDropdown.options[0] = new Option(trnAll, -1);
+				    		for(var i = 0; i < results.children.length; i++){
+				    			subSectorDropdown.options[subSectorDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+				    		}
 			    		}
 			    		break;
 			    	case "Region":
 			    		var zonesDropdown = document.getElementById("zone_dropdown_id");
-			    		zonesDropdown.options.length = 0;
-			    		zonesDropdown.options[0] = new Option(trnAll, -1);
-			    		for(var i = 0; i < results.children.length; i++){
-			    			zonesDropdown.options[zonesDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+			    		if (zonesDropdown!=null){
+					    		zonesDropdown.options.length = 0;
+				    		zonesDropdown.options[0] = new Option(trnAll, -1);
+				    		for(var i = 0; i < results.children.length; i++){
+				    			zonesDropdown.options[zonesDropdown.options.length] = new Option(results.children[i].name, results.children[i].ID);
+				    		}
 			    		}
 			    		break;
 			    	case "Config":
@@ -875,7 +884,8 @@ var callbackApplyFilterCall = {
 			  panelLoaded = true;
 			  refreshBoxes(o);
 			  refreshGraphs();
-			  refreshDropdowns();
+			  if (document.getElementById("dashboardType").value!=4)
+				  refreshDropdowns();
 		  },
 		  failure: function(o) {
 			  loadingPanel.hide();
@@ -922,23 +932,25 @@ function callbackApplyFilter(e){
 	if (!hasFlash()){
 		showInstallFlashPopin();
 		return;
-	}
+	} 
+	var dashboardType = document.getElementById("dashboardType").value;
 	panelLoaded = false;
 	if (document.getElementById("workspaceOnlyQuickFilter")!=null){
 		document.getElementById("workspaceOnly").value = document.getElementById("workspaceOnlyQuickFilter").checked;
 		document.getElementById("workspace_only").checked = document.getElementById("workspaceOnlyQuickFilter").checked;
 	}
 	document.getElementById("currencyId").value = document.getElementById("currencyQuickFilter_dropdown").value;
-	document.getElementById("adjustmentType").value = document.getElementById("adjustment_type_quick").value;
-	document.getElementById("adjustment_type").value = document.getElementById("adjustment_type_quick").options[document.getElementById("adjustment_type").selectedIndex].value;
+	if (dashboardType!=4) {
+		document.getElementById("adjustmentType").value = document.getElementById("adjustment_type_quick").value;
+		document.getElementById("adjustment_type").value = document.getElementById("adjustment_type_quick").options[document.getElementById("adjustment_type").selectedIndex].value;
+		document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
+	}
 	document.getElementById("currencies_dropdown_ids").value = document.getElementById("currencyQuickFilter_dropdown").value;
 	document.getElementById("startYear").value = document.getElementById("startYearQuickFilter_dropdown").value;
 	document.getElementById("endYear").value = document.getElementById("endYearQuickFilter_dropdown").value;
 	document.getElementById("startYear_dropdown").value = document.getElementById("startYearQuickFilter_dropdown").value;
 	document.getElementById("endYear_dropdown").value = document.getElementById("endYearQuickFilter_dropdown").value;
-	document.getElementById("transactionType").value = document.getElementById("transactionType_dropdown").value;
 	document.getElementById("showAmountsInThousands").value = getSelectedValue("show_amounts_in_thousands");
-	var dashboardType = document.getElementById("dashboardType").value;
 	if (dashboardType==1) {
 		document.getElementById("agencyType").value = document.getElementById("agencyTypeQuickFilter_dropdown").value;
 		document.getElementById("agencyType_dropdown").value = document.getElementById("agencyTypeQuickFilter_dropdown").value;
@@ -1017,8 +1029,10 @@ function callbackApplyFilter(e){
 	loadingPanel.loadingPanel.setBody("");
 	refreshLoadingPanel();
 	if(document.body.innerText){
-		document.getElementById("filterOrgGroups").innerText = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
-		document.getElementById("filterOrganizations").innerText = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+		if (document.getElementById("dashboardType").value!=4){
+			document.getElementById("filterOrgGroups").innerText = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+			document.getElementById("filterOrganizations").innerText = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+		}
 		document.getElementById("filterSectorConfiguration").innerText = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSectors").innerText = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSubSectors").innerText = document.getElementById("sub_sector_dropdown_id").options[document.getElementById("sub_sector_dropdown_id").selectedIndex].text;
@@ -1029,8 +1043,10 @@ function callbackApplyFilter(e){
 	}
 	else
 	{
-		document.getElementById("filterOrgGroups").textContent = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
-		document.getElementById("filterOrganizations").textContent = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+		if (document.getElementById("dashboardType").value!=4){
+			document.getElementById("filterOrgGroups").textContent = document.getElementById("org_group_dropdown_id").options[document.getElementById("org_group_dropdown_id").selectedIndex].text;
+			document.getElementById("filterOrganizations").textContent = document.getElementById("org_dropdown_id").options[document.getElementById("org_dropdown_id").selectedIndex].text;
+		}
 		document.getElementById("filterSectorConfiguration").textContent = document.getElementById("sector_config_dropdown_id").options[document.getElementById("sector_config_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSectors").textContent = document.getElementById("sector_dropdown_id").options[document.getElementById("sector_dropdown_id").selectedIndex].text;
 		document.getElementById("filterSubSectors").textContent = document.getElementById("sub_sector_dropdown_id").options[document.getElementById("sub_sector_dropdown_id").selectedIndex].text;
@@ -1041,6 +1057,7 @@ function callbackApplyFilter(e){
 	}
 
 }
+
 var panelLoaded = false;
 function refreshLoadingPanel(){
 	if(!panelLoaded){
@@ -1323,7 +1340,7 @@ function refreshBoxes(o){
 				//}
 				break;
 			case "NPOsList":
-				//if (dashboardType!=2) {
+				//if (dashboardType!=4) {
 					inner = "";
 					if (child.top.length==0){
 						inner = "<b>"+trnNoDataToShow+"</b> <br />";
@@ -1339,7 +1356,7 @@ function refreshBoxes(o){
 				//}
 				break;
 			case "ProgramsList":
-				//if (dashboardType!=2) {
+				//if (dashboardType!=4) {
 					inner = "";
 					if (child.top.length==0){
 						inner = "<b>"+trnNoDataToShow+"</b> <br />";
@@ -1355,7 +1372,7 @@ function refreshBoxes(o){
 				//}
 				break;
 			case "SelOrgGroupsList":
-				//if (dashboardType!=3) {
+				if (dashboardType!=4) {
 					if (child.list.length > 0) {
 					inner = "<hr/>";
 					inner2 = "";
@@ -1375,10 +1392,10 @@ function refreshBoxes(o){
 						document.getElementById("org_group_list_id").style.display = "none";
 						document.getElementById("org_group_dropdown_id").style.display = "";
 					}
-				//}
+				}
 				break;
 			case "SelOrgsList":
-				//if (dashboardType!=3) {
+				if (dashboardType!=4) {
 					if (child.list.length > 0) {
 					inner = "<hr/>";
 					inner2 = "";
@@ -1398,7 +1415,7 @@ function refreshBoxes(o){
 						document.getElementById("org_list_id").style.display = "none";
 						document.getElementById("org_dropdown_id").style.display = "";
 					}
-				//}
+				}
 				break;
 			case "SelRegionsList":
 				//if (dashboardType!=3) {
@@ -1972,7 +1989,6 @@ function initDashboard(){
 		var id = allGraphs[idx].children[0].getAttribute("id");
 		drawGraph(id);
 	}
-	
 	callbackApplyFilter();
 }
 

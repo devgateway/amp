@@ -92,6 +92,10 @@ function showFullList(objectType){
 			divFullName = "divFullPrograms";
 			divTopName = "divTopPrograms";
 			break;
+		case "secondaryPrograms":
+			divFullName = "divFullSecondaryPrograms";
+			divTopName = "divTopSecondaryPrograms";
+			break;
 		case "projects":
 			divFullName = "divFullProjects";
 			divTopName = "divTopProjects";
@@ -178,6 +182,22 @@ var updateFullList = {
 								div.innerHTML = inner;
 						//}
 						break;
+					case "SecondaryProgramsList":
+						//if (dashboardType!=1) {
+							if (child.list.length==0){
+								inner = "<b>"+trnNoDataToShow+"</b> <br />";
+							} else {
+								inner = "<a href='javascript:hideFullSecondaryPrograms()' style='float:right;'>"+trnShowTop+"</a> <br />";
+								for(var i = 0; i < child.list.length; i++){
+									inner = inner + (i+1) + ". " + child.list[i].name + "  <b>(" + child.list[i].value + ")</b> <hr />";
+								}
+								inner = inner + "<a href='javascript:hideFullSecondaryPrograms()' style='float:right;'>"+trnShowTop+"</a>";
+							}
+							var div = document.getElementById("divFullSecondaryPrograms");
+							if (div!=null)
+								div.innerHTML = inner;
+						//}
+						break;
 					case "SectorsList":
 						//if (dashboardType!=3) {
 							if (child.list.length==0){
@@ -255,6 +275,14 @@ function hideFullNPOs(){
 function hideFullPrograms(){
 	var divFull = document.getElementById("divFullPrograms");
 	var divTop = document.getElementById("divTopPrograms");
+	divFull.style.display = "none";
+	divFull.innerHTML = "";
+	divTop.style.display = "";
+}
+
+function hideFullSecondaryPrograms(){
+	var divFull = document.getElementById("divFullSecondaryPrograms");
+	var divTop = document.getElementById("divTopSecondaryPrograms");
 	divFull.style.display = "none";
 	divFull.innerHTML = "";
 	divTop.style.display = "";
@@ -524,6 +552,7 @@ function doExport(){
 	options += "&regionOpt=" + getOptionChecked("export_RegionProfile_");
 	options += "&NPOOpt=" + getOptionChecked("export_NPOProfile_");
 	options += "&programOpt=" + getOptionChecked("export_ProgramProfile_");
+	options += "&secondaryProgramOpt=" + getOptionChecked("export_SecondaryProgramProfile_");
 	
 	var type = "" + getOptionChecked("export_type_");
 	if (type=="0") {
@@ -1371,6 +1400,22 @@ function refreshBoxes(o){
 						div.innerHTML = inner;
 				//}
 				break;
+			case "SecondaryProgramsList":
+				//if (dashboardType!=4) {
+					inner = "";
+					if (child.top.length==0){
+						inner = "<b>"+trnNoDataToShow+"</b> <br />";
+					} else {
+							for(var i = 0; i < child.top.length; i++){
+							inner = inner + (i+1) + ". " + child.top[i].name + "  <b>(" + child.top[i].value + ")</b> <hr />";
+						}
+						inner = inner + "<a href='javascript:showFullList(\"secondaryPrograms\")' style='float:right;'>"+trnShowFullList+"</a>";
+					}
+					var div = document.getElementById("divTopSecondaryPrograms");
+					if (div!=null)
+						div.innerHTML = inner;
+				//}
+				break;
 			case "SelOrgGroupsList":
 				if (dashboardType!=4) {
 					if (child.list.length > 0) {
@@ -1923,6 +1968,10 @@ function updateTitles(){
 	if (type==2) {
 		fundType += trnExpenditures;
 	}
+	if (type==3) {
+		fundType = trnMTEFProjections;
+	}
+	
 	var titlesObj = getTitlesObjects();
 	for ( var i = 0; i < titlesObj.length; i++) {
 		var id = titlesObj[i].getAttribute("id");

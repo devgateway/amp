@@ -100,8 +100,9 @@ public class LaunchDashboard extends Action {
 				}
 				dForm.setGraphList(list);
 				//If a dashboard is executed from the menu, it will show all rank lists available by default
-				if (dashboard.getBaseType()==4){//except for deal dashboard, in that case only show program ranks which is where is peacebuilding 
-					dForm.getFilter().setShowProgramsRanking(true);
+				if (dashboard.getBaseType()==4){//except for deal dashboard, in that case only show secondary program ranks which is where is peacebuilding 
+					dForm.getFilter().setShowSecondaryProgramsRanking(true);
+					dForm.getFilter().setShowProgramsRanking(false);
 					dForm.getFilter().setShowNPORanking(false);
 					dForm.getFilter().setShowProjectsRanking(false);
 					dForm.getFilter().setShowSectorsRanking(false);

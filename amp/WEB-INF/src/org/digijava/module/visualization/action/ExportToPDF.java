@@ -111,6 +111,7 @@ public class ExportToPDF extends Action {
     String regionProfTrn = "";
     String NPOProfTrn = "";
     String programProfTrn = "";
+    String secProgramProfTrn = "";
     String organizationProfTrn = "";
     String beneficiaryAgencyProfTrn = "";
     String plannedTrn = "";
@@ -149,6 +150,7 @@ public class ExportToPDF extends Action {
         String regionOpt = request.getParameter("regionOpt");
         String NPOOpt = request.getParameter("NPOOpt");
         String programOpt = request.getParameter("programOpt");
+        String secProgramOpt = request.getParameter("secondaryProgramOpt");
         String summaryOpt = request.getParameter("summaryOpt");
         String ODAGrowthOpt = request.getParameter("ODAGrowthOpt");
         try {
@@ -209,6 +211,7 @@ public class ExportToPDF extends Action {
             this.regionProfTrn = TranslatorWorker.translateText("Region Profile");
             this.NPOProfTrn = TranslatorWorker.translateText("NPO Profile");
             this.programProfTrn = TranslatorWorker.translateText("Program Profile");
+            this.secProgramProfTrn = TranslatorWorker.translateText("Secondary Program Profile");
 	        this.organizationProfTrn = TranslatorWorker.translateText("Organization Profile");
 	        this.beneficiaryAgencyProfTrn = TranslatorWorker.translateText("Beneficiary Agency Profile");
 	        this.plannedTrn = TranslatorWorker.translateText("Planned");
@@ -682,6 +685,8 @@ public class ExportToPDF extends Action {
 					getNPOProfileTable(NPOOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("ProgramProfile"))
 					getProgramProfileTable(programOpt, doc, vForm, request, amountsDescription);
+				if (ampGraph.getContainerId().equals("SecondaryProgramProfile"))
+					getSecondaryProgramProfileTable(secProgramOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("AidPredictabilityQuarter"))
 					getAidPredictabilityQuarterTable(aidPredicQuarterOpt, doc, vForm, request, amountsDescription);
 				if (ampGraph.getContainerId().equals("BudgetBreakdown"))
@@ -1224,6 +1229,58 @@ public class ExportToPDF extends Action {
 		    programGraph.setWidthPercentage(100);
 		    ByteArrayOutputStream ba = new ByteArrayOutputStream();
 		    ImageIO.write(vForm.getExportData().getProgramGraph(), "png", ba);
+		    Image img = Image.getInstance(ba.toByteArray());
+		    programGraph.addCell(img);
+		    doc.add(programGraph);
+		    doc.add(new Paragraph(" "));
+		}
+    }
+    
+    private void getSecondaryProgramProfileTable(String programOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
+    	//Secondary Program Profile Table.
+		if (!programOpt.equals("0")){
+			doc.newPage();
+			Paragraph subTitle = new Paragraph(secProgramProfTrn + amountDesc, SUBTITLEFONT);
+		    subTitle.setAlignment(Element.ALIGN_LEFT);
+		    doc.add(subTitle);
+		    doc.add(new Paragraph(" "));
+		}
+		if (programOpt.equals("1") || programOpt.equals("3")){
+		    PdfPTable programProfTbl = null;
+		    String[] programProfRows = vForm.getExportData().getSecondaryProgramTableData().split("<");
+		    int colspan = programProfRows[1].split(">").length; 
+		    programProfTbl = new PdfPTable(colspan);
+		    programProfTbl.setWidthPercentage(100);
+		    PdfPCell cell = new PdfPCell(new Paragraph(programTrn, HEADERFONT));
+		    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		    programProfTbl.addCell(cell);
+		    String[] singleRow = programProfRows[1].split(">");
+		    for (int i = 1; i < singleRow.length; i++) {
+		    	cell = new PdfPCell(new Paragraph(singleRow[i], HEADERFONT));
+		    	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		    	programProfTbl.addCell(cell);
+			}
+		    for (int i = 2; i < programProfRows.length; i++) {
+		    	singleRow = programProfRows[i].split(">");
+		    	for (int j = 0; j < singleRow.length; j++) {
+		        	if(j > 0) { //Skip first and last column
+		            	BigDecimal bd = new BigDecimal(singleRow[j]);
+		        		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+		        	}
+		        	else
+		        		cell = new PdfPCell(new Paragraph(singleRow[j]));
+		        	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		        	programProfTbl.addCell(cell);
+				}
+			}
+		    doc.add(programProfTbl);
+		    doc.add(new Paragraph(" "));
+		}
+		if (programOpt.equals("2") || programOpt.equals("3")){
+		    PdfPTable programGraph = new PdfPTable(1);
+		    programGraph.setWidthPercentage(100);
+		    ByteArrayOutputStream ba = new ByteArrayOutputStream();
+		    ImageIO.write(vForm.getExportData().getSecondaryProgramGraph(), "png", ba);
 		    Image img = Image.getInstance(ba.toByteArray());
 		    programGraph.addCell(img);
 		    doc.add(programGraph);

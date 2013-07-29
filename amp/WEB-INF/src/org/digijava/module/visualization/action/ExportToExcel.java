@@ -117,6 +117,7 @@ public class ExportToExcel extends Action {
 		public String regionProfTrn;
 		public String NPOProfTrn;
 		public String programProfTrn;
+		public String secProgramProfTrn;
 		public String organizationProfTrn;
 		public String beneficiaryAgencyProfTrn;
 		public String plannedTrn;
@@ -226,6 +227,7 @@ public class ExportToExcel extends Action {
 	        beneficiaryAgencyProfTrn = TranslatorWorker.translateText("Beneficiary Agency Profile");
 	        NPOProfTrn = TranslatorWorker.translateText("NPO Profile");
 	        programProfTrn = TranslatorWorker.translateText("Program Profile");
+	        secProgramProfTrn = TranslatorWorker.translateText("Secondary Program Profile");
 	        plannedTrn = TranslatorWorker.translateText("Planned");
 	        actualTrn = TranslatorWorker.translateText("Actual");
 	        yearTrn = TranslatorWorker.translateText("Year");
@@ -313,6 +315,7 @@ public class ExportToExcel extends Action {
         String regionOpt = request.getParameter("regionOpt");
         String NPOOpt = request.getParameter("NPOOpt");
         String programOpt = request.getParameter("programOpt");
+        String secProgramOpt = request.getParameter("secondaryProgramOpt");
         String summaryOpt = request.getParameter("summaryOpt");
     
     	try {
@@ -894,6 +897,8 @@ public class ExportToExcel extends Action {
 					getNPOProfileTable(NPOOpt, wb, vForm, request, amountDescription, data);
 				if (ampGraph.getContainerId().equals("ProgramProfile"))
 					getProgramProfileTable(programOpt, wb, vForm, request, amountDescription, data);
+				if (ampGraph.getContainerId().equals("SecondaryProgramProfile"))
+					getSecondaryProgramProfileTable(secProgramOpt, wb, vForm, request, amountDescription, data);
 				if (ampGraph.getContainerId().equals("AidPredictabilityQuarter"))
 					getAidPredictabilityQuarterTable(aidPredicQuarterOpt, wb, vForm, request, amountDescription, data);
 				if (ampGraph.getContainerId().equals("BudgetBreakdown"))
@@ -1728,6 +1733,82 @@ public class ExportToExcel extends Action {
 	            
 		        ByteArrayOutputStream ba6 = new ByteArrayOutputStream();
 	            ImageIO.write(vForm.getExportData().getProgramGraph(), "png", ba6);
+	            int pictureIndex6 = wb.addPicture(ba6.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+	            HSSFPatriarch patriarch6 = data.sheet10.createDrawingPatriarch();
+	            HSSFPicture pic6 =  patriarch6.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, data.rowNum, (short)5, data.rowNum+25), pictureIndex6);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic6.getAnchor();
+	            anchor.setCol2((short)5);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(data.rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+		    }
+    }
+    
+    private void getSecondaryProgramProfileTable(String programOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc,ExportToExcelData data) throws Exception{
+    	//Program Profile Table.
+		    if (!programOpt.equals("0")){
+		    	data.sheet10 = wb.createSheet(data.secProgramProfTrn);
+		    	data.rowNum=1;
+		    }
+		    if (programOpt.equals("1") || programOpt.equals("3")){
+		    	//rowNum = rowNum + 2;
+		        data.cellNum = 0;
+		        
+		        data.headerText = null;
+	        	data.row = data.sheet10.createRow(data.rowNum++);
+	        	data.cell = data.row.createCell(data.cellNum++);
+	        	String[] programProfRows = vForm.getExportData().getSecondaryProgramTableData().split("<");
+	            
+	        	data.headerText = new HSSFRichTextString(data.secProgramProfTrn + amountDesc);
+	            data.cell.setCellValue(data.headerText);
+	            data.cell.setCellStyle(data.subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            data.cellNum = 0;
+	            data.row = data.sheet10.createRow(data.rowNum++);
+	            data.cell = data.row.createCell(data.cellNum++);
+	            data.headerText = new HSSFRichTextString(data.programTrn);
+	            data.cell.setCellValue(data.headerText);
+	            data.cell.setCellStyle(data.subHeaderCS);
+	            String[] singleRow = programProfRows[1].split(">");
+	            for (int i = 1; i < singleRow.length; i++) {
+	            	data.cell = data.row.createCell(data.cellNum++);
+	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+	 	            data.cell.setCellValue(data.headerText);
+	 	            data.cell.setCellStyle(data.subHeaderCS);
+				}
+	            for (int i = 2; i < programProfRows.length; i++) {
+		        	data.cellNum = 0;
+			        data.row = data.sheet10.createRow(data.rowNum++);
+			        HSSFCellStyle st = null;
+			    	if (i == programProfRows.length-1)
+			    		st = data.lastCellStyle;
+		            else
+		            	st = data.cellStyle;
+	            	singleRow = programProfRows[i].split(">");
+	            	for (int j = 0; j < singleRow.length; j++) {
+	            		data.cell = data.row.createCell(data.cellNum++);
+	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+	 		            data.cell.setCellValue(data.headerText);
+	 		            data.cell.setCellStyle(st);
+	    			}
+				}
+		    }
+		    
+		    if (programOpt.equals("2") || programOpt.equals("3")){
+		    	data.rowNum++;
+		    	data.rowNum++;
+		        data.cellNum = 0;
+		        data.row = data.sheet10.createRow(data.rowNum++);
+	            data.cell = data.row.createCell(data.cellNum++);
+	            data.headerText = new HSSFRichTextString(data.programProfTrn + " Chart");
+	            data.cell.setCellValue(data.headerText);
+	            data.cell.setCellStyle(data.headerCS);
+	            
+		        ByteArrayOutputStream ba6 = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getSecondaryProgramGraph(), "png", ba6);
 	            int pictureIndex6 = wb.addPicture(ba6.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
 	            HSSFPatriarch patriarch6 = data.sheet10.createDrawingPatriarch();
 	            HSSFPicture pic6 =  patriarch6.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, data.rowNum, (short)5, data.rowNum+25), pictureIndex6);

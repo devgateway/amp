@@ -421,6 +421,13 @@ function initializeGlobalVariables(){
 								</html:checkbox>
 							</li>
 						</field:display>
+						<field:display name="Secondary Programs Ranking" feature="Ranking Categories">
+							<li>
+								<html:checkbox property="filter.showSecondaryProgramsRanking" styleId="show_secondary_programs_ranking">
+									<digi:trn>Show Secondary Programs Ranking</digi:trn>
+								</html:checkbox>
+							</li>
+						</field:display>
 					</ul>
 				</feature:display>	
 				</div>

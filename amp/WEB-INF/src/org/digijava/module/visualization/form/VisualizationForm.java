@@ -165,6 +165,8 @@ public class VisualizationForm extends ActionForm {
 		private Map<AmpSector, BigDecimal> fullSectors;
 		private Map<AmpTheme, BigDecimal> topPrograms;
 		private Map<AmpTheme, BigDecimal> fullPrograms;
+		private Map<AmpTheme, BigDecimal> topSecondaryPrograms;
+		private Map<AmpTheme, BigDecimal> fullSecondaryPrograms;
 		private Map<AmpTheme, BigDecimal> topNPOs;
 		private Map<AmpTheme, BigDecimal> fullNPOs;
 		
@@ -241,6 +243,20 @@ public class VisualizationForm extends ActionForm {
 		public void setFullNPOs(Map<AmpTheme, BigDecimal> fullNPOs) {
 			this.fullNPOs = fullNPOs;
 		}
+		public Map<AmpTheme, BigDecimal> getTopSecondaryPrograms() {
+			return topSecondaryPrograms;
+		}
+		public void setTopSecondaryPrograms(
+				Map<AmpTheme, BigDecimal> topSecondaryPrograms) {
+			this.topSecondaryPrograms = topSecondaryPrograms;
+		}
+		public Map<AmpTheme, BigDecimal> getFullSecondaryPrograms() {
+			return fullSecondaryPrograms;
+		}
+		public void setFullSecondaryPrograms(
+				Map<AmpTheme, BigDecimal> fullSecondaryPrograms) {
+			this.fullSecondaryPrograms = fullSecondaryPrograms;
+		}
 	}
 
 	public void setExportData(ExportData exportData) {
@@ -258,6 +274,7 @@ public class VisualizationForm extends ActionForm {
 		private BufferedImage budgetGraph;
 		private BufferedImage NPOGraph;
 		private BufferedImage programGraph;
+		private BufferedImage secondaryProgramGraph;
 		private BufferedImage fundingGraph;
 		private BufferedImage aidPredictabilityGraph;
 		private BufferedImage aidPredictabilityQuarterGraph;
@@ -272,6 +289,7 @@ public class VisualizationForm extends ActionForm {
 		private String budgetTableData;
 		private String NPOTableData;
 		private String programTableData;
+		private String secondaryProgramTableData;
 		private String aidPredicTableData;
 		private String aidPredicQuarterTableData;
 		private String aidTypeTableData;
@@ -289,6 +307,7 @@ public class VisualizationForm extends ActionForm {
 		private int exportOrganizationProfileOption = 3;
 		private int exportNPOProfileOption = 3;
 		private int exportProgramProfileOption = 3;
+		private int exportSecondaryProgramProfileOption = 3;
 		private int exportSectorProfileOption = 3;
 		private int exportRegionProfileOption = 3;
 		private int exportSummaryOption = 1;	
@@ -626,6 +645,31 @@ public class VisualizationForm extends ActionForm {
 		public void setExportBeneficiaryAgencyProfileOption(
 				int exportBeneficiaryAgencyProfileOption) {
 			this.exportBeneficiaryAgencyProfileOption = exportBeneficiaryAgencyProfileOption;
+		}
+
+		public BufferedImage getSecondaryProgramGraph() {
+			return secondaryProgramGraph;
+		}
+
+		public void setSecondaryProgramGraph(BufferedImage secondaryProgramGraph) {
+			this.secondaryProgramGraph = secondaryProgramGraph;
+		}
+
+		public String getSecondaryProgramTableData() {
+			return secondaryProgramTableData;
+		}
+
+		public void setSecondaryProgramTableData(String secondaryProgramTableData) {
+			this.secondaryProgramTableData = secondaryProgramTableData;
+		}
+
+		public int getExportSecondaryProgramProfileOption() {
+			return exportSecondaryProgramProfileOption;
+		}
+
+		public void setExportSecondaryProgramProfileOption(
+				int exportSecondaryProgramProfileOption) {
+			this.exportSecondaryProgramProfileOption = exportSecondaryProgramProfileOption;
 		}
 
 

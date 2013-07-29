@@ -100,6 +100,7 @@ public class DashboardFilter {
     private Boolean showRegionsRanking;
     private Boolean showNPORanking;
     private Boolean showProgramsRanking;
+    private Boolean showSecondaryProgramsRanking;
     private Boolean fromGenerator;
     private int agencyType;
     private int agencyTypeQuickFilter;
@@ -872,6 +873,14 @@ public class DashboardFilter {
 
 	public void setShowRegionsRanking(Boolean showRegionsRanking) {
 		this.showRegionsRanking = showRegionsRanking;
+	}
+
+	public Boolean getShowSecondaryProgramsRanking() {
+		return showSecondaryProgramsRanking;
+	}
+
+	public void setShowSecondaryProgramsRanking(Boolean showSecondaryProgramsRanking) {
+		this.showSecondaryProgramsRanking = showSecondaryProgramsRanking;
 	}
 
 	public Boolean getFromGenerator() {

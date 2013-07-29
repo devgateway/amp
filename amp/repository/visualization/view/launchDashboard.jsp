@@ -82,6 +82,7 @@ var trnAvgProjSizeDescription = "";
 var trnCommitments = "";
 var trnDisbursements = "";
 var trnExpenditures = "";
+var trnMTEFProjections = "";
 var trnPledges = "";
 var trnAidPredictability = "";
 var trnAidType = "";
@@ -175,6 +176,7 @@ function initializeTranslations(){
 	trnCommitments="<digi:trn jsFriendly='true'>Commitments</digi:trn>";
 	trnDisbursements="<digi:trn jsFriendly='true'>Disbursements</digi:trn>";
 	trnExpenditures="<digi:trn jsFriendly='true'>Expenditures</digi:trn>";
+	trnMTEFProjections="<digi:trn jsFriendly='true'>MTEF Projections</digi:trn>";
 	trnPledges="<digi:trn jsFriendly='true'>Pledges</digi:trn>";
 	trnAidPredictability="<digi:trn jsFriendly='true'>Aid Predictability</digi:trn>";
 	trnAidType="<digi:trn jsFriendly='true'>Aid Type</digi:trn>";
@@ -1380,6 +1382,35 @@ function initializeGlobalVariables(){
 					</c:forEach>
 				
 					<a href="javascript:hideFullPrograms()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
+				</div>
+			</fieldset>	
+		</c:if>
+	</field:display>
+	<field:display name="Secondary Programs Ranking" feature="Ranking Categories">	
+		<c:if test="${visualizationform.filter.showSecondaryProgramsRanking eq 'true'}">
+			<fieldset>
+				<legend><span id="topSecondaryProgramsTitle" class=legend_label style="width:200px"></span></legend>
+				<div id="divTopSecondaryPrograms" class="field_text">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.topSecondaryPrograms}" var="programItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${programItem.key}"/>  <b>($<c:out value="${programItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:showFullSecondaryPrograms()" style="float:right;"><digi:trn>Show Full List</digi:trn></a>
+				</div>
+				<div id="divFullSecondaryPrograms" class="field_text" style="display: none;">
+					<c:set var="index" value="0"/>
+					<c:forEach items="${visualizationform.ranksInformation.fullSecondaryPrograms}" var="programItem">
+					<c:set var="index" value="${index+1}"/>
+					
+					 <c:out value="${index}"/>. <c:out value="${programItem.key}"/>  <b>($<c:out value="${programItem.value}"/>)</b>
+						<hr />
+					</c:forEach>
+				
+					<a href="javascript:hideFullSecondaryPrograms()" style="float:right;"><digi:trn>View Top List</digi:trn></a>
 				</div>
 			</fieldset>	
 		</c:if>

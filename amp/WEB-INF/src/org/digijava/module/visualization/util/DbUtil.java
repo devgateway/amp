@@ -928,13 +928,13 @@ public class DbUtil {
         
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
-        	oql = " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        	oql += " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
         } 
         if (implementingCondition) {
-        	oql = " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        	oql += " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
         } 
         if (beneficiaryCondition) {
-        	oql = " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        	oql += " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
         } 
         
         //Filter for Category Values
@@ -1065,13 +1065,13 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
 
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
-        	oql = " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        	oql += " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
         } 
         if (implementingCondition) {
-        	oql = " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        	oql += " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
         } 
         if (beneficiaryCondition) {
-        	oql = " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        	oql += " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
         } 
         
 
@@ -1689,13 +1689,13 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
         
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
-        	oql = " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        	oql += " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
         } 
         if (implementingCondition) {
-        	oql = " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        	oql += " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
         } 
         if (beneficiaryCondition) {
-        	oql = " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        	oql += " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
         } 
        
         //Filter for Category Values
@@ -1952,13 +1952,13 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
 
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
-        	oql = " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        	oql += " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
         } 
         if (implementingCondition) {
-        	oql = " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        	oql += " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
         } 
         if (beneficiaryCondition) {
-        	oql = " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        	oql += " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
         } 
        
         //Filter for Category Values
@@ -2220,13 +2220,13 @@ private static String getHQLQueryForDD(DashboardFilter filter) {
 
         // Filter for the Organizations and their roles (Donor, Implementing or Beneficiary)
         if (donorCondition) {
-        	oql = " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
+        	oql += " and role.roleCode='DN' and orole.organisation in (" + filter.getDonorAgencyId() + ") ";
         } 
         if (implementingCondition) {
-        	oql = " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
+        	oql += " and role.roleCode='IA' and orole.organisation in (" + filter.getImplementingAgencyId() + ") ";
         } 
         if (beneficiaryCondition) {
-        	oql = " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
+        	oql += " and role.roleCode='BA' and orole.organisation in (" + filter.getBeneficiaryAgencyId() + ") ";
         } 
 
         //Filter for Category Values

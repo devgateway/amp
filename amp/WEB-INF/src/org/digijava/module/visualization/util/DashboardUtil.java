@@ -425,13 +425,13 @@ public class DashboardUtil {
 						form.getRanksInformation().setTopPrograms(getTop(form.getRanksInformation().getFullPrograms(),form.getFilter().getTopLists()));
 					}
 				} 
-				if (filter.getDashboardType()==4) {// it is only used for Deal Dashboard
+				if (filter.getShowProgramsRanking()==null || filter.getShowProgramsRanking() || isInGraphInList(form.getGraphList(),"SecondaryProgramProfile")) {
 					if (secondaryProgramListReduced==null || secondaryProgramListReduced.size()==0) {
-		        		form.getRanksInformation().setFullPrograms(null);
-			        	form.getRanksInformation().setTopPrograms(null);
+		        		form.getRanksInformation().setFullSecondaryPrograms(null);
+			        	form.getRanksInformation().setTopSecondaryPrograms(null);
 					} else {
-						form.getRanksInformation().setFullPrograms(getRankProgramsByKey(secondaryProgramListReduced, form.getFilter()));//secondary program uses the same programs rank 
-						form.getRanksInformation().setTopPrograms(getTop(form.getRanksInformation().getFullPrograms(),form.getFilter().getTopLists()));
+						form.getRanksInformation().setFullSecondaryPrograms(getRankProgramsByKey(secondaryProgramListReduced, form.getFilter())); 
+						form.getRanksInformation().setTopSecondaryPrograms(getTop(form.getRanksInformation().getFullSecondaryPrograms(),form.getFilter().getTopLists()));
 					}
 				}
 				
@@ -454,12 +454,14 @@ public class DashboardUtil {
 			form.getRanksInformation().setFullProjects(null);
 			form.getRanksInformation().setFullNPOs(null);
 			form.getRanksInformation().setFullPrograms(null);
+			form.getRanksInformation().setFullSecondaryPrograms(null);
 			form.getRanksInformation().setTopOrganizations(null);
 			form.getRanksInformation().setTopSectors(null);
 			form.getRanksInformation().setTopRegions(null);
 			form.getRanksInformation().setTopProjects(null);
 			form.getRanksInformation().setTopNPOs(null);
 			form.getRanksInformation().setTopPrograms(null);
+			form.getRanksInformation().setTopSecondaryPrograms(null);
 		}
 	}
     

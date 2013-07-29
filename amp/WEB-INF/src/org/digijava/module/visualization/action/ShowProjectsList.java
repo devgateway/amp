@@ -213,7 +213,7 @@ public class ShowProjectsList extends Action {
 			visualizationForm.setItemProjectsList(itemProjectsList);
 		}
 				
-		if (type.equals("NPOProfile")||type.equals("ProgramProfile")){
+		if (type.equals("NPOProfile")||type.equals("ProgramProfile")||type.equals("SecondaryProgramProfile")){
 	    	for (int i = 0; i < ids.length; i++) {
 				Long long1 = ids[i];
 				itemName = DbUtil.getProgramById(long1).getName();

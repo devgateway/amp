@@ -24,10 +24,10 @@ public abstract class CategCell extends Cell implements Categorizable {
 
 	public CategCell() {
 		super();
-		metaData=new HashSet();
+		metaData=new HashSet<MetaInfo>();
 	}
 	
-	protected Set metaData;
+	protected HashSet<MetaInfo> metaData;
 	
 	/**
 	 * @deprecated
@@ -66,7 +66,7 @@ public abstract class CategCell extends Cell implements Categorizable {
 	 */
 	public CategCell(Long id) {
 		super(id);
-		metaData=new HashSet();
+		metaData = new HashSet<MetaInfo>();
 	}
 
 	/* (non-Javadoc)
@@ -80,7 +80,7 @@ public abstract class CategCell extends Cell implements Categorizable {
 	/**
 	 * @return Returns the metaData.
 	 */
-	public Set getMetaData() {
+	public HashSet<MetaInfo> getMetaData() {
 		return metaData;
 	}
 

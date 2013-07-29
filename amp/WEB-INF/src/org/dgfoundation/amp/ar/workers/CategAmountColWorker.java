@@ -255,7 +255,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		addMetaIfExists(rs, acc, "agreement_title_code", ArConstants.AGREEMENT_TITLE_CODE, null, false);
 		addMetaIfExists(rs, acc, "component_type", ArConstants.COMPONENT, null, true);
 		addMetaIfExists(rs, acc, "recipient_name", ArConstants.RECIPIENT_NAME, null, false);
-		addMetaIfExists(rs, acc, "recipient_role_name", ArConstants.RECIPIENT_ROLE, null, false);
+		addMetaIfExists(rs, acc, "recipient_role_name", ArConstants.RECIPIENT_ROLE_NAME, null, false);
+		addMetaIfExists(rs, acc, "recipient_role_code", ArConstants.RECIPIENT_ROLE_CODE, null, false);
+		addMetaIfExists(rs, acc, "source_role_code", ArConstants.SOURCE_ROLE_CODE, null, false);
 		
 		MetaInfo headMeta=null;
 		
@@ -463,11 +465,33 @@ public class CategAmountColWorker extends ColumnWorker {
 		else 
 			logger.error("The filter.currency property should not be null !");
 						
-		
+		fillRealDisbursementTypes(acc);
 		
 		return acc;
 	}
 
+	protected void fillRealDisbursementTypes(CategAmountCell acc)
+	{
+		String recipientRoleTypeCode = acc.getMetaValueString(ArConstants.RECIPIENT_ROLE_CODE);
+		String sourceRoleTypeCode = acc.getMetaValueString(ArConstants.SOURCE_ROLE_CODE);
+		if (recipientRoleTypeCode != null && sourceRoleTypeCode != null)
+		{
+			// we have a directed transaction!
+			String recognizedTransactionType = null;
+			if (sourceRoleTypeCode.equals(Constants.FUNDING_AGENCY) && recipientRoleTypeCode.equals(Constants.EXECUTING_AGENCY))
+				recognizedTransactionType = ArConstants.TRANSACTION_DN_EXEC;
+			
+			if (sourceRoleTypeCode.equals(Constants.EXECUTING_AGENCY) && recipientRoleTypeCode.equals(Constants.IMPLEMENTING_AGENCY))
+				recognizedTransactionType = ArConstants.TRANSACTION_EXEC_IMPL;
+
+			if (sourceRoleTypeCode.equals(Constants.IMPLEMENTING_AGENCY) && recipientRoleTypeCode.equals(Constants.BENEFICIARY_AGENCY))
+				recognizedTransactionType = ArConstants.TRANSACTION_IMPL_BENF;
+			
+			if (recognizedTransactionType != null)
+				acc.getMetaData().add(this.getCachedMetaInfo(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE, recognizedTransactionType));
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

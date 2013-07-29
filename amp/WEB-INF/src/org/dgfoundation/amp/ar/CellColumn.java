@@ -26,7 +26,7 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Jun 19, 2006 a column that holds cells
  */
-public class CellColumn extends Column {
+public class CellColumn<K extends Cell> extends Column<K> {
 
 	/**
 	 * Returns the number of items in the column as the visible rows (they are already unique) so this means
@@ -42,7 +42,7 @@ public class CellColumn extends Column {
 	 * 
 	 * @return the Iterator
 	 */
-	public Iterator<Cell> iterator() {
+	public Iterator<K> iterator() {
 		return items.iterator();
 	}
 
@@ -119,8 +119,8 @@ public class CellColumn extends Column {
 		return (Cell) getItem(i);
 	}
 
-	public void addCell(Object cc) {
-		Cell c = (Cell) cc;
+	public void addCell(K c) {
+		//Cell c = (Cell) cc;
 		c.setColumn(this);
 		if (!itemsMap.containsKey(c.getOwnerId()))
 			itemsMap.put(c.getOwnerId(), new ArrayList<Cell>());
@@ -318,7 +318,7 @@ public class CellColumn extends Column {
 	 * @param oldCell
 	 * @param newCell
 	 */
-	public void replaceCell(Cell oldCell, Cell newCell) {
+	public void replaceCell(K oldCell, K newCell) {
 		int idx = items.indexOf(oldCell);
 		items.remove(idx);
 		items.add(idx, newCell);
@@ -396,7 +396,7 @@ public class CellColumn extends Column {
 	@Override
 	public void filterByIds(Set<Long> idsToRetain)
 	{
-		Iterator<Cell> cells = this.iterator();
+		Iterator<K> cells = this.iterator();
 		while(cells.hasNext())
 		{
 			Cell cell = cells.next();

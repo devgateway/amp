@@ -36,7 +36,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * @since Jun 22, 2006
  * 
  */
-public class GroupColumn extends Column {
+public class GroupColumn extends Column<Column> {
 
 	/**
 	 * Returns the max of the underlying visible rows of the subcolumns
@@ -133,19 +133,41 @@ public class GroupColumn extends Column {
     	}
     }
     
-    public static boolean isActualDisbursement(Categorizable item)
+    public static boolean isRealDisbursement(Categorizable item)
     {
-    	Set<MetaInfo> metadata = item.getMetaData();
-    	for(MetaInfo minfo:metadata)
+    	boolean isActualDisbursement = false;
+    	boolean hasDestination = false;
+
+    	for(MetaInfo minfo:item.getMetaData())
     	{
-    		if (minfo!=null && minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
-    		{
-    			String val = minfo.getValue().toString();
-    			if (val.equals(ArConstants.ACTUAL_DISBURSEMENTS))
-    				return true;
-    		}
+    		if (minfo == null)
+    			continue; // shouldn't happen
+    		
+    		if (minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
+    			isActualDisbursement = minfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
+    		
+    		if (minfo.getCategory().equals(ArConstants.RECIPIENT_NAME))
+    			hasDestination = true;
     	}
-    	return false;
+    	
+//    	if (isActualDisbursement && hasDestination)
+//    		System.out.println("masha");
+    	
+    	return isActualDisbursement && hasDestination;
+    	
+//    	return isActualDisbursement(metadata) && 
+//    	for(MetaInfo minfo:metadata)
+//    	{
+//    		if (minfo!=null && minfo.getCategory().equals(ArConstants.FUNDING_TYPE))
+//    		{
+//    			String val = minfo.getValue().toString();
+//    			if (val.equals(ArConstants.ACTUAL_DISBURSEMENTS))
+//    			{    				
+//    				return true;
+//    			}
+//    		}
+//    	}
+    	//return false;
     }
     
     /**
@@ -204,15 +226,15 @@ public class GroupColumn extends Column {
      * @param generateTotalCols true when creating TotalAmountColumnS instead of CellColumnS
      * @return a GroupColumn that holds the categorized Data
      */
-    private static Column verticalSplitByCateg(CellColumn src,
+    private static Column verticalSplitByCateg(CellColumn<? extends CategAmountCell> src,
     	String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
     	
     	HashMap<String,String> yearMapping = new HashMap<String, String>();
     	HashMap<String,String> monthMapping = new HashMap<String, String>();
     	    	
-    	Column ret = new GroupColumn(src);
+    	GroupColumn ret = new GroupColumn(src);
         Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
-        Iterator<Cell> i = src.iterator();
+        Iterator<? extends CategAmountCell> i = src.iterator();
        
         AmpARFilter myFilters	= null;
         try{
@@ -400,9 +422,9 @@ public class GroupColumn extends Column {
             
             cc.setContentCategory(category);
             //iterate the src column and add the items with same MetaInfo
-            Iterator ii=src.iterator();
+            Iterator<? extends CategAmountCell> ii = src.iterator();
             while (ii.hasNext()) {
-    			Categorizable item = (Categorizable) ii.next();
+            	CategAmountCell item = ii.next();
     			
     			//add terms of assistance total items if this subcategory was forced from above.
     			//this means ALL cells be added here regardless of their category
@@ -430,8 +452,9 @@ public class GroupColumn extends Column {
     			if (category.equals(ArConstants.FUNDING_TYPE) &&
     				element.getCategory().equals(ArConstants.FUNDING_TYPE) &&
     				(element.getValue().toString().equals(ArConstants.REAL_DISBURSEMENTS) || element.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS)) &&
-    				isActualDisbursement(item))
+    				isRealDisbursement(item))
     			{
+    				// 
     				try
     				{
         				Cell obj = (Cell)(((Cell) item).clone());
@@ -521,7 +544,7 @@ public class GroupColumn extends Column {
 
 				tcmc.setExpression(MathExpressionRepository.UNDISBURSED_BALANCE);
 
-				Iterator<Cell> it = src.iterator();
+				Iterator<? extends CategAmountCell> it = src.iterator();
 
 				while (it.hasNext()) {
 
@@ -538,7 +561,7 @@ public class GroupColumn extends Column {
          
         if(ret.getItems().size()==0) {
         	AmountCellColumn acc=new AmountCellColumn(ret);
-        	Iterator<Cell> ii=src.iterator();
+        	Iterator<? extends CategAmountCell> ii = src.iterator();
         	while (ii.hasNext()) {
 				AmountCell element = (AmountCell) ii.next();
 				acc.addCell(element);
@@ -587,10 +610,10 @@ public class GroupColumn extends Column {
      */
     public void addColumn(Column c) {
         if (!items.contains(c)){
-        	items.add(c);        
+        	getItems().add(c);        
         	c.setParent(this);
         } else {
-            Column older=(Column) items.get(items.indexOf(c));
+            Column older = (Column) items.get(items.indexOf(c));
             older.getItems().addAll(c.getItems());
         }
     }
@@ -600,9 +623,9 @@ public class GroupColumn extends Column {
     		addColumn(c);
     	else {
     		if(idx.intValue() + 1 > items.size()) 
-    			items.add(idx.intValue() - 1, c);
+    			getItems().add(idx.intValue() - 1, c);
     		else
-    			items.add(idx.intValue(), c);
+    			getItems().add(idx.intValue(), c);
     		c.setParent(this);
     		}
     }
@@ -640,8 +663,8 @@ public class GroupColumn extends Column {
      */
     public void replaceColumn(Object columnId, Column newColumn) {
         int idx = items.indexOf(getColumn(columnId));
-        items.remove(idx);
-        items.add(idx, newColumn);
+        getItems().remove(idx);
+        getItems().add(idx, newColumn);
     }
 
     /*
@@ -840,7 +863,7 @@ public class GroupColumn extends Column {
 		}
 		return false;
 	}
-	
+		
 	@Override
 	public boolean removeEmptyChildren(boolean checkFunding) {
 		List<Column> myItems	= getItems();

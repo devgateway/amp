@@ -117,6 +117,11 @@ public class AmpReportGenerator extends ReportGenerator {
 					ARUtil.containsColumn(ArConstants.MODE_OF_PAYMENT, reportMetadata.getColumns())) {
 				ret.add(ArConstants.MODE_OF_PAYMENT);
 			}
+			
+			if (ARUtil.containsMeasure(ArConstants.REAL_DISBURSEMENTS, reportMetadata.getMeasures()))
+			{
+				ret.add(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE);
+			}
 
 		}
 		return ret;
@@ -319,7 +324,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				CellColumn older = (CellColumn) rawColumns.getColumn(column.getColumnId());
 				if (older != null) {
 				    for ( Object o : column.getItems() ) 
-				    	older.addCell(o);
+				    	older.addCell((Cell) o);
 				    
 				} else {
 					rawColumns.addColumn(rcol.getOrderId().intValue(), column);
@@ -484,111 +489,104 @@ public class AmpReportGenerator extends ReportGenerator {
 	}
 
 	/**
-	 * generating the total columns of the report. createTotals is invoked after
-	 * the data has been retrieved and is the first substep of processing.
-	 * 
+	 * builds subcolumns of type "Actual Commitments / Disbursements / etc" and adds them to newcol
+	 * returns true iff the function has created, without the report having required it, a "Total Actual Commitments" column
+	 * @return
 	 */
-	protected void createTotals() {
-		boolean verticalSplitByTypeOfAssistence = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true") &&
-				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
-				ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns());
-		boolean verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT)!= null && 
-				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
-			!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.MODE_OF_PAYMENT) &&
-			ARUtil.containsColumn(ArConstants.MODE_OF_PAYMENT, reportMetadata.getColumns());
-		
-		// we perform totals by categorizing only by Funding Type...
-		boolean categorizeByFundingType = false;
-		if (reportMetadata.getType().intValue() != 4)
-			categorizeByFundingType = true;
-		
-		// get the funding column
-		AmountCellColumn funding = (AmountCellColumn) rawColumns.getColumn(ArConstants.COLUMN_FUNDING);
-		
-		//get the MTEF columns
-		List<TotalComputedAmountColumn> mtefCols	= new ArrayList<TotalComputedAmountColumn>();
-		for ( Object tempObj:rawColumns.getItems() ) {
-			Column tempCol		= (Column) tempObj;
-			if ( tempCol.getAbsoluteColumnName().contains("MTEF") ) {
-				mtefCols.add( (TotalComputedAmountColumn) tempCol );
-			}
-		}
+	protected boolean buildFundingTypeCategoriesSubcolumns(AmountCellColumn<CategAmountCell> funding, GroupColumn newcol, boolean verticalSplitByTypeOfAssistence, boolean verticalSplitByModeOfPayment)
+	{
 		boolean totalActualCommitmentsLoaded = false;
 		boolean totalActualCommitmentsAdded = false;
-		
-		GroupColumn newcol = new GroupColumn();
-		if (categorizeByFundingType) {
-			Set<AmpReportMeasures> measures = reportMetadata.getMeasures();
-			List<AmpReportMeasures> measuresList = new ArrayList<AmpReportMeasures>(
-					measures);
-			Collections.sort(measuresList);
-			//First pass to determine if Actual Commitments needs to be added
-			Iterator<AmpReportMeasures> ii = measuresList.iterator();
-			while (ii.hasNext()) {
-				AmpReportMeasures ampReportMeasurement = ii.next();
-				AmpMeasures element = ampReportMeasurement.getMeasure();
-				if(element.getMeasureName().equals(ArConstants.ACTUAL_COMMITMENTS))
-				{
-					totalActualCommitmentsLoaded = true;
-					break;
-				}
-			}
-			if(!totalActualCommitmentsLoaded) {
-				AmpReportMeasures ampReportMeasurement = new AmpReportMeasures();
-				AmpMeasures element = new AmpMeasures();
-				element.setMeasureName(ArConstants.ACTUAL_COMMITMENTS);
-				ampReportMeasurement.setMeasure(element);
-				measuresList.add(ampReportMeasurement);
-				totalActualCommitmentsAdded = true;
-			}
-			
-			ii = measuresList.iterator();
-			while (ii.hasNext()) {
-				AmpReportMeasures ampReportMeasurement = ii.next();
-				AmpMeasures element = ampReportMeasurement.getMeasure();
-				
-				if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || 
-						element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || 
-						element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) ||
-						element.getExpression()!=null
-						)
-					continue;
 
-				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
-				AmountCellColumn cc = null;
-				
-				if(verticalSplitByModeOfPayment || verticalSplitByTypeOfAssistence){
-					cc = new AmountCellColumn(metaInfo.getValue().toString());	
-				}else{
-					cc = new TotalAmountColumn(metaInfo.getValue().toString(), true);
-				}
-				
-				newcol.getItems().add(cc);
-				cc.setParent(newcol);
-
-				cc.setContentCategory(ArConstants.COLUMN_FUNDING);
-				// iterate the src column and add the items with same MetaInfo
-				if (funding != null){
-					Iterator it = funding.iterator();
-					while (it.hasNext()) {
-						Categorizable item = (Categorizable) it.next();
-						boolean shouldAddRealDisbursement = element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS) &&
-			    				GroupColumn.isActualDisbursement(item); // add ACTUAL DISBURSEMENT items to the REAL DISBURSEMENTS column - as they have the same datasource (ACTUAL DISBURSEMENTS), they have the same metadata
-						boolean shouldAddCellToColumn = item.hasMetaInfo(metaInfo) || shouldAddRealDisbursement; // ugly hack because the same data source (actual disbursements) should fill two columns: actual disbursements + real disbursements								
-						if (shouldAddCellToColumn)
-							cc.addCell(item);
-					}
-				}
+		Set<AmpReportMeasures> measures = reportMetadata.getMeasures();
+		List<AmpReportMeasures> measuresList = new ArrayList<AmpReportMeasures>(
+				measures);
+		Collections.sort(measuresList);
+		//First pass to determine if Actual Commitments needs to be added
+		Iterator<AmpReportMeasures> ii = measuresList.iterator();
+		while (ii.hasNext()) {
+			AmpReportMeasures ampReportMeasurement = ii.next();
+			AmpMeasures element = ampReportMeasurement.getMeasure();
+			if(element.getMeasureName().equals(ArConstants.ACTUAL_COMMITMENTS))
+			{
+				totalActualCommitmentsLoaded = true;
+				break;
 			}
 		}
- 
-		//Calculate global totals for Computed MEasures that require it
+		if(!totalActualCommitmentsLoaded) {
+			AmpReportMeasures ampReportMeasurement = new AmpReportMeasures();
+			AmpMeasures element = new AmpMeasures();
+			element.setMeasureName(ArConstants.ACTUAL_COMMITMENTS);
+			ampReportMeasurement.setMeasure(element);
+			measuresList.add(ampReportMeasurement);
+			totalActualCommitmentsAdded = true;
+		}
+		
+		ii = measuresList.iterator();
+		while (ii.hasNext()) {
+			AmpReportMeasures ampReportMeasurement = ii.next();
+			AmpMeasures element = ampReportMeasurement.getMeasure();
+			
+			if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || 
+					element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || 
+					element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE) ||
+					element.getExpression()!=null
+					)
+				continue;
+				
+			
+			MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
+			AmountCellColumn cc = null;
+			
+			if(verticalSplitByModeOfPayment || verticalSplitByTypeOfAssistence){
+				cc = new AmountCellColumn(metaInfo.getValue().toString());	
+			}else{
+				cc = new TotalAmountColumn(metaInfo.getValue().toString(), true);
+			}
+			
+			newcol.getItems().add(cc);
+			cc.setParent(newcol);
+
+			cc.setContentCategory(ArConstants.COLUMN_FUNDING);
+			// iterate the src column and add the items with same MetaInfo
+			if (funding != null){
+				Iterator<CategAmountCell> it = funding.iterator();
+				while (it.hasNext()) {
+					CategAmountCell item = (CategAmountCell) it.next();
+					boolean shouldAddRealDisbursement = element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS) &&
+		    				GroupColumn.isRealDisbursement(item); // add ACTUAL DISBURSEMENT items to the REAL DISBURSEMENTS column - as they have the same datasource (ACTUAL DISBURSEMENTS), they have the same metadata
+					boolean shouldAddCellToColumn = item.hasMetaInfo(metaInfo) || shouldAddRealDisbursement; // ugly hack because the same data source (actual disbursements) should fill two columns: actual disbursements + real disbursements								
+					if (shouldAddCellToColumn)
+						cc.addCell(item);
+				}
+			}
+			
+			boolean shouldSplitTotalsByRealDisbursements = element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS);
+			if (funding != null && shouldSplitTotalsByRealDisbursements)
+			{
+				// DO SOMETHING, BOZO!
+				this.addTotalsVerticalSplit(newcol, ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE);
+			}
+
+		}
+		
+		return !totalActualCommitmentsLoaded && totalActualCommitmentsAdded;
+	}
+	
+	/**
+	 * calculates the "Total Actual Commitments" (a computed measure) field of the report and removes the "Total Costs / Actual Commitments" subcolumn iff it was not requested in the report (it is ALWAYS calculated in order to be able to calculate this field in this function)
+	 * @param newcol - the "Total Costs" GroupColumn which is being created
+	 * @param removeActualCommitmentsSubcolumn
+	 */
+	protected void buildTotalActualCommitmentsSubcolumn(GroupColumn newcol, boolean removeActualCommitmentsSubcolumn)
+	{
+		//Calculate global totals for Computed Measures that require it
 		TotalAmountColumn removeableColumn = null;
 		BigDecimal total = new BigDecimal(0);
-		Iterator it = newcol.getItems().iterator();
+		Iterator<Column> it = newcol.getItems().iterator();
 		while (it.hasNext())
 		{
-			Object el = it.next();
+			Column el = it.next();
 			if (el instanceof TotalAmountColumn){
 				TotalAmountColumn column = (TotalAmountColumn) el;
 				if(ArConstants.ACTUAL_COMMITMENTS.equalsIgnoreCase(column.getName())) {
@@ -602,7 +600,7 @@ public class AmpReportGenerator extends ReportGenerator {
 							total = total.add(new BigDecimal(dbl));
 						}
 					}
-					if(!totalActualCommitmentsLoaded && totalActualCommitmentsAdded){ //If it was added for calculation purposes, remove it
+					if (removeActualCommitmentsSubcolumn){ //If it was added for calculation purposes, remove it
 						removeableColumn = column;
 					}
 					break;
@@ -613,10 +611,50 @@ public class AmpReportGenerator extends ReportGenerator {
 			newcol.getItems().remove(removeableColumn);
 		}
 		this.setTotalActualCommitments(total);
+	}
+	
+	/**
+	 * generating the total columns of the report. createTotals is invoked after
+	 * the data has been retrieved and is the first substep of processing.
+	 * 
+	 */
+	protected void createTotals() {
+		boolean verticalSplitByTypeOfAssistence = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE).equalsIgnoreCase("true") &&
+				!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.TERMS_OF_ASSISTANCE) &&
+				ARUtil.containsColumn(ArConstants.TERMS_OF_ASSISTANCE, reportMetadata.getColumns());
+		
+		boolean verticalSplitByModeOfPayment = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT)!= null && 
+				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_MODE_OF_PAYMENT).equalsIgnoreCase("true") &&
+			!ARUtil.hasHierarchy(reportMetadata.getHierarchies(),ArConstants.MODE_OF_PAYMENT) &&
+			ARUtil.containsColumn(ArConstants.MODE_OF_PAYMENT, reportMetadata.getColumns());
+		
+		// we perform totals by categorizing only by Funding Type...
+		boolean categorizeByFundingType = false;
+		if (reportMetadata.getType().intValue() != 4)
+			categorizeByFundingType = true;
+		
+		// get the funding column
+		AmountCellColumn funding = (AmountCellColumn) rawColumns.getColumn(ArConstants.COLUMN_FUNDING);
+						
+		GroupColumn newcol = new GroupColumn();
+		if (categorizeByFundingType) {
+			boolean removeActualCommitmentsSubcolumn = buildFundingTypeCategoriesSubcolumns(funding, newcol, verticalSplitByTypeOfAssistence, verticalSplitByModeOfPayment);
+			buildTotalActualCommitmentsSubcolumn(newcol, removeActualCommitmentsSubcolumn);
+		}
+ 
+		
+		//get the MTEF columns
+		List<TotalComputedAmountColumn> mtefCols	= new ArrayList<TotalComputedAmountColumn>();
+		for ( Object tempObj:rawColumns.getItems() ) {
+			Column tempCol		= (Column) tempObj;
+			if ( tempCol.getAbsoluteColumnName().contains("MTEF") ) {
+				mtefCols.add( (TotalComputedAmountColumn) tempCol );
+			}
+		}
+
 		/**
 		 * Iterare all measure and add a column for each computed measure
 		 */
-
 		Set<AmpReportMeasures> xmeasures = reportMetadata.getMeasures();
 		List<AmpReportMeasures> xmeasuresList = new ArrayList<AmpReportMeasures>(
 				xmeasures);
@@ -635,7 +673,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 				
 				for (TotalComputedAmountColumn tcaCol: mtefCols ) {
-					Iterator <ComputedAmountCell>	iterCac = tcaCol.getItems().iterator();
+					Iterator <ComputedAmountCell>	iterCac = (Iterator<ComputedAmountCell>) (tcaCol.getItems().iterator());
 					while ( iterCac.hasNext() ) {
 						ComputedAmountCell cac	= iterCac.next();
 						cTac.addCell(cac);
@@ -647,7 +685,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			}
 		}
 		
-		//end computted measures
+		//end computed measures
 		
 		// we create the total commitments column
 
@@ -701,35 +739,18 @@ public class AmpReportGenerator extends ReportGenerator {
 				
 		// add subcolumns for type of assistance
 		//split column for type of assistance ONLY when TOA is added as column	
-		if(verticalSplitByTypeOfAssistence) {
-			
-			//iterate each column in newcol
-//			for (int i=0; i< newcol.getItems().size();i++){
-//				Column nestedCol = (Column) newcol.getItems().get(i);
-//				if(nestedCol instanceof GroupColumn || nestedCol instanceof TotalComputedMeasureColumn) continue;
-//				
-//				List<String> cat = new ArrayList<String>();
-//				cat.add(ArConstants.TERMS_OF_ASSISTANCE);
-//				GroupColumn nestedCol2 = (GroupColumn) GroupColumn.verticalSplitByCategs((CellColumn)nestedCol, cat,
-//						true, reportMetadata);
-//				
-//				nestedCol2.addColumn(nestedCol);
-//				nestedCol.setName(ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
-//				newcol.replaceColumn(nestedCol.getName(), nestedCol2);
-//				
-//			}
-			this.addTotalsVerticalSplit(newcol, ArConstants.TERMS_OF_ASSISTANCE, ArConstants.TERMS_OF_ASSISTANCE_TOTAL);
+		if(verticalSplitByTypeOfAssistence) {			
+			this.addTotalsVerticalSplit(newcol, ArConstants.TERMS_OF_ASSISTANCE/*, ArConstants.TERMS_OF_ASSISTANCE_TOTAL*/);
 		}
 		
-		if(verticalSplitByModeOfPayment) {
-			
-			this.addTotalsVerticalSplit(newcol, ArConstants.MODE_OF_PAYMENT, ArConstants.MODE_OF_PAYMENT_TOTAL);
+		if(verticalSplitByModeOfPayment) {			
+			this.addTotalsVerticalSplit(newcol, ArConstants.MODE_OF_PAYMENT/*, ArConstants.MODE_OF_PAYMENT_TOTAL*/);
 		}
 		
 		rawColumns.addColumn(newcol);
 	}
 	
-	protected void addTotalsVerticalSplit(GroupColumn newcol, String splitterCol, String totalsSplitterCol) {
+	protected void addTotalsVerticalSplit(GroupColumn newcol, String splitterCol) {
 		//iterate each column in newcol
 		for (int i=0; i< newcol.getItems().size();i++){
 			Column nestedCol = (Column) newcol.getItems().get(i);

@@ -6,7 +6,7 @@
  */
 package org.dgfoundation.amp.ar;
 
-import java.util.Set;
+import java.util.HashSet;
 
 /**
  * 
@@ -15,7 +15,7 @@ import java.util.Set;
  *
  */
 public interface Categorizable {
-	public Set getMetaData();
+	public HashSet<MetaInfo> getMetaData();
 	
 	public boolean hasMetaInfo(MetaInfo m);
 	

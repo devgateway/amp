@@ -21,7 +21,7 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  * @since Aug 1, 2006
  *
  */
-public class AmountCellColumn extends CellColumn {
+public class AmountCellColumn<K extends AmountCell> extends CellColumn<K> {
 
 	/**
 	 * @param worker

@@ -26,7 +26,7 @@ import edu.emory.mathcs.backport.java.util.Arrays;
  */
 public class CategAmountCell extends AmountCell implements Categorizable {
 
-	protected Set<MetaInfo> metaData;
+	protected HashSet<MetaInfo> metaData;
 
 	@Override
 	public AmountCell merge(Cell c) {
@@ -72,7 +72,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	/**
 	 * @return Returns the metaData.
 	 */
-	public Set<MetaInfo> getMetaData() {
+	public HashSet<MetaInfo> getMetaData() {
 		return metaData;
 	}
 
@@ -80,7 +80,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	 * @param metaData
 	 *            The metaData to set.
 	 */
-	public void setMetaData(Set<MetaInfo> metaData) {
+	public void setMetaData(HashSet<MetaInfo> metaData) {
 		this.metaData = metaData;
 	}
 
@@ -206,7 +206,8 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 		{
 			MetaInfo metaInfo = mit.next();
 			if (metaInfo.getCategory().equals(ArConstants.RECIPIENT_NAME) ||
-				metaInfo.getCategory().equals(ArConstants.RECIPIENT_ROLE))
+				metaInfo.getCategory().equals(ArConstants.RECIPIENT_ROLE_NAME) ||
+				metaInfo.getCategory().equals(ArConstants.RECIPIENT_ROLE_CODE))
 				mit.remove();
 		}
 		for(AmountCell amCell:mergedCells)
@@ -268,7 +269,7 @@ public Cell filter(Cell metaCell,Set ids) {
 	{
 		// only apply the test for "basic" CategAmountCell's, as merged ones merge all the metadata from all the merged cells and we might filter out unneedingly
 		// if column by which we are doing the hierarchy is one of the related organisations' column
-		String relatedOrgRole = this.getMetaValueString(ArConstants.RECIPIENT_ROLE);
+		String relatedOrgRole = this.getMetaValueString(ArConstants.RECIPIENT_ROLE_NAME);
 		String relatedOrgName = this.getMetaValueString(ArConstants.RECIPIENT_NAME);
 		if (metaCell.getColumn().getName().equals(relatedOrgRole))
 		{

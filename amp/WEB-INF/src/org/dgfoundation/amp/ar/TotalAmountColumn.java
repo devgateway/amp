@@ -11,7 +11,7 @@ import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
-public class TotalAmountColumn extends AmountCellColumn {
+public class TotalAmountColumn<K extends AmountCell> extends AmountCellColumn<K> {
 
     public boolean filterShowable;
 
@@ -65,37 +65,38 @@ public class TotalAmountColumn extends AmountCellColumn {
 
     public void addCell(Object c) {
     	try {
-	    	List<AmountCell> tobeMergedCells	= new ArrayList<AmountCell>();
-	    	if ( c instanceof ListCell ) {
-	    		Iterator<AmountCell> iter	= ((ListCell)c).iterator();
-	    		while ( iter.hasNext() ) {
-	    			tobeMergedCells.add(iter.next());
-	    		}
-	    	}
-	    	else {
-    	AmountCell ac = (AmountCell) c;
-	    		tobeMergedCells.add(ac);
-	    	}
-	    	for (AmountCell ac:tobeMergedCells) {
-    	if (filterShowable && !ac.isShow())
-    		return;
+    		List<AmountCell> tobeMergedCells	= new ArrayList<AmountCell>();
+    		if ( c instanceof ListCell ) {
+    			Iterator<AmountCell> iter	= ((ListCell)c).iterator();
+    			while ( iter.hasNext() ) {
+    				tobeMergedCells.add(iter.next());
+    			}
+    		}
+    		else
+    		{
+    			AmountCell ac = (AmountCell) c;
+    			tobeMergedCells.add(ac);
+    		}
+    		for (AmountCell ac:tobeMergedCells) 
+    		{
+    			if (filterShowable && !ac.isShow())
+    				return;
 
-    	AmountCell byOwner = (AmountCell) this.getByOwner(ac.getOwnerId());
-    	if (byOwner != null)
-    		byOwner.merge(byOwner, ac);
-    	else {
-    		AmountCell newcell = (AmountCell) ac.newInstance();
-    		// AmountCell newcell = new AmountCell();
-    		newcell.merge(newcell, ac);
-    		newcell.setColumn(this);
-    		super.addCell(newcell);
-    	}
-	    	}
+    			AmountCell byOwner = (AmountCell) this.getByOwner(ac.getOwnerId());
+    			if (byOwner != null)
+    				byOwner.merge(byOwner, ac);
+    			else {
+    				AmountCell newcell = (AmountCell) ac.newInstance();
+    				//AmountCell newcell = new AmountCell();
+    				newcell.merge(newcell, ac);
+    				newcell.setColumn(this);
+    				super.addCell((K) newcell);
+    			}
+    		}
     	}
     	catch (ClassCastException e) {
-			logger.error("Wrong class for cell in addCell(). It should be AmountCell and not " + c.getClass().getName() );
-		}
-
+    		logger.error("Wrong class for cell in addCell(). It should be AmountCell and not " + c.getClass().getName() );
+    	}
     }
 
     public Column newInstance() {

@@ -18,7 +18,7 @@ import org.dgfoundation.amp.exprlogic.Values;
  * 
  * @author Sebastian Dimunzio Apr 15, 2009
  */
-public class TotalComputedAmountColumn extends TotalAmountColumn {
+public class TotalComputedAmountColumn extends TotalAmountColumn<ComputedAmountCell> {
 
 	/**
 	 * @param worker

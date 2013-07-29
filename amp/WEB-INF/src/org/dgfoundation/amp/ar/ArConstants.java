@@ -74,7 +74,7 @@ public final class ArConstants {
 	public final static String AGREEMENT_TITLE_CODE = "Agreement Title + Code";
 	
 	public final static String DISABLE_PERCENT = "Disable_Percent";
-	public final static String IS_REAL_DISBURSEMENTS_COLUMN = "Is Real Disbursements";
+	//public final static String IS_REAL_DISBURSEMENTS_COLUMN = "Is Real Disbursements";
 	
 	/**
 	 * @deprecated use COLUMN_COUNTRY if it's related to the column
@@ -95,7 +95,9 @@ public final class ArConstants {
 	
 	public final static String COMPONENT="Component Type";
 	public final static String RECIPIENT_NAME = "Recipient Name";
-	public final static String RECIPIENT_ROLE = "Recipient Role";
+	public final static String RECIPIENT_ROLE_NAME = "Recipient Role Name";
+	public final static String RECIPIENT_ROLE_CODE = "Recipient Role Code";
+	public final static String SOURCE_ROLE_CODE = "Source Role Code";
 
 	public final static String UNALLOCATED="Unallocated";
 	
@@ -240,6 +242,11 @@ public final class ArConstants {
 //	public final static String SECTOR_PERCENTAGE="Sector Percentage";
 	
 	public final static String PERCENTAGE="Percentage";
+	
+	public final static String TRANSACTION_REAL_DISBURSEMENT_TYPE = "Real Disbursement Type";
+	public final static String TRANSACTION_DN_EXEC = "DN-EXEC";
+	public final static String TRANSACTION_EXEC_IMPL = "EXEC-IMPL";
+	public final static String TRANSACTION_IMPL_BENF = "IMPL-BENF";
 	
 	//draft in title
 	public final static String DRAFT="DRAFT";

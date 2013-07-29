@@ -24,7 +24,7 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  * @since May 31, 2006
  * 
  */
-public abstract class Column extends Viewable implements ColumnIdentifiable {
+public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 	
 	private String expression;
 	private String totalExpression;
@@ -50,7 +50,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	
 	protected int spanCount = 0;
 
-	protected List items;
+	protected List<K> items;
 
 	protected Viewable parent;
 
@@ -97,7 +97,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	 * 
 	 * @return the Iterator
 	 */
-	public Iterator iterator() {
+	public Iterator<K> iterator() {
 		return items.iterator();
 	}
 
@@ -146,7 +146,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	 * @return the Cell, or null if unavailable
 	 * @see org.dgfoundation.amp.ar.cell.Cell
 	 */
-	public Object getItem(int indexPos) {
+	public K getItem(int indexPos) {
 		if (indexPos > items.size() - 1)
 			return null;
 
@@ -162,32 +162,32 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	public Column(Viewable parent, String name) {
 		super();
 		this.name = name;
-		items = new ArrayList();
+		items = new ArrayList<K>();
 		this.parent = parent;
 	}
 
 	public Column(ColumnWorker worker) {
 		super();
 		this.worker = worker;
-		items = new ArrayList();
+		items = new ArrayList<K>();
 	}
 
 	public Column(String name) {
 		super();
-		items = new ArrayList();
+		items = new ArrayList<K>();
 		this.name = name;
 	}
 
 	public Column(String name,int initialCapacity) {
 		super();
-		items = new ArrayList(initialCapacity);
+		items = new ArrayList<K>(initialCapacity);
 		this.name = name;
 	}
 
 	
 	public Column() {
 		super();
-		items = new ArrayList();
+		items = new ArrayList<K>();
 	}
 
 	/**
@@ -241,7 +241,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	/**
 	 * @return Returns the items.
 	 */
-	public List getItems() {
+	public List<K> getItems() {
 		return items;
 	}
 
@@ -368,17 +368,17 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
      * Useful for translating the column names
      * @return the absolute column name as a collection, starting with the topmost parent (root) and ending with the self name
      */
-	public Collection getAbsoluteColumnNameAsList(){
-		List names=new ArrayList();
-		if (parent!=null && parent instanceof Column) 
+	public Collection<String> getAbsoluteColumnNameAsList(){
+		List<String> names = new ArrayList<String>();
+		if (parent != null && parent instanceof Column) 
 			names.addAll(((Column)parent).getAbsoluteColumnNameAsList()) ;
 		names.add(this.name);
 		return names;
 	}
 
-    public Collection getAbsoluteColumnAsList(){
-        List cols=new ArrayList();
-        if (parent!=null && parent instanceof Column)
+    public Collection<Column> getAbsoluteColumnAsList(){
+        List<Column> cols = new ArrayList<Column>();
+        if (parent != null && parent instanceof Column)
             cols.addAll(((Column)parent).getAbsoluteColumnAsList()) ;
         cols.add(this);
         return cols;
@@ -416,7 +416,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 		this.maxNameDisplayLength = maxNameDisplayLength;
 	}
 
-	public void setItems(List items) {
+	public void setItems(List<K> items) {
 	    this.items = items;
 	}
 

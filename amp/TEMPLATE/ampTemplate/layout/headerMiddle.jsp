@@ -420,7 +420,7 @@ function adminHelp(){
                                        	</li>
 
 									<c:if test="${not empty sessionScope.currentMember}">
-									<c:if test="${sessionScope.currentMember.addActivity == 'true'}">
+									        <c:if test="${sessionScope.currentMember.addActivity == 'true'}">
 												<field:display name="Add Activity Button" feature="Edit Activity">
 		                                        <li class="yuiampmenuitem_drop">
                                                     <c:set var="trnClickToAddNewActivit">
@@ -441,8 +441,8 @@ function adminHelp(){
 												</li>
 												 -->
 												</field:display>
-												</c:if>
-											</c:if>
+                                            </c:if>
+                                        <field:display name="Add SSC Button" feature="Edit Activity">
                                               <li class="yuiampmenuitem_drop">
                                                   <c:set var="trnClickToAddNewActivit">
                                                       <digi:trn>Click here to Add New SSC</digi:trn>
@@ -451,6 +451,8 @@ function adminHelp(){
                                                       <digi:trn>Add SSC</digi:trn>
                                                   </a>
                                               </li>
+                                        </field:display>
+                                    </c:if>
                                             <%--<a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
                                             <digi:trn key="aim:addTab">Add Tab</digi:trn>
                                             </a> --%>

@@ -388,7 +388,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Actual/Planned Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Actual/Planned Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Add A New Component Button" feature="Admin - Component Type"></field:display> 
-<field:display name="Add Activity Button" feature="Edit Activity"></field:display> 
+<field:display name="Add Activity Button" feature="Edit Activity"></field:display>
+<field:display name="Add SSC Button" feature="Edit Activity"></field:display>
 <field:display name="Add Actors Link" feature="Issues"></field:display> 
 <field:display name="Add Commitment Button" feature="Commitments"></field:display> 
 <field:display name="Pipeline" feature="Commitments"></field:display>

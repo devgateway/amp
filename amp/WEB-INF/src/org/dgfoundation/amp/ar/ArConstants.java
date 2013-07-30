@@ -8,6 +8,9 @@ package org.dgfoundation.amp.ar;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * 
@@ -193,10 +196,25 @@ public final class ArConstants {
 	public final static String COLUMN_ANY_SECTOR="Sector";
 	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
 	
+	public final static String ROLE_NAME_DONOR_AGENCY = "Donor Agency";
+	public final static String ROLE_NAME_EXECUTING_AGENCY = "Executing Agency";
+	public final static String ROLE_NAME_IMPLEMENTING_AGENCY = "Implementing Agency";
+	public final static String ROLE_NAME_BENEFICIARY_AGENCY = "Beneficiary Agency";
+	
+	
 	public final static String COLUMN_SECTOR_TAG="Sector Tag";
 	
 	public final static List<String> COLUMN_ANY_RELATED_ORGS=Arrays.asList("Beneficiary Agency","Contracting Agency",
 							"Executing Agency","Implementing Agency","Regional Group","Responsible Organization","Sector Group");
+
+	public final static Map<String, String> COLUMN_ROLE_CODES = new HashMap<String, String>()
+			{{
+				put(ROLE_NAME_DONOR_AGENCY, Constants.ROLE_CODE_DONOR);
+				put(ROLE_NAME_EXECUTING_AGENCY, Constants.ROLE_CODE_EXECUTING_AGENCY);
+				put(ROLE_NAME_IMPLEMENTING_AGENCY, Constants.ROLE_CODE_IMPLEMENTING_AGENCY);
+				put(ROLE_NAME_BENEFICIARY_AGENCY, Constants.ROLE_CODE_BENEFICIARY_AGENCY);
+			}};
+
 	
 	public final static String COLUMN_COUNTRY="Country";
 	public final static String COLUMN_REGION="Region";

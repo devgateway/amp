@@ -12,9 +12,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -47,6 +49,7 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -782,6 +785,106 @@ public class AmpReportGenerator extends ReportGenerator {
 		AmpARFilter arf = (AmpARFilter) filter;
 
 	}
+	
+	/**
+	 *  if has Real Disbursements column AND has a hierarchy by one of ArConstants.COLUMN_ROLE_CODES.keys(), then remove all columns which are not "v temu" from:
+	 *	1) Funding -> YEAR -> Real Disbursements -> XYZ
+	 *	2) Total Costs -> Real Disbursements -> XYZ
+	 * @param fundingOrgHiers
+	 * {@link CategAmountCell#filter(Cell, Set)}
+	 */
+	protected void removeUnusedRealDisbursementsFlowsFromReport(Set<String> fundingOrgHiers)
+	{
+		Map<String, Set<String>> flowsToRetain = new HashMap<String, Set<String>>();
+		flowsToRetain.put(ArConstants.ROLE_NAME_DONOR_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_DN_EXEC);}});
+		flowsToRetain.put(ArConstants.ROLE_NAME_EXECUTING_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_DN_EXEC);add(ArConstants.TRANSACTION_EXEC_IMPL);}});
+		flowsToRetain.put(ArConstants.ROLE_NAME_IMPLEMENTING_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_EXEC_IMPL);add(ArConstants.TRANSACTION_IMPL_BENF);}});
+		flowsToRetain.put(ArConstants.ROLE_NAME_BENEFICIARY_AGENCY, new HashSet<String>(){{add(ArConstants.TRANSACTION_IMPL_BENF);}});
+
+		Set<String> allLegalFlows = new HashSet<String>(){{
+			add(ArConstants.TRANSACTION_DN_EXEC);
+			add(ArConstants.TRANSACTION_EXEC_IMPL);
+			add(ArConstants.TRANSACTION_IMPL_BENF);
+		}};
+		
+		for(String hierColName:fundingOrgHiers)
+		{
+			if (!flowsToRetain.containsKey(hierColName))
+			{
+				logger.warn("funding hierarchy not found in FLOWS_TO_RETAIN, ignoring");
+				continue;
+			}
+			allLegalFlows.retainAll(flowsToRetain.get(hierColName));
+		}
+		if (allLegalFlows.isEmpty())
+		{
+			logger.warn("no funding flows are legal. Instead of removing the whole Real Disbursements column, will let it empty - Report Wizard shouldn't allow such reports to exist");
+			return;
+		}
+		
+		filterRealDisbursementsSubcolumns(report, allLegalFlows);
+	}
+	
+	/**
+	 * given at the input a Real Disbursements GroupColumn and a list of legal subcolumns, removes all the subcolumns which have a different name
+	 * @param realDisbursementsCol
+	 * @param allLegalFlows
+	 */
+	protected void cleanupRealDisbursements(GroupColumn realDisbursementsCol, Set<String> allLegalFlows)
+	{
+		Iterator<Column> cols = realDisbursementsCol.iterator();
+		while (cols.hasNext())
+		{
+			Column col = cols.next();
+			if (!allLegalFlows.contains(col.getName()))
+				cols.remove();
+		}
+	}
+	
+	/**
+	 * recursively goes all the way down in a hierarchy of columns in order to find & clean all the Real Disbursements GroupColumns it can find
+	 * @param col
+	 * @param allLegalFlows
+	 */
+	protected void filterRealDisbursementsSubcolumns(Column col, Set<String> allLegalFlows)
+	{
+		if (!(col instanceof GroupColumn))
+			return;
+		
+		GroupColumn gc = (GroupColumn) col;
+		if (gc.getName().equals(ArConstants.REAL_DISBURSEMENTS))
+		{
+			cleanupRealDisbursements((GroupColumn) col, allLegalFlows);
+			return;
+		}
+		for(Column column:gc.getItems())
+			filterRealDisbursementsSubcolumns(column, allLegalFlows);
+	}
+	
+	/**
+	 * recursively goes all the way down to ColumnReportData and then through columns in order to clean up Real Disbursement's subcolumns of names NOT found in allLegalFlows
+	 * @param rd
+	 * @param allLegalFlows
+	 */
+	protected void filterRealDisbursementsSubcolumns(ReportData rd, Set<String> allLegalFlows)
+	{
+		if (rd instanceof GroupReportData)
+		{
+			GroupReportData grd = (GroupReportData) rd;
+			for(ReportData child_rd:grd.getItems())
+				filterRealDisbursementsSubcolumns(child_rd, allLegalFlows);
+			return;
+		}
+		if (rd instanceof ColumnReportData)
+		{
+			ColumnReportData crd = (ColumnReportData) rd;
+			for(Column col:crd.getItems())
+			{
+				filterRealDisbursementsSubcolumns(col, allLegalFlows);
+			}
+			return;
+		}
+	}
 
 	protected void prepareData() {
 
@@ -885,7 +988,14 @@ public class AmpReportGenerator extends ReportGenerator {
 		report.removeEmptyChildren();
 		
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+		Set<String> fundingOrgHiers = reportMetadata.getHierarchyNames();
+		fundingOrgHiers.retainAll(ArConstants.COLUMN_ROLE_CODES.keySet());
 
+		if (reportMetadata.getMeasureNames().contains(ArConstants.REAL_DISBURSEMENTS) && !fundingOrgHiers.isEmpty())
+		{
+			removeUnusedRealDisbursementsFlowsFromReport(fundingOrgHiers);
+		}
+						
 		if (dateFilterHidesProjects && !reportMetadata.getDrilldownTab() && 
 				(this.getFilter().wasDateFilterUsed() || (reportMetadata.getHierarchies().size() > 0))
 			)

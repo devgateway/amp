@@ -5,8 +5,10 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
@@ -16,6 +18,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.helper.Constants;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -216,7 +219,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	}
 	
 public Cell filter(Cell metaCell,Set ids) {
-	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);    
+	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);
 	if(ret==null) return null;
 		
 //	if (this.hasMetaInfo(isRealDisbursementsColumn))
@@ -283,6 +286,28 @@ public Cell filter(Cell metaCell,Set ids) {
 				disablePercentage = true;
 			}
 		}
+	}
+
+	/**
+	 * when doing a hierarchy by Donor Agency, the <Real Disbursements> column should only have flow DN-EXEC shown
+	 * when doing a hierarchy by Executing Agency, the <Real Disbursements> column should only have flows DN-EXEC and EXEC-IMPL shown
+	 * when doing a hierarchy by Implementing Agency, the <Real Disbursements> column should only have flows EXEC-IMPL and IMPL-BENF shown
+	 * when doing a hierarchy by Beneficiary Agency, the <Real Disbursements> column should only have flow IMPL-BENF shown
+	 * 
+	 * also see AmpReportGenerator.removeUnusedRealDisbursementsFlowsFromReport
+	 */
+	String directedType = this.getMetaValueString(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE);
+	boolean isDirectedActualDisbursement = directedType != null;
+	
+	if (isDirectedActualDisbursement && mergedCells.isEmpty() && ArConstants.COLUMN_ROLE_CODES.containsKey(metaCell.getColumn().getName()))
+	{
+		boolean passesTest = false;
+		String columnRoleCode = ArConstants.COLUMN_ROLE_CODES.get(metaCell.getColumn().getName());
+		
+		passesTest = (this.getMetaValueString(ArConstants.SOURCE_ROLE_CODE).equals(columnRoleCode) && this.getMetaValueString(ArConstants.DONOR).equals(metaCell.getValue().toString())) ||
+					(this.getMetaValueString(ArConstants.RECIPIENT_ROLE_CODE).equals(columnRoleCode) && this.getMetaValueString(ArConstants.RECIPIENT_NAME).equals(metaCell.getValue().toString()));
+		if (!passesTest)
+			return null;
 	}
 	
     //apply metatext filters

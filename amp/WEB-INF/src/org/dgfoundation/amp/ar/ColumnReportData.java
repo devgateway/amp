@@ -232,6 +232,8 @@ public class ColumnReportData extends ReportData<Column> {
 			throw new UnidentifiedItemException(
 					"Cannot find a Column with Id " + columnName
 							+ " in this ReportData");
+		
+		//SortedSet<Cell> cats = getCategories(keyCol);
 		TreeSet<Cell> cats = new TreeSet<Cell>();
 		Iterator i = keyCol.iterator();
 		while (i.hasNext()) {
@@ -241,7 +243,7 @@ public class ColumnReportData extends ReportData<Column> {
 		}
 		// TODO-Constantin: O(N^2) iteration in [categories x keys]
 		// we iterate each category from the set and search for matching rows
-		for (Cell cat:cats) {			
+		for (Cell cat:cats) {
 			if ( cat.compareTo(fakeCell) == 0 ) {
 				existsUnallocatedCateg = true;
 			}
@@ -251,9 +253,7 @@ public class ColumnReportData extends ReportData<Column> {
 			if(!ARDimension.isLinkedWith(this, cat)) continue;
 			
 			logger.info("Splitting by category: "+cat);
-			ColumnReportData crd = new ColumnReportData((String) cat
-					.getColumnId()
-					+ ": " + cat.toString());
+			ColumnReportData crd = new ColumnReportData((String) cat.getColumnId() + ": " + cat.toString());
 			crd.setSplitterCell(cat);
 
 			dest.addReport(crd);

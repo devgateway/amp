@@ -191,11 +191,11 @@ public abstract class ColumnWorker {
 			  * org.dgfoundation.amp.ar.AmpReportGenerator.retrieveData(): from 5200ms to 3500ms
 			  * org.dgfoundation.amp.ar.workers.ColumnWorker.extractCellColumn() 5200ms to 3500ms
 			  */
-			while (rs.next()) 
+			while (rs.next())
 			{
 				Cell c = getCellFromRow(rs);
-				if(c != null) 
-					cc.addCell(c);				
+				if(c != null)
+					cc.addCell(c);
 			}
 
 			rs.close();

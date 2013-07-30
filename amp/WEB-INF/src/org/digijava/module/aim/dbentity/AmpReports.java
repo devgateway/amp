@@ -621,4 +621,21 @@ public class AmpReports implements Comparable, LoggerIdentifiable, Serializable,
 	{
 		this.reportGenerator = generator;
 	}
+	
+	public Set<String> getMeasureNames()
+	{
+		Set<String> res = new HashSet<String>();
+		for(AmpReportMeasures measure:getMeasures())
+			res.add(measure.getMeasure().getMeasureName());
+		return res;
+	}
+	
+	public Set<String> getHierarchyNames()
+	{
+		Set<String> res = new HashSet<String>();
+		for(AmpReportHierarchy hier: getHierarchies())
+			res.add(hier.getColumn().getColumnName());
+		return res;
+	}
 }
+
